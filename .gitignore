@@ -62,6 +62,9 @@ data/private/
 # Private project knowledge base
 obsidian-vault/
 
+# Official event documents copied from the login-gated event page (private by user decision)
+docs/official/
+
 # Obsidian user-specific state, if other vaults are tracked
 .obsidian/workspace.json
 .obsidian/workspace-mobile.json
@@ -70,3 +73,6 @@ obsidian-vault/
 
 # --- Git worktrees (normally ../meta-hackathon-worktrees/) --------------------
 worktrees/
+
+# Master project prompt: internal model/subscription setup (private by user decision)
+docs/MASTER_PROMPT.md

@@ -1,5 +1,7 @@
 # Initial task queue — not dispatched
 
+> **Superseded 2026-10-27** by `VERTICAL_SLICE_PLAN.md` (TASK-001…010). T1 is done: credits confirmed and the direct API smoke passed. T2/T3 are split into TASK-002…006. Kept for history.
+
 | ID | Owner | Dependencies | Scope | Acceptance |
 |---|---|---|---|---|
 | T1 | Calvin + lead | FAQ/master instructions, Meta account, spending approval | Verify rules, credits, direct model catalog, run prepared API smoke | Actual exact-model receipt; confirmed eligible schedule; no secret exposure |

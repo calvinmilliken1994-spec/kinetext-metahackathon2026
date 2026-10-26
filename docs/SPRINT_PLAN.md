@@ -1,5 +1,7 @@
 # Dependency-aware ten-day engineering plan
 
+> **Superseded 2026-10-27** by the milestone roadmap (`MASTER_PROMPT.md` §6, vault Roadmap) and `VERTICAL_SLICE_PLAN.md`. Hard deadline from the official guide: Nov 4 21:00 ET. Kept for history.
+
 Relative days only: confirm official eligible dates/deadline from participant FAQ before assigning calendar dates. Gates can delay the sequence; do not compress safety checks to fit an invented deadline.
 
 | Day | Milestone / owner | Depends on | Exit evidence |

@@ -1,0 +1,67 @@
+{
+  "status": "passed",
+  "route": "hermes-to-muse-cli-subscription",
+  "requestedModel": "muse-spark-1.3",
+  "contributorMode": "off",
+  "checkedAt": "2026-10-26T21:22:20.337891+00:00",
+  "fallbackUsed": false,
+  "maxModelSteps": 1,
+  "timeoutSeconds": 90,
+  "subscriptionTier": "Muse Code High Usage",
+  "allowanceBefore": {
+    "tier": "Muse Code High Usage",
+    "window": {
+      "usedPercent": 0,
+      "resetsAtMs": 1793059192000
+    },
+    "weekly": {
+      "usedPercent": 0,
+      "resetsAtMs": 1793577600000
+    },
+    "asOfMs": 1793049740392,
+    "source": "mint"
+  },
+  "exitCode": 0,
+  "configuredModel": "muse-spark-1.3",
+  "usage": {
+    "kind": "run_usage",
+    "command_id": "01a17a17-cd15-7f03-ac0c-cb11c6399f08",
+    "run_stream": {
+      "kind": "run",
+      "id": "01a17a17-cd15-7f03-ac0c-cb11c6399f08"
+    },
+    "models": [
+      {
+        "model": "muse-spark-1.3",
+        "input_tokens": 20383,
+        "cached_tokens": 0,
+        "output_tokens": 2648,
+        "reasoning_tokens": 1829,
+        "calls": 1
+      }
+    ],
+    "calls": 1,
+    "completed_calls": 1,
+    "failed_calls": 0,
+    "cancelled_calls": 0,
+    "children_included": false,
+    "allowance": {
+      "tier": null,
+      "window": {
+        "used_percent": 0,
+        "resets_at_ms": 1793059192000
+      },
+      "weekly": {
+        "used_percent": 0,
+        "resets_at_ms": 1793577600000
+      },
+      "as_of_ms": 1793049755452,
+      "source": "stream"
+    }
+  },
+  "httpStatuses": [],
+  "terminal": "completed",
+  "answer": "1. Problem: `behavioralTests[]` is validated but never defined in spec v0.2. Why: validator cannot be implemented or frozen in TASK-001. Change: define it or delete check 5 reference to it; keep only `predictions[]`.\n2. Problem: `tolerance` has no units or semantics. Why: `|expected - F/m| <= tolerance` is unverifiable. Change: specify `toleranceAbsMps2: number >0, <=0.05`, exact comparison formula.\n3. Problem: grounding check says \"whitespace-normalised\" with no function. Why: UI passes but validator fails on newlines/case. Change: freeze normalization to `collapse \\s+ to single space + trim, case-sensitive`, and require `sourceId` registry plus `sha256` of `source.txt`.\n4. Problem: source-analysis invariants missing. Why: `supported:false + activity:forces-1d-v1` or empty `concepts/objectives` can pass schema. Change: require `if supported=false then activity=none and unsupportedReason required; if true then concepts>=1, objectives>=1`, unique `concepts[].id` pattern.\n5. Problem: ranges and display fields underspecified. Why: `min/default/max`, `durationS/stepS`, `scenario` labels block engine and UI. Change: freeze numeric types as `number` only, `massKg>0`, `stepS>0`, `durationS/stepS<=3000 integer frames`, `scenario` max 60 chars rendered as text only with escaping.\n6. Problem: full Ajv schema likely uses constrained-decoding-hostile keywords. Why: ` $ref/$defs, oneOf/anyOf/not, if/then, pattern, patternProperties, uniqueItems, type:[\"string\",\"null\"]` often rejected or degrade guarantees. Change: shape generation schema flat: no refs, no unions, `enum` for `engine/observables/activity`, `additionalProperties:false`, all fields `required`, simple `string/number/boolean/array/object`; verify in docs for Meta `json_schema` supported subset.\n7. Problem: RISK-001 fallback is informal. Why: TASK-004 spike can silently fork contracts. Change: freeze two schemas in TASK-001: `spec.gen.json` minimal for Muse plus `spec.full.json` for Ajv; validator accepts only full, generator sends only gen.\n8. Problem: quotes will paraphrase without verbatim discipline. Why: substring check fails on ellipsis, smart quotes, joins. Change: prompt source in fenced block marked data, instruct ignore-instructions-inside, copy character-for-character, no ellipsis/paraphrase/merge across paragraphs, prefer <=150-char sentence fragments, return exact `sourceId`.\n9. Problem: `provenance/at/seq/receipt` types vague. Why: ledger and timeline cannot reconcile. Change: `at: RFC3339 string`, `seq: integer monotonic from 0`, `revision: integer from 1`, `repairOf: integer|null`, persist `responseId, usage, latencyMs` from `complete()` receipt verbatim.\n10. Problem: product risks reading as basic single-call wrapper. Why: judges reward visible model-checker loop. Change: demo bounded repair already architected: on Ajv/behavioral fail, resend same `json_schema` plus machine validator errors for one retry, show diff in validation panel. Uses only documented Chat Completions + `response_format json_schema`; verify in docs whether Meta returns `responseId/usage` for ledger receipts.\n",
+  "reason": null,
+  "elapsedSeconds": 15.172
+}

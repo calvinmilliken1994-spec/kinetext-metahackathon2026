@@ -1,0 +1,28 @@
+{
+  "status": "passed",
+  "checkedAt": "2026-10-26T21:16:51.418Z",
+  "provider": "meta",
+  "model": "muse-spark-1.3",
+  "responseId": "chatcmpl-01a17a12-beb0-7197-9279-ff40a8217fd2",
+  "essentialToProductBehavior": false,
+  "feature": "setup-api-smoke",
+  "modality": "text",
+  "toolCalls": [],
+  "outputArtifact": "one-word-connectivity-check",
+  "validation": "exact ready; finish_reason stop; exact model; reported usage",
+  "latencyMs": 3133,
+  "usage": {
+    "completion_tokens": 39,
+    "prompt_tokens": 15,
+    "total_tokens": 54,
+    "completion_tokens_details": {
+      "reasoning_tokens": 29
+    },
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "estimatedIncrementalCostUSD": 0.0001845,
+  "priceSource": "https://dev.meta.ai/docs/getting-started/pricing-rate-limits",
+  "networkAttempted": true
+}

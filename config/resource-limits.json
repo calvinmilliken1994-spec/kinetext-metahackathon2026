@@ -2,7 +2,7 @@
   "version": 1,
   "status": "design-defaults-not-a-production-enforcer",
   "approvedBudgetUSD": {
-    "meta": 0,
+    "meta": 150,
     "baseten": 0,
     "modal": 0,
     "fireworks": 0,
@@ -15,5 +15,6 @@
   "maxInputTokens": 16000,
   "maxOutputTokens": 4096,
   "generatedCodeEnabled": false,
-  "externalModelFallbackEnabled": false
+  "externalModelFallbackEnabled": false,
+  "approvedBudgetNote": "meta: USD 150 participant free credits confirmed 2026-10-27; others 0"
 }

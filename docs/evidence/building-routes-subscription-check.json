@@ -1,0 +1,76 @@
+{
+  "check": "building-routes-subscription-only",
+  "checkedAt": "2026-10-27T06:38+09:00",
+  "method": "hermes -p meta-hackathon-2026 chat -m <alias> --reasoning high --oneshot -q 'Reply with exactly: <MARKER>'; billing route read back from the profile session store",
+  "routes": [
+    {
+      "role": "orchestrator",
+      "alias": "orchestrator",
+      "model": "claude-opus-5-5",
+      "billingProvider": "anthropic",
+      "credential": "OAuth (Claude subscription)",
+      "evidence": "this session"
+    },
+    {
+      "role": "complex frontend",
+      "alias": "complex-frontend",
+      "model": "claude-sonnet-5-5",
+      "billingProvider": "anthropic",
+      "credential": "OAuth (Claude subscription)",
+      "session": "20261027_063837_7c111b",
+      "answer": "SONNET_OK"
+    },
+    {
+      "role": "independent review",
+      "alias": "openai-review",
+      "model": "gpt-6.1-sol",
+      "billingProvider": "openai-codex",
+      "baseUrl": "https://chatgpt.com/backend-api/codex",
+      "credential": "OAuth (ChatGPT/Codex subscription)",
+      "session": "20261027_063641_b5338c",
+      "answer": "SOL_OK"
+    },
+    {
+      "role": "backend",
+      "alias": "qwen-backend",
+      "model": "qwen3.8-max",
+      "baseUrl": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
+      "credential": "Alibaba Model Studio Token Plan key (sk-sp tier)",
+      "session": "20261027_063733_fc9b39",
+      "answer": "QWEN_MAX_OK"
+    },
+    {
+      "role": "routine tests",
+      "alias": "routine-tests",
+      "model": "deepseek-v4.1-flash-1017",
+      "baseUrl": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
+      "credential": "Alibaba Token Plan key",
+      "session": "20261027_063755_da26e5",
+      "answer": "DEEPSEEK_OK"
+    },
+    {
+      "role": "documentation",
+      "alias": "qwen-docs",
+      "model": "qwen3.8-flash",
+      "baseUrl": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
+      "credential": "Alibaba Token Plan key",
+      "session": "20261027_063816_3eae9b",
+      "answer": "QWEN_FLASH_OK"
+    },
+    {
+      "role": "Meta engineering",
+      "route": "scripts/muse-subscription.py",
+      "model": "muse-spark-1.3",
+      "credential": "Muse Code OAuth subscription (High Usage); wrapper strips MODEL_API_KEY",
+      "receipt": "docs/evidence/muse-architecture-review.json"
+    }
+  ],
+  "negativeChecks": [
+    "Token Plan key against PAYG endpoint dashscope-intl.aliyuncs.com GET /models -> HTTP 401 (key cannot incur DashScope pay-as-you-go usage)",
+    "Profile session store: no session has billing provider meta-ai (credits) at any time",
+    "meta-generation / meta-repair aliases (provider meta-ai = participant credits) removed",
+    "Auxiliary auto chain (main provider -> OpenRouter :free -> Nous -> custom) does not include meta-ai"
+  ],
+  "defectFound": "ALIBABA_TOKEN_PLAN_API_KEY in the profile .env held a 29-character non-key text value (401). The working Token Plan key was stored under DASHSCOPE_API_KEY.",
+  "resolution": "2026-10-27 06:46 KST, approved by Calvin: working key copied into ALIBABA_TOKEN_PLAN_API_KEY (GET /models 200); aliases qwen-backend, routine-tests, qwen-docs use key_env ALIBABA_TOKEN_PLAN_API_KEY; re-verified routine-tests live (session 20261027_064613_88ac40, DEEPSEEK_OK). Values never printed; .env backup kept in the profile backups folder."
+}

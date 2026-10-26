@@ -61,4 +61,8 @@ Actual tests: Spark 1.3 returned `MUSE_SUBSCRIPTION_OK` with one completed subsc
 See `docs/MUSE_SUBSCRIPTION.md` for limits and usage. This resolves subscription routing, not Wonder entitlement.
 
 ## Remaining gates
+> **Update 2026-10-27 (routing):** building is subscription-only. Removed `meta-generation`/`meta-repair` aliases (they billed participant credits via `meta-ai`). `qwen-backend`, `routine-tests`, `qwen-docs` now use provider `alibaba-token-plan` with `key_env: ALIBABA_TOKEN_PLAN_API_KEY` (that variable held an invalid non-key value until 2026-10-27, when Calvin approved copying the working Token Plan key into it; `DASHSCOPE_API_KEY` holds the same Token Plan key). All six building routes answered live; see `docs/evidence/building-routes-subscription-check.json`. Config backup in the profile `backups/`.
+>
+> **Update 2026-10-27:** official participant guide recovered (`HACKATHON_RULES.md`); Meta credits confirmed (USD 150) and the direct API smoke passed; master prompt preserved at `docs/MASTER_PROMPT.md`. Muse Wonder is excluded by the latest user directive (supersedes "permitted" wording above). Remaining: user confirmation before product implementation; Baseten enablement (Stage 7 only).
+
 Official participant FAQ/master instructions, verified credits and approved metered budget, exact Wonder/Baseten enablement, and user confirmation before product implementation. No product agents/build/deployment launched. Original setup provenance remains OpenAI-authored; Opus is the new lead from this user decision onward.

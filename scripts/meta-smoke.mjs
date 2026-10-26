@@ -13,7 +13,8 @@ function stop(reason, exitCode = 2) {
   process.exit(exitCode);
 }
 if (!key) stop('MODEL_API_KEY_MISSING');
-if (!/^LLM\|[0-9]+\|[^\s|]+$/.test(key)) stop('MODEL_API_KEY_FORMAT_INVALID');
+// Shape check only (no whitespace, plausible length); the server is the authority on validity.
+if (!/^\S{20,}$/.test(key)) stop('MODEL_API_KEY_FORMAT_INVALID');
 const budget = Number(process.env.META_APPROVED_JOB_BUDGET_USD || 0);
 if (!Number.isFinite(budget) || budget < upperEstimateUSD) stop('SPENDING_NOT_APPROVED');
 const started = performance.now();

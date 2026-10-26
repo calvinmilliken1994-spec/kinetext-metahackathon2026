@@ -1,17 +1,34 @@
-# Hackathon rules — verification pending
+# Hackathon rules — verified against the official participant guide
 
 ## Authority
-The official participant FAQ referenced by the user is the intended basis for competition requirements. It was not included in this addendum, found in the empty project folder, or recovered in the searched current/older hackathon session history. Request the original FAQ and master instructions. **Do not treat the user addendum or model docs as official contest rules.**
+Canonical source: the Cerebral Valley participant guide (login-gated "Event Details" page), copied by Calvin and received 2026-10-27 06:02 KST. Private copy: `docs/official/PARTICIPANT_GUIDE.md` (gitignored by user decision). Section numbers below cite that guide (§n). Event page: https://cerebralvalley.ai/e/meta-ai-developer-hackathon/details. The user addendum and master prompt are project requirements, not contest rules. (History: before 2026-10-27 06:02 KST the guide was unrecovered — fetches hit a login wall.)
 
-- Event: https://cerebralvalley.ai/e/meta-ai-developer-hackathon/details
-- Fetch on 2026-10-27 KST returned a login page, not event details.
-- Browser attempt was blocked by Chrome profile lock. User browser was not closed; credentials were not guessed.
+## Requirements that constrain this project
+| Topic | Official rule | Project consequence |
+|---|---|---|
+| Problem statement (§1) | Build toward **Build for Your World** or **Push the Frontier**; must incorporate Meta models | Target "Build for Your World" (teachers/learners turning sources into verified interactive activities). Meta is the core intelligence layer, not decoration |
+| Building window (§3) | Building period Oct 27 – Nov 4 (ET). Kickoff Mon Oct 26 12:00 ET = Oct 27 01:00 KST | See provenance note below |
+| Deadline (§3, §7) | Submissions due **Wed Nov 4, 9:00 PM ET = Thu Nov 5, 11:00 KST** via CV platform. Nov 3 is the last full day for troubleshooting questions. Late submissions not considered | Freeze features well before; submission package is Stage 9 |
+| Open source (§4) | Repositories must be public | Public at submission; user controls visibility timing |
+| New work only (§4) | Demo must show only features built during the hackathon; judges must clearly identify what was created during the event, or disqualification | Keep `PROVENANCE.md` and the Git log precise; README must separate setup scaffold from event-built product work |
+| Rights (§4) | Disqualified for code, data or assets without rights | Licensed sources only; record licenses per source and dependency |
+| Anti-projects (§4) | Includes basic RAG apps, simple image analyzers, **simple "AI for Education" chatbots**, medical advice | The product must not read as an education chatbot: emphasis on executable, verified interactive artifacts, not chat |
+| Team (§4) | Max 4; solo allowed | Solo/indie track assumed — confirm with Calvin |
+| Deliverables (§7) | Public repo, **3-minute demo video**, live product; list everyone who worked on it | Stage 9 checklist |
+| Credits (§5) | $150 Meta Model API credits, claim by Nov 4 9 PM ET; card required; optional Spend Limit notification | Claimed and applied (see `RESOURCE_POLICY.md`) |
+| Baseten (§6) | Use `meta-models/muse-spark-open-1026` (not the docs' unsuffixed ID) | Exact ID confirmed by guide; access/credits still unverified |
 
-## Unverified contest requirements
-Dates/timezone and eligible development window; team size/eligibility/location; required Meta usage; allowed preexisting code/assets; submission deadline and exact deliverables; public repo/license obligations; judging rubric; three-minute video requirement (user-requested demo format, not yet confirmed official); credit eligibility/expiration; IP and privacy rules.
+## Judging (§8)
+Stage 1 pass/fail: fits a theme and reasonably used Meta Model API and/or open-weight models during the hackathon. Stage 2 weighted 0–10: **Impact 30%**, **Use of Meta AI Tooling 25%** (creative, beyond basic integration), **Technical Depth & Execution 20%**, **Demo 25%** (working, holds up live, video worth watching). Stage 3: top 5 per track ranked live on the same rubric.
+
+## Bonus prizes relevant to scope (§9)
+- Best Agentic Use-Case ($5K): autonomy, effectiveness, practical usefulness — aligns with the Stage 5 verify-and-repair loop.
+- Best Build on Meta Open Weight Models ($10K): Muse Glimmer or Muse Spark Open on own hardware or partner inference; partner verifies. Stage 7 option only if a real eligible runtime path exists.
+- Best Creative Build ($5K): Muse Image or Muse Wonder. Wonder is excluded by user directive; Muse Image only for labeled illustrations, never scientific diagrams.
+- Most Viral (X engagement) and Community Vote: post-submission, user's call.
 
 ## Working project constraints (user requirements, not official rules)
-Meta-first core, permanent tagline, physics-first real interactive application, actual tests and repair evidence, public-repo provenance, licensed samples, no fabricated measurements. See `PROFILE_ADDENDUM.md`.
+Meta-first core, permanent tagline, physics-first real interactive application, actual tests and repair evidence, public-repo provenance, licensed samples, no fabricated measurements. See `PROFILE_ADDENDUM.md` and `MASTER_PROMPT.md`.
 
-## Required record
-When FAQ is supplied: retain its exact source/file, retrieval time and version; cite each requirement to a section; resolve conflicts before implementation or submission. Calendar dates for the ten-day plan remain relative until eligibility/deadline is verified.
+## Provenance note
+Setup commits `23ae633` and `b5f25da` were made 2026-10-27 05:44–05:47 KST (= Oct 26 ~16:45 ET): after kickoff, before the stated Oct 27 building-period start. They contain setup documentation, a draft schema, tests and a smoke probe — no product functionality. Treat them as setup scaffold and say so in the README and demo. All product features are built from 2026-10-27 onward.
