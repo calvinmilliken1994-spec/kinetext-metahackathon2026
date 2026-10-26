@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "status": "design-defaults-not-a-production-enforcer",
+  "approvedBudgetUSD": {
+    "meta": 0,
+    "baseten": 0,
+    "modal": 0,
+    "fireworks": 0,
+    "other": 0
+  },
+  "maxRepairAttempts": 2,
+  "maxRetries": 1,
+  "maxToolCalls": 12,
+  "maxJobWallTimeMs": 120000,
+  "maxInputTokens": 16000,
+  "maxOutputTokens": 4096,
+  "generatedCodeEnabled": false,
+  "externalModelFallbackEnabled": false
+}

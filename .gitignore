@@ -1,0 +1,72 @@
+# --- Environment variables and credentials ---------------------------------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials.json
+secrets.json
+service-account*.json
+
+# --- Python ------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# --- Node.js / Next.js -------------------------------------------------------
+node_modules/
+.next/
+out/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+
+# --- Local configuration and development files -------------------------------
+.vscode/
+.idea/
+*.log
+logs/
+tmp/
+temp/
+.cache/
+.DS_Store
+Thumbs.db
+
+# --- User uploads, runtime data and generated artifacts ----------------------
+# Uploaded sources may be copyrighted/private. Licensed, intentionally public
+# samples belong in tracked, attributed paths such as tests/fixtures/.
+uploads/
+generated/
+artifacts/
+storage/
+data/private/
+.data/
+*.sqlite
+*.sqlite3
+*.db
+
+# --- Hermes and Obsidian -----------------------------------------------------
+# Local agent secrets and runtime state
+.hermes/
+.hermes-cache/
+
+# Private project knowledge base
+obsidian-vault/
+
+# Obsidian user-specific state, if other vaults are tracked
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache/
+.obsidian/plugins/*/data.json
+
+# --- Git worktrees (normally ../meta-hackathon-worktrees/) --------------------
+worktrees/

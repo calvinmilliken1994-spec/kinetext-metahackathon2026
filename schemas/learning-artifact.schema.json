@@ -1,0 +1,310 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.invalid/learning-artifact-v0.1.schema.json",
+  "title": "Learning Artifact v0.1 \u2014 forces template only; semantic validation also required",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": "0.1.0"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "learningObjectives": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      },
+      "minItems": 1,
+      "maxItems": 10
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "locator": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "license": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10000
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "locator",
+          "license",
+          "sha256",
+          "page"
+        ]
+      },
+      "minItems": 1,
+      "maxItems": 20
+    },
+    "explanations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 5000
+          },
+          "sourceIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "minItems": 1,
+            "maxItems": 20
+          }
+        },
+        "required": [
+          "text",
+          "sourceIds"
+        ]
+      },
+      "minItems": 1,
+      "maxItems": 50
+    },
+    "simulation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "engine": {
+          "const": "forces-1d-v1"
+        },
+        "massKg": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "unit": {
+              "const": "kg"
+            },
+            "min": {
+              "type": "number",
+              "minimum": 0.01,
+              "maximum": 1000
+            },
+            "max": {
+              "type": "number",
+              "minimum": 0.01,
+              "maximum": 1000
+            },
+            "default": {
+              "type": "number",
+              "minimum": 0.01,
+              "maximum": 1000
+            }
+          },
+          "required": [
+            "unit",
+            "min",
+            "max",
+            "default"
+          ]
+        },
+        "netForceN": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "unit": {
+              "const": "N"
+            },
+            "min": {
+              "type": "number",
+              "minimum": -1000,
+              "maximum": 1000
+            },
+            "max": {
+              "type": "number",
+              "minimum": -1000,
+              "maximum": 1000
+            },
+            "default": {
+              "type": "number",
+              "minimum": -1000,
+              "maximum": 1000
+            }
+          },
+          "required": [
+            "unit",
+            "min",
+            "max",
+            "default"
+          ]
+        },
+        "durationS": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 30
+        },
+        "stepS": {
+          "type": "number",
+          "minimum": 0.001,
+          "maximum": 0.1
+        },
+        "equation": {
+          "const": "a=F_net/m"
+        }
+      },
+      "required": [
+        "engine",
+        "massKg",
+        "netForceN",
+        "durationS",
+        "stepS",
+        "equation"
+      ]
+    },
+    "behavioralTests": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "massKg": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 1000
+          },
+          "netForceN": {
+            "type": "number",
+            "minimum": -1000,
+            "maximum": 1000
+          },
+          "expectedAccelerationMps2": {
+            "type": "number",
+            "minimum": -100000,
+            "maximum": 100000
+          },
+          "tolerance": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 0.001
+          }
+        },
+        "required": [
+          "name",
+          "massKg",
+          "netForceN",
+          "expectedAccelerationMps2",
+          "tolerance"
+        ]
+      },
+      "minItems": 1,
+      "maxItems": 20
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "maxWallTimeMs": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 10000
+        },
+        "maxRepairAttempts": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2
+        },
+        "network": {
+          "const": false
+        },
+        "generatedCodeAllowed": {
+          "const": false
+        }
+      },
+      "required": [
+        "maxWallTimeMs",
+        "maxRepairAttempts",
+        "network",
+        "generatedCodeAllowed"
+      ]
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "provider": {
+          "const": "meta"
+        },
+        "requestedModel": {
+          "const": "muse-spark-1.3"
+        },
+        "responseId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "runId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        }
+      },
+      "required": [
+        "provider",
+        "requestedModel",
+        "responseId",
+        "runId"
+      ]
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "title",
+    "learningObjectives",
+    "sources",
+    "explanations",
+    "simulation",
+    "behavioralTests",
+    "execution",
+    "provenance"
+  ]
+}

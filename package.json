@@ -1,0 +1,14 @@
+{
+  "name": "meta-hackathon-2026",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Make knowledge interactive. Product name provisional; setup only.",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "smoke:meta": "node --env-file-if-exists=.env.local scripts/meta-smoke.mjs",
+    "check": "npm test"
+  },
+  "devDependencies": { "ajv": "8.17.1" }
+}

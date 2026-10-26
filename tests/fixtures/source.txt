@@ -1,0 +1,1 @@
+Newton second law: net force equals mass times acceleration. SI units: newton, kilogram, metre per second squared. Original test text authored for this repository.

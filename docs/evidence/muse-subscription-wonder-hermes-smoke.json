@@ -1,0 +1,60 @@
+{
+  "status": "failed",
+  "route": "hermes-to-muse-cli-subscription",
+  "requestedModel": "muse-wonder-1.0",
+  "contributorMode": "off",
+  "checkedAt": "2026-10-26T19:16:46.672646+00:00",
+  "fallbackUsed": false,
+  "maxModelSteps": 1,
+  "timeoutSeconds": 90,
+  "subscriptionTier": "Muse Code High Usage",
+  "allowanceBefore": {
+    "tier": "Muse Code High Usage",
+    "window": {
+      "usedPercent": 0,
+      "resetsAtMs": 1793059192000
+    },
+    "weekly": {
+      "usedPercent": 0,
+      "resetsAtMs": 1793577600000
+    },
+    "asOfMs": 1793042206729,
+    "source": "mint"
+  },
+  "exitCode": 1,
+  "configuredModel": "muse-wonder-1.0",
+  "usage": {
+    "kind": "run_usage",
+    "command_id": "01a179a4-d7ca-7fc1-8ed6-6e9c1cea976e",
+    "run_stream": {
+      "kind": "run",
+      "id": "01a179a4-d7ca-7fc1-8ed6-6e9c1cea976e"
+    },
+    "models": [],
+    "calls": 1,
+    "completed_calls": 0,
+    "failed_calls": 1,
+    "cancelled_calls": 0,
+    "children_included": false,
+    "allowance": {
+      "tier": "Muse Code High Usage",
+      "window": {
+        "used_percent": 0,
+        "resets_at_ms": 1793059192000
+      },
+      "weekly": {
+        "used_percent": 0,
+        "resets_at_ms": 1793577600000
+      },
+      "as_of_ms": 1793042209855,
+      "source": "mint"
+    }
+  },
+  "httpStatuses": [
+    404
+  ],
+  "terminal": "failed",
+  "answer": "",
+  "reason": "model `muse-wonder-1.0` does not exist or you lack access [request_id=f5525e8f-e2bc-49b4-bf57-7c4fda51fd79]",
+  "elapsedSeconds": 4.453
+}
