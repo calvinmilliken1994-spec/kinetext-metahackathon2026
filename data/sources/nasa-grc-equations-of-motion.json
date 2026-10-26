@@ -1,0 +1,12 @@
+{
+  "id": "nasa-grc-equations-of-motion",
+  "title": "Equations of Motion — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+  "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/equations-of-motion/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+  "sha256": "1f43ca9d8a7097f7898a56c0eef367132de6ac7e5fe28605b5504b696324dbf0",
+  "textFile": "nasa-grc-equations-of-motion.txt",
+  "retrievedAt": "2026-10-26T22:22:43Z",
+  "transcription": "Main article text only (navigation, image, feedback form and simulator instructions removed). LaTeX equations transcribed to plain text, e.g. a = F / m. Whitespace normalised.",
+  "purpose": "supported example: constant force, constant mass, a = F/m and kinematics"
+}

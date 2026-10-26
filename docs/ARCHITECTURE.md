@@ -64,6 +64,9 @@ v0.1 fields stay unless listed: `schemaVersion`, `id`, `title`, `learningObjecti
 5. Behavioural: each `behavioralTests[]` and `predictions[]` expected acceleration equals `F/m` from the engine within tolerance; predictions lie inside the slider ranges.
 6. Trajectory invariants on default parameters: finite values, `v(t)=a·t`, `x(t)=½·a·t²`.
 
+## Source-use conditions (from TASK-007)
+NASA sources may be used in AI tools only if outputs are attributed to the product, not NASA. Therefore: the UI labels generated content "AI-generated with Muse Spark" and shows the source disclosure "includes NASA source material; NASA has not reviewed or endorsed this activity"; prompts forbid "according to NASA"-style attribution; the validator rejects generated text that attributes claims to the source publisher (check `policy.no-publisher-attribution`). Verbatim evidence quotes are shown as quotes from the source, which is permitted.
+
 ## Safety and trust boundaries
 Source text is data: prompts delimit it and instruct Muse to ignore instructions inside it; outputs are schema-constrained, so injected text cannot add code. No model-supplied URLs are fetched. API key stays server-side (never in `apps/web`). Free-credit traffic may be used by Meta for product improvement, so only licensed public or synthetic sources are sent (`RESOURCE_POLICY.md`). Generated code execution stays disabled; activities are data rendered by tested components.
 

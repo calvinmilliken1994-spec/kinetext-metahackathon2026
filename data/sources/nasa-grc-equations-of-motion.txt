@@ -1,0 +1,23 @@
+# Equations of Motion
+
+Aircraft Motion – Constant Force, X -Direction Only
+
+In cruising flight, an airplane can sustain a constant speed and level flight in which the forces are all in equilibrium. As shown on the slide, the weight is balanced by the lift, and the drag is balanced by the thrust. However, if the forces become unbalanced, the aircraft will move in the direction of the greater force. We can compute the acceleration (a), velocity (V), and final displacement (x) of the aircraft using Newton’s Second Law of Motion. On this slide, we will consider only the horizontal (x-direction) motion, but similar equations could be developed for the vertical and side-to-side motion as well.
+
+If the mass (m) of the aircraft remains a constant we can use the familiar form of Newton’s second law to solve for the acceleration:
+
+F = m * a
+
+a = F / m
+
+We have to determine the mass of the aircraft from the weight. The force (F) will be the difference between the opposing forces (thrust minus drag).
+
+If the force also remains constant, the basic equations of motion can be solved. For a constant force and constant mass, the acceleration remains constant. The velocity (V) at any time (t) is the acceleration (a) times the time plus the initial velocity (Vo).
+
+V = a * t + Vo
+
+Similarly, the location (x) at any time (t) is given by 1/2 the acceleration times the time squared, plus the initial location (xo), plus the initial velocity times the time.
+
+x = (a * t^2) / 2 + Vo * t + xo
+
+Note that these equations can be used only if the mass and the force (and the acceleration) are constant. The mass of an aircraft remains fairly constant during cruise since the only loss is for the fuel which is consumed. Fuel mass is normally a small percentage of the mass of an aircraft. However for aircraft, the lift and drag forces are themselves functions of the square of the velocity. So we can assume a constant force for only a very small amount of time. To solve the actual equations of motion for an aircraft, we must use calculus and integrate the equations of motion. The integration can be performed analytically or numerically.

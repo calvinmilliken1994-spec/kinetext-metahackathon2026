@@ -1,0 +1,6 @@
+# Keep line endings as LF everywhere so hashes and diffs match across platforms.
+* text=auto eol=lf
+# Stored source texts are hashed (sha256) byte-for-byte: never rewrite their line endings.
+data/sources/*.txt -text
+*.png binary
+*.jpg binary

@@ -1,0 +1,12 @@
+{
+  "id": "nasa-grc-speed-of-sound",
+  "title": "Speed of Sound Interactive — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+  "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/speed-of-sound-interactive/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+  "sha256": "7ebd6e4acd15582d57fbdf4cdea82b7d4748c231e5aea039c2c8756214c8e02a",
+  "textFile": "nasa-grc-speed-of-sound.txt",
+  "retrievedAt": "2026-10-26T22:22:43Z",
+  "transcription": "Main article text only (navigation, image, feedback form and simulator instructions removed). LaTeX equations transcribed to plain text, e.g. a = F / m. Whitespace normalised.",
+  "purpose": "unsupported example: speed of sound / Mach number (no forces-1d activity applies)"
+}
