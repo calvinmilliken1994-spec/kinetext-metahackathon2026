@@ -1,0 +1,57 @@
+{
+  "activity": "forces-1d-v1",
+  "concepts": [
+    {
+      "evidence": [
+        {
+          "quote": "F = m * a",
+          "sourceId": "nasa-grc-equations-of-motion"
+        },
+        {
+          "quote": "a = F / m",
+          "sourceId": "nasa-grc-equations-of-motion"
+        }
+      ],
+      "id": "newtons-second-law",
+      "name": "Newton's Second Law"
+    },
+    {
+      "evidence": [
+        {
+          "quote": "The force (F) will be the difference between the opposing forces (thrust minus drag).",
+          "sourceId": "nasa-grc-equations-of-motion"
+        },
+        {
+          "quote": "However, if the forces become unbalanced, the aircraft will move in the direction of the greater force.",
+          "sourceId": "nasa-grc-equations-of-motion"
+        }
+      ],
+      "id": "net-force-1d",
+      "name": "Net Force in One Dimension"
+    },
+    {
+      "evidence": [
+        {
+          "quote": "For a constant force and constant mass, the acceleration remains constant.",
+          "sourceId": "nasa-grc-equations-of-motion"
+        },
+        {
+          "quote": "V = a * t + Vo",
+          "sourceId": "nasa-grc-equations-of-motion"
+        },
+        {
+          "quote": "x = (a * t^2) / 2 + Vo * t + xo",
+          "sourceId": "nasa-grc-equations-of-motion"
+        }
+      ],
+      "id": "constant-acceleration-motion",
+      "name": "Constant-Acceleration Motion"
+    }
+  ],
+  "objectives": [
+    "Calculate acceleration from constant net force and mass in one dimension",
+    "Predict velocity and displacement over time under constant acceleration"
+  ],
+  "supported": true,
+  "unsupportedReason": ""
+}

@@ -1,0 +1,122 @@
+{
+  "title": "Constant Force Motion in One Dimension",
+  "learningObjectives": [
+    "Calculate acceleration from constant net force and mass in one dimension",
+    "Predict velocity and displacement over time under constant acceleration"
+  ],
+  "explanations": [
+    {
+      "evidence": [
+        {
+          "quote": "F = m * a",
+          "sourceId": "nasa-grc-equations-of-motion"
+        },
+        {
+          "quote": "a = F / m",
+          "sourceId": "nasa-grc-equations-of-motion"
+        }
+      ],
+      "id": "newtons-second-law",
+      "text": "For constant mass, acceleration equals net force divided by mass."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "The force (F) will be the difference between the opposing forces (thrust minus drag).",
+          "sourceId": "nasa-grc-equations-of-motion"
+        },
+        {
+          "quote": "However, if the forces become unbalanced, the aircraft will move in the direction of the greater force.",
+          "sourceId": "nasa-grc-equations-of-motion"
+        }
+      ],
+      "id": "net-force-direction",
+      "text": "Net force in one dimension is the difference between opposing forces, and unbalanced force produces motion in the direction of the greater force."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "For a constant force and constant mass, the acceleration remains constant.",
+          "sourceId": "nasa-grc-equations-of-motion"
+        },
+        {
+          "quote": "V = a * t + Vo",
+          "sourceId": "nasa-grc-equations-of-motion"
+        }
+      ],
+      "id": "constant-acceleration-motion",
+      "text": "With constant force and constant mass, acceleration stays constant and velocity increases linearly with time."
+    }
+  ],
+  "simulation": {
+    "massKg": {
+      "min": 0.5,
+      "max": 20,
+      "default": 2
+    },
+    "netForceN": {
+      "min": -50,
+      "max": 50,
+      "default": 10
+    },
+    "durationS": 5,
+    "stepS": 0.02,
+    "scenario": {
+      "objectLabel": "Model aircraft",
+      "surfaceLabel": "Level flight, x-direction only"
+    },
+    "observables": [
+      "position",
+      "velocity",
+      "acceleration"
+    ]
+  },
+  "behavioralTests": [
+    {
+      "expectedAccelerationMps2": 5,
+      "massKg": 2,
+      "name": "positive net force accelerates forward",
+      "netForceN": 10,
+      "tolerance": 0.001
+    },
+    {
+      "expectedAccelerationMps2": -4,
+      "massKg": 5,
+      "name": "negative net force accelerates backward",
+      "netForceN": -20,
+      "tolerance": 0.001
+    },
+    {
+      "expectedAccelerationMps2": 0,
+      "massKg": 10,
+      "name": "zero net force means zero acceleration",
+      "netForceN": 0,
+      "tolerance": 0.001
+    },
+    {
+      "expectedAccelerationMps2": 3,
+      "massKg": 4,
+      "name": "larger mass gives smaller acceleration",
+      "netForceN": 12,
+      "tolerance": 0.001
+    }
+  ],
+  "predictions": [
+    {
+      "expectedAccelerationMps2": 2,
+      "id": "pred-1",
+      "massKg": 5,
+      "netForceN": 10,
+      "prompt": "A 5 kg model aircraft has 10 N net force forward. Predict its acceleration.",
+      "tolerance": 0.001
+    },
+    {
+      "expectedAccelerationMps2": -5,
+      "id": "pred-2",
+      "massKg": 2,
+      "netForceN": -10,
+      "prompt": "A 2 kg model aircraft has 10 N net force backward. Predict its acceleration.",
+      "tolerance": 0.001
+    }
+  ]
+}
