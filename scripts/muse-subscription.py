@@ -47,20 +47,34 @@ def locate_muse():
     return exe
 
 
+def timeout_seconds(value):
+    """Wall-clock deadline for one bridge run: default 90 s, bounded to 30..600 s."""
+    if value is None:
+        return 90
+    if not 30 <= value <= 600:
+        raise ValueError('TIMEOUT_OUT_OF_RANGE')
+    return value
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--model', choices=MODELS, default='muse-wonder-1.0')
     parser.add_argument('--prompt-file', type=Path)
     parser.add_argument('--contributor-mode', choices=('on', 'off'), default='off')
     parser.add_argument('--receipt', type=Path)
+    parser.add_argument('--timeout-seconds', type=int, help='Deadline in seconds (30-600, default 90)')
     args = parser.parse_args()
+    try:
+        deadline = timeout_seconds(args.timeout_seconds)
+    except ValueError:
+        parser.error('--timeout-seconds must be between 30 and 600')
     if args.contributor_mode == 'on' and args.prompt_file:
         parser.error('Contributor-mode route is limited to the fixed non-private smoke prompt')
     started = time.monotonic()
     report = {'status': 'failed', 'route': 'hermes-to-muse-cli-subscription',
               'requestedModel': args.model, 'contributorMode': args.contributor_mode,
               'checkedAt': datetime.now(timezone.utc).isoformat(), 'fallbackUsed': False,
-              'maxModelSteps': 1, 'timeoutSeconds': 90}
+              'maxModelSteps': 1, 'timeoutSeconds': deadline}
     try:
         # Read only credential metadata. Never print/copy the token or key.
         config_home = Path(os.environ.get('XDG_CONFIG_HOME', str(Path.home() / '.config')))
@@ -88,7 +102,7 @@ def main():
                               'Reply with exactly: MUSE_SUBSCRIPTION_OK. Do not use tools.', encoding='utf-8')
             result = subprocess.run(command(exe, args.model, prompt, work, args.contributor_mode),
                                     capture_output=True, text=True, encoding='utf-8', errors='replace',
-                                    env=env, cwd=work, timeout=max(1, 90-(time.monotonic()-started)))
+                                    env=env, cwd=work, timeout=max(1, deadline-(time.monotonic()-started)))
             report['exitCode'] = result.returncode
             terminal = None
             statuses = []

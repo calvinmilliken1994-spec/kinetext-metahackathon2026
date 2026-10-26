@@ -24,6 +24,16 @@ class MuseSubscriptionRouteTest(unittest.TestCase):
         self.assertIn('--disable-reminders', cmd)
         self.assertNotIn('--api-key-stdin', cmd)
 
+    def test_timeout_is_bounded(self):
+        spec = importlib.util.spec_from_file_location('muse_subscription', SCRIPT)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        self.assertEqual(module.timeout_seconds(None), 90)
+        self.assertEqual(module.timeout_seconds(300), 300)
+        for bad in (0, 29, 601, -5):
+            with self.assertRaises(ValueError):
+                module.timeout_seconds(bad)
+
     def test_success_requires_actual_model_usage_not_just_configured_label(self):
         spec = importlib.util.spec_from_file_location('muse_subscription', SCRIPT)
         module = importlib.util.module_from_spec(spec)
