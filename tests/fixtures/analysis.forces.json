@@ -1,0 +1,20 @@
+{
+  "supported": true,
+  "activity": "forces-1d-v1",
+  "unsupportedReason": "",
+  "concepts": [
+    {
+      "id": "newtons-second-law",
+      "name": "Newton's second law",
+      "evidence": [
+        {
+          "sourceId": "source-1",
+          "quote": "net force equals mass times acceleration"
+        }
+      ]
+    }
+  ],
+  "objectives": [
+    "Relate net force, mass and acceleration."
+  ]
+}

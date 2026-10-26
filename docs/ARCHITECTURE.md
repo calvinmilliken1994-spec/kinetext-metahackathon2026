@@ -1,6 +1,6 @@
-# Architecture — v0.2 proposal (Stage 1), pending user confirmation
+# Architecture — v0.2 (Stage 1), approved 2026-10-27
 
-**Make knowledge interactive.** Status: design only. Interfaces below become frozen when TASK-001 lands with tests. Supersedes the v0.1 proposal (Next.js + OpenAI SDK), kept in Git history.
+**Make knowledge interactive.** Status: contracts **frozen** by TASK-001 — canonical files: `schemas/activity-spec.full.json`, `schemas/activity-spec.gen.json`, `schemas/source-analysis.gen.json`, `packages/contracts/index.ts`; tests `tests/contracts.test.ts`. Source fields also gained `attribution` (CC BY needs it) and `page` became optional (web sources). Tolerance limit is 0.01 m/s². Supersedes the v0.1 proposal (Next.js + OpenAI SDK), kept in Git history.
 
 ## Product loop
 SOURCE → MUSE ANALYSIS → ACTIVITY SPEC → DETERMINISTIC VALIDATION → (bounded MUSE REPAIR) → INTERACTIVE ACTIVITY → TEACHER EDIT → PUBLISH.

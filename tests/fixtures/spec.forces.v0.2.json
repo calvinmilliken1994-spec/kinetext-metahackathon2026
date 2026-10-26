@@ -1,0 +1,117 @@
+{
+  "schemaVersion": "0.2.0",
+  "id": "forces-contract-fixture",
+  "title": "Push a cart: force, mass and acceleration",
+  "learningObjectives": [
+    "Predict how acceleration changes when net force or mass changes."
+  ],
+  "sources": [
+    {
+      "id": "source-1",
+      "title": "Original contract test source",
+      "locator": "tests/fixtures/source.txt",
+      "license": "CC0-1.0",
+      "attribution": "Original test text authored for this repository; dedicated CC0-1.0.",
+      "sha256": "89f34f6f3025c6e29c4a651596f9a6d904879384e96f0d8f4c8d2e65ed816b4d"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "second-law",
+      "text": "Acceleration equals net force divided by mass.",
+      "evidence": [
+        {
+          "sourceId": "source-1",
+          "quote": "net force equals mass times acceleration"
+        }
+      ]
+    },
+    {
+      "id": "units",
+      "text": "Force is measured in newtons, mass in kilograms, acceleration in metres per second squared.",
+      "evidence": [
+        {
+          "sourceId": "source-1",
+          "quote": "SI units: newton, kilogram, metre per second squared"
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "forces-1d-v1",
+    "equation": "a=F_net/m",
+    "massKg": {
+      "unit": "kg",
+      "min": 1,
+      "max": 10,
+      "default": 2
+    },
+    "netForceN": {
+      "unit": "N",
+      "min": -10,
+      "max": 10,
+      "default": 4
+    },
+    "durationS": 5,
+    "stepS": 0.02,
+    "scenario": {
+      "objectLabel": "Cart",
+      "surfaceLabel": "Frictionless track"
+    },
+    "observables": [
+      "position",
+      "velocity",
+      "acceleration"
+    ]
+  },
+  "behavioralTests": [
+    {
+      "name": "positive force",
+      "massKg": 2,
+      "netForceN": 4,
+      "expectedAccelerationMps2": 2,
+      "tolerance": 1e-06
+    },
+    {
+      "name": "negative force",
+      "massKg": 4,
+      "netForceN": -8,
+      "expectedAccelerationMps2": -2,
+      "tolerance": 1e-06
+    },
+    {
+      "name": "non-integer result",
+      "massKg": 3,
+      "netForceN": 1,
+      "expectedAccelerationMps2": 0.3333,
+      "tolerance": 0.001
+    }
+  ],
+  "predictions": [
+    {
+      "id": "double-force",
+      "prompt": "A 2 kg cart is pushed with 10 N. What is its acceleration?",
+      "massKg": 2,
+      "netForceN": 10,
+      "expectedAccelerationMps2": 5,
+      "tolerance": 0.001
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "fixture-not-a-real-response",
+    "runId": "contract-fixture",
+    "promptVersion": "fixture",
+    "revision": 1,
+    "repairOf": null,
+    "generatedAt": "2026-10-27T00:00:00.000Z"
+  }
+}

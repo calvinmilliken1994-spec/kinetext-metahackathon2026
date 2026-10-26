@@ -1,0 +1,9 @@
+{
+  "id": "source-1",
+  "title": "Original contract test source",
+  "locator": "tests/fixtures/source.txt",
+  "license": "CC0-1.0",
+  "attribution": "Original test text authored for this repository; dedicated CC0-1.0.",
+  "sha256": "89f34f6f3025c6e29c4a651596f9a6d904879384e96f0d8f4c8d2e65ed816b4d",
+  "text": "Newton second law: net force equals mass times acceleration. SI units: newton, kilogram, metre per second squared. Original test text authored for this repository.\n"
+}

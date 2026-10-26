@@ -19,6 +19,20 @@ Before assignment record task ID, owner, exact files, parent dependencies, branc
 ## Worktrees
 Local repo only; no remote publication is authorized. Lead retains main. After initial setup commit and approval, use `git status --short --branch` then `git worktree add ../meta-hackathon-worktrees/<task-id> -b task/<task-id>` from the project root. Each role has one worktree/branch and no shared mutable build output. Inspect all dirty state before branch operations; never stash/drop/delete another agent's work. Merge/review serially, then rerun integration tests. Worktrees are not execution sandboxes.
 
+## Delegation mechanism — built-in Hermes subagents (Calvin's preference, 2026-10-27)
+Tasks are delegated with Hermes' built-in `delegate_task`, one child at a time (`delegation.max_concurrent_children: 1`). The tool has no per-task model field, so the lead pins the route in config immediately before each delegation and clears it afterwards:
+
+| Route | `delegation.provider` | `delegation.model` |
+|---|---|---|
+| Backend (Qwen Max) | `alibaba-token-plan` | `qwen3.8-max` |
+| Routine tests (DeepSeek) | `alibaba-token-plan` | `deepseek-v4.1-flash-1017` |
+| Docs (Qwen Flash) | `alibaba-token-plan` | `qwen3.8-flash` |
+| Frontend (Sonnet) | `anthropic` | `claude-sonnet-5-5` |
+| Review (GPT-6.1 Sol) | `openai-codex` | `gpt-6.1-sol` |
+| Unset (default) | — | children inherit Opus 5.5 |
+
+Set with `hermes -p meta-hackathon-2026 config set delegation.provider …` / `delegation.model …`; the change applies to the next `delegate_task` call in the running session. Verified 2026-10-27: a child dispatched after pinning Qwen Max ran `qwen3.8-max`, billed to `alibaba-token-plan` (session `20261027_070335_e9c9dc`). Never pin `meta-ai` (bills participant credits). Muse has no Hermes subscription provider: Meta-authored work (TASK-004) is done by a child that calls `scripts/muse-subscription.py` and applies Muse's output. Child summaries are self-reports; the lead re-runs tests before accepting work.
+
 ## Explicit route pin examples (do not auto-execute)
 > **2026-10-27 — building uses subscriptions only** (`RESOURCE_POLICY.md` § Usage split). Launch workers by alias, e.g. `hermes -p meta-hackathon-2026 chat -m qwen-backend --reasoning high -q "<task>"`; aliases `qwen-backend`, `routine-tests` and `qwen-docs` pin the Alibaba Token Plan endpoint and key. **Do not use `--provider alibaba`**: it targets the DashScope pay-as-you-go endpoint (the Token Plan key 401s there, so it fails rather than bills, but it is the wrong route). Never use `--provider meta-ai` for building: it bills the participant credits. The `meta-generation`/`meta-repair` aliases were removed for that reason. The examples below predate this note.
 

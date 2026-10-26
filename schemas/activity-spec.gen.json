@@ -1,0 +1,220 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "title",
+    "learningObjectives",
+    "explanations",
+    "simulation",
+    "behavioralTests",
+    "predictions"
+  ],
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Short activity title for students."
+    },
+    "learningObjectives": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "1-5 measurable objectives grounded in the source."
+    },
+    "explanations": {
+      "type": "array",
+      "description": "1-6 short explanations, each supported by verbatim quotes from the source.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "text",
+          "evidence"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "lowercase-kebab id"
+          },
+          "text": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "sourceId",
+                "quote"
+              ],
+              "properties": {
+                "sourceId": {
+                  "type": "string"
+                },
+                "quote": {
+                  "type": "string",
+                  "description": "Exact characters copied from the source, no ellipsis, 150 characters or fewer."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "simulation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "massKg",
+        "netForceN",
+        "durationS",
+        "stepS",
+        "scenario",
+        "observables"
+      ],
+      "properties": {
+        "massKg": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "min",
+            "max",
+            "default"
+          ],
+          "properties": {
+            "min": {
+              "type": "number"
+            },
+            "max": {
+              "type": "number"
+            },
+            "default": {
+              "type": "number"
+            }
+          }
+        },
+        "netForceN": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "min",
+            "max",
+            "default"
+          ],
+          "properties": {
+            "min": {
+              "type": "number"
+            },
+            "max": {
+              "type": "number"
+            },
+            "default": {
+              "type": "number"
+            }
+          }
+        },
+        "durationS": {
+          "type": "number"
+        },
+        "stepS": {
+          "type": "number"
+        },
+        "scenario": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "objectLabel",
+            "surfaceLabel"
+          ],
+          "properties": {
+            "objectLabel": {
+              "type": "string"
+            },
+            "surfaceLabel": {
+              "type": "string"
+            }
+          }
+        },
+        "observables": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "position",
+              "velocity",
+              "acceleration"
+            ]
+          }
+        }
+      }
+    },
+    "behavioralTests": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "massKg",
+          "netForceN",
+          "expectedAccelerationMps2",
+          "tolerance"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "massKg": {
+            "type": "number"
+          },
+          "netForceN": {
+            "type": "number"
+          },
+          "expectedAccelerationMps2": {
+            "type": "number"
+          },
+          "tolerance": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "predictions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "prompt",
+          "massKg",
+          "netForceN",
+          "expectedAccelerationMps2",
+          "tolerance"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "prompt": {
+            "type": "string"
+          },
+          "massKg": {
+            "type": "number"
+          },
+          "netForceN": {
+            "type": "number"
+          },
+          "expectedAccelerationMps2": {
+            "type": "number"
+          },
+          "tolerance": {
+            "type": "number"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "title": "Push a cart: force, mass and acceleration",
+  "learningObjectives": [
+    "Predict how acceleration changes when net force or mass changes."
+  ],
+  "explanations": [
+    {
+      "id": "second-law",
+      "text": "Acceleration equals net force divided by mass.",
+      "evidence": [
+        {
+          "sourceId": "source-1",
+          "quote": "net force equals mass times acceleration"
+        }
+      ]
+    },
+    {
+      "id": "units",
+      "text": "Force is measured in newtons, mass in kilograms, acceleration in metres per second squared.",
+      "evidence": [
+        {
+          "sourceId": "source-1",
+          "quote": "SI units: newton, kilogram, metre per second squared"
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "massKg": {
+      "min": 1,
+      "max": 10,
+      "default": 2
+    },
+    "netForceN": {
+      "min": -10,
+      "max": 10,
+      "default": 4
+    },
+    "durationS": 5,
+    "stepS": 0.02,
+    "scenario": {
+      "objectLabel": "Cart",
+      "surfaceLabel": "Frictionless track"
+    },
+    "observables": [
+      "position",
+      "velocity",
+      "acceleration"
+    ]
+  },
+  "behavioralTests": [
+    {
+      "name": "positive force",
+      "massKg": 2,
+      "netForceN": 4,
+      "expectedAccelerationMps2": 2,
+      "tolerance": 1e-06
+    },
+    {
+      "name": "negative force",
+      "massKg": 4,
+      "netForceN": -8,
+      "expectedAccelerationMps2": -2,
+      "tolerance": 1e-06
+    },
+    {
+      "name": "non-integer result",
+      "massKg": 3,
+      "netForceN": 1,
+      "expectedAccelerationMps2": 0.3333,
+      "tolerance": 0.001
+    }
+  ],
+  "predictions": [
+    {
+      "id": "double-force",
+      "prompt": "A 2 kg cart is pushed with 10 N. What is its acceleration?",
+      "massKg": 2,
+      "netForceN": 10,
+      "expectedAccelerationMps2": 5,
+      "tolerance": 0.001
+    }
+  ]
+}

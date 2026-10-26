@@ -1,6 +1,6 @@
 # Stage 2 plan — first functional vertical slice
 
-Status: **proposed, awaiting Calvin's go-ahead.** Contracts: `ARCHITECTURE.md` v0.2. Supersedes `TASKS.md` T1–T3 (T1 is now done: credits confirmed, API smoke passed).
+Status: **approved 2026-10-27** — run all tasks in order, serially, via built-in Hermes subagents (`AGENT_ROLES.md`). Stage 2 Meta credit cap **USD 10**. Contracts: `ARCHITECTURE.md` v0.2. Supersedes `TASKS.md` T1–T3 (T1 is now done: credits confirmed, API smoke passed).
 
 ## Target flow and exit criterion
 Licensed source text → Muse Spark 1.3 analysis → structured forces activity spec → deterministic validation report → interactive React simulation (student changes mass and force, sees correct acceleration and motion).
@@ -27,7 +27,7 @@ Route constraint for TASK-004: the Muse Code subscription bridge (`scripts/muse-
 
 ## Budget for Stage 2 (Meta Model API, participant credits)
 Building, including all unit and contract tests, uses subscriptions only and costs no credits. Credits are spent only by live product runs: the TASK-004 spike, the TASK-008 live end-to-end check and demo rehearsals.
-Estimated per live pipeline run (analysis + spec, Spark Standard): ~8k input + ~5k output tokens incl. reasoning ≈ USD 0.03. Proposed Stage 2 cap: **USD 5** (~150 runs) inside the USD 150 total, enforced by the ledger. Engineering via the Muse Code subscription is not charged to the credits.
+Estimated per live pipeline run (analysis + spec, Spark Standard): ~8k input + ~5k output tokens incl. reasoning ≈ USD 0.03. Approved Stage 2 cap: **USD 10** inside the USD 150 total, enforced by the ledger. Engineering via the Muse Code subscription is not charged to the credits.
 
 ## Risks
 | ID | Risk | Mitigation |

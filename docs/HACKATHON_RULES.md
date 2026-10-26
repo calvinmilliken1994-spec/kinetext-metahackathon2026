@@ -13,7 +13,7 @@ Canonical source: the Cerebral Valley participant guide (login-gated "Event Deta
 | New work only (§4) | Demo must show only features built during the hackathon; judges must clearly identify what was created during the event, or disqualification | Keep `PROVENANCE.md` and the Git log precise; README must separate setup scaffold from event-built product work |
 | Rights (§4) | Disqualified for code, data or assets without rights | Licensed sources only; record licenses per source and dependency |
 | Anti-projects (§4) | Includes basic RAG apps, simple image analyzers, **simple "AI for Education" chatbots**, medical advice | The product must not read as an education chatbot: emphasis on executable, verified interactive artifacts, not chat |
-| Team (§4) | Max 4; solo allowed | Solo/indie track assumed — confirm with Calvin |
+| Team (§4) | Max 4; solo allowed | **Solo, Indie Developer track** (confirmed by Calvin 2026-10-27) |
 | Deliverables (§7) | Public repo, **3-minute demo video**, live product; list everyone who worked on it | Stage 9 checklist |
 | Credits (§5) | $150 Meta Model API credits, claim by Nov 4 9 PM ET; card required; optional Spend Limit notification | Claimed and applied (see `RESOURCE_POLICY.md`) |
 | Baseten (§6) | Use `meta-models/muse-spark-open-1026` (not the docs' unsuffixed ID) | Exact ID confirmed by guide; access/credits still unverified |

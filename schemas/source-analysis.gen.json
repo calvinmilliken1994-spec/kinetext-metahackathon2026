@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["supported", "activity", "unsupportedReason", "concepts", "objectives"],
+  "properties": {
+    "supported": { "type": "boolean", "description": "True only if the source teaches net force, mass and acceleration in one dimension (Newton's second law)." },
+    "activity": { "type": "string", "enum": ["forces-1d-v1", "none"] },
+    "unsupportedReason": { "type": "string", "description": "Empty string when supported." },
+    "concepts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "evidence"],
+        "properties": {
+          "id": { "type": "string", "description": "lowercase-kebab id" },
+          "name": { "type": "string" },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["sourceId", "quote"],
+              "properties": {
+                "sourceId": { "type": "string" },
+                "quote": { "type": "string", "description": "Exact characters copied from the source, no ellipsis, 150 characters or fewer." }
+              }
+            }
+          }
+        }
+      }
+    },
+    "objectives": { "type": "array", "items": { "type": "string" } }
+  }
+}

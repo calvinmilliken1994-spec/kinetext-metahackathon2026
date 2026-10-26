@@ -13,8 +13,11 @@
   "maxToolCalls": 12,
   "maxJobWallTimeMs": 120000,
   "maxInputTokens": 16000,
-  "maxOutputTokens": 4096,
+  "maxOutputTokens": 8000,
   "generatedCodeEnabled": false,
   "externalModelFallbackEnabled": false,
-  "approvedBudgetNote": "meta: USD 150 participant free credits confirmed 2026-10-27; others 0"
+  "approvedBudgetNote": "meta: USD 150 participant credits, used only for live product test/demo runs (building is subscription-only). Stage 2 cap USD 10 (Calvin, 2026-10-27). Others 0.",
+  "stageCapsUSD": {
+    "stage2": 10
+  }
 }
