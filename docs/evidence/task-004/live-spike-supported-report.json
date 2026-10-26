@@ -1,0 +1,86 @@
+{
+  "artifactId": "nasa-grc-equations-of-motion-spike",
+  "revision": 1,
+  "checks": [
+    {
+      "id": "schema.full",
+      "kind": "schema",
+      "passed": true,
+      "message": "spec matches activity-spec.full.json (draft-07)"
+    },
+    {
+      "id": "semantic.mass-range",
+      "kind": "semantic",
+      "passed": true,
+      "message": "massKg min=0.5 < max=20 with default=2 inside the range"
+    },
+    {
+      "id": "semantic.force-range",
+      "kind": "semantic",
+      "passed": true,
+      "message": "netForceN min=-50 < max=50 with default=10 inside the range"
+    },
+    {
+      "id": "semantic.frame-budget",
+      "kind": "semantic",
+      "passed": true,
+      "message": "default simulation produces 251 frames, within MAX_FRAMES=3001"
+    },
+    {
+      "id": "semantic.unique-ids",
+      "kind": "semantic",
+      "passed": true,
+      "message": "explanation ids, prediction ids and behavioral test names are unique"
+    },
+    {
+      "id": "refs.sources",
+      "kind": "grounding",
+      "passed": true,
+      "message": "all references resolve: 1 spec source(s), 1 cited sourceId(s)"
+    },
+    {
+      "id": "refs.sha256",
+      "kind": "grounding",
+      "passed": true,
+      "message": "sha256 verified for 1 source(s): stored hash and recomputed text hash both match the spec"
+    },
+    {
+      "id": "grounding.quotes",
+      "kind": "grounding",
+      "passed": true,
+      "message": "all 6 evidence quote(s) appear in their source text after whitespace normalisation"
+    },
+    {
+      "id": "behavior.tests",
+      "kind": "behavioral",
+      "passed": true,
+      "message": "all 4 behavioral test(s) match a=F/m within tolerance"
+    },
+    {
+      "id": "behavior.predictions",
+      "kind": "behavioral",
+      "passed": true,
+      "message": "all 2 prediction(s) match a=F/m within tolerance"
+    },
+    {
+      "id": "semantic.predictions-in-range",
+      "kind": "semantic",
+      "passed": true,
+      "message": "all 2 prediction(s) are reproducible within the simulation slider ranges"
+    },
+    {
+      "id": "behavior.trajectory",
+      "kind": "behavioral",
+      "passed": true,
+      "message": "all 251 frames are finite and satisfy v=a*t and x=0.5*a*t^2 within 1e-9",
+      "path": "/simulation"
+    },
+    {
+      "id": "policy.no-publisher-attribution",
+      "kind": "semantic",
+      "passed": true,
+      "message": "no student-facing text attributes claims to the source publisher"
+    }
+  ],
+  "publishable": true
+}

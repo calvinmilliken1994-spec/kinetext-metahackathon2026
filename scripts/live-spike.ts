@@ -1,0 +1,37 @@
+// Live spike (TASK-004 acceptance, EXP-001): run analyzeSource + generateSpec against the real Meta Model API.
+// Spends participant credits (purpose test-live) under the Stage 2 ledger cap. Usage:
+//   MODEL_API_KEY=... node scripts/live-spike.ts <sourceId>
+import { mkdirSync, writeFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
+import { createLedger } from '../packages/meta/ledger.ts';
+import { createMetaClient, MetaError } from '../packages/meta/client.ts';
+import { analyzeSource, generateSpec } from '../packages/meta/pipeline.ts';
+import { loadSource } from '../packages/sources/index.ts';
+
+const sourceId = process.argv[2] ?? 'nasa-grc-equations-of-motion';
+const limits = JSON.parse(readFileSync(new URL('../config/resource-limits.json', import.meta.url), 'utf8'));
+const ledger = createLedger({ path: 'storage/ledger.jsonl', capUSD: limits.stageCapsUSD.stage2 });
+const client = createMetaClient({ apiKey: process.env.MODEL_API_KEY, ledger, allowLive: true });
+const jobId = `spike-${Date.now()}`;
+const dir = `storage/runs/${jobId}`;
+mkdirSync(dir, { recursive: true });
+const source = loadSource(sourceId);
+const summary = (r: { checks: { id: string; passed: boolean; message: string }[]; publishable: boolean }) =>
+  ({ publishable: r.publishable, failed: r.checks.filter(c => !c.passed).map(c => `${c.id}: ${c.message}`) });
+
+try {
+  const a = await analyzeSource(client, source, 'test-live');
+  writeFileSync(`${dir}/analysis.json`, JSON.stringify(a, null, 2));
+  console.log(JSON.stringify({ stage: 'analyze', receipt: a.receipt, supported: a.analysis.supported, report: summary(a.report) }));
+  if (a.analysis.supported && a.report.publishable) {
+    const s = await generateSpec(client, source, a.analysis, { jobId, specId: `${sourceId}-spike` }, 'test-live');
+    writeFileSync(`${dir}/spec.json`, JSON.stringify(s.spec, null, 2));
+    writeFileSync(`${dir}/report.json`, JSON.stringify(s.report, null, 2));
+    console.log(JSON.stringify({ stage: 'specify', receipt: s.receipt, report: summary(s.report) }));
+  }
+} catch (err) {
+  const e = err as MetaError;
+  console.log(JSON.stringify({ stage: 'error', code: e.code ?? 'UNKNOWN', message: e.message, status: e.status, receipt: e.receipt }));
+  process.exitCode = 1;
+}
+console.log(JSON.stringify({ jobId, dir, ledgerCommittedUSD: ledger.committedUSD(), capUSD: ledger.capUSD }));

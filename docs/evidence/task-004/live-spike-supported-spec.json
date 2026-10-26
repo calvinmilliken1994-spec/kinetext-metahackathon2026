@@ -1,0 +1,155 @@
+{
+  "schemaVersion": "0.2.0",
+  "id": "nasa-grc-equations-of-motion-spike",
+  "title": "Constant Force Motion in One Dimension",
+  "learningObjectives": [
+    "Calculate acceleration from constant net force and mass in one dimension",
+    "Predict velocity and displacement over time under constant acceleration"
+  ],
+  "sources": [
+    {
+      "id": "nasa-grc-equations-of-motion",
+      "title": "Equations of Motion — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+      "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/equations-of-motion/",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+      "sha256": "1f43ca9d8a7097f7898a56c0eef367132de6ac7e5fe28605b5504b696324dbf0"
+    }
+  ],
+  "explanations": [
+    {
+      "evidence": [
+        {
+          "quote": "F = m * a",
+          "sourceId": "nasa-grc-equations-of-motion"
+        },
+        {
+          "quote": "a = F / m",
+          "sourceId": "nasa-grc-equations-of-motion"
+        }
+      ],
+      "id": "newtons-second-law",
+      "text": "For constant mass, acceleration equals net force divided by mass."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "The force (F) will be the difference between the opposing forces (thrust minus drag).",
+          "sourceId": "nasa-grc-equations-of-motion"
+        },
+        {
+          "quote": "However, if the forces become unbalanced, the aircraft will move in the direction of the greater force.",
+          "sourceId": "nasa-grc-equations-of-motion"
+        }
+      ],
+      "id": "net-force-direction",
+      "text": "Net force in one dimension is the difference between opposing forces, and unbalanced force produces motion in the direction of the greater force."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "For a constant force and constant mass, the acceleration remains constant.",
+          "sourceId": "nasa-grc-equations-of-motion"
+        },
+        {
+          "quote": "V = a * t + Vo",
+          "sourceId": "nasa-grc-equations-of-motion"
+        }
+      ],
+      "id": "constant-acceleration-motion",
+      "text": "With constant force and constant mass, acceleration stays constant and velocity increases linearly with time."
+    }
+  ],
+  "simulation": {
+    "engine": "forces-1d-v1",
+    "equation": "a=F_net/m",
+    "massKg": {
+      "unit": "kg",
+      "default": 2,
+      "max": 20,
+      "min": 0.5
+    },
+    "netForceN": {
+      "unit": "N",
+      "default": 10,
+      "max": 50,
+      "min": -50
+    },
+    "durationS": 5,
+    "stepS": 0.02,
+    "scenario": {
+      "objectLabel": "Model aircraft",
+      "surfaceLabel": "Level flight, x-direction only"
+    },
+    "observables": [
+      "position",
+      "velocity",
+      "acceleration"
+    ]
+  },
+  "behavioralTests": [
+    {
+      "expectedAccelerationMps2": 5,
+      "massKg": 2,
+      "name": "positive net force accelerates forward",
+      "netForceN": 10,
+      "tolerance": 0.001
+    },
+    {
+      "expectedAccelerationMps2": -4,
+      "massKg": 5,
+      "name": "negative net force accelerates backward",
+      "netForceN": -20,
+      "tolerance": 0.001
+    },
+    {
+      "expectedAccelerationMps2": 0,
+      "massKg": 10,
+      "name": "zero net force means zero acceleration",
+      "netForceN": 0,
+      "tolerance": 0.001
+    },
+    {
+      "expectedAccelerationMps2": 3,
+      "massKg": 4,
+      "name": "larger mass gives smaller acceleration",
+      "netForceN": 12,
+      "tolerance": 0.001
+    }
+  ],
+  "predictions": [
+    {
+      "expectedAccelerationMps2": 2,
+      "id": "pred-1",
+      "massKg": 5,
+      "netForceN": 10,
+      "prompt": "A 5 kg model aircraft has 10 N net force forward. Predict its acceleration.",
+      "tolerance": 0.001
+    },
+    {
+      "expectedAccelerationMps2": -5,
+      "id": "pred-2",
+      "massKg": 2,
+      "netForceN": -10,
+      "prompt": "A 2 kg model aircraft has 10 N net force backward. Predict its acceleration.",
+      "tolerance": 0.001
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a17a7b-5b20-7359-8650-77e87bab980c",
+    "runId": "spike-1793056245664",
+    "promptVersion": "v1",
+    "revision": 1,
+    "repairOf": null,
+    "generatedAt": "2026-10-26T23:11:07.147Z"
+  }
+}

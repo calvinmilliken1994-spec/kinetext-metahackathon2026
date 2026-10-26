@@ -12,7 +12,13 @@ Estimates use local token counts × published Standard rates (input $1.25/M, cac
 |---|---|---|---|---|---|---|---|
 | 1 | 2026-10-26T21:16:51Z | Setup API smoke (fixed "ready" prompt) | muse-spark-1.3 | chatcmpl-01a17a12-beb0-7197-9279-ff40a8217fd2 | 15 / 39 (29) | 0.0001845 | `docs/evidence/meta-api-spark-smoke.json` |
 
-Cumulative estimated: **USD 0.0001845** of 150.
+| 2 | 2026-10-27 (KST 08:30) | Stage 2 live spike: analysis, supported source | muse-spark-1.3 | chatcmpl-01a17a7b-36cb-74f4-837a-6b198ab92d7b | 1,073 / 3,779 (3,484) | 0.017402 | `docs/evidence/task-004/` |
+| 3 | 2026-10-27 | Stage 2 live spike: spec, supported source | muse-spark-1.3 | chatcmpl-01a17a7b-5b20-7359-8650-77e87bab980c | 1,980 / 3,413 (2,782) | 0.016980 | `docs/evidence/task-004/` |
+| 4 | 2026-10-27 | Stage 2 live spike: analysis, unsupported source | muse-spark-1.3 | chatcmpl-01a17a7b-9f26-73da-9858-9c496d26d09d | 1,453 / 904 (847) | 0.005658 | `docs/evidence/task-004/` |
+
+From row 2 on, calls are also recorded by the product's own ledger (`storage/ledger.jsonl`, gitignored), which enforces the Stage 2 cap of USD 10.
+
+Cumulative estimated: **USD 0.0402** of 150 (Stage 2: USD 0.0400 of 10).
 
 Checked 2026-10-27 KST. Public rates are not account credit balances. No paid infrastructure was provisioned.
 
