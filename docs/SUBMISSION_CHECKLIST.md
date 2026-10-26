@@ -19,4 +19,4 @@
 - [ ] README gives reproducible setup, limitations and working commands.
 - [ ] Calvin explicitly approves any GitHub publication/deployment and final submission.
 
-No remote is configured and nothing has been pushed or deployed during setup.
+Public GitHub repo `calvinmilliken1994-spec/meta-hackathon-2026` holds the setup scaffold (pushed with Calvin's approval; see `REPOSITORY_LOG.md`). Nothing has been deployed.
