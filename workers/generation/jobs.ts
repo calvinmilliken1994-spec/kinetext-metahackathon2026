@@ -2,7 +2,8 @@
 //
 // One job per call of startJob(). The stage machine persists everything under
 // `${storageDir}/runs/<jobId>/`:
-//   job.json        — JobSummary, written synchronously at start ('running') and rewritten at the end
+//   job.json        — JobSummary, written synchronously at start ('running') and rewritten at the end;
+//                     carries owner {pid, startedAt} so recovery never interrupts a live owner (TASK-009 N-05)
 //   events.jsonl    — one StageEvent per line, appended as stages progress (seq 0..n per job)
 //   analysis.json   — {analysis, report, receipt} from analyzeSource
 //   spec.r1.json    — the assembled ActivitySpec from generateSpec (revision 1)
@@ -59,6 +60,13 @@ function publicError(code: string): { code: string; message: string } {
   return { code: 'INTERNAL', message: JOB_ERROR_MESSAGES['INTERNAL'] ?? 'Unexpected internal error' };
 }
 
+export interface JobOwner {
+  /** PID of the process that started the job (N-05). */
+  pid: number;
+  /** ISO timestamp recorded when the job started. */
+  startedAt: string;
+}
+
 export interface JobSummary {
   jobId: string;
   sourceId: string;
@@ -74,6 +82,12 @@ export interface JobSummary {
   /** Part of totalCostUSD charged at reservation because the outcome was uncertain (TASK-009 R-09). */
   reservedUnknownUSD: number;
   error?: { code: string; message: string };
+  /**
+   * N-05: the process that owns this job, recorded in job.json from the first
+   * write so recovery never interrupts a job whose owner is still alive.
+   * Optional: records written before this field existed carry no owner.
+   */
+  owner?: JobOwner;
 }
 
 /** Per-job resource budgets wired from config/resource-limits.json (TASK-009 R-11). */
@@ -148,6 +162,11 @@ function readJsonFile(path: string): unknown | undefined {
   }
 }
 
+/** N-04: the unknown-outcome portion is the explicit amount; a missing or invalid one counts as 0. */
+function reservedUnknownOf(value: number | undefined): number {
+  return typeof value === 'number' && Number.isFinite(value) ? value : 0;
+}
+
 export function startJob(
   sourceId: string,
   deps: JobDeps,
@@ -166,14 +185,17 @@ export function startJob(
   const runDir: string = join(deps.storageDir, 'runs', jobId);
   mkdirSync(runDir, { recursive: true });
 
+  const createdAt: string = now().toISOString();
   const summary: JobSummary = {
     jobId,
     sourceId,
     status: 'running',
     purpose: deps.purpose,
-    createdAt: now().toISOString(),
+    createdAt,
     totalCostUSD: 0,
     reservedUnknownUSD: 0,
+    // N-05: recovery consults this owner record before interrupting a running job.
+    owner: { pid: process.pid, startedAt: createdAt },
   };
   writeJsonAtomic(join(runDir, 'job.json'), summary);
 
@@ -229,12 +251,14 @@ async function runJob(
     writeJsonAtomic(join(runDir, 'job.json'), summary);
   }
 
-  /** R-09: a receipt charged at reservation is real money with an uncertain outcome. */
+  /**
+   * R-09/N-04: a receipt charged at reservation is real money with an uncertain
+   * outcome. The unknown portion is the receipt's explicit reservedUnknownUSD —
+   * never the whole estCostUSD inferred from the costBasis flag.
+   */
   function accountReceipt(receipt: MetaReceipt): void {
     totalCostUSD += receipt.estCostUSD;
-    if (receipt.costBasis === 'reservation') {
-      reservedUnknownUSD += receipt.estCostUSD;
-    }
+    reservedUnknownUSD += reservedUnknownOf(receipt.reservedUnknownUSD);
   }
 
   function finish(status: JobStatus): JobSummary {
@@ -264,9 +288,13 @@ async function runJob(
       const basis: 'usage' | 'reservation' | undefined = err.costBasis ?? err.receipt?.costBasis;
       const reserved = basis === 'reservation';
       totalCostUSD += charged;
-      if (reserved) {
-        reservedUnknownUSD += charged;
-      }
+      // N-04: the unknown-outcome part is the explicit reservedUnknownUSD amount
+      // (on the error, else on its receipt) — never the whole charge inferred
+      // from the costBasis flag. A missing amount counts as 0.
+      reservedUnknownUSD +=
+        err.reservedUnknownUSD !== undefined
+          ? reservedUnknownOf(err.reservedUnknownUSD)
+          : reservedUnknownOf(err.receipt?.reservedUnknownUSD);
       const extra: EventExtra = {
         // R-01: the failure detail is the fixed code — never err.message or provider text.
         detail: reserved ? `${err.code}; cost basis: reservation (outcome uncertain)` : `${err.code}`,
@@ -452,15 +480,102 @@ export function readJob(
   return result;
 }
 
+/** N-05 recovery knobs; both optional with conservative defaults. */
+export interface RecoveryOptions {
+  /**
+   * An ownerless 'running' job is interrupted only when its recorded start is
+   * older than this. Default 120000 (config/resource-limits.json maxJobWallTimeMs).
+   */
+  maxJobWallTimeMs?: number;
+  /**
+   * PID liveness probe. Default: `process.kill(pid, 0)` — success or EPERM (or
+   * any non-ESRCH error) counts as alive; only ESRCH counts as dead.
+   */
+  isAlive?: (pid: number) => boolean;
+}
+
+function defaultIsAlive(pid: number): boolean {
+  try {
+    process.kill(pid, 0);
+    return true;
+  } catch (err) {
+    // ESRCH: no such process — dead. EPERM and anything else: fail conservative — alive.
+    return (err as NodeJS.ErrnoException).code !== 'ESRCH';
+  }
+}
+
+/** The owner pid when the record carries a usable one; undefined for legacy/corrupt owners. */
+function ownerPidOf(summary: JobSummary): number | undefined {
+  const owner: unknown = summary.owner;
+  if (typeof owner !== 'object' || owner === null) {
+    return undefined;
+  }
+  const pid: unknown = (owner as { pid?: unknown }).pid;
+  return typeof pid === 'number' && Number.isInteger(pid) && pid > 0 ? pid : undefined;
+}
+
+/** owner.startedAt when parseable, else createdAt; NaN when neither parses. */
+function startedMsOf(summary: JobSummary): number {
+  const owner: unknown = summary.owner;
+  const candidates: unknown[] = [];
+  if (typeof owner === 'object' && owner !== null) {
+    candidates.push((owner as { startedAt?: unknown }).startedAt);
+  }
+  candidates.push(summary.createdAt);
+  for (const candidate of candidates) {
+    if (typeof candidate === 'string') {
+      const ms = Date.parse(candidate);
+      if (Number.isFinite(ms)) {
+        return ms;
+      }
+    }
+  }
+  return Number.NaN;
+}
+
 /**
- * R-10 startup recovery: every job still marked 'running' was left behind by a
- * previous process (this one has not started any job yet when main.ts calls
- * this before listening). Each becomes 'failed' with the fixed INTERRUPTED
- * error, a 'done'/'failed' event is appended, and already-accounted costs and
+ * N-05: a 'running' job is abandoned only when its recorded owner process is
+ * provably gone (never when the owner is this process), or — for legacy records
+ * with no usable owner — when it has been running longer than maxJobWallTimeMs.
+ * An unparseable start time is treated as young: leave the job alone.
+ */
+function isAbandoned(
+  summary: JobSummary,
+  nowMs: number,
+  maxJobWallTimeMs: number,
+  isAlive: (pid: number) => boolean,
+): boolean {
+  const pid = ownerPidOf(summary);
+  if (pid !== undefined) {
+    if (pid === process.pid) {
+      return false; // never interrupt this process's own active job
+    }
+    return !isAlive(pid);
+  }
+  const startedMs = startedMsOf(summary);
+  if (!Number.isFinite(startedMs)) {
+    return false;
+  }
+  return nowMs - startedMs > maxJobWallTimeMs;
+}
+
+/**
+ * R-10/N-05 startup recovery: a job still marked 'running' becomes 'failed'
+ * with the fixed INTERRUPTED error ONLY when its owner process is dead (or, for
+ * legacy records without an owner, when the job is older than maxJobWallTimeMs).
+ * Jobs of live owners — including this process — are never touched, so an
+ * offline/second startup sharing the storage directory cannot corrupt active
+ * work. A 'done'/'failed' event is appended, and already-accounted costs and
  * unknown reservations are kept as they are — nothing is refunded here.
  * Returns the recovered job ids.
  */
-export function recoverInterruptedJobs(storageDir: string, now: () => Date = () => new Date()): string[] {
+export function recoverInterruptedJobs(
+  storageDir: string,
+  now: () => Date = () => new Date(),
+  opts: RecoveryOptions = {},
+): string[] {
+  const maxJobWallTimeMs = positiveOr(opts.maxJobWallTimeMs, DEFAULT_JOB_WALL_TIME_MS);
+  const isAlive = opts.isAlive ?? defaultIsAlive;
   let entries;
   try {
     entries = readdirSync(join(storageDir, 'runs'), { withFileTypes: true });
@@ -482,6 +597,10 @@ export function recoverInterruptedJobs(storageDir: string, now: () => Date = () 
       continue;
     }
     const at = now().toISOString();
+    // N-05: recover only provably abandoned jobs.
+    if (!isAbandoned(summary, Date.parse(at), maxJobWallTimeMs, isAlive)) {
+      continue;
+    }
     let seq = 0;
     try {
       for (const line of readFileSync(join(runDir, 'events.jsonl'), 'utf8').split('\n')) {

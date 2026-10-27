@@ -2,6 +2,8 @@
 // No network, no credits, no .env access.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { spawn } from 'node:child_process';
+import type { ChildProcess } from 'node:child_process';
 import { existsSync, mkdtempSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -359,7 +361,12 @@ test('startJob: an unexpected exception becomes INTERNAL with a fixed message (R
 
 test('startJob: timeout with chargedUSD counts into totalCostUSD and reservedUnknownUSD (R-09 reviewer probe)', async () => {
   const storageDir = tempStorage();
-  const err = new MetaError('TIMEOUT', undefined, { chargedUSD: 0.027565, costBasis: 'reservation' });
+  // Wave-A2 clients always attach reservedUnknownUSD (N-04); the worker sums that field.
+  const err = new MetaError('TIMEOUT', undefined, {
+    chargedUSD: 0.027565,
+    reservedUnknownUSD: 0.027565,
+    costBasis: 'reservation',
+  });
   const { jobId, done } = startJob('nasa-grc-equations-of-motion', {
     client: fakeClient({ analyzeError: err }),
     storageDir,
@@ -392,7 +399,12 @@ test('startJob: a usage-basis failure keeps reservedUnknownUSD at zero (R-09)', 
 
 test('startJob: a reservation-basis receipt on a success path also lands in reservedUnknownUSD (R-09)', async () => {
   const storageDir = tempStorage();
-  const reservationReceipt: MetaReceipt = { ...fakeReceipt('fake-reserved'), costBasis: 'reservation' };
+  // Wave-A2 receipts always carry the explicit reserved-unknown amount (N-04).
+  const reservationReceipt: MetaReceipt = {
+    ...fakeReceipt('fake-reserved'),
+    costBasis: 'reservation',
+    reservedUnknownUSD: 0.01,
+  };
   const client: MetaClient = {
     complete: async <T>(req: CompleteRequest): Promise<{ data: T; receipt: MetaReceipt }> => {
       if (req.schemaName === 'source_analysis') {
@@ -555,4 +567,265 @@ test('recoverInterruptedJobs: a job left running by a previous process becomes f
 test('recoverInterruptedJobs: missing or empty storage recovers nothing', () => {
   assert.deepEqual(recoverInterruptedJobs(join(tempStorage(), 'nope')), []);
   assert.deepEqual(recoverInterruptedJobs(tempStorage()), []);
+});
+
+/* ------------------------------------------------------------------ */
+/* N-04 — reservedUnknownUSD is the explicit amount, never inferred    */
+/* ------------------------------------------------------------------ */
+
+test('startJob: a mixed 503→200 receipt reports only the reserved attempt as unknown (N-04 reviewer probe)', async () => {
+  const storageDir = tempStorage();
+  // Reviewer P3 numbers: the 503 attempt keeps its $0.02987 reservation while the
+  // retried 200 bills $0.0000975 of known usage; the receipt total is $0.0299675
+  // with costBasis 'reservation' — the unknown part is ONLY the 503 reservation.
+  const mixed: MetaReceipt = {
+    ...fakeReceipt('fake-503-then-200'),
+    estCostUSD: 0.0299675,
+    reservedUnknownUSD: 0.02987,
+    costBasis: 'reservation',
+    attempts: 2,
+  };
+  const client: MetaClient = {
+    complete: async <T>(req: CompleteRequest): Promise<{ data: T; receipt: MetaReceipt }> => {
+      if (req.schemaName === 'source_analysis') {
+        return { data: analysisFixture as T, receipt: mixed };
+      }
+      return {
+        data: genFixture as T,
+        receipt: { ...fakeReceipt('fake-gen-1'), costBasis: 'usage', reservedUnknownUSD: 0 },
+      };
+    },
+  };
+  const { done } = startJob('nasa-grc-equations-of-motion', { client, storageDir, purpose: 'test-live' });
+  const summary = await done;
+  assert.equal(summary.status, 'succeeded');
+  assert.equal(summary.totalCostUSD, 0.039968, '0.0299675 + 0.01, rounded to 1e-6');
+  assert.equal(
+    summary.reservedUnknownUSD,
+    0.02987,
+    'only the 503 attempt reservation is unknown — not the whole costBasis=reservation total',
+  );
+});
+
+test('startJob: MetaError.reservedUnknownUSD splits the charged total (N-04)', async () => {
+  const storageDir = tempStorage();
+  const err = new MetaError('SERVER_ERROR', undefined, {
+    status: 503,
+    chargedUSD: 0.0307,
+    reservedUnknownUSD: 0.02987,
+    costBasis: 'reservation',
+  });
+  const { done } = startJob('nasa-grc-equations-of-motion', {
+    client: fakeClient({ specError: err }),
+    storageDir,
+    purpose: 'test-live',
+  });
+  const summary = await done;
+  assert.equal(summary.status, 'failed');
+  assert.equal(summary.totalCostUSD, 0.0407, 'analyze receipt 0.01 + charged 0.0307');
+  assert.equal(summary.reservedUnknownUSD, 0.02987, 'only the explicit reserved-unknown part of the charge');
+  const failedEvent = readEvents(storageDir, summary.jobId).find(
+    e => e.stage === 'specify' && e.status === 'failed',
+  );
+  assert.equal(failedEvent?.estCostUSD, 0.0307, 'the failed-stage event still carries the full charge');
+  assert.equal(failedEvent?.detail, 'SERVER_ERROR; cost basis: reservation (outcome uncertain)');
+});
+
+test('startJob: costBasis "reservation" with reservedUnknownUSD 0 no longer implies an unknown total (N-04)', async () => {
+  const storageDir = tempStorage();
+  const receipt: MetaReceipt = {
+    ...fakeReceipt('fake-zero-unknown'),
+    costBasis: 'reservation',
+    reservedUnknownUSD: 0,
+  };
+  const client: MetaClient = {
+    complete: async <T>(req: CompleteRequest): Promise<{ data: T; receipt: MetaReceipt }> => {
+      if (req.schemaName === 'source_analysis') {
+        return { data: analysisFixture as T, receipt };
+      }
+      return { data: genFixture as T, receipt: fakeReceipt('fake-gen-1') };
+    },
+  };
+  const { done } = startJob('nasa-grc-equations-of-motion', { client, storageDir, purpose: 'test-live' });
+  const summary = await done;
+  assert.equal(summary.totalCostUSD, 0.02);
+  assert.equal(summary.reservedUnknownUSD, 0, 'the explicit amount wins over the basis flag');
+});
+
+/* ------------------------------------------------------------------ */
+/* N-05 — owner-aware recovery                                         */
+/* ------------------------------------------------------------------ */
+
+function writeRunningJob(storageDir: string, jobId: string, overrides: Record<string, unknown> = {}): void {
+  const runDir = join(storageDir, 'runs', jobId);
+  mkdirSync(runDir, { recursive: true });
+  writeFileSync(
+    join(runDir, 'job.json'),
+    JSON.stringify(
+      {
+        jobId,
+        sourceId: 'nasa-grc-equations-of-motion',
+        status: 'running',
+        purpose: 'test-live',
+        createdAt: '2026-01-01T00:00:00.000Z',
+        totalCostUSD: 0,
+        reservedUnknownUSD: 0,
+        ...overrides,
+      },
+      null,
+      2,
+    ),
+  );
+}
+
+function waitExit(child: ChildProcess, timeoutMs: number): Promise<number | null> {
+  return new Promise<number | null>((resolve, reject) => {
+    if (child.exitCode !== null) {
+      resolve(child.exitCode);
+      return;
+    }
+    const timer = setTimeout(() => reject(new Error('CHILD_EXIT_TIMEOUT')), timeoutMs);
+    child.once('exit', code => {
+      clearTimeout(timer);
+      resolve(code);
+    });
+  });
+}
+
+function sleepMs(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+test('startJob records owner {pid, startedAt} in job.json from the first write (N-05)', async () => {
+  const storageDir = tempStorage();
+  let release: () => void = () => {};
+  const gate = new Promise<void>(resolve => {
+    release = resolve;
+  });
+  const inner = fakeClient();
+  const client: MetaClient = {
+    complete: async <T>(req: CompleteRequest): Promise<{ data: T; receipt: MetaReceipt }> => {
+      await gate;
+      return inner.complete<T>(req);
+    },
+  };
+  const { jobId, done } = startJob('nasa-grc-equations-of-motion', {
+    client,
+    storageDir,
+    purpose: 'test-live',
+    now: () => new Date('2026-03-03T04:05:06.000Z'),
+  });
+  // job.json is written synchronously at start — inspect it while the job is parked.
+  const running = JSON.parse(readFileSync(join(storageDir, 'runs', jobId, 'job.json'), 'utf8')) as JobSummary;
+  assert.equal(running.status, 'running');
+  assert.deepEqual(running.owner, { pid: process.pid, startedAt: '2026-03-03T04:05:06.000Z' });
+  // Reviewer P1: recovery inside the active process must not mark its own pending job failed.
+  assert.deepEqual(recoverInterruptedJobs(storageDir), []);
+  assert.equal(readJob(storageDir, jobId)?.summary.status, 'running');
+  release();
+  const summary = await done;
+  assert.equal(summary.status, 'succeeded');
+  assert.equal(summary.owner?.pid, process.pid, 'the terminal record keeps the owner');
+});
+
+test('recoverInterruptedJobs: injected isAlive — live owner untouched, dead owner recovered (N-05 reviewer probe)', () => {
+  const storageDir = tempStorage();
+  const liveJob = 'job-20260404000000-aaaa0001';
+  const deadJob = 'job-20260404000000-bbbb0002';
+  writeRunningJob(storageDir, liveJob, { owner: { pid: 424242, startedAt: '2026-04-04T00:00:00.000Z' } });
+  writeRunningJob(storageDir, deadJob, { owner: { pid: 434343, startedAt: '2026-04-04T00:00:00.000Z' } });
+  const probed: number[] = [];
+  const recovered = recoverInterruptedJobs(storageDir, () => new Date('2026-04-04T00:00:05.000Z'), {
+    isAlive: (pid: number) => {
+      probed.push(pid);
+      return pid === 424242;
+    },
+  });
+  assert.deepEqual(recovered, [deadJob]);
+  assert.deepEqual([...probed].sort(), [424242, 434343], 'both owner pids are probed');
+  assert.equal(readJob(storageDir, liveJob)?.summary.status, 'running', "the live owner's job is untouched");
+  const dead = readJob(storageDir, deadJob);
+  assert.equal(dead?.summary.status, 'failed');
+  assert.deepEqual(dead?.summary.error, {
+    code: 'INTERRUPTED',
+    message: 'The server stopped before this job finished.',
+  });
+});
+
+test('recoverInterruptedJobs: never touches a job owned by the current process, even if isAlive lies (N-05)', () => {
+  const storageDir = tempStorage();
+  const own = 'job-20260404000000-cccc0003';
+  writeRunningJob(storageDir, own, {
+    owner: { pid: process.pid, startedAt: new Date().toISOString() },
+    createdAt: new Date().toISOString(),
+  });
+  assert.deepEqual(recoverInterruptedJobs(storageDir, undefined, { isAlive: () => false }), []);
+  assert.equal(readJob(storageDir, own)?.summary.status, 'running');
+});
+
+test('recoverInterruptedJobs: default liveness probe — alive child owner untouched, recovered after it dies (N-05)', async () => {
+  const storageDir = tempStorage();
+  const child = spawn(process.execPath, ['-e', 'setInterval(() => {}, 1000);'], { stdio: 'ignore' });
+  try {
+    const pid = child.pid;
+    assert.ok(typeof pid === 'number' && pid > 0, 'the child has a pid');
+    const jobId = 'job-20260404000000-dddd0004';
+    writeRunningJob(storageDir, jobId, {
+      owner: { pid, startedAt: new Date().toISOString() },
+      createdAt: new Date().toISOString(),
+    });
+    // Reviewer P3: a startup sharing storage with a LIVE owner must not interrupt its job.
+    assert.deepEqual(recoverInterruptedJobs(storageDir), []);
+    assert.equal(readJob(storageDir, jobId)?.summary.status, 'running');
+    child.kill();
+    await waitExit(child, 10000);
+    // The OS may need a moment before the pid reads dead; poll until recovery fires.
+    const deadline = Date.now() + 5000;
+    let recovered: string[] = [];
+    while (Date.now() < deadline) {
+      recovered = recoverInterruptedJobs(storageDir);
+      if (recovered.length === 1) {
+        break;
+      }
+      await sleepMs(50);
+    }
+    assert.deepEqual(recovered, [jobId], 'the dead owner\'s job is recovered');
+    assert.equal(readJob(storageDir, jobId)?.summary.status, 'failed');
+    assert.equal(readJob(storageDir, jobId)?.summary.error?.code, 'INTERRUPTED');
+  } finally {
+    try {
+      child.kill();
+    } catch {
+      // already dead
+    }
+  }
+});
+
+test('recoverInterruptedJobs: ownerless legacy jobs recover only past maxJobWallTimeMs (N-05)', () => {
+  const storageDir = tempStorage();
+  const nowMs = Date.parse('2026-04-04T00:10:00.000Z');
+  const freshId = 'job-20260404000000-eeee0005';
+  const oldId = 'job-20260404000000-ffff0006';
+  const noPidId = 'job-20260404000000-aaaa0007';
+  writeRunningJob(storageDir, freshId, { createdAt: new Date(nowMs - 30_000).toISOString() });
+  writeRunningJob(storageDir, oldId, { createdAt: new Date(nowMs - 300_000).toISOString() });
+  writeRunningJob(storageDir, noPidId, {
+    createdAt: new Date(nowMs - 300_000).toISOString(),
+    owner: { startedAt: new Date(nowMs - 300_000).toISOString() }, // owner without a usable pid
+  });
+  // Default budget 120000 ms: the two 5-minute-old jobs recover, the 30-second one stays.
+  const recovered = recoverInterruptedJobs(storageDir, () => new Date(nowMs));
+  assert.deepEqual(recovered, [noPidId, oldId].sort());
+  assert.equal(readJob(storageDir, freshId)?.summary.status, 'running', 'a young ownerless job is not interrupted');
+  // A tighter configured budget catches the fresh legacy job too.
+  const recovered2 = recoverInterruptedJobs(storageDir, () => new Date(nowMs), { maxJobWallTimeMs: 10_000 });
+  assert.deepEqual(recovered2, [freshId]);
+});
+
+test('recoverInterruptedJobs: an ownerless job with an unparseable start time is left alone (N-05)', () => {
+  const storageDir = tempStorage();
+  const brokenId = 'job-20260404000000-0bad0008';
+  writeRunningJob(storageDir, brokenId, { createdAt: 'not-a-timestamp' });
+  assert.deepEqual(recoverInterruptedJobs(storageDir), []);
+  assert.equal(readJob(storageDir, brokenId)?.summary.status, 'running');
 });

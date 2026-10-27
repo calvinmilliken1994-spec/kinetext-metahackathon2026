@@ -1,0 +1,11 @@
+{
+  "purpose": "Confirm gpt-6-astra can serve as the independent reviewer on the Codex subscription (TASK-009 final check)",
+  "checkedAt": "2026-10-27 (KST)",
+  "catalog": "openai-codex provider model list includes gpt-6-astra and gpt-6-astra-900k (listing only)",
+  "command": "hermes -p meta-hackathon-2026 chat -Q --provider openai-codex -m gpt-6-astra --reasoning high -q 'Reply with exactly: ASTRA_OK'",
+  "answer": "ASTRA_OK",
+  "billingProvider": "openai-codex",
+  "billingBaseUrl": "https://chatgpt.com/backend-api/codex",
+  "metered": false,
+  "metaCredits": false
+}

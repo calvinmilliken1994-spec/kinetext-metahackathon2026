@@ -44,3 +44,5 @@ Run from assigned worktree; profile supplies project rules and local credential 
 - Meta subscription: load `muse-subscription` skill and invoke `python scripts/muse-subscription.py --model muse-wonder-1.0` (fixed smoke) or `--model muse-spark-1.3 --prompt-file <file>` for authorized bounded text-in/text-out work. This routes through the logged-in CLI, not PAYG. Wonder currently returns 404; never silently switch it to Spark. Separate direct product API route uses the built-in `meta-ai` provider and project API key, with independent billing approval.
 
 Do not rely on `delegate_task` for different per-task providers when its schema does not expose that routing. No worker profiles or unattended dispatchers are configured in this checkpoint.
+
+**2026-10-27:** `gpt-6-astra` (openai-codex subscription) passed a route check (`docs/evidence/astra-route-check.json`) and was chosen by Calvin for the TASK-009 final review. GPT-6.1 Sol remains the default reviewer.

@@ -672,3 +672,167 @@ test('validateSpec: scope.prose-unverified always passes with the exact honest-s
   assert.equal(checkOf(failing, 'scope.prose-unverified').passed, true);
   assert.equal(checkOf(failing, 'scope.prose-unverified').message, expected);
 });
+
+/* ------------------------------------------------------------------ */
+/* N-06 — qualified publisher policy: attribution wording fails only   */
+/* when it names a source or authority                                 */
+/* ------------------------------------------------------------------ */
+
+test('validateSpec: benign "according to the net force divided by its mass" prose passes policy (N-06 reviewer probe)', () => {
+  // Reviewer P1 (N-06): changing ONLY the explanation prose to this normal physics
+  // sentence used to fail policy.no-publisher-attribution and block the artifact.
+  const spec = loadSpec();
+  spec.explanations[0].text = 'The object accelerates according to the net force divided by its mass.';
+  const report = validateSpec(spec, [loadSourceDoc()]);
+  assert.deepEqual(failedIds(report), [], report.checks.filter(c => !c.passed).map(c => `${c.id}: ${c.message}`).join('; '));
+  assert.equal(checkOf(report, 'policy.no-publisher-attribution').passed, true);
+  assert.equal(report.publishable, true);
+});
+
+test('validateSpec: attribution wording naming a source or authority fails policy (N-06)', () => {
+  const mutations: [(s: any) => void, string][] = [
+    [s => { s.explanations[0].text = 'The result holds according to the source.'; }, 'according to the source'],
+    [s => { s.explanations[1].text = 'Units follow according to the text.'; }, 'according to the text'],
+    [s => { s.title = 'Motion endorsed by Glenn Research Center'; }, 'endorsed by Glenn Research Center'],
+    [s => { s.learningObjectives[0] = 'See the official position of the agency on acceleration.'; }, 'official position of the agency'],
+    [s => { s.behavioralTests[0].name = 'official conclusion of the author check'; }, 'official conclusion of the author'],
+    [s => { s.predictions[0].prompt = "According to Newton's law, what is the acceleration?"; }, "according to Newton's law (capitalised authority)"],
+  ];
+  for (const [mutate, label] of mutations) {
+    const report = expectSpecFailures(mutate, ['policy.no-publisher-attribution']);
+    assert.match(checkOf(report, 'policy.no-publisher-attribution').message, /attribution/, label);
+  }
+});
+
+test('validateSpec: the capitalised-follower rule is case-sensitive, the trigger rule case-insensitive (N-06)', () => {
+  // No capitalised follower and no source noun: benign, even for an uppercase trigger.
+  const benign = loadSpec();
+  benign.explanations[0].text = 'This result is endorsed by glenn research center measurements.';
+  let report = validateSpec(benign, [loadSourceDoc()]);
+  assert.equal(checkOf(report, 'policy.no-publisher-attribution').passed, true, 'lowercase follower does not name an authority');
+  assert.equal(report.publishable, true);
+
+  const upperTrigger = loadSpec();
+  upperTrigger.explanations[0].text = 'ACCORDING TO the net force, the cart speeds up.';
+  report = validateSpec(upperTrigger, [loadSourceDoc()]);
+  assert.equal(checkOf(report, 'policy.no-publisher-attribution').passed, true, 'the trigger is matched case-insensitively but the follower stays lowercase');
+  assert.equal(report.publishable, true);
+
+  // An uppercase trigger followed by a capitalised word still fails.
+  expectSpecFailures(s => { s.title = 'APPROVED BY Glenn Research Center'; }, ['policy.no-publisher-attribution']);
+});
+
+test('validateSpec: a capitalised follower counts only within the 40-character window (N-06)', () => {
+  const inside = loadSpec();
+  inside.explanations[0].text = `The effect appears according to ${'a'.repeat(33)} Newton law.`; // capital at window offset 35
+  let report = validateSpec(inside, [loadSourceDoc()]);
+  assert.deepEqual(failedIds(report), ['policy.no-publisher-attribution']);
+
+  const outside = loadSpec();
+  outside.explanations[0].text = `The effect appears according to ${'a'.repeat(45)} Newton law.`; // capital at window offset 47
+  report = validateSpec(outside, [loadSourceDoc()]);
+  assert.equal(checkOf(report, 'policy.no-publisher-attribution').passed, true, 'beyond 40 characters the follower no longer counts');
+  assert.equal(report.publishable, true);
+});
+
+test('validateSpec: plain NASA / full publisher name still fails anywhere without attribution wording (N-06)', () => {
+  expectSpecFailures(s => { s.title = 'The NASA cart: force and acceleration'; }, ['policy.no-publisher-attribution']);
+  expectSpecFailures(
+    s => { s.simulation.scenario.surfaceLabel = 'National Aeronautics and Space Administration track'; },
+    ['policy.no-publisher-attribution'],
+  );
+});
+
+test('validateAnalysis: benign "according to" prose passes; naming an authority fails (N-06)', () => {
+  const benign = loadAnalysisFixture();
+  benign.objectives[0] = 'Predict motion according to the net force and the mass.';
+  let report = validateAnalysis(benign, [loadSourceDoc()]);
+  assert.deepEqual(failedIds(report), [], report.checks.filter(c => !c.passed).map(c => `${c.id}: ${c.message}`).join('; '));
+  assert.equal(report.publishable, true);
+
+  const named = loadAnalysisFixture();
+  named.concepts[0].name = 'Endorsed by Glenn Research Center law';
+  report = validateAnalysis(named, [loadSourceDoc()]);
+  assert.deepEqual(failedIds(report), ['policy.no-publisher-attribution']);
+
+  const byReason = loadAnalysisFixture();
+  byReason.supported = false;
+  byReason.activity = 'none';
+  byReason.unsupportedReason = 'According to the author, this material teaches sound, not forces.';
+  report = validateAnalysis(byReason, [loadSourceDoc()]);
+  assert.deepEqual(failedIds(report), ['policy.no-publisher-attribution']);
+});
+
+/* ------------------------------------------------------------------ */
+/* N-07 — compact equation quotes ('F=ma') count as evidence           */
+/* ------------------------------------------------------------------ */
+
+test('quoteCountsAsEvidence: compact equations containing "=" count from 3 normalised chars (N-07)', () => {
+  assert.equal(quoteCountsAsEvidence('F=ma'), true, 'the reviewer\'s compact formula');
+  assert.equal(quoteCountsAsEvidence('E=mc2'), true);
+  assert.equal(quoteCountsAsEvidence('v=d/t'), true);
+  assert.equal(quoteCountsAsEvidence(' F = ma '), true, 'normalises to "F = ma" (6 chars, =, 3 letters)');
+  // Still rejected: fewer than 3 letters/digits, or short without '='.
+  assert.equal(quoteCountsAsEvidence('a=b'), false);
+  assert.equal(quoteCountsAsEvidence('F=m'), false);
+  assert.equal(quoteCountsAsEvidence('='), false);
+  assert.equal(quoteCountsAsEvidence('a='), false);
+  assert.equal(quoteCountsAsEvidence('Fma'), false, 'short without "=" is not an equation');
+  assert.equal(quoteCountsAsEvidence('x*y'), false);
+  assert.equal(quoteCountsAsEvidence('m * a'), false, 'short non-equation quotes still fail');
+  assert.equal(quoteCountsAsEvidence('   '), false);
+  assert.equal(quoteCountsAsEvidence(''), false);
+  // The ordinary length rule is unchanged.
+  assert.equal(quoteCountsAsEvidence('F = m * a'), true);
+});
+
+test('validateSpec: the reviewer\'s hash-matched "F=ma" quote grounds as compact equation evidence (N-07)', () => {
+  // Reviewer P1 (N-07): an exact source containing 'F=ma', matching sha256 and a
+  // quote citing that formula used to fail grounding solely on the 8-char minimum.
+  const text =
+    'Newton second law: the compact form F=ma relates net force to acceleration. SI units: newton, kilogram, metre per second squared.\n';
+  const doc: SourceDocument = {
+    id: 'source-1', title: 'Compact-formula source', locator: 'tests/fixtures/none.txt',
+    license: 'CC0-1.0', attribution: 'test', sha256: sha256(text), text,
+  };
+  const spec = loadSpec();
+  spec.sources[0].sha256 = sha256(text);
+  spec.explanations[0].evidence = [{ sourceId: 'source-1', quote: 'F=ma' }];
+  const report = validateSpec(spec, [doc]);
+  assert.deepEqual(failedIds(report), [], report.checks.filter(c => !c.passed).map(c => `${c.id}: ${c.message}`).join('; '));
+  assert.equal(checkOf(report, 'grounding.quotes').passed, true);
+  assert.equal(report.publishable, true);
+});
+
+test('validateSpec: a short quote without "=" still fails grounding.quotes (N-07 boundary)', () => {
+  const text =
+    'Newton second law: net force equals mass times acceleration, written Fma in compact form. SI units: newton, kilogram, metre per second squared.\n';
+  const doc: SourceDocument = {
+    id: 'source-1', title: 'Short-quote source', locator: 'tests/fixtures/none.txt',
+    license: 'CC0-1.0', attribution: 'test', sha256: sha256(text), text,
+  };
+  const report = expectSpecFailures(
+    s => {
+      s.sources[0].sha256 = sha256(text);
+      s.explanations[0].evidence[0].quote = 'Fma'; // verbatim in the source, but short and no '='
+    },
+    ['grounding.quotes'],
+    [doc],
+  );
+  assert.match(checkOf(report, 'grounding.quotes').message, /Fma/);
+});
+
+test('validateAnalysis: a compact "F=ma" concept quote counts and grounds (N-07)', () => {
+  const text =
+    'Newton second law: F=ma relates net force to acceleration. Original test text authored for this repository.\n';
+  const doc: SourceDocument = {
+    id: 'source-1', title: 'Compact-formula source', locator: 'tests/fixtures/none.txt',
+    license: 'CC0-1.0', attribution: 'test', sha256: sha256(text), text,
+  };
+  const analysis = loadAnalysisFixture();
+  analysis.concepts[0].evidence[0].quote = 'F=ma';
+  const report = validateAnalysis(analysis, [doc]);
+  assert.deepEqual(failedIds(report), [], report.checks.filter(c => !c.passed).map(c => `${c.id}: ${c.message}`).join('; '));
+  assert.equal(checkOf(report, 'grounding.quotes').passed, true);
+  assert.equal(report.publishable, true);
+});

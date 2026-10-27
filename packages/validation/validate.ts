@@ -45,13 +45,26 @@ const analysisSchemaValidate: ValidateFunction = ajv.compile(sourceAnalysisGenSc
 
 /** NASA's AI-use guidance forbids attributing generated claims to the publisher. */
 const PUBLISHER_MENTION = /\bNASA\b|National Aeronautics and Space Administration/i;
-const ATTRIBUTION_WORDING = /\b(according to|endorsed by|approved by|official (conclusion|position) of)\b/i;
+/**
+ * N-06: attribution wording fails ONLY when it names a source or authority —
+ * the trigger phrase (matched case-insensitively) followed within 40 characters
+ * by a word starting with a capital letter (case-SENSITIVE: an actual uppercase
+ * letter, so lowercase prose never counts) or by "the source|publisher|agency|
+ * author|text". Normal physics prose such as "accelerates according to the net
+ * force divided by its mass" therefore passes.
+ */
+const ATTRIBUTION_TRIGGER = /\b(?:according to|endorsed by|approved by|official (?:conclusion|position) of)\b/gi;
+const ATTRIBUTION_WINDOW_CHARS = 40;
+const CAPITALISED_FOLLOWER = /\b[A-Z]/; // deliberately case-sensitive
+const SOURCE_NOUN_FOLLOWER = /\bthe (?:source|publisher|agency|author|text)\b/i;
 const CONCEPT_ID_PATTERN = /^[a-z0-9-]{1,40}$/;
 const QUOTE_MESSAGE_LIMIT = 60;
 const SCHEMA_ERROR_LIMIT = 5;
 const TRAJECTORY_TOLERANCE = 1e-9; // absolute + relative
 /** R-05: a quote only counts as evidence when it is long and substantive enough to locate. */
 const QUOTE_MIN_NORMALIZED_CHARS = 8;
+/** N-07: a compact equation ('F=ma') counts from this normalised length when it contains '='. */
+const QUOTE_EQUATION_MIN_NORMALIZED_CHARS = 3;
 const QUOTE_MIN_LETTER_DIGITS = 3;
 const LETTER_DIGIT_PATTERN = /[\p{L}\p{N}]/gu;
 
@@ -64,25 +77,48 @@ export function normalizeWhitespace(s: string): string {
 }
 
 /**
- * R-05: a quote counts as evidence only if its whitespace-normalised form has
- * >= 8 characters and >= 3 letters/digits (\p{L}\p{N}). Whitespace-only or
- * trivial quotes used to normalise to strings that match every source.
+ * R-05/N-07: a quote counts as evidence only if its whitespace-normalised form
+ * has >= 8 characters and >= 3 letters/digits (\p{L}\p{N}), OR it is a compact
+ * equation: it contains '=', its normalised form has >= 3 characters and
+ * >= 3 letters/digits (e.g. 'F=ma'). Whitespace-only or trivial quotes used to
+ * normalise to strings that match every source; short non-equation spans such
+ * as 'm * a' still do not count.
  */
 export function quoteCountsAsEvidence(quote: unknown): boolean {
   if (typeof quote !== 'string') {
     return false;
   }
   const normalized = normalizeWhitespace(quote);
-  if (normalized.length < QUOTE_MIN_NORMALIZED_CHARS) {
+  const lettersDigits = normalized.match(LETTER_DIGIT_PATTERN);
+  if (lettersDigits === null || lettersDigits.length < QUOTE_MIN_LETTER_DIGITS) {
     return false;
   }
-  const lettersDigits = normalized.match(LETTER_DIGIT_PATTERN);
-  return lettersDigits !== null && lettersDigits.length >= QUOTE_MIN_LETTER_DIGITS;
+  if (normalized.length >= QUOTE_MIN_NORMALIZED_CHARS) {
+    return true;
+  }
+  // N-07: narrow validated short-form path for compact equations only.
+  return normalized.length >= QUOTE_EQUATION_MIN_NORMALIZED_CHARS && normalized.includes('=');
 }
 
-/** True when a generated display string mentions the publisher or uses attribution/endorsement wording. */
+/** N-06: true when attribution wording names a source or authority within 40 characters. */
+function hasAttributionWording(text: string): boolean {
+  for (const m of text.matchAll(ATTRIBUTION_TRIGGER)) {
+    const start = (m.index ?? 0) + m[0].length;
+    const window = text.slice(start, start + ATTRIBUTION_WINDOW_CHARS);
+    if (CAPITALISED_FOLLOWER.test(window) || SOURCE_NOUN_FOLLOWER.test(window)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * True when a generated display string mentions the publisher (fails anywhere)
+ * or uses attribution/endorsement wording that names a source or authority
+ * (N-06 qualified condition).
+ */
 function hasPublisherAttribution(text: unknown): boolean {
-  return typeof text === 'string' && (PUBLISHER_MENTION.test(text) || ATTRIBUTION_WORDING.test(text));
+  return typeof text === 'string' && (PUBLISHER_MENTION.test(text) || hasAttributionWording(text));
 }
 
 /**
@@ -261,7 +297,7 @@ export function validateSpec(spec: unknown, sources: SourceDocument[]): Validati
           counted++;
           if (!quoteCountsAsEvidence(ev.quote)) {
             failures.push(
-              `quote "${truncate(ev.quote, QUOTE_MESSAGE_LIMIT)}" (sourceId ${ev.sourceId}, explanation ${ex.id}) does not count as evidence: expected >= ${QUOTE_MIN_NORMALIZED_CHARS} normalised characters with >= ${QUOTE_MIN_LETTER_DIGITS} letters/digits`,
+              `quote "${truncate(ev.quote, QUOTE_MESSAGE_LIMIT)}" (sourceId ${ev.sourceId}, explanation ${ex.id}) does not count as evidence: expected >= ${QUOTE_MIN_NORMALIZED_CHARS} normalised characters with >= ${QUOTE_MIN_LETTER_DIGITS} letters/digits, or a compact equation containing "=" with >= ${QUOTE_EQUATION_MIN_NORMALIZED_CHARS} normalised characters and >= ${QUOTE_MIN_LETTER_DIGITS} letters/digits`,
             );
             continue;
           }
@@ -279,7 +315,7 @@ export function validateSpec(spec: unknown, sources: SourceDocument[]): Validati
         }
       }
       return failures.length === 0
-        ? { passed: true, message: `all ${counted} evidence quote(s) count as evidence (>= ${QUOTE_MIN_NORMALIZED_CHARS} normalised characters, >= ${QUOTE_MIN_LETTER_DIGITS} letters/digits) and all ${located} resolvable quote(s) appear in their source text after whitespace normalisation; every explanation has >= 1 counted quote` }
+        ? { passed: true, message: `all ${counted} evidence quote(s) count as evidence (>= ${QUOTE_MIN_NORMALIZED_CHARS} normalised characters with >= ${QUOTE_MIN_LETTER_DIGITS} letters/digits, or a compact "=" equation with >= ${QUOTE_EQUATION_MIN_NORMALIZED_CHARS}) and all ${located} resolvable quote(s) appear in their source text after whitespace normalisation; every explanation has >= 1 counted quote` }
         : { passed: false, message: `${failures.join('; ')} (expected counted verbatim quotes that appear in the source text after whitespace normalisation)`, path: '/explanations' };
     }),
 
@@ -357,10 +393,10 @@ export function validateSpec(spec: unknown, sources: SourceDocument[]): Validati
       ];
       const hits = fields.filter(f => hasPublisherAttribution(f.text));
       return hits.length === 0
-        ? { passed: true, message: 'no generated display field (title, objectives, explanations, prediction prompts, behavioral test names, scenario labels) mentions the publisher or uses attribution/endorsement wording; evidence quotes are exempt' }
+        ? { passed: true, message: 'no generated display field (title, objectives, explanations, prediction prompts, behavioral test names, scenario labels) mentions the publisher or uses attribution/endorsement wording naming a source or authority; evidence quotes are exempt' }
         : {
             passed: false,
-            message: `publisher attribution found at ${hits.map(h => `${h.path}: "${truncate(h.text, QUOTE_MESSAGE_LIMIT)}"`).join('; ')} (expected no mention of NASA / "National Aeronautics and Space Administration" and no "according to / endorsed by / approved by / official conclusion|position of" wording in generated display fields — NASA's AI-use guidance forbids attributing generated output to NASA)`,
+            message: `publisher attribution found at ${hits.map(h => `${h.path}: "${truncate(h.text, QUOTE_MESSAGE_LIMIT)}"`).join('; ')} (expected no mention of NASA / "National Aeronautics and Space Administration" anywhere, and no "according to / endorsed by / approved by / official conclusion|position of" wording naming a source or authority — a capitalised word or "the source/publisher/agency/author/text" within ${ATTRIBUTION_WINDOW_CHARS} characters — in generated display fields; NASA's AI-use guidance forbids attributing generated output to NASA)`,
             path: hits[0].path,
           };
     }),
@@ -479,7 +515,7 @@ export function validateAnalysis(analysis: unknown, sources: SourceDocument[]): 
           counted++;
           if (!quoteCountsAsEvidence(ev.quote)) {
             failures.push(
-              `quote "${truncate(ev.quote, QUOTE_MESSAGE_LIMIT)}" (sourceId ${ev.sourceId}, concept ${c.id}) does not count as evidence: expected >= ${QUOTE_MIN_NORMALIZED_CHARS} normalised characters with >= ${QUOTE_MIN_LETTER_DIGITS} letters/digits`,
+              `quote "${truncate(ev.quote, QUOTE_MESSAGE_LIMIT)}" (sourceId ${ev.sourceId}, concept ${c.id}) does not count as evidence: expected >= ${QUOTE_MIN_NORMALIZED_CHARS} normalised characters with >= ${QUOTE_MIN_LETTER_DIGITS} letters/digits, or a compact equation containing "=" with >= ${QUOTE_EQUATION_MIN_NORMALIZED_CHARS} normalised characters and >= ${QUOTE_MIN_LETTER_DIGITS} letters/digits`,
             );
             continue;
           }
@@ -497,7 +533,7 @@ export function validateAnalysis(analysis: unknown, sources: SourceDocument[]): 
         }
       }
       return failures.length === 0
-        ? { passed: true, message: `all ${counted} concept quote(s) count as evidence (>= ${QUOTE_MIN_NORMALIZED_CHARS} normalised characters, >= ${QUOTE_MIN_LETTER_DIGITS} letters/digits) and all ${located} resolvable quote(s) appear in their source text after whitespace normalisation${a.supported === true ? '; every supported concept has >= 1 counted quote' : ''}` }
+        ? { passed: true, message: `all ${counted} concept quote(s) count as evidence (>= ${QUOTE_MIN_NORMALIZED_CHARS} normalised characters with >= ${QUOTE_MIN_LETTER_DIGITS} letters/digits, or a compact "=" equation with >= ${QUOTE_EQUATION_MIN_NORMALIZED_CHARS}) and all ${located} resolvable quote(s) appear in their source text after whitespace normalisation${a.supported === true ? '; every supported concept has >= 1 counted quote' : ''}` }
         : { passed: false, message: `${failures.join('; ')} (expected counted verbatim quotes that appear in the source text after whitespace normalisation)`, path: '/concepts' };
     }),
 
@@ -509,10 +545,10 @@ export function validateAnalysis(analysis: unknown, sources: SourceDocument[]): 
       ];
       const hits = fields.filter(f => hasPublisherAttribution(f.text));
       return hits.length === 0
-        ? { passed: true, message: 'no generated analysis field (concept names, objectives, unsupportedReason) mentions the publisher or uses attribution/endorsement wording; evidence quotes are exempt' }
+        ? { passed: true, message: 'no generated analysis field (concept names, objectives, unsupportedReason) mentions the publisher or uses attribution/endorsement wording naming a source or authority; evidence quotes are exempt' }
         : {
             passed: false,
-            message: `publisher attribution found at ${hits.map(h => `${h.path}: "${truncate(h.text, QUOTE_MESSAGE_LIMIT)}"`).join('; ')} (expected no mention of NASA / "National Aeronautics and Space Administration" and no "according to / endorsed by / approved by / official conclusion|position of" wording in generated analysis fields — NASA's AI-use guidance forbids attributing generated output to NASA)`,
+            message: `publisher attribution found at ${hits.map(h => `${h.path}: "${truncate(h.text, QUOTE_MESSAGE_LIMIT)}"`).join('; ')} (expected no mention of NASA / "National Aeronautics and Space Administration" anywhere, and no "according to / endorsed by / approved by / official conclusion|position of" wording naming a source or authority — a capitalised word or "the source/publisher/agency/author/text" within ${ATTRIBUTION_WINDOW_CHARS} characters — in generated analysis fields; NASA's AI-use guidance forbids attributing generated output to NASA)`,
             path: hits[0].path,
           };
     }),
