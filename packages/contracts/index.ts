@@ -77,6 +77,8 @@ export interface MetaReceipt {
   usage: Usage | null; latencyMs: number; estCostUSD: number; finishReason: string; attempts: number;
   /** How estCostUSD was determined (TASK-009 R-04/R-09). Absent on receipts recorded before the fix. */
   costBasis?: 'usage' | 'reservation';
+  /** Part of estCostUSD charged at a reservation because an attempt's outcome was uncertain (TASK-009 N-04). */
+  reservedUnknownUSD?: number;
 }
 
 export interface StageEvent {

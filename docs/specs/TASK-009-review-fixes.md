@@ -40,3 +40,33 @@ Required new tests: reflected synthetic secret/source markers in a 400 and a 500
 
 ## Wave D — web UI (Sonnet)
 R-08: replace "re-checks every claim" wording with what is actually checked; label explanations "AI-generated · needs teacher review". R-09: show `reservedUnknownUSD` as "includes $x reserved for an uncertain outcome", never $0 for unknown. R-10: use `/api/health.busy` for the generate button, show `INTERRUPTED` jobs clearly.
+
+---
+
+# Round 2 — after the re-review (`docs/reviews/stage-2-re-review.md`)
+
+Re-review verdict: CHANGES REQUIRED. Resolved: R-01, R-03, R-04, R-05, R-08, R-12, R-13. Accepted as debt (documented): **R-06** (UTF-8 byte bound assumes a byte-level tokenizer; not verified against Meta billing) and **R-07** (Host/Origin allowlist in place; a per-session token is deferred). Lead decisions for the rest:
+
+## Contract change (lead)
+`MetaReceipt.reservedUnknownUSD?: number` — the part of `estCostUSD` charged at a reservation because an attempt's outcome was uncertain (0 when every attempt had valid usage or was a 4xx).
+
+## Wave A2 — `packages/meta` (Muse)
+| Finding | Required behaviour |
+|---|---|
+| N-01 (High), R-02 | Replace the lock file with an **operating-system-backed lock** that is released automatically when the process dies, so stale locks cannot exist: `export async function openLedger(opts: { path; capUSD; now?; newId?; lockPort?: number }): Promise<Ledger>` first listens with `node:net` on `127.0.0.1:<lockPort>`, where `lockPort` defaults to `49152 + (first 4 bytes of sha256(resolved absolute ledger path)) % 16000`. `EADDRINUSE` → throw `Error('LEDGER_LOCKED')`. The listening server is the lock; `ledger.close()` closes it (and `unref()` it so it never keeps the process alive). Remove the PID lock file and stale-takeover code. Keep the re-read before each reserve. `createLedger` is removed (all callers move to `await openLedger`). Tests: two `openLedger` calls on one path → second rejects `LEDGER_LOCKED`; **two child processes** started at the same moment against one path → exactly one acquires; after the owner exits (killed), a new owner acquires immediately; close/reopen. |
+| N-02 | Only a genuine cap refusal maps to `BUDGET_EXCEEDED`. Any other ledger failure during reserve or reconcile → new code `LEDGER_ERROR` (fixed public message), no request sent if it happened at reserve time. |
+| N-03 | Every failure after a reservation carries `chargedUSD`. Validate the response envelope: a 2xx body that is not an object, or whose `choices[0]` is not an object, is an uncertain outcome (reconcile at reservation). If `reconcile` itself throws, throw `LEDGER_ERROR` with `chargedUSD` = the reservation (conservative). |
+| N-04 | Track known and uncertain amounts separately per attempt: receipts and `MetaError` carry `reservedUnknownUSD` (sum of attempt amounts charged at reservation); `costBasis` is `'reservation'` if that sum > 0, else `'usage'`. 503→200 must report reservedUnknownUSD = the 503 attempt's reservation only. |
+| R-11 | The retry sleep must abort immediately when the job signal fires (`DEADLINE_EXCEEDED`, no second attempt). |
+
+## Wave B2/C2 — validation, worker, API (Qwen)
+| Finding | Required behaviour |
+|---|---|
+| N-06 | Publisher policy: `/\bNASA\b|National Aeronautics and Space Administration/i` still fails anywhere in generated fields. Attribution wording fails only when it names a source or authority: `according to|endorsed by|approved by|official (conclusion|position) of` followed within 40 characters by a word starting with a capital letter, or by `the (source|publisher|agency|author|text)`. Benign prose such as "accelerates according to the net force divided by its mass" passes. Add benign and malicious examples. |
+| N-07 | A quote counts if (a) normalized length ≥ 8 with ≥ 3 letters/digits, **or** (b) it is a compact equation: contains `=`, normalized length ≥ 3, ≥ 3 letters/digits (e.g. `F=ma`). Whitespace-only and short non-equation quotes still fail. |
+| N-05 | Each job records `owner: { pid, startedAt }` in job.json. `recoverInterruptedJobs` marks a `running` job INTERRUPTED only if its owner PID is not alive (`process.kill(pid, 0)` throws `ESRCH`; `EPERM` counts as alive) or the owner field is missing **and** the job is older than `maxJobWallTimeMs`. `main.ts` runs recovery only after it holds the ledger (live mode); offline servers never mutate jobs. |
+| N-04 (worker) | Use `receipt.reservedUnknownUSD` / `MetaError.reservedUnknownUSD` for `JobSummary.reservedUnknownUSD` instead of inferring from `costBasis`. |
+| R-11 (api) | `main.ts` passes `maxInputTokens` from `config/resource-limits.json` to `createMetaClient` and uses `await openLedger(...)`; closes the ledger on SIGINT/SIGTERM. |
+
+Lead: `scripts/live-spike.ts` moves to `openLedger`, uses the configured job deadline and input cap.
+
