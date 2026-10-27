@@ -18,7 +18,7 @@ export function Header({ health, down }: { health: Health | null; down: boolean 
         </svg>
         <div>
           <h1>Make knowledge interactive</h1>
-          <p>Source → Muse Spark → verified interactive activity</p>
+          <p>Source → Muse Spark → machine-checked interactive activity</p>
         </div>
       </div>
       <span className={cls} role="status"><span className="dot" aria-hidden="true" />{label}</span>

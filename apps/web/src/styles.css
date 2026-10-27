@@ -335,3 +335,13 @@ input[type="range"] { width: 100%; accent-color: var(--accent); height: 24px; ma
   .source-scroll { flex: none; height: 360px; }
   .controls-row { grid-template-columns: 1fr; }
 }
+
+/* ---------- TASK-009 Wave D: honesty UI ---------- */
+.callout-info { background: var(--accent-soft); color: #17315f; border: 1px solid #b9cdf7; }
+.scope-notice { margin: 8px 0 10px; line-height: 1.45; }
+.check-icon.info { color: var(--accent); }
+.tag-ai { background: var(--warn-soft); color: #6b4700; border-color: #ecce85; font-weight: 600; white-space: nowrap; }
+.tag-warn { background: var(--warn-soft); color: #6b4700; border-color: #ecce85; }
+.expl-top { margin-bottom: 4px; }
+.run-note { font-size: 12px; font-weight: 600; color: var(--warn); }
+.outcome-interrupted h2 { color: var(--warn); }

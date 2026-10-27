@@ -24,13 +24,24 @@ export function CitationChip({ label, quote, citeKey, enabled, onCite }: { label
   );
 }
 
+export const AI_TAG_TEXT = 'AI-generated · needs teacher review';
+
+/** Small label: the wording is model prose; only its quotes/numbers are machine-checked. */
+export function AiTag() {
+  return <span className="tag tag-ai" title="The quotes, numbers and ranges are machine-checked; the wording is AI-generated and has not been reviewed.">{AI_TAG_TEXT}</span>;
+}
+
 export function Explanations({ explanations, cite }: { explanations: ActivitySpec['explanations']; cite: CiteProps }) {
   return (
     <section className="card" aria-labelledby="expl-heading">
-      <h3 id="expl-heading">Explanations, grounded in the source</h3>
+      <div className="card-head">
+        <h3 id="expl-heading">Explanations, grounded in the source</h3>
+        <AiTag />
+      </div>
       <ul className="explanations">
         {explanations.map((ex) => (
           <li key={ex.id}>
+            <div className="expl-top"><AiTag /></div>
             <p>{ex.text}</p>
             <div className="chips" role="group" aria-label={`Evidence for ${ex.id}`}>
               {ex.evidence.map((ev, i) => {

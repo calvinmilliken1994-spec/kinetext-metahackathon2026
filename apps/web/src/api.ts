@@ -5,7 +5,7 @@ import type { ActivitySpec, MetaReceipt, SourceAnalysis, StageEvent, ValidationR
 
 export type JobStatus = 'running' | 'succeeded' | 'unsupported' | 'failed';
 
-export interface Health { ok: boolean; live: boolean }
+export interface Health { ok: boolean; live: boolean; /** The server is running a job right now (absent on older servers). */ busy?: boolean }
 
 export interface SourceMeta {
   id: string; title: string; locator: string; license: string; attribution: string; sha256: string; purpose: string;
@@ -15,6 +15,8 @@ export interface SourceDoc extends SourceMeta { text: string; page?: number }
 export interface JobSummary {
   jobId: string; sourceId: string; status: JobStatus; purpose: string; createdAt: string; finishedAt?: string;
   specId?: string; publishable?: boolean; checksPassed?: number; checksTotal?: number; totalCostUSD: number;
+  /** Part of totalCostUSD charged at a reservation (outcome uncertain). Absent on jobs recorded before the fix = 0. */
+  reservedUnknownUSD?: number;
   error?: { code: string; message: string };
 }
 
@@ -82,6 +84,8 @@ const MESSAGES: Record<string, string> = {
   NOT_FOUND: 'Not found.',
   SOURCE_UNAVAILABLE: 'The source could not be loaded (its hash did not verify).',
   JOB_START_FAILED: 'The server could not start the job.',
+  HOST_NOT_ALLOWED: 'The API refused this host. Open the app at http://127.0.0.1:5173.',
+  ORIGIN_NOT_ALLOWED: 'The API refused this origin. Open the app at http://127.0.0.1:5173.',
 };
 
 export function describeError(e: unknown): string {

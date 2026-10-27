@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildTimeline, formatCostUSD, formatDuration, newestFirst, pickDefaultJob, runBadge, shortId, totalEventCost } from './jobs.ts';
+import { buildTimeline, formatCostUSD, formatDuration, INTERRUPTED_TEXT, isInterrupted, jobStatusLabel, newestFirst, pickDefaultJob, runBadge, shortId, totalEventCost } from './jobs.ts';
 import type { StageEvent } from '../../../../packages/contracts/index.ts';
 
 const usage = { promptTokens: 10, completionTokens: 20, reasoningTokens: 15, cachedTokens: 0 };
@@ -86,6 +86,28 @@ test('shortId / cost / duration formatting', () => {
   assert.equal(formatDuration(4103), '4.10 s');
 });
 
+test('isInterrupted / jobStatusLabel: INTERRUPTED is shown as Interrupted, not a plain failure', () => {
+  const interrupted = { status: 'failed' as const, error: { code: 'INTERRUPTED' } };
+  assert.equal(isInterrupted(interrupted), true);
+  assert.equal(isInterrupted({ status: 'failed', error: { code: 'META_TIMEOUT' } }), false);
+  assert.equal(isInterrupted({ status: 'failed' }), false);
+  assert.equal(isInterrupted({ status: 'running', error: { code: 'INTERRUPTED' } }), false);
+  assert.deepEqual(jobStatusLabel(interrupted), { text: 'Interrupted', tone: 'warn' });
+  assert.deepEqual(jobStatusLabel({ status: 'failed', error: { code: 'VALIDATION_FAILED' } }), { text: 'Failed', tone: 'bad' });
+  assert.equal(INTERRUPTED_TEXT, 'Interrupted — the server stopped before this job finished.');
+});
+
+test('jobStatusLabel: succeeded shows machine-check counts, never "Verified"', () => {
+  assert.deepEqual(jobStatusLabel({ status: 'succeeded', checksPassed: 14, checksTotal: 14 }), { text: 'Checks 14/14', tone: 'ok' });
+  assert.deepEqual(jobStatusLabel({ status: 'succeeded', checksPassed: 13, checksTotal: 14 }), { text: 'Checks 13/14', tone: 'warn' });
+  assert.deepEqual(jobStatusLabel({ status: 'succeeded' }), { text: 'Succeeded', tone: 'ok' });
+  assert.deepEqual(jobStatusLabel({ status: 'running' }), { text: 'Running', tone: 'running' });
+  assert.deepEqual(jobStatusLabel({ status: 'running' }, true), { text: 'Running', tone: 'running' });
+  // server says idle → the 'running' record is stale
+  assert.deepEqual(jobStatusLabel({ status: 'running' }, false), { text: 'Stale (not running)', tone: 'warn' });
+  assert.deepEqual(jobStatusLabel({ status: 'unsupported' }), { text: 'Not supported yet', tone: 'warn' });
+});
+
 test('newestFirst / pickDefaultJob prefer running, then newest succeeded', () => {
   const jobs = [
     { jobId: 'a', status: 'failed' as const, createdAt: '2026-10-27T00:00:00Z' },
@@ -93,8 +115,10 @@ test('newestFirst / pickDefaultJob prefer running, then newest succeeded', () =>
     { jobId: 'c', status: 'succeeded' as const, createdAt: '2026-10-25T00:00:00Z' },
   ];
   assert.deepEqual(newestFirst(jobs).map((j) => j.jobId), ['a', 'b', 'c']);
-  assert.equal(pickDefaultJob(jobs)?.jobId, 'b');
-  assert.equal(pickDefaultJob([...jobs, { jobId: 'r', status: 'running' as const, createdAt: '2026-10-20T00:00:00Z' }])?.jobId, 'r');
-  assert.equal(pickDefaultJob([]), null);
-  assert.equal(pickDefaultJob([jobs[0] as (typeof jobs)[number]])?.jobId, 'a');
+  assert.equal(pickDefaultJob(jobs, false)?.jobId, 'b');
+  assert.equal(pickDefaultJob([...jobs, { jobId: 'r', status: 'running' as const, createdAt: '2026-10-20T00:00:00Z' }], true)?.jobId, 'r');
+  // a stale 'running' record is ignored when the server says it is not busy
+  assert.equal(pickDefaultJob([...jobs, { jobId: 'r', status: 'running' as const, createdAt: '2026-10-20T00:00:00Z' }], false)?.jobId, 'b');
+  assert.equal(pickDefaultJob([], true), null);
+  assert.equal(pickDefaultJob([jobs[0] as (typeof jobs)[number]], false)?.jobId, 'a');
 });

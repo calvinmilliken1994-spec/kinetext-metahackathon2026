@@ -8,6 +8,35 @@ export type JobStatus = 'running' | 'succeeded' | 'unsupported' | 'failed';
 /** Minimal job shape needed here (the API's JobSummary is a superset). */
 export interface JobLike { jobId: string; status: JobStatus; createdAt: string }
 
+export const INTERRUPTED_CODE = 'INTERRUPTED';
+export const INTERRUPTED_TEXT = 'Interrupted — the server stopped before this job finished.';
+
+/** A job the server marked failed with code INTERRUPTED on restart (R-10). */
+export function isInterrupted(job: { status: JobStatus; error?: { code: string } | undefined }): boolean {
+  return job.status === 'failed' && job.error?.code === INTERRUPTED_CODE;
+}
+
+export interface StatusLabel { text: string; tone: 'ok' | 'warn' | 'bad' | 'running' }
+
+/**
+ * Runs-list status for a job summary. 'Checks n/n' = machine checks only (R-08).
+ * `serverBusy === false` means /api/health says nothing is running, so a 'running' record is stale.
+ */
+export function jobStatusLabel(job: {
+  status: JobStatus; checksPassed?: number | undefined; checksTotal?: number | undefined; error?: { code: string } | undefined;
+}, serverBusy: boolean | null = null): StatusLabel {
+  switch (job.status) {
+    case 'running':
+      return serverBusy === false ? { text: 'Stale (not running)', tone: 'warn' } : { text: 'Running', tone: 'running' };
+    case 'succeeded':
+      return job.checksPassed !== undefined && job.checksTotal !== undefined
+        ? { text: `Checks ${job.checksPassed}/${job.checksTotal}`, tone: job.checksPassed === job.checksTotal ? 'ok' : 'warn' }
+        : { text: 'Succeeded', tone: 'ok' };
+    case 'unsupported': return { text: 'Not supported yet', tone: 'warn' };
+    case 'failed': return isInterrupted(job) ? { text: 'Interrupted', tone: 'warn' } : { text: 'Failed', tone: 'bad' };
+  }
+}
+
 export interface RunBadge {
   kind: 'live' | 'recorded';
   /** Visible text. */
@@ -135,10 +164,13 @@ export function newestFirst<T extends Pick<JobLike, 'createdAt'>>(jobs: readonly
   return [...jobs].sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
 }
 
-/** Pick the job to show for a source: a running one, else the newest succeeded, else the newest. */
-export function pickDefaultJob<T extends JobLike>(jobsForSource: readonly T[]): T | null {
+/**
+ * Pick the job to show for a source: a running one (only when the SERVER is busy — a stale 'running'
+ * record left by a dead process must not hijack the view), else the newest succeeded, else the newest.
+ */
+export function pickDefaultJob<T extends JobLike>(jobsForSource: readonly T[], serverBusy: boolean): T | null {
   const sorted = newestFirst(jobsForSource);
-  return sorted.find((j) => j.status === 'running')
+  return (serverBusy ? sorted.find((j) => j.status === 'running') : undefined)
     ?? sorted.find((j) => j.status === 'succeeded')
     ?? sorted[0]
     ?? null;

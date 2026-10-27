@@ -41,8 +41,9 @@ export interface ReportSummary {
   total: number;
   passed: number;
   failed: number;
-  verified: boolean;
-  /** 'Verified · 13/13 checks' or 'Blocked · n failed'. */
+  /** Every machine check passed AND the report is publishable. Says nothing about explanation wording. */
+  allPassed: boolean;
+  /** 'Machine checks passed · 14/14' or 'Blocked · 2 of 14 checks failed'. Counts come from the report. */
   label: string;
 }
 
@@ -50,9 +51,28 @@ export function summarizeReport(report: Pick<ValidationReport, 'checks' | 'publi
   const total = report.checks.length;
   const passed = report.checks.filter((c) => c.passed).length;
   const failed = total - passed;
-  const verified = failed === 0 && total > 0 && report.publishable;
-  return {
-    total, passed, failed, verified,
-    label: verified ? `Verified · ${passed}/${total} checks` : `Blocked · ${failed > 0 ? failed : 'not publishable'}${failed > 0 ? ' failed' : ''}`,
-  };
+  const allPassed = failed === 0 && total > 0 && report.publishable;
+  let label: string;
+  if (allPassed) label = `Machine checks passed · ${passed}/${total}`;
+  else if (failed > 0) label = `Blocked · ${failed} of ${total} checks failed`;
+  else label = 'Blocked · not publishable';
+  return { total, passed, failed, allPassed, label };
+}
+
+/** Always-passing scope check added by the validator (R-08): prose is not machine-verified. */
+export const PROSE_CHECK_ID = 'scope.prose-unverified';
+
+/** Shown when the report predates that check, because the limitation holds regardless. */
+export const PROSE_FALLBACK_MESSAGE =
+  'Explanation prose is AI-generated; quotes, numbers and ranges are machine-checked, the wording needs teacher review.';
+
+export interface ScopeNotice {
+  message: string;
+  /** True when the message comes from the report's own scope.prose-unverified check. */
+  fromReport: boolean;
+}
+
+export function proseScopeNotice(report: Pick<ValidationReport, 'checks'>): ScopeNotice {
+  const c = report.checks.find((k) => k.id === PROSE_CHECK_ID);
+  return c !== undefined ? { message: c.message, fromReport: true } : { message: PROSE_FALLBACK_MESSAGE, fromReport: false };
 }

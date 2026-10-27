@@ -5,6 +5,8 @@ import { api, describeError } from './api.ts';
 import type { Health, JobDetail, JobSummary, SourceDoc, SourceMeta } from './api.ts';
 
 export const POLL_MS = 1500;
+/** /api/health poll: the authoritative busy flag for the Generate button (R-10). */
+export const HEALTH_POLL_MS = 3000;
 
 function isAbort(e: unknown): boolean {
   return e instanceof DOMException && e.name === 'AbortError';
@@ -15,7 +17,8 @@ export type Loadable<T> =
   | { state: 'error'; message: string }
   | { state: 'ready'; data: T };
 
-export function useHealth(): { health: Health | null; down: boolean } {
+/** Polls /api/health every 3 s while mounted; `refresh()` re-polls immediately (e.g. right after POSTing a job). */
+export function useHealth(): { health: Health | null; down: boolean; refresh: () => Promise<void> } {
   const [health, setHealth] = useState<Health | null>(null);
   const [down, setDown] = useState(false);
   useEffect(() => {
@@ -30,12 +33,21 @@ export function useHealth(): { health: Health | null; down: boolean } {
         if (isAbort(e)) return;
         setDown(true);
       }
-      timer = setTimeout(() => { void tick(); }, 8000);
+      timer = setTimeout(() => { void tick(); }, HEALTH_POLL_MS);
     };
     void tick();
     return () => { ctl.abort(); if (timer !== undefined) clearTimeout(timer); };
   }, []);
-  return { health, down };
+  const refresh = useCallback(async (): Promise<void> => {
+    try {
+      const h = await api.health();
+      setHealth(h);
+      setDown(false);
+    } catch {
+      setDown(true);
+    }
+  }, []);
+  return { health, down, refresh };
 }
 
 export function useSources(): { sources: Loadable<SourceMeta[]>; reload: () => void } {
@@ -69,10 +81,11 @@ export function useSourceDoc(id: string | null): Loadable<SourceDoc> | null {
   return doc.value;
 }
 
-export function useJobs(): { jobs: Loadable<JobSummary[]>; refresh: () => void } {
+/** Job list; polls every 1.5 s while the SERVER reports busy (not while stale 'running' records exist). */
+export function useJobs(serverBusy: boolean): { jobs: Loadable<JobSummary[]>; refresh: () => void } {
   const [jobs, setJobs] = useState<Loadable<JobSummary[]>>({ state: 'loading' });
   const [nonce, setNonce] = useState(0);
-  const anyRunning = jobs.state === 'ready' && jobs.data.some((j) => j.status === 'running');
+  // Re-fetch when busy flips (a finished job must appear without a manual reload).
   useEffect(() => {
     const ctl = new AbortController();
     api.jobs(ctl.signal).then(
@@ -80,12 +93,12 @@ export function useJobs(): { jobs: Loadable<JobSummary[]>; refresh: () => void }
       (e: unknown) => { if (!isAbort(e)) setJobs({ state: 'error', message: describeError(e) }); },
     );
     return () => ctl.abort();
-  }, [nonce]);
+  }, [nonce, serverBusy]);
   useEffect(() => {
-    if (!anyRunning) return;
+    if (!serverBusy) return;
     const t = setInterval(() => setNonce((n) => n + 1), POLL_MS);
     return () => clearInterval(t);
-  }, [anyRunning]);
+  }, [serverBusy]);
   return { jobs, refresh: useCallback(() => setNonce((n) => n + 1), []) };
 }
 

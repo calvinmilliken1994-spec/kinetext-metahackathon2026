@@ -4,6 +4,7 @@ import { useHealth, useJobDetail, useJobs, useSourceDoc, useSources } from './ho
 import { buildHighlights } from './lib/highlight.ts';
 import { collectQuoteRefs } from './lib/evidence.ts';
 import { newestFirst, pickDefaultJob } from './lib/jobs.ts';
+import { generateState, isServerBusy } from './lib/health.ts';
 import { Header } from './components/Header.tsx';
 import { SourcePanel } from './components/SourcePanel.tsx';
 import type { Flash } from './components/SourcePanel.tsx';
@@ -15,9 +16,10 @@ import { ValidationPanel } from './components/ValidationPanel.tsx';
 const NO_JOBS: never[] = [];
 
 export function App() {
-  const { health, down } = useHealth();
+  const { health, down, refresh: refreshHealth } = useHealth();
   const { sources, reload: reloadSources } = useSources();
-  const { jobs, refresh: refreshJobs } = useJobs();
+  const serverBusy = isServerBusy(health);
+  const { jobs, refresh: refreshJobs } = useJobs(serverBusy);
 
   const [pickedSource, setPickedSource] = useState<string | null>(null);
   const [pickedJob, setPickedJob] = useState<{ jobId: string; sourceId: string } | null>(null);
@@ -35,11 +37,11 @@ export function App() {
     () => newestFirst(allJobs.filter((j) => j.sourceId === selectedSourceId)),
     [allJobs, selectedSourceId],
   );
-  const anyRunning = allJobs.some((j) => j.status === 'running');
+  const generate = generateState({ health, down, generating, hasSource: selectedSource !== null });
 
   const selectedJobId = pickedJob !== null && pickedJob.sourceId === selectedSourceId
     ? pickedJob.jobId
-    : pickDefaultJob(jobsForSource)?.jobId ?? null;
+    : pickDefaultJob(jobsForSource, generate.busy)?.jobId ?? null;
   const detail = useJobDetail(selectedJobId);
   const ready = detail?.state === 'ready' && detail.data.summary.sourceId === selectedSourceId ? detail.data : null;
 
@@ -69,8 +71,11 @@ export function App() {
         refreshJobs();
       },
       (e: unknown) => setGenerateError(describeError(e)),
-    ).finally(() => setGenerating(false));
-  }, [selectedSourceId, refreshJobs]);
+    ).finally(() => {
+      // Keep the button locked until /api/health has been re-read, so it never flickers enabled.
+      void refreshHealth().finally(() => setGenerating(false));
+    });
+  }, [selectedSourceId, refreshJobs, refreshHealth]);
 
   const onSelectSource = useCallback((id: string) => { setPickedSource(id); setFlash(null); }, []);
   const onSelectJob = useCallback((jobId: string) => {
@@ -105,7 +110,7 @@ export function App() {
               <p className="muted">
                 {health !== null && !health.live
                   ? 'Live generation is off on this server and there are no recorded runs for this source. Pick another source, or start the API with live generation enabled.'
-                  : 'Press “Generate with Muse Spark”. Muse reads the source, plans an activity, and deterministic code validates every claim before you can use it.'}
+                  : 'Press “Generate with Muse Spark”. Muse reads the source, plans an activity, and deterministic code machine-checks its quotes, numbers, ranges, sources and physics. Explanation wording is AI-generated and needs teacher review.'}
               </p>
             </div>
           )}
@@ -115,22 +120,22 @@ export function App() {
           {ready !== null && spec !== undefined && ready.summary.status === 'succeeded' && (
             <ActivityPanel key={spec.id} spec={spec} cite={{ sourceId: ready.summary.sourceId, located, onCite }} />
           )}
-          {ready !== null && (spec === undefined || ready.summary.status !== 'succeeded') && <JobOutcome detail={ready} />}
+          {ready !== null && (spec === undefined || ready.summary.status !== 'succeeded') && (
+            <JobOutcome detail={ready} serverBusy={health === null ? null : generate.busy} />
+          )}
         </main>
 
         <aside className="side" aria-label="Pipeline and validation">
           <PipelinePanel
-            health={health}
-            down={down}
             sourceTitle={selectedSource?.title ?? null}
             jobs={jobs}
             jobsForSource={jobsForSource}
-            anyRunning={anyRunning}
+            generate={generate}
+            serverBusy={health === null ? null : generate.busy}
             selectedJobId={selectedJobId}
             onSelectJob={onSelectJob}
             liveJobIds={liveJobIds}
             onGenerate={onGenerate}
-            generating={generating}
             generateError={generateError}
             detail={detail}
           />

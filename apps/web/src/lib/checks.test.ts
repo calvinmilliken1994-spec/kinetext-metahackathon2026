@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { groupChecks, summarizeReport } from './checks.ts';
+import { groupChecks, PROSE_CHECK_ID, proseScopeNotice, summarizeReport } from './checks.ts';
 import { fixed, stepDigits, trimmed } from './format.ts';
 import type { ValidationCheck } from '../../../../packages/contracts/index.ts';
 
@@ -19,15 +19,30 @@ test('groupChecks omits empty kinds', () => {
   assert.deepEqual(groupChecks({ checks: [c('s', 'schema', true)] }).map((g) => g.kind), ['schema']);
 });
 
-test('summarizeReport: Verified · 13/13 and Blocked · n failed', () => {
-  const ok = Array.from({ length: 13 }, (_, i) => c(`k${i}`, 'semantic', true));
-  assert.equal(summarizeReport({ checks: ok, publishable: true }).label, 'Verified · 13/13 checks');
-  const bad = [...ok.slice(0, 11), c('x', 'grounding', false), c('y', 'behavioral', false)];
+test('summarizeReport: Machine checks passed · n/n (counts from the report) and Blocked', () => {
+  const ok = Array.from({ length: 14 }, (_, i) => c(`k${i}`, 'semantic', true));
+  const s14 = summarizeReport({ checks: ok, publishable: true });
+  assert.equal(s14.label, 'Machine checks passed · 14/14');
+  assert.equal(s14.allPassed, true);
+  // an older 13-check report simply shows what it contains
+  assert.equal(summarizeReport({ checks: ok.slice(0, 13), publishable: true }).label, 'Machine checks passed · 13/13');
+  assert.ok(!/verified/i.test(s14.label));
+  const bad = [...ok.slice(0, 12), c('x', 'grounding', false), c('y', 'behavioral', false)];
   const s = summarizeReport({ checks: bad, publishable: false });
-  assert.equal(s.label, 'Blocked · 2 failed');
-  assert.equal(s.verified, false);
-  assert.equal(summarizeReport({ checks: [], publishable: false }).verified, false);
+  assert.equal(s.label, 'Blocked · 2 of 14 checks failed');
+  assert.equal(s.allPassed, false);
+  assert.equal(summarizeReport({ checks: [], publishable: false }).allPassed, false);
   assert.equal(summarizeReport({ checks: ok, publishable: false }).label, 'Blocked · not publishable');
+});
+
+test('proseScopeNotice uses the report check when present, else a fallback that still states the limit', () => {
+  const msg = 'Explanation prose is AI-generated; quotes, numbers and ranges are machine-checked, the wording needs teacher review.';
+  const withCheck = proseScopeNotice({ checks: [c('s', 'schema', true), { id: PROSE_CHECK_ID, kind: 'semantic', passed: true, message: 'custom text' }] });
+  assert.deepEqual(withCheck, { message: 'custom text', fromReport: true });
+  const without = proseScopeNotice({ checks: [c('s', 'schema', true)] });
+  assert.equal(without.fromReport, false);
+  assert.equal(without.message, msg);
+  assert.match(without.message, /teacher review/);
 });
 
 test('fixed / trimmed / stepDigits', () => {
