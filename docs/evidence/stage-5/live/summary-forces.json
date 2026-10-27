@@ -1,0 +1,28 @@
+{
+  "ranAt": "2026-10-27T18:13:36.346Z",
+  "base": "http://127.0.0.1:8787",
+  "results": [
+    {
+      "name": "forces",
+      "expect": "forces-1d-v1 published (Stage 2 regression)",
+      "sourceId": "nasa-grc-equations-of-motion",
+      "jobId": "job-20261027181254-6666934e",
+      "wallS": 42.3,
+      "status": "succeeded",
+      "outcome": null,
+      "engine": "forces-1d-v1",
+      "error": null,
+      "revisions": 1,
+      "publishedRevision": 1,
+      "bestRevision": null,
+      "repairs": [],
+      "demoFault": null,
+      "checks": "15/15",
+      "totalCostUSD": 0.045811,
+      "reservedUnknownUSD": 0,
+      "title": "Constant Force Motion in One Direction",
+      "unsupportedReason": "",
+      "failedChecks": []
+    }
+  ]
+}

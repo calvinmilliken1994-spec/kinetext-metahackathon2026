@@ -1,0 +1,28 @@
+{
+  "ranAt": "2026-10-27T18:14:16.981Z",
+  "base": "http://127.0.0.1:8787",
+  "results": [
+    {
+      "name": "teacher-moon",
+      "expect": "projectile-v1 published from a pasted teacher text",
+      "sourceId": "user-accf5f60ebed",
+      "jobId": "job-20261027181336-572d603f",
+      "wallS": 40.3,
+      "status": "succeeded",
+      "outcome": null,
+      "engine": "projectile-v1",
+      "error": null,
+      "revisions": 1,
+      "publishedRevision": 1,
+      "bestRevision": null,
+      "repairs": [],
+      "demoFault": null,
+      "checks": "14/14",
+      "totalCostUSD": 0.047072,
+      "reservedUnknownUSD": 0,
+      "title": "Throwing a ball on the Moon",
+      "unsupportedReason": "",
+      "failedChecks": []
+    }
+  ]
+}

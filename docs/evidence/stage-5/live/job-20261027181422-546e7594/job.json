@@ -1,0 +1,23 @@
+{
+  "jobId": "job-20261027181422-546e7594",
+  "sourceId": "user-0e818e7ef9c1",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-27T18:14:22.965Z",
+  "totalCostUSD": 0.042085,
+  "reservedUnknownUSD": 0,
+  "engine": "lift-equation-v1",
+  "revisions": 1,
+  "repairs": [],
+  "sourceKind": "user",
+  "owner": {
+    "pid": 4596,
+    "startedAt": "2026-10-27T18:14:22.965Z"
+  },
+  "specId": "user-0e818e7ef9c1-job-20261027181422-546e7594",
+  "publishable": true,
+  "checksPassed": 15,
+  "checksTotal": 15,
+  "publishedRevision": 1,
+  "finishedAt": "2026-10-27T18:14:57.911Z"
+}

@@ -1,0 +1,14 @@
+{"jobId":"job-20261027181808-c945bedb","seq":0,"stage":"ingest","status":"started","at":"2026-10-27T18:18:08.047Z"}
+{"jobId":"job-20261027181808-c945bedb","seq":1,"stage":"ingest","status":"succeeded","at":"2026-10-27T18:18:08.051Z","detail":"sha256 dd59e60d6324"}
+{"jobId":"job-20261027181808-c945bedb","seq":2,"stage":"analyze","status":"started","at":"2026-10-27T18:18:08.052Z"}
+{"jobId":"job-20261027181808-c945bedb","seq":3,"stage":"analyze","status":"succeeded","at":"2026-10-27T18:18:23.495Z","model":"muse-spark-1.3","responseId":"chatcmpl-01a17e95-b72b-73c7-8d9e-ff044c05c4a5","usage":{"promptTokens":1429,"completionTokens":3658,"reasoningTokens":3379,"cachedTokens":1393},"latencyMs":15433,"estCostUSD":0.01580045,"detail":"supported; checks 6/6 passed"}
+{"jobId":"job-20261027181808-c945bedb","seq":4,"stage":"specify","status":"started","at":"2026-10-27T18:18:23.495Z"}
+{"jobId":"job-20261027181808-c945bedb","seq":5,"stage":"specify","status":"succeeded","at":"2026-10-27T18:18:55.597Z","model":"muse-spark-1.3","responseId":"chatcmpl-01a17e96-3448-76ef-aecd-cc3c2d43e542","usage":{"promptTokens":2606,"completionTokens":7874,"reasoningTokens":7026,"cachedTokens":0},"latencyMs":32011,"estCostUSD":0.036722,"detail":"spec nasa-grc-lift-equation-job-20261027181808-c945bedb"}
+{"jobId":"job-20261027181808-c945bedb","seq":6,"stage":"inject","status":"succeeded","at":"2026-10-27T18:18:55.597Z","revision":1,"detail":"demo fault injected by the system: wrong-answer at behavioralTests[0].expectedLiftN"}
+{"jobId":"job-20261027181808-c945bedb","seq":7,"stage":"validate","status":"started","at":"2026-10-27T18:18:55.598Z","revision":1}
+{"jobId":"job-20261027181808-c945bedb","seq":8,"stage":"validate","status":"failed","at":"2026-10-27T18:18:55.600Z","revision":1,"detail":"VALIDATION_FAILED; failed checks: behavior.tests"}
+{"jobId":"job-20261027181808-c945bedb","seq":9,"stage":"repair","status":"started","at":"2026-10-27T18:18:55.600Z","revision":2,"detail":"targeted checks: behavior.tests"}
+{"jobId":"job-20261027181808-c945bedb","seq":10,"stage":"repair","status":"succeeded","at":"2026-10-27T18:19:11.542Z","model":"muse-spark-1.3","responseId":"chatcmpl-01a17e96-72de-763e-8baa-ac0c04a974e2","usage":{"promptTokens":4223,"completionTokens":3782,"reasoningTokens":2938,"cachedTokens":0},"latencyMs":15937,"estCostUSD":0.02135225,"revision":2,"detail":"repaired revision 1"}
+{"jobId":"job-20261027181808-c945bedb","seq":11,"stage":"validate","status":"started","at":"2026-10-27T18:19:11.544Z","revision":2}
+{"jobId":"job-20261027181808-c945bedb","seq":12,"stage":"validate","status":"succeeded","at":"2026-10-27T18:19:11.544Z","revision":2,"detail":"16/16 checks passed"}
+{"jobId":"job-20261027181808-c945bedb","seq":13,"stage":"done","status":"succeeded","at":"2026-10-27T18:19:11.545Z","detail":"publishable after repair (revision 2)"}

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { FormEvent } from 'react';
 import type { AnyPrediction, EngineId } from '../../../../packages/contracts/index.ts';
 import { engineOutput, formatQuantity, outputInfo, predictionExplanation } from '../lib/engines.ts';
-import { gradePrediction, parseGuess } from '../lib/predictions.ts';
+import { gradePrediction, parseGuess, studentTolerance } from '../lib/predictions.ts';
 import type { Grade } from '../lib/predictions.ts';
 import { trimmed } from '../lib/format.ts';
 
@@ -37,7 +37,7 @@ function PredictionCard({ engine, prediction: p, index, onRun }: CardProps) {
       setError('The engine cannot evaluate this prediction.');
       return;
     }
-    const g = gradePrediction(guess, actual, p.tolerance);
+    const g = gradePrediction(guess, actual, studentTolerance(actual, p.tolerance));
     setGrade(g);
     onRun(p, index, g);
   };
@@ -65,14 +65,14 @@ function PredictionCard({ engine, prediction: p, index, onRun }: CardProps) {
           </div>
           <button type="submit" className="btn btn-primary" disabled={guess === null}>Run it</button>
         </div>
-        <p className="muted small" id={`${inputId}-tol`}>Counts as correct within ±{trimmed(p.tolerance, 6)}{unit}.</p>
+        <p className="muted small" id={`${inputId}-tol`}>Counts as correct within 2% of the engine's value (or ±{trimmed(p.tolerance, 6)}{unit}, whichever is larger).</p>
         {error !== null && <p className="field-error" role="alert">{error}</p>}
         {grade !== null && (
           <div className={`grade ${grade.withinTolerance ? 'grade-ok' : 'grade-miss'}`} role="status">
-            <strong>{grade.withinTolerance ? '✓ Within tolerance' : `✗ Outside tolerance — your guess was too ${grade.direction === 'high' ? 'high' : 'low'}`}</strong>
+            <strong>{grade.withinTolerance ? '✓ Close enough' : `✗ Not close enough — your guess was too ${grade.direction === 'high' ? 'high' : 'low'}`}</strong>
             <span>
               You guessed {trimmed(grade.guess, 4)}{unit} · engine says <b>{predictionExplanation(engine, p, grade.actual)}</b>
-              {' '}· off by {formatQuantity(Math.abs(grade.error))} (tolerance ±{trimmed(grade.tolerance, 6)})
+              {' '}· off by {formatQuantity(Math.abs(grade.error))} (allowed ±{trimmed(grade.tolerance, 4)})
             </span>
           </div>
         )}

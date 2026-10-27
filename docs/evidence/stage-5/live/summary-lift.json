@@ -1,0 +1,28 @@
+{
+  "ranAt": "2026-10-27T18:09:19.387Z",
+  "base": "http://127.0.0.1:8787",
+  "results": [
+    {
+      "name": "lift",
+      "expect": "lift-equation-v1 published",
+      "sourceId": "nasa-grc-lift-equation",
+      "jobId": "job-20261027180833-39d13eb7",
+      "wallS": 46.4,
+      "status": "succeeded",
+      "outcome": null,
+      "engine": "lift-equation-v1",
+      "error": null,
+      "revisions": 1,
+      "publishedRevision": 1,
+      "bestRevision": null,
+      "repairs": [],
+      "demoFault": null,
+      "checks": "15/15",
+      "totalCostUSD": 0.048567,
+      "reservedUnknownUSD": 0,
+      "title": "Lift Equation Explorer",
+      "unsupportedReason": "",
+      "failedChecks": []
+    }
+  ]
+}

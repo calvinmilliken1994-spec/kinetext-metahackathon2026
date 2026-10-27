@@ -1,0 +1,108 @@
+{
+  "analysis": {
+    "activity": "lift-equation-v1",
+    "concepts": [
+      {
+        "evidence": [
+          {
+            "quote": "L = Cl * (rho * V^2 / 2) * A",
+            "sourceId": "nasa-grc-lift-equation"
+          },
+          {
+            "quote": "lift L is equal to the lift coefficient Cl times the density rho times half of the velocity V squared times the wing area A.",
+            "sourceId": "nasa-grc-lift-equation"
+          }
+        ],
+        "id": "lift-equation",
+        "name": "Lift Equation"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "For lift, this variable is called the lift coefficient, designated \"Cl.\"",
+            "sourceId": "nasa-grc-lift-equation"
+          }
+        ],
+        "id": "lift-coefficient",
+        "name": "Lift Coefficient"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "is called the dynamic pressure and appears in Bernoulli's pressure equation.",
+            "sourceId": "nasa-grc-lift-equation"
+          }
+        ],
+        "id": "dynamic-pressure",
+        "name": "Dynamic Pressure"
+      }
+    ],
+    "objectives": [
+      "Calculate lift from lift coefficient, air density, velocity, and wing area",
+      "Explain how lift coefficient collects shape, inclination, viscosity, and compressibility effects"
+    ],
+    "supported": true,
+    "unsupportedReason": ""
+  },
+  "report": {
+    "artifactId": "source-analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis.gen.json"
+      },
+      {
+        "id": "analysis.invariants",
+        "kind": "semantic",
+        "passed": true,
+        "message": "invariants hold for supported=true"
+      },
+      {
+        "id": "analysis.concept-ids",
+        "kind": "semantic",
+        "passed": true,
+        "message": "all 3 concept id(s) are unique lowercase-kebab"
+      },
+      {
+        "id": "refs.sources",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 1 cited sourceId(s) have matching documents"
+      },
+      {
+        "id": "grounding.quotes",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 concept quote(s) count as evidence (>= 8 normalised characters with >= 3 letters/digits, or a compact \"=\" equation with >= 3) and all 4 resolvable quote(s) appear in their source text after whitespace normalisation; every supported concept has >= 1 counted quote"
+      },
+      {
+        "id": "policy.no-publisher-attribution",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated analysis field (concept names, objectives, unsupportedReason) mentions the publisher or uses attribution/endorsement wording naming a source or authority; evidence quotes are exempt"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a17e92-dbf2-72fc-92d8-05a09726da54",
+    "usage": {
+      "promptTokens": 1429,
+      "completionTokens": 3986,
+      "reasoningTokens": 3756,
+      "cachedTokens": 1393
+    },
+    "latencyMs": 16772,
+    "estCostUSD": 0.01719445,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage"
+  }
+}

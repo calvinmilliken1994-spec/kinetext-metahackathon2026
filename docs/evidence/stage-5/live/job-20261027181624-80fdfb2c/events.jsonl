@@ -1,0 +1,6 @@
+{"jobId":"job-20261027181624-80fdfb2c","seq":0,"stage":"ingest","status":"started","at":"2026-10-27T18:16:24.392Z"}
+{"jobId":"job-20261027181624-80fdfb2c","seq":1,"stage":"ingest","status":"succeeded","at":"2026-10-27T18:16:24.395Z","detail":"sha256 dd59e60d6324"}
+{"jobId":"job-20261027181624-80fdfb2c","seq":2,"stage":"analyze","status":"started","at":"2026-10-27T18:16:24.396Z"}
+{"jobId":"job-20261027181624-80fdfb2c","seq":3,"stage":"analyze","status":"succeeded","at":"2026-10-27T18:16:35.167Z","model":"muse-spark-1.3","responseId":"chatcmpl-01a17e94-102c-7590-8518-55fa8ff59d51","usage":{"promptTokens":1429,"completionTokens":2939,"reasoningTokens":2662,"cachedTokens":0},"latencyMs":10762,"estCostUSD":0.014277,"detail":"supported; checks 6/6 passed"}
+{"jobId":"job-20261027181624-80fdfb2c","seq":4,"stage":"specify","status":"started","at":"2026-10-27T18:16:35.167Z"}
+{"jobId":"job-20261027181624-80fdfb2c","seq":5,"stage":"specify","status":"failed","at":"2026-10-27T18:17:12.796Z","detail":"OUTPUT_TRUNCATED","model":"muse-spark-1.3","responseId":"chatcmpl-01a17e94-a338-73e5-abb9-9ca3229a9836","usage":{"promptTokens":2601,"completionTokens":8000,"reasoningTokens":7998,"cachedTokens":0},"latencyMs":37627,"estCostUSD":0.03725125}

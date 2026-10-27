@@ -1,0 +1,48 @@
+{
+  "ranAt": "2026-10-27T18:19:12.485Z",
+  "base": "http://127.0.0.1:8787",
+  "results": [
+    {
+      "name": "demo-fault-lift",
+      "expect": "labelled system fault in revision 1, repaired by Muse (excluded from metrics)",
+      "sourceId": "nasa-grc-lift-equation",
+      "jobId": "job-20261027181808-c945bedb",
+      "wallS": 64.5,
+      "status": "succeeded",
+      "outcome": null,
+      "engine": "lift-equation-v1",
+      "error": null,
+      "revisions": 2,
+      "publishedRevision": 2,
+      "bestRevision": null,
+      "repairs": [
+        {
+          "revision": 2,
+          "repairOf": 1,
+          "targeted": [
+            "behavior.tests"
+          ],
+          "fixed": [
+            "behavior.tests"
+          ],
+          "remaining": [],
+          "publishable": true,
+          "afterInjectedFault": true
+        }
+      ],
+      "demoFault": {
+        "kind": "wrong-answer",
+        "path": "behavioralTests[0].expectedLiftN",
+        "original": 24500,
+        "injected": 36751,
+        "revision": 1
+      },
+      "checks": "16/16",
+      "totalCostUSD": 0.073875,
+      "reservedUnknownUSD": 0,
+      "title": "Exploring Lift: Density, Speed, and Wing Area",
+      "unsupportedReason": "",
+      "failedChecks": []
+    }
+  ]
+}

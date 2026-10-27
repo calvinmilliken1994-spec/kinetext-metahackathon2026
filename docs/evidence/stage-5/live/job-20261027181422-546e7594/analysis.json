@@ -1,0 +1,102 @@
+{
+  "analysis": {
+    "activity": "lift-equation-v1",
+    "concepts": [
+      {
+        "evidence": [
+          {
+            "quote": "L = Cl * (rho * V^2 / 2) * A",
+            "sourceId": "user-0e818e7ef9c1"
+          },
+          {
+            "quote": "lift L equals the lift coefficient Cl times the air density rho",
+            "sourceId": "user-0e818e7ef9c1"
+          }
+        ],
+        "id": "lift-equation",
+        "name": "Lift equation"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "Doubling the airspeed makes the lift four times larger, because lift depends on the square of the velocity.",
+            "sourceId": "user-0e818e7ef9c1"
+          },
+          {
+            "quote": "A bigger wing area gives proportionally more lift.",
+            "sourceId": "user-0e818e7ef9c1"
+          }
+        ],
+        "id": "lift-scaling",
+        "name": "Lift scaling with velocity and area"
+      }
+    ],
+    "objectives": [
+      "Calculate lift from lift coefficient, air density, velocity, and wing area",
+      "Explain that lift scales with velocity squared and proportionally with wing area"
+    ],
+    "supported": true,
+    "unsupportedReason": ""
+  },
+  "report": {
+    "artifactId": "source-analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis.gen.json"
+      },
+      {
+        "id": "analysis.invariants",
+        "kind": "semantic",
+        "passed": true,
+        "message": "invariants hold for supported=true"
+      },
+      {
+        "id": "analysis.concept-ids",
+        "kind": "semantic",
+        "passed": true,
+        "message": "all 2 concept id(s) are unique lowercase-kebab"
+      },
+      {
+        "id": "refs.sources",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 1 cited sourceId(s) have matching documents"
+      },
+      {
+        "id": "grounding.quotes",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 concept quote(s) count as evidence (>= 8 normalised characters with >= 3 letters/digits, or a compact \"=\" equation with >= 3) and all 4 resolvable quote(s) appear in their source text after whitespace normalisation; every supported concept has >= 1 counted quote"
+      },
+      {
+        "id": "policy.no-publisher-attribution",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated analysis field (concept names, objectives, unsupportedReason) mentions the publisher or uses attribution/endorsement wording naming a source or authority; evidence quotes are exempt"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a17e92-3347-74b6-b9e0-88a4183d1832",
+    "usage": {
+      "promptTokens": 1265,
+      "completionTokens": 2327,
+      "reasoningTokens": 2106,
+      "cachedTokens": 0
+    },
+    "latencyMs": 10114,
+    "estCostUSD": 0.011471,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage"
+  }
+}

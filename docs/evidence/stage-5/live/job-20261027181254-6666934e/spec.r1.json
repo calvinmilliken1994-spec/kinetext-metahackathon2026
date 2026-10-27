@@ -1,0 +1,178 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nasa-grc-equations-of-motion-job-20261027181254-6666934e",
+  "title": "Constant Force Motion in One Direction",
+  "learningObjectives": [
+    "Calculate 1D acceleration from net force and mass using a = F/m.",
+    "Explain net force as the difference of opposing forces in 1D motion.",
+    "Predict velocity and position over time under constant acceleration."
+  ],
+  "sources": [
+    {
+      "id": "nasa-grc-equations-of-motion",
+      "title": "Equations of Motion — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+      "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/equations-of-motion/",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+      "sha256": "1f43ca9d8a7097f7898a56c0eef367132de6ac7e5fe28605b5504b696324dbf0"
+    }
+  ],
+  "explanations": [
+    {
+      "evidence": [
+        {
+          "quote": "F = m * a",
+          "sourceId": "nasa-grc-equations-of-motion"
+        },
+        {
+          "quote": "a = F / m",
+          "sourceId": "nasa-grc-equations-of-motion"
+        }
+      ],
+      "id": "newtons-second-law",
+      "text": "For constant mass, acceleration equals net force divided by mass."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "The force (F) will be the difference between the opposing forces (thrust minus drag).",
+          "sourceId": "nasa-grc-equations-of-motion"
+        },
+        {
+          "quote": "However, if the forces become unbalanced, the aircraft will move in the direction of the greater force.",
+          "sourceId": "nasa-grc-equations-of-motion"
+        }
+      ],
+      "id": "net-force-thrust-minus-drag",
+      "text": "Net force in one direction is the difference of opposing forces, and unbalanced force causes motion toward the greater force."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "For a constant force and constant mass, the acceleration remains constant.",
+          "sourceId": "nasa-grc-equations-of-motion"
+        },
+        {
+          "quote": "Note that these equations can be used only if the mass and the force (and the acceleration) are constant.",
+          "sourceId": "nasa-grc-equations-of-motion"
+        }
+      ],
+      "id": "constant-force-constant-acceleration",
+      "text": "Constant force and constant mass produce constant acceleration, and the motion equations apply only in that case."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "V = a * t + Vo",
+          "sourceId": "nasa-grc-equations-of-motion"
+        },
+        {
+          "quote": "x = (a * t^2) / 2 + Vo * t + xo",
+          "sourceId": "nasa-grc-equations-of-motion"
+        }
+      ],
+      "id": "velocity-and-position",
+      "text": "Under constant acceleration, velocity grows linearly with time and position follows the time-squared relation."
+    }
+  ],
+  "simulation": {
+    "engine": "forces-1d-v1",
+    "equation": "a=F_net/m",
+    "massKg": {
+      "unit": "kg",
+      "default": 5,
+      "max": 20,
+      "min": 0.5
+    },
+    "netForceN": {
+      "unit": "N",
+      "default": 10,
+      "max": 50,
+      "min": -50
+    },
+    "scenario": {
+      "objectLabel": "Model aircraft",
+      "surfaceLabel": "Level flight, x-direction only"
+    },
+    "durationS": 5,
+    "stepS": 0.02,
+    "observables": [
+      "position",
+      "velocity",
+      "acceleration"
+    ]
+  },
+  "behavioralTests": [
+    {
+      "expectedAccelerationMps2": 5,
+      "massKg": 2,
+      "name": "positive net force",
+      "netForceN": 10,
+      "tolerance": 0.001
+    },
+    {
+      "expectedAccelerationMps2": -3,
+      "massKg": 4,
+      "name": "negative net force",
+      "netForceN": -12,
+      "tolerance": 0.001
+    },
+    {
+      "expectedAccelerationMps2": 0,
+      "massKg": 5,
+      "name": "zero net force equilibrium",
+      "netForceN": 0,
+      "tolerance": 0.001
+    },
+    {
+      "expectedAccelerationMps2": 2.5,
+      "massKg": 10,
+      "name": "larger mass smaller acceleration",
+      "netForceN": 25,
+      "tolerance": 0.001
+    }
+  ],
+  "predictions": [
+    {
+      "expectedAccelerationMps2": 3,
+      "id": "pred-1",
+      "massKg": 4,
+      "netForceN": 12,
+      "prompt": "A model aircraft of mass 4 kg has a net horizontal force of 12 N. Predict its acceleration.",
+      "tolerance": 0.001
+    },
+    {
+      "expectedAccelerationMps2": -2,
+      "id": "pred-2",
+      "massKg": 5,
+      "netForceN": -10,
+      "prompt": "A model aircraft of mass 5 kg has a net horizontal force of -10 N. Predict its acceleration.",
+      "tolerance": 0.001
+    },
+    {
+      "expectedAccelerationMps2": 2,
+      "id": "pred-3",
+      "massKg": 2.5,
+      "netForceN": 5,
+      "prompt": "A model aircraft of mass 2.5 kg has a net horizontal force of 5 N. Predict its acceleration.",
+      "tolerance": 0.001
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a17e91-5544-73fe-af70-e965a6ac3a37",
+    "runId": "job-20261027181254-6666934e",
+    "promptVersion": "v3",
+    "generatedAt": "2026-10-27T18:13:36.291Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

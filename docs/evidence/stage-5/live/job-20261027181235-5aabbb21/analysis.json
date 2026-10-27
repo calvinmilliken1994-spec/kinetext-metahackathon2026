@@ -1,0 +1,117 @@
+{
+  "analysis": {
+    "activity": "none",
+    "concepts": [
+      {
+        "evidence": [
+          {
+            "quote": "In reality, a baseball or a soccer ball in flight generates a moderate amount of aerodynamic drag and is not strictly ballistic.",
+            "sourceId": "nasa-grc-flight-equations-with-drag"
+          },
+          {
+            "quote": "D = (Cd * rho * A * Vt^2) / 2",
+            "sourceId": "nasa-grc-flight-equations-with-drag"
+          }
+        ],
+        "id": "aerodynamic-drag",
+        "name": "Aerodynamic Drag"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "Terminal velocity is noted by the symbol Vt.",
+            "sourceId": "nasa-grc-flight-equations-with-drag"
+          },
+          {
+            "quote": "Vt = sqrt((2 * m * g) / (Cd * rho * A))",
+            "sourceId": "nasa-grc-flight-equations-with-drag"
+          }
+        ],
+        "id": "terminal-velocity",
+        "name": "Terminal Velocity"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "W = m * g",
+            "sourceId": "nasa-grc-flight-equations-with-drag"
+          },
+          {
+            "quote": "where a is the acceleration, W is the weight, and D is the drag.",
+            "sourceId": "nasa-grc-flight-equations-with-drag"
+          }
+        ],
+        "id": "weight-force",
+        "name": "Weight Force"
+      }
+    ],
+    "objectives": [
+      "Explain how velocity-dependent aerodynamic drag alters ballistic flight",
+      "Calculate terminal velocity from mass, gravity, air density, and drag parameters",
+      "Describe vertical ascent and horizontal motion with drag"
+    ],
+    "supported": false,
+    "unsupportedReason": "The source teaches projectile motion with velocity-squared aerodynamic drag and terminal velocity rather than drag-free ballistic flight, constant-net-force motion, lift, or speed of sound."
+  },
+  "report": {
+    "artifactId": "source-analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis.gen.json"
+      },
+      {
+        "id": "analysis.invariants",
+        "kind": "semantic",
+        "passed": true,
+        "message": "invariants hold for supported=false"
+      },
+      {
+        "id": "analysis.concept-ids",
+        "kind": "semantic",
+        "passed": true,
+        "message": "all 3 concept id(s) are unique lowercase-kebab"
+      },
+      {
+        "id": "refs.sources",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 1 cited sourceId(s) have matching documents"
+      },
+      {
+        "id": "grounding.quotes",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 concept quote(s) count as evidence (>= 8 normalised characters with >= 3 letters/digits, or a compact \"=\" equation with >= 3) and all 6 resolvable quote(s) appear in their source text after whitespace normalisation"
+      },
+      {
+        "id": "policy.no-publisher-attribution",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated analysis field (concept names, objectives, unsupportedReason) mentions the publisher or uses attribution/endorsement wording naming a source or authority; evidence quotes are exempt"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a17e90-a99a-749b-852a-ddb5792d18c3",
+    "usage": {
+      "promptTokens": 2703,
+      "completionTokens": 4474,
+      "reasoningTokens": 4160,
+      "cachedTokens": 0
+    },
+    "latencyMs": 16705,
+    "estCostUSD": 0.02239325,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage"
+  }
+}

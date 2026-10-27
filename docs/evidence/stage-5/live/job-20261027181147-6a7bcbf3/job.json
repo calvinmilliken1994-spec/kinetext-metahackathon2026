@@ -1,0 +1,23 @@
+{
+  "jobId": "job-20261027181147-6a7bcbf3",
+  "sourceId": "nasa-grc-speed-of-sound",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-27T18:11:47.107Z",
+  "totalCostUSD": 0.049054,
+  "reservedUnknownUSD": 0,
+  "engine": "speed-of-sound-v1",
+  "revisions": 1,
+  "repairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 4596,
+    "startedAt": "2026-10-27T18:11:47.107Z"
+  },
+  "specId": "nasa-grc-speed-of-sound-job-20261027181147-6a7bcbf3",
+  "publishable": true,
+  "checksPassed": 14,
+  "checksTotal": 14,
+  "publishedRevision": 1,
+  "finishedAt": "2026-10-27T18:12:30.819Z"
+}

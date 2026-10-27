@@ -1,0 +1,166 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nasa-grc-ballistic-flight-equations-job-20261027181108-895b5df2",
+  "title": "Ballistic Flight: How High Will It Go?",
+  "learningObjectives": [
+    "Use constant horizontal velocity to calculate downrange distance over time",
+    "Use constant gravitational acceleration to predict vertical velocity and altitude over time",
+    "Calculate maximum altitude from initial vertical velocity and gravity"
+  ],
+  "sources": [
+    {
+      "id": "nasa-grc-ballistic-flight-equations",
+      "title": "Ballistic Flight Equations — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+      "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/ballistic-flight-equations/",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+      "sha256": "89ecf743b3bc22c056d40e778dd8cab693f91bf7a124244344ecdef71df50422"
+    }
+  ],
+  "explanations": [
+    {
+      "evidence": [
+        {
+          "quote": "The horizontal motion is uniform because there is no external force in the horizontal direction.",
+          "sourceId": "nasa-grc-ballistic-flight-equations"
+        }
+      ],
+      "id": "horizontal-uniform-motion",
+      "text": "With no drag and no horizontal force, horizontal velocity stays constant and downrange distance grows steadily with time."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "V = V0 - g * t",
+          "sourceId": "nasa-grc-ballistic-flight-equations"
+        },
+        {
+          "quote": "y = V0 * t - (g * t^2) / 2",
+          "sourceId": "nasa-grc-ballistic-flight-equations"
+        }
+      ],
+      "id": "vertical-motion-under-gravity",
+      "text": "Gravity is the only vertical force, so vertical velocity decreases linearly with time and height follows a quadratic curve."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "At the highest point in the flight, the vertical velocity is zero.",
+          "sourceId": "nasa-grc-ballistic-flight-equations"
+        },
+        {
+          "quote": "y = V0^2 / (2 * g)",
+          "sourceId": "nasa-grc-ballistic-flight-equations"
+        }
+      ],
+      "id": "maximum-altitude",
+      "text": "Maximum height occurs when vertical velocity reaches zero, giving y_max from initial vertical velocity and gravity; doubling vertical speed quadruples height."
+    }
+  ],
+  "simulation": {
+    "engine": "projectile-v1",
+    "equation": "y_max=V0^2/(2*g)",
+    "horizontalSpeedMps": {
+      "unit": "m/s",
+      "default": 20,
+      "max": 50,
+      "min": 5
+    },
+    "verticalSpeedMps": {
+      "unit": "m/s",
+      "default": 15,
+      "max": 30,
+      "min": 5
+    },
+    "gravityMps2": {
+      "unit": "m/s^2",
+      "default": 9.8,
+      "max": 24.8,
+      "min": 1.6
+    },
+    "scenario": {
+      "objectLabel": "Soccer ball",
+      "settingLabel": "Level field"
+    }
+  },
+  "behavioralTests": [
+    {
+      "expectedMaxHeightM": 1.2755,
+      "gravityMps2": 9.8,
+      "horizontalSpeedMps": 10,
+      "name": "low-arc",
+      "tolerance": 0.01,
+      "verticalSpeedMps": 5
+    },
+    {
+      "expectedMaxHeightM": 781.25,
+      "gravityMps2": 1.6,
+      "horizontalSpeedMps": 20,
+      "name": "high-arc",
+      "tolerance": 0.5,
+      "verticalSpeedMps": 50
+    },
+    {
+      "expectedMaxHeightM": 11.4796,
+      "gravityMps2": 9.8,
+      "horizontalSpeedMps": 20,
+      "name": "nominal-earth-arc",
+      "tolerance": 0.05,
+      "verticalSpeedMps": 15
+    },
+    {
+      "expectedMaxHeightM": 53.9084,
+      "gravityMps2": 3.71,
+      "horizontalSpeedMps": 30,
+      "name": "mars-like-arc",
+      "tolerance": 0.2,
+      "verticalSpeedMps": 20
+    }
+  ],
+  "predictions": [
+    {
+      "expectedMaxHeightM": 11.4796,
+      "gravityMps2": 9.8,
+      "horizontalSpeedMps": 20,
+      "id": "pred-1",
+      "prompt": "Predict the maximum height for U0=20 m/s, V0=15 m/s, g=9.8 m/s^2.",
+      "tolerance": 0.05,
+      "verticalSpeedMps": 15
+    },
+    {
+      "expectedMaxHeightM": 5.102,
+      "gravityMps2": 9.8,
+      "horizontalSpeedMps": 30,
+      "id": "pred-2",
+      "prompt": "Predict the maximum height for U0=30 m/s, V0=10 m/s, g=9.8 m/s^2.",
+      "tolerance": 0.02,
+      "verticalSpeedMps": 10
+    },
+    {
+      "expectedMaxHeightM": 31.8878,
+      "gravityMps2": 9.8,
+      "horizontalSpeedMps": 15,
+      "id": "pred-3",
+      "prompt": "Predict the maximum height for U0=15 m/s, V0=25 m/s, g=9.8 m/s^2.",
+      "tolerance": 0.15,
+      "verticalSpeedMps": 25
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a17e8f-a4d7-74db-9260-d6e66daaa166",
+    "runId": "job-20261027181108-895b5df2",
+    "promptVersion": "v3",
+    "generatedAt": "2026-10-27T18:11:45.627Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

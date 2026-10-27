@@ -1,0 +1,44 @@
+{
+  "jobId": "job-20261027181923-ea52ab35",
+  "sourceId": "nasa-grc-ballistic-flight-equations",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-27T18:19:23.913Z",
+  "totalCostUSD": 0.059215,
+  "reservedUnknownUSD": 0,
+  "engine": "projectile-v1",
+  "revisions": 2,
+  "repairs": [
+    {
+      "revision": 2,
+      "repairOf": 1,
+      "targeted": [
+        "grounding.quotes"
+      ],
+      "fixed": [
+        "grounding.quotes"
+      ],
+      "remaining": [],
+      "publishable": true,
+      "afterInjectedFault": true
+    }
+  ],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 38504,
+    "startedAt": "2026-10-27T18:19:23.913Z"
+  },
+  "demoFault": {
+    "kind": "fabricated-quote",
+    "path": "explanations[0].evidence[0].quote",
+    "original": "The horizontal motion is uniform because there is no external force in the horizontal direction.",
+    "injected": "Muse confirmed this result in a controlled laboratory trial (ref ea52ab35).",
+    "revision": 1
+  },
+  "specId": "nasa-grc-ballistic-flight-equations-job-20261027181923-ea52ab35",
+  "publishable": true,
+  "checksPassed": 15,
+  "checksTotal": 15,
+  "publishedRevision": 2,
+  "finishedAt": "2026-10-27T18:20:13.282Z"
+}

@@ -1,0 +1,23 @@
+{
+  "jobId": "job-20261027181254-6666934e",
+  "sourceId": "nasa-grc-equations-of-motion",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-27T18:12:54.031Z",
+  "totalCostUSD": 0.045811,
+  "reservedUnknownUSD": 0,
+  "engine": "forces-1d-v1",
+  "revisions": 1,
+  "repairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 4596,
+    "startedAt": "2026-10-27T18:12:54.031Z"
+  },
+  "specId": "nasa-grc-equations-of-motion-job-20261027181254-6666934e",
+  "publishable": true,
+  "checksPassed": 15,
+  "checksTotal": 15,
+  "publishedRevision": 1,
+  "finishedAt": "2026-10-27T18:13:36.334Z"
+}

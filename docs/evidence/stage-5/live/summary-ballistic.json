@@ -1,0 +1,28 @@
+{
+  "ranAt": "2026-10-27T18:11:46.778Z",
+  "base": "http://127.0.0.1:8787",
+  "results": [
+    {
+      "name": "ballistic",
+      "expect": "projectile-v1 published",
+      "sourceId": "nasa-grc-ballistic-flight-equations",
+      "jobId": "job-20261027181108-895b5df2",
+      "wallS": 38.3,
+      "status": "succeeded",
+      "outcome": null,
+      "engine": "projectile-v1",
+      "error": null,
+      "revisions": 1,
+      "publishedRevision": 1,
+      "bestRevision": null,
+      "repairs": [],
+      "demoFault": null,
+      "checks": "14/14",
+      "totalCostUSD": 0.038738,
+      "reservedUnknownUSD": 0,
+      "title": "Ballistic Flight: How High Will It Go?",
+      "unsupportedReason": "",
+      "failedChecks": []
+    }
+  ]
+}

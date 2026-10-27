@@ -1,0 +1,109 @@
+{
+  "analysis": {
+    "activity": "speed-of-sound-v1",
+    "concepts": [
+      {
+        "evidence": [
+          {
+            "quote": "a = sqrt(gamma * R * T)",
+            "sourceId": "nasa-grc-speed-of-sound"
+          },
+          {
+            "quote": "the speed of sound depends on the state of the gas.",
+            "sourceId": "nasa-grc-speed-of-sound"
+          }
+        ],
+        "id": "speed-of-sound-equation",
+        "name": "Speed of Sound Equation"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "Notice that the temperature must be specified on an absolute scale (Kelvin or Rankine).",
+            "sourceId": "nasa-grc-speed-of-sound"
+          }
+        ],
+        "id": "absolute-temperature-scale",
+        "name": "Absolute Temperature Scale"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "Aeronautical engineers call the ratio of the aircraft’s speed to the speed of sound the Mach number, M.",
+            "sourceId": "nasa-grc-speed-of-sound"
+          }
+        ],
+        "id": "mach-number",
+        "name": "Mach Number"
+      }
+    ],
+    "objectives": [
+      "Calculate the speed of sound using a = sqrt(gamma * R * T) with absolute temperature",
+      "Explain how gas type and temperature affect the speed of sound",
+      "Define Mach number as the ratio of aircraft speed to the speed of sound"
+    ],
+    "supported": true,
+    "unsupportedReason": ""
+  },
+  "report": {
+    "artifactId": "source-analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis.gen.json"
+      },
+      {
+        "id": "analysis.invariants",
+        "kind": "semantic",
+        "passed": true,
+        "message": "invariants hold for supported=true"
+      },
+      {
+        "id": "analysis.concept-ids",
+        "kind": "semantic",
+        "passed": true,
+        "message": "all 3 concept id(s) are unique lowercase-kebab"
+      },
+      {
+        "id": "refs.sources",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 1 cited sourceId(s) have matching documents"
+      },
+      {
+        "id": "grounding.quotes",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 concept quote(s) count as evidence (>= 8 normalised characters with >= 3 letters/digits, or a compact \"=\" equation with >= 3) and all 4 resolvable quote(s) appear in their source text after whitespace normalisation; every supported concept has >= 1 counted quote"
+      },
+      {
+        "id": "policy.no-publisher-attribution",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated analysis field (concept names, objectives, unsupportedReason) mentions the publisher or uses attribution/endorsement wording naming a source or authority; evidence quotes are exempt"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a17e8f-d68b-775f-af5c-5d8dcef26b5b",
+    "usage": {
+      "promptTokens": 1952,
+      "completionTokens": 2476,
+      "reasoningTokens": 2232,
+      "cachedTokens": 0
+    },
+    "latencyMs": 11182,
+    "estCostUSD": 0.012963,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage"
+  }
+}

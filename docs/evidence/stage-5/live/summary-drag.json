@@ -1,0 +1,28 @@
+{
+  "ranAt": "2026-10-27T18:12:53.707Z",
+  "base": "http://127.0.0.1:8787",
+  "results": [
+    {
+      "name": "drag",
+      "expect": "declined (no tested engine models drag)",
+      "sourceId": "nasa-grc-flight-equations-with-drag",
+      "jobId": "job-20261027181235-5aabbb21",
+      "wallS": 18.1,
+      "status": "unsupported",
+      "outcome": null,
+      "engine": null,
+      "error": null,
+      "revisions": 0,
+      "publishedRevision": null,
+      "bestRevision": null,
+      "repairs": [],
+      "demoFault": null,
+      "checks": "?/?",
+      "totalCostUSD": 0.022393,
+      "reservedUnknownUSD": 0,
+      "title": null,
+      "unsupportedReason": "The source teaches projectile motion with velocity-squared aerodynamic drag and terminal velocity rather than drag-free ballistic flight, constant-net-force motion, lift, or speed of sound.",
+      "failedChecks": []
+    }
+  ]
+}

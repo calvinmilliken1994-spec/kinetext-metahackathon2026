@@ -1,0 +1,169 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nasa-grc-lift-equation-job-20261027180833-39d13eb7",
+  "title": "Lift Equation Explorer",
+  "learningObjectives": [
+    "Calculate lift from lift coefficient, air density, velocity, and wing area using the lift equation",
+    "Explain how lift depends on density, velocity squared, wing area, and lift coefficient",
+    "Describe dynamic pressure as density times velocity squared divided by two"
+  ],
+  "sources": [
+    {
+      "id": "nasa-grc-lift-equation",
+      "title": "Lift Equation — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+      "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/lift-equation/",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+      "sha256": "dd59e60d632407e534757295f073841306676ba982a0a661a5a8c0199a85071a"
+    }
+  ],
+  "explanations": [
+    {
+      "evidence": [
+        {
+          "quote": "L = Cl * (rho * V^2 / 2) * A",
+          "sourceId": "nasa-grc-lift-equation"
+        },
+        {
+          "quote": "lift L is equal to the lift coefficient Cl times the density rho",
+          "sourceId": "nasa-grc-lift-equation"
+        }
+      ],
+      "id": "lift-equation",
+      "text": "Lift equals the lift coefficient times dynamic pressure times wing area. Doubling wing area doubles lift, while doubling velocity quadruples lift."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "For lift, this variable is called the lift coefficient, designated \"Cl.\"",
+          "sourceId": "nasa-grc-lift-equation"
+        },
+        {
+          "quote": "This allows us to collect all the effects, simple and complex, into a single equation.",
+          "sourceId": "nasa-grc-lift-equation"
+        }
+      ],
+      "id": "lift-coefficient",
+      "text": "The lift coefficient collects complex shape, inclination, viscosity, and compressibility effects into a single variable used to calculate lift."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "\"density times the square of the velocity divided by two\" is called the dynamic pressure",
+          "sourceId": "nasa-grc-lift-equation"
+        }
+      ],
+      "id": "dynamic-pressure",
+      "text": "Dynamic pressure is density times velocity squared divided by two. Higher density or higher velocity increases dynamic pressure and therefore lift."
+    }
+  ],
+  "simulation": {
+    "engine": "lift-equation-v1",
+    "equation": "L=Cl*(rho*V^2/2)*A",
+    "liftCoefficient": {
+      "unit": "1",
+      "default": 0.8,
+      "max": 1.5,
+      "min": 0.2
+    },
+    "airDensityKgM3": {
+      "unit": "kg/m^3",
+      "default": 1.225,
+      "max": 1.3,
+      "min": 0.9
+    },
+    "airspeedMps": {
+      "unit": "m/s",
+      "default": 50,
+      "max": 100,
+      "min": 10
+    },
+    "wingAreaM2": {
+      "unit": "m^2",
+      "default": 20,
+      "max": 50,
+      "min": 5
+    },
+    "scenario": {
+      "objectLabel": "Model wing",
+      "settingLabel": "Sea-level airflow"
+    }
+  },
+  "behavioralTests": [
+    {
+      "airDensityKgM3": 1.225,
+      "airspeedMps": 50,
+      "expectedLiftN": 24500,
+      "liftCoefficient": 0.8,
+      "name": "Baseline sea-level lift",
+      "tolerance": 2,
+      "wingAreaM2": 20
+    },
+    {
+      "airDensityKgM3": 1,
+      "airspeedMps": 40,
+      "expectedLiftN": -4000,
+      "liftCoefficient": -0.5,
+      "name": "Negative lift coefficient",
+      "tolerance": 1,
+      "wingAreaM2": 10
+    },
+    {
+      "airDensityKgM3": 1.225,
+      "airspeedMps": 80,
+      "expectedLiftN": 70560,
+      "liftCoefficient": 1.2,
+      "name": "High speed lift",
+      "tolerance": 5,
+      "wingAreaM2": 15
+    },
+    {
+      "airDensityKgM3": 0.9,
+      "airspeedMps": 30,
+      "expectedLiftN": 4050,
+      "liftCoefficient": 0.4,
+      "name": "Low density lift",
+      "tolerance": 1,
+      "wingAreaM2": 25
+    }
+  ],
+  "predictions": [
+    {
+      "airDensityKgM3": 1.225,
+      "airspeedMps": 60,
+      "expectedLiftN": 26460,
+      "id": "predict-lift-mid-speed",
+      "liftCoefficient": 0.6,
+      "prompt": "Predict the lift for Cl=0.6, rho=1.225 kg/m^3, V=60 m/s, and A=20 m^2.",
+      "tolerance": 2,
+      "wingAreaM2": 20
+    },
+    {
+      "airDensityKgM3": 1,
+      "airspeedMps": 40,
+      "expectedLiftN": 12000,
+      "id": "predict-lift-high-cl",
+      "liftCoefficient": 1,
+      "prompt": "Predict the lift for Cl=1.0, rho=1.0 kg/m^3, V=40 m/s, and A=15 m^2.",
+      "tolerance": 1,
+      "wingAreaM2": 15
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a17e8d-6391-7601-88c6-dd2cf91376b9",
+    "runId": "job-20261027180833-39d13eb7",
+    "promptVersion": "v3",
+    "generatedAt": "2026-10-27T18:09:17.787Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

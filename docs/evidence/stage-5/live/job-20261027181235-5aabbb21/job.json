@@ -1,0 +1,18 @@
+{
+  "jobId": "job-20261027181235-5aabbb21",
+  "sourceId": "nasa-grc-flight-equations-with-drag",
+  "status": "unsupported",
+  "purpose": "test-live",
+  "createdAt": "2026-10-27T18:12:35.582Z",
+  "totalCostUSD": 0.022393,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 4596,
+    "startedAt": "2026-10-27T18:12:35.582Z"
+  },
+  "finishedAt": "2026-10-27T18:12:52.297Z"
+}

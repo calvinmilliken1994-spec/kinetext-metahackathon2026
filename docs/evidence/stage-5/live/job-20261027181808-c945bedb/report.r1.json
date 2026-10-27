@@ -1,0 +1,98 @@
+{
+  "artifactId": "nasa-grc-lift-equation-job-20261027181808-c945bedb",
+  "revision": 1,
+  "checks": [
+    {
+      "id": "schema.full",
+      "kind": "schema",
+      "passed": true,
+      "message": "spec matches activity-spec.full.lift-equation-v1.json (draft-07)"
+    },
+    {
+      "id": "semantic.range.liftCoefficient",
+      "kind": "semantic",
+      "passed": true,
+      "message": "liftCoefficient min=0.2 < max=1.5 with default=0.8 inside the range"
+    },
+    {
+      "id": "semantic.range.airDensityKgM3",
+      "kind": "semantic",
+      "passed": true,
+      "message": "airDensityKgM3 min=0.9 < max=1.3 with default=1.225 inside the range"
+    },
+    {
+      "id": "semantic.range.airspeedMps",
+      "kind": "semantic",
+      "passed": true,
+      "message": "airspeedMps min=10 < max=100 with default=50 inside the range"
+    },
+    {
+      "id": "semantic.range.wingAreaM2",
+      "kind": "semantic",
+      "passed": true,
+      "message": "wingAreaM2 min=5 < max=50 with default=20 inside the range"
+    },
+    {
+      "id": "semantic.unique-ids",
+      "kind": "semantic",
+      "passed": true,
+      "message": "explanation ids, prediction ids and behavioral test names are unique"
+    },
+    {
+      "id": "refs.sources",
+      "kind": "grounding",
+      "passed": true,
+      "message": "all references resolve: 1 spec source(s), 1 cited sourceId(s)"
+    },
+    {
+      "id": "refs.sha256",
+      "kind": "grounding",
+      "passed": true,
+      "message": "sha256 verified for 1 source(s): stored hash and recomputed text hash both match the spec"
+    },
+    {
+      "id": "grounding.quotes",
+      "kind": "grounding",
+      "passed": true,
+      "message": "all 6 evidence quote(s) count as evidence (>= 8 normalised characters with >= 3 letters/digits, or a compact \"=\" equation with >= 3) and all 6 resolvable quote(s) appear in their source text after whitespace normalisation; every explanation has >= 1 counted quote"
+    },
+    {
+      "id": "behavior.tests",
+      "kind": "behavioral",
+      "passed": false,
+      "message": "\"baseline lift\": expected 36751, computeOutput(liftCoefficient=0.8, airDensityKgM3=1.225, airspeedMps=50, wingAreaM2=20) = 24500.000000000004, |diff| 12250.999999999996 > tolerance 2",
+      "path": "/behavioralTests"
+    },
+    {
+      "id": "behavior.predictions",
+      "kind": "behavioral",
+      "passed": true,
+      "message": "all 2 prediction(s) match L=Cl*(rho*V^2/2)*A within tolerance"
+    },
+    {
+      "id": "semantic.tolerance",
+      "kind": "semantic",
+      "passed": true,
+      "message": "every case tolerance is <= maxTolerance('lift-equation-v1', computed) across 4 behavioral test(s) and 2 prediction(s)"
+    },
+    {
+      "id": "semantic.predictions-in-range",
+      "kind": "semantic",
+      "passed": true,
+      "message": "all 2 prediction(s) are reproducible within the simulation slider ranges"
+    },
+    {
+      "id": "policy.no-publisher-attribution",
+      "kind": "semantic",
+      "passed": true,
+      "message": "no generated display field (title, objectives, explanations, prediction prompts, behavioral test names, scenario labels) mentions the publisher or uses attribution/endorsement wording naming a source or authority; evidence quotes are exempt"
+    },
+    {
+      "id": "scope.prose-unverified",
+      "kind": "semantic",
+      "passed": true,
+      "message": "Explanation prose is AI-generated; quotes, numbers and ranges are machine-checked, the wording needs teacher review."
+    }
+  ],
+  "publishable": false
+}

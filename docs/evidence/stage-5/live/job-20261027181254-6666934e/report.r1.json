@@ -1,0 +1,98 @@
+{
+  "artifactId": "nasa-grc-equations-of-motion-job-20261027181254-6666934e",
+  "revision": 1,
+  "checks": [
+    {
+      "id": "schema.full",
+      "kind": "schema",
+      "passed": true,
+      "message": "spec matches activity-spec.full.json (draft-07)"
+    },
+    {
+      "id": "semantic.mass-range",
+      "kind": "semantic",
+      "passed": true,
+      "message": "massKg min=0.5 < max=20 with default=5 inside the range"
+    },
+    {
+      "id": "semantic.force-range",
+      "kind": "semantic",
+      "passed": true,
+      "message": "netForceN min=-50 < max=50 with default=10 inside the range"
+    },
+    {
+      "id": "semantic.frame-budget",
+      "kind": "semantic",
+      "passed": true,
+      "message": "default simulation produces 251 frames, within MAX_FRAMES=3001"
+    },
+    {
+      "id": "semantic.unique-ids",
+      "kind": "semantic",
+      "passed": true,
+      "message": "explanation ids, prediction ids and behavioral test names are unique"
+    },
+    {
+      "id": "refs.sources",
+      "kind": "grounding",
+      "passed": true,
+      "message": "all references resolve: 1 spec source(s), 1 cited sourceId(s)"
+    },
+    {
+      "id": "refs.sha256",
+      "kind": "grounding",
+      "passed": true,
+      "message": "sha256 verified for 1 source(s): stored hash and recomputed text hash both match the spec"
+    },
+    {
+      "id": "grounding.quotes",
+      "kind": "grounding",
+      "passed": true,
+      "message": "all 8 evidence quote(s) count as evidence (>= 8 normalised characters with >= 3 letters/digits, or a compact \"=\" equation with >= 3) and all 8 resolvable quote(s) appear in their source text after whitespace normalisation; every explanation has >= 1 counted quote"
+    },
+    {
+      "id": "behavior.tests",
+      "kind": "behavioral",
+      "passed": true,
+      "message": "all 4 behavioral test(s) match a=F_net/m within tolerance"
+    },
+    {
+      "id": "behavior.predictions",
+      "kind": "behavioral",
+      "passed": true,
+      "message": "all 3 prediction(s) match a=F_net/m within tolerance"
+    },
+    {
+      "id": "semantic.tolerance",
+      "kind": "semantic",
+      "passed": true,
+      "message": "every case tolerance is <= maxTolerance('forces-1d-v1', computed) across 4 behavioral test(s) and 3 prediction(s)"
+    },
+    {
+      "id": "semantic.predictions-in-range",
+      "kind": "semantic",
+      "passed": true,
+      "message": "all 3 prediction(s) are reproducible within the simulation slider ranges"
+    },
+    {
+      "id": "behavior.trajectory",
+      "kind": "behavioral",
+      "passed": true,
+      "message": "all 251 frames are finite and satisfy v=a*t and x=0.5*a*t^2 within 1e-9",
+      "path": "/simulation"
+    },
+    {
+      "id": "policy.no-publisher-attribution",
+      "kind": "semantic",
+      "passed": true,
+      "message": "no generated display field (title, objectives, explanations, prediction prompts, behavioral test names, scenario labels) mentions the publisher or uses attribution/endorsement wording naming a source or authority; evidence quotes are exempt"
+    },
+    {
+      "id": "scope.prose-unverified",
+      "kind": "semantic",
+      "passed": true,
+      "message": "Explanation prose is AI-generated; quotes, numbers and ranges are machine-checked, the wording needs teacher review."
+    }
+  ],
+  "publishable": true
+}

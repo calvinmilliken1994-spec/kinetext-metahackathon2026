@@ -1,0 +1,160 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nasa-grc-ballistic-flight-equations-job-20261027181923-ea52ab35",
+  "title": "Ballistic Flight: Maximum Height",
+  "learningObjectives": [
+    "Calculate maximum height as V0 squared divided by twice gravitational acceleration",
+    "Explain that horizontal motion has constant velocity and distance equals velocity times time"
+  ],
+  "sources": [
+    {
+      "id": "nasa-grc-ballistic-flight-equations",
+      "title": "Ballistic Flight Equations — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+      "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/ballistic-flight-equations/",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+      "sha256": "89ecf743b3bc22c056d40e778dd8cab693f91bf7a124244344ecdef71df50422"
+    }
+  ],
+  "explanations": [
+    {
+      "evidence": [
+        {
+          "quote": "The horizontal motion is uniform because there is no external force in the horizontal direction.",
+          "sourceId": "nasa-grc-ballistic-flight-equations"
+        },
+        {
+          "quote": "x = U0 * t",
+          "sourceId": "nasa-grc-ballistic-flight-equations"
+        }
+      ],
+      "id": "horizontal-uniform-motion",
+      "text": "With no horizontal force, horizontal velocity stays constant and horizontal distance grows linearly with time."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "In the vertical plane, weight is the only external force acting on the object.",
+          "sourceId": "nasa-grc-ballistic-flight-equations"
+        },
+        {
+          "quote": "V = V0 - g * t",
+          "sourceId": "nasa-grc-ballistic-flight-equations"
+        }
+      ],
+      "id": "vertical-motion-under-gravity",
+      "text": "Weight alone acts vertically, so vertical velocity decreases linearly with time according to gravitational acceleration."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "y = V0^2 / (2 * g)",
+          "sourceId": "nasa-grc-ballistic-flight-equations"
+        },
+        {
+          "quote": "The maximum altitude changes as the square of the launch velocity.",
+          "sourceId": "nasa-grc-ballistic-flight-equations"
+        }
+      ],
+      "id": "maximum-height-scaling",
+      "text": "Maximum height is reached when vertical velocity is zero and scales as the square of initial vertical velocity divided by twice gravity."
+    }
+  ],
+  "simulation": {
+    "engine": "projectile-v1",
+    "equation": "y_max=V0^2/(2*g)",
+    "horizontalSpeedMps": {
+      "unit": "m/s",
+      "default": 20,
+      "max": 50,
+      "min": 5
+    },
+    "verticalSpeedMps": {
+      "unit": "m/s",
+      "default": 15,
+      "max": 30,
+      "min": 5
+    },
+    "gravityMps2": {
+      "unit": "m/s^2",
+      "default": 9.8,
+      "max": 24.8,
+      "min": 1.6
+    },
+    "scenario": {
+      "objectLabel": "Soccer ball",
+      "settingLabel": "Level field"
+    }
+  },
+  "behavioralTests": [
+    {
+      "expectedMaxHeightM": 0.1815,
+      "gravityMps2": 24.8,
+      "horizontalSpeedMps": 10,
+      "name": "low-arc - light toss under strong gravity",
+      "tolerance": 0.01,
+      "verticalSpeedMps": 3
+    },
+    {
+      "expectedMaxHeightM": 11.4796,
+      "gravityMps2": 9.8,
+      "horizontalSpeedMps": 20,
+      "name": "mid-arc - typical field kick",
+      "tolerance": 0.01,
+      "verticalSpeedMps": 15
+    },
+    {
+      "expectedMaxHeightM": 2000,
+      "gravityMps2": 1.6,
+      "horizontalSpeedMps": 30,
+      "name": "high-arc - powerful launch in low gravity",
+      "tolerance": 0.01,
+      "verticalSpeedMps": 80
+    },
+    {
+      "expectedMaxHeightM": 20.4082,
+      "gravityMps2": 9.8,
+      "horizontalSpeedMps": 15,
+      "name": "standard earth launch",
+      "tolerance": 0.01,
+      "verticalSpeedMps": 20
+    }
+  ],
+  "predictions": [
+    {
+      "expectedMaxHeightM": 11.4796,
+      "gravityMps2": 9.8,
+      "horizontalSpeedMps": 20,
+      "id": "prediction-1",
+      "prompt": "Predict the maximum height for a launch with U0=20 m/s, V0=15 m/s and g=9.8 m/s^2.",
+      "tolerance": 0.01,
+      "verticalSpeedMps": 15
+    },
+    {
+      "expectedMaxHeightM": 7.3469,
+      "gravityMps2": 9.8,
+      "horizontalSpeedMps": 18,
+      "id": "prediction-2",
+      "prompt": "Predict the maximum height for a launch with U0=18 m/s, V0=12 m/s and g=9.8 m/s^2.",
+      "tolerance": 0.01,
+      "verticalSpeedMps": 12
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a17e97-642e-748d-9f27-1e2ebe81ed08",
+    "runId": "job-20261027181923-ea52ab35",
+    "promptVersion": "v3",
+    "generatedAt": "2026-10-27T18:20:13.277Z",
+    "revision": 2,
+    "repairOf": 1
+  }
+}

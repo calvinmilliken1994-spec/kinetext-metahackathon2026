@@ -1,0 +1,22 @@
+{
+  "jobId": "job-20261027181624-80fdfb2c",
+  "sourceId": "nasa-grc-lift-equation",
+  "status": "failed",
+  "purpose": "test-live",
+  "createdAt": "2026-10-27T18:16:24.390Z",
+  "totalCostUSD": 0.051528,
+  "reservedUnknownUSD": 0,
+  "engine": "lift-equation-v1",
+  "revisions": 0,
+  "repairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 32280,
+    "startedAt": "2026-10-27T18:16:24.390Z"
+  },
+  "error": {
+    "code": "OUTPUT_TRUNCATED",
+    "message": "output truncated"
+  },
+  "finishedAt": "2026-10-27T18:17:12.797Z"
+}

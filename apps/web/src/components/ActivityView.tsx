@@ -60,7 +60,7 @@ function Shell({ spec, cite, disclosure, repairBadge, engine, last, simRef, onRu
       <div ref={simRef} className="sim-anchor">
         {last !== null && (
           <div className={`last-result ${last.grade.withinTolerance ? 'grade-ok' : 'grade-miss'}`} role="status">
-            <strong>Prediction {last.index + 1}: {last.grade.withinTolerance ? '✓ within tolerance' : '✗ outside tolerance'}</strong>
+            <strong>Prediction {last.index + 1}: {last.grade.withinTolerance ? '✓ close enough' : '✗ not close enough'}</strong>
             <span>
               you guessed {trimmed(last.grade.guess, 4)}{unit}, the engine gives {formatQuantity(last.grade.actual)}{unit} (±{trimmed(last.grade.tolerance, 6)} allowed)
             </span>

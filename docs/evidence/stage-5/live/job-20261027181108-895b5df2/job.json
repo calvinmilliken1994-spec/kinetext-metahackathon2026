@@ -1,0 +1,23 @@
+{
+  "jobId": "job-20261027181108-895b5df2",
+  "sourceId": "nasa-grc-ballistic-flight-equations",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-27T18:11:08.504Z",
+  "totalCostUSD": 0.038738,
+  "reservedUnknownUSD": 0,
+  "engine": "projectile-v1",
+  "revisions": 1,
+  "repairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 4596,
+    "startedAt": "2026-10-27T18:11:08.504Z"
+  },
+  "specId": "nasa-grc-ballistic-flight-equations-job-20261027181108-895b5df2",
+  "publishable": true,
+  "checksPassed": 14,
+  "checksTotal": 14,
+  "publishedRevision": 1,
+  "finishedAt": "2026-10-27T18:11:45.682Z"
+}

@@ -1,0 +1,48 @@
+{
+  "ranAt": "2026-10-27T18:20:14.243Z",
+  "base": "http://127.0.0.1:8787",
+  "results": [
+    {
+      "name": "demo-fault-quote-ballistic",
+      "expect": "labelled fabricated quote in revision 1, caught by grounding, repaired by Muse (excluded from metrics)",
+      "sourceId": "nasa-grc-ballistic-flight-equations",
+      "jobId": "job-20261027181923-ea52ab35",
+      "wallS": 50.3,
+      "status": "succeeded",
+      "outcome": null,
+      "engine": "projectile-v1",
+      "error": null,
+      "revisions": 2,
+      "publishedRevision": 2,
+      "bestRevision": null,
+      "repairs": [
+        {
+          "revision": 2,
+          "repairOf": 1,
+          "targeted": [
+            "grounding.quotes"
+          ],
+          "fixed": [
+            "grounding.quotes"
+          ],
+          "remaining": [],
+          "publishable": true,
+          "afterInjectedFault": true
+        }
+      ],
+      "demoFault": {
+        "kind": "fabricated-quote",
+        "path": "explanations[0].evidence[0].quote",
+        "original": "The horizontal motion is uniform because there is no external force in the horizontal direction.",
+        "injected": "Muse confirmed this result in a controlled laboratory trial (ref ea52ab35).",
+        "revision": 1
+      },
+      "checks": "15/15",
+      "totalCostUSD": 0.059215,
+      "reservedUnknownUSD": 0,
+      "title": "Ballistic Flight: Maximum Height",
+      "unsupportedReason": "",
+      "failedChecks": []
+    }
+  ]
+}
