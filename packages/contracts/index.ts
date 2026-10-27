@@ -75,6 +75,8 @@ export interface MetaReceipt {
   purpose: 'test-live' | 'demo' | 'fake';
   requestedModel: string; returnedModel: string; responseId: string;
   usage: Usage | null; latencyMs: number; estCostUSD: number; finishReason: string; attempts: number;
+  /** How estCostUSD was determined (TASK-009 R-04/R-09). Absent on receipts recorded before the fix. */
+  costBasis?: 'usage' | 'reservation';
 }
 
 export interface StageEvent {
