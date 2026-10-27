@@ -6,6 +6,7 @@ export type MetaErrorCode =
   | 'LIVE_CALLS_DISABLED'
   | 'MODEL_API_KEY_MISSING'
   | 'BUDGET_EXCEEDED'
+  | 'LEDGER_ERROR'
   | 'TIMEOUT'
   | 'RATE_LIMITED'
   | 'SERVER_ERROR'
@@ -25,6 +26,7 @@ export const META_ERROR_MESSAGES: Readonly<Record<MetaErrorCode, string>> = {
   LIVE_CALLS_DISABLED: 'live calls disabled',
   MODEL_API_KEY_MISSING: 'model API key missing',
   BUDGET_EXCEEDED: 'budget exceeded',
+  LEDGER_ERROR: 'spend ledger unavailable; operator recovery required',
   TIMEOUT: 'timeout',
   RATE_LIMITED: 'rate limited',
   SERVER_ERROR: 'server error',
@@ -46,6 +48,7 @@ export class MetaError extends Error {
   status?: number;
   receipt?: MetaReceipt;
   chargedUSD?: number;
+  reservedUnknownUSD?: number;
   costBasis?: 'usage' | 'reservation';
   providerErrorType?: string;
   /**
@@ -60,6 +63,7 @@ export class MetaError extends Error {
       status?: number;
       receipt?: MetaReceipt;
       chargedUSD?: number;
+      reservedUnknownUSD?: number;
       costBasis?: 'usage' | 'reservation';
       providerErrorType?: string;
     },
@@ -77,6 +81,9 @@ export class MetaError extends Error {
       }
       if (opts.chargedUSD !== undefined) {
         this.chargedUSD = opts.chargedUSD;
+      }
+      if (opts.reservedUnknownUSD !== undefined) {
+        this.reservedUnknownUSD = opts.reservedUnknownUSD;
       }
       if (opts.costBasis !== undefined) {
         this.costBasis = opts.costBasis;
@@ -119,7 +126,7 @@ export interface MetaClientOptions {
   retryDelayMs?: number;
   maxInputTokens?: number;
   fetchImpl?: typeof fetch;
-  sleep?: (ms: number) => Promise<void>;
+  sleep?: (ms: number, signal?: AbortSignal) => Promise<void>;
   now?: () => number;
 }
 
@@ -224,6 +231,37 @@ function jobAborted(signal: AbortSignal | undefined): boolean {
   return signal !== undefined && signal.aborted;
 }
 
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function defaultSleep(ms: number, signal?: AbortSignal): Promise<void> {
+  return new Promise<void>((resolve): void => {
+    if (jobAborted(signal)) {
+      resolve();
+      return;
+    }
+    const timer = setTimeout((): void => {
+      if (signal !== undefined) {
+        signal.removeEventListener('abort', onAbort);
+      }
+      resolve();
+    }, ms);
+    const onAbort = (): void => {
+      clearTimeout(timer);
+      resolve();
+    };
+    if (signal !== undefined) {
+      signal.addEventListener('abort', onAbort, { once: true });
+      if (jobAborted(signal)) {
+        clearTimeout(timer);
+        signal.removeEventListener('abort', onAbort);
+        resolve();
+      }
+    }
+  });
+}
+
 export function createMetaClient(opts: MetaClientOptions): MetaClient {
   if (opts.allowLive !== true) {
     throw new MetaError('LIVE_CALLS_DISABLED', 'live calls disabled');
@@ -240,22 +278,71 @@ export function createMetaClient(opts: MetaClientOptions): MetaClient {
   const retryDelayMs: number = opts.retryDelayMs ?? 1000;
   const maxInputTokens: number = opts.maxInputTokens ?? 16000;
   const fetchImpl: typeof fetch = opts.fetchImpl ?? (globalThis.fetch as typeof fetch);
-  const sleep: (ms: number) => Promise<void> =
-    opts.sleep ??
-    ((ms: number): Promise<void> => {
-      return new Promise<void>((resolve): void => {
-        setTimeout(resolve, ms);
-      });
-    });
+  const sleep: (ms: number, signal?: AbortSignal) => Promise<void> = opts.sleep ?? defaultSleep;
   const now: () => number = opts.now ?? Date.now;
 
+  async function sleepWithSignal(ms: number, signal: AbortSignal | undefined): Promise<void> {
+    if (signal === undefined) {
+      await sleep(ms, undefined);
+      return;
+    }
+    if (jobAborted(signal)) {
+      return;
+    }
+    let onAbort: () => void = (): void => {};
+    const abortPromise = new Promise<void>((resolve): void => {
+      onAbort = (): void => {
+        resolve();
+      };
+      signal.addEventListener('abort', onAbort, { once: true });
+    });
+    try {
+      await Promise.race([sleep(ms, signal), abortPromise]);
+    } finally {
+      signal.removeEventListener('abort', onAbort);
+    }
+  }
+
   async function complete<T>(req: CompleteRequest): Promise<{ data: T; receipt: MetaReceipt }> {
+    let knownUSD = 0;
+    let reservedUnknownUSD = 0;
+
+    function chargedUSD(): number {
+      return knownUSD + reservedUnknownUSD;
+    }
+
+    function currentBasis(): 'usage' | 'reservation' {
+      return reservedUnknownUSD > 0 ? 'reservation' : 'usage';
+    }
+
+    function fail(
+      code: MetaErrorCode,
+      extra?: { status?: number; receipt?: MetaReceipt; providerErrorType?: string },
+    ): MetaError {
+      return new MetaError(code, undefined, {
+        status: extra?.status,
+        receipt: extra?.receipt,
+        chargedUSD: chargedUSD(),
+        reservedUnknownUSD,
+        costBasis: currentBasis(),
+        providerErrorType: extra?.providerErrorType,
+      });
+    }
+
     const bound: number = inputTokenBound(req.messages, req.jsonSchema);
     if (bound > maxInputTokens) {
-      throw new MetaError('INPUT_TOO_LARGE', undefined, { chargedUSD: 0, costBasis: 'usage' });
+      throw new MetaError('INPUT_TOO_LARGE', undefined, {
+        chargedUSD: 0,
+        reservedUnknownUSD: 0,
+        costBasis: 'usage',
+      });
     }
     if (jobAborted(req.signal)) {
-      throw new MetaError('DEADLINE_EXCEEDED', undefined, { chargedUSD: 0, costBasis: 'usage' });
+      throw new MetaError('DEADLINE_EXCEEDED', undefined, {
+        chargedUSD: 0,
+        reservedUnknownUSD: 0,
+        costBasis: 'usage',
+      });
     }
     const perAttemptReservation: number = reservationUSD(model, bound, req.maxOutputTokens);
 
@@ -278,26 +365,6 @@ export function createMetaClient(opts: MetaClientOptions): MetaClient {
       'Content-Type': 'application/json',
     };
 
-    let totalCharged = 0;
-    let anyReservationBasis = false;
-
-    function currentBasis(): 'usage' | 'reservation' {
-      return anyReservationBasis ? 'reservation' : 'usage';
-    }
-
-    function fail(
-      code: MetaErrorCode,
-      extra?: { status?: number; receipt?: MetaReceipt; providerErrorType?: string },
-    ): MetaError {
-      return new MetaError(code, undefined, {
-        status: extra?.status,
-        receipt: extra?.receipt,
-        chargedUSD: totalCharged,
-        costBasis: currentBasis(),
-        providerErrorType: extra?.providerErrorType,
-      });
-    }
-
     for (let attempt = 1; attempt <= 2; attempt++) {
       if (jobAborted(req.signal)) {
         throw fail('DEADLINE_EXCEEDED');
@@ -305,11 +372,16 @@ export function createMetaClient(opts: MetaClientOptions): MetaClient {
       let reservationId: string;
       try {
         reservationId = ledger.reserve({ purpose: req.purpose, model, estUSD: perAttemptReservation });
-      } catch {
-        throw fail('BUDGET_EXCEEDED');
+      } catch (reserveErr: unknown) {
+        if (reserveErr instanceof Error && reserveErr.message === 'BUDGET_EXCEEDED') {
+          throw fail('BUDGET_EXCEEDED');
+        }
+        throw fail('LEDGER_ERROR');
       }
 
-      const reconcileThis = (
+      let attemptReconciled = false;
+
+      const settle = (
         costUSD: number,
         basis: 'usage' | 'reservation' | 'rejected',
         note: string,
@@ -326,62 +398,79 @@ export function createMetaClient(opts: MetaClientOptions): MetaClient {
         if (usageVal !== undefined) {
           actual.usage = usageVal;
         }
-        ledger.reconcile(reservationId, actual);
-        totalCharged += costUSD;
+        try {
+          ledger.reconcile(reservationId, actual);
+        } catch {
+          reservedUnknownUSD += perAttemptReservation;
+          attemptReconciled = true;
+          throw fail('LEDGER_ERROR');
+        }
+        attemptReconciled = true;
         if (basis === 'reservation') {
-          anyReservationBasis = true;
+          reservedUnknownUSD += costUSD;
+        } else {
+          knownUSD += costUSD;
         }
       };
 
-      let res: Response;
       try {
-        const timeoutSignal: AbortSignal = AbortSignal.timeout(timeoutMs);
-        const signal: AbortSignal =
-          req.signal !== undefined ? AbortSignal.any([timeoutSignal, req.signal]) : timeoutSignal;
-        res = await fetchImpl(url, { method: 'POST', headers, body: bodyJson, signal });
-      } catch (err: unknown) {
-        reconcileThis(perAttemptReservation, 'reservation', 'uncertain outcome');
-        if (jobAborted(req.signal)) {
-          throw fail('DEADLINE_EXCEEDED');
-        }
-        if (isTimeoutError(err)) {
-          throw fail('TIMEOUT');
-        }
-        throw fail('NETWORK_ERROR');
-      }
-
-      if (res.ok) {
-        let raw: unknown;
+        let res: Response;
         try {
-          raw = (await res.json()) as unknown;
-        } catch {
+          const timeoutSignal: AbortSignal = AbortSignal.timeout(timeoutMs);
+          const signal: AbortSignal =
+            req.signal !== undefined ? AbortSignal.any([timeoutSignal, req.signal]) : timeoutSignal;
+          res = await fetchImpl(url, { method: 'POST', headers, body: bodyJson, signal });
+        } catch (err: unknown) {
+          settle(perAttemptReservation, 'reservation', 'uncertain outcome');
           if (jobAborted(req.signal)) {
-            reconcileThis(perAttemptReservation, 'reservation', 'uncertain outcome');
             throw fail('DEADLINE_EXCEEDED');
           }
-          reconcileThis(perAttemptReservation, 'reservation', 'uncertain outcome');
-          throw fail('SERVER_ERROR');
+          if (isTimeoutError(err)) {
+            throw fail('TIMEOUT');
+          }
+          throw fail('NETWORK_ERROR');
         }
-        if (jobAborted(req.signal)) {
-          reconcileThis(perAttemptReservation, 'reservation', 'uncertain outcome');
-          throw fail('DEADLINE_EXCEEDED');
-        }
-        const data = raw as Record<string, unknown>;
-        const returnedModel: string =
-          typeof data['model'] === 'string' ? (data['model'] as string) : '';
-        const responseId: string = typeof data['id'] === 'string' ? (data['id'] as string) : '';
-        const choicesUnknown: unknown = data['choices'];
-        const choices: Array<Record<string, unknown>> = (Array.isArray(choicesUnknown)
-          ? choicesUnknown
-          : []) as Array<Record<string, unknown>>;
-        const first: Record<string, unknown> | undefined =
-          choices.length > 0 ? choices[0] : undefined;
-        const finishReason: string =
-          first !== undefined && typeof first['finish_reason'] === 'string'
-            ? (first['finish_reason'] as string)
-            : 'unknown';
-        let content = '';
-        if (first !== undefined) {
+
+        if (res.ok) {
+          let raw: unknown;
+          try {
+            raw = (await res.json()) as unknown;
+          } catch {
+            if (jobAborted(req.signal)) {
+              settle(perAttemptReservation, 'reservation', 'uncertain outcome');
+              throw fail('DEADLINE_EXCEEDED');
+            }
+            settle(perAttemptReservation, 'reservation', 'uncertain outcome');
+            throw fail('SERVER_ERROR');
+          }
+          if (jobAborted(req.signal)) {
+            settle(perAttemptReservation, 'reservation', 'uncertain outcome');
+            throw fail('DEADLINE_EXCEEDED');
+          }
+          if (!isPlainObject(raw)) {
+            settle(perAttemptReservation, 'reservation', 'uncertain outcome');
+            throw fail('SERVER_ERROR');
+          }
+          const data: Record<string, unknown> = raw;
+          const choicesUnknown: unknown = data['choices'];
+          if (!Array.isArray(choicesUnknown)) {
+            settle(perAttemptReservation, 'reservation', 'uncertain outcome');
+            throw fail('SERVER_ERROR');
+          }
+          const firstRaw: unknown = (choicesUnknown as Array<unknown>)[0];
+          if (!isPlainObject(firstRaw)) {
+            settle(perAttemptReservation, 'reservation', 'uncertain outcome');
+            throw fail('SERVER_ERROR');
+          }
+          const first: Record<string, unknown> = firstRaw;
+          const returnedModel: string =
+            typeof data['model'] === 'string' ? (data['model'] as string) : '';
+          const responseId: string = typeof data['id'] === 'string' ? (data['id'] as string) : '';
+          const finishReason: string =
+            typeof first['finish_reason'] === 'string'
+              ? (first['finish_reason'] as string)
+              : 'unknown';
+          let content = '';
           const msg: unknown = first['message'];
           if (typeof msg === 'object' && msg !== null) {
             const c: unknown = (msg as Record<string, unknown>)['content'];
@@ -389,109 +478,138 @@ export function createMetaClient(opts: MetaClientOptions): MetaClient {
               content = c;
             }
           }
-        }
-        const usage: Usage | null = toUsage(data['usage']);
-        let attemptCost: number;
-        let attemptNote = '';
-        let attemptBasis: 'usage' | 'reservation';
-        if (usage === null) {
-          attemptCost = perAttemptReservation;
-          attemptBasis = 'reservation';
-          attemptNote = 'uncertain outcome';
-        } else {
-          attemptCost = costFromUsage(model, usage);
-          attemptBasis = 'usage';
-          attemptNote = 'usage';
-        }
-        reconcileThis(attemptCost, attemptBasis, attemptNote, responseId, usage);
-        const end: number = now();
-        const latencyMs: number = Math.max(0, Math.round(end - start));
-        const receipt: MetaReceipt = {
-          purpose: req.purpose,
-          requestedModel: model,
-          returnedModel,
-          responseId,
-          usage,
-          latencyMs,
-          estCostUSD: totalCharged,
-          finishReason,
-          attempts: attempt,
-          costBasis: currentBasis(),
-        };
+          const usage: Usage | null = toUsage(data['usage']);
+          let attemptCost: number;
+          let attemptBasis: 'usage' | 'reservation';
+          let attemptNote = '';
+          if (usage === null) {
+            attemptCost = perAttemptReservation;
+            attemptBasis = 'reservation';
+            attemptNote = 'uncertain outcome';
+          } else {
+            attemptCost = costFromUsage(model, usage);
+            attemptBasis = 'usage';
+            attemptNote = 'usage';
+          }
+          settle(attemptCost, attemptBasis, attemptNote, responseId, usage);
+          const end: number = now();
+          const latencyMs: number = Math.max(0, Math.round(end - start));
+          const receipt: MetaReceipt = {
+            purpose: req.purpose,
+            requestedModel: model,
+            returnedModel,
+            responseId,
+            usage,
+            latencyMs,
+            estCostUSD: chargedUSD(),
+            reservedUnknownUSD,
+            finishReason,
+            attempts: attempt,
+            costBasis: currentBasis(),
+          };
 
-        if (data['model'] !== model) {
-          throw fail('RETURNED_MODEL_MISMATCH', { receipt });
+          if (data['model'] !== model) {
+            throw fail('RETURNED_MODEL_MISMATCH', { receipt });
+          }
+          if (finishReason !== 'stop') {
+            throw fail('OUTPUT_TRUNCATED', { receipt });
+          }
+          if (content.length === 0) {
+            throw fail('EMPTY_OUTPUT', { receipt });
+          }
+          let parsedContent: unknown;
+          try {
+            parsedContent = JSON.parse(content) as unknown;
+          } catch {
+            throw fail('OUTPUT_NOT_JSON', { receipt });
+          }
+          return { data: parsedContent as T, receipt };
         }
-        if (finishReason !== 'stop') {
-          throw fail('OUTPUT_TRUNCATED', { receipt });
-        }
-        if (content.length === 0) {
-          throw fail('EMPTY_OUTPUT', { receipt });
-        }
-        let parsedContent: unknown;
+
+        const status: number = res.status;
+        let providerErrorType: string | undefined;
         try {
-          parsedContent = JSON.parse(content) as unknown;
+          const errBody: unknown = (await res.json()) as unknown;
+          providerErrorType = extractTypeFromBody(errBody);
         } catch {
-          throw fail('OUTPUT_NOT_JSON', { receipt });
+          if (jobAborted(req.signal)) {
+            settle(perAttemptReservation, 'reservation', 'uncertain outcome');
+            throw fail('DEADLINE_EXCEEDED');
+          }
+          providerErrorType = undefined;
         }
-        return { data: parsedContent as T, receipt };
-      }
-
-      const status: number = res.status;
-      let providerErrorType: string | undefined;
-      try {
-        const errBody: unknown = (await res.json()) as unknown;
-        providerErrorType = extractTypeFromBody(errBody);
-      } catch {
         if (jobAborted(req.signal)) {
-          reconcileThis(perAttemptReservation, 'reservation', 'uncertain outcome');
+          settle(perAttemptReservation, 'reservation', 'uncertain outcome');
           throw fail('DEADLINE_EXCEEDED');
         }
-        providerErrorType = undefined;
-      }
-      if (jobAborted(req.signal)) {
-        // Error-body read finished but the job deadline fired: retain liability.
-        // If this attempt was not reconciled yet, reconcile it now.
-        reconcileThis(perAttemptReservation, 'reservation', 'uncertain outcome');
-        throw fail('DEADLINE_EXCEEDED');
-      }
-      const retryable: boolean =
-        status === 429 || status === 500 || status === 502 || status === 503 || status === 504;
-      if (retryable && attempt < 2) {
-        reconcileThis(perAttemptReservation, 'reservation', 'uncertain outcome');
-        const delay: number = retryDelayMs * (1 + Math.random());
-        await sleep(delay);
-        continue;
-      }
-      if (status === 429) {
-        reconcileThis(perAttemptReservation, 'reservation', 'uncertain outcome');
-        throw fail('RATE_LIMITED', { status, providerErrorType });
-      }
-      if (status >= 500 && status <= 599) {
-        reconcileThis(perAttemptReservation, 'reservation', 'uncertain outcome');
-        throw fail('SERVER_ERROR', { status, providerErrorType });
-      }
-      if (status === 400) {
-        reconcileThis(0, 'rejected', 'rejected');
-        throw fail('BAD_REQUEST', { status, providerErrorType });
-      }
-      if (status === 401 || status === 403) {
-        reconcileThis(0, 'rejected', 'rejected');
-        throw fail('AUTH_FAILED', { status, providerErrorType });
-      }
-      if (status === 404) {
-        reconcileThis(0, 'rejected', 'rejected');
-        throw fail('MODEL_NOT_FOUND', { status, providerErrorType });
-      }
-      if (status >= 400 && status < 500) {
-        reconcileThis(0, 'rejected', 'rejected');
+        const retryable: boolean =
+          status === 429 || status === 500 || status === 502 || status === 503 || status === 504;
+        if (retryable && attempt < 2) {
+          settle(perAttemptReservation, 'reservation', 'uncertain outcome');
+          const delay: number = retryDelayMs * (1 + Math.random());
+          try {
+            await sleepWithSignal(delay, req.signal);
+          } catch {
+            if (jobAborted(req.signal)) {
+              throw fail('DEADLINE_EXCEEDED');
+            }
+            throw fail('SERVER_ERROR');
+          }
+          if (jobAborted(req.signal)) {
+            throw fail('DEADLINE_EXCEEDED');
+          }
+          continue;
+        }
+        if (status === 429) {
+          settle(perAttemptReservation, 'reservation', 'uncertain outcome');
+          throw fail('RATE_LIMITED', { status, providerErrorType });
+        }
+        if (status >= 500 && status <= 599) {
+          settle(perAttemptReservation, 'reservation', 'uncertain outcome');
+          throw fail('SERVER_ERROR', { status, providerErrorType });
+        }
+        if (status === 400) {
+          settle(0, 'rejected', 'rejected');
+          throw fail('BAD_REQUEST', { status, providerErrorType });
+        }
+        if (status === 401 || status === 403) {
+          settle(0, 'rejected', 'rejected');
+          throw fail('AUTH_FAILED', { status, providerErrorType });
+        }
+        if (status === 404) {
+          settle(0, 'rejected', 'rejected');
+          throw fail('MODEL_NOT_FOUND', { status, providerErrorType });
+        }
+        if (status >= 400 && status < 500) {
+          settle(0, 'rejected', 'rejected');
+          throw fail('HTTP_ERROR', { status, providerErrorType });
+        }
+        settle(perAttemptReservation, 'reservation', 'uncertain outcome');
         throw fail('HTTP_ERROR', { status, providerErrorType });
+      } catch (err: unknown) {
+        if (err instanceof MetaError) {
+          throw err;
+        }
+        if (!attemptReconciled) {
+          try {
+            ledger.reconcile(reservationId, {
+              costUSD: perAttemptReservation,
+              note: 'uncertain outcome',
+            });
+            reservedUnknownUSD += perAttemptReservation;
+            attemptReconciled = true;
+          } catch {
+            reservedUnknownUSD += perAttemptReservation;
+            attemptReconciled = true;
+            throw fail('LEDGER_ERROR');
+          }
+        }
+        throw fail('SERVER_ERROR');
       }
-      reconcileThis(perAttemptReservation, 'reservation', 'uncertain outcome');
-      throw fail('HTTP_ERROR', { status, providerErrorType });
     }
     throw new MetaError('SERVER_ERROR', undefined, {
-      chargedUSD: totalCharged,
+      chargedUSD: chargedUSD(),
+      reservedUnknownUSD,
       costBasis: currentBasis(),
     });
   }

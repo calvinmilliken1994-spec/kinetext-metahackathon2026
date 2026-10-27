@@ -1,5 +1,8 @@
-import { appendFileSync, existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
-import { randomUUID } from 'node:crypto';
+import { appendFileSync, existsSync, mkdirSync, readFileSync } from 'node:fs';
+import { createHash, randomUUID } from 'node:crypto';
+import { dirname, resolve } from 'node:path';
+import { createServer } from 'node:net';
+import type { Server, Socket } from 'node:net';
 import type { Usage } from '../contracts/index.ts';
 
 export interface LedgerEntry {
@@ -34,111 +37,10 @@ interface ReservationState {
   actualUSD: number;
 }
 
-const heldLockPaths: Set<string> = new Set<string>();
-let exitListenerInstalled = false;
-
-function installExitListener(): void {
-  if (exitListenerInstalled) {
-    return;
-  }
-  exitListenerInstalled = true;
-  process.on('exit', () => {
-    for (const lockPath of Array.from(heldLockPaths)) {
-      try {
-        const content: string = readFileSync(lockPath, 'utf8');
-        if (content.trim() === String(process.pid)) {
-          try {
-            unlinkSync(lockPath);
-          } catch {
-            // ignore cleanup errors on exit
-          }
-        }
-      } catch {
-        // lock already gone
-      }
-      heldLockPaths.delete(lockPath);
-    }
-  });
-}
-
-function parentDir(filePath: string): string {
-  const slash: number = filePath.lastIndexOf('/');
-  const backslash: number = filePath.lastIndexOf('\\');
-  const idx: number = slash > backslash ? slash : backslash;
-  if (idx <= 0) {
-    return '';
-  }
-  return filePath.slice(0, idx);
-}
-
-function releaseLockIfOwned(lockPath: string): void {
-  try {
-    const content: string = readFileSync(lockPath, 'utf8');
-    if (content.trim() === String(process.pid)) {
-      try {
-        unlinkSync(lockPath);
-      } catch {
-        // ignore
-      }
-    }
-  } catch {
-    // already gone
-  }
-  heldLockPaths.delete(lockPath);
-}
-
-function acquireLock(lockPath: string): void {
-  try {
-    writeFileSync(lockPath, String(process.pid), { flag: 'wx' });
-    heldLockPaths.add(lockPath);
-    installExitListener();
-    return;
-  } catch (err: unknown) {
-    const code: unknown = (err as { code?: unknown }).code;
-    if (code !== 'EEXIST') {
-      throw new Error('LEDGER_LOCKED');
-    }
-  }
-  let content: string;
-  try {
-    content = readFileSync(lockPath, 'utf8');
-  } catch {
-    throw new Error('LEDGER_LOCKED');
-  }
-  const trimmed: string = content.trim();
-  if (!/^[1-9][0-9]*$/.test(trimmed)) {
-    throw new Error('LEDGER_LOCKED');
-  }
-  const pid: number = Number(trimmed);
-  let alive: boolean;
-  try {
-    process.kill(pid, 0);
-    alive = true;
-  } catch (err: unknown) {
-    const code: unknown = (err as { code?: unknown }).code;
-    if (code === 'EPERM') {
-      alive = true;
-    } else if (code === 'ESRCH') {
-      alive = false;
-    } else {
-      throw new Error('LEDGER_LOCKED');
-    }
-  }
-  if (alive) {
-    throw new Error('LEDGER_LOCKED');
-  }
-  try {
-    unlinkSync(lockPath);
-  } catch {
-    throw new Error('LEDGER_LOCKED');
-  }
-  try {
-    writeFileSync(lockPath, String(process.pid), { flag: 'wx' });
-    heldLockPaths.add(lockPath);
-    installExitListener();
-  } catch {
-    throw new Error('LEDGER_LOCKED');
-  }
+export function defaultLockPort(ledgerPath: string): number {
+  const digest = createHash('sha256').update(resolve(ledgerPath), 'utf8').digest();
+  const u32: number = digest.readUInt32BE(0);
+  return 49152 + (u32 % 16000);
 }
 
 function replayLedgerFile(ledgerPath: string): Map<string, ReservationState> {
@@ -217,30 +119,87 @@ function replayLedgerFile(ledgerPath: string): Map<string, ReservationState> {
   return reservations;
 }
 
-export function createLedger(opts: {
+// Lock notes: openLedger holds an OS-backed exclusive lock by listening on
+// 127.0.0.1:<port> (default defaultLockPort(resolved path)). This guarantees one
+// owner per ledger path among processes on this host that use openLedger with the
+// same port derivation; the OS releases the listening socket automatically when the
+// process exits or crashes, so stale locks cannot exist. It does NOT guarantee:
+// a foreign program already bound to that port makes openLedger fail closed with
+// LEDGER_LOCKED/LEDGER_LOCK_FAILED; two different path spellings of one file
+// (e.g. letter case on Windows, symlinks, relative vs absolute) derive different
+// ports and are not mutually excluded; writers that do not use openLedger are not
+// excluded, which is why the re-read before each reserve stays.
+export async function openLedger(opts: {
   path: string;
   capUSD: number;
   now?: () => Date;
   newId?: () => string;
-}): Ledger {
+  lockPort?: number;
+}): Promise<Ledger> {
   const ledgerPath: string = opts.path;
   const capUSD: number = opts.capUSD;
   if (typeof capUSD !== 'number' || !Number.isFinite(capUSD) || capUSD < 0) {
     throw new Error('INVALID_AMOUNT');
   }
+  let port: number;
+  if (opts.lockPort !== undefined) {
+    if (!Number.isInteger(opts.lockPort) || opts.lockPort < 1 || opts.lockPort > 65535) {
+      throw new Error('INVALID_LOCK_PORT');
+    }
+    port = opts.lockPort;
+  } else {
+    port = defaultLockPort(ledgerPath);
+  }
   const now: () => Date = opts.now ?? (() => new Date());
   const newId: () => string = opts.newId ?? (() => randomUUID());
-  const lockPath: string = `${ledgerPath}.lock`;
-  const dir: string = parentDir(ledgerPath);
-  if (dir !== '') {
-    mkdirSync(dir, { recursive: true });
-  }
-  acquireLock(lockPath);
+  mkdirSync(dirname(ledgerPath), { recursive: true });
+
+  const server: Server = createServer();
+  server.on('connection', (s: Socket): void => {
+    s.destroy();
+  });
+  await new Promise<void>((resolveListen, rejectListen): void => {
+    const onListening = (): void => {
+      server.removeListener('error', onError);
+      resolveListen();
+    };
+    const onError = (err: unknown): void => {
+      server.removeListener('listening', onListening);
+      const code: unknown = (err as { code?: unknown }).code;
+      if (code === 'EADDRINUSE') {
+        rejectListen(new Error('LEDGER_LOCKED'));
+      } else {
+        rejectListen(new Error('LEDGER_LOCK_FAILED'));
+      }
+    };
+    server.once('listening', onListening);
+    server.once('error', onError);
+    server.listen({ host: '127.0.0.1', port, exclusive: true });
+  });
+  server.unref();
+  server.on('error', (): void => {});
+
   let reservations: Map<string, ReservationState>;
   try {
     reservations = replayLedgerFile(ledgerPath);
   } catch (err: unknown) {
-    releaseLockIfOwned(lockPath);
+    await new Promise<void>((resolveClose): void => {
+      let settled = false;
+      const done = (): void => {
+        if (!settled) {
+          settled = true;
+          resolveClose();
+        }
+      };
+      server.once('close', done);
+      try {
+        server.close((): void => {
+          done();
+        });
+      } catch {
+        done();
+      }
+    });
     throw err;
   }
 
@@ -261,10 +220,7 @@ export function createLedger(opts: {
   }
 
   function appendEntry(entry: LedgerEntry): void {
-    const parent: string = parentDir(ledgerPath);
-    if (parent !== '') {
-      mkdirSync(parent, { recursive: true });
-    }
+    mkdirSync(dirname(ledgerPath), { recursive: true });
     appendFileSync(ledgerPath, JSON.stringify(entry) + '\n');
   }
 
@@ -342,7 +298,11 @@ export function createLedger(opts: {
       return;
     }
     closed = true;
-    releaseLockIfOwned(lockPath);
+    try {
+      server.close();
+    } catch {
+      // ignore close errors
+    }
   }
 
   return {
