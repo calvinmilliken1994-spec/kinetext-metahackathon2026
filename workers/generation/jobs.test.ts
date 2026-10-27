@@ -11,6 +11,7 @@ import { startJob, listJobs, readJob, recoverInterruptedJobs } from './jobs.ts';
 import type { JobSummary } from './jobs.ts';
 import { MetaError } from '../../packages/meta/client.ts';
 import type { CompleteRequest, MetaClient } from '../../packages/meta/client.ts';
+import { GeneratedOutputError } from '../../packages/meta/pipeline.ts';
 import type { GeneratedSpec, MetaReceipt, SourceAnalysis, StageEvent } from '../../packages/contracts/index.ts';
 
 const analysisFixture = JSON.parse(
@@ -828,4 +829,172 @@ test('recoverInterruptedJobs: an ownerless job with an unparseable start time is
   writeRunningJob(storageDir, brokenId, { createdAt: 'not-a-timestamp' });
   assert.deepEqual(recoverInterruptedJobs(storageDir), []);
   assert.equal(readJob(storageDir, brokenId)?.summary.status, 'running');
+});
+
+/* ------------------------------------------------------------------ */
+/* F-01 — generated-output failures: receipts accounted, OUTPUT_INVALID */
+/* ------------------------------------------------------------------ */
+
+const OUTPUT_INVALID_MESSAGE = 'The model returned output that does not match the required structure.';
+
+test('startJob: GeneratedOutputError on analyze accounts its receipt and persists OUTPUT_INVALID (F-01)', async () => {
+  const storageDir = tempStorage();
+  // Reviewer P3 valid-usage numbers: prompt 10 / completion 20 tokens = $0.0000975.
+  const receipt: MetaReceipt = {
+    ...fakeReceipt('fake-null-analysis'),
+    usage: { promptTokens: 10, completionTokens: 20, reasoningTokens: 0, cachedTokens: 0 },
+    estCostUSD: 0.0000975,
+    costBasis: 'usage',
+    reservedUnknownUSD: 0,
+  };
+  const client: MetaClient = {
+    complete: async () => {
+      throw new GeneratedOutputError('analyze', receipt);
+    },
+  };
+  const { jobId, done } = startJob('nasa-grc-equations-of-motion', { client, storageDir, purpose: 'test-live' });
+  const summary = await done;
+  assert.equal(summary.status, 'failed');
+  assert.deepEqual(summary.error, { code: 'OUTPUT_INVALID', message: OUTPUT_INVALID_MESSAGE });
+  assert.equal(summary.totalCostUSD, 0.000098, 'the completed call is billed exactly like a successful receipt (rounded to 1e-6)');
+  assert.equal(summary.reservedUnknownUSD, 0);
+  const jobJson = JSON.parse(readFileSync(join(storageDir, 'runs', jobId, 'job.json'), 'utf8')) as JobSummary;
+  assert.equal(jobJson.status, 'failed', 'terminal state is persisted — never left running');
+  assert.equal(jobJson.error?.code, 'OUTPUT_INVALID');
+  const failedEvent = readEvents(storageDir, jobId).find(e => e.stage === 'analyze' && e.status === 'failed');
+  assert.ok(failedEvent !== undefined, 'analyze failed event exists');
+  assert.equal(failedEvent.detail, 'OUTPUT_INVALID');
+  assert.equal(failedEvent.model, 'muse-spark-1.3');
+  assert.equal(failedEvent.latencyMs, 42);
+  assert.equal(failedEvent.estCostUSD, 0.0000975, 'the failed-stage event carries the receipt charge');
+  assert.ok(!existsSync(join(storageDir, 'runs', jobId, 'analysis.json')), 'invalid analysis is never persisted');
+});
+
+test('startJob: reservation-basis OUTPUT_INVALID keeps the unknown part and marks the cost basis (F-01 reviewer probe)', async () => {
+  const storageDir = tempStorage();
+  // Reviewer P3: absent usage on the analysis call retains the $0.0326875 reservation.
+  const receipt: MetaReceipt = {
+    ...fakeReceipt('fake-analysis-reserved'),
+    usage: null,
+    estCostUSD: 0.0326875,
+    costBasis: 'reservation',
+    reservedUnknownUSD: 0.0326875,
+  };
+  const client: MetaClient = {
+    complete: async () => {
+      throw new GeneratedOutputError('analyze', receipt);
+    },
+  };
+  const { jobId, done } = startJob('nasa-grc-equations-of-motion', { client, storageDir, purpose: 'test-live' });
+  const summary = await done;
+  assert.equal(summary.status, 'failed');
+  assert.equal(summary.error?.code, 'OUTPUT_INVALID');
+  assert.equal(summary.totalCostUSD, 0.032688, 'reservation rounded to 1e-6');
+  assert.equal(summary.reservedUnknownUSD, 0.032688, 'the whole reservation is unknown-outcome');
+  const failedEvent = readEvents(storageDir, jobId).find(e => e.stage === 'analyze' && e.status === 'failed');
+  assert.equal(failedEvent?.detail, 'OUTPUT_INVALID; cost basis: reservation (outcome uncertain)');
+  assert.equal(failedEvent?.estCostUSD, 0.0326875);
+});
+
+test('startJob: GeneratedOutputError on specify accounts BOTH receipts exactly once (F-01 reviewer probe)', async () => {
+  const storageDir = tempStorage();
+  const analysisReceipt: MetaReceipt = {
+    ...fakeReceipt('fake-analysis-ok'),
+    usage: { promptTokens: 10, completionTokens: 20, reasoningTokens: 0, cachedTokens: 0 },
+    estCostUSD: 0.0000975,
+    costBasis: 'usage',
+    reservedUnknownUSD: 0,
+  };
+  const specReceipt: MetaReceipt = { ...analysisReceipt, responseId: 'fake-spec-bad' };
+  const client: MetaClient = {
+    complete: async <T>(req: CompleteRequest): Promise<{ data: T; receipt: MetaReceipt }> => {
+      if (req.schemaName === 'source_analysis') {
+        return { data: analysisFixture as T, receipt: analysisReceipt };
+      }
+      throw new GeneratedOutputError('specify', specReceipt);
+    },
+  };
+  const { jobId, done } = startJob('nasa-grc-equations-of-motion', { client, storageDir, purpose: 'test-live' });
+  const summary = await done;
+  assert.equal(summary.status, 'failed');
+  assert.equal(summary.error?.code, 'OUTPUT_INVALID');
+  assert.equal(summary.totalCostUSD, 0.000195, 'reviewer P3: analysis + spec receipts, each counted once');
+  assert.equal(summary.reservedUnknownUSD, 0);
+  const jobJson = JSON.parse(readFileSync(join(storageDir, 'runs', jobId, 'job.json'), 'utf8')) as JobSummary;
+  assert.equal(jobJson.status, 'failed', 'terminal state is persisted — never left running');
+  assert.equal(jobJson.error?.code, 'OUTPUT_INVALID');
+  const failedEvent = readEvents(storageDir, jobId).find(e => e.stage === 'specify' && e.status === 'failed');
+  assert.ok(failedEvent !== undefined, 'specify failed event exists');
+  assert.equal(failedEvent.detail, 'OUTPUT_INVALID');
+  assert.equal(failedEvent.estCostUSD, 0.0000975, 'the failed-stage event carries the spec receipt charge');
+  assert.ok(existsSync(join(storageDir, 'runs', jobId, 'analysis.json')), 'the successful analysis stays persisted');
+});
+
+test('startJob: a duck-typed OUTPUT_INVALID error with a receipt is accounted like GeneratedOutputError (F-01)', async () => {
+  const storageDir = tempStorage();
+  const client: MetaClient = {
+    complete: async () => {
+      // Same shape, different realm/module instance: code + a receipt with a finite estCostUSD.
+      throw {
+        code: 'OUTPUT_INVALID',
+        stage: 'analyze',
+        receipt: { ...fakeReceipt('fake-duck'), estCostUSD: 0.02, costBasis: 'usage', reservedUnknownUSD: 0 },
+      };
+    },
+  };
+  const { jobId, done } = startJob('nasa-grc-equations-of-motion', { client, storageDir, purpose: 'test-live' });
+  const summary = await done;
+  assert.equal(summary.status, 'failed');
+  assert.deepEqual(summary.error, { code: 'OUTPUT_INVALID', message: OUTPUT_INVALID_MESSAGE });
+  assert.equal(summary.totalCostUSD, 0.02);
+  const jobJson = JSON.parse(readFileSync(join(storageDir, 'runs', jobId, 'job.json'), 'utf8')) as JobSummary;
+  assert.equal(jobJson.error?.code, 'OUTPUT_INVALID');
+});
+
+test('startJob: an unpublishable analysis fails ANALYSIS_INVALID without dereferencing analysis fields (F-01)', async () => {
+  const storageDir = tempStorage();
+  // Schema-valid analysis that fails grounding: the first concept's quote no longer counts.
+  const bad = structuredClone(analysisFixture);
+  const firstConcept = bad.concepts[0];
+  assert.ok(firstConcept !== undefined);
+  firstConcept.evidence = [{ quote: 'abc', sourceId: 'nasa-grc-equations-of-motion' }];
+  // Trap: after analysis.json exists (i.e. after the pipeline returned), ANY read of
+  // the model's supported/unsupportedReason fields throws — the publishable check
+  // must gate every dereference of the analysis (reviewer F-01 ordering).
+  let jobIdHolder: string | undefined;
+  const trapped = new Proxy(bad, {
+    get(target, prop, receiver) {
+      if (
+        (prop === 'supported' || prop === 'unsupportedReason') &&
+        jobIdHolder !== undefined &&
+        existsSync(join(storageDir, 'runs', jobIdHolder, 'analysis.json'))
+      ) {
+        throw new Error('ANALYSIS_FIELD_DEREFERENCED_AFTER_REPORT_GATE');
+      }
+      return Reflect.get(target, prop, receiver);
+    },
+  });
+  const client: MetaClient = {
+    complete: async <T>(req: CompleteRequest): Promise<{ data: T; receipt: MetaReceipt }> => {
+      if (req.schemaName === 'source_analysis') {
+        return { data: trapped as unknown as T, receipt: fakeReceipt('fake-trap') };
+      }
+      throw new Error('specify must not run for an unpublishable analysis');
+    },
+  };
+  const { jobId, done } = startJob('nasa-grc-equations-of-motion', { client, storageDir, purpose: 'test-live' });
+  jobIdHolder = jobId;
+  const summary = await done;
+  assert.equal(summary.status, 'failed');
+  assert.deepEqual(summary.error, { code: 'ANALYSIS_INVALID', message: 'analysis failed validation' });
+  assert.equal(summary.totalCostUSD, 0.01, 'the analysis receipt is still accounted');
+  const jobJson = JSON.parse(readFileSync(join(storageDir, 'runs', jobId, 'job.json'), 'utf8')) as JobSummary;
+  assert.equal(jobJson.status, 'failed');
+  assert.equal(jobJson.error?.code, 'ANALYSIS_INVALID');
+  const failedEvent = readEvents(storageDir, jobId).find(e => e.stage === 'analyze' && e.status === 'failed');
+  assert.ok(failedEvent !== undefined);
+  assert.equal(failedEvent.detail, 'ANALYSIS_INVALID', 'the detail never dereferences analysis fields');
+  assert.equal(failedEvent.estCostUSD, 0.01);
+  assert.ok(existsSync(join(storageDir, 'runs', jobId, 'analysis.json')), 'the analysis + failing report stay persisted');
+  assert.ok(!readEvents(storageDir, jobId).some(e => e.stage === 'specify'));
 });

@@ -10,19 +10,23 @@
 //   report.r1.json  — the ValidationReport for spec.r1
 //
 // Failure policy: `done` never rejects. Every failure (missing source, MetaError,
-// unpublishable analysis, failed spec validation, unexpected crash) becomes a
-// terminal JobSummary with status 'failed' (or 'unsupported' for an honest
-// not-supported-yet analysis) plus an error {code, message} whose message is a
-// FIXED public sentence per code (TASK-009 R-01): raw exception text, provider
-// bodies and reflected error strings are never persisted. Spend is accounted
-// from receipts and MetaError.chargedUSD: totalCostUSD is everything charged,
-// reservedUnknownUSD is the part charged at reservation because the outcome was
-// uncertain (TASK-009 R-09).
+// schema-invalid generated output, unpublishable analysis, failed spec validation,
+// unexpected crash) becomes a terminal JobSummary with status 'failed' (or
+// 'unsupported' for an honest not-supported-yet analysis) plus an error
+// {code, message} whose message is a FIXED public sentence per code (TASK-009
+// R-01): raw exception text, provider bodies and reflected error strings are
+// never persisted. Spend is accounted from receipts and MetaError.chargedUSD —
+// including the receipt carried by a GeneratedOutputError, whose provider call
+// completed and was reconciled before the generated data failed its schema
+// (TASK-009 F-01): totalCostUSD is everything charged, reservedUnknownUSD is
+// the part charged at reservation because the outcome was uncertain (R-09).
+// Even the last-resort catch persists a terminal failed/INTERNAL state, so a
+// settled job is never left persisted as 'running'.
 
 import { appendFileSync, mkdirSync, readdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { randomUUID } from 'node:crypto';
-import { analyzeSource, generateSpec } from '../../packages/meta/pipeline.ts';
+import { analyzeSource, generateSpec, GeneratedOutputError } from '../../packages/meta/pipeline.ts';
 import { MetaError, META_ERROR_MESSAGES } from '../../packages/meta/client.ts';
 import type { MetaClient, MetaErrorCode } from '../../packages/meta/client.ts';
 import { loadSource } from '../../packages/sources/index.ts';
@@ -43,6 +47,7 @@ export const JOB_ERROR_MESSAGES: Readonly<Record<string, string>> = {
   SOURCE_UNAVAILABLE: 'source unavailable',
   ANALYSIS_INVALID: 'analysis failed validation',
   VALIDATION_FAILED: 'generated spec failed validation',
+  OUTPUT_INVALID: 'The model returned output that does not match the required structure.',
   INTERRUPTED: 'The server stopped before this job finished.',
   INTERNAL: 'Unexpected internal error',
 };
@@ -167,6 +172,32 @@ function reservedUnknownOf(value: number | undefined): number {
   return typeof value === 'number' && Number.isFinite(value) ? value : 0;
 }
 
+/**
+ * F-01: recognise the pipeline's GeneratedOutputError — via instanceof, or via
+ * the duck-typed shape (code 'OUTPUT_INVALID' plus a receipt carrying a finite
+ * estCostUSD) so a copy from another module instance is handled identically.
+ * Returns the receipt whose cost must be accounted, or undefined.
+ */
+function generatedOutputReceipt(err: unknown): MetaReceipt | undefined {
+  let receipt: unknown;
+  if (err instanceof GeneratedOutputError) {
+    receipt = err.receipt;
+  } else if (typeof err === 'object' && err !== null) {
+    const candidate = err as { code?: unknown; receipt?: unknown };
+    if (candidate.code !== 'OUTPUT_INVALID') {
+      return undefined;
+    }
+    receipt = candidate.receipt;
+  } else {
+    return undefined;
+  }
+  if (typeof receipt !== 'object' || receipt === null) {
+    return undefined;
+  }
+  const est: unknown = (receipt as { estCostUSD?: unknown }).estCostUSD;
+  return typeof est === 'number' && Number.isFinite(est) ? (receipt as MetaReceipt) : undefined;
+}
+
 export function startJob(
   sourceId: string,
   deps: JobDeps,
@@ -208,11 +239,36 @@ export function startJob(
 
   const done: Promise<JobSummary> = runJob(sourceId, jobId, runDir, deps, summary, now, budget, onEvent).catch(
     (_err: unknown): JobSummary => {
-      // Last resort: runJob already finalises on expected failures, so reaching here
-      // means persistence itself broke. Still never reject — and never persist the
-      // raw exception text (R-01).
+      // Last resort (F-01): runJob already finalises on expected failures, so
+      // reaching here means an invariant or persistence itself broke. Never
+      // reject, never persist raw exception text (R-01) — and never leave the
+      // job persisted as 'running' after its promise settled: the terminal
+      // state is written best-effort inside its own try/catch.
+      const at = now().toISOString();
       summary.status = 'failed';
       summary.error = publicError('INTERNAL');
+      summary.finishedAt = at;
+      try {
+        writeJsonAtomic(join(runDir, 'job.json'), summary);
+      } catch {
+        // job.json may be unwritable; still attempt the terminal event below
+      }
+      try {
+        let seq = 0;
+        try {
+          for (const line of readFileSync(join(runDir, 'events.jsonl'), 'utf8').split('\n')) {
+            if (line.trim() !== '') {
+              seq += 1;
+            }
+          }
+        } catch {
+          seq = 0; // no events file yet; the terminal event starts the sequence
+        }
+        const event: StageEvent = { jobId, seq, stage: 'done', status: 'failed', at, detail: 'INTERNAL' };
+        appendFileSync(join(runDir, 'events.jsonl'), `${JSON.stringify(event)}\n`);
+      } catch {
+        // best effort: the persisted job.json above is the authoritative state
+      }
       return summary;
     },
   );
@@ -277,6 +333,23 @@ async function runJob(
   }
 
   function failFromError(stage: Stage, err: unknown): JobSummary {
+    // F-01: a GeneratedOutputError means the provider call COMPLETED and the
+    // ledger already reconciled it at receipt.estCostUSD. Account the receipt
+    // exactly like a successful one (it was never accounted before the throw,
+    // so this cannot double count), then fail through the normal persisted path.
+    const outputReceipt = generatedOutputReceipt(err);
+    if (outputReceipt !== undefined) {
+      accountReceipt(outputReceipt);
+      const extra: EventExtra = {
+        ...receiptFields(outputReceipt),
+        // R-01: the failure detail is the fixed code — plus the cost-basis note.
+        detail:
+          outputReceipt.costBasis === 'reservation'
+            ? 'OUTPUT_INVALID; cost basis: reservation (outcome uncertain)'
+            : 'OUTPUT_INVALID',
+      };
+      return fail(stage, 'OUTPUT_INVALID', extra);
+    }
     if (err instanceof MetaError) {
       // R-09: a MetaError thrown after a reservation carries chargedUSD/costBasis.
       const hasChargedUSD = typeof err.chargedUSD === 'number' && Number.isFinite(err.chargedUSD);
@@ -343,15 +416,18 @@ async function runJob(
     join(runDir, 'analysis.json'),
     { analysis, report: analysisReport, receipt: analysisReceipt },
   );
-  const analysisDetail = `${
-    analysis.supported ? 'supported' : `unsupported: ${analysis.unsupportedReason}`
-  }; checks ${checksPassed(analysisReport)}/${analysisReport.checks.length} passed`;
+  // F-01: the report gates every read of the analysis. When it is not
+  // publishable the job fails with the fixed ANALYSIS_INVALID detail — no
+  // analysis field is dereferenced for it.
   if (!analysisReport.publishable) {
     return fail('analyze', 'ANALYSIS_INVALID', {
       ...receiptFields(analysisReceipt),
       detail: 'ANALYSIS_INVALID',
     });
   }
+  const analysisDetail = `${
+    analysis.supported ? 'supported' : `unsupported: ${analysis.unsupportedReason}`
+  }; checks ${checksPassed(analysisReport)}/${analysisReport.checks.length} passed`;
   emit('analyze', 'succeeded', { ...receiptFields(analysisReceipt), detail: analysisDetail });
   if (!analysis.supported) {
     emit('done', 'succeeded', { detail: 'unsupported' });
