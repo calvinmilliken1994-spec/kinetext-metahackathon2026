@@ -37,3 +37,11 @@ Estimated per live pipeline run (analysis + spec, Spark Standard): ~8k input + ~
 | RISK-003 | Demo reads as a chatbot (anti-project) | No chat UI; artifact, live pipeline and validation are the product |
 | RISK-004 | New-work-only rule | Provenance doc and commit log separate setup scaffold from event work |
 | RISK-005 | Free-credit content may be used by Meta | Only licensed public/synthetic sources |
+
+## Status (2026-10-27) — Stage 2 complete
+
+- **All ten tasks DONE** (TASK-001…TASK-010), per the table above and `docs/REPOSITORY_LOG.md`; `main` HEAD `1ea0c7c`.
+- **TASK-009 outcome:** three independent review rounds — GPT-6.1 Sol (`docs/reviews/stage-2-independent-review.md`, 13 findings R-01…R-13; `docs/reviews/stage-2-re-review.md`, N-01…N-07), then GPT-6 Astra (`docs/reviews/stage-2-final-review.md`, one blocker F-01) whose addendum verdicts **APPROVED WITH CONDITIONS** at `78e3745`: supervised, loopback-only live demos under the USD 10 Stage 2 cap; every ledger writer must use `ledgerLockPort` 47853 (`config/resource-limits.json`) and the same ledger; explanation prose needs teacher review. Fix decisions in `docs/specs/TASK-009-review-fixes.md`; accepted debt DEBT-001…003 logged in the vault Issue Register.
+- **Tests:** `npm run check` **330/330** pass (re-run by the lead during TASK-010 at HEAD `1ea0c7c`); web production build passes (final review evidence).
+- **Meta spend:** product runtime calls on participant credits ≈ **USD 0.132 of the USD 10 cap** (`docs/PROVIDER_USAGE.md`; enforced by the storage ledger). Engineering via the Muse Code subscription is not charged to credits (`docs/META_CONTRIBUTIONS.md`).
+- The exit criterion was met live: NASA *Equations of Motion* → Muse analysis → spec → validation → interactive simulation, started from the web UI — 13/13 checks at run time (`docs/evidence/task-008/`); today the hardened validator runs 14 spec checks and the committed evidence re-validates in `npm run check`.
