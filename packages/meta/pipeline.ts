@@ -1,3 +1,5 @@
+import { Ajv } from 'ajv';
+import type { AnySchemaObject, ValidateFunction } from 'ajv';
 import { assembleSpec } from '../contracts/index.ts';
 import type {
   ActivitySpec,
@@ -11,6 +13,38 @@ import { activitySpecGenSchema, sourceAnalysisGenSchema } from '../contracts/sch
 import { validateAnalysis, validateSpec } from '../validation/validate.ts';
 import { buildAnalysisMessages, buildSpecMessages, PROMPT_VERSION } from './prompts.ts';
 import type { CompleteRequest, MetaClient } from './client.ts';
+
+export class GeneratedOutputError extends Error {
+  readonly code: 'OUTPUT_INVALID';
+  readonly stage: 'analyze' | 'specify';
+  readonly receipt: MetaReceipt;
+  constructor(stage: 'analyze' | 'specify', receipt: MetaReceipt) {
+    super('The model returned output that does not match the required structure.');
+    this.name = 'GeneratedOutputError';
+    this.code = 'OUTPUT_INVALID';
+    this.stage = stage;
+    this.receipt = receipt;
+  }
+}
+
+const ajv: Ajv = new Ajv({ allErrors: true, strict: false });
+const validateAnalysisGen: ValidateFunction = ajv.compile(
+  sourceAnalysisGenSchema as unknown as AnySchemaObject,
+);
+const validateSpecGen: ValidateFunction = ajv.compile(
+  activitySpecGenSchema as unknown as AnySchemaObject,
+);
+
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  if (typeof value !== 'object' || value === null) {
+    return false;
+  }
+  if (Array.isArray(value)) {
+    return false;
+  }
+  const proto: unknown = Object.getPrototypeOf(value);
+  return proto === Object.prototype || proto === null;
+}
 
 export async function analyzeSource(
   client: MetaClient,
@@ -30,6 +64,10 @@ export async function analyzeSource(
     req.signal = opts.signal;
   }
   const result = await client.complete<SourceAnalysis>(req);
+  const raw: unknown = result.data;
+  if (!isPlainObject(raw) || !validateAnalysisGen(raw)) {
+    throw new GeneratedOutputError('analyze', result.receipt);
+  }
   const report: ValidationReport = validateAnalysis(result.data, [source]);
   return { analysis: result.data, report, receipt: result.receipt };
 }
@@ -60,21 +98,30 @@ export async function generateSpec(
     req.signal = opts.signal;
   }
   const result = await client.complete<GeneratedSpec>(req);
-  const spec: ActivitySpec = assembleSpec(result.data, {
-    id: ids.specId,
-    sources: [source],
-    provenance: {
-      provider: 'meta',
-      requestedModel: result.receipt.requestedModel,
-      returnedModel: result.receipt.returnedModel,
-      responseId: result.receipt.responseId,
-      runId: ids.jobId,
-      promptVersion: PROMPT_VERSION,
-      revision: 1,
-      repairOf: null,
-      generatedAt: now().toISOString(),
-    },
-  });
+  const raw: unknown = result.data;
+  if (!isPlainObject(raw) || !validateSpecGen(raw)) {
+    throw new GeneratedOutputError('specify', result.receipt);
+  }
+  let spec: ActivitySpec;
+  try {
+    spec = assembleSpec(result.data, {
+      id: ids.specId,
+      sources: [source],
+      provenance: {
+        provider: 'meta',
+        requestedModel: result.receipt.requestedModel,
+        returnedModel: result.receipt.returnedModel,
+        responseId: result.receipt.responseId,
+        runId: ids.jobId,
+        promptVersion: PROMPT_VERSION,
+        revision: 1,
+        repairOf: null,
+        generatedAt: now().toISOString(),
+      },
+    });
+  } catch {
+    throw new GeneratedOutputError('specify', result.receipt);
+  }
   const report: ValidationReport = validateSpec(spec, [source]);
   return { generated: result.data, spec, report, receipt: result.receipt };
 }

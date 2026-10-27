@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { analyzeSource, generateSpec } from './pipeline.ts';
+import { analyzeSource, generateSpec, GeneratedOutputError } from './pipeline.ts';
 import { PROMPT_VERSION } from './prompts.ts';
 import { MetaError } from './client.ts';
 import type { CompleteRequest, MetaClient } from './client.ts';
@@ -36,6 +36,19 @@ const fakeReceipt: MetaReceipt = {
   finishReason: 'stop',
   attempts: 1,
 };
+
+const FIXED_MESSAGE = 'The model returned output that does not match the required structure.';
+const MARKER_ANALYZE = 'SYNTH-MARKER-ANALYZE-q7w4e9z2k1';
+const MARKER_SPEC = 'SYNTH-MARKER-SPEC-m8n3p6r5t2';
+
+function fakeClientFor<T>(data: unknown): MetaClient {
+  return {
+    async complete<U>(req: CompleteRequest): Promise<{ data: U; receipt: MetaReceipt }> {
+      void req;
+      return { data: data as unknown as U, receipt: fakeReceipt };
+    },
+  };
+}
 
 test('analyzeSource validates, uses source_analysis schema and passes purpose through', async () => {
   const seen: CompleteRequest[] = [];
@@ -242,4 +255,131 @@ test('aborted job signal with a DEADLINE_EXCEEDED client error propagates that M
       }),
     (err: unknown) => err instanceof MetaError && err.code === 'DEADLINE_EXCEEDED',
   );
+});
+
+test('analyzeSource rejects null, number, array, empty object and missing-supported with GeneratedOutputError and no leakage', async () => {
+  const missingSupported = JSON.parse(JSON.stringify(analysisForces)) as Record<string, unknown>;
+  delete missingSupported['supported'];
+  missingSupported['objectives'] = [MARKER_ANALYZE];
+  const cases: unknown[] = [null, 42, [], {}, missingSupported];
+  for (const bad of cases) {
+    const fake: MetaClient = fakeClientFor(bad);
+    let caught: unknown;
+    try {
+      await analyzeSource(fake, source, 'demo');
+      assert.fail('expected GeneratedOutputError');
+    } catch (err: unknown) {
+      caught = err;
+    }
+    assert.ok(caught instanceof GeneratedOutputError);
+    const outErr = caught as GeneratedOutputError;
+    assert.equal(outErr.code, 'OUTPUT_INVALID');
+    assert.equal(outErr.stage, 'analyze');
+    assert.ok(outErr.receipt === fakeReceipt);
+    assert.equal(outErr.message, FIXED_MESSAGE);
+    assert.equal(outErr.name, 'GeneratedOutputError');
+    assert.ok(outErr instanceof Error);
+    assert.ok(!outErr.message.includes(MARKER_ANALYZE));
+    assert.ok(!JSON.stringify(outErr).includes(MARKER_ANALYZE));
+  }
+});
+
+test('analyzeSource error for a marker-bearing invalid object never echoes model output', async () => {
+  const badWithMarker: Record<string, unknown> = {
+    supported: true,
+    activity: 'forces-1d-v1',
+    unsupportedReason: MARKER_ANALYZE,
+    concepts: [],
+    objectives: [MARKER_ANALYZE],
+  };
+  delete badWithMarker['supported'];
+  const fake: MetaClient = fakeClientFor(badWithMarker);
+  let caught: unknown;
+  try {
+    await analyzeSource(fake, source, 'demo');
+    assert.fail('expected GeneratedOutputError');
+  } catch (err: unknown) {
+    caught = err;
+  }
+  assert.ok(caught instanceof GeneratedOutputError);
+  const outErr = caught as GeneratedOutputError;
+  assert.equal(outErr.stage, 'analyze');
+  assert.ok(outErr.receipt === fakeReceipt);
+  assert.equal(outErr.message, FIXED_MESSAGE);
+  assert.ok(!outErr.message.includes(MARKER_ANALYZE));
+  assert.ok(!JSON.stringify(outErr).includes(MARKER_ANALYZE));
+});
+
+test('generateSpec rejects null, empty object, null simulation and missing required field with GeneratedOutputError', async () => {
+  const missingTitle = JSON.parse(JSON.stringify(genForces)) as Record<string, unknown>;
+  delete missingTitle['title'];
+  missingTitle['learningObjectives'] = [MARKER_SPEC];
+  const cases: unknown[] = [null, {}, { simulation: null }, missingTitle];
+  for (const bad of cases) {
+    const fake: MetaClient = fakeClientFor(bad);
+    let caught: unknown;
+    try {
+      await generateSpec(
+        fake,
+        source,
+        analysisForces,
+        { jobId: 'job-1', specId: 'spec-1' },
+        'demo',
+        () => new Date('2026-01-01T00:00:00.000Z'),
+      );
+      assert.fail('expected GeneratedOutputError');
+    } catch (err: unknown) {
+      caught = err;
+    }
+    assert.ok(caught instanceof GeneratedOutputError);
+    const outErr = caught as GeneratedOutputError;
+    assert.equal(outErr.code, 'OUTPUT_INVALID');
+    assert.equal(outErr.stage, 'specify');
+    assert.ok(outErr.receipt === fakeReceipt);
+    assert.equal(outErr.message, FIXED_MESSAGE);
+    assert.equal(outErr.name, 'GeneratedOutputError');
+    assert.ok(outErr instanceof Error);
+    assert.ok(!outErr.message.includes(MARKER_SPEC));
+    assert.ok(!JSON.stringify(outErr).includes(MARKER_SPEC));
+  }
+});
+
+test('GeneratedOutputError shape is fixed and schema-valid recorded spec still succeeds', async () => {
+  const err = new GeneratedOutputError('specify', fakeReceipt);
+  assert.equal(err.code, 'OUTPUT_INVALID');
+  assert.equal(err.stage, 'specify');
+  assert.ok(err.receipt === fakeReceipt);
+  assert.equal(err.name, 'GeneratedOutputError');
+  assert.equal(err.message, FIXED_MESSAGE);
+  assert.ok(err instanceof Error);
+  const analyzeErr = new GeneratedOutputError('analyze', fakeReceipt);
+  assert.equal(analyzeErr.stage, 'analyze');
+  assert.equal(analyzeErr.code, 'OUTPUT_INVALID');
+
+  const fake: MetaClient = {
+    async complete<T>(req: CompleteRequest): Promise<{ data: T; receipt: MetaReceipt }> {
+      void req;
+      return { data: genForces as unknown as T, receipt: fakeReceipt };
+    },
+  };
+  const result = await generateSpec(
+    fake,
+    source,
+    analysisForces,
+    { jobId: 'job-1', specId: 'spec-1' },
+    'demo',
+    () => new Date('2026-01-01T00:00:00.000Z'),
+  );
+  assert.equal(result.report.publishable, true);
+  assert.ok(result.receipt === fakeReceipt);
+  assert.equal(result.generated, genForces as unknown as GeneratedSpec);
+
+  const fakeAnalysis: MetaClient = {
+    async complete<T>(req: CompleteRequest): Promise<{ data: T; receipt: MetaReceipt }> {
+      void req;
+      return { data: analysisForces as unknown as T, receipt: fakeReceipt };
+    },
+  };
+  const analysisResult = await analyzeSource(fakeAnalysis, source, 'demo');
+  assert.ok(analysisResult.analysis === analysisForces);
 });

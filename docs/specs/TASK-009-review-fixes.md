@@ -70,3 +70,14 @@ Re-review verdict: CHANGES REQUIRED. Resolved: R-01, R-03, R-04, R-05, R-08, R-1
 
 Lead: `scripts/live-spike.ts` moves to `openLedger`, uses the configured job deadline and input cap.
 
+---
+
+# Round 3 — after the final review (`docs/reviews/stage-2-final-review.md`, gpt-6-astra)
+
+Verdict CHANGES REQUIRED with one blocker. All of R-01…R-13 and N-01…N-07 are resolved or accepted debt except R-09/R-10, which stay partial only because of F-01.
+
+| Finding | Decision |
+|---|---|
+| F-01 (Medium, blocker) | **Fix.** `pipeline.ts` (Muse): exported `GeneratedOutputError { code: 'OUTPUT_INVALID'; stage: 'analyze'\|'specify'; receipt }` with a fixed message; generated data is Ajv-validated against the gen schema before use, and any `assembleSpec` exception becomes this error. Worker (Qwen): account `err.receipt` cost, fail the job through the normal persisted path with code `OUTPUT_INVALID`; check the analysis report before reading analysis fields; the last-resort catch also persists a terminal `failed`/`INTERNAL` summary and `done failed` event (best effort). Regression: fake-fetch real client → pipeline → worker → GET for analysis `null` and spec `null` / `{}` / `{simulation:null}`, with valid and absent usage; job total equals the ledger's committed amount. |
+| F-02 (Low) | **Accepted as debt (DEBT-002), with a condition.** Every ledger writer must use `ledgerLockPort` from `config/resource-limits.json`; both shipped entry points do. Never omit or change the port to get past `LEDGER_LOCKED`. Revisit (file-identity lock) before any multi-writer use. |
+
