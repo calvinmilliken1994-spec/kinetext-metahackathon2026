@@ -1,17 +1,20 @@
 import { useCallback, useMemo, useState } from 'react';
-import type { ForcesActivitySpec } from '../../../packages/contracts/index.ts';
 import { api, describeError } from './api.ts';
 import { useHealth, useJobDetail, useJobs, useSourceDoc, useSources } from './hooks.ts';
 import { buildHighlights } from './lib/highlight.ts';
 import { collectQuoteRefs } from './lib/evidence.ts';
 import { newestFirst, pickDefaultJob } from './lib/jobs.ts';
 import { generateState, isServerBusy } from './lib/health.ts';
+import { defaultRevision, overallRepairBadge, revisionInputs, validationHeading } from './lib/repairs.ts';
+import { demoFaultToSend, disclosureText } from './lib/sources.ts';
+import type { DemoChoice } from './lib/sources.ts';
 import { Header } from './components/Header.tsx';
 import { SourcePanel } from './components/SourcePanel.tsx';
 import type { Flash } from './components/SourcePanel.tsx';
 import { PipelinePanel } from './components/PipelinePanel.tsx';
 import { ActivityPanel } from './components/ActivityPanel.tsx';
 import { JobOutcome } from './components/JobOutcome.tsx';
+import { RepairTimeline } from './components/RepairTimeline.tsx';
 import { ValidationPanel } from './components/ValidationPanel.tsx';
 
 const NO_JOBS: never[] = [];
@@ -24,9 +27,11 @@ export function App() {
 
   const [pickedSource, setPickedSource] = useState<string | null>(null);
   const [pickedJob, setPickedJob] = useState<{ jobId: string; sourceId: string } | null>(null);
+  const [pickedRevision, setPickedRevision] = useState<{ jobId: string; revision: number } | null>(null);
   const [liveJobIds, setLiveJobIds] = useState<ReadonlySet<string>>(() => new Set());
   const [generating, setGenerating] = useState(false);
   const [generateError, setGenerateError] = useState<string | null>(null);
+  const [demoChoice, setDemoChoice] = useState<DemoChoice>('none');
   const [flash, setFlash] = useState<Flash | null>(null);
 
   const sourceList = sources.state === 'ready' ? sources.data : null;
@@ -65,7 +70,7 @@ export function App() {
     const sourceId = selectedSourceId;
     setGenerating(true);
     setGenerateError(null);
-    api.createJob(sourceId).then(
+    api.createJob(sourceId, demoFaultToSend(demoChoice)).then(
       ({ jobId }) => {
         setLiveJobIds((prev) => new Set(prev).add(jobId));
         setPickedJob({ jobId, sourceId });
@@ -76,16 +81,28 @@ export function App() {
       // Keep the button locked until /api/health has been re-read, so it never flickers enabled.
       void refreshHealth().finally(() => setGenerating(false));
     });
-  }, [selectedSourceId, refreshJobs, refreshHealth]);
+  }, [selectedSourceId, demoChoice, refreshJobs, refreshHealth]);
 
   const onSelectSource = useCallback((id: string) => { setPickedSource(id); setFlash(null); }, []);
+  const onSourceCreated = useCallback((id: string) => { reloadSources(); setPickedSource(id); setFlash(null); }, [reloadSources]);
   const onSelectJob = useCallback((jobId: string) => {
     if (selectedSourceId !== null) setPickedJob({ jobId, sourceId: selectedSourceId });
   }, [selectedSourceId]);
 
   const spec = ready?.spec;
-  const report = ready?.report ?? null;
   const analysisReport = ready?.analysis?.report ?? null;
+
+  // Revisions (Stage 5): the validation panel shows the published (else best) revision unless the user picks another.
+  const revisions = useMemo(() => (ready === null ? [] : revisionInputs(ready)), [ready]);
+  const defaultRev = ready === null ? null : defaultRevision(revisions, ready.summary);
+  const viewRev = pickedRevision !== null && pickedRevision.jobId === selectedJobId && revisions.some((r) => r.revision === pickedRevision.revision)
+    ? pickedRevision.revision
+    : defaultRev;
+  const report = revisions.find((r) => r.revision === viewRev)?.report ?? ready?.report ?? null;
+  const onViewRevision = useCallback((revision: number) => {
+    if (selectedJobId !== null) setPickedRevision({ jobId: selectedJobId, revision });
+  }, [selectedJobId]);
+  const repairBadge = ready === null ? null : overallRepairBadge(ready.summary);
 
   return (
     <div className="app">
@@ -96,6 +113,7 @@ export function App() {
           selectedId={selectedSourceId}
           onSelect={onSelectSource}
           onReload={reloadSources}
+          onCreated={onSourceCreated}
           doc={doc}
           highlights={highlights}
           quotes={quotes}
@@ -118,9 +136,14 @@ export function App() {
           {selectedJobId === null && jobs.state === 'loading' && <p className="muted pad">Loading…</p>}
           {detail?.state === 'loading' && <p className="muted pad">Loading run…</p>}
           {detail?.state === 'error' && <div className="callout callout-error pad-m" role="alert">{detail.message}</div>}
-          {/* Stage 5 TASK-016 adds renderers for the other engines; until then only forces specs render. */}
-          {ready !== null && spec !== undefined && ready.summary.status === 'succeeded' && spec.simulation.engine === 'forces-1d-v1' && (
-            <ActivityPanel key={spec.id} spec={spec as ForcesActivitySpec} cite={{ sourceId: ready.summary.sourceId, located, onCite }} />
+          {ready !== null && spec !== undefined && ready.summary.status === 'succeeded' && (
+            <ActivityPanel
+              key={spec.id}
+              spec={spec}
+              cite={{ sourceId: ready.summary.sourceId, located, onCite }}
+              disclosure={disclosureText(selectedSource)}
+              repairBadge={repairBadge}
+            />
           )}
           {ready !== null && (spec === undefined || ready.summary.status !== 'succeeded') && (
             <JobOutcome detail={ready} serverBusy={health === null ? null : generate.busy} />
@@ -130,6 +153,7 @@ export function App() {
         <aside className="side" aria-label="Pipeline and validation">
           <PipelinePanel
             sourceTitle={selectedSource?.title ?? null}
+            teacherSource={selectedSource?.kind === 'user'}
             jobs={jobs}
             jobsForSource={jobsForSource}
             generate={generate}
@@ -138,10 +162,30 @@ export function App() {
             onSelectJob={onSelectJob}
             liveJobIds={liveJobIds}
             onGenerate={onGenerate}
+            demoChoice={demoChoice}
+            onDemoChoice={setDemoChoice}
             generateError={generateError}
             detail={detail}
           />
-          {report !== null && <ValidationPanel report={report} heading="Validation" showPublish={spec !== undefined} />}
+          {ready !== null && (
+            <RepairTimeline
+              revisions={revisions}
+              repairs={ready.summary.repairs}
+              demoFault={ready.summary.demoFault}
+              events={ready.events}
+              publishedRevision={ready.summary.publishedRevision}
+              bestRevision={ready.summary.bestRevision}
+              viewing={viewRev}
+              onView={onViewRevision}
+            />
+          )}
+          {report !== null && (
+            <ValidationPanel
+              report={report}
+              heading={validationHeading(viewRev, revisions.length, ready?.summary.publishedRevision)}
+              showPublish={spec !== undefined && viewRev === defaultRev}
+            />
+          )}
           {report === null && analysisReport !== null && (
             <ValidationPanel report={analysisReport} heading="Source analysis checks" showPublish={false} />
           )}

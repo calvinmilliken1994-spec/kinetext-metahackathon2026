@@ -1,61 +1,16 @@
 import { useId } from 'react';
-import type { ChangeEvent } from 'react';
 import type { Frame } from '../../../../packages/activities/forces-1d/engine.ts';
 import type { ForcesActivitySpec as ActivitySpec } from '../../../../packages/contracts/index.ts';
-import { fixed, trimmed } from '../lib/format.ts';
+import { fixed } from '../lib/format.ts';
 import { sliderStep } from '../lib/track.ts';
 import { Scene } from './Scene.tsx';
 import { Graph } from './Graph.tsx';
+import { Readout, Slider } from './controls.tsx';
 import type { SimControls } from './useSimulation.ts';
 
 const pickV = (f: Frame): number => f.v;
 const pickX = (f: Frame): number => f.x;
 const pickA = (f: Frame): number => f.a;
-
-interface SliderProps {
-  label: string;
-  symbol: string;
-  unit: string;
-  unitWord: string;
-  min: number;
-  max: number;
-  value: number;
-  onChange: (v: number) => void;
-}
-
-function Slider({ label, symbol, unit, unitWord, min, max, value, onChange }: SliderProps) {
-  const id = useId();
-  const step = sliderStep(min, max);
-  const shown = trimmed(value, 2);
-  return (
-    <div className="slider">
-      <div className="slider-head">
-        <label htmlFor={id}>{label} <span className="sym">({symbol})</span></label>
-        <output htmlFor={id} className="slider-value">{shown} <span className="unit">{unit}</span></output>
-      </div>
-      <input
-        id={id}
-        type="range"
-        min={min}
-        max={max}
-        step={step}
-        value={value}
-        aria-valuetext={`${shown} ${unitWord}`}
-        onChange={(e: ChangeEvent<HTMLInputElement>) => onChange(Number(e.target.value))}
-      />
-      <div className="slider-ends" aria-hidden="true"><span>{min} {unit}</span><span>{max} {unit}</span></div>
-    </div>
-  );
-}
-
-function Readout({ name, value, unit, accent }: { name: string; value: string; unit: string; accent?: string }) {
-  return (
-    <div className={`readout${accent ? ` readout-${accent}` : ''}`}>
-      <dt>{name}</dt>
-      <dd><span className="num">{value}</span> <span className="unit">{unit}</span></dd>
-    </div>
-  );
-}
 
 export function Simulation({ sim, ctl }: { sim: ActivitySpec['simulation']; ctl: SimControls }) {
   const scrubId = useId();
@@ -104,12 +59,12 @@ export function Simulation({ sim, ctl }: { sim: ActivitySpec['simulation']; ctl:
       <div className="controls-row">
         <div className="sliders">
           <Slider
-            label="Mass" symbol="m" unit="kg" unitWord="kilograms"
-            min={sim.massKg.min} max={sim.massKg.max} value={ctl.massKg} onChange={ctl.setMass}
+            label="Mass" symbol="m" unit="kg"
+            min={sim.massKg.min} max={sim.massKg.max} step={sliderStep(sim.massKg.min, sim.massKg.max)} value={ctl.massKg} onChange={ctl.setMass}
           />
           <Slider
-            label="Net force" symbol="F_net" unit="N" unitWord="newtons"
-            min={sim.netForceN.min} max={sim.netForceN.max} value={ctl.netForceN} onChange={ctl.setForce}
+            label="Net force" symbol="F_net" unit="N"
+            min={sim.netForceN.min} max={sim.netForceN.max} step={sliderStep(sim.netForceN.min, sim.netForceN.max)} value={ctl.netForceN} onChange={ctl.setForce}
           />
         </div>
         <dl className="readouts" aria-label="Live readouts from the engine">

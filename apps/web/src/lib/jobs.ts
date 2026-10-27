@@ -79,6 +79,8 @@ export type RowStatus = 'pending' | 'running' | 'succeeded' | 'failed';
 
 export interface TimelineRow {
   stage: Stage;
+  /** Spec revision for inject / validate / repair rows (Stage 5); absent for other stages and older runs. */
+  revision?: number;
   status: RowStatus;
   /** Wall time between the stage's started and finished events; null while running/pending. */
   durationMs: number | null;
@@ -90,43 +92,62 @@ export interface TimelineRow {
   detail?: string;
 }
 
+function rowFromEvents(stage: Stage, evs: readonly StageEvent[], revision: number | undefined): TimelineRow {
+  const started = evs.find((e) => e.status === 'started');
+  const finished = [...evs].reverse().find((e) => e.status !== 'started');
+  const row: TimelineRow = {
+    stage,
+    status: finished ? finished.status as RowStatus : 'running',
+    durationMs: null,
+  };
+  if (revision !== undefined) row.revision = revision;
+  if (started && finished) {
+    const d = Date.parse(finished.at) - Date.parse(started.at);
+    row.durationMs = Number.isFinite(d) && d >= 0 ? d : null;
+  }
+  const src = finished ?? started;
+  if (src) {
+    if (src.model !== undefined) row.model = src.model;
+    if (src.responseId !== undefined) row.responseId = src.responseId;
+    if (src.usage !== undefined) row.usage = src.usage;
+    if (src.latencyMs !== undefined) row.latencyMs = src.latencyMs;
+    if (src.estCostUSD !== undefined) row.estCostUSD = src.estCostUSD;
+    if (src.detail !== undefined) row.detail = src.detail;
+  }
+  return row;
+}
+
 /**
  * Build the timeline strictly from the events that exist. Stages that have no event yet appear as
  * 'pending' ONLY while the job is still running (so progress is visible); a finished job never shows
  * invented rows. 'inject' and 'repair' appear only when the pipeline actually emitted them.
+ * Stage 5: events are grouped per (stage, revision), so validate / repair rows exist once per revision
+ * and rows come out in the order the pipeline emitted them (validate r1 → repair r2 → validate r2 → …).
  */
 export function buildTimeline(events: readonly StageEvent[], jobStatus: JobStatus): TimelineRow[] {
-  const rows: TimelineRow[] = [];
-  for (const stage of STAGE_ORDER) {
-    const evs = events.filter((e) => e.stage === stage).sort((a, b) => a.seq - b.seq);
-    if (evs.length === 0) {
-      if (jobStatus === 'running' && stage !== 'repair' && stage !== 'inject') rows.push({ stage, status: 'pending', durationMs: null });
-      continue;
+  const groups = new Map<string, { stage: Stage; revision: number | undefined; evs: StageEvent[] }>();
+  for (const e of [...events].sort((a, b) => a.seq - b.seq)) {
+    const revision = e.stage === 'inject' || e.stage === 'validate' || e.stage === 'repair' ? e.revision : undefined;
+    const key = `${e.stage}:${revision ?? ''}`;
+    const g = groups.get(key) ?? { stage: e.stage, revision, evs: [] };
+    g.evs.push(e);
+    groups.set(key, g);
+  }
+  const rows: TimelineRow[] = [...groups.values()].map((g) => rowFromEvents(g.stage, g.evs, g.revision));
+  if (jobStatus === 'running') {
+    const present = new Set(rows.map((r) => r.stage));
+    for (const stage of STAGE_ORDER) {
+      if (!present.has(stage) && stage !== 'repair' && stage !== 'inject') rows.push({ stage, status: 'pending', durationMs: null });
     }
-    const started = evs.find((e) => e.status === 'started');
-    const finished = [...evs].reverse().find((e) => e.status !== 'started');
-    const row: TimelineRow = {
-      stage,
-      status: finished ? finished.status as RowStatus : 'running',
-      durationMs: null,
-    };
-    if (started && finished) {
-      const d = Date.parse(finished.at) - Date.parse(started.at);
-      row.durationMs = Number.isFinite(d) && d >= 0 ? d : null;
-    }
-    const src = finished ?? started;
-    if (src) {
-      if (src.model !== undefined) row.model = src.model;
-      if (src.responseId !== undefined) row.responseId = src.responseId;
-      if (src.usage !== undefined) row.usage = src.usage;
-      if (src.latencyMs !== undefined) row.latencyMs = src.latencyMs;
-      if (src.estCostUSD !== undefined) row.estCostUSD = src.estCostUSD;
-      if (src.detail !== undefined) row.detail = src.detail;
-    }
-    rows.push(row);
   }
   return rows;
 }
+
+/** Row heading: 'Validate · revision 2'. Revision-less rows keep their plain stage label. */
+export function rowLabel(row: Pick<TimelineRow, 'stage' | 'revision'>): string {
+  return row.revision !== undefined && row.stage !== 'inject' ? `${STAGE_LABEL[row.stage]} · revision ${row.revision}` : STAGE_LABEL[row.stage];
+}
+
 
 /** Sum of estCostUSD reported by events; null when no event carries a cost (unknown, never zero). */
 export function totalEventCost(events: readonly StageEvent[]): number | null {

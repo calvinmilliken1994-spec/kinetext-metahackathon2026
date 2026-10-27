@@ -1,12 +1,18 @@
 import type { JobDetail, JobSummary } from '../api.ts';
 import type { Loadable } from '../hooks.ts';
 import { describeJobCost } from '../lib/cost.ts';
+import { engineTitle } from '../lib/engines.ts';
 import type { GenerateState } from '../lib/health.ts';
 import { INTERRUPTED_TEXT, isInterrupted, jobStatusLabel, runBadge } from '../lib/jobs.ts';
+import { runTags } from '../lib/repairs.ts';
+import { DEMO_FAULT_HELP, DEMO_FAULT_LABEL, demoFaultOptions, FREE_CREDITS_NOTE } from '../lib/sources.ts';
+import type { DemoChoice } from '../lib/sources.ts';
 import { Timeline } from './Timeline.tsx';
 
 export interface PipelinePanelProps {
   sourceTitle: string | null;
+  /** The selected source is a teacher's pasted text (shows the free-credits notice next to Generate). */
+  teacherSource: boolean;
   jobs: Loadable<JobSummary[]>;
   jobsForSource: readonly JobSummary[];
   /** Button state derived from /api/health (busy flag), not from job history. */
@@ -17,6 +23,8 @@ export interface PipelinePanelProps {
   onSelectJob: (id: string) => void;
   liveJobIds: ReadonlySet<string>;
   onGenerate: () => void;
+  demoChoice: DemoChoice;
+  onDemoChoice: (c: DemoChoice) => void;
   generateError: string | null;
   detail: Loadable<JobDetail> | null;
 }
@@ -39,6 +47,20 @@ export function PipelinePanel(p: PipelinePanelProps) {
         </button>
         {why !== null && <p id="generate-why" className="muted small gen-why">{why}</p>}
         {p.generateError !== null && <p className="field-error" role="alert">{p.generateError}</p>}
+        {p.teacherSource && <p className="callout callout-warn small gen-why" role="note">{FREE_CREDITS_NOTE}</p>}
+
+        <div className={`demo-fault${p.demoChoice !== 'none' ? ' demo-fault-on' : ''}`}>
+          <label htmlFor="demo-fault-select" className="field-label">{DEMO_FAULT_LABEL}</label>
+          <select id="demo-fault-select" value={p.demoChoice} disabled={generate.busy} aria-describedby="demo-fault-help" onChange={(e) => p.onDemoChoice(e.target.value as DemoChoice)}>
+            {demoFaultOptions().map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+          </select>
+          <p id="demo-fault-help" className="muted small">{DEMO_FAULT_HELP}</p>
+          {p.demoChoice !== 'none' && (
+            <p className="callout callout-fault small" role="note">
+              Demonstration: the next run will carry a fault injected by the system (<code>{p.demoChoice}</code>), not made by Muse.
+            </p>
+          )}
+        </div>
       </div>
 
       <div className="runs">
@@ -55,6 +77,8 @@ export function PipelinePanel(p: PipelinePanelProps) {
             const interrupted = isInterrupted(j);
             const selected = j.jobId === p.selectedJobId;
             const cost = describeJobCost({ totalCostUSD: j.totalCostUSD, reservedUnknownUSD: j.reservedUnknownUSD, interrupted });
+            const engine = engineTitle(j.engine);
+            const tags = runTags(j);
             return (
               <li key={j.jobId}>
                 <button type="button" className={`run${selected ? ' selected' : ''}`} aria-pressed={selected} onClick={() => p.onSelectJob(j.jobId)}>
@@ -62,6 +86,12 @@ export function PipelinePanel(p: PipelinePanelProps) {
                     <span className={`badge ${badge.kind === 'live' ? 'badge-live' : 'badge-rec'}`}>{badge.label}</span>
                     <span className={`status st-${st.tone}`}>{st.text}</span>
                   </span>
+                  {(engine !== null || tags.length > 0) && (
+                    <span className="run-tags">
+                      {engine !== null && <span className="tag tag-engine" title={j.engine ?? undefined}>{engine}</span>}
+                      {tags.map((t) => <span key={t.text} className={`tag tag-${t.tone}`}>{t.text}</span>)}
+                    </span>
+                  )}
                   <span className="run-sub mono">{j.jobId} · est. cost {cost}</span>
                   {interrupted && <span className="run-note">{INTERRUPTED_TEXT}</span>}
                 </button>

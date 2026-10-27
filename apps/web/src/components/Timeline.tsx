@@ -1,6 +1,6 @@
 import type { StageEvent } from '../../../../packages/contracts/index.ts';
 import { stageCostLabel, timelineTotal } from '../lib/cost.ts';
-import { buildTimeline, formatDuration, formatTokens, shortId, STAGE_LABEL } from '../lib/jobs.ts';
+import { buildTimeline, formatDuration, formatTokens, rowLabel, shortId } from '../lib/jobs.ts';
 import type { JobStatus, RowStatus } from '../lib/jobs.ts';
 
 const ICON: Record<RowStatus, { glyph: string; label: string }> = {
@@ -28,14 +28,15 @@ export function Timeline({ events, jobStatus, totalCostUSD, reservedUnknownUSD, 
           const tokens = formatTokens(r.usage);
           const cost = stageCostLabel(r);
           return (
-            <li key={r.stage} className={`stage stage-${r.status}`}>
+            <li key={`${r.stage}:${r.revision ?? ''}`} className={`stage stage-${r.status}${r.stage === 'inject' ? ' stage-inject' : ''}`}>
               <span className={`stage-icon ${r.status}`} role="img" aria-label={ICON[r.status].label}>{ICON[r.status].glyph}</span>
               <div className="stage-body">
                 <div className="stage-top">
-                  <strong>{STAGE_LABEL[r.stage]}</strong>
+                  <strong>{rowLabel(r)}</strong>
                   {r.durationMs !== null && <span className="stage-dur">{formatDuration(r.durationMs)}</span>}
                   {r.status === 'running' && <span className="stage-dur pulse">running…</span>}
                 </div>
+                {r.stage === 'inject' && <div className="stage-meta"><span className="tag tag-fault">System-made — not a model error</span></div>}
                 {(r.model !== undefined || cost !== null) && (
                   <div className="stage-meta">
                     {r.model !== undefined && <span className="tag">{r.model}</span>}

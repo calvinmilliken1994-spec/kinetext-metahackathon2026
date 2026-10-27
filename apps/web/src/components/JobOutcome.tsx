@@ -1,6 +1,9 @@
 import type { JobDetail } from '../api.ts';
+import { ENGINES, ENGINE_IDS } from '../../../../packages/contracts/index.ts';
 import { describeJobCost } from '../lib/cost.ts';
+import { engineTitle } from '../lib/engines.ts';
 import { INTERRUPTED_TEXT, isInterrupted } from '../lib/jobs.ts';
+import { demoFaultNotice, repairAttemptCount } from '../lib/repairs.ts';
 
 /** Centre-column states for jobs that did not produce a runnable activity. `serverBusy`: /api/health busy flag (null = unknown). */
 export function JobOutcome({ detail, serverBusy }: { detail: JobDetail; serverBusy: boolean | null }) {
@@ -34,8 +37,8 @@ export function JobOutcome({ detail, serverBusy }: { detail: JobDetail; serverBu
         <h2>Not supported yet</h2>
         <blockquote>{reason}</blockquote>
         <p className="muted">
-          The only activity engine available today is <code>forces-1d-v1</code> (net force and mass → acceleration in one dimension).
-          Rather than force a mismatched simulation, the pipeline stopped here and nothing was generated.
+          Muse Spark can choose among these tested activity types: {ENGINE_IDS.map((id) => ENGINES[id].title).join('; ')}.
+          None of them fits this source, so rather than force a mismatched simulation the pipeline stopped here and nothing was generated.
         </p>
       </div>
     );
@@ -55,11 +58,21 @@ export function JobOutcome({ detail, serverBusy }: { detail: JobDetail; serverBu
     );
   }
   const failed = (report?.checks ?? []).filter((c) => !c.passed);
+  const chosen = engineTitle(summary.engine);
+  const repairCount = repairAttemptCount(summary.repairs, detail.events);
   return (
     <div className="outcome outcome-failed" role="alert">
       <p className="eyebrow">Generation did not finish</p>
       <h2>Blocked</h2>
+      {chosen !== null && <p className="muted">Activity type Muse chose: <strong>{chosen}</strong> (<code>{summary.engine}</code>)</p>}
+      {summary.demoFault !== undefined && <p className="callout callout-fault" role="note">{demoFaultNotice(summary.demoFault)}</p>}
       {summary.error !== undefined && <p>Error code: <code>{summary.error.code}</code>{summary.error.message ? <span className="muted"> — {summary.error.message}</span> : null}</p>}
+      {repairCount > 0 && (
+        <p>
+          Muse made {repairCount} repair attempt{repairCount === 1 ? '' : 's'}, but no revision passed every machine check
+          {summary.bestRevision !== undefined ? `; the checks below are from revision ${summary.bestRevision}, the one with the fewest failures` : ''}.
+        </p>
+      )}
       <p className="muted">Estimated cost: {describeJobCost({ totalCostUSD: summary.totalCostUSD, reservedUnknownUSD: summary.reservedUnknownUSD })}.</p>
       {failed.length > 0 && (
         <>
