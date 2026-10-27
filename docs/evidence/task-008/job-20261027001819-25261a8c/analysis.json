@@ -1,0 +1,116 @@
+{
+  "analysis": {
+    "activity": "forces-1d-v1",
+    "concepts": [
+      {
+        "evidence": [
+          {
+            "quote": "F = m * a",
+            "sourceId": "nasa-grc-equations-of-motion"
+          },
+          {
+            "quote": "a = F / m",
+            "sourceId": "nasa-grc-equations-of-motion"
+          }
+        ],
+        "id": "newtons-second-law",
+        "name": "Newton's second law"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "The force (F) will be the difference between the opposing forces (thrust minus drag).",
+            "sourceId": "nasa-grc-equations-of-motion"
+          },
+          {
+            "quote": "However, if the forces become unbalanced, the aircraft will move in the direction of the greater force.",
+            "sourceId": "nasa-grc-equations-of-motion"
+          }
+        ],
+        "id": "net-force-1d",
+        "name": "Net force in one dimension"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "For a constant force and constant mass, the acceleration remains constant.",
+            "sourceId": "nasa-grc-equations-of-motion"
+          },
+          {
+            "quote": "V = a * t + Vo",
+            "sourceId": "nasa-grc-equations-of-motion"
+          },
+          {
+            "quote": "x = (a * t^2) / 2 + Vo * t + xo",
+            "sourceId": "nasa-grc-equations-of-motion"
+          },
+          {
+            "quote": "we will consider only the horizontal (x-direction) motion",
+            "sourceId": "nasa-grc-equations-of-motion"
+          }
+        ],
+        "id": "constant-acceleration-motion",
+        "name": "Motion with constant acceleration"
+      }
+    ],
+    "objectives": [
+      "Use net force and mass to calculate acceleration in one dimension",
+      "Predict velocity and displacement over time for constant net force and constant mass"
+    ],
+    "supported": true,
+    "unsupportedReason": ""
+  },
+  "report": {
+    "artifactId": "source-analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis.gen.json"
+      },
+      {
+        "id": "analysis.invariants",
+        "kind": "semantic",
+        "passed": true,
+        "message": "invariants hold for supported=true"
+      },
+      {
+        "id": "analysis.concept-ids",
+        "kind": "semantic",
+        "passed": true,
+        "message": "all 3 concept id(s) are unique lowercase-kebab"
+      },
+      {
+        "id": "refs.sources",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 1 cited sourceId(s) have matching documents"
+      },
+      {
+        "id": "grounding.quotes",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 8 concept quote(s) appear in their source text after whitespace normalisation"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a17ab9-189d-7677-abc7-318f7f715888",
+    "usage": {
+      "promptTokens": 1073,
+      "completionTokens": 3988,
+      "reasoningTokens": 3663,
+      "cachedTokens": 0
+    },
+    "latencyMs": 14106,
+    "estCostUSD": 0.01829025,
+    "finishReason": "stop",
+    "attempts": 1
+  }
+}

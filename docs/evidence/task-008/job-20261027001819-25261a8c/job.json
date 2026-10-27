@@ -1,0 +1,13 @@
+{
+  "jobId": "job-20261027001819-25261a8c",
+  "sourceId": "nasa-grc-equations-of-motion",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-27T00:18:19.248Z",
+  "totalCostUSD": 0.041832,
+  "specId": "nasa-grc-equations-of-motion-job-20261027001819-25261a8c",
+  "publishable": true,
+  "checksPassed": 13,
+  "checksTotal": 13,
+  "finishedAt": "2026-10-27T00:18:54.247Z"
+}

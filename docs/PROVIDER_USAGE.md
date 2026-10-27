@@ -17,10 +17,11 @@ Estimates use local token counts × published Standard rates (input $1.25/M, cac
 | 4 | 2026-10-27 | Stage 2 live spike: analysis, unsupported source | muse-spark-1.3 | chatcmpl-01a17a7b-9f26-73da-9858-9c496d26d09d | 1,453 / 904 (847) | 0.005658 | `docs/evidence/task-004/` |
 
 | 5–7 | 2026-10-27 08:40 KST | First jobs through the product API (`job-20261026234008-04c93801` supported: analysis + spec; `job-20261026234051-0d51ecdc` unsupported: analysis) | muse-spark-1.3 | see `storage/runs/<job>/events.jsonl` | — | 0.017360 + 0.028178 + 0.005031 | product ledger |
+| 8–9 | 2026-10-27 09:18 KST | TASK-008 live run started from the web UI (`job-20261027001819-25261a8c`): analysis + spec, 13/13 | muse-spark-1.3 | see `docs/evidence/task-008/` | — | 0.018290 + 0.023541 | product ledger |
 
 From row 2 on, calls are also recorded by the product's own ledger (`storage/ledger.jsonl`, gitignored), which enforces the Stage 2 cap of USD 10.
 
-Cumulative estimated: **USD 0.0908** of 150 (Stage 2: USD 0.0906 of 10, per the product ledger).
+Cumulative estimated: **USD 0.1326** of 150 (Stage 2: USD 0.1324 of 10, per the product ledger).
 
 Checked 2026-10-27 KST. Public rates are not account credit balances. No paid infrastructure was provisioned.
 

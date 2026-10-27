@@ -1,0 +1,5 @@
+{"jobId":"job-20261026234051-0d51ecdc","seq":0,"stage":"ingest","status":"started","at":"2026-10-26T23:40:51.888Z"}
+{"jobId":"job-20261026234051-0d51ecdc","seq":1,"stage":"ingest","status":"succeeded","at":"2026-10-26T23:40:51.891Z","detail":"sha256 7ebd6e4acd15"}
+{"jobId":"job-20261026234051-0d51ecdc","seq":2,"stage":"analyze","status":"started","at":"2026-10-26T23:40:51.892Z"}
+{"jobId":"job-20261026234051-0d51ecdc","seq":3,"stage":"analyze","status":"succeeded","at":"2026-10-26T23:40:55.998Z","model":"muse-spark-1.3","responseId":"chatcmpl-01a17a96-a6e5-7045-a424-e6c1c521962d","usage":{"promptTokens":1453,"completionTokens":1117,"reasoningTokens":1060,"cachedTokens":1393},"latencyMs":4103,"estCostUSD":0.0050311999999999996,"detail":"unsupported: The source teaches sound speed dependence on gas properties and temperature and Mach number flight regimes, not how net force and mass determine acceleration in one dimension.; checks 5/5 passed"}
+{"jobId":"job-20261026234051-0d51ecdc","seq":4,"stage":"done","status":"succeeded","at":"2026-10-26T23:40:55.998Z","detail":"unsupported"}

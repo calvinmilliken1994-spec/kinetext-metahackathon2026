@@ -1,0 +1,177 @@
+{
+  "schemaVersion": "0.2.0",
+  "id": "nasa-grc-equations-of-motion-job-20261027001819-25261a8c",
+  "title": "Constant Force Motion in One Dimension",
+  "learningObjectives": [
+    "Use net force and mass to calculate acceleration in one dimension",
+    "Predict velocity and displacement over time for constant net force and constant mass"
+  ],
+  "sources": [
+    {
+      "id": "nasa-grc-equations-of-motion",
+      "title": "Equations of Motion — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+      "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/equations-of-motion/",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+      "sha256": "1f43ca9d8a7097f7898a56c0eef367132de6ac7e5fe28605b5504b696324dbf0"
+    }
+  ],
+  "explanations": [
+    {
+      "evidence": [
+        {
+          "quote": "F = m * a",
+          "sourceId": "nasa-grc-equations-of-motion"
+        },
+        {
+          "quote": "a = F / m",
+          "sourceId": "nasa-grc-equations-of-motion"
+        }
+      ],
+      "id": "newtons-second-law",
+      "text": "Acceleration equals net force divided by mass, expressed as F = m*a."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "The force (F) will be the difference between the opposing forces (thrust minus drag).",
+          "sourceId": "nasa-grc-equations-of-motion"
+        },
+        {
+          "quote": "However, if the forces become unbalanced, the aircraft will move in the direction of the greater force.",
+          "sourceId": "nasa-grc-equations-of-motion"
+        }
+      ],
+      "id": "net-force-thrust-drag",
+      "text": "In one direction the net force is thrust minus drag, and unbalanced forces cause motion toward the greater force."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "For a constant force and constant mass, the acceleration remains constant.",
+          "sourceId": "nasa-grc-equations-of-motion"
+        },
+        {
+          "quote": "V = a * t + Vo",
+          "sourceId": "nasa-grc-equations-of-motion"
+        }
+      ],
+      "id": "constant-acceleration-velocity",
+      "text": "With constant force and constant mass, acceleration stays constant and velocity changes linearly with time."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "x = (a * t^2) / 2 + Vo * t + xo",
+          "sourceId": "nasa-grc-equations-of-motion"
+        },
+        {
+          "quote": "we will consider only the horizontal (x-direction) motion",
+          "sourceId": "nasa-grc-equations-of-motion"
+        }
+      ],
+      "id": "constant-acceleration-position",
+      "text": "For horizontal motion, position depends on acceleration, time squared, initial velocity, and initial position."
+    }
+  ],
+  "simulation": {
+    "engine": "forces-1d-v1",
+    "equation": "a=F_net/m",
+    "massKg": {
+      "unit": "kg",
+      "default": 5,
+      "max": 20,
+      "min": 0.5
+    },
+    "netForceN": {
+      "unit": "N",
+      "default": 10,
+      "max": 50,
+      "min": -50
+    },
+    "durationS": 5,
+    "stepS": 0.02,
+    "scenario": {
+      "objectLabel": "Model aircraft",
+      "surfaceLabel": "Level flight, x-direction only"
+    },
+    "observables": [
+      "position",
+      "velocity",
+      "acceleration"
+    ]
+  },
+  "behavioralTests": [
+    {
+      "expectedAccelerationMps2": 2,
+      "massKg": 5,
+      "name": "positive net force accelerates forward",
+      "netForceN": 10,
+      "tolerance": 0.001
+    },
+    {
+      "expectedAccelerationMps2": -3,
+      "massKg": 4,
+      "name": "negative net force accelerates backward",
+      "netForceN": -12,
+      "tolerance": 0.001
+    },
+    {
+      "expectedAccelerationMps2": 0,
+      "massKg": 10,
+      "name": "zero net force gives zero acceleration",
+      "netForceN": 0,
+      "tolerance": 0.001
+    },
+    {
+      "expectedAccelerationMps2": 7.5,
+      "massKg": 2,
+      "name": "larger force on small mass",
+      "netForceN": 15,
+      "tolerance": 0.001
+    }
+  ],
+  "predictions": [
+    {
+      "expectedAccelerationMps2": 4,
+      "id": "pred-1",
+      "massKg": 5,
+      "netForceN": 20,
+      "prompt": "Predict the acceleration when net force is 20 N and mass is 5 kg.",
+      "tolerance": 0.001
+    },
+    {
+      "expectedAccelerationMps2": -3,
+      "id": "pred-2",
+      "massKg": 10,
+      "netForceN": -30,
+      "prompt": "Predict the acceleration when net force is -30 N and mass is 10 kg.",
+      "tolerance": 0.001
+    },
+    {
+      "expectedAccelerationMps2": 5,
+      "id": "pred-3",
+      "massKg": 2,
+      "netForceN": 10,
+      "prompt": "Predict the acceleration when net force is 10 N and mass is 2 kg.",
+      "tolerance": 0.001
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a17ab9-6a3a-762c-b435-4e58b0c0e44a",
+    "runId": "job-20261027001819-25261a8c",
+    "promptVersion": "v1",
+    "revision": 1,
+    "repairOf": null,
+    "generatedAt": "2026-10-27T00:18:54.231Z"
+  }
+}

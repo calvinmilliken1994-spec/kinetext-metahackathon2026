@@ -1,0 +1,62 @@
+{
+  "analysis": {
+    "activity": "none",
+    "concepts": [],
+    "objectives": [],
+    "supported": false,
+    "unsupportedReason": "The source teaches sound speed dependence on gas properties and temperature and Mach number flight regimes, not how net force and mass determine acceleration in one dimension."
+  },
+  "report": {
+    "artifactId": "source-analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis.gen.json"
+      },
+      {
+        "id": "analysis.invariants",
+        "kind": "semantic",
+        "passed": true,
+        "message": "invariants hold for supported=false"
+      },
+      {
+        "id": "analysis.concept-ids",
+        "kind": "semantic",
+        "passed": true,
+        "message": "all 0 concept id(s) are unique lowercase-kebab"
+      },
+      {
+        "id": "refs.sources",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 0 cited sourceId(s) have matching documents"
+      },
+      {
+        "id": "grounding.quotes",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 0 concept quote(s) appear in their source text after whitespace normalisation"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a17a96-a6e5-7045-a424-e6c1c521962d",
+    "usage": {
+      "promptTokens": 1453,
+      "completionTokens": 1117,
+      "reasoningTokens": 1060,
+      "cachedTokens": 1393
+    },
+    "latencyMs": 4103,
+    "estCostUSD": 0.0050311999999999996,
+    "finishReason": "stop",
+    "attempts": 1
+  }
+}
