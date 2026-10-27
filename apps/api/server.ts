@@ -6,12 +6,18 @@
 // Nothing is logged here (the server must never echo request bodies).
 //
 // Routes:
-//   GET  /api/health      → {ok, live}
+//   GET  /api/health      → {ok, live, busy}
 //   GET  /api/sources     → metadata list (no text)
 //   GET  /api/sources/:id → metadata + hash-checked text
 //   GET  /api/jobs        → newest-first job summaries
 //   GET  /api/jobs/:id    → {summary, events, analysis?, spec?, report?}
 //   POST /api/jobs        → 202 {jobId}; one live job at a time (409 while running)
+//
+// Authorization (TASK-009 R-07): every request must carry an allowed Host
+// (127.0.0.1:<bound port>, localhost:<bound port>, or an allowedHosts entry —
+// by default the Vite dev proxy hosts); POST /api/jobs additionally requires
+// an Origin of http:// + an allowed host when the header is present. Anything
+// else is 403 before routing. (A per-session token is deferred technical debt.)
 
 import { createServer } from 'node:http';
 import type { IncomingMessage, Server, ServerResponse } from 'node:http';
@@ -24,9 +30,12 @@ export interface ApiOptions {
   sourcesDir?: URL;
   /** null disables live generation: POST /api/jobs then answers 503 LIVE_DISABLED. */
   startJob: ((sourceId: string) => { jobId: string; done: Promise<JobSummary> }) | null;
+  /** Extra allowed Host values (and http://<value> Origins); replaces the Vite defaults. */
+  allowedHosts?: string[];
 }
 
 const MAX_BODY_BYTES = 10 * 1024;
+const DEFAULT_ALLOWED_HOSTS: readonly string[] = ['127.0.0.1:5173', 'localhost:5173'];
 
 interface SourceRefResponse {
   id: string;
@@ -107,16 +116,35 @@ function readBodyLimited(req: IncomingMessage, limit: number): Promise<string> {
 export function createApiServer(opts: ApiOptions): Server {
   /** Guards runaway spend: at most one live job between start and settlement. */
   let inFlight: Promise<JobSummary> | null = null;
+  const allowedHosts: readonly string[] = opts.allowedHosts ?? DEFAULT_ALLOWED_HOSTS;
+
+  /** R-07: the allowed Host values, including this server's actual bound port. */
+  function hostAllowed(rawHost: string): boolean {
+    const host = rawHost.toLowerCase();
+    const address = server.address();
+    if (address !== null && typeof address === 'object') {
+      if (host === `127.0.0.1:${address.port}` || host === `localhost:${address.port}`) {
+        return true;
+      }
+    }
+    return allowedHosts.some(allowed => allowed.toLowerCase() === host);
+  }
 
   async function handle(req: IncomingMessage, res: ServerResponse): Promise<void> {
     const method = req.method ?? 'GET';
     const pathname = new URL(req.url ?? '/', 'http://127.0.0.1').pathname;
 
+    // R-07: Host allowlist on EVERY request, before any routing.
+    if (!hostAllowed(req.headers.host ?? '')) {
+      return sendError(res, 403, 'HOST_NOT_ALLOWED');
+    }
+
     if (pathname === '/api/health') {
       if (method !== 'GET') {
         return sendError(res, 405, 'METHOD_NOT_ALLOWED');
       }
-      return sendJson(res, 200, { ok: true, live: opts.startJob !== null });
+      // busy (R-10): an in-process job is running right now.
+      return sendJson(res, 200, { ok: true, live: opts.startJob !== null, busy: inFlight !== null });
     }
 
     if (pathname === '/api/sources') {
@@ -215,6 +243,14 @@ export function createApiServer(opts: ApiOptions): Server {
   }
 
   async function handleCreateJob(req: IncomingMessage, res: ServerResponse): Promise<void> {
+    // R-07: a browser Origin, when present, must be http:// + an allowed host.
+    const origin = req.headers.origin;
+    if (typeof origin === 'string') {
+      const prefix = 'http://';
+      if (!origin.startsWith(prefix) || !hostAllowed(origin.slice(prefix.length))) {
+        return sendError(res, 403, 'ORIGIN_NOT_ALLOWED');
+      }
+    }
     const start = opts.startJob;
     if (start === null) {
       return sendError(res, 503, 'LIVE_DISABLED');
@@ -274,7 +310,7 @@ export function createApiServer(opts: ApiOptions): Server {
     return sendJson(res, 202, { jobId: started.jobId });
   }
 
-  return createServer((req: IncomingMessage, res: ServerResponse) => {
+  const server: Server = createServer((req: IncomingMessage, res: ServerResponse) => {
     handle(req, res).catch(() => {
       // Fixed, content-free 500; never expose internals.
       if (!res.headersSent) {
@@ -284,4 +320,5 @@ export function createApiServer(opts: ApiOptions): Server {
       }
     });
   });
+  return server;
 }

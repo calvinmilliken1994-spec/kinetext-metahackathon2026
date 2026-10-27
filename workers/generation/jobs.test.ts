@@ -2,10 +2,10 @@
 // No network, no credits, no .env access.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { existsSync, mkdtempSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { startJob, listJobs, readJob } from './jobs.ts';
+import { startJob, listJobs, readJob, recoverInterruptedJobs } from './jobs.ts';
 import type { JobSummary } from './jobs.ts';
 import { MetaError } from '../../packages/meta/client.ts';
 import type { CompleteRequest, MetaClient } from '../../packages/meta/client.ts';
@@ -83,10 +83,11 @@ test('startJob: supported NASA source runs the full pipeline to a publishable sp
 
   assert.equal(summary.status, 'succeeded');
   assert.equal(summary.publishable, true);
-  assert.equal(summary.checksPassed, 13);
-  assert.equal(summary.checksTotal, 13);
+  assert.equal(summary.checksPassed, 14);
+  assert.equal(summary.checksTotal, 14);
   assert.equal(summary.specId, `nasa-grc-equations-of-motion-${jobId}`.slice(0, 64));
   assert.equal(summary.totalCostUSD, 0.02);
+  assert.equal(summary.reservedUnknownUSD, 0, 'a fully usage-billed run reserves nothing unknown');
   assert.equal(summary.error, undefined);
   assert.ok(summary.finishedAt !== undefined);
 
@@ -126,10 +127,10 @@ test('startJob: supported NASA source runs the full pipeline to a publishable sp
   assert.equal(analyzeOk.model, 'muse-spark-1.3');
   assert.equal(analyzeOk.responseId, 'fake-analysis-1');
   assert.equal(analyzeOk.estCostUSD, 0.01);
-  assert.match(analyzeOk.detail ?? '', /^supported; checks 5\/5 passed$/);
+  assert.match(analyzeOk.detail ?? '', /^supported; checks 6\/6 passed$/);
   const validateOk = events[7];
   assert.ok(validateOk !== undefined);
-  assert.equal(validateOk.detail, '13/13 checks passed');
+  assert.equal(validateOk.detail, '14/14 checks passed');
 
   const spec = JSON.parse(readFileSync(join(runDir, 'spec.r1.json'), 'utf8')) as { id: string; provenance: { runId: string } };
   assert.equal(spec.id, summary.specId);
@@ -159,7 +160,7 @@ test('startJob: unsupported source ends honestly with status unsupported and no 
   );
   const analyzeOk = events[3];
   assert.ok(analyzeOk !== undefined);
-  assert.match(analyzeOk.detail ?? '', /^unsupported: .+; checks 5\/5 passed$/);
+  assert.match(analyzeOk.detail ?? '', /^unsupported: .+; checks 6\/6 passed$/);
   const doneOk = events[4];
   assert.ok(doneOk !== undefined);
   assert.equal(doneOk.detail, 'unsupported');
@@ -176,10 +177,11 @@ test('startJob: MetaError TIMEOUT on analyze fails the job with the error code',
   assert.equal(summary.status, 'failed');
   assert.deepEqual(summary.error, { code: 'TIMEOUT', message: 'timeout' });
   assert.equal(summary.totalCostUSD, 0);
+  assert.equal(summary.reservedUnknownUSD, 0, 'a MetaError without charge information reserves nothing');
   const events = readEvents(storageDir, jobId);
   const analyzeFailed = events.find(e => e.stage === 'analyze' && e.status === 'failed');
   assert.ok(analyzeFailed !== undefined, 'analyze failed event exists');
-  assert.equal(analyzeFailed.detail, 'TIMEOUT: timeout');
+  assert.equal(analyzeFailed.detail, 'TIMEOUT');
   assert.ok(!events.some(e => e.stage === 'specify'), 'pipeline stops at the failed stage');
   assert.ok(!existsSync(join(storageDir, 'runs', jobId, 'analysis.json')));
 });
@@ -197,7 +199,9 @@ test('startJob: MetaError with a receipt on specify accounts its cost', async ()
   const summary = await done;
   assert.equal(summary.status, 'failed');
   assert.equal(summary.error?.code, 'OUTPUT_TRUNCATED');
+  assert.equal(summary.error?.message, 'output truncated');
   assert.equal(summary.totalCostUSD, 0.02, 'analyze receipt + failed specify receipt');
+  assert.equal(summary.reservedUnknownUSD, 0, 'a usage-basis receipt reserves nothing unknown');
 });
 
 test('startJob: corrupted evidence quote fails validation with VALIDATION_FAILED', async () => {
@@ -216,12 +220,13 @@ test('startJob: corrupted evidence quote fails validation with VALIDATION_FAILED
   const summary = await done;
   assert.equal(summary.status, 'failed');
   assert.equal(summary.error?.code, 'VALIDATION_FAILED');
+  assert.equal(summary.error?.message, 'generated spec failed validation');
   assert.equal(summary.publishable, undefined);
   const events = readEvents(storageDir, jobId);
   const validateFailed = events.find(e => e.stage === 'validate' && e.status === 'failed');
   assert.ok(validateFailed !== undefined, 'validate failed event exists');
   assert.ok(validateFailed.detail?.includes('grounding.quotes'), `detail names the failing check: ${validateFailed.detail}`);
-  assert.match(validateFailed.detail ?? '', /^12\/13 checks passed/);
+  assert.match(validateFailed.detail ?? '', /^VALIDATION_FAILED; failed checks: grounding\.quotes$/);
   assert.ok(!events.some(e => e.stage === 'done'), 'no done event for a failed job');
   assert.ok(existsSync(join(storageDir, 'runs', jobId, 'report.r1.json')));
 });
@@ -236,7 +241,10 @@ test('startJob: unknown source id fails ingest with SOURCE_UNAVAILABLE', async (
   const summary = await done;
   assert.equal(summary.status, 'failed');
   assert.equal(summary.error?.code, 'SOURCE_UNAVAILABLE');
+  assert.equal(summary.error?.message, 'source unavailable', 'fixed public message, never the raw fs error');
   const events = readEvents(storageDir, jobId);
+  const ingestFailed = events.find(e => e.stage === 'ingest' && e.status === 'failed');
+  assert.equal(ingestFailed?.detail, 'SOURCE_UNAVAILABLE');
   assert.deepEqual(
     events.map(e => `${e.stage}:${e.status}`),
     ['ingest:started', 'ingest:failed'],
@@ -299,4 +307,252 @@ test('listJobs returns newest first and skips unreadable dirs; readJob validates
 
 test('listJobs on a missing storage dir returns an empty list', () => {
   assert.deepEqual(listJobs(join(tempStorage(), 'nope')), []);
+});
+
+/* ------------------------------------------------------------------ */
+/* R-01 — fixed public error messages; no provider/exception text      */
+/* ------------------------------------------------------------------ */
+
+test('startJob: MetaError extras never reach job.json or events.jsonl (R-01)', async () => {
+  const storageDir = tempStorage();
+  const metaErr = new MetaError('SERVER_ERROR', undefined, { status: 500, providerErrorType: 'server_error' });
+  // A synthetic marker in an unrelated property, standing in for a reflected provider body.
+  (metaErr as unknown as Record<string, unknown>)['providerBody'] = 'SECRET-MARKER-KEY reflected provider text';
+  const client: MetaClient = {
+    complete: async () => {
+      throw metaErr;
+    },
+  };
+  const { jobId, done } = startJob('nasa-grc-equations-of-motion', { client, storageDir, purpose: 'test-live' });
+  const summary = await done;
+  assert.deepEqual(summary.error, { code: 'SERVER_ERROR', message: 'server error' });
+  const runDir = join(storageDir, 'runs', jobId);
+  const jobJson = readFileSync(join(runDir, 'job.json'), 'utf8');
+  const eventsRaw = readFileSync(join(runDir, 'events.jsonl'), 'utf8');
+  for (const blob of [jobJson, eventsRaw, JSON.stringify(summary)]) {
+    assert.ok(!blob.includes('SECRET-MARKER'), `synthetic marker must not be persisted anywhere: ${blob.slice(0, 200)}`);
+  }
+  const failedEvent = readEvents(storageDir, jobId).find(e => e.stage === 'analyze' && e.status === 'failed');
+  assert.equal(failedEvent?.detail, 'SERVER_ERROR', 'failure detail is the code only');
+});
+
+test('startJob: an unexpected exception becomes INTERNAL with a fixed message (R-01)', async () => {
+  const storageDir = tempStorage();
+  const client: MetaClient = {
+    complete: async () => {
+      throw new Error('SECRET-MARKER source text');
+    },
+  };
+  const { jobId, done } = startJob('nasa-grc-equations-of-motion', { client, storageDir, purpose: 'test-live' });
+  const summary = await done;
+  assert.deepEqual(summary.error, { code: 'INTERNAL', message: 'Unexpected internal error' });
+  const runDir = join(storageDir, 'runs', jobId);
+  assert.ok(!readFileSync(join(runDir, 'job.json'), 'utf8').includes('SECRET-MARKER'));
+  assert.ok(!readFileSync(join(runDir, 'events.jsonl'), 'utf8').includes('SECRET-MARKER'));
+  const failedEvent = readEvents(storageDir, jobId).find(e => e.status === 'failed');
+  assert.equal(failedEvent?.detail, 'INTERNAL');
+});
+
+/* ------------------------------------------------------------------ */
+/* R-09 — failure costs: chargedUSD and reservedUnknownUSD             */
+/* ------------------------------------------------------------------ */
+
+test('startJob: timeout with chargedUSD counts into totalCostUSD and reservedUnknownUSD (R-09 reviewer probe)', async () => {
+  const storageDir = tempStorage();
+  const err = new MetaError('TIMEOUT', undefined, { chargedUSD: 0.027565, costBasis: 'reservation' });
+  const { jobId, done } = startJob('nasa-grc-equations-of-motion', {
+    client: fakeClient({ analyzeError: err }),
+    storageDir,
+    purpose: 'test-live',
+  });
+  const summary = await done;
+  assert.equal(summary.status, 'failed');
+  assert.equal(summary.totalCostUSD, 0.027565, 'the reserved-unknown charge is part of the total');
+  assert.equal(summary.reservedUnknownUSD, 0.027565);
+  const failedEvent = readEvents(storageDir, jobId).find(e => e.stage === 'analyze' && e.status === 'failed');
+  assert.equal(failedEvent?.estCostUSD, 0.027565, 'the failed-stage event carries the charge');
+  assert.equal(failedEvent?.detail, 'TIMEOUT; cost basis: reservation (outcome uncertain)');
+});
+
+test('startJob: a usage-basis failure keeps reservedUnknownUSD at zero (R-09)', async () => {
+  const storageDir = tempStorage();
+  const err = new MetaError('BAD_REQUEST', undefined, { status: 400, chargedUSD: 0, costBasis: 'usage' });
+  const { jobId, done } = startJob('nasa-grc-equations-of-motion', {
+    client: fakeClient({ analyzeError: err }),
+    storageDir,
+    purpose: 'test-live',
+  });
+  const summary = await done;
+  assert.equal(summary.totalCostUSD, 0);
+  assert.equal(summary.reservedUnknownUSD, 0);
+  const failedEvent = readEvents(storageDir, jobId).find(e => e.stage === 'analyze' && e.status === 'failed');
+  assert.equal(failedEvent?.detail, 'BAD_REQUEST');
+  assert.equal(failedEvent?.estCostUSD, 0);
+});
+
+test('startJob: a reservation-basis receipt on a success path also lands in reservedUnknownUSD (R-09)', async () => {
+  const storageDir = tempStorage();
+  const reservationReceipt: MetaReceipt = { ...fakeReceipt('fake-reserved'), costBasis: 'reservation' };
+  const client: MetaClient = {
+    complete: async <T>(req: CompleteRequest): Promise<{ data: T; receipt: MetaReceipt }> => {
+      if (req.schemaName === 'source_analysis') {
+        return { data: analysisFixture as T, receipt: reservationReceipt };
+      }
+      return { data: genFixture as T, receipt: fakeReceipt('fake-gen-1') };
+    },
+  };
+  const { done } = startJob('nasa-grc-equations-of-motion', { client, storageDir, purpose: 'test-live' });
+  const summary = await done;
+  assert.equal(summary.status, 'succeeded');
+  assert.equal(summary.totalCostUSD, 0.02);
+  assert.equal(summary.reservedUnknownUSD, 0.01, 'only the reservation-basis receipt is unknown-outcome');
+});
+
+/* ------------------------------------------------------------------ */
+/* R-11 — job deadline and per-stage output caps                       */
+/* ------------------------------------------------------------------ */
+
+test('startJob: the job deadline aborts a hanging client with DEADLINE_EXCEEDED (R-11)', async () => {
+  const storageDir = tempStorage();
+  const client: MetaClient = {
+    complete: <T>(req: CompleteRequest): Promise<{ data: T; receipt: MetaReceipt }> =>
+      new Promise<{ data: T; receipt: MetaReceipt }>((_resolve, reject) => {
+        const signal = req.signal;
+        if (signal === undefined) {
+          reject(new Error('NO_SIGNAL_PASSED'));
+          return;
+        }
+        const onAbort = (): void => {
+          reject(new MetaError('DEADLINE_EXCEEDED', undefined, { chargedUSD: 0, costBasis: 'usage' }));
+        };
+        if (signal.aborted) {
+          onAbort();
+          return;
+        }
+        signal.addEventListener('abort', onAbort, { once: true });
+      }),
+  };
+  const { done } = startJob('nasa-grc-equations-of-motion', {
+    client,
+    storageDir,
+    purpose: 'test-live',
+    limits: { maxJobWallTimeMs: 30 },
+  });
+  const summary = await done;
+  assert.equal(summary.status, 'failed');
+  assert.deepEqual(summary.error, { code: 'DEADLINE_EXCEEDED', message: 'job deadline exceeded' });
+});
+
+test('startJob: one signal and per-stage output caps reach every client call (R-11)', async () => {
+  const inner = fakeClient();
+  const seen: { schema: string; maxOutputTokens: number; hasSignal: boolean }[] = [];
+  const client: MetaClient = {
+    complete: async <T>(req: CompleteRequest): Promise<{ data: T; receipt: MetaReceipt }> => {
+      seen.push({ schema: req.schemaName, maxOutputTokens: req.maxOutputTokens, hasSignal: req.signal !== undefined });
+      return inner.complete<T>(req);
+    },
+  };
+  const first = startJob('nasa-grc-equations-of-motion', { client, storageDir: tempStorage(), purpose: 'test-live' });
+  await first.done;
+  assert.deepEqual(seen, [
+    { schema: 'source_analysis', maxOutputTokens: 6000, hasSignal: true },
+    { schema: 'activity_spec', maxOutputTokens: 8000, hasSignal: true },
+  ], 'defaults match config/resource-limits.json and the pipeline contract');
+
+  seen.length = 0;
+  const second = startJob('nasa-grc-equations-of-motion', {
+    client,
+    storageDir: tempStorage(),
+    purpose: 'test-live',
+    limits: { maxJobWallTimeMs: 60000, analysisMaxOutputTokens: 1234, specMaxOutputTokens: 4321 },
+  });
+  await second.done;
+  assert.deepEqual(seen.map(s => s.maxOutputTokens), [1234, 4321], 'JobDeps.limits override the stage caps');
+});
+
+/* ------------------------------------------------------------------ */
+/* R-10 — atomic artifacts and startup recovery                        */
+/* ------------------------------------------------------------------ */
+
+test('startJob: JSON artifacts land atomically with no leftover temp files (R-10)', async () => {
+  const storageDir = tempStorage();
+  const { jobId, done } = startJob('nasa-grc-equations-of-motion', {
+    client: fakeClient(),
+    storageDir,
+    purpose: 'test-live',
+  });
+  await done;
+  const files = readdirSync(join(storageDir, 'runs', jobId)).sort();
+  assert.deepEqual(files, ['analysis.json', 'events.jsonl', 'job.json', 'report.r1.json', 'spec.r1.json']);
+  for (const f of files) {
+    assert.ok(!f.includes('.tmp'), `no temp artifact may remain: ${f}`);
+  }
+});
+
+test('recoverInterruptedJobs: a job left running by a previous process becomes failed/INTERRUPTED (R-10 reviewer probe)', async () => {
+  const storageDir = tempStorage();
+  const jobId = 'job-20260101000000-deadbeef';
+  const runDir = join(storageDir, 'runs', jobId);
+  mkdirSync(runDir, { recursive: true });
+  writeFileSync(
+    join(runDir, 'job.json'),
+    JSON.stringify(
+      {
+        jobId,
+        sourceId: 'nasa-grc-equations-of-motion',
+        status: 'running',
+        purpose: 'test-live',
+        createdAt: '2026-01-01T00:00:00.000Z',
+        totalCostUSD: 0.01,
+        reservedUnknownUSD: 0.01,
+      },
+      null,
+      2,
+    ),
+  );
+  writeFileSync(
+    join(runDir, 'events.jsonl'),
+    `${JSON.stringify({ jobId, seq: 0, stage: 'ingest', status: 'started', at: '2026-01-01T00:00:00.000Z' })}\n` +
+      `${JSON.stringify({ jobId, seq: 1, stage: 'analyze', status: 'started', at: '2026-01-01T00:00:01.000Z' })}\n`,
+  );
+  // A finished job that recovery must not touch.
+  const finished = startJob('nasa-grc-speed-of-sound', {
+    client: fakeClient({ analysis: unsupportedFixture }),
+    storageDir,
+    purpose: 'test-live',
+  });
+  await finished.done;
+
+  const recovered = recoverInterruptedJobs(storageDir, () => new Date('2026-02-02T00:00:00.000Z'));
+  assert.deepEqual(recovered, [jobId]);
+
+  const job = readJob(storageDir, jobId);
+  assert.ok(job !== null);
+  assert.equal(job.summary.status, 'failed');
+  assert.deepEqual(job.summary.error, {
+    code: 'INTERRUPTED',
+    message: 'The server stopped before this job finished.',
+  });
+  assert.equal(job.summary.finishedAt, '2026-02-02T00:00:00.000Z');
+  assert.equal(job.summary.totalCostUSD, 0.01, 'already-accounted cost is kept');
+  assert.equal(job.summary.reservedUnknownUSD, 0.01, 'unknown reservations are never refunded by recovery');
+  const last = job.events[job.events.length - 1];
+  assert.equal(last?.stage, 'done');
+  assert.equal(last?.status, 'failed');
+  assert.equal(last?.detail, 'INTERRUPTED');
+  assert.equal(last?.seq, 2, 'the recovery event continues the sequence');
+  assert.equal(last?.at, '2026-02-02T00:00:00.000Z');
+
+  // The finished job is untouched and recovery is idempotent.
+  const untouched = readJob(storageDir, finished.jobId);
+  assert.equal(untouched?.summary.status, 'unsupported');
+  assert.deepEqual(recoverInterruptedJobs(storageDir), []);
+  for (const f of readdirSync(runDir)) {
+    assert.ok(!f.includes('.tmp'), `no temp artifact may remain: ${f}`);
+  }
+});
+
+test('recoverInterruptedJobs: missing or empty storage recovers nothing', () => {
+  assert.deepEqual(recoverInterruptedJobs(join(tempStorage(), 'nope')), []);
+  assert.deepEqual(recoverInterruptedJobs(tempStorage()), []);
 });

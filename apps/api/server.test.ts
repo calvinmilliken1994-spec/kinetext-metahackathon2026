@@ -3,14 +3,15 @@
 // No network beyond localhost, no credits, no .env access.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, readFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import { request as httpRequest } from 'node:http';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import type { AddressInfo } from 'node:net';
 import type { Server } from 'node:http';
 import { createApiServer } from './server.ts';
 import type { ApiOptions } from './server.ts';
-import { startJob as realStartJob } from '../../workers/generation/jobs.ts';
+import { startJob as realStartJob, recoverInterruptedJobs } from '../../workers/generation/jobs.ts';
 import type { JobSummary } from '../../workers/generation/jobs.ts';
 import { MetaError } from '../../packages/meta/client.ts';
 import type { CompleteRequest, MetaClient } from '../../packages/meta/client.ts';
@@ -88,11 +89,11 @@ function assertSecurityHeaders(headers: Headers): void {
 
 const noStart: ApiOptions['startJob'] = null;
 
-test('GET /api/health reports ok and the live flag', async () => {
+test('GET /api/health reports ok, the live flag and busy', async () => {
   await withServer({ storageDir: tempStorage(), startJob: noStart }, async base => {
     const off = await getJson(base, '/api/health');
     assert.equal(off.status, 200);
-    assert.deepEqual(off.body, { ok: true, live: false });
+    assert.deepEqual(off.body, { ok: true, live: false, busy: false });
     assertSecurityHeaders(off.headers);
   });
   const fakeStart = (sourceId: string) => ({
@@ -104,12 +105,48 @@ test('GET /api/health reports ok and the live flag', async () => {
       purpose: 'test-live' as const,
       createdAt: new Date().toISOString(),
       totalCostUSD: 0,
+      reservedUnknownUSD: 0,
     }),
   });
   await withServer({ storageDir: tempStorage(), startJob: fakeStart }, async base => {
     const on = await getJson(base, '/api/health');
     assert.equal(on.status, 200);
-    assert.deepEqual(on.body, { ok: true, live: true });
+    assert.deepEqual(on.body, { ok: true, live: true, busy: false });
+  });
+});
+
+test('GET /api/health busy is true while an in-process job runs (R-10)', async () => {
+  let release!: (s: JobSummary) => void;
+  const gate = new Promise<JobSummary>(resolve => {
+    release = resolve;
+  });
+  const fakeStart = (_sourceId: string) => ({
+    jobId: 'job-busy',
+    done: gate,
+  });
+  await withServer({ storageDir: tempStorage(), startJob: fakeStart }, async base => {
+    const before = await getJson(base, '/api/health');
+    assert.deepEqual(before.body, { ok: true, live: true, busy: false });
+    const post = await fetch(`${base}/api/jobs`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ sourceId: 'nasa-grc-equations-of-motion' }),
+    });
+    assert.equal(post.status, 202);
+    const during = await getJson(base, '/api/health');
+    assert.deepEqual(during.body, { ok: true, live: true, busy: true }, 'busy while the job is in flight');
+    release({
+      jobId: 'job-busy',
+      sourceId: 'nasa-grc-equations-of-motion',
+      status: 'succeeded',
+      purpose: 'test-live',
+      createdAt: new Date().toISOString(),
+      totalCostUSD: 0,
+      reservedUnknownUSD: 0,
+    });
+    await new Promise(resolve => setTimeout(resolve, 20));
+    const after = await getJson(base, '/api/health');
+    assert.deepEqual(after.body, { ok: true, live: true, busy: false }, 'busy clears once the job settles');
   });
 });
 
@@ -173,6 +210,7 @@ test('POST /api/jobs validates body, content-type, size and source existence', a
         purpose: 'test-live',
         createdAt: new Date().toISOString(),
         totalCostUSD: 0,
+        reservedUnknownUSD: 0,
       }),
     };
   };
@@ -225,6 +263,7 @@ test('POST /api/jobs accepts one job, blocks while it runs, then accepts again',
             purpose: 'test-live',
             createdAt: new Date().toISOString(),
             totalCostUSD: 0,
+            reservedUnknownUSD: 0,
           });
     return { jobId, done };
   };
@@ -251,6 +290,7 @@ test('POST /api/jobs accepts one job, blocks while it runs, then accepts again',
       purpose: 'test-live',
       createdAt: new Date().toISOString(),
       totalCostUSD: 0,
+      reservedUnknownUSD: 0,
     });
     await new Promise(resolve => setTimeout(resolve, 20));
 
@@ -277,7 +317,7 @@ test('GET /api/jobs and /api/jobs/:id serve worker-persisted runs', async () => 
     assert.equal(jobs.length, 1);
     assert.equal(jobs[0]?.jobId, jobId);
     assert.equal(jobs[0]?.status, 'succeeded');
-    assert.equal(jobs[0]?.checksPassed, 13);
+    assert.equal(jobs[0]?.checksPassed, 14);
 
     const detail = await getJson(base, `/api/jobs/${jobId}`);
     assert.equal(detail.status, 200);
@@ -376,5 +416,237 @@ test('error responses never leak internals', async () => {
     const text = await res.text();
     assert.ok(!text.includes('at '), 'no stack frames');
     assert.ok(!text.includes('ENOENT'), 'no fs internals');
+  });
+});
+
+/* ------------------------------------------------------------------ */
+/* R-07 — Host and Origin allowlists                                   */
+/* ------------------------------------------------------------------ */
+
+/** Raw loopback request with fully custom headers (fetch forbids Host/Origin). */
+function rawHttp(
+  port: number,
+  opts: { method?: string; path: string; headers?: Record<string, string>; body?: string },
+): Promise<{ status: number; bodyText: string }> {
+  return new Promise((resolve, reject) => {
+    const req = httpRequest(
+      { host: '127.0.0.1', port, path: opts.path, method: opts.method ?? 'GET', headers: opts.headers ?? {} },
+      res => {
+        const chunks: Buffer[] = [];
+        res.on('data', (c: Buffer) => chunks.push(c));
+        res.on('end', () => resolve({ status: res.statusCode ?? 0, bodyText: Buffer.concat(chunks).toString('utf8') }));
+      },
+    );
+    req.on('error', reject);
+    if (opts.body !== undefined) {
+      req.write(opts.body);
+    }
+    req.end();
+  });
+}
+
+const postBody = JSON.stringify({ sourceId: 'nasa-grc-equations-of-motion' });
+
+function recordingStart(): { start: NonNullable<ApiOptions['startJob']>; started: string[] } {
+  const started: string[] = [];
+  return {
+    started,
+    start: (sourceId: string) => {
+      started.push(sourceId);
+      return {
+        jobId: `job-${started.length}`,
+        done: Promise.resolve<JobSummary>({
+          jobId: `job-${started.length}`,
+          sourceId,
+          status: 'succeeded',
+          purpose: 'test-live',
+          createdAt: new Date().toISOString(),
+          totalCostUSD: 0,
+          reservedUnknownUSD: 0,
+        }),
+      };
+    },
+  };
+}
+
+test('R-07: foreign Host is rejected with 403 HOST_NOT_ALLOWED on every route', async () => {
+  const rec = recordingStart();
+  await withServer({ storageDir: tempStorage(), startJob: rec.start }, async base => {
+    const port = Number(new URL(base).port);
+    // Reviewer P1: a loopback POST under an attacker-controlled hostname used to be accepted with 202.
+    const post = await rawHttp(port, {
+      method: 'POST',
+      path: '/api/jobs',
+      headers: { host: `attacker.example:${port}`, 'content-type': 'application/json' },
+      body: postBody,
+    });
+    assert.equal(post.status, 403);
+    assert.deepEqual(JSON.parse(post.bodyText), { error: 'HOST_NOT_ALLOWED' });
+    const health = await rawHttp(port, { path: '/api/health', headers: { host: `attacker.example:${port}` } });
+    assert.equal(health.status, 403);
+    assert.deepEqual(JSON.parse(health.bodyText), { error: 'HOST_NOT_ALLOWED' });
+    assert.deepEqual(rec.started, [], 'no job is started for a rejected host');
+    // The server's own origins stay allowed.
+    const loopback = await rawHttp(port, { path: '/api/health', headers: { host: `127.0.0.1:${port}` } });
+    assert.equal(loopback.status, 200);
+    const localhost = await rawHttp(port, { path: '/api/health', headers: { host: `localhost:${port}` } });
+    assert.equal(localhost.status, 200);
+  });
+});
+
+test('R-07: foreign Origin on POST /api/jobs is rejected with 403 ORIGIN_NOT_ALLOWED', async () => {
+  const rec = recordingStart();
+  await withServer({ storageDir: tempStorage(), startJob: rec.start }, async base => {
+    const port = Number(new URL(base).port);
+    const res = await rawHttp(port, {
+      method: 'POST',
+      path: '/api/jobs',
+      headers: { host: `127.0.0.1:${port}`, origin: 'http://attacker.example', 'content-type': 'application/json' },
+      body: postBody,
+    });
+    assert.equal(res.status, 403);
+    assert.deepEqual(JSON.parse(res.bodyText), { error: 'ORIGIN_NOT_ALLOWED' });
+    assert.deepEqual(rec.started, []);
+    // An https Origin for an allowed host is still rejected: only http:// + allowed host matches.
+    const secure = await rawHttp(port, {
+      method: 'POST',
+      path: '/api/jobs',
+      headers: { host: `127.0.0.1:${port}`, origin: `https://127.0.0.1:${port}`, 'content-type': 'application/json' },
+      body: postBody,
+    });
+    assert.equal(secure.status, 403);
+    assert.deepEqual(JSON.parse(secure.bodyText), { error: 'ORIGIN_NOT_ALLOWED' });
+  });
+});
+
+test('R-07: the Vite development proxy (Host 127.0.0.1:5173 + matching Origin) is accepted', async () => {
+  const rec = recordingStart();
+  await withServer({ storageDir: tempStorage(), startJob: rec.start }, async base => {
+    const port = Number(new URL(base).port);
+    const res = await rawHttp(port, {
+      method: 'POST',
+      path: '/api/jobs',
+      headers: { host: '127.0.0.1:5173', origin: 'http://127.0.0.1:5173', 'content-type': 'application/json' },
+      body: postBody,
+    });
+    assert.equal(res.status, 202);
+    assert.deepEqual(JSON.parse(res.bodyText), { jobId: 'job-1' });
+    assert.deepEqual(rec.started, ['nasa-grc-equations-of-motion']);
+    const localhostProxy = await rawHttp(port, {
+      method: 'POST',
+      path: '/api/jobs',
+      headers: { host: 'localhost:5173', origin: 'http://localhost:5173', 'content-type': 'application/json' },
+      body: postBody,
+    });
+    assert.equal(localhostProxy.status, 202, 'localhost:5173 with a matching Origin is accepted too');
+    assert.deepEqual(rec.started, ['nasa-grc-equations-of-motion', 'nasa-grc-equations-of-motion']);
+  });
+});
+
+test('R-07: allowedHosts replaces the default allowlist', async () => {
+  const rec = recordingStart();
+  await withServer({ storageDir: tempStorage(), startJob: rec.start, allowedHosts: ['myproxy:4321'] }, async base => {
+    const port = Number(new URL(base).port);
+    const oldDefault = await rawHttp(port, { path: '/api/health', headers: { host: '127.0.0.1:5173' } });
+    assert.equal(oldDefault.status, 403, 'the default Vite hosts are not implicitly allowed');
+    const custom = await rawHttp(port, { path: '/api/health', headers: { host: 'myproxy:4321' } });
+    assert.equal(custom.status, 200);
+    const customOrigin = await rawHttp(port, {
+      method: 'POST',
+      path: '/api/jobs',
+      headers: { host: `127.0.0.1:${port}`, origin: 'http://myproxy:4321', 'content-type': 'application/json' },
+      body: postBody,
+    });
+    assert.equal(customOrigin.status, 202);
+  });
+});
+
+/* ------------------------------------------------------------------ */
+/* R-01 / R-10 through the HTTP surface                                */
+/* ------------------------------------------------------------------ */
+
+test('R-01: GET /api/jobs/:id never carries provider or exception markers', async () => {
+  const storageDir = tempStorage();
+  const metaErr = new MetaError('SERVER_ERROR', undefined, { status: 500 });
+  (metaErr as unknown as Record<string, unknown>)['providerBody'] = 'SECRET-MARKER-KEY reflected provider text';
+  const markerClient: MetaClient = {
+    complete: async () => {
+      throw metaErr;
+    },
+  };
+  const meta = await realStartJob('nasa-grc-equations-of-motion', {
+    client: markerClient,
+    storageDir,
+    purpose: 'test-live',
+  });
+  await meta.done;
+  const plainClient: MetaClient = {
+    complete: async () => {
+      throw new Error('SECRET-MARKER source text');
+    },
+  };
+  const plain = await realStartJob('nasa-grc-equations-of-motion', {
+    client: plainClient,
+    storageDir,
+    purpose: 'test-live',
+  });
+  const plainSummary = await plain.done;
+  assert.deepEqual(plainSummary.error, { code: 'INTERNAL', message: 'Unexpected internal error' });
+
+  await withServer({ storageDir, startJob: noStart }, async base => {
+    for (const jobId of [meta.jobId, plain.jobId]) {
+      const res = await fetch(`${base}/api/jobs/${jobId}`);
+      assert.equal(res.status, 200);
+      const text = await res.text();
+      assert.ok(!text.includes('SECRET-MARKER'), `GET /api/jobs/${jobId} must not leak the marker`);
+      const job = JSON.parse(text) as { summary: JobSummary };
+      assert.equal(job.summary.status, 'failed');
+      assert.equal(typeof job.summary.error?.message, 'string');
+    }
+    const listRes = await fetch(`${base}/api/jobs`);
+    assert.ok(!(await listRes.text()).includes('SECRET-MARKER'), 'the job list must not leak the marker either');
+  });
+});
+
+test('R-10: a job left running by a previous process is served as failed/INTERRUPTED after recovery', async () => {
+  const storageDir = tempStorage();
+  const jobId = 'job-20260101000000-beef0000';
+  const runDir = join(storageDir, 'runs', jobId);
+  mkdirSync(runDir, { recursive: true });
+  writeFileSync(
+    join(runDir, 'job.json'),
+    JSON.stringify({
+      jobId,
+      sourceId: 'nasa-grc-equations-of-motion',
+      status: 'running',
+      purpose: 'test-live',
+      createdAt: '2026-01-01T00:00:00.000Z',
+      totalCostUSD: 0,
+      reservedUnknownUSD: 0,
+    }),
+  );
+  writeFileSync(
+    join(runDir, 'events.jsonl'),
+    `${JSON.stringify({ jobId, seq: 0, stage: 'analyze', status: 'started', at: '2026-01-01T00:00:01.000Z' })}\n`,
+  );
+  // main.ts runs this before listening; the API then serves the recovered state.
+  assert.deepEqual(recoverInterruptedJobs(storageDir), [jobId]);
+
+  await withServer({ storageDir, startJob: noStart }, async base => {
+    const detail = await getJson(base, `/api/jobs/${jobId}`);
+    assert.equal(detail.status, 200);
+    const job = detail.body as { summary: JobSummary; events: { stage: string; status: string; detail?: string }[] };
+    assert.equal(job.summary.status, 'failed');
+    assert.deepEqual(job.summary.error, {
+      code: 'INTERRUPTED',
+      message: 'The server stopped before this job finished.',
+    });
+    const last = job.events[job.events.length - 1];
+    assert.equal(last?.stage, 'done');
+    assert.equal(last?.status, 'failed');
+    assert.equal(last?.detail, 'INTERRUPTED');
+    const list = await getJson(base, '/api/jobs');
+    const jobs = list.body as JobSummary[];
+    assert.equal(jobs[0]?.status, 'failed', 'the listing no longer shows a phantom running job');
   });
 });

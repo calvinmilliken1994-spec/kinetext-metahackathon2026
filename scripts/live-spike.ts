@@ -30,8 +30,10 @@ try {
     console.log(JSON.stringify({ stage: 'specify', receipt: s.receipt, report: summary(s.report) }));
   }
 } catch (err) {
+  // R-01: print only the public error code and cost fields, never messages or provider data.
   const e = err as MetaError;
-  console.log(JSON.stringify({ stage: 'error', code: e.code ?? 'UNKNOWN', message: e.message, status: e.status, receipt: e.receipt }));
+  console.log(JSON.stringify({ stage: 'error', code: e.code ?? 'INTERNAL', status: e.status, chargedUSD: e.chargedUSD, costBasis: e.costBasis }));
   process.exitCode = 1;
 }
 console.log(JSON.stringify({ jobId, dir, ledgerCommittedUSD: ledger.committedUSD(), capUSD: ledger.capUSD }));
+ledger.close();

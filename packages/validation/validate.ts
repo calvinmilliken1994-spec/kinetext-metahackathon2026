@@ -1,11 +1,13 @@
 // TASK-003 — deterministic validation engine.
 //
-// Every claim in a generated activity must be mechanically verifiable before a
-// student sees it. This module runs four layers over Muse output:
+// Every MACHINE-CHECKABLE claim in a generated activity is verified before a
+// student sees it; free-form explanation prose is NOT scientifically verified
+// and needs teacher review (see the always-passing 'scope.prose-unverified'
+// check, TASK-009 R-08). This module runs four layers over Muse output:
 //   schema     — structural conformance (Ajv, draft-07)
 //   semantic   — internal consistency (ranges, ids, budgets, attribution policy)
-//   grounding  — references, sha256 integrity and verbatim quotes against the
-//                licensed source documents
+//   grounding  — references, sha256 integrity and counted verbatim quotes
+//                against the licensed source documents
 //   behavioral — physics claims re-executed against the closed-form
 //                forces-1d-v1 engine
 //
@@ -42,11 +44,16 @@ const specSchemaValidate: ValidateFunction = ajv.compile(activitySpecFullSchema 
 const analysisSchemaValidate: ValidateFunction = ajv.compile(sourceAnalysisGenSchema as AnySchemaObject);
 
 /** NASA's AI-use guidance forbids attributing generated claims to the publisher. */
-const PUBLISHER_ATTRIBUTION = /according to nasa|\bnasa (says|said|states|stated|explains|confirms|recommends|reports)\b/i;
+const PUBLISHER_MENTION = /\bNASA\b|National Aeronautics and Space Administration/i;
+const ATTRIBUTION_WORDING = /\b(according to|endorsed by|approved by|official (conclusion|position) of)\b/i;
 const CONCEPT_ID_PATTERN = /^[a-z0-9-]{1,40}$/;
 const QUOTE_MESSAGE_LIMIT = 60;
 const SCHEMA_ERROR_LIMIT = 5;
 const TRAJECTORY_TOLERANCE = 1e-9; // absolute + relative
+/** R-05: a quote only counts as evidence when it is long and substantive enough to locate. */
+const QUOTE_MIN_NORMALIZED_CHARS = 8;
+const QUOTE_MIN_LETTER_DIGITS = 3;
+const LETTER_DIGIT_PATTERN = /[\p{L}\p{N}]/gu;
 
 type CheckBody = Omit<ValidationCheck, 'id' | 'kind'>;
 type TextLookup = (sourceId: string) => string | undefined;
@@ -54,6 +61,28 @@ type TextLookup = (sourceId: string) => string | undefined;
 /** Replace every whitespace run with a single space, then trim. Case-sensitive; no other folding. */
 export function normalizeWhitespace(s: string): string {
   return s.replace(/\s+/g, ' ').trim();
+}
+
+/**
+ * R-05: a quote counts as evidence only if its whitespace-normalised form has
+ * >= 8 characters and >= 3 letters/digits (\p{L}\p{N}). Whitespace-only or
+ * trivial quotes used to normalise to strings that match every source.
+ */
+export function quoteCountsAsEvidence(quote: unknown): boolean {
+  if (typeof quote !== 'string') {
+    return false;
+  }
+  const normalized = normalizeWhitespace(quote);
+  if (normalized.length < QUOTE_MIN_NORMALIZED_CHARS) {
+    return false;
+  }
+  const lettersDigits = normalized.match(LETTER_DIGIT_PATTERN);
+  return lettersDigits !== null && lettersDigits.length >= QUOTE_MIN_LETTER_DIGITS;
+}
+
+/** True when a generated display string mentions the publisher or uses attribution/endorsement wording. */
+function hasPublisherAttribution(text: unknown): boolean {
+  return typeof text === 'string' && (PUBLISHER_MENTION.test(text) || ATTRIBUTION_WORDING.test(text));
 }
 
 /**
@@ -224,20 +253,34 @@ export function validateSpec(spec: unknown, sources: SourceDocument[]): Validati
 
     guarded('grounding.quotes', 'grounding', () => {
       const failures: string[] = [];
-      let verified = 0;
+      let counted = 0;
+      let located = 0;
       for (const ex of s.explanations) {
+        let countedForExplanation = 0;
         for (const ev of ex.evidence) {
+          counted++;
+          if (!quoteCountsAsEvidence(ev.quote)) {
+            failures.push(
+              `quote "${truncate(ev.quote, QUOTE_MESSAGE_LIMIT)}" (sourceId ${ev.sourceId}, explanation ${ex.id}) does not count as evidence: expected >= ${QUOTE_MIN_NORMALIZED_CHARS} normalised characters with >= ${QUOTE_MIN_LETTER_DIGITS} letters/digits`,
+            );
+            continue;
+          }
+          countedForExplanation++;
           const text = textOf(ev.sourceId);
           if (text === undefined) continue; // unresolvable references are reported by refs.sources
-          verified++;
           if (!text.includes(normalizeWhitespace(ev.quote))) {
-            failures.push(`"${truncate(ev.quote, QUOTE_MESSAGE_LIMIT)}" (sourceId ${ev.sourceId}, explanation ${ex.id})`);
+            failures.push(`"${truncate(ev.quote, QUOTE_MESSAGE_LIMIT)}" (sourceId ${ev.sourceId}, explanation ${ex.id}) not found in the source text`);
+          } else {
+            located++;
           }
+        }
+        if (countedForExplanation === 0) {
+          failures.push(`explanation "${ex.id}" has no counted evidence quote (expected >= 1)`);
         }
       }
       return failures.length === 0
-        ? { passed: true, message: `all ${verified} evidence quote(s) appear in their source text after whitespace normalisation` }
-        : { passed: false, message: `quotes not found in their source text: ${failures.join('; ')} (expected exact substrings after whitespace normalisation)`, path: '/explanations' };
+        ? { passed: true, message: `all ${counted} evidence quote(s) count as evidence (>= ${QUOTE_MIN_NORMALIZED_CHARS} normalised characters, >= ${QUOTE_MIN_LETTER_DIGITS} letters/digits) and all ${located} resolvable quote(s) appear in their source text after whitespace normalisation; every explanation has >= 1 counted quote` }
+        : { passed: false, message: `${failures.join('; ')} (expected counted verbatim quotes that appear in the source text after whitespace normalisation)`, path: '/explanations' };
     }),
 
     guarded('behavior.tests', 'behavioral', () => {
@@ -308,16 +351,28 @@ export function validateSpec(spec: unknown, sources: SourceDocument[]): Validati
         ...s.learningObjectives.map((t, i) => ({ path: `/learningObjectives/${i}`, text: t })),
         ...s.explanations.map((ex, i) => ({ path: `/explanations/${i}/text`, text: ex.text })),
         ...s.predictions.map((p, i) => ({ path: `/predictions/${i}/prompt`, text: p.prompt })),
+        ...s.behavioralTests.map((b, i) => ({ path: `/behavioralTests/${i}/name`, text: b.name })),
+        { path: '/simulation/scenario/objectLabel', text: sim.scenario.objectLabel },
+        { path: '/simulation/scenario/surfaceLabel', text: sim.scenario.surfaceLabel },
       ];
-      const hits = fields.filter(f => typeof f.text === 'string' && PUBLISHER_ATTRIBUTION.test(f.text));
+      const hits = fields.filter(f => hasPublisherAttribution(f.text));
       return hits.length === 0
-        ? { passed: true, message: 'no student-facing text attributes claims to the source publisher' }
+        ? { passed: true, message: 'no generated display field (title, objectives, explanations, prediction prompts, behavioral test names, scenario labels) mentions the publisher or uses attribution/endorsement wording; evidence quotes are exempt' }
         : {
             passed: false,
-            message: `publisher attribution found at ${hits.map(h => `${h.path}: "${truncate(h.text, QUOTE_MESSAGE_LIMIT)}"`).join('; ')} (expected no claims attributed to NASA — NASA's AI-use guidance forbids attributing generated output to NASA)`,
+            message: `publisher attribution found at ${hits.map(h => `${h.path}: "${truncate(h.text, QUOTE_MESSAGE_LIMIT)}"`).join('; ')} (expected no mention of NASA / "National Aeronautics and Space Administration" and no "according to / endorsed by / approved by / official conclusion|position of" wording in generated display fields — NASA's AI-use guidance forbids attributing generated output to NASA)`,
             path: hits[0].path,
           };
     }),
+
+    // R-08: honest scope. Everything above is machine-checked; the explanation
+    // WORDING itself is model prose that no deterministic check can verify.
+    {
+      id: 'scope.prose-unverified',
+      kind: 'semantic',
+      passed: true,
+      message: 'Explanation prose is AI-generated; quotes, numbers and ranges are machine-checked, the wording needs teacher review.',
+    },
   ];
 
   return {
@@ -416,20 +471,50 @@ export function validateAnalysis(analysis: unknown, sources: SourceDocument[]): 
 
     guarded('grounding.quotes', 'grounding', () => {
       const failures: string[] = [];
-      let verified = 0;
+      let counted = 0;
+      let located = 0;
       for (const c of a.concepts) {
+        let countedForConcept = 0;
         for (const ev of c.evidence) {
+          counted++;
+          if (!quoteCountsAsEvidence(ev.quote)) {
+            failures.push(
+              `quote "${truncate(ev.quote, QUOTE_MESSAGE_LIMIT)}" (sourceId ${ev.sourceId}, concept ${c.id}) does not count as evidence: expected >= ${QUOTE_MIN_NORMALIZED_CHARS} normalised characters with >= ${QUOTE_MIN_LETTER_DIGITS} letters/digits`,
+            );
+            continue;
+          }
+          countedForConcept++;
           const text = textOf(ev.sourceId);
           if (text === undefined) continue; // unresolvable references are reported by refs.sources
-          verified++;
           if (!text.includes(normalizeWhitespace(ev.quote))) {
-            failures.push(`"${truncate(ev.quote, QUOTE_MESSAGE_LIMIT)}" (sourceId ${ev.sourceId}, concept ${c.id})`);
+            failures.push(`"${truncate(ev.quote, QUOTE_MESSAGE_LIMIT)}" (sourceId ${ev.sourceId}, concept ${c.id}) not found in the source text`);
+          } else {
+            located++;
           }
+        }
+        if (a.supported === true && countedForConcept === 0) {
+          failures.push(`concept "${c.id}" has no counted evidence quote (expected >= 1 when supported=true)`);
         }
       }
       return failures.length === 0
-        ? { passed: true, message: `all ${verified} concept quote(s) appear in their source text after whitespace normalisation` }
-        : { passed: false, message: `quotes not found in their source text: ${failures.join('; ')} (expected exact substrings after whitespace normalisation)`, path: '/concepts' };
+        ? { passed: true, message: `all ${counted} concept quote(s) count as evidence (>= ${QUOTE_MIN_NORMALIZED_CHARS} normalised characters, >= ${QUOTE_MIN_LETTER_DIGITS} letters/digits) and all ${located} resolvable quote(s) appear in their source text after whitespace normalisation${a.supported === true ? '; every supported concept has >= 1 counted quote' : ''}` }
+        : { passed: false, message: `${failures.join('; ')} (expected counted verbatim quotes that appear in the source text after whitespace normalisation)`, path: '/concepts' };
+    }),
+
+    guarded('policy.no-publisher-attribution', 'semantic', () => {
+      const fields: { path: string; text: string }[] = [
+        ...a.concepts.map((c, i) => ({ path: `/concepts/${i}/name`, text: c.name })),
+        ...a.objectives.map((t, i) => ({ path: `/objectives/${i}`, text: t })),
+        { path: '/unsupportedReason', text: a.unsupportedReason },
+      ];
+      const hits = fields.filter(f => hasPublisherAttribution(f.text));
+      return hits.length === 0
+        ? { passed: true, message: 'no generated analysis field (concept names, objectives, unsupportedReason) mentions the publisher or uses attribution/endorsement wording; evidence quotes are exempt' }
+        : {
+            passed: false,
+            message: `publisher attribution found at ${hits.map(h => `${h.path}: "${truncate(h.text, QUOTE_MESSAGE_LIMIT)}"`).join('; ')} (expected no mention of NASA / "National Aeronautics and Space Administration" and no "according to / endorsed by / approved by / official conclusion|position of" wording in generated analysis fields — NASA's AI-use guidance forbids attributing generated output to NASA)`,
+            path: hits[0].path,
+          };
     }),
   ];
 

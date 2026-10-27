@@ -4,8 +4,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
-import { checkTrajectory, normalizeWhitespace, validateAnalysis, validateSpec } from './validate.ts';
-import { loadSource } from '../sources/index.ts';
+import { checkTrajectory, normalizeWhitespace, quoteCountsAsEvidence, validateAnalysis, validateSpec } from './validate.ts';
+import { loadSource, sha256 } from '../sources/index.ts';
 import { simulate } from '../activities/forces-1d/engine.ts';
 import type { Frame } from '../activities/forces-1d/engine.ts';
 import type { SourceDocument, ValidationReport } from '../contracts/index.ts';
@@ -40,6 +40,7 @@ const SPEC_CHECK_IDS: string[] = [
   'semantic.predictions-in-range',
   'behavior.trajectory',
   'policy.no-publisher-attribution',
+  'scope.prose-unverified',
 ];
 
 const SPEC_CHECK_KINDS: Record<string, string> = {
@@ -56,6 +57,7 @@ const SPEC_CHECK_KINDS: Record<string, string> = {
   'semantic.predictions-in-range': 'semantic',
   'behavior.trajectory': 'behavioral',
   'policy.no-publisher-attribution': 'semantic',
+  'scope.prose-unverified': 'semantic',
 };
 
 const ANALYSIS_CHECK_IDS: string[] = [
@@ -64,6 +66,7 @@ const ANALYSIS_CHECK_IDS: string[] = [
   'analysis.concept-ids',
   'refs.sources',
   'grounding.quotes',
+  'policy.no-publisher-attribution',
 ];
 
 function checkOf(report: ValidationReport, id: string) {
@@ -112,7 +115,7 @@ test('normalizeWhitespace collapses whitespace runs and trims, case-sensitively'
 /* validateSpec — happy path                                           */
 /* ------------------------------------------------------------------ */
 
-test('validateSpec: valid fixture passes all 13 checks and is publishable', () => {
+test('validateSpec: valid fixture passes all 14 checks and is publishable', () => {
   const report = validateSpec(loadSpec(), [loadSourceDoc()]);
   assert.deepEqual(report.checks.map(c => c.id), SPEC_CHECK_IDS);
   for (const c of report.checks) {
@@ -389,7 +392,7 @@ test('validateSpec: behavior.trajectory passes for the valid default simulation'
 /* validateAnalysis                                                    */
 /* ------------------------------------------------------------------ */
 
-test('validateAnalysis: valid fixture is publishable with all 5 checks', () => {
+test('validateAnalysis: valid fixture is publishable with all 6 checks', () => {
   const report = validateAnalysis(loadAnalysisFixture(), [loadSourceDoc()]);
   assert.deepEqual(report.checks.map(c => c.id), ANALYSIS_CHECK_IDS);
   for (const c of report.checks) assert.equal(c.passed, true, `${c.id}: ${c.message}`);
@@ -481,4 +484,191 @@ test('validateAnalysis: schema failure returns a single failed schema.analysis c
     assert.equal(report.revision, 1);
   }
   assert.doesNotThrow(() => validateAnalysis(null, undefined as unknown as SourceDocument[]));
+});
+
+/* ------------------------------------------------------------------ */
+/* R-05 — quotes must count as evidence (no whitespace/empty bypass)   */
+/* ------------------------------------------------------------------ */
+
+test('quoteCountsAsEvidence: >= 8 normalised characters and >= 3 letters/digits', () => {
+  // The reviewer's bypass: whitespace normalises to '' which is a substring of everything.
+  assert.equal(quoteCountsAsEvidence('   '), false);
+  assert.equal(quoteCountsAsEvidence('\n\t  \n'), false);
+  assert.equal(quoteCountsAsEvidence(''), false);
+  // Present in a source but too short to be evidence on its own.
+  assert.equal(quoteCountsAsEvidence('m * a'), false); // 5 chars
+  assert.equal(quoteCountsAsEvidence('F = m * a'), true); // 9 chars, 3 letters/digits
+  // Long enough but fewer than 3 letters/digits.
+  assert.equal(quoteCountsAsEvidence('- - - - - - - -'), false);
+  assert.equal(quoteCountsAsEvidence('a b c d e f g h'), true);
+  // Unicode letters/digits count.
+  assert.equal(quoteCountsAsEvidence('运动方程描述物体的加速度'), true);
+});
+
+test('validateSpec: whitespace-only quotes everywhere fail grounding.quotes (R-05 reviewer probe)', () => {
+  // Reviewer P1: every quote replaced by '   ' used to yield publishable=true 13/13.
+  const report = expectSpecFailures(
+    s => {
+      for (const ex of s.explanations) {
+        for (const ev of ex.evidence) {
+          ev.quote = '   ';
+        }
+      }
+    },
+    ['grounding.quotes'],
+  );
+  const msg = checkOf(report, 'grounding.quotes').message;
+  assert.match(msg, /second-law/, 'the failing explanation is named');
+  assert.match(msg, /8/, 'the message states the minimum normalised length');
+});
+
+test('validateSpec: a quote present in the source but too short to count fails grounding.quotes (R-05)', () => {
+  const text =
+    'Newton second law: net force equals mass times acceleration. SI units: newton, kilogram, metre per second squared. The product m * a equals the net force.\n';
+  const doc: SourceDocument = {
+    id: 'source-1', title: 'Short-quote source', locator: 'tests/fixtures/none.txt',
+    license: 'CC0-1.0', attribution: 'test', sha256: sha256(text), text,
+  };
+  const report = expectSpecFailures(
+    s => {
+      s.sources[0].sha256 = sha256(text);
+      s.explanations[0].evidence[0].quote = 'm * a'; // verbatim in the source, but only 5 chars
+    },
+    ['grounding.quotes'],
+    [doc],
+  );
+  assert.match(checkOf(report, 'grounding.quotes').message, /m \* a/);
+});
+
+test('validateSpec: a real short formula quote "F = m * a" still counts and grounds (R-05)', () => {
+  const text =
+    'For a constant mass, F = m * a relates net force to acceleration. SI units: newton, kilogram, metre per second squared.\n';
+  const doc: SourceDocument = {
+    id: 'source-1', title: 'Formula source', locator: 'tests/fixtures/none.txt',
+    license: 'CC0-1.0', attribution: 'test', sha256: sha256(text), text,
+  };
+  const spec = loadSpec();
+  spec.sources[0].sha256 = sha256(text);
+  spec.explanations[0].evidence = [{ sourceId: 'source-1', quote: 'F = m * a' }]; // 9 chars, 3 letters/digits
+  const report = validateSpec(spec, [doc]);
+  assert.deepEqual(failedIds(report), [], report.checks.filter(c => !c.passed).map(c => `${c.id}: ${c.message}`).join('; '));
+  assert.equal(checkOf(report, 'grounding.quotes').passed, true);
+  assert.equal(report.publishable, true);
+});
+
+test('validateAnalysis: supported analysis with all concept evidence removed fails (R-05 reviewer probe)', () => {
+  // Reviewer P1: removing every concept evidence entry used to yield publishable=true 5/5.
+  const analysis = loadAnalysisFixture();
+  for (const c of analysis.concepts) {
+    c.evidence = [];
+  }
+  const report = validateAnalysis(analysis, [loadSourceDoc()]);
+  assert.deepEqual(failedIds(report), ['grounding.quotes']);
+  assert.match(checkOf(report, 'grounding.quotes').message, /newtons-second-law/);
+  assert.equal(report.publishable, false);
+});
+
+test('validateAnalysis: whitespace-only concept quotes fail grounding.quotes (R-05)', () => {
+  const analysis = loadAnalysisFixture();
+  analysis.concepts[0].evidence[0].quote = ' \n\t ';
+  const report = validateAnalysis(analysis, [loadSourceDoc()]);
+  assert.deepEqual(failedIds(report), ['grounding.quotes']);
+  assert.equal(report.publishable, false);
+});
+
+test('validateAnalysis: unsupported analysis without concepts still passes grounding (R-05)', () => {
+  const analysis = loadAnalysisFixture();
+  analysis.supported = false;
+  analysis.activity = 'none';
+  analysis.unsupportedReason = 'Source is a poem; it does not teach 1D Newtonian mechanics.';
+  analysis.concepts = [];
+  const report = validateAnalysis(analysis, [loadSourceDoc()]);
+  assert.deepEqual(failedIds(report), []);
+  assert.equal(report.publishable, true);
+});
+
+/* ------------------------------------------------------------------ */
+/* R-12 — publisher attribution across EVERY generated display field   */
+/* ------------------------------------------------------------------ */
+
+test('validateSpec: reviewer-probe title and scenario label fail policy.no-publisher-attribution (R-12)', () => {
+  const report = expectSpecFailures(
+    s => {
+      s.title = "NASA's official conclusion: this activity is endorsed by NASA";
+      s.simulation.scenario.objectLabel = 'According to NASA';
+    },
+    ['policy.no-publisher-attribution'],
+  );
+  const msg = checkOf(report, 'policy.no-publisher-attribution').message;
+  assert.match(msg, /\/title/);
+  assert.match(msg, /objectLabel/);
+});
+
+test('validateSpec: attribution wording fails in every generated display field (R-12)', () => {
+  const mutations: [(s: any) => void, string][] = [
+    [s => { s.learningObjectives[0] = 'See the official position of the publisher on acceleration.'; }, 'learningObjectives'],
+    [s => { s.explanations[0].text = 'National Aeronautics and Space Administration materials explain this.'; }, 'explanations text'],
+    [s => { s.predictions[0].prompt = 'Guess what NASA says happens.'; }, 'prediction prompt'],
+    [s => { s.behavioralTests[0].name = 'endorsed by NASA check'; }, 'behavioral test name'],
+    [s => { s.simulation.scenario.surfaceLabel = 'approved by NASA surface'; }, 'surfaceLabel'],
+  ];
+  for (const [mutate, label] of mutations) {
+    expectSpecFailures(mutate, ['policy.no-publisher-attribution']);
+    void label;
+  }
+});
+
+test('validateSpec: evidence quotes are exempt from the attribution policy (R-12)', () => {
+  const text =
+    'Newton second law: net force equals mass times acceleration. NASA provides these equations of motion for constant forces. SI units: newton, kilogram, metre per second squared.\n';
+  const doc: SourceDocument = {
+    id: 'source-1', title: 'NASA-mentioning source', locator: 'tests/fixtures/none.txt',
+    license: 'CC0-1.0', attribution: 'test', sha256: sha256(text), text,
+  };
+  const spec = loadSpec();
+  spec.sources[0].sha256 = sha256(text);
+  spec.explanations[0].evidence = [
+    { sourceId: 'source-1', quote: 'NASA provides these equations of motion for constant forces.' },
+  ];
+  const report = validateSpec(spec, [doc]);
+  assert.deepEqual(failedIds(report), [], report.checks.filter(c => !c.passed).map(c => `${c.id}: ${c.message}`).join('; '));
+  assert.equal(report.publishable, true);
+});
+
+test('validateAnalysis: publisher attribution in concept names, objectives or unsupportedReason fails (R-12)', () => {
+  const byName = loadAnalysisFixture();
+  byName.concepts[0].name = 'According to NASA, force rules motion';
+  let report = validateAnalysis(byName, [loadSourceDoc()]);
+  assert.deepEqual(failedIds(report), ['policy.no-publisher-attribution']);
+
+  const byObjective = loadAnalysisFixture();
+  byObjective.objectives[0] = 'Learn why the official position of NASA matters.';
+  report = validateAnalysis(byObjective, [loadSourceDoc()]);
+  assert.deepEqual(failedIds(report), ['policy.no-publisher-attribution']);
+
+  const byReason = loadAnalysisFixture();
+  byReason.supported = false;
+  byReason.activity = 'none';
+  byReason.unsupportedReason = 'This source is endorsed by NASA but teaches sound, not forces.';
+  report = validateAnalysis(byReason, [loadSourceDoc()]);
+  assert.deepEqual(failedIds(report), ['policy.no-publisher-attribution']);
+});
+
+/* ------------------------------------------------------------------ */
+/* R-08 — honest scope: prose is not machine-verified                  */
+/* ------------------------------------------------------------------ */
+
+test('validateSpec: scope.prose-unverified always passes with the exact honest-scope message (R-08)', () => {
+  const expected =
+    'Explanation prose is AI-generated; quotes, numbers and ranges are machine-checked, the wording needs teacher review.';
+  const report = validateSpec(loadSpec(), [loadSourceDoc()]);
+  const scope = checkOf(report, 'scope.prose-unverified');
+  assert.equal(scope.kind, 'semantic');
+  assert.equal(scope.passed, true);
+  assert.equal(scope.message, expected);
+  // It also passes (and is present) when other checks fail — it documents scope, not quality.
+  const failing = validateSpec(loadSpec(), []);
+  assert.equal(failing.publishable, false);
+  assert.equal(checkOf(failing, 'scope.prose-unverified').passed, true);
+  assert.equal(checkOf(failing, 'scope.prose-unverified').message, expected);
 });

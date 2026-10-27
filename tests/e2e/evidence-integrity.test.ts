@@ -26,7 +26,9 @@ import type { JobSummary } from '../../workers/generation/jobs.ts';
 
 const EVIDENCE_ROOT = fileURLToPath(new URL('../../docs/evidence/task-008/', import.meta.url));
 const MODEL = 'muse-spark-1.3';
-const SPEC_CHECK_COUNT = 13;
+// The evidence was recorded with the 13-check spec validator; TASK-009 added checks (14 today).
+const STORED_SPEC_CHECK_COUNT = 13;
+const CURRENT_SPEC_CHECK_COUNT = 14;
 
 interface AnalysisRecord {
   analysis: SourceAnalysis;
@@ -63,6 +65,18 @@ function readEvents(dir: string): StageEvent[] {
 }
 
 /** The (id, passed) shape of a report — the part that must be reproducible. */
+/** Every check recorded in the stored report must give the same result today; checks added since must pass. */
+function assertStoredChecksStillHold(current: ValidationReport, stored: ValidationReport, label: string): void {
+  const now = new Map(current.checks.map(c => [c.id, c.passed]));
+  for (const c of stored.checks) {
+    assert.equal(now.get(c.id), c.passed, `${label}: stored check ${c.id} gives the same result today`);
+  }
+  const storedIds = new Set(stored.checks.map(c => c.id));
+  for (const c of current.checks.filter(c => !storedIds.has(c.id))) {
+    assert.equal(c.passed, true, `${label}: check added since recording (${c.id}) passes: ${c.message}`);
+  }
+}
+
 function checkSignal(report: ValidationReport): { id: string; passed: boolean }[] {
   return report.checks.map(c => ({ id: c.id, passed: c.passed }));
 }
@@ -167,7 +181,7 @@ test('evidence: every run is internally consistent and still verifies today', as
         true,
         `re-validated analysis is publishable: ${analysisReport.checks.filter(c => !c.passed).map(c => `${c.id}: ${c.message}`).join('; ')}`,
       );
-      assert.deepEqual(checkSignal(analysisReport), checkSignal(record.report), 're-validated analysis checks match the stored report');
+      assertStoredChecksStillHold(analysisReport, record.report, 'analysis');
 
       if (job.status === 'unsupported') {
         // --- unsupported outcome --------------------------------------------
@@ -195,9 +209,9 @@ test('evidence: every run is internally consistent and still verifies today', as
         true,
         `re-validated spec is publishable: ${report.checks.filter(c => !c.passed).map(c => `${c.id}: ${c.message}`).join('; ')}`,
       );
-      assert.equal(report.checks.length, SPEC_CHECK_COUNT, `re-validated spec runs all ${SPEC_CHECK_COUNT} checks`);
-      assert.deepEqual(checkSignal(report), checkSignal(storedReport), 're-validated spec checks match report.r1.json');
-      assert.equal(storedReport.checks.length, SPEC_CHECK_COUNT, `stored report has ${SPEC_CHECK_COUNT} checks`);
+      assert.equal(report.checks.length, CURRENT_SPEC_CHECK_COUNT, `re-validated spec runs all ${CURRENT_SPEC_CHECK_COUNT} current checks`);
+      assertStoredChecksStillHold(report, storedReport, 'spec');
+      assert.equal(storedReport.checks.length, STORED_SPEC_CHECK_COUNT, `stored report has ${STORED_SPEC_CHECK_COUNT} checks`);
       assert.equal(storedReport.publishable, true);
       assert.equal(storedReport.artifactId, spec.id, 'report is about this spec');
       assert.equal(report.artifactId, spec.id);
@@ -207,8 +221,8 @@ test('evidence: every run is internally consistent and still verifies today', as
       assert.equal(spec.provenance.returnedModel, MODEL);
       assert.equal(spec.provenance.provider, 'meta');
       assert.equal(spec.provenance.runId, job.jobId);
-      assert.equal(job.checksPassed, SPEC_CHECK_COUNT);
-      assert.equal(job.checksTotal, SPEC_CHECK_COUNT);
+      assert.equal(job.checksPassed, STORED_SPEC_CHECK_COUNT);
+      assert.equal(job.checksTotal, STORED_SPEC_CHECK_COUNT);
       assert.equal(job.publishable, true);
       assert.equal(job.specId, spec.id);
 
