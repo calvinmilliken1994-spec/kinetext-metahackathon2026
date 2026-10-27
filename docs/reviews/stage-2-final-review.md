@@ -85,3 +85,58 @@ The ledger remains conservative in every reproduced F-01 case; the defects are f
 - Six round-2 Muse receipt metadata records report `passed`, requested/configured `muse-spark-1.3`, no fallback and completed one-step subscription runs; their README documents the High route and repair provenance. This verifies consistency of local records, not historical provider transactions independently.
 
 No implementation edits, Git writes, commit, push, publication or paid provisioning were performed. Deliverable: `docs/reviews/stage-2-final-review.md`.
+
+## Addendum — F-01 fix verification (HEAD 78e3745b3096046857d92fd97f3284236b8f6754)
+
+**Updated verdict: APPROVED WITH CONDITIONS.** This addendum supersedes the blocking verdict above for the reviewed HEAD; the earlier review is preserved unchanged. Reviewer: OpenAI `gpt-6-astra` via `openai-codex`, independent of the implementation authors. Reviewed fixes: `c832626` (Muse Spark 1.3, pipeline) and `78e3745` (Qwen, worker/API regression tests), against the Round 3 contract in `docs/specs/TASK-009-review-fixes.md`. The Muse contribution receipt is `docs/evidence/task-009/muse-A3r3-1-pipeline-output-error.json`; attribution is supported by that local record, not an independent historical provider audit.
+
+**Muse-authored `packages/meta` and the full Stage 2 pipeline are acceptable for supervised, loopback-only live demo use under the $10 Stage 2 cap, subject to the conditions below. F-01 is resolved; R-09 and R-10 can now be closed in their stated review scope.** This is not approval for unattended use, public deployment, or an invoice-level guaranteed spending cap. No live inference was used for this verification.
+
+### Final disposition
+
+| ID | Final status | Verification evidence and qualification |
+|---|---|---|
+| **F-01** | **RESOLVED — blocker closed** | `packages/meta/pipeline.ts:17-27,66-72,100-125` validates generated JSON before use and carries the reconciled receipt on `GeneratedOutputError`; assembly exceptions also retain it. `workers/generation/jobs.ts:335-352,419-430` accounts that receipt once, persists failure, and checks the analysis report before reading its fields. Independent P3 rerun: **19/19 cases passed**, including all original 12 cases, otherwise-valid spec missing `title`, synthetic marker payloads, and 503→invalid-spec. All returned, disk and GET summaries agreed on terminal `failed/OUTPUT_INVALID`, with fixed errors, ordered failed-stage events and reconciled totals. No model-output markers, schema diagnostics or dereference exception text leaked into those errors/events/responses. |
+| **F-02** | **ACCEPTED-AS-DEBT — DEBT-002, conditional** | Reasonable for a supervised loopback demo, **not fixed**. Both runtime ledger entry points still obtain the lock port from `config/resource-limits.json`: `apps/api/main.ts:50-77` and `scripts/live-spike.ts:12-13`. P2 rerun again proved two simultaneous owners are possible for one scratch ledger when configured port 47853 and default port 63177 are mixed. Conversely, configured-port contenders excluded each other and retained the cap after owner death. Every writer to the real Stage 2 ledger must use the same configured port and canonical ledger; no omitted/changed port or fresh ledger to bypass refusal. Isolated fake-transport test ledgers are not product ledger writers. Require a centralized/file-identity lock before expanding writer usage. |
+| **R-09** | **RESOLVED — close** | P3 job totals, event-cost sums and ledger commitments agree to the documented 1e-6 USD summary rounding for valid and absent usage, including the failed stage. The 503→invalid-spec probe retained only the uncertain attempt in `reservedUnknownUSD`: total **$0.046320**, unknown **$0.046125**. P1 malformed-envelope/reconcile and mixed-cost tests also passed. Interruption/storage-fault accounting reconstruction remains outside this closure; the durable ledger remains authoritative. |
+| **R-10** | **RESOLVED — close** | No P3 settled job remained `running`; disk and real GET were identical to the completed summary. Last-resort catch (`jobs.ts:240-272`) writes terminal failed/INTERNAL plus a sequenced `done failed` event best-effort; the circular-receipt regression passed in the full suite. P2 verified that offline startup and recovery do not mutate a live owner's job, then recovered it after termination, preserving ledger liability; second recovery was a no-op. Unwritable storage, power loss and PID reuse remain the previously documented limitations. |
+
+### Executed verification
+
+All independent scripts and generated storage are in the active profile's `cache/scratch/review4/`, not the repository. These are fake-transport/recorded-fixture results, not live model outputs.
+
+| Check | Observed result |
+|---|---|
+| `npm run check` | Exit 0; TypeScript clean; **330 passed, 0 failed/skipped/cancelled**. Includes real-client→pipeline→worker→GET regressions and last-resort terminal persistence. |
+| `npm --prefix apps/web run build` | Exit 0; frontend TypeScript and Vite succeeded, **42 modules transformed**. |
+| `shape-probes.mjs` → `p3-results.json` | Exit 0; **19 cases**, with raw `job.json`, events, actual GET response, exact ledger and recovery-while-alive assertions. Covers analysis `null`/`{}`/`{simulation:null}`, spec equivalents, missing required `title`, marker-bearing invalid objects, each with valid/absent usage, plus mixed retry liability. |
+| `probes.mjs` → `p1-final-results.json` | Exit 0; **39 cases**. R-01 reflected 400/500 error markers remained absent from storage and GET; N-03 malformed envelopes and reconcile exceptions retained reservations; N-04 mixed 503→200 kept known/unknown amounts separate. Deadline, usage, validation and prompt-boundary checks also reran. |
+| `process-probes.mjs` → `p2-rerun-results.json` | Exit 0; **11 records**, including six two-process races, foreign listeners, mixed-port hazard, actual offline API startup while a fake-transport job owner lived, and dead-owner recovery. N-05 passed without weakening live-owner protection. |
+| `verify-results.mjs` → `verification-summary.json` | Exit 0; result counts/unique P3 names verified; all recorded child PIDs dead and tested lock ports rebindable. A separate injected assembly-time exception became `GeneratedOutputError` with the full **$0.0000975** receipt and no injected exception marker. Servers/children started by the probes were stopped. |
+
+Representative P3 accounting (USD; the summary intentionally rounds to six decimals):
+
+| Generated failure | Usage | Exact ledger liability | Persisted/GET total | Persisted/GET unknown |
+|---|---|---:|---:|---:|
+| Analysis `null` | valid | 0.0000975 | 0.000098 | 0 |
+| Analysis `null` | absent | 0.0326875 | 0.032688 | 0.032688 |
+| Valid analysis → invalid spec (including missing `title`) | valid on both | 0.000195 | 0.000195 | 0 |
+| Valid analysis → invalid spec (including missing `title`) | absent on both | 0.0788125 | 0.078813 | 0.078813 |
+
+### New findings and execution limitations
+
+**No new blocking finding or regression was found.** R-01, N-03, N-04 and N-05 retain their resolved dispositions. F-02 remains a demonstrated conditional hazard, not a guarantee made safe by replay-before-reserve alone.
+
+The initial P2 run completed eight records, then the deliberately omitted-port mixed-owner test failed closed with `LEDGER_LOCK_FAILED` at hash-derived port 51810. Its partial evidence remains in `p2-results.json`. A fresh scratch-path rerun completed all 11 records; no product configuration or ledger was changed. The underlying OS reason for that first bind failure was not determined. This is consistent with the already documented limitation of default ports in the Windows dynamic range and does not affect the configured-port verdict. Scratch-script preparation also hit tool redaction and a shell `TMPDIR` mismatch; byte-copying the existing synthetic probes into the explicit approved scratch path corrected those harness issues before execution.
+
+The defensive INTERNAL catch is terminal-persistence protection, not a new guarantee of cost reconstruction after arbitrary internal/storage faults; it can only persist best-effort and does not reconstruct run-local accumulators. The full suite's circular-receipt test establishes terminal status, not invoice reconciliation. Prior limitations on physical disk failure, abandoned-job totals, PID reuse, live billing/tokenization, browser exploitability, scientific prose correctness and live model adherence still apply.
+
+### Conditions of this approval
+
+1. **One canonical Stage 2 ledger and configured lock identity:** every real writer uses `ledgerLockPort` from config (currently **47853**). Keep API storage aligned with the spike's ledger; never change/omit the port or reset/switch the ledger to evade a lock, cap or corruption refusal. Do not run a separate metered smoke outside this accounting.
+2. **$10 Stage 2 cap, supervised only:** retain bounded attempts, token limits and shared deadline; maintain available-credit headroom and reconcile against provider billing. R-06's unverified tokenizer/framing bound and R-07's deferred session token remain accepted debt, not newly proven guarantees.
+3. **Local trust boundary:** retain loopback binding and Host/Origin checks, exact `muse-spark-1.3` gating, fixed public errors and no alternate-model fallback. No unattended, network-facing or multi-host operation is approved.
+4. **Content and publication:** licensed public/project-authored/synthetic inputs only; generated code execution and publishing remain disabled; teacher review is required for prose, attribution and source-use conditions. Passing numerical/schema checks is not full scientific verification.
+5. **Operational failures:** after interruption or storage error, stop and reconcile durable ledger liability against job totals before another demo run. Do not treat missing/incomplete per-job totals as released capacity.
+
+Only this report and approved scratch probes were intentionally written; the build also produced ignored output. No implementation edits, Git writes, `.env` reads, `META_LIVE` startup, live Meta/Muse calls, publication or provisioning were performed.
