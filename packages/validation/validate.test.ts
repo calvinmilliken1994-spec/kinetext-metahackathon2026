@@ -37,6 +37,7 @@ const SPEC_CHECK_IDS: string[] = [
   'grounding.quotes',
   'behavior.tests',
   'behavior.predictions',
+  'semantic.tolerance',
   'semantic.predictions-in-range',
   'behavior.trajectory',
   'policy.no-publisher-attribution',
@@ -54,6 +55,7 @@ const SPEC_CHECK_KINDS: Record<string, string> = {
   'grounding.quotes': 'grounding',
   'behavior.tests': 'behavioral',
   'behavior.predictions': 'behavioral',
+  'semantic.tolerance': 'semantic',
   'semantic.predictions-in-range': 'semantic',
   'behavior.trajectory': 'behavioral',
   'policy.no-publisher-attribution': 'semantic',
@@ -115,7 +117,7 @@ test('normalizeWhitespace collapses whitespace runs and trims, case-sensitively'
 /* validateSpec — happy path                                           */
 /* ------------------------------------------------------------------ */
 
-test('validateSpec: valid fixture passes all 14 checks and is publishable', () => {
+test('validateSpec: valid fixture passes all 15 checks and is publishable', () => {
   const report = validateSpec(loadSpec(), [loadSourceDoc()]);
   assert.deepEqual(report.checks.map(c => c.id), SPEC_CHECK_IDS);
   for (const c of report.checks) {
@@ -256,10 +258,23 @@ test('validateSpec: schema failure returns a single failed schema.full check and
 });
 
 test('validateSpec: schema failure message lists errors as instancePath + message, max 5', () => {
-  const report = validateSpec({}, [loadSourceDoc()]);
+  // A known engine id but nothing else: the Ajv gate (not the engine gate) reports the missing properties.
+  const report = validateSpec({ simulation: { engine: 'forces-1d-v1' } }, [loadSourceDoc()]);
+  assert.equal(report.checks.length, 1);
   const msg = report.checks[0].message;
   assert.match(msg, /must have required property 'schemaVersion'/);
-  assert.match(msg, /\(\+6 more\)/); // 11 required properties missing -> 5 shown + 6 more
+  assert.match(msg, /\(\+\d+ more\)/); // 17 schema errors -> 5 shown + the rest counted
+});
+
+test('validateSpec: forces tolerance above the schema cap (0.01) fails schema.full alone', () => {
+  // The Stage 2 forces schema caps tolerance at 0.01 = absMax, so semantic.tolerance
+  // can never fire for a schema-valid forces spec — stored evidence stays valid.
+  const spec = loadSpec();
+  spec.behavioralTests[0].tolerance = 0.02;
+  const report = validateSpec(spec, [loadSourceDoc()]);
+  assert.equal(report.checks.length, 1);
+  assert.deepEqual(failedIds(report), ['schema.full']);
+  assert.equal(report.publishable, false);
 });
 
 test('validateSpec: schema failure keeps a string spec.id as artifactId', () => {

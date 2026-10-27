@@ -162,7 +162,7 @@ async function withPipeline(
   }
 }
 
-test('POST/GET round trip: recorded Muse output becomes a publishable 14/14 spec over HTTP', async () => {
+test('POST/GET round trip: recorded Muse output becomes a publishable 15/15 spec over HTTP', async () => {
   await withPipeline(recordedClient(), async ({ base, storageDir }) => {
     const created = await postJob(base, SUPPORTED_SOURCE);
     assert.equal(created.status, 202, 'a live job is accepted with 202');
@@ -174,8 +174,8 @@ test('POST/GET round trip: recorded Muse output becomes a publishable 14/14 spec
     const summary = view.summary;
     assert.equal(summary.status, 'succeeded');
     assert.equal(summary.publishable, true);
-    assert.equal(summary.checksPassed, 14);
-    assert.equal(summary.checksTotal, 14);
+    assert.equal(summary.checksPassed, 15);
+    assert.equal(summary.checksTotal, 15);
     assert.equal(summary.totalCostUSD, 0.02, 'analysis receipt + spec receipt');
     assert.equal(summary.error, undefined);
     assert.equal(summary.specId, `${SUPPORTED_SOURCE}-${String(jobId)}`);
@@ -197,7 +197,7 @@ test('POST/GET round trip: recorded Muse output becomes a publishable 14/14 spec
       true,
       `returned spec re-validates: ${revalidated.checks.filter(c => !c.passed).map(c => `${c.id}: ${c.message}`).join('; ')}`,
     );
-    assert.equal(revalidated.checks.length, 14);
+    assert.equal(revalidated.checks.length, 15);
     const storedReport = view.report as ValidationReport;
     assert.deepEqual(
       revalidated.checks.map(c => ({ id: c.id, passed: c.passed })),
@@ -226,7 +226,7 @@ test('POST/GET round trip: recorded Muse output becomes a publishable 14/14 spec
     assert.equal(jobs.length, 1);
     assert.equal(jobs[0]?.jobId, String(jobId));
     assert.equal(jobs[0]?.status, 'succeeded');
-    assert.equal(jobs[0]?.checksPassed, 14);
+    assert.equal(jobs[0]?.checksPassed, 15);
   });
 });
 
@@ -278,7 +278,7 @@ test('POST while a job is running answers 409 JOB_RUNNING, then accepts again on
     gate.release();
     const settled = await waitForTerminal(base, jobId);
     assert.equal(settled.summary.status, 'succeeded');
-    assert.equal(settled.summary.checksPassed, 14);
+    assert.equal(settled.summary.checksPassed, 15);
 
     const second = await postJob(base, SUPPORTED_SOURCE);
     assert.equal(second.status, 202, 'the in-flight gate is cleared once the run settles');

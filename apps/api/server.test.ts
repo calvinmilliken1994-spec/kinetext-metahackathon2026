@@ -317,7 +317,7 @@ test('GET /api/jobs and /api/jobs/:id serve worker-persisted runs', async () => 
     assert.equal(jobs.length, 1);
     assert.equal(jobs[0]?.jobId, jobId);
     assert.equal(jobs[0]?.status, 'succeeded');
-    assert.equal(jobs[0]?.checksPassed, 14);
+    assert.equal(jobs[0]?.checksPassed, 15);
 
     const detail = await getJson(base, `/api/jobs/${jobId}`);
     assert.equal(detail.status, 200);

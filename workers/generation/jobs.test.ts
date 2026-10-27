@@ -86,8 +86,8 @@ test('startJob: supported NASA source runs the full pipeline to a publishable sp
 
   assert.equal(summary.status, 'succeeded');
   assert.equal(summary.publishable, true);
-  assert.equal(summary.checksPassed, 14);
-  assert.equal(summary.checksTotal, 14);
+  assert.equal(summary.checksPassed, 15);
+  assert.equal(summary.checksTotal, 15);
   assert.equal(summary.specId, `nasa-grc-equations-of-motion-${jobId}`.slice(0, 64));
   assert.equal(summary.totalCostUSD, 0.02);
   assert.equal(summary.reservedUnknownUSD, 0, 'a fully usage-billed run reserves nothing unknown');
@@ -133,7 +133,7 @@ test('startJob: supported NASA source runs the full pipeline to a publishable sp
   assert.match(analyzeOk.detail ?? '', /^supported; checks 6\/6 passed$/);
   const validateOk = events[7];
   assert.ok(validateOk !== undefined);
-  assert.equal(validateOk.detail, '14/14 checks passed');
+  assert.equal(validateOk.detail, '15/15 checks passed');
 
   const spec = JSON.parse(readFileSync(join(runDir, 'spec.r1.json'), 'utf8')) as { id: string; provenance: { runId: string } };
   assert.equal(spec.id, summary.specId);

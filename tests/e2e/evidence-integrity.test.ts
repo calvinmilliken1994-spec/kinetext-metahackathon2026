@@ -26,9 +26,9 @@ import type { JobSummary } from '../../workers/generation/jobs.ts';
 
 const EVIDENCE_ROOT = fileURLToPath(new URL('../../docs/evidence/task-008/', import.meta.url));
 const MODEL = 'muse-spark-1.3';
-// The evidence was recorded with the 13-check spec validator; TASK-009 added checks (14 today).
+// The evidence was recorded with the 13-check spec validator; TASK-009 and Stage 5 added checks (15 today).
 const STORED_SPEC_CHECK_COUNT = 13;
-const CURRENT_SPEC_CHECK_COUNT = 14;
+const CURRENT_SPEC_CHECK_COUNT = 15;
 
 interface AnalysisRecord {
   analysis: SourceAnalysis;
