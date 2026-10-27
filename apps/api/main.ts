@@ -20,6 +20,7 @@ import { openLedger } from '../../packages/meta/ledger.ts';
 import type { Ledger } from '../../packages/meta/ledger.ts';
 import { createMetaClient, MetaError } from '../../packages/meta/client.ts';
 import type { MetaClient } from '../../packages/meta/client.ts';
+import type { DemoFault } from '../../packages/contracts/index.ts';
 import { startJob as startGenerationJob, recoverInterruptedJobs } from '../../workers/generation/jobs.ts';
 import { createApiServer } from './server.ts';
 import type { ApiOptions } from './server.ts';
@@ -54,17 +55,25 @@ async function startup(): Promise<void> {
         maxJobWallTimeMs?: unknown;
         maxOutputTokens?: unknown;
         maxInputTokens?: unknown;
+        maxRepairAttempts?: unknown;
         ledgerLockPort?: unknown;
       };
       const capUSD: number = limits.stageCapsUSD?.stage2 ?? 0; // default zero spend
       const wallTimeMs: unknown = limits.maxJobWallTimeMs;
       const maxOutputTokens: unknown = limits.maxOutputTokens;
       const maxInputTokens: unknown = limits.maxInputTokens;
+      const maxRepairAttempts: unknown = limits.maxRepairAttempts;
+      // Stage 5: the repair bound must be a finite non-negative number (0 disables repairs).
+      const repairAttempts: number =
+        typeof maxRepairAttempts === 'number' && Number.isFinite(maxRepairAttempts) && maxRepairAttempts >= 0
+          ? maxRepairAttempts
+          : Number.NaN;
       const lockPort: unknown = limits.ledgerLockPort;
       if (
         !finitePositive(wallTimeMs) ||
         !finitePositive(maxOutputTokens) ||
         !finitePositive(maxInputTokens) ||
+        Number.isNaN(repairAttempts) ||
         !validLockPort(lockPort)
       ) {
         throw new Error('RESOURCE_LIMITS_INVALID');
@@ -83,16 +92,20 @@ async function startup(): Promise<void> {
         // R-11: the configured input budget, not the client default.
         maxInputTokens,
       });
-      startJob = (sourceId: string) =>
+      startJob = (sourceId: string, jobOpts?: { demoFault?: DemoFault }) =>
         startGenerationJob(sourceId, {
           client,
           storageDir,
           purpose,
-          // R-11: one job-wide deadline and per-stage output caps from config.
+          // Stage 5: the optional labelled demo fault requested by POST /api/jobs.
+          demoFault: jobOpts?.demoFault,
+          // R-11: one job-wide deadline and per-stage output caps from config;
+          // maxRepairAttempts bounds the Stage 5 repair loop.
           limits: {
             maxJobWallTimeMs: wallTimeMs,
             analysisMaxOutputTokens: Math.min(6000, maxOutputTokens),
             specMaxOutputTokens: maxOutputTokens,
+            maxRepairAttempts: repairAttempts,
           },
         });
       // N-05: recovery mutates job storage, so it runs ONLY in live mode and

@@ -106,6 +106,10 @@ test('GET /api/health reports ok, the live flag and busy', async () => {
       createdAt: new Date().toISOString(),
       totalCostUSD: 0,
       reservedUnknownUSD: 0,
+      engine: null,
+      revisions: 0,
+      repairs: [],
+      sourceKind: 'library' as const,
     }),
   });
   await withServer({ storageDir: tempStorage(), startJob: fakeStart }, async base => {
@@ -143,6 +147,10 @@ test('GET /api/health busy is true while an in-process job runs (R-10)', async (
       createdAt: new Date().toISOString(),
       totalCostUSD: 0,
       reservedUnknownUSD: 0,
+      engine: null,
+      revisions: 0,
+      repairs: [],
+      sourceKind: 'library',
     });
     await new Promise(resolve => setTimeout(resolve, 20));
     const after = await getJson(base, '/api/health');
@@ -211,6 +219,10 @@ test('POST /api/jobs validates body, content-type, size and source existence', a
         createdAt: new Date().toISOString(),
         totalCostUSD: 0,
         reservedUnknownUSD: 0,
+        engine: null,
+        revisions: 0,
+        repairs: [],
+        sourceKind: 'library',
       }),
     };
   };
@@ -264,6 +276,10 @@ test('POST /api/jobs accepts one job, blocks while it runs, then accepts again',
             createdAt: new Date().toISOString(),
             totalCostUSD: 0,
             reservedUnknownUSD: 0,
+            engine: null,
+            revisions: 0,
+            repairs: [],
+            sourceKind: 'library',
           });
     return { jobId, done };
   };
@@ -291,6 +307,10 @@ test('POST /api/jobs accepts one job, blocks while it runs, then accepts again',
       createdAt: new Date().toISOString(),
       totalCostUSD: 0,
       reservedUnknownUSD: 0,
+      engine: null,
+      revisions: 0,
+      repairs: [],
+      sourceKind: 'library',
     });
     await new Promise(resolve => setTimeout(resolve, 20));
 
@@ -463,6 +483,10 @@ function recordingStart(): { start: NonNullable<ApiOptions['startJob']>; started
           createdAt: new Date().toISOString(),
           totalCostUSD: 0,
           reservedUnknownUSD: 0,
+          engine: null,
+          revisions: 0,
+          repairs: [],
+          sourceKind: 'library',
         }),
       };
     },

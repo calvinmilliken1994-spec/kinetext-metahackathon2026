@@ -6,8 +6,9 @@
 //                     carries owner {pid, startedAt} so recovery never interrupts a live owner (TASK-009 N-05)
 //   events.jsonl    — one StageEvent per line, appended as stages progress (seq 0..n per job)
 //   analysis.json   — {analysis, report, receipt} from analyzeSource
-//   spec.r1.json    — the assembled ActivitySpec from generateSpec (revision 1)
-//   report.r1.json  — the ValidationReport for spec.r1
+//   spec.r<n>.json   — the assembled ActivitySpec for revision n (1 = generateSpec,
+//                      n > 1 = repairSpec; Stage 5 bounded repair loop)
+//   report.r<n>.json — the ValidationReport for spec.r<n>
 //
 // Failure policy: `done` never rejects. Every failure (missing source, MetaError,
 // schema-invalid generated output, unpublishable analysis, failed spec validation,
@@ -26,12 +27,32 @@
 import { appendFileSync, mkdirSync, readdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { randomUUID } from 'node:crypto';
-import { analyzeSource, generateSpec, GeneratedOutputError } from '../../packages/meta/pipeline.ts';
+import { analyzeSource, generateSpec, repairSpec, GeneratedOutputError } from '../../packages/meta/pipeline.ts';
 import { MetaError, META_ERROR_MESSAGES } from '../../packages/meta/client.ts';
 import type { MetaClient, MetaErrorCode } from '../../packages/meta/client.ts';
-import { loadSource } from '../../packages/sources/index.ts';
+import {
+  loadSource,
+  loadUserSource,
+  sha256,
+  userSourcesDirOf,
+  USER_SOURCE_ID_PATTERN,
+} from '../../packages/sources/index.ts';
+import { repairFindings, validateSpec } from '../../packages/validation/validate.ts';
+import { assembleSpec, DEMO_FAULTS, ENGINES, isEngineId } from '../../packages/contracts/index.ts';
 import type {
+  ActivitySpec,
+  AssembleOptions,
+  DemoFault,
+  EngineId,
+  FaultRecord,
+  ForcesGeneratedSpec,
+  GeneratedSpec,
+  LiftGeneratedSpec,
   MetaReceipt,
+  ProjectileGeneratedSpec,
+  RepairFinding,
+  RepairRecord,
+  SoundGeneratedSpec,
   SourceAnalysis,
   SourceDocument,
   Stage,
@@ -87,6 +108,20 @@ export interface JobSummary {
   /** Part of totalCostUSD charged at reservation because the outcome was uncertain (TASK-009 R-09). */
   reservedUnknownUSD: number;
   error?: { code: string; message: string };
+  /** Engine Muse chose for this source (Stage 5); null until a supported analysis is validated. */
+  engine: EngineId | null;
+  /** Number of spec revisions produced and persisted (1 without repairs). */
+  revisions: number;
+  /** One record per repair attempt, in order (Stage 5). */
+  repairs: RepairRecord[];
+  /** Set when any revision was publishable: the revision that gets published. */
+  publishedRevision?: number;
+  /** Set on VALIDATION_FAILED: the revision with the fewest failing checks. */
+  bestRevision?: number;
+  /** Set when the system injected a labelled demo fault into revision 1 (never a model error). */
+  demoFault?: FaultRecord;
+  /** Where the source came from: the licensed library or a teacher's pasted text. */
+  sourceKind: 'library' | 'user';
   /**
    * N-05: the process that owns this job, recorded in job.json from the first
    * write so recovery never interrupts a job whose owner is still alive.
@@ -100,6 +135,8 @@ export interface JobLimits {
   maxJobWallTimeMs?: number;
   analysisMaxOutputTokens?: number;
   specMaxOutputTokens?: number;
+  /** Stage 5: bound on Muse repair attempts after a failing validation (config maxRepairAttempts). */
+  maxRepairAttempts?: number;
 }
 
 export interface JobDeps {
@@ -107,6 +144,10 @@ export interface JobDeps {
   storageDir: string;
   purpose: 'test-live' | 'demo';
   sourcesDir?: URL;
+  /** Teacher-source store; defaults to `<storageDir>/user-sources`. */
+  userSourcesDir?: string;
+  /** Labelled system-made fault to inject into revision 1 before validation (demo only). */
+  demoFault?: DemoFault;
   now?: () => Date;
   newJobId?: () => string;
   limits?: JobLimits;
@@ -117,13 +158,19 @@ const JOB_ID_PATTERN = /^[a-z0-9-]{1,80}$/;
 const DEFAULT_JOB_WALL_TIME_MS = 120000; // config/resource-limits.json maxJobWallTimeMs
 const DEFAULT_ANALYSIS_MAX_OUTPUT_TOKENS = 6000;
 const DEFAULT_SPEC_MAX_OUTPUT_TOKENS = 8000; // config/resource-limits.json maxOutputTokens
+const DEFAULT_MAX_REPAIR_ATTEMPTS = 2; // config/resource-limits.json maxRepairAttempts
 
 type EventExtra = Partial<
-  Pick<StageEvent, 'model' | 'responseId' | 'usage' | 'latencyMs' | 'estCostUSD' | 'detail'>
+  Pick<StageEvent, 'model' | 'responseId' | 'usage' | 'latencyMs' | 'estCostUSD' | 'detail' | 'revision'>
 >;
 
 function positiveOr(value: number | undefined, fallback: number): number {
   return typeof value === 'number' && Number.isFinite(value) && value > 0 ? value : fallback;
+}
+
+/** Like positiveOr but for counts that may legitimately be 0 (e.g. maxRepairAttempts). */
+function nonNegativeIntOr(value: number | undefined, fallback: number): number {
+  return typeof value === 'number' && Number.isInteger(value) && value >= 0 ? value : fallback;
 }
 
 /** Money stays readable in job.json: rounded to 1e-6 USD. */
@@ -198,6 +245,81 @@ function generatedOutputReceipt(err: unknown): MetaReceipt | undefined {
   return typeof est === 'number' && Number.isFinite(est) ? (receipt as MetaReceipt) : undefined;
 }
 
+/** True for the pipeline's plain ENGINE_REQUIRED/ENGINE_MISMATCH guard errors (thrown before any model call). */
+function isEngineRequired(err: unknown): boolean {
+  return err instanceof Error && err.message === 'ENGINE_REQUIRED';
+}
+
+/** assembleSpec with a runtime engine id (the typed overloads need the engine as a literal). */
+function assembleForEngine(gen: GeneratedSpec, engine: EngineId, opts: AssembleOptions): ActivitySpec {
+  switch (engine) {
+    case 'forces-1d-v1':
+      return assembleSpec(gen as ForcesGeneratedSpec, engine, opts);
+    case 'projectile-v1':
+      return assembleSpec(gen as ProjectileGeneratedSpec, engine, opts);
+    case 'lift-equation-v1':
+      return assembleSpec(gen as LiftGeneratedSpec, engine, opts);
+    case 'speed-of-sound-v1':
+      return assembleSpec(gen as SoundGeneratedSpec, engine, opts);
+  }
+  throw new Error('ENGINE_REQUIRED');
+}
+
+/** 8 hex chars taken from the job id (its random suffix); hashed fallback for hand-made ids. */
+function nonceFromJobId(jobId: string): string {
+  const match = /([0-9a-f]{8})$/.exec(jobId);
+  return match !== null ? match[1] : sha256(jobId).slice(0, 8);
+}
+
+function fabricatedQuoteSentence(nonce: string): string {
+  return `Muse confirmed this result in a controlled laboratory trial (ref ${nonce}).`;
+}
+
+/**
+ * Stage 5 labelled demo fault: a deterministic, SYSTEM-MADE change to the generated
+ * spec (never presented as a model error). Mutates the caller's clone of the
+ * generated spec in place and returns the FaultRecord describing the change.
+ * The fabricated quote carries a nonce and is verified absent from the source
+ * text first (Muse design review decision 18).
+ */
+function applyDemoFault(
+  kind: DemoFault,
+  gen: GeneratedSpec,
+  engine: EngineId,
+  jobId: string,
+  sourceText: string,
+): FaultRecord {
+  if (kind === 'wrong-answer') {
+    const outputKey = ENGINES[engine].output.key;
+    const tests = gen.behavioralTests as unknown as Record<string, unknown>[];
+    const first = tests[0];
+    if (first === undefined || typeof first[outputKey] !== 'number') {
+      throw new Error('DEMO_FAULT_TARGET_MISSING');
+    }
+    const original = first[outputKey] as number;
+    const injected = original * 1.5 + 1;
+    first[outputKey] = injected;
+    return { kind, path: `behavioralTests[0].${outputKey}`, original, injected, revision: 1 };
+  }
+  if (kind === 'fabricated-quote') {
+    const explanations = gen.explanations as unknown as { evidence?: { quote?: unknown }[] }[];
+    const evidence = explanations[0]?.evidence?.[0];
+    if (evidence === undefined || typeof evidence.quote !== 'string') {
+      throw new Error('DEMO_FAULT_TARGET_MISSING');
+    }
+    const original = evidence.quote;
+    let nonce = nonceFromJobId(jobId);
+    let sentence = fabricatedQuoteSentence(nonce);
+    while (sourceText.includes(sentence)) {
+      nonce = sha256(nonce).slice(0, 8);
+      sentence = fabricatedQuoteSentence(nonce);
+    }
+    evidence.quote = sentence;
+    return { kind, path: 'explanations[0].evidence[0].quote', original, injected: sentence, revision: 1 };
+  }
+  throw new Error('DEMO_FAULT_INVALID');
+}
+
 export function startJob(
   sourceId: string,
   deps: JobDeps,
@@ -205,6 +327,9 @@ export function startJob(
 ): { jobId: string; done: Promise<JobSummary> } {
   if (!SOURCE_ID_PATTERN.test(sourceId)) {
     throw new Error('SOURCE_ID_INVALID');
+  }
+  if (deps.demoFault !== undefined && !(DEMO_FAULTS as readonly string[]).includes(deps.demoFault)) {
+    throw new Error('DEMO_FAULT_INVALID');
   }
   const now: () => Date = deps.now ?? ((): Date => new Date());
   const jobId: string =
@@ -225,6 +350,11 @@ export function startJob(
     createdAt,
     totalCostUSD: 0,
     reservedUnknownUSD: 0,
+    // Stage 5: engine/revision/repair bookkeeping starts empty; sourceKind is derived from the id.
+    engine: null,
+    revisions: 0,
+    repairs: [],
+    sourceKind: USER_SOURCE_ID_PATTERN.test(sourceId) ? 'user' : 'library',
     // N-05: recovery consults this owner record before interrupting a running job.
     owner: { pid: process.pid, startedAt: createdAt },
   };
@@ -388,9 +518,13 @@ async function runJob(
   emit('ingest', 'started');
   let source: SourceDocument;
   try {
-    source = loadSource(sourceId, deps.sourcesDir);
+    source =
+      summary.sourceKind === 'user'
+        ? loadUserSource(sourceId, deps.userSourcesDir ?? userSourcesDirOf(deps.storageDir))
+        : loadSource(sourceId, deps.sourcesDir);
   } catch {
-    // R-01: the raw fs/loader error never reaches the artifacts.
+    // R-01: the raw fs/loader error never reaches the artifacts. Hash mismatches
+    // (tampered library or teacher text) land here too.
     return fail('ingest', 'SOURCE_UNAVAILABLE', { detail: 'SOURCE_UNAVAILABLE' });
   }
   emit('ingest', 'succeeded', { detail: `sha256 ${source.sha256.slice(0, 12)}` });
@@ -434,7 +568,16 @@ async function runJob(
     return finish('unsupported');
   }
 
-  // --- specify --------------------------------------------------------------
+  // Defensive (Stage 5): a supported analysis without a known engine becomes
+  // ANALYSIS_INVALID before any model call. Normally unreachable — validateAnalysis
+  // already fails supported=true with an activity that is not a known engine id.
+  if (!isEngineId(analysis.activity)) {
+    return fail('specify', 'ANALYSIS_INVALID', { detail: 'ANALYSIS_INVALID' });
+  }
+  const engine: EngineId = analysis.activity;
+  summary.engine = engine;
+
+  // --- specify (revision 1) ---------------------------------------------------
   emit('specify', 'started');
   const specId = `${sourceId}-${jobId}`.slice(0, 64);
   let specResult: Awaited<ReturnType<typeof generateSpec>>;
@@ -449,38 +592,196 @@ async function runJob(
       { signal: budget.signal, maxOutputTokens: budget.specMaxOutputTokens },
     );
   } catch (err: unknown) {
+    if (isEngineRequired(err)) {
+      // Defensive: the pipeline guard fired before any model call — the same fixed
+      // code as an invalid analysis, never INTERNAL.
+      return fail('specify', 'ANALYSIS_INVALID', { detail: 'ANALYSIS_INVALID' });
+    }
     return failFromError('specify', err);
   }
   accountReceipt(specResult.receipt);
-  writeJsonAtomic(join(runDir, 'spec.r1.json'), specResult.spec);
+
+  // --- inject (optional labelled demo fault, Stage 5) --------------------------
+  // A SYSTEM-made change to the generated spec BEFORE validation, so judges can
+  // watch catch → repair → pass on demand. Always labelled, never a model error;
+  // the fault is applied to a clone so stored fixtures/evidence are never touched.
+  let generated: GeneratedSpec = specResult.generated;
+  let spec: ActivitySpec = specResult.spec;
+  let report: ValidationReport = specResult.report;
+  if (deps.demoFault !== undefined) {
+    const faultyGen = structuredClone(generated) as GeneratedSpec;
+    summary.demoFault = applyDemoFault(deps.demoFault, faultyGen, engine, jobId, source.text);
+    // Re-assemble with the SAME provenance so spec.r1.json reflects the fault.
+    spec = assembleForEngine(faultyGen, engine, {
+      id: specId,
+      sources: [source],
+      provenance: specResult.spec.provenance,
+      execution: specResult.spec.execution,
+    });
+    generated = faultyGen;
+    report = validateSpec(spec, [source]);
+  }
+  writeJsonAtomic(join(runDir, 'spec.r1.json'), spec);
   emit('specify', 'succeeded', {
     ...receiptFields(specResult.receipt),
     detail: `spec ${specId}`,
   });
-
-  // --- validate -------------------------------------------------------------
-  emit('validate', 'started');
-  const report = specResult.report;
-  writeJsonAtomic(join(runDir, 'report.r1.json'), report);
-  const passed = checksPassed(report);
-  const total = report.checks.length;
-  const validateDetail = `${passed}/${total} checks passed`;
-  if (!report.publishable) {
-    const ids = failedCheckIds(report);
-    // R-01: the failure detail is the code plus system-owned failing check ids.
-    return fail('validate', 'VALIDATION_FAILED', {
-      detail: `VALIDATION_FAILED; failed checks: ${ids.join(', ')}`,
+  if (summary.demoFault !== undefined) {
+    emit('inject', 'succeeded', {
+      revision: 1,
+      detail: `demo fault injected by the system: ${summary.demoFault.kind} at ${summary.demoFault.path}`,
     });
   }
-  emit('validate', 'succeeded', { detail: validateDetail });
+
+  // --- validate + bounded repair loop (Stage 5) --------------------------------
+  interface RevisionState {
+    revision: number;
+    generated: GeneratedSpec;
+    spec: ActivitySpec;
+    report: ValidationReport;
+  }
+  const revisions: RevisionState[] = [{ revision: 1, generated, spec, report }];
+  let current: RevisionState = revisions[0];
+  summary.revisions = 1;
+  const maxRepairs = nonNegativeIntOr(deps.limits?.maxRepairAttempts, DEFAULT_MAX_REPAIR_ATTEMPTS);
+  const findingsHistory: RepairFinding[][] = [];
+
+  function emitValidateOutcome(state: RevisionState): void {
+    const passed = checksPassed(state.report);
+    const total = state.report.checks.length;
+    if (state.report.publishable) {
+      emit('validate', 'succeeded', { revision: state.revision, detail: `${passed}/${total} checks passed` });
+    } else {
+      // R-01: the failure detail is the code plus system-owned failing check ids.
+      emit('validate', 'failed', {
+        revision: state.revision,
+        detail: `VALIDATION_FAILED; failed checks: ${failedCheckIds(state.report).join(', ')}`,
+      });
+    }
+  }
+
+  emit('validate', 'started', { revision: 1 });
+  writeJsonAtomic(join(runDir, 'report.r1.json'), report);
+  emitValidateOutcome(current);
+
+  let repairsDone = 0;
+  while (!current.report.publishable && repairsDone < maxRepairs) {
+    const nextRevision = current.revision + 1;
+    const targeted = failedCheckIds(current.report);
+    emit('repair', 'started', {
+      revision: nextRevision,
+      detail: `targeted checks: ${targeted.join(', ')}`,
+    });
+    // Decision 14: every prior revision's findings re-enter the repair prompt.
+    findingsHistory.push(repairFindings(current.report, current.spec));
+    let repaired: Awaited<ReturnType<typeof repairSpec>>;
+    try {
+      repaired = await repairSpec(
+        deps.client,
+        source,
+        analysis,
+        {
+          generated: current.generated,
+          spec: current.spec,
+          report: current.report,
+          revision: current.revision,
+          findingsHistory,
+        },
+        { jobId, specId },
+        deps.purpose,
+        now,
+        // R-11: the job-wide deadline and the spec output cap cover repairs too.
+        { signal: budget.signal, maxOutputTokens: budget.specMaxOutputTokens },
+      );
+    } catch (err: unknown) {
+      const outputReceipt = generatedOutputReceipt(err);
+      if (outputReceipt !== undefined) {
+        // F-01: the repair call COMPLETED and was billed. Account the receipt,
+        // record the failed repair and STOP repairing; the job then fails
+        // VALIDATION_FAILED below (no earlier revision can be publishable here —
+        // the loop only runs while the current one is not).
+        accountReceipt(outputReceipt);
+        emit('repair', 'failed', {
+          ...receiptFields(outputReceipt),
+          revision: nextRevision,
+          detail:
+            outputReceipt.costBasis === 'reservation'
+              ? 'OUTPUT_INVALID; cost basis: reservation (outcome uncertain)'
+              : 'OUTPUT_INVALID',
+        });
+        break;
+      }
+      if (isEngineRequired(err)) {
+        return fail('repair', 'ANALYSIS_INVALID', { detail: 'ANALYSIS_INVALID', revision: nextRevision });
+      }
+      // MetaError (deadline, rate limit, ...) fails the job with its fixed code.
+      return failFromError('repair', err);
+    }
+    accountReceipt(repaired.receipt);
+    repairsDone += 1;
+    current = {
+      revision: nextRevision,
+      generated: repaired.generated,
+      spec: repaired.spec,
+      // The pipeline's repair report already carries the 'repair.no-weakening' check.
+      report: repaired.report,
+    };
+    revisions.push(current);
+    summary.revisions = revisions.length;
+    writeJsonAtomic(join(runDir, `spec.r${nextRevision}.json`), current.spec);
+    emit('repair', 'succeeded', {
+      ...receiptFields(repaired.receipt),
+      revision: nextRevision,
+      detail: `repaired revision ${nextRevision - 1}`,
+    });
+    const remaining = failedCheckIds(current.report);
+    const passingIds = new Set(current.report.checks.filter(c => c.passed).map(c => c.id));
+    const record: RepairRecord = {
+      revision: nextRevision,
+      repairOf: nextRevision - 1,
+      targeted,
+      fixed: targeted.filter(id => passingIds.has(id)),
+      remaining,
+      publishable: current.report.publishable,
+      // Decision 17: repairs after a system-injected fault never count in quality metrics.
+      afterInjectedFault: summary.demoFault !== undefined,
+    };
+    summary.repairs.push(record);
+    writeJsonAtomic(join(runDir, `report.r${nextRevision}.json`), current.report);
+    emit('validate', 'started', { revision: nextRevision });
+    emitValidateOutcome(current);
+  }
 
   // --- done -----------------------------------------------------------------
-  emit('done', 'succeeded', { detail: 'publishable' });
-  summary.specId = specId;
-  summary.publishable = true;
-  summary.checksPassed = passed;
-  summary.checksTotal = total;
-  return finish('succeeded');
+  if (current.report.publishable) {
+    emit('done', 'succeeded', {
+      detail:
+        current.revision === 1
+          ? 'publishable'
+          : `publishable after repair (revision ${current.revision})`,
+    });
+    summary.specId = specId;
+    summary.publishable = true;
+    summary.checksPassed = checksPassed(current.report);
+    summary.checksTotal = current.report.checks.length;
+    summary.publishedRevision = current.revision;
+    return finish('succeeded');
+  }
+  // No publishable revision (decision 14): the job reports the revision with the
+  // fewest failing checks; ties resolve to the earliest revision. The terminal
+  // marker is the last per-revision 'validate' failed event — a failed job never
+  // emits 'done'.
+  let best: RevisionState = revisions[0];
+  for (const candidate of revisions) {
+    if (failedCheckIds(candidate.report).length < failedCheckIds(best.report).length) {
+      best = candidate;
+    }
+  }
+  summary.bestRevision = best.revision;
+  summary.checksPassed = checksPassed(best.report);
+  summary.checksTotal = best.report.checks.length;
+  summary.error = publicError('VALIDATION_FAILED');
+  return finish('failed');
 }
 
 export function listJobs(storageDir: string): JobSummary[] {
@@ -509,10 +810,24 @@ export function listJobs(storageDir: string): JobSummary[] {
   return jobs;
 }
 
+export interface JobRevisionView {
+  revision: number;
+  spec: unknown;
+  report?: unknown;
+}
+
 export function readJob(
   storageDir: string,
   jobId: string,
-): { summary: JobSummary; events: StageEvent[]; analysis?: unknown; spec?: unknown; report?: unknown } | null {
+): {
+  summary: JobSummary;
+  events: StageEvent[];
+  analysis?: unknown;
+  spec?: unknown;
+  report?: unknown;
+  /** Stage 5: every persisted revision in order, so the UI can show 1 → 2 → 3. */
+  revisions: JobRevisionView[];
+} | null {
   if (!JOB_ID_PATTERN.test(jobId)) {
     throw new Error('JOB_ID_INVALID');
   }
@@ -537,21 +852,58 @@ export function readJob(
   } catch {
     // no events file (yet)
   }
-  const result: { summary: JobSummary; events: StageEvent[]; analysis?: unknown; spec?: unknown; report?: unknown } = {
+  const result: {
+    summary: JobSummary;
+    events: StageEvent[];
+    analysis?: unknown;
+    spec?: unknown;
+    report?: unknown;
+    revisions: JobRevisionView[];
+  } = {
     summary: summary as JobSummary,
     events,
+    revisions: [],
   };
   const analysis = readJsonFile(join(runDir, 'analysis.json'));
   if (analysis !== undefined) {
     result.analysis = analysis;
   }
-  const spec = readJsonFile(join(runDir, 'spec.r1.json'));
-  if (spec !== undefined) {
-    result.spec = spec;
+  // Every persisted revision: spec.r<n>.json (+ report.r<n>.json when present).
+  let specNumbers: number[] = [];
+  try {
+    specNumbers = readdirSync(runDir)
+      .map(f => /^spec\.r(\d+)\.json$/.exec(f))
+      .filter((m): m is RegExpExecArray => m !== null)
+      .map(m => Number(m[1]))
+      .sort((a, b) => a - b);
+  } catch {
+    specNumbers = [];
   }
-  const report = readJsonFile(join(runDir, 'report.r1.json'));
-  if (report !== undefined) {
-    result.report = report;
+  for (const n of specNumbers) {
+    const specN = readJsonFile(join(runDir, `spec.r${n}.json`));
+    if (specN === undefined) {
+      continue;
+    }
+    const entry: JobRevisionView = { revision: n, spec: specN };
+    const reportN = readJsonFile(join(runDir, `report.r${n}.json`));
+    if (reportN !== undefined) {
+      entry.report = reportN;
+    }
+    result.revisions.push(entry);
+  }
+  // Compatibility fields: spec/report of the published (else best, else latest) revision.
+  const s = summary as JobSummary;
+  const chosen: number =
+    (typeof s.publishedRevision === 'number' ? s.publishedRevision : undefined) ??
+    (typeof s.bestRevision === 'number' ? s.bestRevision : undefined) ??
+    (result.revisions.length > 0 ? result.revisions[result.revisions.length - 1].revision : 1);
+  const chosenEntry =
+    result.revisions.find(r => r.revision === chosen) ?? result.revisions[0];
+  if (chosenEntry !== undefined) {
+    result.spec = chosenEntry.spec;
+    if (chosenEntry.report !== undefined) {
+      result.report = chosenEntry.report;
+    }
   }
   return result;
 }

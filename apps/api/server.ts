@@ -7,34 +7,55 @@
 //
 // Routes:
 //   GET  /api/health      → {ok, live, busy}
-//   GET  /api/sources     → metadata list (no text)
-//   GET  /api/sources/:id → metadata + hash-checked text
+//   GET  /api/sources     → metadata list (no text), library + teacher ('user') sources with kind
+//   POST /api/sources     → store a teacher-pasted source (JSON ≤ 64 KB); 201 created / 200 existing
+//   GET  /api/sources/:id → metadata + hash-checked text (library and user sources)
 //   GET  /api/jobs        → newest-first job summaries
-//   GET  /api/jobs/:id    → {summary, events, analysis?, spec?, report?}
-//   POST /api/jobs        → 202 {jobId}; one live job at a time (409 while running)
+//   GET  /api/jobs/:id    → {summary, events, revisions, analysis?, spec?, report?}
+//   POST /api/jobs        → 202 {jobId}; body {sourceId, demoFault?}; one live job at a time (409 while running)
 //
 // Authorization (TASK-009 R-07): every request must carry an allowed Host
 // (127.0.0.1:<bound port>, localhost:<bound port>, or an allowedHosts entry —
-// by default the Vite dev proxy hosts); POST /api/jobs additionally requires
+// by default the Vite dev proxy hosts); POST routes additionally require
 // an Origin of http:// + an allowed host when the header is present. Anything
 // else is 403 before routing. (A per-session token is deferred technical debt.)
 
 import { createServer } from 'node:http';
 import type { IncomingMessage, Server, ServerResponse } from 'node:http';
-import { listSourceIds, loadSource, loadSourceMeta } from '../../packages/sources/index.ts';
+import {
+  listSourceIds,
+  listUserSourceIds,
+  loadSource,
+  loadSourceMeta,
+  loadUserSource,
+  loadUserSourceMeta,
+  MAX_USER_SOURCES,
+  saveUserSource,
+  userSourceId,
+  userSourcesDirOf,
+  USER_SOURCE_ID_PATTERN,
+} from '../../packages/sources/index.ts';
+import { DEMO_FAULTS, validateUserSourceInput } from '../../packages/contracts/index.ts';
+import type { DemoFault } from '../../packages/contracts/index.ts';
 import { listJobs, readJob } from '../../workers/generation/jobs.ts';
 import type { JobSummary } from '../../workers/generation/jobs.ts';
 
 export interface ApiOptions {
   storageDir: string;
   sourcesDir?: URL;
+  /** Teacher-source store; defaults to `<storageDir>/user-sources`. */
+  userSourcesDir?: string;
   /** null disables live generation: POST /api/jobs then answers 503 LIVE_DISABLED. */
-  startJob: ((sourceId: string) => { jobId: string; done: Promise<JobSummary> }) | null;
+  startJob:
+    | ((sourceId: string, opts?: { demoFault?: DemoFault }) => { jobId: string; done: Promise<JobSummary> })
+    | null;
   /** Extra allowed Host values (and http://<value> Origins); replaces the Vite defaults. */
   allowedHosts?: string[];
 }
 
 const MAX_BODY_BYTES = 10 * 1024;
+/** Teacher-pasted source bodies may be larger than job bodies, but stay bounded (Stage 5). */
+const MAX_SOURCE_BODY_BYTES = 64 * 1024;
 const DEFAULT_ALLOWED_HOSTS: readonly string[] = ['127.0.0.1:5173', 'localhost:5173'];
 
 interface SourceRefResponse {
@@ -45,6 +66,9 @@ interface SourceRefResponse {
   attribution: string;
   sha256: string;
   purpose: string;
+  kind: 'library' | 'user';
+  licenseLabel?: string;
+  createdAt?: string;
 }
 
 function sendJson(res: ServerResponse, status: number, body: unknown): void {
@@ -118,6 +142,21 @@ export function createApiServer(opts: ApiOptions): Server {
   let inFlight: Promise<JobSummary> | null = null;
   const allowedHosts: readonly string[] = opts.allowedHosts ?? DEFAULT_ALLOWED_HOSTS;
 
+  /** Stage 5: teacher-source store (defaults to `<storageDir>/user-sources`). */
+  function userSourcesDir(): string {
+    return opts.userSourcesDir ?? userSourcesDirOf(opts.storageDir);
+  }
+
+  /** R-07: POST routes require an Origin of http:// + an allowed host when present. */
+  function originAllowed(req: IncomingMessage): boolean {
+    const origin = req.headers.origin;
+    if (typeof origin !== 'string') {
+      return true;
+    }
+    const prefix = 'http://';
+    return origin.startsWith(prefix) && hostAllowed(origin.slice(prefix.length));
+  }
+
   /** R-07: the allowed Host values, including this server's actual bound port. */
   function hostAllowed(rawHost: string): boolean {
     const host = rawHost.toLowerCase();
@@ -148,33 +187,57 @@ export function createApiServer(opts: ApiOptions): Server {
     }
 
     if (pathname === '/api/sources') {
-      if (method !== 'GET') {
-        return sendError(res, 405, 'METHOD_NOT_ALLOWED');
-      }
-      const out: SourceRefResponse[] = [];
-      let ids: string[] = [];
-      try {
-        ids = listSourceIds(opts.sourcesDir);
-      } catch {
-        ids = [];
-      }
-      for (const id of ids) {
+      if (method === 'GET') {
+        const out: SourceRefResponse[] = [];
+        let ids: string[] = [];
         try {
-          const meta = loadSourceMeta(id, opts.sourcesDir);
-          out.push({
-            id: meta.id,
-            title: meta.title,
-            locator: meta.locator,
-            license: meta.license,
-            attribution: meta.attribution,
-            sha256: meta.sha256,
-            purpose: meta.purpose,
-          });
+          ids = listSourceIds(opts.sourcesDir);
         } catch {
-          // skip an unreadable registry entry rather than failing the whole list
+          ids = [];
         }
+        for (const id of ids) {
+          try {
+            const meta = loadSourceMeta(id, opts.sourcesDir);
+            out.push({
+              id: meta.id,
+              title: meta.title,
+              locator: meta.locator,
+              license: meta.license,
+              attribution: meta.attribution,
+              sha256: meta.sha256,
+              purpose: meta.purpose,
+              kind: 'library',
+            });
+          } catch {
+            // skip an unreadable registry entry rather than failing the whole list
+          }
+        }
+        // Stage 5: teacher-pasted sources join the list (never their text).
+        for (const id of listUserSourceIds(userSourcesDir())) {
+          try {
+            const meta = loadUserSourceMeta(id, userSourcesDir());
+            out.push({
+              id: meta.id,
+              title: meta.title,
+              locator: meta.locator,
+              license: meta.license,
+              attribution: meta.attribution,
+              sha256: meta.sha256,
+              purpose: 'teacher-provided',
+              kind: 'user',
+              licenseLabel: meta.licenseLabel,
+              createdAt: meta.createdAt,
+            });
+          } catch {
+            // skip an unreadable user entry rather than failing the whole list
+          }
+        }
+        return sendJson(res, 200, out);
       }
-      return sendJson(res, 200, out);
+      if (method === 'POST') {
+        return handleCreateSource(req, res);
+      }
+      return sendError(res, 405, 'METHOD_NOT_ALLOWED');
     }
 
     if (pathname.startsWith('/api/sources/')) {
@@ -184,6 +247,32 @@ export function createApiServer(opts: ApiOptions): Server {
       }
       if (method !== 'GET') {
         return sendError(res, 405, 'METHOD_NOT_ALLOWED');
+      }
+      // Stage 5: teacher sources live in their own store but answer the same shape.
+      if (USER_SOURCE_ID_PATTERN.test(id)) {
+        try {
+          const meta = loadUserSourceMeta(id, userSourcesDir());
+          const doc = loadUserSource(id, userSourcesDir()); // hash-checked
+          const userBody: SourceRefResponse & { text: string } = {
+            id: doc.id,
+            title: doc.title,
+            locator: doc.locator,
+            license: doc.license,
+            attribution: doc.attribution,
+            sha256: doc.sha256,
+            purpose: 'teacher-provided',
+            kind: 'user',
+            licenseLabel: meta.licenseLabel,
+            createdAt: meta.createdAt,
+            text: doc.text,
+          };
+          return sendJson(res, 200, userBody);
+        } catch (err: unknown) {
+          if (isNotFound(err)) {
+            return sendError(res, 404, 'NOT_FOUND');
+          }
+          return sendError(res, 500, 'SOURCE_UNAVAILABLE'); // e.g. sha256 mismatch (tampered text)
+        }
       }
       try {
         const meta = loadSourceMeta(id, opts.sourcesDir);
@@ -196,6 +285,7 @@ export function createApiServer(opts: ApiOptions): Server {
           attribution: doc.attribution,
           sha256: doc.sha256,
           purpose: meta.purpose,
+          kind: 'library',
           text: doc.text,
         };
         if (doc.page !== undefined) {
@@ -242,14 +332,56 @@ export function createApiServer(opts: ApiOptions): Server {
     return sendError(res, 404, 'NOT_FOUND');
   }
 
+  async function handleCreateSource(req: IncomingMessage, res: ServerResponse): Promise<void> {
+    // R-07: same Origin protection as every other POST route.
+    if (!originAllowed(req)) {
+      return sendError(res, 403, 'ORIGIN_NOT_ALLOWED');
+    }
+    const contentType = (req.headers['content-type'] ?? '').toLowerCase();
+    if (!contentType.startsWith('application/json')) {
+      return sendError(res, 415, 'UNSUPPORTED_MEDIA_TYPE');
+    }
+    let rawBody: string;
+    try {
+      rawBody = await readBodyLimited(req, MAX_SOURCE_BODY_BYTES);
+    } catch (err: unknown) {
+      if (err instanceof Error && err.message === 'PAYLOAD_TOO_LARGE') {
+        return sendError(res, 413, 'PAYLOAD_TOO_LARGE');
+      }
+      return sendError(res, 400, 'BAD_REQUEST');
+    }
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(rawBody) as unknown;
+    } catch {
+      return sendError(res, 400, 'BAD_REQUEST');
+    }
+    // Contracts own the limits/normalisation: title/text/attribution lengths,
+    // licence id, rights confirmation, CRLF→LF + control-char strip + trim.
+    const validated = validateUserSourceInput(parsed);
+    if (!validated.ok) {
+      return sendJson(res, 400, { error: 'SOURCE_INVALID', problems: validated.problems });
+    }
+    const dir = userSourcesDir();
+    // Idempotent: identical (normalised) text maps to the same id — 200, even at the limit.
+    const prospectiveId = userSourceId(validated.value.text);
+    const existingIds = listUserSourceIds(dir);
+    if (!existingIds.includes(prospectiveId) && existingIds.length >= MAX_USER_SOURCES) {
+      return sendError(res, 409, 'SOURCE_LIMIT');
+    }
+    try {
+      const { id, created } = saveUserSource(validated.value, dir);
+      return sendJson(res, created ? 201 : 200, { id, title: validated.value.title, kind: 'user' });
+    } catch {
+      // Fixed, content-free 500; never expose fs internals.
+      return sendError(res, 500, 'INTERNAL');
+    }
+  }
+
   async function handleCreateJob(req: IncomingMessage, res: ServerResponse): Promise<void> {
     // R-07: a browser Origin, when present, must be http:// + an allowed host.
-    const origin = req.headers.origin;
-    if (typeof origin === 'string') {
-      const prefix = 'http://';
-      if (!origin.startsWith(prefix) || !hostAllowed(origin.slice(prefix.length))) {
-        return sendError(res, 403, 'ORIGIN_NOT_ALLOWED');
-      }
+    if (!originAllowed(req)) {
+      return sendError(res, 403, 'ORIGIN_NOT_ALLOWED');
     }
     const start = opts.startJob;
     if (start === null) {
@@ -281,12 +413,23 @@ export function createApiServer(opts: ApiOptions): Server {
     if (typeof sourceId !== 'string' || sourceId === '') {
       return sendError(res, 400, 'BAD_REQUEST');
     }
+    // Stage 5: optional labelled demo fault; anything outside DEMO_FAULTS is a 400.
+    let demoFault: DemoFault | undefined;
+    if ('demoFault' in (parsed as Record<string, unknown>)) {
+      const rawFault: unknown = (parsed as Record<string, unknown>)['demoFault'];
+      if (typeof rawFault !== 'string' || !(DEMO_FAULTS as readonly string[]).includes(rawFault)) {
+        return sendError(res, 400, 'BAD_REQUEST');
+      }
+      demoFault = rawFault as DemoFault;
+    }
     let knownIds: string[] = [];
     try {
       knownIds = listSourceIds(opts.sourcesDir);
     } catch {
       knownIds = [];
     }
+    // Teacher sources are first-class job inputs (Stage 5).
+    knownIds = [...knownIds, ...listUserSourceIds(userSourcesDir())];
     if (!knownIds.includes(sourceId)) {
       return sendError(res, 404, 'SOURCE_NOT_FOUND');
     }
@@ -295,7 +438,7 @@ export function createApiServer(opts: ApiOptions): Server {
     }
     let started: { jobId: string; done: Promise<JobSummary> };
     try {
-      started = start(sourceId);
+      started = start(sourceId, demoFault !== undefined ? { demoFault } : undefined);
     } catch {
       return sendError(res, 500, 'JOB_START_FAILED');
     }
