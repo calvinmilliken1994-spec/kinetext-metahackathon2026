@@ -1,0 +1,12 @@
+{
+  "id": "nasa-grc-ballistic-flight-equations",
+  "title": "Ballistic Flight Equations — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+  "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/ballistic-flight-equations/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+  "sha256": "89ecf743b3bc22c056d40e778dd8cab693f91bf7a124244344ecdef71df50422",
+  "textFile": "nasa-grc-ballistic-flight-equations.txt",
+  "retrievedAt": "2026-10-27T15:06:52Z",
+  "transcription": "Main article text only (navigation, images and page furniture removed). LaTeX equations transcribed to plain text, e.g. y = V0^2 / (2 * g). Whitespace normalised.",
+  "purpose": "supported example: ballistic flight without drag, x = U0 * t, y = V0 * t - g * t^2 / 2, ymax = V0^2 / (2 * g)"
+}

@@ -1,0 +1,12 @@
+{
+  "id": "nasa-grc-flight-equations-with-drag",
+  "title": "Flight Equations with Drag — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+  "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/flight-equations-with-drag/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+  "sha256": "9abdaed82167ea87bed900563c3cfb7c1e86b1a570b2711600aacf899eceef4a",
+  "textFile": "nasa-grc-flight-equations-with-drag.txt",
+  "retrievedAt": "2026-10-27T15:06:52Z",
+  "transcription": "Main article text only (navigation, images and page furniture removed). LaTeX equations transcribed to plain text, e.g. y = V0^2 / (2 * g). Whitespace normalised.",
+  "purpose": "deliberately unsupported example: ballistic flight with drag (no tested activity models drag; the pipeline should decline)"
+}

@@ -1,7 +1,7 @@
 import { useId } from 'react';
 import type { ChangeEvent } from 'react';
 import type { Frame } from '../../../../packages/activities/forces-1d/engine.ts';
-import type { ActivitySpec } from '../../../../packages/contracts/index.ts';
+import type { ForcesActivitySpec as ActivitySpec } from '../../../../packages/contracts/index.ts';
 import { fixed, trimmed } from '../lib/format.ts';
 import { sliderStep } from '../lib/track.ts';
 import { Scene } from './Scene.tsx';

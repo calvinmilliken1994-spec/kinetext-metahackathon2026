@@ -4,149 +4,455 @@
   "title": "Activity spec v0.2.0 (full contract). Structural only: semantic, grounding and behavioural checks live in packages/validation.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "id", "title", "learningObjectives", "sources", "explanations", "simulation", "behavioralTests", "predictions", "execution", "provenance"],
+  "required": [
+    "schemaVersion",
+    "id",
+    "title",
+    "learningObjectives",
+    "sources",
+    "explanations",
+    "simulation",
+    "behavioralTests",
+    "predictions",
+    "execution",
+    "provenance"
+  ],
   "properties": {
-    "schemaVersion": { "const": "0.2.0" },
-    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,63}$" },
-    "title": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "schemaVersion": {
+      "enum": [
+        "0.2.0",
+        "0.3.0"
+      ]
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
     "learningObjectives": {
-      "type": "array", "minItems": 1, "maxItems": 10,
-      "items": { "type": "string", "minLength": 1, "maxLength": 500 }
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 10,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      }
     },
     "sources": {
-      "type": "array", "minItems": 1, "maxItems": 20,
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20,
       "items": {
-        "type": "object", "additionalProperties": false,
-        "required": ["id", "title", "locator", "license", "attribution", "sha256"],
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "title",
+          "locator",
+          "license",
+          "attribution",
+          "sha256"
+        ],
         "properties": {
-          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,63}$" },
-          "title": { "type": "string", "minLength": 1, "maxLength": 300 },
-          "locator": { "type": "string", "minLength": 1, "maxLength": 1000 },
-          "license": { "type": "string", "minLength": 1, "maxLength": 100 },
-          "attribution": { "type": "string", "minLength": 1, "maxLength": 1000 },
-          "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
-          "page": { "type": "integer", "minimum": 1, "maximum": 10000 }
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "locator": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "license": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "attribution": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10000
+          }
         }
       }
     },
     "explanations": {
-      "type": "array", "minItems": 1, "maxItems": 20,
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20,
       "items": {
-        "type": "object", "additionalProperties": false,
-        "required": ["id", "text", "evidence"],
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "text",
+          "evidence"
+        ],
         "properties": {
-          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,39}$" },
-          "text": { "type": "string", "minLength": 1, "maxLength": 2000 },
-          "evidence": { "$ref": "#/definitions/evidenceList" }
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{0,39}$"
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          },
+          "evidence": {
+            "$ref": "#/definitions/evidenceList"
+          }
         }
       }
     },
     "simulation": {
-      "type": "object", "additionalProperties": false,
-      "required": ["engine", "equation", "massKg", "netForceN", "durationS", "stepS", "scenario", "observables"],
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "engine",
+        "equation",
+        "massKg",
+        "netForceN",
+        "durationS",
+        "stepS",
+        "scenario",
+        "observables"
+      ],
       "properties": {
-        "engine": { "const": "forces-1d-v1" },
-        "equation": { "const": "a=F_net/m" },
+        "engine": {
+          "const": "forces-1d-v1"
+        },
+        "equation": {
+          "const": "a=F_net/m"
+        },
         "massKg": {
-          "type": "object", "additionalProperties": false,
-          "required": ["unit", "min", "max", "default"],
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "unit",
+            "min",
+            "max",
+            "default"
+          ],
           "properties": {
-            "unit": { "const": "kg" },
-            "min": { "type": "number", "minimum": 0.01, "maximum": 1000 },
-            "max": { "type": "number", "minimum": 0.01, "maximum": 1000 },
-            "default": { "type": "number", "minimum": 0.01, "maximum": 1000 }
+            "unit": {
+              "const": "kg"
+            },
+            "min": {
+              "type": "number",
+              "minimum": 0.01,
+              "maximum": 1000
+            },
+            "max": {
+              "type": "number",
+              "minimum": 0.01,
+              "maximum": 1000
+            },
+            "default": {
+              "type": "number",
+              "minimum": 0.01,
+              "maximum": 1000
+            }
           }
         },
         "netForceN": {
-          "type": "object", "additionalProperties": false,
-          "required": ["unit", "min", "max", "default"],
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "unit",
+            "min",
+            "max",
+            "default"
+          ],
           "properties": {
-            "unit": { "const": "N" },
-            "min": { "type": "number", "minimum": -1000, "maximum": 1000 },
-            "max": { "type": "number", "minimum": -1000, "maximum": 1000 },
-            "default": { "type": "number", "minimum": -1000, "maximum": 1000 }
+            "unit": {
+              "const": "N"
+            },
+            "min": {
+              "type": "number",
+              "minimum": -1000,
+              "maximum": 1000
+            },
+            "max": {
+              "type": "number",
+              "minimum": -1000,
+              "maximum": 1000
+            },
+            "default": {
+              "type": "number",
+              "minimum": -1000,
+              "maximum": 1000
+            }
           }
         },
-        "durationS": { "type": "number", "exclusiveMinimum": 0, "maximum": 30 },
-        "stepS": { "type": "number", "minimum": 0.001, "maximum": 0.1 },
+        "durationS": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 30
+        },
+        "stepS": {
+          "type": "number",
+          "minimum": 0.001,
+          "maximum": 0.1
+        },
         "scenario": {
-          "type": "object", "additionalProperties": false,
-          "required": ["objectLabel", "surfaceLabel"],
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "objectLabel",
+            "surfaceLabel"
+          ],
           "properties": {
-            "objectLabel": { "type": "string", "minLength": 1, "maxLength": 60 },
-            "surfaceLabel": { "type": "string", "minLength": 1, "maxLength": 60 }
+            "objectLabel": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 60
+            },
+            "surfaceLabel": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 60
+            }
           }
         },
         "observables": {
-          "type": "array", "minItems": 1, "maxItems": 3, "uniqueItems": true,
-          "items": { "enum": ["position", "velocity", "acceleration"] }
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "position",
+              "velocity",
+              "acceleration"
+            ]
+          }
         }
       }
     },
     "behavioralTests": {
-      "type": "array", "minItems": 1, "maxItems": 20,
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20,
       "items": {
-        "type": "object", "additionalProperties": false,
-        "required": ["name", "massKg", "netForceN", "expectedAccelerationMps2", "tolerance"],
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "massKg",
+          "netForceN",
+          "expectedAccelerationMps2",
+          "tolerance"
+        ],
         "properties": {
-          "name": { "type": "string", "minLength": 1, "maxLength": 100 },
-          "massKg": { "type": "number", "exclusiveMinimum": 0, "maximum": 1000 },
-          "netForceN": { "type": "number", "minimum": -1000, "maximum": 1000 },
-          "expectedAccelerationMps2": { "type": "number", "minimum": -100000, "maximum": 100000 },
-          "tolerance": { "type": "number", "exclusiveMinimum": 0, "maximum": 0.01 }
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "massKg": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 1000
+          },
+          "netForceN": {
+            "type": "number",
+            "minimum": -1000,
+            "maximum": 1000
+          },
+          "expectedAccelerationMps2": {
+            "type": "number",
+            "minimum": -100000,
+            "maximum": 100000
+          },
+          "tolerance": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 0.01
+          }
         }
       }
     },
     "predictions": {
-      "type": "array", "minItems": 1, "maxItems": 5,
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 5,
       "items": {
-        "type": "object", "additionalProperties": false,
-        "required": ["id", "prompt", "massKg", "netForceN", "expectedAccelerationMps2", "tolerance"],
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "prompt",
+          "massKg",
+          "netForceN",
+          "expectedAccelerationMps2",
+          "tolerance"
+        ],
         "properties": {
-          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,39}$" },
-          "prompt": { "type": "string", "minLength": 1, "maxLength": 300 },
-          "massKg": { "type": "number", "exclusiveMinimum": 0, "maximum": 1000 },
-          "netForceN": { "type": "number", "minimum": -1000, "maximum": 1000 },
-          "expectedAccelerationMps2": { "type": "number", "minimum": -100000, "maximum": 100000 },
-          "tolerance": { "type": "number", "exclusiveMinimum": 0, "maximum": 0.01 }
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{0,39}$"
+          },
+          "prompt": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "massKg": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 1000
+          },
+          "netForceN": {
+            "type": "number",
+            "minimum": -1000,
+            "maximum": 1000
+          },
+          "expectedAccelerationMps2": {
+            "type": "number",
+            "minimum": -100000,
+            "maximum": 100000
+          },
+          "tolerance": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 0.01
+          }
         }
       }
     },
     "execution": {
-      "type": "object", "additionalProperties": false,
-      "required": ["maxWallTimeMs", "maxRepairAttempts", "network", "generatedCodeAllowed"],
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "maxWallTimeMs",
+        "maxRepairAttempts",
+        "network",
+        "generatedCodeAllowed"
+      ],
       "properties": {
-        "maxWallTimeMs": { "type": "integer", "minimum": 100, "maximum": 10000 },
-        "maxRepairAttempts": { "type": "integer", "minimum": 0, "maximum": 2 },
-        "network": { "const": false },
-        "generatedCodeAllowed": { "const": false }
+        "maxWallTimeMs": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 10000
+        },
+        "maxRepairAttempts": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2
+        },
+        "network": {
+          "const": false
+        },
+        "generatedCodeAllowed": {
+          "const": false
+        }
       }
     },
     "provenance": {
-      "type": "object", "additionalProperties": false,
-      "required": ["provider", "requestedModel", "returnedModel", "responseId", "runId", "promptVersion", "revision", "repairOf", "generatedAt"],
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider",
+        "requestedModel",
+        "returnedModel",
+        "responseId",
+        "runId",
+        "promptVersion",
+        "revision",
+        "repairOf",
+        "generatedAt"
+      ],
       "properties": {
-        "provider": { "const": "meta" },
-        "requestedModel": { "type": "string", "minLength": 1, "maxLength": 100 },
-        "returnedModel": { "type": "string", "minLength": 1, "maxLength": 100 },
-        "responseId": { "type": "string", "minLength": 1, "maxLength": 200 },
-        "runId": { "type": "string", "minLength": 1, "maxLength": 100 },
-        "promptVersion": { "type": "string", "minLength": 1, "maxLength": 40 },
-        "revision": { "type": "integer", "minimum": 1, "maximum": 100 },
-        "repairOf": { "type": ["integer", "null"], "minimum": 1 },
-        "generatedAt": { "type": "string", "minLength": 20, "maxLength": 40 }
+        "provider": {
+          "const": "meta"
+        },
+        "requestedModel": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "returnedModel": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "responseId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "runId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "promptVersion": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "repairOf": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "generatedAt": {
+          "type": "string",
+          "minLength": 20,
+          "maxLength": 40
+        }
       }
     }
   },
   "definitions": {
     "evidenceList": {
-      "type": "array", "minItems": 1, "maxItems": 5,
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 5,
       "items": {
-        "type": "object", "additionalProperties": false,
-        "required": ["sourceId", "quote"],
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "sourceId",
+          "quote"
+        ],
         "properties": {
-          "sourceId": { "type": "string", "minLength": 1, "maxLength": 64 },
-          "quote": { "type": "string", "minLength": 3, "maxLength": 300 }
+          "sourceId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "quote": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 300
+          }
         }
       }
     }

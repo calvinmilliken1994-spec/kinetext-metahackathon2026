@@ -27,7 +27,7 @@ import type { AnySchemaObject, ValidateFunction } from 'ajv';
 
 import { ENGINE_ID } from '../contracts/index.ts';
 import type {
-  ActivitySpec,
+  ForcesActivitySpec,
   CheckKind,
   SourceAnalysis,
   SourceDocument,
@@ -197,7 +197,8 @@ export function validateSpec(spec: unknown, sources: SourceDocument[]): Validati
     };
   }
 
-  const s = spec as ActivitySpec;
+  // Stage 5 TASK-013 generalises this to every engine; until then only forces-1d-v1 is checked.
+  const s = spec as ForcesActivitySpec;
   const sim = s.simulation;
 
   const checks: ValidationCheck[] = [

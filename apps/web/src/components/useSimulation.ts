@@ -4,7 +4,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { accelerationOf, simulate, stateAt } from '../../../../packages/activities/forces-1d/engine.ts';
 import type { Frame } from '../../../../packages/activities/forces-1d/engine.ts';
-import type { ActivitySpec } from '../../../../packages/contracts/index.ts';
+import type { ForcesActivitySpec as ActivitySpec } from '../../../../packages/contracts/index.ts';
 
 export interface SimControls {
   massKg: number;

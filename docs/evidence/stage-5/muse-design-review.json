@@ -1,0 +1,67 @@
+{
+  "status": "passed",
+  "route": "hermes-to-muse-cli-subscription",
+  "requestedModel": "muse-spark-1.3",
+  "contributorMode": "off",
+  "checkedAt": "2026-10-27T15:15:13.377354+00:00",
+  "fallbackUsed": false,
+  "maxModelSteps": 1,
+  "timeoutSeconds": 400,
+  "subscriptionTier": "Muse Code High Usage",
+  "allowanceBefore": {
+    "tier": "Muse Code High Usage",
+    "window": {
+      "usedPercent": 0,
+      "resetsAtMs": 1793116690000
+    },
+    "weekly": {
+      "usedPercent": 3,
+      "resetsAtMs": 1793577600000
+    },
+    "asOfMs": 1793114113459,
+    "source": "mint"
+  },
+  "exitCode": 0,
+  "configuredModel": "muse-spark-1.3",
+  "usage": {
+    "kind": "run_usage",
+    "command_id": "01a17dee-0ebe-7233-8cba-29df3740d3cc",
+    "run_stream": {
+      "kind": "run",
+      "id": "01a17dee-0ebe-7233-8cba-29df3740d3cc"
+    },
+    "models": [
+      {
+        "model": "muse-spark-1.3",
+        "input_tokens": 28046,
+        "cached_tokens": 0,
+        "output_tokens": 7599,
+        "reasoning_tokens": 5589,
+        "calls": 1
+      }
+    ],
+    "calls": 1,
+    "completed_calls": 1,
+    "failed_calls": 0,
+    "cancelled_calls": 0,
+    "children_included": false,
+    "allowance": {
+      "tier": null,
+      "window": {
+        "used_percent": 0,
+        "resets_at_ms": 1793116690000
+      },
+      "weekly": {
+        "used_percent": 3,
+        "resets_at_ms": 1793577600000
+      },
+      "as_of_ms": 1793114145478,
+      "source": "stream"
+    }
+  },
+  "httpStatuses": [],
+  "terminal": "completed",
+  "answer": "## A. Physics / maths errors vs sources\n\n1. Severity: Medium. Location: `packages/contracts/engines.ts` \u2014 `ENGINES['speed-of-sound-v1'].inputs gamma hardMin: 1` (inclusive). The source teaches isentropic `a=sqrt(gamma*R*T)` with `gamma=Cp/Cv>1` (air ~1.4, monatomic ~1.66). `gamma=1` is the isothermal Newton value, not this model. Change: `hardMin: 1, exclusiveMin: true`.\n2. Severity: Medium. Location: `packages/contracts/engines.ts` \u2014 `ENGINES['forces-1d-v1'].tolerance {absMax:0.01, relMax:0}` vs all other engines `relMax:0.005`. At `|a|=1e5` (allowed by `1000/0.01`) this demands 1e-7 relative accuracy; JSON rounding of repeating decimals (e.g. `1000/0.06=16666.66\u2026`) can spuriously fail. Change: `relMax: 0.005` like the other engines.\n3. Severity: Low. Location: `STAGE-5-plan.md` Behaviour/TASK-012 \u2014 `flight time 2\u00b7V0/g`. The excerpt derives only time-to-apex `t=V0/g` and `y_max=V0^2/(2g)`; `2V0/g` additionally assumes landing at launch elevation (`y=0`). Change: state the assumption (`y0=0`, level landing) and clamp animated frames at `y>=0`; do not sample underground `t` values.\n4. Severity: Low. Location: `packages/contracts/engines.ts` \u2014 `projectile.verticalSpeedMps exclusiveMin:true`, `lift.airDensityKgM3` and `lift.wingAreaM2 exclusiveMin:true`. `V0=0\u2192y_max=0`, `rho=0\u2192L=0`, `A=0\u2192L=0` are all valid closed-form results, so the exclusions are design narrowings, not physics. Change: either drop them or document as \"degenerate cases excluded on purpose\".\n5. Severity: Medium. Location: `scripts/build-schemas.ts` \u2014 `fullSchema()` tolerance `maximum: max(absMax, relMax*max(|outMin|,|outMax|))`. For lift this allows `tolerance` up to 5e6 and projectile up to 5000 in-schema. The per-case cap `maxTolerance(computed)` must be enforced in validation, not the schema. Change: keep schema max as a coarse guard but require `semantic.tolerance` to check `tolerance <= maxTolerance(recomputed)` per case; add a fixture with large tolerance on a small output that must fail.\n\n## B. Contract gaps blocking repair / choice / user sources\n\n6. Severity: High. Location: `packages/contracts/index.ts` \u2014 `assembleSpec(gen: GeneratedSpec, engine: EngineId, ...)`. `gen` and `engine` are independent; the body casts through `Record<string,unknown>`. A forces gen + projectile engine compiles and produces garbage. The catch-all copy loop also leaks model-supplied extras (e.g. `durationS/stepS`) into non-forces simulations, defeating `additionalProperties:false`. Change: overload per engine (`gen: GeneratedFor<E>, engine: E`) and strip instead of copy: only `d.inputs` keys plus the known extras per engine.\n7. Severity: High. Location: `packages/contracts/index.ts` \u2014 `RepairFinding {id,kind,message,path?}` + `repairFindings()` truncating to 300 chars. No structured `expected/computed/tolerance` or input snapshot, so `repairSpec` must re-parse prose. Truncation can cut the numbers it needs. Change: add optional structured fields (`expected?: number, computed?: number, tolerance?: number`) and never truncate those; keep the 300-char prose cap only for display.\n8. Severity: Medium. Location: `packages/contracts/index.ts` \u2014 `BehavioralTest`/`Prediction` aliases are forces-only (`ForcesCase`); there is no `ActivityCase` union or typed `computeOutput(engine, case)`. TASK-013/014 cannot be written type-safely. Change: add `ActivityCase`/`BehavioralTestAny` unions and `computeOutput(engine: EngineId, c: ActivityCase): number`.\n9. Severity: Medium. Location: `STAGE-5-plan.md` + `index.ts` \u2014 `validateSpec` dispatches on `spec.simulation.engine`, `schema.full` fails on missing/unknown, but `fullSchemaFor(engine)` has no defined fallback input. Change: specify fallback (validate against forces full + emit `schema.full` failure naming the unknown engine).\n10. Severity: Medium. Location: `packages/contracts/index.ts` \u2014 `Provenance {revision, repairOf}` vs `assembleSpec(opts)`. Nothing sets `revision=1/repairOf=null` or `revision=n+1`; each implementer will invent it. Change: export `initialProvenance()` / `repairProvenance(prev)` helpers and require their use.\n11. Severity: Medium. Location: `packages/contracts/index.ts` \u2014 user sources: `USER_SOURCE_LIMITS`, normalisation, `user-<sha12>.{json,txt}`, hash verification described only in the plan. No canonical hash input (pre/post normalisation?) and no exported validator. Change: define `hash = sha256(normalisedText)` explicitly and export `validateUserSourceInput()`.\n12. Severity: Low. Location: `packages/contracts/index.ts` \u2014 `FaultRecord.revision: 1` literal and `path` example hardcodes a forces key. Change: `revision: number` and document engine-specific output keys in the path.\n\n## C. Repair-loop risks, cheapest mitigations\n\n13. Severity: High. Location: TASK-014 `repairSpec` / TASK-015 loop \u2014 Muse can \"fix\" failures by weakening tests (raise `tolerance` within schema max, pick trivial inputs, shrink ranges). Cheapest mitigation: validation already caps `tolerance<=maxTolerance(computed)`; additionally forbid increasing any `tolerance` or shrinking any range width in a repair unless that check was failing, and state this in the repair prompt.\n14. Severity: Medium. Location: TASK-015 loop \u2014 oscillation/regression (fix A, break B, flip-flop over 2 attempts). Change: feed all prior reports (not just last findings), instruct \"do not alter passing checks\", and publish the best revision (fewest failures; first publishable wins).\n15. Severity: High. Location: TASK-014 \u2014 prompt injection via pasted `UserSourceInput.text` and via model-controlled strings echoed in check messages into `repairSpec`. Escaped-JSON labelling is planned but not a typed boundary. Change: treat findings as untrusted too (JSON-escape, separate `untrusted` block, system-wins instruction); keep `grounding.quotes` (verbatim substring), `policy.no-publisher-attribution`, `scope.prose-unverified` as backstops; add one adversarial source to TASK-017.\n16. Severity: Medium. Location: `Execution.maxRepairAttempts` + budget (\"4 Meta calls/job\"). A stuck repair doubles cost per job. Change: keep hard cap 2 (already in `DEFAULT_EXECUTION`); ensure `assembleSpec` never lets the model override `execution` on repair.\n\n## D. Demo-misleading risks\n\n17. Severity: High. Location: TASK-015/016 \u2014 `FaultRecord` + timeline (\"revision 1\u21922\u21923, which checks were fixed\", \"Repaired by Muse\" badge). Revision-1 reports are indistinguishable from genuine model errors, inflating repair stats. Change: flag r1 reports/jobs with `injectedFault`, badge repairs from injected faults as \"system-made fault, repaired\", and exclude demo-fault jobs from success metrics/fixtures.\n18. Severity: Medium. Location: `wrong-answer: output\u00d71.5+1`, `fabricated-quote: fixed sentence`. The fixed sentence could in principle occur in a pasted user source (demo silently passes with no repair), and lift/sound renderers (arrow, wavefronts) plus projectile animation sampling are unspecified and may imply fidelity the closed form does not provide. Change: use a nonce quote verified absent pre-injection; drive animations from spec inputs (`U0,V0,g`; wavefront speed = computed `a`) and label them schematic; demo the `drag` decline case so the video does not imply every source yields an activity.\n\nVerdict: Do not build on these contracts until findings 6, 7, 13, 15 and 17 are fixed; the rest can ride with the tasks.\n",
+  "reason": null,
+  "elapsedSeconds": 32.171
+}

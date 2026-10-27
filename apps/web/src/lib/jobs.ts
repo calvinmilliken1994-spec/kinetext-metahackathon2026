@@ -63,12 +63,13 @@ export function runBadge(
   return { kind: 'recorded', label: `Recorded run · ${fmt(job.createdAt)}` };
 }
 
-export const STAGE_ORDER: readonly Stage[] = ['ingest', 'analyze', 'specify', 'validate', 'repair', 'done'];
+export const STAGE_ORDER: readonly Stage[] = ['ingest', 'analyze', 'specify', 'inject', 'validate', 'repair', 'done'];
 
 export const STAGE_LABEL: Record<Stage, string> = {
   ingest: 'Ingest source',
   analyze: 'Analyse source',
   specify: 'Specify activity',
+  inject: 'Demo fault (system-injected)',
   validate: 'Validate',
   repair: 'Repair',
   done: 'Done',
@@ -92,14 +93,14 @@ export interface TimelineRow {
 /**
  * Build the timeline strictly from the events that exist. Stages that have no event yet appear as
  * 'pending' ONLY while the job is still running (so progress is visible); a finished job never shows
- * invented rows. 'repair' appears only when the pipeline actually emitted it.
+ * invented rows. 'inject' and 'repair' appear only when the pipeline actually emitted them.
  */
 export function buildTimeline(events: readonly StageEvent[], jobStatus: JobStatus): TimelineRow[] {
   const rows: TimelineRow[] = [];
   for (const stage of STAGE_ORDER) {
     const evs = events.filter((e) => e.stage === stage).sort((a, b) => a.seq - b.seq);
     if (evs.length === 0) {
-      if (jobStatus === 'running' && stage !== 'repair') rows.push({ stage, status: 'pending', durationMs: null });
+      if (jobStatus === 'running' && stage !== 'repair' && stage !== 'inject') rows.push({ stage, status: 'pending', durationMs: null });
       continue;
     }
     const started = evs.find((e) => e.status === 'started');

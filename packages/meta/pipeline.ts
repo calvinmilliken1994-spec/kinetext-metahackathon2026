@@ -4,6 +4,7 @@ import { assembleSpec } from '../contracts/index.ts';
 import type {
   ActivitySpec,
   GeneratedSpec,
+  ForcesGeneratedSpec,
   MetaReceipt,
   SourceAnalysis,
   SourceDocument,
@@ -104,7 +105,7 @@ export async function generateSpec(
   }
   let spec: ActivitySpec;
   try {
-    spec = assembleSpec(result.data, {
+    spec = assembleSpec(result.data as ForcesGeneratedSpec, 'forces-1d-v1', {
       id: ids.specId,
       sources: [source],
       provenance: {

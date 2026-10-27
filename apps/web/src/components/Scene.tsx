@@ -1,6 +1,6 @@
 import { useId, useMemo } from 'react';
 import type { Frame } from '../../../../packages/activities/forces-1d/engine.ts';
-import type { ActivitySpec } from '../../../../packages/contracts/index.ts';
+import type { ForcesActivitySpec as ActivitySpec } from '../../../../packages/contracts/index.ts';
 import { arrowLength, clampArrow, objectShapeFor, toPx, trackWindow } from '../lib/track.ts';
 import { fixed, trimmed } from '../lib/format.ts';
 

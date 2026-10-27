@@ -1,7 +1,20 @@
-// Shared contracts v0.2.0 — owned by the lead. Changing anything here requires a contract review.
+// Shared contracts v0.3.0 — owned by the lead. Changing anything here requires a contract review.
 // Runtime: Node 24 type stripping, so only erasable TypeScript syntax (no enums, namespaces or parameter properties).
+// v0.3 adds: several tested activity engines (packages/contracts/engines.ts), agentic repair revisions,
+// teacher-provided sources and labelled demo fault injection. v0.2.0 forces specs remain valid.
 
-export const SCHEMA_VERSION = '0.2.0';
+import { ENGINES } from './engines.ts';
+import type { EngineId } from './engines.ts';
+
+export { ENGINES, ENGINE_IDS, isEngineId, maxTolerance } from './engines.ts';
+export type { EngineDescriptor, EngineId, EngineInput } from './engines.ts';
+
+export const SCHEMA_VERSION = '0.3.0';
+/** Schema versions the full schemas accept. 0.2.0 is forces-1d-v1 only (recorded Stage 2 evidence). */
+export const ACCEPTED_SCHEMA_VERSIONS = ['0.2.0', '0.3.0'] as const;
+export type SchemaVersion = typeof ACCEPTED_SCHEMA_VERSIONS[number];
+
+/** forces-1d-v1 identifiers, kept for Stage 2 code. */
 export const ENGINE_ID = 'forces-1d-v1';
 export const EQUATION = 'a=F_net/m';
 
@@ -17,55 +30,127 @@ export interface SourceDocument {
 export type SourceRef = Omit<SourceDocument, 'text'>;
 
 export interface Range<U extends string> { unit: U; min: number; max: number; default: number }
-export interface NumericCase { massKg: number; netForceN: number; expectedAccelerationMps2: number; tolerance: number }
-export interface BehavioralTest extends NumericCase { name: string }
-export interface Prediction extends NumericCase { id: string; prompt: string }
+export interface GenRange { min: number; max: number; default: number }
 
-export interface Simulation {
-  engine: typeof ENGINE_ID; equation: typeof EQUATION;
+// ---- Per-engine numeric cases. Each case states every engine input plus the expected output. -------------
+export interface ForcesCase { massKg: number; netForceN: number; expectedAccelerationMps2: number; tolerance: number }
+export interface ProjectileCase {
+  horizontalSpeedMps: number; verticalSpeedMps: number; gravityMps2: number; expectedMaxHeightM: number; tolerance: number;
+}
+export interface LiftCase {
+  liftCoefficient: number; airDensityKgM3: number; airspeedMps: number; wingAreaM2: number; expectedLiftN: number; tolerance: number;
+}
+export interface SoundCase {
+  gamma: number; gasConstantJPerKgK: number; temperatureK: number; expectedSpeedMps: number; tolerance: number;
+}
+/** Stage 2 name for the forces case. */
+export type NumericCase = ForcesCase;
+/** Any engine's case (inputs + expected output + tolerance). */
+export type ActivityCase = ForcesCase | ProjectileCase | LiftCase | SoundCase;
+
+export type BehavioralTestOf<C> = C & { name: string };
+export type PredictionOf<C> = C & { id: string; prompt: string };
+export type BehavioralTest = BehavioralTestOf<ForcesCase>;
+export type Prediction = PredictionOf<ForcesCase>;
+export type AnyBehavioralTest = BehavioralTestOf<ActivityCase>;
+export type AnyPrediction = PredictionOf<ActivityCase>;
+
+// ---- Per-engine simulations (full spec form: ranges carry units). ----------------------------------------
+export interface ForcesSimulation {
+  engine: 'forces-1d-v1'; equation: 'a=F_net/m';
   massKg: Range<'kg'>; netForceN: Range<'N'>;
   durationS: number; stepS: number;
   scenario: { objectLabel: string; surfaceLabel: string };
   observables: Observable[];
 }
+export interface ProjectileSimulation {
+  engine: 'projectile-v1'; equation: 'y_max=V0^2/(2*g)';
+  horizontalSpeedMps: Range<'m/s'>; verticalSpeedMps: Range<'m/s'>; gravityMps2: Range<'m/s^2'>;
+  scenario: { objectLabel: string; settingLabel: string };
+}
+export interface LiftSimulation {
+  engine: 'lift-equation-v1'; equation: 'L=Cl*(rho*V^2/2)*A';
+  liftCoefficient: Range<'1'>; airDensityKgM3: Range<'kg/m^3'>; airspeedMps: Range<'m/s'>; wingAreaM2: Range<'m^2'>;
+  scenario: { objectLabel: string; settingLabel: string };
+}
+export interface SoundSimulation {
+  engine: 'speed-of-sound-v1'; equation: 'a=sqrt(gamma*R*T)';
+  gamma: Range<'1'>; gasConstantJPerKgK: Range<'J/(kg*K)'>; temperatureK: Range<'K'>;
+  scenario: { objectLabel: string; settingLabel: string };
+}
+export type Simulation = ForcesSimulation | ProjectileSimulation | LiftSimulation | SoundSimulation;
 
 export interface Provenance {
   provider: 'meta'; requestedModel: string; returnedModel: string; responseId: string; runId: string;
   promptVersion: string; revision: number; repairOf: number | null; generatedAt: string;
 }
 
-/** Full activity spec — validated by schemas/activity-spec.full.json plus packages/validation. */
-export interface ActivitySpec {
-  schemaVersion: typeof SCHEMA_VERSION; id: string; title: string; learningObjectives: string[];
-  sources: SourceRef[];
-  explanations: { id: string; text: string; evidence: Evidence[] }[];
-  simulation: Simulation; behavioralTests: BehavioralTest[]; predictions: Prediction[];
-  execution: { maxWallTimeMs: number; maxRepairAttempts: number; network: false; generatedCodeAllowed: false };
-  provenance: Provenance;
-}
+export interface Explanation { id: string; text: string; evidence: Evidence[] }
+export interface Execution { maxWallTimeMs: number; maxRepairAttempts: number; network: false; generatedCodeAllowed: false }
 
-/** What Muse generates (schemas/activity-spec.gen.json). The system adds ids, sources, execution and provenance. */
-export interface GeneratedSpec {
-  title: string; learningObjectives: string[];
-  explanations: { id: string; text: string; evidence: Evidence[] }[];
+interface SpecBase {
+  schemaVersion: SchemaVersion; id: string; title: string; learningObjectives: string[];
+  sources: SourceRef[]; explanations: Explanation[]; execution: Execution; provenance: Provenance;
+}
+export interface ForcesActivitySpec extends SpecBase {
+  simulation: ForcesSimulation; behavioralTests: BehavioralTestOf<ForcesCase>[]; predictions: PredictionOf<ForcesCase>[];
+}
+export interface ProjectileActivitySpec extends SpecBase {
+  simulation: ProjectileSimulation; behavioralTests: BehavioralTestOf<ProjectileCase>[]; predictions: PredictionOf<ProjectileCase>[];
+}
+export interface LiftActivitySpec extends SpecBase {
+  simulation: LiftSimulation; behavioralTests: BehavioralTestOf<LiftCase>[]; predictions: PredictionOf<LiftCase>[];
+}
+export interface SoundActivitySpec extends SpecBase {
+  simulation: SoundSimulation; behavioralTests: BehavioralTestOf<SoundCase>[]; predictions: PredictionOf<SoundCase>[];
+}
+/** Full activity spec — validated by schemas/activity-spec.full[.<engine>].json plus packages/validation. */
+export type ActivitySpec = ForcesActivitySpec | ProjectileActivitySpec | LiftActivitySpec | SoundActivitySpec;
+
+// ---- What Muse generates (schemas/activity-spec.gen[.<engine>].json). The system adds ids, sources, engine,
+// equation, units, execution and provenance. --------------------------------------------------------------
+interface GenBase { title: string; learningObjectives: string[]; explanations: Explanation[] }
+export interface ForcesGeneratedSpec extends GenBase {
   simulation: {
-    massKg: { min: number; max: number; default: number };
-    netForceN: { min: number; max: number; default: number };
-    durationS: number; stepS: number;
-    scenario: { objectLabel: string; surfaceLabel: string };
-    observables: Observable[];
+    massKg: GenRange; netForceN: GenRange; durationS: number; stepS: number;
+    scenario: { objectLabel: string; surfaceLabel: string }; observables: Observable[];
   };
-  behavioralTests: BehavioralTest[]; predictions: Prediction[];
+  behavioralTests: BehavioralTestOf<ForcesCase>[]; predictions: PredictionOf<ForcesCase>[];
+}
+export interface ProjectileGeneratedSpec extends GenBase {
+  simulation: { horizontalSpeedMps: GenRange; verticalSpeedMps: GenRange; gravityMps2: GenRange; scenario: { objectLabel: string; settingLabel: string } };
+  behavioralTests: BehavioralTestOf<ProjectileCase>[]; predictions: PredictionOf<ProjectileCase>[];
+}
+export interface LiftGeneratedSpec extends GenBase {
+  simulation: {
+    liftCoefficient: GenRange; airDensityKgM3: GenRange; airspeedMps: GenRange; wingAreaM2: GenRange;
+    scenario: { objectLabel: string; settingLabel: string };
+  };
+  behavioralTests: BehavioralTestOf<LiftCase>[]; predictions: PredictionOf<LiftCase>[];
+}
+export interface SoundGeneratedSpec extends GenBase {
+  simulation: { gamma: GenRange; gasConstantJPerKgK: GenRange; temperatureK: GenRange; scenario: { objectLabel: string; settingLabel: string } };
+  behavioralTests: BehavioralTestOf<SoundCase>[]; predictions: PredictionOf<SoundCase>[];
+}
+export type GeneratedSpec = ForcesGeneratedSpec | ProjectileGeneratedSpec | LiftGeneratedSpec | SoundGeneratedSpec;
+/** The generated-spec type for one engine. */
+export interface GeneratedSpecByEngine {
+  'forces-1d-v1': ForcesGeneratedSpec; 'projectile-v1': ProjectileGeneratedSpec;
+  'lift-equation-v1': LiftGeneratedSpec; 'speed-of-sound-v1': SoundGeneratedSpec;
+}
+export interface ActivitySpecByEngine {
+  'forces-1d-v1': ForcesActivitySpec; 'projectile-v1': ProjectileActivitySpec;
+  'lift-equation-v1': LiftActivitySpec; 'speed-of-sound-v1': SoundActivitySpec;
 }
 
-/** Muse source analysis (schemas/source-analysis.gen.json). Invariants are checked by packages/validation. */
+/** Muse source analysis (schemas/source-analysis.gen.json). Muse chooses the engine or 'none'. */
 export interface SourceAnalysis {
-  supported: boolean; activity: typeof ENGINE_ID | 'none'; unsupportedReason: string;
+  supported: boolean; activity: EngineId | 'none'; unsupportedReason: string;
   concepts: { id: string; name: string; evidence: Evidence[] }[];
   objectives: string[];
 }
 
-export type Stage = 'ingest' | 'analyze' | 'specify' | 'validate' | 'repair' | 'done';
+export type Stage = 'ingest' | 'analyze' | 'specify' | 'inject' | 'validate' | 'repair' | 'done';
 export type StageStatus = 'started' | 'succeeded' | 'failed';
 
 export interface Usage { promptTokens: number; completionTokens: number; reasoningTokens: number; cachedTokens: number }
@@ -84,19 +169,134 @@ export interface MetaReceipt {
 export interface StageEvent {
   jobId: string; seq: number; stage: Stage; status: StageStatus; at: string;
   model?: string; responseId?: string; usage?: Usage | null; latencyMs?: number; estCostUSD?: number; detail?: string;
+  /** Spec revision this event concerns (inject / validate / repair). */
+  revision?: number;
 }
 
 export type CheckKind = 'schema' | 'semantic' | 'grounding' | 'behavioral';
 export interface ValidationCheck { id: string; kind: CheckKind; passed: boolean; message: string; path?: string }
 export interface ValidationReport { artifactId: string; revision: number; checks: ValidationCheck[]; publishable: boolean }
 
-export interface AssembleOptions {
-  id: string; sources: SourceDocument[]; provenance: Provenance;
-  execution?: ActivitySpec['execution'];
+// ---- Agentic repair (Stage 5). -------------------------------------------------------------------------
+/**
+ * One failing deterministic check passed back to Muse. `message` is system-authored but may quote model output,
+ * so prompts treat findings as untrusted data. Structured numbers are never truncated (message display is).
+ */
+export interface RepairFinding {
+  id: string; kind: CheckKind; message: string; path?: string;
+  /** For numeric checks: the stated value, the engine-computed value and the tolerance used. */
+  expected?: number; computed?: number; tolerance?: number;
+}
+/** Summary of one repair attempt, stored on the job. */
+export interface RepairRecord {
+  revision: number; repairOf: number;
+  /** Check ids that failed on `repairOf`. */
+  targeted: string[];
+  /** Of `targeted`, the ids that pass on `revision`. */
+  fixed: string[];
+  /** Check ids failing on `revision` (may include new failures). */
+  remaining: string[];
+  publishable: boolean;
+  /** True when revision 1 contained a system-injected demo fault. Such repairs never count in quality metrics. */
+  afterInjectedFault: boolean;
 }
 
-/** Combine Muse output with system-owned fields. Never copies source text into the spec. */
-export function assembleSpec(gen: GeneratedSpec, opts: AssembleOptions): ActivitySpec {
+// ---- Labelled demo fault injection (system-made, never presented as a model error). ----------------------
+export const DEMO_FAULTS = ['wrong-answer', 'fabricated-quote'] as const;
+export type DemoFault = typeof DEMO_FAULTS[number];
+export interface FaultRecord {
+  kind: DemoFault;
+  /** JSON path in the generated spec that was changed; the output key depends on the engine,
+   *  e.g. "behavioralTests[0].expectedAccelerationMps2" or "behavioralTests[0].expectedLiftN". */
+  path: string;
+  original: string | number;
+  injected: string | number;
+  /** The revision the fault was injected into (always the first generated revision). */
+  revision: number;
+}
+
+// ---- Teacher-provided sources. -------------------------------------------------------------------------
+export const USER_LICENSES = ['public-domain', 'cc-by', 'cc-by-sa', 'own-work', 'permission-granted'] as const;
+export type UserLicense = typeof USER_LICENSES[number];
+export interface UserSourceInput {
+  title: string; text: string; license: UserLicense; attribution: string; locator?: string;
+  /** Teacher confirms the right to process the text with AI models and that it has no personal or student data. */
+  rightsConfirmed: true;
+}
+export const USER_SOURCE_LIMITS = { titleMin: 3, titleMax: 120, attributionMin: 3, attributionMax: 300, textMin: 300, textMax: 8000, locatorMax: 300 } as const;
+
+/** Normalise pasted text exactly once; the stored text and its sha256 are of this normalised form. */
+export function normalizeUserText(text: string): string {
+  return text
+    .replace(/\r\n?/g, '\n')
+    // Remove control characters except tab and newline.
+    .replace(/[\u0000-\u0008\u000B-\u001F\u007F]/g, '')
+    .trim();
+}
+
+export type UserSourceProblem =
+  | 'TITLE_LENGTH' | 'TEXT_LENGTH' | 'ATTRIBUTION_LENGTH' | 'LOCATOR_LENGTH' | 'LICENSE_INVALID' | 'RIGHTS_NOT_CONFIRMED' | 'NOT_AN_OBJECT';
+
+/** Validate a teacher source after normalising its text. Returns the cleaned input or the list of problems. */
+export function validateUserSourceInput(raw: unknown): { ok: true; value: UserSourceInput } | { ok: false; problems: UserSourceProblem[] } {
+  if (typeof raw !== 'object' || raw === null || Array.isArray(raw)) return { ok: false, problems: ['NOT_AN_OBJECT'] };
+  const r = raw as Record<string, unknown>;
+  const L = USER_SOURCE_LIMITS;
+  const str = (v: unknown): string => (typeof v === 'string' ? v.trim() : '');
+  const title = str(r.title);
+  const attribution = str(r.attribution);
+  const locator = str(r.locator);
+  const text = typeof r.text === 'string' ? normalizeUserText(r.text) : '';
+  const problems: UserSourceProblem[] = [];
+  if (title.length < L.titleMin || title.length > L.titleMax) problems.push('TITLE_LENGTH');
+  if (text.length < L.textMin || text.length > L.textMax) problems.push('TEXT_LENGTH');
+  if (attribution.length < L.attributionMin || attribution.length > L.attributionMax) problems.push('ATTRIBUTION_LENGTH');
+  if (locator.length > L.locatorMax) problems.push('LOCATOR_LENGTH');
+  if (!(USER_LICENSES as readonly unknown[]).includes(r.license)) problems.push('LICENSE_INVALID');
+  if (r.rightsConfirmed !== true) problems.push('RIGHTS_NOT_CONFIRMED');
+  if (problems.length > 0) return { ok: false, problems };
+  const value: UserSourceInput = { title, text, license: r.license as UserLicense, attribution, rightsConfirmed: true };
+  if (locator !== '') value.locator = locator;
+  return { ok: true, value };
+}
+
+// ---- Provenance helpers (every revision is numbered the same way). --------------------------------------
+type ProvenanceBase = Omit<Provenance, 'revision' | 'repairOf'>;
+export function initialProvenance(base: ProvenanceBase): Provenance {
+  return { ...base, revision: 1, repairOf: null };
+}
+export function repairProvenance(base: ProvenanceBase, previousRevision: number): Provenance {
+  return { ...base, revision: previousRevision + 1, repairOf: previousRevision };
+}
+
+// ---- Assembly. -----------------------------------------------------------------------------------------
+export interface AssembleOptions {
+  id: string; sources: SourceDocument[]; provenance: Provenance;
+  execution?: Execution;
+}
+
+const DEFAULT_EXECUTION: Execution = { maxWallTimeMs: 2000, maxRepairAttempts: 2, network: false, generatedCodeAllowed: false };
+
+/** Simulation fields besides the engine inputs and `scenario` that each engine keeps from the generated spec. */
+const ENGINE_EXTRAS: Record<EngineId, readonly string[]> = {
+  'forces-1d-v1': ['durationS', 'stepS', 'observables'],
+  'projectile-v1': [],
+  'lift-equation-v1': [],
+  'speed-of-sound-v1': [],
+};
+
+/**
+ * Combine Muse output with system-owned fields for the given engine. Never copies source text into the spec.
+ * Ranges get the descriptor units; engine and equation come from the catalogue, never from the model; any
+ * simulation field the engine does not define is dropped. `execution` and `provenance` are system-owned.
+ */
+export function assembleSpec<E extends EngineId>(gen: GeneratedSpecByEngine[E], engine: E, opts: AssembleOptions): ActivitySpecByEngine[E] {
+  const d = ENGINES[engine];
+  const g = gen.simulation as unknown as Record<string, unknown>;
+  const simulation: Record<string, unknown> = { engine: d.id, equation: d.equation };
+  for (const input of d.inputs) simulation[input.key] = { unit: input.unit, ...(g[input.key] as GenRange) };
+  simulation.scenario = g.scenario;
+  for (const key of ENGINE_EXTRAS[engine]) simulation[key] = g[key];
   return {
     schemaVersion: SCHEMA_VERSION,
     id: opts.id,
@@ -104,19 +304,10 @@ export function assembleSpec(gen: GeneratedSpec, opts: AssembleOptions): Activit
     learningObjectives: gen.learningObjectives,
     sources: opts.sources.map(({ text: _text, ...ref }) => ref),
     explanations: gen.explanations,
-    simulation: {
-      engine: ENGINE_ID,
-      equation: EQUATION,
-      massKg: { unit: 'kg', ...gen.simulation.massKg },
-      netForceN: { unit: 'N', ...gen.simulation.netForceN },
-      durationS: gen.simulation.durationS,
-      stepS: gen.simulation.stepS,
-      scenario: gen.simulation.scenario,
-      observables: gen.simulation.observables,
-    },
+    simulation,
     behavioralTests: gen.behavioralTests,
     predictions: gen.predictions,
-    execution: opts.execution ?? { maxWallTimeMs: 2000, maxRepairAttempts: 2, network: false, generatedCodeAllowed: false },
+    execution: opts.execution ?? DEFAULT_EXECUTION,
     provenance: opts.provenance,
-  };
+  } as unknown as ActivitySpecByEngine[E];
 }

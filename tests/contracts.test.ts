@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { Ajv } from 'ajv';
-import { assembleSpec, type GeneratedSpec, type Provenance, type SourceDocument } from '../packages/contracts/index.ts';
+import { assembleSpec, type ForcesGeneratedSpec, type GeneratedSpec, type Provenance, type SourceDocument } from '../packages/contracts/index.ts';
 import { activitySpecFullSchema, activitySpecGenSchema, sourceAnalysisGenSchema } from '../packages/contracts/schemas.ts';
 
 const fixture = (name: string) => JSON.parse(readFileSync(new URL(`./fixtures/${name}`, import.meta.url), 'utf8'));
@@ -16,11 +16,12 @@ test('full schema accepts the v0.2 fixture', () => {
 });
 
 test('assembleSpec turns Muse output plus system fields into the full fixture, without source text', () => {
-  const spec = assembleSpec(fixture('gen.forces.json') as GeneratedSpec, {
+  const spec = assembleSpec(fixture('gen.forces.json') as ForcesGeneratedSpec, 'forces-1d-v1', {
     id: 'forces-contract-fixture', sources: [fixture('source-doc.json') as SourceDocument],
     provenance: fixture('provenance.fixture.json') as Provenance,
   });
-  assert.deepEqual(spec, fixture('spec.forces.v0.2.json'));
+  // v0.3 assembly stamps the current schema version; everything else equals the v0.2 fixture.
+  assert.deepEqual(spec, { ...(fixture('spec.forces.v0.2.json') as object), schemaVersion: '0.3.0' });
   assert.equal(JSON.stringify(spec).includes((fixture('source-doc.json') as SourceDocument).text), false);
   assert.equal(validateFull(spec), true, JSON.stringify(validateFull.errors));
 });

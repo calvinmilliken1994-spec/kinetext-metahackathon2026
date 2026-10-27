@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from 'react';
-import type { ActivitySpec, Prediction } from '../../../../packages/contracts/index.ts';
+import type { ForcesActivitySpec as ActivitySpec, Prediction } from '../../../../packages/contracts/index.ts';
 import type { Grade } from '../lib/predictions.ts';
 import { fixed, trimmed } from '../lib/format.ts';
 import { Disclosure } from './Disclosure.tsx';

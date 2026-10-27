@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
+import type { ForcesActivitySpec } from '../../../packages/contracts/index.ts';
 import { api, describeError } from './api.ts';
 import { useHealth, useJobDetail, useJobs, useSourceDoc, useSources } from './hooks.ts';
 import { buildHighlights } from './lib/highlight.ts';
@@ -117,8 +118,9 @@ export function App() {
           {selectedJobId === null && jobs.state === 'loading' && <p className="muted pad">Loading…</p>}
           {detail?.state === 'loading' && <p className="muted pad">Loading run…</p>}
           {detail?.state === 'error' && <div className="callout callout-error pad-m" role="alert">{detail.message}</div>}
-          {ready !== null && spec !== undefined && ready.summary.status === 'succeeded' && (
-            <ActivityPanel key={spec.id} spec={spec} cite={{ sourceId: ready.summary.sourceId, located, onCite }} />
+          {/* Stage 5 TASK-016 adds renderers for the other engines; until then only forces specs render. */}
+          {ready !== null && spec !== undefined && ready.summary.status === 'succeeded' && spec.simulation.engine === 'forces-1d-v1' && (
+            <ActivityPanel key={spec.id} spec={spec as ForcesActivitySpec} cite={{ sourceId: ready.summary.sourceId, located, onCite }} />
           )}
           {ready !== null && (spec === undefined || ready.summary.status !== 'succeeded') && (
             <JobOutcome detail={ready} serverBusy={health === null ? null : generate.busy} />

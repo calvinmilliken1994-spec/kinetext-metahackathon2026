@@ -1,0 +1,139 @@
+# Flight Equations with Drag
+
+A ball in flight has no engine to produce thrust, so the resulting flight is similar to the flight of shell from a cannon, or a bullet from a gun. This type of flight is called ballistic flight and assumes that weight is the only force acting on the ball. In reality, a baseball or a soccer ball in flight generates a moderate amount of aerodynamic drag and is not strictly ballistic. On this page we develop the equations which describe the motion of a flying ball including the effects of drag.
+
+Vertical Location
+
+At launch the ball is inclined at some angle to the vertical, so we resolve the initial velocity into a vertical and horizontal component. Unlike the ballistic flight equations, the horizontal equation includes the action of aerodynamic drag on the ball. We will first consider the vertical component and then develop the equations for the horizontal component.
+
+In the vertical plane, the only forces acting on the ball are the forces of weight and drag. There is a characteristic velocity which appears in many of the equations that is called the terminal velocity because it is the constant velocity that the object sustains during a coasting descent. Terminal velocity is noted by the symbol Vt.
+
+Vertical Descent
+
+During the vertical descent, for a light object, the weight and drag of an object are equal and opposite. There is no net force acting on the ball and the vertical acceleration is zero.
+
+a = 0
+
+W = D
+
+where a is the acceleration, W is the weight, and D is the drag. The weight of any object is given by the weight equation:
+
+W = m * g
+
+where m is the mass of the object and g is the gravitational acceleration equal to 32.2 ft/sec2 or 9.8 m/sec2 on the surface of the Earth. (The gravitational acceleration has different values on the Moon and on Mars.) The drag is given by the drag equation:
+
+D = (Cd * rho * A * Vt^2) / 2
+
+where rho is the gas density, Cd is the drag coefficient which characterizes the effects of shape of the ball, A is the cross-sectional area of the ball, and Vt is the terminal velocity.
+
+Velocity
+
+The gas density has different surface values on the Earth and on Mars and varies with altitude. On the Moon the gas density is zero. Combining the last three equations, we can determine the terminal velocity:
+
+m * g = (Cd * rho * A * Vt^2) / 2
+
+Vt = sqrt((2 * m * g) / (Cd * rho * A))
+
+Now, turning to the ascent trajectory, the ball is traveling at an initial vertical velocity V0. With the positive vertical coordinate denoted by y, the net vertical force Fnet acting on the ball is given by:
+
+Fnet = -W - D
+
+Because the weight of the object is a constant, we can use the simple form of Newton's second law to solve for the vertical acceleration:
+
+Fnet = m * a = -W - D
+
+m * a = -m * g - (Cd * rho * A * v^2) / 2
+
+a = -g - (Cd * rho * A * v^2) / (2 * m)
+
+Notice that the acceleration changes with time. Multiply the last term by g / g and use the definition of the terminal velocity to obtain:
+
+a = -g * (1 + v^2 / Vt^2)
+
+Acceleration
+
+The acceleration is the time rate of change of velocity:
+
+a = dv/dt = -g * (1 + v^2 / Vt^2)
+
+Integrating this differential equation:
+
+dv / (1 + v^2 / Vt^2) = -g * dt
+
+Vt * tan-1(v / Vt) = -g * t
+
+where tan-1 is the inverse tangent function, and t is time. The limits of integration for velocity v are from V0 to V and the limits for time t is from 0 to t:
+
+tan-1(V / Vt) - tan-1(V0 / Vt) = -g * t / Vt
+
+tan-1(V / Vt) = tan-1(V0 / Vt) - g * t / Vt
+
+Now take the tangent function of both sides of the equation using the trigonometric identity:
+
+tan(a - b) = (tan(a) - tan(b)) / (1 + tan(a) * tan(b))
+
+on the right-hand side to obtain:
+
+V / Vt = (V0 / Vt - tan(g * t / Vt)) / (1 + (V0 / Vt) * tan(g * t / Vt))
+
+V / Vt = (V0 - Vt - tan(g * t / Vt)) / (Vt + V0 * tan(g * t / Vt))
+
+Vertical Ascent
+
+This is the equation for the velocity at any time during the vertical ascent. At the top of the trajectory, the velocity is zero. We can solve the velocity equation to determine the time when this occurs:
+
+V0 / Vt = tan(g * t(v=0) / Vt)
+
+t(v=0) = (Vt / g) * tan-1(V0 / Vt)
+
+To determine the vertical location during the ascent, we have to use another identity from differential calculus:
+
+dv/dt = (dv/dy) * (dy/dt)
+
+dv/dt = v * dv/dy
+
+We previously determined that:
+
+dv/dt = -g * (1 + v^2 / Vt^2)
+
+v * dv/dy = -g * (1 + v^2 / Vt^2)
+
+(v / (1 + v^2 / Vt^2)) * dv = -g * dy
+
+Integrating both sides:
+
+(Vt^2 / 2) * ln(v^2 + Vt^2) = -g * y
+
+where ln is the natural logarithmic function. The limits of integration for velocity v is from V0 to V and the limits for direction y is from 0 to y:
+
+(Vt^2 / 2) * ln(V^2 + Vt^2) - ln(V0^2 + Vt^2) = -g * y
+
+y = (Vt^2 / (2 * g)) * ln((V0^2 + Vt^2) / (V^2 + Vt^2))
+
+Notice that the location equation is pretty messy! For a given time t, we would have to find the local velocity V, and then plug that value into the location equation to get the location y. At the maximum height ymax, the velocity is equal to zero:
+
+ymax = (Vt^2 / (2 * g)) * ln((V0^2 + Vt^2) / Vt^2)
+
+Horizontal Location
+
+The horizontal equations are a little easier, since the only net force acting on the ball is the drag:
+
+Fnet = m * a = -D
+
+m * a = -(Cd * rho * A * u^2) / 2
+
+a = -(Cd * rho * A * u^2) / (2 * m)
+
+where u is the horizontal velocity. We can use the terminal velocity to simplify this equation:
+
+a = du/dt = -g * u^2 / Vt^2
+
+(1 / u^2) * du = -(g / Vt^2) * dt
+
+Integrating the equations, with the limits on the velocity from the initial velocity U0 to U, we obtain:
+
+u = dx/dt = (Vt^2 * U0) / (Vt^2 + g * U0 * t)
+
+The horizontal velocity is inversely dependent on the time. We can similarly solve for the location x at any time by integrating the velocity equation:
+
+x = (Vt^2 / g) * ln((Vt^2 + g * U0 * t) / Vt^2)

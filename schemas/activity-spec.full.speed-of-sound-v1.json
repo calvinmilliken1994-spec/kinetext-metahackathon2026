@@ -1,0 +1,474 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://make-knowledge-interactive.local/schemas/activity-spec.full.speed-of-sound-v1.json",
+  "title": "Activity spec (full) — Speed of sound in a gas",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "title",
+    "learningObjectives",
+    "sources",
+    "explanations",
+    "simulation",
+    "behavioralTests",
+    "predictions",
+    "execution",
+    "provenance"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "0.3.0"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "learningObjectives": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 10,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "title",
+          "locator",
+          "license",
+          "attribution",
+          "sha256"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "locator": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "license": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "attribution": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10000
+          }
+        }
+      }
+    },
+    "explanations": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "text",
+          "evidence"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{0,39}$"
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          },
+          "evidence": {
+            "$ref": "#/definitions/evidenceList"
+          }
+        }
+      }
+    },
+    "simulation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "engine",
+        "equation",
+        "gamma",
+        "gasConstantJPerKgK",
+        "temperatureK",
+        "scenario"
+      ],
+      "properties": {
+        "engine": {
+          "const": "speed-of-sound-v1"
+        },
+        "equation": {
+          "const": "a=sqrt(gamma*R*T)"
+        },
+        "gamma": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "unit",
+            "min",
+            "max",
+            "default"
+          ],
+          "properties": {
+            "unit": {
+              "const": "1"
+            },
+            "min": {
+              "type": "number",
+              "exclusiveMinimum": 1,
+              "maximum": 1.7
+            },
+            "max": {
+              "type": "number",
+              "exclusiveMinimum": 1,
+              "maximum": 1.7
+            },
+            "default": {
+              "type": "number",
+              "exclusiveMinimum": 1,
+              "maximum": 1.7
+            }
+          }
+        },
+        "gasConstantJPerKgK": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "unit",
+            "min",
+            "max",
+            "default"
+          ],
+          "properties": {
+            "unit": {
+              "const": "J/(kg*K)"
+            },
+            "min": {
+              "type": "number",
+              "minimum": 100,
+              "maximum": 5000
+            },
+            "max": {
+              "type": "number",
+              "minimum": 100,
+              "maximum": 5000
+            },
+            "default": {
+              "type": "number",
+              "minimum": 100,
+              "maximum": 5000
+            }
+          }
+        },
+        "temperatureK": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "unit",
+            "min",
+            "max",
+            "default"
+          ],
+          "properties": {
+            "unit": {
+              "const": "K"
+            },
+            "min": {
+              "type": "number",
+              "minimum": 50,
+              "maximum": 2000
+            },
+            "max": {
+              "type": "number",
+              "minimum": 50,
+              "maximum": 2000
+            },
+            "default": {
+              "type": "number",
+              "minimum": 50,
+              "maximum": 2000
+            }
+          }
+        },
+        "scenario": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "objectLabel",
+            "settingLabel"
+          ],
+          "properties": {
+            "objectLabel": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 60
+            },
+            "settingLabel": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 60
+            }
+          }
+        }
+      }
+    },
+    "behavioralTests": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "gamma",
+          "gasConstantJPerKgK",
+          "temperatureK",
+          "expectedSpeedMps",
+          "tolerance"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "gamma": {
+            "type": "number",
+            "exclusiveMinimum": 1,
+            "maximum": 1.7
+          },
+          "gasConstantJPerKgK": {
+            "type": "number",
+            "minimum": 100,
+            "maximum": 5000
+          },
+          "temperatureK": {
+            "type": "number",
+            "minimum": 50,
+            "maximum": 2000
+          },
+          "expectedSpeedMps": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10000
+          },
+          "tolerance": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 50
+          }
+        }
+      }
+    },
+    "predictions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "prompt",
+          "gamma",
+          "gasConstantJPerKgK",
+          "temperatureK",
+          "expectedSpeedMps",
+          "tolerance"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{0,39}$"
+          },
+          "prompt": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "gamma": {
+            "type": "number",
+            "exclusiveMinimum": 1,
+            "maximum": 1.7
+          },
+          "gasConstantJPerKgK": {
+            "type": "number",
+            "minimum": 100,
+            "maximum": 5000
+          },
+          "temperatureK": {
+            "type": "number",
+            "minimum": 50,
+            "maximum": 2000
+          },
+          "expectedSpeedMps": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10000
+          },
+          "tolerance": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 50
+          }
+        }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "maxWallTimeMs",
+        "maxRepairAttempts",
+        "network",
+        "generatedCodeAllowed"
+      ],
+      "properties": {
+        "maxWallTimeMs": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 10000
+        },
+        "maxRepairAttempts": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2
+        },
+        "network": {
+          "const": false
+        },
+        "generatedCodeAllowed": {
+          "const": false
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider",
+        "requestedModel",
+        "returnedModel",
+        "responseId",
+        "runId",
+        "promptVersion",
+        "revision",
+        "repairOf",
+        "generatedAt"
+      ],
+      "properties": {
+        "provider": {
+          "const": "meta"
+        },
+        "requestedModel": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "returnedModel": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "responseId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "runId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "promptVersion": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "repairOf": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "generatedAt": {
+          "type": "string",
+          "minLength": 20,
+          "maxLength": 40
+        }
+      }
+    }
+  },
+  "definitions": {
+    "evidenceList": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "sourceId",
+          "quote"
+        ],
+        "properties": {
+          "sourceId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "quote": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 300
+          }
+        }
+      }
+    }
+  }
+}

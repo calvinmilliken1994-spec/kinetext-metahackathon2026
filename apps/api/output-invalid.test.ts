@@ -38,8 +38,11 @@ const FAKE_KEY = 'LLM_F…_KEY'; // synthetic; never a real credential
 const USAGE_REVIEWER = { prompt_tokens: 10, completion_tokens: 20 };
 const USAGE_COST_PER_CALL = 0.0000975;
 /** Reviewer P3 absent-usage reservations for this source/prompt/schema set. */
-const ANALYSIS_RESERVATION = 0.0326875;
-const BOTH_RESERVATIONS = 0.0788125;
+// Reservations follow the input bound (UTF-8 bytes of prompt + schema), so they change with prompts/schemas.
+// v0.3 analysis schema lists four engines: +$0.000155 versus the reviewer's original $0.0326875.
+const ANALYSIS_RESERVATION = 0.0328425;
+const BOTH_RESERVATIONS = 0.0789675;
+const round6 = (x: number): number => Math.round(x * 1e6) / 1e6;
 const OUTPUT_INVALID_MESSAGE = 'The model returned output that does not match the required structure.';
 
 interface Queued {
@@ -236,8 +239,8 @@ test('F-01 P3(a): analysis content "null" with absent usage retains the reservat
     Math.abs(committedUSD - ANALYSIS_RESERVATION) < 1e-9,
     `reviewer reservation expected ${ANALYSIS_RESERVATION}, ledger committed ${committedUSD}`,
   );
-  assert.equal(summary.totalCostUSD, 0.032688, 'rounded to 1e-6 in job.json');
-  assert.equal(summary.reservedUnknownUSD, 0.032688);
+  assert.equal(summary.totalCostUSD, round6(ANALYSIS_RESERVATION), 'rounded to 1e-6 in job.json');
+  assert.equal(summary.reservedUnknownUSD, round6(ANALYSIS_RESERVATION));
 });
 
 const specCases = ['null', '{}', '{"simulation":null}'] as const;
@@ -270,8 +273,8 @@ for (const specContent of specCases) {
       Math.abs(committedUSD - BOTH_RESERVATIONS) < 1e-9,
       `reviewer reservations total expected ${BOTH_RESERVATIONS}, ledger committed ${committedUSD}`,
     );
-    assert.equal(summary.totalCostUSD, 0.078813, 'rounded to 1e-6 in job.json');
-    assert.equal(summary.reservedUnknownUSD, 0.078813);
+    assert.equal(summary.totalCostUSD, round6(BOTH_RESERVATIONS), 'rounded to 1e-6 in job.json');
+    assert.equal(summary.reservedUnknownUSD, round6(BOTH_RESERVATIONS));
   });
 }
 
