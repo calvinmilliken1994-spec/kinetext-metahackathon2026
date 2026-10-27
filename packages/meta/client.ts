@@ -1,4 +1,4 @@
-import { costFromUsage, reservationUSD } from './pricing.ts';
+import { costFromUsage, inputTokenBound, isValidUsage, reservationUSD } from './pricing.ts';
 import type { Ledger } from './ledger.ts';
 import type { MetaReceipt, Usage } from '../contracts/index.ts';
 
@@ -17,14 +17,55 @@ export type MetaErrorCode =
   | 'RETURNED_MODEL_MISMATCH'
   | 'OUTPUT_TRUNCATED'
   | 'OUTPUT_NOT_JSON'
-  | 'EMPTY_OUTPUT';
+  | 'EMPTY_OUTPUT'
+  | 'DEADLINE_EXCEEDED'
+  | 'INPUT_TOO_LARGE';
+
+export const META_ERROR_MESSAGES: Readonly<Record<MetaErrorCode, string>> = {
+  LIVE_CALLS_DISABLED: 'live calls disabled',
+  MODEL_API_KEY_MISSING: 'model API key missing',
+  BUDGET_EXCEEDED: 'budget exceeded',
+  TIMEOUT: 'timeout',
+  RATE_LIMITED: 'rate limited',
+  SERVER_ERROR: 'server error',
+  NETWORK_ERROR: 'network error',
+  BAD_REQUEST: 'bad request',
+  AUTH_FAILED: 'authentication failed',
+  MODEL_NOT_FOUND: 'model not found',
+  HTTP_ERROR: 'http error',
+  RETURNED_MODEL_MISMATCH: 'returned model mismatch',
+  OUTPUT_TRUNCATED: 'output truncated',
+  OUTPUT_NOT_JSON: 'output not JSON',
+  EMPTY_OUTPUT: 'empty output',
+  DEADLINE_EXCEEDED: 'job deadline exceeded',
+  INPUT_TOO_LARGE: 'input too large',
+};
 
 export class MetaError extends Error {
   code: MetaErrorCode;
   status?: number;
   receipt?: MetaReceipt;
-  constructor(code: MetaErrorCode, message: string, opts?: { status?: number; receipt?: MetaReceipt }) {
-    super(message);
+  chargedUSD?: number;
+  costBasis?: 'usage' | 'reservation';
+  providerErrorType?: string;
+  /**
+   * The second `message` argument is IGNORED for source compatibility only
+   * (callers may pass the old message). `this.message` is always
+   * `META_ERROR_MESSAGES[code]` so provider text can never enter the message.
+   */
+  constructor(
+    code: MetaErrorCode,
+    message?: string,
+    opts?: {
+      status?: number;
+      receipt?: MetaReceipt;
+      chargedUSD?: number;
+      costBasis?: 'usage' | 'reservation';
+      providerErrorType?: string;
+    },
+  ) {
+    super(META_ERROR_MESSAGES[code]);
+    void message;
     this.name = 'MetaError';
     this.code = code;
     if (opts !== undefined) {
@@ -33,6 +74,18 @@ export class MetaError extends Error {
       }
       if (opts.receipt !== undefined) {
         this.receipt = opts.receipt;
+      }
+      if (opts.chargedUSD !== undefined) {
+        this.chargedUSD = opts.chargedUSD;
+      }
+      if (opts.costBasis !== undefined) {
+        this.costBasis = opts.costBasis;
+      }
+      if (
+        opts.providerErrorType !== undefined &&
+        /^[a-z_]{1,40}$/.test(opts.providerErrorType)
+      ) {
+        this.providerErrorType = opts.providerErrorType;
       }
     }
   }
@@ -49,6 +102,7 @@ export interface CompleteRequest {
   jsonSchema: Record<string, unknown>;
   messages: ChatMessage[];
   maxOutputTokens: number;
+  signal?: AbortSignal;
 }
 
 export interface MetaClient {
@@ -63,6 +117,7 @@ export interface MetaClientOptions {
   baseUrl?: string;
   timeoutMs?: number;
   retryDelayMs?: number;
+  maxInputTokens?: number;
   fetchImpl?: typeof fetch;
   sleep?: (ms: number) => Promise<void>;
   now?: () => number;
@@ -76,25 +131,64 @@ function toUsage(raw: unknown): Usage | null {
     return null;
   }
   const o = raw as Record<string, unknown>;
-  const promptTokens: number = typeof o['prompt_tokens'] === 'number' ? o['prompt_tokens'] : 0;
-  const completionTokens: number = typeof o['completion_tokens'] === 'number' ? o['completion_tokens'] : 0;
-  let reasoningTokens = 0;
-  let cachedTokens = 0;
-  const compDetails: unknown = o['completion_tokens_details'];
-  if (typeof compDetails === 'object' && compDetails !== null) {
-    const cd = compDetails as Record<string, unknown>;
-    if (typeof cd['reasoning_tokens'] === 'number') {
-      reasoningTokens = cd['reasoning_tokens'];
-    }
+  const pt: unknown = o['prompt_tokens'];
+  const ct: unknown = o['completion_tokens'];
+  if (typeof pt !== 'number' || typeof ct !== 'number') {
+    return null;
   }
+  if (!Number.isFinite(pt) || !Number.isFinite(ct)) {
+    return null;
+  }
+  if (!Number.isInteger(pt) || !Number.isInteger(ct)) {
+    return null;
+  }
+  if (pt < 0 || ct < 0) {
+    return null;
+  }
+  let cached = 0;
+  let reasoning = 0;
   const promptDetails: unknown = o['prompt_tokens_details'];
-  if (typeof promptDetails === 'object' && promptDetails !== null) {
-    const pd = promptDetails as Record<string, unknown>;
-    if (typeof pd['cached_tokens'] === 'number') {
-      cachedTokens = pd['cached_tokens'];
+  if (promptDetails !== undefined && promptDetails !== null) {
+    if (typeof promptDetails !== 'object') {
+      return null;
+    }
+    const c: unknown = (promptDetails as Record<string, unknown>)['cached_tokens'];
+    if (c !== undefined) {
+      if (typeof c !== 'number' || !Number.isFinite(c) || !Number.isInteger(c) || c < 0) {
+        return null;
+      }
+      cached = c;
     }
   }
-  return { promptTokens, completionTokens, reasoningTokens, cachedTokens };
+  const compDetails: unknown = o['completion_tokens_details'];
+  if (compDetails !== undefined && compDetails !== null) {
+    if (typeof compDetails !== 'object') {
+      return null;
+    }
+    const r: unknown = (compDetails as Record<string, unknown>)['reasoning_tokens'];
+    if (r !== undefined) {
+      if (typeof r !== 'number' || !Number.isFinite(r) || !Number.isInteger(r) || r < 0) {
+        return null;
+      }
+      reasoning = r;
+    }
+  }
+  if (cached > pt) {
+    return null;
+  }
+  if (reasoning > ct) {
+    return null;
+  }
+  const usage: Usage = {
+    promptTokens: pt,
+    completionTokens: ct,
+    reasoningTokens: reasoning,
+    cachedTokens: cached,
+  };
+  if (!isValidUsage(usage)) {
+    return null;
+  }
+  return usage;
 }
 
 function isTimeoutError(err: unknown): boolean {
@@ -106,6 +200,28 @@ function isTimeoutError(err: unknown): boolean {
     return name === 'TimeoutError' || name === 'AbortError';
   }
   return false;
+}
+
+function extractTypeFromBody(body: unknown): string | undefined {
+  if (typeof body !== 'object' || body === null) {
+    return undefined;
+  }
+  const e: unknown = (body as Record<string, unknown>)['error'];
+  if (typeof e !== 'object' || e === null) {
+    return undefined;
+  }
+  const t: unknown = (e as Record<string, unknown>)['type'];
+  if (typeof t !== 'string') {
+    return undefined;
+  }
+  if (!/^[a-z_]{1,40}$/.test(t)) {
+    return undefined;
+  }
+  return t;
+}
+
+function jobAborted(signal: AbortSignal | undefined): boolean {
+  return signal !== undefined && signal.aborted;
 }
 
 export function createMetaClient(opts: MetaClientOptions): MetaClient {
@@ -122,6 +238,7 @@ export function createMetaClient(opts: MetaClientOptions): MetaClient {
   const baseUrl: string = opts.baseUrl ?? 'https://api.meta.ai/v1';
   const timeoutMs: number = opts.timeoutMs ?? 120000;
   const retryDelayMs: number = opts.retryDelayMs ?? 1000;
+  const maxInputTokens: number = opts.maxInputTokens ?? 16000;
   const fetchImpl: typeof fetch = opts.fetchImpl ?? (globalThis.fetch as typeof fetch);
   const sleep: (ms: number) => Promise<void> =
     opts.sleep ??
@@ -133,18 +250,14 @@ export function createMetaClient(opts: MetaClientOptions): MetaClient {
   const now: () => number = opts.now ?? Date.now;
 
   async function complete<T>(req: CompleteRequest): Promise<{ data: T; receipt: MetaReceipt }> {
-    let messageChars = 0;
-    for (const m of req.messages) {
-      messageChars += m.content.length;
+    const bound: number = inputTokenBound(req.messages, req.jsonSchema);
+    if (bound > maxInputTokens) {
+      throw new MetaError('INPUT_TOO_LARGE', undefined, { chargedUSD: 0, costBasis: 'usage' });
     }
-    const schemaLen: number = JSON.stringify(req.jsonSchema).length;
-    const reservation: number = reservationUSD(model, messageChars + schemaLen, req.maxOutputTokens);
-    let reservationId: string;
-    try {
-      reservationId = ledger.reserve({ purpose: req.purpose, model, estUSD: reservation });
-    } catch {
-      throw new MetaError('BUDGET_EXCEEDED', 'budget exceeded');
+    if (jobAborted(req.signal)) {
+      throw new MetaError('DEADLINE_EXCEEDED', undefined, { chargedUSD: 0, costBasis: 'usage' });
     }
+    const perAttemptReservation: number = reservationUSD(model, bound, req.maxOutputTokens);
 
     const start: number = now();
     const url: string = `${baseUrl}/chat/completions`;
@@ -165,30 +278,97 @@ export function createMetaClient(opts: MetaClientOptions): MetaClient {
       'Content-Type': 'application/json',
     };
 
+    let totalCharged = 0;
+    let anyReservationBasis = false;
+
+    function currentBasis(): 'usage' | 'reservation' {
+      return anyReservationBasis ? 'reservation' : 'usage';
+    }
+
+    function fail(
+      code: MetaErrorCode,
+      extra?: { status?: number; receipt?: MetaReceipt; providerErrorType?: string },
+    ): MetaError {
+      return new MetaError(code, undefined, {
+        status: extra?.status,
+        receipt: extra?.receipt,
+        chargedUSD: totalCharged,
+        costBasis: currentBasis(),
+        providerErrorType: extra?.providerErrorType,
+      });
+    }
+
     for (let attempt = 1; attempt <= 2; attempt++) {
+      if (jobAborted(req.signal)) {
+        throw fail('DEADLINE_EXCEEDED');
+      }
+      let reservationId: string;
+      try {
+        reservationId = ledger.reserve({ purpose: req.purpose, model, estUSD: perAttemptReservation });
+      } catch {
+        throw fail('BUDGET_EXCEEDED');
+      }
+
+      const reconcileThis = (
+        costUSD: number,
+        basis: 'usage' | 'reservation' | 'rejected',
+        note: string,
+        responseId?: string,
+        usageVal?: Usage | null,
+      ): void => {
+        const actual: { costUSD: number; responseId?: string; usage?: Usage | null; note?: string } = {
+          costUSD,
+          note,
+        };
+        if (responseId !== undefined && responseId !== '') {
+          actual.responseId = responseId;
+        }
+        if (usageVal !== undefined) {
+          actual.usage = usageVal;
+        }
+        ledger.reconcile(reservationId, actual);
+        totalCharged += costUSD;
+        if (basis === 'reservation') {
+          anyReservationBasis = true;
+        }
+      };
+
       let res: Response;
       try {
-        const signal: AbortSignal = AbortSignal.timeout(timeoutMs);
+        const timeoutSignal: AbortSignal = AbortSignal.timeout(timeoutMs);
+        const signal: AbortSignal =
+          req.signal !== undefined ? AbortSignal.any([timeoutSignal, req.signal]) : timeoutSignal;
         res = await fetchImpl(url, { method: 'POST', headers, body: bodyJson, signal });
       } catch (err: unknown) {
-        ledger.reconcile(reservationId, { costUSD: reservation });
-        if (isTimeoutError(err)) {
-          throw new MetaError('TIMEOUT', 'timeout');
+        reconcileThis(perAttemptReservation, 'reservation', 'uncertain outcome');
+        if (jobAborted(req.signal)) {
+          throw fail('DEADLINE_EXCEEDED');
         }
-        throw new MetaError('NETWORK_ERROR', 'network error');
+        if (isTimeoutError(err)) {
+          throw fail('TIMEOUT');
+        }
+        throw fail('NETWORK_ERROR');
       }
 
       if (res.ok) {
         let raw: unknown;
         try {
-          const parsed: unknown = await res.json();
-          raw = parsed;
+          raw = (await res.json()) as unknown;
         } catch {
-          ledger.reconcile(reservationId, { costUSD: reservation });
-          throw new MetaError('SERVER_ERROR', 'server error');
+          if (jobAborted(req.signal)) {
+            reconcileThis(perAttemptReservation, 'reservation', 'uncertain outcome');
+            throw fail('DEADLINE_EXCEEDED');
+          }
+          reconcileThis(perAttemptReservation, 'reservation', 'uncertain outcome');
+          throw fail('SERVER_ERROR');
+        }
+        if (jobAborted(req.signal)) {
+          reconcileThis(perAttemptReservation, 'reservation', 'uncertain outcome');
+          throw fail('DEADLINE_EXCEEDED');
         }
         const data = raw as Record<string, unknown>;
-        const returnedModel: string = typeof data['model'] === 'string' ? (data['model'] as string) : '';
+        const returnedModel: string =
+          typeof data['model'] === 'string' ? (data['model'] as string) : '';
         const responseId: string = typeof data['id'] === 'string' ? (data['id'] as string) : '';
         const choicesUnknown: unknown = data['choices'];
         const choices: Array<Record<string, unknown>> = (Array.isArray(choicesUnknown)
@@ -211,7 +391,19 @@ export function createMetaClient(opts: MetaClientOptions): MetaClient {
           }
         }
         const usage: Usage | null = toUsage(data['usage']);
-        const cost: number = usage === null ? reservation : costFromUsage(model, usage);
+        let attemptCost: number;
+        let attemptNote = '';
+        let attemptBasis: 'usage' | 'reservation';
+        if (usage === null) {
+          attemptCost = perAttemptReservation;
+          attemptBasis = 'reservation';
+          attemptNote = 'uncertain outcome';
+        } else {
+          attemptCost = costFromUsage(model, usage);
+          attemptBasis = 'usage';
+          attemptNote = 'usage';
+        }
+        reconcileThis(attemptCost, attemptBasis, attemptNote, responseId, usage);
         const end: number = now();
         const latencyMs: number = Math.max(0, Math.round(end - start));
         const receipt: MetaReceipt = {
@@ -221,95 +413,87 @@ export function createMetaClient(opts: MetaClientOptions): MetaClient {
           responseId,
           usage,
           latencyMs,
-          estCostUSD: cost,
+          estCostUSD: totalCharged,
           finishReason,
           attempts: attempt,
+          costBasis: currentBasis(),
         };
-        const settled: { costUSD: number; responseId?: string; usage?: Usage | null } = {
-          costUSD: cost,
-        };
-        if (responseId !== '') {
-          settled.responseId = responseId;
-        }
-        settled.usage = usage;
 
         if (data['model'] !== model) {
-          ledger.reconcile(reservationId, settled);
-          throw new MetaError('RETURNED_MODEL_MISMATCH', 'returned model mismatch', { receipt });
+          throw fail('RETURNED_MODEL_MISMATCH', { receipt });
         }
         if (finishReason !== 'stop') {
-          ledger.reconcile(reservationId, settled);
-          throw new MetaError('OUTPUT_TRUNCATED', 'output truncated', { receipt });
+          throw fail('OUTPUT_TRUNCATED', { receipt });
         }
         if (content.length === 0) {
-          ledger.reconcile(reservationId, settled);
-          throw new MetaError('EMPTY_OUTPUT', 'empty output', { receipt });
+          throw fail('EMPTY_OUTPUT', { receipt });
         }
         let parsedContent: unknown;
         try {
           parsedContent = JSON.parse(content) as unknown;
         } catch {
-          ledger.reconcile(reservationId, settled);
-          throw new MetaError('OUTPUT_NOT_JSON', 'output not JSON', { receipt });
+          throw fail('OUTPUT_NOT_JSON', { receipt });
         }
-        ledger.reconcile(reservationId, settled);
         return { data: parsedContent as T, receipt };
       }
 
       const status: number = res.status;
+      let providerErrorType: string | undefined;
+      try {
+        const errBody: unknown = (await res.json()) as unknown;
+        providerErrorType = extractTypeFromBody(errBody);
+      } catch {
+        if (jobAborted(req.signal)) {
+          reconcileThis(perAttemptReservation, 'reservation', 'uncertain outcome');
+          throw fail('DEADLINE_EXCEEDED');
+        }
+        providerErrorType = undefined;
+      }
+      if (jobAborted(req.signal)) {
+        // Error-body read finished but the job deadline fired: retain liability.
+        // If this attempt was not reconciled yet, reconcile it now.
+        reconcileThis(perAttemptReservation, 'reservation', 'uncertain outcome');
+        throw fail('DEADLINE_EXCEEDED');
+      }
       const retryable: boolean =
         status === 429 || status === 500 || status === 502 || status === 503 || status === 504;
       if (retryable && attempt < 2) {
+        reconcileThis(perAttemptReservation, 'reservation', 'uncertain outcome');
         const delay: number = retryDelayMs * (1 + Math.random());
         await sleep(delay);
         continue;
       }
       if (status === 429) {
-        ledger.reconcile(reservationId, { costUSD: reservation });
-        throw new MetaError('RATE_LIMITED', 'rate limited', { status });
+        reconcileThis(perAttemptReservation, 'reservation', 'uncertain outcome');
+        throw fail('RATE_LIMITED', { status, providerErrorType });
       }
       if (status >= 500 && status <= 599) {
-        ledger.reconcile(reservationId, { costUSD: reservation });
-        throw new MetaError('SERVER_ERROR', 'server error', { status });
+        reconcileThis(perAttemptReservation, 'reservation', 'uncertain outcome');
+        throw fail('SERVER_ERROR', { status, providerErrorType });
       }
       if (status === 400) {
-        let apiMsg = '';
-        try {
-          const eb: unknown = await res.json();
-          if (typeof eb === 'object' && eb !== null) {
-            const e: unknown = (eb as Record<string, unknown>)['error'];
-            if (typeof e === 'object' && e !== null) {
-              const m: unknown = (e as Record<string, unknown>)['message'];
-              if (typeof m === 'string' && m.length > 0) {
-                apiMsg = m.slice(0, 300);
-              }
-            } else if (typeof e === 'string' && e.length > 0) {
-              apiMsg = e.slice(0, 300);
-            }
-          }
-        } catch {
-          apiMsg = '';
-        }
-        const msg: string = apiMsg !== '' ? `bad request: ${apiMsg}` : 'bad request';
-        ledger.reconcile(reservationId, { costUSD: 0 });
-        throw new MetaError('BAD_REQUEST', msg, { status });
+        reconcileThis(0, 'rejected', 'rejected');
+        throw fail('BAD_REQUEST', { status, providerErrorType });
       }
       if (status === 401 || status === 403) {
-        ledger.reconcile(reservationId, { costUSD: 0 });
-        throw new MetaError('AUTH_FAILED', 'authentication failed', { status });
+        reconcileThis(0, 'rejected', 'rejected');
+        throw fail('AUTH_FAILED', { status, providerErrorType });
       }
       if (status === 404) {
-        ledger.reconcile(reservationId, { costUSD: 0 });
-        throw new MetaError('MODEL_NOT_FOUND', 'model not found', { status });
+        reconcileThis(0, 'rejected', 'rejected');
+        throw fail('MODEL_NOT_FOUND', { status, providerErrorType });
       }
       if (status >= 400 && status < 500) {
-        ledger.reconcile(reservationId, { costUSD: 0 });
-        throw new MetaError('HTTP_ERROR', `http error: ${status}`, { status });
+        reconcileThis(0, 'rejected', 'rejected');
+        throw fail('HTTP_ERROR', { status, providerErrorType });
       }
-      ledger.reconcile(reservationId, { costUSD: reservation });
-      throw new MetaError('HTTP_ERROR', `http error: ${status}`, { status });
+      reconcileThis(perAttemptReservation, 'reservation', 'uncertain outcome');
+      throw fail('HTTP_ERROR', { status, providerErrorType });
     }
-    throw new MetaError('SERVER_ERROR', 'server error');
+    throw new MetaError('SERVER_ERROR', undefined, {
+      chargedUSD: totalCharged,
+      costBasis: currentBasis(),
+    });
   }
 
   return { complete };

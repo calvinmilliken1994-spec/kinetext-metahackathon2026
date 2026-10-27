@@ -47,6 +47,29 @@ def locate_muse():
     return exe
 
 
+def parse_allowance(returncode, stdout):
+    """Interpret `muse usage --json`. Returns (allowance, note).
+
+    A missing/null allowance with exit 0 occurs right after a usage-window reset, until the first
+    model turn; the OAuth + active-subscription check above still gates the run, so this is
+    recorded as a note rather than treated as a failure. Anything else unreadable fails closed.
+    """
+    if returncode != 0:
+        raise RuntimeError('SUBSCRIPTION_ALLOWANCE_NOT_VERIFIED')
+    try:
+        payload = json.loads(stdout)
+    except ValueError:
+        raise RuntimeError('SUBSCRIPTION_ALLOWANCE_NOT_VERIFIED')
+    if not isinstance(payload, dict):
+        raise RuntimeError('SUBSCRIPTION_ALLOWANCE_NOT_VERIFIED')
+    data = payload.get('allowance')
+    if data is None:
+        return None, 'ALLOWANCE_NOT_REPORTED_NEW_WINDOW'
+    if not isinstance(data, dict) or not data.get('tier'):
+        raise RuntimeError('SUBSCRIPTION_ALLOWANCE_NOT_VERIFIED')
+    return data, None
+
+
 def timeout_seconds(value):
     """Wall-clock deadline for one bridge run: default 90 s, bounded to 30..600 s."""
     if value is None:
@@ -92,11 +115,11 @@ def main():
             allowance = subprocess.run([str(exe), 'usage', '--json'], capture_output=True,
                                        text=True, encoding='utf-8', errors='replace',
                                        env=env, cwd=work, timeout=20)
-            allowance_data = json.loads(allowance.stdout).get('allowance') if allowance.returncode == 0 else None
-            if not allowance_data or not allowance_data.get('tier'):
-                raise RuntimeError('SUBSCRIPTION_ALLOWANCE_NOT_VERIFIED')
-            report['subscriptionTier'] = allowance_data['tier']
+            allowance_data, allowance_note = parse_allowance(allowance.returncode, allowance.stdout)
+            report['subscriptionTier'] = allowance_data['tier'] if allowance_data else None
             report['allowanceBefore'] = allowance_data
+            if allowance_note:
+                report['allowanceNote'] = allowance_note
             prompt = work / 'prompt.txt'
             prompt.write_text(args.prompt_file.read_text(encoding='utf-8') if args.prompt_file else
                               'Reply with exactly: MUSE_SUBSCRIPTION_OK. Do not use tools.', encoding='utf-8')

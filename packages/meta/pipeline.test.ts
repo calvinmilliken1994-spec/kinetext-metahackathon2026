@@ -91,7 +91,7 @@ test('generateSpec assembles provenance, strips source text and validates', asyn
   assert.ok(req0 !== undefined);
   assert.equal(req0.schemaName, 'activity_spec');
   assert.ok(req0.jsonSchema === activitySpecGenSchema);
-  assert.equal(req0.maxOutputTokens, 12000);
+  assert.equal(req0.maxOutputTokens, 8000);
   assert.equal(req0.purpose, 'test-live');
   assert.equal(result.spec.sources.length, 1);
   const src0 = result.spec.sources[0];
@@ -132,5 +132,114 @@ test('MetaError thrown by the client propagates', async () => {
     () =>
       generateSpec(failing, source, analysisForces, { jobId: 'job-1', specId: 'spec-1' }, 'demo'),
     (err: unknown) => err instanceof MetaError,
+  );
+});
+
+test('analyzeSource sends maxOutputTokens 6000 by default and honours the override', async () => {
+  const seen: CompleteRequest[] = [];
+  const fake: MetaClient = {
+    async complete<T>(req: CompleteRequest): Promise<{ data: T; receipt: MetaReceipt }> {
+      seen.push(req);
+      return { data: analysisForces as unknown as T, receipt: fakeReceipt };
+    },
+  };
+  await analyzeSource(fake, source, 'demo');
+  const req0 = seen[0];
+  assert.ok(req0 !== undefined);
+  assert.equal(req0.maxOutputTokens, 6000);
+  await analyzeSource(fake, source, 'demo', { maxOutputTokens: 1234 });
+  const req1 = seen[1];
+  assert.ok(req1 !== undefined);
+  assert.equal(req1.maxOutputTokens, 1234);
+});
+
+test('generateSpec sends maxOutputTokens 8000 by default and honours the override', async () => {
+  const seen: CompleteRequest[] = [];
+  const fake: MetaClient = {
+    async complete<T>(req: CompleteRequest): Promise<{ data: T; receipt: MetaReceipt }> {
+      seen.push(req);
+      return { data: genForces as unknown as T, receipt: fakeReceipt };
+    },
+  };
+  await generateSpec(fake, source, analysisForces, { jobId: 'job-1', specId: 'spec-1' }, 'demo');
+  const req0 = seen[0];
+  assert.ok(req0 !== undefined);
+  assert.equal(req0.maxOutputTokens, 8000);
+  await generateSpec(
+    fake,
+    source,
+    analysisForces,
+    { jobId: 'job-1', specId: 'spec-1' },
+    'demo',
+    () => new Date('2026-01-01T00:00:00.000Z'),
+    { maxOutputTokens: 4321 },
+  );
+  const req1 = seen[1];
+  assert.ok(req1 !== undefined);
+  assert.equal(req1.maxOutputTokens, 4321);
+});
+
+test('provided signal is forwarded as the same object; no signal key when not provided', async () => {
+  const seenAnalyze: CompleteRequest[] = [];
+  const fakeAnalyze: MetaClient = {
+    async complete<T>(req: CompleteRequest): Promise<{ data: T; receipt: MetaReceipt }> {
+      seenAnalyze.push(req);
+      return { data: analysisForces as unknown as T, receipt: fakeReceipt };
+    },
+  };
+  await analyzeSource(fakeAnalyze, source, 'demo');
+  const defaultAnalyze = seenAnalyze[0];
+  assert.ok(defaultAnalyze !== undefined);
+  assert.ok(!('signal' in defaultAnalyze));
+  const controllerA = new AbortController();
+  await analyzeSource(fakeAnalyze, source, 'demo', { signal: controllerA.signal });
+  const withSignalAnalyze = seenAnalyze[1];
+  assert.ok(withSignalAnalyze !== undefined);
+  assert.ok(withSignalAnalyze.signal === controllerA.signal);
+
+  const seenSpec: CompleteRequest[] = [];
+  const fakeSpec: MetaClient = {
+    async complete<T>(req: CompleteRequest): Promise<{ data: T; receipt: MetaReceipt }> {
+      seenSpec.push(req);
+      return { data: genForces as unknown as T, receipt: fakeReceipt };
+    },
+  };
+  await generateSpec(fakeSpec, source, analysisForces, { jobId: 'job-1', specId: 'spec-1' }, 'demo');
+  const defaultSpec = seenSpec[0];
+  assert.ok(defaultSpec !== undefined);
+  assert.ok(!('signal' in defaultSpec));
+  const controllerB = new AbortController();
+  await generateSpec(
+    fakeSpec,
+    source,
+    analysisForces,
+    { jobId: 'job-1', specId: 'spec-1' },
+    'demo',
+    () => new Date('2026-01-01T00:00:00.000Z'),
+    { signal: controllerB.signal },
+  );
+  const withSignalSpec = seenSpec[1];
+  assert.ok(withSignalSpec !== undefined);
+  assert.ok(withSignalSpec.signal === controllerB.signal);
+});
+
+test('aborted job signal with a DEADLINE_EXCEEDED client error propagates that MetaError', async () => {
+  const failing: MetaClient = {
+    async complete<T>(_req: CompleteRequest): Promise<{ data: T; receipt: MetaReceipt }> {
+      throw new MetaError('DEADLINE_EXCEEDED');
+    },
+  };
+  const controller = new AbortController();
+  controller.abort();
+  await assert.rejects(
+    () => analyzeSource(failing, source, 'demo', { signal: controller.signal }),
+    (err: unknown) => err instanceof MetaError && err.code === 'DEADLINE_EXCEEDED',
+  );
+  await assert.rejects(
+    () =>
+      generateSpec(failing, source, analysisForces, { jobId: 'job-1', specId: 'spec-1' }, 'demo', () => new Date(), {
+        signal: controller.signal,
+      }),
+    (err: unknown) => err instanceof MetaError && err.code === 'DEADLINE_EXCEEDED',
   );
 });

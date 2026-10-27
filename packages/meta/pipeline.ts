@@ -10,20 +10,26 @@ import type {
 import { activitySpecGenSchema, sourceAnalysisGenSchema } from '../contracts/schemas.ts';
 import { validateAnalysis, validateSpec } from '../validation/validate.ts';
 import { buildAnalysisMessages, buildSpecMessages, PROMPT_VERSION } from './prompts.ts';
-import type { MetaClient } from './client.ts';
+import type { CompleteRequest, MetaClient } from './client.ts';
 
 export async function analyzeSource(
   client: MetaClient,
   source: SourceDocument,
   purpose: 'test-live' | 'demo',
+  opts?: { signal?: AbortSignal; maxOutputTokens?: number },
 ): Promise<{ analysis: SourceAnalysis; report: ValidationReport; receipt: MetaReceipt }> {
-  const result = await client.complete<SourceAnalysis>({
+  const maxOutputTokens: number = opts?.maxOutputTokens ?? 6000;
+  const req: CompleteRequest = {
     purpose,
     schemaName: 'source_analysis',
     jsonSchema: sourceAnalysisGenSchema,
     messages: buildAnalysisMessages(source),
-    maxOutputTokens: 6000,
-  });
+    maxOutputTokens,
+  };
+  if (opts?.signal !== undefined) {
+    req.signal = opts.signal;
+  }
+  const result = await client.complete<SourceAnalysis>(req);
   const report: ValidationReport = validateAnalysis(result.data, [source]);
   return { analysis: result.data, report, receipt: result.receipt };
 }
@@ -35,19 +41,25 @@ export async function generateSpec(
   ids: { jobId: string; specId: string },
   purpose: 'test-live' | 'demo',
   now: () => Date = () => new Date(),
+  opts?: { signal?: AbortSignal; maxOutputTokens?: number },
 ): Promise<{
   generated: GeneratedSpec;
   spec: ActivitySpec;
   report: ValidationReport;
   receipt: MetaReceipt;
 }> {
-  const result = await client.complete<GeneratedSpec>({
+  const maxOutputTokens: number = opts?.maxOutputTokens ?? 8000;
+  const req: CompleteRequest = {
     purpose,
     schemaName: 'activity_spec',
     jsonSchema: activitySpecGenSchema,
     messages: buildSpecMessages(source, analysis),
-    maxOutputTokens: 12000,
-  });
+    maxOutputTokens,
+  };
+  if (opts?.signal !== undefined) {
+    req.signal = opts.signal;
+  }
+  const result = await client.complete<GeneratedSpec>(req);
   const spec: ActivitySpec = assembleSpec(result.data, {
     id: ids.specId,
     sources: [source],

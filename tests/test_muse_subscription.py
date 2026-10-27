@@ -34,6 +34,21 @@ class MuseSubscriptionRouteTest(unittest.TestCase):
             with self.assertRaises(ValueError):
                 module.timeout_seconds(bad)
 
+    def test_allowance_parsing_accepts_fresh_usage_window(self):
+        spec = importlib.util.spec_from_file_location('muse_subscription', SCRIPT)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        data, note = module.parse_allowance(0, '{"allowance": {"tier": "Muse Code High Usage", "window": {"usedPercent": 3}}}')
+        self.assertEqual(data['tier'], 'Muse Code High Usage')
+        self.assertIsNone(note)
+        # Right after a window reset the CLI reports no allowance until the first model turn.
+        data, note = module.parse_allowance(0, '{"allowance": null}')
+        self.assertIsNone(data)
+        self.assertEqual(note, 'ALLOWANCE_NOT_REPORTED_NEW_WINDOW')
+        for code, out in ((1, ''), (0, 'not json'), (0, '[]')):
+            with self.assertRaises(RuntimeError):
+                module.parse_allowance(code, out)
+
     def test_success_requires_actual_model_usage_not_just_configured_label(self):
         spec = importlib.util.spec_from_file_location('muse_subscription', SCRIPT)
         module = importlib.util.module_from_spec(spec)
