@@ -228,7 +228,18 @@ export interface StageEvent {
 }
 
 export type CheckKind = 'schema' | 'semantic' | 'grounding' | 'behavioral';
-export interface ValidationCheck { id: string; kind: CheckKind; passed: boolean; message: string; path?: string }
+export interface ValidationCheck {
+  id: string; kind: CheckKind; passed: boolean; message: string; path?: string;
+  /**
+   * S5B-03/S5B-04 (Stage 5b review, frozen design decision 1): validator-owned exact JSON-pointer
+   * field paths of every offending field OCCURRENCE this failing check names (e.g.
+   * '/simulation/events/2/year', '/concepts/1/id', '/predictions/0/id'). Never derived from message
+   * text; repair authorization (timeline no-weakening, analysis-unchanged) consumes ONLY these
+   * paths — `message` is display-only and must never be searched for ids. Absent on passing checks
+   * and on checks whose violations are not field-scoped (e.g. 'repair.no-weakening' itself).
+   */
+  affected?: string[];
+}
 export interface ValidationReport { artifactId: string; revision: number; checks: ValidationCheck[]; publishable: boolean }
 
 // ---- Agentic repair (Stage 5). -------------------------------------------------------------------------
@@ -240,6 +251,15 @@ export interface RepairFinding {
   id: string; kind: CheckKind; message: string; path?: string;
   /** For numeric checks: the stated value, the engine-computed value and the tolerance used. */
   expected?: number; computed?: number; tolerance?: number;
+  /**
+   * S5B-03/S5B-04 (frozen design decision 1): the failing check's `affected` field paths, carried
+   * separately from the truncated display message. A finding unlocks EXACTLY its affected fields
+   * (decision 2): label/name/id/policy findings unlock that string only; timeline date-grounding
+   * findings unlock that event's date+evidence (or removal); case-order findings unlock that case's
+   * pair; analysis id findings unlock that concept's id; analysis invariants name the specific
+   * inconsistent field(s). Never search `message` for authorization.
+   */
+  affected?: string[];
 }
 /** Summary of one repair attempt, stored on the job. */
 export interface RepairRecord {

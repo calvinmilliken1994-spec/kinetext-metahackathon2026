@@ -217,11 +217,17 @@ test('probe: title-year rule negative — a date unit containing another year ca
     quoteGroundsDate('After 1775 tensions rose, on June 10 a committee was appointed.', D(1776, 6, 10), 1776),
     false,
   );
-  // The same quote grounds 1775-06-10 directly... the unit states 1775 with month and day.
+  // S5B-01 (frozen decision 3): the same quote no longer grounds 1775-06-10 either — the year 1775
+  // and the month-day "June 10" are SEPARATE expressions, and a claimed date's components must all
+  // come from ONE connected date expression (this assertion encoded the removed token-bag behavior).
   assert.equal(
     quoteGroundsDate('After 1775 tensions rose, on June 10 a committee was appointed.', D(1775, 6, 10), null),
-    true,
+    false,
   );
+  // ... while the connected form states the full date in one expression and grounds it.
+  assert.equal(quoteGroundsDate('After June 10, 1775 tensions rose.', D(1775, 6, 10), null), true);
+  // The year alone is still stated by its own expression.
+  assert.equal(quoteGroundsDate('After 1775 tensions rose, on June 10 a committee was appointed.', D(1775), null), true);
 });
 
 /* ------------------------------------------------------------------ */

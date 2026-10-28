@@ -119,6 +119,70 @@ function rangeCheckId(engine: EngineId, inputKey: string): string {
 export type CheckBody = Omit<ValidationCheck, 'id' | 'kind'>;
 export type TextLookup = (sourceId: string) => string | undefined;
 
+/**
+ * S5B-03/S5B-04 (frozen decision 1): the offending field paths of a failed schema validation, as
+ * JSON pointers — every Ajv error's instancePath, with 'required' errors refined to the missing
+ * property ('/simulation/events/0' + missing 'year' → '/simulation/events/0/year'). Root-level
+ * errors (instancePath '') carry no field information and are skipped. Deduplicated, never capped
+ * (affected paths are structured data; only the display message is truncated).
+ */
+export function schemaAffectedPaths(validate: ValidateFunction): string[] {
+  const errors = validate.errors ?? [];
+  const paths = new Set<string>();
+  for (const e of errors) {
+    if (typeof e.instancePath !== 'string' || e.instancePath === '') continue;
+    const missing = (e as { params?: { missingProperty?: unknown } }).params?.missingProperty;
+    paths.add(e.keyword === 'required' && typeof missing === 'string' && missing !== '' ? `${e.instancePath}/${missing}` : e.instancePath);
+  }
+  return [...paths];
+}
+
+/**
+ * S5B-03/S5B-04 helper for the repair guards (Wave B consumes this): the deduplicated
+ * `affected` field paths of every FAILING check of a report, in report order. Pure; never throws;
+ * a report without structured affected paths yields an empty list, and consumers must fail closed
+ * (a finding without affected paths unlocks nothing).
+ */
+export function affectedPathsOf(report: ValidationReport): string[] {
+  const out: string[] = [];
+  const seen = new Set<string>();
+  const checks = (report as { checks?: unknown } | null | undefined)?.checks;
+  if (!Array.isArray(checks)) return out;
+  for (const check of checks) {
+    if (typeof check !== 'object' || check === null) continue;
+    const c = check as ValidationCheck;
+    if (c.passed || !Array.isArray(c.affected)) continue;
+    for (const p of c.affected) {
+      if (typeof p === 'string' && p !== '' && !seen.has(p)) {
+        seen.add(p);
+        out.push(p);
+      }
+    }
+  }
+  return out;
+}
+
+/**
+ * The same collection keyed by failing check id, for guards that scope unlocks per finding kind
+ * (frozen decision 2 — e.g. only analysis.invariants naming /supported or /activity may move the
+ * supported/activity decision). Failing checks without affected paths map to an empty list:
+ * their violations are not field-scoped and unlock nothing.
+ */
+export function affectedByCheckIdOf(report: ValidationReport): Map<string, string[]> {
+  const map = new Map<string, string[]>();
+  const checks = (report as { checks?: unknown } | null | undefined)?.checks;
+  if (!Array.isArray(checks)) return map;
+  for (const check of checks) {
+    if (typeof check !== 'object' || check === null) continue;
+    const c = check as ValidationCheck;
+    if (c.passed || typeof c.id !== 'string') continue;
+    const affected = Array.isArray(c.affected) ? c.affected.filter((p): p is string => typeof p === 'string' && p !== '') : [];
+    const prev = map.get(c.id);
+    map.set(c.id, prev === undefined ? [...new Set(affected)] : [...new Set([...prev, ...affected])]);
+  }
+  return map;
+}
+
 /** The post-gate working view of a spec: the engine's full schema guarantees these shapes. */
 interface LooseRange { unit: string; min: number; max: number; default: number }
 interface LooseSpec {
@@ -280,6 +344,10 @@ export function validateSpec(spec: unknown, sources: SourceDocument[]): Validati
           kind: 'schema',
           passed: false,
           message: schemaFailureMessage(schemaValidate, 'spec failed schema.full'),
+          ...(() => {
+            const affected = schemaAffectedPaths(schemaValidate);
+            return affected.length > 0 ? { affected } : {};
+          })(),
         },
       ],
       publishable: false,
@@ -308,10 +376,15 @@ export function validateSpec(spec: unknown, sources: SourceDocument[]): Validati
     ...d.inputs.map(input =>
       guarded(rangeCheckId(engine, input.key), 'semantic', () => {
         const r = rangeOf(input.key);
-        const problems = rangeProblems(`simulation.${input.key}`, r);
+        const { problems, fields } = rangeProblems(`simulation.${input.key}`, r);
         return problems.length === 0
           ? { passed: true, message: `${input.key} min=${r.min} < max=${r.max} with default=${r.default} inside the range` }
-          : { passed: false, message: problems.join('; '), path: `/simulation/${input.key}` };
+          : {
+              passed: false,
+              message: problems.join('; '),
+              path: `/simulation/${input.key}`,
+              affected: fields.map(f => `/simulation/${input.key}/${f}`),
+            };
       }),
     ),
 
@@ -333,9 +406,10 @@ export function validateSpec(spec: unknown, sources: SourceDocument[]): Validati
                   passed: false,
                   message: `default simulation (durationS=${durationS}, stepS=${stepS}) needs ${needed} frames, expected <= MAX_FRAMES=${MAX_FRAMES}`,
                   path: '/simulation',
+                  affected: ['/simulation/durationS', '/simulation/stepS'],
                 };
               }
-              return { passed: false, message: `default simulation failed: ${errMsg(err)} (expected it to run within MAX_FRAMES=${MAX_FRAMES})`, path: '/simulation' };
+              return { passed: false, message: `default simulation failed: ${errMsg(err)} (expected it to run within MAX_FRAMES=${MAX_FRAMES})`, path: '/simulation', affected: ['/simulation/durationS', '/simulation/stepS'] };
             }
           }),
         ]
@@ -343,15 +417,27 @@ export function validateSpec(spec: unknown, sources: SourceDocument[]): Validati
 
     guarded('semantic.unique-ids', 'semantic', () => {
       const problems: string[] = [];
+      const affected: string[] = [];
+      // S5B-04 (decision 1): every occurrence of a duplicated key is an offending field occurrence.
+      const dupOccurrences = (values: string[], pathOf: (i: number) => string): void => {
+        const dups = new Set(duplicates(values));
+        if (dups.size === 0) return;
+        values.forEach((v, i) => {
+          if (dups.has(v)) affected.push(pathOf(i));
+        });
+      };
       const expDups = duplicates(s.explanations.map(e => e.id));
       if (expDups.length > 0) problems.push(`duplicate explanation ids: ${expDups.join(', ')}`);
+      dupOccurrences(s.explanations.map(e => e.id), i => `/explanations/${i}/id`);
       const predDups = duplicates(s.predictions.map(p => String(p.id)));
       if (predDups.length > 0) problems.push(`duplicate prediction ids: ${predDups.join(', ')}`);
+      dupOccurrences(s.predictions.map(p => String(p.id)), i => `/predictions/${i}/id`);
       const testDups = duplicates(s.behavioralTests.map(b => String(b.name)));
       if (testDups.length > 0) problems.push(`duplicate behavioral test names: ${testDups.join(', ')}`);
+      dupOccurrences(s.behavioralTests.map(b => String(b.name)), i => `/behavioralTests/${i}/name`);
       return problems.length === 0
         ? { passed: true, message: 'explanation ids, prediction ids and behavioral test names are unique' }
-        : { passed: false, message: `${problems.join('; ')} (expected all unique)` };
+        : { passed: false, message: `${problems.join('; ')} (expected all unique)`, affected };
     }),
 
     guarded('refs.sources', 'grounding', () => {
@@ -359,26 +445,36 @@ export function validateSpec(spec: unknown, sources: SourceDocument[]): Validati
       const specIdSet = new Set(specSourceIds);
       const citedIds = [...new Set(s.explanations.flatMap(ex => ex.evidence.map(ev => ev.sourceId)))];
       const problems: string[] = [];
+      const affected: string[] = [];
       const unknownCited = citedIds.filter(id => !specIdSet.has(id));
       if (unknownCited.length > 0) {
         problems.push(`evidence cites sourceId(s) not declared in spec.sources: ${unknownCited.join(', ')} (declared: ${specSourceIds.join(', ') || 'none'})`);
+        const unknownSet = new Set(unknownCited);
+        s.explanations.forEach((ex, j) =>
+          ex.evidence.forEach((ev, k) => {
+            if (unknownSet.has(ev.sourceId)) affected.push(`/explanations/${j}/evidence/${k}/sourceId`);
+          }),
+        );
       }
       const missingDocs = specSourceIds.filter(id => !docById.has(id));
       if (missingDocs.length > 0) {
         problems.push(`spec.sources id(s) with no matching document provided: ${missingDocs.join(', ')} (provided: ${[...docById.keys()].join(', ') || 'none'})`);
+        s.sources.forEach((src, i) => {
+          if (!docById.has(src.id)) affected.push(`/sources/${i}`);
+        });
       }
       return problems.length === 0
         ? { passed: true, message: `all references resolve: ${specSourceIds.length} spec source(s), ${citedIds.length} cited sourceId(s)` }
-        : { passed: false, message: problems.join('; '), path: '/sources' };
+        : { passed: false, message: problems.join('; '), path: '/sources', affected };
     }),
 
     guarded('refs.sha256', 'grounding', () => {
       const problems: string[] = [];
-      let verified = 0;
-      for (const src of s.sources) {
+      const affected: string[] = [];
+      s.sources.forEach((src, i) => {
         const doc = docById.get(src.id);
-        if (!doc) continue; // unresolvable references are reported by refs.sources
-        verified++;
+        if (!doc) return; // unresolvable references are reported by refs.sources
+        const before = problems.length;
         if (doc.sha256 !== src.sha256) {
           problems.push(`source "${src.id}": spec sha256 ${src.sha256} != stored document sha256 ${String(doc.sha256)}`);
         }
@@ -386,68 +482,78 @@ export function validateSpec(spec: unknown, sources: SourceDocument[]): Validati
         if (recomputed !== src.sha256) {
           problems.push(`source "${src.id}": spec sha256 ${src.sha256} != sha256(document.text) ${recomputed ?? '(document has no text)'}`);
         }
-      }
+        if (problems.length > before) affected.push(`/sources/${i}/sha256`);
+      });
+      const verified = s.sources.filter(src => docById.has(src.id)).length;
       return problems.length === 0
         ? { passed: true, message: `sha256 verified for ${verified} source(s): stored hash and recomputed text hash both match the spec` }
-        : { passed: false, message: `${problems.join('; ')} (expected spec sha256 == document sha256 == sha256(document.text))`, path: '/sources' };
+        : { passed: false, message: `${problems.join('; ')} (expected spec sha256 == document sha256 == sha256(document.text))`, path: '/sources', affected };
     }),
 
     guarded('grounding.quotes', 'grounding', () => {
       const failures: string[] = [];
+      const affected: string[] = [];
       let counted = 0;
       let located = 0;
-      for (const ex of s.explanations) {
+      s.explanations.forEach((ex, j) => {
         let countedForExplanation = 0;
-        for (const ev of ex.evidence) {
+        ex.evidence.forEach((ev, k) => {
           counted++;
           if (!quoteCountsAsEvidence(ev.quote)) {
             failures.push(
               `quote "${truncate(ev.quote, QUOTE_MESSAGE_LIMIT)}" (sourceId ${ev.sourceId}, explanation ${ex.id}) does not count as evidence: expected >= ${QUOTE_MIN_NORMALIZED_CHARS} normalised characters with >= ${QUOTE_MIN_LETTER_DIGITS} letters/digits, or a compact equation containing "=" with >= ${QUOTE_EQUATION_MIN_NORMALIZED_CHARS} normalised characters and >= ${QUOTE_MIN_LETTER_DIGITS} letters/digits`,
             );
-            continue;
+            affected.push(`/explanations/${j}/evidence/${k}/quote`);
+            return;
           }
           countedForExplanation++;
           const text = textOf(ev.sourceId);
-          if (text === undefined) continue; // unresolvable references are reported by refs.sources
+          if (text === undefined) return; // unresolvable references are reported by refs.sources
           if (!text.includes(normalizeWhitespace(ev.quote))) {
             failures.push(`"${truncate(ev.quote, QUOTE_MESSAGE_LIMIT)}" (sourceId ${ev.sourceId}, explanation ${ex.id}) not found in the source text`);
+            affected.push(`/explanations/${j}/evidence/${k}/quote`);
           } else {
             located++;
           }
-        }
+        });
         if (countedForExplanation === 0) {
           failures.push(`explanation "${ex.id}" has no counted evidence quote (expected >= 1)`);
+          affected.push(`/explanations/${j}/evidence`);
         }
-      }
+      });
       return failures.length === 0
         ? { passed: true, message: `all ${counted} evidence quote(s) count as evidence (>= ${QUOTE_MIN_NORMALIZED_CHARS} normalised characters with >= ${QUOTE_MIN_LETTER_DIGITS} letters/digits, or a compact "=" equation with >= ${QUOTE_EQUATION_MIN_NORMALIZED_CHARS}) and all ${located} resolvable quote(s) appear in their source text after whitespace normalisation; every explanation has >= 1 counted quote` }
-        : { passed: false, message: `${failures.join('; ')} (expected counted verbatim quotes that appear in the source text after whitespace normalisation)`, path: '/explanations' };
+        : { passed: false, message: `${failures.join('; ')} (expected counted verbatim quotes that appear in the source text after whitespace normalisation)`, path: '/explanations', affected };
     }),
 
     guarded('behavior.tests', 'behavioral', () => {
       const problems: string[] = [];
-      for (const b of s.behavioralTests) {
+      const affected: string[] = [];
+      s.behavioralTests.forEach((b, i) => {
         const { expected, computed, diff, tolerance } = caseNumbers(engine, b);
         if (diff > tolerance) {
           problems.push(`"${b.name}": expected ${expected}, computeOutput(${inputAssignments(engine, b)}) = ${computed}, |diff| ${diff} > tolerance ${tolerance}`);
+          affected.push(`/behavioralTests/${i}/${d.output.key}`);
         }
-      }
+      });
       return problems.length === 0
         ? { passed: true, message: `all ${s.behavioralTests.length} behavioral test(s) match ${d.equation} within tolerance` }
-        : { passed: false, message: problems.join('; '), path: '/behavioralTests' };
+        : { passed: false, message: problems.join('; '), path: '/behavioralTests', affected };
     }),
 
     guarded('behavior.predictions', 'behavioral', () => {
       const problems: string[] = [];
-      for (const p of s.predictions) {
+      const affected: string[] = [];
+      s.predictions.forEach((p, i) => {
         const { expected, computed, diff, tolerance } = caseNumbers(engine, p);
         if (diff > tolerance) {
           problems.push(`"${p.id}": expected ${expected}, computeOutput(${inputAssignments(engine, p)}) = ${computed}, |diff| ${diff} > tolerance ${tolerance}`);
+          affected.push(`/predictions/${i}/${d.output.key}`);
         }
-      }
+      });
       return problems.length === 0
         ? { passed: true, message: `all ${s.predictions.length} prediction(s) match ${d.equation} within tolerance` }
-        : { passed: false, message: problems.join('; '), path: '/predictions' };
+        : { passed: false, message: problems.join('; '), path: '/predictions', affected };
     }),
 
     // Stage 5 (Muse review finding 5): the schema tolerance maximum is only a
@@ -455,6 +561,7 @@ export function validateSpec(spec: unknown, sources: SourceDocument[]): Validati
     // tolerance <= maxTolerance(engine, computed) = max(absMax, relMax*|computed|).
     guarded('semantic.tolerance', 'semantic', () => {
       const problems: string[] = [];
+      const affected: string[] = [];
       let firstPath = '/behavioralTests';
       const cases: { list: string; index: number; label: string; rec: Record<string, unknown> }[] = [
         ...s.behavioralTests.map((b, i) => ({ list: 'behavioralTests', index: i, label: `"${b.name}"`, rec: b })),
@@ -468,28 +575,31 @@ export function validateSpec(spec: unknown, sources: SourceDocument[]): Validati
           problems.push(
             `${c.list}[${c.index}] ${c.label}: tolerance ${tolerance} exceeds maxTolerance('${engine}', computed=${computed}) = ${max} (rule: tolerance <= max(absMax=${d.tolerance.absMax}, relMax=${d.tolerance.relMax}*|computed|))`,
           );
+          affected.push(`/${c.list}/${c.index}/tolerance`);
         }
       }
       return problems.length === 0
         ? { passed: true, message: `every case tolerance is <= maxTolerance('${engine}', computed) across ${s.behavioralTests.length} behavioral test(s) and ${s.predictions.length} prediction(s)` }
-        : { passed: false, message: problems.join('; '), path: firstPath };
+        : { passed: false, message: problems.join('; '), path: firstPath, affected };
     }),
 
     guarded('semantic.predictions-in-range', 'semantic', () => {
       const problems: string[] = [];
-      for (const p of s.predictions) {
+      const affected: string[] = [];
+      s.predictions.forEach((p, i) => {
         const rec = p as unknown as Record<string, number>;
         for (const input of d.inputs) {
           const r = rangeOf(input.key);
           const v = rec[input.key];
           if (v < r.min || v > r.max) {
             problems.push(`prediction "${p.id}": ${input.key} ${v} outside slider range [${r.min}, ${r.max}]`);
+            affected.push(`/predictions/${i}/${input.key}`);
           }
         }
-      }
+      });
       return problems.length === 0
         ? { passed: true, message: `all ${s.predictions.length} prediction(s) are reproducible within the simulation slider ranges` }
-        : { passed: false, message: `${problems.join('; ')} (expected every prediction to be reachable with the sliders)`, path: '/predictions' };
+        : { passed: false, message: `${problems.join('; ')} (expected every prediction to be reachable with the sliders)`, path: '/predictions', affected };
     }),
 
     // Forces-only: the animated trajectory must satisfy the closed-form
@@ -534,6 +644,8 @@ export function validateSpec(spec: unknown, sources: SourceDocument[]): Validati
             passed: false,
             message: `publisher attribution found at ${hits.map(h => `${h.path}: "${truncate(h.text, QUOTE_MESSAGE_LIMIT)}"`).join('; ')} (expected no mention of NASA / "National Aeronautics and Space Administration" anywhere, and no "according to / endorsed by / approved by / official conclusion|position of" wording naming a source or authority — a capitalised word or "the source/publisher/agency/author/text" within ${ATTRIBUTION_WINDOW_CHARS} characters — in generated display fields; NASA's AI-use guidance forbids attributing generated output to NASA)`,
             path: hits[0].path,
+            // S5B-03 (decision 1): EVERY violating field occurrence, never just the first.
+            affected: hits.map(h => h.path),
           };
     }),
 
@@ -581,6 +693,10 @@ export function validateAnalysis(analysis: unknown, sources: SourceDocument[]): 
           kind: 'schema',
           passed: false,
           message: schemaFailureMessage(analysisSchemaValidate, 'analysis failed schema.analysis'),
+          ...(() => {
+            const affected = schemaAffectedPaths(analysisSchemaValidate);
+            return affected.length > 0 ? { affected } : {};
+          })(),
         },
       ],
       publishable: false,
@@ -594,85 +710,119 @@ export function validateAnalysis(analysis: unknown, sources: SourceDocument[]): 
 
     guarded('analysis.invariants', 'semantic', () => {
       const problems: string[] = [];
+      // S5B-04 (frozen decision 2): the SPECIFIC inconsistent field(s). An empty concepts/objectives
+      // list affects that LIST ('/concepts', '/objectives'), never the supported/activity decision;
+      // the decision is affected only when the decision itself is inconsistent, so a format/list
+      // finding can never be escaped by declining the source.
+      const affected: string[] = [];
       if (a.supported === true) {
         if (!isActivityId(a.activity)) {
           problems.push(`supported=true but activity is "${a.activity}", expected one of ${ACTIVITY_IDS.join(', ')}`);
+          affected.push('/activity');
         }
         if (a.concepts.length < 1) {
           problems.push(`supported=true but concepts.length is ${a.concepts.length}, expected >= 1`);
+          affected.push('/concepts');
         }
         if (a.objectives.length < 1) {
           problems.push(`supported=true but objectives.length is ${a.objectives.length}, expected >= 1`);
+          affected.push('/objectives');
         }
       } else {
         if (a.activity !== 'none') {
           problems.push(`supported=false but activity is "${a.activity}", expected "none"`);
+          affected.push('/supported', '/activity');
         }
         if (typeof a.unsupportedReason !== 'string' || a.unsupportedReason.trim() === '') {
           problems.push(`supported=false but unsupportedReason is ${JSON.stringify(a.unsupportedReason) ?? 'missing'}, expected a non-empty explanation`);
+          affected.push('/unsupportedReason');
         }
       }
       return problems.length === 0
         ? { passed: true, message: `invariants hold for supported=${a.supported}` }
-        : { passed: false, message: problems.join('; ') };
+        : { passed: false, message: problems.join('; '), path: affected[0], affected };
     }),
 
     guarded('analysis.concept-ids', 'semantic', () => {
       const ids = a.concepts.map(c => c.id);
       const problems: string[] = [];
+      // S5B-04 (decision 1): EVERY bad id occurrence gets its own path — for a duplicate, every
+      // occurrence of the duplicated value (a legitimate repair may rename any one of them).
+      const affected = new Set<string>();
       const dups = duplicates(ids);
       if (dups.length > 0) problems.push(`duplicate concept ids: ${dups.join(', ')} (expected all unique)`);
+      const dupSet = new Set(dups);
+      ids.forEach((id, i) => {
+        if (dupSet.has(id)) affected.add(`/concepts/${i}/id`);
+      });
       const badFormat = ids.filter(id => !CONCEPT_ID_PATTERN.test(id));
       if (badFormat.length > 0) {
         problems.push(`concept ids not matching /^[a-z0-9-]{1,40}$/: ${badFormat.map(id => `"${id}"`).join(', ')}`);
       }
+      ids.forEach((id, i) => {
+        if (!CONCEPT_ID_PATTERN.test(id)) affected.add(`/concepts/${i}/id`);
+      });
       return problems.length === 0
         ? { passed: true, message: `all ${ids.length} concept id(s) are unique lowercase-kebab` }
-        : { passed: false, message: problems.join('; '), path: '/concepts' };
+        : { passed: false, message: problems.join('; '), path: '/concepts', affected: [...affected] };
     }),
 
     guarded('refs.sources', 'grounding', () => {
       const citedIds = [...new Set(a.concepts.flatMap(c => c.evidence.map(ev => ev.sourceId)))];
       const missing = citedIds.filter(id => !docById.has(id));
+      const affected: string[] = [];
+      if (missing.length > 0) {
+        const missingSet = new Set(missing);
+        a.concepts.forEach((c, i) =>
+          c.evidence.forEach((ev, j) => {
+            if (missingSet.has(ev.sourceId)) affected.push(`/concepts/${i}/evidence/${j}/sourceId`);
+          }),
+        );
+      }
       return missing.length === 0
         ? { passed: true, message: `all ${citedIds.length} cited sourceId(s) have matching documents` }
         : {
             passed: false,
             message: `concept evidence cites sourceId(s) with no matching document: ${missing.join(', ')} (provided: ${[...docById.keys()].join(', ') || 'none'})`,
             path: '/concepts',
+            affected,
           };
     }),
 
     guarded('grounding.quotes', 'grounding', () => {
       const failures: string[] = [];
+      const affected: string[] = [];
       let counted = 0;
       let located = 0;
-      for (const c of a.concepts) {
+      a.concepts.forEach((c, i) => {
         let countedForConcept = 0;
-        for (const ev of c.evidence) {
+        c.evidence.forEach((ev, j) => {
           counted++;
           if (!quoteCountsAsEvidence(ev.quote)) {
             failures.push(
               `quote "${truncate(ev.quote, QUOTE_MESSAGE_LIMIT)}" (sourceId ${ev.sourceId}, concept ${c.id}) does not count as evidence: expected >= ${QUOTE_MIN_NORMALIZED_CHARS} normalised characters with >= ${QUOTE_MIN_LETTER_DIGITS} letters/digits, or a compact equation containing "=" with >= ${QUOTE_EQUATION_MIN_NORMALIZED_CHARS} normalised characters and >= ${QUOTE_MIN_LETTER_DIGITS} letters/digits`,
             );
-            continue;
+            affected.push(`/concepts/${i}/evidence/${j}/quote`);
+            return;
           }
           countedForConcept++;
           const text = textOf(ev.sourceId);
-          if (text === undefined) continue; // unresolvable references are reported by refs.sources
+          if (text === undefined) return; // unresolvable references are reported by refs.sources
           if (!text.includes(normalizeWhitespace(ev.quote))) {
             failures.push(`"${truncate(ev.quote, QUOTE_MESSAGE_LIMIT)}" (sourceId ${ev.sourceId}, concept ${c.id}) not found in the source text`);
+            affected.push(`/concepts/${i}/evidence/${j}/quote`);
           } else {
             located++;
           }
-        }
+        });
         if (a.supported === true && countedForConcept === 0) {
           failures.push(`concept "${c.id}" has no counted evidence quote (expected >= 1 when supported=true)`);
+          affected.push(`/concepts/${i}/evidence`);
         }
-      }
+      });
       return failures.length === 0
         ? { passed: true, message: `all ${counted} concept quote(s) count as evidence (>= ${QUOTE_MIN_NORMALIZED_CHARS} normalised characters with >= ${QUOTE_MIN_LETTER_DIGITS} letters/digits, or a compact "=" equation with >= ${QUOTE_EQUATION_MIN_NORMALIZED_CHARS}) and all ${located} resolvable quote(s) appear in their source text after whitespace normalisation${a.supported === true ? '; every supported concept has >= 1 counted quote' : ''}` }
-        : { passed: false, message: `${failures.join('; ')} (expected counted verbatim quotes that appear in the source text after whitespace normalisation)`, path: '/concepts' };
+        : { passed: false, message: `${failures.join('; ')} (expected counted verbatim quotes that appear in the source text after whitespace normalisation)`, path: '/concepts', affected };
     }),
 
     guarded('policy.no-publisher-attribution', 'semantic', () => {
@@ -688,6 +838,9 @@ export function validateAnalysis(analysis: unknown, sources: SourceDocument[]): 
             passed: false,
             message: `publisher attribution found at ${hits.map(h => `${h.path}: "${truncate(h.text, QUOTE_MESSAGE_LIMIT)}"`).join('; ')} (expected no mention of NASA / "National Aeronautics and Space Administration" anywhere, and no "according to / endorsed by / approved by / official conclusion|position of" wording naming a source or authority — a capitalised word or "the source/publisher/agency/author/text" within ${ATTRIBUTION_WINDOW_CHARS} characters — in generated analysis fields; NASA's AI-use guidance forbids attributing generated output to NASA)`,
             path: hits[0].path,
+            // S5B-04 (decision 1/2): EVERY violating field, so a repair guard can authorize a
+            // legitimate multi-group fix (reviewer probe 'multiple-policy-groups-cannot-fix').
+            affected: hits.map(h => h.path),
           };
     }),
   ];
@@ -725,6 +878,9 @@ export function repairFindings(report: ValidationReport, spec?: AnyActivitySpec)
       message: truncate(check.message, FINDING_MESSAGE_LIMIT),
     };
     if (check.path !== undefined) finding.path = check.path;
+    // S5B-03/S5B-04 (decision 1): the structured field paths travel with the finding, separate
+    // from the truncated display message; repair guards authorize ONLY from these paths.
+    if (Array.isArray(check.affected) && check.affected.length > 0) finding.affected = [...check.affected];
     if (spec !== undefined && (check.id === 'behavior.tests' || check.id === 'behavior.predictions')) {
       const detail = firstFailingCase(spec as ActivitySpec, check.id === 'behavior.tests' ? 'behavioralTests' : 'predictions');
       if (detail !== undefined) {
@@ -1163,15 +1319,18 @@ export function indexSources(sources: SourceDocument[]): { docById: Map<string, 
   return { docById, textOf };
 }
 
-function rangeProblems(label: string, r: { min: number; max: number; default: number }): string[] {
+function rangeProblems(label: string, r: { min: number; max: number; default: number }): { problems: string[]; fields: string[] } {
   const problems: string[] = [];
+  const fields: string[] = [];
   if (!(r.min < r.max)) {
     problems.push(`${label}.min (${r.min}) must be < ${label}.max (${r.max})`);
+    fields.push('min', 'max');
   }
   if (!(r.min <= r.default && r.default <= r.max)) {
     problems.push(`${label}.default (${r.default}) must satisfy ${label}.min (${r.min}) <= default <= ${label}.max (${r.max})`);
+    fields.push('default');
   }
-  return problems;
+  return { problems, fields };
 }
 
 function withinTrajectoryTolerance(actual: number, expected: number): boolean {
