@@ -1,0 +1,5 @@
+{"jobId":"job-20261028171536-8ec95129","seq":0,"stage":"ingest","status":"started","at":"2026-10-28T17:15:36.668Z"}
+{"jobId":"job-20261028171536-8ec95129","seq":1,"stage":"ingest","status":"succeeded","at":"2026-10-28T17:15:36.670Z","detail":"sha256 0d11585e47f0"}
+{"jobId":"job-20261028171536-8ec95129","seq":2,"stage":"analyze","status":"started","at":"2026-10-28T17:15:36.670Z"}
+{"jobId":"job-20261028171536-8ec95129","seq":3,"stage":"analyze","status":"succeeded","at":"2026-10-28T17:15:53.593Z","model":"muse-spark-1.3","responseId":"chatcmpl-01a18382-db3a-76e9-8463-9dbf65c404e1","usage":{"promptTokens":2183,"completionTokens":3644,"reasoningTokens":3386,"cachedTokens":0},"latencyMs":16921,"estCostUSD":0.01821575,"detail":"unsupported: The source teaches the history, scope, and significance of the Emancipation Proclamation in the Civil War, which does not match any listed activity engine.; checks 6/6 passed"}
+{"jobId":"job-20261028171536-8ec95129","seq":4,"stage":"done","status":"succeeded","at":"2026-10-28T17:15:53.594Z","detail":"unsupported"}

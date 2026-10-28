@@ -1,0 +1,157 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nrc-backgrounder-plutonium-job-20261028170518-13335c0a",
+  "title": "Plutonium Half-Life Decay",
+  "learningObjectives": [
+    "Explain that half-life is the time required to lose half of radioactivity.",
+    "Compare decay rates of plutonium isotopes with different half-lives.",
+    "Describe how decay transforms plutonium into daughter products that can remain radioactive."
+  ],
+  "sources": [
+    {
+      "id": "nrc-backgrounder-plutonium",
+      "title": "Backgrounder on Plutonium — U.S. Nuclear Regulatory Commission",
+      "locator": "https://www.nrc.gov/regulations-legislation/fact-sheets-brochures/backgrounder-on-plutonium",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: U.S. Nuclear Regulatory Commission, 'Backgrounder on Plutonium', Fact Sheets & Brochures. NRC's website constitutes a U.S. Government Work under federal copyright law and is not subject to copyright. The U.S. Nuclear Regulatory Commission has not reviewed, approved or endorsed this activity.",
+      "sha256": "03700e48439f4a60c4b8ff3676122131acf7c23ff26eaacb5700f29a06768737"
+    }
+  ],
+  "explanations": [
+    {
+      "evidence": [
+        {
+          "quote": "The different isotopes have different “half-lives” – the time it takes to lose half of its radioactivity.",
+          "sourceId": "nrc-backgrounder-plutonium"
+        }
+      ],
+      "id": "half-life-definition",
+      "text": "Half-life is the time it takes for a radioactive material to lose half of its radioactivity."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "Pu-239 has a half-life of 24,100 years and Pu-241’s half-life is 14.4 years.",
+          "sourceId": "nrc-backgrounder-plutonium"
+        },
+        {
+          "quote": "Substances with shorter half-lives decay more quickly than those with longer half-lives, so they emit more energetic radioactivity.",
+          "sourceId": "nrc-backgrounder-plutonium"
+        }
+      ],
+      "id": "shorter-half-life-faster-decay",
+      "text": "Isotopes with shorter half-lives decay more quickly. Pu-241 decays faster than Pu-239 because its half-life is much shorter."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "Like any radioactive isotopes, plutonium isotopes transform when they decay.",
+          "sourceId": "nrc-backgrounder-plutonium"
+        },
+        {
+          "quote": "Many of these “daughter products” are themselves radioactive.",
+          "sourceId": "nrc-backgrounder-plutonium"
+        }
+      ],
+      "id": "decay-daughter-products",
+      "text": "Plutonium isotopes transform when they decay into different isotopes or elements, many of which remain radioactive."
+    }
+  ],
+  "simulation": {
+    "engine": "half-life-v1",
+    "equation": "N=N0*(1/2)^(t/T)",
+    "initialAmount": {
+      "unit": "1",
+      "default": 100,
+      "max": 1000,
+      "min": 1
+    },
+    "halfLife": {
+      "unit": "time",
+      "default": 5,
+      "max": 25,
+      "min": 1
+    },
+    "elapsedTime": {
+      "unit": "time",
+      "default": 5,
+      "max": 30,
+      "min": 0
+    },
+    "scenario": {
+      "objectLabel": "Radioactive sample (grams)",
+      "settingLabel": "Half-life in years"
+    }
+  },
+  "behavioralTests": [
+    {
+      "elapsedTime": 10,
+      "expectedRemaining": 50,
+      "halfLife": 10,
+      "initialAmount": 100,
+      "name": "one half-life leaves half",
+      "tolerance": 0.1
+    },
+    {
+      "elapsedTime": 28.8,
+      "expectedRemaining": 50,
+      "halfLife": 14.4,
+      "initialAmount": 200,
+      "name": "two Pu-241 half-lives leave quarter",
+      "tolerance": 0.1
+    },
+    {
+      "elapsedTime": 24100,
+      "expectedRemaining": 40,
+      "halfLife": 24100,
+      "initialAmount": 80,
+      "name": "Pu-239 one half-life",
+      "tolerance": 0.1
+    },
+    {
+      "elapsedTime": 5,
+      "expectedRemaining": 70.7107,
+      "halfLife": 10,
+      "initialAmount": 100,
+      "name": "partial half-life decay",
+      "tolerance": 0.1
+    }
+  ],
+  "predictions": [
+    {
+      "elapsedTime": 5,
+      "expectedRemaining": 50,
+      "halfLife": 5,
+      "id": "decay-one-half-life",
+      "initialAmount": 100,
+      "prompt": "A 100-gram sample has a half-life of 5 years. How much remains after 5 years?",
+      "tolerance": 0.1
+    },
+    {
+      "elapsedTime": 20,
+      "expectedRemaining": 50,
+      "halfLife": 10,
+      "id": "decay-two-half-lives",
+      "initialAmount": 200,
+      "prompt": "A 200-gram sample has a half-life of 10 years. How much remains after 20 years?",
+      "tolerance": 0.1
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a1837a-6b73-748b-869f-6d272124416c",
+    "runId": "job-20261028170518-13335c0a",
+    "promptVersion": "v7",
+    "generatedAt": "2026-10-28T17:06:40.713Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

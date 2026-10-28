@@ -1,0 +1,18 @@
+{
+  "jobId": "job-20261028170124-43b6de98",
+  "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+  "status": "unsupported",
+  "purpose": "test-live",
+  "createdAt": "2026-10-28T17:01:24.535Z",
+  "totalCostUSD": 0.015351,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 7692,
+    "startedAt": "2026-10-28T17:01:24.535Z"
+  },
+  "finishedAt": "2026-10-28T17:01:38.879Z"
+}

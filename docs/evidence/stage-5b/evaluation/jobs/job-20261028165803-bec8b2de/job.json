@@ -1,0 +1,23 @@
+{
+  "jobId": "job-20261028165803-bec8b2de",
+  "sourceId": "nasa-grc-simplified-aircraft-motion",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-28T16:58:03.075Z",
+  "totalCostUSD": 0.031658,
+  "reservedUnknownUSD": 0,
+  "engine": "forces-1d-v1",
+  "revisions": 1,
+  "repairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 7692,
+    "startedAt": "2026-10-28T16:58:03.075Z"
+  },
+  "specId": "nasa-grc-simplified-aircraft-motion-job-20261028165803-bec8b2de",
+  "publishable": true,
+  "checksPassed": 15,
+  "checksTotal": 15,
+  "publishedRevision": 1,
+  "finishedAt": "2026-10-28T16:58:35.707Z"
+}

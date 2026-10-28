@@ -1,0 +1,4 @@
+{"jobId":"job-20261028165911-9b924273","seq":0,"stage":"ingest","status":"started","at":"2026-10-28T16:59:11.203Z"}
+{"jobId":"job-20261028165911-9b924273","seq":1,"stage":"ingest","status":"succeeded","at":"2026-10-28T16:59:11.205Z","detail":"sha256 f94199ea21e1"}
+{"jobId":"job-20261028165911-9b924273","seq":2,"stage":"analyze","status":"started","at":"2026-10-28T16:59:11.205Z"}
+{"jobId":"job-20261028165911-9b924273","seq":3,"stage":"analyze","status":"failed","at":"2026-10-28T16:59:27.295Z","model":"muse-spark-1.3","responseId":"chatcmpl-01a18373-ce53-70d2-a645-78c1659079d2","usage":{"promptTokens":2257,"completionTokens":3541,"reasoningTokens":3296,"cachedTokens":0},"latencyMs":16086,"estCostUSD":0.0178705,"detail":"ANALYSIS_INVALID"}

@@ -1,0 +1,105 @@
+{
+  "analysis": {
+    "activity": "none",
+    "concepts": [
+      {
+        "evidence": [
+          {
+            "quote": "There are two broad classifications: high-level or low-level waste.",
+            "sourceId": "nrc-backgrounder-radioactive-waste"
+          }
+        ],
+        "id": "radioactive-waste-classification",
+        "name": "Radioactive Waste Classification"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "High-level radioactive waste primarily is uranium fuel that has been used in a nuclear power reactor",
+            "sourceId": "nrc-backgrounder-radioactive-waste"
+          }
+        ],
+        "id": "high-level-waste-spent-fuel",
+        "name": "High-Level Waste and Spent Fuel"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "All U.S. nuclear power plants store spent nuclear fuel in \"spent fuel pools.\"",
+            "sourceId": "nrc-backgrounder-radioactive-waste"
+          }
+        ],
+        "id": "spent-fuel-storage",
+        "name": "Spent Fuel Storage"
+      }
+    ],
+    "objectives": [
+      "Distinguish high-level waste from low-level waste",
+      "Describe how spent nuclear fuel is stored at reactor sites",
+      "Identify regulatory roles for storage and disposal of radioactive waste"
+    ],
+    "supported": false,
+    "unsupportedReason": "The source covers classification storage and disposal of high-level and low-level radioactive waste and agency regulatory roles and does not teach a quantitative model matching any listed activity."
+  },
+  "report": {
+    "artifactId": "source-analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis.gen.json"
+      },
+      {
+        "id": "analysis.invariants",
+        "kind": "semantic",
+        "passed": true,
+        "message": "invariants hold for supported=false"
+      },
+      {
+        "id": "analysis.concept-ids",
+        "kind": "semantic",
+        "passed": true,
+        "message": "all 3 concept id(s) are unique lowercase-kebab"
+      },
+      {
+        "id": "refs.sources",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 1 cited sourceId(s) have matching documents"
+      },
+      {
+        "id": "grounding.quotes",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 concept quote(s) count as evidence (>= 8 normalised characters with >= 3 letters/digits, or a compact \"=\" equation with >= 3) and all 3 resolvable quote(s) appear in their source text after whitespace normalisation"
+      },
+      {
+        "id": "policy.no-publisher-attribution",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated analysis field (concept names, objectives, unsupportedReason) mentions the publisher or uses attribution/endorsement wording naming a source or authority; evidence quotes are exempt"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18379-2911-737a-8e85-d7c74696df01",
+    "usage": {
+      "promptTokens": 3881,
+      "completionTokens": 4800,
+      "reasoningTokens": 4558,
+      "cachedTokens": 0
+    },
+    "latencyMs": 25886,
+    "estCostUSD": 0.02525125,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage"
+  }
+}

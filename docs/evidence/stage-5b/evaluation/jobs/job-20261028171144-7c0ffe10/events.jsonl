@@ -1,0 +1,5 @@
+{"jobId":"job-20261028171144-7c0ffe10","seq":0,"stage":"ingest","status":"started","at":"2026-10-28T17:11:44.989Z"}
+{"jobId":"job-20261028171144-7c0ffe10","seq":1,"stage":"ingest","status":"succeeded","at":"2026-10-28T17:11:44.990Z","detail":"sha256 9f06caf792dd"}
+{"jobId":"job-20261028171144-7c0ffe10","seq":2,"stage":"analyze","status":"started","at":"2026-10-28T17:11:44.990Z"}
+{"jobId":"job-20261028171144-7c0ffe10","seq":3,"stage":"analyze","status":"succeeded","at":"2026-10-28T17:12:01.123Z","model":"muse-spark-1.3","responseId":"chatcmpl-01a1837f-4f16-7639-9049-e46408267ed4","usage":{"promptTokens":1860,"completionTokens":2386,"reasoningTokens":2116,"cachedTokens":0},"latencyMs":16128,"estCostUSD":0.0124655,"detail":"unsupported: The source teaches random mating and positive versus negative assortative mating in humans rather than Hardy-Weinberg genotype frequency calculations or any other listed equation or timeline.; checks 6/6 passed"}
+{"jobId":"job-20261028171144-7c0ffe10","seq":4,"stage":"done","status":"succeeded","at":"2026-10-28T17:12:01.127Z","detail":"unsupported"}

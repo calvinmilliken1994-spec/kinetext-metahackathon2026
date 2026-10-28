@@ -1,0 +1,129 @@
+{
+  "analysis": {
+    "activity": "none",
+    "concepts": [
+      {
+        "evidence": [
+          {
+            "quote": "If an individual has two different alleles at a specific locus, the individual is heterozygous at that locus",
+            "sourceId": "nij-heterozygosity"
+          }
+        ],
+        "id": "heterozygosity",
+        "name": "Heterozygosity"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "Allele frequency, or the frequency at which alleles are found at any locus of interest",
+            "sourceId": "nij-heterozygosity"
+          }
+        ],
+        "id": "allele-frequency",
+        "name": "Allele Frequency"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "can be calculated using the formula k(k+1)/2, where k is the number of alleles at a particular locus",
+            "sourceId": "nij-heterozygosity"
+          },
+          {
+            "quote": "A Punnett square is simply a grid that graphically represents expected genotypes",
+            "sourceId": "nij-heterozygosity"
+          }
+        ],
+        "id": "genotype-calculation",
+        "name": "Genotype Calculation"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "A gene pool is the unique set of alleles that could be found by analyzing the DNA from every member of a species or population",
+            "sourceId": "nij-heterozygosity"
+          }
+        ],
+        "id": "gene-pool",
+        "name": "Gene Pool"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "approximately 85% of human genetic diversity comes from individuals of the same population",
+            "sourceId": "nij-heterozygosity"
+          }
+        ],
+        "id": "genetic-diversity",
+        "name": "Genetic Diversity"
+      }
+    ],
+    "objectives": [
+      "Define heterozygous, homozygous, and allele frequency",
+      "Calculate expected numbers of genotypes and use Punnett squares",
+      "Explain gene pools and patterns of human genetic diversity"
+    ],
+    "supported": false,
+    "unsupportedReason": "The source teaches heterozygosity, allele frequencies, genotype counts, Punnett squares, gene pools, and human genetic diversity, none of which matches a listed activity equation."
+  },
+  "report": {
+    "artifactId": "source-analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis.gen.json"
+      },
+      {
+        "id": "analysis.invariants",
+        "kind": "semantic",
+        "passed": true,
+        "message": "invariants hold for supported=false"
+      },
+      {
+        "id": "analysis.concept-ids",
+        "kind": "semantic",
+        "passed": true,
+        "message": "all 5 concept id(s) are unique lowercase-kebab"
+      },
+      {
+        "id": "refs.sources",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 1 cited sourceId(s) have matching documents"
+      },
+      {
+        "id": "grounding.quotes",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 concept quote(s) count as evidence (>= 8 normalised characters with >= 3 letters/digits, or a compact \"=\" equation with >= 3) and all 6 resolvable quote(s) appear in their source text after whitespace normalisation"
+      },
+      {
+        "id": "policy.no-publisher-attribution",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated analysis field (concept names, objectives, unsupportedReason) mentions the publisher or uses attribution/endorsement wording naming a source or authority; evidence quotes are exempt"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a1837e-c20d-7298-8ae8-f559fa576fee",
+    "usage": {
+      "promptTokens": 2136,
+      "completionTokens": 4301,
+      "reasoningTokens": 3943,
+      "cachedTokens": 0
+    },
+    "latencyMs": 30028,
+    "estCostUSD": 0.02094925,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage"
+  }
+}

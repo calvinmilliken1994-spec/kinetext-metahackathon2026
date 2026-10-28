@@ -1,0 +1,73 @@
+{
+  "artifactId": "nara-lee-resolution-job-20261028171315-79068df8",
+  "revision": 1,
+  "checks": [
+    {
+      "id": "schema.full",
+      "kind": "schema",
+      "passed": true,
+      "message": "spec matches activity-spec.full.timeline-v1.json (draft-07)"
+    },
+    {
+      "id": "timeline.unique-ids",
+      "kind": "semantic",
+      "passed": true,
+      "message": "event ids, explanation ids, prediction ids and behavioral test names are unique, and all 4 behavioral test(s) and 3 prediction(s) reference two different existing events"
+    },
+    {
+      "id": "timeline.approximate-date",
+      "kind": "grounding",
+      "passed": true,
+      "message": "no approximate dates: none of the 10 event quote(s) across 7 event(s) states a decade form (\"1770s\"), \"circa\", \"c.\", \"ca.\", \"around\", \"about\" or \"early/mid/late\" before a year or month"
+    },
+    {
+      "id": "timeline.date-grounded",
+      "kind": "grounding",
+      "passed": true,
+      "message": "all 7 event date(s) are stated in ONE sentence unit of a counted verbatim quote: the year (directly, or from a source title stating exactly one year when the unit states the month), plus the month and day where stated"
+    },
+    {
+      "id": "timeline.distinct-dates",
+      "kind": "semantic",
+      "passed": true,
+      "message": "all 7 event (year, month, day) tuples are distinct"
+    },
+    {
+      "id": "timeline.case-order",
+      "kind": "behavioral",
+      "passed": true,
+      "message": "all 4 behavioral test(s) and 3 prediction(s) recomputed from the event dates: earlierEventId is strictly earlier than laterEventId at the precision both events state"
+    },
+    {
+      "id": "refs.sources",
+      "kind": "grounding",
+      "passed": true,
+      "message": "all references resolve: 1 spec source(s), 1 cited sourceId(s)"
+    },
+    {
+      "id": "refs.sha256",
+      "kind": "grounding",
+      "passed": true,
+      "message": "sha256 verified for 1 source(s): stored hash and recomputed text hash both match the spec"
+    },
+    {
+      "id": "grounding.quotes",
+      "kind": "grounding",
+      "passed": true,
+      "message": "all 16 evidence quote(s) count as evidence (>= 8 normalised characters with >= 3 letters/digits, or a compact \"=\" equation with >= 3) and all 16 resolvable quote(s) appear in their source text after whitespace normalisation; every explanation and every event has >= 1 counted quote"
+    },
+    {
+      "id": "policy.no-publisher-attribution",
+      "kind": "semantic",
+      "passed": true,
+      "message": "no generated display field (title, objectives, explanations, prediction prompts, behavioral test names, event labels, scenario labels) mentions the publisher or uses attribution/endorsement wording naming a source or authority; evidence quotes are exempt"
+    },
+    {
+      "id": "scope.prose-unverified",
+      "kind": "semantic",
+      "passed": true,
+      "message": "Explanation prose is AI-generated; quotes, numbers and ranges are machine-checked, the wording needs teacher review."
+    }
+  ],
+  "publishable": true
+}

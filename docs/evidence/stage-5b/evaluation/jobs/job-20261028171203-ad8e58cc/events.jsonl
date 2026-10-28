@@ -1,0 +1,5 @@
+{"jobId":"job-20261028171203-ad8e58cc","seq":0,"stage":"ingest","status":"started","at":"2026-10-28T17:12:03.540Z"}
+{"jobId":"job-20261028171203-ad8e58cc","seq":1,"stage":"ingest","status":"succeeded","at":"2026-10-28T17:12:03.542Z","detail":"sha256 3b67b8bbab70"}
+{"jobId":"job-20261028171203-ad8e58cc","seq":2,"stage":"analyze","status":"started","at":"2026-10-28T17:12:03.542Z"}
+{"jobId":"job-20261028171203-ad8e58cc","seq":3,"stage":"analyze","status":"succeeded","at":"2026-10-28T17:12:24.087Z","model":"muse-spark-1.3","responseId":"chatcmpl-01a1837f-a8ac-7499-9bc5-f9a8ebf60857","usage":{"promptTokens":1973,"completionTokens":3448,"reasoningTokens":3163,"cachedTokens":0},"latencyMs":20542,"estCostUSD":0.01712025,"detail":"unsupported: The source teaches descriptive population genetics including allele-frequency change, evolutionary forces, and population definitions, which contains no Hardy-Weinberg equilibrium calculation or other listed activity model.; checks 6/6 passed"}
+{"jobId":"job-20261028171203-ad8e58cc","seq":4,"stage":"done","status":"succeeded","at":"2026-10-28T17:12:24.087Z","detail":"unsupported"}

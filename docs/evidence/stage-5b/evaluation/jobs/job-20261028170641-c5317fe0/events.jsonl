@@ -1,0 +1,9 @@
+{"jobId":"job-20261028170641-c5317fe0","seq":0,"stage":"ingest","status":"started","at":"2026-10-28T17:06:41.851Z"}
+{"jobId":"job-20261028170641-c5317fe0","seq":1,"stage":"ingest","status":"succeeded","at":"2026-10-28T17:06:41.852Z","detail":"sha256 9877c6c69563"}
+{"jobId":"job-20261028170641-c5317fe0","seq":2,"stage":"analyze","status":"started","at":"2026-10-28T17:06:41.852Z"}
+{"jobId":"job-20261028170641-c5317fe0","seq":3,"stage":"analyze","status":"succeeded","at":"2026-10-28T17:06:54.201Z","model":"muse-spark-1.3","responseId":"chatcmpl-01a1837a-a02a-7080-a2fe-d76cd5dc5607","usage":{"promptTokens":1666,"completionTokens":1897,"reasoningTokens":1802,"cachedTokens":0},"latencyMs":12345,"estCostUSD":0.01014475,"detail":"supported; checks 6/6 passed"}
+{"jobId":"job-20261028170641-c5317fe0","seq":4,"stage":"specify","status":"started","at":"2026-10-28T17:06:54.201Z"}
+{"jobId":"job-20261028170641-c5317fe0","seq":5,"stage":"specify","status":"succeeded","at":"2026-10-28T17:07:45.597Z","model":"muse-spark-1.3","responseId":"chatcmpl-01a1837b-68d7-71b9-9e2e-802ac06a0943","usage":{"promptTokens":2065,"completionTokens":6925,"reasoningTokens":6335,"cachedTokens":0},"latencyMs":51393,"estCostUSD":0.0320125,"detail":"spec nrc-glossary-half-life-job-20261028170641-c5317fe0"}
+{"jobId":"job-20261028170641-c5317fe0","seq":6,"stage":"validate","status":"started","at":"2026-10-28T17:07:45.597Z","revision":1}
+{"jobId":"job-20261028170641-c5317fe0","seq":7,"stage":"validate","status":"succeeded","at":"2026-10-28T17:07:45.599Z","revision":1,"detail":"14/14 checks passed"}
+{"jobId":"job-20261028170641-c5317fe0","seq":8,"stage":"done","status":"succeeded","at":"2026-10-28T17:07:45.599Z","detail":"publishable"}

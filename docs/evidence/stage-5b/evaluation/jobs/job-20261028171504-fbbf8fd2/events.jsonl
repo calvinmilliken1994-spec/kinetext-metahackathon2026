@@ -1,0 +1,5 @@
+{"jobId":"job-20261028171504-fbbf8fd2","seq":0,"stage":"ingest","status":"started","at":"2026-10-28T17:15:04.614Z"}
+{"jobId":"job-20261028171504-fbbf8fd2","seq":1,"stage":"ingest","status":"succeeded","at":"2026-10-28T17:15:04.615Z","detail":"sha256 a4a36b13e468"}
+{"jobId":"job-20261028171504-fbbf8fd2","seq":2,"stage":"analyze","status":"started","at":"2026-10-28T17:15:04.615Z"}
+{"jobId":"job-20261028171504-fbbf8fd2","seq":3,"stage":"analyze","status":"succeeded","at":"2026-10-28T17:15:27.860Z","model":"muse-spark-1.3","responseId":"chatcmpl-01a18382-76b1-70e4-8228-d8f0426883fe","usage":{"promptTokens":1920,"completionTokens":4633,"reasoningTokens":4370,"cachedTokens":0},"latencyMs":23243,"estCostUSD":0.02209025,"detail":"unsupported: The source covers the constitutional debates, proposal, and ratification history of the Bill of Rights and later amendments, which matches none of the listed science, math, or timeline engines requiring five distinct dated events.; checks 6/6 passed"}
+{"jobId":"job-20261028171504-fbbf8fd2","seq":4,"stage":"done","status":"succeeded","at":"2026-10-28T17:15:27.861Z","detail":"unsupported"}

@@ -1,0 +1,5 @@
+{"jobId":"job-20261028171718-a2ae997c","seq":0,"stage":"ingest","status":"started","at":"2026-10-28T17:17:18.042Z"}
+{"jobId":"job-20261028171718-a2ae997c","seq":1,"stage":"ingest","status":"succeeded","at":"2026-10-28T17:17:18.044Z","detail":"sha256 66e6cfc191fb"}
+{"jobId":"job-20261028171718-a2ae997c","seq":2,"stage":"analyze","status":"started","at":"2026-10-28T17:17:18.044Z"}
+{"jobId":"job-20261028171718-a2ae997c","seq":3,"stage":"analyze","status":"succeeded","at":"2026-10-28T17:17:33.463Z","model":"muse-spark-1.3","responseId":"chatcmpl-01a18384-6164-70bd-aee2-1ce3be358f33","usage":{"promptTokens":2070,"completionTokens":2946,"reasoningTokens":2678,"cachedTokens":0},"latencyMs":15417,"estCostUSD":0.015108,"detail":"unsupported: The source teaches steady gliding flight using glide-angle trigonometry and lift-drag-weight equilibrium, which matches none of the available activity engines.; checks 6/6 passed"}
+{"jobId":"job-20261028171718-a2ae997c","seq":4,"stage":"done","status":"succeeded","at":"2026-10-28T17:17:33.464Z","detail":"unsupported"}

@@ -1,0 +1,5 @@
+{"jobId":"job-20261028171055-9b69167e","seq":0,"stage":"ingest","status":"started","at":"2026-10-28T17:10:55.076Z"}
+{"jobId":"job-20261028171055-9b69167e","seq":1,"stage":"ingest","status":"succeeded","at":"2026-10-28T17:10:55.077Z","detail":"sha256 b88d68137ace"}
+{"jobId":"job-20261028171055-9b69167e","seq":2,"stage":"analyze","status":"started","at":"2026-10-28T17:10:55.078Z"}
+{"jobId":"job-20261028171055-9b69167e","seq":3,"stage":"analyze","status":"succeeded","at":"2026-10-28T17:11:25.108Z","model":"muse-spark-1.3","responseId":"chatcmpl-01a1837e-c20d-7298-8ae8-f559fa576fee","usage":{"promptTokens":2136,"completionTokens":4301,"reasoningTokens":3943,"cachedTokens":0},"latencyMs":30028,"estCostUSD":0.02094925,"detail":"unsupported: The source teaches heterozygosity, allele frequencies, genotype counts, Punnett squares, gene pools, and human genetic diversity, none of which matches a listed activity equation.; checks 6/6 passed"}
+{"jobId":"job-20261028171055-9b69167e","seq":4,"stage":"done","status":"succeeded","at":"2026-10-28T17:11:25.109Z","detail":"unsupported"}

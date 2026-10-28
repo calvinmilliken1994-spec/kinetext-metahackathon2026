@@ -1,0 +1,18 @@
+{
+  "jobId": "job-20261028165837-74219834",
+  "sourceId": "nasa-grc-weight-equation",
+  "status": "unsupported",
+  "purpose": "test-live",
+  "createdAt": "2026-10-28T16:58:37.824Z",
+  "totalCostUSD": 0.021457,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 7692,
+    "startedAt": "2026-10-28T16:58:37.824Z"
+  },
+  "finishedAt": "2026-10-28T16:58:58.523Z"
+}

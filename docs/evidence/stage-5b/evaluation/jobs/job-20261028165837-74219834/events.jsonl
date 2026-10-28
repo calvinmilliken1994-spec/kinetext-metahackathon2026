@@ -1,0 +1,5 @@
+{"jobId":"job-20261028165837-74219834","seq":0,"stage":"ingest","status":"started","at":"2026-10-28T16:58:37.825Z"}
+{"jobId":"job-20261028165837-74219834","seq":1,"stage":"ingest","status":"succeeded","at":"2026-10-28T16:58:37.826Z","detail":"sha256 3bce4bd7de87"}
+{"jobId":"job-20261028165837-74219834","seq":2,"stage":"analyze","status":"started","at":"2026-10-28T16:58:37.826Z"}
+{"jobId":"job-20261028165837-74219834","seq":3,"stage":"analyze","status":"succeeded","at":"2026-10-28T16:58:58.522Z","model":"muse-spark-1.3","responseId":"chatcmpl-01a18373-5df4-749e-b5c9-1eb77439f327","usage":{"promptTokens":2148,"completionTokens":4417,"reasoningTokens":4056,"cachedTokens":0},"latencyMs":20693,"estCostUSD":0.02145725,"detail":"unsupported: The source teaches the weight equation W = m*g, universal gravitation, and altitude-related weight change, which matches none of the listed activity equations.; checks 6/6 passed"}
+{"jobId":"job-20261028165837-74219834","seq":4,"stage":"done","status":"succeeded","at":"2026-10-28T16:58:58.523Z","detail":"unsupported"}

@@ -1,0 +1,141 @@
+{
+  "analysis": {
+    "activity": "timeline-v1",
+    "concepts": [
+      {
+        "evidence": [
+          {
+            "quote": "Nicholas Steno, 1669, gets credit for first writing down basic geological principles as laws.",
+            "sourceId": "usgs-powell-geologic-time"
+          }
+        ],
+        "id": "stratigraphic-principles",
+        "name": "Stratigraphic Principles"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "In 1788, James Hutton proposed what would become the foundational principle of geology — uniformitarianism.",
+            "sourceId": "usgs-powell-geologic-time"
+          }
+        ],
+        "id": "uniformitarianism",
+        "name": "Uniformitarianism"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "In 1815, Smith developed the law of faunal succession",
+            "sourceId": "usgs-powell-geologic-time"
+          },
+          {
+            "quote": "The first geologic time scale was published in 1841 — Powell certainly would have known of it and used it in his geologic trips to the West.",
+            "sourceId": "usgs-powell-geologic-time"
+          }
+        ],
+        "id": "faunal-succession",
+        "name": "Faunal Succession"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "who, in 1862, had calculated an age of the Earth based on thermodynamic modeling",
+            "sourceId": "usgs-powell-geologic-time"
+          },
+          {
+            "quote": "In 1869, the same year Powell launched his expedition, English scientist Thomas Huxley challenged Lord Kelvin’s calculation",
+            "sourceId": "usgs-powell-geologic-time"
+          }
+        ],
+        "id": "cooling-age-of-earth",
+        "name": "Cooling Age of Earth"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "It was the discovery of radioactivity in 1896 that changed the heat-flow picture dramatically.",
+            "sourceId": "usgs-powell-geologic-time"
+          },
+          {
+            "quote": "Based on radiometric dating of the oldest rock he could find, English geologist Arthur Holmes in 1913 calculated an age of 1.6 billion years",
+            "sourceId": "usgs-powell-geologic-time"
+          },
+          {
+            "quote": "It was 1956 when Clair Cameron Patterson, an American geochemist, used lead-lead dating",
+            "sourceId": "usgs-powell-geologic-time"
+          }
+        ],
+        "id": "radiometric-age-of-earth",
+        "name": "Radiometric Age of Earth"
+      }
+    ],
+    "objectives": [
+      "Order major developments in understanding geologic time from 1669 to 1956 on a timeline",
+      "Explain how stratigraphy, uniformitarianism, and faunal succession established relative time before absolute dating",
+      "Describe how discovery of radioactivity and lead-lead dating revised the estimated age of Earth"
+    ],
+    "supported": true,
+    "unsupportedReason": ""
+  },
+  "report": {
+    "artifactId": "source-analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis.gen.json"
+      },
+      {
+        "id": "analysis.invariants",
+        "kind": "semantic",
+        "passed": true,
+        "message": "invariants hold for supported=true"
+      },
+      {
+        "id": "analysis.concept-ids",
+        "kind": "semantic",
+        "passed": true,
+        "message": "all 5 concept id(s) are unique lowercase-kebab"
+      },
+      {
+        "id": "refs.sources",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 1 cited sourceId(s) have matching documents"
+      },
+      {
+        "id": "grounding.quotes",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 9 concept quote(s) count as evidence (>= 8 normalised characters with >= 3 letters/digits, or a compact \"=\" equation with >= 3) and all 9 resolvable quote(s) appear in their source text after whitespace normalisation; every supported concept has >= 1 counted quote"
+      },
+      {
+        "id": "policy.no-publisher-attribution",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated analysis field (concept names, objectives, unsupportedReason) mentions the publisher or uses attribution/endorsement wording naming a source or authority; evidence quotes are exempt"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a1837c-3aef-765a-a750-071f0f7bbab7",
+    "usage": {
+      "promptTokens": 3376,
+      "completionTokens": 5428,
+      "reasoningTokens": 4924,
+      "cachedTokens": 0
+    },
+    "latencyMs": 30225,
+    "estCostUSD": 0.027289,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage"
+  }
+}

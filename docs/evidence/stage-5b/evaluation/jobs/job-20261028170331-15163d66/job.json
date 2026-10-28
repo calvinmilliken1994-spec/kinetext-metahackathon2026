@@ -1,0 +1,23 @@
+{
+  "jobId": "job-20261028170331-15163d66",
+  "sourceId": "cfpb-saving-post-secondary-education",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-28T17:03:31.226Z",
+  "totalCostUSD": 0.072615,
+  "reservedUnknownUSD": 0,
+  "engine": "compound-interest-v1",
+  "revisions": 1,
+  "repairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 7692,
+    "startedAt": "2026-10-28T17:03:31.226Z"
+  },
+  "specId": "cfpb-saving-post-secondary-education-job-20261028170331-15163d66",
+  "publishable": true,
+  "checksPassed": 15,
+  "checksTotal": 15,
+  "publishedRevision": 1,
+  "finishedAt": "2026-10-28T17:04:42.169Z"
+}

@@ -1,0 +1,23 @@
+{
+  "jobId": "job-20261028170220-c936ea20",
+  "sourceId": "cfpb-teenagers-and-saving",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-28T17:02:20.281Z",
+  "totalCostUSD": 0.06266,
+  "reservedUnknownUSD": 0,
+  "engine": "compound-interest-v1",
+  "revisions": 1,
+  "repairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 7692,
+    "startedAt": "2026-10-28T17:02:20.281Z"
+  },
+  "specId": "cfpb-teenagers-and-saving-job-20261028170220-c936ea20",
+  "publishable": true,
+  "checksPassed": 15,
+  "checksTotal": 15,
+  "publishedRevision": 1,
+  "finishedAt": "2026-10-28T17:03:29.174Z"
+}

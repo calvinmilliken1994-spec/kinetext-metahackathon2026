@@ -1,0 +1,108 @@
+{
+  "analysis": {
+    "activity": "none",
+    "concepts": [
+      {
+        "evidence": [
+          {
+            "quote": "pt = ps + (rho * V^2) / 2",
+            "sourceId": "nasa-grc-bernoullis-equation"
+          },
+          {
+            "quote": "The equation states that the static pressure ps in the flow plus the dynamic pressure, one half of the density rho",
+            "sourceId": "nasa-grc-bernoullis-equation"
+          }
+        ],
+        "id": "bernoullis-equation",
+        "name": "Bernoulli's equation"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "The form of the dynamic pressure is the density times the square of the velocity divided by two.",
+            "sourceId": "nasa-grc-bernoullis-equation"
+          }
+        ],
+        "id": "dynamic-pressure",
+        "name": "Dynamic pressure"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "the restrictions for this form are that the flow is inviscid, incompressible, steady, without heat addition",
+            "sourceId": "nasa-grc-bernoullis-equation"
+          }
+        ],
+        "id": "incompressible-inviscid-flow-assumptions",
+        "name": "Incompressible inviscid flow assumptions"
+      }
+    ],
+    "objectives": [
+      "Explain the relationship among static pressure, dynamic pressure, and total pressure",
+      "Apply Bernoulli's equation to steady incompressible inviscid flow"
+    ],
+    "supported": false,
+    "unsupportedReason": "The source teaches Bernoulli's equation for static, dynamic, and total pressure in steady incompressible inviscid flow, which does not match any listed activity engine."
+  },
+  "report": {
+    "artifactId": "source-analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis.gen.json"
+      },
+      {
+        "id": "analysis.invariants",
+        "kind": "semantic",
+        "passed": true,
+        "message": "invariants hold for supported=false"
+      },
+      {
+        "id": "analysis.concept-ids",
+        "kind": "semantic",
+        "passed": true,
+        "message": "all 3 concept id(s) are unique lowercase-kebab"
+      },
+      {
+        "id": "refs.sources",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 1 cited sourceId(s) have matching documents"
+      },
+      {
+        "id": "grounding.quotes",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 concept quote(s) count as evidence (>= 8 normalised characters with >= 3 letters/digits, or a compact \"=\" equation with >= 3) and all 4 resolvable quote(s) appear in their source text after whitespace normalisation"
+      },
+      {
+        "id": "policy.no-publisher-attribution",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated analysis field (concept names, objectives, unsupportedReason) mentions the publisher or uses attribution/endorsement wording naming a source or authority; evidence quotes are exempt"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18383-7802-71ba-9faf-e68c00f05573",
+    "usage": {
+      "promptTokens": 3357,
+      "completionTokens": 2832,
+      "reasoningTokens": 2549,
+      "cachedTokens": 0
+    },
+    "latencyMs": 15994,
+    "estCostUSD": 0.01623225,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage"
+  }
+}

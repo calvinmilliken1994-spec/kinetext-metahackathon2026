@@ -1,0 +1,18 @@
+{
+  "jobId": "job-20261028171555-361c8607",
+  "sourceId": "nasa-grc-drag-equation",
+  "status": "unsupported",
+  "purpose": "test-live",
+  "createdAt": "2026-10-28T17:15:55.210Z",
+  "totalCostUSD": 0.020491,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 7692,
+    "startedAt": "2026-10-28T17:15:55.210Z"
+  },
+  "finishedAt": "2026-10-28T17:16:17.160Z"
+}

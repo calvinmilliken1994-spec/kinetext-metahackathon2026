@@ -1,0 +1,18 @@
+{
+  "jobId": "job-20261028165927-bf95bcaa",
+  "sourceId": "nasa-grc-range-constant-velocity",
+  "status": "unsupported",
+  "purpose": "test-live",
+  "createdAt": "2026-10-28T16:59:27.723Z",
+  "totalCostUSD": 0.017902,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 7692,
+    "startedAt": "2026-10-28T16:59:27.723Z"
+  },
+  "finishedAt": "2026-10-28T16:59:45.145Z"
+}

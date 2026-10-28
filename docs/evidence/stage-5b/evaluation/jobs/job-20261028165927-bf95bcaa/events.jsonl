@@ -1,0 +1,5 @@
+{"jobId":"job-20261028165927-bf95bcaa","seq":0,"stage":"ingest","status":"started","at":"2026-10-28T16:59:27.724Z"}
+{"jobId":"job-20261028165927-bf95bcaa","seq":1,"stage":"ingest","status":"succeeded","at":"2026-10-28T16:59:27.725Z","detail":"sha256 f1f4102e2339"}
+{"jobId":"job-20261028165927-bf95bcaa","seq":2,"stage":"analyze","status":"started","at":"2026-10-28T16:59:27.726Z"}
+{"jobId":"job-20261028165927-bf95bcaa","seq":3,"stage":"analyze","status":"succeeded","at":"2026-10-28T16:59:45.144Z","model":"muse-spark-1.3","responseId":"chatcmpl-01a18374-1405-72f8-a95c-dd52013eedec","usage":{"promptTokens":2265,"completionTokens":3546,"reasoningTokens":3210,"cachedTokens":0},"latencyMs":17416,"estCostUSD":0.01790175,"detail":"unsupported: The source teaches constant-velocity aircraft range using d = V * t and R = V * tmax, which matches none of the listed activity engines.; checks 6/6 passed"}
+{"jobId":"job-20261028165927-bf95bcaa","seq":4,"stage":"done","status":"succeeded","at":"2026-10-28T16:59:45.145Z","detail":"unsupported"}

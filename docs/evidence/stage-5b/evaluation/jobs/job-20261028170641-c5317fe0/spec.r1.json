@@ -1,0 +1,148 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nrc-glossary-half-life-job-20261028170641-c5317fe0",
+  "title": "Half-Life and Radioactive Decay",
+  "learningObjectives": [
+    "Define half-life as the time for one half of the atoms of a radioactive substance to disintegrate into another nuclear form.",
+    "Compare measured half-lives ranging from millionths of a second to billions of years."
+  ],
+  "sources": [
+    {
+      "id": "nrc-glossary-half-life",
+      "title": "Half-life — U.S. Nuclear Regulatory Commission, glossary",
+      "locator": "https://www.nrc.gov/education-regulatory-research/glossary/half-life",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: U.S. Nuclear Regulatory Commission, 'Half-life', Education & Regulatory Research glossary. NRC's website constitutes a U.S. Government Work under federal copyright law and is not subject to copyright. The U.S. Nuclear Regulatory Commission has not reviewed, approved or endorsed this activity.",
+      "sha256": "9877c6c6956308cd42fe37add0cb11802645ecb92867b7ea53a17ad85cf6a5de"
+    }
+  ],
+  "explanations": [
+    {
+      "evidence": [
+        {
+          "quote": "The time in which one half of the atoms of a particular radioactive substance disintegrate into another nuclear form.",
+          "sourceId": "nrc-glossary-half-life"
+        }
+      ],
+      "id": "what-is-half-life",
+      "text": "Half-life is the time needed for one half of the atoms of a radioactive substance to disintegrate into another nuclear form."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "Measured half-lives vary from millionths of a second to billions of years.",
+          "sourceId": "nrc-glossary-half-life"
+        }
+      ],
+      "id": "range-of-half-lives",
+      "text": "Measured half-lives vary widely, from millionths of a second to billions of years."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "Also called physical or radiological half-life.",
+          "sourceId": "nrc-glossary-half-life"
+        }
+      ],
+      "id": "other-name-for-half-life",
+      "text": "The same interval is also called physical or radiological half-life."
+    }
+  ],
+  "simulation": {
+    "engine": "half-life-v1",
+    "equation": "N=N0*(1/2)^(t/T)",
+    "initialAmount": {
+      "unit": "1",
+      "default": 100,
+      "max": 1000,
+      "min": 1
+    },
+    "halfLife": {
+      "unit": "time",
+      "default": 5,
+      "max": 10,
+      "min": 1
+    },
+    "elapsedTime": {
+      "unit": "time",
+      "default": 5,
+      "max": 25,
+      "min": 0
+    },
+    "scenario": {
+      "objectLabel": "Radioactive sample (grams)",
+      "settingLabel": "Half-life in years"
+    }
+  },
+  "behavioralTests": [
+    {
+      "elapsedTime": 5,
+      "expectedRemaining": 50,
+      "halfLife": 5,
+      "initialAmount": 100,
+      "name": "one half-life remains one half",
+      "tolerance": 0.05
+    },
+    {
+      "elapsedTime": 10,
+      "expectedRemaining": 25,
+      "halfLife": 5,
+      "initialAmount": 100,
+      "name": "two half-lives remain one quarter",
+      "tolerance": 0.05
+    },
+    {
+      "elapsedTime": 0,
+      "expectedRemaining": 200,
+      "halfLife": 3,
+      "initialAmount": 200,
+      "name": "zero time remains full amount",
+      "tolerance": 0.1
+    },
+    {
+      "elapsedTime": 6,
+      "expectedRemaining": 28.2843,
+      "halfLife": 4,
+      "initialAmount": 80,
+      "name": "fractional half-lives decay",
+      "tolerance": 0.02
+    }
+  ],
+  "predictions": [
+    {
+      "elapsedTime": 5,
+      "expectedRemaining": 50,
+      "halfLife": 5,
+      "id": "pred-1",
+      "initialAmount": 100,
+      "prompt": "A 100-gram sample has a half-life of 5 years. How much remains after 5 years?",
+      "tolerance": 0.05
+    },
+    {
+      "elapsedTime": 8,
+      "expectedRemaining": 30,
+      "halfLife": 4,
+      "id": "pred-2",
+      "initialAmount": 120,
+      "prompt": "A 120-gram sample has a half-life of 4 years. How much remains after 8 years?",
+      "tolerance": 0.05
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a1837b-68d7-71b9-9e2e-802ac06a0943",
+    "runId": "job-20261028170641-c5317fe0",
+    "promptVersion": "v7",
+    "generatedAt": "2026-10-28T17:07:45.595Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

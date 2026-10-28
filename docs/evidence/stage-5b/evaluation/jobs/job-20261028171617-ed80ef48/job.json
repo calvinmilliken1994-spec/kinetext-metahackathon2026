@@ -1,0 +1,18 @@
+{
+  "jobId": "job-20261028171617-ed80ef48",
+  "sourceId": "nasa-grc-bernoullis-equation",
+  "status": "unsupported",
+  "purpose": "test-live",
+  "createdAt": "2026-10-28T17:16:17.803Z",
+  "totalCostUSD": 0.016232,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 7692,
+    "startedAt": "2026-10-28T17:16:17.803Z"
+  },
+  "finishedAt": "2026-10-28T17:16:33.803Z"
+}

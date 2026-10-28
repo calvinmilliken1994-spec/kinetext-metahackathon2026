@@ -1,0 +1,5 @@
+{"jobId":"job-20261028171555-361c8607","seq":0,"stage":"ingest","status":"started","at":"2026-10-28T17:15:55.212Z"}
+{"jobId":"job-20261028171555-361c8607","seq":1,"stage":"ingest","status":"succeeded","at":"2026-10-28T17:15:55.213Z","detail":"sha256 9462a6186d8b"}
+{"jobId":"job-20261028171555-361c8607","seq":2,"stage":"analyze","status":"started","at":"2026-10-28T17:15:55.214Z"}
+{"jobId":"job-20261028171555-361c8607","seq":3,"stage":"analyze","status":"succeeded","at":"2026-10-28T17:16:17.159Z","model":"muse-spark-1.3","responseId":"chatcmpl-01a18383-371f-72c3-ac4e-aa44adbd3ab4","usage":{"promptTokens":2252,"completionTokens":4159,"reasoningTokens":3845,"cachedTokens":0},"latencyMs":21942,"estCostUSD":0.02049075,"detail":"unsupported: The source teaches the aerodynamic drag equation D = Cd*(rho*V^2*A)/2 including drag coefficient, reference area, and dynamic pressure, which fits no listed activity because lift-equation-v1 covers lift only and projectile-v1 excludes drag.; checks 6/6 passed"}
+{"jobId":"job-20261028171555-361c8607","seq":4,"stage":"done","status":"succeeded","at":"2026-10-28T17:16:17.159Z","detail":"unsupported"}

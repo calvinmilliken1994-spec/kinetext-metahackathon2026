@@ -1,0 +1,18 @@
+{
+  "jobId": "job-20261028171504-fbbf8fd2",
+  "sourceId": "nara-bill-of-rights",
+  "status": "unsupported",
+  "purpose": "test-live",
+  "createdAt": "2026-10-28T17:15:04.613Z",
+  "totalCostUSD": 0.02209,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 7692,
+    "startedAt": "2026-10-28T17:15:04.613Z"
+  },
+  "finishedAt": "2026-10-28T17:15:27.861Z"
+}

@@ -1,0 +1,239 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "usgs-powell-geologic-time-job-20261028170809-2489e263",
+  "title": "Dating Deep Time: From Steno to Patterson",
+  "learningObjectives": [
+    "Order major advances in geologic time thinking from 1669 to 1956 on a timeline.",
+    "Explain how superposition and faunal succession established relative order before absolute dating.",
+    "Describe how radioactivity and lead-lead dating revised Earth's age to about 4.55 billion years."
+  ],
+  "sources": [
+    {
+      "id": "usgs-powell-geologic-time",
+      "title": "Powell Expedition—Geologic Time. Then and Now. — U.S. Geological Survey",
+      "locator": "https://www.usgs.gov/news/powell-expedition-geologic-time-then-and-now",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: U.S. Geological Survey, 'Powell Expedition—Geologic Time. Then and Now.' (2019). Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+      "sha256": "fa7498537478e10722976127bedd9cf61ccb5dda39090e0a4f844635b5a8f71f"
+    }
+  ],
+  "explanations": [
+    {
+      "evidence": [
+        {
+          "quote": "The law of superposition says that older rocks are on the bottom and younger rocks are on the top.",
+          "sourceId": "usgs-powell-geologic-time"
+        },
+        {
+          "quote": "In 1815, Smith developed the law of faunal succession",
+          "sourceId": "usgs-powell-geologic-time"
+        }
+      ],
+      "id": "relative-order-first",
+      "text": "Early geologists established relative time by ordering rock layers and fossils before they could measure absolute ages."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "In 1788, James Hutton proposed what would become the foundational principle of geology — uniformitarianism.",
+          "sourceId": "usgs-powell-geologic-time"
+        },
+        {
+          "quote": "no vestige of a beginning. No prospect of an end.",
+          "sourceId": "usgs-powell-geologic-time"
+        }
+      ],
+      "id": "uniformitarianism-deep-time",
+      "text": "Hutton argued that slow processes seen today shaped Earth in the past, implying vast geologic time."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "It was the discovery of radioactivity in 1896 that changed the heat-flow picture dramatically.",
+          "sourceId": "usgs-powell-geologic-time"
+        },
+        {
+          "quote": "It was 1956 when Clair Cameron Patterson, an American geochemist, used lead-lead dating",
+          "sourceId": "usgs-powell-geologic-time"
+        }
+      ],
+      "id": "radioactivity-absolute-age",
+      "text": "Discovery of radioactivity provided heat to explain long time and tools to date rocks, leading to Patterson's Earth age."
+    }
+  ],
+  "simulation": {
+    "engine": "timeline-v1",
+    "events": [
+      {
+        "day": 0,
+        "evidence": [
+          {
+            "quote": "Nicholas Steno, 1669, gets credit for first writing down basic geological principles as laws.",
+            "sourceId": "usgs-powell-geologic-time"
+          },
+          {
+            "quote": "The law of superposition says that older rocks are on the bottom and younger rocks are on the top.",
+            "sourceId": "usgs-powell-geologic-time"
+          }
+        ],
+        "id": "e1",
+        "label": "Steno writes geologic principles",
+        "month": 0,
+        "year": 1669
+      },
+      {
+        "day": 0,
+        "evidence": [
+          {
+            "quote": "In 1788, James Hutton proposed what would become the foundational principle of geology — uniformitarianism.",
+            "sourceId": "usgs-powell-geologic-time"
+          }
+        ],
+        "id": "e2",
+        "label": "Hutton proposes uniformitarianism",
+        "month": 0,
+        "year": 1788
+      },
+      {
+        "day": 0,
+        "evidence": [
+          {
+            "quote": "In 1815, Smith developed the law of faunal succession",
+            "sourceId": "usgs-powell-geologic-time"
+          },
+          {
+            "quote": "species become extinct and are replaced by new species",
+            "sourceId": "usgs-powell-geologic-time"
+          }
+        ],
+        "id": "e3",
+        "label": "Smith develops faunal succession law",
+        "month": 0,
+        "year": 1815
+      },
+      {
+        "day": 0,
+        "evidence": [
+          {
+            "quote": "The first geologic time scale was published in 1841 — Powell certainly would have known of it and used it in his geologic trips to the West.",
+            "sourceId": "usgs-powell-geologic-time"
+          }
+        ],
+        "id": "e4",
+        "label": "First geologic time scale published",
+        "month": 0,
+        "year": 1841
+      },
+      {
+        "day": 0,
+        "evidence": [
+          {
+            "quote": "It was the discovery of radioactivity in 1896 that changed the heat-flow picture dramatically.",
+            "sourceId": "usgs-powell-geologic-time"
+          }
+        ],
+        "id": "e5",
+        "label": "Discovery of radioactivity",
+        "month": 0,
+        "year": 1896
+      },
+      {
+        "day": 0,
+        "evidence": [
+          {
+            "quote": "English geologist Arthur Holmes in 1913 calculated an age of 1.6 billion years",
+            "sourceId": "usgs-powell-geologic-time"
+          },
+          {
+            "quote": "the first such estimate based on radiometric dating",
+            "sourceId": "usgs-powell-geologic-time"
+          }
+        ],
+        "id": "e6",
+        "label": "Holmes calculates 1.6-billion-year age",
+        "month": 0,
+        "year": 1913
+      },
+      {
+        "day": 0,
+        "evidence": [
+          {
+            "quote": "It was 1956 when Clair Cameron Patterson, an American geochemist, used lead-lead dating",
+            "sourceId": "usgs-powell-geologic-time"
+          },
+          {
+            "quote": "this date was accepted as the age of Earth",
+            "sourceId": "usgs-powell-geologic-time"
+          }
+        ],
+        "id": "e7",
+        "label": "Patterson dates meteorite, Earth age",
+        "month": 0,
+        "year": 1956
+      }
+    ],
+    "scenario": {
+      "settingLabel": "Geology from 1669 to 1956",
+      "subjectLabel": "History of Geologic Time"
+    }
+  },
+  "behavioralTests": [
+    {
+      "earlierEventId": "e1",
+      "laterEventId": "e2",
+      "name": "Steno principles before Hutton uniformitarianism"
+    },
+    {
+      "earlierEventId": "e3",
+      "laterEventId": "e4",
+      "name": "Faunal succession before first time scale"
+    },
+    {
+      "earlierEventId": "e4",
+      "laterEventId": "e5",
+      "name": "First time scale before radioactivity discovery"
+    },
+    {
+      "earlierEventId": "e6",
+      "laterEventId": "e7",
+      "name": "Holmes age before Patterson age"
+    }
+  ],
+  "predictions": [
+    {
+      "earlierEventId": "e1",
+      "id": "p1",
+      "laterEventId": "e4",
+      "prompt": "Which happened first: Steno writing geologic principles or publication of the first geologic time scale?"
+    },
+    {
+      "earlierEventId": "e4",
+      "id": "p2",
+      "laterEventId": "e5",
+      "prompt": "Which happened first: publication of the first geologic time scale or discovery of radioactivity?"
+    },
+    {
+      "earlierEventId": "e6",
+      "id": "p3",
+      "laterEventId": "e7",
+      "prompt": "Which happened first: Holmes calculating a 1.6-billion-year age or Patterson dating the Canyon Diablo meteorite?"
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a1837d-515d-7010-a935-6f4bc981acdc",
+    "runId": "job-20261028170809-2489e263",
+    "promptVersion": "v7",
+    "generatedAt": "2026-10-28T17:09:50.702Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "jobId": "job-20261028171315-79068df8",
+  "sourceId": "nara-lee-resolution",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-28T17:13:15.510Z",
+  "totalCostUSD": 0.082576,
+  "reservedUnknownUSD": 0,
+  "engine": "timeline-v1",
+  "revisions": 1,
+  "repairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 7692,
+    "startedAt": "2026-10-28T17:13:15.510Z"
+  },
+  "specId": "nara-lee-resolution-job-20261028171315-79068df8",
+  "publishable": true,
+  "checksPassed": 11,
+  "checksTotal": 11,
+  "publishedRevision": 1,
+  "finishedAt": "2026-10-28T17:15:02.318Z"
+}

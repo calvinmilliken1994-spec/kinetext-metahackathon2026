@@ -1,0 +1,18 @@
+{
+  "jobId": "job-20261028171718-a2ae997c",
+  "sourceId": "nasa-grc-glider-trajectory-problem",
+  "status": "unsupported",
+  "purpose": "test-live",
+  "createdAt": "2026-10-28T17:17:18.041Z",
+  "totalCostUSD": 0.015108,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 7692,
+    "startedAt": "2026-10-28T17:17:18.041Z"
+  },
+  "finishedAt": "2026-10-28T17:17:33.464Z"
+}

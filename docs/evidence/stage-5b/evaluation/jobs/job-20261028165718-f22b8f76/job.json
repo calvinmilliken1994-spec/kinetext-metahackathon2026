@@ -1,0 +1,23 @@
+{
+  "jobId": "job-20261028165718-f22b8f76",
+  "sourceId": "nasa-grc-newtons-laws-of-motion",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-28T16:57:18.332Z",
+  "totalCostUSD": 0.045815,
+  "reservedUnknownUSD": 0,
+  "engine": "forces-1d-v1",
+  "revisions": 1,
+  "repairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 7692,
+    "startedAt": "2026-10-28T16:57:18.332Z"
+  },
+  "specId": "nasa-grc-newtons-laws-of-motion-job-20261028165718-f22b8f76",
+  "publishable": true,
+  "checksPassed": 15,
+  "checksTotal": 15,
+  "publishedRevision": 1,
+  "finishedAt": "2026-10-28T16:58:02.473Z"
+}

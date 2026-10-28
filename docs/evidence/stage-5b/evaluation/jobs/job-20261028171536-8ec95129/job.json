@@ -1,0 +1,18 @@
+{
+  "jobId": "job-20261028171536-8ec95129",
+  "sourceId": "nara-emancipation-proclamation",
+  "status": "unsupported",
+  "purpose": "test-live",
+  "createdAt": "2026-10-28T17:15:36.667Z",
+  "totalCostUSD": 0.018216,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 7692,
+    "startedAt": "2026-10-28T17:15:36.667Z"
+  },
+  "finishedAt": "2026-10-28T17:15:53.594Z"
+}

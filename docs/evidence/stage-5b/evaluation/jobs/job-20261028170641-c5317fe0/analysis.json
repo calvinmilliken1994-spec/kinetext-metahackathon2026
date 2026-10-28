@@ -1,0 +1,83 @@
+{
+  "analysis": {
+    "activity": "half-life-v1",
+    "concepts": [
+      {
+        "evidence": [
+          {
+            "quote": "The time in which one half of the atoms of a particular radioactive substance disintegrate into another nuclear form.",
+            "sourceId": "nrc-glossary-half-life"
+          }
+        ],
+        "id": "half-life",
+        "name": "Half-life"
+      }
+    ],
+    "objectives": [
+      "Define half-life as the time for one half of the atoms to disintegrate"
+    ],
+    "supported": true,
+    "unsupportedReason": ""
+  },
+  "report": {
+    "artifactId": "source-analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis.gen.json"
+      },
+      {
+        "id": "analysis.invariants",
+        "kind": "semantic",
+        "passed": true,
+        "message": "invariants hold for supported=true"
+      },
+      {
+        "id": "analysis.concept-ids",
+        "kind": "semantic",
+        "passed": true,
+        "message": "all 1 concept id(s) are unique lowercase-kebab"
+      },
+      {
+        "id": "refs.sources",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 1 cited sourceId(s) have matching documents"
+      },
+      {
+        "id": "grounding.quotes",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 1 concept quote(s) count as evidence (>= 8 normalised characters with >= 3 letters/digits, or a compact \"=\" equation with >= 3) and all 1 resolvable quote(s) appear in their source text after whitespace normalisation; every supported concept has >= 1 counted quote"
+      },
+      {
+        "id": "policy.no-publisher-attribution",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated analysis field (concept names, objectives, unsupportedReason) mentions the publisher or uses attribution/endorsement wording naming a source or authority; evidence quotes are exempt"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a1837a-a02a-7080-a2fe-d76cd5dc5607",
+    "usage": {
+      "promptTokens": 1666,
+      "completionTokens": 1897,
+      "reasoningTokens": 1802,
+      "cachedTokens": 0
+    },
+    "latencyMs": 12345,
+    "estCostUSD": 0.01014475,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage"
+  }
+}

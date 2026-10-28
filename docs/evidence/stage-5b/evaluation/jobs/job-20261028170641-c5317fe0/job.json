@@ -1,0 +1,23 @@
+{
+  "jobId": "job-20261028170641-c5317fe0",
+  "sourceId": "nrc-glossary-half-life",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-28T17:06:41.850Z",
+  "totalCostUSD": 0.042157,
+  "reservedUnknownUSD": 0,
+  "engine": "half-life-v1",
+  "revisions": 1,
+  "repairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 7692,
+    "startedAt": "2026-10-28T17:06:41.850Z"
+  },
+  "specId": "nrc-glossary-half-life-job-20261028170641-c5317fe0",
+  "publishable": true,
+  "checksPassed": 14,
+  "checksTotal": 14,
+  "publishedRevision": 1,
+  "finishedAt": "2026-10-28T17:07:45.600Z"
+}

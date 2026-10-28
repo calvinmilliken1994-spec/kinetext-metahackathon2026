@@ -1,0 +1,168 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "cfpb-teenagers-and-saving-job-20261028170220-c936ea20",
+  "title": "Start Early: How Compound Interest Grows Savings",
+  "learningObjectives": [
+    "Explain that compound interest is earning interest on savings and on previously earned interest.",
+    "Compare the age-65 totals from setting aside $100 yearly starting at age 14 versus starting at age 35 at 5 percent every year."
+  ],
+  "sources": [
+    {
+      "id": "cfpb-teenagers-and-saving",
+      "title": "Teenagers and saving — Consumer Financial Protection Bureau, Money as You Grow",
+      "locator": "https://www.consumerfinance.gov/consumer-tools/money-as-you-grow/teen-young-adult/explore-saving/",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: Consumer Financial Protection Bureau, Money as You Grow, 'Teenagers and saving'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+      "sha256": "a438468abdb47ce3f3afb4ed9e5c4bafa5ebf39e76f40973647383ef8df00b58"
+    }
+  ],
+  "explanations": [
+    {
+      "evidence": [
+        {
+          "quote": "Compound interest is when your child earns interest on both the money they save and the interest they earn.",
+          "sourceId": "cfpb-teenagers-and-saving"
+        }
+      ],
+      "id": "what-is-compound-interest",
+      "text": "Compound interest means you earn interest on both the money you save and the interest that money has already earned."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "The sooner you start saving, the faster your money can grow from compound interest.",
+          "sourceId": "cfpb-teenagers-and-saving"
+        },
+        {
+          "quote": "If they set aside $100 every year starting at age 14, they'd have about $23,000 at age 65.",
+          "sourceId": "cfpb-teenagers-and-saving"
+        }
+      ],
+      "id": "start-early-to-grow",
+      "text": "Starting to save earlier gives compound interest more time to grow money, so saving the same yearly amount from a younger age can lead to a much larger total."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "However, if they begin saving at age 35, they'd have about $7,000 at age 65.",
+          "sourceId": "cfpb-teenagers-and-saving"
+        },
+        {
+          "quote": "The example assumes the account earns 5 percent every year.",
+          "sourceId": "cfpb-teenagers-and-saving"
+        }
+      ],
+      "id": "five-percent-yearly-example",
+      "text": "In the example the account earns 5 percent every year, and starting at age 35 instead of age 14 leaves much less by age 65."
+    }
+  ],
+  "simulation": {
+    "engine": "compound-interest-v1",
+    "equation": "A=P*(1+r/(100*n))^(n*t)",
+    "principalUSD": {
+      "unit": "USD",
+      "default": 1000,
+      "max": 10000,
+      "min": 100
+    },
+    "annualRatePercent": {
+      "unit": "%",
+      "default": 5,
+      "max": 12,
+      "min": 1
+    },
+    "compoundsPerYear": {
+      "unit": "per year",
+      "default": 4,
+      "max": 12,
+      "min": 1
+    },
+    "years": {
+      "unit": "years",
+      "default": 10,
+      "max": 40,
+      "min": 1
+    },
+    "scenario": {
+      "objectLabel": "Savings account",
+      "settingLabel": "Interest compounded yearly"
+    }
+  },
+  "behavioralTests": [
+    {
+      "annualRatePercent": 5,
+      "compoundsPerYear": 1,
+      "expectedAmountUSD": 1628.89,
+      "name": "yearly-5-percent-10-years",
+      "principalUSD": 1000,
+      "tolerance": 0.01,
+      "years": 10
+    },
+    {
+      "annualRatePercent": 5,
+      "compoundsPerYear": 12,
+      "expectedAmountUSD": 1647.01,
+      "name": "monthly-5-percent-10-years",
+      "principalUSD": 1000,
+      "tolerance": 0.01,
+      "years": 10
+    },
+    {
+      "annualRatePercent": 5,
+      "compoundsPerYear": 1,
+      "expectedAmountUSD": 2653.3,
+      "name": "yearly-5-percent-20-years",
+      "principalUSD": 1000,
+      "tolerance": 0.01,
+      "years": 20
+    },
+    {
+      "annualRatePercent": 0,
+      "compoundsPerYear": 12,
+      "expectedAmountUSD": 2500,
+      "name": "zero-rate-edge-case",
+      "principalUSD": 2500,
+      "tolerance": 0.01,
+      "years": 10
+    }
+  ],
+  "predictions": [
+    {
+      "annualRatePercent": 5,
+      "compoundsPerYear": 1,
+      "expectedAmountUSD": 1628.89,
+      "id": "predict-yearly-10-years",
+      "principalUSD": 1000,
+      "prompt": "You start with $1,000 in a savings account earning 5% compounded yearly. After 10 years, how much will you have?",
+      "tolerance": 0.01,
+      "years": 10
+    },
+    {
+      "annualRatePercent": 5,
+      "compoundsPerYear": 1,
+      "expectedAmountUSD": 8643.88,
+      "id": "predict-yearly-30-years",
+      "principalUSD": 2000,
+      "prompt": "You start with $2,000 in a savings account earning 5% compounded yearly. After 30 years, how much will you have?",
+      "tolerance": 0.01,
+      "years": 30
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18377-7ef5-7509-b086-4dfd53950f5b",
+    "runId": "job-20261028170220-c936ea20",
+    "promptVersion": "v7",
+    "generatedAt": "2026-10-28T17:03:29.117Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

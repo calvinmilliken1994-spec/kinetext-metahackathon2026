@@ -1,0 +1,5 @@
+{"jobId":"job-20261028165946-0bad55e5","seq":0,"stage":"ingest","status":"started","at":"2026-10-28T16:59:46.250Z"}
+{"jobId":"job-20261028165946-0bad55e5","seq":1,"stage":"ingest","status":"succeeded","at":"2026-10-28T16:59:46.251Z","detail":"sha256 1bd1a2678b2c"}
+{"jobId":"job-20261028165946-0bad55e5","seq":2,"stage":"analyze","status":"started","at":"2026-10-28T16:59:46.252Z"}
+{"jobId":"job-20261028165946-0bad55e5","seq":3,"stage":"analyze","status":"succeeded","at":"2026-10-28T17:00:09.342Z","model":"muse-spark-1.3","responseId":"chatcmpl-01a18374-7291-7497-bf67-9ab7e609afbf","usage":{"promptTokens":2133,"completionTokens":5458,"reasoningTokens":5095,"cachedTokens":0},"latencyMs":23088,"estCostUSD":0.02586275,"detail":"unsupported: The source covers how lift varies with wing area, planform reference area, and flap and slat deployment, but it does not teach the full lift equation relating lift to coefficient, density, and velocity.; checks 6/6 passed"}
+{"jobId":"job-20261028165946-0bad55e5","seq":4,"stage":"done","status":"succeeded","at":"2026-10-28T17:00:09.342Z","detail":"unsupported"}

@@ -1,0 +1,5 @@
+{"jobId":"job-20261028171226-947f26bb","seq":0,"stage":"ingest","status":"started","at":"2026-10-28T17:12:26.134Z"}
+{"jobId":"job-20261028171226-947f26bb","seq":1,"stage":"ingest","status":"succeeded","at":"2026-10-28T17:12:26.135Z","detail":"sha256 6da19e2b0134"}
+{"jobId":"job-20261028171226-947f26bb","seq":2,"stage":"analyze","status":"started","at":"2026-10-28T17:12:26.135Z"}
+{"jobId":"job-20261028171226-947f26bb","seq":3,"stage":"analyze","status":"succeeded","at":"2026-10-28T17:12:46.305Z","model":"muse-spark-1.3","responseId":"chatcmpl-01a1837f-ff89-7651-bebe-7acc27a39afb","usage":{"promptTokens":2133,"completionTokens":3332,"reasoningTokens":3017,"cachedTokens":0},"latencyMs":20169,"estCostUSD":0.01682725,"detail":"unsupported: The source covers the Louisiana Purchase transaction, westward expansion, slavery-related sectional tensions, and impacts on Native Americans, which matches no listed activity engine.; checks 6/6 passed"}
+{"jobId":"job-20261028171226-947f26bb","seq":4,"stage":"done","status":"succeeded","at":"2026-10-28T17:12:46.306Z","detail":"unsupported"}

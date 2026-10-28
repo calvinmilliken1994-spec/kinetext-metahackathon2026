@@ -1,0 +1,5 @@
+{"jobId":"job-20261028170201-d4794165","seq":0,"stage":"ingest","status":"started","at":"2026-10-28T17:02:01.697Z"}
+{"jobId":"job-20261028170201-d4794165","seq":1,"stage":"ingest","status":"succeeded","at":"2026-10-28T17:02:01.698Z","detail":"sha256 a7355b33f712"}
+{"jobId":"job-20261028170201-d4794165","seq":2,"stage":"analyze","status":"started","at":"2026-10-28T17:02:01.698Z"}
+{"jobId":"job-20261028170201-d4794165","seq":3,"stage":"analyze","status":"succeeded","at":"2026-10-28T17:02:18.875Z","model":"muse-spark-1.3","responseId":"chatcmpl-01a18376-6cd0-7748-9f21-34dc2060b9ce","usage":{"promptTokens":2448,"completionTokens":3387,"reasoningTokens":3124,"cachedTokens":0},"latencyMs":17174,"estCostUSD":0.01745475,"detail":"unsupported: The source teaches Mach-number-dependent compressibility and density changes across subsonic, transonic, and supersonic flow, which has no matching activity engine.; checks 6/6 passed"}
+{"jobId":"job-20261028170201-d4794165","seq":4,"stage":"done","status":"succeeded","at":"2026-10-28T17:02:18.876Z","detail":"unsupported"}

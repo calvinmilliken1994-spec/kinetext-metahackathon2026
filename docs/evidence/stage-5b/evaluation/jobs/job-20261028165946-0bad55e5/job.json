@@ -1,0 +1,18 @@
+{
+  "jobId": "job-20261028165946-0bad55e5",
+  "sourceId": "nasa-grc-effect-of-size-on-lift",
+  "status": "unsupported",
+  "purpose": "test-live",
+  "createdAt": "2026-10-28T16:59:46.249Z",
+  "totalCostUSD": 0.025863,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 7692,
+    "startedAt": "2026-10-28T16:59:46.249Z"
+  },
+  "finishedAt": "2026-10-28T17:00:09.343Z"
+}

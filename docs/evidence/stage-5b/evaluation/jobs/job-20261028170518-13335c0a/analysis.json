@@ -1,0 +1,116 @@
+{
+  "analysis": {
+    "activity": "half-life-v1",
+    "concepts": [
+      {
+        "evidence": [
+          {
+            "quote": "The different isotopes have different “half-lives” – the time it takes to lose half of its radioactivity.",
+            "sourceId": "nrc-backgrounder-plutonium"
+          },
+          {
+            "quote": "Pu-239 has a half-life of 24,100 years and Pu-241’s half-life is 14.4 years.",
+            "sourceId": "nrc-backgrounder-plutonium"
+          },
+          {
+            "quote": "Substances with shorter half-lives decay more quickly than those with longer half-lives, so they emit more energetic radioactivity.",
+            "sourceId": "nrc-backgrounder-plutonium"
+          }
+        ],
+        "id": "half-life",
+        "name": "Half-life"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "There are five “common” isotopes of plutonium, Pu-238, Pu-239, Pu-240, Pu-241, and Pu-242.",
+            "sourceId": "nrc-backgrounder-plutonium"
+          }
+        ],
+        "id": "plutonium-isotopes",
+        "name": "Plutonium isotopes"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "Like any radioactive isotopes, plutonium isotopes transform when they decay.",
+            "sourceId": "nrc-backgrounder-plutonium"
+          },
+          {
+            "quote": "Many of these “daughter products” are themselves radioactive.",
+            "sourceId": "nrc-backgrounder-plutonium"
+          }
+        ],
+        "id": "radioactive-decay",
+        "name": "Radioactive decay"
+      }
+    ],
+    "objectives": [
+      "Explain that half-life is the time to lose half of radioactivity",
+      "Compare decay rates of different plutonium isotopes using their half-lives"
+    ],
+    "supported": true,
+    "unsupportedReason": ""
+  },
+  "report": {
+    "artifactId": "source-analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis.gen.json"
+      },
+      {
+        "id": "analysis.invariants",
+        "kind": "semantic",
+        "passed": true,
+        "message": "invariants hold for supported=true"
+      },
+      {
+        "id": "analysis.concept-ids",
+        "kind": "semantic",
+        "passed": true,
+        "message": "all 3 concept id(s) are unique lowercase-kebab"
+      },
+      {
+        "id": "refs.sources",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 1 cited sourceId(s) have matching documents"
+      },
+      {
+        "id": "grounding.quotes",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 concept quote(s) count as evidence (>= 8 normalised characters with >= 3 letters/digits, or a compact \"=\" equation with >= 3) and all 6 resolvable quote(s) appear in their source text after whitespace normalisation; every supported concept has >= 1 counted quote"
+      },
+      {
+        "id": "policy.no-publisher-attribution",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated analysis field (concept names, objectives, unsupportedReason) mentions the publisher or uses attribution/endorsement wording naming a source or authority; evidence quotes are exempt"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18379-6618-7023-9bf1-551b7eb28798",
+    "usage": {
+      "promptTokens": 2229,
+      "completionTokens": 3152,
+      "reasoningTokens": 2832,
+      "cachedTokens": 0
+    },
+    "latencyMs": 14955,
+    "estCostUSD": 0.01618225,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "jobId": "job-20261028170518-13335c0a",
+  "sourceId": "nrc-backgrounder-plutonium",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-28T17:05:18.864Z",
+  "totalCostUSD": 0.06757,
+  "reservedUnknownUSD": 0,
+  "engine": "half-life-v1",
+  "revisions": 1,
+  "repairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 7692,
+    "startedAt": "2026-10-28T17:05:18.864Z"
+  },
+  "specId": "nrc-backgrounder-plutonium-job-20261028170518-13335c0a",
+  "publishable": true,
+  "checksPassed": 14,
+  "checksTotal": 14,
+  "publishedRevision": 1,
+  "finishedAt": "2026-10-28T17:06:40.761Z"
+}

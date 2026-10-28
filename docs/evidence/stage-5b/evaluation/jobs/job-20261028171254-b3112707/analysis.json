@@ -1,0 +1,116 @@
+{
+  "analysis": {
+    "activity": "none",
+    "concepts": [
+      {
+        "evidence": [
+          {
+            "quote": "Drafted in secret by delegates to the Constitutional Convention during the summer of 1787",
+            "sourceId": "nara-constitution"
+          },
+          {
+            "quote": "signed on September 17, 1787, established the government of the United States",
+            "sourceId": "nara-constitution"
+          }
+        ],
+        "id": "constitutional-convention",
+        "name": "Constitutional Convention"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "The Federal Convention convened in the State House (Independence Hall) in Philadelphia on May 14, 1787",
+            "sourceId": "nara-constitution"
+          },
+          {
+            "quote": "to revise the Articles of Confederation",
+            "sourceId": "nara-constitution"
+          }
+        ],
+        "id": "articles-of-confederation",
+        "name": "Articles of Confederation"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "how much power to allow the central government",
+            "sourceId": "nara-constitution"
+          },
+          {
+            "quote": "how many representatives in Congress to allow each state",
+            "sourceId": "nara-constitution"
+          }
+        ],
+        "id": "constitutional-compromise",
+        "name": "Constitutional Compromise"
+      }
+    ],
+    "objectives": [
+      "Identify when and where the Federal Convention convened to revise the Articles of Confederation",
+      "Explain why the Convention drafted an entirely new frame of government"
+    ],
+    "supported": false,
+    "unsupportedReason": "The source explains the 1787 drafting of the United States Constitution and gives fewer than five explicitly dated events, so it does not satisfy timeline-v1 and teaches no other listed activity."
+  },
+  "report": {
+    "artifactId": "source-analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis.gen.json"
+      },
+      {
+        "id": "analysis.invariants",
+        "kind": "semantic",
+        "passed": true,
+        "message": "invariants hold for supported=false"
+      },
+      {
+        "id": "analysis.concept-ids",
+        "kind": "semantic",
+        "passed": true,
+        "message": "all 3 concept id(s) are unique lowercase-kebab"
+      },
+      {
+        "id": "refs.sources",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 1 cited sourceId(s) have matching documents"
+      },
+      {
+        "id": "grounding.quotes",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 concept quote(s) count as evidence (>= 8 normalised characters with >= 3 letters/digits, or a compact \"=\" equation with >= 3) and all 6 resolvable quote(s) appear in their source text after whitespace normalisation"
+      },
+      {
+        "id": "policy.no-publisher-attribution",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated analysis field (concept names, objectives, unsupportedReason) mentions the publisher or uses attribution/endorsement wording naming a source or authority; evidence quotes are exempt"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18380-6db0-7264-902e-df7e7fed32bd",
+    "usage": {
+      "promptTokens": 1864,
+      "completionTokens": 3500,
+      "reasoningTokens": 3210,
+      "cachedTokens": 0
+    },
+    "latencyMs": 19500,
+    "estCostUSD": 0.017205,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "jobId": "job-20261028170108-66b02b13",
+  "sourceId": "nasa-grc-specific-heat-cp-cv",
+  "status": "unsupported",
+  "purpose": "test-live",
+  "createdAt": "2026-10-28T17:01:08.020Z",
+  "totalCostUSD": 0.015563,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 7692,
+    "startedAt": "2026-10-28T17:01:08.020Z"
+  },
+  "finishedAt": "2026-10-28T17:01:22.503Z"
+}

@@ -1,0 +1,5 @@
+{"jobId":"job-20261028171617-ed80ef48","seq":0,"stage":"ingest","status":"started","at":"2026-10-28T17:16:17.805Z"}
+{"jobId":"job-20261028171617-ed80ef48","seq":1,"stage":"ingest","status":"succeeded","at":"2026-10-28T17:16:17.806Z","detail":"sha256 ce3917d5b0b1"}
+{"jobId":"job-20261028171617-ed80ef48","seq":2,"stage":"analyze","status":"started","at":"2026-10-28T17:16:17.807Z"}
+{"jobId":"job-20261028171617-ed80ef48","seq":3,"stage":"analyze","status":"succeeded","at":"2026-10-28T17:16:33.802Z","model":"muse-spark-1.3","responseId":"chatcmpl-01a18383-7802-71ba-9faf-e68c00f05573","usage":{"promptTokens":3357,"completionTokens":2832,"reasoningTokens":2549,"cachedTokens":0},"latencyMs":15994,"estCostUSD":0.01623225,"detail":"unsupported: The source teaches Bernoulli's equation for static, dynamic, and total pressure in steady incompressible inviscid flow, which does not match any listed activity engine.; checks 6/6 passed"}
+{"jobId":"job-20261028171617-ed80ef48","seq":4,"stage":"done","status":"succeeded","at":"2026-10-28T17:16:33.803Z","detail":"unsupported"}

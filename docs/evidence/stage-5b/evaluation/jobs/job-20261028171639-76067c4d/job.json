@@ -1,0 +1,22 @@
+{
+  "jobId": "job-20261028171639-76067c4d",
+  "sourceId": "nasa-grc-re-living-the-wright-way",
+  "status": "failed",
+  "purpose": "test-live",
+  "createdAt": "2026-10-28T17:16:39.358Z",
+  "totalCostUSD": 0.027444,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 7692,
+    "startedAt": "2026-10-28T17:16:39.358Z"
+  },
+  "error": {
+    "code": "OUTPUT_TRUNCATED",
+    "message": "output truncated"
+  },
+  "finishedAt": "2026-10-28T17:17:16.774Z"
+}

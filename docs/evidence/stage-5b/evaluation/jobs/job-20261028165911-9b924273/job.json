@@ -1,0 +1,22 @@
+{
+  "jobId": "job-20261028165911-9b924273",
+  "sourceId": "nasa-grc-motion-of-free-falling-object",
+  "status": "failed",
+  "purpose": "test-live",
+  "createdAt": "2026-10-28T16:59:11.202Z",
+  "totalCostUSD": 0.017871,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 7692,
+    "startedAt": "2026-10-28T16:59:11.202Z"
+  },
+  "error": {
+    "code": "ANALYSIS_INVALID",
+    "message": "analysis failed validation"
+  },
+  "finishedAt": "2026-10-28T16:59:27.295Z"
+}

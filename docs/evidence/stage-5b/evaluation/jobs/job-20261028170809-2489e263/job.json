@@ -1,0 +1,23 @@
+{
+  "jobId": "job-20261028170809-2489e263",
+  "sourceId": "usgs-powell-geologic-time",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-28T17:08:09.132Z",
+  "totalCostUSD": 0.085729,
+  "reservedUnknownUSD": 0,
+  "engine": "timeline-v1",
+  "revisions": 1,
+  "repairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 7692,
+    "startedAt": "2026-10-28T17:08:09.132Z"
+  },
+  "specId": "usgs-powell-geologic-time-job-20261028170809-2489e263",
+  "publishable": true,
+  "checksPassed": 11,
+  "checksTotal": 11,
+  "publishedRevision": 1,
+  "finishedAt": "2026-10-28T17:09:50.724Z"
+}

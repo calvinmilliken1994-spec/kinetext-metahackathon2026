@@ -1,0 +1,23 @@
+{
+  "jobId": "job-20261028170952-8fb0fdd2",
+  "sourceId": "usgs-fossils-numeric-time-scale",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-28T17:09:52.281Z",
+  "totalCostUSD": 0.049743,
+  "reservedUnknownUSD": 0,
+  "engine": "half-life-v1",
+  "revisions": 1,
+  "repairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 7692,
+    "startedAt": "2026-10-28T17:09:52.281Z"
+  },
+  "specId": "usgs-fossils-numeric-time-scale-job-20261028170952-8fb0fdd2",
+  "publishable": true,
+  "checksPassed": 14,
+  "checksTotal": 14,
+  "publishedRevision": 1,
+  "finishedAt": "2026-10-28T17:10:53.514Z"
+}

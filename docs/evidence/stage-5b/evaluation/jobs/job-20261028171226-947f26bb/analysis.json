@@ -1,0 +1,115 @@
+{
+  "analysis": {
+    "activity": "none",
+    "concepts": [
+      {
+        "evidence": [
+          {
+            "quote": "the United States purchased 828,000 square miles of land west of the Mississippi River for $15 million.",
+            "sourceId": "nara-louisiana-purchase-treaty"
+          }
+        ],
+        "id": "louisiana-purchase-transaction",
+        "name": "Louisiana Purchase Transaction"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "President Thomas Jefferson was generally a strict interpreter of the Constitution",
+            "sourceId": "nara-louisiana-purchase-treaty"
+          }
+        ],
+        "id": "jefferson-constitutional-concerns",
+        "name": "Jefferson's Constitutional Concerns"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "also exposed the sectional weaknesses between the North and South, especially related to the issue of slavery.",
+            "sourceId": "nara-louisiana-purchase-treaty"
+          }
+        ],
+        "id": "expansion-sectional-tensions-slavery",
+        "name": "Expansion and Sectional Tensions over Slavery"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "Native people were forcibly moved on to reservations, losing vast acreage of their tribal lands",
+            "sourceId": "nara-louisiana-purchase-treaty"
+          }
+        ],
+        "id": "native-american-displacement",
+        "name": "Native American Displacement"
+      }
+    ],
+    "objectives": [
+      "Describe the scale, cost, and westward expansion resulting from the Louisiana Purchase transaction.",
+      "Explain constitutional concerns about acquiring new territory.",
+      "Analyze how territorial expansion exposed sectional tensions over slavery and impacted Native Americans."
+    ],
+    "supported": false,
+    "unsupportedReason": "The source covers the Louisiana Purchase transaction, westward expansion, slavery-related sectional tensions, and impacts on Native Americans, which matches no listed activity engine."
+  },
+  "report": {
+    "artifactId": "source-analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis.gen.json"
+      },
+      {
+        "id": "analysis.invariants",
+        "kind": "semantic",
+        "passed": true,
+        "message": "invariants hold for supported=false"
+      },
+      {
+        "id": "analysis.concept-ids",
+        "kind": "semantic",
+        "passed": true,
+        "message": "all 4 concept id(s) are unique lowercase-kebab"
+      },
+      {
+        "id": "refs.sources",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 1 cited sourceId(s) have matching documents"
+      },
+      {
+        "id": "grounding.quotes",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 concept quote(s) count as evidence (>= 8 normalised characters with >= 3 letters/digits, or a compact \"=\" equation with >= 3) and all 4 resolvable quote(s) appear in their source text after whitespace normalisation"
+      },
+      {
+        "id": "policy.no-publisher-attribution",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated analysis field (concept names, objectives, unsupportedReason) mentions the publisher or uses attribution/endorsement wording naming a source or authority; evidence quotes are exempt"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a1837f-ff89-7651-bebe-7acc27a39afb",
+    "usage": {
+      "promptTokens": 2133,
+      "completionTokens": 3332,
+      "reasoningTokens": 3017,
+      "cachedTokens": 0
+    },
+    "latencyMs": 20169,
+    "estCostUSD": 0.01682725,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage"
+  }
+}

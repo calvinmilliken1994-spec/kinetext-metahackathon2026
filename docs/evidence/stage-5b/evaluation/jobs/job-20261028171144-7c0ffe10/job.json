@@ -1,0 +1,18 @@
+{
+  "jobId": "job-20261028171144-7c0ffe10",
+  "sourceId": "nij-random-mating",
+  "status": "unsupported",
+  "purpose": "test-live",
+  "createdAt": "2026-10-28T17:11:44.988Z",
+  "totalCostUSD": 0.012466,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 7692,
+    "startedAt": "2026-10-28T17:11:44.988Z"
+  },
+  "finishedAt": "2026-10-28T17:12:01.127Z"
+}
