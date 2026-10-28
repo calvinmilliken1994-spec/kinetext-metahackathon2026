@@ -147,3 +147,26 @@ New module `packages/validation/timeline.ts` (+ tests), wired so `validateSpec` 
 - Lead fix: Ajv strict-mode warning in the timeline full schema (`if/then` needed `type: 'integer'`).
 - Deviations accepted: optional 4th argument `compareRevisions(baseline, next, failedIds, { sources, findings })` — without sources the timeline comparator fails closed. **Carry-over to TASK-021 (Muse):** `packages/meta/pipeline.ts:318` must pass `{ sources: [source], findings }` for timeline specs. Other deviations (#3–#7 in Qwen's report) are stricter-safe and accepted.
 - Suite 746/746; schemas up to date; web build ok.
+
+## Stage 5b review round 1 (gpt-6-astra, `docs/reviews/stage-5b-review.md`, CHANGES REQUIRED at 682bebc) — lead decisions
+
+All ten findings accepted. Fix waves (serial, one owner per path):
+
+| Wave | Owner (route) | Findings | Paths |
+|---|---|---|---|
+| A | Qwen Max | S5B-01, S5B-02, S5B-03, S5B-04 (validation side) | `packages/validation/**`, `ValidationCheck`/`RepairFinding` types in `packages/contracts/index.ts` |
+| B | Muse (subscription bridge, Opus orchestrator) | S5B-04 (repair side), S5B-03 integration, prompt alignment (`prompts.ts:171,186` invalid-id exception) | `packages/meta/**` |
+| C | Qwen Max | S5B-05, S5B-06, S5B-07, S5B-08 | `workers/**`, `apps/api/**`, `scripts/evaluation-*.ts` |
+| D | Sonnet | S5B-10, UI wording that depends on S5B-03/04 | `apps/web/**` |
+| — | Lead | S5B-09 evidence wording/totals | `docs/evidence/stage-5b/**` (additive corrections; original files and scores preserved) |
+| E | gpt-6-astra | Re-check with the review's probes | `docs/reviews/stage-5b-review.md` (addendum) |
+
+### Shared design decisions (frozen before Wave A)
+1. **Structured affected items (S5B-03, S5B-04).** `ValidationCheck` gains an optional `affected?: string[]` — validator-owned exact JSON-pointer field paths (e.g. `/simulation/events/2/year`, `/concepts/1/id`, `/predictions/0/id`), one per offending field occurrence, never derived from message text. `RepairFinding` carries the same `affected`. Repair authorization (timeline no-weakening, analysis-unchanged) uses ONLY `affected` paths; message text is display-only and never searched for ids.
+2. **Field-scoped unlocking.** A finding unlocks exactly its affected fields:
+   - a label/name/id/policy finding unlocks that string only — dates, quotes and ordering pairs stay frozen;
+   - only a recomputed date-grounding failure (`timeline.date-grounded`, `timeline.approximate-date`, `timeline.distinct-dates`) unlocks that event's year/month/day/evidence (or its removal), and only a `timeline.case-order` failure unlocks that case's pair;
+   - analysis: an id finding unlocks that concept's id only (name, evidence and other concepts frozen); a policy finding unlocks every listed field (all occurrences are reported); the supported/activity decision changes only if `analysis.invariants` reports the decision itself (`/supported` or `/activity`) as affected — an empty concepts/objectives list affects that list, not the decision.
+3. **Dates are expressions, not token bags (S5B-01).** A claimed date is grounded only by one connected date expression in a unit: `Month D[, ]YYYY`, `D Month YYYY`, `Month YYYY`, `Month D` (+ title-year rule), `YYYY`, BCE forms, range endpoints — with day only as part of a month-day expression (ordinal suffix allowed). Numbers outside a date expression never count.
+4. **Context comes from the source, not the quote (S5B-02).** The quote is located in the source text; approximation qualifiers are checked in the full containing source sentence/heading; a quote that occurs more than once with different qualifier contexts fails closed; the title-year rule rejects titles with approximation/range/ambiguity markers.
+5. **Evidence corrections (S5B-09)** are additive notes beside the original files; pre-registered scores stay unchanged; wording becomes "passed the implemented deterministic checks".
