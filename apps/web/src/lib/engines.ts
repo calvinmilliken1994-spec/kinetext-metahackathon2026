@@ -7,6 +7,9 @@ import { computeOutput, inputsOf } from '../../../../packages/activities/registr
 import { flightTimeOf, stateAt } from '../../../../packages/activities/projectile-v1/engine.ts';
 import { fixed, trimmed } from './format.ts';
 import { sliderStep } from './track.ts';
+import { formatMoney } from './compound.ts';
+import { formatAmount } from './decay.ts';
+import { formatFrequency } from './genetics.ts';
 
 /** Display name of an engine ('Lift equation'), or null for an unknown / missing id. */
 export function engineTitle(engine: string | null | undefined): string | null {
@@ -18,9 +21,10 @@ export function isEngineSpec<E extends EngineId>(spec: ActivitySpec, engine: E):
   return (spec as { simulation?: { engine?: unknown } }).simulation?.engine === engine;
 }
 
-/** 'm/s^2' → 'm/s²', 'kg/m^3' → 'kg/m³', 'J/(kg*K)' → 'J/(kg·K)'; '1' (dimensionless) → ''. */
+/** 'm/s^2' → 'm/s²', 'kg/m^3' → 'kg/m³', 'J/(kg*K)' → 'J/(kg·K)'; '1' (dimensionless) → ''; the generic 'time' → 'time units'. */
 export function prettyUnit(unit: string): string {
   if (unit === '1') return '';
+  if (unit === 'time') return 'time units';
   const sup: Record<string, string> = { '2': '²', '3': '³' };
   return unit.replace(/\^(\d)/g, (_m, d: string) => sup[d] ?? `^${d}`).replace(/\*/g, '·');
 }
@@ -120,17 +124,33 @@ export function formatQuantity(n: number): string {
   return a >= 100 ? trimmed(n, 2) : trimmed(n, 3);
 }
 
+/** An input label without its trailing explanatory parenthesis: 'Half-life T (same time unit as t)' → 'Half-life T'. */
+export function shortInputLabel(label: string): string {
+  const short = label.replace(/\s*\([^()]*\)\s*$/, '');
+  return short === '' ? label : short;
+}
+
+/** The engine's output as a student reads it: cents for money, up to four decimals for frequencies, a readable amount for decay. */
+export function formatOutputValue(engine: EngineId, n: number): string {
+  switch (engine) {
+    case 'compound-interest-v1': return formatMoney(n);
+    case 'hardy-weinberg-v1': return formatFrequency(n);
+    case 'half-life-v1': return formatAmount(n);
+    default: return formatQuantity(n);
+  }
+}
+
 /** One-line explanation of how the engine got a prediction's answer (shown after "Run it"). */
 export function predictionExplanation(engine: EngineId, c: ActivityCase, actual: number): string {
   const out = outputInfo(engine);
-  const value = `${formatQuantity(actual)}${out.unit === '' ? '' : ` ${out.unit}`}`;
+  const value = `${formatOutputValue(engine, actual)}${out.unit === '' ? '' : ` ${out.unit}`}`;
   if (engine === 'forces-1d-v1') {
     const i = caseInputs(engine, c);
     return `a = F/m = ${trimmed(i['netForceN'] ?? Number.NaN, 4)} / ${trimmed(i['massKg'] ?? Number.NaN, 4)} = ${fixed(actual, 3)} m/s²`;
   }
   const i = caseInputs(engine, c);
   const given = ENGINES[engine].inputs
-    .map((inp) => `${inp.label} = ${trimmed(i[inp.key] ?? Number.NaN, 4)}${prettyUnit(inp.unit) === '' ? '' : ` ${prettyUnit(inp.unit)}`}`)
+    .map((inp) => `${shortInputLabel(inp.label)} = ${trimmed(i[inp.key] ?? Number.NaN, 4)}${prettyUnit(inp.unit) === '' ? '' : ` ${prettyUnit(inp.unit)}`}`)
     .join(', ');
   return `${given} → ${out.label.toLowerCase()} = ${value}`;
 }
@@ -178,7 +198,7 @@ export const SOUND_LIFETIME_S = 2.5;
 /** Paused sound view starts here so several rings are already visible. */
 export const SOUND_INITIAL_T = 2;
 
-/** How each engine's view plays: projectile = one flight, sound = continuous rings, lift = static (null). */
+/** How each engine's view plays: projectile = one flight, sound = continuous rings; lift, compound interest, Hardy-Weinberg and half-life are static (null). */
 export function playbackPlan(engine: EngineId, inputs: Record<string, number>): PlaybackPlan | null {
   if (engine === 'projectile-v1') {
     const s = projectileSummary(inputs);

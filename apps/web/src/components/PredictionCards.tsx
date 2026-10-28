@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import type { AnyPrediction, EngineId } from '../../../../packages/contracts/index.ts';
-import { engineOutput, formatQuantity, outputInfo, predictionExplanation } from '../lib/engines.ts';
+import { engineOutput, formatOutputValue, outputInfo, predictionExplanation } from '../lib/engines.ts';
 import { gradePrediction, parseGuess, studentTolerance } from '../lib/predictions.ts';
 import type { Grade } from '../lib/predictions.ts';
 import { trimmed } from '../lib/format.ts';
@@ -72,7 +72,7 @@ function PredictionCard({ engine, prediction: p, index, onRun }: CardProps) {
             <strong>{grade.withinTolerance ? '✓ Close enough' : `✗ Not close enough — your guess was too ${grade.direction === 'high' ? 'high' : 'low'}`}</strong>
             <span>
               You guessed {trimmed(grade.guess, 4)}{unit} · engine says <b>{predictionExplanation(engine, p, grade.actual)}</b>
-              {' '}· off by {formatQuantity(Math.abs(grade.error))} (allowed ±{trimmed(grade.tolerance, 4)})
+              {' '}· off by {formatOutputValue(engine, Math.abs(grade.error))} (allowed ±{trimmed(grade.tolerance, 4)})
             </span>
           </div>
         )}

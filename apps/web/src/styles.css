@@ -422,3 +422,25 @@ input[type="range"] { width: 100%; accent-color: var(--accent); height: 24px; ma
 .paste-toggle { padding-top: 0; }
 .source-panel.is-pasting { overflow-y: auto; }
 .source-panel.is-pasting .source-scroll { flex: none; height: 220px; }
+
+/* compound interest / Hardy-Weinberg / half-life charts */
+.chart-wrap { background: #fff; }
+.chart-grid { stroke: var(--line); stroke-width: 1; }
+.chart-axis { stroke: var(--line-2); stroke-width: 1.5; }
+.chart-box { fill: #fff; stroke: var(--line-2); }
+.chart-guide { stroke: var(--ink-3); stroke-width: 1; stroke-dasharray: 3 4; opacity: 0.6; }
+.chart-now { stroke: var(--ink); stroke-width: 1.2; stroke-dasharray: 5 4; opacity: 0.55; }
+.line-compound { stroke: var(--accent); stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+.chart-dot { fill: var(--c-force); stroke: #fff; stroke-width: 2.5; }
+.chart-dot-start { fill: var(--ink-3); stroke-width: 2; }
+.marker-dot { fill: var(--c-pos); stroke: #fff; stroke-width: 2; }
+.marker-label { fill: var(--c-pos); font-weight: 650; }
+.bar-track { fill: var(--panel-2); stroke: var(--line); }
+.bar-fill { fill: #8fb4e8; }
+.bar-checked { fill: var(--c-force); }
+.formula { display: grid; gap: 4px; padding: 8px 12px; background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; }
+.formula p { margin: 0; }
+.formula code { font-family: var(--mono); font-size: 14px; overflow-wrap: anywhere; }
+.sum-note { margin: 0; padding: 6px 12px; background: var(--ok-soft); border: 1px solid #b7e0c8; border-radius: 8px; color: #0b4f2e; font-size: 13px; overflow-wrap: anywhere; }
+.sum-note-bad { background: var(--bad-soft); border-color: #f0b4af; color: var(--bad); }
+.chart-note { margin: 0; }

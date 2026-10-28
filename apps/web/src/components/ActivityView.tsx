@@ -3,7 +3,7 @@ import type { ReactNode, RefObject } from 'react';
 import { ENGINES } from '../../../../packages/contracts/index.ts';
 import type { ActivitySpec, AnyPrediction, EngineId, ForcesActivitySpec, Prediction } from '../../../../packages/contracts/index.ts';
 import type { Badge } from '../lib/repairs.ts';
-import { caseInputs, defaultInputs, formatQuantity, isEngineSpec, outputInfo, playbackPlan } from '../lib/engines.ts';
+import { caseInputs, defaultInputs, formatOutputValue, isEngineSpec, outputInfo, playbackPlan } from '../lib/engines.ts';
 import type { Grade } from '../lib/predictions.ts';
 import { trimmed } from '../lib/format.ts';
 import { Disclosure } from './Disclosure.tsx';
@@ -16,6 +16,9 @@ import { usePlayback } from './usePlayback.ts';
 import { ProjectileView } from './ProjectileView.tsx';
 import { LiftView } from './LiftView.tsx';
 import { SoundView } from './SoundView.tsx';
+import { CompoundInterestView } from './CompoundInterestView.tsx';
+import { HardyWeinbergView } from './HardyWeinbergView.tsx';
+import { HalfLifeView } from './HalfLifeView.tsx';
 
 interface LastResult { index: number; grade: Grade }
 
@@ -62,7 +65,7 @@ function Shell({ spec, cite, disclosure, repairBadge, engine, last, simRef, onRu
           <div className={`last-result ${last.grade.withinTolerance ? 'grade-ok' : 'grade-miss'}`} role="status">
             <strong>Prediction {last.index + 1}: {last.grade.withinTolerance ? '✓ close enough' : '✗ not close enough'}</strong>
             <span>
-              you guessed {trimmed(last.grade.guess, 4)}{unit}, the engine gives {formatQuantity(last.grade.actual)}{unit} (±{trimmed(last.grade.tolerance, 6)} allowed)
+              you guessed {trimmed(last.grade.guess, 4)}{unit}, the engine gives {formatOutputValue(engine, last.grade.actual)}{unit} (±{trimmed(last.grade.tolerance, 6)} allowed)
             </span>
           </div>
         )}
@@ -101,7 +104,7 @@ function ForcesActivity(props: ActivityPanelProps & { spec: ForcesActivitySpec }
   );
 }
 
-/** projectile / lift / speed-of-sound: slider state + (for animated engines) a playback clock, all fed to the shared engines. */
+/** projectile / lift / speed-of-sound / compound interest / Hardy-Weinberg / half-life: slider state + (for animated engines) a playback clock, all fed to the shared engines. */
 function ClosedFormActivity(props: ActivityPanelProps & { engine: Exclude<EngineId, 'forces-1d-v1'> }) {
   const { spec, engine } = props;
   const [inputs, setInputs] = useState<Record<string, number>>(() => defaultInputs(spec));
@@ -129,6 +132,9 @@ function ClosedFormActivity(props: ActivityPanelProps & { engine: Exclude<Engine
       {isEngineSpec(spec, 'projectile-v1') && <ProjectileView spec={spec} inputs={inputs} onInput={onInput} pb={pb} />}
       {isEngineSpec(spec, 'lift-equation-v1') && <LiftView spec={spec} inputs={inputs} onInput={onInput} />}
       {isEngineSpec(spec, 'speed-of-sound-v1') && <SoundView spec={spec} inputs={inputs} onInput={onInput} pb={pb} />}
+      {isEngineSpec(spec, 'compound-interest-v1') && <CompoundInterestView spec={spec} inputs={inputs} onInput={onInput} />}
+      {isEngineSpec(spec, 'hardy-weinberg-v1') && <HardyWeinbergView spec={spec} inputs={inputs} onInput={onInput} />}
+      {isEngineSpec(spec, 'half-life-v1') && <HalfLifeView spec={spec} inputs={inputs} onInput={onInput} />}
     </Shell>
   );
 }
@@ -140,6 +146,9 @@ export function ActivityPanel(props: ActivityPanelProps) {
   if (isEngineSpec(spec, 'projectile-v1')) return <ClosedFormActivity {...props} engine="projectile-v1" />;
   if (isEngineSpec(spec, 'lift-equation-v1')) return <ClosedFormActivity {...props} engine="lift-equation-v1" />;
   if (isEngineSpec(spec, 'speed-of-sound-v1')) return <ClosedFormActivity {...props} engine="speed-of-sound-v1" />;
+  if (isEngineSpec(spec, 'compound-interest-v1')) return <ClosedFormActivity {...props} engine="compound-interest-v1" />;
+  if (isEngineSpec(spec, 'hardy-weinberg-v1')) return <ClosedFormActivity {...props} engine="hardy-weinberg-v1" />;
+  if (isEngineSpec(spec, 'half-life-v1')) return <ClosedFormActivity {...props} engine="half-life-v1" />;
   return (
     <div className="outcome outcome-failed" role="alert">
       <p className="eyebrow">Unknown activity type</p>

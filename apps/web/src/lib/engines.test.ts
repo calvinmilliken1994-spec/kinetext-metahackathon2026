@@ -4,13 +4,17 @@ import assert from 'node:assert/strict';
 import { ENGINES } from '../../../../packages/contracts/index.ts';
 import type { ActivitySpec } from '../../../../packages/contracts/index.ts';
 import { makeLiftSpec, makeProjectileSpec, makeSoundSpec } from '../../../../packages/validation/fixtures/engine-specs.ts';
+import { makeCompoundInterestSpec, makeHalfLifeSpec, makeHardyWeinbergSpec } from './engine-fixtures.ts';
 import { accelerationOf } from '../../../../packages/activities/forces-1d/engine.ts';
 import { liftOf } from '../../../../packages/activities/lift-equation-v1/engine.ts';
 import { speedOfSoundOf } from '../../../../packages/activities/speed-of-sound-v1/engine.ts';
+import { amountAfter } from '../../../../packages/activities/compound-interest-v1/engine.ts';
+import { heterozygoteFrequencyOf } from '../../../../packages/activities/hardy-weinberg-v1/engine.ts';
+import { remainingAfter } from '../../../../packages/activities/half-life-v1/engine.ts';
 import {
-  caseInputs, clampToSlider, defaultInputs, engineOutput, engineTitle, formatQuantity, isEngineSpec, outputInfo, playbackPlan,
-  playbackSpeed, predictionExplanation, prettyUnit, projectileSummary, rangeMaxima, scenarioLabels, sliderModels,
-  SOUND_INITIAL_T,
+  caseInputs, clampToSlider, defaultInputs, engineOutput, engineTitle, formatOutputValue, formatQuantity, isEngineSpec, outputInfo,
+  playbackPlan, playbackSpeed, predictionExplanation, prettyUnit, projectileSummary, rangeMaxima, scenarioLabels, shortInputLabel,
+  sliderModels, SOUND_INITIAL_T,
 } from './engines.ts';
 
 test('engineTitle: catalogue titles for the four engines, null otherwise', () => {
@@ -161,4 +165,123 @@ test('predictionExplanation: forces keeps the F/m wording, other engines list in
   const s = predictionExplanation('speed-of-sound-v1', makeSoundSpec().predictions[0]!, 358.5749572962395);
   assert.ok(s.endsWith('speed of sound = 358.57 m/s'), s);
   assert.ok(s.includes('Absolute temperature T = 320 K'), s);
+});
+
+// ---- TASK-022: compound interest, Hardy-Weinberg, half-life ------------------------------------------------
+
+test('engineTitle: catalogue titles for the three non-physics engines', () => {
+  assert.equal(engineTitle('compound-interest-v1'), 'Compound interest');
+  assert.equal(engineTitle('hardy-weinberg-v1'), 'Hardy-Weinberg genotype frequencies');
+  assert.equal(engineTitle('half-life-v1'), 'Radioactive decay and half-life');
+});
+
+test('isEngineSpec dispatches the three new engines and nothing else', () => {
+  const c: ActivitySpec = makeCompoundInterestSpec();
+  const h: ActivitySpec = makeHardyWeinbergSpec();
+  const l: ActivitySpec = makeHalfLifeSpec();
+  assert.equal(isEngineSpec(c, 'compound-interest-v1'), true);
+  assert.equal(isEngineSpec(h, 'hardy-weinberg-v1'), true);
+  assert.equal(isEngineSpec(l, 'half-life-v1'), true);
+  assert.equal(isEngineSpec(c, 'half-life-v1'), false);
+  assert.equal(isEngineSpec(h, 'compound-interest-v1'), false);
+  assert.equal(isEngineSpec(l, 'hardy-weinberg-v1'), false);
+});
+
+test('prettyUnit: the generic time unit reads "time units"; per-year and USD pass through', () => {
+  assert.equal(prettyUnit('time'), 'time units');
+  assert.equal(prettyUnit('per year'), 'per year');
+  assert.equal(prettyUnit('USD'), 'USD');
+  assert.equal(prettyUnit('%'), '%');
+});
+
+test('shortInputLabel drops the trailing explanatory parenthesis only', () => {
+  assert.equal(shortInputLabel('Starting amount N0 (any unit: grams, atoms or percent)'), 'Starting amount N0');
+  assert.equal(shortInputLabel('Half-life T (same time unit as t)'), 'Half-life T');
+  assert.equal(shortInputLabel('Mass'), 'Mass');
+  assert.equal(shortInputLabel('(only)'), '(only)');
+});
+
+test('sliderModels: compound interest has four sliders with the spec ranges and the catalogue units', () => {
+  const models = sliderModels(makeCompoundInterestSpec());
+  assert.deepEqual(models.map((m) => m.key), ['principalUSD', 'annualRatePercent', 'compoundsPerYear', 'years']);
+  assert.deepEqual(models.map((m) => m.unit), ['USD', '%', 'per year', 'years']);
+  assert.deepEqual(models.map((m) => m.value), [1000, 5, 1, 10]);
+  assert.deepEqual(models.map((m) => [m.min, m.max]), [[100, 10000], [0, 15], [1, 365], [1, 40]]);
+});
+
+test('sliderModels: Hardy-Weinberg has one dimensionless slider, half-life three with generic time units', () => {
+  const hw = sliderModels(makeHardyWeinbergSpec());
+  assert.deepEqual(hw.map((m) => [m.key, m.unit, m.min, m.max, m.value]), [['alleleFrequencyP', '', 0, 1, 0.3]]);
+  assert.ok((hw[0]?.step ?? 0) > 0 && (hw[0]?.step ?? 1) <= 0.05);
+  const hl = sliderModels(makeHalfLifeSpec());
+  assert.deepEqual(hl.map((m) => m.key), ['initialAmount', 'halfLife', 'elapsedTime']);
+  assert.deepEqual(hl.map((m) => m.unit), ['', 'time units', 'time units']);
+  assert.deepEqual(defaultInputs(makeHalfLifeSpec()), { initialAmount: 80, halfLife: 8, elapsedTime: 24 });
+  assert.deepEqual(rangeMaxima(makeHalfLifeSpec()), { initialAmount: 200, halfLife: 20, elapsedTime: 80 });
+});
+
+test('scenarioLabels for the three new engines come from settingLabel', () => {
+  assert.deepEqual(scenarioLabels(makeCompoundInterestSpec()), { objectLabel: 'Savings account', placeLabel: 'Fixed annual rate', placeKind: 'setting' });
+  assert.deepEqual(scenarioLabels(makeHardyWeinbergSpec()), { objectLabel: 'Flower colour gene', placeLabel: 'Large random-mating population', placeKind: 'setting' });
+  assert.deepEqual(scenarioLabels(makeHalfLifeSpec()), { objectLabel: 'Radioactive sample', placeLabel: 'Sealed laboratory container', placeKind: 'setting' });
+});
+
+test('outputInfo for the three new engines: label from the catalogue; USD only for money, no invented units elsewhere', () => {
+  assert.deepEqual(outputInfo('compound-interest-v1'), { key: 'expectedAmountUSD', label: 'Amount after t years', unit: 'USD' });
+  assert.deepEqual(outputInfo('hardy-weinberg-v1'), { key: 'expectedHeterozygoteFrequency', label: 'Heterozygote frequency 2pq', unit: '' });
+  assert.deepEqual(outputInfo('half-life-v1'), { key: 'expectedRemaining', label: 'Amount remaining N', unit: '' });
+});
+
+test('engineOutput recomputes the three new engines and ignores a lying stored expectation', () => {
+  const c = { ...makeCompoundInterestSpec().predictions[0]!, expectedAmountUSD: 1 };
+  assert.equal(engineOutput('compound-interest-v1', c), amountAfter({ principalUSD: 1000, annualRatePercent: 5, compoundsPerYear: 1, years: 10 }));
+  assert.equal(engineOutput('compound-interest-v1', c), 1628.894626777442);
+  const h = { ...makeHardyWeinbergSpec().predictions[0]!, expectedHeterozygoteFrequency: 0.5 };
+  assert.equal(engineOutput('hardy-weinberg-v1', h), heterozygoteFrequencyOf(0.9));
+  const l = { ...makeHalfLifeSpec().predictions[0]!, expectedRemaining: 999 };
+  assert.equal(engineOutput('half-life-v1', l), remainingAfter({ initialAmount: 200, halfLife: 10, elapsedTime: 30 }));
+  assert.equal(engineOutput('half-life-v1', l), 25);
+});
+
+test('engineOutput returns null when a new engine rejects the inputs', () => {
+  assert.equal(engineOutput('compound-interest-v1', { principalUSD: 0, annualRatePercent: 5, compoundsPerYear: 1, years: 10 }), null);
+  assert.equal(engineOutput('compound-interest-v1', { principalUSD: 100, annualRatePercent: 5, compoundsPerYear: 0, years: 10 }), null);
+  assert.equal(engineOutput('hardy-weinberg-v1', { alleleFrequencyP: 1.5 }), null);
+  assert.equal(engineOutput('half-life-v1', { initialAmount: 10, halfLife: 0, elapsedTime: 5 }), null);
+  assert.equal(engineOutput('half-life-v1', {}), null);
+});
+
+test('playbackPlan: the three new views are static charts, not time animations', () => {
+  assert.equal(playbackPlan('compound-interest-v1', {}), null);
+  assert.equal(playbackPlan('hardy-weinberg-v1', {}), null);
+  assert.equal(playbackPlan('half-life-v1', {}), null);
+});
+
+test('caseInputs extracts the engine input keys of the new engines', () => {
+  assert.deepEqual(caseInputs('half-life-v1', makeHalfLifeSpec().predictions[1]!), { initialAmount: 80, halfLife: 8, elapsedTime: 12 });
+  assert.deepEqual(caseInputs('hardy-weinberg-v1', makeHardyWeinbergSpec().predictions[0]!), { alleleFrequencyP: 0.9 });
+});
+
+test('formatOutputValue: cents for money, four decimals for frequencies, readable amounts for decay, unchanged elsewhere', () => {
+  assert.equal(formatOutputValue('compound-interest-v1', 1628.894626777442), '1,628.89');
+  assert.equal(formatOutputValue('compound-interest-v1', 12345678.9), '12,345,678.90');
+  assert.equal(formatOutputValue('hardy-weinberg-v1', 0.17999999999999997), '0.18');
+  assert.equal(formatOutputValue('hardy-weinberg-v1', 0.0475), '0.0475');
+  assert.equal(formatOutputValue('half-life-v1', 28.284271247461902), '28.28');
+  assert.equal(formatOutputValue('half-life-v1', 0.0625), '0.0625');
+  for (const e of ['forces-1d-v1', 'projectile-v1', 'lift-equation-v1', 'speed-of-sound-v1'] as const) {
+    assert.equal(formatOutputValue(e, 12250), formatQuantity(12250));
+    assert.equal(formatOutputValue(e, 20.408163), formatQuantity(20.408163));
+  }
+});
+
+test('predictionExplanation for the new engines: short input labels, engine output, no invented units', () => {
+  const c = predictionExplanation('compound-interest-v1', makeCompoundInterestSpec().predictions[0]!, 1628.894626777442);
+  assert.ok(c.includes('Starting amount P = 1000 USD'), c);
+  assert.ok(c.includes('Compounding periods per year n = 1 per year'), c);
+  assert.ok(c.endsWith('amount after t years = 1,628.89 USD'), c);
+  const h = predictionExplanation('hardy-weinberg-v1', makeHardyWeinbergSpec().predictions[0]!, 0.17999999999999997);
+  assert.equal(h, 'Frequency p of the first allele = 0.9 → heterozygote frequency 2pq = 0.18');
+  const l = predictionExplanation('half-life-v1', makeHalfLifeSpec().predictions[0]!, 25);
+  assert.equal(l, 'Starting amount N0 = 200, Half-life T = 10 time units, Elapsed time t = 30 time units → amount remaining n = 25');
 });
