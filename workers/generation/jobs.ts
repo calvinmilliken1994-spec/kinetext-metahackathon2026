@@ -61,14 +61,11 @@ import type {
   DemoFault,
   EngineId,
   FaultRecord,
-  ForcesGeneratedSpec,
   GeneratedSpec,
-  LiftGeneratedSpec,
+  GeneratedSpecByEngine,
   MetaReceipt,
-  ProjectileGeneratedSpec,
   RepairFinding,
   RepairRecord,
-  SoundGeneratedSpec,
   SourceAnalysis,
   SourceDocument,
   Stage,
@@ -242,19 +239,34 @@ function writeJsonAtomic(path: string, data: unknown): void {
 }
 
 /**
- * BUG-002: a fixed-vocabulary cause for the last-resort INTERNAL event — an
- * errno-style code (e.g. EPERM) or the error class name (e.g. TypeError) —
- * never the exception message (R-01).
+ * BUG-002/S5B-08: a FIXED-vocabulary cause for the last-resort INTERNAL event.
+ * The vocabulary is an explicit allow-list of errno codes and built-in error class
+ * names (plus the two DOMException names fetch/AbortSignal use) — anything else,
+ * including a regex-shaped but non-enumerated token like the reviewer's
+ * 'PRIVATE_MARKER_TOKEN', maps to 'unknown'. Exported for tests.
  */
-function sanitisedCause(err: unknown): string {
+export const INTERNAL_CAUSE_VOCABULARY: readonly string[] = [
+  // errno-style codes (node fs/net)
+  'EPERM', 'EACCES', 'EBUSY', 'ENOENT', 'ENOSPC', 'EMFILE', 'EEXIST', 'EISDIR', 'ENOTDIR', 'ETIMEDOUT',
+  // built-in error classes
+  'TypeError', 'RangeError', 'SyntaxError', 'ReferenceError', 'Error',
+  // DOMException names produced by fetch/AbortSignal
+  'AbortError', 'TimeoutError',
+];
+const INTERNAL_CAUSE_SET: ReadonlySet<string> = new Set(INTERNAL_CAUSE_VOCABULARY);
+
+export function sanitisedCause(err: unknown): string {
   if (typeof err === 'object' && err !== null) {
     const code = (err as { code?: unknown }).code;
-    if (typeof code === 'string' && /^[A-Z][A-Z0-9_]{1,31}$/.test(code)) {
-      return code;
+    if (typeof code === 'string') {
+      // A string code is checked against the allow-list ONLY — never reflected,
+      // never used as a fallback into `name` (a marker code with a built-in name
+      // stays 'unknown', per the review's regression case).
+      return INTERNAL_CAUSE_SET.has(code) ? code : 'unknown';
     }
     const name = (err as { name?: unknown }).name;
-    if (typeof name === 'string' && /^[A-Za-z]{1,40}$/.test(name)) {
-      return name;
+    if (typeof name === 'string') {
+      return INTERNAL_CAUSE_SET.has(name) ? name : 'unknown';
     }
   }
   return 'unknown';
@@ -322,24 +334,35 @@ function isEngineRequired(err: unknown): boolean {
   return err instanceof Error && err.message === 'ENGINE_REQUIRED';
 }
 
-/** assembleSpec/assembleTimelineSpec with a runtime activity id (the typed overloads need the id as a literal). */
-function assembleForActivity(gen: AnyGeneratedSpec, activity: ActivityId, opts: AssembleOptions): AnyActivitySpec {
-  // Stage 5b: sequence engines assemble through their own function (no equation, no input ranges).
-  if (isSequenceEngineId(activity)) {
-    return assembleTimelineSpec(gen as TimelineGeneratedSpec, opts);
-  }
-  const engine: EngineId = activity;
-  switch (engine) {
+/** assembleSpec/assembleTimelineSpec with a runtime activity id (the typed overloads need the id as a literal).
+ * S5B-05: EXHAUSTIVE across the whole catalogue through one shared assembler path per
+ * kind — assembleSpec for EVERY numeric EngineId, assembleTimelineSpec for timeline —
+ * with a compile-time never check, so a new ActivityId added without a case fails
+ * typecheck instead of falling through to a runtime ENGINE_REQUIRED after a paid
+ * generation (the reviewer's compound-interest/hardy-weinberg/half-life demo crash). */
+export function assembleForActivity(gen: AnyGeneratedSpec, activity: ActivityId, opts: AssembleOptions): AnyActivitySpec {
+  switch (activity) {
+    // Stage 5b: sequence engines assemble through their own function (no equation, no input ranges).
+    case 'timeline-v1':
+      return assembleTimelineSpec(gen as TimelineGeneratedSpec, opts);
     case 'forces-1d-v1':
-      return assembleSpec(gen as ForcesGeneratedSpec, engine, opts);
     case 'projectile-v1':
-      return assembleSpec(gen as ProjectileGeneratedSpec, engine, opts);
     case 'lift-equation-v1':
-      return assembleSpec(gen as LiftGeneratedSpec, engine, opts);
     case 'speed-of-sound-v1':
-      return assembleSpec(gen as SoundGeneratedSpec, engine, opts);
+    case 'compound-interest-v1':
+    case 'hardy-weinberg-v1':
+    case 'half-life-v1': {
+      // ONE shared assembler for every numeric engine — the catalogue's ENGINES record
+      // already keys by EngineId, so no per-engine dispatch can go stale here.
+      const engine: EngineId = activity;
+      return assembleSpec(gen as GeneratedSpecByEngine[typeof engine], engine, opts);
+    }
+    default: {
+      // Compile-time exhaustiveness guard: unreachable while every ActivityId has a case.
+      const missing: never = activity;
+      throw new Error(`ENGINE_REQUIRED:${String(missing)}`);
+    }
   }
-  throw new Error('ENGINE_REQUIRED');
 }
 
 /** 8 hex chars taken from the job id (its random suffix); hashed fallback for hand-made ids. */
@@ -380,7 +403,10 @@ function fabricatedQuoteWithNonce(jobId: string, sourceText: string): string {
  * the engine result therefore exceeds any tolerance the schema allows for the
  * case — including negative originals (the old x*1.5+1 mapped -2 to itself) and
  * zero (mapped to 1). If adding would exceed the output's hard bound, the fault
- * subtracts the same delta instead.
+ * subtracts the same delta instead; if BOTH directions leave the hard range (an
+ * output range narrower than the delta, e.g. hardy-weinberg's 2pq ∈ [0, 0.5] —
+ * S5B-05), it flips to the range bound farther from the engine value, which is
+ * still beyond any allowed tolerance and stays schema-valid.
  *
  * timeline-v1 (Stage 5b): 'wrong-answer' swaps behavioralTests[0]'s
  * earlierEventId/laterEventId — the ordering answer code recomputes from the event dates, so
@@ -461,6 +487,16 @@ export function applyDemoFault(
     let injected = original + delta;
     if (injected > output.hardMax || injected < output.hardMin) {
       injected = original - delta;
+    }
+    if (injected > output.hardMax || injected < output.hardMin) {
+      // S5B-05: an output whose entire hard range is narrower than the delta (e.g.
+      // hardy-weinberg's 2pq ∈ [0, 0.5]) cannot be pushed past a bound in EITHER
+      // direction without failing schema.full instead of behavior.tests. Flip to the
+      // bound FARTHER from the engine value: the distance is then at least half the
+      // range width, which exceeds maxTolerance(engine, computed) for every catalogue
+      // engine, so the fault demonstrably fails behavior.tests while staying a valid
+      // number for the schema — and it can never equal the (correct) original.
+      injected = computed - output.hardMin >= output.hardMax - computed ? output.hardMin : output.hardMax;
     }
     first[outputKey] = injected;
     return { kind, path: `behavioralTests[0].${outputKey}`, original, injected, revision: 1 };
@@ -558,10 +594,27 @@ export function startJob(
       // state is written best-effort inside its own try/catch.
       const at = now().toISOString();
       const cause = sanitisedCause(err);
-      // Local diagnosis only (server stderr, never persisted or served — R-01).
-      console.error(`[${jobId}] INTERNAL during ${progress.stage}:`, err);
-      // BUG-002: summary.totalCostUSD / reservedUnknownUSD are kept current by
-      // runJob's accountReceipt, so billed calls survive this path.
+      // S5B-08 (R-01): default stderr carries ONLY the job id, the stage and the same
+      // fixed-vocabulary cause code — never the exception object, its message or its
+      // stack. MKI_DEBUG_INTERNAL=1 opts into richer LOCAL-ONLY diagnostics, and even
+      // then only the exception's own name/message/stack strings are printed (never an
+      // object dump that could carry receipts, and never source or provider payloads);
+      // nothing beyond the safe code is ever persisted.
+      if (process.env['MKI_DEBUG_INTERNAL'] === '1') {
+        const e = (typeof err === 'object' && err !== null ? err : {}) as { name?: unknown; message?: unknown; stack?: unknown };
+        console.error(
+          `[${jobId}] INTERNAL during ${progress.stage}: cause ${cause} (MKI_DEBUG_INTERNAL)` +
+            `\n  name: ${typeof e.name === 'string' ? e.name : 'unknown'}` +
+            `\n  message: ${typeof e.message === 'string' ? e.message : ''}` +
+            `\n  stack: ${typeof e.stack === 'string' ? e.stack : ''}`,
+        );
+      } else {
+        console.error(`[${jobId}] INTERNAL during ${progress.stage}: cause ${cause}`);
+      }
+      // BUG-002/S5B-06: summary.totalCostUSD / reservedUnknownUSD are kept current by
+      // runJob's single cost accumulator on EVERY charge path (receipts,
+      // GeneratedOutputError receipts and MetaError chargedUSD alike), so billed calls
+      // survive this path even when the failing write was the event append itself.
       summary.status = 'failed';
       summary.error = publicError('INTERNAL');
       summary.finishedAt = at;
@@ -636,17 +689,27 @@ async function runJob(
   }
 
   /**
+   * S5B-06: the ONE cost accumulator. Every charge or unknown-outcome amount —
+   * success receipts, GeneratedOutputError receipts, MetaError chargedUSD/
+   * reservedUnknownUSD, analysis-repair and spec-repair calls alike — passes through
+   * here, and the in-memory summary is updated BEFORE any fallible event/artifact
+   * write that follows, so even the last-resort INTERNAL path (e.g. a failing
+   * events.jsonl append) persists job.json totals equal to the ledger's committed
+   * spend whenever job.json itself is writable.
+   *
    * R-09/N-04: a receipt charged at reservation is real money with an uncertain
-   * outcome. The unknown portion is the receipt's explicit reservedUnknownUSD —
-   * never the whole estCostUSD inferred from the costBasis flag.
+   * outcome. The unknown portion is always the EXPLICIT reservedUnknownUSD amount —
+   * never the whole charge inferred from the costBasis flag.
    */
-  function accountReceipt(receipt: MetaReceipt): void {
-    totalCostUSD += receipt.estCostUSD;
-    reservedUnknownUSD += reservedUnknownOf(receipt.reservedUnknownUSD);
-    // BUG-002: keep the in-memory summary current so even the last-resort
-    // INTERNAL path persists every billed call.
+  function account(chargedUSD: number, unknownUSD: number): void {
+    totalCostUSD += chargedUSD;
+    reservedUnknownUSD += unknownUSD;
     summary.totalCostUSD = roundCost(totalCostUSD);
     summary.reservedUnknownUSD = roundCost(reservedUnknownUSD);
+  }
+
+  function accountReceipt(receipt: MetaReceipt): void {
+    account(receipt.estCostUSD, reservedUnknownOf(receipt.reservedUnknownUSD));
   }
 
   function finish(status: JobStatus): JobSummary {
@@ -693,14 +756,17 @@ async function runJob(
           : 0;
       const basis: 'usage' | 'reservation' | undefined = err.costBasis ?? err.receipt?.costBasis;
       const reserved = basis === 'reservation';
-      totalCostUSD += charged;
       // N-04: the unknown-outcome part is the explicit reservedUnknownUSD amount
       // (on the error, else on its receipt) — never the whole charge inferred
       // from the costBasis flag. A missing amount counts as 0.
-      reservedUnknownUSD +=
+      const unknownPart =
         err.reservedUnknownUSD !== undefined
           ? reservedUnknownOf(err.reservedUnknownUSD)
           : reservedUnknownOf(err.receipt?.reservedUnknownUSD);
+      // S5B-06: through the ONE accumulator — the summary is current BEFORE the
+      // fail()/emit() below, so a failing event write can no longer leave the
+      // last-resort path persisting stale zero totals over billed spend.
+      account(charged, unknownPart);
       // S5-05: failExtra carries the attempted revision so EVERY repair failure
       // event (BAD_REQUEST, TIMEOUT, DEADLINE_EXCEEDED, BUDGET_EXCEEDED,
       // LEDGER_ERROR, INPUT_TOO_LARGE, ...) keeps its place in the timeline.

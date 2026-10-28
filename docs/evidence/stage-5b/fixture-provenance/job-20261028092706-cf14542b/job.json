@@ -1,0 +1,23 @@
+{
+  "jobId": "job-20261028092706-cf14542b",
+  "sourceId": "nij-hardy-weinberg-principle",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-28T09:27:06.904Z",
+  "totalCostUSD": 0.047896,
+  "reservedUnknownUSD": 0,
+  "engine": "hardy-weinberg-v1",
+  "revisions": 1,
+  "repairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 35836,
+    "startedAt": "2026-10-28T09:27:06.904Z"
+  },
+  "specId": "nij-hardy-weinberg-principle-job-20261028092706-cf14542b",
+  "publishable": true,
+  "checksPassed": 12,
+  "checksTotal": 12,
+  "publishedRevision": 1,
+  "finishedAt": "2026-10-28T09:27:49.465Z"
+}
