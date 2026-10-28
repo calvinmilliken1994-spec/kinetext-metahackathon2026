@@ -4,7 +4,7 @@
 // teacher-provided sources and labelled demo fault injection. v0.2.0 forces specs remain valid.
 
 import { ENGINES } from './engines.ts';
-import type { EngineId } from './engines.ts';
+import type { ActivityId, EngineId } from './engines.ts';
 
 export { ENGINES, ENGINE_IDS, isEngineId, maxTolerance, SEQUENCE_ENGINES, SEQUENCE_ENGINE_IDS, isSequenceEngineId, ACTIVITY_IDS, isActivityId } from './engines.ts';
 export type { ActivityId, EngineDescriptor, EngineId, EngineInput, SequenceDescriptor, SequenceEngineId } from './engines.ts';
@@ -190,9 +190,9 @@ export interface ActivitySpecByEngine {
   'compound-interest-v1': CompoundInterestActivitySpec; 'hardy-weinberg-v1': HardyWeinbergActivitySpec; 'half-life-v1': HalfLifeActivitySpec;
 }
 
-/** Muse source analysis (schemas/source-analysis.gen.json). Muse chooses the engine or 'none'. */
+/** Muse source analysis (schemas/source-analysis.gen.json). Muse chooses the activity (numeric engine or sequence engine) or 'none'. */
 export interface SourceAnalysis {
-  supported: boolean; activity: EngineId | 'none'; unsupportedReason: string;
+  supported: boolean; activity: ActivityId | 'none'; unsupportedReason: string;
   concepts: { id: string; name: string; evidence: Evidence[] }[];
   objectives: string[];
 }

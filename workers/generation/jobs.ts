@@ -28,6 +28,7 @@ import { appendFileSync, mkdirSync, readdirSync, readFileSync, renameSync, write
 import { join } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { analyzeSource, generateSpec, repairSpec, GeneratedOutputError } from '../../packages/meta/pipeline.ts';
+import type { TimelineSourceAnalysis } from '../../packages/meta/pipeline.ts';
 import { MetaError, META_ERROR_MESSAGES } from '../../packages/meta/client.ts';
 import type { MetaClient, MetaErrorCode } from '../../packages/meta/client.ts';
 import {
@@ -38,9 +39,19 @@ import {
   USER_SOURCE_ID_PATTERN,
 } from '../../packages/sources/index.ts';
 import { repairFindings, normalizeWhitespace, validateSpec } from '../../packages/validation/validate.ts';
+import type { AnyActivitySpec } from '../../packages/validation/validate.ts';
 import { computeOutput } from '../../packages/activities/registry.ts';
-import { assembleSpec, DEMO_FAULTS, ENGINES, isEngineId, maxTolerance } from '../../packages/contracts/index.ts';
+import {
+  assembleSpec,
+  assembleTimelineSpec,
+  DEMO_FAULTS,
+  ENGINES,
+  isActivityId,
+  isSequenceEngineId,
+  maxTolerance,
+} from '../../packages/contracts/index.ts';
 import type {
+  ActivityId,
   ActivitySpec,
   AssembleOptions,
   DemoFault,
@@ -59,6 +70,8 @@ import type {
   Stage,
   StageEvent,
   StageStatus,
+  TimelineActivitySpec,
+  TimelineGeneratedSpec,
   ValidationReport,
 } from '../../packages/contracts/index.ts';
 
@@ -109,8 +122,8 @@ export interface JobSummary {
   /** Part of totalCostUSD charged at reservation because the outcome was uncertain (TASK-009 R-09). */
   reservedUnknownUSD: number;
   error?: { code: string; message: string };
-  /** Engine Muse chose for this source (Stage 5); null until a supported analysis is validated. */
-  engine: EngineId | null;
+  /** Activity Muse chose for this source (Stage 5/5b: a numeric engine or a sequence engine); null until a supported analysis is validated. */
+  engine: ActivityId | null;
   /** Number of spec revisions produced and persisted (1 without repairs). */
   revisions: number;
   /** One record per repair attempt, in order (Stage 5). */
@@ -171,6 +184,17 @@ export const MAX_REPAIR_ATTEMPTS_BOUND = 2;
 type EventExtra = Partial<
   Pick<StageEvent, 'model' | 'responseId' | 'usage' | 'latencyMs' | 'estCostUSD' | 'detail' | 'revision'>
 >;
+
+/** Stage 5b: anything Muse may generate — a numeric engine's generated spec or the timeline's. */
+type AnyGeneratedSpec = GeneratedSpec | TimelineGeneratedSpec;
+
+/** One generateSpec/repairSpec result, whichever activity kind produced it. */
+interface PipelineResult {
+  generated: AnyGeneratedSpec;
+  spec: AnyActivitySpec;
+  report: ValidationReport;
+  receipt: MetaReceipt;
+}
 
 function positiveOr(value: number | undefined, fallback: number): number {
   return typeof value === 'number' && Number.isFinite(value) && value > 0 ? value : fallback;
@@ -272,8 +296,13 @@ function isEngineRequired(err: unknown): boolean {
   return err instanceof Error && err.message === 'ENGINE_REQUIRED';
 }
 
-/** assembleSpec with a runtime engine id (the typed overloads need the engine as a literal). */
-function assembleForEngine(gen: GeneratedSpec, engine: EngineId, opts: AssembleOptions): ActivitySpec {
+/** assembleSpec/assembleTimelineSpec with a runtime activity id (the typed overloads need the id as a literal). */
+function assembleForActivity(gen: AnyGeneratedSpec, activity: ActivityId, opts: AssembleOptions): AnyActivitySpec {
+  // Stage 5b: sequence engines assemble through their own function (no equation, no input ranges).
+  if (isSequenceEngineId(activity)) {
+    return assembleTimelineSpec(gen as TimelineGeneratedSpec, opts);
+  }
+  const engine: EngineId = activity;
   switch (engine) {
     case 'forces-1d-v1':
       return assembleSpec(gen as ForcesGeneratedSpec, engine, opts);
@@ -298,29 +327,95 @@ function fabricatedQuoteSentence(nonce: string): string {
 }
 
 /**
- * Stage 5 labelled demo fault: a deterministic, SYSTEM-MADE change to the generated
+ * The fabricated sentence for a fabricated-quote demo fault, with a nonce derived from the
+ * job id and re-derived until the sentence is absent from the source under the validator's
+ * whitespace normalisation on BOTH sides (Muse design review decision 18).
+ */
+function fabricatedQuoteWithNonce(jobId: string, sourceText: string): string {
+  const normalizedSource = normalizeWhitespace(sourceText);
+  let nonce = nonceFromJobId(jobId);
+  let sentence = fabricatedQuoteSentence(nonce);
+  while (normalizedSource.includes(normalizeWhitespace(sentence))) {
+    nonce = sha256(nonce).slice(0, 8);
+    sentence = fabricatedQuoteSentence(nonce);
+  }
+  return sentence;
+}
+
+/**
+ * Stage 5/5b labelled demo fault: a deterministic, SYSTEM-MADE change to the generated
  * spec (never presented as a model error). Mutates the caller's clone of the
  * generated spec in place and returns the FaultRecord describing the change
  * (`effective` is set by the caller after re-validating revision 1, S5-04).
  *
- * S5-04: a wrong-answer fault must DEMONSTRABLY fail behavior.tests, so the
+ * Numeric engines (S5-04): a wrong-answer fault must DEMONSTRABLY fail behavior.tests, so the
  * alteration is bounded away from the engine result: injected = original +
  * max(1, 0.5*|original|, 10*maxTolerance(engine, computed)). The distance from
  * the engine result therefore exceeds any tolerance the schema allows for the
  * case — including negative originals (the old x*1.5+1 mapped -2 to itself) and
  * zero (mapped to 1). If adding would exceed the output's hard bound, the fault
- * subtracts the same delta instead. The fabricated quote carries a nonce whose
+ * subtracts the same delta instead.
+ *
+ * timeline-v1 (Stage 5b): 'wrong-answer' swaps behavioralTests[0]'s
+ * earlierEventId/laterEventId — the ordering answer code recomputes from the event dates, so
+ * the swap demonstrably fails timeline.case-order (the record states both pair directions).
+ * 'fabricated-quote' replaces the first event quote (simulation.events[0].evidence[0].quote)
+ * instead of an explanation quote, tripping grounding.quotes (and the event's date grounding).
+ *
+ * For BOTH kinds on every activity, the fabricated quote carries a nonce whose
  * absence is checked with the validator's whitespace normalisation on BOTH
  * sides, so a source containing the sentence with an internal newline still
  * forces a re-derived nonce (Muse design review decision 18).
  */
 export function applyDemoFault(
   kind: DemoFault,
-  gen: GeneratedSpec,
-  engine: EngineId,
+  gen: AnyGeneratedSpec,
+  activity: ActivityId,
   jobId: string,
   sourceText: string,
 ): FaultRecord {
+  // Stage 5b: sequence-engine faults operate on events/ordering pairs, never on ENGINES metadata.
+  if (isSequenceEngineId(activity)) {
+    const timelineGen = gen as TimelineGeneratedSpec;
+    if (kind === 'wrong-answer') {
+      const first = Array.isArray(timelineGen.behavioralTests) ? timelineGen.behavioralTests[0] : undefined;
+      if (
+        first === undefined ||
+        typeof first.earlierEventId !== 'string' ||
+        first.earlierEventId === '' ||
+        typeof first.laterEventId !== 'string' ||
+        first.laterEventId === '' ||
+        first.earlierEventId === first.laterEventId
+      ) {
+        throw new Error('DEMO_FAULT_TARGET_MISSING');
+      }
+      const earlier = first.earlierEventId;
+      const later = first.laterEventId;
+      first.earlierEventId = later;
+      first.laterEventId = earlier;
+      return {
+        kind,
+        path: 'behavioralTests[0]',
+        original: `${earlier} -> ${later}`,
+        injected: `${later} -> ${earlier}`,
+        revision: 1,
+      };
+    }
+    if (kind === 'fabricated-quote') {
+      const evidence = Array.isArray(timelineGen.simulation?.events)
+        ? timelineGen.simulation.events[0]?.evidence?.[0]
+        : undefined;
+      if (evidence === undefined || typeof evidence.quote !== 'string') {
+        throw new Error('DEMO_FAULT_TARGET_MISSING');
+      }
+      const original = evidence.quote;
+      const sentence = fabricatedQuoteWithNonce(jobId, sourceText);
+      evidence.quote = sentence;
+      return { kind, path: 'simulation.events[0].evidence[0].quote', original, injected: sentence, revision: 1 };
+    }
+    throw new Error('DEMO_FAULT_INVALID');
+  }
+  const engine: EngineId = activity;
   if (kind === 'wrong-answer') {
     const outputKey = ENGINES[engine].output.key;
     const tests = gen.behavioralTests as unknown as Record<string, unknown>[];
@@ -352,13 +447,7 @@ export function applyDemoFault(
     }
     const original = evidence.quote;
     // S5-04: absence under the validator's normalisation, not raw includes().
-    const normalizedSource = normalizeWhitespace(sourceText);
-    let nonce = nonceFromJobId(jobId);
-    let sentence = fabricatedQuoteSentence(nonce);
-    while (normalizedSource.includes(normalizeWhitespace(sentence))) {
-      nonce = sha256(nonce).slice(0, 8);
-      sentence = fabricatedQuoteSentence(nonce);
-    }
+    const sentence = fabricatedQuoteWithNonce(jobId, sourceText);
     evidence.quote = sentence;
     return { kind, path: 'explanations[0].evidence[0].quote', original, injected: sentence, revision: 1 };
   }
@@ -366,8 +455,12 @@ export function applyDemoFault(
 }
 
 /** The check a demo fault is designed to trip (S5-04 effectiveness is measured against it). */
-function intendedCheckOf(kind: DemoFault): 'behavior.tests' | 'grounding.quotes' {
-  return kind === 'wrong-answer' ? 'behavior.tests' : 'grounding.quotes';
+function intendedCheckOf(kind: DemoFault, activity: ActivityId): 'behavior.tests' | 'timeline.case-order' | 'grounding.quotes' {
+  if (kind === 'wrong-answer') {
+    // Stage 5b: on a timeline the swapped ordering answer is caught by the recomputed case order.
+    return isSequenceEngineId(activity) ? 'timeline.case-order' : 'behavior.tests';
+  }
+  return 'grounding.quotes';
 }
 
 export function startJob(
@@ -654,29 +747,42 @@ async function runJob(
     return finish('unsupported');
   }
 
-  // Defensive (Stage 5): a supported analysis without a known engine becomes
+  // Defensive (Stage 5/5b): a supported analysis without a known activity becomes
   // ANALYSIS_INVALID before any model call. Normally unreachable — validateAnalysis
-  // already fails supported=true with an activity that is not a known engine id.
-  if (!isEngineId(analysis.activity)) {
+  // already fails supported=true with an activity that is not a known activity id.
+  if (!isActivityId(analysis.activity)) {
     return fail('specify', 'ANALYSIS_INVALID', { detail: 'ANALYSIS_INVALID' });
   }
-  const engine: EngineId = analysis.activity;
-  summary.engine = engine;
+  const activity: ActivityId = analysis.activity;
+  summary.engine = activity;
 
   // --- specify (revision 1) ---------------------------------------------------
   emit('specify', 'started');
   const specId = `${sourceId}-${jobId}`.slice(0, 64);
-  let specResult: Awaited<ReturnType<typeof generateSpec>>;
+  let specResult: PipelineResult;
   try {
-    specResult = await generateSpec(
-      deps.client,
-      source,
-      analysis,
-      { jobId, specId },
-      deps.purpose,
-      now,
-      { signal: budget.signal, maxOutputTokens: budget.specMaxOutputTokens },
-    );
+    // Stage 5b: a timeline analysis selects the pipeline's timeline overload; numeric
+    // analyses keep the legacy overload. packages/meta is Muse-authored, so the worker
+    // narrows the analysis type at the call site instead of the pipeline changing.
+    specResult = isSequenceEngineId(activity)
+      ? await generateSpec(
+          deps.client,
+          source,
+          analysis as TimelineSourceAnalysis,
+          { jobId, specId },
+          deps.purpose,
+          now,
+          { signal: budget.signal, maxOutputTokens: budget.specMaxOutputTokens },
+        )
+      : await generateSpec(
+          deps.client,
+          source,
+          analysis,
+          { jobId, specId },
+          deps.purpose,
+          now,
+          { signal: budget.signal, maxOutputTokens: budget.specMaxOutputTokens },
+        );
   } catch (err: unknown) {
     if (isEngineRequired(err)) {
       // Defensive: the pipeline guard fired before any model call — the same fixed
@@ -691,14 +797,14 @@ async function runJob(
   // A SYSTEM-made change to the generated spec BEFORE validation, so judges can
   // watch catch → repair → pass on demand. Always labelled, never a model error;
   // the fault is applied to a clone so stored fixtures/evidence are never touched.
-  let generated: GeneratedSpec = specResult.generated;
-  let spec: ActivitySpec = specResult.spec;
+  let generated: AnyGeneratedSpec = specResult.generated;
+  let spec: AnyActivitySpec = specResult.spec;
   let report: ValidationReport = specResult.report;
   if (deps.demoFault !== undefined) {
-    const faultyGen = structuredClone(generated) as GeneratedSpec;
-    const fault = applyDemoFault(deps.demoFault, faultyGen, engine, jobId, source.text);
+    const faultyGen = structuredClone(generated) as AnyGeneratedSpec;
+    const fault = applyDemoFault(deps.demoFault, faultyGen, activity, jobId, source.text);
     // Re-assemble with the SAME provenance so spec.r1.json reflects the fault.
-    spec = assembleForEngine(faultyGen, engine, {
+    spec = assembleForActivity(faultyGen, activity, {
       id: specId,
       sources: [source],
       provenance: specResult.spec.provenance,
@@ -708,7 +814,7 @@ async function runJob(
     report = validateSpec(spec, [source]);
     // S5-04: the fault only counts as a demonstrated catch when re-validating
     // revision 1 actually failed the intended check.
-    fault.effective = failedCheckIds(report).includes(intendedCheckOf(deps.demoFault));
+    fault.effective = failedCheckIds(report).includes(intendedCheckOf(deps.demoFault, activity));
     summary.demoFault = fault;
   }
   writeJsonAtomic(join(runDir, 'spec.r1.json'), spec);
@@ -723,7 +829,7 @@ async function runJob(
       // S5-04: an ineffective injection is reported honestly — never as a catch.
       detail:
         fault.effective === false
-          ? `demo fault injected by the system but NOT caught by ${intendedCheckOf(fault.kind)}: ${fault.kind} at ${fault.path}`
+          ? `demo fault injected by the system but NOT caught by ${intendedCheckOf(fault.kind, activity)}: ${fault.kind} at ${fault.path}`
           : `demo fault injected by the system: ${fault.kind} at ${fault.path}`,
     });
   }
@@ -731,8 +837,8 @@ async function runJob(
   // --- validate + bounded repair loop (Stage 5) --------------------------------
   interface RevisionState {
     revision: number;
-    generated: GeneratedSpec;
-    spec: ActivitySpec;
+    generated: AnyGeneratedSpec;
+    spec: AnyActivitySpec;
     report: ValidationReport;
   }
   const revisions: RevisionState[] = [{ revision: 1, generated, spec, report }];
@@ -744,7 +850,7 @@ async function runJob(
   // (including an injected demo fault), never with the previous revision, so a
   // rejected weakening can never become the next baseline and be laundered by
   // repeating it.
-  const baseline: { spec: ActivitySpec; failedIds: string[] } = {
+  const baseline: { spec: AnyActivitySpec; failedIds: string[] } = {
     spec: revisions[0].spec,
     failedIds: failedCheckIds(revisions[0].report),
   };
@@ -778,27 +884,49 @@ async function runJob(
     });
     // Decision 14: every prior revision's findings re-enter the repair prompt.
     findingsHistory.push(repairFindings(current.report, current.spec));
-    let repaired: Awaited<ReturnType<typeof repairSpec>>;
+    let repaired: PipelineResult;
     try {
-      repaired = await repairSpec(
-        deps.client,
-        source,
-        analysis,
-        {
-          generated: current.generated,
-          spec: current.spec,
-          report: current.report,
-          revision: current.revision,
-          findingsHistory,
-          // S5-01: compare against revision 1's obligations, not the last revision.
-          baseline,
-        },
-        { jobId, specId },
-        deps.purpose,
-        now,
-        // R-11: the job-wide deadline and the spec output cap cover repairs too.
-        { signal: budget.signal, maxOutputTokens: budget.specMaxOutputTokens },
-      );
+      // Stage 5b: the same overload narrowing as the specify call — a timeline analysis
+      // repairs through the timeline overload (packages/meta stays untouched).
+      repaired = isSequenceEngineId(activity)
+        ? await repairSpec(
+            deps.client,
+            source,
+            analysis as TimelineSourceAnalysis,
+            {
+              generated: current.generated as TimelineGeneratedSpec,
+              spec: current.spec as TimelineActivitySpec,
+              report: current.report,
+              revision: current.revision,
+              findingsHistory,
+              // S5-01: compare against revision 1's obligations, not the last revision.
+              baseline: { spec: baseline.spec as TimelineActivitySpec, failedIds: baseline.failedIds },
+            },
+            { jobId, specId },
+            deps.purpose,
+            now,
+            // R-11: the job-wide deadline and the spec output cap cover repairs too.
+            { signal: budget.signal, maxOutputTokens: budget.specMaxOutputTokens },
+          )
+        : await repairSpec(
+            deps.client,
+            source,
+            analysis,
+            {
+              generated: current.generated as GeneratedSpec,
+              spec: current.spec as ActivitySpec,
+              report: current.report,
+              revision: current.revision,
+              findingsHistory,
+              // S5-01: compare against revision 1's obligations, not the last revision.
+              baseline: { spec: baseline.spec as ActivitySpec, failedIds: baseline.failedIds },
+            },
+            { jobId, specId },
+            deps.purpose,
+            now,
+            // R-11: the job-wide deadline and the spec output cap cover repairs too.
+            { signal: budget.signal, maxOutputTokens: budget.specMaxOutputTokens },
+          );
     } catch (err: unknown) {
       const outputReceipt = generatedOutputReceipt(err);
       if (outputReceipt !== undefined) {

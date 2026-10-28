@@ -1,0 +1,47 @@
+{
+  "supported": true,
+  "activity": "timeline-v1",
+  "unsupportedReason": "",
+  "concepts": [
+    {
+      "id": "adoption-then-signing",
+      "name": "Adoption on July 4 and the signing that began on August 2",
+      "evidence": [
+        {
+          "sourceId": "nara-declaration-of-independence",
+          "quote": "The Continental Congress adopted the Declaration of Independence on July 4, 1776."
+        },
+        {
+          "sourceId": "nara-declaration-of-independence",
+          "quote": "on August 2, 1776, delegates began signing it."
+        }
+      ]
+    },
+    {
+      "id": "drafting-printing-engrossing",
+      "name": "Drafting by the committee of five, printing, and the engrossed parchment copy",
+      "evidence": [
+        {
+          "sourceId": "nara-declaration-of-independence",
+          "quote": "Congress appointed on June 10 a committee of five to draft a statement of independence for the colonies"
+        },
+        {
+          "sourceId": "nara-declaration-of-independence",
+          "quote": "Jefferson drafted the statement between June 11 and 28"
+        },
+        {
+          "sourceId": "nara-declaration-of-independence",
+          "quote": "the approved Declaration was printed on July 5th"
+        },
+        {
+          "sourceId": "nara-declaration-of-independence",
+          "quote": "On July 19th, Congress ordered that the Declaration be engrossed on parchment"
+        }
+      ]
+    }
+  ],
+  "objectives": [
+    "Order the drafting, adoption, printing and signing of the Declaration of Independence using the dates the source states",
+    "Explain why adoption on July 4 and the start of signing on August 2 are separate events"
+  ]
+}
