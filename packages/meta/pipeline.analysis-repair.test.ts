@@ -131,7 +131,7 @@ test("declining repair passes validateAnalysis but fails repair.analysis-unchang
   assert.equal(unchanged?.path, '/activity');
 });
 
-test('changing objectives fails unchanged; changing concepts is allowed', async () => {
+test('field-scoped guard: fixing the affected id passes; changing an objective or another name fails', async () => {
   const prevReport: ValidationReport = validateAnalysis(storedAnalysis, [source]);
   const fixed: SourceAnalysis = correctedAnalysis();
   const changedObjectives: SourceAnalysis = structuredClone(fixed);
@@ -147,8 +147,25 @@ test('changing objectives fails unchanged; changing concepts is allowed', async 
   const unchangedA = outA.report.checks.find((c) => c.id === 'repair.analysis-unchanged');
   assert.ok(unchangedA);
   assert.equal(unchangedA?.passed, false);
-  assert.equal(unchangedA?.path, '/objectives');
+  assert.equal(unchangedA?.path, '/objectives/0');
+  assert.equal(unchangedA?.affected, undefined);
   assert.equal(outA.report.publishable, false);
+  const changedName: SourceAnalysis = structuredClone(fixed);
+  changedName.concepts[0]!.name = 'SYNTH-MARKER-NAME-4b1c revised concept name.';
+  assert.equal(validateAnalysis(changedName, [source]).publishable, true);
+  const requestsC: CompleteRequest[] = [];
+  const outC = await repairAnalysis(
+    fakeClientFor(changedName, requestsC),
+    source,
+    { analysis: storedAnalysis, report: prevReport, attempt: 1 },
+    'test-live',
+  );
+  const unchangedC = outC.report.checks.find((c) => c.id === 'repair.analysis-unchanged');
+  assert.ok(unchangedC);
+  assert.equal(unchangedC?.passed, false);
+  assert.equal(unchangedC?.path, '/concepts/0/name');
+  assert.equal(unchangedC?.affected, undefined);
+  assert.equal(outC.report.publishable, false);
   const requestsB: CompleteRequest[] = [];
   const outB = await repairAnalysis(
     fakeClientFor(fixed, requestsB),
@@ -307,7 +324,7 @@ test('attempt 2 with baseline compares against the original analysis (immutable 
   const unchanged2 = rev2Report.checks.find((c) => c.id === 'repair.analysis-unchanged');
   assert.ok(unchanged2);
   assert.equal(unchanged2.passed, false);
-  assert.equal(unchanged2.path, '/objectives');
+  assert.equal(unchanged2.path, '/objectives/0');
   const previous2 = {
     analysis: rev2,
     report: rev2Report,
@@ -320,7 +337,7 @@ test('attempt 2 with baseline compares against the original analysis (immutable 
   const unchangedKeep = outKeep.report.checks.find((c) => c.id === 'repair.analysis-unchanged');
   assert.ok(unchangedKeep);
   assert.equal(unchangedKeep.passed, false);
-  assert.equal(unchangedKeep.path, '/objectives');
+  assert.equal(unchangedKeep.path, '/objectives/0');
   assert.equal(outKeep.report.publishable, false);
   assert.equal(outKeep.report.revision, 3);
   const restored: SourceAnalysis = correctedAnalysis();
@@ -369,6 +386,7 @@ test('repair.analysis-unchanged failure never unlocks a group (no baseline)', as
   const unchanged = out.report.checks.find((c) => c.id === 'repair.analysis-unchanged');
   assert.ok(unchanged);
   assert.equal(unchanged.passed, false);
-  assert.equal(unchanged.path, '/objectives');
+  assert.equal(unchanged.path, '/objectives/0');
+  assert.equal(unchanged.affected, undefined);
   assert.equal(out.report.publishable, false);
 });

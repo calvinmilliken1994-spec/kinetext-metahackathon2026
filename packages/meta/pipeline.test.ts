@@ -450,7 +450,7 @@ test('GeneratedOutputError shape is fixed and schema-valid recorded spec still s
 });
 
 test('PROMPT_VERSION is v4', () => {
-  assert.equal(PROMPT_VERSION, 'v8');
+  assert.equal(PROMPT_VERSION, 'v9');
 });
 
 test('analysis prompt lists every engine id with title, equation and appliesWhen', () => {

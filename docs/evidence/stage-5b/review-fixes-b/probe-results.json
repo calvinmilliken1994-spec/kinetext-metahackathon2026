@@ -1,0 +1,67 @@
+{
+  "note": "Reviewer probes (gpt-6-astra, review-5b probes.mjs / extra-probes.mjs, fake MetaClient, no model calls) re-run by the Wave B orchestrator before and after the Muse Wave B changes.",
+  "before": {
+    "analysis-id-unlocks-entire-concepts": {
+      "publishable": true,
+      "guardPassed": true,
+      "guardPath": null,
+      "guardMessage": "changed groups: concepts; allowed by findings analysis.concept-ids",
+      "failures": null
+    },
+    "analysis-id-decline-control": {
+      "publishable": false,
+      "guardPassed": null,
+      "guardPath": null,
+      "guardMessage": "",
+      "failures": [
+        "repair.analysis-unchanged"
+      ]
+    },
+    "empty-concepts-decline-escape": {
+      "publishable": true,
+      "guardPassed": true,
+      "guardPath": null,
+      "guardMessage": "changed groups: decision, unsupportedReason; allowed by findings analysis.invariants",
+      "failures": null
+    },
+    "multiple-policy-groups-cannot-fix": {
+      "publishable": false,
+      "guardPassed": false,
+      "guardPath": "/objectives",
+      "guardMessage": "repair changed objectives without a finding naming them",
+      "failures": null
+    }
+  },
+  "after": {
+    "analysis-id-unlocks-entire-concepts": {
+      "publishable": false,
+      "guardPassed": false,
+      "guardPath": "/concepts",
+      "guardMessage": "repair changed unauthorized fields: /concepts, /concepts/0/name, /concepts/1, /concepts/2",
+      "failures": null
+    },
+    "analysis-id-decline-control": {
+      "publishable": false,
+      "guardPassed": null,
+      "guardPath": null,
+      "guardMessage": "",
+      "failures": [
+        "repair.analysis-unchanged"
+      ]
+    },
+    "empty-concepts-decline-escape": {
+      "publishable": false,
+      "guardPassed": false,
+      "guardPath": "/activity",
+      "guardMessage": "repair changed unauthorized fields: /activity, /supported, /unsupportedReason",
+      "failures": null
+    },
+    "multiple-policy-groups-cannot-fix": {
+      "publishable": true,
+      "guardPassed": true,
+      "guardPath": null,
+      "guardMessage": "changed only authorized fields: /concepts/0/name, /objectives/0 (authorized by baseline findings policy.no-publisher-attribution)",
+      "failures": null
+    }
+  }
+}
