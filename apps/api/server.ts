@@ -371,7 +371,18 @@ export function createApiServer(opts: ApiOptions): Server {
     }
     try {
       const { id, created } = saveUserSource(validated.value, dir);
-      return sendJson(res, created ? 201 : 200, { id, title: validated.value.title, kind: 'user' });
+      // S5-07: answer with the STORED metadata — a duplicate-text POST returns
+      // the original source's title/licence/attribution with reused: true, never
+      // the newly submitted values (which were not saved).
+      const meta = loadUserSourceMeta(id, dir);
+      return sendJson(res, created ? 201 : 200, {
+        id,
+        title: meta.title,
+        kind: 'user',
+        licenseLabel: meta.licenseLabel,
+        attribution: meta.attribution,
+        reused: !created,
+      });
     } catch {
       // Fixed, content-free 500; never expose fs internals.
       return sendError(res, 500, 'INTERNAL');

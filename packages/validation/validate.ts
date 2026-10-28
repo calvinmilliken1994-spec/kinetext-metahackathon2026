@@ -95,6 +95,9 @@ const QUOTE_MIN_LETTER_DIGITS = 3;
 const LETTER_DIGIT_PATTERN = /[\p{L}\p{N}]/gu;
 /** Stage 5: repair finding messages are display text capped at 300 chars; structured numbers are never capped. */
 const FINDING_MESSAGE_LIMIT = 300;
+/** S5-02: the no-weakening failure message lists every violation, capped for display. */
+const COMPARISON_PROBLEM_LIMIT = 12;
+const COMPARISON_MESSAGE_LIMIT = 1200;
 
 /** Stage 2 range-check ids, kept so recorded forces evidence reports the same ids. */
 const FORCES_RANGE_CHECK_IDS: Record<string, string> = {
@@ -751,27 +754,38 @@ function firstFailingCase(
 
 /**
  * Guard a repair revision against WEAKENING the spec instead of fixing it
- * (Muse review finding 13). Returns the 'repair.no-weakening' check:
- * - fails when the engine changed;
- * - fails when a matched case's tolerance increased (behavioral tests matched
- *   by name, predictions by id), unless 'semantic.tolerance' itself failed on
- *   the previous revision — a failing behavior check never excuses widening
- *   tolerances, because widening is how a repair would cheat behavior.tests;
- * - fails when a simulation range width (max - min) shrank, unless that
- *   range's own check id ('semantic.mass-range' / 'semantic.range.<key>')
- *   failed on the previous revision (a broken range had to be rewritten);
- * - fails when the number of behavioral tests or predictions decreased —
- *   deleting a failing case is weakening, never a repair, so no prior failure
- *   excuses it.
+ * (Muse review finding 13; Stage 5 review S5-01/S5-02). `baseline` is the
+ * IMMUTABLE obligation set — in the worker always revision 1 — so a rejected
+ * weakening can never become the next baseline and be laundered by repeating
+ * it. Rules, each scoped per case/field (a global failing check id never
+ * grants unrelated relaxations):
+ * - the engine must be unchanged;
+ * - every baseline behavioral-test `name` and prediction `id` must be present
+ *   EXACTLY ONCE in the repair — renaming, replacing or deleting a case never
+ *   removes the comparison obligation;
+ * - per case: `next.tolerance <= baseline.tolerance` ALWAYS (no exceptions — a
+ *   tolerance failure is fixed by lowering it, and a failing behavior check
+ *   never excuses widening);
+ * - per case: inputs and expected output unchanged unless that SPECIFIC
+ *   baseline case was wrong (|expected - computeOutput| > tolerance, or
+ *   tolerance > maxTolerance(engine, computed)) or — for a prediction — its
+ *   inputs were outside the baseline ranges;
+ * - per input range: the width (max - min) must not shrink unless that range's
+ *   OWN check id ('semantic.mass-range' / 'semantic.force-range' for forces,
+ *   'semantic.range.<key>' elsewhere) failed on the baseline;
+ * - adding cases is allowed.
+ * The failure message lists every violation (capped for display). The pass
+ * message is byte-stable: recorded live evidence stores it verbatim and
+ * tests/e2e/stage5-evidence.test.ts recomputes and compares it.
  * Never throws; junk input fails closed.
  */
-export function compareRevisions(previous: ActivitySpec, next: ActivitySpec, failedOnPrevious: string[]): ValidationCheck {
+export function compareRevisions(baseline: ActivitySpec, next: ActivitySpec, failedOnBaseline: string[]): ValidationCheck {
   const id = 'repair.no-weakening';
   const kind: CheckKind = 'semantic';
   try {
-    const p = previous as unknown as LooseSpec | null | undefined;
+    const p = baseline as unknown as LooseSpec | null | undefined;
     const n = next as unknown as LooseSpec | null | undefined;
-    const failed = new Set(Array.isArray(failedOnPrevious) ? failedOnPrevious : []);
+    const failed = new Set(Array.isArray(failedOnBaseline) ? failedOnBaseline : []);
     const problems: string[] = [];
 
     const pe = p?.simulation?.engine;
@@ -779,7 +793,7 @@ export function compareRevisions(previous: ActivitySpec, next: ActivitySpec, fai
     let sharedEngine: EngineId | undefined;
     if (!isEngineId(pe) || !isEngineId(ne)) {
       problems.push(
-        `cannot compare revisions: simulation.engine must be a known engine id on both (previous ${pe === undefined ? 'missing' : JSON.stringify(pe)}, next ${ne === undefined ? 'missing' : JSON.stringify(ne)})`,
+        `cannot compare revisions: simulation.engine must be a known engine id on both (baseline ${pe === undefined ? 'missing' : JSON.stringify(pe)}, next ${ne === undefined ? 'missing' : JSON.stringify(ne)})`,
       );
     } else if (pe !== ne) {
       problems.push(`engine changed from ${pe} to ${ne}`);
@@ -792,11 +806,9 @@ export function compareRevisions(previous: ActivitySpec, next: ActivitySpec, fai
     const pPreds = looseList(p, 'predictions');
     const nPreds = looseList(n, 'predictions');
 
-    // Tolerances: matched cases must not get looser.
-    if (!failed.has('semantic.tolerance')) {
-      collectToleranceIncreases(pTests, nTests, 'name', 'behavioralTests', problems);
-      collectToleranceIncreases(pPreds, nPreds, 'id', 'predictions', problems);
-    }
+    // Case identity, tolerances and content — matched by stable name/id.
+    compareCases(sharedEngine, p, pTests, nTests, 'name', 'behavioralTests', false, problems);
+    compareCases(sharedEngine, p, pPreds, nPreds, 'id', 'predictions', true, problems);
 
     // Range widths: comparable only while the engine (and so the input keys) is the same.
     if (sharedEngine !== undefined) {
@@ -814,30 +826,155 @@ export function compareRevisions(previous: ActivitySpec, next: ActivitySpec, fai
       }
     }
 
-    // Case counts: never excused — dropping a failing case is weakening, not repair.
-    if (nTests.length < pTests.length) {
-      problems.push(`behavioralTests count decreased ${pTests.length} -> ${nTests.length}`);
+    if (problems.length === 0) {
+      return {
+        id,
+        kind,
+        passed: true,
+        message: `no weakening: engine ${String(ne)} unchanged, no matched case tolerance increased, no simulation range width shrank, and the number of behavioral tests (${nTests.length}) and predictions (${nPreds.length}) did not decrease`,
+      };
     }
-    if (nPreds.length < pPreds.length) {
-      problems.push(`predictions count decreased ${pPreds.length} -> ${nPreds.length}`);
-    }
-
-    return problems.length === 0
-      ? {
-          id,
-          kind,
-          passed: true,
-          message: `no weakening: engine ${String(ne)} unchanged, no matched case tolerance increased, no simulation range width shrank, and the number of behavioral tests (${nTests.length}) and predictions (${nPreds.length}) did not decrease`,
-        }
-      : {
-          id,
-          kind,
-          passed: false,
-          message: `repair weakened the spec: ${problems.join('; ')} (a repair must fix the failing checks without changing the engine, widening tolerances, shrinking slider ranges or dropping cases)`,
-        };
+    const shown = problems.slice(0, COMPARISON_PROBLEM_LIMIT);
+    const hidden = problems.length - shown.length;
+    const list =
+      truncate(shown.join('; '), COMPARISON_MESSAGE_LIMIT) +
+      (hidden > 0 ? ` (+${hidden} more violation(s))` : '');
+    return {
+      id,
+      kind,
+      passed: false,
+      message: `repair weakened the spec: ${list} (a repair must fix the failing checks without changing the engine, renaming/replacing/deleting baseline cases, widening any tolerance, rewriting a case that passed on the baseline, or shrinking slider ranges)`,
+    };
   } catch (err) {
     return { id, kind, passed: false, message: `comparison crashed before it could pass or fail cleanly: ${errMsg(err)}` };
   }
+}
+
+/**
+ * Per-list preservation: every baseline case key (name/id) present exactly
+ * once, tolerance never increased, and inputs/expected output frozen unless
+ * that specific baseline case was wrong. Content rules need the shared engine;
+ * identity is checked even without one (the engine violation is already listed).
+ */
+function compareCases(
+  engine: EngineId | undefined,
+  baseline: LooseSpec | null | undefined,
+  prev: Record<string, unknown>[],
+  next: Record<string, unknown>[],
+  keyField: 'name' | 'id',
+  list: string,
+  isPrediction: boolean,
+  problems: string[],
+): void {
+  const nextByKey = new Map<string, Record<string, unknown>[]>();
+  for (const c of next) {
+    const k = c[keyField];
+    if (typeof k !== 'string') continue;
+    const bucket = nextByKey.get(k);
+    if (bucket === undefined) {
+      nextByKey.set(k, [c]);
+    } else {
+      bucket.push(c);
+    }
+  }
+  const seen = new Set<string>();
+  for (let i = 0; i < prev.length; i++) {
+    const bc = prev[i];
+    const k = bc[keyField];
+    if (typeof k !== 'string') {
+      problems.push(`${list}[${i}] has no usable ${keyField} in the baseline, so its preservation cannot be verified`);
+      continue;
+    }
+    if (seen.has(k)) continue; // a duplicated baseline key is one obligation
+    seen.add(k);
+    const matches = nextByKey.get(k) ?? [];
+    if (matches.length === 0) {
+      problems.push(
+        `${list} "${k}" from the baseline is missing from the repair (renaming, replacing or deleting a baseline case is weakening, never a repair)`,
+      );
+      continue;
+    }
+    if (matches.length > 1) {
+      problems.push(`${list} "${k}" appears ${matches.length} times in the repair, expected exactly once`);
+      continue;
+    }
+    const nc = matches[0];
+
+    // Tolerance: never increased, no exceptions (S5-02 rule 3).
+    const bt = bc.tolerance;
+    const nt = nc.tolerance;
+    if (!isFiniteNumber(bt) || !isFiniteNumber(nt)) {
+      problems.push(
+        `${list} "${k}" tolerance must be a finite number on both revisions (baseline ${String(bt)}, next ${String(nt)})`,
+      );
+    } else if (nt > bt) {
+      problems.push(`${list} "${k}" tolerance increased from ${bt} to ${nt} (a tolerance failure is fixed by lowering it, never by widening)`);
+    }
+
+    // Content: frozen unless THIS baseline case was wrong (S5-02 rule 4).
+    if (engine === undefined) continue;
+    const changes: string[] = [];
+    for (const input of ENGINES[engine].inputs) {
+      if (!Object.is(bc[input.key], nc[input.key])) {
+        changes.push(`${input.key} ${fmtValue(bc[input.key])} -> ${fmtValue(nc[input.key])}`);
+      }
+    }
+    const outputKey = ENGINES[engine].output.key;
+    if (!Object.is(bc[outputKey], nc[outputKey])) {
+      changes.push(`${outputKey} ${fmtValue(bc[outputKey])} -> ${fmtValue(nc[outputKey])}`);
+    }
+    if (changes.length > 0 && !baselineCaseWasWrong(engine, baseline, bc, isPrediction)) {
+      problems.push(
+        `${list} "${k}" changed (${changes.join(', ')}) even though the case passed its own checks on the baseline (only a case that was wrong on the baseline may change)`,
+      );
+    }
+  }
+}
+
+/**
+ * True when the specific baseline case was demonstrably wrong: its stated
+ * output misses the deterministic recomputation beyond its tolerance, its
+ * tolerance exceeded maxTolerance(engine, computed), or — for a prediction —
+ * its inputs were outside the baseline slider ranges. A case that cannot be
+ * recomputed counts as wrong (it could never be shown correct).
+ */
+function baselineCaseWasWrong(
+  engine: EngineId,
+  baseline: LooseSpec | null | undefined,
+  bc: Record<string, unknown>,
+  isPrediction: boolean,
+): boolean {
+  try {
+    const rec = bc as Record<string, number>;
+    const computed = computeOutput(engine, rec);
+    const expected = rec[ENGINES[engine].output.key];
+    const tolerance = rec.tolerance;
+    if (!isFiniteNumber(expected) || !isFiniteNumber(tolerance)) {
+      return true;
+    }
+    if (Math.abs(expected - computed) > tolerance) {
+      return true;
+    }
+    if (tolerance > maxTolerance(engine, computed)) {
+      return true;
+    }
+  } catch {
+    return true;
+  }
+  if (isPrediction) {
+    for (const input of ENGINES[engine].inputs) {
+      const r = baseline?.simulation?.[input.key];
+      const v = (bc as Record<string, number>)[input.key];
+      if (isLooseRange(r) && typeof v === 'number' && (v < r.min || v > r.max)) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+function fmtValue(v: unknown): string {
+  return typeof v === 'number' || typeof v === 'string' || typeof v === 'boolean' ? String(v) : JSON.stringify(v) ?? String(v);
 }
 
 /* ------------------------------------------------------------------ */
@@ -928,31 +1065,6 @@ function looseList(spec: LooseSpec | null | undefined, key: 'behavioralTests' | 
   const v = (spec as unknown as Record<string, unknown> | null | undefined)?.[key];
   if (!Array.isArray(v)) return [];
   return v.filter((x): x is Record<string, unknown> => typeof x === 'object' && x !== null);
-}
-
-/** Report every matched case (by name/id) whose tolerance grew. */
-function collectToleranceIncreases(
-  prev: Record<string, unknown>[],
-  next: Record<string, unknown>[],
-  keyField: 'name' | 'id',
-  list: string,
-  problems: string[],
-): void {
-  const prevByKey = new Map<string, number>();
-  for (const c of prev) {
-    const k = c[keyField];
-    const t = c.tolerance;
-    if (typeof k === 'string' && typeof t === 'number' && !prevByKey.has(k)) prevByKey.set(k, t);
-  }
-  for (const c of next) {
-    const k = c[keyField];
-    const t = c.tolerance;
-    if (typeof k !== 'string' || typeof t !== 'number') continue;
-    const pt = prevByKey.get(k);
-    if (pt !== undefined && t > pt) {
-      problems.push(`${list} "${k}" tolerance increased from ${pt} to ${t}`);
-    }
-  }
 }
 
 function errMsg(err: unknown): string {

@@ -138,13 +138,21 @@ async function postJson(base: string, path: string, body: unknown): Promise<{ st
 /* POST /api/sources                                                    */
 /* ------------------------------------------------------------------ */
 
-test('POST /api/sources stores a teacher source atomically and answers 201 {id,title,kind}', async () => {
+test('POST /api/sources stores a teacher source atomically and answers 201 with the stored metadata', async () => {
   const storageDir = tempStorage();
   await withServer({ storageDir, startJob: null }, async base => {
     const created = await postJson(base, '/api/sources', sourceBody());
     assert.equal(created.status, 201);
     const expectedId = userSourceId(TEXT);
-    assert.deepEqual(created.body, { id: expectedId, title: 'Runway physics notes', kind: 'user' });
+    // S5-07: the response is the STORED metadata, plus an explicit reused flag.
+    assert.deepEqual(created.body, {
+      id: expectedId,
+      title: 'Runway physics notes',
+      kind: 'user',
+      licenseLabel: "Teacher's own work",
+      attribution: 'Written by the teacher for this class.',
+      reused: false,
+    });
 
     const dir = join(storageDir, 'user-sources');
     assert.ok(existsSync(join(dir, `${expectedId}.json`)));
@@ -184,7 +192,7 @@ test('POST /api/sources is idempotent for identical text (200) and normalisation
     assert.equal(first.status, 201);
     const again = await postJson(base, '/api/sources', sourceBody());
     assert.equal(again.status, 200, 'identical text returns the existing source');
-    assert.deepEqual(again.body, first.body);
+    assert.deepEqual(again.body, { ...(first.body as Record<string, unknown>), reused: true });
     // CRLF line endings, a control character and surrounding whitespace normalise to the same source.
     const messy = await postJson(
       base,
@@ -192,7 +200,51 @@ test('POST /api/sources is idempotent for identical text (200) and normalisation
       sourceBody({ text: `\r\n${TEXT.replace(/\n/g, '\r\n').replace('core', 'co\u0000re')}  \r\n` }),
     );
     assert.equal(messy.status, 200, 'the normalised form already exists');
-    assert.deepEqual(messy.body, first.body);
+    assert.deepEqual(messy.body, again.body);
+  });
+});
+
+test('S5-07 POST /api/sources: duplicate text answers 200 with the STORED metadata and reused: true', async () => {
+  const storageDir = tempStorage();
+  await withServer({ storageDir, startJob: null }, async base => {
+    // The reviewer's probe: the first POST stores 'First title'/cc-by/'Original author';
+    // an identical-text POST with different metadata must NOT echo the submitted title.
+    const first = await postJson(
+      base,
+      '/api/sources',
+      sourceBody({ title: 'First title', license: 'cc-by', attribution: 'Original author' }),
+    );
+    assert.equal(first.status, 201);
+    const id = (first.body as { id: string }).id;
+    assert.deepEqual(first.body, {
+      id,
+      title: 'First title',
+      kind: 'user',
+      licenseLabel: 'CC BY 4.0',
+      attribution: 'Original author',
+      reused: false,
+    });
+
+    const second = await postJson(
+      base,
+      '/api/sources',
+      sourceBody({ title: 'Second title', license: 'public-domain', attribution: 'Replacement author' }),
+    );
+    assert.equal(second.status, 200);
+    assert.deepEqual(second.body, {
+      id,
+      title: 'First title',
+      kind: 'user',
+      licenseLabel: 'CC BY 4.0',
+      attribution: 'Original author',
+      reused: true,
+    });
+
+    // GET still serves the original stored metadata — the response no longer implies replacement was saved.
+    const stored = await fetch(`${base}/api/sources/${id}`).then(r => r.json()) as Record<string, unknown>;
+    assert.equal(stored['title'], 'First title');
+    assert.equal(stored['license'], 'cc-by');
+    assert.equal(stored['attribution'], 'Original author');
   });
 });
 
@@ -260,7 +312,16 @@ test('POST /api/sources enforces the 200-source limit with 409 SOURCE_LIMIT (exi
     assert.deepEqual(fresh.body, { error: 'SOURCE_LIMIT' });
     const existing = await postJson(base, '/api/sources', sourceBody({ text: firstText }));
     assert.equal(existing.status, 200, 're-posting an existing source is idempotent even at the limit');
-    assert.deepEqual(existing.body, { id: userSourceId(firstText), title: 'Runway physics notes', kind: 'user' });
+    // S5-07: the STORED metadata comes back (title 'Source 0', not the submitted
+    // 'Runway physics notes'), with reused: true disclosing that nothing was saved.
+    assert.deepEqual(existing.body, {
+      id: userSourceId(firstText),
+      title: 'Source 0',
+      kind: 'user',
+      licenseLabel: 'Public domain',
+      attribution: 'Public domain text.',
+      reused: true,
+    });
   });
 });
 

@@ -414,7 +414,7 @@ test('compareRevisions: engine changed always fails', () => {
   assert.match(check.message, /lift-equation-v1/);
 });
 
-test('compareRevisions: tolerance increase fails unless semantic.tolerance failed on the previous revision', () => {
+test('compareRevisions: tolerance increase always fails — no blanket exception from semantic.tolerance (S5-02)', () => {
   const prev = makeProjectileSpec();
   const next = makeProjectileSpec();
   next.behavioralTests[0].tolerance = 0.05; // 0.001 -> 0.05
@@ -424,7 +424,11 @@ test('compareRevisions: tolerance increase fails unless semantic.tolerance faile
   assert.match(failed.message, /tolerance/);
   assert.match(failed.message, /0\.001/);
   assert.match(failed.message, /0\.05/);
-  assert.equal(compareRevisions(prev, next, ['semantic.tolerance']).passed, true);
+  assert.equal(
+    compareRevisions(prev, next, ['semantic.tolerance']).passed,
+    false,
+    'a global tolerance failure elsewhere never permits an unrelated widening (S5-02 scoped exceptions)',
+  );
   assert.equal(
     compareRevisions(prev, next, ['behavior.tests']).passed,
     false,
@@ -438,7 +442,11 @@ test('compareRevisions: prediction tolerance increase follows the same rule', ()
   next.predictions[0].tolerance = 0.5; // 0.01 -> 0.5
   assert.equal(compareRevisions(prev, next, []).passed, false);
   assert.equal(compareRevisions(prev, next, ['behavior.predictions']).passed, false);
-  assert.equal(compareRevisions(prev, next, ['semantic.tolerance']).passed, true);
+  assert.equal(
+    compareRevisions(prev, next, ['semantic.tolerance']).passed,
+    false,
+    'S5-02: tolerance may only shrink — no failing check id excuses a widening',
+  );
 });
 
 test('compareRevisions: tolerance decrease or unchanged tolerances pass', () => {
@@ -490,7 +498,7 @@ test('compareRevisions: fewer behavioral tests or predictions always fails', () 
   const t = compareRevisions(prev, fewerTests, []);
   assert.equal(t.passed, false);
   assert.match(t.message, /behavioralTests/);
-  assert.match(t.message, /2 -> 1/);
+  assert.match(t.message, /"moon launch" from the baseline is missing from the repair/);
   assert.equal(
     compareRevisions(prev, fewerTests, ['behavior.tests']).passed,
     false,
@@ -502,7 +510,7 @@ test('compareRevisions: fewer behavioral tests or predictions always fails', () 
   fewerPredictions.predictions.pop();
   const p = compareRevisions(prevSound, fewerPredictions, ['behavior.predictions']);
   assert.equal(p.passed, false);
-  assert.match(p.message, /predictions/);
+  assert.match(p.message, /predictions "hot-day" from the baseline is missing from the repair/);
 });
 
 test('compareRevisions: adding cases passes', () => {

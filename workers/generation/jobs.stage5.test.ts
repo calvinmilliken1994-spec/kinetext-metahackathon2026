@@ -444,8 +444,9 @@ test('demo fault wrong-answer: injected into revision 1 before validation, label
     kind: 'wrong-answer',
     path: 'behavioralTests[0].expectedAccelerationMps2',
     original: 5,
-    injected: 8.5, // 5 * 1.5 + 1
+    injected: 7.5, // S5-04: original + max(1, 0.5*|original|, 10*maxTolerance(engine, computed))
     revision: 1,
+    effective: true,
   });
   assert.equal(summary.repairs.length, 1);
   assert.equal(summary.repairs[0]?.afterInjectedFault, true, 'decision 17: labelled as after an injected fault');
@@ -455,7 +456,7 @@ test('demo fault wrong-answer: injected into revision 1 before validation, label
     behavioralTests: { expectedAccelerationMps2: number }[];
     provenance: { revision: number };
   };
-  assert.equal(spec1.behavioralTests[0]?.expectedAccelerationMps2, 8.5, 'spec.r1.json reflects the fault');
+  assert.equal(spec1.behavioralTests[0]?.expectedAccelerationMps2, 7.5, 'spec.r1.json reflects the fault');
   assert.equal(spec1.provenance.revision, 1, 'the injected revision stays revision 1');
   const spec2 = readJson(join(runDir, 'spec.r2.json')) as { behavioralTests: { expectedAccelerationMps2: number }[] };
   assert.equal(spec2.behavioralTests[0]?.expectedAccelerationMps2, 5, 'the repair restores the honest value');
@@ -498,6 +499,7 @@ test('demo fault fabricated-quote: nonce from the job id, verified absent from t
   assert.equal(fault.path, 'explanations[0].evidence[0].quote');
   assert.equal(fault.revision, 1);
   assert.equal(fault.original, 'F = m * a');
+  assert.equal(fault.effective, true, 'S5-04: the intended grounding.quotes check failed on revision 1');
   const injected = String(fault.injected);
   const nonceMatch = /^Muse confirmed this result in a controlled laboratory trial \(ref ([0-9a-f]{8})\)\.$/.exec(
     injected,
@@ -629,8 +631,9 @@ test('demo fault wrong-answer on lift-equation-v1: injected, caught and repaired
     kind: 'wrong-answer',
     path: 'behavioralTests[0].expectedLiftN',
     original: 12250,
-    injected: 18376, // 12250 * 1.5 + 1
+    injected: 18375, // S5-04: 12250 + max(1, 6125, 10*maxTolerance(lift, 12250) = 612.5)
     revision: 1,
+    effective: true,
   });
   assert.equal(summary.repairs[0]?.afterInjectedFault, true);
   assert.deepEqual(summary.repairs[0]?.targeted, ['behavior.tests']);
@@ -640,7 +643,7 @@ test('demo fault wrong-answer on lift-equation-v1: injected, caught and repaired
     behavioralTests: { expectedLiftN: number }[];
   };
   assert.equal(spec1.simulation.engine, 'lift-equation-v1');
-  assert.equal(spec1.behavioralTests[0]?.expectedLiftN, 18376);
+  assert.equal(spec1.behavioralTests[0]?.expectedLiftN, 18375);
   const inject = readEvents(storageDir, jobId).find(e => e.stage === 'inject');
   assert.equal(
     inject?.detail,

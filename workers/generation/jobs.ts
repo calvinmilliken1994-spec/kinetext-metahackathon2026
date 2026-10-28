@@ -37,8 +37,9 @@ import {
   userSourcesDirOf,
   USER_SOURCE_ID_PATTERN,
 } from '../../packages/sources/index.ts';
-import { repairFindings, validateSpec } from '../../packages/validation/validate.ts';
-import { assembleSpec, DEMO_FAULTS, ENGINES, isEngineId } from '../../packages/contracts/index.ts';
+import { repairFindings, normalizeWhitespace, validateSpec } from '../../packages/validation/validate.ts';
+import { computeOutput } from '../../packages/activities/registry.ts';
+import { assembleSpec, DEMO_FAULTS, ENGINES, isEngineId, maxTolerance } from '../../packages/contracts/index.ts';
 import type {
   ActivitySpec,
   AssembleOptions,
@@ -135,7 +136,12 @@ export interface JobLimits {
   maxJobWallTimeMs?: number;
   analysisMaxOutputTokens?: number;
   specMaxOutputTokens?: number;
-  /** Stage 5: bound on Muse repair attempts after a failing validation (config maxRepairAttempts). */
+  /**
+   * Stage 5: bound on Muse repair attempts after a failing validation (config
+   * maxRepairAttempts). S5-06: must be an integer in [0, MAX_REPAIR_ATTEMPTS_BOUND];
+   * any other value throws MAX_REPAIR_ATTEMPTS_INVALID at startJob (fail closed —
+   * the absolute ≤2 repair rule is enforced at this boundary, never defaulted away).
+   */
   maxRepairAttempts?: number;
 }
 
@@ -159,6 +165,8 @@ const DEFAULT_JOB_WALL_TIME_MS = 120000; // config/resource-limits.json maxJobWa
 const DEFAULT_ANALYSIS_MAX_OUTPUT_TOKENS = 6000;
 const DEFAULT_SPEC_MAX_OUTPUT_TOKENS = 8000; // config/resource-limits.json maxOutputTokens
 const DEFAULT_MAX_REPAIR_ATTEMPTS = 2; // config/resource-limits.json maxRepairAttempts
+/** S5-06: the absolute repair bound. Startup and the worker boundary both enforce integer [0, 2]. */
+export const MAX_REPAIR_ATTEMPTS_BOUND = 2;
 
 type EventExtra = Partial<
   Pick<StageEvent, 'model' | 'responseId' | 'usage' | 'latencyMs' | 'estCostUSD' | 'detail' | 'revision'>
@@ -166,11 +174,6 @@ type EventExtra = Partial<
 
 function positiveOr(value: number | undefined, fallback: number): number {
   return typeof value === 'number' && Number.isFinite(value) && value > 0 ? value : fallback;
-}
-
-/** Like positiveOr but for counts that may legitimately be 0 (e.g. maxRepairAttempts). */
-function nonNegativeIntOr(value: number | undefined, fallback: number): number {
-  return typeof value === 'number' && Number.isInteger(value) && value >= 0 ? value : fallback;
 }
 
 /** Money stays readable in job.json: rounded to 1e-6 USD. */
@@ -278,11 +281,21 @@ function fabricatedQuoteSentence(nonce: string): string {
 /**
  * Stage 5 labelled demo fault: a deterministic, SYSTEM-MADE change to the generated
  * spec (never presented as a model error). Mutates the caller's clone of the
- * generated spec in place and returns the FaultRecord describing the change.
- * The fabricated quote carries a nonce and is verified absent from the source
- * text first (Muse design review decision 18).
+ * generated spec in place and returns the FaultRecord describing the change
+ * (`effective` is set by the caller after re-validating revision 1, S5-04).
+ *
+ * S5-04: a wrong-answer fault must DEMONSTRABLY fail behavior.tests, so the
+ * alteration is bounded away from the engine result: injected = original +
+ * max(1, 0.5*|original|, 10*maxTolerance(engine, computed)). The distance from
+ * the engine result therefore exceeds any tolerance the schema allows for the
+ * case — including negative originals (the old x*1.5+1 mapped -2 to itself) and
+ * zero (mapped to 1). If adding would exceed the output's hard bound, the fault
+ * subtracts the same delta instead. The fabricated quote carries a nonce whose
+ * absence is checked with the validator's whitespace normalisation on BOTH
+ * sides, so a source containing the sentence with an internal newline still
+ * forces a re-derived nonce (Muse design review decision 18).
  */
-function applyDemoFault(
+export function applyDemoFault(
   kind: DemoFault,
   gen: GeneratedSpec,
   engine: EngineId,
@@ -297,7 +310,18 @@ function applyDemoFault(
       throw new Error('DEMO_FAULT_TARGET_MISSING');
     }
     const original = first[outputKey] as number;
-    const injected = original * 1.5 + 1;
+    let computed: number;
+    try {
+      computed = computeOutput(engine, first as Record<string, number>);
+    } catch {
+      computed = original; // a case the engine cannot run keeps the value-relative bound
+    }
+    const delta = Math.max(1, 0.5 * Math.abs(original), 10 * maxTolerance(engine, computed));
+    const output = ENGINES[engine].output;
+    let injected = original + delta;
+    if (injected > output.hardMax || injected < output.hardMin) {
+      injected = original - delta;
+    }
     first[outputKey] = injected;
     return { kind, path: `behavioralTests[0].${outputKey}`, original, injected, revision: 1 };
   }
@@ -308,9 +332,11 @@ function applyDemoFault(
       throw new Error('DEMO_FAULT_TARGET_MISSING');
     }
     const original = evidence.quote;
+    // S5-04: absence under the validator's normalisation, not raw includes().
+    const normalizedSource = normalizeWhitespace(sourceText);
     let nonce = nonceFromJobId(jobId);
     let sentence = fabricatedQuoteSentence(nonce);
-    while (sourceText.includes(sentence)) {
+    while (normalizedSource.includes(normalizeWhitespace(sentence))) {
       nonce = sha256(nonce).slice(0, 8);
       sentence = fabricatedQuoteSentence(nonce);
     }
@@ -318,6 +344,11 @@ function applyDemoFault(
     return { kind, path: 'explanations[0].evidence[0].quote', original, injected: sentence, revision: 1 };
   }
   throw new Error('DEMO_FAULT_INVALID');
+}
+
+/** The check a demo fault is designed to trip (S5-04 effectiveness is measured against it). */
+function intendedCheckOf(kind: DemoFault): 'behavior.tests' | 'grounding.quotes' {
+  return kind === 'wrong-answer' ? 'behavior.tests' : 'grounding.quotes';
 }
 
 export function startJob(
@@ -330,6 +361,15 @@ export function startJob(
   }
   if (deps.demoFault !== undefined && !(DEMO_FAULTS as readonly string[]).includes(deps.demoFault)) {
     throw new Error('DEMO_FAULT_INVALID');
+  }
+  // S5-06: the absolute ≤2 repair bound fails closed at this boundary — an
+  // invalid limit is never silently replaced with the default.
+  const requestedRepairs: number | undefined = deps.limits?.maxRepairAttempts;
+  if (
+    requestedRepairs !== undefined &&
+    !(Number.isInteger(requestedRepairs) && requestedRepairs >= 0 && requestedRepairs <= MAX_REPAIR_ATTEMPTS_BOUND)
+  ) {
+    throw new Error('MAX_REPAIR_ATTEMPTS_INVALID');
   }
   const now: () => Date = deps.now ?? ((): Date => new Date());
   const jobId: string =
@@ -462,7 +502,7 @@ async function runJob(
     return finish('failed');
   }
 
-  function failFromError(stage: Stage, err: unknown): JobSummary {
+  function failFromError(stage: Stage, err: unknown, failExtra?: EventExtra): JobSummary {
     // F-01: a GeneratedOutputError means the provider call COMPLETED and the
     // ledger already reconciled it at receipt.estCostUSD. Account the receipt
     // exactly like a successful one (it was never accounted before the throw,
@@ -471,6 +511,7 @@ async function runJob(
     if (outputReceipt !== undefined) {
       accountReceipt(outputReceipt);
       const extra: EventExtra = {
+        ...failExtra,
         ...receiptFields(outputReceipt),
         // R-01: the failure detail is the fixed code — plus the cost-basis note.
         detail:
@@ -498,7 +539,11 @@ async function runJob(
         err.reservedUnknownUSD !== undefined
           ? reservedUnknownOf(err.reservedUnknownUSD)
           : reservedUnknownOf(err.receipt?.reservedUnknownUSD);
+      // S5-05: failExtra carries the attempted revision so EVERY repair failure
+      // event (BAD_REQUEST, TIMEOUT, DEADLINE_EXCEEDED, BUDGET_EXCEEDED,
+      // LEDGER_ERROR, INPUT_TOO_LARGE, ...) keeps its place in the timeline.
       const extra: EventExtra = {
+        ...failExtra,
         // R-01: the failure detail is the fixed code — never err.message or provider text.
         detail: reserved ? `${err.code}; cost basis: reservation (outcome uncertain)` : `${err.code}`,
       };
@@ -511,7 +556,7 @@ async function runJob(
       }
       return fail(stage, err.code, extra);
     }
-    return fail(stage, 'INTERNAL', { detail: 'INTERNAL' });
+    return fail(stage, 'INTERNAL', { ...failExtra, detail: 'INTERNAL' });
   }
 
   // --- ingest -------------------------------------------------------------
@@ -610,7 +655,7 @@ async function runJob(
   let report: ValidationReport = specResult.report;
   if (deps.demoFault !== undefined) {
     const faultyGen = structuredClone(generated) as GeneratedSpec;
-    summary.demoFault = applyDemoFault(deps.demoFault, faultyGen, engine, jobId, source.text);
+    const fault = applyDemoFault(deps.demoFault, faultyGen, engine, jobId, source.text);
     // Re-assemble with the SAME provenance so spec.r1.json reflects the fault.
     spec = assembleForEngine(faultyGen, engine, {
       id: specId,
@@ -620,6 +665,10 @@ async function runJob(
     });
     generated = faultyGen;
     report = validateSpec(spec, [source]);
+    // S5-04: the fault only counts as a demonstrated catch when re-validating
+    // revision 1 actually failed the intended check.
+    fault.effective = failedCheckIds(report).includes(intendedCheckOf(deps.demoFault));
+    summary.demoFault = fault;
   }
   writeJsonAtomic(join(runDir, 'spec.r1.json'), spec);
   emit('specify', 'succeeded', {
@@ -627,9 +676,14 @@ async function runJob(
     detail: `spec ${specId}`,
   });
   if (summary.demoFault !== undefined) {
+    const fault = summary.demoFault;
     emit('inject', 'succeeded', {
       revision: 1,
-      detail: `demo fault injected by the system: ${summary.demoFault.kind} at ${summary.demoFault.path}`,
+      // S5-04: an ineffective injection is reported honestly — never as a catch.
+      detail:
+        fault.effective === false
+          ? `demo fault injected by the system but NOT caught by ${intendedCheckOf(fault.kind)}: ${fault.kind} at ${fault.path}`
+          : `demo fault injected by the system: ${fault.kind} at ${fault.path}`,
     });
   }
 
@@ -643,7 +697,16 @@ async function runJob(
   const revisions: RevisionState[] = [{ revision: 1, generated, spec, report }];
   let current: RevisionState = revisions[0];
   summary.revisions = 1;
-  const maxRepairs = nonNegativeIntOr(deps.limits?.maxRepairAttempts, DEFAULT_MAX_REPAIR_ATTEMPTS);
+  // S5-06: startJob already refused anything but an integer in [0, MAX_REPAIR_ATTEMPTS_BOUND].
+  const maxRepairs = deps.limits?.maxRepairAttempts ?? DEFAULT_MAX_REPAIR_ATTEMPTS;
+  // S5-01: the IMMUTABLE baseline — every repair is compared with revision 1
+  // (including an injected demo fault), never with the previous revision, so a
+  // rejected weakening can never become the next baseline and be laundered by
+  // repeating it.
+  const baseline: { spec: ActivitySpec; failedIds: string[] } = {
+    spec: revisions[0].spec,
+    failedIds: failedCheckIds(revisions[0].report),
+  };
   const findingsHistory: RepairFinding[][] = [];
 
   function emitValidateOutcome(state: RevisionState): void {
@@ -686,6 +749,8 @@ async function runJob(
           report: current.report,
           revision: current.revision,
           findingsHistory,
+          // S5-01: compare against revision 1's obligations, not the last revision.
+          baseline,
         },
         { jobId, specId },
         deps.purpose,
@@ -714,8 +779,9 @@ async function runJob(
       if (isEngineRequired(err)) {
         return fail('repair', 'ANALYSIS_INVALID', { detail: 'ANALYSIS_INVALID', revision: nextRevision });
       }
-      // MetaError (deadline, rate limit, ...) fails the job with its fixed code.
-      return failFromError('repair', err);
+      // MetaError (bad request, deadline, budget refusal, ...) fails the job with
+      // its fixed code — and S5-05: the event carries the attempted revision.
+      return failFromError('repair', err, { revision: nextRevision });
     }
     accountReceipt(repaired.receipt);
     repairsDone += 1;

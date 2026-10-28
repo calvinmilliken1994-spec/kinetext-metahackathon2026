@@ -170,6 +170,31 @@ test('repairAttemptCount: recorded repairs plus repair calls that failed without
   assert.equal(repairAttemptCount([rec({ revision: 2 })], [ev(0, 'repair', 'failed', { revision: 2 }), ev(1, 'repair', 'started', { revision: 3 })]), 1);
 });
 
+test('S5-05: a MetaError repair failure (BAD_REQUEST) with its revision becomes its own step and counts as an attempt', () => {
+  // The worker now stamps the attempted revision on EVERY repair failure event
+  // (400/deadline/budget included), so the timeline never drops the failed card.
+  const events = [
+    ev(0, 'validate', 'failed', { revision: 1, detail: 'VALIDATION_FAILED; failed checks: behavior.tests' }),
+    ev(1, 'repair', 'started', { revision: 2, detail: 'targeted checks: behavior.tests' }),
+    ev(2, 'repair', 'failed', { revision: 2, detail: 'BAD_REQUEST', estCostUSD: 0 }),
+  ];
+  const steps = buildRepairSteps({
+    revisions: [{ revision: 1, report: report(1, ['behavior.tests']) }],
+    events,
+    bestRevision: 1,
+  });
+  assert.deepEqual(steps.map((s) => [s.revision, s.failedAttempt]), [[1, false], [2, true]]);
+  const failedStep = steps[1];
+  assert.ok(failedStep !== undefined);
+  assert.equal(failedStep.role, 'repair');
+  assert.equal(failedStep.repairOf, 1);
+  assert.equal(failedStep.actor?.failed, true);
+  assert.equal(failedStep.actor?.detail, 'BAD_REQUEST');
+  assert.deepEqual(failedStep.targeted, ['behavior.tests']);
+  assert.equal(failedStep.badge, null, 'a refused repair is never "repaired"');
+  assert.equal(repairAttemptCount([], events), 1, 'the refused call counts as one repair attempt');
+});
+
 test('defaultRevision / validationHeading / revisionInputs', () => {
   const revs = [{ revision: 1 }, { revision: 2 }, { revision: 3 }];
   assert.equal(defaultRevision(revs, { publishedRevision: 2 }), 2);
@@ -189,4 +214,13 @@ test('defaultRevision / validationHeading / revisionInputs', () => {
   assert.deepEqual(revisionInputs({ report: r, summary: {} }), [{ revision: 1, report: r }]);
   assert.deepEqual(revisionInputs({ report: r, summary: { publishedRevision: 2 } }), [{ revision: 2, report: r }]);
   assert.deepEqual(revisionInputs({ summary: {} }), []);
+});
+
+test('S5-04: a demo fault the checks did not catch is reported as not caught, never as a catch', () => {
+  const caught = demoFaultNotice({ kind: 'wrong-answer', path: 'behavioralTests[0].expectedLiftN', effective: true });
+  assert.ok(!/not caught/i.test(caught));
+  const missed = demoFaultNotice({ kind: 'wrong-answer', path: 'behavioralTests[0].expectedLiftN', effective: false });
+  assert.match(missed, /not caught by the checks/);
+  // Records made before the fix (no effective field) keep today's wording.
+  assert.equal(demoFaultNotice({ kind: 'fabricated-quote', path: 'explanations[0].evidence[0].quote' }).includes('not caught'), false);
 });

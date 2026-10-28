@@ -1,0 +1,410 @@
+// Stage 5 review S5-02 — baseline-anchored, per-case/per-field no-weakening rules.
+// Every case here reproduces a reviewer probe (launder-tolerance, launder-range,
+// rename-tolerance, replace-case, exception.mjs) at the deterministic validator level.
+// Run: node --test packages/validation/compare-revisions.test.ts
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+
+import { compareRevisions, validateSpec } from './validate.ts';
+import { makeProjectileSpec, projectileSourceDoc } from './fixtures/engine-specs.ts';
+import type { ActivitySpec, ValidationReport } from '../contracts/index.ts';
+
+function failedIds(report: ValidationReport): string[] {
+  return report.checks.filter(c => !c.passed).map(c => c.id);
+}
+
+type LooseCase = Record<string, unknown>;
+function casesOf(spec: unknown, list: 'behavioralTests' | 'predictions'): LooseCase[] {
+  return (spec as unknown as Record<string, LooseCase[]>)[list];
+}
+
+const projectileDoc = projectileSourceDoc();
+
+/** A projectile spec whose first case states a wrong answer (+0.05 m). */
+function wrongProjectile(): ActivitySpec {
+  const spec = makeProjectileSpec();
+  const first = casesOf(spec, 'behavioralTests')[0];
+  assert.ok(first !== undefined);
+  first['expectedMaxHeightM'] = (first['expectedMaxHeightM'] as number) + 0.05;
+  return spec;
+}
+
+/* ------------------------------------------------------------------ */
+/* exception.mjs — scoped tolerance exceptions (S5-02)                  */
+/* ------------------------------------------------------------------ */
+
+test('S5-02 exception.mjs: one invalid tolerance no longer disables tolerance comparisons for all cases', () => {
+  // Reviewer probe: baseline case 0 states a wrong answer (tolerance 0.001) and
+  // baseline case 1 has an excessive tolerance (0.5 > maxTolerance) so
+  // 'semantic.tolerance' fails on the baseline. The "repair" widens case 0's
+  // tolerance 0.001 → 0.1 (masking its unchanged wrong answer) and lowers case 1
+  // to 0.01. The next revision is fully publishable on its own — the comparison
+  // is the only guard, and it must fail because case 0's tolerance increased.
+  const previous = wrongProjectile();
+  const prevCases = casesOf(previous, 'behavioralTests');
+  assert.ok(prevCases[1] !== undefined);
+  prevCases[1]['tolerance'] = 0.5;
+  const prevReport = validateSpec(previous, [projectileDoc]);
+  assert.ok(failedIds(prevReport).includes('semantic.tolerance'), 'the excessive tolerance fails on the baseline');
+  assert.ok(failedIds(prevReport).includes('behavior.tests'), 'the wrong answer fails on the baseline');
+
+  const next = structuredClone(previous);
+  const nextCases = casesOf(next, 'behavioralTests');
+  assert.ok(nextCases[0] !== undefined && nextCases[1] !== undefined);
+  nextCases[0]['tolerance'] = 0.1;
+  nextCases[1]['tolerance'] = 0.01;
+  const nextReport = validateSpec(next, [projectileDoc]);
+  assert.equal(nextReport.publishable, true, 'the probe revision passes every validator check on its own');
+
+  const comparison = compareRevisions(previous, next, failedIds(prevReport));
+  assert.equal(comparison.id, 'repair.no-weakening');
+  assert.equal(comparison.passed, false, 'the unrelated tolerance increase is a violation even though semantic.tolerance failed on the baseline');
+  assert.match(comparison.message, /"earth launch" tolerance increased from 0\.001 to 0\.1/);
+  assert.ok(!comparison.message.includes('"moon launch" tolerance'), 'lowering the invalid tolerance is not a violation');
+});
+
+/* ------------------------------------------------------------------ */
+/* launder-tolerance / launder-range (S5-01 + S5-02)                    */
+/* ------------------------------------------------------------------ */
+
+test('S5-01 launder-tolerance: a rejected weakening stays rejected against the baseline forever', () => {
+  const r1 = wrongProjectile(); // expected +0.05, tolerance 0.001 → behavior.tests fails
+  const r1Report = validateSpec(r1, [projectileDoc]);
+  assert.deepEqual(failedIds(r1Report), ['behavior.tests']);
+
+  const r2 = structuredClone(r1);
+  // Widened to 0.1 (<= maxTolerance(projectile, 20.408…) = 0.102) so the wrong
+  // answer "passes" behavior.tests and semantic.tolerance on its own.
+  casesOf(r2, 'behavioralTests')[0]['tolerance'] = 0.1;
+  const r2Report = validateSpec(r2, [projectileDoc]);
+  assert.equal(r2Report.publishable, true, 'the widened revision passes the plain validator');
+
+  // First repair: compared against the baseline it must fail.
+  const first = compareRevisions(r1, r2, failedIds(r1Report));
+  assert.equal(first.passed, false);
+  assert.match(first.message, /tolerance increased from 0\.001 to 0\.1/);
+
+  // The laundering attempt: r3 repeats the EXACT rejected content. Compared
+  // against r2 it would be identical (no change); compared against the
+  // immutable baseline it must fail again with the same violation.
+  const r3 = structuredClone(r2);
+  const again = compareRevisions(r1, r3, failedIds(r1Report));
+  assert.equal(again.passed, false, 'an unchanged rejected weakening must remain rejected forever');
+  assert.match(again.message, /tolerance increased from 0\.001 to 0\.1/);
+  // ... while a comparison anchored on the weakened revision would have passed (the old bug).
+  assert.equal(compareRevisions(r2, r3, failedIds(r2Report)).passed, true);
+});
+
+test('S5-01 launder-range: a shrunk range stays rejected against the baseline even when repeated verbatim', () => {
+  const r1 = wrongProjectile();
+  const r1Report = validateSpec(r1, [projectileDoc]);
+
+  const r2 = structuredClone(makeProjectileSpec()); // honest answers, but a narrower gravity slider
+  const sim = (r2 as unknown as { simulation: Record<string, { min: number; max: number; default: number }> }).simulation;
+  sim['gravityMps2'].max -= 1;
+  const r2Report = validateSpec(r2, [projectileDoc]);
+  assert.equal(r2Report.publishable, true, 'the narrower range passes the plain validator');
+
+  const first = compareRevisions(r1, r2, failedIds(r1Report));
+  assert.equal(first.passed, false);
+  assert.match(first.message, /simulation\.gravityMps2 range width shrank from 19 to 18/);
+
+  const r3 = structuredClone(r2);
+  const again = compareRevisions(r1, r3, failedIds(r1Report));
+  assert.equal(again.passed, false, 'the identical shrink must remain rejected against the baseline');
+  assert.match(again.message, /range width shrank/);
+  assert.equal(compareRevisions(r2, r3, failedIds(r2Report)).passed, true, 'the old previous-anchored comparison would have laundered it');
+});
+
+test('range shrink is excused only by that range\'s own failed check id, per input', () => {
+  const baseline = makeProjectileSpec();
+  const next = structuredClone(baseline);
+  const sim = (next as unknown as { simulation: Record<string, { min: number; max: number; default: number }> }).simulation;
+  sim['verticalSpeedMps'].max -= 1;
+
+  // No failed range check → violation names the range's own check id.
+  const denied = compareRevisions(baseline, next, []);
+  assert.equal(denied.passed, false);
+  assert.match(denied.message, /simulation\.verticalSpeedMps range width shrank/);
+
+  // That range's own check failed on the baseline → the rewrite is allowed.
+  assert.equal(compareRevisions(baseline, next, ['semantic.range.verticalSpeedMps']).passed, true);
+
+  // A DIFFERENT range's failure does not excuse it (scoped per field).
+  assert.equal(compareRevisions(baseline, next, ['semantic.range.gravityMps2']).passed, false);
+});
+
+test('forces keeps the Stage 2 range check ids in the shrink exception', () => {
+  const spec = JSON.parse(
+    readFileSync(new URL('../../tests/fixtures/spec.forces.v0.2.json', import.meta.url), 'utf8'),
+  ) as ActivitySpec;
+  const next = structuredClone(spec);
+  const sim = (next as unknown as { simulation: Record<string, { min: number; max: number; default: number }> }).simulation;
+  const mass = sim['massKg'];
+  mass.max -= 1;
+  const denied = compareRevisions(spec, next, []);
+  assert.equal(denied.passed, false);
+  assert.match(denied.message, /simulation\.massKg range width shrank/);
+  assert.equal(compareRevisions(spec, next, ['semantic.mass-range']).passed, true, 'the legacy forces id excuses its own range');
+  assert.equal(compareRevisions(spec, next, ['semantic.range.massKg']).passed, false, 'the generic id does not apply to forces');
+});
+
+/* ------------------------------------------------------------------ */
+/* rename-tolerance / replace-case (S5-02)                              */
+/* ------------------------------------------------------------------ */
+
+test('S5-02 rename-tolerance: renaming a baseline case does not remove its obligations', () => {
+  // Reviewer probe: keep the erroneous expectation, rename the test, widen the
+  // tolerance — the rename must not dodge the comparison.
+  const r1 = wrongProjectile();
+  const r1Report = validateSpec(r1, [projectileDoc]);
+  const r2 = structuredClone(r1);
+  const first = casesOf(r2, 'behavioralTests')[0];
+  assert.ok(first !== undefined);
+  first['name'] = `${String(first['name'])} renamed`;
+  first['tolerance'] = 0.1;
+  const comparison = compareRevisions(r1, r2, failedIds(r1Report));
+  assert.equal(comparison.passed, false);
+  assert.match(comparison.message, /"earth launch" from the baseline is missing from the repair/);
+  assert.match(comparison.message, /renaming, replacing or deleting/);
+});
+
+test('S5-02 replace-case: deleting a failing case and duplicating a passing one under a new name fails', () => {
+  const r1 = wrongProjectile();
+  const r1Report = validateSpec(r1, [projectileDoc]);
+  const r2 = structuredClone(r1);
+  const cases = casesOf(r2, 'behavioralTests');
+  assert.ok(cases[1] !== undefined);
+  cases[0] = structuredClone(cases[1]);
+  cases[0]['name'] = 'Replacement case';
+  const r2Report = validateSpec(r2, [projectileDoc]);
+  assert.equal(r2Report.publishable, true, 'the replacement passes every plain check (same count, all answers right)');
+  const comparison = compareRevisions(r1, r2, failedIds(r1Report));
+  assert.equal(comparison.passed, false);
+  assert.match(comparison.message, /"earth launch" from the baseline is missing from the repair/);
+});
+
+test('a baseline case name appearing twice in the repair fails (exactly once)', () => {
+  const baseline = makeProjectileSpec();
+  const next = structuredClone(baseline);
+  const cases = casesOf(next, 'behavioralTests');
+  cases.push(structuredClone(cases[0]));
+  const comparison = compareRevisions(baseline, next, []);
+  assert.equal(comparison.passed, false);
+  assert.match(comparison.message, /"earth launch" appears 2 times in the repair, expected exactly once/);
+});
+
+/* ------------------------------------------------------------------ */
+/* Per-case content immutability (S5-02 rule 4)                         */
+/* ------------------------------------------------------------------ */
+
+test('a case that was correct on the baseline may not change inputs or expected output', () => {
+  const baseline = makeProjectileSpec(); // every case correct as delivered
+  const baselineReport = validateSpec(baseline, [projectileDoc]);
+  assert.equal(baselineReport.publishable, true);
+
+  // Changing an input of a correct case is a violation, even with an honest expected value.
+  const movedInputs = structuredClone(baseline);
+  const c0 = casesOf(movedInputs, 'behavioralTests')[0];
+  assert.ok(c0 !== undefined);
+  c0['verticalSpeedMps'] = 21;
+  c0['expectedMaxHeightM'] = (21 * 21) / (2 * 9.8);
+  const denied = compareRevisions(baseline, movedInputs, []);
+  assert.equal(denied.passed, false);
+  assert.match(denied.message, /"earth launch" changed \(verticalSpeedMps 20 -> 21, expectedMaxHeightM [\d.]+ -> [\d.]+\)/);
+  assert.match(denied.message, /passed its own checks on the baseline/);
+
+  // Changing only the expected output of a correct case is also a violation.
+  const movedExpected = structuredClone(baseline);
+  const e0 = casesOf(movedExpected, 'behavioralTests')[0];
+  assert.ok(e0 !== undefined);
+  e0['expectedMaxHeightM'] = (e0['expectedMaxHeightM'] as number) + 0.0005; // still inside its tolerance!
+  assert.equal(compareRevisions(baseline, movedExpected, []).passed, false);
+});
+
+test('a case that was wrong on the baseline may be corrected (inputs, expected output, lower tolerance)', () => {
+  const baseline = wrongProjectile();
+  const baselineReport = validateSpec(baseline, [projectileDoc]);
+  assert.deepEqual(failedIds(baselineReport), ['behavior.tests'], '|expected - computed| > tolerance made this case wrong');
+
+  const fixed = makeProjectileSpec(); // restores the honest expected value, everything else equal
+  assert.equal(compareRevisions(baseline, fixed, failedIds(baselineReport)).passed, true);
+
+  // Rewriting the inputs of a wrong case is allowed too (still the same identity).
+  const rewritten = structuredClone(fixed);
+  const c0 = casesOf(rewritten, 'behavioralTests')[0];
+  assert.ok(c0 !== undefined);
+  c0['verticalSpeedMps'] = 25;
+  c0['expectedMaxHeightM'] = (25 * 25) / (2 * 9.8);
+  assert.equal(compareRevisions(baseline, rewritten, failedIds(baselineReport)).passed, true);
+
+  // A baseline case whose tolerance exceeded maxTolerance counts as wrong and may change.
+  const overTolerance = makeProjectileSpec();
+  const t1 = casesOf(overTolerance, 'behavioralTests')[1];
+  assert.ok(t1 !== undefined);
+  t1['tolerance'] = 0.5; // > maxTolerance(projectile, 44.44…) = 0.2222
+  const overReport = validateSpec(overTolerance, [projectileDoc]);
+  assert.ok(failedIds(overReport).includes('semantic.tolerance'));
+  const tightened = structuredClone(overTolerance);
+  const tt1 = casesOf(tightened, 'behavioralTests')[1];
+  assert.ok(tt1 !== undefined);
+  tt1['tolerance'] = 0.01;
+  tt1['expectedMaxHeightM'] = 44.444444;
+  assert.equal(compareRevisions(overTolerance, tightened, failedIds(overReport)).passed, true);
+});
+
+test('lowering a tolerance is always allowed; raising it is never allowed, even for a wrong case', () => {
+  const baseline = wrongProjectile();
+  const baselineReport = validateSpec(baseline, [projectileDoc]);
+  const lowered = structuredClone(baseline);
+  casesOf(lowered, 'behavioralTests')[0]['tolerance'] = 0.0005;
+  assert.equal(compareRevisions(baseline, lowered, failedIds(baselineReport)).passed, true);
+
+  const raised = structuredClone(baseline);
+  const c = casesOf(raised, 'behavioralTests')[0];
+  assert.ok(c !== undefined);
+  c['tolerance'] = 0.002;
+  c['expectedMaxHeightM'] = 20.408163265306122; // honest value, but the tolerance grew
+  const comparison = compareRevisions(baseline, raised, failedIds(baselineReport));
+  assert.equal(comparison.passed, false);
+  assert.match(comparison.message, /tolerance increased from 0\.001 to 0\.002/);
+});
+
+/* ------------------------------------------------------------------ */
+/* Predictions (S5-02: behavioral tests AND predictions)                */
+/* ------------------------------------------------------------------ */
+
+test('predictions: id preservation, content immutability and tolerance rule apply exactly like tests', () => {
+  const baseline = makeProjectileSpec();
+  const baselineReport = validateSpec(baseline, [projectileDoc]);
+  assert.equal(baselineReport.publishable, true);
+
+  // Renaming a prediction id is a violation.
+  const renamed = structuredClone(baseline);
+  casesOf(renamed, 'predictions')[0]['id'] = 'fast-throw-2';
+  const renameComparison = compareRevisions(baseline, renamed, []);
+  assert.equal(renameComparison.passed, false);
+  assert.match(renameComparison.message, /predictions "fast-throw" from the baseline is missing from the repair/);
+
+  // Changing a correct prediction's expected output is a violation (even within tolerance).
+  const nudged = structuredClone(baseline);
+  const p = casesOf(nudged, 'predictions')[0];
+  assert.ok(p !== undefined);
+  p['expectedMaxHeightM'] = (p['expectedMaxHeightM'] as number) + 0.0005;
+  assert.equal(compareRevisions(baseline, nudged, []).passed, false);
+
+  // Widening a prediction tolerance is a violation.
+  const widened = structuredClone(baseline);
+  casesOf(widened, 'predictions')[0]['tolerance'] = 0.01;
+  const widenComparison = compareRevisions(baseline, widened, []);
+  assert.equal(widenComparison.passed, false);
+  assert.match(widenComparison.message, /predictions "fast-throw" tolerance increased from 0\.001 to 0\.01/);
+
+  // Deleting a prediction is a violation.
+  const deleted = structuredClone(baseline);
+  (deleted as unknown as { predictions: unknown[] }).predictions = [];
+  assert.equal(compareRevisions(baseline, deleted, []).passed, false);
+});
+
+test('predictions: a prediction whose baseline inputs were outside the baseline ranges may change', () => {
+  const baseline = makeProjectileSpec();
+  const p = casesOf(baseline, 'predictions')[0];
+  assert.ok(p !== undefined);
+  p['verticalSpeedMps'] = 45; // outside the baseline slider range [5, 40]
+  p['expectedMaxHeightM'] = (45 * 45) / (2 * 9.8);
+  const baselineReport = validateSpec(baseline, [projectileDoc]);
+  assert.ok(failedIds(baselineReport).includes('semantic.predictions-in-range'));
+
+  const brought = structuredClone(baseline);
+  const pb = casesOf(brought, 'predictions')[0];
+  assert.ok(pb !== undefined);
+  pb['verticalSpeedMps'] = 30; // reachable with the sliders again
+  pb['expectedMaxHeightM'] = (30 * 30) / (2 * 9.8);
+  assert.equal(compareRevisions(baseline, brought, failedIds(baselineReport)).passed, true);
+});
+
+/* ------------------------------------------------------------------ */
+/* Engine, additions, message shape                                     */
+/* ------------------------------------------------------------------ */
+
+test('engine changes and unknown engines still fail closed', () => {
+  const baseline = makeProjectileSpec();
+  const next = structuredClone(baseline);
+  (next as unknown as { simulation: Record<string, unknown> }).simulation['engine'] = 'forces-1d-v1';
+  const changed = compareRevisions(baseline, next, []);
+  assert.equal(changed.passed, false);
+  assert.match(changed.message, /engine changed from projectile-v1 to forces-1d-v1/);
+
+  const junk = compareRevisions(null as unknown as ActivitySpec, undefined as unknown as ActivitySpec, []);
+  assert.equal(junk.passed, false);
+  assert.match(junk.message, /cannot compare revisions/);
+});
+
+test('adding cases is allowed', () => {
+  const baseline = makeProjectileSpec();
+  const next = structuredClone(baseline);
+  const extra: LooseCase = {
+    name: 'extra launch',
+    horizontalSpeedMps: 5,
+    verticalSpeedMps: 10,
+    gravityMps2: 9.8,
+    expectedMaxHeightM: (10 * 10) / (2 * 9.8),
+    tolerance: 0.001,
+  };
+  casesOf(next, 'behavioralTests').push(extra);
+  const comparison = compareRevisions(baseline, next, []);
+  assert.equal(comparison.passed, true, comparison.message);
+});
+
+test('identical revisions pass with the exact message format the recorded evidence stores', () => {
+  const baseline = makeProjectileSpec();
+  const comparison = compareRevisions(baseline, structuredClone(baseline), []);
+  assert.equal(comparison.passed, true);
+  assert.equal(comparison.id, 'repair.no-weakening');
+  assert.equal(comparison.kind, 'semantic');
+  // Byte-identical to the pass message recorded in docs/evidence/stage-5/live
+  // (tests/e2e/stage5-evidence.test.ts recomputes and compares it verbatim).
+  assert.equal(
+    comparison.message,
+    'no weakening: engine projectile-v1 unchanged, no matched case tolerance increased, no simulation range width shrank, and the number of behavioral tests (2) and predictions (1) did not decrease',
+  );
+});
+
+test('the failure message lists every violation, capped for display', () => {
+  const baseline = wrongProjectile();
+  const baselineReport = validateSpec(baseline, [projectileDoc]);
+  const next = structuredClone(baseline);
+  const cases = casesOf(next, 'behavioralTests');
+  assert.ok(cases[0] !== undefined && cases[1] !== undefined);
+  cases[0]['tolerance'] = 0.05; // violation 1: tolerance increased
+  cases[1]['name'] = 'renamed away'; // violation 2: baseline name missing
+  const comparison = compareRevisions(baseline, next, failedIds(baselineReport));
+  assert.equal(comparison.passed, false);
+  assert.match(comparison.message, /"earth launch" tolerance increased from 0\.001 to 0\.05/);
+  assert.match(comparison.message, /"moon launch" from the baseline is missing from the repair/);
+
+  // More violations than the display cap → the message says how many are hidden.
+  const manyBaseline = {
+    simulation: { engine: 'projectile-v1' },
+    behavioralTests: Array.from({ length: 13 }, (_v, i) => ({
+      name: `case-${i}`,
+      horizontalSpeedMps: 1,
+      verticalSpeedMps: 1,
+      gravityMps2: 1,
+      expectedMaxHeightM: 0.5,
+      tolerance: 0.001,
+    })),
+    predictions: [],
+  } as unknown as ActivitySpec;
+  const manyNext = {
+    simulation: { engine: 'projectile-v1' },
+    behavioralTests: [],
+    predictions: [],
+  } as unknown as ActivitySpec;
+  const capped = compareRevisions(manyBaseline, manyNext, []);
+  assert.equal(capped.passed, false);
+  assert.match(capped.message, /case-0/);
+  assert.match(capped.message, /\(\+1 more violation\(s\)\)/);
+  assert.ok(capped.message.length < 2000, 'the display message stays bounded');
+});

@@ -26,8 +26,10 @@ export interface RepairSummaryInput {
 }
 
 /** 'Demo fault injected by the system (not a model error): wrong-answer at behavioralTests[0].expectedLiftN' */
-export function demoFaultNotice(f: Pick<FaultRecord, 'kind' | 'path'>): string {
-  return `${FAULT_BADGE} (${FAULT_NOT_MODEL_ERROR}): ${f.kind} at ${f.path}`;
+export function demoFaultNotice(f: Pick<FaultRecord, 'kind' | 'path' | 'effective'>): string {
+  const base = `${FAULT_BADGE} (${FAULT_NOT_MODEL_ERROR}): ${f.kind} at ${f.path}`;
+  // S5-04: an injected fault that no check caught demonstrates nothing; say so plainly.
+  return f.effective === false ? `${base} — not caught by the checks, so this run does not demonstrate a catch` : base;
 }
 
 /** What the system changed, e.g. 'value 20.408 → 31.612' or a shortened quote swap. */
