@@ -1,0 +1,113 @@
+{
+  "analysis": {
+    "activity": "timeline-v1",
+    "concepts": [
+      {
+        "evidence": [
+          {
+            "quote": "the Second Continental Congress appointed three committees on June 11, 1776.",
+            "sourceId": "nara-articles-of-confederation"
+          },
+          {
+            "quote": "The Articles of Confederation were adopted by the Continental Congress on November 15, 1777.",
+            "sourceId": "nara-articles-of-confederation"
+          }
+        ],
+        "id": "drafting-articles",
+        "name": "Drafting and adoption of the Articles of Confederation"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "When Maryland ratified it on March 1, 1781, the Congress of the Confederation came into being.",
+            "sourceId": "nara-articles-of-confederation"
+          },
+          {
+            "quote": "It was in force from March 1, 1781, until 1789 when the present-day Constitution went into effect.",
+            "sourceId": "nara-articles-of-confederation"
+          }
+        ],
+        "id": "confederation-government",
+        "name": "Ratification and operation of the Confederation government"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "In May of 1787, the Constitutional Convention assembled in Philadelphia to revise the Articles of Confederation.",
+            "sourceId": "nara-articles-of-confederation"
+          }
+        ],
+        "id": "constitutional-convention",
+        "name": "Constitutional Convention and replacement government"
+      }
+    ],
+    "objectives": [
+      "Order key events from committee appointment in 1776 through adoption, ratification, operation, and replacement of the Articles",
+      "Explain why ratification was delayed and why the central government proved ineffective",
+      "Connect weaknesses under the Articles to the decision to redesign the government in 1787"
+    ],
+    "supported": true,
+    "unsupportedReason": ""
+  },
+  "report": {
+    "artifactId": "source-analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis.gen.json"
+      },
+      {
+        "id": "analysis.invariants",
+        "kind": "semantic",
+        "passed": true,
+        "message": "invariants hold for supported=true"
+      },
+      {
+        "id": "analysis.concept-ids",
+        "kind": "semantic",
+        "passed": true,
+        "message": "all 3 concept id(s) are unique lowercase-kebab"
+      },
+      {
+        "id": "refs.sources",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 1 cited sourceId(s) have matching documents"
+      },
+      {
+        "id": "grounding.quotes",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 concept quote(s) count as evidence (>= 8 normalised characters with >= 3 letters/digits, or a compact \"=\" equation with >= 3) and all 5 resolvable quote(s) appear in their source text after whitespace normalisation; every supported concept has >= 1 counted quote"
+      },
+      {
+        "id": "policy.no-publisher-attribution",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated analysis field (concept names, objectives, unsupportedReason) mentions the publisher or uses attribution/endorsement wording naming a source or authority; evidence quotes are exempt"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18327-ef81-706e-b413-4cc3677987c4",
+    "usage": {
+      "promptTokens": 2214,
+      "completionTokens": 3209,
+      "reasoningTokens": 2886,
+      "cachedTokens": 0
+    },
+    "latencyMs": 10190,
+    "estCostUSD": 0.01640575,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "jobId": "job-20261028153510-c5e1a7da",
+  "sourceId": "nara-declaration-of-independence",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-28T15:35:10.455Z",
+  "totalCostUSD": 0.085619,
+  "reservedUnknownUSD": 0,
+  "engine": "timeline-v1",
+  "revisions": 1,
+  "repairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 22748,
+    "startedAt": "2026-10-28T15:35:10.455Z"
+  },
+  "specId": "nara-declaration-of-independence-job-20261028153510-c5e1a7da",
+  "publishable": true,
+  "checksPassed": 11,
+  "checksTotal": 11,
+  "publishedRevision": 1,
+  "finishedAt": "2026-10-28T15:36:10.066Z"
+}

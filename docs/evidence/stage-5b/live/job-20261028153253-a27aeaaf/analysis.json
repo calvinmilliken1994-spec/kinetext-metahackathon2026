@@ -1,0 +1,120 @@
+{
+  "analysis": {
+    "activity": "timeline-v1",
+    "concepts": [
+      {
+        "evidence": [
+          {
+            "quote": "The Continental Congress adopted the Declaration of Independence on July 4, 1776.",
+            "sourceId": "nara-declaration-of-independence"
+          },
+          {
+            "quote": "Finally, in the afternoon of July 4th, the Declaration was adopted.",
+            "sourceId": "nara-declaration-of-independence"
+          }
+        ],
+        "id": "adoption-of-independence",
+        "name": "Adoption of Independence"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "Congress appointed on June 10 a committee of five to draft a statement of independence",
+            "sourceId": "nara-declaration-of-independence"
+          },
+          {
+            "quote": "Jefferson drafted the statement between June 11 and 28",
+            "sourceId": "nara-declaration-of-independence"
+          }
+        ],
+        "id": "drafting-the-declaration",
+        "name": "Drafting the Declaration"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "the approved Declaration was printed on July 5th",
+            "sourceId": "nara-declaration-of-independence"
+          },
+          {
+            "quote": "On July 19th, Congress ordered that the Declaration be engrossed on parchment",
+            "sourceId": "nara-declaration-of-independence"
+          },
+          {
+            "quote": "On August 2nd John Hancock, the President of the Congress, signed the engrossed copy",
+            "sourceId": "nara-declaration-of-independence"
+          }
+        ],
+        "id": "printing-engrossing-and-signing",
+        "name": "Printing, Engrossing and Signing"
+      }
+    ],
+    "objectives": [
+      "Sequence the drafting, adoption, printing, engrossing, and signing of the Declaration in chronological order",
+      "Recall the dates of committee appointment, draft preparation, congressional revision, printing, engrossing order, and signing"
+    ],
+    "supported": true,
+    "unsupportedReason": ""
+  },
+  "report": {
+    "artifactId": "source-analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis.gen.json"
+      },
+      {
+        "id": "analysis.invariants",
+        "kind": "semantic",
+        "passed": true,
+        "message": "invariants hold for supported=true"
+      },
+      {
+        "id": "analysis.concept-ids",
+        "kind": "semantic",
+        "passed": true,
+        "message": "all 3 concept id(s) are unique lowercase-kebab"
+      },
+      {
+        "id": "refs.sources",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 1 cited sourceId(s) have matching documents"
+      },
+      {
+        "id": "grounding.quotes",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 7 concept quote(s) count as evidence (>= 8 normalised characters with >= 3 letters/digits, or a compact \"=\" equation with >= 3) and all 7 resolvable quote(s) appear in their source text after whitespace normalisation; every supported concept has >= 1 counted quote"
+      },
+      {
+        "id": "policy.no-publisher-attribution",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated analysis field (concept names, objectives, unsupportedReason) mentions the publisher or uses attribution/endorsement wording naming a source or authority; evidence quotes are exempt"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18324-c716-7636-8e4e-acfeb38e2e54",
+    "usage": {
+      "promptTokens": 2136,
+      "completionTokens": 3721,
+      "reasoningTokens": 3387,
+      "cachedTokens": 0
+    },
+    "latencyMs": 14142,
+    "estCostUSD": 0.01848425,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage"
+  }
+}

@@ -1,0 +1,217 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nara-articles-of-confederation-job-20261028153624-4dc34853",
+  "title": "From Confederation to Constitution",
+  "learningObjectives": [
+    "Order key events from committee appointment in 1776 through adoption, ratification, operation, and replacement",
+    "Explain why ratification was delayed and why the central government proved ineffective",
+    "Connect weaknesses under the Articles to the decision to redesign the government in 1787"
+  ],
+  "sources": [
+    {
+      "id": "nara-articles-of-confederation",
+      "title": "Articles of Confederation (1777) — National Archives, Milestone Documents (agency-written introduction)",
+      "locator": "https://www.archives.gov/milestone-documents/articles-of-confederation",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Articles of Confederation (1777)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+      "sha256": "254310acbd3a0b3352ae85953f18138ed309fe49fa6c7841387e92394766c73f"
+    }
+  ],
+  "explanations": [
+    {
+      "evidence": [
+        {
+          "quote": "One of the committees was tasked with determining what form the confederation of the colonies should take.",
+          "sourceId": "nara-articles-of-confederation"
+        },
+        {
+          "quote": "After considerable debate and revision, the Second Continental Congress adopted the Articles of Confederation on November 15, 1777.",
+          "sourceId": "nara-articles-of-confederation"
+        }
+      ],
+      "id": "drafting-and-adoption",
+      "text": "A committee with one representative from each colony drafted the plan, and Congress adopted the Articles after debate and revision."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "Ratification by all 13 states was necessary to set the Confederation into motion.",
+          "sourceId": "nara-articles-of-confederation"
+        },
+        {
+          "quote": "Because of disputes over representation, voting, and the western lands claimed by some states, ratification was delayed.",
+          "sourceId": "nara-articles-of-confederation"
+        }
+      ],
+      "id": "ratification-delay",
+      "text": "Because all 13 states had to agree, disputes over representation, voting, and western lands delayed the start of government."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "With the states retaining considerable power, the central government had insufficient power to regulate commerce.",
+          "sourceId": "nara-articles-of-confederation"
+        },
+        {
+          "quote": "In May of 1787, the Constitutional Convention assembled in Philadelphia to revise the Articles of Confederation.",
+          "sourceId": "nara-articles-of-confederation"
+        }
+      ],
+      "id": "weaknesses-and-redesign",
+      "text": "The central government could not tax or regulate commerce, so delegates met in 1787 to revise the Articles and redesign the government."
+    }
+  ],
+  "simulation": {
+    "engine": "timeline-v1",
+    "events": [
+      {
+        "day": 11,
+        "evidence": [
+          {
+            "quote": "After the Lee Resolution proposed independence for the American colonies, the Second Continental Congress appointed three committees on June 11, 1776.",
+            "sourceId": "nara-articles-of-confederation"
+          },
+          {
+            "quote": "One of the committees was tasked with determining what form the confederation of the colonies should take.",
+            "sourceId": "nara-articles-of-confederation"
+          }
+        ],
+        "id": "e1",
+        "label": "Three committees appointed",
+        "month": 6,
+        "year": 1776
+      },
+      {
+        "day": 15,
+        "evidence": [
+          {
+            "quote": "The Articles of Confederation were adopted by the Continental Congress on November 15, 1777.",
+            "sourceId": "nara-articles-of-confederation"
+          },
+          {
+            "quote": "This document served as the United States' first constitution.",
+            "sourceId": "nara-articles-of-confederation"
+          }
+        ],
+        "id": "e2",
+        "label": "Articles of Confederation adopted",
+        "month": 11,
+        "year": 1777
+      },
+      {
+        "day": 1,
+        "evidence": [
+          {
+            "quote": "When Maryland ratified it on March 1, 1781, the Congress of the Confederation came into being.",
+            "sourceId": "nara-articles-of-confederation"
+          },
+          {
+            "quote": "Ratification by all 13 states was necessary to set the Confederation into motion.",
+            "sourceId": "nara-articles-of-confederation"
+          }
+        ],
+        "id": "e3",
+        "label": "Maryland ratifies; Confederation Congress begins",
+        "month": 3,
+        "year": 1781
+      },
+      {
+        "day": 0,
+        "evidence": [
+          {
+            "quote": "In May of 1787, the Constitutional Convention assembled in Philadelphia to revise the Articles of Confederation.",
+            "sourceId": "nara-articles-of-confederation"
+          },
+          {
+            "quote": "They shuttered the windows of the State House (Independence Hall) and swore secrecy so they could speak freely.",
+            "sourceId": "nara-articles-of-confederation"
+          }
+        ],
+        "id": "e4",
+        "label": "Constitutional Convention assembles",
+        "month": 5,
+        "year": 1787
+      },
+      {
+        "day": 0,
+        "evidence": [
+          {
+            "quote": "It was in force from March 1, 1781, until 1789 when the present-day Constitution went into effect.",
+            "sourceId": "nara-articles-of-confederation"
+          },
+          {
+            "quote": "After three hot, summer months of highly charged debate, the new Constitution was signed, which remains in effect today.",
+            "sourceId": "nara-articles-of-confederation"
+          }
+        ],
+        "id": "e5",
+        "label": "Constitution goes into effect",
+        "month": 0,
+        "year": 1789
+      }
+    ],
+    "scenario": {
+      "settingLabel": "United States, 1776-1789",
+      "subjectLabel": "Articles of Confederation"
+    }
+  },
+  "behavioralTests": [
+    {
+      "earlierEventId": "e1",
+      "laterEventId": "e2",
+      "name": "Committees to adoption"
+    },
+    {
+      "earlierEventId": "e2",
+      "laterEventId": "e3",
+      "name": "Adoption to ratification"
+    },
+    {
+      "earlierEventId": "e3",
+      "laterEventId": "e4",
+      "name": "Ratification to convention"
+    },
+    {
+      "earlierEventId": "e4",
+      "laterEventId": "e5",
+      "name": "Convention to new Constitution"
+    }
+  ],
+  "predictions": [
+    {
+      "earlierEventId": "e1",
+      "id": "p1",
+      "laterEventId": "e2",
+      "prompt": "Which happened first: appointment of three committees or adoption of the Articles?"
+    },
+    {
+      "earlierEventId": "e3",
+      "id": "p2",
+      "laterEventId": "e4",
+      "prompt": "Which happened first: Maryland ratification or assembly of the Constitutional Convention?"
+    },
+    {
+      "earlierEventId": "e2",
+      "id": "p3",
+      "laterEventId": "e5",
+      "prompt": "Which happened first: adoption of the Articles or the Constitution going into effect?"
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18328-5821-7439-ad61-0b79bee3521e",
+    "runId": "job-20261028153624-4dc34853",
+    "promptVersion": "v7",
+    "generatedAt": "2026-10-28T15:37:01.769Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

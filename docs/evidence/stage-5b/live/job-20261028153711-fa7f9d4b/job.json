@@ -1,0 +1,45 @@
+{
+  "jobId": "job-20261028153711-fa7f9d4b",
+  "sourceId": "nara-declaration-of-independence",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-28T15:37:11.280Z",
+  "totalCostUSD": 0.108119,
+  "reservedUnknownUSD": 0,
+  "engine": "timeline-v1",
+  "revisions": 2,
+  "repairs": [
+    {
+      "revision": 2,
+      "repairOf": 1,
+      "targeted": [
+        "timeline.case-order"
+      ],
+      "fixed": [
+        "timeline.case-order"
+      ],
+      "remaining": [],
+      "publishable": true,
+      "afterInjectedFault": true
+    }
+  ],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 22748,
+    "startedAt": "2026-10-28T15:37:11.280Z"
+  },
+  "demoFault": {
+    "kind": "wrong-answer",
+    "path": "behavioralTests[0]",
+    "original": "e1 -> e3",
+    "injected": "e3 -> e1",
+    "revision": 1,
+    "effective": true
+  },
+  "specId": "nara-declaration-of-independence-job-20261028153711-fa7f9d4b",
+  "publishable": true,
+  "checksPassed": 12,
+  "checksTotal": 12,
+  "publishedRevision": 2,
+  "finishedAt": "2026-10-28T15:38:18.260Z"
+}

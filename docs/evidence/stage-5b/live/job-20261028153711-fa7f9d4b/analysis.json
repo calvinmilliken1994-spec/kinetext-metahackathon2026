@@ -1,0 +1,134 @@
+{
+  "analysis": {
+    "activity": "timeline-v1",
+    "concepts": [
+      {
+        "evidence": [
+          {
+            "quote": "Declaration of Independence (1776)",
+            "sourceId": "nara-declaration-of-independence"
+          },
+          {
+            "quote": "Congress appointed on June 10 a committee of five to draft a statement of independence for the colonies.",
+            "sourceId": "nara-declaration-of-independence"
+          },
+          {
+            "quote": "Jefferson drafted the statement between June 11 and 28",
+            "sourceId": "nara-declaration-of-independence"
+          }
+        ],
+        "id": "drafting-the-declaration",
+        "name": "Drafting the Declaration"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "The Continental Congress adopted the Declaration of Independence on July 4, 1776.",
+            "sourceId": "nara-declaration-of-independence"
+          },
+          {
+            "quote": "Finally, in the afternoon of July 4th, the Declaration was adopted.",
+            "sourceId": "nara-declaration-of-independence"
+          }
+        ],
+        "id": "adoption-of-independence",
+        "name": "Adoption of Independence"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "the approved Declaration was printed on July 5th",
+            "sourceId": "nara-declaration-of-independence"
+          }
+        ],
+        "id": "printing-and-distribution",
+        "name": "Printing and Distribution"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "On July 19th, Congress ordered that the Declaration be engrossed on parchment with a new title,",
+            "sourceId": "nara-declaration-of-independence"
+          },
+          {
+            "quote": "It was engrossed on parchment and on August 2, 1776, delegates began signing it.",
+            "sourceId": "nara-declaration-of-independence"
+          },
+          {
+            "quote": "On August 2nd John Hancock, the President of the Congress, signed the engrossed copy with a bold signature.",
+            "sourceId": "nara-declaration-of-independence"
+          }
+        ],
+        "id": "engrossing-and-signing",
+        "name": "Engrossing and Signing"
+      }
+    ],
+    "objectives": [
+      "Sequence the drafting, adoption, printing, engrossing, and signing milestones in chronological order",
+      "Match calendar dates in June, July, and August 1776 to key events in the declaration process"
+    ],
+    "supported": true,
+    "unsupportedReason": ""
+  },
+  "report": {
+    "artifactId": "source-analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis.gen.json"
+      },
+      {
+        "id": "analysis.invariants",
+        "kind": "semantic",
+        "passed": true,
+        "message": "invariants hold for supported=true"
+      },
+      {
+        "id": "analysis.concept-ids",
+        "kind": "semantic",
+        "passed": true,
+        "message": "all 4 concept id(s) are unique lowercase-kebab"
+      },
+      {
+        "id": "refs.sources",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 1 cited sourceId(s) have matching documents"
+      },
+      {
+        "id": "grounding.quotes",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 9 concept quote(s) count as evidence (>= 8 normalised characters with >= 3 letters/digits, or a compact \"=\" equation with >= 3) and all 9 resolvable quote(s) appear in their source text after whitespace normalisation; every supported concept has >= 1 counted quote"
+      },
+      {
+        "id": "policy.no-publisher-attribution",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated analysis field (concept names, objectives, unsupportedReason) mentions the publisher or uses attribution/endorsement wording naming a source or authority; evidence quotes are exempt"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18328-aa2e-73be-9b57-cbe062df3722",
+    "usage": {
+      "promptTokens": 2136,
+      "completionTokens": 3639,
+      "reasoningTokens": 3231,
+      "cachedTokens": 0
+    },
+    "latencyMs": 11532,
+    "estCostUSD": 0.01813575,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage"
+  }
+}

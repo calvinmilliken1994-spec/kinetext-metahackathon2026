@@ -1,0 +1,229 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nara-declaration-of-independence-job-20261028153711-fa7f9d4b",
+  "title": "Declaring Independence in Summer 1776",
+  "learningObjectives": [
+    "Sequence the drafting, adoption, printing, engrossing, and signing milestones in chronological order",
+    "Match calendar dates in June, July, and August 1776 to key events in the declaration process"
+  ],
+  "sources": [
+    {
+      "id": "nara-declaration-of-independence",
+      "title": "Declaration of Independence (1776) — National Archives, Milestone Documents (agency-written introduction)",
+      "locator": "https://www.archives.gov/milestone-documents/declaration-of-independence",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Declaration of Independence (1776)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+      "sha256": "f0322f21a85ef6996de0972f6543cc8ed8e3393aed20b7d086cada9260c1c668"
+    }
+  ],
+  "explanations": [
+    {
+      "evidence": [
+        {
+          "quote": "Congress appointed on June 10 a committee of five to draft a statement of independence for the colonies.",
+          "sourceId": "nara-declaration-of-independence"
+        },
+        {
+          "quote": "The Continental Congress adopted the Declaration of Independence on July 4, 1776.",
+          "sourceId": "nara-declaration-of-independence"
+        }
+      ],
+      "id": "committee-to-adoption",
+      "text": "A drafting committee was appointed in June, and the resulting Declaration was adopted on July 4 after revision."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "the approved Declaration was printed on July 5th",
+          "sourceId": "nara-declaration-of-independence"
+        },
+        {
+          "quote": "These printed copies, bearing only the names of John Hancock, President, and Charles Thomson, secretary,",
+          "sourceId": "nara-declaration-of-independence"
+        }
+      ],
+      "id": "printing-and-distribution",
+      "text": "Printing on July 5 produced copies for state assemblies, conventions, and Continental troops."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "On July 19th, Congress ordered that the Declaration be engrossed on parchment",
+          "sourceId": "nara-declaration-of-independence"
+        },
+        {
+          "quote": "It was engrossed on parchment and on August 2, 1776, delegates began signing it.",
+          "sourceId": "nara-declaration-of-independence"
+        }
+      ],
+      "id": "engrossing-and-signing",
+      "text": "The order to engross the Declaration created the formal parchment copy that delegates began signing in August."
+    }
+  ],
+  "simulation": {
+    "engine": "timeline-v1",
+    "events": [
+      {
+        "day": 10,
+        "evidence": [
+          {
+            "quote": "Congress appointed on June 10 a committee of five to draft a statement of independence for the colonies.",
+            "sourceId": "nara-declaration-of-independence"
+          },
+          {
+            "quote": "The committee included Thomas Jefferson, John Adams, Benjamin Franklin",
+            "sourceId": "nara-declaration-of-independence"
+          }
+        ],
+        "id": "e1",
+        "label": "Committee of five appointed to draft independence",
+        "month": 6,
+        "year": 1776
+      },
+      {
+        "day": 3,
+        "evidence": [
+          {
+            "quote": "The congressional revision process took all of July 3rd and most of July 4th.",
+            "sourceId": "nara-declaration-of-independence"
+          },
+          {
+            "quote": "submitted drafts to Adams and Franklin who made some changes",
+            "sourceId": "nara-declaration-of-independence"
+          }
+        ],
+        "id": "e2",
+        "label": "Congressional revision of the draft",
+        "month": 7,
+        "year": 1776
+      },
+      {
+        "day": 4,
+        "evidence": [
+          {
+            "quote": "The Continental Congress adopted the Declaration of Independence on July 4, 1776.",
+            "sourceId": "nara-declaration-of-independence"
+          }
+        ],
+        "id": "e3",
+        "label": "Declaration of Independence adopted",
+        "month": 7,
+        "year": 1776
+      },
+      {
+        "day": 5,
+        "evidence": [
+          {
+            "quote": "the approved Declaration was printed on July 5th",
+            "sourceId": "nara-declaration-of-independence"
+          },
+          {
+            "quote": "These printed copies, bearing only the names of John Hancock, President, and Charles Thomson, secretary,",
+            "sourceId": "nara-declaration-of-independence"
+          }
+        ],
+        "id": "e4",
+        "label": "Declaration printed for distribution",
+        "month": 7,
+        "year": 1776
+      },
+      {
+        "day": 19,
+        "evidence": [
+          {
+            "quote": "On July 19th, Congress ordered that the Declaration be engrossed on parchment",
+            "sourceId": "nara-declaration-of-independence"
+          },
+          {
+            "quote": "Engrossing is the process of copying an official document in a large hand.",
+            "sourceId": "nara-declaration-of-independence"
+          }
+        ],
+        "id": "e5",
+        "label": "Declaration ordered engrossed on parchment",
+        "month": 7,
+        "year": 1776
+      },
+      {
+        "day": 2,
+        "evidence": [
+          {
+            "quote": "It was engrossed on parchment and on August 2, 1776, delegates began signing it.",
+            "sourceId": "nara-declaration-of-independence"
+          },
+          {
+            "quote": "56 delegates eventually signed the document.",
+            "sourceId": "nara-declaration-of-independence"
+          }
+        ],
+        "id": "e6",
+        "label": "Engrossed Declaration signing begins",
+        "month": 8,
+        "year": 1776
+      }
+    ],
+    "scenario": {
+      "settingLabel": "Continental Congress, Summer 1776",
+      "subjectLabel": "Declaration of Independence"
+    }
+  },
+  "behavioralTests": [
+    {
+      "earlierEventId": "e1",
+      "laterEventId": "e3",
+      "name": "Committee appointment before adoption"
+    },
+    {
+      "earlierEventId": "e2",
+      "laterEventId": "e4",
+      "name": "Revision before printing"
+    },
+    {
+      "earlierEventId": "e3",
+      "laterEventId": "e5",
+      "name": "Adoption before engrossing order"
+    },
+    {
+      "earlierEventId": "e5",
+      "laterEventId": "e6",
+      "name": "Engrossing order before signing"
+    }
+  ],
+  "predictions": [
+    {
+      "earlierEventId": "e1",
+      "id": "p1",
+      "laterEventId": "e3",
+      "prompt": "Which happened first: appointment of the drafting committee or adoption of the Declaration?"
+    },
+    {
+      "earlierEventId": "e4",
+      "id": "p2",
+      "laterEventId": "e5",
+      "prompt": "Which happened first: printing of the Declaration or ordering it to be engrossed on parchment?"
+    },
+    {
+      "earlierEventId": "e2",
+      "id": "p3",
+      "laterEventId": "e6",
+      "prompt": "Which happened first: congressional revision of the draft or signing of the engrossed copy?"
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18329-829c-7572-8748-c55c80a0927d",
+    "runId": "job-20261028153711-fa7f9d4b",
+    "promptVersion": "v7",
+    "generatedAt": "2026-10-28T15:38:18.249Z",
+    "revision": 2,
+    "repairOf": 1
+  }
+}

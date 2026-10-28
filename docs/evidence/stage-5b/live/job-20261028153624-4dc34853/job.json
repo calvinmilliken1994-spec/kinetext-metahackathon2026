@@ -1,0 +1,23 @@
+{
+  "jobId": "job-20261028153624-4dc34853",
+  "sourceId": "nara-articles-of-confederation",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-28T15:36:24.789Z",
+  "totalCostUSD": 0.058306,
+  "reservedUnknownUSD": 0,
+  "engine": "timeline-v1",
+  "revisions": 1,
+  "repairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 22748,
+    "startedAt": "2026-10-28T15:36:24.789Z"
+  },
+  "specId": "nara-articles-of-confederation-job-20261028153624-4dc34853",
+  "publishable": true,
+  "checksPassed": 11,
+  "checksTotal": 11,
+  "publishedRevision": 1,
+  "finishedAt": "2026-10-28T15:37:01.776Z"
+}

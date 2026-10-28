@@ -20,8 +20,8 @@ test('S5-06: the checked-in config parses, with maxRepairAttempts = 2', () => {
   assert.equal(limits.maxRepairAttempts, 2);
   assert.equal(MAX_REPAIR_ATTEMPTS_BOUND, 2);
   assert.equal(limits.capUSD, 10);
-  assert.equal(limits.wallTimeMs, 240000);
-  assert.equal(limits.maxOutputTokens, 16000);
+  assert.equal(limits.wallTimeMs, 420000);
+  assert.equal(limits.maxOutputTokens, 32000);
   assert.equal(limits.maxInputTokens, 32000);
   assert.equal(limits.ledgerLockPort, 47853);
 });
