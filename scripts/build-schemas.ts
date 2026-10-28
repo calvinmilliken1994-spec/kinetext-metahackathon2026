@@ -156,8 +156,8 @@ function timelineSchemas(d: SequenceDescriptor): { gen: Record<string, any>; ful
       day: { type: 'integer', minimum: 0, maximum: 31 },
       evidence: { type: 'array', minItems: 1, maxItems: 2, items: evidenceFull },
     },
-    if: { properties: { day: { minimum: 1 } } },
-    then: { properties: { month: { minimum: 1 } } },
+    if: { properties: { day: { type: 'integer', minimum: 1 } } },
+    then: { properties: { month: { type: 'integer', minimum: 1 } } },
   };
   const fb = forcesFull.properties.behavioralTests;
   const fp = forcesFull.properties.predictions;

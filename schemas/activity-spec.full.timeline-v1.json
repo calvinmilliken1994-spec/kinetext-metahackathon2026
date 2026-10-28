@@ -184,6 +184,7 @@
             "if": {
               "properties": {
                 "day": {
+                  "type": "integer",
                   "minimum": 1
                 }
               }
@@ -191,6 +192,7 @@
             "then": {
               "properties": {
                 "month": {
+                  "type": "integer",
                   "minimum": 1
                 }
               }

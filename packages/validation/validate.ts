@@ -46,6 +46,7 @@ import type {
   SourceAnalysis,
   SourceDocument,
   SourceRef,
+  TimelineActivitySpec,
   ValidationCheck,
   ValidationReport,
 } from '../contracts/index.ts';
@@ -54,6 +55,11 @@ import { computeOutput } from '../activities/registry.ts';
 import { MAX_FRAMES, simulate } from '../activities/forces-1d/engine.ts';
 import type { Frame } from '../activities/forces-1d/engine.ts';
 import { sha256 } from '../sources/index.ts';
+import { compareTimelineRevisions, validateTimelineSpec } from './timeline.ts';
+import type { TimelineCompareContext } from './timeline.ts';
+
+/** Any full activity spec: the seven numeric engines plus the timeline-v1 sequence engine. */
+export type AnyActivitySpec = ActivitySpec | TimelineActivitySpec;
 
 const ajv = new Ajv({ allErrors: true });
 const analysisSchemaValidate: ValidateFunction = ajv.compile(sourceAnalysisGenSchema as AnySchemaObject);
@@ -84,20 +90,20 @@ const ATTRIBUTION_WINDOW_CHARS = 40;
 const CAPITALISED_FOLLOWER = /\b[A-Z]/; // deliberately case-sensitive
 const SOURCE_NOUN_FOLLOWER = /\bthe (?:source|publisher|agency|author|text)\b/i;
 const CONCEPT_ID_PATTERN = /^[a-z0-9-]{1,40}$/;
-const QUOTE_MESSAGE_LIMIT = 60;
+export const QUOTE_MESSAGE_LIMIT = 60;
 const SCHEMA_ERROR_LIMIT = 5;
 const TRAJECTORY_TOLERANCE = 1e-9; // absolute + relative
 /** R-05: a quote only counts as evidence when it is long and substantive enough to locate. */
-const QUOTE_MIN_NORMALIZED_CHARS = 8;
+export const QUOTE_MIN_NORMALIZED_CHARS = 8;
 /** N-07: a compact equation ('F=ma') counts from this normalised length when it contains '='. */
-const QUOTE_EQUATION_MIN_NORMALIZED_CHARS = 3;
-const QUOTE_MIN_LETTER_DIGITS = 3;
+export const QUOTE_EQUATION_MIN_NORMALIZED_CHARS = 3;
+export const QUOTE_MIN_LETTER_DIGITS = 3;
 const LETTER_DIGIT_PATTERN = /[\p{L}\p{N}]/gu;
 /** Stage 5: repair finding messages are display text capped at 300 chars; structured numbers are never capped. */
 const FINDING_MESSAGE_LIMIT = 300;
 /** S5-02: the no-weakening failure message lists every violation, capped for display. */
-const COMPARISON_PROBLEM_LIMIT = 12;
-const COMPARISON_MESSAGE_LIMIT = 1200;
+export const COMPARISON_PROBLEM_LIMIT = 12;
+export const COMPARISON_MESSAGE_LIMIT = 1200;
 
 /** Stage 2 range-check ids, kept so recorded forces evidence reports the same ids. */
 const FORCES_RANGE_CHECK_IDS: Record<string, string> = {
@@ -110,8 +116,8 @@ function rangeCheckId(engine: EngineId, inputKey: string): string {
   return legacy ?? `semantic.range.${inputKey}`;
 }
 
-type CheckBody = Omit<ValidationCheck, 'id' | 'kind'>;
-type TextLookup = (sourceId: string) => string | undefined;
+export type CheckBody = Omit<ValidationCheck, 'id' | 'kind'>;
+export type TextLookup = (sourceId: string) => string | undefined;
 
 /** The post-gate working view of a spec: the engine's full schema guarantees these shapes. */
 interface LooseRange { unit: string; min: number; max: number; default: number }
@@ -173,7 +179,7 @@ function hasAttributionWording(text: string): boolean {
  * or uses attribution/endorsement wording that names a source or authority
  * (N-06 qualified condition).
  */
-function hasPublisherAttribution(text: unknown): boolean {
+export function hasPublisherAttribution(text: unknown): boolean {
   return typeof text === 'string' && (PUBLISHER_MENTION.test(text) || hasAttributionWording(text));
 }
 
@@ -230,6 +236,11 @@ export function checkTrajectory(frames: Frame[]): { passed: boolean; message: st
  */
 export function validateSpec(spec: unknown, sources: SourceDocument[]): ValidationReport {
   const engineValue = (spec as { simulation?: { engine?: unknown } } | null | undefined)?.simulation?.engine;
+  // Stage 5b sequence engines dispatch to their own module (timeline-v1 is deliberately NOT in
+  // ENGINE_IDS yet, so the numeric unknown-engine path below stays byte-stable).
+  if (engineValue === 'timeline-v1') {
+    return validateTimelineSpec(spec, sources);
+  }
   if (!isEngineId(engineValue)) {
     const maybeId = (spec as { id?: unknown } | null | undefined)?.id;
     const named = engineValue === undefined ? 'missing' : JSON.stringify(engineValue);
@@ -701,7 +712,7 @@ export function validateAnalysis(analysis: unknown, sources: SourceDocument[]): 
  * in full precision (never truncated) together with a case path such as
  * 'behavioralTests[2]'. Never throws.
  */
-export function repairFindings(report: ValidationReport, spec?: ActivitySpec): RepairFinding[] {
+export function repairFindings(report: ValidationReport, spec?: AnyActivitySpec): RepairFinding[] {
   const findings: RepairFinding[] = [];
   if (typeof report !== 'object' || report === null || !Array.isArray(report.checks)) {
     return findings;
@@ -715,7 +726,7 @@ export function repairFindings(report: ValidationReport, spec?: ActivitySpec): R
     };
     if (check.path !== undefined) finding.path = check.path;
     if (spec !== undefined && (check.id === 'behavior.tests' || check.id === 'behavior.predictions')) {
-      const detail = firstFailingCase(spec, check.id === 'behavior.tests' ? 'behavioralTests' : 'predictions');
+      const detail = firstFailingCase(spec as ActivitySpec, check.id === 'behavior.tests' ? 'behavioralTests' : 'predictions');
       if (detail !== undefined) {
         finding.path = detail.path;
         finding.expected = detail.expected;
@@ -787,11 +798,28 @@ function firstFailingCase(
  * message is byte-stable: recorded live evidence stores it verbatim and
  * tests/e2e/stage5-evidence.test.ts recomputes and compares it.
  * Never throws; junk input fails closed.
+ *
+ * Stage 5b: when either revision's simulation.engine is 'timeline-v1', the comparison dispatches to
+ * compareTimelineRevisions (packages/validation/timeline.ts) — sequence-engine rules (frozen grounded
+ * events, no added events, count within [5, baseline], case identity by (name/id, occurrence)) with
+ * the numeric rules untouched. `timeline` optionally carries the source documents and the baseline
+ * findings for an exact recomputation of which events passed date grounding on the baseline.
  */
-export function compareRevisions(baseline: ActivitySpec, next: ActivitySpec, failedOnBaseline: string[]): ValidationCheck {
+export function compareRevisions(
+  baseline: AnyActivitySpec,
+  next: AnyActivitySpec,
+  failedOnBaseline: string[],
+  timeline?: TimelineCompareContext,
+): ValidationCheck {
   const id = 'repair.no-weakening';
   const kind: CheckKind = 'semantic';
   try {
+    const engines = [baseline, next].map(
+      spec => (spec as { simulation?: { engine?: unknown } } | null | undefined)?.simulation?.engine,
+    );
+    if (engines.includes('timeline-v1')) {
+      return compareTimelineRevisions(baseline, next, failedOnBaseline, timeline);
+    }
     const p = baseline as unknown as LooseSpec | null | undefined;
     const n = next as unknown as LooseSpec | null | undefined;
     const failed = new Set(Array.isArray(failedOnBaseline) ? failedOnBaseline : []);
@@ -1070,7 +1098,7 @@ function fmtValue(v: unknown): string {
 /* ------------------------------------------------------------------ */
 
 /** Run one check body so a crash is recorded as a failed check instead of hiding the others. */
-function guarded(id: string, kind: CheckKind, body: () => CheckBody): ValidationCheck {
+export function guarded(id: string, kind: CheckKind, body: () => CheckBody): ValidationCheck {
   try {
     return { id, kind, ...body() };
   } catch (err) {
@@ -1096,7 +1124,7 @@ function inputAssignments(engine: EngineId, c: Record<string, unknown>): string 
 }
 
 /** Index caller-provided documents by id and memoise their whitespace-normalised text. */
-function indexSources(sources: SourceDocument[]): { docById: Map<string, SourceDocument>; textOf: TextLookup } {
+export function indexSources(sources: SourceDocument[]): { docById: Map<string, SourceDocument>; textOf: TextLookup } {
   const docById = new Map<string, SourceDocument>();
   const list = Array.isArray(sources) ? sources.filter(d => typeof d === 'object' && d !== null) : [];
   for (const d of list) {
@@ -1131,7 +1159,7 @@ function withinTrajectoryTolerance(actual: number, expected: number): boolean {
   return Math.abs(actual - expected) <= TRAJECTORY_TOLERANCE + TRAJECTORY_TOLERANCE * Math.abs(expected);
 }
 
-function duplicates(values: string[]): string[] {
+export function duplicates(values: string[]): string[] {
   const seen = new Set<string>();
   const dups = new Set<string>();
   for (const v of values) {
@@ -1155,15 +1183,15 @@ function looseList(spec: LooseSpec | null | undefined, key: 'behavioralTests' | 
   return v.filter((x): x is Record<string, unknown> => typeof x === 'object' && x !== null);
 }
 
-function errMsg(err: unknown): string {
+export function errMsg(err: unknown): string {
   return err instanceof Error ? err.message : String(err);
 }
 
-function truncate(s: string, max: number): string {
+export function truncate(s: string, max: number): string {
   return typeof s === 'string' && s.length > max ? s.slice(0, max) : String(s);
 }
 
-function schemaFailureMessage(validate: ValidateFunction, label: string): string {
+export function schemaFailureMessage(validate: ValidateFunction, label: string): string {
   const errors = validate.errors ?? [];
   const shown = errors.slice(0, SCHEMA_ERROR_LIMIT).map(e => `${e.instancePath} ${e.message ?? 'invalid'}`.trim());
   const extra = errors.length > shown.length ? ` (+${errors.length - shown.length} more)` : '';
