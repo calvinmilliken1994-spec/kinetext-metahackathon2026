@@ -159,45 +159,64 @@ export function moveItem<T>(items: readonly T[], from: number, to: number): T[] 
 
 // ---- grading an order -------------------------------------------------------------------------------------
 
+/** Two cards the learner put the wrong way round: `firstId` is listed above `secondId` but its date is strictly later. */
+export interface WrongPair { firstId: string; secondId: string }
+
 export interface OrderGrade {
   /** Events in the activity. */
   total: number;
-  /** Positions (aligned to the learner's order) that hold an event allowed to be there. */
+  /** Positions (aligned to the learner's order) whose card is part of no wrong pair. */
   positions: boolean[];
+  /** Cards that are part of no wrong pair. */
   rightCount: number;
   /** The whole order is consistent with the dates. */
   correct: boolean;
+  /** Every pair that is strictly ordered by the dates but listed the wrong way round, in the learner's list order. */
+  wrongPairs: WrongPair[];
   /** The order computed from the dates (ties: less precise first). */
   correctOrderIds: string[];
 }
 
 /**
- * Grade a learner's order against the dates. A position is right when the event there is allowed to sit there: at
- * least as many events as are strictly earlier than it come before, and as many as are strictly later come after.
- * Events whose dates cannot be strictly ordered may be swapped freely.
+ * Grade a learner's order against the dates. The order is right when no pair of events that the dates strictly order
+ * (comparable at the precision both state, and different) is listed the wrong way round; events whose dates cannot
+ * be strictly ordered may be swapped freely. Feedback names the real wrong pairs: a card is marked only when it is
+ * one end of such a pair, so a rejected order always shows at least one pair to fix and an accepted order marks nothing.
  */
 export function gradeOrder(events: readonly Dated[], orderIds: readonly string[]): OrderGrade {
-  const n = events.length;
   const byId = new Map(events.map((e) => [e.id, e] as const));
-  const positions = orderIds.map((id, k) => {
-    const e = byId.get(id);
-    if (e === undefined) return false;
-    let before = 0;
-    let after = 0;
-    for (const other of events) {
-      if (other.id === e.id) continue;
-      const c = compareEvents(other, e);
-      if (c === -1) before++;
-      else if (c === 1) after++;
+  const wrongPairs: WrongPair[] = [];
+  for (let i = 0; i < orderIds.length; i++) {
+    for (let j = i + 1; j < orderIds.length; j++) {
+      const a = byId.get(orderIds[i] as string);
+      const b = byId.get(orderIds[j] as string);
+      if (a !== undefined && b !== undefined && a.id !== b.id && compareEvents(a, b) === 1) wrongPairs.push({ firstId: a.id, secondId: b.id });
     }
-    return k >= before && k <= n - 1 - after;
-  });
-  const rightCount = positions.filter(Boolean).length;
+  }
+  const involved = new Set(wrongPairs.flatMap((w) => [w.firstId, w.secondId]));
+  const positions = orderIds.map((id) => byId.has(id) && !involved.has(id));
   return {
-    total: n, positions, rightCount,
-    correct: isValidOrder(events, orderIds),
+    total: events.length, positions, rightCount: positions.filter(Boolean).length,
+    correct: isValidOrder(events, orderIds), wrongPairs,
     correctOrderIds: dateOrder(events).map((e) => e.id),
   };
+}
+
+/** The ids of the cards `id` is the wrong way round with (empty when it is in no wrong pair). */
+export function wrongPartners(grade: Pick<OrderGrade, 'wrongPairs'>, id: string): string[] {
+  return grade.wrongPairs.flatMap((w) => (w.firstId === id ? [w.secondId] : w.secondId === id ? [w.firstId] : []));
+}
+
+/** Plain-language result line. Names the first wrong pair (and how many more) so a rejected order always says what to fix. */
+export function orderSummary(grade: OrderGrade, labels: Readonly<Record<string, string>>): string {
+  if (grade.correct) return `✓ Correct — all ${grade.total} events are in the right order.`;
+  const name = (id: string): string => labels[id] ?? id;
+  const first = grade.wrongPairs[0];
+  const lead = `✗ ${grade.rightCount} of ${grade.total} events are in the right place.`;
+  if (first === undefined) return `${lead} The order is incomplete or has an unknown card — check every event is in the list.`;
+  const more = grade.wrongPairs.length - 1;
+  const tail = more > 0 ? ` ${more} more ${more === 1 ? 'pair is' : 'pairs are'} marked too.` : '';
+  return `${lead} “${name(first.firstId)}” and “${name(first.secondId)}” are the wrong way round.${tail} Move the marked cards and check again.`;
 }
 
 // ---- predictions ------------------------------------------------------------------------------------------

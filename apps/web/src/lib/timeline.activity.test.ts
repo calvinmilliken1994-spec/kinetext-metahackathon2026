@@ -6,7 +6,7 @@ import { assembleTimelineSpec } from '../../../../packages/contracts/index.ts';
 import type { TimelineEvent, TimelineGeneratedSpec, TimelineActivitySpec } from '../../../../packages/contracts/index.ts';
 import {
   compareEvents, dateOrder, describeAnswerSwap, formatEventDate, gradeOrder, gradePair, hasUnorderedPair, isTimelineSpec,
-  isValidOrder, moveItem, pairOptions, seededShuffle, timelineEventLabels,
+  isValidOrder, moveItem, orderSummary, pairOptions, seededShuffle, timelineEventLabels, wrongPartners,
 } from './timeline.ts';
 
 const ev = (id: string, year: number, month = 0, day = 0): TimelineEvent =>
@@ -188,6 +188,83 @@ test('gradeOrder treats a missing or unknown id as wrong, never as a crash', () 
   assert.equal(g.total, 3);
   assert.equal(g.positions.length, 2);
   assert.equal(g.positions[1], false);
+});
+
+// ---- S5B-10: feedback names real violated pairs ---------------------------------------------------------
+
+const labelsOf = (events: readonly TimelineEvent[]): Record<string, string> => Object.fromEntries(events.map((e) => [e.id, e.label]));
+
+test('S5B-10 reviewer case: year, June 2, June 1, month-only, next year is rejected AND names the June 2 / June 1 pair', () => {
+  const events = [ev('year', 1855), ev('month', 1855, 6), ev('early', 1855, 6, 1), ev('late', 1855, 6, 2), ev('next-year', 1856)];
+  const g = gradeOrder(events, ['year', 'late', 'early', 'month', 'next-year']);
+  assert.equal(g.correct, false);
+  assert.deepEqual(g.wrongPairs, [{ firstId: 'late', secondId: 'early' }]);
+  assert.deepEqual(g.positions, [true, false, false, true, true]);
+  assert.equal(g.rightCount, 3);
+  assert.notDeepEqual(g.positions, [true, true, true, true, true]);
+  assert.match(orderSummary(g, labelsOf(events)), /3 of 5 events are in the right place\. “Event late” and “Event early” are the wrong way round\./);
+});
+
+test('S5B-10: a fully dated wrong order marks every inverted pair and no card is left unmarked wrongly', () => {
+  const events = [ev('a', 1800, 1, 1), ev('b', 1800, 2, 1), ev('c', 1800, 3, 1)];
+  const g = gradeOrder(events, ['c', 'b', 'a']);
+  assert.equal(g.correct, false);
+  assert.deepEqual(g.wrongPairs, [{ firstId: 'c', secondId: 'b' }, { firstId: 'c', secondId: 'a' }, { firstId: 'b', secondId: 'a' }]);
+  assert.deepEqual(g.positions, [false, false, false]);
+  assert.equal(g.rightCount, 0);
+  assert.match(orderSummary(g, labelsOf(events)), /0 of 3 .*“Event c” and “Event b” are the wrong way round\. 2 more pairs are marked too/);
+});
+
+test('S5B-10: precision ties are accepted in either order and mark nothing', () => {
+  const events = [ev('early', 1775, 5, 1), ev('yearOnly', 1776), ev('july', 1776, 7, 4), ev('late', 1777, 1, 1)];
+  for (const order of [['early', 'yearOnly', 'july', 'late'], ['early', 'july', 'yearOnly', 'late']]) {
+    const g = gradeOrder(events, order);
+    assert.equal(g.correct, true);
+    assert.deepEqual(g.wrongPairs, []);
+    assert.equal(g.rightCount, 4);
+    assert.ok(g.positions.every(Boolean));
+  }
+});
+
+test('S5B-10: the correct order is all green with a plain success summary', () => {
+  const events = declarationSpec().simulation.events;
+  const g = gradeOrder(events, ['e1', 'e2', 'e3', 'e4', 'e5', 'e6']);
+  assert.deepEqual(g.wrongPairs, []);
+  assert.equal(orderSummary(g, labelsOf(events)), '✓ Correct — all 6 events are in the right order.');
+});
+
+test('S5B-10: a single adjacent swap marks exactly the two swapped cards and names them', () => {
+  const events = declarationSpec().simulation.events;
+  const g = gradeOrder(events, ['e1', 'e2', 'e4', 'e3', 'e5', 'e6']);
+  assert.deepEqual(g.wrongPairs, [{ firstId: 'e4', secondId: 'e3' }]);
+  assert.deepEqual(g.positions, [true, true, false, false, true, true]);
+  assert.deepEqual(wrongPartners(g, 'e4'), ['e3']);
+  assert.deepEqual(wrongPartners(g, 'e3'), ['e4']);
+  assert.deepEqual(wrongPartners(g, 'e1'), []);
+});
+
+test('S5B-10 invariant (brute force): rejected <=> at least one named pair, and every pair is genuinely inverted', () => {
+  const sets: TimelineEvent[][] = [
+    [ev('a', 1855), ev('b', 1855, 6), ev('c', 1855, 6, 1), ev('d', 1855, 6, 2), ev('e', 1856)],
+    [ev('a', 1776), ev('b', 1776, 6), ev('c', 1776, 8), ev('d', 1776, 6, 10), ev('e', 1775)],
+    [ev('a', -500), ev('b', -44, 3, 15), ev('c', -44), ev('d', 1), ev('e', -44, 3)],
+  ];
+  const perms = (xs: string[]): string[][] => (xs.length <= 1 ? [xs] : xs.flatMap((x, i) => perms([...xs.slice(0, i), ...xs.slice(i + 1)]).map((p) => [x, ...p])));
+  for (const events of sets) {
+    const byId = new Map(events.map((e) => [e.id, e] as const));
+    for (const p of perms(events.map((e) => e.id))) {
+      const g = gradeOrder(events, p);
+      assert.equal(g.correct, g.wrongPairs.length === 0, p.join());
+      assert.equal(g.correct, g.positions.every(Boolean), p.join());
+      for (const w of g.wrongPairs) {
+        assert.ok(p.indexOf(w.firstId) < p.indexOf(w.secondId), p.join());
+        assert.equal(compareEvents(byId.get(w.firstId) as TimelineEvent, byId.get(w.secondId) as TimelineEvent), 1, p.join());
+      }
+      const involved = new Set(g.wrongPairs.flatMap((w) => [w.firstId, w.secondId]));
+      assert.deepEqual(g.positions, p.map((id) => !involved.has(id)), p.join());
+      assert.equal(g.rightCount, p.filter((id) => !involved.has(id)).length, p.join());
+    }
+  }
 });
 
 // ---- moving items ----------------------------------------------------------------------------------------

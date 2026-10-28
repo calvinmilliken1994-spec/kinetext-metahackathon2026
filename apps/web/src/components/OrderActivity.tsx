@@ -1,7 +1,7 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { DragEvent } from 'react';
 import type { TimelineEvent } from '../../../../packages/contracts/index.ts';
-import { formatEventDate, gradeOrder, hasUnorderedPair, moveItem, seededShuffle } from '../lib/timeline.ts';
+import { formatEventDate, gradeOrder, hasUnorderedPair, moveItem, orderSummary, seededShuffle, wrongPartners } from '../lib/timeline.ts';
 import type { OrderGrade } from '../lib/timeline.ts';
 import type { CiteProps } from './Explanations.tsx';
 import { EventEvidence } from './EventEvidence.tsx';
@@ -16,17 +16,13 @@ interface Props {
   cite: CiteProps;
 }
 
-function summaryOf(g: OrderGrade): string {
-  if (g.correct) return `✓ Correct — all ${g.total} events are in the right order.`;
-  return `✗ ${g.rightCount} of ${g.total} events are in the right place. The marked cards are not where the dates put them — move them and check again.`;
-}
-
 /** "Put these events in order": drag cards, or use the Up/Down buttons (keyboard and screen-reader friendly), then check against the dates. */
 export function OrderActivity({ events, seed, revealed, onCheck, cite }: Props) {
   const headingId = useId();
   const hintId = useId();
   const startOrder = useMemo(() => seededShuffle(events, seed).map((e) => e.id), [events, seed]);
   const byId = useMemo(() => new Map(events.map((e) => [e.id, e] as const)), [events]);
+  const labels = useMemo(() => Object.fromEntries(events.map((e) => [e.id, e.label])), [events]);
   const [order, setOrder] = useState<string[]>(startOrder);
   const [grade, setGrade] = useState<OrderGrade | null>(null);
   const [announce, setAnnounce] = useState('');
@@ -113,6 +109,8 @@ export function OrderActivity({ events, seed, revealed, onCheck, cite }: Props) 
           const e = byId.get(id);
           if (e === undefined) return null;
           const mark = grade === null ? null : grade.positions[i] === true;
+          const partners = grade === null ? [] : wrongPartners(grade, id).map((pid) => `“${labels[pid] ?? pid}”`);
+          const shownPartners = partners.length > 2 ? `${partners.slice(0, 2).join(', ')} and ${partners.length - 2} more` : partners.join(' and ');
           return (
             <li
               key={id}
@@ -132,7 +130,7 @@ export function OrderActivity({ events, seed, revealed, onCheck, cite }: Props) 
                   <span className="sr-only"> (position {i + 1} of {n})</span>
                 </p>
                 {mark !== null && (
-                  <p className={`order-mark ${mark ? 'ok' : 'bad'}`}>{mark ? '✓ Right place' : '✗ Not the right place'}</p>
+                  <p className={`order-mark ${mark ? 'ok' : 'bad'}`}>{mark ? '✓ Right place' : (shownPartners === '' ? '✗ Not the right place' : `✗ Wrong way round with ${shownPartners}`)}</p>
                 )}
                 {revealed && (
                   <div className="order-reveal">
@@ -160,7 +158,7 @@ export function OrderActivity({ events, seed, revealed, onCheck, cite }: Props) 
       <p className="sr-only" role="status" aria-live="polite">{announce}</p>
       {grade !== null && (
         <div className={`grade ${grade.correct ? 'grade-ok' : 'grade-miss'}`} role="status" data-testid="order-result">
-          <strong>{summaryOf(grade)}</strong>
+          <strong>{orderSummary(grade, labels)}</strong>
           <span>The dates and quotes are now shown on each card.</span>
         </div>
       )}
