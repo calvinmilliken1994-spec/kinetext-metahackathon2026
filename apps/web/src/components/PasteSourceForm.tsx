@@ -3,12 +3,12 @@ import type { FormEvent } from 'react';
 import { USER_SOURCE_LIMITS } from '../../../../packages/contracts/index.ts';
 import type { UserLicense } from '../../../../packages/contracts/index.ts';
 import { api, ApiError, describeError } from '../api.ts';
-import { EMPTY_FORM, FREE_CREDITS_NOTE, licenseOptions, problemsByField, RIGHTS_LABEL, textCount, validateSourceForm } from '../lib/sources.ts';
+import { EMPTY_FORM, FREE_CREDITS_NOTE, licenseOptions, problemsByField, reuseNotice, RIGHTS_LABEL, textCount, validateSourceForm } from '../lib/sources.ts';
 import type { FieldProblems, SourceFormValues } from '../lib/sources.ts';
 
 export interface PasteSourceFormProps {
-  /** Called with the stored source id after a successful save. */
-  onCreated: (sourceId: string) => void;
+  /** Called with the stored source id after a successful save, plus a notice when the text already existed. */
+  onCreated: (sourceId: string, notice: string | null) => void;
   onCancel: () => void;
 }
 
@@ -50,7 +50,7 @@ export function PasteSourceForm({ onCreated, onCancel }: PasteSourceFormProps) {
     setProblems({});
     setSaving(true);
     api.createSource(r.input).then(
-      (created) => { setSaving(false); onCreated(created.id); },
+      (created) => { setSaving(false); onCreated(created.id, reuseNotice(created)); },
       (err: unknown) => {
         setSaving(false);
         if (err instanceof ApiError && err.code === 'SOURCE_INVALID' && err.problems.length > 0) {

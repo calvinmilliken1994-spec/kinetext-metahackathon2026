@@ -1,6 +1,7 @@
 // Thin typed client for the local API (apps/api/server.ts). The browser never calls a model:
 // it only reads stored results and asks the server to start a job.
 
+import type { CreatedSource } from './lib/sources.ts';
 import type { ActivitySpec, DemoFault, EngineId, FaultRecord, MetaReceipt, RepairRecord, SourceAnalysis, StageEvent, UserSourceInput, ValidationReport } from '../../../packages/contracts/index.ts';
 
 export type JobStatus = 'running' | 'succeeded' | 'unsupported' | 'failed';
@@ -101,7 +102,7 @@ export const api = {
     }),
   /** Store a teacher-pasted text. 201 = created, 200 = the same text was stored before. */
   createSource: (input: UserSourceInput) =>
-    request<{ id: string; title: string; kind: 'user' }>('/api/sources', {
+    request<CreatedSource>('/api/sources', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(input),

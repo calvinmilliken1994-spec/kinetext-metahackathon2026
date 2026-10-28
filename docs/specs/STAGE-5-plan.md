@@ -84,3 +84,10 @@ Muse Spark 1.3 reviewed the contracts and plan via the subscription bridge (32 s
 | S5-06 (Low) | `maxRepairAttempts` must be an integer in [0, 2] at startup (`RESOURCE_LIMITS_INVALID`) and at the worker boundary (clamped/fails closed). |
 | S5-07 (Low) | Duplicate-text POST returns the **stored** source metadata with `reused: true`; the UI says the text already exists under its stored title. |
 
+## Independent review round 2 (addendum in `docs/reviews/stage-5-review.md`, CHANGES REQUIRED) — lead decisions
+| ID | Decision |
+|---|---|
+| S5-08 (High) | Case identity is **(name, occurrence)** for behavioral tests and **(id, occurrence)** for predictions: the k-th baseline case named X must match the k-th case named X in the next revision. Every baseline occurrence must be matched; content rules (frozen unless that specific case was wrong; tolerance never raised) apply per matched pair. Deleting a duplicate, replacing it under a new name, or reordering duplicates to swap content therefore fails. |
+| S5-09 (Medium) | A baseline case whose **own name/id** violates the publisher policy (same patterns as `policy.no-publisher-attribution`) may be renamed. It is then matched **by its position** in the list; its numeric content stays under the same rules; the new name/id must not violate the policy and must not collide with another baseline name/id. No other renames are allowed. |
+| S5-07 (UI) | The paste form tells the teacher when the text already existed (`reused: true`) and shows the stored title/licence (lead). |
+

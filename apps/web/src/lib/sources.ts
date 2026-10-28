@@ -168,3 +168,14 @@ export function demoFaultOptions(): { value: DemoChoice; label: string }[] {
 export function demoFaultToSend(choice: DemoChoice): DemoFault | undefined {
   return choice === 'none' ? undefined : choice;
 }
+
+/** What POST /api/sources answers. `reused` is true when identical text was already stored (review S5-07). */
+export interface CreatedSource { id: string; title: string; kind: 'user'; reused?: boolean; licenseLabel?: string; attribution?: string }
+
+/** Plain-language disclosure when the server reused an existing source instead of saving the new metadata. */
+export function reuseNotice(created: CreatedSource): string | null {
+  if (created.reused !== true) return null;
+  const licence = created.licenseLabel !== undefined && created.licenseLabel !== '' ? ` (${created.licenseLabel})` : '';
+  return `This text was already saved as “${created.title}”${licence}. Using the existing source; its title, licence and attribution were not changed.`;
+}
+

@@ -68,6 +68,7 @@ export function SourcePanel({ sources, selectedId, onSelect, onReload, onCreated
   const located = highlights ? Object.keys(highlights.ranges).length : 0;
   const meta = sources.state === 'ready' ? sources.data.find((s) => s.id === selectedId) : undefined;
   const [pasting, setPasting] = useState(false);
+  const [reuseMsg, setReuseMsg] = useState<string | null>(null);
   const library = sources.state === 'ready' ? sources.data.filter((s) => s.kind !== 'user') : [];
   const teacher = sources.state === 'ready' ? sources.data.filter((s) => s.kind === 'user') : [];
 
@@ -106,14 +107,15 @@ export function SourcePanel({ sources, selectedId, onSelect, onReload, onCreated
 
       {sources.state === 'ready' && !pasting && (
         <div className="pad paste-toggle">
-          <button type="button" className="btn btn-small" onClick={() => setPasting(true)} aria-expanded={false}>＋ Paste your own text</button>
+          <button type="button" className="btn btn-small" onClick={() => { setPasting(true); setReuseMsg(null); }} aria-expanded={false}>＋ Paste your own text</button>
+          {reuseMsg !== null && <p className="callout pad-s small" role="status">{reuseMsg}</p>}
         </div>
       )}
       {pasting && (
         <div className="pad">
           <PasteSourceForm
             onCancel={() => setPasting(false)}
-            onCreated={(id) => { setPasting(false); onCreated(id); }}
+            onCreated={(id, notice) => { setPasting(false); setReuseMsg(notice); onCreated(id); }}
           />
         </div>
       )}

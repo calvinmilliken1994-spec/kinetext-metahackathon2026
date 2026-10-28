@@ -5,6 +5,7 @@ import { USER_LICENSES, USER_SOURCE_LIMITS, validateUserSourceInput } from '../.
 import {
   demoFaultOptions, demoFaultToSend, disclosureText, EMPTY_FORM, FREE_CREDITS_NOTE, isHttpUrl, licenseLabel, licenseOptions, problemMessage,
   problemsByField, RIGHTS_LABEL, sourceLicenseText, sourceOptionLabel, textCount, validateSourceForm,
+  reuseNotice,
 } from './sources.ts';
 import type { SourceFormValues } from './sources.ts';
 
@@ -149,4 +150,17 @@ test('demo fault options: none + both faults, only system-made faults are ever s
   assert.equal(demoFaultToSend('none'), undefined);
   assert.equal(demoFaultToSend('wrong-answer'), 'wrong-answer');
   assert.equal(demoFaultToSend('fabricated-quote'), 'fabricated-quote');
+});
+
+test('S5-07: a reused source is disclosed with its stored title and licence', () => {
+  assert.equal(reuseNotice({ id: 'user-abc', title: 'New title', kind: 'user', reused: false }), null);
+  assert.equal(reuseNotice({ id: 'user-abc', title: 'New title', kind: 'user' }), null);
+  assert.equal(
+    reuseNotice({ id: 'user-abc', title: 'First title', kind: 'user', reused: true, licenseLabel: 'CC BY 4.0' }),
+    'This text was already saved as “First title” (CC BY 4.0). Using the existing source; its title, licence and attribution were not changed.',
+  );
+  assert.equal(
+    reuseNotice({ id: 'user-abc', title: 'First title', kind: 'user', reused: true }),
+    'This text was already saved as “First title”. Using the existing source; its title, licence and attribution were not changed.',
+  );
 });
