@@ -191,6 +191,25 @@ function writeJsonAtomic(path: string, data: unknown): void {
   renameSync(tmpPath, path);
 }
 
+/**
+ * BUG-002: a fixed-vocabulary cause for the last-resort INTERNAL event — an
+ * errno-style code (e.g. EPERM) or the error class name (e.g. TypeError) —
+ * never the exception message (R-01).
+ */
+function sanitisedCause(err: unknown): string {
+  if (typeof err === 'object' && err !== null) {
+    const code = (err as { code?: unknown }).code;
+    if (typeof code === 'string' && /^[A-Z][A-Z0-9_]{1,31}$/.test(code)) {
+      return code;
+    }
+    const name = (err as { name?: unknown }).name;
+    if (typeof name === 'string' && /^[A-Za-z]{1,40}$/.test(name)) {
+      return name;
+    }
+  }
+  return 'unknown';
+}
+
 function receiptFields(receipt: MetaReceipt): EventExtra {
   return {
     model: receipt.returnedModel,
@@ -407,14 +426,21 @@ export function startJob(
     specMaxOutputTokens: positiveOr(deps.limits?.specMaxOutputTokens, DEFAULT_SPEC_MAX_OUTPUT_TOKENS),
   };
 
-  const done: Promise<JobSummary> = runJob(sourceId, jobId, runDir, deps, summary, now, budget, onEvent).catch(
-    (_err: unknown): JobSummary => {
+  // BUG-002: the stage in progress, so the last-resort catch can say where it broke.
+  const progress: { stage: Stage } = { stage: 'ingest' };
+  const done: Promise<JobSummary> = runJob(sourceId, jobId, runDir, deps, summary, now, budget, onEvent, progress).catch(
+    (err: unknown): JobSummary => {
       // Last resort (F-01): runJob already finalises on expected failures, so
       // reaching here means an invariant or persistence itself broke. Never
       // reject, never persist raw exception text (R-01) — and never leave the
       // job persisted as 'running' after its promise settled: the terminal
       // state is written best-effort inside its own try/catch.
       const at = now().toISOString();
+      const cause = sanitisedCause(err);
+      // Local diagnosis only (server stderr, never persisted or served — R-01).
+      console.error(`[${jobId}] INTERNAL during ${progress.stage}:`, err);
+      // BUG-002: summary.totalCostUSD / reservedUnknownUSD are kept current by
+      // runJob's accountReceipt, so billed calls survive this path.
       summary.status = 'failed';
       summary.error = publicError('INTERNAL');
       summary.finishedAt = at;
@@ -434,7 +460,14 @@ export function startJob(
         } catch {
           seq = 0; // no events file yet; the terminal event starts the sequence
         }
-        const event: StageEvent = { jobId, seq, stage: 'done', status: 'failed', at, detail: 'INTERNAL' };
+        const event: StageEvent = {
+          jobId,
+          seq,
+          stage: 'done',
+          status: 'failed',
+          at,
+          detail: `INTERNAL; during ${progress.stage}; cause ${cause}`,
+        };
         appendFileSync(join(runDir, 'events.jsonl'), `${JSON.stringify(event)}\n`);
       } catch {
         // best effort: the persisted job.json above is the authoritative state
@@ -454,6 +487,7 @@ async function runJob(
   now: () => Date,
   budget: { signal: AbortSignal; analysisMaxOutputTokens: number; specMaxOutputTokens: number },
   onEvent?: (e: StageEvent) => void,
+  progress: { stage: Stage } = { stage: 'ingest' },
 ): Promise<JobSummary> {
   let seq = 0;
   let totalCostUSD = 0;
@@ -461,6 +495,9 @@ async function runJob(
 
   function emit(stage: Stage, status: StageStatus, extra?: EventExtra): StageEvent {
     const event: StageEvent = { jobId, seq, stage, status, at: now().toISOString(), ...extra };
+    if (status === 'started') {
+      progress.stage = stage;
+    }
     seq += 1;
     appendFileSync(join(runDir, 'events.jsonl'), `${JSON.stringify(event)}\n`);
     if (onEvent !== undefined) {
@@ -485,6 +522,10 @@ async function runJob(
   function accountReceipt(receipt: MetaReceipt): void {
     totalCostUSD += receipt.estCostUSD;
     reservedUnknownUSD += reservedUnknownOf(receipt.reservedUnknownUSD);
+    // BUG-002: keep the in-memory summary current so even the last-resort
+    // INTERNAL path persists every billed call.
+    summary.totalCostUSD = roundCost(totalCostUSD);
+    summary.reservedUnknownUSD = roundCost(reservedUnknownUSD);
   }
 
   function finish(status: JobStatus): JobSummary {

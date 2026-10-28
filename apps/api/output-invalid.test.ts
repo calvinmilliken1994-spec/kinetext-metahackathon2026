@@ -318,7 +318,7 @@ test('F-01: an unexpected exception after start persists failed/INTERNAL — job
   const last = events[events.length - 1];
   assert.equal(last?.stage, 'done');
   assert.equal(last?.status, 'failed');
-  assert.equal(last?.detail, 'INTERNAL');
+  assert.equal(last?.detail, 'INTERNAL; during analyze; cause TypeError', 'BUG-002: stage + sanitised cause');
   assert.equal(last?.seq, events.length - 1, 'the last-resort event continues the sequence');
 
   const served = await getServedJob(storageDir, jobId);
