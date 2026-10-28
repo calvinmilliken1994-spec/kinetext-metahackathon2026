@@ -1,0 +1,337 @@
+# Guide to Reliving the Wright Way
+
+In the spirit of the Wright Brothers, NASA is using aeronautics technology to provide access to space. These fundamentals and lessons will help you understand their journey of flight.
+
+The Wright Way will show you the basic math and physics that led to the invention of the airplane by the Wright Brothers.
+
+Fundamentals
+
+The Wright Brothers’ discuss Newton’s Laws of Motion – Video
+
+Newton’s Laws of Motion
+
+Application of Newton’s Third Law – Action & Reaction
+
+Torque (Moments)
+
+Equilibrium
+
+The Idea of Functions
+
+Sine-Cosine-Tangent
+
+The Process of Combustion
+
+Work Equals Force Times Distance
+
+What is Power?
+
+Lessons in Aerodynamics
+
+Aerodynamic Forces
+
+Center of Pressure
+
+Aerodynamic Center
+
+Similarity Parameters
+
+Boundary Layer
+
+Bernoulli’s Equation
+
+Roll
+
+Pitch
+
+Yaw
+
+Wright Brothers Aircraft
+
+First Flights and Planes
+
+Unpowered Aircraft (1900 – 1902)
+
+1902 Glider
+
+Powered Aircraft (1903-1905)
+
+Interactive Simulations
+
+Aircraft Elevator Interactive
+
+At the front of all of the Wright brothers’ aircraft one finds the elevators. The elevators are a pair of movable wings which are controlled by the ...
+
+1900 Aircraft Interactive
+
+You can study the design of the 1900 aircraft by changing the view using the buttons at the bottom of this JavaScript program. This simulation shows a ...
+
+1901 Aircraft Interactive
+
+The simulation below is a computer drawing of the Wright brothers’ 1901 aircraft. This was the second unpowered aircraft built by the brothers. The ...
+
+1902 Aircraft Interactive
+
+The simulation below shows a computer drawing of the Wright brothers’ 1902 aircraft. This was the third unpowered aircraft built by the brothers. The ...
+
+1903 Aircraft Interactive
+
+This page shows a computer drawing of the Wright brothers’ 1903 aircraft. This machine was the first piloted aircraft that was heavier than air, ...
+
+1904 Aircraft Interactive
+
+This page shows a computer drawing of the Wright brothers’ 1904 aircraft. This machine was the second powered aircraft built by the brothers. ...
+
+1905 Aircraft Interactive
+
+This page shows a computer drawing of the Wright brothers’ 1905 aircraft. This machine was the third powered aircraft built by the brothers. In a ...
+
+Modern Lift Equation Interactive
+
+The objective of this simulation is to find the flight conditions that produce an aircraft lift greater than the aircraft weight. You will be determining ...
+
+1901 Wind Tunnel Interactive
+
+This simulation works exactly the same way that the Wright Brother’s 1901 wind tunnel worked. The layout of the simulator shows an overhead view into ...
+
+Forces on an Aircraft
+
+Four Forces on the Flyer
+
+Four Forces on a Kite
+
+Three Forces on a Glider
+
+Aircraft Parts
+
+Parts of the Aircraft
+
+Wing Geometry
+
+Aircraft Elevator Interactive
+
+Rudders Interactive – Biplane
+
+Roll and Wing Warping
+
+Wing Warping
+
+Engine Interactive
+
+Propellers
+
+Kites and Gliders
+
+Aircraft Flown as a Kite
+
+Aircraft Flown as a Glider
+
+Glide Angle
+
+Drag to Lift Ratio
+
+Lift to Drag (L/D) Ratio
+
+1901 Wind Tunnel Tests
+
+1901 Wind Tunnel Interactive
+
+1901 Bicycle Tests
+
+1901 Wind Tunnel Tests
+
+Wind Tunnel
+
+Wind Tunnel Models
+
+Lift Balance – Design
+
+Lift Balance – Operation
+
+Drag Balance – Design
+
+Drag Balance – Operation
+
+Wind Tunnel Results
+
+Wright 1903 Engine
+
+Internal Combustion Engine – Otto Cycle
+
+Engine Thermodynamic Analysis
+
+Engine Mechanical Operation
+
+Intake Stroke
+
+Compression Stroke
+
+Combustion Process
+
+Power Stroke
+
+Heat Rejection
+
+Exhaust Stroke
+
+Engine Parts
+
+Crankcase
+
+Power Train
+
+Bore and Stroke
+
+Combustion Chamber
+
+Fuel System
+
+Electrical System
+
+Cooling System
+
+Lubrication System
+
+Timing System
+
+Lift and Drag
+
+The Wright Brothers’ discuss Lift
+
+Lift
+
+Lift Equation of the 1900’s
+
+Modern Lift Equation ..Interactive
+
+Effects of Shape on Lift ..Interactive
+
+Effects of Inclination on Lift ..Interactive
+
+Effects of Velocity on Lift ..Interactive
+
+The Wright Brothers discuss Drag Force
+
+Drag
+
+Drag Equation of the 1900’s
+
+Smeaton Coefficient
+
+Modern Drag Equation
+
+Effects of Shape on Drag
+
+Thrust and Weight
+
+The Wright Brothers Discuss Thrust Force
+
+Thrust
+
+Propeller Thrust Equation
+
+The Wright Brothers discuss Weight Force
+
+Weight
+
+Weight Equation
+
+The Wright Brothers discuss Center of Gravity
+
+Center of Gravity – cg
+
+Flight Control and Maneuvers
+
+General Aircraft Motion
+
+Rotations – Control Axes
+
+The Wright Brothers’ discuss Roll
+
+Roll
+
+The Wright Brothers’ discuss Pitch
+
+Pitch
+
+The Wright Brothers discuss Yaw
+
+Yaw
+
+Translations
+
+Relative Velocity
+
+Cruise Conditions
+
+Simplified Motion
+
+Equations of Motion
+
+Banking Turns
+
+Side Forces
+
+Gas Static
+
+Properties of Air
+
+Air Pressure
+
+Air Temperature
+
+Equation of State
+
+Specific Heats – cp and cv
+
+Boyle’s Law
+
+Charles and Gay-Lussac’s Law
+
+Work Done by a Gas
+
+Enthalpy
+
+Entropy of a Gas
+
+Compression and Expansion
+
+Thermodynamics
+
+What is Thermodynamics?
+
+Zeroth Law – Thermal Equilibrium
+
+First Law – Internal Energy
+
+First Law – Conservation of Energy
+
+Second Law – Entropy
+
+Heat Transfer
+
+Replicas
+
+Full Scale Replica of Wright 1900 Aircraft
+
+Computed Performance Predictions
+
+Interactive Performance Prediction
+
+Panel Code Performance Prediction
+
+Computed Flows at Angle = 0
+
+Computed Flows at Angle = 5
+
+Computed Flows at Angle = 10
+
+Half Scale Replica of Wright 1902 Aircraft
+
+Modeling the Wright 1902 Glider
+
+Replica of Wright 1902 Aircraft
+
+Replica of Wright 1903 Aircraft
+
+Replica of Wright 1905 Aircraft

@@ -1,0 +1,12 @@
+{
+  "id": "nasa-grc-motion-of-free-falling-object",
+  "title": "Motion of Free Falling Object — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+  "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/motion-of-free-falling-object/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+  "sha256": "f94199ea21e14dad578baee19694e534fff3dba5dc88f9bc2ea6ec082445c317",
+  "textFile": "nasa-grc-motion-of-free-falling-object.txt",
+  "retrievedAt": "2026-10-28T15:46:00Z",
+  "transcription": "Main article text only (breadcrumbs, hero image, navigation, feedback form and footer removed). LaTeX equations transcribed to plain text (V = a * t; X = (1 / 2) * a * t^2). The acceleration/velocity/displacement table is transcribed as plain-text pipe-separated lines, one line per row. Whitespace normalised.",
+  "purpose": "evaluation: expected forces-1d-v1 (constant g with a metric table at 1-second intervals; the projectile-v1 vertical part is an equally acceptable reading of the same physics)"
+}

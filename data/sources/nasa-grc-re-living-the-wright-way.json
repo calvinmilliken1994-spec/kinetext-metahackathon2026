@@ -1,0 +1,12 @@
+{
+  "id": "nasa-grc-re-living-the-wright-way",
+  "title": "Guide to Reliving the Wright Way — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+  "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/re-living-the-wright-way/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+  "sha256": "c7d0a44cd306a87e59d38d81850a825080de38231c0242f7086f5336a80c94c2",
+  "textFile": "nasa-grc-re-living-the-wright-way.txt",
+  "retrievedAt": "2026-10-28T15:46:00Z",
+  "transcription": "Full guide-index page text (hero image, simulation screenshots, navigation, feedback form and footer removed): the two lead paragraphs and every section list item and interactive-card teaser as printed, including the truncated '...' teasers and the page's own grammar (e.g. 'The Wright Brothers' discuss…', '..Interactive'). Whitespace normalised.",
+  "purpose": "evaluation: expected decline (narrative history-of-flight index page with no single quantitative model; forcing an engine here would fabricate physics)"
+}

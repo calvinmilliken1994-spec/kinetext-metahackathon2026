@@ -1,0 +1,12 @@
+{
+  "id": "nara-emancipation-proclamation",
+  "title": "Emancipation Proclamation (1863) — National Archives, Milestone Documents (agency-written introduction)",
+  "locator": "https://www.archives.gov/milestone-documents/emancipation-proclamation",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Emancipation Proclamation (1863)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+  "sha256": "0d11585e47f04bd0a12b0ded4d23595943f21a5af522811db76a93ef0486f646",
+  "textFile": "nara-emancipation-proclamation.txt",
+  "retrievedAt": "2026-10-28T15:46:00Z",
+  "transcription": "Agency-written introduction and background only: the bold summary sentence and the six history paragraphs. Citation line, images and enlarge/download links, catalog links, 'View Transcript', previous/next navigation and the 1863 proclamation transcript were removed. The page's own wording 'President issued the Emancipation Proclamation' (missing 'Lincoln') is kept as printed. Inline hyperlinks flattened to their text. Whitespace normalised.",
+  "purpose": "evaluation: expected timeline-v1 (Preliminary Proclamation September 22, 1862; final Proclamation January 1, 1863; two-date core with surrounding Civil War context)"
+}

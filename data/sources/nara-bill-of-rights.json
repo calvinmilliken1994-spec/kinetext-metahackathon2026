@@ -1,0 +1,12 @@
+{
+  "id": "nara-bill-of-rights",
+  "title": "Bill of Rights (1791) — National Archives, Milestone Documents (agency-written introduction)",
+  "locator": "https://www.archives.gov/milestone-documents/bill-of-rights",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Bill of Rights (1791)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+  "sha256": "a4a36b13e4682b41a3b938737553b5a5f3e509f35af3132cd2420de67f016531",
+  "textFile": "nara-bill-of-rights.txt",
+  "retrievedAt": "2026-10-28T15:46:00Z",
+  "transcription": "Agency-written introduction and background only: the bold summary sentence and the two history paragraphs. Citation line, images and enlarge/download links, 'View Transcript', the 'More information' block, previous/next navigation and the amendments transcript were removed. Inline hyperlinks flattened to their text. Whitespace normalised.",
+  "purpose": "evaluation: expected timeline-v1 (September 25, 1789 Congress proposes twelve amendments; December 15, 1791 three-fourths of the states ratify ten; May 7, 1992 Article 2 becomes the 27th Amendment)"
+}

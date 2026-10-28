@@ -1,0 +1,19 @@
+# Backgrounder on Plutonium
+
+Plutonium is a radioactive metallic element with the atomic number 94. It was discovered in 1940 by scientists studying how to split atoms to make atomic bombs. Plutonium is created in a reactor when uranium atoms absorb neutrons. Nearly all plutonium is man-made.
+
+Plutonium predominantly emits alpha particles – a type of radiation that is easily stopped and has a short range. It also emits neutrons, beta particles and gamma rays. It is considered toxic, in part, because if it were to be inhaled it could deposit in the lungs and eventually cause damage.
+
+There are five “common” isotopes of plutonium, Pu-238, Pu-239, Pu-240, Pu-241, and Pu-242. These are all “fissionable” – the atom’s nucleus can easily split apart if it is struck by a neutron.
+
+The different isotopes have different “half-lives” – the time it takes to lose half of its radioactivity. Pu-239 has a half-life of 24,100 years and Pu-241’s half-life is 14.4 years. Substances with shorter half-lives decay more quickly than those with longer half-lives, so they emit more energetic radioactivity.
+
+Like any radioactive isotopes, plutonium isotopes transform when they decay. They might become different plutonium isotopes or different elements, such as uranium or neptunium. Many of these “daughter products” are themselves radioactive.
+
+Different uses have been found for plutonium. Plutonium-238 has been used to power batteries for some heart pacemakers, as well as provide a long-lived heat source to power NASA space missions. Like uranium, plutonium can also be used to fuel nuclear power plants. This is done in a few countries but not currently in the United States.
+
+Today’s light water reactors – used to make commercial power in the United States – create plutonium when the uranium in their fuel fissions. Some of the neutrons released by uranium interact with other uranium atoms to form plutonium. Some of the plutonium itself fissions – part of the chain reaction of splitting atoms that is the basis of nuclear power. Any plutonium that does not fission stays in the spent fuel. Spent nuclear fuel from U.S. reactors contains about 1 percent plutonium by weight.
+
+There are many metric tons of plutonium in spent nuclear fuel stored around the world. To be usable, plutonium would need to be separated from the other products in spent fuel. This process, known as reprocessing, uses chemicals to separate plutonium from uranium and other fission products. Once separated, plutonium oxide can be mixed with uranium oxide to produce mixed oxide or MOX fuel.
+
+MOX fuel can be used in power reactors. Reprocessing is controversial internationally, because the plutonium can also be used to make nuclear weapons. The United States briefly reprocessed spent fuel in the 1970s, but there is currently no commercial reprocessing program in the country.

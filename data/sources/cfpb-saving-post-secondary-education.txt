@@ -1,0 +1,197 @@
+# Saving for post-secondary education
+
+Students use an online compound interest calculator to explore the value of saving money over time for future education goals.
+
+Learning goals
+
+Big idea
+
+The sooner you start saving for post-secondary education, the faster your money can grow from compound interest.
+
+Essential questions
+
+What savings goal can I set to help pay for higher education?
+
+How can my savings grow over time?
+
+Objectives
+
+Understand how time and compound interest can increase savings
+
+Understand the value of starting early to save for post-secondary education
+
+What students will do
+
+Watch a video on compound interest.
+
+Identify reasons to start saving early for post-secondary education.
+
+Use an online calculator to understand how time and compound interest can increase savings.
+
+NOTE
+
+Please remember to consider your students' accommodations and special needs to ensure that all students are able to participate in a meaningful way.
+
+KEY INFORMATION
+
+Building block:
+
+Executive function
+
+Financial knowledge and decision-making skills
+
+Grade level: High school (9–12)
+
+Age range: 13-19
+
+Topic: Spend Save and invest (Saving for college), Spend (Paying for college)
+
+School subject: CTE (Career and technical education), Math, Social studies or history
+
+Teaching strategy: Blended learning, Personalized instruction
+
+Bloom's Taxonomy level: Apply, Analyze
+
+Activity duration: 45-60 minutes
+
+National Standards for Personal Financial Education, 2021
+
+Earning income: 8-3, 8-4, 12-3
+
+Saving: 8-1, 8-3, 12-1, 12-9,
+
+Investing: 8-7
+
+These standards are cumulative, and topics are not repeated in each grade level. This activity may include information students need to understand before exploring this topic in more detail.
+
+Preparing for this activity
+
+While it's not necessary, completing the "Learning how FAFSA works" activity first may make this one more meaningful.
+
+Print copies of all student materials for each student, or prepare for students to access them electronically.
+
+Review the optional videos and select the one most appropriate for your students.
+
+Take time to practice using this online calculator so you're familiar with how it works: https://www.investor.gov/financial-tools-calculators/calculators/compound-interest-calculator.
+
+Secure computers or tablets with Internet access for students to access the online calculator.
+
+Note: If you can't arrange for students to have individual or group Internet access, this can be done as a whole-class activity by projecting the calculator on a screen from a computer.
+
+What you'll need
+
+THIS TEACHER GUIDE
+
+Saving for post-secondary education (guide)
+
+cfpb_building_block_activities_saving-post-secondary-education_guide.pdf
+
+STUDENT MATERIALS
+
+Saving for post-secondary education (worksheet)
+
+cfpb_building_block_activities_saving-post-secondary-education_worksheet.pdf
+
+Videos on compound interest (optional):
+
+https://youtu.be/r0haW5E_OpI
+
+https://www.stlouisfed.org/education/no-frills-money-skills-video-series/episode-1-growing-money-compound-interest
+
+The U.S. Securities and Exchange Commission's (SEC's) compound interest calculator: https://www.investor.gov/financial-tools-calculators/calculators/compound-interest-calculator
+
+Computers or tablets with Internet access (if available)
+
+Exploring key financial concepts
+
+Enrolling in college or another post-secondary program usually comes with a cost. To help meet these costs, a good place to start may be to research the potential costs for the education path you're considering. You can use this information to set a specific goal for how much money you'd like to save. Once your financial goal is set, you can figure out specific steps you'll take to reach the goal. It's important to remember that even small steps make a difference and may help prepare you to contribute to your education costs.
+
+TIP
+
+Because financial products, terms, and laws change, students should be encouraged to always look for the most up-to-date information.
+
+The sooner you start saving in an account that pays interest, the faster your money can grow. That's because of the effect of compound interest. Compound interest is when you earn interest on both the money you save and the interest you earn. So let's say you invest $1,000 (your principal) and it earns 5 percent (interest rate) once a year (the compounding frequency). After the first year, you would have $1,050—your original principal, plus 5 percent, or $50. The second year, you would have $1,102.50. That's because the next interest payment equals 5 percent of $1,050, or $52.50. Increasing the compounding frequency or your interest rate or adding to your principal can help your savings grow even faster.
+
+Teaching this activity
+
+Whole-class introduction
+
+Ask students to share some things people can do to prepare to pay for education after high school.
+
+Answers may include saving money or looking for scholarships.
+
+Introduce students to the concept of compound interest. You can either do that yourself (refer to the "Exploring key financial concepts" section for some ideas) or have students watch one of the videos below that describe compound interest:
+
+"How compound interest boosts savings" a video created by the Financial Literacy Center,¹ a joint center of the RAND Corporation, Dartmouth College, and the Wharton School: https://youtu.be/r0haW5E_OpI
+
+"Growing money - compound interest" a video created by the St. Louis Federal Reserve Bank: https://www.stlouisfed.org/education/no-frills-money-skills-video-series/episode-1-growing-money-compound-interest.
+
+1. The Consumer Financial Protection Bureau does not endorse this third party or guarantee the accuracy of this third-party information.
+
+Be sure students understand key vocabulary:
+
+Compound interest: When you earn interest on both the money you save and the interest you earn.
+
+TIP
+
+Visit CFPB's financial education glossary at consumerfinance.gov/financial-education-glossary/.
+
+Interest rate: A percentage of a sum borrowed that is charged by a lender or merchant for letting you use its money. A bank or credit union may also pay you an interest rate if you deposit money in certain types of accounts. (This activity focuses on interest that a bank or credit union would pay to you.)
+
+Investment: Something you spend your money on that you expect will earn a financial return.
+
+Money market deposit account: Federally insured account at a bank or credit union that offers a higher rate of interest than a savings account, allows for a limited number of transactions monthly, and may require a minimum deposit or minimum account balance.
+
+Post-secondary education: Includes all forms of schooling after high school, not just college.
+
+Individual or group work
+
+Distribute the "Saving for post-secondary education" worksheet to each student.
+
+Explain that they'll use a specialized online calculator to determine how much their money can grow using the power of compound interest through different savings products.
+
+Bring up the U.S. Securities and Exchange Commission's (SEC's) free online compound interest calculator to show students what they can expect: https://www.investor.gov/financial-tools-calculators/calculators/compound-interest-calculator
+
+Be sure students know what to do in each step:
+
+Step 1. Initial investment: Enter the amount of money you have to start this savings investment.
+
+Step 2a. Contribute: Enter the amount you plan to add each month.
+
+Step 2b. Length of time: Enter the number of years you plan to save before you'll need the money.
+
+Step 3a. Interest rate: Enter your estimated annual interest rate. Information about current interest rates can be found online.
+
+Step 3b. Range of interest rates: Enter the degree to which the interest rate might fluctuate above and below the rate estimated in Step 3a. This helps you get a more accurate picture.
+
+Step 4. Compounding: The number of times per year that interest will be compounded. Interest can be compounded annually (once each year), semi-annually (twice each year), monthly, or daily.
+
+Be sure students understand that the interest rates, interest rate ranges, and compounding frequencies in the scenarios are for example only.
+
+Students can work individually or with a partner on the scenarios.
+
+Remind students that they should record the total savings for each scenario on their worksheet.
+
+After students have completed their calculations for three scenarios, give them a few minutes to reflect on what they've learned about compound interest and answer the reflection questions on their own.
+
+Wrap-up
+
+Bring students together to share their learning. Through questioning and discussion, help students understand how starting to save early in an account that pays interest and regularly adding to their savings can help increase their savings over time.
+
+Suggested next steps
+
+Consider searching for other CFPB activities that address the topics of saving and investing (including saving for college) and spending (including paying for college). Suggested activities include "Learning how federal financial aid can help you pay for higher education" and "Using a student loan calculator".
+
+Measuring student learning
+
+Students' answers on their worksheets and during discussion can give you a sense of their understanding.
+
+This answer guide provides possible answers for the "Saving for post-secondary education" worksheet. Keep in mind that students' answers may vary. The important thing is for students to have reasonable justification for their answers.
+
+Answer guide
+
+Scenario A: Willie would have $8,974.70, using this amount of time and compound interest.
+
+Scenario B: Kwame would have $9,330.16, using this amount of time and compound interest.
+
+Scenario C: Venita would have $24,315.19, using this amount of time and compound interest.

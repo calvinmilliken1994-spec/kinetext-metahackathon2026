@@ -1,0 +1,12 @@
+{
+  "id": "nrc-backgrounder-plutonium",
+  "title": "Backgrounder on Plutonium — U.S. Nuclear Regulatory Commission",
+  "locator": "https://www.nrc.gov/regulations-legislation/fact-sheets-brochures/backgrounder-on-plutonium",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: U.S. Nuclear Regulatory Commission, 'Backgrounder on Plutonium', Fact Sheets & Brochures. NRC's website constitutes a U.S. Government Work under federal copyright law and is not subject to copyright. The U.S. Nuclear Regulatory Commission has not reviewed, approved or endorsed this activity.",
+  "sha256": "03700e48439f4a60c4b8ff3676122131acf7c23ff26eaacb5700f29a06768737",
+  "textFile": "nrc-backgrounder-plutonium.txt",
+  "retrievedAt": "2026-10-28T15:46:00Z",
+  "transcription": "Main fact-sheet text only (site furniture, sidebar, 'Printable Version' link, the Cassini photo and its caption and the August 2025 date removed). The Pu-239 half-life is kept as printed here (24,100 years), which deliberately conflicts with the 24,000 years printed on the NRC radioactive-waste backgrounder. Whitespace normalised.",
+  "purpose": "evaluation: expected half-life-v1 (borderline: Pu-239 = 24,100 years and Pu-241 = 14.4 years with the 'time to lose half its radioactivity' definition; cross-source consistency trap against the radioactive-waste backgrounder)"
+}

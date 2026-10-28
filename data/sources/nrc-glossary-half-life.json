@@ -1,0 +1,12 @@
+{
+  "id": "nrc-glossary-half-life",
+  "title": "Half-life — U.S. Nuclear Regulatory Commission, glossary",
+  "locator": "https://www.nrc.gov/education-regulatory-research/glossary/half-life",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: U.S. Nuclear Regulatory Commission, 'Half-life', Education & Regulatory Research glossary. NRC's website constitutes a U.S. Government Work under federal copyright law and is not subject to copyright. The U.S. Nuclear Regulatory Commission has not reviewed, approved or endorsed this activity.",
+  "sha256": "9877c6c6956308cd42fe37add0cb11802645ecb92867b7ea53a17ad85cf6a5de",
+  "textFile": "nrc-glossary-half-life.txt",
+  "retrievedAt": "2026-10-28T15:46:00Z",
+  "transcription": "Glossary term text only (site furniture, sidebar navigation and footer removed): the one-sentence definition exactly as printed. Whitespace normalised.",
+  "purpose": "evaluation: expected decline (one-sentence glossary definition — 'millionths of a second to billions of years' — with no numbers to build cases from; a strict pipeline should decline for insufficient content)"
+}

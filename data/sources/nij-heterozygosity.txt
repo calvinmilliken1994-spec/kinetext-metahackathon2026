@@ -1,0 +1,13 @@
+# Heterozygosity
+
+The variation in alleles is critical to the survival of a species and allows organisms to adapt to changing environments. Allele frequency, or the frequency at which alleles are found at any locus of interest, is used to estimate the frequency of a given genetic profile. Every diploid cell has two alleles, one inherited from each parent. If an individual has two different alleles at a specific locus, the individual is heterozygous at that locus; if the two alleles are the same, the individual is homozygous. Allele frequency is used to characterize the genetic diversity, or richness of the gene pool, in a population. Populations need variation. The measure of the amount of heterozygosity across loci can be used as a general indicator of the amount of genetic variability.
+
+The number of possible genotypes from only a few loci is great, and can be calculated using the formula k(k+1)/2, where k is the number of alleles at a particular locus. The parameter k also represents the expected number of homozygous genotypes, and k[(k-1)/2] represents the expected number of heterozygous genotypes. The observed heterozygosity can be compared to the expected heterozygosity, and the deviations between these values can indicate important population dynamics.
+
+Download a spreadsheet to see this calculation in action.
+
+The exact genotypes can be determined using a Punnett square. A Punnett square is simply a grid that graphically represents expected genotypes. These grids are useful tools to visually determine projected genotypes and their frequencies.
+
+A gene pool is the unique set of alleles that could be found by analyzing the DNA from every member of a species or population. A large gene pool is often associated with considerable genetic diversity whereas a small gene pool is associated with poor genetic diversity and can lead to decreased fitness and an increased chance of extinction. Fitness is the probability of transmitting one's genes to the next generation in relation to the average probability for that population.
+
+Genetic diversity is greater within populations than between them. The study of genetics has revealed that approximately 85% of human genetic diversity comes from individuals of the same population. The remaining 15% is derived from diversity between continents (~10%) and to a lesser extent, diversity within continents (~5%). These data support the view that interracial variations do not represent major differences in the human genome, in contrast to what was previously thought.

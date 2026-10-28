@@ -1,0 +1,12 @@
+{
+  "id": "nara-constitution",
+  "title": "Constitution of the United States (1787) — National Archives, Milestone Documents (agency-written introduction)",
+  "locator": "https://www.archives.gov/milestone-documents/constitution",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Constitution of the United States (1787)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+  "sha256": "a14175b009333bebd61eaff70e3393928a8f0dbd0ae00027067c07b15d176db4",
+  "textFile": "nara-constitution.txt",
+  "retrievedAt": "2026-10-28T15:46:00Z",
+  "transcription": "Agency-written introduction and background only: the bold summary sentence and the three history paragraphs. Citation line, images and enlarge/download links, catalog link, the 'More information' block, previous/next navigation and the Constitution transcript were removed. Inline hyperlinks flattened to their text. Whitespace normalised.",
+  "purpose": "evaluation: expected timeline-v1 (convention convened May 14, 1787; quorum of seven states May 25; mid-June decision to draft a new frame of government; signed September 17, 1787)"
+}

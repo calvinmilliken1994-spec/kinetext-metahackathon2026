@@ -1,0 +1,12 @@
+{
+  "id": "nasa-grc-newtons-laws-of-motion",
+  "title": "Newton's Laws of Motion — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+  "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/newtons-laws-of-motion/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+  "sha256": "907bae07076eef20118a4e54096ad399b11994ec5e310d9bed74850f6d009014",
+  "textFile": "nasa-grc-newtons-laws-of-motion.txt",
+  "retrievedAt": "2026-10-28T15:46:00Z",
+  "transcription": "Main article text only (hero image, embedded YouTube video, navigation, feedback form and footer removed; the hero lead paragraph is included). LaTeX equations transcribed to plain text, e.g. F = (m1 * V1 – m0 * V0) / (t1 – t0), with the en dashes printed in the equations kept. The three-laws review table is transcribed as plain-text pipe-separated lines. Whitespace normalised.",
+  "purpose": "evaluation: expected forces-1d-v1 (all three laws stated plainly; F = m * a with metric examples; short page)"
+}

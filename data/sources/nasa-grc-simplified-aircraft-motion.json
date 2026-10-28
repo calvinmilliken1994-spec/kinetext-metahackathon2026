@@ -1,0 +1,12 @@
+{
+  "id": "nasa-grc-simplified-aircraft-motion",
+  "title": "Simplified Aircraft Motion — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+  "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/simplified-aircraft-motion/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+  "sha256": "21d6273d590cd157b690fe9491c4c0d202f5b35c5e5a31a8c072b37bbe89edd5",
+  "textFile": "nasa-grc-simplified-aircraft-motion.txt",
+  "retrievedAt": "2026-10-28T15:46:00Z",
+  "transcription": "Main article text only (breadcrumbs, hero image, navigation, feedback form and footer removed). LaTeX equations transcribed to plain text, e.g. F = m * a; the non-breaking spaces inside 'Aircraft~Rises' and its siblings rendered as ordinary spaces. Whitespace normalised.",
+  "purpose": "evaluation: expected forces-1d-v1 (balanced vs unbalanced forces on an aircraft with an explicit Newton's-second-law computation)"
+}

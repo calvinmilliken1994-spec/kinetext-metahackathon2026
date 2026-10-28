@@ -1,0 +1,3 @@
+# Half-life
+
+The time in which one half of the atoms of a particular radioactive substance disintegrate into another nuclear form. Measured half-lives vary from millionths of a second to billions of years. Also called physical or radiological half-life.

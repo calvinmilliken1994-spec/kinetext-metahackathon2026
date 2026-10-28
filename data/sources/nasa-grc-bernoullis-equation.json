@@ -1,0 +1,12 @@
+{
+  "id": "nasa-grc-bernoullis-equation",
+  "title": "Bernoulli's Equation — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+  "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/bernoullis-equation/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+  "sha256": "ce3917d5b0b1392825d9f0c16d2d9b78898e119122bec3a1dd940e1d45437799",
+  "textFile": "nasa-grc-bernoullis-equation.txt",
+  "retrievedAt": "2026-10-28T15:46:00Z",
+  "transcription": "Main article text only (breadcrumbs, hero image, navigation, feedback form and footer removed). Derivation equations transcribed from LaTeX to plain text with station subscripts appended (e.g. pt = ps + (rho * V^2) / 2; (ps)2 + (rho * V^2 / 2)2 = (ps)1 + (rho * V^2 / 2)1 = a constant = pt); inline (ρ) kept as on the page. Whitespace normalised.",
+  "purpose": "evaluation: expected decline (pressure/energy conservation along a streamline; no engine models it and lift-equation-v1's appliesWhen excludes Bernoulli pressure distributions alone)"
+}

@@ -1,0 +1,12 @@
+{
+  "id": "nasa-grc-glider-trajectory-problem",
+  "title": "Glider Trajectory Problem — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+  "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/glider-trajectory-problem/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+  "sha256": "66e6cfc191fb83e9cfff3bc323a0394b392cbb4e0278aba87b367f3203c3c1e2",
+  "textFile": "nasa-grc-glider-trajectory-problem.txt",
+  "retrievedAt": "2026-10-28T15:46:00Z",
+  "transcription": "Main article text only (breadcrumbs, hero image, navigation, feedback form and footer removed). Equations transcribed from LaTeX to plain text: tan(a) = h / d; L * cos(a) + D * sin(a) = W; L * sin(a) = D * cos(a). The page's own missing space in '1903.More sophisticated' is kept as printed. Whitespace normalised.",
+  "purpose": "evaluation: expected decline (trap: looks ballistic via the glide-angle relation tan(a) = h/d, but the physics is steady descent in lift/drag equilibrium; projectile-v1 explicitly excludes drag — the most likely forced-mapping error in the physics set)"
+}

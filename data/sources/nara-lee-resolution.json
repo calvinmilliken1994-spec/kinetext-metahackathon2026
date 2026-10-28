@@ -1,0 +1,12 @@
+{
+  "id": "nara-lee-resolution",
+  "title": "Lee Resolution (1776) — National Archives, Milestone Documents (agency-written introduction)",
+  "locator": "https://www.archives.gov/milestone-documents/lee-resolution",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Lee Resolution (1776)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+  "sha256": "a18b4131b1c5223c9b0685aed8fa77a746537b2af6e2084d892549e8808ce9e3",
+  "textFile": "nara-lee-resolution.txt",
+  "retrievedAt": "2026-10-28T15:46:00Z",
+  "transcription": "Agency-written introduction and background only: the bold summary sentence and the seven history paragraphs. Citation line, images and enlarge/download links, catalog links, 'View Transcript', previous/next navigation and the 1776 resolution transcript were removed. Inline hyperlinks flattened to their text. Whitespace normalised.",
+  "purpose": "evaluation: expected timeline-v1 (June 7, 1776 motion; June 11 three concurrent committees; July 2 adoption; July 9 New York; September 1776 treaties plan; November 1777 confederation plan — short dense sequence that pairs with the core Declaration source)"
+}

@@ -1,0 +1,12 @@
+{
+  "id": "nasa-grc-specific-heat-cp-cv",
+  "title": "Specific Heat – Cp & Cv — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+  "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/specific-heat-cp-cv/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+  "sha256": "9df5f948a44c3fd060dd74c26ccaa8247cb311d0b0d618ceaafaf6382ba4d1b8",
+  "textFile": "nasa-grc-specific-heat-cp-cv.txt",
+  "retrievedAt": "2026-10-28T15:46:00Z",
+  "transcription": "Main article text only (breadcrumbs, hero image, navigation, feedback form and footer removed). Display equations transcribed from LaTeX to plain text (e.g. cp = cv + R, gamma = cp / cv); inline math symbols rendered as on the page (Δ, ΔT, γ). The page's own typo 'where h in the specific enthalpy' and its missing period before 'If we substitute' are kept as printed; the page's malformed inline-LaTeX fragment (a stray '\\)latex \\Delta e$') is rendered as the intended 'Δe' quotation it was meant to produce. Whitespace normalised.",
+  "purpose": "evaluation: expected speed-of-sound-v1 (derivation-heavy thermodynamics — enthalpy, internal energy, gamma = cp/cv, R = cp − cv — supplying the γ and R inputs around the two numbers the engine needs)"
+}

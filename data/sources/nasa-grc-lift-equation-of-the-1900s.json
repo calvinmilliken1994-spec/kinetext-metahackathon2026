@@ -1,0 +1,12 @@
+{
+  "id": "nasa-grc-lift-equation-of-the-1900s",
+  "title": "Lift Equation of the 1900's — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+  "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/lift-equation-of-the-1900s/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+  "sha256": "41fb1b6349509be9b9478942fed514cd8d077b15436694132ecbfb588c477402",
+  "textFile": "nasa-grc-lift-equation-of-the-1900s.txt",
+  "retrievedAt": "2026-10-28T15:46:00Z",
+  "transcription": "Main article text only (breadcrumbs, hero image, embedded movie/Podcast links, navigation, feedback form and footer removed). The historical lift equation is kept as the page prints it: L = k * V^2 * A * cl, with the Smeaton-coefficient values (.0027 to .005, .0033, .00326) and the imperial example (100 + 150 pounds, 15 mile per hour wind, 5 degrees) exactly as on the page. Whitespace normalised.",
+  "purpose": "evaluation: expected lift-equation-v1 (historical form with the Smeaton coefficient in imperial units and several quoted k values — unit conversion and an ambiguous constant likely to trip the model)"
+}

@@ -1,0 +1,12 @@
+{
+  "id": "usgs-powell-geologic-time",
+  "title": "Powell Expedition—Geologic Time. Then and Now. — U.S. Geological Survey",
+  "locator": "https://www.usgs.gov/news/powell-expedition-geologic-time-then-and-now",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: U.S. Geological Survey, 'Powell Expedition—Geologic Time. Then and Now.' (2019). Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+  "sha256": "fa7498537478e10722976127bedd9cf61ccb5dda39090e0a4f844635b5a8f71f",
+  "textFile": "usgs-powell-geologic-time.txt",
+  "retrievedAt": "2026-10-28T15:46:00Z",
+  "transcription": "Main article text only (carousel image, byline and date, side images with their captions and 'Sources/Usage' credits, the footnote separator line, 'Related' article teasers, the contacts block and footer removed). The intro paragraph and the full radiometric-dating footnote (cake-eating halving analogy and the U-235 → Pb-207 worked example) are kept; the footnote asterisk in 'half-lives*' is kept as printed. The U-235 half-life is kept as printed here (710 million years), deliberately conflicting with the 704 Myr on the core usgs-geologic-age source. Whitespace normalised.",
+  "purpose": "evaluation: expected half-life-v1 (half-life = 1 day cake analogy — 1/8 left → 3 half-lives — plus a 7/8-daughter → 3 half-lives → 2.13 billion yr worked example buried in a narrative news feature)"
+}

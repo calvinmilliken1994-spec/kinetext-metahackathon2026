@@ -1,0 +1,12 @@
+{
+  "id": "nasa-grc-weight-equation",
+  "title": "Weight Equation — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+  "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/weight-equation/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+  "sha256": "3bce4bd7de875c5dc08f1b682c3179be302140b673e9a7ea4ee516e778de172c",
+  "textFile": "nasa-grc-weight-equation.txt",
+  "retrievedAt": "2026-10-28T15:46:00Z",
+  "transcription": "Main article text only (breadcrumbs, hero image, navigation, feedback form and footer removed). The page's own plain-text equation lines kept verbatim, including 'g = G * m earth / (d earth)^2' and the imperial/metric mix (9.8 meters or 32.2 feet per square second; 10000 vs 9965 pounds). Whitespace normalised.",
+  "purpose": "evaluation: expected forces-1d-v1 (borderline: the page teaches W = m * g and F = G * m1 * m2 / d^2 with g varying with altitude — not F_net = m * a; tests applicability judgment and mass-vs-weight confusion)"
+}

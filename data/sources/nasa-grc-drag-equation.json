@@ -1,0 +1,12 @@
+{
+  "id": "nasa-grc-drag-equation",
+  "title": "Drag Equation — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+  "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/drag-equation/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+  "sha256": "9462a6186d8b00e0dbf2618e4a6701edc9448614e144af1f4bc0b53b59f6ceed",
+  "textFile": "nasa-grc-drag-equation.txt",
+  "retrievedAt": "2026-10-28T15:46:00Z",
+  "transcription": "Main article text only (breadcrumbs, hero image, the 'Download as a Slide' link, navigation, feedback form and footer removed). The drag equation transcribed from LaTeX to plain text: D = Cd * (rho * V^2 * A) / 2; inline (ρ) kept as on the page. Whitespace normalised.",
+  "purpose": "evaluation: expected decline (real quantitative drag physics that no tested engine models; the closest engines — lift-equation-v1 and projectile-v1 — explicitly exclude drag)"
+}

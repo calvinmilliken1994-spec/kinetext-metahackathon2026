@@ -1,0 +1,12 @@
+{
+  "id": "nasa-grc-role-of-the-mach-number",
+  "title": "Role of the Mach Number — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+  "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/role-of-the-mach-number/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+  "sha256": "a7355b33f7126247cd0576ce48a0975a781814c8687022d8fdf12e11fdeaa3c8",
+  "textFile": "nasa-grc-role-of-the-mach-number.txt",
+  "retrievedAt": "2026-10-28T15:46:00Z",
+  "transcription": "Main article text only (breadcrumbs, hero image, the speed-of-sound simulator widget with its 'General Instructions' block and loading notice, navigation, feedback form and footer removed). Derivation equations transcribed from LaTeX to plain text (e.g. gamma * R * T = a^2; -M^2 * (dV / V) = drho / rho); inline (ρ) and (γ) kept as on the page; the page's own typo 'effects. we begin' kept as printed. Whitespace normalised.",
+  "purpose": "evaluation: expected speed-of-sound-v1 (borderline: derives the speed of sound from gamma, R and T but is mostly flight-regime classification, which the engine's appliesWhen explicitly excludes; ambiguous mapping by design)"
+}

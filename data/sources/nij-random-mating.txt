@@ -1,0 +1,5 @@
+# Random Mating
+
+One reason that Hardy-Weinberg does not always apply to humans is that random mating, a condition of HWE (Hardy-Weinberg Equilibrium), does not occur. Random mating implies that mating should be arbitrary with regard to the locus being considered. As with most mammals, humans tend to mate with individuals that are similar to themselves, especially with respect to evident or visible traits such as height, I.Q., and ethnicity. This constitutes non-random, positive assortative mating. In contrast, negative assortative mating is breeding between individuals with dissimilar genotypes, and is more rare. Positive assortative mating leads to an increase in homozygotes whereas negative assortative mating leads to an increase in heterozygotes. However, assortative mating is never complete. While humans often mate with individuals alike in characteristics such as physical attributes, they mate randomly with respect to other traits such as blood type and short tandem repeat (STR) genotype.
+
+Watch a video on random mating presented by Greggory LaBerge.

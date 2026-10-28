@@ -1,0 +1,12 @@
+{
+  "id": "cfpb-teenagers-and-saving",
+  "title": "Teenagers and saving — Consumer Financial Protection Bureau, Money as You Grow",
+  "locator": "https://www.consumerfinance.gov/consumer-tools/money-as-you-grow/teen-young-adult/explore-saving/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: Consumer Financial Protection Bureau, Money as You Grow, 'Teenagers and saving'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+  "sha256": "a438468abdb47ce3f3afb4ed9e5c4bafa5ebf39e76f40973647383ef8df00b58",
+  "textFile": "cfpb-teenagers-and-saving.txt",
+  "retrievedAt": "2026-10-28T15:46:00Z",
+  "transcription": "Main article text only (site header, menu, search widget, the 'Page last modified' block, the download link for the related activity PDF and footer removed). The lead paragraph and the conversation/activity sections are kept; bullet lists flattened to one line per item; the page's mix of curly and straight quotation marks and apostrophes kept as printed. Whitespace normalised.",
+  "purpose": "evaluation: expected compound-interest-v1 (defines compound interest but its worked example is yearly $100 deposits from age 14 (about $23,000 at 65) vs from age 35 (about $7,000) — an annuity the lump-sum engine does not model; tests whether cases stay within A = P*(1+r/(100*n))^(n*t))"
+}

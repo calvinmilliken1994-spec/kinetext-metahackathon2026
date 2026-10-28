@@ -1,0 +1,12 @@
+{
+  "id": "nij-heterozygosity",
+  "title": "Heterozygosity — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+  "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/population-genetics/heterozygosity",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Heterozygosity'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+  "sha256": "b88d68137ace380387528e9b0d424ad162ee448ea6d48d6646cb090dbfc4e1e9",
+  "textFile": "nij-heterozygosity.txt",
+  "retrievedAt": "2026-10-28T15:46:00Z",
+  "transcription": "Main course-page text only (archival notice, course navigation, the Punnett-square and genetic-diversity images with their NIJ credits, Back/Forward links, other-course lists and creation date removed; the 'Download a spreadsheet…' sentence kept as body text). Reference markers (^02, ^04) removed. Whitespace normalised.",
+  "purpose": "evaluation: expected hardy-weinberg-v1 (heterozygote frequency as the direct teaching target of the engine, with the k(k+1)/2 genotype-count formula and observed-vs-expected heterozygosity)"
+}

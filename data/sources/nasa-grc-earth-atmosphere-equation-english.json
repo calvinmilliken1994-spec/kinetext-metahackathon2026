@@ -1,0 +1,12 @@
+{
+  "id": "nasa-grc-earth-atmosphere-equation-english",
+  "title": "Earth Atmosphere Equation – English — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+  "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/earth-atmosphere-equation-english/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+  "sha256": "27cabc2c092bc294e05f921ebe3f7e6c73775f3986f7aed07bf86ba89fff17f5",
+  "textFile": "nasa-grc-earth-atmosphere-equation-english.txt",
+  "retrievedAt": "2026-10-28T15:46:00Z",
+  "transcription": "Main article text only (breadcrumbs, hero image, simulator widget, navigation, feedback form and footer removed). Curve-fit equations transcribed from LaTeX to plain text with the page's customary units kept exactly (Fahrenheit degrees, pounds/square feet, feet), e.g. p = 2116 * ((T + 459.7) / 518.6)^5.256. Whitespace normalised.",
+  "purpose": "evaluation: expected speed-of-sound-v1 (three atmospheric zones with separate English-units curve fits; multi-step substitution needed to reach a = sqrt(gamma * R * T))"
+}

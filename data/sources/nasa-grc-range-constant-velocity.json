@@ -1,0 +1,12 @@
+{
+  "id": "nasa-grc-range-constant-velocity",
+  "title": "Range – Constant Velocity — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+  "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/range-constant-velocity/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+  "sha256": "f1f4102e23398f882264cb387f0c4115207597b855cadae074925c9e7c1a4127",
+  "textFile": "nasa-grc-range-constant-velocity.txt",
+  "retrievedAt": "2026-10-28T15:46:00Z",
+  "transcription": "Main article text only (breadcrumbs, hero image, navigation, feedback form and footer removed). LaTeX equations transcribed to plain text (d = V * t; R = V * tmax). Whitespace normalised.",
+  "purpose": "evaluation: expected projectile-v1 (only the horizontal x = U0 * t part of the engine appears on the page; tests whether the model over-claims the vertical motion)"
+}

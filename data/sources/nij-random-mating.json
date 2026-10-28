@@ -1,0 +1,12 @@
+{
+  "id": "nij-random-mating",
+  "title": "Random Mating — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+  "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/hardy-weinberg-principle/random-mating",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Random Mating'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+  "sha256": "9f06caf792ddeb146476c0c5d2cf1851b1f5e8bd6f0fc7dfae8cb33d50725ad8",
+  "textFile": "nij-random-mating.txt",
+  "retrievedAt": "2026-10-28T15:46:00Z",
+  "transcription": "Main course-page text only (archival notice, course navigation, the random-mating diagram and its NIJ credit, the embedded video's terms-of-service line, Back/Forward links, other-course lists and creation date removed; the 'Watch a video on random mating presented by Greggory LaBerge.' sentence kept as body text). Reference marker ^07 removed. Whitespace normalised.",
+  "purpose": "evaluation: expected hardy-weinberg-v1 (random mating as a Hardy-Weinberg condition — assumption-focused, with positive/negative assortative mating and no numeric worked example, so an honest decline is also acceptable)"
+}

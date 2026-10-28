@@ -1,0 +1,12 @@
+{
+  "id": "nrc-backgrounder-radioactive-waste",
+  "title": "Backgrounder on Radioactive Waste — U.S. Nuclear Regulatory Commission",
+  "locator": "https://www.nrc.gov/regulations-legislation/fact-sheets-brochures/backgrounder-on-radioactive-waste",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: U.S. Nuclear Regulatory Commission, 'Backgrounder on Radioactive Waste', Fact Sheets & Brochures. NRC's website constitutes a U.S. Government Work under federal copyright law and is not subject to copyright. The U.S. Nuclear Regulatory Commission has not reviewed, approved or endorsed this activity.",
+  "sha256": "096bd0acfbc24540be6110113c96ed0fa4b892969980ff5bcf1d7834bc1d71b7",
+  "textFile": "nrc-backgrounder-radioactive-waste.txt",
+  "retrievedAt": "2026-10-28T15:46:00Z",
+  "transcription": "Main fact-sheet text only (site furniture, sidebar, 'Printable Version' link, the 'On this page' anchor list, photo tables and their captions, the 'Summary' field label and the January 2024 date removed; the summary sentence itself is kept as the lead paragraph). The live page's own truncated sentence and duplicated 'There have been eight operating commercial facilities… only the latter four sites' paragraph are kept verbatim in both places, as printed. Whitespace normalised.",
+  "purpose": "evaluation: expected half-life-v1 (borderline: half-life numbers — Sr-90/Cs-137 about 30 years, Pu-239 24,000 years — inside ~1,900 words of waste-policy text with no decay computation; may legitimately decline or produce a thin activity)"
+}

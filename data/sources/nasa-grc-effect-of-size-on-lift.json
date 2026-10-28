@@ -1,0 +1,12 @@
+{
+  "id": "nasa-grc-effect-of-size-on-lift",
+  "title": "Effect of Size on Lift — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+  "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/effect-of-size-on-lift/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+  "sha256": "1bd1a2678b2c2cb6f162ebbeb4ec95d6aa439d14002682604d2ac9cd680d76f4",
+  "textFile": "nasa-grc-effect-of-size-on-lift.txt",
+  "retrievedAt": "2026-10-28T15:46:00Z",
+  "transcription": "Main article text only (breadcrumbs, hero image, embedded simulation and its loading notice, navigation, feedback form and footer removed). The page carries no display equations. Whitespace normalised.",
+  "purpose": "evaluation: expected lift-equation-v1 (reference-area choice for the lift equation, wing-area computation for odd shapes, area scaling of lift)"
+}

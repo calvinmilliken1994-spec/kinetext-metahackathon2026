@@ -1,0 +1,12 @@
+{
+  "id": "cfpb-saving-post-secondary-education",
+  "title": "Saving for post-secondary education (teacher guide) — Consumer Financial Protection Bureau, Building Blocks activities",
+  "locator": "https://files.consumerfinance.gov/f/documents/cfpb_building_block_activities_saving-post-secondary-education_guide.pdf",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: Consumer Financial Protection Bureau, Building Blocks activities, 'Saving for post-secondary education (teacher guide)'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+  "sha256": "243a4b56c86936ecc243da4c7fc982bc76b85ee12116c97e4f751cfb8ba6c926",
+  "textFile": "cfpb-saving-post-secondary-education.txt",
+  "retrievedAt": "2026-10-28T15:46:00Z",
+  "transcription": "Full 6-page teacher-guide text extracted from the PDF text layer: headings, bullets, NOTE/TIP/KEY INFORMATION boxes, the vocabulary list, the answer guide and the third-party-video footnote, in the text layer's reading order; bullet glyphs and underline markup dropped, URLs and file names kept verbatim. The answer-key totals ($8,974.70 / $9,330.16 / $24,315.19) reference scenario inputs that live in a separate worksheet PDF and are deliberately left dangling. Whitespace normalised.",
+  "purpose": "evaluation: expected compound-interest-v1 (contains the canonical lump-sum example $1,000 → $1,050 → $1,102.50 at 5 percent yearly plus answer-key totals whose inputs are not in this document — dangling numbers likely to be misused)"
+}

@@ -1,0 +1,23 @@
+# Fossils, Rocks, and Time: The Numeric Time Scale
+
+THE NUMERIC TIME SCALE
+
+Thus far we have been discussing the relative time scale. How can we add numbers to our time scale? How have geologists determined that:
+
+Earth is about 4.6 billion years old?
+
+The oldest known fossils are from rocks that were deposited about 3.5 billion years ago?
+
+The first abundant shelly fossils occur in rocks that are about 570 million years old?
+
+The last ice age ended about 10,000 ago?
+
+Nineteenth-century geologists and paleontologists believed that Earth was quite old, but they had only crude ways of estimating just how old. The assignment of ages of rocks in thousands, millions, and billions of years was made possible by the discovery of radioactivity. Now we can use minerals that contain naturally occurring radioactive elements to calculate the numeric age of a rock in years.
+
+The basic unit of each chemical element is the atom. An atom consists of a central nucleus, which contains protons and neutrons, surrounded by a cloud of electrons. Isotopes of an element are atoms that differ from one another only in the number of neutrons in the nucleus. For example, radioactive atoms of the element potassium have 19 protons and 21 neutrons in the nucleus (potassium 40); other atoms of potassium have 19 protons and 20 or 22 neutrons (potassium 39 and potassium 41). A radioactive isotope (the parent) of one chemical element naturally converts to a stable isotope (the daughter) of another chemical element by undergoing changes in the nucleus.
+
+The change from parent to daughter happens at a constant rate, called the half-life. The half-life of a radioactive isotope is the length of time required for exactly one-half of the parent atoms to decay to daughter atoms. Each radioactive isotope has its own unique half-life. Precise laboratory measurements of the number of remaining atoms of the parent and the number of atoms of the new daughter produced are used to compute the age of the rock. For dating geologic materials, four parent/daughter decay series are especially useful: carbon to nitrogen, potassium to argon, rubidium to strontium, and uranium to lead. Age determinations using radioactive isotopes are subject to relatively small errors in measurement--but errors that look small can mean many years or millions of years. If the measurements have an error of 1 percent, for example, an age determination of 100 million years could actually be wrong by a million years too low or too high.
+
+Isotopic techniques are used to measure the time at which a particular mineral within a rock was formed. To allow us to assign numeric ages to the geologic time scale, a rock that can be dated isotopically is found together with rocks that can be assigned relative ages because of their fossils. Many samples, usually from several different places, must be studied before assigning a numeric age to a boundary on the geologic time scale. [Sidebar]
+
+The geologic time scale is the product of many years of detective work, as well as a variety of dating techniques not discussed here. The details will change as more and better information and tools become available. Many scientists have contributed and continue to contribute to the refinement of the geologic time scale as they study the fossils and the rocks, and the chemical and physical properties of the materials of which Earth is made. Just as in the time of William Smith, knowing what kinds of rocks are found below the soil can help people to make informed judgments about the uses of the resources of the planet.

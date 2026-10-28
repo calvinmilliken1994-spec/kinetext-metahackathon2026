@@ -1,0 +1,12 @@
+{
+  "id": "nij-population-genetics",
+  "title": "Population Genetics — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+  "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/population-genetics",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Population Genetics'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+  "sha256": "3b67b8bbab70fa3f03067b217df5601f05ff044f0f6c0c6cad7b44b5191a29db",
+  "textFile": "nij-population-genetics.txt",
+  "retrievedAt": "2026-10-28T15:46:00Z",
+  "transcription": "Main course-page text only (archival notice, course navigation, the portrait image and its NIJ credit, Back/Forward links, other-course lists and creation date removed). Reference markers (^01, ^02, ^03) removed. Whitespace normalised.",
+  "purpose": "evaluation: expected hardy-weinberg-v1 (allele-frequency groundwork — population structure, gene pool, race/ethnicity classification caveats; thin for full equilibrium cases, so an honest decline is also acceptable)"
+}
