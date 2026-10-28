@@ -1,0 +1,12 @@
+{
+  "id": "nara-articles-of-confederation",
+  "title": "Articles of Confederation (1777) — National Archives, Milestone Documents (agency-written introduction)",
+  "locator": "https://www.archives.gov/milestone-documents/articles-of-confederation",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Articles of Confederation (1777)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+  "sha256": "254310acbd3a0b3352ae85953f18138ed309fe49fa6c7841387e92394766c73f",
+  "textFile": "nara-articles-of-confederation.txt",
+  "retrievedAt": "2026-10-28T07:20:00Z",
+  "transcription": "Agency-written introduction and background only: the bold summary sentence and the eight history paragraphs. Citation line, images, catalog link, DocsTeach block, previous/next navigation and the 1777/1781 document transcript were removed. Inline hyperlinks flattened to their text. Original wording kept verbatim, including the unclosed quotation after 'every Power...'. Whitespace normalised.",
+  "purpose": "supported example: timeline-v1 (planned); rich date sequence across two documents — June 11 1776 committee appointed, November 15 1777 adoption, March 1 1781 Maryland ratification and entry into force, May 1787 Constitutional Convention, mid-June 1787 redesign decision, summer 1787 signing, 1789 replacement by the Constitution"
+}

@@ -96,3 +96,9 @@ Muse's prompt-guidance sentences go into TASK-021 verbatim as input.
 `schema.full` → `timeline.unique-ids` → `timeline.approximate-date` → `timeline.date-grounded` (sentence unit, rules #1–#4, #8, #9) → `timeline.distinct-dates` (no exception) → `timeline.case-order` (strict at shared precision) → existing quote/explanation/publisher/scope checks. Repair: `repair.no-weakening` timeline rules per #6.
 
 Sequencing: TASK-019 contracts start after the source-gathering task finishes (avoids breaking its test run mid-edit).
+
+## Direction decision (Calvin, 2026-10-28)
+Considered: a general formula block (Muse writes the equation in a restricted, parsed maths language; code checks it is quoted in the source, unit-consistent, and reproduces the source's worked examples) with one general chart view, to move toward "any source". **Decision: keep the fixed, hand-built activity types** for this hackathon — screens for the three new subjects (TASK-022), then the timeline (TASK-019..021), then the evaluation run (TASK-023). The general formula block is recorded as the post-hackathon path to arbitrary sources and may be named as such in the submission.
+
+## Finding from the real sources (lead, 2026-10-28) — input to TASK-019
+`nara-declaration-of-independence` states the year once ("on July 4, 1776" in the first sentence; title "Declaration of Independence (1776)") and then gives most dates without a year ("on June 10", "between June 11 and 28", "on July 19th", "On August 2nd"). Under the strict sentence-unit rule most events on the page could not be grounded, which would push the model toward a decline or a thin timeline. Proposed resolution for TASK-019 (to confirm with Muse in TASK-021): an event's year may come from the page **title line** when the title contains exactly one year; month and day must still be in one sentence unit of the event's quote. No other cross-sentence year inheritance.

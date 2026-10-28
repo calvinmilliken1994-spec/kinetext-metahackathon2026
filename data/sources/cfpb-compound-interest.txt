@@ -1,0 +1,15 @@
+# How does compound interest work?
+
+Compound interest is when you earn interest on the money you’ve saved and on the interest you earn along the way.
+
+Here’s an example to help explain compound interest.
+
+| Amount you start with | $1,000 | Also called your principal |
+| How much you earn | 5 percent | Also called your interest rate, or rate of return |
+| How often you calculate interest | Once a year | Also called your compounding frequency |
+| Amount after the first year | $1,050 | Amount you started the year with, plus 5 percent 0.05 x $1,000 = $50 $1,000 + $50 = $1,050 |
+| Amount after the second year | $1,102.50 | Amount you started the year with, plus 5 percent 0.05 x $1,050 = $52.50 $1,050 + $52.50 = $1,102.50 |
+
+Increasing the compounding frequency, finding a higher interest rate, and adding to your principal amount are ways to help your savings grow even faster.
+
+You can also crunch numbers using different interest rates, periods of time, and compounding frequencies at the Securities and Exchange Commission’s website Investor.gov.

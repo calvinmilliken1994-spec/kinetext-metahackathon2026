@@ -1,0 +1,12 @@
+{
+  "id": "nij-hardy-weinberg-principle",
+  "title": "Hardy-Weinberg Principle — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+  "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/hardy-weinberg-principle",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Hardy-Weinberg Principle'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+  "sha256": "db613d58d5101a939f34fed65153bc279e823153472574a035a6071032b4ce8c",
+  "textFile": "nij-hardy-weinberg-principle.txt",
+  "retrievedAt": "2026-10-28T07:15:00Z",
+  "transcription": "Main article text only (archival notice, course navigation, photographs and their credits, the accordion trigger line, attached-PDF notices, Back/Forward links, other-course lists and creation date removed). Superscript exponents rendered with ^, e.g. p^2, q^2, χ^2. Tables transcribed as plain-text pipe-separated lines. Reference markers ([04], [05], [06]) removed. Original inconsistencies kept as printed ('Forensic Town' vs 'Forensics Town', '(AA)/(aa)/(Aa)' for the RR/rr/Rr genotypes, 'all of the of the', en dash in one chi-square term).",
+  "purpose": "supported example: hardy-weinberg-v1 (2pq with q = 1 - p); MN blood group worked example (p = 0.547, 2pq = 0.496, 1496/2478/1026 of 5000) plus a multi-step fruit-fly equilibrium example and chi-squared extension — the chi-square part is beyond every engine and tests that the pipeline uses only the HWE portion"
+}

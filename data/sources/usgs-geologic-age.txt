@@ -1,0 +1,53 @@
+# Geologic Age: Using Radioactive Decay to Determine Geologic Age
+
+Background
+
+This packet is only available online.
+
+The full text the USGS publication titled, Geological Time is available online.
+
+At the close of the 18th century, the haze of fantasy and mysticism that tended to obscure the true nature of the Earth was being swept away. Careful studies by scientists showed that rocks had diverse origins. Some rock layers, containing clearly identifiable fossil remains of fish and other forms of aquatic animal and plant life, originally formed in the ocean. Other layers, consisting of sand grains winnowed clean by the pounding surf, obviously formed as beach deposits that marked the shorelines of ancient seas. Certain layers are in the form of sand bars and gravel banks -- rock debris spread over the land by streams. Some rocks were once lava flows or beds of cinders and ash thrown out of ancient volcanoes; others are portions of large masses of once-molten rock that cooled very slowly far beneath the Earth's surface. Other rocks were so transformed by heat and pressure during the heaving and buckling of the Earth's crust in periods of mountain building that their original features were obliterated.
+
+From the results of studies on the origins of the various kinds of rocks (petrology), coupled with studies of rock layering (stratigraphy) and the evolution of life (paleontology), today geologists reconstruct the sequence of events that has shaped the Earth's surface. Their studies show, for example, that during a particular episode the land surface was raised in one part of the world to form high plateaus and mountain ranges. After the uplift of the land, the forces of erosion attacked the highlands and the eroded rock debris was transported and redeposited in the lowlands. During the same interval of time in another part of the world, the land surface subsided and was covered by the seas. With the sinking of the land surface, sediments were deposited on the ocean floor. The evidence of the pre-existence of ancient mountain ranges lies in the nature of the eroded rock debris, and the evidence of the seas' former presence is, in part, the fossil forms of marine life that accumulated with the bottom sediments.
+
+Such recurring events as mountain building and sea encroachment, of which the rocks themselves are records, comprise units of geologic time even though the actual dates of the events are unknown. By comparison, the history of mankind is similarly organized into relative units of time. We speak of human events as occurring either B.C. or A.D. -- broad divisions of time. Shorter spans are measured by the dynasties of ancient Egypt or by the reigns of kings and queens in Europe. Geologists have done the same thing to geologic time by dividing the Earth's history into Eras -- broad spans based on the general character of life that existed during these times, and Periods -- shorter spans based partly on evidence of major disturbances of the Earth's crust.
+
+The names used to designate the divisions of geologic time are a fascinating mixture of works that mark highlights in the historical development of geologic science over the past 200 years. Nearly every name signifies the acceptance of a new scientific concept -- a new rung in the ladder of geologic knowledge.
+
+The discovery of the natural radioactive decay of uranium in 1896 by Henry Becquerel, the French physicist, opened new vistas in science. In 1905, the British physicist Lord Rutherford -- after defining the structure of the atom -- made the first clear suggestion for using radioactivity as a tool for measuring geologic time directly; shortly thereafter, in 1907, Professor B. B. Boltwood, radiochemist of Yale University, published a list of geologic ages based on radioactivity. Although Boltwood's ages have since been revised, they did show correctly that the duration of geologic time would be measured in terms of hundreds-to-thousands of millions of years.
+
+The next 40 years was a period of expanding research on the nature and behavior of atoms, leading to the development of nuclear fission and fusion as energy sources. A byproduct of this atomic research has been the development and continuing refinement of the various methods and techniques used to measure the age of Earth materials. Precise dating has been accomplished since 1950.
+
+A chemical element consists of atoms with a specific number of protons in their nuclei but different atomic weights owing to variations in the number of neutrons. Atoms of the same element with differing atomic weights are called isotopes. Radioactive decay is a spontaneous process in which an isotope (the parent) loses particles from its nucleus to form an isotope of a new element (the daughter). The rate of decay is conveniently expressed in terms of an isotope's half-life, or the time it takes for one-half of a particular radioactive isotope in a sample to decay. Most radioactive isotopes have rapid rates of decay (that is, short half-lives) and lose their radioactivity within a few days or years. Some isotopes, however, decay slowly, and several of these are used as geologic clocks. The parent isotopes and corresponding daughter products most commonly used to determine the ages of ancient rocks are listed below:
+
+| Parent Isotope | Stable Daughter Product | Currently Accepted Half-life Values |
+| Uranium-238 | Lead-206 | 4.5 billion years |
+| Uranium-235 | Lead-207 | 704 million years |
+| Thorium-232 | Lead-208 | 14.0 billion years |
+| Rubidium-87 | Strontium-87 | 48.8 billion years |
+| Potassium-40 | Argon-40 | 1.25 billion years |
+| Samarium-147 | Neodymium-143 | 106 billion years |
+
+The mathematical expression that relates radioactive decay to geologic time is called the age equation and is:
+
+t=1/delta ln(1 + D/P)
+
+where:
+
+t is the age of a rock or mineral specimen,
+
+D is the number of atoms of a daughter product today,
+
+P is the number of atoms of the parent product today,
+
+ln s the natural logarithm (logarithm to base e), and
+
+delta is the appropriate decay constant.
+
+(The decay constant for each parent isotope is related to its half-life, t 1/2, by the following expression:
+
+t 1/2 = ln2/delta
+
+Dating rocks by these radioactive timekeepers is simple in theory, but the laboratory procedures are complex. The numbers of parent and daughter isotopes in each specimen are determined by various kinds of analytical methods. The principal difficulty lies in measuring precisely very small amounts of isotopes.
+
+Literally thousands of dated materials are now available for use to bracket the various episodes in the history of the Earth within specific time zones. Many points on the time scale are being revised, however, as the behavior of isotopes in the Earth's crust is more clearly understood. Thus the graphic illustration of the geologic time scale, showing both relative time and radiometric time, represents only the present state of knowledge. Certainly, revisions and modifications will be forthcoming as research continues to improve our knowledge of Earth history.

@@ -1,0 +1,12 @@
+{
+  "id": "nrc-unit-1-radiation",
+  "title": "Unit 1: Radiation — U.S. Nuclear Regulatory Commission, The Student Corner",
+  "locator": "https://www.nrc.gov/education-regulatory-research/the-student-corner/unit-1-radiation",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: U.S. Nuclear Regulatory Commission, The Student Corner, 'Unit 1: Radiation'. NRC's website constitutes a U.S. Government Work under federal copyright law and is not subject to copyright. The U.S. Nuclear Regulatory Commission has not reviewed, approved or endorsed this activity.",
+  "sha256": "6f95dabbfae4672606b2dba412e42ca16b682bdcba08e15408a02f2572189c80",
+  "textFile": "nrc-unit-1-radiation.txt",
+  "retrievedAt": "2026-10-28T07:52:00Z",
+  "transcription": "Main lesson-plan text only (site furniture, breadcrumb, image placeholder, 'Printable Version' link, the classroom-activity link lists and the review date removed). The numbered Questions/Answers tables are transcribed as plain-text 'Q:'/'A:' lines. Headings flattened to their own lines. Original wording kept verbatim, including inconsistencies between the question list and the answer table.",
+  "purpose": "supported example: half-life-v1 (N = N0*(1/2)^(t/T)); explains half-life with numbers ('a half-life of 10 years, half of its atoms will decay in 10 years. Then in another 10 years half of that amount will decay and so on') plus the U-238 decay chain — supported but noisy: a 2,300-word lesson plan whose physics is surrounded by classroom scaffolding"
+}

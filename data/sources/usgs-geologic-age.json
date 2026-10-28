@@ -1,0 +1,12 @@
+{
+  "id": "usgs-geologic-age",
+  "title": "Geologic Age: Using Radioactive Decay to Determine Geologic Age — U.S. Geological Survey",
+  "locator": "https://www.usgs.gov/educational-resources/geologic-age-using-radioactive-decay-determine-geologic-age",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: U.S. Geological Survey, 'Geologic Age: Using Radioactive Decay to Determine Geologic Age' (1997). Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+  "sha256": "6e5bf0115bcc99d56d14dbecdc9d5ce23538b3bf71393efa1f5f77b6969614c2",
+  "textFile": "usgs-geologic-age.txt",
+  "retrievedAt": "2026-10-28T08:01:00Z",
+  "transcription": "Main article text only (site banner, menu, feedback widget removed). The parent/daughter isotope table is transcribed as plain-text pipe-separated lines. Equations transcribed exactly as printed on the page, including the page's own typo 'ln s the natural logarithm' and the unclosed parenthesis before the decay-constant expression. A leading typographic asterisk on 'This packet is only available online.' was dropped.",
+  "purpose": "decline control: deliberately harder chemistry/earth source — teaches the radiometric age equation solved for t (t=1/delta ln(1 + D/P)) and the decay constant relation (t 1/2 = ln2/delta) with half-life values in billions of years, which half-life-v1 explicitly does not model; the pipeline should decline rather than force N = N0*(1/2)^(t/T)"
+}

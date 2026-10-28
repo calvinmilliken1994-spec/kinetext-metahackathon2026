@@ -1,0 +1,12 @@
+{
+  "id": "cfpb-compound-interest",
+  "title": "How does compound interest work? — Consumer Financial Protection Bureau, Ask CFPB",
+  "locator": "https://www.consumerfinance.gov/ask-cfpb/how-does-compound-interest-work-en-1683/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: Consumer Financial Protection Bureau, Ask CFPB, 'How does compound interest work?'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+  "sha256": "b53156638f6b191a78c86fac8fa0b2051d61a41f7e64c7bf1e8b7258ae8c411c",
+  "textFile": "cfpb-compound-interest.txt",
+  "retrievedAt": "2026-10-28T07:12:00Z",
+  "transcription": "Main article text only (navigation, related-questions block, search widget and footer removed). The worked-example table is transcribed as plain-text pipe-separated lines, one line per row, with in-cell line breaks joined by spaces. Curly quotation marks and apostrophes preserved as on the page.",
+  "purpose": "supported example: compound-interest-v1 (A = P*(1+r/(100*n))^(n*t)); canonical worked example $1,000 at 5 percent compounded once a year: $1,050 then $1,102.50"
+}

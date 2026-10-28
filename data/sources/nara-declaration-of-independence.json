@@ -1,0 +1,12 @@
+{
+  "id": "nara-declaration-of-independence",
+  "title": "Declaration of Independence (1776) — National Archives, Milestone Documents (agency-written introduction)",
+  "locator": "https://www.archives.gov/milestone-documents/declaration-of-independence",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Declaration of Independence (1776)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+  "sha256": "f0322f21a85ef6996de0972f6543cc8ed8e3393aed20b7d086cada9260c1c668",
+  "textFile": "nara-declaration-of-independence.txt",
+  "retrievedAt": "2026-10-28T07:14:00Z",
+  "transcription": "Agency-written introduction and background only: the bold summary sentence and the six history paragraphs. Citation line, images and enlarge/download links, 'More information' and DocsTeach blocks, previous/next navigation and the 1776 document transcript with signer list were removed. Inline hyperlinks flattened to their text. Whitespace normalised.",
+  "purpose": "supported example: timeline-v1 (planned); dense dated sequence with verbatim quotes — June 10 committee of five, June 11-28 Jefferson draft, July 2 Lee Resolution, July 3-4 revision and adoption, July 5 printing, July 19 engrossing order ('the unanimous declaration of the thirteen united states of America'), August 2 signing, 56 signers"
+}

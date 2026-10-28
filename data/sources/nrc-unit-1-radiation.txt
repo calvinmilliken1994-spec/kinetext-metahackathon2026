@@ -1,0 +1,227 @@
+# Unit 1: Radiation
+
+Time: Four hours
+
+Objectives
+
+A. Teacher:
+
+To stimulate students' interest in the biological effects of radiation.
+
+To help students become more literate in the benefits and hazards of radiation.
+
+To inform youngsters about the NRC's role in regulating radioactive materials.
+
+B. At the conclusion of this unit the student should be able to:
+
+Distinguish between natural and man-made radiation.
+
+Detect and measure radiation using a Geiger counter.
+
+Investigate the "footprints" of radiation using the Cloud Chamber.
+
+Describe the principle of half-life of radioactive materials and demonstrate how half-lives can be calculated.
+
+Identify and discuss the different types of radiation.
+
+Investigation and Building Background
+
+Introduce term:
+
+Students have little knowledge of radiation (terminology) and no useful meanings for the term. Dictionary not much help.
+
+Resources:
+
+Radiation Terminology "Nuclear Reactor Concepts" Workshop Manual, U.S. NRC.
+
+Dose Standards and Methods for Protection Against Radiation and Contamination "Nuclear Reactor Concepts" Workshop Manual, U.S. NRC.
+
+Biological Effects of Radiation "Nuclear Reactor Concepts" Workshop Manual, U.S. NRC.
+
+The Harnessed Atom (available for download). Pages 61-98 will help in the discussion of: radiation and radioactive decay; the cloud chamber; detecting and measuring radiation, using the Geiger counter, computing radiation dosage and the uses of radiation, such as radiography.
+
+Energy from the Atom (available through the American Nuclear Society). Pages 1-1 to 1-24; 2-1 to 2-37; and 3-1 to 3-17 will help by providing background on atomic structures and on nuclear energy.
+
+The Web site of the Environmental Protection Agency (EPA) and its "Environmental Kids Club".
+
+Experiment:
+
+Hypothesis made before conducting the Cloud Chamber experiment: "While radiation cannot be seen, the cloud chamber allows one to see the tracks it leaves in dense gas."
+
+Introduce the vocabulary commonly used in the detection and measurement of radiation.
+
+Divide the class up into groups of no more than four students.
+
+Generalizing
+
+Materials needed for the Cloud Chamber:
+
+small transparent container with transparent lid
+
+flat black spray paint
+
+blotter paper
+
+pure ethyl alcohol
+
+radioactive source
+
+masking tape
+
+dry ice
+
+styrofoam square
+
+flashlight
+
+gloves or tongs to handle the dry ice
+
+Vocabulary: detecting and measuring radiation
+
+adverse, curie, discernible, film badge, Geiger counter, millirem, rad, radiation dose, rem, roentgen, time, distance, shielding
+
+Materials for measuring radiation with the Geiger counter
+
+Geiger counter
+
+Radioactive sources
+
+Shielding material such as paper, aluminum foil, brick, jar of water, piece of wood, glass pane, sheet of lead
+
+Questions
+
+Why are elements that break apart called unstable?
+
+How do things become less radioactive as time goes by?
+
+What materials are best for shielding?
+
+Gamma radiation, a powerful type of radiation emitted from some radioactive isotopes, has no weight. What other types of radiation particles have no weight?
+
+After Cloud Chamber Experiment
+
+Because you could not see the radiation, what kind of observation did you experience?
+
+What is happening to the radioactive source?
+
+What radiation "footprints" did you see? Describe them.
+
+After the Geiger Counter Measurements
+
+Why do we measure radiation exposure?
+
+When you use a Geiger counter to survey a radioactive substance, why is it important to know what the background radiation level is?
+
+Has anyone you know been helped or harmed by radiation?
+
+References
+
+The Harnessed Atom, Teacher's Edition, U.S. Department of Energy.
+
+Lesson Plan
+
+Note: Give each student a 5x7 index card as he/she enters the classroom.
+
+Greeting...
+
+"Radiation" (written on the board)
+
+When you see or hear this word what do you think about? What do you think it means?
+
+I would like you to share your thoughts with me by writing on the card what you thought about when I wrote "radiation" on the board. Do not put your name on the card!
+
+[Collect the cards and mix them up. Read several out loud to the class and stimulate discussion on each. Do not attempt to connect any child with a particular note. Write key words from student opinion on the board for future reference.]
+
+Introduction
+
+Radiation is all around us. It comes from the Earth and from outer space. Many forms of radiation are invisible — we can't feel it, see it, taste it, or smell it. Yet, it can be detected and measured when present. We measure ionizing radiation in units called millirems. But what is radiation? Radioactive materials are composed of atoms that are unstable. An unstable atom gives off its excess energy until it becomes stable. The energy emitted is radiation. We can classify radiation as being either natural and man-made.
+
+As I mentioned a moment ago, the Earth is surrounded by radiation. Every day, for example, we are exposed to radon, a radioactive gas from uranium found in soil dispersed in the air; from radioactive potassium in our food and water; from uranium, radium, and thorium in the Earth's crust; and from cosmic rays and the sun.
+
+These types of radiation are called natural or background radiation. In the U.S. we are exposed to an average of 300 millirems of natural radiation each year (a millirem is a unit of measure for exposure to radiation). This amounts to natural radiation accounting for about half of our total annual exposure. Where does the remaining 50 percent come from? Man-made sources — mostly medical procedures.
+
+Man-made radiation sources that people can be exposed to include tobacco, television, medical x-rays, smoke detectors, lantern mantles, nuclear medicine, and building materials.
+
+Adding it all up, the average American is exposed to a total of about 620 millirems a year from natural and man-made radiation. The sources of radiation are shown in Classroom Activity 1.
+
+Generally, when we think of radiation exposure, we need to look at radioactive atoms produced in nuclear reactors and described as being unstable. They are unstable because they undergo a disintegrating process called decaying. During this process, unstable atoms becomes stable, throwing off (emitting) radiation in the form of rays and/or particles.
+
+How fast a radioactive atom decays into a stable atom depends on the atom itself. For example, the range in the rate of decay among isotopes goes from fractions of seconds to several billion years (e.g., uranium).
+
+Let's take a look at uranium-238 to illustrate the decay chain.
+
+As U-238 decays it changes into thorium-230, which changes into radium-226, which changes into radon-218, which changes into bismuth-214, and finally into lead-206 (a stable element).
+
+One peculiar thing about radioactive atoms is that no one knows exactly when the element will decay and give off radiation. There is, however, a pattern relating to how long it takes for an isotope to lose half of its radioactivity. The pattern is called half-life. If an atom, for example, has a half-life of 10 years, half of its atoms will decay in 10 years. Then in another 10 years half of that amount will decay and so on. While there are several different forms of radiation, we're going to concentrate on just three that result from the decay of radioactive isotopes: alpha, beta, and gamma.
+
+Beta particles are high energy electrons. Both alpha and beta particles are emitted from unstable isotopes. The alpha particle, consisting of two protons and two neutrons, is relatively large compared to beta particles. Gamma rays have no mass.
+
+Because of its size and electrical charge (+2), the alpha particle has a relatively slow speed and low penetrating distance (one to two inches in air). Alpha particles are easily stopped by a thin sheet of paper or the body's outer layer of skin. Since they do not penetrate the outer (dead) layer of skin, they present little or no hazard when they are external to the body.
+
+However, alpha particles are considered internal hazards, because when they come in contact with live tissue they cause a large number of ionizations to occur in small areas, thus causing damage to tissues and cells.
+
+Beta radiation, while faster and lighter than alpha radiation, can travel through about 10 feet of air and penetrate very thin layers of materials such as aluminum foil. However, while clothing will stop most beta particles, they can penetrate the live layers of skin tissue. Therefore, beta radiation is considered to be both an internal and external (to skin only) hazard. Thin layers of metals and plastics can be used to shield individuals from beta radiation.
+
+Gamma radiation, high energy light, is a little different. It is a type of electromagnetic wave, just like radio waves, light waves, and x-rays. Gamma radiation is a very strong type of electromagnetic wave. It is has no weight and travels at the speed of light. This is much faster than alpha and beta radiation.
+
+Because of their penetrating capability, gamma rays are considered both internal and external hazards. Thick walls of cement, lead, or steel are needed to stop it.
+
+Alpha, beta, and gamma radiations are also known as ionizing radiation. Ionizing radiation is especially harmful because it can change the chemical makeup of many things, including the delicate chemistry of the human body and other living organisms. For this reason it is a good idea to avoid unnecessary exposure to all ionizing radiation.
+
+The problem is simply this: large amounts of radiation — far above the levels encountered in daily life -- can produce cancer and genetic defects in living organisms. Radiation causes damage and alters the body's normal cells and normal cell function. This breakdown in normal cell function may result in an uncontrolled growth of cells, hence the potential for malignant/cancerous tumors.
+
+Whether the source of radiation is natural or man-made, whether it is a small dose of radiation or a large dose, there will be some biological effects. A diagram can show the biological effect of ionizing radiation.
+
+Radiation causes ionizations of atoms that will affect molecules that may affect cells that may effect tissues that may affect organs that may affect the whole body.
+
+[Write the following on the board]
+
+Although we tend to think of biological effects in terms of the effect of radiation on living cells, in actuality, ionizing radiation, by definition, interacts only with atoms by a process called ionization. Thus, all biological damage effects begin when radiation interacts with atoms forming the cells in the human body. As a result, radiation effects on humans proceed from the lowest to the highest level as noted on the board.
+
+[Radiation causes ionizations of atoms that will affect molecules that may affect cells that may effect tissues that may affect organs that may affect the whole body.]
+
+Experiment A: The Cloud Chamber
+
+While radiation cannot be seen, the cloud chamber allows you to see the tracks it leaves in a dense gas. [Complete Classroom Activity 1]
+
+Experiment B: Using the Geiger Counter
+
+How radioactive are different materials? [Complete Classroom Activities 2 and 3]
+
+Answers to Questions from "Radiation" Unit Outline:
+
+1. Q: Why are elements that break apart called unstable?
+A: They are unstable because in the process of emitting gamma rays they become stable or change into another element by emitting alpha and beta particles.
+
+2. Q: How do things become less radioactive as time goes by?
+A: Unstable elements break down bit by bit emitting alpha and beta particles and gamma rays. Each unstable element also loses its radioactivity at a different rate that is defined by its half-life. Half-lives range from fractions of a second to several billion years.
+
+3. Q: What materials are best for shielding?
+A: Denser materials such as lead or concrete are more effective for stopping radiation because the radiation has more matter with which to collide.
+
+4. Q: Gamma radiation, a form of ionizing electromagnetic radiation emitted from some radioactive isotopes, has no weight. What other types of radiation do you come in contact with that have no weight?
+A: Any form of electromagnetic radiation: sunlight, x-rays, soundwaves, microwaves, TV, and radiowaves.
+
+After Cloud Chamber Experiment
+
+5. Q: Because you could not see the radiation, what kind of observation did you experience?
+A: One sees the tracks left in the dense gas.
+
+6. Q: What is happening to the radioactive source?
+A: It is decaying (losing its radioactivity).
+
+7. Q: What radiation "footprints" did you see? Describe them.
+A: They are "puffs" or "trails." Alpha rays produce sharp tracks about 1 cm long. Beta rays produce thin tracks from 3 to 10 cm long, and gamma rays produce twisting and spiraling tracks.
+
+After the Geiger Counter Measurements
+
+8. Q: Why do we measure radiation dose?
+A: Because exposure to too much radiation can be harmful to people. Further, the Federal government has set limits on how much exposure to radiation workers and individuals in the general public may receive from man-made sources. The NRC, for instance, requires that its licensees limit maximum radiation exposure to the public to 100 millirems per year and limit overexposure to adults working with radioactive material to 5,000 millirems per year. Its regulations are consistent with recommendations of national and international organizations and with practices in other developed nations.
+
+9. Q: When you use a Geiger counter to determine how radioactive a substance is, why is it important to know the background radiation level?
+A: You need to know that level so you don't add that count to the reading of the substance you are testing.
+
+10. Q: Has anyone you know been helped or harmed by radiation?
+A: Answers will depend on the experiences of the students. They are most likely to mention such things as medical and dental x-rays and cancer treatments as being helpful. To benefit mankind, radiation is used in science, medicine, space exploration, geology, ecology, architecture and engineering. For harmful effects, they are likely to mention sunburn or skin cancer and the effects of radiation on the residents of Hiroshima and Nagasaki in Japan at the end of World War II.
+
+For information on radiation and its effects, contact the NRC, the EPA, or your local or state health officials.
