@@ -1,0 +1,326 @@
+{
+  "generatedAt": "2026-10-28T18:33:07.865Z",
+  "resultsFile": "docs/evidence/stage-5b/evaluation/results.jsonl",
+  "manifestFile": "data/evaluation/manifest.json",
+  "manifestTotal": 29,
+  "resultLines": 12,
+  "reportedJobs": 12,
+  "supersededDuplicateLines": 0,
+  "metrics": {
+    "total": 12,
+    "byClass": {
+      "correct-first-try": 4,
+      "correct-after-repair": 1,
+      "correct-decline": 3,
+      "wrong-engine": 0,
+      "wrong-decline": 3,
+      "false-accept": 1,
+      "failed": 0,
+      "unknown": 0
+    },
+    "accuracyRate": 0.6666666666666666,
+    "bySubject": {
+      "physics": {
+        "total": 8,
+        "byClass": {
+          "correct-first-try": 1,
+          "correct-after-repair": 1,
+          "correct-decline": 3,
+          "wrong-engine": 0,
+          "wrong-decline": 2,
+          "false-accept": 1,
+          "failed": 0,
+          "unknown": 0
+        },
+        "accuracyRate": 0.625
+      },
+      "finance": {
+        "total": 2,
+        "byClass": {
+          "correct-first-try": 2,
+          "correct-after-repair": 0,
+          "correct-decline": 0,
+          "wrong-engine": 0,
+          "wrong-decline": 0,
+          "false-accept": 0,
+          "failed": 0,
+          "unknown": 0
+        },
+        "accuracyRate": 1
+      },
+      "chemistry-earth": {
+        "total": 1,
+        "byClass": {
+          "correct-first-try": 1,
+          "correct-after-repair": 0,
+          "correct-decline": 0,
+          "wrong-engine": 0,
+          "wrong-decline": 0,
+          "false-accept": 0,
+          "failed": 0,
+          "unknown": 0
+        },
+        "accuracyRate": 1
+      },
+      "history": {
+        "total": 1,
+        "byClass": {
+          "correct-first-try": 0,
+          "correct-after-repair": 0,
+          "correct-decline": 0,
+          "wrong-engine": 0,
+          "wrong-decline": 1,
+          "false-accept": 0,
+          "failed": 0,
+          "unknown": 0
+        },
+        "accuracyRate": 0
+      }
+    },
+    "byDifficulty": {
+      "hard": {
+        "total": 10,
+        "byClass": {
+          "correct-first-try": 4,
+          "correct-after-repair": 0,
+          "correct-decline": 3,
+          "wrong-engine": 0,
+          "wrong-decline": 3,
+          "false-accept": 0,
+          "failed": 0,
+          "unknown": 0
+        },
+        "accuracyRate": 0.7
+      },
+      "easy": {
+        "total": 1,
+        "byClass": {
+          "correct-first-try": 0,
+          "correct-after-repair": 1,
+          "correct-decline": 0,
+          "wrong-engine": 0,
+          "wrong-decline": 0,
+          "false-accept": 0,
+          "failed": 0,
+          "unknown": 0
+        },
+        "accuracyRate": 1
+      },
+      "medium": {
+        "total": 1,
+        "byClass": {
+          "correct-first-try": 0,
+          "correct-after-repair": 0,
+          "correct-decline": 0,
+          "wrong-engine": 0,
+          "wrong-decline": 0,
+          "false-accept": 1,
+          "failed": 0,
+          "unknown": 0
+        },
+        "accuracyRate": 0
+      }
+    },
+    "repairs": {
+      "total": 2,
+      "jobsWithRepairs": 2,
+      "analysisTotal": 2,
+      "jobsWithAnalysisRepairs": 2,
+      "byTargetedCheck": {
+        "analysis.concept-ids": 2
+      },
+      "byFirstRevisionCheck": {}
+    },
+    "cost": {
+      "publishedLessons": 6,
+      "meanPerPublishedUSD": 0.065242,
+      "maxPerPublishedUSD": 0.081363,
+      "totalUSD": 0.501058
+    },
+    "timing": {
+      "meanWallS": 39.975
+    },
+    "pages": [
+      {
+        "sourceId": "nasa-grc-weight-equation",
+        "candidate": 3,
+        "subject": "physics",
+        "difficulty": "hard",
+        "expected": "forces-1d-v1",
+        "class": "correct-decline",
+        "engine": null,
+        "publishedRevision": null,
+        "revisions": 0,
+        "status": "unsupported",
+        "error": null,
+        "totalCostUSD": 0.020641,
+        "wallS": 20.2
+      },
+      {
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "candidate": 4,
+        "subject": "physics",
+        "difficulty": "easy",
+        "expected": "forces-1d-v1",
+        "class": "correct-after-repair",
+        "engine": "forces-1d-v1",
+        "publishedRevision": 1,
+        "revisions": 1,
+        "status": "succeeded",
+        "error": null,
+        "totalCostUSD": 0.058963,
+        "wallS": 56.5
+      },
+      {
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "candidate": 7,
+        "subject": "physics",
+        "difficulty": "hard",
+        "expected": "lift-equation-v1",
+        "class": "correct-first-try",
+        "engine": "lift-equation-v1",
+        "publishedRevision": 1,
+        "revisions": 1,
+        "status": "succeeded",
+        "error": null,
+        "totalCostUSD": 0.066677,
+        "wallS": 66.5
+      },
+      {
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "candidate": 8,
+        "subject": "physics",
+        "difficulty": "hard",
+        "expected": "speed-of-sound-v1",
+        "class": "wrong-decline",
+        "engine": null,
+        "publishedRevision": null,
+        "revisions": 0,
+        "status": "unsupported",
+        "error": null,
+        "totalCostUSD": 0.014122,
+        "wallS": 12.2
+      },
+      {
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "candidate": 9,
+        "subject": "physics",
+        "difficulty": "hard",
+        "expected": "speed-of-sound-v1",
+        "class": "wrong-decline",
+        "engine": null,
+        "publishedRevision": null,
+        "revisions": 0,
+        "status": "unsupported",
+        "error": null,
+        "totalCostUSD": 0.012975,
+        "wallS": 12.1
+      },
+      {
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "candidate": 10,
+        "subject": "physics",
+        "difficulty": "hard",
+        "expected": "speed-of-sound-v1",
+        "class": "correct-decline",
+        "engine": null,
+        "publishedRevision": null,
+        "revisions": 0,
+        "status": "unsupported",
+        "error": null,
+        "totalCostUSD": 0.032699,
+        "wallS": 26.2
+      },
+      {
+        "sourceId": "cfpb-teenagers-and-saving",
+        "candidate": 11,
+        "subject": "finance",
+        "difficulty": "hard",
+        "expected": "compound-interest-v1",
+        "class": "correct-first-try",
+        "engine": "compound-interest-v1",
+        "publishedRevision": 1,
+        "revisions": 1,
+        "status": "succeeded",
+        "error": null,
+        "totalCostUSD": 0.063841,
+        "wallS": 64.4
+      },
+      {
+        "sourceId": "cfpb-saving-post-secondary-education",
+        "candidate": 12,
+        "subject": "finance",
+        "difficulty": "hard",
+        "expected": "compound-interest-v1",
+        "class": "correct-first-try",
+        "engine": "compound-interest-v1",
+        "publishedRevision": 1,
+        "revisions": 1,
+        "status": "succeeded",
+        "error": null,
+        "totalCostUSD": 0.081363,
+        "wallS": 76.5
+      },
+      {
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "candidate": 13,
+        "subject": "chemistry-earth",
+        "difficulty": "hard",
+        "expected": "half-life-v1",
+        "class": "correct-first-try",
+        "engine": "half-life-v1",
+        "publishedRevision": 1,
+        "revisions": 1,
+        "status": "succeeded",
+        "error": null,
+        "totalCostUSD": 0.058544,
+        "wallS": 56.4
+      },
+      {
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "candidate": 21,
+        "subject": "history",
+        "difficulty": "hard",
+        "expected": "timeline-v1",
+        "class": "wrong-decline",
+        "engine": null,
+        "publishedRevision": null,
+        "revisions": 0,
+        "status": "unsupported",
+        "error": null,
+        "totalCostUSD": 0.013189,
+        "wallS": 12.1
+      },
+      {
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "candidate": 28,
+        "subject": "physics",
+        "difficulty": "medium",
+        "expected": "decline",
+        "class": "false-accept",
+        "engine": "timeline-v1",
+        "publishedRevision": 1,
+        "revisions": 1,
+        "status": "succeeded",
+        "error": null,
+        "totalCostUSD": 0.062065,
+        "wallS": 62.5
+      },
+      {
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "candidate": 29,
+        "subject": "physics",
+        "difficulty": "hard",
+        "expected": "decline",
+        "class": "correct-decline",
+        "engine": null,
+        "publishedRevision": null,
+        "revisions": 0,
+        "status": "unsupported",
+        "error": null,
+        "totalCostUSD": 0.015979,
+        "wallS": 14.1
+      }
+    ]
+  }
+}

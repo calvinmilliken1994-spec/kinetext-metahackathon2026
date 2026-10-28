@@ -1,0 +1,168 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "cfpb-saving-post-secondary-education-job-20261028183123-ce5d6485",
+  "title": "Saving for College with Compound Interest",
+  "learningObjectives": [
+    "Understand how time and compound interest can increase savings",
+    "Understand the value of starting early to save for post-secondary education"
+  ],
+  "sources": [
+    {
+      "id": "cfpb-saving-post-secondary-education",
+      "title": "Saving for post-secondary education (teacher guide) — Consumer Financial Protection Bureau, Building Blocks activities",
+      "locator": "https://files.consumerfinance.gov/f/documents/cfpb_building_block_activities_saving-post-secondary-education_guide.pdf",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: Consumer Financial Protection Bureau, Building Blocks activities, 'Saving for post-secondary education (teacher guide)'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+      "sha256": "243a4b56c86936ecc243da4c7fc982bc76b85ee12116c97e4f751cfb8ba6c926"
+    }
+  ],
+  "explanations": [
+    {
+      "evidence": [
+        {
+          "quote": "Compound interest is when you earn interest on both the money you save and the interest you earn.",
+          "sourceId": "cfpb-saving-post-secondary-education"
+        }
+      ],
+      "id": "what-is-compound-interest",
+      "text": "Compound interest means you earn interest on both the money you save and the interest you have already earned, so starting early helps savings grow."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "So let's say you invest $1,000 (your principal) and it earns 5 percent (interest rate) once a year (the compounding frequency).",
+          "sourceId": "cfpb-saving-post-secondary-education"
+        },
+        {
+          "quote": "The second year, you would have $1,102.50.",
+          "sourceId": "cfpb-saving-post-secondary-education"
+        }
+      ],
+      "id": "worked-example-1000-at-5-percent",
+      "text": "For example, a $1,000 principal at 5 percent compounded once a year grows to $1,102.50 after two years."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "Interest can be compounded annually (once each year), semi-annually (twice each year), monthly, or daily.",
+          "sourceId": "cfpb-saving-post-secondary-education"
+        },
+        {
+          "quote": "Increasing the compounding frequency or your interest rate or adding to your principal can help your savings grow even faster.",
+          "sourceId": "cfpb-saving-post-secondary-education"
+        }
+      ],
+      "id": "compounding-frequency-and-growth",
+      "text": "Interest can be compounded annually, semi-annually, monthly, or daily, and increasing frequency, rate, or principal can help savings grow even faster."
+    }
+  ],
+  "simulation": {
+    "engine": "compound-interest-v1",
+    "equation": "A=P*(1+r/(100*n))^(n*t)",
+    "principalUSD": {
+      "unit": "USD",
+      "default": 1000,
+      "max": 10000,
+      "min": 100
+    },
+    "annualRatePercent": {
+      "unit": "%",
+      "default": 5,
+      "max": 12,
+      "min": 1
+    },
+    "compoundsPerYear": {
+      "unit": "per year",
+      "default": 4,
+      "max": 12,
+      "min": 1
+    },
+    "years": {
+      "unit": "years",
+      "default": 10,
+      "max": 40,
+      "min": 1
+    },
+    "scenario": {
+      "objectLabel": "Savings account",
+      "settingLabel": "Saving for post-secondary education"
+    }
+  },
+  "behavioralTests": [
+    {
+      "annualRatePercent": 5,
+      "compoundsPerYear": 1,
+      "expectedAmountUSD": 1102.5,
+      "name": "Source example: $1,000 at 5% yearly for 2 years",
+      "principalUSD": 1000,
+      "tolerance": 0.01,
+      "years": 2
+    },
+    {
+      "annualRatePercent": 0,
+      "compoundsPerYear": 12,
+      "expectedAmountUSD": 2500,
+      "name": "Edge case: 0% rate keeps principal",
+      "principalUSD": 2500,
+      "tolerance": 0.01,
+      "years": 10
+    },
+    {
+      "annualRatePercent": 4,
+      "compoundsPerYear": 2,
+      "expectedAmountUSD": 2437.99,
+      "name": "$2,000 at 4% semi-annual for 5 years",
+      "principalUSD": 2000,
+      "tolerance": 0.01,
+      "years": 5
+    },
+    {
+      "annualRatePercent": 12,
+      "compoundsPerYear": 12,
+      "expectedAmountUSD": 1126.83,
+      "name": "$1,000 at 12% monthly for 1 year",
+      "principalUSD": 1000,
+      "tolerance": 0.01,
+      "years": 1
+    }
+  ],
+  "predictions": [
+    {
+      "annualRatePercent": 8,
+      "compoundsPerYear": 4,
+      "expectedAmountUSD": 2971.89,
+      "id": "save-2000-8pct-quarterly-5yr",
+      "principalUSD": 2000,
+      "prompt": "You save $2,000 for college at 8% compounded quarterly for 5 years. What amount will you have?",
+      "tolerance": 0.01,
+      "years": 5
+    },
+    {
+      "annualRatePercent": 6,
+      "compoundsPerYear": 2,
+      "expectedAmountUSD": 1806.11,
+      "id": "save-1000-6pct-semiannual-10yr",
+      "principalUSD": 1000,
+      "prompt": "You save $1,000 for college at 6% compounded semi-annually for 10 years. What amount will you have?",
+      "tolerance": 0.01,
+      "years": 10
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a183c9-1e9f-76b8-ac84-02d578cc22af",
+    "runId": "job-20261028183123-ce5d6485",
+    "promptVersion": "v8",
+    "generatedAt": "2026-10-28T18:32:38.422Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

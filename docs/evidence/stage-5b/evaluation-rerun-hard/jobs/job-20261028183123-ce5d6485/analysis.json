@@ -1,0 +1,110 @@
+{
+  "analysis": {
+    "activity": "compound-interest-v1",
+    "concepts": [
+      {
+        "evidence": [
+          {
+            "quote": "Compound interest is when you earn interest on both the money you save and the interest you earn.",
+            "sourceId": "cfpb-saving-post-secondary-education"
+          },
+          {
+            "quote": "That's because the next interest payment equals 5 percent of $1,050, or $52.50.",
+            "sourceId": "cfpb-saving-post-secondary-education"
+          }
+        ],
+        "id": "compound-interest",
+        "name": "Compound interest"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "So let's say you invest $1,000 (your principal) and it earns 5 percent (interest rate) once a year (the compounding frequency).",
+            "sourceId": "cfpb-saving-post-secondary-education"
+          },
+          {
+            "quote": "After the first year, you would have $1,050—your original principal, plus 5 percent, or $50.",
+            "sourceId": "cfpb-saving-post-secondary-education"
+          },
+          {
+            "quote": "The second year, you would have $1,102.50.",
+            "sourceId": "cfpb-saving-post-secondary-education"
+          },
+          {
+            "quote": "Interest can be compounded annually (once each year), semi-annually (twice each year), monthly, or daily.",
+            "sourceId": "cfpb-saving-post-secondary-education"
+          }
+        ],
+        "id": "compound-interest-worked-example",
+        "name": "Compound interest worked example"
+      }
+    ],
+    "objectives": [
+      "Understand how time and compound interest can increase savings",
+      "Understand the value of starting early to save for post-secondary education"
+    ],
+    "supported": true,
+    "unsupportedReason": ""
+  },
+  "report": {
+    "artifactId": "source-analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis.gen.json"
+      },
+      {
+        "id": "analysis.invariants",
+        "kind": "semantic",
+        "passed": true,
+        "message": "invariants hold for supported=true"
+      },
+      {
+        "id": "analysis.concept-ids",
+        "kind": "semantic",
+        "passed": true,
+        "message": "all 2 concept id(s) are unique lowercase-kebab"
+      },
+      {
+        "id": "refs.sources",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 1 cited sourceId(s) have matching documents"
+      },
+      {
+        "id": "grounding.quotes",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 concept quote(s) count as evidence (>= 8 normalised characters with >= 3 letters/digits, or a compact \"=\" equation with >= 3) and all 6 resolvable quote(s) appear in their source text after whitespace normalisation; every supported concept has >= 1 counted quote"
+      },
+      {
+        "id": "policy.no-publisher-attribution",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated analysis field (concept names, objectives, unsupportedReason) mentions the publisher or uses attribution/endorsement wording naming a source or authority; evidence quotes are exempt"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a183c8-2c5a-76f7-88c2-e645758e9cdb",
+    "usage": {
+      "promptTokens": 3577,
+      "completionTokens": 2859,
+      "reasoningTokens": 2561,
+      "cachedTokens": 0
+    },
+    "latencyMs": 12707,
+    "estCostUSD": 0.016622,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage"
+  }
+}
