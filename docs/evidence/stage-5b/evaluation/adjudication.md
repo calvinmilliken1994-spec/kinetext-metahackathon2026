@@ -24,3 +24,8 @@ The pre-registered scoring (`summary.md`, expectations committed in `32ca75e` be
 1. Analysis output cap 6,000 → raise (two truncations).
 2. Give the analysis stage the same bounded check → repair loop as the spec stage. #4 would then have been a genuine, natural, visible repair.
 3. Consider whether `timeline-v1`'s minimum of 5 events is too strict for short primary-source introductions.
+
+## Correction (2026-10-29, after independent review S5B-09)
+- "Muse's published lessons were all correct first time" overstates what was measured. Supported statement: **all nine published specs passed the implemented deterministic checks on revision 1.** The checks do not establish prose entailment, applicability or event-label correctness, and the review (S5B-01/S5B-02) showed the timeline date check could accept dates not stated in the source; those holes are being fixed. Content correctness was not independently assessed.
+- #4's concept id was **53** characters, not 51.
+- The 16/29 score is an expectation-matching decision score, not a measure of content correctness. The pre-registered scores above are unchanged.

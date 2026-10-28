@@ -21,3 +21,11 @@ The second #12 run (after the fix) published on revision 1 with no error.
 - #7 (1900s lift equation) and #28 (Wright index): the analysis cap no longer truncates; both published r1. #7 uses the modern SI lift equation (numbers correct) rather than the page's historic imperial form. #28 became a 6-event timeline whose date quotes are link titles ("1900 Aircraft Interactive"); its labels add wording ("Second Unpowered Aircraft") that no check verifies → new debt: event labels are not grounded in their quotes.
 - #13 (NRC radioactive waste) now published a half-life lesson (was declined).
 - Declines unchanged for #3, #8, #9, #21, #29.
+
+## Corrections (2026-10-29, after independent review S5B-09)
+- **Cost:** the 12 recorded results total **USD 0.501058** (not 0.58); the omitted first #12 job `job-20261028182320-bc3e9bff` cost **USD 0.139421**; all 13 stored jobs total **USD 0.640479**.
+- **The aggregate is not an all-attempt rate.** `summary.md` covers the 12 rows in `results.jsonl` (latest run per page). The 13 stored jobs contain **four repair attempts across three jobs**: two accepted analysis repairs (#4, #10) and two **rejected** spec repair attempts (#12, first run). Counting all attempts, the follow-up has one failed job.
+- **#12 was not a successful live repair.** Both spec repair attempts were rejected at run time; only a replay under BUG-003's fix (90f040c) shows the rejected r2 would now pass. The replacement run published on revision 1 without repair.
+- The two natural repairs are **format repairs** (over-long concept ids), not corrections of subject matter.
+- `correct-after-repair` in `summary.md` counts any repair (analysis or spec) before publishing; the "Wrote …" line prints the default folder name, but the report files are in this folder.
+- This follow-up re-ran a selected subset after code and limit changes; it is not a fresh benchmark, and no repair-success rate follows from it.
