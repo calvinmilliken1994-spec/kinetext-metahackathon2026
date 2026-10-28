@@ -982,7 +982,14 @@ test('startJob: an unpublishable analysis fails ANALYSIS_INVALID without derefer
       throw new Error('specify must not run for an unpublishable analysis');
     },
   };
-  const { jobId, done } = startJob('nasa-grc-equations-of-motion', { client, storageDir, purpose: 'test-live' });
+  const { jobId, done } = startJob('nasa-grc-equations-of-motion', {
+    client,
+    storageDir,
+    purpose: 'test-live',
+    // TASK-024b: maxRepairAttempts 0 keeps today's behaviour — this test pins the
+    // F-01 dereference gate, not the analysis repair loop (covered in jobs.analysis-repair.test.ts).
+    limits: { maxRepairAttempts: 0 },
+  });
   jobIdHolder = jobId;
   const summary = await done;
   assert.equal(summary.status, 'failed');

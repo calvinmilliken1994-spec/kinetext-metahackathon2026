@@ -32,6 +32,16 @@ export interface RepairSummary {
   remaining?: string[];
 }
 
+/** One analysis-stage repair attempt (TASK-024b), as recorded by scripts/evaluation-run.ts. */
+export interface AnalysisRepairSummary {
+  attempt?: number | null;
+  revision?: number | null;
+  targeted?: string[];
+  fixed?: string[];
+  remaining?: string[];
+  passed?: boolean;
+}
+
 /** One JSON line of docs/evidence/stage-5b/evaluation/results.jsonl. */
 export interface EvalResultLine {
   sourceId: string;
@@ -46,6 +56,8 @@ export interface EvalResultLine {
   publishedRevision?: number | null;
   revisions?: number | null;
   repairs?: RepairSummary[] | null;
+  /** TASK-024b (additive): absent on records written before analysis repair existed. */
+  analysisRepairs?: AnalysisRepairSummary[] | null;
   failedChecks?: string[] | null;
   firstRevisionFailedChecks?: string[] | null;
   error?: string | null;
@@ -101,6 +113,10 @@ export interface MetricsSummary {
   repairs: {
     total: number;
     jobsWithRepairs: number;
+    /** TASK-024b: analysis-stage repair attempts (included in `total`). */
+    analysisTotal: number;
+    /** TASK-024b: jobs with at least one analysis repair (included in `jobsWithRepairs`). */
+    jobsWithAnalysisRepairs: number;
     /** How many repair attempts targeted each check id. */
     byTargetedCheck: Record<string, number>;
     /** In how many jobs each check id failed on revision 1 (the natural trigger). */
@@ -124,11 +140,14 @@ export function classifyResult(r: EvalResultLine): OutcomeClass {
     return expected === 'decline' || acceptable.includes('decline') ? 'correct-decline' : 'wrong-decline';
   }
   if (r.status === 'succeeded' && r.engine != null && r.publishedRevision != null) {
+    // TASK-024b: an analysis repair counts as a repair too — a job that published
+    // revision 1 only after its analysis was repaired is correct-after-repair.
+    const repaired = r.publishedRevision > 1 || (r.analysisRepairs ?? []).length > 0;
     if (expected === 'decline') {
-      return acceptable.includes(r.engine) ? (r.publishedRevision > 1 ? 'correct-after-repair' : 'correct-first-try') : 'false-accept';
+      return acceptable.includes(r.engine) ? (repaired ? 'correct-after-repair' : 'correct-first-try') : 'false-accept';
     }
     if (r.engine === expected || acceptable.includes(r.engine)) {
-      return r.publishedRevision > 1 ? 'correct-after-repair' : 'correct-first-try';
+      return repaired ? 'correct-after-repair' : 'correct-first-try';
     }
     return 'wrong-engine';
   }
@@ -173,6 +192,8 @@ export function computeMetrics(results: EvalResultLine[], manifest: ManifestEntr
 
   let repairsTotal = 0;
   let jobsWithRepairs = 0;
+  let analysisRepairsTotal = 0;
+  let jobsWithAnalysisRepairs = 0;
   const byTargetedCheck: Record<string, number> = {};
   const byFirstRevisionCheck: Record<string, number> = {};
 
@@ -210,9 +231,16 @@ export function computeMetrics(results: EvalResultLine[], manifest: ManifestEntr
     });
 
     const repairs = r.repairs ?? [];
-    if (repairs.length > 0) jobsWithRepairs += 1;
-    repairsTotal += repairs.length;
+    // TASK-024b: analysis-stage repairs are natural repairs too (old records simply have none).
+    const analysisRepairs = r.analysisRepairs ?? [];
+    if (repairs.length > 0 || analysisRepairs.length > 0) jobsWithRepairs += 1;
+    repairsTotal += repairs.length + analysisRepairs.length;
+    if (analysisRepairs.length > 0) jobsWithAnalysisRepairs += 1;
+    analysisRepairsTotal += analysisRepairs.length;
     for (const rep of repairs) {
+      for (const id of rep.targeted ?? []) byTargetedCheck[id] = (byTargetedCheck[id] ?? 0) + 1;
+    }
+    for (const rep of analysisRepairs) {
       for (const id of rep.targeted ?? []) byTargetedCheck[id] = (byTargetedCheck[id] ?? 0) + 1;
     }
     for (const id of r.firstRevisionFailedChecks ?? []) byFirstRevisionCheck[id] = (byFirstRevisionCheck[id] ?? 0) + 1;
@@ -239,7 +267,7 @@ export function computeMetrics(results: EvalResultLine[], manifest: ManifestEntr
     accuracyRate: total === 0 ? null : correct / total,
     bySubject,
     byDifficulty,
-    repairs: { total: repairsTotal, jobsWithRepairs, byTargetedCheck, byFirstRevisionCheck },
+    repairs: { total: repairsTotal, jobsWithRepairs, analysisTotal: analysisRepairsTotal, jobsWithAnalysisRepairs, byTargetedCheck, byFirstRevisionCheck },
     cost: {
       publishedLessons,
       meanPerPublishedUSD: publishedLessons === 0 ? null : Math.round((publishedCostSum / publishedLessons) * 1e6) / 1e6,
@@ -303,6 +331,7 @@ export function renderSummaryMarkdown(m: MetricsSummary, opts: { manifestTotal: 
   L.push('No demo faults are injected in evaluation runs, so every repair below is a natural model failure repaired by Muse.');
   L.push('');
   L.push(`- Repair attempts: **${m.repairs.total}** across **${m.repairs.jobsWithRepairs}** job(s).`);
+  L.push(`- Analysis repair attempts: **${m.repairs.analysisTotal}** across **${m.repairs.jobsWithAnalysisRepairs}** job(s) (source-analysis stage, TASK-024b; included in the totals above).`);
   const targeted = Object.entries(m.repairs.byTargetedCheck).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
   if (targeted.length > 0) {
     L.push('- Checks targeted by repairs:');

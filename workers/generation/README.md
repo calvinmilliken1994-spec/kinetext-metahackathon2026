@@ -8,7 +8,7 @@ activity spec. It is the only writer of `storage/runs/<jobId>/`.
 ```ts
 startJob(sourceId, deps, onEvent?) → { jobId, done: Promise<JobSummary> }
 listJobs(storageDir) → JobSummary[]      // newest first by createdAt; skips unreadable dirs
-readJob(storageDir, jobId) → { summary, events, analysis?, spec?, report? } | null
+readJob(storageDir, jobId) → { summary, events, analysis?, spec?, report?, revisions, analysisRevisions } | null
 ```
 
 - `sourceId` must match `/^[a-z0-9][a-z0-9-]{0,63}$/`; anything else throws
@@ -31,7 +31,7 @@ contiguous from 0 per job) and calls the optional `onEvent` subscriber
 | Stage | Success | Failure |
 |---|---|---|
 | `ingest` | started → `loadSource` (hash-checked) → succeeded, detail `sha256 <first 12 hex>` | failed, job fails with `SOURCE_UNAVAILABLE` |
-| `analyze` | started → `analyzeSource` → writes `analysis.json` `{analysis, report, receipt}` → succeeded with receipt fields + detail `supported; checks a/b passed` | report not publishable → failed, job fails `ANALYSIS_INVALID`; `MetaError` → failed detail `<code>: <message>` |
+| `analyze` | started → `analyzeSource` → writes `analysis.json` `{analysis, report, receipt}` → succeeded with receipt fields + detail `supported; checks a/b passed` | report not publishable → bounded analysis repair loop (TASK-024b, below); if no attempt passes → failed, job fails `ANALYSIS_INVALID`; `MetaError` → failed detail `<code>: <message>` |
 | `specify` | started → `generateSpec` (specId `<sourceId>-<jobId>` truncated to 64) → writes `spec.r1.json` (the assembled `ActivitySpec`) → succeeded with receipt fields | `MetaError` → failed, job fails with that code |
 | `validate` | started → writes `report.r1.json` → succeeded detail `a/b checks passed` | not publishable → failed detail adds the failing check ids, job fails `VALIDATION_FAILED` |
 | `done` | succeeded (`publishable` for a succeeded job; `unsupported` for an honest not-supported-yet analysis) | — |
@@ -39,6 +39,29 @@ contiguous from 0 per job) and calls the optional `onEvent` subscriber
 An analysis with `supported: false` (and a publishable analysis report) ends the
 job with status `unsupported` after a single `done:succeeded` event — no spec is
 generated and no spend beyond the analysis call is incurred.
+
+## Analysis check-then-repair (TASK-024b)
+
+When the revision-1 analysis report is not publishable, the worker runs up to
+`limits.maxRepairAttempts` (same config value as spec repairs, integer 0–2;
+0 keeps the old fail-fast behaviour) calls to Muse's `repairAnalysis`:
+
+- attempt 1 passes `previous = {analysis: <revision-1 analysis>, report, attempt: 1}`;
+  attempt 2 passes the attempt-1 analysis/report plus the **immutable** revision-1
+  `baseline` (S5-01 for analyses), so a rejected weakening can never become the baseline.
+- The job deadline signal and `analysisMaxOutputTokens` cover every attempt; each
+  receipt is accounted exactly like other calls (F-01/BUG-002 included:
+  a `GeneratedOutputError` fails the job `OUTPUT_INVALID` with its receipt accounted).
+- Events are `repair:started` / `repair:succeeded` (or `repair:failed`) carrying
+  `target: 'analysis'` and the produced analysis revision (2 = attempt 1, 3 = attempt 2);
+  spec-repair events carry no `target` (absent = spec).
+- `summary.analysisRepairs` records `{attempt, revision, targeted, fixed, remaining, passed}`
+  per attempt. The analysis and spec repair budgets are separate.
+- A passing repaired analysis becomes the analysis of record (`analysis.json` is
+  rewritten; the job then continues normally — decline → `unsupported`, supported →
+  `specify`). A repair that flips to a decline to escape a finding is rejected by
+  the pipeline's `repair.analysis-unchanged` check, so it can never end as `unsupported`.
+- If no attempt passes, the job fails `ANALYSIS_INVALID` as before.
 
 ## Job statuses
 
@@ -62,7 +85,11 @@ to reserve past the cap); the worker only reports what receipts say.
 storage/runs/<jobId>/
   job.json        JobSummary (running → terminal)
   events.jsonl    one StageEvent per line, append-only
-  analysis.json   {analysis, report, receipt} from analyzeSource
+  analysis.json   {analysis, report, receipt} from analyzeSource; rewritten with the
+                  repaired analysis when an analysis repair passes (TASK-024b)
+  analysis.r1.json  ONLY when an analysis repair was attempted: the immutable
+  analysis.r2.json  revision-1 analysis (r1) and each attempt's {analysis, report,
+  …                receipt} (r<n> = attempt n-1), mirroring spec.r<n>/report.r<n>
   spec.r1.json    assembled ActivitySpec (revision 1)
   report.r1.json  ValidationReport for spec.r1
 ```

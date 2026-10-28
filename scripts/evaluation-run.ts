@@ -133,6 +133,15 @@ for (const p of plan) {
     publishedRevision: s.publishedRevision ?? null,
     revisions: s.revisions ?? null,
     repairs: (s.repairs ?? []).map((r: any) => ({ targeted: r.targeted ?? [], fixed: r.fixed ?? [] })),
+    // TASK-024b (additive): analysis-stage repairs, so the metrics can count natural analysis repairs.
+    analysisRepairs: (s.analysisRepairs ?? []).map((r: any) => ({
+      attempt: r.attempt ?? null,
+      revision: r.revision ?? null,
+      targeted: r.targeted ?? [],
+      fixed: r.fixed ?? [],
+      remaining: r.remaining ?? [],
+      passed: r.passed === true,
+    })),
     failedChecks,
     firstRevisionFailedChecks,
     error: s.error?.code ?? null,

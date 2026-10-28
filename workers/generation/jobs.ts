@@ -5,7 +5,11 @@
 //   job.json        — JobSummary, written synchronously at start ('running') and rewritten at the end;
 //                     carries owner {pid, startedAt} so recovery never interrupts a live owner (TASK-009 N-05)
 //   events.jsonl    — one StageEvent per line, appended as stages progress (seq 0..n per job)
-//   analysis.json   — {analysis, report, receipt} from analyzeSource
+//   analysis.json   — {analysis, report, receipt} from analyzeSource; rewritten with the
+//                     repaired analysis when the analysis repair loop (TASK-024b) fixes it
+//   analysis.r<n>.json — ONLY when an analysis repair was attempted: the immutable
+//                     revision-1 analysis (n=1) and every repair attempt's
+//                     {analysis, report, receipt} (n = attempt + 1), mirroring spec.r<n>
 //   spec.r<n>.json   — the assembled ActivitySpec for revision n (1 = generateSpec,
 //                      n > 1 = repairSpec; Stage 5 bounded repair loop)
 //   report.r<n>.json — the ValidationReport for spec.r<n>
@@ -27,7 +31,7 @@
 import { appendFileSync, mkdirSync, readdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { randomUUID } from 'node:crypto';
-import { analyzeSource, generateSpec, repairSpec, GeneratedOutputError } from '../../packages/meta/pipeline.ts';
+import { analyzeSource, generateSpec, repairAnalysis, repairSpec, GeneratedOutputError } from '../../packages/meta/pipeline.ts';
 import type { TimelineSourceAnalysis } from '../../packages/meta/pipeline.ts';
 import { MetaError, META_ERROR_MESSAGES } from '../../packages/meta/client.ts';
 import type { MetaClient, MetaErrorCode } from '../../packages/meta/client.ts';
@@ -107,6 +111,22 @@ export interface JobOwner {
   startedAt: string;
 }
 
+/** Summary of one ANALYSIS repair attempt (TASK-024b), stored on the job. Mirrors RepairRecord for spec repairs. */
+export interface AnalysisRepairRecord {
+  /** 1-based analysis repair attempt (bounded by the same maxRepairAttempts as spec repairs). */
+  attempt: number;
+  /** Analysis revision the attempt produced (attempt + 1; revision 1 is the original analysis). */
+  revision: number;
+  /** Check ids failing on the analysis the attempt started from. */
+  targeted: string[];
+  /** Of `targeted`, the ids that pass on the produced revision. */
+  fixed: string[];
+  /** Check ids failing on the produced revision (may include repair.analysis-unchanged or new failures). */
+  remaining: string[];
+  /** True when the produced analysis report is publishable. */
+  passed: boolean;
+}
+
 export interface JobSummary {
   jobId: string;
   sourceId: string;
@@ -128,6 +148,12 @@ export interface JobSummary {
   revisions: number;
   /** One record per repair attempt, in order (Stage 5). */
   repairs: RepairRecord[];
+  /**
+   * One record per ANALYSIS repair attempt, in order (TASK-024b). Empty when the
+   * revision-1 analysis was publishable or maxRepairAttempts is 0. Optional: jobs
+   * recorded before analysis repair existed carry no analysisRepairs field.
+   */
+  analysisRepairs?: AnalysisRepairRecord[];
   /** Set when any revision was publishable: the revision that gets published. */
   publishedRevision?: number;
   /** Set on VALIDATION_FAILED: the revision with the fewest failing checks. */
@@ -182,7 +208,7 @@ const DEFAULT_MAX_REPAIR_ATTEMPTS = 2; // config/resource-limits.json maxRepairA
 export const MAX_REPAIR_ATTEMPTS_BOUND = 2;
 
 type EventExtra = Partial<
-  Pick<StageEvent, 'model' | 'responseId' | 'usage' | 'latencyMs' | 'estCostUSD' | 'detail' | 'revision'>
+  Pick<StageEvent, 'model' | 'responseId' | 'usage' | 'latencyMs' | 'estCostUSD' | 'detail' | 'revision' | 'target'>
 >;
 
 /** Stage 5b: anything Muse may generate — a numeric engine's generated spec or the timeline's. */
@@ -506,6 +532,8 @@ export function startJob(
     engine: null,
     revisions: 0,
     repairs: [],
+    // TASK-024b: analysis repair bookkeeping starts empty alongside spec repairs.
+    analysisRepairs: [],
     sourceKind: USER_SOURCE_ID_PATTERN.test(sourceId) ? 'user' : 'library',
     // N-05: recovery consults this owner record before interrupting a running job.
     owner: { pid: process.pid, startedAt: createdAt },
@@ -729,13 +757,107 @@ async function runJob(
     join(runDir, 'analysis.json'),
     { analysis, report: analysisReport, receipt: analysisReceipt },
   );
-  // F-01: the report gates every read of the analysis. When it is not
-  // publishable the job fails with the fixed ANALYSIS_INVALID detail — no
-  // analysis field is dereferenced for it.
-  if (!analysisReport.publishable) {
+  // --- bounded analysis check-then-repair loop (TASK-024b) ---------------------
+  // F-01 still holds: the report gates every read of the analysis, and no analysis
+  // field is dereferenced on the failure paths below. The analysis repair budget is
+  // separate from the spec repair budget (each up to maxRepairAttempts).
+  // S5-06: startJob already refused any maxRepairAttempts outside integer [0, MAX_REPAIR_ATTEMPTS_BOUND].
+  const maxAnalysisRepairs = deps.limits?.maxRepairAttempts ?? DEFAULT_MAX_REPAIR_ATTEMPTS;
+  // S5-01 for analyses: the IMMUTABLE revision-1 analysis — attempt 2 is compared
+  // with it, never with the rejected attempt 1.
+  const analysisR1: { analysis: SourceAnalysis; report: ValidationReport } = { analysis, report: analysisReport };
+  let curAnalysis: SourceAnalysis = analysis;
+  let curAnalysisReport: ValidationReport = analysisReport;
+  let curAnalysisReceipt: MetaReceipt = analysisReceipt;
+  let analysisAttemptsDone = 0;
+  while (!curAnalysisReport.publishable && analysisAttemptsDone < maxAnalysisRepairs) {
+    const attempt = analysisAttemptsDone + 1;
+    const nextRevision = attempt + 1; // repairAnalysis numbers its report attempt + 1
+    const targeted = failedCheckIds(curAnalysisReport);
+    emit('repair', 'started', {
+      target: 'analysis',
+      revision: nextRevision,
+      detail: `analysis repair ${attempt}; targeted checks: ${targeted.join(', ')}`,
+    });
+    if (attempt === 1) {
+      // The first attempt also persists the immutable revision-1 baseline with its report.
+      writeJsonAtomic(join(runDir, 'analysis.r1.json'), {
+        analysis: analysisR1.analysis,
+        report: analysisR1.report,
+        receipt: analysisReceipt,
+      });
+    }
+    let repairedAnalysis: { analysis: SourceAnalysis; report: ValidationReport; receipt: MetaReceipt };
+    try {
+      repairedAnalysis = await repairAnalysis(
+        deps.client,
+        source,
+        attempt === 1
+          ? { analysis: analysisR1.analysis, report: analysisR1.report, attempt: 1 }
+          : {
+              analysis: curAnalysis,
+              report: curAnalysisReport,
+              attempt: 2,
+              // S5-01: compare with revision 1, never with the rejected previous attempt.
+              baseline: { analysis: analysisR1.analysis, report: analysisR1.report },
+            },
+        deps.purpose,
+        // R-11: the job-wide deadline and the analysis output cap cover analysis repairs too.
+        { signal: budget.signal, maxOutputTokens: budget.analysisMaxOutputTokens },
+      );
+    } catch (err: unknown) {
+      // F-01/S5-05: a GeneratedOutputError (billed call, schema-invalid output) or any
+      // MetaError fails the job through the normal persisted path with its fixed code,
+      // the accounted receipt and the attempted revision on the event.
+      return failFromError('repair', err, { revision: nextRevision, target: 'analysis' });
+    }
+    accountReceipt(repairedAnalysis.receipt);
+    analysisAttemptsDone += 1;
+    const passingIds = new Set(repairedAnalysis.report.checks.filter(c => c.passed).map(c => c.id));
+    const remaining = failedCheckIds(repairedAnalysis.report);
+    const analysisRecord: AnalysisRepairRecord = {
+      attempt,
+      revision: nextRevision,
+      targeted,
+      fixed: targeted.filter(id => passingIds.has(id)),
+      remaining,
+      passed: repairedAnalysis.report.publishable,
+    };
+    (summary.analysisRepairs ??= []).push(analysisRecord);
+    curAnalysis = repairedAnalysis.analysis;
+    curAnalysisReport = repairedAnalysis.report;
+    curAnalysisReceipt = repairedAnalysis.receipt;
+    writeJsonAtomic(join(runDir, `analysis.r${nextRevision}.json`), {
+      analysis: curAnalysis,
+      report: curAnalysisReport,
+      receipt: curAnalysisReceipt,
+    });
+    // R-01: the detail carries system-owned failing check ids, never model or exception text.
+    emit('repair', 'succeeded', {
+      target: 'analysis',
+      ...receiptFields(curAnalysisReceipt),
+      revision: nextRevision,
+      detail: curAnalysisReport.publishable
+        ? `analysis repair ${attempt} passed; ${checksPassed(curAnalysisReport)}/${curAnalysisReport.checks.length} checks passed`
+        : `analysis repair ${attempt} still failing checks: ${remaining.join(', ')}`,
+    });
+  }
+  if (!curAnalysisReport.publishable) {
+    // F-01: the job fails with the fixed ANALYSIS_INVALID detail — no analysis field is
+    // dereferenced for it. The event carries the last analysis call's receipt.
     return fail('analyze', 'ANALYSIS_INVALID', {
-      ...receiptFields(analysisReceipt),
+      ...receiptFields(curAnalysisReceipt),
       detail: 'ANALYSIS_INVALID',
+    });
+  }
+  if (analysisAttemptsDone > 0) {
+    // The repaired analysis becomes the analysis of record; revision 1 stays in analysis.r1.json.
+    analysis = curAnalysis;
+    analysisReport = curAnalysisReport;
+    writeJsonAtomic(join(runDir, 'analysis.json'), {
+      analysis: curAnalysis,
+      report: curAnalysisReport,
+      receipt: curAnalysisReceipt,
     });
   }
   const analysisDetail = `${
@@ -1051,6 +1173,15 @@ export interface JobRevisionView {
   report?: unknown;
 }
 
+/** One persisted analysis revision (TASK-024b): present only when an analysis repair was attempted. */
+export interface JobAnalysisRevisionView {
+  /** 1 = the immutable original analysis; n > 1 = the result of analysis repair attempt n-1. */
+  revision: number;
+  analysis: unknown;
+  report?: unknown;
+  receipt?: unknown;
+}
+
 export function readJob(
   storageDir: string,
   jobId: string,
@@ -1062,6 +1193,8 @@ export function readJob(
   report?: unknown;
   /** Stage 5: every persisted revision in order, so the UI can show 1 → 2 → 3. */
   revisions: JobRevisionView[];
+  /** TASK-024b: every persisted analysis revision in order; empty without analysis repairs. */
+  analysisRevisions: JobAnalysisRevisionView[];
 } | null {
   if (!JOB_ID_PATTERN.test(jobId)) {
     throw new Error('JOB_ID_INVALID');
@@ -1094,14 +1227,43 @@ export function readJob(
     spec?: unknown;
     report?: unknown;
     revisions: JobRevisionView[];
+    analysisRevisions: JobAnalysisRevisionView[];
   } = {
     summary: summary as JobSummary,
     events,
     revisions: [],
+    analysisRevisions: [],
   };
   const analysis = readJsonFile(join(runDir, 'analysis.json'));
   if (analysis !== undefined) {
     result.analysis = analysis;
+  }
+  // TASK-024b: every persisted analysis revision (analysis.r<n>.json exists only
+  // when the analysis repair loop ran; r1 is the immutable original).
+  let analysisNumbers: number[] = [];
+  try {
+    analysisNumbers = readdirSync(runDir)
+      .map(f => /^analysis\.r(\d+)\.json$/.exec(f))
+      .filter((m): m is RegExpExecArray => m !== null)
+      .map(m => Number(m[1]))
+      .sort((a, b) => a - b);
+  } catch {
+    analysisNumbers = [];
+  }
+  for (const n of analysisNumbers) {
+    const file = readJsonFile(join(runDir, `analysis.r${n}.json`));
+    if (file === undefined || typeof file !== 'object' || file === null) {
+      continue;
+    }
+    const rec = file as { analysis?: unknown; report?: unknown; receipt?: unknown };
+    const entry: JobAnalysisRevisionView = { revision: n, analysis: rec.analysis };
+    if (rec.report !== undefined) {
+      entry.report = rec.report;
+    }
+    if (rec.receipt !== undefined) {
+      entry.receipt = rec.receipt;
+    }
+    result.analysisRevisions.push(entry);
   }
   // Every persisted revision: spec.r<n>.json (+ report.r<n>.json when present).
   let specNumbers: number[] = [];

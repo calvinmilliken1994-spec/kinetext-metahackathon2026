@@ -218,6 +218,13 @@ export interface StageEvent {
   model?: string; responseId?: string; usage?: Usage | null; latencyMs?: number; estCostUSD?: number; detail?: string;
   /** Spec revision this event concerns (inject / validate / repair). */
   revision?: number;
+  /**
+   * TASK-024b: what a 'repair' event repairs — 'analysis' for a source-analysis repair
+   * (the analysis revision in `revision`: 2 = attempt 1, 3 = attempt 2). Absent on every
+   * other event and on spec-repair events (recorded before this field existed and since:
+   * absent means the spec repair loop).
+   */
+  target?: 'analysis' | 'spec';
 }
 
 export type CheckKind = 'schema' | 'semantic' | 'grounding' | 'behavioral';

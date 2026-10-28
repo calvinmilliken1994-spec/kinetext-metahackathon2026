@@ -181,3 +181,82 @@ test('renderSummaryMarkdown: states the sample size and every class, and handles
   assert.match(empty, /0 of 29/);
   assert.doesNotMatch(empty, /NaN/);
 });
+
+/* ------------------------------------------------------------------ */
+/* TASK-024b: analysis repairs count as natural repairs                 */
+/* ------------------------------------------------------------------ */
+
+function analysisRepairLine(over: Partial<EvalResultLine> = {}): EvalResultLine {
+  return line({
+    sourceId: 'an1',
+    analysisRepairs: [{ attempt: 1, revision: 2, targeted: ['analysis.concept-ids'], fixed: ['analysis.concept-ids'], remaining: [], passed: true }],
+    ...over,
+  });
+}
+
+test('classifyResult: publishing revision 1 after an analysis repair is correct-after-repair', () => {
+  assert.equal(classifyResult(analysisRepairLine({ publishedRevision: 1, revisions: 1 })), 'correct-after-repair');
+});
+
+test('classifyResult: old records without analysisRepairs keep their class', () => {
+  const old = line({ publishedRevision: 1, revisions: 1 });
+  assert.equal('analysisRepairs' in old, false);
+  assert.equal(classifyResult(old), 'correct-first-try');
+  assert.equal(classifyResult(line({ publishedRevision: 2, revisions: 2 })), 'correct-after-repair');
+});
+
+test('classifyResult: analysis repair on an acceptable-engine expected-decline page is correct-after-repair', () => {
+  assert.equal(
+    classifyResult(analysisRepairLine({ expected: 'decline', acceptable: ['forces-1d-v1'], publishedRevision: 1 })),
+    'correct-after-repair',
+  );
+  assert.equal(
+    classifyResult(analysisRepairLine({ expected: 'decline', acceptable: [], publishedRevision: 1 })),
+    'false-accept',
+    'an engine outside expected/acceptable is never laundered by a repair',
+  );
+});
+
+test('classifyResult: analysis repair cannot rescue a wrong engine or a failed job', () => {
+  assert.equal(classifyResult(analysisRepairLine({ engine: 'lift-equation-v1' })), 'wrong-engine');
+  assert.equal(
+    classifyResult(analysisRepairLine({ status: 'failed', error: 'ANALYSIS_INVALID', engine: null, publishedRevision: null })),
+    'failed',
+  );
+});
+
+test('computeMetrics: analysis repairs join the natural repair counts', () => {
+  const results = [
+    analysisRepairLine({ sourceId: 'a1' }),
+    line({
+      sourceId: 'a2', publishedRevision: 2, revisions: 2,
+      repairs: [{ revision: 2, targeted: ['behavior.tests'], fixed: ['behavior.tests'], remaining: [] }],
+      firstRevisionFailedChecks: ['behavior.tests'],
+    }),
+    line({
+      sourceId: 'a3', status: 'failed', error: 'ANALYSIS_INVALID', engine: null, publishedRevision: null,
+      analysisRepairs: [
+        { attempt: 1, revision: 2, targeted: ['analysis.concept-ids'], fixed: [], remaining: ['analysis.concept-ids'], passed: false },
+        { attempt: 2, revision: 3, targeted: ['analysis.concept-ids'], fixed: [], remaining: ['analysis.concept-ids'], passed: false },
+      ],
+    }),
+    line({ sourceId: 'a4' }),
+  ];
+  const m = computeMetrics(results, []);
+  assert.equal(m.repairs.total, 4, 'one analysis + one spec + two failed analysis attempts');
+  assert.equal(m.repairs.jobsWithRepairs, 3);
+  assert.equal(m.repairs.analysisTotal, 3);
+  assert.equal(m.repairs.jobsWithAnalysisRepairs, 2);
+  assert.deepEqual(m.repairs.byTargetedCheck, { 'analysis.concept-ids': 3, 'behavior.tests': 1 });
+  assert.equal(m.byClass['correct-after-repair'], 2, 'a1 (analysis repair) + a2 (spec repair)');
+  assert.equal(m.byClass['correct-first-try'], 1);
+  assert.equal(m.byClass.failed, 1);
+});
+
+test('renderSummaryMarkdown: mentions analysis repairs and stays valid without them', () => {
+  const md = renderSummaryMarkdown(computeMetrics([analysisRepairLine({})], []), { manifestTotal: 29 });
+  assert.match(md, /Analysis repair attempts: \*\*1\*\*/);
+  const without = renderSummaryMarkdown(computeMetrics([line({ sourceId: 'b' })], []), { manifestTotal: 29 });
+  assert.match(without, /Analysis repair attempts: \*\*0\*\*/);
+  assert.doesNotMatch(without, /NaN/);
+});
