@@ -3,8 +3,8 @@
 // evidence keeps validating; only its full schemaVersion widens to the accepted list.
 // Usage: node scripts/build-schemas.ts [--check]   (--check exits 1 if any file would change)
 import { readFileSync, writeFileSync } from 'node:fs';
-import { ACCEPTED_SCHEMA_VERSIONS, ENGINES, ENGINE_IDS, SCHEMA_VERSION } from '../packages/contracts/index.ts';
-import type { EngineDescriptor, EngineId } from '../packages/contracts/index.ts';
+import { ACCEPTED_SCHEMA_VERSIONS, ENGINES, ENGINE_IDS, SCHEMA_VERSION, SEQUENCE_ENGINES } from '../packages/contracts/index.ts';
+import type { EngineDescriptor, EngineId, SequenceDescriptor } from '../packages/contracts/index.ts';
 
 const dir = new URL('../schemas/', import.meta.url);
 const read = (name: string): Record<string, any> => JSON.parse(readFileSync(new URL(name, dir), 'utf8'));
@@ -118,6 +118,86 @@ for (const id of ENGINE_IDS) {
   if (id === 'forces-1d-v1') continue;
   emit(`activity-spec.gen.${id}.json`, genSchema(ENGINES[id as EngineId]));
   emit(`activity-spec.full.${id}.json`, fullSchema(ENGINES[id as EngineId]));
+}
+
+// timeline-v1 (sequence engine): events with integer dates (month/day 0 = not stated) + ordering pairs.
+function timelineSchemas(d: SequenceDescriptor): { gen: Record<string, any>; full: Record<string, any> } {
+  const forcesGen = read('activity-spec.gen.json');
+  const forcesFull = read('activity-spec.full.json');
+  const evidenceGen = forcesGen.properties.explanations.items.properties.evidence.items;
+  const evidenceFull = forcesFull.properties.explanations.items.properties.evidence.items;
+  const pairGen = {
+    earlierEventId: { type: 'string', description: 'Id of the event that happened first (the correct answer).' },
+    laterEventId: { type: 'string', description: 'Id of the event that happened later.' },
+  };
+  const idPattern = { type: 'string', pattern: '^[a-z0-9][a-z0-9-]{0,39}$' };
+  const scenario = (full: boolean) => ({
+    type: 'object', additionalProperties: false, required: d.scenarioKeys,
+    properties: Object.fromEntries(d.scenarioKeys.map(k => [k, full ? { type: 'string', minLength: 1, maxLength: 60 } : { type: 'string' }])),
+  });
+  const eventGen = {
+    type: 'object', additionalProperties: false, required: ['id', 'label', 'year', 'month', 'day', 'evidence'],
+    properties: {
+      id: { type: 'string', description: 'Short id such as e1.' },
+      label: { type: 'string', description: 'Short learner-facing name of the event, 80 characters or fewer.' },
+      year: { type: 'integer', description: 'Year stated in the source; negative for BCE; never 0.' },
+      month: { type: 'integer', description: 'Month 1-12 only if stated in the same sentence as the date; otherwise 0.' },
+      day: { type: 'integer', description: 'Day 1-31 only if stated in the same sentence; otherwise 0.' },
+      evidence: { type: 'array', description: '1-2 verbatim quotes; the first must contain the date.', items: evidenceGen },
+    },
+  };
+  const eventFull = {
+    type: 'object', additionalProperties: false, required: ['id', 'label', 'year', 'month', 'day', 'evidence'],
+    properties: {
+      id: idPattern,
+      label: { type: 'string', minLength: 1, maxLength: 80 },
+      year: { type: 'integer', minimum: d.yearMin, maximum: d.yearMax, not: { const: 0 } },
+      month: { type: 'integer', minimum: 0, maximum: 12 },
+      day: { type: 'integer', minimum: 0, maximum: 31 },
+      evidence: { type: 'array', minItems: 1, maxItems: 2, items: evidenceFull },
+    },
+    if: { properties: { day: { minimum: 1 } } },
+    then: { properties: { month: { minimum: 1 } } },
+  };
+  const fb = forcesFull.properties.behavioralTests;
+  const fp = forcesFull.properties.predictions;
+  const gen = {
+    ...forcesGen,
+    properties: {
+      ...forcesGen.properties,
+      simulation: { type: 'object', additionalProperties: false, required: ['events', 'scenario'], properties: { events: { type: 'array', items: eventGen }, scenario: scenario(false) } },
+      behavioralTests: { type: 'array', items: { type: 'object', additionalProperties: false, required: ['name', 'earlierEventId', 'laterEventId'], properties: { name: { type: 'string' }, ...pairGen } } },
+      predictions: { type: 'array', items: { type: 'object', additionalProperties: false, required: ['id', 'prompt', 'earlierEventId', 'laterEventId'], properties: { id: { type: 'string' }, prompt: { type: 'string' }, ...pairGen } } },
+    },
+  };
+  const full = {
+    ...forcesFull,
+    $id: `https://make-knowledge-interactive.local/schemas/activity-spec.full.${d.id}.json`,
+    title: `Activity spec (full) — ${d.title}`,
+    properties: {
+      ...forcesFull.properties,
+      schemaVersion: { const: SCHEMA_VERSION },
+      simulation: {
+        type: 'object', additionalProperties: false, required: ['engine', 'events', 'scenario'],
+        properties: { engine: { const: d.id }, events: { type: 'array', minItems: d.events.min, maxItems: d.events.max, items: eventFull }, scenario: scenario(true) },
+      },
+      behavioralTests: {
+        ...fb, minItems: d.behavioralTests.min, maxItems: d.behavioralTests.max,
+        items: { type: 'object', additionalProperties: false, required: ['name', 'earlierEventId', 'laterEventId'], properties: { name: fb.items.properties.name, earlierEventId: idPattern, laterEventId: idPattern } },
+      },
+      predictions: {
+        ...fp, minItems: d.predictions.min, maxItems: d.predictions.max,
+        items: { type: 'object', additionalProperties: false, required: ['id', 'prompt', 'earlierEventId', 'laterEventId'], properties: { id: fp.items.properties.id, prompt: fp.items.properties.prompt, earlierEventId: idPattern, laterEventId: idPattern } },
+      },
+    },
+  };
+  return { gen, full };
+}
+
+{
+  const tl = timelineSchemas(SEQUENCE_ENGINES['timeline-v1']);
+  emit('activity-spec.gen.timeline-v1.json', tl.gen);
+  emit('activity-spec.full.timeline-v1.json', tl.full);
 }
 
 const analysis = read('source-analysis.gen.json');

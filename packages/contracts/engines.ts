@@ -154,3 +154,46 @@ export function maxTolerance(engine: EngineId, computed: number): number {
   const t = ENGINES[engine].tolerance;
   return Math.max(t.absMax, t.relMax * Math.abs(computed));
 }
+
+// ---- Sequence engines (Stage 5b). ------------------------------------------------------------------------
+// Non-numeric activities: the source text itself is the oracle. Kept OUT of ENGINE_IDS until validation,
+// prompts, worker and UI all support them (then the analysis enum is widened in one step).
+
+export const SEQUENCE_ENGINE_IDS = ['timeline-v1'] as const;
+export type SequenceEngineId = typeof SEQUENCE_ENGINE_IDS[number];
+
+export interface SequenceDescriptor {
+  kind: 'sequence';
+  id: SequenceEngineId;
+  title: string;
+  /** Shown to Muse during analysis: when this engine applies, and when it does not. */
+  appliesWhen: string;
+  /** Scenario label keys (each a 1-60 character string). */
+  scenarioKeys: string[];
+  events: { min: number; max: number };
+  behavioralTests: { min: number; max: number };
+  predictions: { min: number; max: number };
+  /** Integer years; negative = BCE; 0 never occurs. */
+  yearMin: number;
+  yearMax: number;
+}
+
+export const SEQUENCE_ENGINES: Record<SequenceEngineId, SequenceDescriptor> = {
+  'timeline-v1': {
+    kind: 'sequence',
+    id: 'timeline-v1',
+    title: 'Timeline of dated events',
+    appliesWhen:
+      'The source narrates or explains a sequence of historical (or otherwise dated) events and states the date of at least five of them in its own text: a year, optionally with month and day (the year may come from a title or heading that contains exactly one year). Not for sources whose events are only approximately dated (decades, "circa", "early 1800s", "that summer"), undated processes, or a single event.',
+    scenarioKeys: ['subjectLabel', 'settingLabel'],
+    events: { min: 5, max: 10 },
+    behavioralTests: { min: 3, max: 5 },
+    predictions: { min: 2, max: 3 },
+    yearMin: -3000,
+    yearMax: 2100,
+  },
+};
+
+export function isSequenceEngineId(value: unknown): value is SequenceEngineId {
+  return typeof value === 'string' && (SEQUENCE_ENGINE_IDS as readonly string[]).includes(value);
+}

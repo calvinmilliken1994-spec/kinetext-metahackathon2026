@@ -28,3 +28,7 @@ export function genSchemaFor(engine: EngineId): Record<string, unknown> {
 export function fullSchemaFor(engine: EngineId): Record<string, unknown> {
   return fullSchemas[engine];
 }
+
+/** timeline-v1 (sequence engine, Stage 5b). */
+export const timelineGenSchema = load('activity-spec.gen.timeline-v1.json');
+export const timelineFullSchema = load('activity-spec.full.timeline-v1.json');

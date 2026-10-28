@@ -1,0 +1,45 @@
+{
+  "title": "How the Declaration of Independence Came Together",
+  "learningObjectives": [
+    "Put the main steps of drafting, adopting, printing and signing the Declaration of Independence in order",
+    "Explain why adoption on July 4 and signing on August 2 were separate events"
+  ],
+  "explanations": [
+    {
+      "id": "adoption-vs-signing",
+      "text": "Congress adopted the Declaration first; most delegates signed the engrossed parchment copy almost a month later.",
+      "evidence": [
+        { "sourceId": "nara-declaration-of-independence", "quote": "The Continental Congress adopted the Declaration of Independence on July 4, 1776." },
+        { "sourceId": "nara-declaration-of-independence", "quote": "on August 2, 1776, delegates began signing it." }
+      ]
+    },
+    {
+      "id": "committee-of-five",
+      "text": "A committee of five drafted the statement, and Jefferson did the actual writing.",
+      "evidence": [
+        { "sourceId": "nara-declaration-of-independence", "quote": "with the actual writing delegated to Jefferson" }
+      ]
+    }
+  ],
+  "simulation": {
+    "events": [
+      { "id": "e1", "label": "Committee of five appointed to draft a statement", "year": 1776, "month": 6, "day": 10, "evidence": [ { "sourceId": "nara-declaration-of-independence", "quote": "Congress appointed on June 10 a committee of five to draft a statement of independence for the colonies" } ] },
+      { "id": "e2", "label": "Independence section of the Lee Resolution adopted", "year": 1776, "month": 7, "day": 2, "evidence": [ { "sourceId": "nara-declaration-of-independence", "quote": "the section of the Lee Resolution dealing with independence was not adopted until July 2" } ] },
+      { "id": "e3", "label": "Congress adopts the Declaration", "year": 1776, "month": 7, "day": 4, "evidence": [ { "sourceId": "nara-declaration-of-independence", "quote": "The Continental Congress adopted the Declaration of Independence on July 4, 1776." } ] },
+      { "id": "e4", "label": "The approved Declaration is printed", "year": 1776, "month": 7, "day": 5, "evidence": [ { "sourceId": "nara-declaration-of-independence", "quote": "the approved Declaration was printed on July 5th" } ] },
+      { "id": "e5", "label": "Congress orders an engrossed parchment copy", "year": 1776, "month": 7, "day": 19, "evidence": [ { "sourceId": "nara-declaration-of-independence", "quote": "On July 19th, Congress ordered that the Declaration be engrossed on parchment" } ] },
+      { "id": "e6", "label": "Delegates begin signing", "year": 1776, "month": 8, "day": 2, "evidence": [ { "sourceId": "nara-declaration-of-independence", "quote": "on August 2, 1776, delegates began signing it." } ] }
+    ],
+    "scenario": { "subjectLabel": "Declaration of Independence", "settingLabel": "Continental Congress, 1776" }
+  },
+  "behavioralTests": [
+    { "name": "committee-before-adoption", "earlierEventId": "e1", "laterEventId": "e3" },
+    { "name": "lee-resolution-before-declaration", "earlierEventId": "e2", "laterEventId": "e3" },
+    { "name": "printing-before-engrossing-order", "earlierEventId": "e4", "laterEventId": "e5" },
+    { "name": "adoption-before-signing", "earlierEventId": "e3", "laterEventId": "e6" }
+  ],
+  "predictions": [
+    { "id": "pred-signing-vs-adoption", "prompt": "Which happened first: Congress adopting the Declaration, or delegates signing it?", "earlierEventId": "e3", "laterEventId": "e6" },
+    { "id": "pred-printing-vs-engrossing", "prompt": "Which came first: printing the approved Declaration, or ordering the parchment copy?", "earlierEventId": "e4", "laterEventId": "e5" }
+  ]
+}

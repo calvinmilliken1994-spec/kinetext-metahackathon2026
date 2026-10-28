@@ -6,8 +6,8 @@
 import { ENGINES } from './engines.ts';
 import type { EngineId } from './engines.ts';
 
-export { ENGINES, ENGINE_IDS, isEngineId, maxTolerance } from './engines.ts';
-export type { EngineDescriptor, EngineId, EngineInput } from './engines.ts';
+export { ENGINES, ENGINE_IDS, isEngineId, maxTolerance, SEQUENCE_ENGINES, SEQUENCE_ENGINE_IDS, isSequenceEngineId } from './engines.ts';
+export type { EngineDescriptor, EngineId, EngineInput, SequenceDescriptor, SequenceEngineId } from './engines.ts';
 
 export const SCHEMA_VERSION = '0.3.0';
 /** Schema versions the full schemas accept. 0.2.0 is forces-1d-v1 only (recorded Stage 2 evidence). */
@@ -367,4 +367,51 @@ export function assembleSpec<E extends EngineId>(gen: GeneratedSpecByEngine[E], 
     execution: opts.execution ?? DEFAULT_EXECUTION,
     provenance: opts.provenance,
   } as unknown as ActivitySpecByEngine[E];
+}
+
+// ---- timeline-v1 (Stage 5b, sequence engine). --------------------------------------------------------------
+// Every date must be stated in one sentence unit of a verbatim quote (packages/validation); ordering answers
+// are recomputed from the dates. Month/day 0 = "not stated" (structured output needs every key present).
+
+export interface TimelineEvent {
+  id: string;
+  /** Short learner-facing name, 1-80 characters. */
+  label: string;
+  /** Integer year, -3000..2100, never 0; negative = BCE. */
+  year: number;
+  /** 1-12, or 0 when the source does not state it. */
+  month: number;
+  /** 1-31, or 0 when not stated; a day requires a month. */
+  day: number;
+  /** 1-2 verbatim quotes: one date unit, optionally one description. */
+  evidence: Evidence[];
+}
+/** "Which happened first?" — earlierEventId is the expected answer, recomputed from the dates. */
+export interface TimelineCase { earlierEventId: string; laterEventId: string }
+export interface TimelineScenario { subjectLabel: string; settingLabel: string }
+export interface TimelineSimulation { engine: 'timeline-v1'; events: TimelineEvent[]; scenario: TimelineScenario }
+export interface TimelineActivitySpec extends SpecBase {
+  simulation: TimelineSimulation; behavioralTests: BehavioralTestOf<TimelineCase>[]; predictions: PredictionOf<TimelineCase>[];
+}
+export interface TimelineGeneratedSpec extends GenBase {
+  simulation: { events: TimelineEvent[]; scenario: TimelineScenario };
+  behavioralTests: BehavioralTestOf<TimelineCase>[]; predictions: PredictionOf<TimelineCase>[];
+}
+
+/** Combine Muse output with system-owned fields for timeline-v1 (same rules as assembleSpec). */
+export function assembleTimelineSpec(gen: TimelineGeneratedSpec, opts: AssembleOptions): TimelineActivitySpec {
+  const g = gen.simulation;
+  return {
+    schemaVersion: SCHEMA_VERSION,
+    id: opts.id,
+    title: gen.title,
+    learningObjectives: gen.learningObjectives,
+    sources: opts.sources.map(({ text: _text, ...ref }) => ref),
+    explanations: gen.explanations,
+    simulation: { engine: 'timeline-v1', events: g.events, scenario: g.scenario },
+    behavioralTests: gen.behavioralTests,
+    predictions: gen.predictions,
+    execution: opts.execution ?? DEFAULT_EXECUTION,
+    provenance: opts.provenance,
+  };
 }

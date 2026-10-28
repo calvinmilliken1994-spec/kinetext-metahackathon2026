@@ -115,3 +115,28 @@ Jobs 18:27–20:41 KST (purpose `test-live`): Hardy-Weinberg (NIJ), half-life (N
 - Fix (`workers/generation/jobs.ts`): `accountReceipt` keeps `summary.totalCostUSD`/`reservedUnknownUSD` current, so the last-resort path persists every billed call; the last-resort event now reads `INTERNAL; during <stage>; cause <code-or-class>` from a fixed vocabulary (errno code such as `EPERM` or error class such as `TypeError`; never the message, R-01); the full error goes to server stderr only.
 - Root cause of the live crash not reproduced: 20,000 fuzzed compound-interest specs never made `validateSpec` throw, and no temp file was left behind (rules out a failed atomic rename). The next occurrence will name its stage and cause.
 - Tests 676/676; web build ok.
+
+## TASK-019 timeline contracts — DONE (lead, test-first, 2026-10-28)
+- `packages/contracts/engines.ts`: `SEQUENCE_ENGINE_IDS = ['timeline-v1']`, `SequenceDescriptor` (`kind: 'sequence'`, scenario keys `subjectLabel`/`settingLabel`, 5–10 events, 3–5 tests, 2–3 predictions, years -3000..2100), `isSequenceEngineId`. **Not yet in `ENGINE_IDS`** — the analysis enum is widened in one final integration step once validation, prompts/pipeline, worker and UI support it, so every intermediate commit stays green.
+- `packages/contracts/index.ts`: `TimelineEvent { id, label, year, month, day, evidence }` (month/day **0 = not stated**, because constrained decoding needs every key present), `TimelineCase { earlierEventId, laterEventId }`, `TimelineSimulation` (no `equation`), `TimelineActivitySpec`, `TimelineGeneratedSpec`, `assembleTimelineSpec`.
+- Schemas `activity-spec.{gen,full}.timeline-v1.json`: integer dates, year ≠ 0, day ⇒ month (`if/then`), 1–2 quotes per event, label ≤ 80, counts per descriptor, no equation field.
+- Fixture `tests/fixtures/timeline.declaration.gen.json`: six events from the real `nara-declaration-of-independence` text with verbatim quotes.
+- Tests `tests/contracts.timeline.test.ts` (6). Suite 682/682.
+
+### Lead decision: title-year rule (resolves the finding from the real sources; Muse to confirm wording in TASK-021)
+An event's **year** may come from the source title only when (a) the title (the source's `title` field, or the first text line if it is a `#` heading) contains **exactly one** standalone year, (b) the event's year equals it, (c) the event's date unit states the **month** (and the day, if claimed), and (d) the date unit contains no other year. Otherwise the year must be in the date unit itself. No other cross-sentence inheritance. This keeps "on June 10" groundable on a page titled "Declaration of Independence (1776)" while a quote with no month can never borrow a year.
+
+## TASK-020 timeline validation — contract for Qwen Max
+New module `packages/validation/timeline.ts` (+ tests), wired so `validateSpec` and `compareRevisions` dispatch on `simulation.engine === 'timeline-v1'`:
+1. `sentenceUnits(quote)`: split on `[.!?;]` followed by whitespace/end, and on newlines; a `#` heading line is one unit. Abbreviations "B.C."/"A.D."/"B.C.E." must not split units.
+2. Date matching on a unit (Muse findings #1–#4, #9): mask `\d{1,3}(,\d{3})+` first; year = `(^|[^0-9])YEAR($|[^0-9])`; a range `1775-1783` / `1775–1783` / `1775/1783` grounds only its endpoints; BCE marker after `abs(year)` required for negative years and forbidden for positive; months by the fixed list (`jan(uary)?`, …, `sep(t)?(ember)?`, …, period optional, word boundaries, case-insensitive); day = `\b0?DAY(st|nd|rd|th)?\b` and only counted in the unit that has the month.
+3. Checks, each `guarded` like the existing ones, with failure messages naming the event id, its date and the offending quote/unit:
+   - `schema.full` (timeline full schema); `timeline.unique-ids` (event ids unique; every case id references an event; a case's two ids differ);
+   - `timeline.approximate-date` (fires first: decade "1770s", "circa", "c.", "ca.", "around", "about", "early/mid/late" in the date unit → "approximate date — remove this event");
+   - `timeline.date-grounded` (some quote of the event has ONE unit containing the year — or the title-year rule above — plus the month and day if non-zero; quote must also pass the existing verbatim check);
+   - `timeline.distinct-dates` (no two events with the same (year, month, day) tuple);
+   - `timeline.case-order` (for each test and prediction: compare at the precision both events state; if not strictly ordered at that precision → fail "ambiguous"; if laterEventId is earlier → fail "wrong answer");
+   - existing generic checks for explanations AND event evidence: `refs.sources`, `refs.sha256`, `grounding.quotes`, `policy.no-publisher-attribution` (labels, prompts, names, titles), `scope.prose-unverified`.
+4. `compareRevisions` for timeline (Muse #6, simplified): against the r1 baseline, an event whose `timeline.date-grounded` passed on r1 keeps id, label, year, month, day and evidence unchanged unless a finding names it; no new event ids; event count ≤ r1 and ≥ 5; tests/predictions keep (name/id, occurrence) identity and may change only their pair when a finding names them (same occurrence rules as numeric engines).
+5. `repairFindings` produce paths like `/simulation/events/2` and `/behavioralTests/1` so repair prompts can name the item.
+6. Probe tests: "1,000 soldiers" never grounds year 1000; "July ... [sentence] ... 1776" across two sentences does not ground July 1776; "4 delegates" does not ground day 4; "500 BCE" grounds -500 not 500; "the 1770s" is approximate; "1775–1783" grounds 1775 and 1783 but not 1778; title-year rule positive and negative cases from the real Declaration text; an end-to-end validateSpec of the assembled fixture passes.

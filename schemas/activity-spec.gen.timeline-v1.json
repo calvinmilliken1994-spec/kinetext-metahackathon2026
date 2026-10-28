@@ -1,0 +1,205 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "title",
+    "learningObjectives",
+    "explanations",
+    "simulation",
+    "behavioralTests",
+    "predictions"
+  ],
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Short activity title for students."
+    },
+    "learningObjectives": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "1-5 measurable objectives grounded in the source."
+    },
+    "explanations": {
+      "type": "array",
+      "description": "1-6 short explanations, each supported by verbatim quotes from the source.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "text",
+          "evidence"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "lowercase-kebab id"
+          },
+          "text": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "sourceId",
+                "quote"
+              ],
+              "properties": {
+                "sourceId": {
+                  "type": "string"
+                },
+                "quote": {
+                  "type": "string",
+                  "description": "Exact characters copied from the source, no ellipsis, 150 characters or fewer."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "simulation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "events",
+        "scenario"
+      ],
+      "properties": {
+        "events": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "label",
+              "year",
+              "month",
+              "day",
+              "evidence"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Short id such as e1."
+              },
+              "label": {
+                "type": "string",
+                "description": "Short learner-facing name of the event, 80 characters or fewer."
+              },
+              "year": {
+                "type": "integer",
+                "description": "Year stated in the source; negative for BCE; never 0."
+              },
+              "month": {
+                "type": "integer",
+                "description": "Month 1-12 only if stated in the same sentence as the date; otherwise 0."
+              },
+              "day": {
+                "type": "integer",
+                "description": "Day 1-31 only if stated in the same sentence; otherwise 0."
+              },
+              "evidence": {
+                "type": "array",
+                "description": "1-2 verbatim quotes; the first must contain the date.",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "sourceId",
+                    "quote"
+                  ],
+                  "properties": {
+                    "sourceId": {
+                      "type": "string"
+                    },
+                    "quote": {
+                      "type": "string",
+                      "description": "Exact characters copied from the source, no ellipsis, 150 characters or fewer."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "scenario": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "subjectLabel",
+            "settingLabel"
+          ],
+          "properties": {
+            "subjectLabel": {
+              "type": "string"
+            },
+            "settingLabel": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "behavioralTests": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "earlierEventId",
+          "laterEventId"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "earlierEventId": {
+            "type": "string",
+            "description": "Id of the event that happened first (the correct answer)."
+          },
+          "laterEventId": {
+            "type": "string",
+            "description": "Id of the event that happened later."
+          }
+        }
+      }
+    },
+    "predictions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "prompt",
+          "earlierEventId",
+          "laterEventId"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "prompt": {
+            "type": "string"
+          },
+          "earlierEventId": {
+            "type": "string",
+            "description": "Id of the event that happened first (the correct answer)."
+          },
+          "laterEventId": {
+            "type": "string",
+            "description": "Id of the event that happened later."
+          }
+        }
+      }
+    }
+  }
+}
