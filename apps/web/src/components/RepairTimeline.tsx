@@ -1,6 +1,7 @@
 import type { FaultRecord, RepairRecord, StageEvent } from '../../../../packages/contracts/index.ts';
 import type { RevisionInput } from '../lib/repairs.ts';
-import { buildRepairSteps, METRICS_NOTE, overallRepairBadge } from '../lib/repairs.ts';
+import { buildRepairSteps, faultChangeLine, METRICS_NOTE, overallRepairBadge } from '../lib/repairs.ts';
+import { checkName } from '../lib/checks.ts';
 import { shortId } from '../lib/jobs.ts';
 
 export interface RepairTimelineProps {
@@ -13,18 +14,29 @@ export interface RepairTimelineProps {
   /** Revision whose checks the validation panel currently shows. */
   viewing: number | null;
   onView: (revision: number) => void;
+  /** Timeline jobs: event id -> label, so a swapped-answer fault is described in words. */
+  eventLabels?: Readonly<Record<string, string>>;
 }
 
 function CheckIds({ ids, tone }: { ids: readonly string[]; tone: 'ok' | 'bad' | 'neutral' }) {
   if (ids.length === 0) return <span className="muted">none</span>;
-  return <span className="check-ids">{ids.map((id) => <code key={id} className={`check-id check-id-${tone}`}>{id}</code>)}</span>;
+  return (
+    <span className="check-ids">
+      {ids.map((id) => {
+        const name = checkName(id);
+        return name === null
+          ? <code key={id} className={`check-id check-id-${tone}`}>{id}</code>
+          : <span key={id} className={`check-id check-id-${tone}`} title={id}>{name} <code className="check-code">{id}</code></span>;
+      })}
+    </span>
+  );
 }
 
 /** Revision 1 → 2 → 3: what failed, what Muse targeted, fixed and left failing, with an honest label for system-made faults. */
 export function RepairTimeline(p: RepairTimelineProps) {
   const steps = buildRepairSteps({
     revisions: p.revisions, repairs: p.repairs, demoFault: p.demoFault, events: p.events,
-    publishedRevision: p.publishedRevision, bestRevision: p.bestRevision,
+    publishedRevision: p.publishedRevision, bestRevision: p.bestRevision, eventLabels: p.eventLabels,
   });
   if (steps.length === 0) return null;
   const overall = overallRepairBadge({ publishedRevision: p.publishedRevision, repairs: p.repairs, demoFault: p.demoFault });
@@ -58,7 +70,7 @@ export function RepairTimeline(p: RepairTimelineProps) {
               {s.faultNotice !== null && (
                 <p className="callout callout-fault small" role="note" data-testid="fault-notice">
                   <strong>{s.faultNotice}</strong>
-                  {s.faultChange !== null && <><br /><span>Changed by the system: {s.faultChange}.</span></>}
+                  {s.faultChange !== null && <><br /><span>{faultChangeLine(s.faultChange)}</span></>}
                 </p>
               )}
 

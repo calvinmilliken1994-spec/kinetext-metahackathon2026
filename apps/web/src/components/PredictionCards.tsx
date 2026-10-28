@@ -1,10 +1,14 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
-import type { AnyPrediction, EngineId } from '../../../../packages/contracts/index.ts';
+import type { AnyPrediction, EngineId, TimelineEvent } from '../../../../packages/contracts/index.ts';
 import { engineOutput, formatOutputValue, outputInfo, predictionExplanation } from '../lib/engines.ts';
 import { gradePrediction, parseGuess, studentTolerance } from '../lib/predictions.ts';
 import type { Grade } from '../lib/predictions.ts';
 import { trimmed } from '../lib/format.ts';
+import { formatEventDate, gradePair, pairOptions } from '../lib/timeline.ts';
+import type { PairGrade, PairPrediction } from '../lib/timeline.ts';
+import { EventEvidence } from './EventEvidence.tsx';
+import type { CiteProps } from './Explanations.tsx';
 
 export type RunPrediction = (prediction: AnyPrediction, index: number, grade: Grade) => void;
 
@@ -89,6 +93,97 @@ export function PredictionCards({ engine, predictions, onRun }: { engine: Engine
       <p className="muted small">Commit to a number first. “Run it” sets the sliders, plays the model, and checks your guess against the engine.</p>
       <ol className="predictions">
         {predictions.map((p, i) => <PredictionCard key={p.id} engine={engine} prediction={p} index={i} onRun={onRun} />)}
+      </ol>
+    </section>
+  );
+}
+
+// ---- timeline-v1: "which happened first?" -------------------------------------------------------------------
+
+interface TimelineCardProps {
+  prediction: PairPrediction;
+  index: number;
+  events: readonly TimelineEvent[];
+  seed: string;
+  cite: CiteProps;
+}
+
+function TimelinePredictionCard({ prediction: p, index, events, seed, cite }: TimelineCardProps) {
+  const [grade, setGrade] = useState<PairGrade | null>(null);
+  const options = pairOptions(events, p, seed);
+  const promptId = `pred-${p.id}-prompt`;
+  if (options === null) {
+    return (
+      <li className="prediction">
+        <div className="prediction-head"><span className="prediction-num">{index + 1}</span><p id={promptId}>{p.prompt}</p></div>
+        <p className="field-error" role="alert">This question names an event that is not on the timeline, so it cannot be graded.</p>
+      </li>
+    );
+  }
+  // The answer is always recomputed from the dates; the spec's stored earlier/later ids only name the two events.
+  const pick = (id: string): void => { if (grade === null) setGrade(gradePair(events, p, id)); };
+
+  return (
+    <li className="prediction">
+      <div className="prediction-head">
+        <span className="prediction-num">{index + 1}</span>
+        <p id={promptId}>{p.prompt}</p>
+      </div>
+      <div className="pair-options" role="group" aria-labelledby={promptId}>
+        {options.map((e) => {
+          const picked = grade !== null && grade.pickedId === e.id;
+          return (
+            <button
+              key={e.id}
+              type="button"
+              className={`btn pair-option${picked ? ' pair-picked' : ''}`}
+              aria-pressed={picked}
+              disabled={grade !== null}
+              onClick={() => pick(e.id)}
+            >
+              {e.label}
+            </button>
+          );
+        })}
+      </div>
+      {grade === null && <p className="muted small">Pick the event you think happened first. The dates and quotes from the source appear once you answer.</p>}
+      {grade !== null && grade.status === 'graded' && (
+        <div className={`grade ${grade.correct ? 'grade-ok' : 'grade-miss'}`} role="status">
+          <strong>{grade.correct ? '✓ Right' : '✗ Not quite'} — “{grade.earlier.label}” came first.</strong>
+          <span>
+            {formatEventDate(grade.earlier)} → {formatEventDate(grade.later)}
+            {!grade.correct && <> · you picked “{(grade.pickedId === grade.later.id ? grade.later : grade.earlier).label}”</>}
+          </span>
+        </div>
+      )}
+      {grade !== null && grade.status === 'ungradable' && (
+        <div className="grade grade-miss" role="status">
+          <strong>This pair is not graded</strong>
+          <span>The source states these two dates too loosely ({formatEventDate(grade.first)} and {formatEventDate(grade.second)}) to say which came first.</span>
+        </div>
+      )}
+      {grade !== null && (
+        <ol className="pair-answer" aria-label="Both events with their dates and quotes, earliest first">
+          {(grade.status === 'graded' ? [grade.earlier, grade.later] : [grade.first, grade.second]).map((e) => (
+            <li key={e.id}>
+              <p><strong>{formatEventDate(e)}</strong> — {e.label}</p>
+              <EventEvidence event={e} cite={cite} />
+            </li>
+          ))}
+        </ol>
+      )}
+    </li>
+  );
+}
+
+export function TimelinePredictionCards({ events, predictions, seed, cite }: { events: readonly TimelineEvent[]; predictions: readonly PairPrediction[]; seed: string; cite: CiteProps }) {
+  if (predictions.length === 0) return null;
+  return (
+    <section className="card" aria-labelledby="pred-heading">
+      <h3 id="pred-heading">Predict, then reveal</h3>
+      <p className="muted small">Commit to an answer first. After you choose, the dates and the source’s own words show whether you were right.</p>
+      <ol className="predictions">
+        {predictions.map((p, i) => <TimelinePredictionCard key={p.id} prediction={p} index={i} events={events} seed={seed} cite={cite} />)}
       </ol>
     </section>
   );

@@ -1,7 +1,6 @@
 import type { JobDetail } from '../api.ts';
-import { ENGINES, ENGINE_IDS } from '../../../../packages/contracts/index.ts';
 import { describeJobCost } from '../lib/cost.ts';
-import { engineTitle } from '../lib/engines.ts';
+import { activityTitles, engineTitle } from '../lib/engines.ts';
 import { INTERRUPTED_TEXT, isInterrupted } from '../lib/jobs.ts';
 import { demoFaultNotice, repairAttemptCount } from '../lib/repairs.ts';
 
@@ -37,7 +36,7 @@ export function JobOutcome({ detail, serverBusy }: { detail: JobDetail; serverBu
         <h2>Not supported yet</h2>
         <blockquote>{reason}</blockquote>
         <p className="muted">
-          Muse Spark can choose among these tested activity types: {ENGINE_IDS.map((id) => ENGINES[id].title).join('; ')}.
+          Muse Spark can choose among these tested activity types: {activityTitles().join('; ')}.
           None of them fits this source, so rather than force a mismatched simulation the pipeline stopped here and nothing was generated.
         </p>
       </div>

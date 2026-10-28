@@ -1,8 +1,8 @@
 // Engine view-model helpers (pure). Every number shown for projectile / lift / speed-of-sound comes from the
 // SAME deterministic engines the validator ran (packages/activities/**); nothing here re-implements physics.
 
-import { ENGINES, isEngineId } from '../../../../packages/contracts/index.ts';
-import type { ActivityCase, ActivitySpec, ActivitySpecByEngine, EngineId } from '../../../../packages/contracts/index.ts';
+import { ACTIVITY_IDS, ENGINES, isEngineId, isSequenceEngineId, SEQUENCE_ENGINES } from '../../../../packages/contracts/index.ts';
+import type { ActivityCase, ActivityId, ActivitySpec, ActivitySpecByEngine, EngineId } from '../../../../packages/contracts/index.ts';
 import { computeOutput, inputsOf } from '../../../../packages/activities/registry.ts';
 import { flightTimeOf, stateAt } from '../../../../packages/activities/projectile-v1/engine.ts';
 import { fixed, trimmed } from './format.ts';
@@ -11,9 +11,15 @@ import { formatMoney } from './compound.ts';
 import { formatAmount } from './decay.ts';
 import { formatFrequency } from './genetics.ts';
 
-/** Display name of an engine ('Lift equation'), or null for an unknown / missing id. */
+/** Display name of an activity type ('Lift equation', 'Timeline of dated events'), or null for an unknown / missing id. */
 export function engineTitle(engine: string | null | undefined): string | null {
-  return isEngineId(engine) ? ENGINES[engine].title : null;
+  if (isEngineId(engine)) return ENGINES[engine].title;
+  return isSequenceEngineId(engine) ? SEQUENCE_ENGINES[engine].title : null;
+}
+
+/** Titles of every activity type Muse can choose (numeric engines and the timeline), in catalogue order. */
+export function activityTitles(): string[] {
+  return ACTIVITY_IDS.map((id) => engineTitle(id) ?? id);
 }
 
 /** Type guard: narrow an ActivitySpec to one engine's spec (the union is discriminated one level down). */
@@ -198,8 +204,8 @@ export const SOUND_LIFETIME_S = 2.5;
 /** Paused sound view starts here so several rings are already visible. */
 export const SOUND_INITIAL_T = 2;
 
-/** How each engine's view plays: projectile = one flight, sound = continuous rings; lift, compound interest, Hardy-Weinberg and half-life are static (null). */
-export function playbackPlan(engine: EngineId, inputs: Record<string, number>): PlaybackPlan | null {
+/** How each engine's view plays: projectile = one flight, sound = continuous rings; lift, compound interest, Hardy-Weinberg, half-life and the timeline are static (null). */
+export function playbackPlan(engine: ActivityId, inputs: Record<string, number>): PlaybackPlan | null {
   if (engine === 'projectile-v1') {
     const s = projectileSummary(inputs);
     return s === null ? { durationS: 0, speed: 1, initialT: 0 } : { durationS: s.flightTimeS, speed: playbackSpeed(s.flightTimeS), initialT: 0 };

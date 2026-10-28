@@ -1,8 +1,8 @@
-// Collect every evidence quote (explanations + analysis concepts) that cites the selected source.
+// Collect every evidence quote (explanations, timeline events, analysis concepts) that cites the selected source.
 
-import type { ActivitySpec, SourceAnalysis } from '../../../../packages/contracts/index.ts';
+import type { Evidence, SourceAnalysis } from '../../../../packages/contracts/index.ts';
 
-export type QuoteKind = 'explanation' | 'concept';
+export type QuoteKind = 'explanation' | 'concept' | 'event';
 
 export interface QuoteRef {
   /** Unique key: `${kind}:${ownerId}:${index}` */
@@ -13,13 +13,24 @@ export interface QuoteRef {
   ownerLabel: string;
 }
 
+/** Explanation and timeline-event quotes are the activity's evidence; analysis concepts are Muse's own finds. */
+export function isEvidenceKey(key: string): boolean {
+  return key.startsWith('explanation:') || key.startsWith('event:');
+}
+
 export function quoteKey(kind: QuoteKind, ownerId: string, index: number): string {
   return `${kind}:${ownerId}:${index}`;
 }
 
+/** The parts of a spec that carry evidence quotes: explanations for every engine, plus the events of a timeline. */
+export interface SpecWithQuotes {
+  explanations: readonly { id: string; evidence: readonly Evidence[] }[];
+  simulation?: { engine?: string; events?: readonly { id: string; label: string; evidence: readonly Evidence[] }[] };
+}
+
 export function collectQuoteRefs(
   sourceId: string,
-  spec: Pick<ActivitySpec, 'explanations'> | null | undefined,
+  spec: SpecWithQuotes | null | undefined,
   analysis: Pick<SourceAnalysis, 'concepts'> | null | undefined,
 ): QuoteRef[] {
   const out: QuoteRef[] = [];
@@ -27,6 +38,13 @@ export function collectQuoteRefs(
     ex.evidence.forEach((ev, i) => {
       if (ev.sourceId === sourceId) {
         out.push({ key: quoteKey('explanation', ex.id, i), quote: ev.quote, kind: 'explanation', ownerId: ex.id, ownerLabel: ex.id });
+      }
+    });
+  }
+  for (const e of spec?.simulation?.events ?? []) {
+    e.evidence.forEach((ev, i) => {
+      if (ev.sourceId === sourceId) {
+        out.push({ key: quoteKey('event', e.id, i), quote: ev.quote, kind: 'event', ownerId: e.id, ownerLabel: e.label });
       }
     });
   }

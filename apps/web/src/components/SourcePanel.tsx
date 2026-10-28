@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Loadable } from '../hooks.ts';
 import type { SourceDoc, SourceMeta } from '../api.ts';
 import type { HighlightResult } from '../lib/highlight.ts';
+import { isEvidenceKey } from '../lib/evidence.ts';
 import type { QuoteRef } from '../lib/evidence.ts';
 import { isHttpUrl, sourceLicenseText, sourceOptionLabel, TEACHER_TAG } from '../lib/sources.ts';
 import { CitationChip } from './Explanations.tsx';
@@ -49,7 +50,7 @@ function HighlightedText({ text, highlights, byKey, flash }: { text: string; hig
     return highlights.segments.map((s) => {
       const slice = text.slice(s.start, s.end);
       if (s.keys.length === 0) return <span key={s.start}>{slice}</span>;
-      const isEvidence = s.keys.some((k) => k.startsWith('explanation:'));
+      const isEvidence = s.keys.some(isEvidenceKey);
       const owners = [...new Set(s.keys.map((k) => byKey.get(k)?.ownerLabel ?? k))].join(', ');
       return (
         <mark key={s.start} data-keys={s.keys.join(' ')} className={isEvidence ? 'ev-explanation' : 'ev-concept'} title={`Evidence for: ${owners}`}>

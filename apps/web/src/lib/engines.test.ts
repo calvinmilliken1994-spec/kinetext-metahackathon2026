@@ -12,7 +12,7 @@ import { amountAfter } from '../../../../packages/activities/compound-interest-v
 import { heterozygoteFrequencyOf } from '../../../../packages/activities/hardy-weinberg-v1/engine.ts';
 import { remainingAfter } from '../../../../packages/activities/half-life-v1/engine.ts';
 import {
-  caseInputs, clampToSlider, defaultInputs, engineOutput, engineTitle, formatOutputValue, formatQuantity, isEngineSpec, outputInfo,
+  activityTitles, caseInputs, clampToSlider, defaultInputs, engineOutput, engineTitle, formatOutputValue, formatQuantity, isEngineSpec, outputInfo,
   playbackPlan, playbackSpeed, predictionExplanation, prettyUnit, projectileSummary, rangeMaxima, scenarioLabels, shortInputLabel,
   sliderModels, SOUND_INITIAL_T,
 } from './engines.ts';
@@ -284,4 +284,19 @@ test('predictionExplanation for the new engines: short input labels, engine outp
   assert.equal(h, 'Frequency p of the first allele = 0.9 → heterozygote frequency 2pq = 0.18');
   const l = predictionExplanation('half-life-v1', makeHalfLifeSpec().predictions[0]!, 25);
   assert.equal(l, 'Starting amount N0 = 200, Half-life T = 10 time units, Elapsed time t = 30 time units → amount remaining n = 25');
+});
+
+// ---- TASK-022b: timeline-v1 metadata -----------------------------------------------------------------------
+
+test('engineTitle: the sequence engine timeline-v1 is titled from SEQUENCE_ENGINES', () => {
+  assert.equal(engineTitle('timeline-v1'), 'Timeline of dated events');
+  assert.equal(engineTitle('timeline-v2'), null);
+});
+
+test('timeline-v1 has no playback plan and activityTitles lists every activity type Muse can choose', () => {
+  assert.equal(playbackPlan('timeline-v1', {}), null);
+  const titles = activityTitles();
+  assert.ok(titles.includes('Timeline of dated events'));
+  assert.ok(titles.includes('Compound interest'));
+  assert.equal(new Set(titles).size, titles.length);
 });

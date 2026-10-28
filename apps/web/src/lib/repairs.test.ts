@@ -3,7 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import type { FaultRecord, RepairRecord, StageEvent, ValidationReport } from '../../../../packages/contracts/index.ts';
 import {
-  BADGE_REPAIRED, BADGE_REPAIRED_AFTER_FAULT, buildRepairSteps, defaultRevision, demoFaultNotice, faultChangeText, overallRepairBadge,
+  BADGE_REPAIRED, BADGE_REPAIRED_AFTER_FAULT, buildRepairSteps, defaultRevision, demoFaultNotice, faultChangeLine, faultChangeText, overallRepairBadge,
   repairAttemptCount, revisionInputs, runTags, validationHeading,
 } from './repairs.ts';
 
@@ -223,4 +223,38 @@ test('S5-04: a demo fault the checks did not catch is reported as not caught, ne
   assert.match(missed, /not caught by the checks/);
   // Records made before the fix (no effective field) keep today's wording.
   assert.equal(demoFaultNotice({ kind: 'fabricated-quote', path: 'explanations[0].evidence[0].quote' }).includes('not caught'), false);
+});
+
+// ---- TASK-022b: timeline demo-fault text ---------------------------------------------------------------------
+
+const LABELS = { e1: 'Committee of five appointed', e3: 'Congress adopts the Declaration', e6: 'Delegates begin signing' };
+
+test('faultChangeText: a swapped timeline answer is described in words with event labels, not as a quote', () => {
+  const t = faultChangeText({ original: 'e1 -> e3', injected: 'e3 -> e1' }, LABELS);
+  assert.ok(t.startsWith('System swapped the answer: “Congress adopts the Declaration” now claimed to come before “Committee of five appointed”'), t);
+  assert.ok(!t.startsWith('quote'));
+  assert.ok(!/e1|e3/.test(t), 'no raw ids when labels are known');
+});
+
+test('faultChangeText: without labels the swap still reads as a swap (ids shown), numeric and quote faults are unchanged', () => {
+  assert.match(faultChangeText({ original: 'e1 -> e3', injected: 'e3 -> e1' }), /^System swapped the answer: “e3” now claimed to come before “e1”/);
+  assert.equal(faultChangeText(FAULT, LABELS), 'value 12250 → 18376');
+  assert.ok(faultChangeText({ original: 'A real source sentence about dates.', injected: 'Invented sentence.' }, LABELS).startsWith('quote “A real'));
+});
+
+test('faultChangeLine adds the "Changed by the system" lead-in only to non-sentence changes', () => {
+  assert.equal(faultChangeLine('value 1 → 2'), 'Changed by the system: value 1 → 2.');
+  const swap = faultChangeText({ original: 'e1 -> e3', injected: 'e3 -> e1' }, LABELS);
+  assert.equal(faultChangeLine(swap), `${swap}.`);
+});
+
+test('buildRepairSteps passes event labels to the fault text of a timeline wrong-answer fault', () => {
+  const fault: FaultRecord = { kind: 'wrong-answer', path: 'behavioralTests[0]', original: 'e1 -> e3', injected: 'e3 -> e1', revision: 1, effective: true };
+  const steps = buildRepairSteps({
+    revisions: [{ revision: 1, report: report(1, ['timeline.case-order']) }, { revision: 2, report: report(2, []) }],
+    repairs: [rec({ revision: 2, targeted: ['timeline.case-order'], fixed: ['timeline.case-order'], publishable: true, afterInjectedFault: true })],
+    demoFault: fault, publishedRevision: 2, eventLabels: LABELS,
+  });
+  assert.match(steps[0]?.faultChange ?? '', /“Congress adopts the Declaration” now claimed to come before “Committee of five appointed”/);
+  assert.equal(steps[0]?.faultNotice, 'Demo fault injected by the system (not a model error): wrong-answer at behavioralTests[0]');
 });

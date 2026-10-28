@@ -6,6 +6,7 @@ import type { FaultRecord, RepairRecord, StageEvent, ValidationReport } from '..
 import { stageCostLabel } from './cost.ts';
 import { previewQuote } from './evidence.ts';
 import { trimmed } from './format.ts';
+import { describeAnswerSwap } from './timeline.ts';
 
 export const BADGE_REPAIRED = 'Repaired by Muse';
 export const BADGE_REPAIRED_AFTER_FAULT = 'System-made fault, repaired by Muse';
@@ -32,12 +33,22 @@ export function demoFaultNotice(f: Pick<FaultRecord, 'kind' | 'path' | 'effectiv
   return f.effective === false ? `${base} — not caught by the checks, so this run does not demonstrate a catch` : base;
 }
 
-/** What the system changed, e.g. 'value 20.408 → 31.612' or a shortened quote swap. */
-export function faultChangeText(f: Pick<FaultRecord, 'original' | 'injected'>): string {
+/**
+ * What the system changed, e.g. 'value 20.408 → 31.612', a shortened quote swap, or (timeline) a swapped ordering
+ * answer described with the event labels.
+ */
+export function faultChangeText(f: Pick<FaultRecord, 'original' | 'injected'>, eventLabels: Readonly<Record<string, string>> = {}): string {
   if (typeof f.original === 'number' && typeof f.injected === 'number') {
     return `value ${trimmed(f.original, 6)} → ${trimmed(f.injected, 6)}`;
   }
+  const swap = describeAnswerSwap(f.original, f.injected, eventLabels);
+  if (swap !== null) return swap;
   return `quote “${previewQuote(String(f.original), 70)}” → “${previewQuote(String(f.injected), 70)}”`;
+}
+
+/** The sentence shown under a fault notice: complete sentences stand alone, short changes get the usual lead-in. */
+export function faultChangeLine(change: string): string {
+  return change.startsWith('System ') ? `${change}.` : `Changed by the system: ${change}.`;
 }
 
 /** Overall badge for a job: only when a revision after the first was published. Fault runs never say just 'repaired'. */
@@ -131,6 +142,8 @@ export function buildRepairSteps(input: {
   events?: readonly StageEvent[] | undefined;
   publishedRevision?: number | undefined;
   bestRevision?: number | undefined;
+  /** Timeline jobs: event id -> label, so a swapped-answer fault is described in words. */
+  eventLabels?: Readonly<Record<string, string>> | undefined;
 }): RepairStep[] {
   const events = input.events ?? [];
   const repairs = input.repairs ?? [];
@@ -177,7 +190,7 @@ export function buildRepairSteps(input: {
       revision: n, role, repairOf: role === 'repair' ? (record?.repairOf ?? n - 1) : null, failedAttempt: false,
       hasReport: rev.report !== undefined, passed, total, publishable, failedIds,
       targeted, fixed, remaining, introduced,
-      fault, faultNotice: fault !== null ? demoFaultNotice(fault) : null, faultChange: fault !== null ? faultChangeText(fault) : null,
+      fault, faultNotice: fault !== null ? demoFaultNotice(fault) : null, faultChange: fault !== null ? faultChangeText(fault, input.eventLabels) : null,
       badge, actor: role === 'repair' ? actorFor(events, n) : null,
       isPublished: input.publishedRevision === n, isBest: input.publishedRevision === undefined && input.bestRevision === n,
       outcome,

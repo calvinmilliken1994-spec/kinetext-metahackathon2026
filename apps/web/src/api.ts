@@ -2,7 +2,8 @@
 // it only reads stored results and asks the server to start a job.
 
 import type { CreatedSource } from './lib/sources.ts';
-import type { ActivitySpec, DemoFault, EngineId, FaultRecord, MetaReceipt, RepairRecord, SourceAnalysis, StageEvent, UserSourceInput, ValidationReport } from '../../../packages/contracts/index.ts';
+import type { AnyActivitySpec } from './lib/timeline.ts';
+import type { ActivityId, DemoFault, FaultRecord, MetaReceipt, RepairRecord, SourceAnalysis, StageEvent, UserSourceInput, ValidationReport } from '../../../packages/contracts/index.ts';
 
 export type JobStatus = 'running' | 'succeeded' | 'unsupported' | 'failed';
 
@@ -25,7 +26,7 @@ export interface JobSummary {
   reservedUnknownUSD?: number;
   error?: { code: string; message: string };
   /** Stage 5 fields — all absent on runs recorded before Stage 5. */
-  engine?: EngineId | null;
+  engine?: ActivityId | null;
   revisions?: number;
   repairs?: RepairRecord[];
   publishedRevision?: number;
@@ -35,14 +36,14 @@ export interface JobSummary {
 }
 
 /** One stored revision of the activity spec and its validation report (Stage 5). */
-export interface JobRevision { revision: number; spec: ActivitySpec; report?: ValidationReport }
+export interface JobRevision { revision: number; spec: AnyActivitySpec; report?: ValidationReport }
 
 export interface JobDetail {
   summary: JobSummary;
   events: StageEvent[];
   analysis?: { analysis: SourceAnalysis; report: ValidationReport; receipt: MetaReceipt };
   /** The published (else best, else latest) revision's spec / report. */
-  spec?: ActivitySpec;
+  spec?: AnyActivitySpec;
   report?: ValidationReport;
   /** Absent on older servers; the UI then treats spec/report as the only revision. */
   revisions?: JobRevision[];

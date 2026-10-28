@@ -6,6 +6,7 @@ import { collectQuoteRefs } from './lib/evidence.ts';
 import { newestFirst, pickDefaultJob } from './lib/jobs.ts';
 import { generateState, isServerBusy } from './lib/health.ts';
 import { defaultRevision, overallRepairBadge, revisionInputs, validationHeading } from './lib/repairs.ts';
+import { timelineEventLabels } from './lib/timeline.ts';
 import { demoFaultToSend, disclosureText } from './lib/sources.ts';
 import type { DemoChoice } from './lib/sources.ts';
 import { Header } from './components/Header.tsx';
@@ -103,6 +104,11 @@ export function App() {
     if (selectedJobId !== null) setPickedRevision({ jobId: selectedJobId, revision });
   }, [selectedJobId]);
   const repairBadge = ready === null ? null : overallRepairBadge(ready.summary);
+  // A timeline's demo fault names events by id; the first draft's labels let the panel describe it in words.
+  const eventLabels = useMemo(
+    () => timelineEventLabels(ready?.revisions?.find((r) => r.revision === 1)?.spec ?? ready?.spec),
+    [ready],
+  );
 
   return (
     <div className="app">
@@ -176,6 +182,7 @@ export function App() {
               publishedRevision={ready.summary.publishedRevision}
               bestRevision={ready.summary.bestRevision}
               viewing={viewRev}
+              eventLabels={eventLabels}
               onView={onViewRevision}
             />
           )}

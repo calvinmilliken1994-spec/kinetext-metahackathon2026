@@ -76,3 +76,25 @@ export function proseScopeNotice(report: Pick<ValidationReport, 'checks'>): Scop
   const c = report.checks.find((k) => k.id === PROSE_CHECK_ID);
   return c !== undefined ? { message: c.message, fromReport: true } : { message: PROSE_FALLBACK_MESSAGE, fromReport: false };
 }
+
+/** Plain-language names for the timeline checks (the raw id stays visible next to them). */
+export const TIMELINE_CHECK_NAMES: Readonly<Record<string, string>> = {
+  'timeline.date-grounded': 'Every date is stated in its quote',
+  'timeline.case-order': 'Ordering answers match the dates',
+  'timeline.approximate-date': 'No approximate dates',
+  'timeline.distinct-dates': 'No two events share a date',
+  'timeline.unique-ids': 'Events and questions are consistent',
+};
+
+/** Readable name of a check id, or null when it has none (then show the id itself). */
+export function checkName(id: string): string | null {
+  return Object.hasOwn(TIMELINE_CHECK_NAMES, id) ? (TIMELINE_CHECK_NAMES[id] ?? null) : null;
+}
+
+/** One-line description of what the machine checks did, matching the activity type the report belongs to. */
+export function validationBlurb(report: Pick<ValidationReport, 'checks'>): string {
+  const timeline = report.checks.some((c) => c.id.startsWith('timeline.'));
+  return timeline
+    ? 'Machine-checked by deterministic code, not by the model grading itself: schema, source hashes, quotes found in the source, every date stated in its quote, and every ordering answer recomputed from the dates.'
+    : 'Machine-checked by deterministic code, not by the model grading itself: schema, ranges, source hashes, quotes found in the source, and numbers re-run on the physics engine.';
+}

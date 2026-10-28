@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { collectQuoteRefs, previewQuote } from './evidence.ts';
+import { collectQuoteRefs, isEvidenceKey, previewQuote } from './evidence.ts';
 
 const spec = {
   explanations: [
@@ -27,4 +27,33 @@ test('previewQuote shortens long quotes and keeps short ones', () => {
   const p = previewQuote('word '.repeat(40), 30);
   assert.ok(p.length <= 30);
   assert.ok(p.endsWith('…'));
+});
+
+test('timeline event quotes are collected like explanation quotes and labelled with the event', () => {
+  const tl = {
+    explanations: [{ id: 'x1', text: 't', evidence: [{ sourceId: 's1', quote: 'q-expl' }] }],
+    simulation: {
+      engine: 'timeline-v1',
+      events: [
+        { id: 'e1', label: 'Committee appointed', evidence: [{ sourceId: 's1', quote: 'q-e1a' }, { sourceId: 'other', quote: 'zzz' }] },
+        { id: 'e2', label: 'Declaration adopted', evidence: [{ sourceId: 's1', quote: 'q-e2' }] },
+      ],
+    },
+  };
+  const refs = collectQuoteRefs('s1', tl, undefined);
+  assert.deepEqual(refs.map((r) => r.key), ['explanation:x1:0', 'event:e1:0', 'event:e2:0']);
+  assert.equal(refs[1]?.kind, 'event');
+  assert.equal(refs[1]?.ownerLabel, 'Committee appointed');
+  assert.equal(refs[1]?.quote, 'q-e1a');
+});
+
+test('specs without events (numeric engines) are unaffected by event collection', () => {
+  const refs = collectQuoteRefs('s1', { ...spec, simulation: { engine: 'projectile-v1' } }, undefined);
+  assert.deepEqual(refs.map((r) => r.key), ['explanation:e1:0', 'explanation:e2:0']);
+});
+
+test('explanation and timeline-event quotes highlight as evidence; concepts do not', () => {
+  assert.equal(isEvidenceKey('explanation:e1:0'), true);
+  assert.equal(isEvidenceKey('event:e3:0'), true);
+  assert.equal(isEvidenceKey('concept:c1:0'), false);
 });

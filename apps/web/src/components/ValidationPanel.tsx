@@ -1,5 +1,5 @@
 import type { ValidationReport } from '../../../../packages/contracts/index.ts';
-import { groupChecks, KIND_BLURB, PROSE_CHECK_ID, proseScopeNotice, summarizeReport } from '../lib/checks.ts';
+import { checkName, groupChecks, KIND_BLURB, PROSE_CHECK_ID, proseScopeNotice, summarizeReport, validationBlurb } from '../lib/checks.ts';
 
 function PassIcon({ id, passed }: { id: string; passed: boolean }) {
   if (id === PROSE_CHECK_ID) return <span className="check-icon info" role="img" aria-label="scope notice">ⓘ</span>;
@@ -25,9 +25,7 @@ export function ValidationPanel({ report, heading, showPublish }: ValidationPane
         <h3 id="val-heading">{heading}</h3>
         <span className={`badge ${summary.allPassed ? 'badge-ok' : 'badge-bad'}`}>{summary.allPassed ? '✓ ' : '⛔ '}{summary.label}</span>
       </div>
-      <p className="muted small">
-        Machine-checked by deterministic code, not by the model grading itself: schema, ranges, source hashes, quotes found in the source, and numbers re-run on the physics engine.
-      </p>
+      <p className="muted small">{validationBlurb(report)}</p>
       <div className="callout callout-info scope-notice" role="note" data-testid="scope-notice">
         <strong>Not machine-verified:</strong> {scope.message}
       </div>
@@ -42,7 +40,11 @@ export function ValidationPanel({ report, heading, showPublish }: ValidationPane
             {g.checks.map((c) => (
               <li key={c.id}>
                 <details className={`check ${c.passed ? 'check-pass' : 'check-fail'}`} open={!c.passed}>
-                  <summary><PassIcon id={c.id} passed={c.passed} /> <code>{c.id}</code></summary>
+                  <summary>
+                    <PassIcon id={c.id} passed={c.passed} />{' '}
+                    {checkName(c.id) !== null && <><strong className="check-name">{checkName(c.id)}</strong>{' '}</>}
+                    <code>{c.id}</code>
+                  </summary>
                   <p>{c.message}{c.path !== undefined && <span className="muted"> · {c.path}</span>}</p>
                 </details>
               </li>

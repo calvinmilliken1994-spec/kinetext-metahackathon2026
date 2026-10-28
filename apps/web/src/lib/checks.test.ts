@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { groupChecks, PROSE_CHECK_ID, proseScopeNotice, summarizeReport } from './checks.ts';
+import { checkName, groupChecks, validationBlurb, PROSE_CHECK_ID, proseScopeNotice, summarizeReport, TIMELINE_CHECK_NAMES } from './checks.ts';
 import { fixed, stepDigits, trimmed } from './format.ts';
 import type { ValidationCheck } from '../../../../packages/contracts/index.ts';
 
@@ -55,4 +55,25 @@ test('fixed / trimmed / stepDigits', () => {
   assert.equal(stepDigits(0.1), 1);
   assert.equal(stepDigits(0.02), 2);
   assert.equal(stepDigits(5), 0);
+});
+
+test('timeline check ids have readable names; other ids have none (the raw id is shown)', () => {
+  assert.equal(checkName('timeline.date-grounded'), 'Every date is stated in its quote');
+  assert.equal(checkName('timeline.case-order'), 'Ordering answers match the dates');
+  assert.equal(checkName('timeline.approximate-date'), 'No approximate dates');
+  assert.equal(checkName('timeline.distinct-dates'), 'No two events share a date');
+  assert.equal(checkName('timeline.unique-ids'), 'Events and questions are consistent');
+  assert.equal(checkName('behavior.tests'), null);
+  assert.equal(checkName('schema.full'), null);
+  assert.deepEqual(Object.keys(TIMELINE_CHECK_NAMES).sort(), [
+    'timeline.approximate-date', 'timeline.case-order', 'timeline.date-grounded', 'timeline.distinct-dates', 'timeline.unique-ids',
+  ]);
+});
+
+test('validationBlurb describes dates and ordering for a timeline report and keeps the engine wording otherwise', () => {
+  const tl = validationBlurb({ checks: [c('schema.full', 'schema', true), c('timeline.case-order', 'behavioral', true)] });
+  assert.match(tl, /date/i);
+  assert.match(tl, /order/i);
+  assert.ok(!/physics engine/i.test(tl));
+  assert.match(validationBlurb({ checks: [c('behavior.tests', 'behavioral', true)] }), /engine/i);
 });
