@@ -23,6 +23,10 @@ From row 2 on, calls are also recorded by the product's own ledger (`storage/led
 
 Cumulative estimated: **USD 0.1326** of 150 (Stage 2: USD 0.1324 of 10, per the product ledger).
 
+| 10+ | 2026-10-28 03:08–03:19 KST | Stage 5 live runs (TASK-017): 11 jobs on participant credits, purpose `test-live` — one per supported source/engine (lift, ballistic, sound, forces), the drag decline, two teacher-pasted sources (incl. the prompt-injection test), two labelled demo-fault repairs, two superseded failed attempts | muse-spark-1.3 | per-job events with response IDs in `docs/evidence/stage-5/live/` | — | **0.525535** total | product ledger; per-job costs in `docs/evidence/stage-5/live/README.md` |
+
+**Stage 5 update 2026-10-28:** cumulative estimated **USD 0.658** of 150 (USD 0.1326 setup+Stage 2 rows above, plus Stage 5 USD 0.5255). The product ledger's committed total (all `reconcile` entries) is **USD 0.713831 of the USD 10 cap** — it also covers two runs Calvin started from the web UI on 2026-10-27 after Stage 2 closed (`job-20261027115756-63fa4ce9` speed of sound, declined, USD 0.005627; `job-20261027123517-0c6652a3` equations of motion, published, USD 0.05023; together USD 0.055857), which are not in committed evidence; the reviewer independently re-summed it (`docs/reviews/stage-5-review.md`, Addendum 2). Limits used at these runs: input bound 32,000, spec/repair output 16,000, job deadline 240 s (`config/resource-limits.json`; reasons in `RESOURCE_POLICY.md` "Stage 5 update"). Provider billing still not queried; local estimates, Standard prices.
+
 Checked 2026-10-27 KST. Public rates are not account credit balances. No paid infrastructure was provisioned.
 
 | Provider | Account access observed | Verified credits | Setup usage |
