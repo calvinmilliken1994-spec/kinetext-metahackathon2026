@@ -39,9 +39,9 @@ const USAGE_REVIEWER = { prompt_tokens: 10, completion_tokens: 20 };
 const USAGE_COST_PER_CALL = 0.0000975;
 /** Reviewer P3 absent-usage reservations for this source/prompt/schema set. */
 // Reservations follow the input bound (UTF-8 bytes of prompt + schema), so they change with prompts/schemas.
-// Stage 5 analysis prompt (v3) lists four engines with their appliesWhen texts.
-const ANALYSIS_RESERVATION = 0.0348575;
-const BOTH_RESERVATIONS = 0.08174875;
+// Stage 5 analysis prompt (v4): four engines with appliesWhen texts, metadata in an untrusted JSON block.
+const ANALYSIS_RESERVATION = 0.03506375;
+const BOTH_RESERVATIONS = 0.08216125;
 const round6 = (x: number): number => Math.round(x * 1e6) / 1e6;
 const OUTPUT_INVALID_MESSAGE = 'The model returned output that does not match the required structure.';
 

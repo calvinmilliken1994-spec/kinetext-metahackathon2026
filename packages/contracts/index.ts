@@ -213,6 +213,12 @@ export interface FaultRecord {
   injected: string | number;
   /** The revision the fault was injected into (always the first generated revision). */
   revision: number;
+  /**
+   * True only when re-validating the faulty revision made the intended check fail (`behavior.tests` for
+   * wrong-answer, `grounding.quotes` for fabricated-quote). False means the demo did not demonstrate a catch,
+   * and the UI must say so (Stage 5 review S5-04). Absent on records made before that fix.
+   */
+  effective?: boolean;
 }
 
 // ---- Teacher-provided sources. -------------------------------------------------------------------------
@@ -242,7 +248,8 @@ export function validateUserSourceInput(raw: unknown): { ok: true; value: UserSo
   if (typeof raw !== 'object' || raw === null || Array.isArray(raw)) return { ok: false, problems: ['NOT_AN_OBJECT'] };
   const r = raw as Record<string, unknown>;
   const L = USER_SOURCE_LIMITS;
-  const str = (v: unknown): string => (typeof v === 'string' ? v.trim() : '');
+  // Metadata is single-line: any run of whitespace (including newlines) collapses to one space (review S5-03).
+  const str = (v: unknown): string => (typeof v === 'string' ? v.replace(/[\u0000-\u001F\u007F]/g, ' ').replace(/\s+/g, ' ').trim() : '');
   const title = str(r.title);
   const attribution = str(r.attribution);
   const locator = str(r.locator);

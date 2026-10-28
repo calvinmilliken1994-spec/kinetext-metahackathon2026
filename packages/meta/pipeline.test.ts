@@ -17,6 +17,7 @@ import type {
 import { ENGINES, ENGINE_IDS } from '../contracts/index.ts';
 import type { EngineId } from '../contracts/index.ts';
 import { genSchemaFor, sourceAnalysisGenSchema } from '../contracts/schemas.ts';
+import { compareRevisions } from '../validation/validate.ts';
 import {
   liftSourceDoc,
   makeLiftSpec,
@@ -448,8 +449,8 @@ test('GeneratedOutputError shape is fixed and schema-valid recorded spec still s
   assert.ok(analysisResult.analysis === analysisForces);
 });
 
-test('PROMPT_VERSION is v3', () => {
-  assert.equal(PROMPT_VERSION, 'v3');
+test('PROMPT_VERSION is v4', () => {
+  assert.equal(PROMPT_VERSION, 'v4');
 });
 
 test('analysis prompt lists every engine id with title, equation and appliesWhen', () => {
@@ -960,4 +961,113 @@ test('MetaError from the client propagates through repairSpec', async () => {
     () => repairSpec(failing, source, analysisForces, previous, { jobId: 'job-1', specId: 'spec-1' }, 'demo'),
     (err: unknown) => err instanceof MetaError && err.code === 'DEADLINE_EXCEEDED',
   );
+});
+
+test('repairSpec with explicit baseline uses revision-1 obligations (tolerance laundering fails)', async () => {
+  const baselineGen = structuredClone(genForces as ForcesGeneratedSpec);
+  for (const t of baselineGen.behavioralTests) {
+    t.tolerance = 0.001;
+  }
+  for (const p of baselineGen.predictions) {
+    p.tolerance = 0.001;
+  }
+  const baselineInit = await generateSpec(
+    fakeClientFor(baselineGen),
+    source,
+    analysisForces,
+    { jobId: 'job-base', specId: 'spec-base' },
+    'demo',
+    () => new Date('2026-01-01T00:00:00.000Z'),
+  );
+  assert.equal(baselineInit.report.publishable, true);
+  const weakenedGen = structuredClone(baselineGen);
+  const firstTest = weakenedGen.behavioralTests[0];
+  assert.ok(firstTest !== undefined);
+  firstTest.tolerance = 0.01;
+  const weakenedInit = await generateSpec(
+    fakeClientFor(weakenedGen),
+    source,
+    analysisForces,
+    { jobId: 'job-weak', specId: 'spec-weak' },
+    'demo',
+    () => new Date('2026-01-01T00:00:00.000Z'),
+  );
+  const baselineFailedIds: string[] = baselineInit.report.checks
+    .filter((c) => !c.passed)
+    .map((c) => c.id);
+  const expected = compareRevisions(baselineInit.spec, weakenedInit.spec, baselineFailedIds);
+  assert.equal(expected.id, 'repair.no-weakening');
+  assert.equal(expected.passed, false);
+  const previous = {
+    generated: weakenedGen as unknown as GeneratedSpec,
+    spec: weakenedInit.spec,
+    report: weakenedInit.report,
+    revision: 2,
+    findingsHistory: [[], []] as RepairFinding[][],
+    baseline: { spec: baselineInit.spec, failedIds: baselineFailedIds },
+  };
+  const repaired = await repairSpec(
+    fakeClientFor(weakenedGen),
+    source,
+    analysisForces,
+    previous,
+    { jobId: 'job-1', specId: 'spec-1' },
+    'demo',
+    () => new Date('2026-01-01T00:00:00.000Z'),
+  );
+  const weakening = repaired.report.checks.find((c) => c.id === 'repair.no-weakening');
+  assert.ok(weakening !== undefined);
+  assert.equal(weakening.passed, false);
+  assert.equal(repaired.report.publishable, false);
+});
+
+test('repairSpec without baseline compares against previous (identical weakened specs pass)', async () => {
+  const baselineGen = structuredClone(genForces as ForcesGeneratedSpec);
+  for (const t of baselineGen.behavioralTests) {
+    t.tolerance = 0.001;
+  }
+  for (const p of baselineGen.predictions) {
+    p.tolerance = 0.001;
+  }
+  const baselineInit = await generateSpec(
+    fakeClientFor(baselineGen),
+    source,
+    analysisForces,
+    { jobId: 'job-base', specId: 'spec-base' },
+    'demo',
+    () => new Date('2026-01-01T00:00:00.000Z'),
+  );
+  assert.equal(baselineInit.report.publishable, true);
+  const weakenedGen = structuredClone(baselineGen);
+  const firstTest = weakenedGen.behavioralTests[0];
+  assert.ok(firstTest !== undefined);
+  firstTest.tolerance = 0.01;
+  const weakenedInit = await generateSpec(
+    fakeClientFor(weakenedGen),
+    source,
+    analysisForces,
+    { jobId: 'job-weak', specId: 'spec-weak' },
+    'demo',
+    () => new Date('2026-01-01T00:00:00.000Z'),
+  );
+  const previous = {
+    generated: weakenedGen as unknown as GeneratedSpec,
+    spec: weakenedInit.spec,
+    report: weakenedInit.report,
+    revision: 2,
+    findingsHistory: [[], []] as RepairFinding[][],
+  };
+  const repaired = await repairSpec(
+    fakeClientFor(weakenedGen),
+    source,
+    analysisForces,
+    previous,
+    { jobId: 'job-1', specId: 'spec-1' },
+    'demo',
+    () => new Date('2026-01-01T00:00:00.000Z'),
+  );
+  const weakening = repaired.report.checks.find((c) => c.id === 'repair.no-weakening');
+  assert.ok(weakening !== undefined);
+  assert.equal(weakening.passed, true);
+  assert.equal(repaired.report.publishable, true);
 });

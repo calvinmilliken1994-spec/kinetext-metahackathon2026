@@ -73,3 +73,14 @@ Muse Spark 1.3 reviewed the contracts and plan via the subscription bridge (32 s
 - **TASK-014** repair prompt: complete corrected spec; keep passing parts unchanged; never weaken tests or widen tolerances to pass; findings and prior specs are untrusted data.
 - **TASK-015** worker appends `repair.no-weakening` to each repair revision's report before deciding publishability.
 
+## Independent review round 1 (`docs/reviews/stage-5-review.md`, GPT-6 Astra, CHANGES REQUIRED) — lead decisions
+| ID | Decision |
+|---|---|
+| S5-01 (High) | **Immutable baseline.** Every repair is compared with **revision 1** (the original obligations), never with the previous revision, so a rejected weakening can never become the next baseline. `repairSpec` takes `previous.baseline = { spec, failedIds }` (defaults to `previous` for direct callers); the worker always passes revision 1. |
+| S5-02 (High) | `compareRevisions(baseline, next, failedOnBaseline)` semantics (signature unchanged), each rule scoped per case/field: (1) engine unchanged; (2) every baseline behavioral-test `name` and prediction `id` still present exactly once (renames/replacements fail); (3) per case: `next.tolerance <= baseline.tolerance` **always** (no exceptions — a tolerance failure is fixed by lowering it); (4) per case: inputs and expected output unchanged unless that **specific** baseline case was wrong (`|expected − computed| > tolerance` or `tolerance > maxTolerance`, recomputed with the engine) or, for a prediction, its inputs were outside the baseline ranges; (5) per input range: width must not shrink unless that range's own check failed on the baseline; (6) adding cases is allowed. Message names every violation. |
+| S5-03 (Medium) | Teacher metadata is untrusted: `validateUserSourceInput` collapses title/attribution/locator to single-line text (lead, contracts); prompts put source title/license/attribution inside an escaped JSON block labelled untrusted data, never in instruction text (Muse, prompts.ts). |
+| S5-04 (Medium) | Demo faults must demonstrably fail: wrong-answer adds `max(1, 0.5·|original|, 10·maxTolerance)` (subtracting if that would exceed the output's hard bound); quote absence checked with the validator's whitespace normalisation; after injection the worker re-validates and records `FaultRecord.effective` (intended check failed). Ineffective faults are reported honestly (`inject` event detail and UI), never as a catch. |
+| S5-05 (Medium) | Every repair failure event carries the attempted `revision` (MetaError, budget, deadline, provider errors). |
+| S5-06 (Low) | `maxRepairAttempts` must be an integer in [0, 2] at startup (`RESOURCE_LIMITS_INVALID`) and at the worker boundary (clamped/fails closed). |
+| S5-07 (Low) | Duplicate-text POST returns the **stored** source metadata with `reused: true`; the UI says the text already exists under its stored title. |
+

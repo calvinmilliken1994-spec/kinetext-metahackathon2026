@@ -197,6 +197,7 @@ export async function repairSpec(
     report: ValidationReport;
     revision: number;
     findingsHistory: RepairFinding[][];
+    baseline?: { spec: ActivitySpec; failedIds: string[] };
   },
   ids: { jobId: string; specId: string },
   purpose: 'test-live' | 'demo',
@@ -310,10 +311,11 @@ export async function repairSpec(
     throw new GeneratedOutputError('repair', result.receipt);
   }
   const base: ValidationReport = validateSpec(spec, [source]);
-  const failedIdsOfPrevious: string[] = previous.report.checks
-    .filter((c) => !c.passed)
-    .map((c) => c.id);
-  const weakening = compareRevisions(previous.spec, spec, failedIdsOfPrevious);
+  const baselineSpec: ActivitySpec = previous.baseline?.spec ?? previous.spec;
+  const baselineFailedIds: string[] =
+    previous.baseline?.failedIds ??
+    previous.report.checks.filter((c) => !c.passed).map((c) => c.id);
+  const weakening = compareRevisions(baselineSpec, spec, baselineFailedIds);
   const checks = [...base.checks, weakening];
   const report: ValidationReport = {
     artifactId: base.artifactId,

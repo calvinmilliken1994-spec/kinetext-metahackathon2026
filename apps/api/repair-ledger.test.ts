@@ -28,6 +28,7 @@ const genFixture = JSON.parse(
   readFileSync(new URL('../../tests/fixtures/nasa-gen.recorded.json', import.meta.url), 'utf8'),
 ) as GeneratedSpec;
 
+const LIMITS = JSON.parse(readFileSync(new URL('../../config/resource-limits.json', import.meta.url), 'utf8')) as { maxInputTokens: number };
 const FAKE_KEY = 'LLM_F…_KEY'; // synthetic; never a real credential
 /** Reviewer P3 valid usage: $0.0000975 per call at muse-spark-1.3 prices. */
 const USAGE_REVIEWER = { prompt_tokens: 10, completion_tokens: 20 };
@@ -101,6 +102,8 @@ async function runRepairJob(responses: Queued[]): Promise<{ summary: JobSummary;
       apiKey: FAKE_KEY,
       ledger,
       allowLive: true,
+      // Same input cap as apps/api/main.ts: repair prompts exceed the client's 16000 default.
+      maxInputTokens: LIMITS.maxInputTokens,
       fetchImpl: queueFetch(responses),
       sleep: async () => {},
     });
