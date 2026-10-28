@@ -2,6 +2,7 @@ import type { JobDetail } from '../api.ts';
 import { describeJobCost } from '../lib/cost.ts';
 import { activityTitles, engineTitle } from '../lib/engines.ts';
 import { INTERRUPTED_TEXT, isInterrupted } from '../lib/jobs.ts';
+import { analysisRepairNote, analysisRepairOverall } from '../lib/analysisRepairs.ts';
 import { demoFaultNotice, repairAttemptCount } from '../lib/repairs.ts';
 
 /** Centre-column states for jobs that did not produce a runnable activity. `serverBusy`: /api/health busy flag (null = unknown). */
@@ -28,6 +29,7 @@ export function JobOutcome({ detail, serverBusy }: { detail: JobDetail; serverBu
       </div>
     );
   }
+  const analysisNote = analysisRepairOverall({ analysisRepairs: summary.analysisRepairs }).state === 'none' ? null : analysisRepairNote(summary.analysisRepairs);
   if (summary.status === 'unsupported') {
     const reason = analysis?.analysis.unsupportedReason ?? 'No reason was recorded.';
     return (
@@ -39,6 +41,7 @@ export function JobOutcome({ detail, serverBusy }: { detail: JobDetail; serverBu
           Muse Spark can choose among these tested activity types: {activityTitles().join('; ')}.
           None of them fits this source, so rather than force a mismatched simulation the pipeline stopped here and nothing was generated.
         </p>
+        {analysisNote !== null && <p className="callout callout-natural small" role="note">{analysisNote}</p>}
       </div>
     );
   }
@@ -66,6 +69,7 @@ export function JobOutcome({ detail, serverBusy }: { detail: JobDetail; serverBu
       {chosen !== null && <p className="muted">Activity type Muse chose: <strong>{chosen}</strong> (<code>{summary.engine}</code>)</p>}
       {summary.demoFault !== undefined && <p className="callout callout-fault" role="note">{demoFaultNotice(summary.demoFault)}</p>}
       {summary.error !== undefined && <p>Error code: <code>{summary.error.code}</code>{summary.error.message ? <span className="muted"> — {summary.error.message}</span> : null}</p>}
+      {analysisNote !== null && <p className="callout callout-error small" role="note">{analysisNote}</p>}
       {repairCount > 0 && (
         <p>
           Muse made {repairCount} repair attempt{repairCount === 1 ? '' : 's'}, but no revision passed every machine check

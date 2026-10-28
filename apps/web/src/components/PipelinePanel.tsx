@@ -4,6 +4,7 @@ import { describeJobCost } from '../lib/cost.ts';
 import { engineTitle } from '../lib/engines.ts';
 import type { GenerateState } from '../lib/health.ts';
 import { INTERRUPTED_TEXT, isInterrupted, jobStatusLabel, runBadge } from '../lib/jobs.ts';
+import { analysisRepairTags } from '../lib/analysisRepairs.ts';
 import { runTags } from '../lib/repairs.ts';
 import { DEMO_FAULT_HELP, DEMO_FAULT_LABEL, demoFaultOptions, FREE_CREDITS_NOTE } from '../lib/sources.ts';
 import type { DemoChoice } from '../lib/sources.ts';
@@ -78,7 +79,7 @@ export function PipelinePanel(p: PipelinePanelProps) {
             const selected = j.jobId === p.selectedJobId;
             const cost = describeJobCost({ totalCostUSD: j.totalCostUSD, reservedUnknownUSD: j.reservedUnknownUSD, interrupted });
             const engine = engineTitle(j.engine);
-            const tags = runTags(j);
+            const tags = [...analysisRepairTags(j), ...runTags(j)];
             return (
               <li key={j.jobId}>
                 <button type="button" className={`run${selected ? ' selected' : ''}`} aria-pressed={selected} onClick={() => p.onSelectJob(j.jobId)}>
@@ -113,6 +114,7 @@ export function PipelinePanel(p: PipelinePanelProps) {
             totalCostUSD={p.detail.data.summary.totalCostUSD}
             reservedUnknownUSD={p.detail.data.summary.reservedUnknownUSD}
             interrupted={isInterrupted(p.detail.data.summary)}
+            analysisRepairs={p.detail.data.summary.analysisRepairs}
           />
         )}
       </div>

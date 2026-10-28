@@ -13,9 +13,11 @@ export interface ValidationPanelProps {
   heading: string;
   /** Show the (disabled) publish control — only for a full activity spec. */
   showPublish: boolean;
+  /** Readable check names; defaults to the timeline names. The source-analysis panel passes the analysis names. */
+  nameOf?: (id: string) => string | null;
 }
 
-export function ValidationPanel({ report, heading, showPublish }: ValidationPanelProps) {
+export function ValidationPanel({ report, heading, showPublish, nameOf = checkName }: ValidationPanelProps) {
   const summary = summarizeReport(report);
   const groups = groupChecks(report);
   const scope = proseScopeNotice(report);
@@ -42,7 +44,7 @@ export function ValidationPanel({ report, heading, showPublish }: ValidationPane
                 <details className={`check ${c.passed ? 'check-pass' : 'check-fail'}`} open={!c.passed}>
                   <summary>
                     <PassIcon id={c.id} passed={c.passed} />{' '}
-                    {checkName(c.id) !== null && <><strong className="check-name">{checkName(c.id)}</strong>{' '}</>}
+                    {nameOf(c.id) !== null && <><strong className="check-name">{nameOf(c.id)}</strong>{' '}</>}
                     <code>{c.id}</code>
                   </summary>
                   <p>{c.message}{c.path !== undefined && <span className="muted"> · {c.path}</span>}</p>

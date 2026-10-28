@@ -5,6 +5,8 @@ import { buildHighlights } from './lib/highlight.ts';
 import { collectQuoteRefs } from './lib/evidence.ts';
 import { newestFirst, pickDefaultJob } from './lib/jobs.ts';
 import { generateState, isServerBusy } from './lib/health.ts';
+import { analysisCheckName, analysisRepairOverall, buildAnalysisRepairSteps, repairSummaryText } from './lib/analysisRepairs.ts';
+import { checkName } from './lib/checks.ts';
 import { defaultRevision, overallRepairBadge, revisionInputs, validationHeading } from './lib/repairs.ts';
 import { timelineEventLabels } from './lib/timeline.ts';
 import { demoFaultToSend, disclosureText } from './lib/sources.ts';
@@ -15,6 +17,7 @@ import type { Flash } from './components/SourcePanel.tsx';
 import { PipelinePanel } from './components/PipelinePanel.tsx';
 import { ActivityPanel } from './components/ActivityPanel.tsx';
 import { JobOutcome } from './components/JobOutcome.tsx';
+import { AnalysisRepairTimeline } from './components/AnalysisRepairTimeline.tsx';
 import { RepairTimeline } from './components/RepairTimeline.tsx';
 import { ValidationPanel } from './components/ValidationPanel.tsx';
 
@@ -110,6 +113,16 @@ export function App() {
     [ready],
   );
 
+  // Analysis repairs (TASK-024c): Muse repairing its own first analysis, shown before the spec repairs.
+  const analysisSteps = useMemo(
+    () => (ready === null ? [] : buildAnalysisRepairSteps({ revisions: ready.analysisRevisions ?? [], analysisRepairs: ready.summary.analysisRepairs, events: ready.events })),
+    [ready],
+  );
+  const analysisOverall = analysisRepairOverall({ analysisRepairs: ready?.summary.analysisRepairs, events: ready?.events });
+  const repairBanner = ready === null || analysisOverall.state === 'none'
+    ? null
+    : repairSummaryText(ready.summary) ?? 'Analysis repair in progress';
+
   return (
     <div className="app">
       <Header health={health} down={down} />
@@ -142,6 +155,12 @@ export function App() {
           {selectedJobId === null && jobs.state === 'loading' && <p className="muted pad">Loading…</p>}
           {detail?.state === 'loading' && <p className="muted pad">Loading run…</p>}
           {detail?.state === 'error' && <div className="callout callout-error pad-m" role="alert">{detail.message}</div>}
+          {ready !== null && repairBanner !== null && (
+            <p className={`callout ${analysisOverall.state === 'failed' ? 'callout-error' : 'callout-natural'} pad-m repair-banner`} role="note" data-testid="repair-summary">
+              <strong>{repairBanner}</strong>
+              {analysisOverall.state === 'failed' ? ' — Muse’s own analysis did not pass.' : ' — Natural repair (Muse’s own mistake), details under “Analysis repair”.'}
+            </p>
+          )}
           {ready !== null && spec !== undefined && ready.summary.status === 'succeeded' && (
             <ActivityPanel
               key={spec.id}
@@ -173,6 +192,7 @@ export function App() {
             generateError={generateError}
             detail={detail}
           />
+          {ready !== null && <AnalysisRepairTimeline steps={analysisSteps} overall={analysisOverall} />}
           {ready !== null && (
             <RepairTimeline
               revisions={revisions}
@@ -194,7 +214,12 @@ export function App() {
             />
           )}
           {report === null && analysisReport !== null && (
-            <ValidationPanel report={analysisReport} heading="Source analysis checks" showPublish={false} />
+            <ValidationPanel
+              report={analysisReport}
+              heading={analysisOverall.state === 'passed' ? 'Source analysis checks (after repair)' : 'Source analysis checks'}
+              showPublish={false}
+              nameOf={(id) => analysisCheckName(id) ?? checkName(id)}
+            />
           )}
         </aside>
       </div>

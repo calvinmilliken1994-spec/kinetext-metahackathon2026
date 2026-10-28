@@ -258,3 +258,28 @@ test('buildRepairSteps passes event labels to the fault text of a timeline wrong
   assert.match(steps[0]?.faultChange ?? '', /“Congress adopts the Declaration” now claimed to come before “Committee of five appointed”/);
   assert.equal(steps[0]?.faultNotice, 'Demo fault injected by the system (not a model error): wrong-answer at behavioralTests[0]');
 });
+
+// ---- TASK-024c: analysis-repair events (target 'analysis') must never be mistaken for spec repairs -----------------
+
+test('spec repair steps ignore analysis repair events with the same revision number', () => {
+  const events = [
+    ev(1, 'repair', 'started', { revision: 2, target: 'analysis' }),
+    ev(2, 'repair', 'failed', { revision: 2, target: 'analysis', model: 'muse-spark-1.3', estCostUSD: 0.5, detail: 'OUTPUT_INVALID' }),
+  ];
+  const steps = buildRepairSteps({ revisions: [{ revision: 1, report: report(1, ['behavior.tests']) }], events });
+  assert.deepEqual(steps.map((s) => [s.revision, s.failedAttempt]), [[1, false]]);
+  assert.equal(repairAttemptCount([], events), 0);
+});
+
+test('a spec repair keeps its own actor when an analysis repair shares its revision number', () => {
+  const events = [
+    ev(1, 'repair', 'succeeded', { revision: 2, model: 'spec-model', estCostUSD: 0.0301, detail: 'repaired revision 1' }),
+    ev(2, 'repair', 'succeeded', { revision: 2, target: 'analysis', model: 'analysis-model', estCostUSD: 0.5 }),
+  ];
+  const steps = buildRepairSteps({
+    revisions: [{ revision: 1, report: report(1, ['behavior.tests']) }, { revision: 2, report: report(2, []) }],
+    repairs: [rec({ revision: 2, targeted: ['behavior.tests'], fixed: ['behavior.tests'], publishable: true })], events, publishedRevision: 2,
+  });
+  assert.equal(steps[1]?.actor?.model, 'spec-model');
+  assert.equal(repairAttemptCount([rec({ revision: 2 })], events), 1);
+});

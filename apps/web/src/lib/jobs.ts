@@ -75,12 +75,17 @@ export const STAGE_LABEL: Record<Stage, string> = {
   done: 'Done',
 };
 
+/** Step heading of a source-analysis repair, between 'Analyse source' and 'Specify activity'. */
+export const ANALYSIS_REPAIR_STEP = 'Repair analysis';
+
 export type RowStatus = 'pending' | 'running' | 'succeeded' | 'failed';
 
 export interface TimelineRow {
   stage: Stage;
   /** Spec revision for inject / validate / repair rows (Stage 5); absent for other stages and older runs. */
   revision?: number;
+  /** 'analysis' for a source-analysis repair (TASK-024b); absent for spec repairs and every other stage. */
+  target?: 'analysis';
   status: RowStatus;
   /** Wall time between the stage's started and finished events; null while running/pending. */
   durationMs: number | null;
@@ -92,7 +97,7 @@ export interface TimelineRow {
   detail?: string;
 }
 
-function rowFromEvents(stage: Stage, evs: readonly StageEvent[], revision: number | undefined): TimelineRow {
+function rowFromEvents(stage: Stage, evs: readonly StageEvent[], revision: number | undefined, target?: 'analysis'): TimelineRow {
   const started = evs.find((e) => e.status === 'started');
   const finished = [...evs].reverse().find((e) => e.status !== 'started');
   const row: TimelineRow = {
@@ -101,6 +106,7 @@ function rowFromEvents(stage: Stage, evs: readonly StageEvent[], revision: numbe
     durationMs: null,
   };
   if (revision !== undefined) row.revision = revision;
+  if (target !== undefined) row.target = target;
   if (started && finished) {
     const d = Date.parse(finished.at) - Date.parse(started.at);
     row.durationMs = Number.isFinite(d) && d >= 0 ? d : null;
@@ -124,16 +130,30 @@ function rowFromEvents(stage: Stage, evs: readonly StageEvent[], revision: numbe
  * Stage 5: events are grouped per (stage, revision), so validate / repair rows exist once per revision
  * and rows come out in the order the pipeline emitted them (validate r1 → repair r2 → validate r2 → …).
  */
-export function buildTimeline(events: readonly StageEvent[], jobStatus: JobStatus): TimelineRow[] {
-  const groups = new Map<string, { stage: Stage; revision: number | undefined; evs: StageEvent[] }>();
+export function buildTimeline(events: readonly StageEvent[], jobStatus: JobStatus, analysisRepairs?: readonly { revision: number; passed: boolean }[]): TimelineRow[] {
+  const groups = new Map<string, { stage: Stage; revision: number | undefined; target: 'analysis' | undefined; evs: StageEvent[] }>();
   for (const e of [...events].sort((a, b) => a.seq - b.seq)) {
     const revision = e.stage === 'inject' || e.stage === 'validate' || e.stage === 'repair' ? e.revision : undefined;
-    const key = `${e.stage}:${revision ?? ''}`;
-    const g = groups.get(key) ?? { stage: e.stage, revision, evs: [] };
+    // TASK-024b: analysis repairs carry target 'analysis' and share revision numbers with spec repairs, so they get their own rows.
+    const target = e.stage === 'repair' && e.target === 'analysis' ? 'analysis' : undefined;
+    const key = `${e.stage}:${target ?? ''}:${revision ?? ''}`;
+    const g = groups.get(key) ?? { stage: e.stage, revision, target, evs: [] };
     g.evs.push(e);
     groups.set(key, g);
   }
-  const rows: TimelineRow[] = [...groups.values()].map((g) => rowFromEvents(g.stage, g.evs, g.revision));
+  const rows: TimelineRow[] = [...groups.values()].map((g) => {
+    const row = rowFromEvents(g.stage, g.evs, g.revision, g.target);
+    if (g.target === 'analysis' && row.status === 'succeeded') {
+      // The repair CALL succeeded, but the repaired analysis may still fail its checks: never show that as a green tick.
+      const rec = analysisRepairs?.find((r) => r.revision === g.revision);
+      if (rec !== undefined ? !rec.passed : (row.detail ?? '').includes('still failing')) row.status = 'failed';
+    }
+    return row;
+  });
+  // The Analyse step ends when the analysis is final, i.e. after its repairs; show only the analysis call's own time.
+  const repairMs = rows.reduce((sum, r) => sum + (r.target === 'analysis' && r.durationMs !== null ? r.durationMs : 0), 0);
+  const analyze = rows.find((r) => r.stage === 'analyze');
+  if (analyze !== undefined && analyze.durationMs !== null && repairMs > 0) analyze.durationMs = Math.max(0, analyze.durationMs - repairMs);
   if (jobStatus === 'running') {
     const present = new Set(rows.map((r) => r.stage));
     for (const stage of STAGE_ORDER) {
@@ -144,7 +164,8 @@ export function buildTimeline(events: readonly StageEvent[], jobStatus: JobStatu
 }
 
 /** Row heading: 'Validate · revision 2'. Revision-less rows keep their plain stage label. */
-export function rowLabel(row: Pick<TimelineRow, 'stage' | 'revision'>): string {
+export function rowLabel(row: Pick<TimelineRow, 'stage' | 'revision' | 'target'>): string {
+  if (row.target === 'analysis') return row.revision !== undefined && row.revision > 1 ? `${ANALYSIS_REPAIR_STEP} · attempt ${row.revision - 1}` : ANALYSIS_REPAIR_STEP;
   return row.revision !== undefined && row.stage !== 'inject' ? `${STAGE_LABEL[row.stage]} · revision ${row.revision}` : STAGE_LABEL[row.stage];
 }
 

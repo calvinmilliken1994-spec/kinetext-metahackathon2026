@@ -112,9 +112,15 @@ function failedIdsOf(report: ValidationReport | undefined): string[] {
   return (report?.checks ?? []).filter((c) => !c.passed).map((c) => c.id);
 }
 
-function actorFor(events: readonly StageEvent[], revision: number): RepairActor | null {
+/** True for a repair event of the ANALYSIS loop (TASK-024b); absent target = the spec repair loop. */
+export function isAnalysisRepairEvent(e: Pick<StageEvent, 'stage' | 'target'>): boolean {
+  return e.stage === 'repair' && e.target === 'analysis';
+}
+
+/** Model, response id and cost of the repair call that produced `revision` (analysis and spec revisions are numbered separately). */
+export function repairActor(events: readonly StageEvent[], revision: number, target: 'spec' | 'analysis' = 'spec'): RepairActor | null {
   const done = events
-    .filter((e) => e.stage === 'repair' && e.revision === revision && e.status !== 'started')
+    .filter((e) => e.stage === 'repair' && e.revision === revision && e.status !== 'started' && isAnalysisRepairEvent(e) === (target === 'analysis'))
     .sort((a, b) => a.seq - b.seq);
   const ev = done[done.length - 1];
   if (ev === undefined) return null;
@@ -191,7 +197,7 @@ export function buildRepairSteps(input: {
       hasReport: rev.report !== undefined, passed, total, publishable, failedIds,
       targeted, fixed, remaining, introduced,
       fault, faultNotice: fault !== null ? demoFaultNotice(fault) : null, faultChange: fault !== null ? faultChangeText(fault, input.eventLabels) : null,
-      badge, actor: role === 'repair' ? actorFor(events, n) : null,
+      badge, actor: role === 'repair' ? repairActor(events, n) : null,
       isPublished: input.publishedRevision === n, isBest: input.publishedRevision === undefined && input.bestRevision === n,
       outcome,
     });
@@ -199,14 +205,14 @@ export function buildRepairSteps(input: {
 
   // Repair attempts that never produced a revision (failed repair event, no spec.r<n>.json).
   const failedRevisions = new Set(
-    events.filter((e) => e.stage === 'repair' && e.status === 'failed' && typeof e.revision === 'number' && !byRevision.has(e.revision)).map((e) => e.revision as number),
+    events.filter((e) => e.stage === 'repair' && !isAnalysisRepairEvent(e) && e.status === 'failed' && typeof e.revision === 'number' && !byRevision.has(e.revision)).map((e) => e.revision as number),
   );
   for (const n of failedRevisions) {
     const prev = byRevision.get(n - 1);
     steps.push({
       revision: n, role: 'repair', repairOf: n - 1, failedAttempt: true, hasReport: false, passed: null, total: null, publishable: false,
       failedIds: [], targeted: failedIdsOf(prev?.report), fixed: [], remaining: failedIdsOf(prev?.report), introduced: [],
-      fault: null, faultNotice: null, faultChange: null, badge: null, actor: actorFor(events, n),
+      fault: null, faultNotice: null, faultChange: null, badge: null, actor: repairActor(events, n),
       isPublished: false, isBest: false,
       outcome: 'Muse’s repair call returned no usable revision; the earlier revision stays as it was.',
     });
@@ -234,7 +240,7 @@ export function validationHeading(revision: number | null, totalRevisions: numbe
 export function repairAttemptCount(repairs: readonly RepairRecord[] | undefined, events: readonly StageEvent[] | undefined): number {
   const revisions = new Set((repairs ?? []).map((r) => r.revision));
   for (const e of events ?? []) {
-    if (e.stage === 'repair' && e.status === 'failed' && typeof e.revision === 'number') revisions.add(e.revision);
+    if (e.stage === 'repair' && !isAnalysisRepairEvent(e) && e.status === 'failed' && typeof e.revision === 'number') revisions.add(e.revision);
   }
   return revisions.size;
 }

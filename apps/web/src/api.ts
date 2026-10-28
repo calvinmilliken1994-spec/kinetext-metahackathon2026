@@ -3,6 +3,7 @@
 
 import type { CreatedSource } from './lib/sources.ts';
 import type { AnyActivitySpec } from './lib/timeline.ts';
+import type { AnalysisRepairRecord } from './lib/analysisRepairs.ts';
 import type { ActivityId, DemoFault, FaultRecord, MetaReceipt, RepairRecord, SourceAnalysis, StageEvent, UserSourceInput, ValidationReport } from '../../../packages/contracts/index.ts';
 
 export type JobStatus = 'running' | 'succeeded' | 'unsupported' | 'failed';
@@ -29,6 +30,8 @@ export interface JobSummary {
   engine?: ActivityId | null;
   revisions?: number;
   repairs?: RepairRecord[];
+  /** TASK-024b: one record per ANALYSIS repair attempt (Muse repaired its own first analysis). Absent on older runs. */
+  analysisRepairs?: AnalysisRepairRecord[];
   publishedRevision?: number;
   bestRevision?: number;
   demoFault?: FaultRecord;
@@ -37,6 +40,9 @@ export interface JobSummary {
 
 /** One stored revision of the activity spec and its validation report (Stage 5). */
 export interface JobRevision { revision: number; spec: AnyActivitySpec; report?: ValidationReport }
+
+/** One stored revision of the source analysis (only present when an analysis repair ran). */
+export interface JobAnalysisRevision { revision: number; analysis: SourceAnalysis; report?: ValidationReport; receipt?: MetaReceipt }
 
 export interface JobDetail {
   summary: JobSummary;
@@ -47,6 +53,8 @@ export interface JobDetail {
   report?: ValidationReport;
   /** Absent on older servers; the UI then treats spec/report as the only revision. */
   revisions?: JobRevision[];
+  /** TASK-024b: revision 1 = Muse's first analysis, then each repair. Empty / absent when the analysis was never repaired. */
+  analysisRevisions?: JobAnalysisRevision[];
 }
 
 export class ApiError extends Error {

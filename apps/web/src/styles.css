@@ -489,3 +489,30 @@ input[type="range"] { width: 100%; accent-color: var(--accent); height: 24px; ma
 .pair-answer { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 8px; }
 .pair-answer p { margin: 0 0 2px; font-size: 13px; }
 @media (max-width: 560px) { .order-item { grid-template-columns: auto minmax(0, 1fr); } .order-buttons { grid-column: 1 / -1; justify-content: flex-start; } }
+
+/* ---------- TASK-024c: natural analysis repairs (Muse's own mistake) vs system-made faults (amber) ---------- */
+:root { --natural: #0b5d6b; --natural-soft: #e0f4f6; --natural-line: #9fd3da; }
+.badge-natural { background: var(--natural-soft); color: var(--natural); border: 1px solid var(--natural-line); }
+.tag-natural { background: var(--natural-soft); color: var(--natural); border-color: var(--natural-line); font-weight: 600; }
+.tag-bad { background: var(--bad-soft); color: var(--bad); border-color: #f2b8b3; font-weight: 600; }
+.callout-natural { background: var(--natural-soft); color: #08414b; border: 1px solid var(--natural-line); }
+.repair-banner { margin-bottom: 0; }
+.rev-analysis { border-left-color: var(--natural); }
+.rev-analysis-still-failing, .rev-analysis-call-failed { border-left-color: var(--bad); }
+.stage-analysis-repair .stage-icon { border-color: var(--natural); }
+.flow { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 8px; counter-reset: flow; }
+.flow > li { position: relative; padding-left: 28px; counter-increment: flow; }
+.flow > li::before { content: counter(flow); position: absolute; left: 0; top: 0; width: 20px; height: 20px; border-radius: 50%; background: var(--natural-soft); color: var(--natural); border: 1px solid var(--natural-line); font-size: 11.5px; font-weight: 700; display: grid; place-items: center; }
+.flow > li > p { margin: 3px 0 0; }
+.fail-list, .diff-list, .after-checks { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 4px; }
+.plain { color: var(--ink-2); }
+.checker-msg { font-family: var(--mono); font-size: 11.5px; overflow-wrap: anywhere; quotes: none; }
+.checker-msg::before, .checker-msg::after { content: ""; }
+.diff-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: #fff; }
+.diff-label { font-weight: 650; color: var(--ink-2); flex: 0 0 100%; }
+.diff-side { overflow-wrap: anywhere; }
+.diff-del { background: var(--bad-soft); color: var(--bad); text-decoration: line-through; text-decoration-thickness: 1px; padding: 0 4px; border-radius: 4px; font-family: var(--mono); font-size: 12px; }
+.diff-ins { background: var(--ok-soft); color: var(--ok); text-decoration: none; padding: 0 4px; border-radius: 4px; font-family: var(--mono); font-size: 12px; font-weight: 600; }
+.diff-arrow { color: var(--ink-3); font-weight: 700; }
+.after-checks li { display: flex; gap: 6px; align-items: baseline; }
+.after-bad { color: var(--bad); }

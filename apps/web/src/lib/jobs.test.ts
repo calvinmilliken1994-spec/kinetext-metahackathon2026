@@ -1,8 +1,9 @@
 /// <reference types="node" />
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildTimeline, formatCostUSD, formatDuration, INTERRUPTED_TEXT, isInterrupted, jobStatusLabel, newestFirst, pickDefaultJob, runBadge, shortId, totalEventCost } from './jobs.ts';
+import { buildTimeline, formatCostUSD, formatDuration, INTERRUPTED_TEXT, isInterrupted, jobStatusLabel, newestFirst, pickDefaultJob, rowLabel, runBadge, shortId, totalEventCost } from './jobs.ts';
 import type { StageEvent } from '../../../../packages/contracts/index.ts';
+import type { TimelineRow } from './jobs.ts';
 
 const usage = { promptTokens: 10, completionTokens: 20, reasoningTokens: 15, cachedTokens: 0 };
 const ev = (seq: number, stage: StageEvent['stage'], status: StageEvent['status'], at: string, extra: Partial<StageEvent> = {}): StageEvent =>
@@ -121,4 +122,45 @@ test('newestFirst / pickDefaultJob prefer running, then newest succeeded', () =>
   assert.equal(pickDefaultJob([...jobs, { jobId: 'r', status: 'running' as const, createdAt: '2026-10-20T00:00:00Z' }], false)?.jobId, 'b');
   assert.equal(pickDefaultJob([], true), null);
   assert.equal(pickDefaultJob([jobs[0] as (typeof jobs)[number]], false)?.jobId, 'a');
+});
+
+// ---- TASK-024c: analysis repair rows sit between Analyse and Specify, labelled as their own step -------------------
+
+test('buildTimeline: analysis repair is its own step between Analyse and Specify; Analyse excludes the repair time', () => {
+  const events = [
+    ev(0, 'ingest', 'started', '2026-10-28T18:17:32.646Z'),
+    ev(1, 'ingest', 'succeeded', '2026-10-28T18:17:32.650Z'),
+    ev(2, 'analyze', 'started', '2026-10-28T18:17:32.651Z'),
+    ev(3, 'repair', 'started', '2026-10-28T18:17:43.840Z', { target: 'analysis', revision: 2 }),
+    ev(4, 'repair', 'succeeded', '2026-10-28T18:17:53.270Z', { target: 'analysis', revision: 2, model: 'muse-spark-1.3', estCostUSD: 0.0105, detail: 'analysis repair 1 passed; 7/7 checks passed' }),
+    ev(5, 'analyze', 'succeeded', '2026-10-28T18:17:53.272Z', { model: 'muse-spark-1.3', estCostUSD: 0.0115, detail: 'supported; checks 7/7 passed' }),
+    ev(6, 'specify', 'started', '2026-10-28T18:17:53.273Z'),
+    ev(7, 'specify', 'succeeded', '2026-10-28T18:18:27.261Z'),
+    // a SPEC repair with the same revision number gets its own row
+    ev(8, 'repair', 'started', '2026-10-28T18:18:28.000Z', { revision: 2 }),
+    ev(9, 'repair', 'succeeded', '2026-10-28T18:18:30.000Z', { revision: 2 }),
+  ];
+  const rows = buildTimeline(events, 'succeeded');
+  assert.deepEqual(rows.map((r) => [r.stage, r.target ?? null, r.revision ?? null]), [
+    ['ingest', null, null], ['analyze', null, null], ['repair', 'analysis', 2], ['specify', null, null], ['repair', null, 2],
+  ]);
+  assert.equal(rows[2]?.durationMs, 9430);
+  assert.equal(rows[2]?.status, 'succeeded');
+  assert.equal(rows[1]?.durationMs, 20621 - 9430); // 11 s of analysis, not the repair on top
+  assert.equal(rowLabel(rows[2] as TimelineRow), 'Repair analysis · attempt 1');
+  assert.equal(rowLabel(rows[4] as TimelineRow), 'Repair · revision 2');
+  assert.equal(rowLabel(rows[1] as TimelineRow), 'Analyse source');
+});
+
+test('buildTimeline: an analysis repair that still failed its checks is shown as failed, not as a green tick', () => {
+  const events = [
+    ev(0, 'analyze', 'started', '2026-10-28T00:00:00.000Z'),
+    ev(1, 'repair', 'started', '2026-10-28T00:00:10.000Z', { target: 'analysis', revision: 2 }),
+    ev(2, 'repair', 'succeeded', '2026-10-28T00:00:20.000Z', { target: 'analysis', revision: 2, detail: 'analysis repair 1 still failing checks: analysis.concept-ids' }),
+    ev(3, 'analyze', 'failed', '2026-10-28T00:00:20.001Z', { detail: 'ANALYSIS_INVALID' }),
+  ];
+  const withRecord = buildTimeline(events, 'failed', [{ revision: 2, passed: false }]);
+  assert.equal(withRecord.find((r) => r.stage === 'repair')?.status, 'failed');
+  const detailOnly = buildTimeline(events, 'failed');
+  assert.equal(detailOnly.find((r) => r.stage === 'repair')?.status, 'failed');
 });
