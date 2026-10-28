@@ -1,0 +1,55 @@
+{
+  "jobId": "job-20261028182320-bc3e9bff",
+  "sourceId": "cfpb-saving-post-secondary-education",
+  "status": "failed",
+  "purpose": "test-live",
+  "createdAt": "2026-10-28T18:23:20.257Z",
+  "totalCostUSD": 0.139421,
+  "reservedUnknownUSD": 0,
+  "engine": "compound-interest-v1",
+  "revisions": 3,
+  "repairs": [
+    {
+      "revision": 2,
+      "repairOf": 1,
+      "targeted": [
+        "schema.full"
+      ],
+      "fixed": [
+        "schema.full"
+      ],
+      "remaining": [
+        "repair.no-weakening"
+      ],
+      "publishable": false,
+      "afterInjectedFault": false
+    },
+    {
+      "revision": 3,
+      "repairOf": 2,
+      "targeted": [
+        "repair.no-weakening"
+      ],
+      "fixed": [],
+      "remaining": [
+        "repair.no-weakening"
+      ],
+      "publishable": false,
+      "afterInjectedFault": false
+    }
+  ],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 19316,
+    "startedAt": "2026-10-28T18:23:20.257Z"
+  },
+  "bestRevision": 1,
+  "checksPassed": 0,
+  "checksTotal": 1,
+  "error": {
+    "code": "VALIDATION_FAILED",
+    "message": "generated spec failed validation"
+  },
+  "finishedAt": "2026-10-28T18:25:34.296Z"
+}

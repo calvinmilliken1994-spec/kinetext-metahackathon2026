@@ -1,0 +1,103 @@
+{
+  "artifactId": "cfpb-saving-post-secondary-education-job-20261028182320-bc3e9bff",
+  "revision": 3,
+  "checks": [
+    {
+      "id": "schema.full",
+      "kind": "schema",
+      "passed": true,
+      "message": "spec matches activity-spec.full.compound-interest-v1.json (draft-07)"
+    },
+    {
+      "id": "semantic.range.principalUSD",
+      "kind": "semantic",
+      "passed": true,
+      "message": "principalUSD min=100 < max=10000 with default=1000 inside the range"
+    },
+    {
+      "id": "semantic.range.annualRatePercent",
+      "kind": "semantic",
+      "passed": true,
+      "message": "annualRatePercent min=1 < max=12 with default=5 inside the range"
+    },
+    {
+      "id": "semantic.range.compoundsPerYear",
+      "kind": "semantic",
+      "passed": true,
+      "message": "compoundsPerYear min=1 < max=12 with default=4 inside the range"
+    },
+    {
+      "id": "semantic.range.years",
+      "kind": "semantic",
+      "passed": true,
+      "message": "years min=1 < max=40 with default=10 inside the range"
+    },
+    {
+      "id": "semantic.unique-ids",
+      "kind": "semantic",
+      "passed": true,
+      "message": "explanation ids, prediction ids and behavioral test names are unique"
+    },
+    {
+      "id": "refs.sources",
+      "kind": "grounding",
+      "passed": true,
+      "message": "all references resolve: 1 spec source(s), 1 cited sourceId(s)"
+    },
+    {
+      "id": "refs.sha256",
+      "kind": "grounding",
+      "passed": true,
+      "message": "sha256 verified for 1 source(s): stored hash and recomputed text hash both match the spec"
+    },
+    {
+      "id": "grounding.quotes",
+      "kind": "grounding",
+      "passed": true,
+      "message": "all 6 evidence quote(s) count as evidence (>= 8 normalised characters with >= 3 letters/digits, or a compact \"=\" equation with >= 3) and all 6 resolvable quote(s) appear in their source text after whitespace normalisation; every explanation has >= 1 counted quote"
+    },
+    {
+      "id": "behavior.tests",
+      "kind": "behavioral",
+      "passed": true,
+      "message": "all 4 behavioral test(s) match A=P*(1+r/(100*n))^(n*t) within tolerance"
+    },
+    {
+      "id": "behavior.predictions",
+      "kind": "behavioral",
+      "passed": true,
+      "message": "all 2 prediction(s) match A=P*(1+r/(100*n))^(n*t) within tolerance"
+    },
+    {
+      "id": "semantic.tolerance",
+      "kind": "semantic",
+      "passed": true,
+      "message": "every case tolerance is <= maxTolerance('compound-interest-v1', computed) across 4 behavioral test(s) and 2 prediction(s)"
+    },
+    {
+      "id": "semantic.predictions-in-range",
+      "kind": "semantic",
+      "passed": true,
+      "message": "all 2 prediction(s) are reproducible within the simulation slider ranges"
+    },
+    {
+      "id": "policy.no-publisher-attribution",
+      "kind": "semantic",
+      "passed": true,
+      "message": "no generated display field (title, objectives, explanations, prediction prompts, behavioral test names, scenario labels) mentions the publisher or uses attribution/endorsement wording naming a source or authority; evidence quotes are exempt"
+    },
+    {
+      "id": "scope.prose-unverified",
+      "kind": "semantic",
+      "passed": true,
+      "message": "Explanation prose is AI-generated; quotes, numbers and ranges are machine-checked, the wording needs teacher review."
+    },
+    {
+      "id": "repair.no-weakening",
+      "kind": "semantic",
+      "passed": false,
+      "message": "repair weakened the spec: predictions \"save-2000-at-4-percent-quarterly-15-years\" from the baseline is missing from the repair (renaming, replacing or deleting a baseline case is weakening, never a repair) (a repair must fix the failing checks without changing the engine, renaming/replacing/deleting any baseline case occurrence, widening any tolerance, rewriting a case that passed on the baseline, or shrinking slider ranges; only a baseline name/id that itself violates the publisher-attribution policy may be renamed, to a policy-compliant key that is not another baseline name/id)"
+    }
+  ],
+  "publishable": false
+}

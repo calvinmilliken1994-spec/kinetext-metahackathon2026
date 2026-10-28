@@ -1,0 +1,113 @@
+{
+  "analysis": {
+    "activity": "none",
+    "concepts": [
+      {
+        "evidence": [
+          {
+            "quote": "The Mach number is the ratio of the speed of the aircraft, or the speed of the gas, to the speed of sound in the gas.",
+            "sourceId": "nasa-grc-role-of-the-mach-number"
+          }
+        ],
+        "id": "mach-number-definition",
+        "name": "Mach Number Definition"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "-M^2 * (dV / V) = drho / rho",
+            "sourceId": "nasa-grc-role-of-the-mach-number"
+          },
+          {
+            "quote": "where M is the Mach number.",
+            "sourceId": "nasa-grc-role-of-the-mach-number"
+          }
+        ],
+        "id": "compressibility-density-change",
+        "name": "Compressibility and Density Change"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "For low speed, or subsonic conditions, the Mach number is less than one, M < 1,",
+            "sourceId": "nasa-grc-role-of-the-mach-number"
+          },
+          {
+            "quote": "As the speed increases beyond the speed of sound, the flight Mach number is greater than one, M > 1,",
+            "sourceId": "nasa-grc-role-of-the-mach-number"
+          }
+        ],
+        "id": "flow-regimes-subsonic-transonic-supersonic",
+        "name": "Subsonic Transonic and Supersonic Flow Regimes"
+      }
+    ],
+    "objectives": [
+      "Explain how Mach number relates velocity changes to density changes in compressible flow",
+      "Distinguish subsonic, transonic, and supersonic flow by Mach number and compressibility importance"
+    ],
+    "supported": false,
+    "unsupportedReason": "The source teaches Mach-number-dependent compressibility and the density-velocity relation across subsonic, transonic, and supersonic flow, which matches none of the listed activity equations."
+  },
+  "report": {
+    "artifactId": "source-analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis.gen.json"
+      },
+      {
+        "id": "analysis.invariants",
+        "kind": "semantic",
+        "passed": true,
+        "message": "invariants hold for supported=false"
+      },
+      {
+        "id": "analysis.concept-ids",
+        "kind": "semantic",
+        "passed": false,
+        "message": "concept ids not matching /^[a-z0-9-]{1,40}$/: \"flow-regimes-subsonic-transonic-supersonic\"",
+        "path": "/concepts"
+      },
+      {
+        "id": "refs.sources",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 1 cited sourceId(s) have matching documents"
+      },
+      {
+        "id": "grounding.quotes",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 concept quote(s) count as evidence (>= 8 normalised characters with >= 3 letters/digits, or a compact \"=\" equation with >= 3) and all 5 resolvable quote(s) appear in their source text after whitespace normalisation"
+      },
+      {
+        "id": "policy.no-publisher-attribution",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated analysis field (concept names, objectives, unsupportedReason) mentions the publisher or uses attribution/endorsement wording naming a source or authority; evidence quotes are exempt"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a183bf-57df-7076-8925-cbad65737a1a",
+    "usage": {
+      "promptTokens": 2448,
+      "completionTokens": 3777,
+      "reasoningTokens": 3444,
+      "cachedTokens": 0
+    },
+    "latencyMs": 16307,
+    "estCostUSD": 0.01911225,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage"
+  }
+}

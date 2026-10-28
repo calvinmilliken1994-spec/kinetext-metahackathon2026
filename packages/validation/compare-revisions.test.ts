@@ -708,3 +708,72 @@ test('S5-09: no other renames — a clean name that violates nothing stays immut
   assert.equal(comparison.passed, false);
   assert.match(comparison.message, /"earth launch" from the baseline is missing from the repair/);
 });
+
+/* ------------------------------------------------------------------ */
+/* BUG-003 — an id that is itself invalid (schema id pattern) is       */
+/* repairable by renaming it, numbers frozen (live job                 */
+/* job-20261028182320-bc3e9bff: a 41-character prediction id failed    */
+/* schema.full; Muse renamed it correctly; no-weakening rejected the   */
+/* rename twice, so the job could never publish).                      */
+/* ------------------------------------------------------------------ */
+
+const LONG_ID = 'save-2000-at-4-percent-quarterly-15-years'; // 41 chars, as in the live job
+
+function longIdProjectile(): ActivitySpec {
+  const spec = makeProjectileSpec();
+  const first = casesOf(spec, 'predictions')[0];
+  assert.ok(first !== undefined);
+  first['id'] = LONG_ID;
+  return spec;
+}
+
+test('BUG-003: a prediction id that fails the id pattern may be renamed to a valid id with identical numbers', () => {
+  const r1 = longIdProjectile();
+  const r1Report = validateSpec(r1, [projectileDoc]);
+  assert.deepEqual(failedIds(r1Report), ['schema.full'], 'the over-long id is the only baseline failure');
+  const r2 = structuredClone(r1);
+  casesOf(r2, 'predictions')[0]!['id'] = 'save-2000-4pct-quarterly-15y';
+  assert.equal(validateSpec(r2, [projectileDoc]).publishable, true);
+  const comparison = compareRevisions(r1, r2, failedIds(r1Report));
+  assert.equal(comparison.passed, true, comparison.message);
+});
+
+test('BUG-003: the replacement id must itself be valid and not another baseline id', () => {
+  const r1 = longIdProjectile();
+  const failed = failedIds(validateSpec(r1, [projectileDoc]));
+  const stillLong = structuredClone(r1);
+  casesOf(stillLong, 'predictions')[0]!['id'] = 'save-2000-at-4-percent-quarterly-15-years-x';
+  const c1 = compareRevisions(r1, stillLong, failed);
+  assert.equal(c1.passed, false);
+  assert.match(c1.message, /not a valid id/);
+  // A second baseline prediction, so the rename could impersonate it.
+  const withTwo = structuredClone(r1);
+  const preds = casesOf(withTwo, 'predictions');
+  preds.push({ ...structuredClone(preds[0]!), id: 'second-prediction' });
+  const failed2 = failedIds(validateSpec(withTwo, [projectileDoc]));
+  const impersonates = structuredClone(withTwo);
+  casesOf(impersonates, 'predictions')[0]!['id'] = 'second-prediction';
+  const c2 = compareRevisions(withTwo, impersonates, failed2);
+  assert.equal(c2.passed, false);
+  assert.match(c2.message, /not another baseline id|appears 2 times/);
+});
+
+test('BUG-003: renaming an invalid id never unlocks its numbers', () => {
+  const r1 = longIdProjectile();
+  const failed = failedIds(validateSpec(r1, [projectileDoc]));
+  const r2 = structuredClone(r1);
+  const c = casesOf(r2, 'predictions')[0]!;
+  c['id'] = 'renamed-and-changed';
+  c['verticalSpeedMps'] = (c['verticalSpeedMps'] as number) + 1;
+  const comparison = compareRevisions(r1, r2, failed);
+  assert.equal(comparison.passed, false, 'a rename keeps the numbers frozen');
+});
+
+test('BUG-003: a VALID baseline id still may not be renamed', () => {
+  const r1 = makeProjectileSpec();
+  const r2 = structuredClone(r1);
+  casesOf(r2, 'predictions')[0]!['id'] = 'some-other-id';
+  const comparison = compareRevisions(r1, r2, []);
+  assert.equal(comparison.passed, false);
+  assert.match(comparison.message, /missing from the repair/);
+});

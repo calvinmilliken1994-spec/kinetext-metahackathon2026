@@ -1,0 +1,9 @@
+{"jobId":"job-20261028181829-4f827600","seq":0,"stage":"ingest","status":"started","at":"2026-10-28T18:18:29.466Z"}
+{"jobId":"job-20261028181829-4f827600","seq":1,"stage":"ingest","status":"succeeded","at":"2026-10-28T18:18:29.469Z","detail":"sha256 41fb1b634950"}
+{"jobId":"job-20261028181829-4f827600","seq":2,"stage":"analyze","status":"started","at":"2026-10-28T18:18:29.470Z"}
+{"jobId":"job-20261028181829-4f827600","seq":3,"stage":"analyze","status":"succeeded","at":"2026-10-28T18:18:54.448Z","model":"muse-spark-1.3","responseId":"chatcmpl-01a183bc-8c13-77e5-ab52-bc3a2486ae37","usage":{"promptTokens":2609,"completionTokens":5356,"reasoningTokens":5039,"cachedTokens":0},"latencyMs":24977,"estCostUSD":0.02602425,"detail":"supported; checks 6/6 passed"}
+{"jobId":"job-20261028181829-4f827600","seq":4,"stage":"specify","status":"started","at":"2026-10-28T18:18:54.449Z"}
+{"jobId":"job-20261028181829-4f827600","seq":5,"stage":"specify","status":"succeeded","at":"2026-10-28T18:19:34.530Z","model":"muse-spark-1.3","responseId":"chatcmpl-01a183bd-2869-7434-80f4-d7f9ee3c3bc8","usage":{"promptTokens":3360,"completionTokens":8577,"reasoningTokens":7735,"cachedTokens":0},"latencyMs":40008,"estCostUSD":0.04065225,"detail":"spec nasa-grc-lift-equation-of-the-1900s-job-20261028181829-4f827600"}
+{"jobId":"job-20261028181829-4f827600","seq":6,"stage":"validate","status":"started","at":"2026-10-28T18:19:34.530Z","revision":1}
+{"jobId":"job-20261028181829-4f827600","seq":7,"stage":"validate","status":"succeeded","at":"2026-10-28T18:19:34.533Z","revision":1,"detail":"15/15 checks passed"}
+{"jobId":"job-20261028181829-4f827600","seq":8,"stage":"done","status":"succeeded","at":"2026-10-28T18:19:34.533Z","detail":"publishable"}

@@ -9,7 +9,8 @@ import { computeMetrics, parseResultsJsonl, renderSummaryMarkdown } from './eval
 import type { ManifestEntry } from './evaluation-metrics.ts';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const OUT_DIR = join(ROOT, 'docs', 'evidence', 'stage-5b', 'evaluation');
+// EVAL_OUT_DIR (relative to the repo root) keeps follow-up runs apart from the pre-registered evaluation.
+const OUT_DIR = process.env.EVAL_OUT_DIR ? join(ROOT, process.env.EVAL_OUT_DIR) : join(ROOT, 'docs', 'evidence', 'stage-5b', 'evaluation');
 const RESULTS = join(OUT_DIR, 'results.jsonl');
 const MANIFEST = join(ROOT, 'data', 'evaluation', 'manifest.json');
 

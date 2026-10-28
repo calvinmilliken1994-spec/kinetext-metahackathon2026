@@ -1,0 +1,106 @@
+{
+  "analysis": {
+    "activity": "none",
+    "concepts": [
+      {
+        "evidence": [
+          {
+            "quote": "The flight path intersects the ground at an angle a called the glide angle.",
+            "sourceId": "nasa-grc-glider-trajectory-problem"
+          },
+          {
+            "quote": "tan(a) = h / d",
+            "sourceId": "nasa-grc-glider-trajectory-problem"
+          }
+        ],
+        "id": "glide-angle",
+        "name": "Glide Angle"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "Considering the balance of forces for a glider, we get two vector component equations.",
+            "sourceId": "nasa-grc-glider-trajectory-problem"
+          },
+          {
+            "quote": "L * cos(a) + D * sin(a) = W",
+            "sourceId": "nasa-grc-glider-trajectory-problem"
+          },
+          {
+            "quote": "L * sin(a) = D * cos(a)",
+            "sourceId": "nasa-grc-glider-trajectory-problem"
+          }
+        ],
+        "id": "steady-glide-force-balance",
+        "name": "Steady Glide Force Balance"
+      }
+    ],
+    "objectives": [
+      "Calculate glide angle from altitude change and distance flown using tangent",
+      "Solve the steady-descent lift-drag-weight component equations for lift and drag"
+    ],
+    "supported": false,
+    "unsupportedReason": "The source teaches glide-angle trigonometry and steady-descent lift-drag-weight equilibrium, which matches none of the listed activity equations."
+  },
+  "report": {
+    "artifactId": "source-analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis.gen.json"
+      },
+      {
+        "id": "analysis.invariants",
+        "kind": "semantic",
+        "passed": true,
+        "message": "invariants hold for supported=false"
+      },
+      {
+        "id": "analysis.concept-ids",
+        "kind": "semantic",
+        "passed": true,
+        "message": "all 2 concept id(s) are unique lowercase-kebab"
+      },
+      {
+        "id": "refs.sources",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 1 cited sourceId(s) have matching documents"
+      },
+      {
+        "id": "grounding.quotes",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 concept quote(s) count as evidence (>= 8 normalised characters with >= 3 letters/digits, or a compact \"=\" equation with >= 3) and all 5 resolvable quote(s) appear in their source text after whitespace normalisation"
+      },
+      {
+        "id": "policy.no-publisher-attribution",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated analysis field (concept names, objectives, unsupportedReason) mentions the publisher or uses attribution/endorsement wording naming a source or authority; evidence quotes are exempt"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a183c3-eac4-75fc-9f12-a80b1b4c1321",
+    "usage": {
+      "promptTokens": 2070,
+      "completionTokens": 3151,
+      "reasoningTokens": 2901,
+      "cachedTokens": 0
+    },
+    "latencyMs": 13450,
+    "estCostUSD": 0.01597925,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage"
+  }
+}

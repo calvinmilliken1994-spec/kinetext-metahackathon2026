@@ -1,0 +1,178 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "cfpb-saving-post-secondary-education-job-20261028182320-bc3e9bff",
+  "title": "Saving Early for College",
+  "learningObjectives": [
+    "Understand how time and compound interest can increase savings",
+    "Understand the value of starting early to save for post-secondary education"
+  ],
+  "sources": [
+    {
+      "id": "cfpb-saving-post-secondary-education",
+      "title": "Saving for post-secondary education (teacher guide) — Consumer Financial Protection Bureau, Building Blocks activities",
+      "locator": "https://files.consumerfinance.gov/f/documents/cfpb_building_block_activities_saving-post-secondary-education_guide.pdf",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: Consumer Financial Protection Bureau, Building Blocks activities, 'Saving for post-secondary education (teacher guide)'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+      "sha256": "243a4b56c86936ecc243da4c7fc982bc76b85ee12116c97e4f751cfb8ba6c926"
+    }
+  ],
+  "explanations": [
+    {
+      "evidence": [
+        {
+          "quote": "Compound interest is when you earn interest on both the money you save and the interest you earn.",
+          "sourceId": "cfpb-saving-post-secondary-education"
+        }
+      ],
+      "id": "what-compound-interest-means",
+      "text": "Compound interest means you earn interest on both the money you save and the interest you have already earned."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "So let's say you invest $1,000 (your principal) and it earns 5 percent (interest rate) once a year (the compounding frequency).",
+          "sourceId": "cfpb-saving-post-secondary-education"
+        }
+      ],
+      "id": "example-principal-rate-frequency",
+      "text": "The example starts with a $1,000 principal earning 5 percent compounded once a year."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "After the first year, you would have $1,050—your original principal, plus 5 percent, or $50.",
+          "sourceId": "cfpb-saving-post-secondary-education"
+        },
+        {
+          "quote": "The second year, you would have $1,102.50.",
+          "sourceId": "cfpb-saving-post-secondary-education"
+        }
+      ],
+      "id": "example-growth-over-two-years",
+      "text": "That savings grows to $1,050 after the first year and to $1,102.50 in the second year."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "The sooner you start saving for post-secondary education, the faster your money can grow from compound interest.",
+          "sourceId": "cfpb-saving-post-secondary-education"
+        },
+        {
+          "quote": "Increasing the compounding frequency or your interest rate or adding to your principal can help your savings grow even faster.",
+          "sourceId": "cfpb-saving-post-secondary-education"
+        }
+      ],
+      "id": "start-early-and-grow-faster",
+      "text": "Starting to save early for post-secondary education helps money grow, and raising the frequency, rate, or principal can make it grow even faster."
+    }
+  ],
+  "simulation": {
+    "engine": "compound-interest-v1",
+    "equation": "A=P*(1+r/(100*n))^(n*t)",
+    "principalUSD": {
+      "unit": "USD",
+      "default": 1000,
+      "max": 10000,
+      "min": 100
+    },
+    "annualRatePercent": {
+      "unit": "%",
+      "default": 5,
+      "max": 12,
+      "min": 1
+    },
+    "compoundsPerYear": {
+      "unit": "per year",
+      "default": 4,
+      "max": 12,
+      "min": 1
+    },
+    "years": {
+      "unit": "years",
+      "default": 10,
+      "max": 40,
+      "min": 1
+    },
+    "scenario": {
+      "objectLabel": "Savings account",
+      "settingLabel": "Interest compounded yearly"
+    }
+  },
+  "behavioralTests": [
+    {
+      "annualRatePercent": 5,
+      "compoundsPerYear": 1,
+      "expectedAmountUSD": 1050,
+      "name": "source example first year",
+      "principalUSD": 1000,
+      "tolerance": 0.01,
+      "years": 1
+    },
+    {
+      "annualRatePercent": 5,
+      "compoundsPerYear": 1,
+      "expectedAmountUSD": 1102.5,
+      "name": "source example second year",
+      "principalUSD": 1000,
+      "tolerance": 0.01,
+      "years": 2
+    },
+    {
+      "annualRatePercent": 0,
+      "compoundsPerYear": 1,
+      "expectedAmountUSD": 1500,
+      "name": "edge case zero rate equals principal",
+      "principalUSD": 1500,
+      "tolerance": 0.01,
+      "years": 10
+    },
+    {
+      "annualRatePercent": 4,
+      "compoundsPerYear": 4,
+      "expectedAmountUSD": 1220.19,
+      "name": "quarterly compounding five years",
+      "principalUSD": 1000,
+      "tolerance": 0.01,
+      "years": 5
+    }
+  ],
+  "predictions": [
+    {
+      "annualRatePercent": 5,
+      "compoundsPerYear": 1,
+      "expectedAmountUSD": 1628.89,
+      "id": "save-1000-at-5-percent-10-years",
+      "principalUSD": 1000,
+      "prompt": "You save $1,000 for college at 5% compounded yearly for 10 years. What will you have?",
+      "tolerance": 0.01,
+      "years": 10
+    },
+    {
+      "annualRatePercent": 4,
+      "compoundsPerYear": 4,
+      "expectedAmountUSD": 3633.39,
+      "id": "save-2000-at-4-percent-quarterly-15-year",
+      "principalUSD": 2000,
+      "prompt": "You save $2,000 for college at 4% compounded quarterly for 15 years. What will you have?",
+      "tolerance": 0.01,
+      "years": 15
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a183c2-0102-73e2-be11-f832cee10fa4",
+    "runId": "job-20261028182320-bc3e9bff",
+    "promptVersion": "v8",
+    "generatedAt": "2026-10-28T18:24:52.077Z",
+    "revision": 2,
+    "repairOf": 1
+  }
+}

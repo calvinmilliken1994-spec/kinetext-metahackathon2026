@@ -1,0 +1,24 @@
+{
+  "jobId": "job-20261028182534-647a4b4e",
+  "sourceId": "nrc-backgrounder-radioactive-waste",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-28T18:25:34.694Z",
+  "totalCostUSD": 0.058544,
+  "reservedUnknownUSD": 0,
+  "engine": "half-life-v1",
+  "revisions": 1,
+  "repairs": [],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 19316,
+    "startedAt": "2026-10-28T18:25:34.694Z"
+  },
+  "specId": "nrc-backgrounder-radioactive-waste-job-20261028182534-647a4b4e",
+  "publishable": true,
+  "checksPassed": 14,
+  "checksTotal": 14,
+  "publishedRevision": 1,
+  "finishedAt": "2026-10-28T18:26:30.974Z"
+}

@@ -1,0 +1,5 @@
+{"jobId":"job-20261028182116-d4aebb23","seq":0,"stage":"ingest","status":"started","at":"2026-10-28T18:21:16.381Z"}
+{"jobId":"job-20261028182116-d4aebb23","seq":1,"stage":"ingest","status":"succeeded","at":"2026-10-28T18:21:16.384Z","detail":"sha256 9df5f948a44c"}
+{"jobId":"job-20261028182116-d4aebb23","seq":2,"stage":"analyze","status":"started","at":"2026-10-28T18:21:16.385Z"}
+{"jobId":"job-20261028182116-d4aebb23","seq":3,"stage":"analyze","status":"succeeded","at":"2026-10-28T18:21:28.445Z","model":"muse-spark-1.3","responseId":"chatcmpl-01a183be-e5a2-7426-9679-3ed594a2b6ff","usage":{"promptTokens":2733,"completionTokens":2519,"reasoningTokens":2200,"cachedTokens":0},"latencyMs":12058,"estCostUSD":0.014122,"detail":"unsupported: The source teaches specific heat capacities, enthalpy relations, and the gamma relation cp = cv + R, which does not match any listed activity engine.; checks 6/6 passed"}
+{"jobId":"job-20261028182116-d4aebb23","seq":4,"stage":"done","status":"succeeded","at":"2026-10-28T18:21:28.445Z","detail":"unsupported"}

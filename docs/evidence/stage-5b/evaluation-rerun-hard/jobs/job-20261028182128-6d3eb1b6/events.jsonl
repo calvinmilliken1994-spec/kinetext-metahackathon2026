@@ -1,0 +1,5 @@
+{"jobId":"job-20261028182128-6d3eb1b6","seq":0,"stage":"ingest","status":"started","at":"2026-10-28T18:21:28.857Z"}
+{"jobId":"job-20261028182128-6d3eb1b6","seq":1,"stage":"ingest","status":"succeeded","at":"2026-10-28T18:21:28.859Z","detail":"sha256 27cabc2c092b"}
+{"jobId":"job-20261028182128-6d3eb1b6","seq":2,"stage":"analyze","status":"started","at":"2026-10-28T18:21:28.860Z"}
+{"jobId":"job-20261028182128-6d3eb1b6","seq":3,"stage":"analyze","status":"succeeded","at":"2026-10-28T18:21:40.497Z","model":"muse-spark-1.3","responseId":"chatcmpl-01a183bf-14ee-779a-97c8-b90ed15b3239","usage":{"promptTokens":2431,"completionTokens":2338,"reasoningTokens":1928,"cachedTokens":0},"latencyMs":11635,"estCostUSD":0.01297525,"detail":"unsupported: The source teaches variation of temperature, pressure, and density with altitude in a three-zone standard atmosphere model, which matches none of the listed activity engines.; checks 6/6 passed"}
+{"jobId":"job-20261028182128-6d3eb1b6","seq":4,"stage":"done","status":"succeeded","at":"2026-10-28T18:21:40.498Z","detail":"unsupported"}

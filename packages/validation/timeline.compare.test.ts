@@ -345,3 +345,21 @@ test('harbor: a legitimate duplicate-date repair (re-grounding the named event t
   assert.equal(check.passed, true, check.message);
   assert.equal(validateSpec(next, [source]).publishable, true);
 });
+
+test('BUG-003 (timeline): an over-long prediction id may be renamed to a valid id; the pair stays frozen', () => {
+  const { spec, source } = decl();
+  const long = 'which-came-first-adoption-or-signing-of-it'; // 42 chars
+  spec.predictions[0]!.id = long;
+  const r1Report = validateSpec(spec, [source]);
+  assert.deepEqual(failedIds(r1Report), ['schema.full']);
+  const r2 = structuredClone(spec);
+  r2.predictions[0]!.id = 'adoption-or-signing';
+  assert.equal(validateSpec(r2, [source]).publishable, true);
+  const ok = compareRevisions(spec, r2, failedIds(r1Report), { sources: [source] });
+  assert.equal(ok.passed, true, ok.message);
+  const swapped = structuredClone(r2);
+  const p0 = swapped.predictions[0]!;
+  [p0.earlierEventId, p0.laterEventId] = [p0.laterEventId, p0.earlierEventId];
+  const bad = compareRevisions(spec, swapped, failedIds(r1Report), { sources: [source] });
+  assert.equal(bad.passed, false, 'renaming never unlocks the pair');
+});

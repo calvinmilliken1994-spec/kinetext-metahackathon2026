@@ -18,7 +18,8 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = 'http://127.0.0.1:8787';
-const OUT_DIR = join(ROOT, 'docs', 'evidence', 'stage-5b', 'evaluation');
+// EVAL_OUT_DIR (relative to the repo root) keeps follow-up runs apart from the pre-registered evaluation.
+const OUT_DIR = process.env.EVAL_OUT_DIR ? join(ROOT, process.env.EVAL_OUT_DIR) : join(ROOT, 'docs', 'evidence', 'stage-5b', 'evaluation');
 const RESULTS = join(OUT_DIR, 'results.jsonl');
 const MANIFEST = join(ROOT, 'data', 'evaluation', 'manifest.json');
 const PER_JOB_RESERVE_USD = 0.15;

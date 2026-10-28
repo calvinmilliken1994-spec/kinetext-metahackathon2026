@@ -1,0 +1,19 @@
+{
+  "jobId": "job-20261028182631-8406be17",
+  "sourceId": "nara-louisiana-purchase-treaty",
+  "status": "unsupported",
+  "purpose": "test-live",
+  "createdAt": "2026-10-28T18:26:31.481Z",
+  "totalCostUSD": 0.013189,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 19316,
+    "startedAt": "2026-10-28T18:26:31.481Z"
+  },
+  "finishedAt": "2026-10-28T18:26:42.977Z"
+}

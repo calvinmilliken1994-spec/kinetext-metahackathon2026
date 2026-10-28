@@ -1,0 +1,127 @@
+{
+  "analysis": {
+    "activity": "none",
+    "concepts": [
+      {
+        "evidence": [
+          {
+            "quote": "Thus the air temperature is highest near the surface and decreases as altitude increases.",
+            "sourceId": "nasa-grc-earth-atmosphere-equation-english"
+          }
+        ],
+        "id": "temperature-altitude-variation",
+        "name": "Temperature Variation with Altitude"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "Therefore, air pressure decreases as we increase altitude.",
+            "sourceId": "nasa-grc-earth-atmosphere-equation-english"
+          }
+        ],
+        "id": "pressure-altitude-variation",
+        "name": "Pressure Variation with Altitude"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "rho = p / (1718 * (T + 459.7))",
+            "sourceId": "nasa-grc-earth-atmosphere-equation-english"
+          },
+          {
+            "quote": "The air density depends on both the temperature and the pressure through the equation of state",
+            "sourceId": "nasa-grc-earth-atmosphere-equation-english"
+          }
+        ],
+        "id": "air-density-equation-of-state",
+        "name": "Air Density Equation of State"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "The troposphere runs from the surface of the Earth to 36,152 feet.",
+            "sourceId": "nasa-grc-earth-atmosphere-equation-english"
+          },
+          {
+            "quote": "T = 59 - .00356 * h",
+            "sourceId": "nasa-grc-earth-atmosphere-equation-english"
+          },
+          {
+            "quote": "In the lower stratosphere the temperature is constant and the pressure decreases exponentially.",
+            "sourceId": "nasa-grc-earth-atmosphere-equation-english"
+          }
+        ],
+        "id": "standard-atmosphere-zones",
+        "name": "Standard Atmosphere Model Zones"
+      }
+    ],
+    "objectives": [
+      "Describe how temperature, pressure, and density vary with altitude in the atmosphere",
+      "Apply the troposphere, lower stratosphere, and upper stratosphere curve fits to find temperature and pressure at a given altitude",
+      "Calculate air density from pressure and temperature using the equation of state"
+    ],
+    "supported": false,
+    "unsupportedReason": "The source teaches variation of temperature, pressure, and density with altitude in a three-zone standard atmosphere model, which matches none of the listed activity engines."
+  },
+  "report": {
+    "artifactId": "source-analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis.gen.json"
+      },
+      {
+        "id": "analysis.invariants",
+        "kind": "semantic",
+        "passed": true,
+        "message": "invariants hold for supported=false"
+      },
+      {
+        "id": "analysis.concept-ids",
+        "kind": "semantic",
+        "passed": true,
+        "message": "all 4 concept id(s) are unique lowercase-kebab"
+      },
+      {
+        "id": "refs.sources",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 1 cited sourceId(s) have matching documents"
+      },
+      {
+        "id": "grounding.quotes",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 7 concept quote(s) count as evidence (>= 8 normalised characters with >= 3 letters/digits, or a compact \"=\" equation with >= 3) and all 7 resolvable quote(s) appear in their source text after whitespace normalisation"
+      },
+      {
+        "id": "policy.no-publisher-attribution",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated analysis field (concept names, objectives, unsupportedReason) mentions the publisher or uses attribution/endorsement wording naming a source or authority; evidence quotes are exempt"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a183bf-14ee-779a-97c8-b90ed15b3239",
+    "usage": {
+      "promptTokens": 2431,
+      "completionTokens": 2338,
+      "reasoningTokens": 1928,
+      "cachedTokens": 0
+    },
+    "latencyMs": 11635,
+    "estCostUSD": 0.01297525,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage"
+  }
+}

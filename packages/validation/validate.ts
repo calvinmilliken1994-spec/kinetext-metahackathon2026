@@ -805,6 +805,18 @@ function firstFailingCase(
  * the numeric rules untouched. `timeline` optionally carries the source documents and the baseline
  * findings for an exact recomputation of which events passed date grounding on the baseline.
  */
+/** The prediction-id pattern of every full activity schema (`^[a-z0-9][a-z0-9-]{0,39}$`). */
+export const VALID_CASE_ID = /^[a-z0-9][a-z0-9-]{0,39}$/;
+
+/**
+ * Rename exceptions for a baseline case key: S5-09 (the key itself violates the
+ * publisher-attribution policy) and BUG-003 (a prediction id that is itself not a
+ * valid id, so schema.full can only be fixed by renaming it). Numbers stay frozen.
+ */
+export function renameableKey(keyField: string, key: string): boolean {
+  return hasPublisherAttribution(key) || (keyField === 'id' && !VALID_CASE_ID.test(key));
+}
+
 export function compareRevisions(
   baseline: AnyActivitySpec,
   next: AnyActivitySpec,
@@ -880,7 +892,7 @@ export function compareRevisions(
       id,
       kind,
       passed: false,
-      message: `repair weakened the spec: ${list} (a repair must fix the failing checks without changing the engine, renaming/replacing/deleting any baseline case occurrence, widening any tolerance, rewriting a case that passed on the baseline, or shrinking slider ranges; only a baseline name/id that itself violates the publisher-attribution policy may be renamed, to a policy-compliant key that is not another baseline name/id)`,
+      message: `repair weakened the spec: ${list} (a repair must fix the failing checks without changing the engine, renaming/replacing/deleting any baseline case occurrence, widening any tolerance, rewriting a case that passed on the baseline, or shrinking slider ranges; only a baseline name/id that itself violates the publisher-attribution policy, or a prediction id that is itself not a valid id, may be renamed, to a valid policy-compliant key that is not another baseline name/id, with its numbers unchanged)`,
     };
   } catch (err) {
     return { id, kind, passed: false, message: `comparison crashed before it could pass or fail cleanly: ${errMsg(err)}` };
@@ -1001,7 +1013,7 @@ function compareCases(
       comparePair(bc, nc, k);
       continue;
     }
-    if (hasPublisherAttribution(k)) {
+    if (renameableKey(keyField, k)) {
       deferred.push({ index: i, bc, key: k, occurrence });
       continue;
     }
@@ -1017,15 +1029,22 @@ function compareCases(
       problems.push(missingMessage(d.key, d.occurrence));
       continue;
     }
+    const why = hasPublisherAttribution(d.key) ? 'violates the publisher-attribution policy' : `is not a valid ${keyField}`;
     if (hasPublisherAttribution(nk)) {
       problems.push(
-        `${list}[${d.index}] "${d.key}" violates the publisher-attribution policy and may be renamed to fix it, but the repair renames it to "${nk}", which violates the policy too`,
+        `${list}[${d.index}] "${d.key}" ${why} and may be renamed to fix it, but the repair renames it to "${nk}", which violates the policy too`,
+      );
+      continue;
+    }
+    if (keyField === 'id' && !VALID_CASE_ID.test(nk)) {
+      problems.push(
+        `${list}[${d.index}] "${d.key}" ${why} and may be renamed to fix it, but the repair renames it to "${nk}", which is not a valid id either (expected ${VALID_CASE_ID.source})`,
       );
       continue;
     }
     if (baselineCountByKey.has(nk)) {
       problems.push(
-        `${list}[${d.index}] "${d.key}" violates the publisher-attribution policy and may be renamed to fix it, but only to a ${keyField} that is not another baseline ${keyField}; the repair renames it to "${nk}"`,
+        `${list}[${d.index}] "${d.key}" ${why} and may be renamed to fix it, but only to a ${keyField} that is not another baseline ${keyField}; the repair renames it to "${nk}"`,
       );
       continue;
     }

@@ -1,0 +1,5 @@
+{"jobId":"job-20261028182631-8406be17","seq":0,"stage":"ingest","status":"started","at":"2026-10-28T18:26:31.483Z"}
+{"jobId":"job-20261028182631-8406be17","seq":1,"stage":"ingest","status":"succeeded","at":"2026-10-28T18:26:31.487Z","detail":"sha256 6da19e2b0134"}
+{"jobId":"job-20261028182631-8406be17","seq":2,"stage":"analyze","status":"started","at":"2026-10-28T18:26:31.487Z"}
+{"jobId":"job-20261028182631-8406be17","seq":3,"stage":"analyze","status":"succeeded","at":"2026-10-28T18:26:42.976Z","model":"muse-spark-1.3","responseId":"chatcmpl-01a183c3-b24d-73b6-8129-5348834dde18","usage":{"promptTokens":2133,"completionTokens":2476,"reasoningTokens":2172,"cachedTokens":0},"latencyMs":11486,"estCostUSD":0.01318925,"detail":"unsupported: The source teaches the Louisiana Purchase, 19th-century expansion, slavery compromises, and impact on Native Americans, which matches none of the listed activity engines.; checks 6/6 passed"}
+{"jobId":"job-20261028182631-8406be17","seq":4,"stage":"done","status":"succeeded","at":"2026-10-28T18:26:42.976Z","detail":"unsupported"}

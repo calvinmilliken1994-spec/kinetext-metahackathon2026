@@ -52,6 +52,8 @@ import {
   errMsg,
   guarded,
   hasPublisherAttribution,
+  renameableKey,
+  VALID_CASE_ID,
   indexSources,
   normalizeWhitespace,
   quoteCountsAsEvidence,
@@ -1034,7 +1036,7 @@ export function compareTimelineRevisions(
           comparePair(bc, nc, k, i);
           continue;
         }
-        if (hasPublisherAttribution(k)) {
+        if (renameableKey(keyField, k)) {
           deferred.push({ index: i, bc, key: k, occurrence });
           continue;
         }
@@ -1052,15 +1054,22 @@ export function compareTimelineRevisions(
           if (!caseMayChange(d.bc, d.index, d.key)) problems.push(missingMessage(d.key, d.occurrence));
           continue;
         }
+        const why = hasPublisherAttribution(d.key) ? 'violates the publisher-attribution policy' : `is not a valid ${keyField}`;
         if (hasPublisherAttribution(nk)) {
           problems.push(
-            `${list}[${d.index}] "${d.key}" violates the publisher-attribution policy and may be renamed to fix it, but the repair renames it to "${nk}", which violates the policy too`,
+            `${list}[${d.index}] "${d.key}" ${why} and may be renamed to fix it, but the repair renames it to "${nk}", which violates the policy too`,
+          );
+          continue;
+        }
+        if (keyField === 'id' && !VALID_CASE_ID.test(nk)) {
+          problems.push(
+            `${list}[${d.index}] "${d.key}" ${why} and may be renamed to fix it, but the repair renames it to "${nk}", which is not a valid id either (expected ${VALID_CASE_ID.source})`,
           );
           continue;
         }
         if (baselineCountByKey.has(nk)) {
           problems.push(
-            `${list}[${d.index}] "${d.key}" violates the publisher-attribution policy and may be renamed to fix it, but only to a ${keyField} that is not another baseline ${keyField}; the repair renames it to "${nk}"`,
+            `${list}[${d.index}] "${d.key}" ${why} and may be renamed to fix it, but only to a ${keyField} that is not another baseline ${keyField}; the repair renames it to "${nk}"`,
           );
           continue;
         }

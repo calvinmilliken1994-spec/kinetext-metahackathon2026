@@ -1,0 +1,24 @@
+{
+  "jobId": "job-20261028181829-4f827600",
+  "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-28T18:18:29.465Z",
+  "totalCostUSD": 0.066677,
+  "reservedUnknownUSD": 0,
+  "engine": "lift-equation-v1",
+  "revisions": 1,
+  "repairs": [],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 19316,
+    "startedAt": "2026-10-28T18:18:29.465Z"
+  },
+  "specId": "nasa-grc-lift-equation-of-the-1900s-job-20261028181829-4f827600",
+  "publishable": true,
+  "checksPassed": 15,
+  "checksTotal": 15,
+  "publishedRevision": 1,
+  "finishedAt": "2026-10-28T18:19:34.534Z"
+}

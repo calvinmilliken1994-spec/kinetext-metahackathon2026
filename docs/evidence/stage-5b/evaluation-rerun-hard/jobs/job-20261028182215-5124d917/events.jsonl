@@ -1,0 +1,9 @@
+{"jobId":"job-20261028182215-5124d917","seq":0,"stage":"ingest","status":"started","at":"2026-10-28T18:22:15.450Z"}
+{"jobId":"job-20261028182215-5124d917","seq":1,"stage":"ingest","status":"succeeded","at":"2026-10-28T18:22:15.454Z","detail":"sha256 a438468abdb4"}
+{"jobId":"job-20261028182215-5124d917","seq":2,"stage":"analyze","status":"started","at":"2026-10-28T18:22:15.454Z"}
+{"jobId":"job-20261028182215-5124d917","seq":3,"stage":"analyze","status":"succeeded","at":"2026-10-28T18:22:31.401Z","model":"muse-spark-1.3","responseId":"chatcmpl-01a183bf-db99-7328-91d4-ab116412f77a","usage":{"promptTokens":2223,"completionTokens":3248,"reasoningTokens":3047,"cachedTokens":0},"latencyMs":15944,"estCostUSD":0.01658275,"detail":"supported; checks 6/6 passed"}
+{"jobId":"job-20261028182215-5124d917","seq":4,"stage":"specify","status":"started","at":"2026-10-28T18:22:31.401Z"}
+{"jobId":"job-20261028182215-5124d917","seq":5,"stage":"specify","status":"succeeded","at":"2026-10-28T18:23:18.905Z","model":"muse-spark-1.3","responseId":"chatcmpl-01a183c0-94da-77bf-9c02-c9c0c067e1dc","usage":{"promptTokens":2831,"completionTokens":10287,"reasoningTokens":9495,"cachedTokens":0},"latencyMs":47444,"estCostUSD":0.0472585,"detail":"spec cfpb-teenagers-and-saving-job-20261028182215-5124d917"}
+{"jobId":"job-20261028182215-5124d917","seq":6,"stage":"validate","status":"started","at":"2026-10-28T18:23:18.905Z","revision":1}
+{"jobId":"job-20261028182215-5124d917","seq":7,"stage":"validate","status":"succeeded","at":"2026-10-28T18:23:18.907Z","revision":1,"detail":"15/15 checks passed"}
+{"jobId":"job-20261028182215-5124d917","seq":8,"stage":"done","status":"succeeded","at":"2026-10-28T18:23:18.907Z","detail":"publishable"}

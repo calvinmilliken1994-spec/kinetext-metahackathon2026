@@ -1,0 +1,32 @@
+{
+  "jobId": "job-20261028182141-78f83d2f",
+  "sourceId": "nasa-grc-role-of-the-mach-number",
+  "status": "unsupported",
+  "purpose": "test-live",
+  "createdAt": "2026-10-28T18:21:41.366Z",
+  "totalCostUSD": 0.032699,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [
+    {
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "analysis.concept-ids"
+      ],
+      "fixed": [
+        "analysis.concept-ids"
+      ],
+      "remaining": [],
+      "passed": true
+    }
+  ],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 19316,
+    "startedAt": "2026-10-28T18:21:41.366Z"
+  },
+  "finishedAt": "2026-10-28T18:22:07.306Z"
+}

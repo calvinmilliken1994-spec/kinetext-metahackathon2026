@@ -1,0 +1,162 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nrc-backgrounder-radioactive-waste-job-20261028182534-647a4b4e",
+  "title": "Radioactive Waste Half-Life",
+  "learningObjectives": [
+    "Explain that half of the remaining radioactivity decays during each half-life period",
+    "Calculate the amount remaining after a given time using the half-life equation",
+    "Compare the 30-year half-lives of cesium-137 and strontium-90 with the 24,000-year half-life of plutonium-239"
+  ],
+  "sources": [
+    {
+      "id": "nrc-backgrounder-radioactive-waste",
+      "title": "Backgrounder on Radioactive Waste — U.S. Nuclear Regulatory Commission",
+      "locator": "https://www.nrc.gov/regulations-legislation/fact-sheets-brochures/backgrounder-on-radioactive-waste",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: U.S. Nuclear Regulatory Commission, 'Backgrounder on Radioactive Waste', Fact Sheets & Brochures. NRC's website constitutes a U.S. Government Work under federal copyright law and is not subject to copyright. The U.S. Nuclear Regulatory Commission has not reviewed, approved or endorsed this activity.",
+      "sha256": "096bd0acfbc24540be6110113c96ed0fa4b892969980ff5bcf1d7834bc1d71b7"
+    }
+  ],
+  "explanations": [
+    {
+      "evidence": [
+        {
+          "quote": "Radioactive isotopes eventually decay, or disintegrate, to harmless materials.",
+          "sourceId": "nrc-backgrounder-radioactive-waste"
+        }
+      ],
+      "id": "decay-to-harmless",
+      "text": "Radioactive isotopes decay over time to harmless materials, with some decaying quickly and others very slowly."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "Strontium-90 and cesium-137 have half-lives of about 30 years (half the radioactivity will decay in 30 years).",
+          "sourceId": "nrc-backgrounder-radioactive-waste"
+        }
+      ],
+      "id": "cesium-strontium-half-life",
+      "text": "Strontium-90 and cesium-137 have half-lives of about 30 years, so half the radioactivity decays every 30 years."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "Plutonium-239 has a half-life of 24,000 years.",
+          "sourceId": "nrc-backgrounder-radioactive-waste"
+        },
+        {
+          "quote": "Transuranic wastes, sometimes called TRU, account for most of the radioactive hazard remaining in high-level waste after 1,000 years.",
+          "sourceId": "nrc-backgrounder-radioactive-waste"
+        }
+      ],
+      "id": "plutonium-long-half-life",
+      "text": "Plutonium-239 has a 24,000-year half-life, so transuranic waste accounts for most remaining hazard after 1,000 years."
+    }
+  ],
+  "simulation": {
+    "engine": "half-life-v1",
+    "equation": "N=N0*(1/2)^(t/T)",
+    "initialAmount": {
+      "unit": "1",
+      "default": 100,
+      "max": 1000,
+      "min": 1
+    },
+    "halfLife": {
+      "unit": "time",
+      "default": 30,
+      "max": 50,
+      "min": 5
+    },
+    "elapsedTime": {
+      "unit": "time",
+      "default": 30,
+      "max": 150,
+      "min": 0
+    },
+    "scenario": {
+      "objectLabel": "Radioactive sample (grams)",
+      "settingLabel": "Half-life in years"
+    }
+  },
+  "behavioralTests": [
+    {
+      "elapsedTime": 30,
+      "expectedRemaining": 50,
+      "halfLife": 30,
+      "initialAmount": 100,
+      "name": "One half-life leaves half",
+      "tolerance": 0.1
+    },
+    {
+      "elapsedTime": 60,
+      "expectedRemaining": 25,
+      "halfLife": 30,
+      "initialAmount": 100,
+      "name": "Two half-lives leave one quarter",
+      "tolerance": 0.05
+    },
+    {
+      "elapsedTime": 10,
+      "expectedRemaining": 158.7401,
+      "halfLife": 30,
+      "initialAmount": 200,
+      "name": "Partial half-life decay",
+      "tolerance": 0.05
+    },
+    {
+      "elapsedTime": 24000,
+      "expectedRemaining": 400,
+      "halfLife": 24000,
+      "initialAmount": 800,
+      "name": "Plutonium one half-life",
+      "tolerance": 1
+    }
+  ],
+  "predictions": [
+    {
+      "elapsedTime": 30,
+      "expectedRemaining": 50,
+      "halfLife": 30,
+      "id": "pred-one-half-life",
+      "initialAmount": 100,
+      "prompt": "A 100-gram sample has a 30-year half-life. How much remains after 30 years?",
+      "tolerance": 0.1
+    },
+    {
+      "elapsedTime": 60,
+      "expectedRemaining": 50,
+      "halfLife": 30,
+      "id": "pred-two-half-lives",
+      "initialAmount": 200,
+      "prompt": "A 200-gram sample has a 30-year half-life. How much remains after 60 years?",
+      "tolerance": 0.1
+    },
+    {
+      "elapsedTime": 45,
+      "expectedRemaining": 35.3553,
+      "halfLife": 30,
+      "id": "pred-partial-decay",
+      "initialAmount": 100,
+      "prompt": "A 100-gram sample has a 30-year half-life. How much remains after 45 years?",
+      "tolerance": 0.05
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a183c3-831a-77d7-a655-20b1c7d0914b",
+    "runId": "job-20261028182534-647a4b4e",
+    "promptVersion": "v8",
+    "generatedAt": "2026-10-28T18:26:30.924Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}
