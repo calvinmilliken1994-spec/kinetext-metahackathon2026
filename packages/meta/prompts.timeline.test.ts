@@ -84,7 +84,7 @@ const REPAIR_SENTENCE: string =
   'For repair: a date finding names one event and one sentence unit — re-ground that event in that unit or remove that event; do not touch passing events, add events, or reorder pairs the finding does not name.';
 
 test('PROMPT_VERSION is v7', () => {
-  assert.equal(PROMPT_VERSION, 'v7');
+  assert.equal(PROMPT_VERSION, 'v8');
 });
 
 test('no system prompt contains physics or the old role wording', () => {

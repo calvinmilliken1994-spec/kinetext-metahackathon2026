@@ -1,3 +1,4 @@
+import { isDeepStrictEqual } from 'node:util';
 import { Ajv } from 'ajv';
 import type { AnySchemaObject, ValidateFunction } from 'ajv';
 import { assembleSpec, assembleTimelineSpec, initialProvenance, isActivityId, isEngineId, repairProvenance } from '../contracts/index.ts';
@@ -15,19 +16,20 @@ import type {
   SourceDocument,
   TimelineActivitySpec,
   TimelineGeneratedSpec,
+  ValidationCheck,
   ValidationReport,
 } from '../contracts/index.ts';
 import { genSchemaFor, sourceAnalysisGenSchema, timelineGenSchema } from '../contracts/schemas.ts';
 import { compareRevisions, repairFindings, validateAnalysis, validateSpec } from '../validation/validate.ts';
 import type { AnyActivitySpec } from '../validation/validate.ts';
-import { buildAnalysisMessages, buildRepairMessages, buildSpecMessages, PROMPT_VERSION } from './prompts.ts';
+import { buildAnalysisMessages, buildAnalysisRepairMessages, buildRepairMessages, buildSpecMessages, PROMPT_VERSION } from './prompts.ts';
 import type { CompleteRequest, MetaClient } from './client.ts';
 
 export class GeneratedOutputError extends Error {
   readonly code: 'OUTPUT_INVALID';
-  readonly stage: 'analyze' | 'specify' | 'repair';
+  readonly stage: 'analyze' | 'specify' | 'repair' | 'analysis-repair';
   readonly receipt: MetaReceipt;
-  constructor(stage: 'analyze' | 'specify' | 'repair', receipt: MetaReceipt) {
+  constructor(stage: 'analyze' | 'specify' | 'repair' | 'analysis-repair', receipt: MetaReceipt) {
     super('The model returned output that does not match the required structure.');
     this.name = 'GeneratedOutputError';
     this.code = 'OUTPUT_INVALID';
@@ -530,4 +532,166 @@ export async function repairSpec(
     publishable: checks.every((c) => c.passed),
   };
   return { generated: result.data, spec, report, receipt: result.receipt };
+}
+
+function allowedAnalysisGroups(report: ValidationReport): Set<string> {
+  const allowed = new Set<string>();
+  const raw: unknown = (report as { checks?: unknown } | null | undefined)?.checks;
+  if (!Array.isArray(raw)) {
+    return allowed;
+  }
+  for (const check of raw as ValidationCheck[]) {
+    if (check.passed) {
+      continue;
+    }
+    if (check.id === 'repair.analysis-unchanged') {
+      continue;
+    }
+    if (check.id === 'schema.analysis' || check.id === 'analysis.invariants') {
+      allowed.add('decision');
+      allowed.add('unsupportedReason');
+      allowed.add('objectives');
+      allowed.add('concepts');
+      continue;
+    }
+    const p: unknown = check.path;
+    if (typeof p !== 'string') {
+      continue;
+    }
+    const names = (field: string): boolean => p === `/${field}` || p.startsWith(`/${field}/`);
+    if (names('supported') || names('activity')) {
+      allowed.add('decision');
+    }
+    if (names('unsupportedReason')) {
+      allowed.add('unsupportedReason');
+    }
+    if (names('objectives')) {
+      allowed.add('objectives');
+    }
+    if (names('concepts')) {
+      allowed.add('concepts');
+    }
+  }
+  return allowed;
+}
+
+function checkAnalysisUnchanged(
+  prevAnalysis: unknown,
+  nextAnalysis: SourceAnalysis,
+  prevReport: ValidationReport,
+): ValidationCheck {
+  // Rationale: without this check a repair could escape a concept-id finding by declining the source (supported=false, activity 'none'), which validateAnalysis alone would accept as an honest decline.
+  const allowed: Set<string> = allowedAnalysisGroups(prevReport);
+  const rawChecks: unknown = (prevReport as { checks?: unknown } | null | undefined)?.checks;
+  const prevChecks: ValidationCheck[] = Array.isArray(rawChecks) ? (rawChecks as ValidationCheck[]) : [];
+  const nextRec = nextAnalysis as unknown as Record<string, unknown>;
+  const nextDecision = { supported: nextRec.supported, activity: nextRec.activity };
+  let prevDecision: { supported: unknown; activity: unknown };
+  let changedDecision: boolean;
+  let changedReason: boolean;
+  let changedObjectives: boolean;
+  let changedConcepts: boolean;
+  if (!isPlainObject(prevAnalysis)) {
+    changedDecision = true;
+    changedReason = true;
+    changedObjectives = true;
+    changedConcepts = true;
+    prevDecision = { supported: undefined, activity: undefined };
+  } else {
+    const p = prevAnalysis as unknown as Record<string, unknown>;
+    prevDecision = { supported: p.supported, activity: p.activity };
+    changedDecision = !isDeepStrictEqual(prevDecision, nextDecision);
+    changedReason = !isDeepStrictEqual(p.unsupportedReason, nextRec.unsupportedReason);
+    changedObjectives = !isDeepStrictEqual(p.objectives, nextRec.objectives);
+    changedConcepts = !isDeepStrictEqual(p.concepts, nextRec.concepts);
+  }
+  const changed: string[] = [];
+  if (changedDecision) {
+    changed.push('decision');
+  }
+  if (changedReason) {
+    changed.push('unsupportedReason');
+  }
+  if (changedObjectives) {
+    changed.push('objectives');
+  }
+  if (changedConcepts) {
+    changed.push('concepts');
+  }
+  const offending: string[] = changed.filter((g) => !allowed.has(g));
+  if (offending.length === 0) {
+    const failingIds: string[] = prevChecks.filter((c) => !c.passed).map((c) => c.id);
+    const changedText: string = changed.length === 0 ? 'no groups changed' : `changed groups: ${changed.join(', ')}`;
+    return {
+      id: 'repair.analysis-unchanged',
+      kind: 'semantic',
+      passed: true,
+      message: `${changedText}; allowed by findings ${failingIds.join(', ')}`,
+    };
+  }
+  const pathFor = (group: string): string => {
+    if (group === 'decision') {
+      return '/activity';
+    }
+    return `/${group}`;
+  };
+  const first: string = offending[0] as string;
+  let message = `repair changed ${offending.join(', ')} without a finding naming them`;
+  if (offending.includes('decision')) {
+    message += `; decision changed from supported=${String(prevDecision.supported)} activity=${String(prevDecision.activity)} to supported=${String(nextDecision.supported)} activity=${String(nextDecision.activity)}`;
+  }
+  return {
+    id: 'repair.analysis-unchanged',
+    kind: 'semantic',
+    passed: false,
+    message,
+    path: pathFor(first),
+  };
+}
+
+export async function repairAnalysis(
+  client: MetaClient,
+  source: SourceDocument,
+  previous: { analysis: unknown; report: ValidationReport; attempt: number; baseline?: { analysis: unknown; report: ValidationReport } },
+  purpose: 'test-live' | 'demo',
+  opts?: { signal?: AbortSignal; maxOutputTokens?: number },
+): Promise<{ analysis: SourceAnalysis; report: ValidationReport; receipt: MetaReceipt }> {
+  if (!Number.isInteger(previous.attempt) || previous.attempt < 1 || previous.attempt > 2) {
+    throw new Error('REPAIR_ATTEMPT_INVALID');
+  }
+  const rawChecks: unknown = (previous.report as { checks?: unknown } | null | undefined)?.checks;
+  if (!Array.isArray(rawChecks) || !(rawChecks as ValidationCheck[]).some((c) => !c.passed)) {
+    throw new Error('NOTHING_TO_REPAIR');
+  }
+  const findings: RepairFinding[] = repairFindings(previous.report);
+  const baselineAnalysis: unknown = previous.baseline?.analysis ?? previous.analysis;
+  const baselineReport: ValidationReport = previous.baseline?.report ?? previous.report;
+  const maxOutputTokens: number = opts?.maxOutputTokens ?? 6000;
+  const req: CompleteRequest = {
+    purpose,
+    schemaName: 'source_analysis_repair',
+    jsonSchema: sourceAnalysisGenSchema,
+    messages: previous.baseline === undefined
+      ? buildAnalysisRepairMessages(source, previous.analysis, findings)
+      : buildAnalysisRepairMessages(source, previous.analysis, findings, baselineAnalysis),
+    maxOutputTokens,
+  };
+  if (opts?.signal !== undefined) {
+    req.signal = opts.signal;
+  }
+  const result = await client.complete<SourceAnalysis>(req);
+  const raw: unknown = result.data;
+  if (!isPlainObject(raw) || !validateAnalysisGen(raw)) {
+    throw new GeneratedOutputError('analysis-repair', result.receipt);
+  }
+  const base: ValidationReport = validateAnalysis(result.data, [source]);
+  const unchanged: ValidationCheck = checkAnalysisUnchanged(baselineAnalysis, result.data, baselineReport);
+  const checks: ValidationCheck[] = [...base.checks, unchanged];
+  const report: ValidationReport = {
+    artifactId: base.artifactId,
+    revision: previous.attempt + 1,
+    checks,
+    publishable: checks.every((c) => c.passed),
+  };
+  return { analysis: result.data, report, receipt: result.receipt };
 }

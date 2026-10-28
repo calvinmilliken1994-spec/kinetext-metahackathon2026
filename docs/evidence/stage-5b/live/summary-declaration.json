@@ -1,0 +1,28 @@
+{
+  "ranAt": "2026-10-28T15:36:10.872Z",
+  "base": "http://127.0.0.1:8787",
+  "results": [
+    {
+      "name": "declaration",
+      "expect": "timeline-v1 published",
+      "sourceId": "nara-declaration-of-independence",
+      "jobId": "job-20261028153510-c5e1a7da",
+      "wallS": 60.4,
+      "status": "succeeded",
+      "outcome": null,
+      "engine": "timeline-v1",
+      "error": null,
+      "revisions": 1,
+      "publishedRevision": 1,
+      "bestRevision": null,
+      "repairs": [],
+      "demoFault": null,
+      "checks": "11/11",
+      "totalCostUSD": 0.085619,
+      "reservedUnknownUSD": 0,
+      "title": "Declaring Independence in 1776",
+      "unsupportedReason": "",
+      "failedChecks": []
+    }
+  ]
+}

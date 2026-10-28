@@ -1,0 +1,28 @@
+{
+  "ranAt": "2026-10-28T15:37:03.020Z",
+  "base": "http://127.0.0.1:8787",
+  "results": [
+    {
+      "name": "articles",
+      "expect": "timeline-v1 published",
+      "sourceId": "nara-articles-of-confederation",
+      "jobId": "job-20261028153624-4dc34853",
+      "wallS": 38.2,
+      "status": "succeeded",
+      "outcome": null,
+      "engine": "timeline-v1",
+      "error": null,
+      "revisions": 1,
+      "publishedRevision": 1,
+      "bestRevision": null,
+      "repairs": [],
+      "demoFault": null,
+      "checks": "11/11",
+      "totalCostUSD": 0.058306,
+      "reservedUnknownUSD": 0,
+      "title": "From Confederation to Constitution",
+      "unsupportedReason": "",
+      "failedChecks": []
+    }
+  ]
+}

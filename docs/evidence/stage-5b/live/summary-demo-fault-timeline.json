@@ -1,0 +1,49 @@
+{
+  "ranAt": "2026-10-28T15:38:19.772Z",
+  "base": "http://127.0.0.1:8787",
+  "results": [
+    {
+      "name": "demo-fault-timeline",
+      "expect": "labelled system fault in revision 1 (swapped ordering answer), caught by timeline.case-order, repaired by Muse (excluded from metrics)",
+      "sourceId": "nara-declaration-of-independence",
+      "jobId": "job-20261028153711-fa7f9d4b",
+      "wallS": 68.5,
+      "status": "succeeded",
+      "outcome": null,
+      "engine": "timeline-v1",
+      "error": null,
+      "revisions": 2,
+      "publishedRevision": 2,
+      "bestRevision": null,
+      "repairs": [
+        {
+          "revision": 2,
+          "repairOf": 1,
+          "targeted": [
+            "timeline.case-order"
+          ],
+          "fixed": [
+            "timeline.case-order"
+          ],
+          "remaining": [],
+          "publishable": true,
+          "afterInjectedFault": true
+        }
+      ],
+      "demoFault": {
+        "kind": "wrong-answer",
+        "path": "behavioralTests[0]",
+        "original": "e1 -> e3",
+        "injected": "e3 -> e1",
+        "revision": 1,
+        "effective": true
+      },
+      "checks": "12/12",
+      "totalCostUSD": 0.108119,
+      "reservedUnknownUSD": 0,
+      "title": "Declaring Independence in Summer 1776",
+      "unsupportedReason": "",
+      "failedChecks": []
+    }
+  ]
+}
