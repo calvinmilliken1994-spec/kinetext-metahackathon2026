@@ -35,7 +35,7 @@
 import { Ajv } from 'ajv';
 import type { AnySchemaObject, ValidateFunction } from 'ajv';
 
-import { ENGINES, ENGINE_IDS, isEngineId, maxTolerance } from '../contracts/index.ts';
+import { ACTIVITY_IDS, ENGINES, ENGINE_IDS, isActivityId, isEngineId, maxTolerance } from '../contracts/index.ts';
 import type {
   ActivitySpec,
   CheckKind,
@@ -595,8 +595,8 @@ export function validateAnalysis(analysis: unknown, sources: SourceDocument[]): 
     guarded('analysis.invariants', 'semantic', () => {
       const problems: string[] = [];
       if (a.supported === true) {
-        if (!isEngineId(a.activity)) {
-          problems.push(`supported=true but activity is "${a.activity}", expected one of ${ENGINE_IDS.join(', ')}`);
+        if (!isActivityId(a.activity)) {
+          problems.push(`supported=true but activity is "${a.activity}", expected one of ${ACTIVITY_IDS.join(', ')}`);
         }
         if (a.concepts.length < 1) {
           problems.push(`supported=true but concepts.length is ${a.concepts.length}, expected >= 1`);

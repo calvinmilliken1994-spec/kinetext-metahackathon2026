@@ -6,8 +6,8 @@
 import { ENGINES } from './engines.ts';
 import type { EngineId } from './engines.ts';
 
-export { ENGINES, ENGINE_IDS, isEngineId, maxTolerance, SEQUENCE_ENGINES, SEQUENCE_ENGINE_IDS, isSequenceEngineId } from './engines.ts';
-export type { EngineDescriptor, EngineId, EngineInput, SequenceDescriptor, SequenceEngineId } from './engines.ts';
+export { ENGINES, ENGINE_IDS, isEngineId, maxTolerance, SEQUENCE_ENGINES, SEQUENCE_ENGINE_IDS, isSequenceEngineId, ACTIVITY_IDS, isActivityId } from './engines.ts';
+export type { ActivityId, EngineDescriptor, EngineId, EngineInput, SequenceDescriptor, SequenceEngineId } from './engines.ts';
 
 export const SCHEMA_VERSION = '0.3.0';
 /** Schema versions the full schemas accept. 0.2.0 is forces-1d-v1 only (recorded Stage 2 evidence). */

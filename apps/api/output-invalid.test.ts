@@ -40,8 +40,8 @@ const USAGE_COST_PER_CALL = 0.0000975;
 /** Reviewer P3 absent-usage reservations for this source/prompt/schema set. */
 // Reservations follow the input bound (UTF-8 bytes of prompt + schema), so they change with prompts/schemas.
 // Stage 5 analysis prompt (v4): four engines with appliesWhen texts, metadata in an untrusted JSON block.
-const ANALYSIS_RESERVATION = 0.036715;
-const BOTH_RESERVATIONS = 0.0838125;
+const ANALYSIS_RESERVATION = 0.0367325;
+const BOTH_RESERVATIONS = 0.08383;
 const round6 = (x: number): number => Math.round(x * 1e6) / 1e6;
 const OUTPUT_INVALID_MESSAGE = 'The model returned output that does not match the required structure.';
 

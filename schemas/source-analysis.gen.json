@@ -23,6 +23,7 @@
         "compound-interest-v1",
         "hardy-weinberg-v1",
         "half-life-v1",
+        "timeline-v1",
         "none"
       ],
       "description": "The single best-fitting engine id, or 'none' when unsupported."

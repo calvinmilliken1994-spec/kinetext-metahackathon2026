@@ -3,7 +3,7 @@
 // evidence keeps validating; only its full schemaVersion widens to the accepted list.
 // Usage: node scripts/build-schemas.ts [--check]   (--check exits 1 if any file would change)
 import { readFileSync, writeFileSync } from 'node:fs';
-import { ACCEPTED_SCHEMA_VERSIONS, ENGINES, ENGINE_IDS, SCHEMA_VERSION, SEQUENCE_ENGINES } from '../packages/contracts/index.ts';
+import { ACCEPTED_SCHEMA_VERSIONS, ACTIVITY_IDS, ENGINES, ENGINE_IDS, SCHEMA_VERSION, SEQUENCE_ENGINES } from '../packages/contracts/index.ts';
 import type { EngineDescriptor, EngineId, SequenceDescriptor } from '../packages/contracts/index.ts';
 
 const dir = new URL('../schemas/', import.meta.url);
@@ -205,7 +205,7 @@ analysis.properties.supported = {
   type: 'boolean',
   description: 'True only if one of the listed activity engines fits what the source teaches; otherwise false.',
 };
-analysis.properties.activity = { type: 'string', enum: [...ENGINE_IDS, 'none'], description: "The single best-fitting engine id, or 'none' when unsupported." };
+analysis.properties.activity = { type: 'string', enum: [...ACTIVITY_IDS, 'none'], description: "The single best-fitting engine id, or 'none' when unsupported." };
 emit('source-analysis.gen.json', analysis);
 
 if (check && changed > 0) process.exit(1);

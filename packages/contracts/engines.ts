@@ -197,3 +197,11 @@ export const SEQUENCE_ENGINES: Record<SequenceEngineId, SequenceDescriptor> = {
 export function isSequenceEngineId(value: unknown): value is SequenceEngineId {
   return typeof value === 'string' && (SEQUENCE_ENGINE_IDS as readonly string[]).includes(value);
 }
+
+// ---- All activity types Muse may choose during analysis. -----------------------------------------------
+export const ACTIVITY_IDS = [...ENGINE_IDS, ...SEQUENCE_ENGINE_IDS] as const;
+export type ActivityId = EngineId | SequenceEngineId;
+
+export function isActivityId(value: unknown): value is ActivityId {
+  return isEngineId(value) || isSequenceEngineId(value);
+}

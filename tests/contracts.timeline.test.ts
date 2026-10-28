@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { Ajv } from 'ajv';
 import {
+  ACTIVITY_IDS, isActivityId,
   ENGINE_IDS, SEQUENCE_ENGINES, SEQUENCE_ENGINE_IDS, assembleTimelineSpec, isSequenceEngineId,
   type Provenance, type SourceDocument, type TimelineGeneratedSpec,
 } from '../packages/contracts/index.ts';
@@ -95,4 +96,11 @@ test('BCE years are negative integers and accepted by the schema', () => {
   s.simulation.events[0]!.month = 0;
   s.simulation.events[0]!.day = 0;
   assert.ok(validFull(s), JSON.stringify(validFull.errors));
+});
+
+test('ACTIVITY_IDS = formula engines + sequence engines; the analysis schema offers all of them', () => {
+  assert.deepEqual([...ACTIVITY_IDS], [...ENGINE_IDS, ...SEQUENCE_ENGINE_IDS]);
+  assert.ok(isActivityId('timeline-v1') && isActivityId('projectile-v1') && !isActivityId('none'));
+  const analysis = fixture('../../schemas/source-analysis.gen.json');
+  assert.deepEqual(analysis.properties.activity.enum, [...ACTIVITY_IDS, 'none']);
 });
