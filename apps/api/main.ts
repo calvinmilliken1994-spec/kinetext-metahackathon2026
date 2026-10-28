@@ -71,7 +71,7 @@ async function startup(): Promise<void> {
           // in [0, 2], validated at startup AND again by the worker boundary).
           limits: {
             maxJobWallTimeMs: limits.wallTimeMs,
-            analysisMaxOutputTokens: Math.min(6000, limits.maxOutputTokens),
+            analysisMaxOutputTokens: limits.analysisMaxOutputTokens,
             specMaxOutputTokens: limits.maxOutputTokens,
             maxRepairAttempts: limits.maxRepairAttempts,
           },

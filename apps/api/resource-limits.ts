@@ -17,6 +17,8 @@ export interface RuntimeLimits {
   capUSD: number;
   wallTimeMs: number;
   maxOutputTokens: number;
+  /** Output cap for the analysis call (reasoning + JSON); must not exceed maxOutputTokens. */
+  analysisMaxOutputTokens: number;
   maxInputTokens: number;
   /** Integer in [0, MAX_REPAIR_ATTEMPTS_BOUND]. */
   maxRepairAttempts: number;
@@ -47,6 +49,7 @@ export function parseResourceLimits(raw: unknown): RuntimeLimits {
     stageCapsUSD?: { stage2?: number };
     maxJobWallTimeMs?: unknown;
     maxOutputTokens?: unknown;
+    analysisMaxOutputTokens?: unknown;
     maxInputTokens?: unknown;
     maxRepairAttempts?: unknown;
     ledgerLockPort?: unknown;
@@ -54,12 +57,15 @@ export function parseResourceLimits(raw: unknown): RuntimeLimits {
   const capUSD: number = limits.stageCapsUSD?.stage2 ?? 0; // default zero spend
   const wallTimeMs: unknown = limits.maxJobWallTimeMs;
   const maxOutputTokens: unknown = limits.maxOutputTokens;
+  const analysisMaxOutputTokens: unknown = limits.analysisMaxOutputTokens;
   const maxInputTokens: unknown = limits.maxInputTokens;
   const maxRepairAttempts: unknown = limits.maxRepairAttempts;
   const lockPort: unknown = limits.ledgerLockPort;
   if (
     !finitePositive(wallTimeMs) ||
     !finitePositive(maxOutputTokens) ||
+    !finitePositive(analysisMaxOutputTokens) ||
+    (analysisMaxOutputTokens as number) > (maxOutputTokens as number) ||
     !finitePositive(maxInputTokens) ||
     !validRepairAttempts(maxRepairAttempts) ||
     !validLockPort(lockPort)
@@ -70,6 +76,7 @@ export function parseResourceLimits(raw: unknown): RuntimeLimits {
     capUSD,
     wallTimeMs,
     maxOutputTokens,
+    analysisMaxOutputTokens: analysisMaxOutputTokens as number,
     maxInputTokens,
     maxRepairAttempts,
     ledgerLockPort: lockPort,

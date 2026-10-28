@@ -19,7 +19,8 @@ test('S5-06: the checked-in config parses, with maxRepairAttempts = 2', () => {
   const limits = parseResourceLimits(realConfig);
   assert.equal(limits.maxRepairAttempts, 2);
   assert.equal(MAX_REPAIR_ATTEMPTS_BOUND, 2);
-  assert.equal(limits.capUSD, 10);
+  assert.equal(limits.capUSD, 50);
+  assert.equal(limits.analysisMaxOutputTokens, 16000, 'analysis may think as hard as the spec step (Stage 5b evaluation: two truncations at 6000)');
   assert.equal(limits.wallTimeMs, 420000);
   assert.equal(limits.maxOutputTokens, 32000);
   assert.equal(limits.maxInputTokens, 32000);
@@ -51,6 +52,8 @@ test('the other runtime bounds still fail closed (regression)', () => {
     { maxJobWallTimeMs: 0 },
     { maxJobWallTimeMs: '240000' },
     { maxOutputTokens: Number.NaN },
+    { analysisMaxOutputTokens: 0 },
+    { analysisMaxOutputTokens: 64000 },
     { maxInputTokens: -5 },
     { ledgerLockPort: 70000 },
     { ledgerLockPort: 1.5 },
