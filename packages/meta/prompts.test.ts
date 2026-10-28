@@ -83,8 +83,8 @@ function makeEvilSource(): SourceDocument {
 const META_OPEN = '<untrusted-source-metadata>';
 const META_CLOSE = '</untrusted-source-metadata>';
 
-test('prompt version bumped for the boundary format change', () => {
-  assert.equal(PROMPT_VERSION, 'v4');
+test('prompt version bumped to v5 for the publisher-name repair exception', () => {
+  assert.equal(PROMPT_VERSION, 'v5');
 });
 
 test('analysis user message wraps the source text in the boundary source block', () => {
@@ -369,11 +369,29 @@ test('repair system prompt keeps original-revision obligations', () => {
   const prev = { title: 'prev' } as unknown as GeneratedSpec;
   const sys = buildRepairMessages(source, analysis, 'forces-1d-v1', prev, [])[0];
   assert.ok(sys !== undefined);
-  assert.ok(
-    sys.content.includes(
-      'Keep every behavioral test name and prediction id from the original revision; never raise any tolerance; never narrow a slider range unless a finding names that range.',
-    ),
-  );
+  assert.ok(sys.content.includes('Keep every behavioral test name and prediction id from the original revision'));
+  assert.ok(sys.content.includes('never raise any tolerance'));
+  assert.ok(sys.content.includes('never narrow a slider range unless a finding names that range'));
+});
+
+test('repair system prompt allows only publisher-policy-violating name/id renames', () => {
+  const prev = { title: 'prev' } as unknown as GeneratedSpec;
+  const sys = buildRepairMessages(source, analysis, 'forces-1d-v1', prev, [])[0];
+  assert.ok(sys !== undefined);
+  const lower: string = sys.content.toLowerCase();
+  assert.ok(lower.includes('only exception'));
+  assert.ok(lower.includes('publisher policy'));
+  assert.ok(sys.content.includes('NASA'));
+  assert.ok(sys.content.includes('National Aeronautics and Space Administration'));
+  assert.ok(lower.includes('attribution'));
+  assert.ok(lower.includes('neutral'));
+  assert.ok(lower.includes('policy-clean'));
+  assert.ok(lower.includes('keep its numbers'));
+  assert.ok(lower.includes('inputs'));
+  assert.ok(lower.includes('expected value'));
+  assert.ok(lower.includes('tolerance unchanged'));
+  assert.ok(lower.includes('do not reuse another original name'));
+  assert.ok(lower.includes('never raise any tolerance'));
 });
 
 test('repair embeds previous spec and ALL findings history escaped inside the untrusted block', () => {

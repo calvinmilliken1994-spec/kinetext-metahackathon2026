@@ -1,0 +1,7 @@
+# Stage 5 review S5-10 (Low): align the repair prompt with the publisher-name exception
+
+You (Muse Spark 1.3) authored packages/meta/prompts.ts. The final independent review found: the repair system prompt says "Keep every behavioral test name and prediction id from the original revision", but the deterministic no-weakening rule now allows exactly one exception — a test name or prediction id that itself violates the publisher policy (mentions NASA / National Aeronautics and Space Administration, or attribution/endorsement wording) may be renamed, keeping all its numbers unchanged, to a new policy-clean name that does not equal another original name/id. Without this guidance the model may never attempt that legitimate repair.
+
+Change ONLY the repair system prompt sentence(s) so they state: keep every original name/id; the only exception is a name/id that itself violates the publisher policy — rename only that one to a neutral name, keep its numbers, inputs, expected value and tolerance unchanged, and do not reuse another original name/id. Keep all other rules (never raise a tolerance, never narrow a range unless a finding names it, untrusted data handling). Bump PROMPT_VERSION to 'v5'.
+
+Tests: update/add a prompts.test.ts test asserting the repair system prompt contains the exception wording and still says never raise a tolerance; PROMPT_VERSION is 'v5' (update existing version assertions that pin 'v4').
