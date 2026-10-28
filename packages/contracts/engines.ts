@@ -3,7 +3,10 @@
 // Every engine is a tested closed-form model: one checked output computed from numeric inputs.
 // Runtime: Node 24 type stripping (erasable TypeScript only).
 
-export const ENGINE_IDS = ['forces-1d-v1', 'projectile-v1', 'lift-equation-v1', 'speed-of-sound-v1'] as const;
+export const ENGINE_IDS = [
+  'forces-1d-v1', 'projectile-v1', 'lift-equation-v1', 'speed-of-sound-v1',
+  'compound-interest-v1', 'hardy-weinberg-v1', 'half-life-v1',
+] as const;
 export type EngineId = typeof ENGINE_IDS[number];
 
 export interface EngineInput {
@@ -94,6 +97,50 @@ export const ENGINES: Record<EngineId, EngineDescriptor> = {
     ],
     output: { key: 'expectedSpeedMps', label: 'Speed of sound', unit: 'm/s', hardMin: 0, hardMax: 10000 },
     tolerance: { absMax: 0.01, relMax: 0.005 },
+    scenarioKeys: ['objectLabel', 'settingLabel'],
+  },
+  'compound-interest-v1': {
+    id: 'compound-interest-v1',
+    title: 'Compound interest',
+    equation: 'A=P*(1+r/(100*n))^(n*t)',
+    appliesWhen:
+      'The source teaches compound interest: money grows by earning interest on the principal and on previously earned interest, compounded a number of times per year over a number of years (including worked examples such as $1,000 at 5% compounded once a year). Not for simple interest only, loan amortisation schedules, inflation adjustments or investment risk without a compounding calculation.',
+    inputs: [
+      { key: 'principalUSD', label: 'Starting amount P', unit: 'USD', hardMin: 0, hardMax: 10000000, exclusiveMin: true },
+      { key: 'annualRatePercent', label: 'Annual interest rate r', unit: '%', hardMin: 0, hardMax: 50 },
+      { key: 'compoundsPerYear', label: 'Compounding periods per year n', unit: 'per year', hardMin: 1, hardMax: 365 },
+      { key: 'years', label: 'Time t', unit: 'years', hardMin: 0, hardMax: 100 },
+    ],
+    output: { key: 'expectedAmountUSD', label: 'Amount after t years', unit: 'USD', hardMin: 0, hardMax: 1000000000000 },
+    tolerance: { absMax: 0.01, relMax: 0.0001 },
+    scenarioKeys: ['objectLabel', 'settingLabel'],
+  },
+  'hardy-weinberg-v1': {
+    id: 'hardy-weinberg-v1',
+    title: 'Hardy-Weinberg genotype frequencies',
+    equation: '2pq, q=1-p',
+    appliesWhen:
+      'The source teaches the Hardy-Weinberg principle for one gene with two alleles: allele frequencies p and q with p + q = 1, and genotype frequencies p^2, 2pq and q^2 in a population in equilibrium. Not for selection, drift, linkage, more than two alleles, or pedigree/Punnett problems about a single couple.',
+    inputs: [
+      { key: 'alleleFrequencyP', label: 'Frequency p of the first allele', unit: '1', hardMin: 0, hardMax: 1 },
+    ],
+    output: { key: 'expectedHeterozygoteFrequency', label: 'Heterozygote frequency 2pq', unit: '1', hardMin: 0, hardMax: 0.5 },
+    tolerance: { absMax: 0.001, relMax: 0.005 },
+    scenarioKeys: ['objectLabel', 'settingLabel'],
+  },
+  'half-life-v1': {
+    id: 'half-life-v1',
+    title: 'Radioactive decay and half-life',
+    equation: 'N=N0*(1/2)^(t/T)',
+    appliesWhen:
+      'The source teaches half-life: after each half-life, half of the remaining radioactive material is left, so the amount after time t is N0 * (1/2)^(t/T). Not for radiometric age equations solved for t from daughter/parent ratios, dose or activity unit conversions, or decay chains.',
+    inputs: [
+      { key: 'initialAmount', label: 'Starting amount N0 (any unit: grams, atoms or percent)', unit: '1', hardMin: 0, hardMax: 1000000000000, exclusiveMin: true },
+      { key: 'halfLife', label: 'Half-life T (same time unit as t)', unit: 'time', hardMin: 0, hardMax: 1000000000000, exclusiveMin: true },
+      { key: 'elapsedTime', label: 'Elapsed time t (same time unit as T)', unit: 'time', hardMin: 0, hardMax: 10000000000000 },
+    ],
+    output: { key: 'expectedRemaining', label: 'Amount remaining N', unit: '1', hardMin: 0, hardMax: 1000000000000 },
+    tolerance: { absMax: 0.001, relMax: 0.005 },
     scenarioKeys: ['objectLabel', 'settingLabel'],
   },
 };

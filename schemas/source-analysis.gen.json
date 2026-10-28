@@ -20,6 +20,9 @@
         "projectile-v1",
         "lift-equation-v1",
         "speed-of-sound-v1",
+        "compound-interest-v1",
+        "hardy-weinberg-v1",
+        "half-life-v1",
         "none"
       ],
       "description": "The single best-fitting engine id, or 'none' when unsupported."

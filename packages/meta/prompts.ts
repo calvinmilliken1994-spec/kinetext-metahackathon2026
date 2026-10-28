@@ -4,7 +4,7 @@ import type { EngineId } from '../contracts/engines.ts';
 import type { GeneratedSpec, RepairFinding, SourceAnalysis, SourceDocument } from '../contracts/index.ts';
 import type { ChatMessage } from './client.ts';
 
-export const PROMPT_VERSION: string = 'v5';
+export const PROMPT_VERSION: string = 'v6';
 
 function describeAllEngines(): string {
   return Object.values(ENGINES)
@@ -49,7 +49,7 @@ function formatEngineInputs(engine: EngineId): string {
     .join('\n');
 }
 
-const SPEC_TAILS: Record<EngineId, string> = {
+export const SPEC_TAILS: Record<EngineId, string> = {
   'forces-1d-v1': `Use classroom-realistic slider ranges: mass roughly 0.5 to 20 kg and force roughly -50 to 50 N, with min < default < max for each slider. Set durationS between 3 and 10 seconds and stepS to 0.02. Include all three observables: position, velocity and acceleration.
 
 Write 2 to 4 explanations, each with 1 to 2 quotes. Write 1 to 3 learning objectives. Write 3 to 5 behavioural tests including one negative-force case and one zero net force test. Write 2 to 3 predictions whose mass and force lie inside the slider ranges.
@@ -78,6 +78,29 @@ Write 2 to 4 explanations, each with 1 to 2 quotes. Write 1 to 3 learning object
 Compute each expectedSpeedMps as sqrt(gamma*R*T) from that case's gamma, gasConstantJPerKgK and temperatureK, rounded to 4 decimals, with a tolerance satisfying the tolerance rule above (small and positive).
 
 Choose a scenario that fits the source (e.g. object "Air sample", setting "Open field").`,
+  'compound-interest-v1': `Use classroom-realistic slider ranges inside the hard bounds, with min < default < max for each slider: e.g. principalUSD roughly 100 to 10000 USD (default ~1000), annualRatePercent roughly 1 to 12 % (default 5), compoundsPerYear 1 to 12 per year (default 1), years 1 to 40 years (default 10). Use whole numbers 1, 2, 4, 12 or 365 for compoundsPerYear in behavioural tests and predictions.
+
+Write 2 to 4 explanations, each with 1 to 2 quotes. Write 1 to 3 learning objectives. Write 3 to 5 behavioural tests including one edge case with 0% rate or 0 years where the amount equals the principal. Write 2 to 3 predictions whose principalUSD, annualRatePercent, compoundsPerYear and years all lie inside the slider ranges.
+
+Compute each expectedAmountUSD as A = P * (1 + r/(100*n))^(n*t) from that case's principalUSD, annualRatePercent, compoundsPerYear and years, with the rate given in percent, rounded to cents (2 decimals), with tolerance 0.01.
+
+Convert the source's worked examples faithfully (if the source compounds once a year, n = 1); never invent interest rates the source does not support for the explanations' claims.
+
+Choose a scenario that fits the source (e.g. object "Savings account", setting "Interest compounded yearly").`,
+  'hardy-weinberg-v1': `Use classroom-realistic slider ranges inside the hard bounds, with min < default < max for each slider: e.g. alleleFrequencyP roughly 0.05 to 0.95 (default 0.5).
+
+Write 2 to 4 explanations, each with 1 to 2 quotes. Write 1 to 3 learning objectives. Write 3 to 5 behavioural tests including one edge case with p = 0.5 giving the maximum 2pq = 0.5 and one case with p = 0 or p = 1 giving 0. Write 2 to 3 predictions whose alleleFrequencyP lies inside the slider range.
+
+Compute each expectedHeterozygoteFrequency as 2 * p * (1 - p) from that case's alleleFrequencyP, rounded to 4 decimals, with tolerance 0.001.
+
+Choose a scenario that fits the source (e.g. object "MN blood group alleles", setting "Large randomly mating population").`,
+  'half-life-v1': `Use classroom-realistic slider ranges inside the hard bounds, with min < default < max for each slider: e.g. initialAmount roughly 1 to 1000 (default ~100; state the unit in the scenario labels, e.g. grams), halfLife roughly 1 to 10 in the same time unit as the source uses (e.g. years, default ~5), elapsedTime from 0 up to about 5 half-lives in the same time unit as halfLife (e.g. 0 to 25 years, default ~5).
+
+Write 2 to 4 explanations, each with 1 to 2 quotes. Write 1 to 3 learning objectives. Write 3 to 5 behavioural tests including one case with elapsed time equal to a whole multiple of the half-life (e.g. t = T and t = 2*T). Write 2 to 3 predictions whose initialAmount, halfLife and elapsedTime all lie inside the slider ranges.
+
+Compute each expectedRemaining as N0 * 0.5^(t/T) from that case's initialAmount, halfLife and elapsedTime, rounded to 4 decimals, with a tolerance satisfying the tolerance rule above (small and positive).
+
+Choose a scenario that fits the source (e.g. object "Radioactive sample (grams)", setting "Half-life in years").`,
 };
 
 function engineSpecGuidance(engine: EngineId): string {

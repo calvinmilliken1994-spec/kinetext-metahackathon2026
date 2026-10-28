@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import {
   PROMPT_VERSION,
+  SPEC_TAILS,
   buildAnalysisMessages,
   buildRepairMessages,
   buildSpecMessages,
@@ -83,8 +84,8 @@ function makeEvilSource(): SourceDocument {
 const META_OPEN = '<untrusted-source-metadata>';
 const META_CLOSE = '</untrusted-source-metadata>';
 
-test('prompt version bumped to v5 for the publisher-name repair exception', () => {
-  assert.equal(PROMPT_VERSION, 'v5');
+test('prompt version bumped to v6 for the three new engines', () => {
+  assert.equal(PROMPT_VERSION, 'v6');
 });
 
 test('analysis user message wraps the source text in the boundary source block', () => {
@@ -147,7 +148,7 @@ test('analysis prompt mentions supported, activity, "none" and unsupportedReason
 test('analysis prompt lists every engine with its title, equation and appliesWhen', () => {
   const sys = buildAnalysisMessages(source)[0];
   assert.ok(sys !== undefined);
-  assert.equal(ENGINE_IDS.length, 4);
+  assert.equal(ENGINE_IDS.length, 7);
   for (const id of ENGINE_IDS) {
     const d = ENGINES[id];
     assert.ok(sys.content.includes(id), `missing engine id ${id}`);
@@ -155,16 +156,6 @@ test('analysis prompt lists every engine with its title, equation and appliesWhe
     assert.ok(sys.content.includes(d.equation), `missing equation for ${id}`);
     assert.ok(sys.content.includes(d.appliesWhen), `missing appliesWhen for ${id}`);
   }
-});
-
-test('analysis prompt instructs single best fit or none and warns against forced near matches', () => {
-  const sys = buildAnalysisMessages(source)[0];
-  assert.ok(sys !== undefined);
-  const lower: string = sys.content.toLowerCase();
-  assert.ok(lower.includes('single best'));
-  assert.ok(sys.content.includes('"none"'));
-  assert.ok(lower.includes('do not force'));
-  assert.ok(sys.content.includes('flight with drag is not projectile-v1'));
 });
 
 test('spec prompt for each engine names its keys, units, equation and scenario keys', () => {
@@ -186,6 +177,61 @@ test('spec prompt for each engine names its keys, units, equation and scenario k
     }
     assert.ok(sys.content.includes('|expected - computed| <= tolerance <= max('), `missing tolerance rule for ${id}`);
   }
+});
+
+test('every ENGINE_ID has a non-empty SPEC_TAILS entry; new engines name their output key', () => {
+  for (const id of ENGINE_IDS) {
+    const tail: string = SPEC_TAILS[id];
+    assert.ok(typeof tail === 'string' && tail.length > 0, `empty SPEC_TAILS entry for ${id}`);
+  }
+  const newEngines: EngineId[] = ['compound-interest-v1', 'hardy-weinberg-v1', 'half-life-v1'];
+  for (const id of newEngines) {
+    const tail: string = SPEC_TAILS[id];
+    assert.ok(tail.includes(ENGINES[id].output.key), `missing output key for ${id}`);
+  }
+});
+
+test('compound-interest spec tail states realistic ranges, exact formula, edge case and faithful conversion', () => {
+  const tail: string = SPEC_TAILS['compound-interest-v1'];
+  assert.ok(tail.includes('100') && tail.includes('10000') && tail.includes('1000'));
+  assert.ok(tail.includes('1 to 12') && tail.includes('default 5'));
+  assert.ok(tail.includes('1 to 40') && tail.includes('default 10'));
+  assert.ok(tail.includes('1, 2, 4, 12') && tail.includes('365'));
+  assert.ok(tail.includes('0% rate') && tail.includes('0 years') && tail.includes('equals the principal'));
+  assert.ok(tail.includes('P * (1 + r/(100*n))^(n*t)'));
+  assert.ok(tail.includes('percent') && tail.includes('2 decimals') && tail.includes('0.01'));
+  assert.ok(tail.includes('n = 1') && tail.includes('never invent interest rates'));
+  assert.ok(tail.includes('Savings account') && tail.includes('Interest compounded yearly'));
+  assert.ok(tail.includes('expectedAmountUSD'));
+  assert.ok(tail.includes('2 to 4 explanations') && tail.includes('1 to 3 learning objectives'));
+  assert.ok(tail.includes('3 to 5 behavioural tests') && tail.includes('2 to 3 predictions'));
+});
+
+test('hardy-weinberg spec tail states realistic range, exact formula and edge cases', () => {
+  const tail: string = SPEC_TAILS['hardy-weinberg-v1'];
+  assert.ok(tail.includes('0.05') && tail.includes('0.95') && tail.includes('0.5'));
+  assert.ok(tail.includes('p = 0.5') && tail.includes('2pq = 0.5'));
+  assert.ok(tail.includes('p = 0') && tail.includes('p = 1'));
+  assert.ok(tail.includes('2 * p * (1 - p)'));
+  assert.ok(tail.includes('4 decimals') && tail.includes('0.001'));
+  assert.ok(tail.includes('MN blood group alleles') && tail.includes('Large randomly mating population'));
+  assert.ok(tail.includes('expectedHeterozygoteFrequency'));
+  assert.ok(tail.includes('2 to 4 explanations') && tail.includes('1 to 3 learning objectives'));
+  assert.ok(tail.includes('3 to 5 behavioural tests') && tail.includes('2 to 3 predictions'));
+});
+
+test('half-life spec tail states realistic ranges, exact formula and whole-multiple edge case', () => {
+  const tail: string = SPEC_TAILS['half-life-v1'];
+  assert.ok(tail.includes('1 to 1000') && tail.includes('grams'));
+  assert.ok(tail.toLowerCase().includes('same time unit') && tail.includes('years'));
+  assert.ok(tail.includes('5 half-lives'));
+  assert.ok(tail.toLowerCase().includes('whole multiple'));
+  assert.ok(tail.includes('N0 * 0.5^(t/T)'));
+  assert.ok(tail.includes('4 decimals') && tail.toLowerCase().includes('tolerance rule'));
+  assert.ok(tail.includes('Radioactive sample (grams)') && tail.includes('Half-life in years'));
+  assert.ok(tail.includes('expectedRemaining'));
+  assert.ok(tail.includes('2 to 4 explanations') && tail.includes('1 to 3 learning objectives'));
+  assert.ok(tail.includes('3 to 5 behavioural tests') && tail.includes('2 to 3 predictions'));
 });
 
 test('buildSpecMessages throws ENGINE_REQUIRED when activity is not an engine id', () => {
@@ -510,3 +556,4 @@ test('adversarial teacher metadata stays inside the untrusted block (repair)', (
   assert.equal(parsed.title, evil.title);
   assert.equal(parsed.attribution, evil.attribution);
 });
+

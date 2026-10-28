@@ -26,6 +26,9 @@ import { accelerationOf } from './forces-1d/engine.ts';
 import { maxHeightOf } from './projectile-v1/engine.ts';
 import { liftOf } from './lift-equation-v1/engine.ts';
 import { speedOfSoundOf } from './speed-of-sound-v1/engine.ts';
+import { amountAfter } from './compound-interest-v1/engine.ts';
+import { heterozygoteFrequencyOf } from './hardy-weinberg-v1/engine.ts';
+import { remainingAfter } from './half-life-v1/engine.ts';
 
 /** Anything carrying the engine's numeric input keys (an ActivityCase, a test, a prediction, a slider state). */
 export type EngineInputs = ActivityCase | Record<string, number>;
@@ -85,5 +88,16 @@ export function computeOutput(engine: EngineId, c: EngineInputs): number {
         gasConstantJPerKgK: inputs.gasConstantJPerKgK,
         temperatureK: inputs.temperatureK,
       });
+    case 'compound-interest-v1':
+      return amountAfter({
+        principalUSD: inputs.principalUSD,
+        annualRatePercent: inputs.annualRatePercent,
+        compoundsPerYear: inputs.compoundsPerYear,
+        years: inputs.years,
+      });
+    case 'hardy-weinberg-v1':
+      return heterozygoteFrequencyOf(inputs.alleleFrequencyP);
+    case 'half-life-v1':
+      return remainingAfter({ initialAmount: inputs.initialAmount, halfLife: inputs.halfLife, elapsedTime: inputs.elapsedTime });
   }
 }

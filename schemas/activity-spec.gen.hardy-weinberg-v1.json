@@ -1,0 +1,178 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "title",
+    "learningObjectives",
+    "explanations",
+    "simulation",
+    "behavioralTests",
+    "predictions"
+  ],
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Short activity title for students."
+    },
+    "learningObjectives": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "1-5 measurable objectives grounded in the source."
+    },
+    "explanations": {
+      "type": "array",
+      "description": "1-6 short explanations, each supported by verbatim quotes from the source.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "text",
+          "evidence"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "lowercase-kebab id"
+          },
+          "text": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "sourceId",
+                "quote"
+              ],
+              "properties": {
+                "sourceId": {
+                  "type": "string"
+                },
+                "quote": {
+                  "type": "string",
+                  "description": "Exact characters copied from the source, no ellipsis, 150 characters or fewer."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "simulation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alleleFrequencyP",
+        "scenario"
+      ],
+      "properties": {
+        "alleleFrequencyP": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "min",
+            "max",
+            "default"
+          ],
+          "description": "Slider range for Frequency p of the first allele (dimensionless).",
+          "properties": {
+            "min": {
+              "type": "number"
+            },
+            "max": {
+              "type": "number"
+            },
+            "default": {
+              "type": "number"
+            }
+          }
+        },
+        "scenario": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "objectLabel",
+            "settingLabel"
+          ],
+          "properties": {
+            "objectLabel": {
+              "type": "string"
+            },
+            "settingLabel": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "behavioralTests": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "alleleFrequencyP",
+          "expectedHeterozygoteFrequency",
+          "tolerance"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "alleleFrequencyP": {
+            "type": "number",
+            "description": "Frequency p of the first allele (dimensionless)"
+          },
+          "expectedHeterozygoteFrequency": {
+            "type": "number",
+            "description": "Heterozygote frequency 2pq (dimensionless), computed with 2pq, q=1-p from the inputs of this case."
+          },
+          "tolerance": {
+            "type": "number",
+            "description": "Allowed absolute difference from the exact value; small and positive."
+          }
+        }
+      }
+    },
+    "predictions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "prompt",
+          "alleleFrequencyP",
+          "expectedHeterozygoteFrequency",
+          "tolerance"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "prompt": {
+            "type": "string"
+          },
+          "alleleFrequencyP": {
+            "type": "number",
+            "description": "Frequency p of the first allele (dimensionless)"
+          },
+          "expectedHeterozygoteFrequency": {
+            "type": "number",
+            "description": "Heterozygote frequency 2pq (dimensionless), computed with 2pq, q=1-p from the inputs of this case."
+          },
+          "tolerance": {
+            "type": "number",
+            "description": "Allowed absolute difference from the exact value; small and positive."
+          }
+        }
+      }
+    }
+  }
+}

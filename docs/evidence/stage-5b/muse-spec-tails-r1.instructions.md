@@ -1,0 +1,3 @@
+# Repair: your new prompts.test.ts test fails
+
+Test 'every ENGINE_ID has a non-empty SPEC_TAILS entry naming its output key' fails with "missing output key for forces-1d-v1": the four pre-existing tails describe the output in words ("expected acceleration", "expectedMaxHeightM" etc.) and forces does not contain 'expectedAccelerationMps2'. Do not change the four existing tails (their wording is tied to recorded live evidence). Fix the TEST only: assert every tail is non-empty, and assert the output key only for the three new engines (compound-interest-v1, hardy-weinberg-v1, half-life-v1). Output the complete prompts.test.ts only.

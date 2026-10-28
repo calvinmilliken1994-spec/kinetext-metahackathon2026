@@ -69,11 +69,17 @@ test('computeOutput reads exactly the descriptor input keys for every engine', (
     horizontalSpeedMps: 7, verticalSpeedMps: 14, gravityMps2: 7,
     liftCoefficient: 1, airDensityKgM3: 1, airspeedMps: 10, wingAreaM2: 2,
     gamma: 1.4, gasConstantJPerKgK: 287, temperatureK: 250,
+    principalUSD: 1000, annualRatePercent: 5, compoundsPerYear: 1, years: 10,
+    alleleFrequencyP: 0.7,
+    initialAmount: 100, halfLife: 5730, elapsedTime: 11460,
   };
   assert.equal(computeOutput('forces-1d-v1', probe), 10 / 5);
   closeTo(computeOutput('projectile-v1', probe), 14 * 14 / (2 * 7), 1e-12);
   closeTo(computeOutput('lift-equation-v1', probe), 1 * 1 * 100 / 2 * 2, 1e-12);
   closeTo(computeOutput('speed-of-sound-v1', probe), Math.sqrt(1.4 * 287 * 250), 1e-12);
+  closeTo(computeOutput('compound-interest-v1', probe), 1000 * Math.pow(1.05, 10), 1e-9);
+  closeTo(computeOutput('hardy-weinberg-v1', probe), 2 * 0.7 * 0.3, 1e-12);
+  closeTo(computeOutput('half-life-v1', probe), 25, 1e-12);
   // Every engine's descriptor keys are present in the probe: nothing fell back to NaN.
   for (const id of ENGINE_IDS) {
     for (const key of inputKeys(id)) assert.ok(key in probe, `${id} input key ${key} covered by the probe`);

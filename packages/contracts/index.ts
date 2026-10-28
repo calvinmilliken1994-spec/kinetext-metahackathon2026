@@ -43,10 +43,15 @@ export interface LiftCase {
 export interface SoundCase {
   gamma: number; gasConstantJPerKgK: number; temperatureK: number; expectedSpeedMps: number; tolerance: number;
 }
+export interface CompoundInterestCase {
+  principalUSD: number; annualRatePercent: number; compoundsPerYear: number; years: number; expectedAmountUSD: number; tolerance: number;
+}
+export interface HardyWeinbergCase { alleleFrequencyP: number; expectedHeterozygoteFrequency: number; tolerance: number }
+export interface HalfLifeCase { initialAmount: number; halfLife: number; elapsedTime: number; expectedRemaining: number; tolerance: number }
 /** Stage 2 name for the forces case. */
 export type NumericCase = ForcesCase;
 /** Any engine's case (inputs + expected output + tolerance). */
-export type ActivityCase = ForcesCase | ProjectileCase | LiftCase | SoundCase;
+export type ActivityCase = ForcesCase | ProjectileCase | LiftCase | SoundCase | CompoundInterestCase | HardyWeinbergCase | HalfLifeCase;
 
 export type BehavioralTestOf<C> = C & { name: string };
 export type PredictionOf<C> = C & { id: string; prompt: string };
@@ -78,7 +83,22 @@ export interface SoundSimulation {
   gamma: Range<'1'>; gasConstantJPerKgK: Range<'J/(kg*K)'>; temperatureK: Range<'K'>;
   scenario: { objectLabel: string; settingLabel: string };
 }
-export type Simulation = ForcesSimulation | ProjectileSimulation | LiftSimulation | SoundSimulation;
+type Scenario2 = { objectLabel: string; settingLabel: string };
+export interface CompoundInterestSimulation {
+  engine: 'compound-interest-v1'; equation: 'A=P*(1+r/(100*n))^(n*t)';
+  principalUSD: Range<'USD'>; annualRatePercent: Range<'%'>; compoundsPerYear: Range<'per year'>; years: Range<'years'>;
+  scenario: Scenario2;
+}
+export interface HardyWeinbergSimulation {
+  engine: 'hardy-weinberg-v1'; equation: '2pq, q=1-p'; alleleFrequencyP: Range<'1'>; scenario: Scenario2;
+}
+export interface HalfLifeSimulation {
+  engine: 'half-life-v1'; equation: 'N=N0*(1/2)^(t/T)';
+  initialAmount: Range<'1'>; halfLife: Range<'time'>; elapsedTime: Range<'time'>; scenario: Scenario2;
+}
+export type Simulation =
+  | ForcesSimulation | ProjectileSimulation | LiftSimulation | SoundSimulation
+  | CompoundInterestSimulation | HardyWeinbergSimulation | HalfLifeSimulation;
 
 export interface Provenance {
   provider: 'meta'; requestedModel: string; returnedModel: string; responseId: string; runId: string;
@@ -104,8 +124,19 @@ export interface LiftActivitySpec extends SpecBase {
 export interface SoundActivitySpec extends SpecBase {
   simulation: SoundSimulation; behavioralTests: BehavioralTestOf<SoundCase>[]; predictions: PredictionOf<SoundCase>[];
 }
+export interface CompoundInterestActivitySpec extends SpecBase {
+  simulation: CompoundInterestSimulation; behavioralTests: BehavioralTestOf<CompoundInterestCase>[]; predictions: PredictionOf<CompoundInterestCase>[];
+}
+export interface HardyWeinbergActivitySpec extends SpecBase {
+  simulation: HardyWeinbergSimulation; behavioralTests: BehavioralTestOf<HardyWeinbergCase>[]; predictions: PredictionOf<HardyWeinbergCase>[];
+}
+export interface HalfLifeActivitySpec extends SpecBase {
+  simulation: HalfLifeSimulation; behavioralTests: BehavioralTestOf<HalfLifeCase>[]; predictions: PredictionOf<HalfLifeCase>[];
+}
 /** Full activity spec — validated by schemas/activity-spec.full[.<engine>].json plus packages/validation. */
-export type ActivitySpec = ForcesActivitySpec | ProjectileActivitySpec | LiftActivitySpec | SoundActivitySpec;
+export type ActivitySpec =
+  | ForcesActivitySpec | ProjectileActivitySpec | LiftActivitySpec | SoundActivitySpec
+  | CompoundInterestActivitySpec | HardyWeinbergActivitySpec | HalfLifeActivitySpec;
 
 // ---- What Muse generates (schemas/activity-spec.gen[.<engine>].json). The system adds ids, sources, engine,
 // equation, units, execution and provenance. --------------------------------------------------------------
@@ -132,15 +163,31 @@ export interface SoundGeneratedSpec extends GenBase {
   simulation: { gamma: GenRange; gasConstantJPerKgK: GenRange; temperatureK: GenRange; scenario: { objectLabel: string; settingLabel: string } };
   behavioralTests: BehavioralTestOf<SoundCase>[]; predictions: PredictionOf<SoundCase>[];
 }
-export type GeneratedSpec = ForcesGeneratedSpec | ProjectileGeneratedSpec | LiftGeneratedSpec | SoundGeneratedSpec;
+export interface CompoundInterestGeneratedSpec extends GenBase {
+  simulation: { principalUSD: GenRange; annualRatePercent: GenRange; compoundsPerYear: GenRange; years: GenRange; scenario: Scenario2 };
+  behavioralTests: BehavioralTestOf<CompoundInterestCase>[]; predictions: PredictionOf<CompoundInterestCase>[];
+}
+export interface HardyWeinbergGeneratedSpec extends GenBase {
+  simulation: { alleleFrequencyP: GenRange; scenario: Scenario2 };
+  behavioralTests: BehavioralTestOf<HardyWeinbergCase>[]; predictions: PredictionOf<HardyWeinbergCase>[];
+}
+export interface HalfLifeGeneratedSpec extends GenBase {
+  simulation: { initialAmount: GenRange; halfLife: GenRange; elapsedTime: GenRange; scenario: Scenario2 };
+  behavioralTests: BehavioralTestOf<HalfLifeCase>[]; predictions: PredictionOf<HalfLifeCase>[];
+}
+export type GeneratedSpec =
+  | ForcesGeneratedSpec | ProjectileGeneratedSpec | LiftGeneratedSpec | SoundGeneratedSpec
+  | CompoundInterestGeneratedSpec | HardyWeinbergGeneratedSpec | HalfLifeGeneratedSpec;
 /** The generated-spec type for one engine. */
 export interface GeneratedSpecByEngine {
   'forces-1d-v1': ForcesGeneratedSpec; 'projectile-v1': ProjectileGeneratedSpec;
   'lift-equation-v1': LiftGeneratedSpec; 'speed-of-sound-v1': SoundGeneratedSpec;
+  'compound-interest-v1': CompoundInterestGeneratedSpec; 'hardy-weinberg-v1': HardyWeinbergGeneratedSpec; 'half-life-v1': HalfLifeGeneratedSpec;
 }
 export interface ActivitySpecByEngine {
   'forces-1d-v1': ForcesActivitySpec; 'projectile-v1': ProjectileActivitySpec;
   'lift-equation-v1': LiftActivitySpec; 'speed-of-sound-v1': SoundActivitySpec;
+  'compound-interest-v1': CompoundInterestActivitySpec; 'hardy-weinberg-v1': HardyWeinbergActivitySpec; 'half-life-v1': HalfLifeActivitySpec;
 }
 
 /** Muse source analysis (schemas/source-analysis.gen.json). Muse chooses the engine or 'none'. */
@@ -290,6 +337,9 @@ const ENGINE_EXTRAS: Record<EngineId, readonly string[]> = {
   'projectile-v1': [],
   'lift-equation-v1': [],
   'speed-of-sound-v1': [],
+  'compound-interest-v1': [],
+  'hardy-weinberg-v1': [],
+  'half-life-v1': [],
 };
 
 /**
