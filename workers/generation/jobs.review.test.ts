@@ -658,3 +658,156 @@ test('S5-04: lift wrong-answer fault stays effective end-to-end with the bounded
     effective: true,
   });
 });
+
+/* ------------------------------------------------------------------ */
+/* S5-08 — duplicate baseline names/ids through the real worker         */
+/* (reviewer probe duplicates.mjs: all four jobs published r2 before    */
+/* the fix)                                                             */
+/* ------------------------------------------------------------------ */
+
+/** genFixture with behavioralTests[1] renamed to behavioralTests[0]'s name (both numerically correct). */
+function duplicateNameGen(): GenTests {
+  const dup = cloneGen();
+  dup.behavioralTests[1]['name'] = dup.behavioralTests[0]['name'];
+  return dup;
+}
+
+test('S5-08 duplicate-name-drops-correct-case: deleting the second occurrence of a duplicated name never publishes', async () => {
+  const storageDir = tempStorage();
+  const dropped = duplicateNameGen();
+  dropped.behavioralTests.splice(1, 1); // tests 4 → 3
+  const { client, repairCount } = stagedClient({ rev1: duplicateNameGen(), repairs: [dropped, duplicateNameGen()] });
+  const { jobId, done } = startJob('nasa-grc-equations-of-motion', { client, storageDir, purpose: 'test-live' });
+  const summary: JobSummary = await done;
+
+  assert.equal(summary.status, 'failed');
+  assert.equal(summary.error?.code, 'VALIDATION_FAILED');
+  assert.equal(summary.publishedRevision, undefined, 'the reviewer probe published this r2 before the fix');
+  assert.equal(summary.revisions, 3);
+  assert.equal(repairCount(), 2);
+  assert.deepEqual(failedIds(readReport(storageDir, jobId, 1)), ['semantic.unique-ids']);
+  const report2 = readReport(storageDir, jobId, 2);
+  assert.deepEqual(failedIds(report2), ['repair.no-weakening'], 'the shrunken revision passes every plain check; only the guard can stop it');
+  assert.match(
+    noWeakening(report2).message,
+    /"positive net force accelerates forward" \(occurrence 2 of 2\) from the baseline is missing from the repair/,
+  );
+});
+
+test('S5-08 duplicate-name-drops-wrong-case: deleting a failing duplicate never publishes', async () => {
+  const storageDir = tempStorage();
+  const wrong = duplicateNameGen();
+  wrong.behavioralTests[1]['expectedAccelerationMps2'] = 999; // wrong: -20 N / 5 kg = -4
+  const dropped = structuredClone(wrong);
+  dropped.behavioralTests.splice(1, 1);
+  const { client } = stagedClient({ rev1: wrong, repairs: [dropped, structuredClone(wrong)] });
+  const { jobId, done } = startJob('nasa-grc-equations-of-motion', { client, storageDir, purpose: 'test-live' });
+  const summary = await done;
+
+  assert.equal(summary.status, 'failed');
+  assert.equal(summary.publishedRevision, undefined, 'deletion removed both the uniqueness and the behavioral failure before the fix');
+  assert.deepEqual(failedIds(readReport(storageDir, jobId, 1)).sort(), ['behavior.tests', 'semantic.unique-ids']);
+  const report2 = readReport(storageDir, jobId, 2);
+  assert.deepEqual(failedIds(report2), ['repair.no-weakening']);
+  assert.match(noWeakening(report2).message, /\(occurrence 2 of 2\) from the baseline is missing/);
+});
+
+test('S5-08 duplicate-name-replaced-same-count: an easy replacement case does not preserve the dropped obligation', async () => {
+  const storageDir = tempStorage();
+  const wrong = duplicateNameGen();
+  wrong.behavioralTests[1]['expectedAccelerationMps2'] = 999;
+  const replaced = structuredClone(wrong);
+  replaced.behavioralTests.splice(1, 1);
+  replaced.behavioralTests.push({
+    name: 'easy replacement',
+    massKg: 1,
+    netForceN: 0,
+    expectedAccelerationMps2: 0,
+    tolerance: 0.001,
+  });
+  assert.equal(replaced.behavioralTests.length, 4, 'the test count is unchanged');
+  const { client } = stagedClient({ rev1: wrong, repairs: [replaced, structuredClone(wrong)] });
+  const { jobId, done } = startJob('nasa-grc-equations-of-motion', { client, storageDir, purpose: 'test-live' });
+  const summary = await done;
+
+  assert.equal(summary.status, 'failed');
+  assert.equal(summary.publishedRevision, undefined, 'the reviewer probe published this same-count replacement before the fix');
+  const report2 = readReport(storageDir, jobId, 2);
+  assert.deepEqual(failedIds(report2), ['repair.no-weakening'], 'the replacement passes every plain check');
+  assert.match(noWeakening(report2).message, /\(occurrence 2 of 2\) from the baseline is missing/);
+});
+
+test('S5-08 duplicate-id-drops-correct-prediction: deleting the second occurrence of a duplicated prediction id never publishes', async () => {
+  const storageDir = tempStorage();
+  const dup = cloneGen();
+  dup.predictions[1]['id'] = 'pred-1'; // both predictions share one id; both numerically correct
+  const dropped = structuredClone(dup);
+  dropped.predictions.splice(1, 1); // predictions 2 → 1
+  const { client } = stagedClient({ rev1: dup, repairs: [dropped, structuredClone(dup)] });
+  const { jobId, done } = startJob('nasa-grc-equations-of-motion', { client, storageDir, purpose: 'test-live' });
+  const summary = await done;
+
+  assert.equal(summary.status, 'failed');
+  assert.equal(summary.publishedRevision, undefined, 'the reviewer probe published this r2 before the fix');
+  assert.deepEqual(failedIds(readReport(storageDir, jobId, 1)), ['semantic.unique-ids']);
+  const report2 = readReport(storageDir, jobId, 2);
+  assert.deepEqual(failedIds(report2), ['repair.no-weakening']);
+  assert.match(noWeakening(report2).message, /predictions "pred-1" \(occurrence 2 of 2\) from the baseline is missing/);
+});
+
+test('S5-08 duplicate-name reordering: swapping content between the two occurrences of one name fails', async () => {
+  const storageDir = tempStorage();
+  const swapped = duplicateNameGen();
+  const first = swapped.behavioralTests[0];
+  const second = swapped.behavioralTests[1];
+  assert.ok(first !== undefined && second !== undefined);
+  swapped.behavioralTests[0] = second;
+  swapped.behavioralTests[1] = first;
+  const { client } = stagedClient({ rev1: duplicateNameGen(), repairs: [swapped, duplicateNameGen()] });
+  const { jobId, done } = startJob('nasa-grc-equations-of-motion', { client, storageDir, purpose: 'test-live' });
+  const summary = await done;
+
+  assert.equal(summary.status, 'failed');
+  assert.equal(summary.publishedRevision, undefined);
+  const report2 = readReport(storageDir, jobId, 2);
+  assert.deepEqual(failedIds(report2).sort(), ['repair.no-weakening', 'semantic.unique-ids'].sort());
+  const message = noWeakening(report2).message;
+  assert.match(message, /"positive net force accelerates forward" changed \(/);
+  assert.match(message, /passed its own checks on the baseline/);
+  assert.ok(!message.includes('appears 2 times'), 'both occurrences are preserved; the swap is the violation');
+});
+
+/* ------------------------------------------------------------------ */
+/* S5-09 — a publisher-policy-violating name is repairable              */
+/* (reviewer probe policy-name-repair: the job burned both attempts     */
+/* before the fix because no valid repair existed)                      */
+/* ------------------------------------------------------------------ */
+
+test('S5-09 policy-name-repair: renaming the NASA test name with identical numbers publishes r2', async () => {
+  const storageDir = tempStorage();
+  const r1 = cloneGen();
+  r1.behavioralTests[0]['name'] = 'NASA predicts this acceleration';
+  const { client, repairCount } = stagedClient({ rev1: r1, repairs: [cloneGen()] });
+  const { jobId, done } = startJob('nasa-grc-equations-of-motion', { client, storageDir, purpose: 'test-live' });
+  const summary = await done;
+
+  assert.equal(summary.status, 'succeeded');
+  assert.equal(summary.publishedRevision, 2, 'a policy-name correction with identical numbers is a legitimate repair');
+  assert.equal(repairCount(), 1);
+  assert.deepEqual(failedIds(readReport(storageDir, jobId, 1)), ['policy.no-publisher-attribution']);
+  const report2 = readReport(storageDir, jobId, 2);
+  assert.deepEqual(failedIds(report2), []);
+  assert.equal(noWeakening(report2).passed, true);
+
+  // Only the name changed; every number carries over from r1 to r2.
+  const disk = readJob(storageDir, jobId);
+  assert.ok(disk !== null);
+  const spec1 = disk.revisions[0]?.spec as { behavioralTests: Record<string, unknown>[] };
+  const spec2 = disk.revisions[1]?.spec as { behavioralTests: Record<string, unknown>[] };
+  const c1 = spec1.behavioralTests[0];
+  const c2 = spec2.behavioralTests[0];
+  assert.ok(c1 !== undefined && c2 !== undefined);
+  assert.equal(c1['name'], 'NASA predicts this acceleration');
+  assert.equal(c2['name'], 'positive net force accelerates forward');
+  assert.deepEqual({ ...c2, name: c1['name'] }, c1, 'every field except the name is identical');
+});

@@ -760,9 +760,18 @@ function firstFailingCase(
  * it. Rules, each scoped per case/field (a global failing check id never
  * grants unrelated relaxations):
  * - the engine must be unchanged;
- * - every baseline behavioral-test `name` and prediction `id` must be present
- *   EXACTLY ONCE in the repair — renaming, replacing or deleting a case never
- *   removes the comparison obligation;
+ * - case identity is (name, occurrence index among the baseline cases with
+ *   that name) for behavioral tests and (id, occurrence) for predictions
+ *   (S5-08): the k-th baseline case named X must match the k-th case named X
+ *   in the repair, so EVERY occurrence of a duplicated baseline name/id is its
+ *   own obligation — renaming, replacing, deleting or reordering cases never
+ *   removes the comparison obligation. The single rename exception (S5-09): a
+ *   baseline case whose own name/id violates the publisher-attribution policy
+ *   (the exact patterns of 'policy.no-publisher-attribution') may be renamed —
+ *   matched by its position in the list — to a name/id that does not violate
+ *   the policy and is not another baseline name/id; its numeric content stays
+ *   under the same rules. No other rename is allowed, so a baseline whose
+ *   duplicate name needs a uniqueness rename fails closed into human review;
  * - per case: `next.tolerance <= baseline.tolerance` ALWAYS (no exceptions — a
  *   tolerance failure is fixed by lowering it, and a failing behavior check
  *   never excuses widening);
@@ -843,7 +852,7 @@ export function compareRevisions(baseline: ActivitySpec, next: ActivitySpec, fai
       id,
       kind,
       passed: false,
-      message: `repair weakened the spec: ${list} (a repair must fix the failing checks without changing the engine, renaming/replacing/deleting baseline cases, widening any tolerance, rewriting a case that passed on the baseline, or shrinking slider ranges)`,
+      message: `repair weakened the spec: ${list} (a repair must fix the failing checks without changing the engine, renaming/replacing/deleting any baseline case occurrence, widening any tolerance, rewriting a case that passed on the baseline, or shrinking slider ranges; only a baseline name/id that itself violates the publisher-attribution policy may be renamed, to a policy-compliant key that is not another baseline name/id)`,
     };
   } catch (err) {
     return { id, kind, passed: false, message: `comparison crashed before it could pass or fail cleanly: ${errMsg(err)}` };
@@ -851,10 +860,29 @@ export function compareRevisions(baseline: ActivitySpec, next: ActivitySpec, fai
 }
 
 /**
- * Per-list preservation: every baseline case key (name/id) present exactly
- * once, tolerance never increased, and inputs/expected output frozen unless
- * that specific baseline case was wrong. Content rules need the shared engine;
- * identity is checked even without one (the engine violation is already listed).
+ * Per-list preservation (S5-02, S5-08, S5-09). Case identity is
+ * (key, occurrence index among the baseline cases with that key): the k-th
+ * baseline case named X must match the k-th case named X in the repair, so
+ * every occurrence of a duplicated baseline name/id stays its own obligation —
+ * deleting a duplicate, replacing it under a new name, or reordering
+ * duplicates to swap their content all fail. Per matched pair the tolerance
+ * never increases and inputs/expected output are frozen unless that specific
+ * baseline case was wrong.
+ *
+ * The single rename exception (S5-09): a baseline case whose own key violates
+ * the publisher-attribution policy (hasPublisherAttribution — the exact
+ * patterns of 'policy.no-publisher-attribution') may be renamed; it is then
+ * matched by its position in the list, and the new key must not violate the
+ * policy and must not equal another baseline key of the same list (no
+ * impersonation of a preserved case). Clean name matches always take priority
+ * over positional ones. Every other rename stays a 'missing from the repair'
+ * violation, so a duplicate needing a uniqueness rename fails closed.
+ *
+ * A baseline key appearing MORE often in the repair than in the baseline makes
+ * occurrence identity ambiguous (and fails semantic.unique-ids anyway) and is
+ * reported; novel keys are additions and allowed. Content rules need the
+ * shared engine; identity is checked even without one (the engine violation
+ * is already listed).
  */
 function compareCases(
   engine: EngineId | undefined,
@@ -877,29 +905,15 @@ function compareCases(
       bucket.push(c);
     }
   }
-  const seen = new Set<string>();
-  for (let i = 0; i < prev.length; i++) {
-    const bc = prev[i];
-    const k = bc[keyField];
-    if (typeof k !== 'string') {
-      problems.push(`${list}[${i}] has no usable ${keyField} in the baseline, so its preservation cannot be verified`);
-      continue;
-    }
-    if (seen.has(k)) continue; // a duplicated baseline key is one obligation
-    seen.add(k);
-    const matches = nextByKey.get(k) ?? [];
-    if (matches.length === 0) {
-      problems.push(
-        `${list} "${k}" from the baseline is missing from the repair (renaming, replacing or deleting a baseline case is weakening, never a repair)`,
-      );
-      continue;
-    }
-    if (matches.length > 1) {
-      problems.push(`${list} "${k}" appears ${matches.length} times in the repair, expected exactly once`);
-      continue;
-    }
-    const nc = matches[0];
+  const baselineCountByKey = new Map<string, number>();
+  for (const c of prev) {
+    const k = c[keyField];
+    if (typeof k !== 'string') continue;
+    baselineCountByKey.set(k, (baselineCountByKey.get(k) ?? 0) + 1);
+  }
 
+  /** Tolerance + content rules for one matched baseline/next pair (S5-02 rules 3–4). */
+  const comparePair = (bc: Record<string, unknown>, nc: Record<string, unknown>, k: string): void => {
     // Tolerance: never increased, no exceptions (S5-02 rule 3).
     const bt = bc.tolerance;
     const nt = nc.tolerance;
@@ -912,7 +926,7 @@ function compareCases(
     }
 
     // Content: frozen unless THIS baseline case was wrong (S5-02 rule 4).
-    if (engine === undefined) continue;
+    if (engine === undefined) return;
     const changes: string[] = [];
     for (const input of ENGINES[engine].inputs) {
       if (!Object.is(bc[input.key], nc[input.key])) {
@@ -926,6 +940,80 @@ function compareCases(
     if (changes.length > 0 && !baselineCaseWasWrong(engine, baseline, bc, isPrediction)) {
       problems.push(
         `${list} "${k}" changed (${changes.join(', ')}) even though the case passed its own checks on the baseline (only a case that was wrong on the baseline may change)`,
+      );
+    }
+  };
+
+  /** S5-08: a duplicated baseline key names WHICH occurrence is missing. */
+  const missingMessage = (k: string, occurrence: number): string => {
+    const count = baselineCountByKey.get(k) ?? 1;
+    const label = count === 1 ? `"${k}"` : `"${k}" (occurrence ${occurrence + 1} of ${count})`;
+    return `${list} ${label} from the baseline is missing from the repair (renaming, replacing or deleting a baseline case is weakening, never a repair)`;
+  };
+
+  // Pass 1 — identity is (key, occurrence). A policy-violating baseline key
+  // without a name match is deferred to the positional rename exception
+  // (pass 2), so clean name matches always take priority.
+  const claimed = new Set<Record<string, unknown>>();
+  const deferred: { index: number; bc: Record<string, unknown>; key: string; occurrence: number }[] = [];
+  const occurrenceSeen = new Map<string, number>();
+  for (let i = 0; i < prev.length; i++) {
+    const bc = prev[i];
+    const k = bc[keyField];
+    if (typeof k !== 'string') {
+      problems.push(`${list}[${i}] has no usable ${keyField} in the baseline, so its preservation cannot be verified`);
+      continue;
+    }
+    const occurrence = occurrenceSeen.get(k) ?? 0;
+    occurrenceSeen.set(k, occurrence + 1);
+    const bucket = nextByKey.get(k) ?? [];
+    if (occurrence < bucket.length) {
+      const nc = bucket[occurrence];
+      claimed.add(nc);
+      comparePair(bc, nc, k);
+      continue;
+    }
+    if (hasPublisherAttribution(k)) {
+      deferred.push({ index: i, bc, key: k, occurrence });
+      continue;
+    }
+    problems.push(missingMessage(k, occurrence));
+  }
+
+  // Pass 2 — S5-09: a baseline case whose own key violates the publisher
+  // policy may be renamed, matched by its position in the list.
+  for (const d of deferred) {
+    const nc: Record<string, unknown> | undefined = next[d.index];
+    const nk = nc?.[keyField];
+    if (nc === undefined || claimed.has(nc) || typeof nk !== 'string' || nk === d.key) {
+      problems.push(missingMessage(d.key, d.occurrence));
+      continue;
+    }
+    if (hasPublisherAttribution(nk)) {
+      problems.push(
+        `${list}[${d.index}] "${d.key}" violates the publisher-attribution policy and may be renamed to fix it, but the repair renames it to "${nk}", which violates the policy too`,
+      );
+      continue;
+    }
+    if (baselineCountByKey.has(nk)) {
+      problems.push(
+        `${list}[${d.index}] "${d.key}" violates the publisher-attribution policy and may be renamed to fix it, but only to a ${keyField} that is not another baseline ${keyField}; the repair renames it to "${nk}"`,
+      );
+      continue;
+    }
+    claimed.add(nc);
+    comparePair(d.bc, nc, d.key);
+  }
+
+  // A baseline key appearing more often in the repair than in the baseline
+  // makes occurrence identity ambiguous; novel keys are additions and allowed.
+  for (const [k, bCount] of baselineCountByKey) {
+    const nCount = (nextByKey.get(k) ?? []).length;
+    if (nCount > bCount) {
+      problems.push(
+        bCount === 1
+          ? `${list} "${k}" appears ${nCount} times in the repair, expected exactly once`
+          : `${list} "${k}" appears ${nCount} times in the repair, expected exactly ${bCount} (one per baseline occurrence)`,
       );
     }
   }

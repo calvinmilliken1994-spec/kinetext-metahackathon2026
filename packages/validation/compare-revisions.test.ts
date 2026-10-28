@@ -1,6 +1,10 @@
 // Stage 5 review S5-02 — baseline-anchored, per-case/per-field no-weakening rules.
 // Every case here reproduces a reviewer probe (launder-tolerance, launder-range,
 // rename-tolerance, replace-case, exception.mjs) at the deterministic validator level.
+// Round-2 sections reproduce the S5-08 probes (duplicates.mjs: duplicate-name
+// deletion, replacement with an unchanged count, reordering duplicates, duplicate
+// prediction ids) and the S5-09 probe (policy-name-repair: a publisher-violating
+// test name must be repairable).
 // Run: node --test packages/validation/compare-revisions.test.ts
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -407,4 +411,300 @@ test('the failure message lists every violation, capped for display', () => {
   assert.match(capped.message, /case-0/);
   assert.match(capped.message, /\(\+1 more violation\(s\)\)/);
   assert.ok(capped.message.length < 2000, 'the display message stays bounded');
+});
+
+/* ------------------------------------------------------------------ */
+/* S5-08 — duplicate baseline names/ids: identity is (key, occurrence)  */
+/* ------------------------------------------------------------------ */
+
+/** A projectile spec whose behavioralTests[1] is renamed to 'earth launch' (both cases numerically correct). */
+function duplicateNameProjectile(): ActivitySpec {
+  const spec = makeProjectileSpec();
+  const cases = casesOf(spec, 'behavioralTests');
+  assert.ok(cases[1] !== undefined);
+  cases[1]['name'] = 'earth launch';
+  return spec;
+}
+
+test('S5-08 duplicate-name-drops-correct-case: deleting the second occurrence of a duplicated name fails', () => {
+  // Reviewer probe duplicate-name-drops-correct-case: two numerically distinct
+  // CORRECT tests share one name; deleting the second drops the test count and
+  // published r2 before the fix. Every occurrence is its own obligation.
+  const r1 = duplicateNameProjectile();
+  const r1Report = validateSpec(r1, [projectileDoc]);
+  assert.deepEqual(failedIds(r1Report), ['semantic.unique-ids'], 'the duplicated name is the only baseline failure');
+
+  const r2 = structuredClone(r1);
+  casesOf(r2, 'behavioralTests').splice(1, 1);
+  const r2Report = validateSpec(r2, [projectileDoc]);
+  assert.equal(r2Report.publishable, true, 'the shrunken revision passes every plain check on its own');
+
+  const comparison = compareRevisions(r1, r2, failedIds(r1Report));
+  assert.equal(comparison.passed, false);
+  assert.match(comparison.message, /"earth launch" \(occurrence 2 of 2\) from the baseline is missing from the repair/);
+});
+
+test('S5-08 duplicate-name-drops-wrong-case: deleting a failing duplicate is not a repair', () => {
+  // Reviewer probe duplicate-name-drops-wrong-case: the second occurrence states
+  // 999 instead of the correct value; deleting it removes BOTH the uniqueness and
+  // the behavioral failure — and published r2 before the fix.
+  const r1 = duplicateNameProjectile();
+  const second = casesOf(r1, 'behavioralTests')[1];
+  assert.ok(second !== undefined);
+  second['expectedMaxHeightM'] = 999; // wrong: computed is 44.44… (tolerance 0.01)
+  const r1Report = validateSpec(r1, [projectileDoc]);
+  assert.deepEqual(failedIds(r1Report).sort(), ['behavior.tests', 'semantic.unique-ids'].sort());
+
+  const r2 = structuredClone(r1);
+  casesOf(r2, 'behavioralTests').splice(1, 1);
+  assert.equal(validateSpec(r2, [projectileDoc]).publishable, true, 'deleting it removes both failures from the plain validator');
+
+  const comparison = compareRevisions(r1, r2, failedIds(r1Report));
+  assert.equal(comparison.passed, false);
+  assert.match(comparison.message, /"earth launch" \(occurrence 2 of 2\) from the baseline is missing from the repair/);
+});
+
+test('S5-08 duplicate-name-replaced-same-count: an easy replacement does not preserve the dropped occurrence', () => {
+  // Reviewer probe duplicate-name-replaced-same-count: replace the ignored wrong
+  // duplicate with an easy case and keep the test count — r2 published before the
+  // fix. Count checks alone are insufficient; the occurrence is still missing.
+  const r1 = duplicateNameProjectile();
+  const second = casesOf(r1, 'behavioralTests')[1];
+  assert.ok(second !== undefined);
+  second['expectedMaxHeightM'] = 999;
+  const r1Report = validateSpec(r1, [projectileDoc]);
+
+  const r2 = structuredClone(r1);
+  const cases = casesOf(r2, 'behavioralTests');
+  cases.splice(1, 1);
+  cases.push({
+    name: 'easy replacement',
+    horizontalSpeedMps: 0,
+    verticalSpeedMps: 5,
+    gravityMps2: 9.8,
+    expectedMaxHeightM: (5 * 5) / (2 * 9.8),
+    tolerance: 0.001,
+  });
+  assert.equal(cases.length, 2, 'the test count is unchanged');
+  assert.equal(validateSpec(r2, [projectileDoc]).publishable, true, 'the replacement passes every plain check');
+
+  const comparison = compareRevisions(r1, r2, failedIds(r1Report));
+  assert.equal(comparison.passed, false);
+  assert.match(comparison.message, /"earth launch" \(occurrence 2 of 2\) from the baseline is missing from the repair/);
+});
+
+test('S5-08 reordering duplicates to swap their content fails', () => {
+  // Both occurrences survive under the same name, but their contents are swapped:
+  // (name, occurrence) identity pairs them up and the frozen-content rule fires.
+  const r1 = duplicateNameProjectile();
+  const r1Report = validateSpec(r1, [projectileDoc]);
+  const r2 = structuredClone(r1);
+  const cases = casesOf(r2, 'behavioralTests');
+  const first = cases[0];
+  const secondCase = cases[1];
+  assert.ok(first !== undefined && secondCase !== undefined);
+  cases[0] = secondCase;
+  cases[1] = first;
+
+  const comparison = compareRevisions(r1, r2, failedIds(r1Report));
+  assert.equal(comparison.passed, false);
+  assert.match(comparison.message, /"earth launch" changed \(/);
+  assert.match(comparison.message, /passed its own checks on the baseline/);
+  assert.ok(!comparison.message.includes('appears 2 times'), 'both occurrences are preserved; the swap is the violation');
+});
+
+test('S5-08 duplicate-id-drops-correct-prediction: deleting the second occurrence of a duplicated prediction id fails', () => {
+  // Reviewer probe duplicate-id-drops-correct-prediction: predictions 2 → 1
+  // published r2 before the fix.
+  const r1 = makeProjectileSpec();
+  const preds = (r1 as unknown as { predictions: LooseCase[] }).predictions;
+  const extra = structuredClone(preds[0]);
+  assert.ok(extra !== undefined);
+  extra['verticalSpeedMps'] = 25;
+  extra['expectedMaxHeightM'] = (25 * 25) / (2 * 9.8);
+  preds.push(extra); // same id 'fast-throw', different correct numbers
+  const r1Report = validateSpec(r1, [projectileDoc]);
+  assert.deepEqual(failedIds(r1Report), ['semantic.unique-ids']);
+
+  const r2 = structuredClone(r1);
+  (r2 as unknown as { predictions: unknown[] }).predictions.splice(1, 1);
+  assert.equal(validateSpec(r2, [projectileDoc]).publishable, true);
+
+  const comparison = compareRevisions(r1, r2, failedIds(r1Report));
+  assert.equal(comparison.passed, false);
+  assert.match(comparison.message, /predictions "fast-throw" \(occurrence 2 of 2\) from the baseline is missing from the repair/);
+});
+
+test('S5-08 preserving every duplicate occurrence passes the comparison (uniqueness stays a plain-validation failure)', () => {
+  const r1 = duplicateNameProjectile();
+  const r1Report = validateSpec(r1, [projectileDoc]);
+  assert.deepEqual(failedIds(r1Report), ['semantic.unique-ids']);
+  const comparison = compareRevisions(r1, structuredClone(r1), failedIds(r1Report));
+  assert.equal(comparison.passed, true, comparison.message);
+  assert.equal(validateSpec(r1, [projectileDoc]).publishable, false, 'the duplicate name still fails semantic.unique-ids');
+});
+
+test('S5-08 renaming a duplicate occurrence to a unique name fails closed (no uniqueness-rename exception)', () => {
+  // Lead decision: only a publisher-policy-violating name/id may be renamed
+  // (S5-09). A duplicate that "repairs" semantic.unique-ids by renaming one
+  // occurrence is rejected — fail closed, ending in human review — because a
+  // rename cannot be distinguished from a replacement.
+  const r1 = duplicateNameProjectile();
+  const r1Report = validateSpec(r1, [projectileDoc]);
+  const r2 = structuredClone(r1);
+  const second = casesOf(r2, 'behavioralTests')[1];
+  assert.ok(second !== undefined);
+  second['name'] = 'moon launch duplicate'; // content untouched, uniqueness "fixed"
+  assert.equal(validateSpec(r2, [projectileDoc]).publishable, true, 'the renamed revision passes every plain check');
+
+  const comparison = compareRevisions(r1, r2, failedIds(r1Report));
+  assert.equal(comparison.passed, false);
+  assert.match(comparison.message, /"earth launch" \(occurrence 2 of 2\) from the baseline is missing from the repair/);
+});
+
+/* ------------------------------------------------------------------ */
+/* S5-09 — publisher-policy-violating names/ids are repairable          */
+/* ------------------------------------------------------------------ */
+
+/** A projectile spec whose first behavioral-test name violates the publisher policy. */
+function nasaNamedProjectile(): ActivitySpec {
+  const spec = makeProjectileSpec();
+  const first = casesOf(spec, 'behavioralTests')[0];
+  assert.ok(first !== undefined);
+  first['name'] = 'NASA predicts this arc';
+  return spec;
+}
+
+test('S5-09 policy-name-repair: a publisher-violating name may be renamed with identical numbers', () => {
+  // Reviewer probe policy-name-repair: r1 is valid except for the NASA name; the
+  // clean fixture (only the name differs) was rejected before the fix, so no valid
+  // repair existed and the job burned both attempts.
+  const r1 = nasaNamedProjectile();
+  const r1Report = validateSpec(r1, [projectileDoc]);
+  assert.deepEqual(failedIds(r1Report), ['policy.no-publisher-attribution'], 'the name is the only baseline failure');
+
+  const r2 = makeProjectileSpec(); // restores a clean name; every number is identical
+  assert.equal(validateSpec(r2, [projectileDoc]).publishable, true);
+
+  const comparison = compareRevisions(r1, r2, failedIds(r1Report));
+  assert.equal(comparison.passed, true, comparison.message);
+});
+
+test('S5-09: the replacement name must not violate the publisher policy either', () => {
+  const r1 = nasaNamedProjectile();
+  const r1Report = validateSpec(r1, [projectileDoc]);
+  const r2 = structuredClone(r1);
+  const first = casesOf(r2, 'behavioralTests')[0];
+  assert.ok(first !== undefined);
+  first['name'] = 'NASA confirms this arc';
+
+  const comparison = compareRevisions(r1, r2, failedIds(r1Report));
+  assert.equal(comparison.passed, false);
+  assert.match(comparison.message, /violates the publisher-attribution policy/);
+  assert.match(comparison.message, /violates the policy too/);
+});
+
+test('S5-09: the replacement name must not equal another baseline name', () => {
+  const r1 = makeProjectileSpec();
+  const cases = casesOf(r1, 'behavioralTests');
+  assert.ok(cases[1] !== undefined);
+  cases[1]['name'] = 'NASA predicts this arc'; // the SECOND case violates the policy
+  const r1Report = validateSpec(r1, [projectileDoc]);
+  assert.deepEqual(failedIds(r1Report), ['policy.no-publisher-attribution']);
+
+  const r2 = structuredClone(r1);
+  const r2Cases = casesOf(r2, 'behavioralTests');
+  assert.ok(r2Cases[1] !== undefined);
+  r2Cases[1]['name'] = 'earth launch'; // impersonates the other baseline case
+
+  const comparison = compareRevisions(r1, r2, failedIds(r1Report));
+  assert.equal(comparison.passed, false);
+  assert.match(comparison.message, /not another baseline name/);
+});
+
+test('S5-09: numeric content rules still apply to a policy rename', () => {
+  const r1 = nasaNamedProjectile();
+  const r1Report = validateSpec(r1, [projectileDoc]);
+
+  // Widening the tolerance under cover of the rename.
+  const widened = structuredClone(r1);
+  const w0 = casesOf(widened, 'behavioralTests')[0];
+  assert.ok(w0 !== undefined);
+  w0['name'] = 'earth launch again';
+  w0['tolerance'] = 0.1;
+  const widenComparison = compareRevisions(r1, widened, failedIds(r1Report));
+  assert.equal(widenComparison.passed, false);
+  assert.match(widenComparison.message, /tolerance increased from 0\.001 to 0\.1/);
+
+  // Rewriting a correct case's numbers under cover of the rename.
+  const rewritten = structuredClone(r1);
+  const c0 = casesOf(rewritten, 'behavioralTests')[0];
+  assert.ok(c0 !== undefined);
+  c0['name'] = 'earth launch again';
+  c0['verticalSpeedMps'] = 5;
+  c0['expectedMaxHeightM'] = (5 * 5) / (2 * 9.8);
+  const rewriteComparison = compareRevisions(r1, rewritten, failedIds(r1Report));
+  assert.equal(rewriteComparison.passed, false);
+  assert.match(rewriteComparison.message, /changed \(verticalSpeedMps 20 -> 5/);
+  assert.match(rewriteComparison.message, /passed its own checks on the baseline/);
+});
+
+test('S5-09: a publisher-violating prediction id may be renamed the same way', () => {
+  const r1 = makeProjectileSpec();
+  const preds = (r1 as unknown as { predictions: LooseCase[] }).predictions;
+  assert.ok(preds[0] !== undefined);
+  preds[0]['id'] = 'nasa-pred'; // matches /\bNASA\b/i — the policy pattern applies to ids too
+  const r2 = makeProjectileSpec(); // original clean id 'fast-throw', identical numbers
+
+  const comparison = compareRevisions(r1, r2, []);
+  assert.equal(comparison.passed, true, comparison.message);
+
+  // ... but not to another policy-violating id, and not to another baseline id.
+  const stillBad = structuredClone(r1);
+  preds0Id(stillBad, 'NASA pred 2');
+  assert.equal(compareRevisions(r1, stillBad, []).passed, false);
+  const colliding = makeProjectileSpec();
+  (colliding as unknown as { predictions: LooseCase[] }).predictions.push({
+    id: 'nasa-pred',
+    prompt: 'A second prediction.',
+    horizontalSpeedMps: 10,
+    verticalSpeedMps: 25,
+    gravityMps2: 9.8,
+    expectedMaxHeightM: (25 * 25) / (2 * 9.8),
+    tolerance: 0.001,
+  });
+  // The policy-violating 'nasa-pred' (position 1) is renamed to 'fast-throw',
+  // the other baseline prediction id — an impersonation, not a policy fix.
+  const impersonate = structuredClone(colliding);
+  const ip = (impersonate as unknown as { predictions: LooseCase[] }).predictions;
+  assert.ok(ip[1] !== undefined);
+  ip[1]['id'] = 'fast-throw';
+  const impersonateComparison = compareRevisions(colliding, impersonate, []);
+  assert.equal(impersonateComparison.passed, false);
+  assert.match(impersonateComparison.message, /not another baseline id/);
+});
+
+function preds0Id(spec: ActivitySpec, id: string): void {
+  const p = (spec as unknown as { predictions: LooseCase[] }).predictions[0];
+  assert.ok(p !== undefined);
+  p['id'] = id;
+}
+
+test('S5-09: keeping a policy-violating name is not itself weakening (the policy check still fails separately)', () => {
+  const r1 = nasaNamedProjectile();
+  const r1Report = validateSpec(r1, [projectileDoc]);
+  const comparison = compareRevisions(r1, structuredClone(r1), failedIds(r1Report));
+  assert.equal(comparison.passed, true, comparison.message);
+  assert.equal(validateSpec(r1, [projectileDoc]).publishable, false, 'the policy failure remains until the name is fixed');
+});
+
+test('S5-09: no other renames — a clean name that violates nothing stays immutable', () => {
+  const r1 = makeProjectileSpec();
+  const r2 = structuredClone(r1);
+  const first = casesOf(r2, 'behavioralTests')[0];
+  assert.ok(first !== undefined);
+  first['name'] = 'totally clean new name';
+  const comparison = compareRevisions(r1, r2, []);
+  assert.equal(comparison.passed, false);
+  assert.match(comparison.message, /"earth launch" from the baseline is missing from the repair/);
 });
