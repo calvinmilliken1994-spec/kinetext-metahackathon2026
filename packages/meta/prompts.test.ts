@@ -85,7 +85,7 @@ const META_OPEN = '<untrusted-source-metadata>';
 const META_CLOSE = '</untrusted-source-metadata>';
 
 test('prompt version bumped to v6 for the three new engines', () => {
-  assert.equal(PROMPT_VERSION, 'v6');
+  assert.equal(PROMPT_VERSION, 'v7');
 });
 
 test('analysis user message wraps the source text in the boundary source block', () => {

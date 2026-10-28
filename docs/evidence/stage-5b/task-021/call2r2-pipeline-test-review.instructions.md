@@ -1,0 +1,7 @@
+# TASK-021 call 2 review-repair (pipeline.timeline.test.ts: untested timeline branches)
+
+Your files are saved verbatim and the whole suite is green (762/762, typecheck clean, web build ok). The lead's review of the new code found no defect in pipeline.ts, but three new timeline branches in it have no test. Add tests for them in `packages/meta/pipeline.timeline.test.ts` (test-only; do not change pipeline.ts):
+1. repairSpec timeline path rejects schema-invalid model output (e.g. `null`, `{}`, a numeric-engine-shaped object, events missing) with `GeneratedOutputError` whose `stage === 'repair'`, `code === 'OUTPUT_INVALID'`, the fixed message, and the receipt preserved (the same receipt object the fake client returned).
+2. Timeline generateSpec and timeline repairSpec send `maxOutputTokens` 8000 by default and honour an override; a provided `signal` is forwarded as the same object; no `signal` key when none is provided (mirror the numeric tests in pipeline.test.ts).
+3. In the ENGINE_REQUIRED test you fixed in repair 1, replace the two-step `as unknown as {...} as unknown as {...}` cast (with an inline `import('../contracts/index.ts')` type) by one plain cast to the numeric previous shape, using a top-level `import type` for ForcesActivitySpec if needed. Keep its assertions.
+Keep every existing test in the file unchanged otherwise. Output only `packages/meta/pipeline.timeline.test.ts` (complete file, one ts block), then `=== NOTES ===`.

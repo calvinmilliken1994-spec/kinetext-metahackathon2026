@@ -1,0 +1,5 @@
+# TASK-021 call 2 repair 1 (pipeline.timeline.test.ts typecheck)
+
+The lead saved your two files from call 2 verbatim. At runtime all 8 tests in `packages/meta/pipeline.timeline.test.ts` pass and the whole suite passes (apart from reservation constants in apps/api that the lead updates mechanically because the prompts grew). `npm run typecheck` (tsc) fails with ONE error in your new test file (full output below): in the test that checks ENGINE_REQUIRED for repairSpec, the loop passes a `'none'` / unknown-id analysis together with a timeline `previous` ({ generated: TimelineGeneratedSpec; spec: TimelineActivitySpec; ... }), which matches neither overload (the timeline overload needs a TimelineSourceAnalysis; the numeric overload needs a numeric previous).
+
+Fix the test only (e.g. cast `previous` the same way your ENGINE_MISMATCH test does, so the call reaches the runtime guard), keeping what it asserts (ENGINE_REQUIRED, zero model calls). Do not change pipeline.ts. Output only `packages/meta/pipeline.timeline.test.ts` (complete file, one ts block), then `=== NOTES ===`. Change nothing else in the file.
