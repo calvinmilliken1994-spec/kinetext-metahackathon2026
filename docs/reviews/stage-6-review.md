@@ -205,3 +205,94 @@ Replay of the new gate/policy over 90 stored jobs (131 analysis revisions, 226 k
 4. **Single-word publisher token** (`ocean` from "NOAA Office of Ocean Exploration" rejecting "deep ocean") — **false positive, narrow the token set:** publisher matching uses acronyms (NASA, NOAA, NARA, CFPB, NRC, USGS, NIJ) and the full publisher name, never ordinary words inside the name.
 
 Rulings 3–4 are implemented after Wave A2 releases `kit/shared.ts`, with the replay re-run.
+
+## Round 2
+
+### Verdict: CHANGES REQUIRED
+
+Reviewer: **OpenAI GPT-6.1 Sol, High reasoning**. Re-reviewed fix commit `b75897324239f844f4f300ea2b8a039d625d788d` against `51896f1`, including the lead's final publisher/compare narrowing. At completion HEAD was `f11dd72` (an evidence-only follow-up); `git diff b758973..HEAD -- packages workers apps scripts tests docs/reviews/stage-6-review.md` was empty before this append. No implementation files were edited by this reviewer.
+
+**Eight findings are CLOSED; four are PARTIALLY CLOSED.** The original wrong-answer vectors now fail, the overview reaches the actual publish gate, list repairs preserve passing prefixes, concurrent charges are retained, and fault origin/kit metrics have regression coverage. However, complete-token/source binding still fails on ordinary numeric/equation continuations. A newly introduced numerical-option inconsistency also publishes a quiz with two equivalent answers and grades one wrong (**S6R-13, P1**). These are concrete wrong-answer consequences, not requests to revisit the lead's wording-hedge or publisher policy.
+
+### Verification, artifacts and boundaries
+
+- `npx --no-install tsc -p . --noEmit`: **exit 0**.
+- `node.exe --test packages/validation/*.test.ts packages/contracts/*.test.ts apps/web/src/lib/*.test.ts tests/evaluation-metrics*.test.ts`: **1,019 passed, 0 failed**.
+- The three inspected worker regression files `lesson.concurrent-fatal.test.ts`, `lesson.overview-gate.test.ts`, and `lesson.fault-origin.test.ts`: **12 passed, 0 failed**. All calls used fake clients or fake transport and temporary job directories. The accounting file's real-ledger/fake-transport subtest also ran: its ledger was temporary, its loopback lock was OS-assigned, and its assertion excluding port **47853** passed. No live ledger/API was opened. The command included a negative test-name pattern intended to omit that subtest, but the execution output shows it ran; the count above includes it rather than claiming it was skipped.
+- Copied the round-1 `publish-probes.mjs` to active-profile `cache/scratch/review-s6-r2/`, changed the overview vector to invoke the new pure `validateLessonAnalysisGate`, and added class/positive controls: **33 uniquely identified vectors**, saved in `publish-results.json`. Independently parsed and asserted the relevant old/new verdicts and controls; `verification-summary.json` records the result. Imports are pure validation/contracts code, plus Node file I/O; no client/worker/ledger imports.
+- `baseline-probe.mjs` loads scratch copies of `51896f1`'s quiz/shared validators (only import paths adjusted) and compares them with the fixed validator. It verifies **S6R-13 was rejected before the wave and accepted after it**; `baseline-results.json` retains both reports.
+- Read-only `replay.mjs` rechecked historical `evaluation-lesson-*` and `live` job copies under `docs/evidence/stage-6/`, expressly excluding the active/new `evaluation-recheck-*` runs: **149 job directories, 211 analysis revisions, 318 kit generations, including 50 explorers**. `replay-results.json` keeps each changed verdict/new failing check. No evidence was rewritten. These are comparisons to archived reports, not a claim that all old generations used the immediately preceding code.
+- No `npm test` / `npm run check`, API startup, provider request, `.env` read, live `storage/` access, live-ledger access, or Git write was performed. The only repository modification is this appended section. Test/probe logs and scripts remain outside the repository in `cache/scratch/review-s6-r2/`.
+
+### Per-finding disposition
+
+| Finding | Status | Evidence |
+|---|---|---|
+| **S6R-01** | **CLOSED** | `overview-bypassed` now fails OV-02/OV-06 through `validateLessonAnalysisGate`, with `/overview/...` affected paths. Worker tests verify repair precedes the overview event, and repeated failure publishes no lesson. Wiring: `lesson.ts:209-217`; gate/repair authority: `analysis-v2.ts:489-508,563-566,592-594`. |
+| **S6R-02** | **CLOSED** | `formula-diagonal` now fails FE-08: stored/default `{x:2,y:4}` is checked (page **6**, wrong expression **10**). Samples independently vary variables, include defaults and stored cases; `expression.ts:496-541`, `formula-explorer.ts:698-716`. This is bounded numeric comparison, not proof of arbitrary functional equivalence. |
+| **S6R-03** | **PARTIALLY CLOSED** | Cropped exponent, `÷ 2`, and chained `=` probes are rejected. But `formula-thousands-suffix` publishes source `z = x+y+1,000` as `x+y+1`: the new prose-boundary cutter deletes `,000`, producing **7 instead of 1006** at the stored case. Details below. |
+| **S6R-04** | **PARTIALLY CLOSED** | The reversed/permuted original formulas fail FE-05/FE-08; explicit-binding and repeated-equal-input controls pass. But `formula-example-exponent-input` binds the prefix `6` of `6e2`, authorizing a formula that gives **20000 instead of 200** at the actual source inputs. Details below. |
+| **S6R-05** | **PARTIALLY CLOSED** | `balance-product-token-cut` now fails BAL-01/BAL-09; water positive control passes. But `balance-omitted-product` removes the source's entire final `+ H2O2` product and still passes every check: the source span is only the generated substring with chemical-character edges, not a complete reaction. Details below. |
+| **S6R-06** | **CLOSED** | Honest compare-tail append/removal pass. `compare-resize-changes-passing-cell` now fails `repair.no-weakening` at `/rows/0/values/0/value`. `repair.ts:175-176,206-210` removes enclosing resize authority for retained leaves; `kit/index.ts:200-202` bounds the resize to the baseline column count. Own-cell failure paths remain usable. |
+| **S6R-07** | **CLOSED** | Executed concurrent-fatal regressions: both settle orders retain both paid/unknown amounts exactly once (synthetic totals **0.51 / 0.50**); fatal-plus-persistence-crash retains **0.25 / 0.20**; one fatal repair is not double-counted. The isolated fake-transport ledger test matches persisted job totals with its ledger. `recordFatal` accounts before storing/emitting terminal metadata; analysis catches do likewise, final `ctx.fail` is non-accounting (`lesson.ts:601-612,654-665,784-791,1418-1420`; shared extractor `job-support.ts:112-171`). |
+| **S6R-08** | **CLOSED** | Original `Official NASA-endorsed lesson` fails field-scoped `schema.gen`. The shared display-field sweep participates in dispatch and repair recomputation (`kit/index.ts:123,198`; `policy.ts:49-145`). Both independent “according to the definition” / “according to NASA” controls behave as adjudicated. Executed ruling tests also cover the seven publisher acronyms, ordinary `ocean`, metadata junk, and genuinely on-page hyphenated compare names. No wording-policy re-litigation. |
+| **S6R-09** | **PARTIALLY CLOSED** | Original `2` vs `20` with `2` elsewhere on the page is rejected; signed/grouped/currency controls behave correctly. But `quiz-number-elsewhere-in-own-quote` accepts answer **`a value of 2`** inside **`a value of 20`** when an unrelated whole `2` occurs later in the same quote. The containment match and numeric-token occurrence remain detached. Details below; related newly introduced option-equivalence defect is S6R-13. |
+| **S6R-10** | **CLOSED** | Both key-point and key-term append controls pass; append plus mutation of a previously passing point fails comparison even though the candidate itself validates. Exact authorised paths, tail-only growth and max counts are enforced (`analysis-v2.ts:545-573`; `repair.ts:206-210`). Oversized analysis lists remain an explicitly documented bounded-repair limitation, not claimed deletion support. |
+| **S6R-11** | **CLOSED** | Worker and web tests execute attempt-1-fails / attempt-2-passes, requested-not-injected, injected-not-caught, other-component natural repair, and no-fault cases. Both attempts of the injected component stay system-made; requested-but-not-injected premium repair remains natural. Origin comes from actual successful injection/component identity, not attempt number (`lesson.ts:574-577,1098,1303`; `lessonJob.ts:404-435,463-477`; provenance preserves any system origin). |
+| **S6R-12** | **CLOSED** | Executed `evaluation-metrics-s6r12.test.ts` review recipe: kit repair joins total/scoped check counts; kit-only lesson joins published-lesson cost denominator; overview/interactive/premium denominators are separate. Missing component-repair fields are disclosed, injected component repairs excluded, v1 statistics pinned, comparison output tested. `evaluation-budget.ts:499` carries fault origin into result records. No report generator or pre-registered rewrite was run. |
+
+### Remaining wrong-answer paths under the original findings
+
+These are **incomplete closures of the existing findings**, not five new policy-hardening requests. Each full component passed `validateKitComponent` in the saved probes.
+
+**S6R-03 — complete RHS parsing still truncates a numeric token.**  
+Location: `packages/validation/kit/formula-explorer.ts:144-152,201`.
+
+- Reproduction `formula-thousands-suffix`: exact source/quote/formulaText **`z = x+y+1,000`**, generated expression **`x+y+1`**, both variables `[1,9]`, stored inputs `{x:2,y:4}`. `parsePageFormulaFromQuote` reports `status:'parsed', rhs:'x+y+1'`; all checks pass. Independent calculator evaluation gives source **1006**, generated **7**.
+- Cause: every comma is classified as prose before lexical validation, including a comma inside a printed number. This still manufactures a shorter mathematical expression.
+- Minimal fix: recognise complete numeric tokens before treating punctuation as prose. Either normalise supported thousands-grouped literals to their value or mark the entire formula unparseable/fail closed; never successfully parse the prefix. Add the whole-token negative test alongside the existing `÷`/exponent vectors and replay explorers again.
+
+**S6R-04 — an “explicit binding” may still be a prefix of a different value.**  
+Location: `packages/validation/kit/formula-explorer.ts:335-338,368-375,434-445`.
+
+- Reproduction `formula-example-exponent-input`: formula quote **`z equals x divided by y`**; worked quote **`With x = 6e2 and y = 3 the result is 200.`**; generated expression **`100*x/y`**, resultNumber 200, tolerance 0.001. Binder returns **`{x:6,y:3}`**, so FE-05 and the unparseable-formula FE-08 bridge pass. At the source's actual `{x:600,y:3}`, page division is **200**, accepted formula is **20000**.
+- Cause: the binding guard only excludes attached digits/thousands commas; it does not require the entire RHS numeric expression/token to end. Unsupported notation becomes a supported prefix.
+- Minimal fix: enforce a complete-value boundary after every supported binding, including rejecting attached exponent/decimal/operator continuations the binder cannot parse. Unsupported bindings must fail closed, not guess. Keep the positive plain-decimal and repeated-value controls.
+
+**S6R-05 — complete species edges are not a complete reaction span.**  
+Location: `packages/validation/kit/shared.ts:332,352-365`; `packages/validation/kit/balance.ts:56-59,108-114,145-147`.
+
+- Reproduction `balance-omitted-product`: exact source/top/species quotes **`The page prints H2 + O2 -> H2O + H2O2.`**, generated equationText **`H2 + O2 -> H2O`**, product list only H2O. All checks pass and the solver returns **`[2,1,2]`** for the truncated reaction; the printed peroxide product disappears.
+- Cause: `chemicallyCompleteOccurrences` only tests immediately adjacent alphanumeric/subscript characters. Whitespace followed by `+` is considered a clean edge. `sourceEquationSpan(...).text` is the same generated needle, so parsing it adds no independent source-span authority.
+- Minimal fix: locate/extract the maximal reaction containing the arrow, respecting supported species/group/state syntax, and compare its parsed side/formula multiset. At minimum fail closed when a selected edge continues through whitespace into a reaction operator/species. Preserve exact integer balancing.
+
+**S6R-09 — the whole number must belong to the actual matched answer occurrence.**  
+Location: `packages/validation/kit/shared.ts:300-324`; `packages/validation/kit/quiz.ts:104,160,206`.
+
+- Reproduction `quiz-number-elsewhere-in-own-quote`: quote **`The experiment records a value of 20 in sample 2.`**, stem **`What value did the experiment record?`**, options **`['a value of 2','other','unknown']`**. All checks pass. The only occurrence of `a value of 2` actually ends inside **20**; the separate sample number **2** supplies the whole-number check.
+- Cause: `containsNormalized` and `missingSignedNumbers` search independently over the entire quote. Passing one does not prove the other's token is at the matched answer span.
+- Minimal fix: find candidate answer occurrences and validate numeric boundaries/value identity **at that same occurrence**. One unrelated token elsewhere in the quote must not rescue a cropped answer. Share that span-aware predicate across Q-02/Q-05/Q-07; this requires no general entailment model.
+
+### New finding
+
+#### S6R-13 — P1: value-canonical number grounding accepts a numerically identical distractor, but grading rejects it
+
+**Location:** `packages/validation/kit/shared.ts:233-242,300-324`; `packages/validation/kit/quiz.ts:121-133,153-169,200-209`; grading consequence `apps/web/src/lib/quiz.ts:47-55`.
+
+**Reproduction:** `quiz-equivalent-numeric-distractor` changes one otherwise-valid golden card to quote **`The experiment records a value of 5.0.`**, stem **`What value did the experiment record?`**, options **`['5','5.00','unknown']`**. All fixed-validator checks pass. Both numerical choices equal the printed value, but `gradeQuizCard` grades by stored index 0 only, so a learner choosing **5.00** is marked wrong. The quote makes no significant-figure/precision question or distinction.
+
+**Regression evidence:** `baseline-probe.mjs` evaluates that exact candidate with `51896f1`'s pure quiz/shared validators: **not publishable (Q-06)**. The fixed gate returns **publishable with no failures**. Thus this is an actual new acceptance introduced by value canonicalisation, not merely an old unreviewed quiz limitation.
+
+**Cause:** N-01 now equates `5`, `5.0`, and `5.00` by value, correctly, but Q-03 still distinguishes their raw strings; Q-05/Q-07 still require raw substring containment before checking numeric value. `5` is a substring of `5.0`, while `5.00` is not, so the equivalent distractor is not recognised as a second correct option. The checks disagree on what counts as the same numerical answer.
+
+**Minimal fix:** retain value-canonical grounding (do not re-break `828,000 ≡ 828000` / currency values), but use a consistent canonical token/span representation for numerical-option identity and quote matching. At least reject numerically equivalent numeric-only options and recognise equivalent numeric distractors; preserve signs and nonnumeric wording. Add both spelling directions and grouped-number variants, then verify that every published card still has exactly one numerically distinct correct option before index-only grading.
+
+### Historical replay and approval boundary
+
+- **50 explorers:** no publishability changes against their archived reports. Only one declares a source example, so this replay does not establish broad real-world coverage of the new explicit-binding grammar.
+- Of the **529** historical artifacts, **8** formerly passing reports now fail: **6 legacy compare gens** have the old `entities/cells` shape instead of `rows` (the compare-grid schema predates this fix wave), plus the **2 already adjudicated catches**: `job-20261029143609-b3ac3e67` quiz options with `>` and `job-20261029145943-048d50e0` Bernoulli `streamline` gloss. The latter quote is “restricts this equation to be true only along a single streamline”; its gloss is “path that confines Bernoulli constant when restrictions apply.” These are not newly discovered false rejections to undo the lead's rulings. Historical verdicts/scores remain unchanged.
+- **36** formerly failing archived artifacts now pass (including number-token fixes and old repair-comparison reports absent from pure content revalidation). This is not a new evaluation score or proof those historical jobs would have completed under the new pipeline. All per-artifact differences remain in the scratch replay result.
+- Publisher narrowing, on-page hyphenated names, structural-vs-content compare permission, independent sampling, and append-only prefix preservation behaved as intended in the executed controls/tests. No new accounting defect was demonstrated in this round.
+
+**Approval gate:** close the four concrete incomplete grounding paths and S6R-13 (or explicitly decide to disable/degrade the affected output class). Preserve the accepted policy rulings, positive controls, independent sampling and cost/fault-origin fixes. Do not call all S6R-01..12 closed on the basis of the original vectors alone. This re-review stops here; it does not propose another open-ended wording-hardening loop.
+
