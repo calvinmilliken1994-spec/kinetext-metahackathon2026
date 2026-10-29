@@ -1,0 +1,284 @@
+{
+  "gen": {
+    "schemaVersion": "concept-map-v1",
+    "title": "How racial classifications relate to genetic variation",
+    "nodes": [
+      {
+        "id": "population-genetics",
+        "label": "population genetics"
+      },
+      {
+        "id": "allele-frequencies",
+        "label": "allele frequencies"
+      },
+      {
+        "id": "evolutionary-forces",
+        "label": "evolutionary forces"
+      },
+      {
+        "id": "racial-classifications",
+        "label": "racial classifications"
+      },
+      {
+        "id": "genetic-variation",
+        "label": "genetic variation"
+      },
+      {
+        "id": "ethnicity",
+        "label": "ethnicity"
+      },
+      {
+        "id": "population-structure",
+        "label": "population structure"
+      }
+    ],
+    "links": [
+      {
+        "id": "link-1",
+        "fromId": "evolutionary-forces",
+        "toId": "allele-frequencies",
+        "relation": "causes",
+        "sourceId": "nij-population-genetics",
+        "quote": "distribution of and change in allele frequencies under the influence of the four evolutionary forces"
+      },
+      {
+        "id": "link-2",
+        "fromId": "population-structure",
+        "toId": "population-genetics",
+        "relation": "is part of",
+        "sourceId": "nij-population-genetics",
+        "quote": "Population structure is also taken into account"
+      },
+      {
+        "id": "link-3",
+        "fromId": "allele-frequencies",
+        "toId": "population-genetics",
+        "relation": "is part of",
+        "sourceId": "nij-population-genetics",
+        "quote": "Population genetics is the study of the distribution of and change in allele frequencies"
+      },
+      {
+        "id": "link-4",
+        "fromId": "racial-classifications",
+        "toId": "genetic-variation",
+        "relation": "contrasts with",
+        "sourceId": "nij-population-genetics",
+        "quote": "Research has demonstrated that racial classifications are inadequate descriptors of the distribution of genetic variation in the human species"
+      },
+      {
+        "id": "link-5",
+        "fromId": "racial-classifications",
+        "toId": "allele-frequencies",
+        "relation": "uses",
+        "sourceId": "nij-population-genetics",
+        "quote": "each is used to provide estimates of allele frequencies"
+      },
+      {
+        "id": "link-6",
+        "fromId": "ethnicity",
+        "toId": "racial-classifications",
+        "relation": "contrasts with",
+        "sourceId": "nij-population-genetics",
+        "quote": "An alternative to classifying the human species by race is to divide them by ethnicity"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029145325-bfb2efb9:concept-map-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every concept-map id pattern, id uniqueness and label shape is within the frozen limits"
+      },
+      {
+        "id": "CM-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 link quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "CM-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every link has one endpoint label in its quote and the other in the quote or the same source paragraph (endpoints-in-quote; paragraph-level co-mention without a stated link is the design-disclosed false accept — quotes are visible)"
+      },
+      {
+        "id": "CM-03",
+        "kind": "semantic",
+        "passed": false,
+        "message": "links[0] (link-1): the relation \"causes\" is not grounded — neither the relation phrase nor one of its trigger words (cause, causes, caused, causing, leads to, lead to, ...) occurs in the quote or its source sentence (relation-in-quote); links[1] (link-2): the relation \"is part of\" is not grounded — neither the relation phrase nor one of its trigger words (part of, parts of, member of, includes, include, including, ...) occurs in the quote or its source sentence (relation-in-quote); links[2] (link-3): the relation \"is part of\" is not grounded — neither the relation phrase nor one of its trigger words (part of, parts of, member of, includes, include, including, ...) occurs in the quote or its source sentence (relation-in-quote); links[3] (link-4): the relation \"contrasts with\" is not grounded — neither the relation phrase nor one of its trigger words (contrast, contrasts, contrasting, unlike, versus, vs, ...) occurs in the quote or its source sentence (relation-in-quote); links[5] (link-6): the relation \"contrasts with\" is not grounded — neither the relation phrase nor one of its trigger words (contrast, contrasts, contrasting, unlike, versus, vs, ...) occurs in the quote or its source sentence (relation-in-quote)",
+        "path": "/links/0/relation",
+        "affected": [
+          "/links/0/relation",
+          "/links/0/quote",
+          "/links/1/relation",
+          "/links/1/quote",
+          "/links/2/relation",
+          "/links/2/quote",
+          "/links/3/relation",
+          "/links/3/quote",
+          "/links/5/relation",
+          "/links/5/quote"
+        ]
+      },
+      {
+        "id": "CM-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the map is connected over all 7 nodes with no self-loops or duplicate links (graph-connected)"
+      },
+      {
+        "id": "CM-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "nodes 7 (4-8) and links 6 (3-10) are within the frozen counts (counts-valid)"
+      },
+      {
+        "id": "CM-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in node labels and the title appears on a provided page (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "3b34dcd29eb84c3a870930a652b930a5",
+    "usage": {
+      "promptTokens": 2462,
+      "completionTokens": 8705,
+      "reasoningTokens": 8275,
+      "cachedTokens": 0
+    },
+    "latencyMs": 32969,
+    "estCostUSD": 0.04007375,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029145325-bfb2efb9:concept-map-v1:r1",
+    "componentId": "concept-map-v1",
+    "title": "How racial classifications relate to genetic variation",
+    "sources": [
+      {
+        "id": "nij-population-genetics",
+        "title": "Population Genetics — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+        "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/population-genetics",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Population Genetics'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+        "sha256": "3b67b8bbab70fa3f03067b217df5601f05ff044f0f6c0c6cad7b44b5191a29db"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "3b34dcd29eb84c3a870930a652b930a5",
+      "runId": "job-20261029145325-bfb2efb9",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T14:55:14.683Z"
+    },
+    "seed": 2875684872,
+    "nodes": [
+      {
+        "id": "population-genetics",
+        "label": "population genetics"
+      },
+      {
+        "id": "allele-frequencies",
+        "label": "allele frequencies"
+      },
+      {
+        "id": "evolutionary-forces",
+        "label": "evolutionary forces"
+      },
+      {
+        "id": "racial-classifications",
+        "label": "racial classifications"
+      },
+      {
+        "id": "genetic-variation",
+        "label": "genetic variation"
+      },
+      {
+        "id": "ethnicity",
+        "label": "ethnicity"
+      },
+      {
+        "id": "population-structure",
+        "label": "population structure"
+      }
+    ],
+    "links": [
+      {
+        "id": "link-1",
+        "fromId": "evolutionary-forces",
+        "toId": "allele-frequencies",
+        "relation": "causes",
+        "sourceId": "nij-population-genetics",
+        "quote": "distribution of and change in allele frequencies under the influence of the four evolutionary forces"
+      },
+      {
+        "id": "link-2",
+        "fromId": "population-structure",
+        "toId": "population-genetics",
+        "relation": "is part of",
+        "sourceId": "nij-population-genetics",
+        "quote": "Population structure is also taken into account"
+      },
+      {
+        "id": "link-3",
+        "fromId": "allele-frequencies",
+        "toId": "population-genetics",
+        "relation": "is part of",
+        "sourceId": "nij-population-genetics",
+        "quote": "Population genetics is the study of the distribution of and change in allele frequencies"
+      },
+      {
+        "id": "link-4",
+        "fromId": "racial-classifications",
+        "toId": "genetic-variation",
+        "relation": "contrasts with",
+        "sourceId": "nij-population-genetics",
+        "quote": "Research has demonstrated that racial classifications are inadequate descriptors of the distribution of genetic variation in the human species"
+      },
+      {
+        "id": "link-5",
+        "fromId": "racial-classifications",
+        "toId": "allele-frequencies",
+        "relation": "uses",
+        "sourceId": "nij-population-genetics",
+        "quote": "each is used to provide estimates of allele frequencies"
+      },
+      {
+        "id": "link-6",
+        "fromId": "ethnicity",
+        "toId": "racial-classifications",
+        "relation": "contrasts with",
+        "sourceId": "nij-population-genetics",
+        "quote": "An alternative to classifying the human species by race is to divide them by ethnicity"
+      }
+    ]
+  }
+}

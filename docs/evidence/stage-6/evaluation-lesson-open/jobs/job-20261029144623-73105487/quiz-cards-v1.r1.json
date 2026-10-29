@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Mach number and compressibility regimes",
+    "cards": [
+      {
+        "id": "supersonic-density-behavior",
+        "stem": "What happens to density compared to velocity in very high speed flow beyond the speed of sound?",
+        "options": [
+          "the density changes faster than the velocity changes",
+          "the density of the air remains constant",
+          "the change in density is very small",
+          "density change is due to temperature only"
+        ],
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "For supersonic and hypersonic flows, the density changes faster than the velocity changes by a factor equal to the square of the Mach number.",
+        "hint": "Focus on how fast density reacts relative to speed in the supersonic quote."
+      },
+      {
+        "id": "subsonic-compressibility",
+        "stem": "How is air behavior described for low subsonic conditions regarding density changes?",
+        "options": [
+          "compressibility can be ignored",
+          "shock waves affect lift and drag",
+          "density changes faster than velocity",
+          "compressibility effects cannot be ignored"
+        ],
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "For the low subsonic conditions, compressibility can be ignored.",
+        "hint": "Recall what the low subsonic quote says about needing to account for density changes."
+      },
+      {
+        "id": "transonic-density-equality",
+        "stem": "How does density variation relate to velocity variation near the speed of sound?",
+        "options": [
+          "the change in density is nearly equal to the change in velocity",
+          "the density changes faster than the velocity changes",
+          "the density of the air remains constant",
+          "the change in density is very small"
+        ],
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "For transonic flows, the change in density is nearly equal to the change in velocity, and compressibility effects cannot be ignored.",
+        "hint": "Look for the sentence that links density and velocity changes for transonic flow."
+      },
+      {
+        "id": "low-speed-density-constant",
+        "stem": "What is observed about air density when an aircraft moves slowly at low speed?",
+        "options": [
+          "the density of the air remains constant",
+          "the density changes faster than the velocity changes",
+          "compressibility can be ignored",
+          "small disturbances generate shock waves"
+        ],
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "If the aircraft passes at a low speed, typically less than 250 mph, it is observed that the density of the air remains constant.",
+        "hint": "Find the observation about density during typical low speed flight."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029144623-73105487:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "60b918d9e6184db78103e6fcff648daa",
+    "usage": {
+      "promptTokens": 3086,
+      "completionTokens": 7866,
+      "reasoningTokens": 7376,
+      "cachedTokens": 0
+    },
+    "latencyMs": 32747,
+    "estCostUSD": 0.037288,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029144623-73105487:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Mach number and compressibility regimes",
+    "sources": [
+      {
+        "id": "nasa-grc-role-of-the-mach-number",
+        "title": "Role of the Mach Number — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/role-of-the-mach-number/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "a7355b33f7126247cd0576ce48a0975a781814c8687022d8fdf12e11fdeaa3c8"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "60b918d9e6184db78103e6fcff648daa",
+      "runId": "job-20261029144623-73105487",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T14:47:44.213Z"
+    },
+    "seed": 3682822254,
+    "cards": [
+      {
+        "id": "supersonic-density-behavior",
+        "stem": "What happens to density compared to velocity in very high speed flow beyond the speed of sound?",
+        "options": [
+          "the density changes faster than the velocity changes",
+          "the density of the air remains constant",
+          "the change in density is very small",
+          "density change is due to temperature only"
+        ],
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "For supersonic and hypersonic flows, the density changes faster than the velocity changes by a factor equal to the square of the Mach number.",
+        "hint": "Focus on how fast density reacts relative to speed in the supersonic quote."
+      },
+      {
+        "id": "subsonic-compressibility",
+        "stem": "How is air behavior described for low subsonic conditions regarding density changes?",
+        "options": [
+          "compressibility can be ignored",
+          "shock waves affect lift and drag",
+          "density changes faster than velocity",
+          "compressibility effects cannot be ignored"
+        ],
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "For the low subsonic conditions, compressibility can be ignored.",
+        "hint": "Recall what the low subsonic quote says about needing to account for density changes."
+      },
+      {
+        "id": "transonic-density-equality",
+        "stem": "How does density variation relate to velocity variation near the speed of sound?",
+        "options": [
+          "the change in density is nearly equal to the change in velocity",
+          "the density changes faster than the velocity changes",
+          "the density of the air remains constant",
+          "the change in density is very small"
+        ],
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "For transonic flows, the change in density is nearly equal to the change in velocity, and compressibility effects cannot be ignored.",
+        "hint": "Look for the sentence that links density and velocity changes for transonic flow."
+      },
+      {
+        "id": "low-speed-density-constant",
+        "stem": "What is observed about air density when an aircraft moves slowly at low speed?",
+        "options": [
+          "the density of the air remains constant",
+          "the density changes faster than the velocity changes",
+          "compressibility can be ignored",
+          "small disturbances generate shock waves"
+        ],
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "If the aircraft passes at a low speed, typically less than 250 mph, it is observed that the density of the air remains constant.",
+        "hint": "Find the observation about density during typical low speed flight."
+      }
+    ]
+  }
+}

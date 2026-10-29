@@ -1,0 +1,221 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Heat Capacity and Gamma Review",
+    "cards": [
+      {
+        "id": "gamma-air-standard-value",
+        "stem": "What value is given for the specific heat ratio of air at standard conditions?",
+        "options": [
+          "gamma = 1.4",
+          "gamma equals cv divided by cp",
+          "gamma depends only on pressure"
+        ],
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "For air, gamma = 1.4 for standard day conditions.",
+        "hint": "Think about the standard day value for air"
+      },
+      {
+        "id": "cp-cv-r-relation",
+        "stem": "How are the specific heat capacities and the gas constant related for a given gas?",
+        "options": [
+          "cp = cv + R",
+          "R equals cp plus cv",
+          "cp equals cv minus R",
+          "cv equals cp times R"
+        ],
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "cp = cv + R",
+        "hint": "Recall the derived relation from the enthalpy equation"
+      },
+      {
+        "id": "heat-capacity-definition",
+        "stem": "What does the heat capacity constant describe for a temperature change?",
+        "options": [
+          "how much heat is added per unit temperature rise",
+          "how much work is done per unit volume change",
+          "how pressure varies with specific volume"
+        ],
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "The heat capacity is a constant that tells how much heat is added per unit temperature rise.",
+        "hint": "Focus on heat added per temperature increase"
+      },
+      {
+        "id": "gamma-ratio-definition",
+        "stem": "How is the specific heat ratio defined using cp and cv?",
+        "options": [
+          "gamma = cp / cv",
+          "gamma = cv / cp",
+          "gamma = cp plus cv",
+          "gamma = cp times cv"
+        ],
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "gamma = cp / cv",
+        "hint": "Remember which specific heat is on top"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029144147-644687fb:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "f1f17c78969e4dc59547c900cdce06f5",
+    "usage": {
+      "promptTokens": 3295,
+      "completionTokens": 7663,
+      "reasoningTokens": 7284,
+      "cachedTokens": 0
+    },
+    "latencyMs": 32879,
+    "estCostUSD": 0.0366865,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029144147-644687fb:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Heat Capacity and Gamma Review",
+    "sources": [
+      {
+        "id": "nasa-grc-specific-heat-cp-cv",
+        "title": "Specific Heat – Cp & Cv — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/specific-heat-cp-cv/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "9df5f948a44c3fd060dd74c26ccaa8247cb311d0b0d618ceaafaf6382ba4d1b8"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "f1f17c78969e4dc59547c900cdce06f5",
+      "runId": "job-20261029144147-644687fb",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T14:43:39.612Z"
+    },
+    "seed": 2638319914,
+    "cards": [
+      {
+        "id": "gamma-air-standard-value",
+        "stem": "What value is given for the specific heat ratio of air at standard conditions?",
+        "options": [
+          "gamma = 1.4",
+          "gamma equals cv divided by cp",
+          "gamma depends only on pressure"
+        ],
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "For air, gamma = 1.4 for standard day conditions.",
+        "hint": "Think about the standard day value for air"
+      },
+      {
+        "id": "cp-cv-r-relation",
+        "stem": "How are the specific heat capacities and the gas constant related for a given gas?",
+        "options": [
+          "cp = cv + R",
+          "R equals cp plus cv",
+          "cp equals cv minus R",
+          "cv equals cp times R"
+        ],
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "cp = cv + R",
+        "hint": "Recall the derived relation from the enthalpy equation"
+      },
+      {
+        "id": "heat-capacity-definition",
+        "stem": "What does the heat capacity constant describe for a temperature change?",
+        "options": [
+          "how much heat is added per unit temperature rise",
+          "how much work is done per unit volume change",
+          "how pressure varies with specific volume"
+        ],
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "The heat capacity is a constant that tells how much heat is added per unit temperature rise.",
+        "hint": "Focus on heat added per temperature increase"
+      },
+      {
+        "id": "gamma-ratio-definition",
+        "stem": "How is the specific heat ratio defined using cp and cv?",
+        "options": [
+          "gamma = cp / cv",
+          "gamma = cv / cp",
+          "gamma = cp plus cv",
+          "gamma = cp times cv"
+        ],
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "gamma = cp / cv",
+        "hint": "Remember which specific heat is on top"
+      }
+    ]
+  }
+}

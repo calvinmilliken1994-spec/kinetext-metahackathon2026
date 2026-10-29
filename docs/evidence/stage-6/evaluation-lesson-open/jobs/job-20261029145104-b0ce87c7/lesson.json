@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261029145104-b0ce87c7",
+  "analysisRef": "job-20261029145104-b0ce87c7/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029145104-b0ce87c7:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Heterozygosity, gene pools and the distribution of genetic diversity",
+    "sources": [
+      {
+        "id": "nij-heterozygosity",
+        "title": "Heterozygosity — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+        "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/population-genetics/heterozygosity",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Heterozygosity'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+        "sha256": "b88d68137ace380387528e9b0d424ad162ee448ea6d48d6646cb090dbfc4e1e9"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "0018adc3346549ac805adad969006732",
+      "runId": "job-20261029145104-b0ce87c7",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T14:52:01.357Z"
+    },
+    "seed": 2448111483,
+    "headline": "Heterozygosity, gene pools and the distribution of genetic diversity",
+    "keyPoints": [
+      {
+        "id": "kp-heterozygous-definition",
+        "point": "An individual with two different alleles at a specific locus is heterozygous",
+        "sourceId": "nij-heterozygosity",
+        "quote": "If an individual has two different alleles at a specific locus, the individual is heterozygous at that locus"
+      },
+      {
+        "id": "kp-allele-frequency-diversity",
+        "point": "Allele frequency is used to characterize genetic diversity and richness of the gene pool in a population",
+        "sourceId": "nij-heterozygosity",
+        "quote": "Allele frequency is used to characterize the genetic diversity, or richness of the gene pool, in a population."
+      },
+      {
+        "id": "kp-genotype-formula",
+        "point": "The number of possible genotypes can be calculated using the formula with alleles at a locus",
+        "sourceId": "nij-heterozygosity",
+        "quote": "The number of possible genotypes from only a few loci is great, and can be calculated using the formula k(k+1)/2"
+      },
+      {
+        "id": "kp-diversity-within-populations",
+        "point": "Genetic diversity is greater within populations than between them",
+        "sourceId": "nij-heterozygosity",
+        "quote": "Genetic diversity is greater within populations than between them."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "kt-heterozygosity",
+        "term": "heterozygosity",
+        "gloss": "measure indicating amount of genetic variability across loci",
+        "sourceId": "nij-heterozygosity",
+        "quote": "The measure of the amount of heterozygosity across loci can be used as a general indicator of the amount of genetic variability."
+      },
+      {
+        "id": "kt-gene-pool",
+        "term": "gene pool",
+        "gloss": "unique set of alleles found in every member of a species",
+        "sourceId": "nij-heterozygosity",
+        "quote": "A gene pool is the unique set of alleles that could be found by analyzing the DNA from every member of a species or population."
+      },
+      {
+        "id": "kt-fitness",
+        "term": "fitness",
+        "gloss": "probability of transmitting genes to the next generation relative to average",
+        "sourceId": "nij-heterozygosity",
+        "quote": "Fitness is the probability of transmitting one's genes to the next generation in relation to the average probability for that population."
+      },
+      {
+        "id": "kt-punnett-square",
+        "term": "Punnett square",
+        "gloss": "grid that graphically represents expected genotypes",
+        "sourceId": "nij-heterozygosity",
+        "quote": "A Punnett square is simply a grid that graphically represents expected genotypes."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sort-groups-v1",
+      "specId": "job-20261029145104-b0ce87c7:sort-groups-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "concept-map-v1",
+      "specId": "job-20261029145104-b0ce87c7:concept-map-v1:r3",
+      "status": "failed",
+      "reason": "CM-02: links[1] (heterozygosity-uses-genetic-diversity): neither endpoint label (\"Allele frequency\", \"Allele frequency\") occurs in the quote — one endpoint label must be IN the quote (endpoints-in-quote); links[2] (gene-pool-causes-fitness): neither endpoint label (\"Allele frequency\", \"Allele frequency\") o",
+      "revision": 3
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029145104-b0ce87c7:quiz-cards-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    }
+  ]
+}

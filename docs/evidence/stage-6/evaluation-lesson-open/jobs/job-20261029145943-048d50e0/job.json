@@ -1,0 +1,46 @@
+{
+  "jobId": "job-20261029145943-048d50e0",
+  "sourceId": "nasa-grc-bernoullis-equation",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T14:59:43.223Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.244967,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [
+    {
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "A-05",
+        "A-07"
+      ],
+      "fixed": [
+        "A-05",
+        "A-07"
+      ],
+      "remaining": [],
+      "passed": true
+    }
+  ],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 41044,
+    "startedAt": "2026-10-29T14:59:43.223Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 3,
+    "componentsPublished": 3,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "finishedAt": "2026-10-29T15:02:25.109Z"
+}

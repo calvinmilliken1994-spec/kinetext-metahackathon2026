@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Newton laws recall",
+    "cards": [
+      {
+        "id": "first-law-inertia-condition",
+        "stem": "Which phrase completes the inertia statement to describe when motion changes?",
+        "options": [
+          "unless acted on by an unbalanced force",
+          "when mass remains constant",
+          "when velocity stays zero",
+          "during steady thrust"
+        ],
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "unless acted on by an unbalanced force",
+        "hint": "Recall the exception that lets motion change from rest or steady travel"
+      },
+      {
+        "id": "second-law-depends",
+        "stem": "How does the second law describe the link between acceleration, mass and applied force?",
+        "options": [
+          "depends on the mass of the object and the amount of force applied",
+          "remains at rest in a straight line",
+          "exerts an equal and opposite force on the first",
+          "is inertia that resists changes"
+        ],
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "The acceleration of an object depends on the mass of the object and the amount of force applied.",
+        "hint": "Think what two factors set how quickly velocity changes"
+      },
+      {
+        "id": "third-law-action-reaction",
+        "stem": "What happens when one object pushes on another during an interaction?",
+        "options": [
+          "exerts an equal and opposite force on the first",
+          "depends on the mass of the object",
+          "unless acted on by an unbalanced force",
+          "remains in uniform motion"
+        ],
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Whenever one object exerts a force on a second object, the second object exerts an equal and opposite force on the first.",
+        "hint": "Consider the paired forces from mutual interaction"
+      },
+      {
+        "id": "constant-mass-relation",
+        "stem": "When is the familiar mass times acceleration form valid for relating force and motion?",
+        "options": [
+          "only good for objects that have a constant mass",
+          "always valid for changing mass",
+          "requires an unbalanced force to start",
+          "defines inertia as resistance"
+        ],
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Remember that this relation is only good for objects that have a constant mass.",
+        "hint": "Think when mass can be taken outside the change in momentum"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029143609-b2f7adf7:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "f3a776e0c02545dd8336fb61164f9dd3",
+    "usage": {
+      "promptTokens": 3479,
+      "completionTokens": 6862,
+      "reasoningTokens": 6429,
+      "cachedTokens": 0
+    },
+    "latencyMs": 31080,
+    "estCostUSD": 0.03351225,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029143609-b2f7adf7:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Newton laws recall",
+    "sources": [
+      {
+        "id": "nasa-grc-newtons-laws-of-motion",
+        "title": "Newton's Laws of Motion — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/newtons-laws-of-motion/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "907bae07076eef20118a4e54096ad399b11994ec5e310d9bed74850f6d009014"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "f3a776e0c02545dd8336fb61164f9dd3",
+      "runId": "job-20261029143609-b2f7adf7",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T14:37:26.911Z"
+    },
+    "seed": 4292211550,
+    "cards": [
+      {
+        "id": "first-law-inertia-condition",
+        "stem": "Which phrase completes the inertia statement to describe when motion changes?",
+        "options": [
+          "unless acted on by an unbalanced force",
+          "when mass remains constant",
+          "when velocity stays zero",
+          "during steady thrust"
+        ],
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "unless acted on by an unbalanced force",
+        "hint": "Recall the exception that lets motion change from rest or steady travel"
+      },
+      {
+        "id": "second-law-depends",
+        "stem": "How does the second law describe the link between acceleration, mass and applied force?",
+        "options": [
+          "depends on the mass of the object and the amount of force applied",
+          "remains at rest in a straight line",
+          "exerts an equal and opposite force on the first",
+          "is inertia that resists changes"
+        ],
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "The acceleration of an object depends on the mass of the object and the amount of force applied.",
+        "hint": "Think what two factors set how quickly velocity changes"
+      },
+      {
+        "id": "third-law-action-reaction",
+        "stem": "What happens when one object pushes on another during an interaction?",
+        "options": [
+          "exerts an equal and opposite force on the first",
+          "depends on the mass of the object",
+          "unless acted on by an unbalanced force",
+          "remains in uniform motion"
+        ],
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Whenever one object exerts a force on a second object, the second object exerts an equal and opposite force on the first.",
+        "hint": "Consider the paired forces from mutual interaction"
+      },
+      {
+        "id": "constant-mass-relation",
+        "stem": "When is the familiar mass times acceleration form valid for relating force and motion?",
+        "options": [
+          "only good for objects that have a constant mass",
+          "always valid for changing mass",
+          "requires an unbalanced force to start",
+          "defines inertia as resistance"
+        ],
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Remember that this relation is only good for objects that have a constant mass.",
+        "hint": "Think when mass can be taken outside the change in momentum"
+      }
+    ]
+  }
+}

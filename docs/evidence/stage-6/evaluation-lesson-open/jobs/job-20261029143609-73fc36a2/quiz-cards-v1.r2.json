@@ -1,0 +1,231 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Weight and Altitude Effects",
+    "cards": [
+      {
+        "id": "altitude-distance-center",
+        "stem": "In the example at 35000 feet what distance to the center of the earth is given",
+        "options": [
+          "4007 miles",
+          "4000 miles",
+          "32.2 miles",
+          "35 miles"
+        ],
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "If an airplane is flying at 35000 feet (about 7 miles) the distance to the center of the earth is about 4007 miles.",
+        "hint": "Add the flight height to the surface radius"
+      },
+      {
+        "id": "surface-gravity-value",
+        "stem": "What value is listed for gravitational acceleration at the surface in metric units",
+        "options": [
+          "9.8 meters per square second",
+          "9965 meters per square second",
+          "35 meters per square second",
+          "4000 meters per square second"
+        ],
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "On the surface of the earth, its value is 9.8 meters per square second or 32.2 feet per square second.",
+        "hint": "Look for the metric value paired with feet per second value"
+      },
+      {
+        "id": "weight-at-altitude-example",
+        "stem": "In the test case how much does an airplane weighing 10000 pounds on the surface weigh at 35000 feet",
+        "options": [
+          "9965 pounds",
+          "10000 pounds",
+          "4000 pounds",
+          "35 pounds"
+        ],
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "it weighs 9965 pounds at 35000 feet;",
+        "hint": "Weight drops a small amount with height"
+      },
+      {
+        "id": "gravity-change-factor",
+        "stem": "What result is given for the square of 4000 over 4007 in the altitude change calculation",
+        "options": [
+          ".9965",
+          "9.8",
+          "35",
+          "32.2"
+        ],
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "We can calculate the change in the gravitational constant as the square of (4000/4007) which equals .9965.",
+        "hint": "It is just under one"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029143609-73fc36a2:quiz-cards-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "quiz-cards-v1: no weakening — every one of the 3 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "a3551c23687e4fc2b1b46550a4dafc8e",
+    "usage": {
+      "promptTokens": 4421,
+      "completionTokens": 3689,
+      "reasoningTokens": 3276,
+      "cachedTokens": 0
+    },
+    "latencyMs": 14248,
+    "estCostUSD": 0.0212045,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029143609-73fc36a2:quiz-cards-v1:r2",
+    "componentId": "quiz-cards-v1",
+    "title": "Weight and Altitude Effects",
+    "sources": [
+      {
+        "id": "nasa-grc-weight-equation",
+        "title": "Weight Equation — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/weight-equation/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "3bce4bd7de875c5dc08f1b682c3179be302140b673e9a7ea4ee516e778de172c"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "a3551c23687e4fc2b1b46550a4dafc8e",
+      "runId": "job-20261029143609-73fc36a2",
+      "promptVersion": "s6-v1",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T14:40:44.858Z"
+    },
+    "seed": 331581093,
+    "cards": [
+      {
+        "id": "altitude-distance-center",
+        "stem": "In the example at 35000 feet what distance to the center of the earth is given",
+        "options": [
+          "4007 miles",
+          "4000 miles",
+          "32.2 miles",
+          "35 miles"
+        ],
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "If an airplane is flying at 35000 feet (about 7 miles) the distance to the center of the earth is about 4007 miles.",
+        "hint": "Add the flight height to the surface radius"
+      },
+      {
+        "id": "surface-gravity-value",
+        "stem": "What value is listed for gravitational acceleration at the surface in metric units",
+        "options": [
+          "9.8 meters per square second",
+          "9965 meters per square second",
+          "35 meters per square second",
+          "4000 meters per square second"
+        ],
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "On the surface of the earth, its value is 9.8 meters per square second or 32.2 feet per square second.",
+        "hint": "Look for the metric value paired with feet per second value"
+      },
+      {
+        "id": "weight-at-altitude-example",
+        "stem": "In the test case how much does an airplane weighing 10000 pounds on the surface weigh at 35000 feet",
+        "options": [
+          "9965 pounds",
+          "10000 pounds",
+          "4000 pounds",
+          "35 pounds"
+        ],
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "it weighs 9965 pounds at 35000 feet;",
+        "hint": "Weight drops a small amount with height"
+      },
+      {
+        "id": "gravity-change-factor",
+        "stem": "What result is given for the square of 4000 over 4007 in the altitude change calculation",
+        "options": [
+          ".9965",
+          "9.8",
+          "35",
+          "32.2"
+        ],
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "We can calculate the change in the gravitational constant as the square of (4000/4007) which equals .9965.",
+        "hint": "It is just under one"
+      }
+    ]
+  }
+}

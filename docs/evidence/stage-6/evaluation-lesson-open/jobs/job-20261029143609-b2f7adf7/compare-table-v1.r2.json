@@ -1,0 +1,206 @@
+{
+  "gen": {
+    "schemaVersion": "compare-table-v1",
+    "title": "Comparing Newtons Laws of Motion",
+    "entities": [
+      "compare-table-v1",
+      "id"
+    ],
+    "attributes": [
+      "law-statement",
+      "name"
+    ],
+    "cells": [
+      {
+        "id": "newtons-laws-compare",
+        "entityIndex": 0,
+        "attributeIndex": 0,
+        "value": "An object at rest remains at rest",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "An object at rest remains at rest"
+      },
+      {
+        "id": "inertia",
+        "entityIndex": 1,
+        "attributeIndex": 0,
+        "value": "The acceleration of an object depends on the mass",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "The acceleration of an object depends on the mass of the object and the amount of force applied."
+      },
+      {
+        "id": "action-reaction",
+        "entityIndex": 0,
+        "attributeIndex": 1,
+        "value": "Inertia",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Newton’s First Law of Motion (Inertia)"
+      },
+      {
+        "id": "law-statement",
+        "entityIndex": 1,
+        "attributeIndex": 1,
+        "value": "Force",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Newton’s Second Law of Motion (Force)"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029143609-b2f7adf7:compare-table-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every compare-table text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "CT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 cell quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "CT-02",
+        "kind": "grounding",
+        "passed": false,
+        "message": "cells[0] (newtons-laws-compare): the entity \"compare-table-v1\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[1] (inertia): the entity \"id\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[2] (action-reaction): the entity \"compare-table-v1\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[3] (law-statement): the entity \"id\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote)",
+        "path": "/cells/0/entityIndex",
+        "affected": [
+          "/cells/0/entityIndex",
+          "/cells/0/quote",
+          "/cells/1/entityIndex",
+          "/cells/1/quote",
+          "/cells/2/entityIndex",
+          "/cells/2/quote",
+          "/cells/3/entityIndex",
+          "/cells/3/quote"
+        ]
+      },
+      {
+        "id": "CT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the table shape is valid: 2 entities x 2 attributes with all 4 cells present exactly once (shape-valid)"
+      },
+      {
+        "id": "CT-04",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in entity names, attributes and cell values appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "CT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no attribute column offers 3 distinct cell values, so the UI falls back to reveal-only with unverified cells blanked as \"Not stated on this page\" — by design this is not a component failure (predict-cell-valid)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": false,
+        "message": "repair weakened the spec: /cells changed shape or list length (item counts and structure are frozen in a repair; the system prunes bad items via the drop helpers, the model never adds, removes or reorders items) (a compare-table-v1 repair must fix the failing checks by changing ONLY fields under the affected paths recomputed from revision 1, must keep every item and id stable — the system prunes bad items, never the model — and must never increase a tolerance or otherwise weaken the spec)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "7cb7779e454b4032b485b0222dd9a465",
+    "usage": {
+      "promptTokens": 5448,
+      "completionTokens": 9068,
+      "reasoningTokens": 8817,
+      "cachedTokens": 0
+    },
+    "latencyMs": 40370,
+    "estCostUSD": 0.045349,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029143609-b2f7adf7:compare-table-v1:r2",
+    "componentId": "compare-table-v1",
+    "title": "Comparing Newtons Laws of Motion",
+    "sources": [
+      {
+        "id": "nasa-grc-newtons-laws-of-motion",
+        "title": "Newton's Laws of Motion — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/newtons-laws-of-motion/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "907bae07076eef20118a4e54096ad399b11994ec5e310d9bed74850f6d009014"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "7cb7779e454b4032b485b0222dd9a465",
+      "runId": "job-20261029143609-b2f7adf7",
+      "promptVersion": "s6-v1",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T14:39:01.197Z"
+    },
+    "seed": 3260870896,
+    "entities": [
+      "compare-table-v1",
+      "id"
+    ],
+    "attributes": [
+      "law-statement",
+      "name"
+    ],
+    "cells": [
+      {
+        "id": "newtons-laws-compare",
+        "entityIndex": 0,
+        "attributeIndex": 0,
+        "value": "An object at rest remains at rest",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "An object at rest remains at rest"
+      },
+      {
+        "id": "inertia",
+        "entityIndex": 1,
+        "attributeIndex": 0,
+        "value": "The acceleration of an object depends on the mass",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "The acceleration of an object depends on the mass of the object and the amount of force applied."
+      },
+      {
+        "id": "action-reaction",
+        "entityIndex": 0,
+        "attributeIndex": 1,
+        "value": "Inertia",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Newton’s First Law of Motion (Inertia)"
+      },
+      {
+        "id": "law-statement",
+        "entityIndex": 1,
+        "attributeIndex": 1,
+        "value": "Force",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Newton’s Second Law of Motion (Force)"
+      }
+    ]
+  }
+}

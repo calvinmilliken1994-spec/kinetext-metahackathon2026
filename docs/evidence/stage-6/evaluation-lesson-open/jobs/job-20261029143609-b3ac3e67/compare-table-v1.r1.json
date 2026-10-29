@@ -1,0 +1,369 @@
+{
+  "gen": {
+    "schemaVersion": "compare-table-v1",
+    "title": "Contrasting Vertical and Horizontal Force Imbalances",
+    "entities": [
+      "Lift > Weight = Aircraft Rises",
+      "Lift > Weight = Aircraft Rises",
+      "Lift > Weight = Aircraft Rises",
+      "Weight > Lift = Aircraft Falls"
+    ],
+    "attributes": [
+      "Lift > Weight = Aircraft Rises",
+      "Lift > Weight = Aircraft Rises",
+      "Lift > Weight = Aircraft Rises",
+      "Weight > Lift = Aircraft Falls"
+    ],
+    "cells": [
+      {
+        "id": "compare-aircraft-force-imbalances",
+        "entityIndex": 0,
+        "attributeIndex": 0,
+        "value": "Lift",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Lift > Weight = Aircraft Rises"
+      },
+      {
+        "id": "compare-aircraft-force-imbalances",
+        "entityIndex": 0,
+        "attributeIndex": 1,
+        "value": "Lift > Weight",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Lift > Weight = Aircraft Rises"
+      },
+      {
+        "id": "compare-aircraft-force-imbalances",
+        "entityIndex": 0,
+        "attributeIndex": 2,
+        "value": "Aircraft Rises",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Lift > Weight = Aircraft Rises"
+      },
+      {
+        "id": "compare-aircraft-force-imbalances",
+        "entityIndex": 1,
+        "attributeIndex": 0,
+        "value": "Weight",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Weight > Lift = Aircraft Falls"
+      },
+      {
+        "id": "compare-aircraft-force-imbalances",
+        "entityIndex": 1,
+        "attributeIndex": 1,
+        "value": "Weight > Lift",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Weight > Lift = Aircraft Falls"
+      },
+      {
+        "id": "compare-aircraft-force-imbalances",
+        "entityIndex": 1,
+        "attributeIndex": 2,
+        "value": "Aircraft Falls",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Weight > Lift = Aircraft Falls"
+      },
+      {
+        "id": "compare-aircraft-force-imbalances",
+        "entityIndex": 2,
+        "attributeIndex": 0,
+        "value": "Thrust",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Thrust > Drag = Aircraft Accelerates"
+      },
+      {
+        "id": "compare-aircraft-force-imbalances",
+        "entityIndex": 2,
+        "attributeIndex": 1,
+        "value": "Thrust > Drag",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Thrust > Drag = Aircraft Accelerates"
+      },
+      {
+        "id": "compare-aircraft-force-imbalances",
+        "entityIndex": 2,
+        "attributeIndex": 2,
+        "value": "Aircraft Accelerates",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Thrust > Drag = Aircraft Accelerates"
+      },
+      {
+        "id": "compare-aircraft-force-imbalances",
+        "entityIndex": 3,
+        "attributeIndex": 0,
+        "value": "Drag",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Drag > Thrust = Aircraft Slows"
+      },
+      {
+        "id": "compare-aircraft-force-imbalances",
+        "entityIndex": 3,
+        "attributeIndex": 1,
+        "value": "Drag > Thrust",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Drag > Thrust = Aircraft Slows"
+      },
+      {
+        "id": "compare-aircraft-force-imbalances",
+        "entityIndex": 3,
+        "attributeIndex": 2,
+        "value": "Aircraft Slows",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Drag > Thrust = Aircraft Slows"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029143609-b3ac3e67:compare-table-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": false,
+        "message": "compare-table gen failed the structural limits: cell id \"compare-aircraft-force-imbalances\" occurs more than once (expected unique ids); cell id \"compare-aircraft-force-imbalances\" occurs more than once (expected unique ids); cell id \"compare-aircraft-force-imbalances\" occurs more than once (expected unique ids); cell id \"compare-aircraft-force-imbalances\" occurs more than once (expected unique ids); cell id \"compare-aircraft-force-imbalances\" occurs more than once (expected unique ids); cell id \"compare-aircraft-force-imbalances\" occurs more than once (expected unique ids); cell id \"compare-aircraft-force-imbalances\" occurs more than once (expected unique ids); cell id \"compare-aircraft-force-imbalances\" occurs more than once (expected unique ids); cell id \"compare-aircraft-force-imbalances\" occurs more than once (expected unique ids); cell id \"compare-aircraft-force-imbalances\" occurs more than once (expected unique ids); cell id \"compare-aircraft-force-imbalances\" occurs more than once (expected unique ids); cell id \"compare-aircraft-force-imbalances\" occurs more than once (expected unique ids)",
+        "path": "/cells/0/id",
+        "affected": [
+          "/cells/0/id",
+          "/cells/1/id",
+          "/cells/2/id",
+          "/cells/3/id",
+          "/cells/4/id",
+          "/cells/5/id",
+          "/cells/6/id",
+          "/cells/7/id",
+          "/cells/8/id",
+          "/cells/9/id",
+          "/cells/10/id",
+          "/cells/11/id"
+        ]
+      },
+      {
+        "id": "CT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 12 cell quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "CT-02",
+        "kind": "grounding",
+        "passed": false,
+        "message": "cells[3] (compare-aircraft-force-imbalances): the entity \"Lift > Weight = Aircraft Rises\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[4] (compare-aircraft-force-imbalances): the entity \"Lift > Weight = Aircraft Rises\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[5] (compare-aircraft-force-imbalances): the entity \"Lift > Weight = Aircraft Rises\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[6] (compare-aircraft-force-imbalances): the entity \"Lift > Weight = Aircraft Rises\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[7] (compare-aircraft-force-imbalances): the entity \"Lift > Weight = Aircraft Rises\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[8] (compare-aircraft-force-imbalances): the entity \"Lift > Weight = Aircraft Rises\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[9] (compare-aircraft-force-imbalances): the entity \"Weight > Lift = Aircraft Falls\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[10] (compare-aircraft-force-imbalances): the entity \"Weight > Lift = Aircraft Falls\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[11] (compare-aircraft-force-imbalances): the entity \"Weight > Lift = Aircraft Falls\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote)",
+        "path": "/cells/3/entityIndex",
+        "affected": [
+          "/cells/3/entityIndex",
+          "/cells/3/quote",
+          "/cells/4/entityIndex",
+          "/cells/4/quote",
+          "/cells/5/entityIndex",
+          "/cells/5/quote",
+          "/cells/6/entityIndex",
+          "/cells/6/quote",
+          "/cells/7/entityIndex",
+          "/cells/7/quote",
+          "/cells/8/entityIndex",
+          "/cells/8/quote",
+          "/cells/9/entityIndex",
+          "/cells/9/quote",
+          "/cells/10/entityIndex",
+          "/cells/10/quote",
+          "/cells/11/entityIndex",
+          "/cells/11/quote"
+        ]
+      },
+      {
+        "id": "CT-03",
+        "kind": "semantic",
+        "passed": false,
+        "message": "cells has 12 entries, expected exactly entities x attributes = 16 (every pair exactly once); the cell pair (entity Lift > Weight = Aircraft Rises, attribute Weight > Lift = Aircraft Falls) is missing (cells must be the exact product); the cell pair (entity Lift > Weight = Aircraft Rises, attribute Weight > Lift = Aircraft Falls) is missing (cells must be the exact product); the cell pair (entity Lift > Weight = Aircraft Rises, attribute Weight > Lift = Aircraft Falls) is missing (cells must be the exact product); the cell pair (entity Weight > Lift = Aircraft Falls, attribute Weight > Lift = Aircraft Falls) is missing (cells must be the exact product)",
+        "path": "/cells",
+        "affected": [
+          "/cells",
+          "/cells",
+          "/cells",
+          "/cells",
+          "/cells"
+        ]
+      },
+      {
+        "id": "CT-04",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in entity names, attributes and cell values appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "CT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "predict mode is available: attribute \"Lift > Weight = Aircraft Rises\" offers >= 3 distinct seeded same-column options (predict-cell-valid)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "2c1c8af6a76346bc93b91dd740c244cc",
+    "usage": {
+      "promptTokens": 2475,
+      "completionTokens": 7488,
+      "reasoningTokens": 6498,
+      "cachedTokens": 0
+    },
+    "latencyMs": 31540,
+    "estCostUSD": 0.03491775,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029143609-b3ac3e67:compare-table-v1:r1",
+    "componentId": "compare-table-v1",
+    "title": "Contrasting Vertical and Horizontal Force Imbalances",
+    "sources": [
+      {
+        "id": "nasa-grc-simplified-aircraft-motion",
+        "title": "Simplified Aircraft Motion — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/simplified-aircraft-motion/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "21d6273d590cd157b690fe9491c4c0d202f5b35c5e5a31a8c072b37bbe89edd5"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "2c1c8af6a76346bc93b91dd740c244cc",
+      "runId": "job-20261029143609-b3ac3e67",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T14:37:22.117Z"
+    },
+    "seed": 1716082199,
+    "entities": [
+      "Lift > Weight = Aircraft Rises",
+      "Lift > Weight = Aircraft Rises",
+      "Lift > Weight = Aircraft Rises",
+      "Weight > Lift = Aircraft Falls"
+    ],
+    "attributes": [
+      "Lift > Weight = Aircraft Rises",
+      "Lift > Weight = Aircraft Rises",
+      "Lift > Weight = Aircraft Rises",
+      "Weight > Lift = Aircraft Falls"
+    ],
+    "cells": [
+      {
+        "id": "compare-aircraft-force-imbalances",
+        "entityIndex": 0,
+        "attributeIndex": 0,
+        "value": "Lift",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Lift > Weight = Aircraft Rises"
+      },
+      {
+        "id": "compare-aircraft-force-imbalances",
+        "entityIndex": 0,
+        "attributeIndex": 1,
+        "value": "Lift > Weight",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Lift > Weight = Aircraft Rises"
+      },
+      {
+        "id": "compare-aircraft-force-imbalances",
+        "entityIndex": 0,
+        "attributeIndex": 2,
+        "value": "Aircraft Rises",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Lift > Weight = Aircraft Rises"
+      },
+      {
+        "id": "compare-aircraft-force-imbalances",
+        "entityIndex": 1,
+        "attributeIndex": 0,
+        "value": "Weight",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Weight > Lift = Aircraft Falls"
+      },
+      {
+        "id": "compare-aircraft-force-imbalances",
+        "entityIndex": 1,
+        "attributeIndex": 1,
+        "value": "Weight > Lift",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Weight > Lift = Aircraft Falls"
+      },
+      {
+        "id": "compare-aircraft-force-imbalances",
+        "entityIndex": 1,
+        "attributeIndex": 2,
+        "value": "Aircraft Falls",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Weight > Lift = Aircraft Falls"
+      },
+      {
+        "id": "compare-aircraft-force-imbalances",
+        "entityIndex": 2,
+        "attributeIndex": 0,
+        "value": "Thrust",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Thrust > Drag = Aircraft Accelerates"
+      },
+      {
+        "id": "compare-aircraft-force-imbalances",
+        "entityIndex": 2,
+        "attributeIndex": 1,
+        "value": "Thrust > Drag",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Thrust > Drag = Aircraft Accelerates"
+      },
+      {
+        "id": "compare-aircraft-force-imbalances",
+        "entityIndex": 2,
+        "attributeIndex": 2,
+        "value": "Aircraft Accelerates",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Thrust > Drag = Aircraft Accelerates"
+      },
+      {
+        "id": "compare-aircraft-force-imbalances",
+        "entityIndex": 3,
+        "attributeIndex": 0,
+        "value": "Drag",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Drag > Thrust = Aircraft Slows"
+      },
+      {
+        "id": "compare-aircraft-force-imbalances",
+        "entityIndex": 3,
+        "attributeIndex": 1,
+        "value": "Drag > Thrust",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Drag > Thrust = Aircraft Slows"
+      },
+      {
+        "id": "compare-aircraft-force-imbalances",
+        "entityIndex": 3,
+        "attributeIndex": 2,
+        "value": "Aircraft Slows",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Drag > Thrust = Aircraft Slows"
+      }
+    ]
+  }
+}

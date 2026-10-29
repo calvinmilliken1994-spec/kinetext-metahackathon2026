@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Core Principles and Aerodynamic Forces Review",
+    "cards": [
+      {
+        "id": "work-energy-principle",
+        "stem": "Which listed fundamental states the relation between work, force and distance?",
+        "options": [
+          "Work Equals Force Times Distance",
+          "What is Power?",
+          "Equilibrium",
+          "Torque (Moments)"
+        ],
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "Work Equals Force Times Distance",
+        "hint": "Think of the basic definition linking effort and displacement."
+      },
+      {
+        "id": "newtons-laws-motion",
+        "stem": "Which fundamental describes the basic rules governing motion for flight study?",
+        "options": [
+          "Newton’s Laws of Motion",
+          "Bernoulli’s Equation",
+          "Aerodynamic Forces",
+          "What is Power?"
+        ],
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "Newton’s Laws of Motion",
+        "hint": "Covers three classic laws taught as core fundamentals."
+      },
+      {
+        "id": "aerodynamic-forces-topic",
+        "stem": "Which lesson topic groups the forces that act on an aircraft in flight?",
+        "options": [
+          "Aerodynamic Forces",
+          "The Process of Combustion",
+          "Equilibrium",
+          "Sine-Cosine-Tangent"
+        ],
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "Aerodynamic Forces",
+        "hint": "Look for the general category that includes lift, drag and related effects."
+      },
+      {
+        "id": "bernoulli-equation-topic",
+        "stem": "Which aerodynamics lesson explains the link between pressure and velocity in flow?",
+        "options": [
+          "Bernoulli’s Equation",
+          "The Idea of Functions",
+          "Work Equals Force Times Distance",
+          "Torque (Moments)"
+        ],
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "Bernoulli’s Equation",
+        "hint": "Often used to describe how speed changes affect pressure."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029150116-4de7c5e7:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "a5bcd4c1849c4acdaa8d5cc39339b8a2",
+    "usage": {
+      "promptTokens": 3162,
+      "completionTokens": 3420,
+      "reasoningTokens": 3062,
+      "cachedTokens": 0
+    },
+    "latencyMs": 14801,
+    "estCostUSD": 0.0184875,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029150116-4de7c5e7:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Core Principles and Aerodynamic Forces Review",
+    "sources": [
+      {
+        "id": "nasa-grc-re-living-the-wright-way",
+        "title": "Guide to Reliving the Wright Way — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/re-living-the-wright-way/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "c7d0a44cd306a87e59d38d81850a825080de38231c0242f7086f5336a80c94c2"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "a5bcd4c1849c4acdaa8d5cc39339b8a2",
+      "runId": "job-20261029150116-4de7c5e7",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T15:02:12.059Z"
+    },
+    "seed": 995086606,
+    "cards": [
+      {
+        "id": "work-energy-principle",
+        "stem": "Which listed fundamental states the relation between work, force and distance?",
+        "options": [
+          "Work Equals Force Times Distance",
+          "What is Power?",
+          "Equilibrium",
+          "Torque (Moments)"
+        ],
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "Work Equals Force Times Distance",
+        "hint": "Think of the basic definition linking effort and displacement."
+      },
+      {
+        "id": "newtons-laws-motion",
+        "stem": "Which fundamental describes the basic rules governing motion for flight study?",
+        "options": [
+          "Newton’s Laws of Motion",
+          "Bernoulli’s Equation",
+          "Aerodynamic Forces",
+          "What is Power?"
+        ],
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "Newton’s Laws of Motion",
+        "hint": "Covers three classic laws taught as core fundamentals."
+      },
+      {
+        "id": "aerodynamic-forces-topic",
+        "stem": "Which lesson topic groups the forces that act on an aircraft in flight?",
+        "options": [
+          "Aerodynamic Forces",
+          "The Process of Combustion",
+          "Equilibrium",
+          "Sine-Cosine-Tangent"
+        ],
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "Aerodynamic Forces",
+        "hint": "Look for the general category that includes lift, drag and related effects."
+      },
+      {
+        "id": "bernoulli-equation-topic",
+        "stem": "Which aerodynamics lesson explains the link between pressure and velocity in flow?",
+        "options": [
+          "Bernoulli’s Equation",
+          "The Idea of Functions",
+          "Work Equals Force Times Distance",
+          "Torque (Moments)"
+        ],
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "Bernoulli’s Equation",
+        "hint": "Often used to describe how speed changes affect pressure."
+      }
+    ]
+  }
+}

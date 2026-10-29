@@ -1,0 +1,197 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "physics",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "Page explains role of Mach number in compressible flow, derives density change relation from momentum and isentropic relations and isentropic speed of sound, and describes subsonic transonic and supersonic regimes.",
+    "overview": {
+      "headline": "How Mach number controls air compressibility and density change",
+      "keyPoints": [
+        {
+          "id": "mach-definition",
+          "point": "Mach number is the ratio of aircraft speed to the speed of sound in the gas",
+          "sourceId": "nasa-grc-role-of-the-mach-number",
+          "quote": "The Mach number is the ratio of the speed of the aircraft, or the speed of the gas, to the speed of sound in the gas."
+        },
+        {
+          "id": "low-speed-density",
+          "point": "Below 250 mph at low speed observed density of air remains constant so compressibility is small",
+          "sourceId": "nasa-grc-role-of-the-mach-number",
+          "quote": "If the aircraft passes at a low speed, typically less than 250 mph, it is observed that the density of the air remains constant."
+        },
+        {
+          "id": "subsonic-compressibility",
+          "point": "In subsonic conditions with Mach less than one square is very small so compressibility can be ignored",
+          "sourceId": "nasa-grc-role-of-the-mach-number",
+          "quote": "For low speed, or subsonic conditions, the Mach number is less than one, M < 1, and the square of the Mach number is very small."
+        },
+        {
+          "id": "transonic-equality",
+          "point": "In transonic flows density change is nearly equal to velocity change and compressibility cannot be ignored",
+          "sourceId": "nasa-grc-role-of-the-mach-number",
+          "quote": "For transonic flows, the change in density is nearly equal to the change in velocity, and compressibility effects cannot be ignored."
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "mach-number",
+          "term": "Mach number",
+          "gloss": "ratio of aircraft or gas speed to speed of sound that sets compressibility influence",
+          "sourceId": "nasa-grc-role-of-the-mach-number",
+          "quote": "The Mach number is the ratio of the speed of the aircraft, or the speed of the gas, to the speed of sound in the gas."
+        },
+        {
+          "id": "speed-of-sound",
+          "term": "speed of sound",
+          "gloss": "transmission speed of small isentropic disturbances in the flow",
+          "sourceId": "nasa-grc-role-of-the-mach-number",
+          "quote": "The speed of sound is equal to the speed of transmission of small, isentropic disturbances in the flow."
+        },
+        {
+          "id": "compressibility",
+          "term": "compressibility",
+          "gloss": "effect that alters resulting aerodynamic force when air density changes",
+          "sourceId": "nasa-grc-role-of-the-mach-number",
+          "quote": "This compressibility effect alters the amount of resulting force on the aircraft since the aerodynamic force depends on the air density."
+        },
+        {
+          "id": "isentropically",
+          "term": "isentropically",
+          "gloss": "with constant entropy as disturbances are transmitted without loss",
+          "sourceId": "nasa-grc-role-of-the-mach-number",
+          "quote": "small disturbances in the flow are transmitted to other locations isentropically or with constant entropy."
+        },
+        {
+          "id": "shock-waves",
+          "term": "shock waves",
+          "gloss": "sharp disturbances that affect lift and drag downstream of the shock",
+          "sourceId": "nasa-grc-role-of-the-mach-number",
+          "quote": "Sharp disturbances generate shock waves that affect both the lift and drag of the aircraft and the flow conditions downstream of the shock wave."
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "speed-of-sound-v1",
+        "pedagogicalReason": "Lets learners explore temperature dependence of sound speed that underlies Mach scaling and compressibility",
+        "focusQuote": "gamma * R * T = a^2",
+        "focusSourceId": "nasa-grc-role-of-the-mach-number"
+      },
+      {
+        "componentId": "sequence-v1",
+        "pedagogicalReason": "Models derivation in page order from momentum through isentropic pressure to Mach density relation",
+        "focusQuote": "rho * V * dV = -dp",
+        "focusSourceId": "nasa-grc-role-of-the-mach-number"
+      },
+      {
+        "componentId": "quiz-cards-v1",
+        "pedagogicalReason": "Checks regime distinctions for subsonic transonic and supersonic compressibility behavior",
+        "focusQuote": "For supersonic and hypersonic flows, the density changes faster than the velocity changes by a factor equal to the square of the Mach number.",
+        "focusSourceId": "nasa-grc-role-of-the-mach-number"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029144623-73105487:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"physics\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 3679 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 12 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 4, keyTerms 5, componentPlan 3; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (3 entries, 1 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "4e150f98106a46d2a1662e78df3d024d",
+    "usage": {
+      "promptTokens": 4229,
+      "completionTokens": 8936,
+      "reasoningTokens": 7898,
+      "cachedTokens": 0
+    },
+    "latencyMs": 34561,
+    "estCostUSD": 0.04326425,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

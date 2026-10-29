@@ -1,0 +1,219 @@
+{
+  "gen": {
+    "schemaVersion": "sort-groups-v1",
+    "title": "Sorting forces and grouping ideas from the reading",
+    "groups": [
+      {
+        "id": "evolutionary-forces",
+        "label": "evolutionary forces"
+      },
+      {
+        "id": "population-groups",
+        "label": "population groups"
+      }
+    ],
+    "items": [
+      {
+        "id": "natural-selection",
+        "label": "natural selection",
+        "groupId": "evolutionary-forces",
+        "sourceId": "nij-population-genetics",
+        "quote": "the four evolutionary forces: natural selection, genetic drift, mutation, and migration"
+      },
+      {
+        "id": "genetic-drift",
+        "label": "genetic drift",
+        "groupId": "evolutionary-forces",
+        "sourceId": "nij-population-genetics",
+        "quote": "the four evolutionary forces: natural selection, genetic drift, mutation, and migration"
+      },
+      {
+        "id": "mutation",
+        "label": "mutation",
+        "groupId": "evolutionary-forces",
+        "sourceId": "nij-population-genetics",
+        "quote": "the four evolutionary forces: natural selection, genetic drift, mutation, and migration"
+      },
+      {
+        "id": "migration",
+        "label": "migration",
+        "groupId": "evolutionary-forces",
+        "sourceId": "nij-population-genetics",
+        "quote": "the four evolutionary forces: natural selection, genetic drift, mutation, and migration"
+      },
+      {
+        "id": "race",
+        "label": "race",
+        "groupId": "population-groups",
+        "sourceId": "nij-population-genetics",
+        "quote": "An alternative to classifying the human species by race is to divide them by ethnicity"
+      },
+      {
+        "id": "ethnicity",
+        "label": "ethnicity",
+        "groupId": "population-groups",
+        "sourceId": "nij-population-genetics",
+        "quote": "An alternative to classifying the human species by race is to divide them by ethnicity"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029145325-bfb2efb9:sort-groups-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sort text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SORT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 item quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SORT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every item label occurs in its quote and every group label occurs in the quote or the same source paragraph (item-and-group-in-quote; the design discloses the weak-link false accept on long paragraphs — every quote is shown to the teacher)"
+      },
+      {
+        "id": "SORT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every declared group is referenced by >= 2 items and every item groupId resolves (groups-covered)"
+      },
+      {
+        "id": "SORT-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every item has a distinct label after normalisation (distinct-items)"
+      },
+      {
+        "id": "SORT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "groups 2 (2-4) and items 6 (6-12) are within the frozen counts (counts-valid)"
+      },
+      {
+        "id": "SORT-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in group and item labels appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "84821eab2d444548931f3d93a4ee778a",
+    "usage": {
+      "promptTokens": 2454,
+      "completionTokens": 6641,
+      "reasoningTokens": 6318,
+      "cachedTokens": 0
+    },
+    "latencyMs": 28375,
+    "estCostUSD": 0.03129175,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029145325-bfb2efb9:sort-groups-v1:r1",
+    "componentId": "sort-groups-v1",
+    "title": "Sorting forces and grouping ideas from the reading",
+    "sources": [
+      {
+        "id": "nij-population-genetics",
+        "title": "Population Genetics — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+        "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/population-genetics",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Population Genetics'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+        "sha256": "3b67b8bbab70fa3f03067b217df5601f05ff044f0f6c0c6cad7b44b5191a29db"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "84821eab2d444548931f3d93a4ee778a",
+      "runId": "job-20261029145325-bfb2efb9",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T14:54:41.709Z"
+    },
+    "seed": 1004297553,
+    "groups": [
+      {
+        "id": "evolutionary-forces",
+        "label": "evolutionary forces"
+      },
+      {
+        "id": "population-groups",
+        "label": "population groups"
+      }
+    ],
+    "items": [
+      {
+        "id": "natural-selection",
+        "label": "natural selection",
+        "groupId": "evolutionary-forces",
+        "sourceId": "nij-population-genetics",
+        "quote": "the four evolutionary forces: natural selection, genetic drift, mutation, and migration"
+      },
+      {
+        "id": "genetic-drift",
+        "label": "genetic drift",
+        "groupId": "evolutionary-forces",
+        "sourceId": "nij-population-genetics",
+        "quote": "the four evolutionary forces: natural selection, genetic drift, mutation, and migration"
+      },
+      {
+        "id": "mutation",
+        "label": "mutation",
+        "groupId": "evolutionary-forces",
+        "sourceId": "nij-population-genetics",
+        "quote": "the four evolutionary forces: natural selection, genetic drift, mutation, and migration"
+      },
+      {
+        "id": "migration",
+        "label": "migration",
+        "groupId": "evolutionary-forces",
+        "sourceId": "nij-population-genetics",
+        "quote": "the four evolutionary forces: natural selection, genetic drift, mutation, and migration"
+      },
+      {
+        "id": "race",
+        "label": "race",
+        "groupId": "population-groups",
+        "sourceId": "nij-population-genetics",
+        "quote": "An alternative to classifying the human species by race is to divide them by ethnicity"
+      },
+      {
+        "id": "ethnicity",
+        "label": "ethnicity",
+        "groupId": "population-groups",
+        "sourceId": "nij-population-genetics",
+        "quote": "An alternative to classifying the human species by race is to divide them by ethnicity"
+      }
+    ]
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nasa-grc-simplified-aircraft-motion-job-20261029143609-b3ac3e67",
+  "title": "forces-1d-v1",
+  "learningObjectives": [
+    "Simplified motion isolates one direction with opposing forces balanced while examining a single net force",
+    "Constant velocity is maintained when opposing forces balance; unbalanced force causes motion in the direction of the larger force",
+    "Acceleration is determined by net force divided by mass as expressed by a = F_net / m"
+  ],
+  "sources": [
+    {
+      "id": "nasa-grc-simplified-aircraft-motion",
+      "title": "Simplified Aircraft Motion — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+      "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/simplified-aircraft-motion/",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+      "sha256": "21d6273d590cd157b690fe9491c4c0d202f5b35c5e5a31a8c072b37bbe89edd5"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "exp1",
+      "text": "Balanced opposing forces maintain steady motion, while an unbalanced force drives motion in the direction of the larger force.",
+      "evidence": [
+        {
+          "sourceId": "nasa-grc-simplified-aircraft-motion",
+          "quote": "the weight would be balanced by the lift and the drag would be balanced by the thrust"
+        },
+        {
+          "sourceId": "nasa-grc-simplified-aircraft-motion",
+          "quote": "If the forces become unbalanced, the aircraft will move in the direction of the greater force."
+        }
+      ]
+    },
+    {
+      "id": "exp2",
+      "text": "Net force is the difference between opposing forces such as thrust minus drag or lift minus weight, and it determines the resulting acceleration.",
+      "evidence": [
+        {
+          "sourceId": "nasa-grc-simplified-aircraft-motion",
+          "quote": "The net force is the difference between the opposing forces; lift minus weight, or thrust minus drag."
+        },
+        {
+          "sourceId": "nasa-grc-simplified-aircraft-motion",
+          "quote": "F = m * a"
+        }
+      ]
+    },
+    {
+      "id": "exp3",
+      "text": "When second-law dynamics are applied, the aircraft's acceleration can be calculated from net force and mass.",
+      "evidence": [
+        {
+          "sourceId": "nasa-grc-simplified-aircraft-motion",
+          "quote": "We can compute the acceleration which the aircraft will experience from Newton’s second law of motion"
+        },
+        {
+          "sourceId": "nasa-grc-simplified-aircraft-motion",
+          "quote": "Where a is the acceleration, m is the mass of the aircraft, and F is the net force acting on the aircraft."
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "forces-1d-v1",
+    "equation": "a=F_net/m",
+    "massKg": {
+      "unit": "kg",
+      "min": 0.01,
+      "max": 1000,
+      "default": 5
+    },
+    "netForceN": {
+      "unit": "N",
+      "min": -1000,
+      "max": 1000,
+      "default": 10
+    },
+    "scenario": {
+      "objectLabel": "Model aircraft",
+      "surfaceLabel": "Level flight, x-direction only"
+    },
+    "durationS": 5,
+    "stepS": 0.02,
+    "observables": [
+      "position",
+      "velocity",
+      "acceleration"
+    ]
+  },
+  "behavioralTests": [
+    {
+      "name": "Positive net force produces positive acceleration",
+      "massKg": 5,
+      "netForceN": 10,
+      "expectedAccelerationMps2": 2,
+      "tolerance": 0.001
+    },
+    {
+      "name": "Negative net force produces negative acceleration",
+      "massKg": 2,
+      "netForceN": -20,
+      "expectedAccelerationMps2": -10,
+      "tolerance": 0.001
+    },
+    {
+      "name": "Zero net force yields zero acceleration",
+      "massKg": 10,
+      "netForceN": 0,
+      "expectedAccelerationMps2": 0,
+      "tolerance": 0.001
+    },
+    {
+      "name": "Larger force increases acceleration proportionally",
+      "massKg": 4,
+      "netForceN": 12,
+      "expectedAccelerationMps2": 3,
+      "tolerance": 0.001
+    }
+  ],
+  "predictions": [
+    {
+      "id": "pred1",
+      "prompt": "Predict the acceleration for the given mass and net force",
+      "massKg": 5,
+      "netForceN": 20,
+      "expectedAccelerationMps2": 4,
+      "tolerance": 0.001
+    },
+    {
+      "id": "pred2",
+      "prompt": "Predict the acceleration for the given mass and net force",
+      "massKg": 8,
+      "netForceN": -16,
+      "expectedAccelerationMps2": -2,
+      "tolerance": 0.001
+    },
+    {
+      "id": "pred3",
+      "prompt": "Predict the acceleration for the given mass and net force",
+      "massKg": 10,
+      "netForceN": 25,
+      "expectedAccelerationMps2": 2.5,
+      "tolerance": 0.001
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "a0ae7dd4caa848e69377033ec95aa1bd",
+    "runId": "job-20261029143609-b3ac3e67",
+    "promptVersion": "v9",
+    "generatedAt": "2026-10-29T14:37:20.556Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

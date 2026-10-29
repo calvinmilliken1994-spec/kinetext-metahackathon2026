@@ -1,0 +1,191 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "Increasing wing area to keep lift high at low velocity",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follows page order from cruise baseline through low velocity need to flap and slat deployment.",
+    "steps": [
+      {
+        "id": "cruise-condition-baseline",
+        "label": "cruise condition",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "The airplane on the left is shown in a cruise condition while the airplane on the right is shown in a takeoff or landing condition.",
+        "orderHint": "Follow wing area growth from cruise to takeoff and landing."
+      },
+      {
+        "id": "low-velocity-need-lift",
+        "label": "relatively low velocity",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "Takeoff and landing are times of relatively low velocity, so to keep the lift high (to avoid the ground!) designers try to increase the wing area.",
+        "orderHint": "Follow wing area growth from cruise to takeoff and landing."
+      },
+      {
+        "id": "sliding-flaps-backwards",
+        "label": "sliding the flaps backwards",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "This is done by sliding the flaps backwards along metal tracks",
+        "orderHint": "Follow wing area growth from cruise to takeoff and landing."
+      },
+      {
+        "id": "shifting-slats-forward",
+        "label": "shifting the slats forward",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "shifting the slats forward to increase the wing area.",
+        "orderHint": "Follow wing area growth from cruise to takeoff and landing."
+      },
+      {
+        "id": "watch-change-in-area",
+        "label": "change in wing area",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "watch the wings during takeoff and landing to see the change in wing area.",
+        "orderHint": "Follow wing area growth from cruise to takeoff and landing."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029144046-8446cd97:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step label occurs in its own quote after normalisation (labels-in-quotes)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 5 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "57e1643d2acb4bb8b2112e6d0c138f87",
+    "usage": {
+      "promptTokens": 2749,
+      "completionTokens": 7939,
+      "reasoningTokens": 7545,
+      "cachedTokens": 0
+    },
+    "latencyMs": 33271,
+    "estCostUSD": 0.037177,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029144046-8446cd97:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "Increasing wing area to keep lift high at low velocity",
+    "sources": [
+      {
+        "id": "nasa-grc-effect-of-size-on-lift",
+        "title": "Effect of Size on Lift — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/effect-of-size-on-lift/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "1bd1a2678b2c2cb6f162ebbeb4ec95d6aa439d14002682604d2ac9cd680d76f4"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "57e1643d2acb4bb8b2112e6d0c138f87",
+      "runId": "job-20261029144046-8446cd97",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T14:42:41.484Z"
+    },
+    "seed": 642535518,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follows page order from cruise baseline through low velocity need to flap and slat deployment.",
+    "steps": [
+      {
+        "id": "cruise-condition-baseline",
+        "label": "cruise condition",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "The airplane on the left is shown in a cruise condition while the airplane on the right is shown in a takeoff or landing condition.",
+        "orderHint": "Follow wing area growth from cruise to takeoff and landing."
+      },
+      {
+        "id": "low-velocity-need-lift",
+        "label": "relatively low velocity",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "Takeoff and landing are times of relatively low velocity, so to keep the lift high (to avoid the ground!) designers try to increase the wing area.",
+        "orderHint": "Follow wing area growth from cruise to takeoff and landing."
+      },
+      {
+        "id": "sliding-flaps-backwards",
+        "label": "sliding the flaps backwards",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "This is done by sliding the flaps backwards along metal tracks",
+        "orderHint": "Follow wing area growth from cruise to takeoff and landing."
+      },
+      {
+        "id": "shifting-slats-forward",
+        "label": "shifting the slats forward",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "shifting the slats forward to increase the wing area.",
+        "orderHint": "Follow wing area growth from cruise to takeoff and landing."
+      },
+      {
+        "id": "watch-change-in-area",
+        "label": "change in wing area",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "watch the wings during takeoff and landing to see the change in wing area.",
+        "orderHint": "Follow wing area growth from cruise to takeoff and landing."
+      }
+    ]
+  }
+}

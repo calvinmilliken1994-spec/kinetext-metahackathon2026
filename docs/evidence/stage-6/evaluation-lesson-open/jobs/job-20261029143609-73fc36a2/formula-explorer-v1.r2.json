@@ -1,0 +1,255 @@
+{
+  "gen": {
+    "schemaVersion": "formula-explorer-v1",
+    "title": "gravity-mass-explorer",
+    "formulaText": "W = m * g",
+    "sourceId": "nasa-grc-weight-equation",
+    "quote": "W = m * g",
+    "expression": "m * g",
+    "variables": [
+      {
+        "name": "m",
+        "pageSymbol": "m",
+        "meaning": "mass of an object",
+        "meaningQuoted": true,
+        "quote": "The weight W, or gravitational force, is then just the mass of an object times the gravitational acceleration.",
+        "unit": "kg",
+        "min": 1000,
+        "max": 10000,
+        "default": 5000
+      },
+      {
+        "name": "g",
+        "pageSymbol": "g",
+        "meaning": "gravitational acceleration",
+        "meaningQuoted": true,
+        "quote": "and the square of the radius of the earth to form the gravitational acceleration, g.",
+        "unit": "m/s2",
+        "min": 9.5,
+        "max": 10.5,
+        "default": 9.8
+      }
+    ],
+    "xVariable": "m",
+    "cases": [
+      {
+        "id": "case-1",
+        "inputs": [
+          {
+            "name": "m",
+            "value": 2000
+          },
+          {
+            "name": "g",
+            "value": 9.8
+          }
+        ]
+      },
+      {
+        "id": "case-2",
+        "inputs": [
+          {
+            "name": "m",
+            "value": 8000
+          },
+          {
+            "name": "g",
+            "value": 9.8
+          }
+        ]
+      }
+    ],
+    "sourceExample": {
+      "quote": "",
+      "resultNumber": 0,
+      "tolerance": 0
+    },
+    "hasSourceExample": false
+  },
+  "report": {
+    "artifactId": "job-20261029143609-73fc36a2:formula-explorer-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every formula-explorer case id and title shape is within the frozen limits"
+      },
+      {
+        "id": "FE-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "the formula quote (1 quote) appears verbatim in source \"nasa-grc-weight-equation\" and formulaText occurs inside the quote after normalisation (formula-quoted)"
+      },
+      {
+        "id": "FE-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "expression parses in the frozen grammar (<= 120 chars, AST <= 50 nodes, no \"**\", no implicit multiplication) and its variable set equals the declared set (expression-parses)"
+      },
+      {
+        "id": "FE-03",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 2 variables are declared with valid unique non-reserved names, exact page symbols, grounded quotes (top-level sourceId) and xVariable \"m\" is one of them (variables-declared)"
+      },
+      {
+        "id": "FE-04",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "all 2 case(s) carry exactly the declared variables with finite in-range inputs and every recomputed output is finite (the system sets the outputs) (cases-recomputed)"
+      },
+      {
+        "id": "FE-05",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "hasSourceExample=false with the empty sourceExample shape (sourceExample-check)"
+      },
+      {
+        "id": "FE-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every slider range is sane (finite, min < max, default inside, positive-range ratio <= 1000000) and no literal exponent exceeds 100 (ranges-sane)"
+      },
+      {
+        "id": "FE-07",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title and variable meanings appears on the page or in the same quote (N-01); units and formula fields are notation and exempt (numbers-checkable)"
+      },
+      {
+        "id": "FE-08",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the expression matches the page formula \"m * g\" parsed from the quote with the same grammar: 5/5 finite slider-range sample points agree within relative 1e-9 (expression-matches-page-formula)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "formula-explorer-v1: no weakening — every one of the 1 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "b93e34664ed84384a79720cee70d9011",
+    "usage": {
+      "promptTokens": 4490,
+      "completionTokens": 4056,
+      "reasoningTokens": 3783,
+      "cachedTokens": 0
+    },
+    "latencyMs": 17381,
+    "estCostUSD": 0.0228505,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029143609-73fc36a2:formula-explorer-v1:r2",
+    "componentId": "formula-explorer-v1",
+    "title": "gravity-mass-explorer",
+    "sources": [
+      {
+        "id": "nasa-grc-weight-equation",
+        "title": "Weight Equation — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/weight-equation/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "3bce4bd7de875c5dc08f1b682c3179be302140b673e9a7ea4ee516e778de172c"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "b93e34664ed84384a79720cee70d9011",
+      "runId": "job-20261029143609-73fc36a2",
+      "promptVersion": "s6-v1",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T14:39:53.112Z"
+    },
+    "seed": 1665000533,
+    "formulaText": "W = m * g",
+    "sourceId": "nasa-grc-weight-equation",
+    "quote": "W = m * g",
+    "expression": "m * g",
+    "variables": [
+      {
+        "name": "m",
+        "pageSymbol": "m",
+        "meaning": "mass of an object",
+        "meaningQuoted": true,
+        "quote": "The weight W, or gravitational force, is then just the mass of an object times the gravitational acceleration.",
+        "unit": "kg",
+        "min": 1000,
+        "max": 10000,
+        "default": 5000
+      },
+      {
+        "name": "g",
+        "pageSymbol": "g",
+        "meaning": "gravitational acceleration",
+        "meaningQuoted": true,
+        "quote": "and the square of the radius of the earth to form the gravitational acceleration, g.",
+        "unit": "m/s2",
+        "min": 9.5,
+        "max": 10.5,
+        "default": 9.8
+      }
+    ],
+    "xVariable": "m",
+    "cases": [
+      {
+        "id": "case-1",
+        "inputs": [
+          {
+            "name": "m",
+            "value": 2000
+          },
+          {
+            "name": "g",
+            "value": 9.8
+          }
+        ]
+      },
+      {
+        "id": "case-2",
+        "inputs": [
+          {
+            "name": "m",
+            "value": 8000
+          },
+          {
+            "name": "g",
+            "value": 9.8
+          }
+        ]
+      }
+    ],
+    "sourceExample": {
+      "quote": "",
+      "resultNumber": 0,
+      "tolerance": 0
+    },
+    "hasSourceExample": false
+  }
+}

@@ -1,0 +1,199 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Plutonium uses and spent fuel composition",
+    "cards": [
+      {
+        "id": "spent-fuel-share",
+        "stem": "What share of spent fuel from U.S. reactors is plutonium by weight?",
+        "options": [
+          "about 1 percent",
+          "a large majority",
+          "a tiny trace",
+          "nearly all of the fuel"
+        ],
+        "sourceId": "nrc-backgrounder-plutonium",
+        "quote": "Spent nuclear fuel from U.S. reactors contains about 1 percent plutonium by weight.",
+        "hint": "Recall the small share left in used fuel."
+      },
+      {
+        "id": "plutonium-238-uses",
+        "stem": "Which plutonium form has powered pacemaker batteries and provided heat for space missions?",
+        "options": [
+          "Plutonium-238",
+          "Pu-239",
+          "Pu-241",
+          "Pu-240"
+        ],
+        "sourceId": "nrc-backgrounder-plutonium",
+        "quote": "Plutonium-238 has been used to power batteries for some heart pacemakers, as well as provide a long-lived heat source to power NASA space missions.",
+        "hint": "Think of the heat source for distant missions and medical devices."
+      },
+      {
+        "id": "mox-fuel-result",
+        "stem": "What fuel product results from mixing the separated oxides together?",
+        "options": [
+          "mixed oxide or MOX fuel",
+          "pure plutonium metal",
+          "uranium hexafluoride gas",
+          "neptunium pellets"
+        ],
+        "sourceId": "nrc-backgrounder-plutonium",
+        "quote": "Once separated, plutonium oxide can be mixed with uranium oxide to produce mixed oxide or MOX fuel.",
+        "hint": "Consider what happens after chemical separation of spent fuel."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029144939-795eccda:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "dffd20cd1c8d4dbb92da533237dd0d26",
+    "usage": {
+      "promptTokens": 2738,
+      "completionTokens": 7990,
+      "reasoningTokens": 7663,
+      "cachedTokens": 0
+    },
+    "latencyMs": 30810,
+    "estCostUSD": 0.03738,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029144939-795eccda:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Plutonium uses and spent fuel composition",
+    "sources": [
+      {
+        "id": "nrc-backgrounder-plutonium",
+        "title": "Backgrounder on Plutonium — U.S. Nuclear Regulatory Commission",
+        "locator": "https://www.nrc.gov/regulations-legislation/fact-sheets-brochures/backgrounder-on-plutonium",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Nuclear Regulatory Commission, 'Backgrounder on Plutonium', Fact Sheets & Brochures. NRC's website constitutes a U.S. Government Work under federal copyright law and is not subject to copyright. The U.S. Nuclear Regulatory Commission has not reviewed, approved or endorsed this activity.",
+        "sha256": "03700e48439f4a60c4b8ff3676122131acf7c23ff26eaacb5700f29a06768737"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "dffd20cd1c8d4dbb92da533237dd0d26",
+      "runId": "job-20261029144939-795eccda",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T14:51:03.457Z"
+    },
+    "seed": 2819400970,
+    "cards": [
+      {
+        "id": "spent-fuel-share",
+        "stem": "What share of spent fuel from U.S. reactors is plutonium by weight?",
+        "options": [
+          "about 1 percent",
+          "a large majority",
+          "a tiny trace",
+          "nearly all of the fuel"
+        ],
+        "sourceId": "nrc-backgrounder-plutonium",
+        "quote": "Spent nuclear fuel from U.S. reactors contains about 1 percent plutonium by weight.",
+        "hint": "Recall the small share left in used fuel."
+      },
+      {
+        "id": "plutonium-238-uses",
+        "stem": "Which plutonium form has powered pacemaker batteries and provided heat for space missions?",
+        "options": [
+          "Plutonium-238",
+          "Pu-239",
+          "Pu-241",
+          "Pu-240"
+        ],
+        "sourceId": "nrc-backgrounder-plutonium",
+        "quote": "Plutonium-238 has been used to power batteries for some heart pacemakers, as well as provide a long-lived heat source to power NASA space missions.",
+        "hint": "Think of the heat source for distant missions and medical devices."
+      },
+      {
+        "id": "mox-fuel-result",
+        "stem": "What fuel product results from mixing the separated oxides together?",
+        "options": [
+          "mixed oxide or MOX fuel",
+          "pure plutonium metal",
+          "uranium hexafluoride gas",
+          "neptunium pellets"
+        ],
+        "sourceId": "nrc-backgrounder-plutonium",
+        "quote": "Once separated, plutonium oxide can be mixed with uranium oxide to produce mixed oxide or MOX fuel.",
+        "hint": "Consider what happens after chemical separation of spent fuel."
+      }
+    ]
+  }
+}

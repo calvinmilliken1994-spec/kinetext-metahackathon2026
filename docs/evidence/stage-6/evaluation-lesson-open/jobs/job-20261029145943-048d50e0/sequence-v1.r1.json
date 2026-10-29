@@ -1,0 +1,219 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "From energy conservation to pressure velocity relation",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follows the macro scale derivation as it appears on the page from energy conservation to pressure velocity form",
+    "steps": [
+      {
+        "id": "step-1-energy-start",
+        "label": "conservation of energy equation",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "We shall derive Bernoulli’s equation by starting with the conservation of energy equation.",
+        "orderHint": "Follow the energy to pressure transformation as laid out on the page"
+      },
+      {
+        "id": "step-2-steady-inviscid",
+        "label": "steady, inviscid flow",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "Assuming a steady, inviscid flow we have a simplified conservation of energy equation in terms of the enthalpy of the fluid:",
+        "orderHint": "Follow the energy to pressure transformation as laid out on the page"
+      },
+      {
+        "id": "step-3-enthalpy-balance",
+        "label": "ht2 - ht1 = q - Wsh",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "ht2 - ht1 = q - Wsh",
+        "orderHint": "Follow the energy to pressure transformation as laid out on the page"
+      },
+      {
+        "id": "step-4-no-heat-transfer",
+        "label": "no heat transfer",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "Assuming no heat transfer into the fluid, and no work done by the fluid, we have:",
+        "orderHint": "Follow the energy to pressure transformation as laid out on the page"
+      },
+      {
+        "id": "step-5-enthalpy-definition",
+        "label": "e2 + (pv)2 + (V^2 / 2)2 = e1 + (pv)1 + (V^2 / 2)1",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "e2 + (pv)2 + (V^2 / 2)2 = e1 + (pv)1 + (V^2 / 2)1",
+        "orderHint": "Follow the energy to pressure transformation as laid out on the page"
+      },
+      {
+        "id": "step-6-density-form",
+        "label": "(p / rho)2 + (V^2 / 2)2 = (p / rho)1 + (V^2 / 2)1",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "(p / rho)2 + (V^2 / 2)2 = (p / rho)1 + (V^2 / 2)1",
+        "orderHint": "Follow the energy to pressure transformation as laid out on the page"
+      },
+      {
+        "id": "step-7-incompressible-constant",
+        "label": "(ps)2 + (rho * V^2 / 2)2 = (ps)1 + (rho * V^2 / 2)1 = a constant = pt",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "(ps)2 + (rho * V^2 / 2)2 = (ps)1 + (rho * V^2 / 2)1 = a constant = pt",
+        "orderHint": "Follow the energy to pressure transformation as laid out on the page"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029145943-048d50e0:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 7 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step label occurs in its own quote after normalisation (labels-in-quotes)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 7 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "fca5656baf1f486ea0c9cd3cd8536c05",
+    "usage": {
+      "promptTokens": 3905,
+      "completionTokens": 7091,
+      "reasoningTokens": 6406,
+      "cachedTokens": 0
+    },
+    "latencyMs": 26855,
+    "estCostUSD": 0.035018,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029145943-048d50e0:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "From energy conservation to pressure velocity relation",
+    "sources": [
+      {
+        "id": "nasa-grc-bernoullis-equation",
+        "title": "Bernoulli's Equation — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/bernoullis-equation/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "ce3917d5b0b1392825d9f0c16d2d9b78898e119122bec3a1dd940e1d45437799"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "fca5656baf1f486ea0c9cd3cd8536c05",
+      "runId": "job-20261029145943-048d50e0",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T15:01:18.445Z"
+    },
+    "seed": 3131027657,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follows the macro scale derivation as it appears on the page from energy conservation to pressure velocity form",
+    "steps": [
+      {
+        "id": "step-1-energy-start",
+        "label": "conservation of energy equation",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "We shall derive Bernoulli’s equation by starting with the conservation of energy equation.",
+        "orderHint": "Follow the energy to pressure transformation as laid out on the page"
+      },
+      {
+        "id": "step-2-steady-inviscid",
+        "label": "steady, inviscid flow",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "Assuming a steady, inviscid flow we have a simplified conservation of energy equation in terms of the enthalpy of the fluid:",
+        "orderHint": "Follow the energy to pressure transformation as laid out on the page"
+      },
+      {
+        "id": "step-3-enthalpy-balance",
+        "label": "ht2 - ht1 = q - Wsh",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "ht2 - ht1 = q - Wsh",
+        "orderHint": "Follow the energy to pressure transformation as laid out on the page"
+      },
+      {
+        "id": "step-4-no-heat-transfer",
+        "label": "no heat transfer",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "Assuming no heat transfer into the fluid, and no work done by the fluid, we have:",
+        "orderHint": "Follow the energy to pressure transformation as laid out on the page"
+      },
+      {
+        "id": "step-5-enthalpy-definition",
+        "label": "e2 + (pv)2 + (V^2 / 2)2 = e1 + (pv)1 + (V^2 / 2)1",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "e2 + (pv)2 + (V^2 / 2)2 = e1 + (pv)1 + (V^2 / 2)1",
+        "orderHint": "Follow the energy to pressure transformation as laid out on the page"
+      },
+      {
+        "id": "step-6-density-form",
+        "label": "(p / rho)2 + (V^2 / 2)2 = (p / rho)1 + (V^2 / 2)1",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "(p / rho)2 + (V^2 / 2)2 = (p / rho)1 + (V^2 / 2)1",
+        "orderHint": "Follow the energy to pressure transformation as laid out on the page"
+      },
+      {
+        "id": "step-7-incompressible-constant",
+        "label": "(ps)2 + (rho * V^2 / 2)2 = (ps)1 + (rho * V^2 / 2)1 = a constant = pt",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "(ps)2 + (rho * V^2 / 2)2 = (ps)1 + (rho * V^2 / 2)1 = a constant = pt",
+        "orderHint": "Follow the energy to pressure transformation as laid out on the page"
+      }
+    ]
+  }
+}

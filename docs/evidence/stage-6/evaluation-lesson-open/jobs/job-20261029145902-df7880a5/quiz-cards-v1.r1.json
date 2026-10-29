@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Practice recalling drag influences and equation form",
+    "cards": [
+      {
+        "id": "drag-equation-form",
+        "stem": "Which expression shows how drag is calculated from coefficient, density, velocity and area",
+        "options": [
+          "D = Cd * (rho * V^2 * A) / 2",
+          "form drag",
+          "skin friction drag",
+          "wave drag"
+        ],
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "D = Cd * (rho * V^2 * A) / 2",
+        "hint": "Recall the form that uses half the velocity squared"
+      },
+      {
+        "id": "drag-dependence-factors",
+        "stem": "Which factor is listed as influencing drag along with velocity and shape",
+        "options": [
+          "density of the air",
+          "color of the surface",
+          "sound pitch of flow",
+          "electrical charge"
+        ],
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "Drag depends on the density of the air, the square of the velocity",
+        "hint": "Think about properties of the surrounding fluid"
+      },
+      {
+        "id": "drag-coefficient-meaning",
+        "stem": "What single variable is used to collect complex dependencies for drag",
+        "options": [
+          "drag coefficient",
+          "lift ratio",
+          "thrust factor",
+          "weight index"
+        ],
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "For drag, this variable is called the drag coefficient, designated “Cd.”",
+        "hint": "It is designated by two letters starting with C"
+      },
+      {
+        "id": "reference-area-concept",
+        "stem": "How is the area term in the drag equation described",
+        "options": [
+          "reference area",
+          "frontal weight",
+          "material density",
+          "engine thrust"
+        ],
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "Notice that the area (A) given in the drag equation is given as a reference area.",
+        "hint": "It indicates the chosen area for comparing coefficients"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029145902-df7880a5:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "848abde33da341299b0b12c8772d7a4a",
+    "usage": {
+      "promptTokens": 2695,
+      "completionTokens": 10372,
+      "reasoningTokens": 10011,
+      "cachedTokens": 0
+    },
+    "latencyMs": 44764,
+    "estCostUSD": 0.04744975,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029145902-df7880a5:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Practice recalling drag influences and equation form",
+    "sources": [
+      {
+        "id": "nasa-grc-drag-equation",
+        "title": "Drag Equation — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/drag-equation/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "9462a6186d8b00e0dbf2618e4a6701edc9448614e144af1f4bc0b53b59f6ceed"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "848abde33da341299b0b12c8772d7a4a",
+      "runId": "job-20261029145902-df7880a5",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T15:00:25.735Z"
+    },
+    "seed": 4287705281,
+    "cards": [
+      {
+        "id": "drag-equation-form",
+        "stem": "Which expression shows how drag is calculated from coefficient, density, velocity and area",
+        "options": [
+          "D = Cd * (rho * V^2 * A) / 2",
+          "form drag",
+          "skin friction drag",
+          "wave drag"
+        ],
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "D = Cd * (rho * V^2 * A) / 2",
+        "hint": "Recall the form that uses half the velocity squared"
+      },
+      {
+        "id": "drag-dependence-factors",
+        "stem": "Which factor is listed as influencing drag along with velocity and shape",
+        "options": [
+          "density of the air",
+          "color of the surface",
+          "sound pitch of flow",
+          "electrical charge"
+        ],
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "Drag depends on the density of the air, the square of the velocity",
+        "hint": "Think about properties of the surrounding fluid"
+      },
+      {
+        "id": "drag-coefficient-meaning",
+        "stem": "What single variable is used to collect complex dependencies for drag",
+        "options": [
+          "drag coefficient",
+          "lift ratio",
+          "thrust factor",
+          "weight index"
+        ],
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "For drag, this variable is called the drag coefficient, designated “Cd.”",
+        "hint": "It is designated by two letters starting with C"
+      },
+      {
+        "id": "reference-area-concept",
+        "stem": "How is the area term in the drag equation described",
+        "options": [
+          "reference area",
+          "frontal weight",
+          "material density",
+          "engine thrust"
+        ],
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "Notice that the area (A) given in the drag equation is given as a reference area.",
+        "hint": "It indicates the chosen area for comparing coefficients"
+      }
+    ]
+  }
+}

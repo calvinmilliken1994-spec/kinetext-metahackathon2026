@@ -1,0 +1,197 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "physics",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "Page provides an index of fundamentals, lessons in aerodynamics, aircraft development stages and interactive simulations that map the path of flight study.",
+    "overview": {
+      "headline": "Index of flight fundamentals linking physics principles to aerodynamics and aircraft study",
+      "keyPoints": [
+        {
+          "id": "newton-laws-fundamentals",
+          "point": "Covers Newton Laws of Motion as core fundamentals for flight physics",
+          "sourceId": "nasa-grc-re-living-the-wright-way",
+          "quote": "Newton’s Laws of Motion"
+        },
+        {
+          "id": "aerodynamic-forces-lesson",
+          "point": "Explores Aerodynamic Forces and related concepts in aerodynamics lessons",
+          "sourceId": "nasa-grc-re-living-the-wright-way",
+          "quote": "Aerodynamic Forces"
+        },
+        {
+          "id": "bernoulli-equation-aerodynamics",
+          "point": "Includes Bernoulli Equation to explain pressure and velocity in aerodynamics",
+          "sourceId": "nasa-grc-re-living-the-wright-way",
+          "quote": "Bernoulli’s Equation"
+        },
+        {
+          "id": "unpowered-aircraft-contrast",
+          "point": "Contrasts Unpowered Aircraft types with powered designs developed for early flight",
+          "sourceId": "nasa-grc-re-living-the-wright-way",
+          "quote": "Unpowered Aircraft (1900 – 1902)"
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "torque",
+          "term": "Torque",
+          "gloss": "Rotational effect linked to Moments that causes turning about a pivot",
+          "sourceId": "nasa-grc-re-living-the-wright-way",
+          "quote": "Torque (Moments)"
+        },
+        {
+          "id": "equilibrium",
+          "term": "Equilibrium",
+          "gloss": "Balanced state where forces cancel to maintain Equilibrium",
+          "sourceId": "nasa-grc-re-living-the-wright-way",
+          "quote": "Equilibrium"
+        },
+        {
+          "id": "functions",
+          "term": "Functions",
+          "gloss": "Mathematical idea where Functions relate inputs to outputs",
+          "sourceId": "nasa-grc-re-living-the-wright-way",
+          "quote": "The Idea of Functions"
+        },
+        {
+          "id": "combustion",
+          "term": "Combustion",
+          "gloss": "Chemical Process involving Combustion that releases energy",
+          "sourceId": "nasa-grc-re-living-the-wright-way",
+          "quote": "The Process of Combustion"
+        },
+        {
+          "id": "lift",
+          "term": "Lift",
+          "gloss": "Upward force described by Lift Equation for flight",
+          "sourceId": "nasa-grc-re-living-the-wright-way",
+          "quote": "Lift Equation of the 1900’s"
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "sequence-v1",
+        "pedagogicalReason": "Traces the taught progression from fundamentals to aerodynamics to aircraft study in page order",
+        "focusQuote": "The Wright Way will show you the basic math and physics that led to the invention of the airplane by the Wright Brothers.",
+        "focusSourceId": "nasa-grc-re-living-the-wright-way"
+      },
+      {
+        "componentId": "sort-groups-v1",
+        "pedagogicalReason": "Organizes listed topics into meaningful categories to support structured learning",
+        "focusQuote": "Lessons in Aerodynamics",
+        "focusSourceId": "nasa-grc-re-living-the-wright-way"
+      },
+      {
+        "componentId": "quiz-cards-v1",
+        "pedagogicalReason": "Reinforces recall of core forces and principles named in the index",
+        "focusQuote": "Work Equals Force Times Distance",
+        "focusSourceId": "nasa-grc-re-living-the-wright-way"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029150116-4de7c5e7:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"physics\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 5259 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 12 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 4, keyTerms 5, componentPlan 3; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (3 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "37b290b9c74b414d8c6941037bf76ea8",
+    "usage": {
+      "promptTokens": 4562,
+      "completionTokens": 6010,
+      "reasoningTokens": 5212,
+      "cachedTokens": 0
+    },
+    "latencyMs": 26389,
+    "estCostUSD": 0.031245,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

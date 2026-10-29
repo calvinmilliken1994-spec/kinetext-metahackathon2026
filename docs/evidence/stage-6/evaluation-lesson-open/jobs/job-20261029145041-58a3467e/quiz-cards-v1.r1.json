@@ -1,0 +1,217 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Geologic Time Facts Check",
+    "cards": [
+      {
+        "id": "patterson-lead-dating",
+        "stem": "Which method did Clair Cameron Patterson use in 1956 to date the Canyon Diablo meteorite?",
+        "options": [
+          "lead-lead dating",
+          "potassium-argon dating",
+          "radiocarbon dating"
+        ],
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "It was 1956 when Clair Cameron Patterson, an American geochemist, used lead-lead dating",
+        "hint": "Recall the dating method tied to Patterson in 1956"
+      },
+      {
+        "id": "earth-age-today",
+        "stem": "What is the current scientific age of Earth described as hard to grasp?",
+        "options": [
+          "4.54 billion years old",
+          "20–400 million years",
+          "1.6 billion years"
+        ],
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "Earth is 4.54 billion years old, a span of time that is hard for many people to grasp.",
+        "hint": "Think of the modern deep time age"
+      },
+      {
+        "id": "faunal-succession-law",
+        "stem": "What principle from 1815 states that species become extinct and are replaced by new species?",
+        "options": [
+          "faunal succession",
+          "original horizontality",
+          "cross-cutting relationships"
+        ],
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "In 1815, Smith developed the law of faunal succession, which states that species become extinct and are replaced by new species",
+        "hint": "Surveyor Smith noted fossil order across England"
+      },
+      {
+        "id": "half-life-definition",
+        "stem": "What describes the time for half of parent isotopes to decay to a daughter product?",
+        "options": [
+          "stable daughter isotope",
+          "unstable parent isotope",
+          "radioactive decay series"
+        ],
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "A half-life is the length of time it takes for half of the number of original, or parent, isotopes to decay to a stable daughter isotope.",
+        "hint": "Focus on the definition of half-life"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029145041-58a3467e:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "fa8e6e77f35a43b1b3a6203b99faa698",
+    "usage": {
+      "promptTokens": 3956,
+      "completionTokens": 8941,
+      "reasoningTokens": 8531,
+      "cachedTokens": 0
+    },
+    "latencyMs": 38798,
+    "estCostUSD": 0.04294425,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029145041-58a3467e:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Geologic Time Facts Check",
+    "sources": [
+      {
+        "id": "usgs-powell-geologic-time",
+        "title": "Powell Expedition—Geologic Time. Then and Now. — U.S. Geological Survey",
+        "locator": "https://www.usgs.gov/news/powell-expedition-geologic-time-then-and-now",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey, 'Powell Expedition—Geologic Time. Then and Now.' (2019). Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "fa7498537478e10722976127bedd9cf61ccb5dda39090e0a4f844635b5a8f71f"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "fa8e6e77f35a43b1b3a6203b99faa698",
+      "runId": "job-20261029145041-58a3467e",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T14:52:23.411Z"
+    },
+    "seed": 406087637,
+    "cards": [
+      {
+        "id": "patterson-lead-dating",
+        "stem": "Which method did Clair Cameron Patterson use in 1956 to date the Canyon Diablo meteorite?",
+        "options": [
+          "lead-lead dating",
+          "potassium-argon dating",
+          "radiocarbon dating"
+        ],
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "It was 1956 when Clair Cameron Patterson, an American geochemist, used lead-lead dating",
+        "hint": "Recall the dating method tied to Patterson in 1956"
+      },
+      {
+        "id": "earth-age-today",
+        "stem": "What is the current scientific age of Earth described as hard to grasp?",
+        "options": [
+          "4.54 billion years old",
+          "20–400 million years",
+          "1.6 billion years"
+        ],
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "Earth is 4.54 billion years old, a span of time that is hard for many people to grasp.",
+        "hint": "Think of the modern deep time age"
+      },
+      {
+        "id": "faunal-succession-law",
+        "stem": "What principle from 1815 states that species become extinct and are replaced by new species?",
+        "options": [
+          "faunal succession",
+          "original horizontality",
+          "cross-cutting relationships"
+        ],
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "In 1815, Smith developed the law of faunal succession, which states that species become extinct and are replaced by new species",
+        "hint": "Surveyor Smith noted fossil order across England"
+      },
+      {
+        "id": "half-life-definition",
+        "stem": "What describes the time for half of parent isotopes to decay to a daughter product?",
+        "options": [
+          "stable daughter isotope",
+          "unstable parent isotope",
+          "radioactive decay series"
+        ],
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "A half-life is the length of time it takes for half of the number of original, or parent, isotopes to decay to a stable daughter isotope.",
+        "hint": "Focus on the definition of half-life"
+      }
+    ]
+  }
+}

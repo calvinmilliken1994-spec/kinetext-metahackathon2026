@@ -1,0 +1,160 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nasa-grc-newtons-laws-of-motion-job-20261029143609-b2f7adf7",
+  "title": "Force, Mass and Acceleration in One Dimension",
+  "learningObjectives": [
+    "Describe how acceleration in one dimension is determined by net force divided by mass for motion with constant mass.",
+    "Predict the size and direction of acceleration from the size and sign of the net force.",
+    "Explain why zero net force results in constant velocity and no acceleration."
+  ],
+  "sources": [
+    {
+      "id": "nasa-grc-newtons-laws-of-motion",
+      "title": "Newton's Laws of Motion — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+      "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/newtons-laws-of-motion/",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+      "sha256": "907bae07076eef20118a4e54096ad399b11994ec5e310d9bed74850f6d009014"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "exp1",
+      "text": "For motion with constant mass in one dimension, acceleration equals net force divided by mass. Larger force produces larger acceleration and larger mass produces smaller acceleration for the same force.",
+      "evidence": [
+        {
+          "sourceId": "nasa-grc-newtons-laws-of-motion",
+          "quote": "The acceleration of an object depends on the mass of the object and the amount of force applied."
+        },
+        {
+          "sourceId": "nasa-grc-newtons-laws-of-motion",
+          "quote": "F = m * a"
+        }
+      ]
+    },
+    {
+      "id": "exp2",
+      "text": "Acceleration is defined by how velocity changes over time, which connects the force and mass to the resulting change in motion.",
+      "evidence": [
+        {
+          "sourceId": "nasa-grc-newtons-laws-of-motion",
+          "quote": "The change in velocity divided by the change in time is the definition of the acceleration a."
+        }
+      ]
+    },
+    {
+      "id": "exp3",
+      "text": "The simple relation between force, mass and acceleration assumes constant mass, and when net force is zero the object keeps a constant velocity rather than accelerating.",
+      "evidence": [
+        {
+          "sourceId": "nasa-grc-newtons-laws-of-motion",
+          "quote": "Remember that this relation is only good for objects that have a constant mass."
+        },
+        {
+          "sourceId": "nasa-grc-newtons-laws-of-motion",
+          "quote": "If there is no net force acting on the object, then the object will maintain a constant velocity."
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "forces-1d-v1",
+    "equation": "a=F_net/m",
+    "massKg": {
+      "unit": "kg",
+      "min": 0.5,
+      "max": 20,
+      "default": 5
+    },
+    "netForceN": {
+      "unit": "N",
+      "min": -50,
+      "max": 50,
+      "default": 10
+    },
+    "scenario": {
+      "objectLabel": "Model aircraft",
+      "surfaceLabel": "Level flight, x-direction only"
+    },
+    "durationS": 6,
+    "stepS": 0.02,
+    "observables": [
+      "position",
+      "velocity",
+      "acceleration"
+    ]
+  },
+  "behavioralTests": [
+    {
+      "name": "positive force acceleration",
+      "massKg": 2,
+      "netForceN": 20,
+      "expectedAccelerationMps2": 10,
+      "tolerance": 0.001
+    },
+    {
+      "name": "negative force - opposite direction",
+      "massKg": 5,
+      "netForceN": -20,
+      "expectedAccelerationMps2": -4,
+      "tolerance": 0.001
+    },
+    {
+      "name": "zero net force - constant velocity",
+      "massKg": 10,
+      "netForceN": 0,
+      "expectedAccelerationMps2": 0,
+      "tolerance": 0.001
+    },
+    {
+      "name": "moderate positive force",
+      "massKg": 4,
+      "netForceN": 12,
+      "expectedAccelerationMps2": 3,
+      "tolerance": 0.001
+    }
+  ],
+  "predictions": [
+    {
+      "id": "pred1",
+      "prompt": "Predict the acceleration for the given mass and net force.",
+      "massKg": 2.5,
+      "netForceN": 15,
+      "expectedAccelerationMps2": 6,
+      "tolerance": 0.001
+    },
+    {
+      "id": "pred2",
+      "prompt": "Predict the acceleration when the net force acts in the negative direction.",
+      "massKg": 8,
+      "netForceN": -24,
+      "expectedAccelerationMps2": -3,
+      "tolerance": 0.001
+    },
+    {
+      "id": "pred3",
+      "prompt": "Predict the acceleration for a larger mass with positive force.",
+      "massKg": 12,
+      "netForceN": 36,
+      "expectedAccelerationMps2": 3,
+      "tolerance": 0.001
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "189c43baf5184740b8dbe603d35a6600",
+    "runId": "job-20261029143609-b2f7adf7",
+    "promptVersion": "v9",
+    "generatedAt": "2026-10-29T14:37:28.064Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

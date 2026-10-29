@@ -1,0 +1,223 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Pool Storage and Dry Casks",
+    "cards": [
+      {
+        "id": "pool-water-function",
+        "stem": "What does water in spent fuel pools do for stored rods?",
+        "options": [
+          "shield the radiation",
+          "enrich the uranium",
+          "create fission products",
+          "solidify liquid wastes"
+        ],
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "quote": "The water is typically about 40 feet deep and serves both to shield the radiation and cool the rods.",
+        "hint": "Think about protection and temperature needs"
+      },
+      {
+        "id": "pool-water-depth",
+        "stem": "How deep is water in spent fuel pools typically?",
+        "options": [
+          "about 40 feet deep",
+          "about 10 feet deep",
+          "about 30 feet deep"
+        ],
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "quote": "The water is typically about 40 feet deep and serves both to shield the radiation and cool the rods.",
+        "hint": "Recall the typical depth mentioned for shielding"
+      },
+      {
+        "id": "dry-cask-material",
+        "stem": "What are dry casks made of for storage?",
+        "options": [
+          "stainless steel canisters surrounded by concrete",
+          "reinforced concrete with steel liners only",
+          "solidified liquid wastes in glass",
+          "ceramic pellets inside metal rods"
+        ],
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "quote": "These casks are stainless steel canisters surrounded by concrete.",
+        "hint": "Think about strong metal inside a concrete shield"
+      },
+      {
+        "id": "pool-cooling-time",
+        "stem": "How long is fuel cooled in the pool before transfer to cask typically?",
+        "options": [
+          "at least five years",
+          "less than one hour",
+          "about 30 years",
+          "up to 40 years"
+        ],
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "quote": "Fuel is typically cooled at least five years in the pool before transfer to cask.",
+        "hint": "Remember the minimum cooling time before moving fuel to dry storage."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029144836-e142ca17:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "fbb1d1687e8a487793bcf4dfe58de24e",
+    "usage": {
+      "promptTokens": 4473,
+      "completionTokens": 5882,
+      "reasoningTokens": 5496,
+      "cachedTokens": 0
+    },
+    "latencyMs": 24058,
+    "estCostUSD": 0.03058975,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029144836-e142ca17:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Pool Storage and Dry Casks",
+    "sources": [
+      {
+        "id": "nrc-backgrounder-radioactive-waste",
+        "title": "Backgrounder on Radioactive Waste — U.S. Nuclear Regulatory Commission",
+        "locator": "https://www.nrc.gov/regulations-legislation/fact-sheets-brochures/backgrounder-on-radioactive-waste",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Nuclear Regulatory Commission, 'Backgrounder on Radioactive Waste', Fact Sheets & Brochures. NRC's website constitutes a U.S. Government Work under federal copyright law and is not subject to copyright. The U.S. Nuclear Regulatory Commission has not reviewed, approved or endorsed this activity.",
+        "sha256": "096bd0acfbc24540be6110113c96ed0fa4b892969980ff5bcf1d7834bc1d71b7"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "fbb1d1687e8a487793bcf4dfe58de24e",
+      "runId": "job-20261029144836-e142ca17",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T14:50:12.451Z"
+    },
+    "seed": 1222348595,
+    "cards": [
+      {
+        "id": "pool-water-function",
+        "stem": "What does water in spent fuel pools do for stored rods?",
+        "options": [
+          "shield the radiation",
+          "enrich the uranium",
+          "create fission products",
+          "solidify liquid wastes"
+        ],
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "quote": "The water is typically about 40 feet deep and serves both to shield the radiation and cool the rods.",
+        "hint": "Think about protection and temperature needs"
+      },
+      {
+        "id": "pool-water-depth",
+        "stem": "How deep is water in spent fuel pools typically?",
+        "options": [
+          "about 40 feet deep",
+          "about 10 feet deep",
+          "about 30 feet deep"
+        ],
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "quote": "The water is typically about 40 feet deep and serves both to shield the radiation and cool the rods.",
+        "hint": "Recall the typical depth mentioned for shielding"
+      },
+      {
+        "id": "dry-cask-material",
+        "stem": "What are dry casks made of for storage?",
+        "options": [
+          "stainless steel canisters surrounded by concrete",
+          "reinforced concrete with steel liners only",
+          "solidified liquid wastes in glass",
+          "ceramic pellets inside metal rods"
+        ],
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "quote": "These casks are stainless steel canisters surrounded by concrete.",
+        "hint": "Think about strong metal inside a concrete shield"
+      },
+      {
+        "id": "pool-cooling-time",
+        "stem": "How long is fuel cooled in the pool before transfer to cask typically?",
+        "options": [
+          "at least five years",
+          "less than one hour",
+          "about 30 years",
+          "up to 40 years"
+        ],
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "quote": "Fuel is typically cooled at least five years in the pool before transfer to cask.",
+        "hint": "Remember the minimum cooling time before moving fuel to dry storage."
+      }
+    ]
+  }
+}

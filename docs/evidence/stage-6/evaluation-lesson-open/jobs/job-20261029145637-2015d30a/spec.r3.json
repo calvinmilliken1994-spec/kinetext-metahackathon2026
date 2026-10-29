@@ -1,0 +1,188 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nara-lee-resolution-job-20261029145637-2015d30a",
+  "title": "Timeline of the Lee Resolution and Independence Efforts",
+  "learningObjectives": [
+    "Sequence the Continental Congress's move toward independence from its 1775 meeting through 1777",
+    "Identify the three parts of the Lee Resolution",
+    "Order the New York vote and the delayed treaty and confederation plans"
+  ],
+  "sources": [
+    {
+      "id": "nara-lee-resolution",
+      "title": "Lee Resolution (1776) — National Archives, Milestone Documents (agency-written introduction)",
+      "locator": "https://www.archives.gov/milestone-documents/lee-resolution",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Lee Resolution (1776)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+      "sha256": "a18b4131b1c5223c9b0685aed8fa77a746537b2af6e2084d892549e8808ce9e3"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "ex1",
+      "text": "The Continental Congress became the governing body of the colonies during the Revolution, with its second meeting gathering in Philadelphia in 1775.",
+      "evidence": [
+        {
+          "sourceId": "nara-lee-resolution",
+          "quote": "The colonists elected delegates to attend a Continental Congress that eventually became the governing body of the union during the Revolution."
+        },
+        {
+          "sourceId": "nara-lee-resolution",
+          "quote": "Its second meeting convened in Philadelphia in 1775."
+        }
+      ]
+    },
+    {
+      "id": "ex2",
+      "text": "The Lee Resolution proposed three actions: declaring independence, seeking foreign alliances, and creating a plan for confederation.",
+      "evidence": [
+        {
+          "sourceId": "nara-lee-resolution",
+          "quote": "The Lee Resolution contained three parts: a declaration of independence, a call to form foreign alliances, and \"a plan for confederation.\""
+        }
+      ]
+    },
+    {
+      "id": "ex3",
+      "text": "After the resolution, later steps included New York's July 1776 vote and longer delays for treaty and confederation plans into 1777.",
+      "evidence": [
+        {
+          "sourceId": "nara-lee-resolution",
+          "quote": "New York cast no vote until the newly elected New York Convention upheld the Declaration of Independence on July 9, 1776."
+        },
+        {
+          "sourceId": "nara-lee-resolution",
+          "quote": "The plan for making treaties was not approved until September of 1776; the plan of confederation was delayed until November of 1777."
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "timeline-v1",
+    "events": [
+      {
+        "id": "e1",
+        "label": "Second Continental Congress second meeting in Philadelphia",
+        "year": 1775,
+        "month": 0,
+        "day": 0,
+        "evidence": [
+          {
+            "sourceId": "nara-lee-resolution",
+            "quote": "Its second meeting convened in Philadelphia in 1775."
+          }
+        ]
+      },
+      {
+        "id": "e2",
+        "label": "Lee Resolution (1776) title",
+        "year": 1776,
+        "month": 0,
+        "day": 0,
+        "evidence": [
+          {
+            "sourceId": "nara-lee-resolution",
+            "quote": "# Lee Resolution (1776)"
+          }
+        ]
+      },
+      {
+        "id": "e3",
+        "label": "New York Convention upholds Declaration of Independence",
+        "year": 1776,
+        "month": 7,
+        "day": 9,
+        "evidence": [
+          {
+            "sourceId": "nara-lee-resolution",
+            "quote": "New York cast no vote until the newly elected New York Convention upheld the Declaration of Independence on July 9, 1776."
+          }
+        ]
+      },
+      {
+        "id": "e4",
+        "label": "Plan for making treaties approval delayed",
+        "year": 1776,
+        "month": 9,
+        "day": 0,
+        "evidence": [
+          {
+            "sourceId": "nara-lee-resolution",
+            "quote": "September of 1776; the plan of confederation was delayed until November of 1777."
+          }
+        ]
+      },
+      {
+        "id": "e5",
+        "label": "Plan of confederation delayed",
+        "year": 1777,
+        "month": 11,
+        "day": 0,
+        "evidence": [
+          {
+            "sourceId": "nara-lee-resolution",
+            "quote": "November of 1777."
+          }
+        ]
+      }
+    ],
+    "scenario": {
+      "subjectLabel": "Lee Resolution",
+      "settingLabel": "Continental Congress, 1775-1777"
+    }
+  },
+  "behavioralTests": [
+    {
+      "name": "second_meeting_before_new_york_vote",
+      "earlierEventId": "e1",
+      "laterEventId": "e3"
+    },
+    {
+      "name": "new_york_vote_before_treaty_plan",
+      "earlierEventId": "e3",
+      "laterEventId": "e4"
+    },
+    {
+      "name": "treaty_plan_before_confederation_delay",
+      "earlierEventId": "e4",
+      "laterEventId": "e5"
+    }
+  ],
+  "predictions": [
+    {
+      "id": "p1",
+      "prompt": "Which happened first: the second meeting of the Continental Congress in Philadelphia or the New York Convention upholding the Declaration of Independence on July 9, 1776?",
+      "earlierEventId": "e1",
+      "laterEventId": "e3"
+    },
+    {
+      "id": "p2",
+      "prompt": "Which happened first: the New York Convention vote on July 9, 1776 or the delayed approval of the plan for making treaties in September 1776?",
+      "earlierEventId": "e3",
+      "laterEventId": "e4"
+    },
+    {
+      "id": "p3",
+      "prompt": "Which happened first: the September 1776 delay for the treaty plan or the November 1777 delay for the confederation plan?",
+      "earlierEventId": "e4",
+      "laterEventId": "e5"
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "0c83f20b276f4b8ea01e04d2f2cc0140",
+    "runId": "job-20261029145637-2015d30a",
+    "promptVersion": "v9",
+    "generatedAt": "2026-10-29T15:01:45.192Z",
+    "revision": 3,
+    "repairOf": 2
+  }
+}

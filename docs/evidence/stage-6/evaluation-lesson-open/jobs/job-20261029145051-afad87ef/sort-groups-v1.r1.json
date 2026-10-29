@@ -1,0 +1,247 @@
+{
+  "gen": {
+    "schemaVersion": "sort-groups-v1",
+    "title": "Group the Especially Useful Decay Pairs",
+    "groups": [
+      {
+        "id": "parent",
+        "label": "parent"
+      },
+      {
+        "id": "daughter",
+        "label": "daughter"
+      }
+    ],
+    "items": [
+      {
+        "id": "carbon",
+        "label": "carbon",
+        "groupId": "parent",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "four parent/daughter decay series are especially useful: carbon to nitrogen, potassium to argon, rubidium to strontium, and uranium to lead."
+      },
+      {
+        "id": "potassium",
+        "label": "potassium",
+        "groupId": "parent",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "four parent/daughter decay series are especially useful: carbon to nitrogen, potassium to argon, rubidium to strontium, and uranium to lead."
+      },
+      {
+        "id": "rubidium",
+        "label": "rubidium",
+        "groupId": "parent",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "four parent/daughter decay series are especially useful: carbon to nitrogen, potassium to argon, rubidium to strontium, and uranium to lead."
+      },
+      {
+        "id": "uranium",
+        "label": "uranium",
+        "groupId": "parent",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "four parent/daughter decay series are especially useful: carbon to nitrogen, potassium to argon, rubidium to strontium, and uranium to lead."
+      },
+      {
+        "id": "nitrogen",
+        "label": "nitrogen",
+        "groupId": "daughter",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "four parent/daughter decay series are especially useful: carbon to nitrogen, potassium to argon, rubidium to strontium, and uranium to lead."
+      },
+      {
+        "id": "argon",
+        "label": "argon",
+        "groupId": "daughter",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "four parent/daughter decay series are especially useful: carbon to nitrogen, potassium to argon, rubidium to strontium, and uranium to lead."
+      },
+      {
+        "id": "strontium",
+        "label": "strontium",
+        "groupId": "daughter",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "four parent/daughter decay series are especially useful: carbon to nitrogen, potassium to argon, rubidium to strontium, and uranium to lead."
+      },
+      {
+        "id": "lead",
+        "label": "lead",
+        "groupId": "daughter",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "four parent/daughter decay series are especially useful: carbon to nitrogen, potassium to argon, rubidium to strontium, and uranium to lead."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029145051-afad87ef:sort-groups-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sort text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SORT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 8 item quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SORT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every item label occurs in its quote and every group label occurs in the quote or the same source paragraph (item-and-group-in-quote; the design discloses the weak-link false accept on long paragraphs — every quote is shown to the teacher)"
+      },
+      {
+        "id": "SORT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every declared group is referenced by >= 2 items and every item groupId resolves (groups-covered)"
+      },
+      {
+        "id": "SORT-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every item has a distinct label after normalisation (distinct-items)"
+      },
+      {
+        "id": "SORT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "groups 2 (2-4) and items 8 (6-12) are within the frozen counts (counts-valid)"
+      },
+      {
+        "id": "SORT-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in group and item labels appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "f5b8d7d0c2cd43f18649f4717c5b5e6d",
+    "usage": {
+      "promptTokens": 2974,
+      "completionTokens": 6040,
+      "reasoningTokens": 5512,
+      "cachedTokens": 0
+    },
+    "latencyMs": 26641,
+    "estCostUSD": 0.0293875,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029145051-afad87ef:sort-groups-v1:r1",
+    "componentId": "sort-groups-v1",
+    "title": "Group the Especially Useful Decay Pairs",
+    "sources": [
+      {
+        "id": "usgs-fossils-numeric-time-scale",
+        "title": "Fossils, Rocks, and Time: The Numeric Time Scale — U.S. Geological Survey",
+        "locator": "https://pubs.usgs.gov/gip/fossils/numeric.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey, 'Fossils, Rocks, and Time: The Numeric Time Scale' (1997). Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "d6ba577d359485d9ea0ae92e97f294d27bb3a67e23758783067591896f570f2d"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "f5b8d7d0c2cd43f18649f4717c5b5e6d",
+      "runId": "job-20261029145051-afad87ef",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T14:52:45.588Z"
+    },
+    "seed": 3236533419,
+    "groups": [
+      {
+        "id": "parent",
+        "label": "parent"
+      },
+      {
+        "id": "daughter",
+        "label": "daughter"
+      }
+    ],
+    "items": [
+      {
+        "id": "carbon",
+        "label": "carbon",
+        "groupId": "parent",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "four parent/daughter decay series are especially useful: carbon to nitrogen, potassium to argon, rubidium to strontium, and uranium to lead."
+      },
+      {
+        "id": "potassium",
+        "label": "potassium",
+        "groupId": "parent",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "four parent/daughter decay series are especially useful: carbon to nitrogen, potassium to argon, rubidium to strontium, and uranium to lead."
+      },
+      {
+        "id": "rubidium",
+        "label": "rubidium",
+        "groupId": "parent",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "four parent/daughter decay series are especially useful: carbon to nitrogen, potassium to argon, rubidium to strontium, and uranium to lead."
+      },
+      {
+        "id": "uranium",
+        "label": "uranium",
+        "groupId": "parent",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "four parent/daughter decay series are especially useful: carbon to nitrogen, potassium to argon, rubidium to strontium, and uranium to lead."
+      },
+      {
+        "id": "nitrogen",
+        "label": "nitrogen",
+        "groupId": "daughter",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "four parent/daughter decay series are especially useful: carbon to nitrogen, potassium to argon, rubidium to strontium, and uranium to lead."
+      },
+      {
+        "id": "argon",
+        "label": "argon",
+        "groupId": "daughter",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "four parent/daughter decay series are especially useful: carbon to nitrogen, potassium to argon, rubidium to strontium, and uranium to lead."
+      },
+      {
+        "id": "strontium",
+        "label": "strontium",
+        "groupId": "daughter",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "four parent/daughter decay series are especially useful: carbon to nitrogen, potassium to argon, rubidium to strontium, and uranium to lead."
+      },
+      {
+        "id": "lead",
+        "label": "lead",
+        "groupId": "daughter",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "four parent/daughter decay series are especially useful: carbon to nitrogen, potassium to argon, rubidium to strontium, and uranium to lead."
+      }
+    ]
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "jobId": "job-20261029144623-4b7eeff9",
+  "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T14:46:23.350Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.280126,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [
+    {
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "A-05",
+        "A-07",
+        "A-10"
+      ],
+      "fixed": [
+        "A-05",
+        "A-07",
+        "A-10"
+      ],
+      "remaining": [],
+      "passed": true
+    }
+  ],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 41044,
+    "startedAt": "2026-10-29T14:46:23.350Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 3,
+    "componentsPublished": 2,
+    "componentsFailed": 1,
+    "partialPublish": true
+  },
+  "componentRepairs": [
+    {
+      "componentId": "formula-explorer-v1",
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "FE-02",
+        "FE-03",
+        "FE-08"
+      ],
+      "fixed": [
+        "FE-03",
+        "FE-08"
+      ],
+      "remaining": [
+        "FE-02"
+      ],
+      "passed": false
+    },
+    {
+      "componentId": "formula-explorer-v1",
+      "attempt": 2,
+      "revision": 3,
+      "targeted": [
+        "FE-02"
+      ],
+      "fixed": [],
+      "remaining": [
+        "FE-02",
+        "FE-08"
+      ],
+      "passed": false
+    }
+  ],
+  "finishedAt": "2026-10-29T14:49:38.078Z"
+}

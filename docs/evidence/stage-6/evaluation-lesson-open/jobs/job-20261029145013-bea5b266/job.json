@@ -1,0 +1,68 @@
+{
+  "jobId": "job-20261029145013-bea5b266",
+  "sourceId": "nrc-glossary-half-life",
+  "status": "failed",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T14:50:13.530Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.045264,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [
+    {
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "A-04",
+        "A-07",
+        "A-10"
+      ],
+      "fixed": [
+        "A-04",
+        "A-07",
+        "A-10"
+      ],
+      "remaining": [
+        "repair.no-weakening"
+      ],
+      "passed": false
+    },
+    {
+      "attempt": 2,
+      "revision": 3,
+      "targeted": [
+        "repair.no-weakening"
+      ],
+      "fixed": [
+        "repair.no-weakening"
+      ],
+      "remaining": [
+        "A-10"
+      ],
+      "passed": false
+    }
+  ],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 41044,
+    "startedAt": "2026-10-29T14:50:13.530Z"
+  },
+  "lesson": {
+    "overviewReady": false,
+    "componentsPlanned": 0,
+    "componentsPublished": 0,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "error": {
+    "code": "ANALYSIS_INVALID",
+    "message": "analysis failed validation"
+  },
+  "finishedAt": "2026-10-29T14:50:40.737Z"
+}

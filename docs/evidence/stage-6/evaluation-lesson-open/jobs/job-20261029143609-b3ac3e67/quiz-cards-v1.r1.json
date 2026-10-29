@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Balanced and Unbalanced Forces in Simplified Flight",
+    "cards": [
+      {
+        "id": "balanced-level-flight",
+        "stem": "Which pairing keeps an aircraft at steady level speed when forces stay even?",
+        "options": [
+          "the weight would be balanced by the lift",
+          "lift would be balanced by drag",
+          "weight would be balanced by thrust",
+          "thrust would be balanced by weight"
+        ],
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "the weight would be balanced by the lift and the drag would be balanced by the thrust",
+        "hint": "Think about which vertical and horizontal pairs cancel."
+      },
+      {
+        "id": "rise-condition",
+        "stem": "What happens when upward force exceeds downward force while other forces stay steady?",
+        "options": [
+          "Lift > Weight = Aircraft Rises",
+          "level flight continues with no change",
+          "forward speed increases steadily",
+          "aircraft yaws to one side"
+        ],
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Lift > Weight = Aircraft Rises",
+        "hint": "Focus on the vertical pair alone."
+      },
+      {
+        "id": "fall-condition",
+        "stem": "What result follows when downward force is greater than upward force?",
+        "options": [
+          "Weight > Lift = Aircraft Falls",
+          "aircraft rises to higher altitude",
+          "forward motion speeds up",
+          "balanced flight is maintained"
+        ],
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Weight > Lift = Aircraft Falls",
+        "hint": "Consider the same vertical forces in reverse."
+      },
+      {
+        "id": "accelerate-condition",
+        "stem": "Which inequality describes gaining speed when forward push grows while resistance stays steady?",
+        "options": [
+          "Thrust > Drag = Aircraft Accelerates",
+          "aircraft slows down gradually",
+          "aircraft holds constant speed",
+          "aircraft descends vertically"
+        ],
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Thrust > Drag = Aircraft Accelerates",
+        "hint": "Look at the horizontal force pair."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029143609-b3ac3e67:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "401b23cb2d5446cc94050aaa2bc89ec8",
+    "usage": {
+      "promptTokens": 2509,
+      "completionTokens": 7866,
+      "reasoningTokens": 7482,
+      "cachedTokens": 0
+    },
+    "latencyMs": 33212,
+    "estCostUSD": 0.03656675,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029143609-b3ac3e67:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Balanced and Unbalanced Forces in Simplified Flight",
+    "sources": [
+      {
+        "id": "nasa-grc-simplified-aircraft-motion",
+        "title": "Simplified Aircraft Motion — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/simplified-aircraft-motion/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "21d6273d590cd157b690fe9491c4c0d202f5b35c5e5a31a8c072b37bbe89edd5"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "401b23cb2d5446cc94050aaa2bc89ec8",
+      "runId": "job-20261029143609-b3ac3e67",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T14:37:53.834Z"
+    },
+    "seed": 3142302996,
+    "cards": [
+      {
+        "id": "balanced-level-flight",
+        "stem": "Which pairing keeps an aircraft at steady level speed when forces stay even?",
+        "options": [
+          "the weight would be balanced by the lift",
+          "lift would be balanced by drag",
+          "weight would be balanced by thrust",
+          "thrust would be balanced by weight"
+        ],
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "the weight would be balanced by the lift and the drag would be balanced by the thrust",
+        "hint": "Think about which vertical and horizontal pairs cancel."
+      },
+      {
+        "id": "rise-condition",
+        "stem": "What happens when upward force exceeds downward force while other forces stay steady?",
+        "options": [
+          "Lift > Weight = Aircraft Rises",
+          "level flight continues with no change",
+          "forward speed increases steadily",
+          "aircraft yaws to one side"
+        ],
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Lift > Weight = Aircraft Rises",
+        "hint": "Focus on the vertical pair alone."
+      },
+      {
+        "id": "fall-condition",
+        "stem": "What result follows when downward force is greater than upward force?",
+        "options": [
+          "Weight > Lift = Aircraft Falls",
+          "aircraft rises to higher altitude",
+          "forward motion speeds up",
+          "balanced flight is maintained"
+        ],
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Weight > Lift = Aircraft Falls",
+        "hint": "Consider the same vertical forces in reverse."
+      },
+      {
+        "id": "accelerate-condition",
+        "stem": "Which inequality describes gaining speed when forward push grows while resistance stays steady?",
+        "options": [
+          "Thrust > Drag = Aircraft Accelerates",
+          "aircraft slows down gradually",
+          "aircraft holds constant speed",
+          "aircraft descends vertically"
+        ],
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Thrust > Drag = Aircraft Accelerates",
+        "hint": "Look at the horizontal force pair."
+      }
+    ]
+  }
+}

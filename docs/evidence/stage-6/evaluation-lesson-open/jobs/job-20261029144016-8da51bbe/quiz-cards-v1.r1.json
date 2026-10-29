@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Balanced forces in steady level flight",
+    "cards": [
+      {
+        "id": "lift-weight-balance",
+        "stem": "In steady level flight with constant speed, how do vertical forces compare?",
+        "options": [
+          "lift is equal to the weight",
+          "lift is greater than the weight",
+          "drag is equal to the weight",
+          "thrust is greater than the weight"
+        ],
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "an airplane can maintain a constant speed and level flight, in which the lift is equal to the weight, and the thrust is equal to the drag.",
+        "hint": "Consider vertical equilibrium in level flight"
+      },
+      {
+        "id": "thrust-drag-balance",
+        "stem": "In steady level flight with constant speed, how do horizontal forces compare?",
+        "options": [
+          "thrust is equal to the drag",
+          "thrust is greater than the drag",
+          "lift is equal to the drag",
+          "weight is equal to the thrust"
+        ],
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "the thrust is equal to the drag.",
+        "hint": "Think about horizontal equilibrium for steady speed"
+      },
+      {
+        "id": "net-force-first-law",
+        "stem": "What external condition lets an aircraft keep its airspeed without accelerating?",
+        "options": [
+          "no net external force",
+          "no net internal force",
+          "net external force at maximum",
+          "airspeed keeps increasing"
+        ],
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "Since there is no net external force on the aircraft, the aircraft maintains a constant airspeed as described by Newton’s First Law of Motion.",
+        "hint": "Recall the law describing motion with zero net force"
+      },
+      {
+        "id": "unbalanced-force-motion",
+        "stem": "When forces no longer balance in flight, what does the aircraft do?",
+        "options": [
+          "moves in the direction of the greater force",
+          "moves opposite the greater force",
+          "remains at constant airspeed",
+          "maintains level flight"
+        ],
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "if the forces become unbalanced, the aircraft moves in the direction of the greater force.",
+        "hint": "Unbalanced force dictates new motion direction"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029144016-8da51bbe:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "2917b606e4884bcaba34156f8a074649",
+    "usage": {
+      "promptTokens": 2881,
+      "completionTokens": 6787,
+      "reasoningTokens": 6374,
+      "cachedTokens": 0
+    },
+    "latencyMs": 26773,
+    "estCostUSD": 0.032446,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029144016-8da51bbe:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Balanced forces in steady level flight",
+    "sources": [
+      {
+        "id": "nasa-grc-range-constant-velocity",
+        "title": "Range – Constant Velocity — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/range-constant-velocity/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "f1f4102e23398f882264cb387f0c4115207597b855cadae074925c9e7c1a4127"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "2917b606e4884bcaba34156f8a074649",
+      "runId": "job-20261029144016-8da51bbe",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T14:41:26.282Z"
+    },
+    "seed": 4060183694,
+    "cards": [
+      {
+        "id": "lift-weight-balance",
+        "stem": "In steady level flight with constant speed, how do vertical forces compare?",
+        "options": [
+          "lift is equal to the weight",
+          "lift is greater than the weight",
+          "drag is equal to the weight",
+          "thrust is greater than the weight"
+        ],
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "an airplane can maintain a constant speed and level flight, in which the lift is equal to the weight, and the thrust is equal to the drag.",
+        "hint": "Consider vertical equilibrium in level flight"
+      },
+      {
+        "id": "thrust-drag-balance",
+        "stem": "In steady level flight with constant speed, how do horizontal forces compare?",
+        "options": [
+          "thrust is equal to the drag",
+          "thrust is greater than the drag",
+          "lift is equal to the drag",
+          "weight is equal to the thrust"
+        ],
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "the thrust is equal to the drag.",
+        "hint": "Think about horizontal equilibrium for steady speed"
+      },
+      {
+        "id": "net-force-first-law",
+        "stem": "What external condition lets an aircraft keep its airspeed without accelerating?",
+        "options": [
+          "no net external force",
+          "no net internal force",
+          "net external force at maximum",
+          "airspeed keeps increasing"
+        ],
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "Since there is no net external force on the aircraft, the aircraft maintains a constant airspeed as described by Newton’s First Law of Motion.",
+        "hint": "Recall the law describing motion with zero net force"
+      },
+      {
+        "id": "unbalanced-force-motion",
+        "stem": "When forces no longer balance in flight, what does the aircraft do?",
+        "options": [
+          "moves in the direction of the greater force",
+          "moves opposite the greater force",
+          "remains at constant airspeed",
+          "maintains level flight"
+        ],
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "if the forces become unbalanced, the aircraft moves in the direction of the greater force.",
+        "hint": "Unbalanced force dictates new motion direction"
+      }
+    ]
+  }
+}

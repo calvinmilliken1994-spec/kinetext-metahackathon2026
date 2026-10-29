@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "How Air Properties Change Above the Surface",
+    "cards": [
+      {
+        "id": "thin-sheet-description",
+        "stem": "Which phrase describes the air that reaches to the edge of space",
+        "options": [
+          "extremely thin sheet of air",
+          "thick uniform blanket of water",
+          "dense solid shell of rock",
+          "steady layer of glowing plasma"
+        ],
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "The Earth’s atmosphere is an extremely thin sheet of air extending from the surface of the Earth to the edge of space",
+        "hint": "Think about how thin the layer is compared to the planet"
+      },
+      {
+        "id": "variations-extend-upward",
+        "stem": "What is said to extend upward from the surface",
+        "options": [
+          "Variations in air properties",
+          "Constant uniform conditions",
+          "Gravity and sunlight only",
+          "Only the oxygen content"
+        ],
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "Variations in air properties extend upward from the surface of the Earth.",
+        "hint": "Focus on what changes with height"
+      },
+      {
+        "id": "temperature-near-surface",
+        "stem": "How is the air temperature described near the ground compared to higher up",
+        "options": [
+          "highest near the surface",
+          "lowest near the surface",
+          "constant at all heights",
+          "warmest in the middle zone"
+        ],
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "Thus the air temperature is highest near the surface and decreases as altitude increases.",
+        "hint": "Sun heats the surface first"
+      },
+      {
+        "id": "pressure-with-altitude",
+        "stem": "What happens to air pressure when altitude increases",
+        "options": [
+          "air pressure decreases",
+          "air pressure increases",
+          "air pressure stays constant",
+          "air pressure disappears instantly"
+        ],
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "Therefore, air pressure decreases as we increase altitude.",
+        "hint": "Think about how much air is above you as you go up"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029144623-4b7eeff9:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "c9e131f93b1447bf9e89e1dfc58e4115",
+    "usage": {
+      "promptTokens": 2975,
+      "completionTokens": 4962,
+      "reasoningTokens": 4577,
+      "cachedTokens": 0
+    },
+    "latencyMs": 20917,
+    "estCostUSD": 0.02480725,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029144623-4b7eeff9:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "How Air Properties Change Above the Surface",
+    "sources": [
+      {
+        "id": "nasa-grc-earth-atmosphere-equation-english",
+        "title": "Earth Atmosphere Equation – English — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/earth-atmosphere-equation-english/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "27cabc2c092bc294e05f921ebe3f7e6c73775f3986f7aed07bf86ba89fff17f5"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "c9e131f93b1447bf9e89e1dfc58e4115",
+      "runId": "job-20261029144623-4b7eeff9",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T14:48:04.251Z"
+    },
+    "seed": 2843283476,
+    "cards": [
+      {
+        "id": "thin-sheet-description",
+        "stem": "Which phrase describes the air that reaches to the edge of space",
+        "options": [
+          "extremely thin sheet of air",
+          "thick uniform blanket of water",
+          "dense solid shell of rock",
+          "steady layer of glowing plasma"
+        ],
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "The Earth’s atmosphere is an extremely thin sheet of air extending from the surface of the Earth to the edge of space",
+        "hint": "Think about how thin the layer is compared to the planet"
+      },
+      {
+        "id": "variations-extend-upward",
+        "stem": "What is said to extend upward from the surface",
+        "options": [
+          "Variations in air properties",
+          "Constant uniform conditions",
+          "Gravity and sunlight only",
+          "Only the oxygen content"
+        ],
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "Variations in air properties extend upward from the surface of the Earth.",
+        "hint": "Focus on what changes with height"
+      },
+      {
+        "id": "temperature-near-surface",
+        "stem": "How is the air temperature described near the ground compared to higher up",
+        "options": [
+          "highest near the surface",
+          "lowest near the surface",
+          "constant at all heights",
+          "warmest in the middle zone"
+        ],
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "Thus the air temperature is highest near the surface and decreases as altitude increases.",
+        "hint": "Sun heats the surface first"
+      },
+      {
+        "id": "pressure-with-altitude",
+        "stem": "What happens to air pressure when altitude increases",
+        "options": [
+          "air pressure decreases",
+          "air pressure increases",
+          "air pressure stays constant",
+          "air pressure disappears instantly"
+        ],
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "Therefore, air pressure decreases as we increase altitude.",
+        "hint": "Think about how much air is above you as you go up"
+      }
+    ]
+  }
+}

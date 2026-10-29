@@ -1,0 +1,124 @@
+{
+  "jobId": "job-20261029145655-fa348b9a",
+  "analysisRef": "job-20261029145655-fa348b9a/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029145655-fa348b9a:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "How 12 proposals became 10 ratified rights in 1791",
+    "sources": [
+      {
+        "id": "nara-bill-of-rights",
+        "title": "Bill of Rights (1791) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/bill-of-rights",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Bill of Rights (1791)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "a4a36b13e4682b41a3b938737553b5a5f3e509f35af3132cd2420de67f016531"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "5133dabcd1c54be98f32f2f6d3495f9c",
+      "runId": "job-20261029145655-fa348b9a",
+      "promptVersion": "s6-v1",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T14:58:01.757Z"
+    },
+    "seed": 621226048,
+    "headline": "How 12 proposals became 10 ratified rights in 1791",
+    "keyPoints": [
+      {
+        "id": "kp-proposal-ratification",
+        "point": "The page notes 12 amendments originally proposed and 10 ratified as the Bill of Rights in 1791",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "Although 12 amendments were originally proposed, the 10 that were ratified became the Bill of Rights in 1791."
+      },
+      {
+        "id": "kp-tyranny-charge",
+        "point": "opponents in adoption debates charged the Constitution as drafted would open the way to tyranny by central government",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "its opponents repeatedly charged that the Constitution as drafted would open the way to tyranny by the central government."
+      },
+      {
+        "id": "kp-british-memory",
+        "point": "memory of British violation of civil rights before and during the Revolution shaped demands for protection",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "Fresh in their minds was the memory of the British violation of civil rights before and during the Revolution."
+      },
+      {
+        "id": "kp-conventions-offer",
+        "point": "state conventions in formal ratification asked for amendments with understanding they would be offered",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "Several state conventions in their formal ratification of the Constitution asked for such amendments;"
+      },
+      {
+        "id": "kp-first-congress-proposal",
+        "point": "the First Congress proposed 12 amendments to the state legislatures on September 25, 1789 meeting frequent arguments",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "On September 25, 1789, the First Congress of the United States therefore proposed to the state legislatures 12 amendments to the Constitution"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "kt-amendments",
+        "term": "amendments",
+        "gloss": "formal changes to the Constitution originally proposed to meet arguments raised against it",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "Although 12 amendments were originally proposed, the 10 that were ratified became the Bill of Rights in 1791."
+      },
+      {
+        "id": "kt-tyranny",
+        "term": "tyranny",
+        "gloss": "central government dominance opponents feared the Constitution as drafted would enable",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "would open the way to tyranny by the central government."
+      },
+      {
+        "id": "kt-immunities",
+        "term": "immunities",
+        "gloss": "individual citizens protections demanded to be spelled out in a bill of rights",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "They demanded a \"bill of rights\" that would spell out the immunities of individual citizens."
+      },
+      {
+        "id": "kt-ratification",
+        "term": "ratification",
+        "gloss": "formal approval action by state conventions that asked for amendments",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "Several state conventions in their formal ratification of the Constitution asked for such amendments;"
+      },
+      {
+        "id": "kt-compensation",
+        "term": "compensation",
+        "gloss": "payment for services of Senators and Representatives subject to varying proposal",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "Article 2 concerning “varying the compensation for the services of the Senators and Representatives”"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261029145655-fa348b9a:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029145655-fa348b9a:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

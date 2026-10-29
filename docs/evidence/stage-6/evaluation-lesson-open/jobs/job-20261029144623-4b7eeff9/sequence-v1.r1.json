@@ -1,0 +1,191 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "Atmosphere Layers from Surface Upward",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Ordered from lowest altitude to highest altitude",
+    "steps": [
+      {
+        "id": "surface-of-the-earth",
+        "label": "surface of the Earth",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "The Earth’s atmosphere is an extremely thin sheet of air extending from the surface of the Earth to the edge of space",
+        "orderHint": "begin at the base of the thin sheet"
+      },
+      {
+        "id": "three-zones",
+        "label": "three zones",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "The model has three zones with separate curve fits for the troposphere, the lower stratosphere, and the upper stratosphere.",
+        "orderHint": "overview of the altitude bands"
+      },
+      {
+        "id": "troposphere",
+        "label": "troposphere",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "The troposphere runs from the surface of the Earth to 36,152 feet.",
+        "orderHint": "lowest band where temperature falls with height"
+      },
+      {
+        "id": "lower-stratosphere",
+        "label": "lower stratosphere",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "The lower stratosphere runs from 36,152 feet to 82,345 feet.",
+        "orderHint": "middle band with steady temperature"
+      },
+      {
+        "id": "upper-stratosphere",
+        "label": "upper stratosphere",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "The upper stratosphere model is used for altitudes above 82,345 feet.",
+        "orderHint": "highest band where temperature rises again"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029144623-4b7eeff9:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step label occurs in its own quote after normalisation (labels-in-quotes)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 5 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "b160173eb8994afdbb2f1fe7d337221a",
+    "usage": {
+      "promptTokens": 3012,
+      "completionTokens": 6355,
+      "reasoningTokens": 6002,
+      "cachedTokens": 0
+    },
+    "latencyMs": 29847,
+    "estCostUSD": 0.03077375,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029144623-4b7eeff9:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "Atmosphere Layers from Surface Upward",
+    "sources": [
+      {
+        "id": "nasa-grc-earth-atmosphere-equation-english",
+        "title": "Earth Atmosphere Equation – English — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/earth-atmosphere-equation-english/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "27cabc2c092bc294e05f921ebe3f7e6c73775f3986f7aed07bf86ba89fff17f5"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "b160173eb8994afdbb2f1fe7d337221a",
+      "runId": "job-20261029144623-4b7eeff9",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T14:47:43.329Z"
+    },
+    "seed": 4017854076,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Ordered from lowest altitude to highest altitude",
+    "steps": [
+      {
+        "id": "surface-of-the-earth",
+        "label": "surface of the Earth",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "The Earth’s atmosphere is an extremely thin sheet of air extending from the surface of the Earth to the edge of space",
+        "orderHint": "begin at the base of the thin sheet"
+      },
+      {
+        "id": "three-zones",
+        "label": "three zones",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "The model has three zones with separate curve fits for the troposphere, the lower stratosphere, and the upper stratosphere.",
+        "orderHint": "overview of the altitude bands"
+      },
+      {
+        "id": "troposphere",
+        "label": "troposphere",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "The troposphere runs from the surface of the Earth to 36,152 feet.",
+        "orderHint": "lowest band where temperature falls with height"
+      },
+      {
+        "id": "lower-stratosphere",
+        "label": "lower stratosphere",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "The lower stratosphere runs from 36,152 feet to 82,345 feet.",
+        "orderHint": "middle band with steady temperature"
+      },
+      {
+        "id": "upper-stratosphere",
+        "label": "upper stratosphere",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "The upper stratosphere model is used for altitudes above 82,345 feet.",
+        "orderHint": "highest band where temperature rises again"
+      }
+    ]
+  }
+}

@@ -1,0 +1,252 @@
+{
+  "gen": {
+    "schemaVersion": "concept-map-v1",
+    "title": "Drag coefficient aggregates multiple drag sources",
+    "nodes": [
+      {
+        "id": "drag",
+        "label": "drag"
+      },
+      {
+        "id": "drag-coefficient",
+        "label": "drag coefficient"
+      },
+      {
+        "id": "form-drag",
+        "label": "form drag"
+      },
+      {
+        "id": "skin-friction-drag",
+        "label": "skin friction drag"
+      },
+      {
+        "id": "wave-drag",
+        "label": "wave drag"
+      },
+      {
+        "id": "induced-drag",
+        "label": "induced drag"
+      }
+    ],
+    "links": [
+      {
+        "id": "link-1",
+        "fromId": "form-drag",
+        "toId": "drag-coefficient",
+        "relation": "is part of",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "The drag coefficient given above includes form drag, skin friction drag, wave drag, and induced drag components."
+      },
+      {
+        "id": "link-2",
+        "fromId": "skin-friction-drag",
+        "toId": "drag-coefficient",
+        "relation": "is part of",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "The drag coefficient given above includes form drag, skin friction drag, wave drag, and induced drag components."
+      },
+      {
+        "id": "link-3",
+        "fromId": "wave-drag",
+        "toId": "drag-coefficient",
+        "relation": "is part of",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "The drag coefficient given above includes form drag, skin friction drag, wave drag, and induced drag components."
+      },
+      {
+        "id": "link-4",
+        "fromId": "induced-drag",
+        "toId": "drag-coefficient",
+        "relation": "is part of",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "The drag coefficient given above includes form drag, skin friction drag, wave drag, and induced drag components."
+      },
+      {
+        "id": "link-5",
+        "fromId": "drag",
+        "toId": "drag-coefficient",
+        "relation": "needs",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "we must determine a value for Cd to determine drag"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029145902-df7880a5:concept-map-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every concept-map id pattern, id uniqueness and label shape is within the frozen limits"
+      },
+      {
+        "id": "CM-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 link quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "CM-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every link has one endpoint label in its quote and the other in the quote or the same source paragraph (endpoints-in-quote; paragraph-level co-mention without a stated link is the design-disclosed false accept — quotes are visible)"
+      },
+      {
+        "id": "CM-03",
+        "kind": "semantic",
+        "passed": false,
+        "message": "links[4] (link-5): the relation \"needs\" is not grounded — neither the relation phrase nor one of its trigger words (need, needs, needed, require, requires, required, ...) occurs in the quote or its source sentence (relation-in-quote)",
+        "path": "/links/4/relation",
+        "affected": [
+          "/links/4/relation",
+          "/links/4/quote"
+        ]
+      },
+      {
+        "id": "CM-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the map is connected over all 6 nodes with no self-loops or duplicate links (graph-connected)"
+      },
+      {
+        "id": "CM-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "nodes 6 (4-8) and links 5 (3-10) are within the frozen counts (counts-valid)"
+      },
+      {
+        "id": "CM-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in node labels and the title appears on a provided page (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "c1d24c23cf6e4cc38036ab1d657f3192",
+    "usage": {
+      "promptTokens": 2673,
+      "completionTokens": 7260,
+      "reasoningTokens": 6879,
+      "cachedTokens": 0
+    },
+    "latencyMs": 27246,
+    "estCostUSD": 0.03419625,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029145902-df7880a5:concept-map-v1:r1",
+    "componentId": "concept-map-v1",
+    "title": "Drag coefficient aggregates multiple drag sources",
+    "sources": [
+      {
+        "id": "nasa-grc-drag-equation",
+        "title": "Drag Equation — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/drag-equation/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "9462a6186d8b00e0dbf2618e4a6701edc9448614e144af1f4bc0b53b59f6ceed"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "c1d24c23cf6e4cc38036ab1d657f3192",
+      "runId": "job-20261029145902-df7880a5",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T15:00:52.987Z"
+    },
+    "seed": 1126571286,
+    "nodes": [
+      {
+        "id": "drag",
+        "label": "drag"
+      },
+      {
+        "id": "drag-coefficient",
+        "label": "drag coefficient"
+      },
+      {
+        "id": "form-drag",
+        "label": "form drag"
+      },
+      {
+        "id": "skin-friction-drag",
+        "label": "skin friction drag"
+      },
+      {
+        "id": "wave-drag",
+        "label": "wave drag"
+      },
+      {
+        "id": "induced-drag",
+        "label": "induced drag"
+      }
+    ],
+    "links": [
+      {
+        "id": "link-1",
+        "fromId": "form-drag",
+        "toId": "drag-coefficient",
+        "relation": "is part of",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "The drag coefficient given above includes form drag, skin friction drag, wave drag, and induced drag components."
+      },
+      {
+        "id": "link-2",
+        "fromId": "skin-friction-drag",
+        "toId": "drag-coefficient",
+        "relation": "is part of",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "The drag coefficient given above includes form drag, skin friction drag, wave drag, and induced drag components."
+      },
+      {
+        "id": "link-3",
+        "fromId": "wave-drag",
+        "toId": "drag-coefficient",
+        "relation": "is part of",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "The drag coefficient given above includes form drag, skin friction drag, wave drag, and induced drag components."
+      },
+      {
+        "id": "link-4",
+        "fromId": "induced-drag",
+        "toId": "drag-coefficient",
+        "relation": "is part of",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "The drag coefficient given above includes form drag, skin friction drag, wave drag, and induced drag components."
+      },
+      {
+        "id": "link-5",
+        "fromId": "drag",
+        "toId": "drag-coefficient",
+        "relation": "needs",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "we must determine a value for Cd to determine drag"
+      }
+    ]
+  }
+}

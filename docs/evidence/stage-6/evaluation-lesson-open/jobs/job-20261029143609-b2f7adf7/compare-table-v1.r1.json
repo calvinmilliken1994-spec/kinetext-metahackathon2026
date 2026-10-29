@@ -1,0 +1,242 @@
+{
+  "gen": {
+    "schemaVersion": "compare-table-v1",
+    "title": "Comparing Newtons Laws of Motion",
+    "entities": [
+      "compare-table-v1",
+      "id"
+    ],
+    "attributes": [
+      "law-statement",
+      "name"
+    ],
+    "cells": [
+      {
+        "id": "newtons-laws-compare",
+        "entityIndex": 0,
+        "attributeIndex": 0,
+        "value": "An object at rest remains at rest",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "An object at rest remains at rest, and an object in motion remains in motion at constant speed and in a straight line unless acted on by an unbalanced force."
+      },
+      {
+        "id": "inertia",
+        "entityIndex": 1,
+        "attributeIndex": 0,
+        "value": "The acceleration of an object depends on the mass",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "The acceleration of an object depends on the mass of the object and the amount of force applied."
+      },
+      {
+        "id": "force",
+        "entityIndex": 2,
+        "attributeIndex": 0,
+        "value": "Whenever one object exerts a force on another object",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Whenever one object exerts a force on another object, the second object exerts an equal and opposite force on the first."
+      },
+      {
+        "id": "action-reaction",
+        "entityIndex": 0,
+        "attributeIndex": 1,
+        "value": "Inertia",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Newton’s First Law of Motion (Inertia)"
+      },
+      {
+        "id": "law-statement",
+        "entityIndex": 1,
+        "attributeIndex": 1,
+        "value": "Force",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Newton’s Second Law of Motion (Force)"
+      },
+      {
+        "id": "principle-name",
+        "entityIndex": 2,
+        "attributeIndex": 1,
+        "value": "Action & Reaction",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Newton’s Third Law of Motion (Action & Reaction)"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029143609-b2f7adf7:compare-table-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every compare-table text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "CT-01",
+        "kind": "grounding",
+        "passed": false,
+        "message": "cells[0] (newtons-laws-compare): quote \"An object at rest remains at rest, and an object in motion r\" is 157 characters, expected <= 150 (expected verbatim quotes of 1-150 characters from the cited source)",
+        "path": "/cells/0/quote",
+        "affected": [
+          "/cells/0/quote"
+        ]
+      },
+      {
+        "id": "CT-02",
+        "kind": "grounding",
+        "passed": false,
+        "message": "cells[0] (newtons-laws-compare): the entity \"compare-table-v1\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[1] (inertia): the entity \"id\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[3] (action-reaction): the entity \"compare-table-v1\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[4] (law-statement): the entity \"id\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote)",
+        "path": "/cells/0/entityIndex",
+        "affected": [
+          "/cells/0/entityIndex",
+          "/cells/0/quote",
+          "/cells/1/entityIndex",
+          "/cells/1/quote",
+          "/cells/3/entityIndex",
+          "/cells/3/quote",
+          "/cells/4/entityIndex",
+          "/cells/4/quote"
+        ]
+      },
+      {
+        "id": "CT-03",
+        "kind": "semantic",
+        "passed": false,
+        "message": "cells has 6 entries, expected exactly entities x attributes = 4 (every pair exactly once); cells[2] (force): entityIndex 2 is outside 0..1; cells[5] (principle-name): entityIndex 2 is outside 0..1",
+        "path": "/cells",
+        "affected": [
+          "/cells",
+          "/cells/2/entityIndex",
+          "/cells/5/entityIndex"
+        ]
+      },
+      {
+        "id": "CT-04",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in entity names, attributes and cell values appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "CT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "predict mode is available: attribute \"law-statement\" offers >= 3 distinct seeded same-column options (predict-cell-valid)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "ab495be8e13c46188eb9aee9da9a86fc",
+    "usage": {
+      "promptTokens": 3470,
+      "completionTokens": 12306,
+      "reasoningTokens": 11677,
+      "cachedTokens": 0
+    },
+    "latencyMs": 53904,
+    "estCostUSD": 0.056638,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029143609-b2f7adf7:compare-table-v1:r1",
+    "componentId": "compare-table-v1",
+    "title": "Comparing Newtons Laws of Motion",
+    "sources": [
+      {
+        "id": "nasa-grc-newtons-laws-of-motion",
+        "title": "Newton's Laws of Motion — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/newtons-laws-of-motion/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "907bae07076eef20118a4e54096ad399b11994ec5e310d9bed74850f6d009014"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "ab495be8e13c46188eb9aee9da9a86fc",
+      "runId": "job-20261029143609-b2f7adf7",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T14:38:20.821Z"
+    },
+    "seed": 3260870896,
+    "entities": [
+      "compare-table-v1",
+      "id"
+    ],
+    "attributes": [
+      "law-statement",
+      "name"
+    ],
+    "cells": [
+      {
+        "id": "newtons-laws-compare",
+        "entityIndex": 0,
+        "attributeIndex": 0,
+        "value": "An object at rest remains at rest",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "An object at rest remains at rest, and an object in motion remains in motion at constant speed and in a straight line unless acted on by an unbalanced force."
+      },
+      {
+        "id": "inertia",
+        "entityIndex": 1,
+        "attributeIndex": 0,
+        "value": "The acceleration of an object depends on the mass",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "The acceleration of an object depends on the mass of the object and the amount of force applied."
+      },
+      {
+        "id": "force",
+        "entityIndex": 2,
+        "attributeIndex": 0,
+        "value": "Whenever one object exerts a force on another object",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Whenever one object exerts a force on another object, the second object exerts an equal and opposite force on the first."
+      },
+      {
+        "id": "action-reaction",
+        "entityIndex": 0,
+        "attributeIndex": 1,
+        "value": "Inertia",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Newton’s First Law of Motion (Inertia)"
+      },
+      {
+        "id": "law-statement",
+        "entityIndex": 1,
+        "attributeIndex": 1,
+        "value": "Force",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Newton’s Second Law of Motion (Force)"
+      },
+      {
+        "id": "principle-name",
+        "entityIndex": 2,
+        "attributeIndex": 1,
+        "value": "Action & Reaction",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Newton’s Third Law of Motion (Action & Reaction)"
+      }
+    ]
+  }
+}

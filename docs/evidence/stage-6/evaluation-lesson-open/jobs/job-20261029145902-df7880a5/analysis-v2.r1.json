@@ -1,0 +1,190 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "physics",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "Page covers drag dependences, grouping complex effects into drag coefficient, the drag equation with dynamic pressure, and guidance on reference area choices.",
+    "overview": {
+      "headline": "Drag force expressed through coefficient density velocity and reference area",
+      "keyPoints": [
+        {
+          "id": "drag-dependence",
+          "point": "Drag dependence includes density of air and velocity squared plus viscosity and compressibility and shape and inclination",
+          "sourceId": "nasa-grc-drag-equation",
+          "quote": "depends on the density of the air, the square of the velocity"
+        },
+        {
+          "id": "drag-equation",
+          "point": "Drag equation sets drag equal to coefficient times density times half velocity squared times reference area",
+          "sourceId": "nasa-grc-drag-equation",
+          "quote": "drag D is equal to the drag coefficient Cd times the density rho (ρ) times half of the velocity V squared times the reference area A"
+        },
+        {
+          "id": "coefficient-components",
+          "point": "Drag coefficient includes form drag skin friction drag wave drag and induced drag components",
+          "sourceId": "nasa-grc-drag-equation",
+          "quote": "The drag coefficient given above includes form drag, skin friction drag, wave drag, and induced drag components."
+        },
+        {
+          "id": "reference-area-choice",
+          "point": "Reference area given in drag equation is given as reference area and may be wing or frontal or total surface area",
+          "sourceId": "nasa-grc-drag-equation",
+          "quote": "Notice that the area (A) given in the drag equation is given as a reference area."
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "drag-coefficient",
+          "term": "drag coefficient",
+          "gloss": "single variable that collects complex dependencies into one value for drag",
+          "sourceId": "nasa-grc-drag-equation",
+          "quote": "For drag, this variable is called the drag coefficient, designated “Cd.”"
+        },
+        {
+          "id": "reference-area",
+          "term": "reference area",
+          "gloss": "area used to characterize aerodynamic force and to convert coefficient values",
+          "sourceId": "nasa-grc-drag-equation",
+          "quote": "Notice that the area (A) given in the drag equation is given as a reference area."
+        },
+        {
+          "id": "dynamic-pressure",
+          "term": "dynamic pressure",
+          "gloss": "pressure term called dynamic pressure that appears in Bernoulli relation",
+          "sourceId": "nasa-grc-drag-equation",
+          "quote": "is called the dynamic pressure and appears in Bernoulli’s pressure equation."
+        },
+        {
+          "id": "density-term",
+          "term": "density",
+          "gloss": "property designated by rho that scales with velocity squared to give pressure",
+          "sourceId": "nasa-grc-drag-equation",
+          "quote": "In the equation given above, the density is designated by the letter rho (ρ)."
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "quiz-cards-v1",
+        "pedagogicalReason": "Builds recall of drag factors, coefficient meaning, and equation form before deeper comparison",
+        "focusQuote": "D = Cd * (rho * V^2 * A) / 2",
+        "focusSourceId": "nasa-grc-drag-equation"
+      },
+      {
+        "componentId": "compare-table-v1",
+        "pedagogicalReason": "Contrasts total surface, frontal, and wing reference areas to clarify coefficient conversion",
+        "focusQuote": "If we think of drag as being caused by friction between the air and the body, a logical choice would be the total surface area of the body.",
+        "focusSourceId": "nasa-grc-drag-equation"
+      },
+      {
+        "componentId": "concept-map-v1",
+        "pedagogicalReason": "Maps how coefficient aggregates form, friction, wave and induced drag into one relation",
+        "focusQuote": "The drag coefficient given above includes form drag, skin friction drag, wave drag, and induced drag components.",
+        "focusSourceId": "nasa-grc-drag-equation"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029145902-df7880a5:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"physics\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 3146 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 11 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 4, keyTerms 4, componentPlan 3; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (3 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "d78fe21e77c94beaa857f9bed30fbf26",
+    "usage": {
+      "promptTokens": 4033,
+      "completionTokens": 9916,
+      "reasoningTokens": 9165,
+      "cachedTokens": 0
+    },
+    "latencyMs": 38212,
+    "estCostUSD": 0.04718425,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

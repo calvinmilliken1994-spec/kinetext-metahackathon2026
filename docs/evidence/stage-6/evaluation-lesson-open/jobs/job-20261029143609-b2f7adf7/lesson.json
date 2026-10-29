@@ -1,0 +1,125 @@
+{
+  "jobId": "job-20261029143609-b2f7adf7",
+  "analysisRef": "job-20261029143609-b2f7adf7/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029143609-b2f7adf7:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Newton laws link inertia force and motion for flight",
+    "sources": [
+      {
+        "id": "nasa-grc-newtons-laws-of-motion",
+        "title": "Newton's Laws of Motion — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/newtons-laws-of-motion/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "907bae07076eef20118a4e54096ad399b11994ec5e310d9bed74850f6d009014"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "c97b4f44855342eea6527b535f0152f5",
+      "runId": "job-20261029143609-b2f7adf7",
+      "promptVersion": "s6-v1",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T14:36:55.813Z"
+    },
+    "seed": 2584593319,
+    "headline": "Newton laws link inertia force and motion for flight",
+    "keyPoints": [
+      {
+        "id": "inertia-law",
+        "point": "Objects that remain at rest or keep constant motion unless unbalanced force acts show inertia",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "unless acted on by an unbalanced force"
+      },
+      {
+        "id": "force-depends",
+        "point": "Acceleration of an object depends on its mass and the amount of applied force",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "The acceleration of an object depends on the mass of the object and the amount of force applied."
+      },
+      {
+        "id": "action-reaction",
+        "point": "Second object exerts equal opposite force when first object exerts force during interaction",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Whenever one object exerts a force on a second object, the second object exerts an equal and opposite force on the first."
+      },
+      {
+        "id": "constant-mass",
+        "point": "Relation F equals m times a is only good for objects that have constant mass",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Remember that this relation is only good for objects that have a constant mass."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "inertia",
+        "term": "inertia",
+        "gloss": "tendency to resist changes in motion when forces cancel",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "This tendency to resist changes in a state of motion is inertia."
+      },
+      {
+        "id": "momentum",
+        "term": "momentum",
+        "gloss": "changes in momentum defined by mass times velocity",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Newton’s second law talks about changes in momentum (m V)."
+      },
+      {
+        "id": "acceleration",
+        "term": "acceleration",
+        "gloss": "definition of acceleration as change in velocity divided by change in time",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "The change in velocity divided by the change in time is the definition of the acceleration a."
+      },
+      {
+        "id": "vector",
+        "term": "vector",
+        "gloss": "quantity having magnitude and direction like force",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Scientists and mathematicians call this a vector quantity."
+      },
+      {
+        "id": "mass",
+        "term": "mass",
+        "gloss": "constant mass for which force equals mass times acceleration remains valid",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Remember that this relation is only good for objects that have a constant mass."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "forces-1d-v1",
+      "specId": "nasa-grc-newtons-laws-of-motion-job-20261029143609-b2f7adf7",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029143609-b2f7adf7:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261029143609-b2f7adf7:compare-table-v1:r3",
+      "status": "failed",
+      "reason": "CT-02, repair.no-weakening: cells[0] (first-law-statement): the entity \"Newton’s First Law of Motion (Inertia)\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[1] (second-law-statement): the entity \"Newton’s Second Law of Motion (Force)\" occurs neither in the quote nor in ",
+      "revision": 3
+    }
+  ]
+}

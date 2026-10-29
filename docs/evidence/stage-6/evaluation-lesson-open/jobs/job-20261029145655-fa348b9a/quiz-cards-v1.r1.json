@@ -1,0 +1,217 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Proposal and Ratification Facts",
+    "cards": [
+      {
+        "id": "ratification-date-articles-three-twelve",
+        "stem": "Which date marks ratification of Articles 3 to 12 by the state legislatures?",
+        "options": [
+          "December 15, 1791",
+          "September 25, 1789",
+          "May 7, 1992"
+        ],
+        "sourceId": "nara-bill-of-rights",
+        "quote": "Articles 3 to 12, ratified December 15, 1791, by three-fourths of the state legislatures",
+        "hint": "Focus on the date linked to Articles 3 to 12 ratification"
+      },
+      {
+        "id": "proposal-date-first-congress",
+        "stem": "When did the First Congress propose 12 amendments to the state legislatures?",
+        "options": [
+          "September 25, 1789",
+          "December 15, 1791",
+          "May 7, 1992"
+        ],
+        "sourceId": "nara-bill-of-rights",
+        "quote": "On September 25, 1789, the First Congress of the United States therefore proposed to the state legislatures 12 amendments to the Constitution",
+        "hint": "Recall when the First Congress sent proposals to the legislatures"
+      },
+      {
+        "id": "article-two-compensation-fate",
+        "stem": "Which article about varying compensation later became the 27th Amendment?",
+        "options": [
+          "Article 2",
+          "Articles 3 to 12",
+          "The first amendment"
+        ],
+        "sourceId": "nara-bill-of-rights",
+        "quote": "Article 2 concerning “varying the compensation for the services of the Senators and Representatives”",
+        "hint": "Check which article deals with compensation for Senators and Representatives"
+      },
+      {
+        "id": "first-amendment-never-ratified",
+        "stem": "Which provision about constituents for each Representative was never ratified?",
+        "options": [
+          "The first amendment",
+          "Article 2",
+          "Articles 3 to 12"
+        ],
+        "sourceId": "nara-bill-of-rights",
+        "quote": "The first amendment, which concerned the number of constituents for each Representative, was never ratified.",
+        "hint": "Find the amendment about constituents that was never ratified"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029145655-fa348b9a:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "a37f0eb47e48434e934a678d9ff0b53f",
+    "usage": {
+      "promptTokens": 2518,
+      "completionTokens": 14196,
+      "reasoningTokens": 13714,
+      "cachedTokens": 0
+    },
+    "latencyMs": 59122,
+    "estCostUSD": 0.0634805,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029145655-fa348b9a:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Proposal and Ratification Facts",
+    "sources": [
+      {
+        "id": "nara-bill-of-rights",
+        "title": "Bill of Rights (1791) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/bill-of-rights",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Bill of Rights (1791)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "a4a36b13e4682b41a3b938737553b5a5f3e509f35af3132cd2420de67f016531"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "a37f0eb47e48434e934a678d9ff0b53f",
+      "runId": "job-20261029145655-fa348b9a",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T14:59:00.889Z"
+    },
+    "seed": 41329393,
+    "cards": [
+      {
+        "id": "ratification-date-articles-three-twelve",
+        "stem": "Which date marks ratification of Articles 3 to 12 by the state legislatures?",
+        "options": [
+          "December 15, 1791",
+          "September 25, 1789",
+          "May 7, 1992"
+        ],
+        "sourceId": "nara-bill-of-rights",
+        "quote": "Articles 3 to 12, ratified December 15, 1791, by three-fourths of the state legislatures",
+        "hint": "Focus on the date linked to Articles 3 to 12 ratification"
+      },
+      {
+        "id": "proposal-date-first-congress",
+        "stem": "When did the First Congress propose 12 amendments to the state legislatures?",
+        "options": [
+          "September 25, 1789",
+          "December 15, 1791",
+          "May 7, 1992"
+        ],
+        "sourceId": "nara-bill-of-rights",
+        "quote": "On September 25, 1789, the First Congress of the United States therefore proposed to the state legislatures 12 amendments to the Constitution",
+        "hint": "Recall when the First Congress sent proposals to the legislatures"
+      },
+      {
+        "id": "article-two-compensation-fate",
+        "stem": "Which article about varying compensation later became the 27th Amendment?",
+        "options": [
+          "Article 2",
+          "Articles 3 to 12",
+          "The first amendment"
+        ],
+        "sourceId": "nara-bill-of-rights",
+        "quote": "Article 2 concerning “varying the compensation for the services of the Senators and Representatives”",
+        "hint": "Check which article deals with compensation for Senators and Representatives"
+      },
+      {
+        "id": "first-amendment-never-ratified",
+        "stem": "Which provision about constituents for each Representative was never ratified?",
+        "options": [
+          "The first amendment",
+          "Article 2",
+          "Articles 3 to 12"
+        ],
+        "sourceId": "nara-bill-of-rights",
+        "quote": "The first amendment, which concerned the number of constituents for each Representative, was never ratified.",
+        "hint": "Find the amendment about constituents that was never ratified"
+      }
+    ]
+  }
+}

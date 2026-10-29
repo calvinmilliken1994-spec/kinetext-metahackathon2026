@@ -1,0 +1,238 @@
+{
+  "gen": {
+    "schemaVersion": "compare-table-v1",
+    "title": "Comparing Newtons Laws of Motion",
+    "entities": [
+      "Newton’s First Law of Motion (Inertia)",
+      "Newton’s Second Law of Motion (Force)",
+      "Newton’s Third Law of Motion (Action & Reaction)"
+    ],
+    "attributes": [
+      "Law Statement",
+      "Core Principle"
+    ],
+    "cells": [
+      {
+        "id": "first-law-statement",
+        "entityIndex": 0,
+        "attributeIndex": 0,
+        "value": "An object at rest remains at rest",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "An object at rest remains at rest, and an object in motion remains in motion at constant speed and in a straight line"
+      },
+      {
+        "id": "second-law-statement",
+        "entityIndex": 1,
+        "attributeIndex": 0,
+        "value": "The acceleration of an object depends on the mass",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "The acceleration of an object depends on the mass of the object and the amount of force applied."
+      },
+      {
+        "id": "third-law-statement",
+        "entityIndex": 2,
+        "attributeIndex": 0,
+        "value": "Whenever one object exerts a force on a second object",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Whenever one object exerts a force on a second object, the second object exerts an equal and opposite force on the first."
+      },
+      {
+        "id": "first-law-principle",
+        "entityIndex": 0,
+        "attributeIndex": 1,
+        "value": "Inertia",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Newton’s First Law of Motion (Inertia)"
+      },
+      {
+        "id": "second-law-principle",
+        "entityIndex": 1,
+        "attributeIndex": 1,
+        "value": "Force",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Newton’s Second Law of Motion (Force)"
+      },
+      {
+        "id": "third-law-principle",
+        "entityIndex": 2,
+        "attributeIndex": 1,
+        "value": "Action & Reaction",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Newton’s Third Law of Motion (Action & Reaction)"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029143609-b2f7adf7:compare-table-v1:r3",
+    "revision": 3,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every compare-table text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "CT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 cell quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "CT-02",
+        "kind": "grounding",
+        "passed": false,
+        "message": "cells[0] (first-law-statement): the entity \"Newton’s First Law of Motion (Inertia)\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[1] (second-law-statement): the entity \"Newton’s Second Law of Motion (Force)\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[2] (third-law-statement): the entity \"Newton’s Third Law of Motion (Action & Reaction)\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote)",
+        "path": "/cells/0/entityIndex",
+        "affected": [
+          "/cells/0/entityIndex",
+          "/cells/0/quote",
+          "/cells/1/entityIndex",
+          "/cells/1/quote",
+          "/cells/2/entityIndex",
+          "/cells/2/quote"
+        ]
+      },
+      {
+        "id": "CT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the table shape is valid: 3 entities x 2 attributes with all 6 cells present exactly once (shape-valid)"
+      },
+      {
+        "id": "CT-04",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in entity names, attributes and cell values appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "CT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "predict mode is available: attribute \"Law Statement\" offers >= 3 distinct seeded same-column options (predict-cell-valid)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": false,
+        "message": "repair weakened the spec: /entities changed shape or list length (item counts and structure are frozen in a repair; the system prunes bad items via the drop helpers, the model never adds, removes or reorders items); /attributes/0 changed from \"law-statement\" to \"Law Statement\" outside the affected paths recomputed from revision 1 (authorized: /cells/0/quote, /cells/0/entityIndex, /cells/1/entityIndex, /cells/1/quote, /cells/3/entityIndex, /cells/3/quote, /cells/4/entityIndex, /cells/4/quote, /cells, /cells/2/entityIndex, /cells/5/entityIndex); /attributes/1 changed from \"name\" to \"Core Principle\" outside the affected paths recomputed from revision 1 (authorized: /cells/0/quote, /cells/0/entityIndex, /cells/1/entityIndex, /cells/1/quote, /cells/3/entityIndex, /cells/3/quote, /cells/4/entityIndex, /cells/4/quote, /cells, /cells/2/entityIndex, /cells/5/entityIndex) (a compare-table-v1 repair must fix the failing checks by changing ONLY fields under the affected paths recomputed from revision 1, must keep every item and id stable — the system prunes bad items, never the model — and must never increase a tolerance or otherwise weaken the spec)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "87652d48cc704a918d8ee791af204b87",
+    "usage": {
+      "promptTokens": 5169,
+      "completionTokens": 17154,
+      "reasoningTokens": 16734,
+      "cachedTokens": 0
+    },
+    "latencyMs": 73836,
+    "estCostUSD": 0.07936575,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029143609-b2f7adf7:compare-table-v1:r3",
+    "componentId": "compare-table-v1",
+    "title": "Comparing Newtons Laws of Motion",
+    "sources": [
+      {
+        "id": "nasa-grc-newtons-laws-of-motion",
+        "title": "Newton's Laws of Motion — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/newtons-laws-of-motion/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "907bae07076eef20118a4e54096ad399b11994ec5e310d9bed74850f6d009014"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "87652d48cc704a918d8ee791af204b87",
+      "runId": "job-20261029143609-b2f7adf7",
+      "promptVersion": "s6-v1",
+      "revision": 3,
+      "repairOf": 2,
+      "generatedAt": "2026-10-29T14:40:15.040Z"
+    },
+    "seed": 3260870896,
+    "entities": [
+      "Newton’s First Law of Motion (Inertia)",
+      "Newton’s Second Law of Motion (Force)",
+      "Newton’s Third Law of Motion (Action & Reaction)"
+    ],
+    "attributes": [
+      "Law Statement",
+      "Core Principle"
+    ],
+    "cells": [
+      {
+        "id": "first-law-statement",
+        "entityIndex": 0,
+        "attributeIndex": 0,
+        "value": "An object at rest remains at rest",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "An object at rest remains at rest, and an object in motion remains in motion at constant speed and in a straight line"
+      },
+      {
+        "id": "second-law-statement",
+        "entityIndex": 1,
+        "attributeIndex": 0,
+        "value": "The acceleration of an object depends on the mass",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "The acceleration of an object depends on the mass of the object and the amount of force applied."
+      },
+      {
+        "id": "third-law-statement",
+        "entityIndex": 2,
+        "attributeIndex": 0,
+        "value": "Whenever one object exerts a force on a second object",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Whenever one object exerts a force on a second object, the second object exerts an equal and opposite force on the first."
+      },
+      {
+        "id": "first-law-principle",
+        "entityIndex": 0,
+        "attributeIndex": 1,
+        "value": "Inertia",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Newton’s First Law of Motion (Inertia)"
+      },
+      {
+        "id": "second-law-principle",
+        "entityIndex": 1,
+        "attributeIndex": 1,
+        "value": "Force",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Newton’s Second Law of Motion (Force)"
+      },
+      {
+        "id": "third-law-principle",
+        "entityIndex": 2,
+        "attributeIndex": 1,
+        "value": "Action & Reaction",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Newton’s Third Law of Motion (Action & Reaction)"
+      }
+    ]
+  }
+}

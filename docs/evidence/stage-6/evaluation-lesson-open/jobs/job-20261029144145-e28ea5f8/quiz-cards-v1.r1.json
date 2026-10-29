@@ -1,0 +1,210 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Wright brothers lift testing",
+    "cards": [
+      {
+        "id": "design-weight-target",
+        "stem": "How heavy was the 1901 aircraft itself expected to be without a pilot",
+        "options": [
+          "100 pounds",
+          "150 pounds",
+          "15 mile per hour",
+          "5 degrees"
+        ],
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "quote": "The 1901 aircraft had been designed to lift itself (100 pounds)",
+        "hint": "Focus on the design weight for the aircraft alone"
+      },
+      {
+        "id": "velocity-dependence",
+        "stem": "How was lift found to change when speed increases",
+        "options": [
+          "square of the velocity",
+          "cube of the velocity",
+          "inverse of the area",
+          "angle of attack"
+        ],
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "quote": "it had been determined that lift depends on the square of the velocity and varies linearly with the surface area of the object.",
+        "hint": "Consider how lift was described relative to speed"
+      },
+      {
+        "id": "modern-pressure-term",
+        "stem": "What pressure term does the current lift formula rely on",
+        "options": [
+          "dynamic pressure",
+          "lift coefficient",
+          "weight of the aircraft",
+          "angle of attack"
+        ],
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "quote": "The modern equation uses the dynamic pressure of the moving air for the pressure dependence, while this equation uses the Smeaton coefficient.",
+        "hint": "Compare old and new formulations of pressure effect"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029144145-e28ea5f8:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "8eafe5e0f22344ed948dd8d60e056513",
+    "usage": {
+      "promptTokens": 3307,
+      "completionTokens": 6134,
+      "reasoningTokens": 5742,
+      "cachedTokens": 0
+    },
+    "latencyMs": 20300,
+    "estCostUSD": 0.03020325,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "pruned": true,
+  "dropped": [
+    {
+      "index": 0,
+      "id": "smeaton-revised-value",
+      "reason": "card failed Q-06",
+      "checks": [
+        "Q-06"
+      ]
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029144145-e28ea5f8:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Wright brothers lift testing",
+    "sources": [
+      {
+        "id": "nasa-grc-lift-equation-of-the-1900s",
+        "title": "Lift Equation of the 1900's — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/lift-equation-of-the-1900s/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "41fb1b6349509be9b9478942fed514cd8d077b15436694132ecbfb588c477402"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "8eafe5e0f22344ed948dd8d60e056513",
+      "runId": "job-20261029144145-e28ea5f8",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T14:44:21.242Z"
+    },
+    "seed": 2244137975,
+    "cards": [
+      {
+        "id": "design-weight-target",
+        "stem": "How heavy was the 1901 aircraft itself expected to be without a pilot",
+        "options": [
+          "100 pounds",
+          "150 pounds",
+          "15 mile per hour",
+          "5 degrees"
+        ],
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "quote": "The 1901 aircraft had been designed to lift itself (100 pounds)",
+        "hint": "Focus on the design weight for the aircraft alone"
+      },
+      {
+        "id": "velocity-dependence",
+        "stem": "How was lift found to change when speed increases",
+        "options": [
+          "square of the velocity",
+          "cube of the velocity",
+          "inverse of the area",
+          "angle of attack"
+        ],
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "quote": "it had been determined that lift depends on the square of the velocity and varies linearly with the surface area of the object.",
+        "hint": "Consider how lift was described relative to speed"
+      },
+      {
+        "id": "modern-pressure-term",
+        "stem": "What pressure term does the current lift formula rely on",
+        "options": [
+          "dynamic pressure",
+          "lift coefficient",
+          "weight of the aircraft",
+          "angle of attack"
+        ],
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "quote": "The modern equation uses the dynamic pressure of the moving air for the pressure dependence, while this equation uses the Smeaton coefficient.",
+        "hint": "Compare old and new formulations of pressure effect"
+      }
+    ]
+  }
+}

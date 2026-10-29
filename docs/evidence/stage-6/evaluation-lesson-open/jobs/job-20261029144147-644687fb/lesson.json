@@ -1,0 +1,125 @@
+{
+  "jobId": "job-20261029144147-644687fb",
+  "analysisRef": "job-20261029144147-644687fb/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029144147-644687fb:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Specific heats at constant pressure and volume linked by gas constant",
+    "sources": [
+      {
+        "id": "nasa-grc-specific-heat-cp-cv",
+        "title": "Specific Heat – Cp & Cv — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/specific-heat-cp-cv/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "9df5f948a44c3fd060dd74c26ccaa8247cb311d0b0d618ceaafaf6382ba4d1b8"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "8d1472afcbb04541a827d4f38ed37b93",
+      "runId": "job-20261029144147-644687fb",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T14:42:38.440Z"
+    },
+    "seed": 29007876,
+    "headline": "Specific heats at constant pressure and volume linked by gas constant",
+    "keyPoints": [
+      {
+        "id": "thermodynamics-branch",
+        "point": "Thermodynamics deals with energy and work of large scale systems observable in experiments",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "Thermodynamics is a branch of physics which deals with the energy and work of a system."
+      },
+      {
+        "id": "heat-capacity-definition",
+        "point": "Heat capacity indicates heat added per unit temperature rise and differs by material and process",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "The heat capacity is a constant that tells how much heat is added per unit temperature rise."
+      },
+      {
+        "id": "cp-cv-r-relation",
+        "point": "Specific heat constants for constant pressure and constant volume relate to gas constant",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "The specific heat constants for constant pressure and constant volume processes are related to the gas constant for a given gas."
+      },
+      {
+        "id": "gamma-air-value",
+        "point": "Gamma depends on gas state and for air standard conditions gamma equals 1.4",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "For air, gamma = 1.4 for standard day conditions."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "enthalpy",
+        "term": "enthalpy",
+        "gloss": "definition explains enthalpy as internal energy plus pressure times specific volume for a gas",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "From the definition of enthalpy:"
+      },
+      {
+        "id": "specific-volume",
+        "term": "specific volume",
+        "gloss": "specific measure of volume per mass appearing with pressure in enthalpy definition",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "where h in the specific enthalpy, p is the pressure, v is the specific volume, and e is the specific internal energy."
+      },
+      {
+        "id": "gas-constant",
+        "term": "gas constant",
+        "gloss": "quantity that connects pressure, temperature and volume in the equation of state for a gas",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "The equation of state of a gas relates the temperature, pressure, and volume through a gas constant R."
+      },
+      {
+        "id": "specific-heat-capacity",
+        "term": "specific heat capacity",
+        "gloss": "heat required to change temperature of a substance for a given temperature change",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "where delta T (ΔT) is the change of temperature of the gas during the process, and c is the specific heat capacity."
+      },
+      {
+        "id": "gamma",
+        "term": "gamma",
+        "gloss": "gamma expresses ratio of specific heats cp to cv for a given gas condition",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "gamma = cp / cv"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261029144147-644687fb:sequence-v1:r1",
+      "status": "passed",
+      "reason": "1 step was left out because they could not be verified against the page: alpha-derive (SEQ-03).",
+      "revision": 1
+    },
+    {
+      "componentId": "formula-explorer-v1",
+      "specId": "job-20261029144147-644687fb:formula-explorer-v1:r3",
+      "status": "failed",
+      "reason": "FE-08: the expression \"cp - (cv + r)\" does not match the page formula \"cv + R\" from the quote: 0/5 finite sample points agree within relative 1e-9 (need >= 3 agreeing and no mismatch). at {cp=1.1, cv=1.1, r=1.1}: expression=-1.1, page formula=\"cv + R\"=2.2; at {cp=1.3, cv=1.3, r=1.3}: expression=-1.3, page ",
+      "revision": 3
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029144147-644687fb:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

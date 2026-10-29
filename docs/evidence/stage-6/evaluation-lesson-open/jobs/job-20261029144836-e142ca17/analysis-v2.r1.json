@@ -1,0 +1,197 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "chemistry",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "Page covers definitions of high and low level waste, formation of fission products and transuranic elements, half life and decay, radiation hazard and dose, reprocessing, pool and dry cask storage, disposal planning and agency roles.",
+    "overview": {
+      "headline": "Radioactive waste types, hazards, storage, disposal and decay",
+      "keyPoints": [
+        {
+          "id": "waste-classifications",
+          "point": "There are two broad classifications of radioactive waste into high level and low level types",
+          "sourceId": "nrc-backgrounder-radioactive-waste",
+          "quote": "There are two broad classifications: high-level or low-level waste."
+        },
+        {
+          "id": "fission-products",
+          "point": "Fission products account for most heat and penetrating radiation in high level waste",
+          "sourceId": "nrc-backgrounder-radioactive-waste",
+          "quote": "These isotopes, called \"fission products,\" account for most of the heat and penetrating radiation in high-level waste."
+        },
+        {
+          "id": "half-life-decay",
+          "point": "Strontium and cesium have half-lives of about thirty years and half the radioactivity will decay in that time",
+          "sourceId": "nrc-backgrounder-radioactive-waste",
+          "quote": "Strontium-90 and cesium-137 have half-lives of about 30 years (half the radioactivity will decay in 30 years)."
+        },
+        {
+          "id": "pool-storage",
+          "point": "Water in spent fuel pools serves to shield radiation and cool rods before transfer to casks",
+          "sourceId": "nrc-backgrounder-radioactive-waste",
+          "quote": "The water is typically about 40 feet deep and serves both to shield the radiation and cool the rods."
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "fission-products",
+          "term": "fission products",
+          "gloss": "isotopes that account for most heat and penetrating radiation from fuel",
+          "sourceId": "nrc-backgrounder-radioactive-waste",
+          "quote": "These isotopes, called \"fission products,\" account for most of the heat and penetrating radiation in high-level waste."
+        },
+        {
+          "id": "transuranic",
+          "term": "Transuranic",
+          "gloss": "hazard remaining in high level waste after long time from heavier elements",
+          "sourceId": "nrc-backgrounder-radioactive-waste",
+          "quote": "Transuranic wastes, sometimes called TRU, account for most of the radioactive hazard remaining in high-level waste after 1,000 years."
+        },
+        {
+          "id": "half-life",
+          "term": "half-life",
+          "gloss": "time in years for half the amount to decay",
+          "sourceId": "nrc-backgrounder-radioactive-waste",
+          "quote": "Plutonium-239 has a half-life of 24,000 years."
+        },
+        {
+          "id": "spent-fuel",
+          "term": "spent fuel",
+          "gloss": "uranium fuel removed from reactors after producing electricity that is thermally hot",
+          "sourceId": "nrc-backgrounder-radioactive-waste",
+          "quote": "High-level waste is primarily spent fuel removed from reactors after producing electricity."
+        },
+        {
+          "id": "dry-cask",
+          "term": "dry cask",
+          "gloss": "concrete surrounded canister used for storage of cooled fuel from pools",
+          "sourceId": "nrc-backgrounder-radioactive-waste",
+          "quote": "As the pools near capacity, utilities move some of the older spent fuel into “dry cask” storage."
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "sort-groups-v1",
+        "pedagogicalReason": "Grouping waste types by source and hazard clarifies classification for learners before details",
+        "focusQuote": "There are two broad classifications: high-level or low-level waste.",
+        "focusSourceId": "nrc-backgrounder-radioactive-waste"
+      },
+      {
+        "componentId": "half-life-v1",
+        "pedagogicalReason": "Exploring half life shows how strontium cesium and plutonium decay at different rates over time",
+        "focusQuote": "Strontium-90 and cesium-137 have half-lives of about 30 years (half the radioactivity will decay in 30 years).",
+        "focusSourceId": "nrc-backgrounder-radioactive-waste"
+      },
+      {
+        "componentId": "quiz-cards-v1",
+        "pedagogicalReason": "Checking facts about pool depth shielding and cask storage reinforces safety and handling details",
+        "focusQuote": "The water is typically about 40 feet deep and serves both to shield the radiation and cool the rods.",
+        "focusSourceId": "nrc-backgrounder-radioactive-waste"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029144836-e142ca17:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"chemistry\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 11852 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 12 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 4, keyTerms 5, componentPlan 3; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (3 entries, 1 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "2c230c21dfee46d898032abf4bae0ed9",
+    "usage": {
+      "promptTokens": 5662,
+      "completionTokens": 10223,
+      "reasoningTokens": 9328,
+      "cachedTokens": 0
+    },
+    "latencyMs": 39151,
+    "estCostUSD": 0.05052525,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

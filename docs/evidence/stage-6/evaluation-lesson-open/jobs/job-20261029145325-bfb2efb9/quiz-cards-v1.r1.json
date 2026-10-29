@@ -1,0 +1,217 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Core ideas about variation and data summarization",
+    "cards": [
+      {
+        "id": "descriptive-stats-purpose",
+        "stem": "What is the stated use for descriptive statistics when working with population data?",
+        "options": [
+          "summarize a collection of population data",
+          "create new allele variants in a lab",
+          "measure physical isolation between groups"
+        ],
+        "sourceId": "nij-population-genetics",
+        "quote": "Descriptive statistics are used to summarize a collection of population data in a clear and concise manner.",
+        "hint": "Think about summarizing large sets clearly and concisely"
+      },
+      {
+        "id": "biology-population-def",
+        "stem": "In biology, how is a population described in terms of breeding behavior?",
+        "options": [
+          "breed primarily or solely among themselves",
+          "share identical allele frequencies always",
+          "maintain uniform racial boundaries"
+        ],
+        "sourceId": "nij-population-genetics",
+        "quote": "In biology, a population generally denotes a group whose members breed primarily or solely among themselves.",
+        "hint": "Consider who members primarily breed with"
+      },
+      {
+        "id": "common-misconception-race",
+        "stem": "Which belief about human groups is called a common misconception on the page?",
+        "options": [
+          "uniform groups with large biological differences",
+          "ethnicity always matches familial origins",
+          "allele frequencies never change over time"
+        ],
+        "sourceId": "nij-population-genetics",
+        "quote": "A common misconception is that human populations fall into uniform groups with large biological differences, which lie along racial boundaries.",
+        "hint": "Focus on ideas about uniformity and racial boundaries"
+      },
+      {
+        "id": "racial-classification-limits",
+        "stem": "What does research conclude about racial classifications and genetic variation?",
+        "options": [
+          "inadequate descriptors of the distribution of genetic variation",
+          "precise estimators of allele frequencies",
+          "determined solely by physical isolation"
+        ],
+        "sourceId": "nij-population-genetics",
+        "quote": "Research has demonstrated that racial classifications are inadequate descriptors of the distribution of genetic variation in the human species.",
+        "hint": "Recall the finding about inadequacy for describing variation"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029145325-bfb2efb9:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "82c42919834d4c34a987cc02e00fb66d",
+    "usage": {
+      "promptTokens": 2484,
+      "completionTokens": 10155,
+      "reasoningTokens": 9765,
+      "cachedTokens": 0
+    },
+    "latencyMs": 42306,
+    "estCostUSD": 0.04626375,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029145325-bfb2efb9:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Core ideas about variation and data summarization",
+    "sources": [
+      {
+        "id": "nij-population-genetics",
+        "title": "Population Genetics — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+        "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/population-genetics",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Population Genetics'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+        "sha256": "3b67b8bbab70fa3f03067b217df5601f05ff044f0f6c0c6cad7b44b5191a29db"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "82c42919834d4c34a987cc02e00fb66d",
+      "runId": "job-20261029145325-bfb2efb9",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T14:54:55.635Z"
+    },
+    "seed": 517395115,
+    "cards": [
+      {
+        "id": "descriptive-stats-purpose",
+        "stem": "What is the stated use for descriptive statistics when working with population data?",
+        "options": [
+          "summarize a collection of population data",
+          "create new allele variants in a lab",
+          "measure physical isolation between groups"
+        ],
+        "sourceId": "nij-population-genetics",
+        "quote": "Descriptive statistics are used to summarize a collection of population data in a clear and concise manner.",
+        "hint": "Think about summarizing large sets clearly and concisely"
+      },
+      {
+        "id": "biology-population-def",
+        "stem": "In biology, how is a population described in terms of breeding behavior?",
+        "options": [
+          "breed primarily or solely among themselves",
+          "share identical allele frequencies always",
+          "maintain uniform racial boundaries"
+        ],
+        "sourceId": "nij-population-genetics",
+        "quote": "In biology, a population generally denotes a group whose members breed primarily or solely among themselves.",
+        "hint": "Consider who members primarily breed with"
+      },
+      {
+        "id": "common-misconception-race",
+        "stem": "Which belief about human groups is called a common misconception on the page?",
+        "options": [
+          "uniform groups with large biological differences",
+          "ethnicity always matches familial origins",
+          "allele frequencies never change over time"
+        ],
+        "sourceId": "nij-population-genetics",
+        "quote": "A common misconception is that human populations fall into uniform groups with large biological differences, which lie along racial boundaries.",
+        "hint": "Focus on ideas about uniformity and racial boundaries"
+      },
+      {
+        "id": "racial-classification-limits",
+        "stem": "What does research conclude about racial classifications and genetic variation?",
+        "options": [
+          "inadequate descriptors of the distribution of genetic variation",
+          "precise estimators of allele frequencies",
+          "determined solely by physical isolation"
+        ],
+        "sourceId": "nij-population-genetics",
+        "quote": "Research has demonstrated that racial classifications are inadequate descriptors of the distribution of genetic variation in the human species.",
+        "hint": "Recall the finding about inadequacy for describing variation"
+      }
+    ]
+  }
+}

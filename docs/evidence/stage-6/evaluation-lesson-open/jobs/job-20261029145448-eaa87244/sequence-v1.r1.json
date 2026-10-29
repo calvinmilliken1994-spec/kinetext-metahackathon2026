@@ -1,0 +1,202 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "From limited negotiation to sectional strain",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "In page order tracing cause from offer to compromise",
+    "steps": [
+      {
+        "id": "authorized-port-mission",
+        "label": "port of New Orleans",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "negotiators Robert Livingston and James Monroe were authorized to pay France up to $10 million solely for the port of New Orleans and the Floridas",
+        "orderHint": "Follow the causal chain as presented on the page"
+      },
+      {
+        "id": "offered-entire-territory",
+        "label": "entire territory of Louisiana",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "when they were offered the entire territory of Louisiana – an area larger than Great Britain, France, Germany, Italy, Spain, and Portugal combined",
+        "orderHint": "Follow the causal chain as presented on the page"
+      },
+      {
+        "id": "first-major-cession",
+        "label": "first major cession",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "The Louisiana Purchase was the first major cession of land in a long series of expansions that span the 19th century.",
+        "orderHint": "Follow the causal chain as presented on the page"
+      },
+      {
+        "id": "sectional-weaknesses-exposed",
+        "label": "sectional weaknesses",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "also exposed the sectional weaknesses between the North and South, especially related to the issue of slavery",
+        "orderHint": "Follow the causal chain as presented on the page"
+      },
+      {
+        "id": "fragile-compromises-balance",
+        "label": "fragile compromises",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "the desire to maintain a balance between \"free states\" and \"slave states\" required a series of fragile compromises",
+        "orderHint": "Follow the causal chain as presented on the page"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029145448-eaa87244:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step label occurs in its own quote after normalisation (labels-in-quotes)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 5 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "412862c2175341fdb48b2f2ec0244240",
+    "usage": {
+      "promptTokens": 2745,
+      "completionTokens": 6756,
+      "reasoningTokens": 6285,
+      "cachedTokens": 0
+    },
+    "latencyMs": 26673,
+    "estCostUSD": 0.03214425,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "pruned": true,
+  "dropped": [
+    {
+      "index": 0,
+      "id": "purchase-west-mississippi",
+      "reason": "step failed SEQ-06",
+      "checks": [
+        "SEQ-06"
+      ]
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029145448-eaa87244:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "From limited negotiation to sectional strain",
+    "sources": [
+      {
+        "id": "nara-louisiana-purchase-treaty",
+        "title": "Louisiana Purchase Treaty (1803) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/louisiana-purchase-treaty",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Louisiana Purchase Treaty (1803)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "6da19e2b0134ca81169b3c5b0a0461ae48243446219561e760b32cb2ed7cce4b"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "412862c2175341fdb48b2f2ec0244240",
+      "runId": "job-20261029145448-eaa87244",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T14:57:02.296Z"
+    },
+    "seed": 1978109617,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "In page order tracing cause from offer to compromise",
+    "steps": [
+      {
+        "id": "authorized-port-mission",
+        "label": "port of New Orleans",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "negotiators Robert Livingston and James Monroe were authorized to pay France up to $10 million solely for the port of New Orleans and the Floridas",
+        "orderHint": "Follow the causal chain as presented on the page"
+      },
+      {
+        "id": "offered-entire-territory",
+        "label": "entire territory of Louisiana",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "when they were offered the entire territory of Louisiana – an area larger than Great Britain, France, Germany, Italy, Spain, and Portugal combined",
+        "orderHint": "Follow the causal chain as presented on the page"
+      },
+      {
+        "id": "first-major-cession",
+        "label": "first major cession",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "The Louisiana Purchase was the first major cession of land in a long series of expansions that span the 19th century.",
+        "orderHint": "Follow the causal chain as presented on the page"
+      },
+      {
+        "id": "sectional-weaknesses-exposed",
+        "label": "sectional weaknesses",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "also exposed the sectional weaknesses between the North and South, especially related to the issue of slavery",
+        "orderHint": "Follow the causal chain as presented on the page"
+      },
+      {
+        "id": "fragile-compromises-balance",
+        "label": "fragile compromises",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "the desire to maintain a balance between \"free states\" and \"slave states\" required a series of fragile compromises",
+        "orderHint": "Follow the causal chain as presented on the page"
+      }
+    ]
+  }
+}

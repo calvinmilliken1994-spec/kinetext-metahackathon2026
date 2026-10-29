@@ -1,0 +1,210 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "How to determine lift and drag from a test flight",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Steps follow the order the ideas appear on the page",
+    "steps": [
+      {
+        "id": "measure-plan-step",
+        "label": "tan(a) = h / d",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "tan(a) = h / d",
+        "orderHint": "measure then calculate then balance forces"
+      },
+      {
+        "id": "describe-workflow-step",
+        "label": "weight W",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The lift L times the cosine cos of the glide angle plus the drag D times the sine sin of the glide angle is equal to the weight W:",
+        "orderHint": "measure then calculate then balance forces"
+      },
+      {
+        "id": "balance-forces-step",
+        "label": "drag times the cosine of the glide angle",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The lift times the sine of the glide angle is equal to the drag times the cosine of the glide angle.",
+        "orderHint": "measure then calculate then balance forces"
+      },
+      {
+        "id": "determine-lift-drag-step",
+        "label": "experimentally determine the lift and drag",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "With these three equations we can experimentally determine the lift and drag of a glider.",
+        "orderHint": "measure then calculate then balance forces"
+      },
+      {
+        "id": "average-glide-angle-step",
+        "label": "measure the distance along the ground",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "If we test fly the glider and measure the distance along the ground, the height at which the glider is released",
+        "orderHint": "measure then calculate then balance forces"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029150146-6acd7991:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step label occurs in its own quote after normalisation (labels-in-quotes)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 5 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "1ac09af5680f484cb2aad1c7ef055178",
+    "usage": {
+      "promptTokens": 2641,
+      "completionTokens": 6639,
+      "reasoningTokens": 6145,
+      "cachedTokens": 0
+    },
+    "latencyMs": 17090,
+    "estCostUSD": 0.031517,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "pruned": true,
+  "dropped": [
+    {
+      "index": 1,
+      "id": "calc-glide-angle-step",
+      "reason": "step failed SEQ-03",
+      "checks": [
+        "SEQ-03"
+      ]
+    },
+    {
+      "index": 6,
+      "id": "solve-equations-step",
+      "reason": "step failed SEQ-01",
+      "checks": [
+        "SEQ-01"
+      ]
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029150146-6acd7991:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "How to determine lift and drag from a test flight",
+    "sources": [
+      {
+        "id": "nasa-grc-glider-trajectory-problem",
+        "title": "Glider Trajectory Problem — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/glider-trajectory-problem/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "66e6cfc191fb83e9cfff3bc323a0394b392cbb4e0278aba87b367f3203c3c1e2"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "1ac09af5680f484cb2aad1c7ef055178",
+      "runId": "job-20261029150146-6acd7991",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T15:03:06.274Z"
+    },
+    "seed": 4202512758,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Steps follow the order the ideas appear on the page",
+    "steps": [
+      {
+        "id": "measure-plan-step",
+        "label": "tan(a) = h / d",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "tan(a) = h / d",
+        "orderHint": "measure then calculate then balance forces"
+      },
+      {
+        "id": "describe-workflow-step",
+        "label": "weight W",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The lift L times the cosine cos of the glide angle plus the drag D times the sine sin of the glide angle is equal to the weight W:",
+        "orderHint": "measure then calculate then balance forces"
+      },
+      {
+        "id": "balance-forces-step",
+        "label": "drag times the cosine of the glide angle",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The lift times the sine of the glide angle is equal to the drag times the cosine of the glide angle.",
+        "orderHint": "measure then calculate then balance forces"
+      },
+      {
+        "id": "determine-lift-drag-step",
+        "label": "experimentally determine the lift and drag",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "With these three equations we can experimentally determine the lift and drag of a glider.",
+        "orderHint": "measure then calculate then balance forces"
+      },
+      {
+        "id": "average-glide-angle-step",
+        "label": "measure the distance along the ground",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "If we test fly the glider and measure the distance along the ground, the height at which the glider is released",
+        "orderHint": "measure then calculate then balance forces"
+      }
+    ]
+  }
+}

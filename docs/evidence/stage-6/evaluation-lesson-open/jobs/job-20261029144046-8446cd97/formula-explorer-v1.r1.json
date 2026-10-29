@@ -1,0 +1,309 @@
+{
+  "gen": {
+    "schemaVersion": "formula-explorer-v1",
+    "title": "",
+    "formulaText": "The total aerodynamic force is equal to the pressure times the surface area around the body.",
+    "sourceId": "nasa-grc-effect-of-size-on-lift",
+    "quote": "The total aerodynamic force is equal to the pressure times the surface area around the body.",
+    "expression": "pressure * area",
+    "variables": [
+      {
+        "name": "force",
+        "pageSymbol": "total aerodynamic force",
+        "meaning": "total aerodynamic force acting on the body",
+        "meaningQuoted": false,
+        "quote": "The total aerodynamic force is equal to the pressure times the surface area around the body.",
+        "unit": "",
+        "min": 500,
+        "max": 50000,
+        "default": 5000
+      },
+      {
+        "name": "pressure",
+        "pageSymbol": "pressure",
+        "meaning": "pressure of the air around the body",
+        "meaningQuoted": false,
+        "quote": "The total aerodynamic force is equal to the pressure times the surface area around the body.",
+        "unit": "",
+        "min": 1000,
+        "max": 100000,
+        "default": 10000
+      },
+      {
+        "name": "area",
+        "pageSymbol": "surface area",
+        "meaning": "surface area around the body",
+        "meaningQuoted": false,
+        "quote": "The total aerodynamic force is equal to the pressure times the surface area around the body.",
+        "unit": "",
+        "min": 0.1,
+        "max": 10,
+        "default": 1
+      }
+    ],
+    "xVariable": "force",
+    "cases": [
+      {
+        "id": "case-1",
+        "inputs": [
+          {
+            "name": "force",
+            "value": 2500
+          },
+          {
+            "name": "pressure",
+            "value": 5000
+          },
+          {
+            "name": "area",
+            "value": 0.5
+          }
+        ]
+      },
+      {
+        "id": "case-2",
+        "inputs": [
+          {
+            "name": "force",
+            "value": 10000
+          },
+          {
+            "name": "pressure",
+            "value": 10000
+          },
+          {
+            "name": "area",
+            "value": 1
+          }
+        ]
+      }
+    ],
+    "sourceExample": {
+      "quote": "",
+      "resultNumber": 0,
+      "tolerance": 0
+    },
+    "hasSourceExample": false
+  },
+  "report": {
+    "artifactId": "job-20261029144046-8446cd97:formula-explorer-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": false,
+        "message": "formula-explorer gen failed the structural limits: title must be a non-empty string",
+        "path": "/title",
+        "affected": [
+          "/title"
+        ]
+      },
+      {
+        "id": "FE-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "the formula quote (1 quote) appears verbatim in source \"nasa-grc-effect-of-size-on-lift\" and formulaText occurs inside the quote after normalisation (formula-quoted)"
+      },
+      {
+        "id": "FE-02",
+        "kind": "semantic",
+        "passed": false,
+        "message": "variable \"force\" is declared but never used in the expression (the variable sets must be equal)",
+        "path": "/variables/0/name",
+        "affected": [
+          "/variables/0/name",
+          "/expression"
+        ]
+      },
+      {
+        "id": "FE-03",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 variables are declared with valid unique non-reserved names, exact page symbols, grounded quotes (top-level sourceId) and xVariable \"force\" is one of them (variables-declared)"
+      },
+      {
+        "id": "FE-04",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "all 2 case(s) carry exactly the declared variables with finite in-range inputs and every recomputed output is finite (the system sets the outputs) (cases-recomputed)"
+      },
+      {
+        "id": "FE-05",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "hasSourceExample=false with the empty sourceExample shape (sourceExample-check)"
+      },
+      {
+        "id": "FE-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every slider range is sane (finite, min < max, default inside, positive-range ratio <= 1000000) and no literal exponent exceeds 100 (ranges-sane)"
+      },
+      {
+        "id": "FE-07",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title and variable meanings appears on the page or in the same quote (N-01); units and formula fields are notation and exempt (numbers-checkable)"
+      },
+      {
+        "id": "FE-08",
+        "kind": "behavioral",
+        "passed": false,
+        "message": "the page formula line could not be parsed with the calculator grammar (the quote contains no \"=\" formula line) and there is no verified FE-05 source example to ground the expression; an unparseable page formula publishes ONLY with a verified source example. The formula could not be checked with our calculator.",
+        "path": "/expression",
+        "affected": [
+          "/expression",
+          "/quote",
+          "/formulaText",
+          "/hasSourceExample",
+          "/sourceExample/quote",
+          "/sourceExample/resultNumber",
+          "/sourceExample/tolerance",
+          "/variables/0/pageSymbol",
+          "/variables/1/pageSymbol",
+          "/variables/2/pageSymbol"
+        ]
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "ffc2e4352eca4c97a4e0c6aa45efd6ff",
+    "usage": {
+      "promptTokens": 3103,
+      "completionTokens": 4883,
+      "reasoningTokens": 4520,
+      "cachedTokens": 0
+    },
+    "latencyMs": 22041,
+    "estCostUSD": 0.0246315,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029144046-8446cd97:formula-explorer-v1:r1",
+    "componentId": "formula-explorer-v1",
+    "title": "",
+    "sources": [
+      {
+        "id": "nasa-grc-effect-of-size-on-lift",
+        "title": "Effect of Size on Lift — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/effect-of-size-on-lift/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "1bd1a2678b2c2cb6f162ebbeb4ec95d6aa439d14002682604d2ac9cd680d76f4"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "ffc2e4352eca4c97a4e0c6aa45efd6ff",
+      "runId": "job-20261029144046-8446cd97",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T14:41:59.631Z"
+    },
+    "seed": 620210900,
+    "formulaText": "The total aerodynamic force is equal to the pressure times the surface area around the body.",
+    "sourceId": "nasa-grc-effect-of-size-on-lift",
+    "quote": "The total aerodynamic force is equal to the pressure times the surface area around the body.",
+    "expression": "pressure * area",
+    "variables": [
+      {
+        "name": "force",
+        "pageSymbol": "total aerodynamic force",
+        "meaning": "total aerodynamic force acting on the body",
+        "meaningQuoted": false,
+        "quote": "The total aerodynamic force is equal to the pressure times the surface area around the body.",
+        "unit": "",
+        "min": 500,
+        "max": 50000,
+        "default": 5000
+      },
+      {
+        "name": "pressure",
+        "pageSymbol": "pressure",
+        "meaning": "pressure of the air around the body",
+        "meaningQuoted": false,
+        "quote": "The total aerodynamic force is equal to the pressure times the surface area around the body.",
+        "unit": "",
+        "min": 1000,
+        "max": 100000,
+        "default": 10000
+      },
+      {
+        "name": "area",
+        "pageSymbol": "surface area",
+        "meaning": "surface area around the body",
+        "meaningQuoted": false,
+        "quote": "The total aerodynamic force is equal to the pressure times the surface area around the body.",
+        "unit": "",
+        "min": 0.1,
+        "max": 10,
+        "default": 1
+      }
+    ],
+    "xVariable": "force",
+    "cases": [
+      {
+        "id": "case-1",
+        "inputs": [
+          {
+            "name": "force",
+            "value": 2500
+          },
+          {
+            "name": "pressure",
+            "value": 5000
+          },
+          {
+            "name": "area",
+            "value": 0.5
+          }
+        ]
+      },
+      {
+        "id": "case-2",
+        "inputs": [
+          {
+            "name": "force",
+            "value": 10000
+          },
+          {
+            "name": "pressure",
+            "value": 10000
+          },
+          {
+            "name": "area",
+            "value": 1
+          }
+        ]
+      }
+    ],
+    "sourceExample": {
+      "quote": "",
+      "resultNumber": 0,
+      "tolerance": 0
+    },
+    "hasSourceExample": false
+  }
+}

@@ -1,0 +1,288 @@
+{
+  "gen": {
+    "schemaVersion": "formula-explorer-v1",
+    "title": "Explore the link between altitude and temperature to predict how air properties change",
+    "formulaText": "T = 59 - .00356 * h",
+    "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+    "quote": "T = 59 - .00356 * h",
+    "expression": "t = 59 - .00356 * h",
+    "variables": [
+      {
+        "name": "t",
+        "pageSymbol": "T",
+        "meaning": "temperature is given in Fahrenheit degrees",
+        "meaningQuoted": true,
+        "quote": "where the temperature is given in Fahrenheit degrees, the pressure in pounds/square feet, and h is the altitude in feet.",
+        "unit": "Fahrenheit degrees",
+        "min": -70,
+        "max": 59,
+        "default": 5.256
+      },
+      {
+        "name": "h",
+        "pageSymbol": "h",
+        "meaning": "h is the altitude in feet",
+        "meaningQuoted": true,
+        "quote": "For the temperature T and the pressure p, the English units curve fits for the troposphere are:",
+        "unit": "feet",
+        "min": 60,
+        "max": 36152,
+        "default": 2116
+      }
+    ],
+    "xVariable": "h",
+    "cases": [
+      {
+        "id": "case-ideal-gas",
+        "inputs": [
+          {
+            "name": "h",
+            "value": 60
+          },
+          {
+            "name": "t",
+            "value": 59
+          }
+        ]
+      },
+      {
+        "id": "case-hot-day",
+        "inputs": [
+          {
+            "name": "h",
+            "value": 2116
+          },
+          {
+            "name": "t",
+            "value": 51.97
+          }
+        ]
+      },
+      {
+        "id": "case-standard-atmosphere",
+        "inputs": [
+          {
+            "name": "h",
+            "value": 36152
+          },
+          {
+            "name": "t",
+            "value": -70
+          }
+        ]
+      }
+    ],
+    "sourceExample": {
+      "quote": "",
+      "resultNumber": 0,
+      "tolerance": 0
+    },
+    "hasSourceExample": false
+  },
+  "report": {
+    "artifactId": "job-20261029144623-4b7eeff9:formula-explorer-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every formula-explorer case id and title shape is within the frozen limits"
+      },
+      {
+        "id": "FE-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "the formula quote (1 quote) appears verbatim in source \"nasa-grc-earth-atmosphere-equation-english\" and formulaText occurs inside the quote after normalisation (formula-quoted)"
+      },
+      {
+        "id": "FE-02",
+        "kind": "semantic",
+        "passed": false,
+        "message": "expression \"t = 59 - .00356 * h\" does not parse in the frozen calculator grammar: unexpected character \"=\" at position 1",
+        "path": "/expression",
+        "affected": [
+          "/expression"
+        ]
+      },
+      {
+        "id": "FE-03",
+        "kind": "grounding",
+        "passed": false,
+        "message": "variables[1]: meaningQuoted=true but the meaning \"h is the altitude in feet\" does not occur in the variable's quote",
+        "path": "/variables/1/meaning",
+        "affected": [
+          "/variables/1/meaning",
+          "/variables/1/quote"
+        ]
+      },
+      {
+        "id": "FE-04",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "all 3 case(s) carry exactly the declared variables with finite in-range inputs and every recomputed output is finite (the system sets the outputs) (cases-recomputed)"
+      },
+      {
+        "id": "FE-05",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "hasSourceExample=false with the empty sourceExample shape (sourceExample-check)"
+      },
+      {
+        "id": "FE-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every slider range is sane (finite, min < max, default inside, positive-range ratio <= 1000000) and no literal exponent exceeds 100 (ranges-sane)"
+      },
+      {
+        "id": "FE-07",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title and variable meanings appears on the page or in the same quote (N-01); units and formula fields are notation and exempt (numbers-checkable)"
+      },
+      {
+        "id": "FE-08",
+        "kind": "behavioral",
+        "passed": false,
+        "message": "FE-08 cannot compare because the expression does not parse (unexpected character \"=\" at position 1). The formula could not be checked with our calculator.",
+        "path": "/expression",
+        "affected": [
+          "/expression"
+        ]
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "2f1b7671407c4ac6b8e947c7a8bc3e64",
+    "usage": {
+      "promptTokens": 3361,
+      "completionTokens": 20726,
+      "reasoningTokens": 20300,
+      "cachedTokens": 0
+    },
+    "latencyMs": 89432,
+    "estCostUSD": 0.09228675,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029144623-4b7eeff9:formula-explorer-v1:r1",
+    "componentId": "formula-explorer-v1",
+    "title": "Explore the link between altitude and temperature to predict how air properties change",
+    "sources": [
+      {
+        "id": "nasa-grc-earth-atmosphere-equation-english",
+        "title": "Earth Atmosphere Equation – English — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/earth-atmosphere-equation-english/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "27cabc2c092bc294e05f921ebe3f7e6c73775f3986f7aed07bf86ba89fff17f5"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "2f1b7671407c4ac6b8e947c7a8bc3e64",
+      "runId": "job-20261029144623-4b7eeff9",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T14:48:42.919Z"
+    },
+    "seed": 1326255049,
+    "formulaText": "T = 59 - .00356 * h",
+    "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+    "quote": "T = 59 - .00356 * h",
+    "expression": "t = 59 - .00356 * h",
+    "variables": [
+      {
+        "name": "t",
+        "pageSymbol": "T",
+        "meaning": "temperature is given in Fahrenheit degrees",
+        "meaningQuoted": true,
+        "quote": "where the temperature is given in Fahrenheit degrees, the pressure in pounds/square feet, and h is the altitude in feet.",
+        "unit": "Fahrenheit degrees",
+        "min": -70,
+        "max": 59,
+        "default": 5.256
+      },
+      {
+        "name": "h",
+        "pageSymbol": "h",
+        "meaning": "h is the altitude in feet",
+        "meaningQuoted": true,
+        "quote": "For the temperature T and the pressure p, the English units curve fits for the troposphere are:",
+        "unit": "feet",
+        "min": 60,
+        "max": 36152,
+        "default": 2116
+      }
+    ],
+    "xVariable": "h",
+    "cases": [
+      {
+        "id": "case-ideal-gas",
+        "inputs": [
+          {
+            "name": "h",
+            "value": 60
+          },
+          {
+            "name": "t",
+            "value": 59
+          }
+        ]
+      },
+      {
+        "id": "case-hot-day",
+        "inputs": [
+          {
+            "name": "h",
+            "value": 2116
+          },
+          {
+            "name": "t",
+            "value": 51.97
+          }
+        ]
+      },
+      {
+        "id": "case-standard-atmosphere",
+        "inputs": [
+          {
+            "name": "h",
+            "value": 36152
+          },
+          {
+            "name": "t",
+            "value": -70
+          }
+        ]
+      }
+    ],
+    "sourceExample": {
+      "quote": "",
+      "resultNumber": 0,
+      "tolerance": 0
+    },
+    "hasSourceExample": false
+  }
+}

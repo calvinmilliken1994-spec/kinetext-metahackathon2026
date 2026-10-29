@@ -1,0 +1,125 @@
+{
+  "jobId": "job-20261029145041-58a3467e",
+  "analysisRef": "job-20261029145041-58a3467e/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029145041-58a3467e:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Deep time from Steno laws to radiometric dating and modern Earth age",
+    "sources": [
+      {
+        "id": "usgs-powell-geologic-time",
+        "title": "Powell Expedition—Geologic Time. Then and Now. — U.S. Geological Survey",
+        "locator": "https://www.usgs.gov/news/powell-expedition-geologic-time-then-and-now",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey, 'Powell Expedition—Geologic Time. Then and Now.' (2019). Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "fa7498537478e10722976127bedd9cf61ccb5dda39090e0a4f844635b5a8f71f"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "a0fb825789a04fdf87291615c31ebb89",
+      "runId": "job-20261029145041-58a3467e",
+      "promptVersion": "s6-v1",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T14:51:44.603Z"
+    },
+    "seed": 437111918,
+    "headline": "Deep time from Steno laws to radiometric dating and modern Earth age",
+    "keyPoints": [
+      {
+        "id": "earth-age-today",
+        "point": "Modern science places Earth age at 4.54 billion years and reflects deep time thinking",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "Earth is 4.54 billion years old, a span of time that is hard for many people to grasp."
+      },
+      {
+        "id": "kelvin-cooling-estimate",
+        "point": "Lord Kelvin cooling magma calculations yielded an age of 20–400 million years",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "Lord Kelvin’s cooling-magma calculations yielded an age of 20–400 million years."
+      },
+      {
+        "id": "steno-stratigraphy-laws",
+        "point": "Steno principles of original horizontality and superposition order sedimentary layers by relative time",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "The law of original horizontality says that sedimentary layers are deposited in horizontal layers."
+      },
+      {
+        "id": "hutton-uniformitarianism",
+        "point": "Hutton proposed uniformitarianism that processes seen today shaped Earth in the past and future",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "In 1788, James Hutton proposed what would become the foundational principle of geology — uniformitarianism."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "uniformitarianism",
+        "term": "uniformitarianism",
+        "gloss": "principle that geologic processes operating today also shaped Earth in the past",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "In 1788, James Hutton proposed what would become the foundational principle of geology — uniformitarianism."
+      },
+      {
+        "id": "stratigraphy",
+        "term": "stratigraphy",
+        "gloss": "branch of geology concerned with study of rock layers",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "These basic principles of stratigraphy — or the branch of geology concerned with the study of rock layers"
+      },
+      {
+        "id": "half-life",
+        "term": "half-life",
+        "gloss": "length of time for half of parent isotopes to decay to daughter isotope",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "A half-life is the length of time it takes for half of the number of original, or parent, isotopes to decay to a stable daughter isotope."
+      },
+      {
+        "id": "faunal-succession",
+        "term": "faunal succession",
+        "gloss": "pattern where species become extinct and are replaced showing characteristic age",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "In 1815, Smith developed the law of faunal succession, which states that species become extinct and are replaced by new species"
+      },
+      {
+        "id": "unconformities",
+        "term": "unconformities",
+        "gloss": "gaps in geologic record that represent missing time",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "He also understood the concept of unconformities (gaps in the geologic record that represent missing time)"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "timeline-v1",
+      "specId": "usgs-powell-geologic-time-job-20261029145041-58a3467e",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029145041-58a3467e:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sort-groups-v1",
+      "specId": "job-20261029145041-58a3467e:sort-groups-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

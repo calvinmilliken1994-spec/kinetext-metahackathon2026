@@ -1,0 +1,204 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "finance",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "Page covers teen saving conversations including how much to save, estimating emergency expenses, choosing safe insured accounts, deciding about retirement matching, and compound interest examples showing benefits of starting early",
+    "overview": {
+      "headline": "Teen saving habits for emergency funds and early investing",
+      "keyPoints": [
+        {
+          "id": "save-percent-emergency",
+          "point": "Teens can aim to save 10 percent of earnings and keep at least three months of living expenses saved for an emergency",
+          "sourceId": "cfpb-teenagers-and-saving",
+          "quote": "“A good rule to live by is to save 10 percent of what you earn, and have at least three months’ worth of living expenses saved up in case of an emergency.”"
+        },
+        {
+          "id": "safe-insured-place",
+          "point": "Keeping money in a federally insured bank or credit union helps keep savings in a safe place",
+          "sourceId": "cfpb-teenagers-and-saving",
+          "quote": "Talk about how to keep money in a safe place, like a federally insured bank or credit union."
+        },
+        {
+          "id": "early-compound-growth",
+          "point": "Setting aside $100 every year starting at age 14 can grow to about $23,000 by age 65 through compounding",
+          "sourceId": "cfpb-teenagers-and-saving",
+          "quote": "If they set aside $100 every year starting at age 14, they'd have about $23,000 at age 65."
+        },
+        {
+          "id": "employer-matching",
+          "point": "Employers may provide matching contributions as an incentive to save and reaching the maximum matching contribution is smart",
+          "sourceId": "cfpb-teenagers-and-saving",
+          "quote": "Some employers provide matching contributions as an incentive to save, so it’s smart to save at least enough for the maximum matching contribution."
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "savings-program",
+          "term": "savings program",
+          "gloss": "a regular plan for setting aside money so funds are readily available for emergencies",
+          "sourceId": "cfpb-teenagers-and-saving",
+          "quote": "Explain to your child that one goal of a savings program is to have money readily available in case an emergency occurs."
+        },
+        {
+          "id": "compound-interest-term",
+          "term": "Compound interest",
+          "gloss": "interest earned on both the original saved money and the accumulated interest",
+          "sourceId": "cfpb-teenagers-and-saving",
+          "quote": "Compound interest is when your child earns interest on both the money they save and the interest they earn."
+        },
+        {
+          "id": "federally-insured-term",
+          "term": "federally insured",
+          "gloss": "protection where deposits are federally insured by the banking system for safety",
+          "sourceId": "cfpb-teenagers-and-saving",
+          "quote": "Talk about how to keep money in a safe place, like a federally insured bank or credit union."
+        },
+        {
+          "id": "matching-contributions-term",
+          "term": "matching contributions",
+          "gloss": "employer payments that provide matching funds as an incentive to save for retirement",
+          "sourceId": "cfpb-teenagers-and-saving",
+          "quote": "Some employers provide matching contributions as an incentive to save, so it’s smart to save at least enough for the maximum matching contribution."
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "quiz-cards-v1",
+        "pedagogicalReason": "Builds recall of core saving targets and safe account choices that are directly stated as checkable facts",
+        "focusQuote": "“A good rule to live by is to save 10 percent of what you earn, and have at least three months’ worth of living expenses saved up in case of an emergency.”",
+        "focusSourceId": "cfpb-teenagers-and-saving"
+      },
+      {
+        "componentId": "sequence-v1",
+        "pedagogicalReason": "Models the ordered steps for estimating expenses and planning per paycheck contributions to build an emergency fund",
+        "focusQuote": "Talk about how to estimate three months’ worth of expenses, and how much to save from each paycheck to build up their savings.",
+        "focusSourceId": "cfpb-teenagers-and-saving"
+      },
+      {
+        "componentId": "compare-table-v1",
+        "pedagogicalReason": "Highlights the impact of starting early by contrasting two timed saving scenarios on shared attributes like duration and final amount",
+        "focusQuote": "If they set aside $100 every year starting at age 14, they'd have about $23,000 at age 65.",
+        "focusSourceId": "cfpb-teenagers-and-saving"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029144623-29f52c03:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"finance\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 3011 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": false,
+        "message": "keyPoints[0] (save-percent-emergency): quote \"“A good rule to live by is to save 10 percent of what you ea\" is 155 characters, expected <= 150; componentPlan[0] (quiz-cards-v1): quote \"“A good rule to live by is to save 10 percent of what you ea\" is 155 characters, expected <= 150 (expected verbatim quotes of 1-150 characters that appear in the cited source)",
+        "path": "/overview/keyPoints/0/quote",
+        "affected": [
+          "/overview/keyPoints/0/quote",
+          "/componentPlan/0/focusQuote"
+        ]
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": false,
+        "message": "keyPoints[0].quote is 155 characters, expected 1-150; componentPlan[0].focusQuote is 155 characters, expected 1-150",
+        "path": "/overview/keyPoints/0/quote",
+        "affected": [
+          "/overview/keyPoints/0/quote",
+          "/componentPlan/0/focusQuote"
+        ]
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (3 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": false,
+        "message": "keyPoints[2].point states the number 23000, which does not appear on the page or in the same quote (N-01); keyPoints[2].point states the number 65, which does not appear on the page or in the same quote (N-01)",
+        "path": "/overview/keyPoints/2/point",
+        "affected": [
+          "/overview/keyPoints/2/point"
+        ]
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "5279274d1206466a8d1d0f30a85bebd5",
+    "usage": {
+      "promptTokens": 4004,
+      "completionTokens": 10488,
+      "reasoningTokens": 9497,
+      "cachedTokens": 0
+    },
+    "latencyMs": 42421,
+    "estCostUSD": 0.049579,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

@@ -1,0 +1,217 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Understanding Savings Growth and Key Terms",
+    "cards": [
+      {
+        "id": "what-is-compound-interest",
+        "stem": "How is compound interest described when earnings build over time?",
+        "options": [
+          "earn interest on both the money you save and the interest you earn",
+          "pay interest only on the original deposit amount",
+          "receive a one-time bonus with no later growth"
+        ],
+        "sourceId": "cfpb-saving-post-secondary-education",
+        "quote": "Compound interest is when you earn interest on both the money you save and the interest you earn.",
+        "hint": "Focus on earning on both saved funds and prior earnings"
+      },
+      {
+        "id": "what-is-interest-rate",
+        "stem": "What does the rate charged for borrowing represent?",
+        "options": [
+          "A percentage of a sum borrowed that is charged by a lender or merchant",
+          "A flat monthly fee for keeping an account open",
+          "A grant that never requires repayment"
+        ],
+        "sourceId": "cfpb-saving-post-secondary-education",
+        "quote": "Interest rate: A percentage of a sum borrowed that is charged by a lender or merchant for letting you use its money.",
+        "hint": "Think about a percentage tied to borrowing"
+      },
+      {
+        "id": "what-is-post-secondary-education",
+        "stem": "How is schooling pursued beyond high school broadly defined?",
+        "options": [
+          "Includes all forms of schooling after high school, not just college",
+          "Covers only four-year university enrollment",
+          "Refers solely to job training without classroom study"
+        ],
+        "sourceId": "cfpb-saving-post-secondary-education",
+        "quote": "Post-secondary education: Includes all forms of schooling after high school, not just college.",
+        "hint": "Consider all options beyond high school, not only college"
+      },
+      {
+        "id": "what-is-an-investment",
+        "stem": "What characterizes an outlay made with an expected gain?",
+        "options": [
+          "Something you spend your money on that you expect will earn a financial return",
+          "Money set aside that you plan never to use again",
+          "Cash kept at home with no expectation of growth"
+        ],
+        "sourceId": "cfpb-saving-post-secondary-education",
+        "quote": "Investment: Something you spend your money on that you expect will earn a financial return.",
+        "hint": "Think about spending now to seek a later return"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029144812-cdd1a3eb:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "f3a24651dc864c44aa0d2ad16dc7c6fc",
+    "usage": {
+      "promptTokens": 4100,
+      "completionTokens": 6222,
+      "reasoningTokens": 5793,
+      "cachedTokens": 0
+    },
+    "latencyMs": 26944,
+    "estCostUSD": 0.0315685,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029144812-cdd1a3eb:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Understanding Savings Growth and Key Terms",
+    "sources": [
+      {
+        "id": "cfpb-saving-post-secondary-education",
+        "title": "Saving for post-secondary education (teacher guide) — Consumer Financial Protection Bureau, Building Blocks activities",
+        "locator": "https://files.consumerfinance.gov/f/documents/cfpb_building_block_activities_saving-post-secondary-education_guide.pdf",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Consumer Financial Protection Bureau, Building Blocks activities, 'Saving for post-secondary education (teacher guide)'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+        "sha256": "243a4b56c86936ecc243da4c7fc982bc76b85ee12116c97e4f751cfb8ba6c926"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "f3a24651dc864c44aa0d2ad16dc7c6fc",
+      "runId": "job-20261029144812-cdd1a3eb",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T14:50:18.024Z"
+    },
+    "seed": 2503659157,
+    "cards": [
+      {
+        "id": "what-is-compound-interest",
+        "stem": "How is compound interest described when earnings build over time?",
+        "options": [
+          "earn interest on both the money you save and the interest you earn",
+          "pay interest only on the original deposit amount",
+          "receive a one-time bonus with no later growth"
+        ],
+        "sourceId": "cfpb-saving-post-secondary-education",
+        "quote": "Compound interest is when you earn interest on both the money you save and the interest you earn.",
+        "hint": "Focus on earning on both saved funds and prior earnings"
+      },
+      {
+        "id": "what-is-interest-rate",
+        "stem": "What does the rate charged for borrowing represent?",
+        "options": [
+          "A percentage of a sum borrowed that is charged by a lender or merchant",
+          "A flat monthly fee for keeping an account open",
+          "A grant that never requires repayment"
+        ],
+        "sourceId": "cfpb-saving-post-secondary-education",
+        "quote": "Interest rate: A percentage of a sum borrowed that is charged by a lender or merchant for letting you use its money.",
+        "hint": "Think about a percentage tied to borrowing"
+      },
+      {
+        "id": "what-is-post-secondary-education",
+        "stem": "How is schooling pursued beyond high school broadly defined?",
+        "options": [
+          "Includes all forms of schooling after high school, not just college",
+          "Covers only four-year university enrollment",
+          "Refers solely to job training without classroom study"
+        ],
+        "sourceId": "cfpb-saving-post-secondary-education",
+        "quote": "Post-secondary education: Includes all forms of schooling after high school, not just college.",
+        "hint": "Consider all options beyond high school, not only college"
+      },
+      {
+        "id": "what-is-an-investment",
+        "stem": "What characterizes an outlay made with an expected gain?",
+        "options": [
+          "Something you spend your money on that you expect will earn a financial return",
+          "Money set aside that you plan never to use again",
+          "Cash kept at home with no expectation of growth"
+        ],
+        "sourceId": "cfpb-saving-post-secondary-education",
+        "quote": "Investment: Something you spend your money on that you expect will earn a financial return.",
+        "hint": "Think about spending now to seek a later return"
+      }
+    ]
+  }
+}

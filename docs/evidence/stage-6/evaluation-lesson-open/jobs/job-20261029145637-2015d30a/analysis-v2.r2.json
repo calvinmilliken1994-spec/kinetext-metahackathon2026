@@ -1,0 +1,203 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "history",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "Page covers Lee Resolution introduced June 7 1776, its three parts, three committees appointed June 11 1776, July 9 1776 New York vote, and later treaty and confederation plans",
+    "overview": {
+      "headline": "Lee Resolution proposed independence and led to committees for declaration and alliances in 1776",
+      "keyPoints": [
+        {
+          "id": "resolution-introduced",
+          "point": "Richard Henry Lee introduced a resolution proposing independence in the Second Continental Congress on June 7 1776",
+          "sourceId": "nara-lee-resolution",
+          "quote": "On June 7, 1776, Richard Henry Lee of Virginia, introduced this resolution in the Second Continental Congress"
+        },
+        {
+          "id": "three-parts",
+          "point": "The Lee Resolution contained three parts including a declaration of independence and a plan for confederation",
+          "sourceId": "nara-lee-resolution",
+          "quote": "The Lee Resolution contained three parts: a declaration of independence, a call to form foreign alliances, and \"a plan for confederation.\""
+        },
+        {
+          "id": "committees-appointed",
+          "point": "Congress appointed three concurrent committees to draft the declaration and to prepare alliance and confederation plans",
+          "sourceId": "nara-lee-resolution",
+          "quote": "On June 11, 1776, the Congress appointed three concurrent committees in response to the Lee Resolution"
+        },
+        {
+          "id": "deferred-vote",
+          "point": "Approval was deferred until July while members obtained instructions and Congress adopted the declaration portion",
+          "sourceId": "nara-lee-resolution",
+          "quote": "approval was deferred until July 2. On that date, Congress adopted the first part (the declaration)."
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "continental-congress",
+          "term": "Continental Congress",
+          "gloss": "delegates gathering that became the governing body of the union during the Revolution",
+          "sourceId": "nara-lee-resolution",
+          "quote": "The colonists elected delegates to attend a Continental Congress that eventually became the governing body of the union during the Revolution."
+        },
+        {
+          "id": "virginia-convention",
+          "term": "Virginia Convention",
+          "gloss": "authorizing body in Virginia that gave instruction to propose independence",
+          "sourceId": "nara-lee-resolution",
+          "quote": "acting under the instruction of the Virginia Convention."
+        },
+        {
+          "id": "lee-resolution",
+          "term": "Lee Resolution",
+          "gloss": "resolution with declaration and alliance and confederation elements",
+          "sourceId": "nara-lee-resolution",
+          "quote": "The Lee Resolution contained three parts: a declaration of independence, a call to form foreign alliances, and \"a plan for confederation.\""
+        },
+        {
+          "id": "foreign-alliances",
+          "term": "foreign alliances",
+          "gloss": "planned partnerships forming support from other nations",
+          "sourceId": "nara-lee-resolution",
+          "quote": "a second to draw up a plan \"for forming foreign alliances,\" and a third to \"prepare and digest the form of a confederation.\""
+        },
+        {
+          "id": "confederation-term",
+          "term": "confederation",
+          "gloss": "plan for uniting colonies under a shared structure delayed until later approval",
+          "sourceId": "nara-lee-resolution",
+          "quote": "The plan for making treaties was not approved until September of 1776; the plan of confederation was delayed until November of 1777."
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "timeline-v1",
+        "pedagogicalReason": "Building chronological order helps learners connect proposal to committee work and final adoption across early summer 1776",
+        "focusQuote": "On June 7, 1776, Richard Henry Lee of Virginia, introduced this resolution in the Second Continental Congress",
+        "focusSourceId": "nara-lee-resolution"
+      },
+      {
+        "componentId": "quiz-cards-v1",
+        "pedagogicalReason": "Recall of resolution parts and vote outcomes reinforces factual understanding of independence process",
+        "focusQuote": "The Lee Resolution contained three parts: a declaration of independence, a call to form foreign alliances, and \"a plan for confederation.\"",
+        "focusSourceId": "nara-lee-resolution"
+      },
+      {
+        "componentId": "sequence-v1",
+        "pedagogicalReason": "Tracing cause and effect from premature concerns to deferred approval shows how delay shaped committee actions",
+        "focusQuote": "On June 11, 1776, the Congress appointed three concurrent committees in response to the Lee Resolution",
+        "focusSourceId": "nara-lee-resolution"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029145637-2015d30a:analysis",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"history\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 2264 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 12 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 4, keyTerms 5, componentPlan 3; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (3 entries, 1 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "source-analysis-v2: no weakening — every one of the 4 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "6d674b2a777a4d23a61aac63937956d2",
+    "usage": {
+      "promptTokens": 6913,
+      "completionTokens": 7830,
+      "reasoningTokens": 6949,
+      "cachedTokens": 0
+    },
+    "latencyMs": 30816,
+    "estCostUSD": 0.04191875,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

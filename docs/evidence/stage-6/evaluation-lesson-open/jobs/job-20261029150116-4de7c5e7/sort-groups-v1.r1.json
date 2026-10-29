@@ -1,0 +1,260 @@
+{
+  "gen": {
+    "schemaVersion": "sort-groups-v1",
+    "title": "Sort Aerodynamics Topics into Groups",
+    "groups": [
+      {
+        "id": "lift",
+        "label": "Lift"
+      },
+      {
+        "id": "drag",
+        "label": "Drag"
+      },
+      {
+        "id": "aircraft",
+        "label": "Aircraft"
+      }
+    ],
+    "items": [
+      {
+        "id": "lift-equation-1900s",
+        "label": "Lift Equation of the 1900’s",
+        "groupId": "lift",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "Lift Equation of the 1900’s"
+      },
+      {
+        "id": "modern-lift-equation",
+        "label": "Modern Lift Equation ..Interactive",
+        "groupId": "lift",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "Modern Lift Equation ..Interactive"
+      },
+      {
+        "id": "drag-equation-1900s",
+        "label": "Drag Equation of the 1900’s",
+        "groupId": "drag",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "Drag Equation of the 1900’s"
+      },
+      {
+        "id": "modern-drag-equation",
+        "label": "Modern Drag Equation",
+        "groupId": "drag",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "Modern Drag Equation"
+      },
+      {
+        "id": "wright-brothers-aircraft",
+        "label": "Wright Brothers Aircraft",
+        "groupId": "aircraft",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "Wright Brothers Aircraft"
+      },
+      {
+        "id": "1903-aircraft-interactive",
+        "label": "1903 Aircraft Interactive",
+        "groupId": "aircraft",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "1903 Aircraft Interactive"
+      },
+      {
+        "id": "aircraft-parts",
+        "label": "Aircraft Parts",
+        "groupId": "aircraft",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "Aircraft Parts"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029150116-4de7c5e7:sort-groups-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sort text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SORT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 7 item quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SORT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every item label occurs in its quote and every group label occurs in the quote or the same source paragraph (item-and-group-in-quote; the design discloses the weak-link false accept on long paragraphs — every quote is shown to the teacher)"
+      },
+      {
+        "id": "SORT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every declared group is referenced by >= 2 items and every item groupId resolves (groups-covered)"
+      },
+      {
+        "id": "SORT-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every item has a distinct label after normalisation (distinct-items)"
+      },
+      {
+        "id": "SORT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "groups 3 (2-4) and items 7 (6-12) are within the frozen counts (counts-valid)"
+      },
+      {
+        "id": "SORT-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in group and item labels appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "5cb56d8dc9084c388ae747dcc415d149",
+    "usage": {
+      "promptTokens": 3131,
+      "completionTokens": 5846,
+      "reasoningTokens": 5411,
+      "cachedTokens": 0
+    },
+    "latencyMs": 26612,
+    "estCostUSD": 0.02875925,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "pruned": true,
+  "dropped": [
+    {
+      "index": 0,
+      "id": "lift-alone",
+      "reason": "item failed SORT-01",
+      "checks": [
+        "SORT-01"
+      ]
+    },
+    {
+      "index": 3,
+      "id": "drag-alone",
+      "reason": "item failed SORT-01",
+      "checks": [
+        "SORT-01"
+      ]
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029150116-4de7c5e7:sort-groups-v1:r1",
+    "componentId": "sort-groups-v1",
+    "title": "Sort Aerodynamics Topics into Groups",
+    "sources": [
+      {
+        "id": "nasa-grc-re-living-the-wright-way",
+        "title": "Guide to Reliving the Wright Way — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/re-living-the-wright-way/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "c7d0a44cd306a87e59d38d81850a825080de38231c0242f7086f5336a80c94c2"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "5cb56d8dc9084c388ae747dcc415d149",
+      "runId": "job-20261029150116-4de7c5e7",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T15:02:09.372Z"
+    },
+    "seed": 630180842,
+    "groups": [
+      {
+        "id": "lift",
+        "label": "Lift"
+      },
+      {
+        "id": "drag",
+        "label": "Drag"
+      },
+      {
+        "id": "aircraft",
+        "label": "Aircraft"
+      }
+    ],
+    "items": [
+      {
+        "id": "lift-equation-1900s",
+        "label": "Lift Equation of the 1900’s",
+        "groupId": "lift",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "Lift Equation of the 1900’s"
+      },
+      {
+        "id": "modern-lift-equation",
+        "label": "Modern Lift Equation ..Interactive",
+        "groupId": "lift",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "Modern Lift Equation ..Interactive"
+      },
+      {
+        "id": "drag-equation-1900s",
+        "label": "Drag Equation of the 1900’s",
+        "groupId": "drag",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "Drag Equation of the 1900’s"
+      },
+      {
+        "id": "modern-drag-equation",
+        "label": "Modern Drag Equation",
+        "groupId": "drag",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "Modern Drag Equation"
+      },
+      {
+        "id": "wright-brothers-aircraft",
+        "label": "Wright Brothers Aircraft",
+        "groupId": "aircraft",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "Wright Brothers Aircraft"
+      },
+      {
+        "id": "1903-aircraft-interactive",
+        "label": "1903 Aircraft Interactive",
+        "groupId": "aircraft",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "1903 Aircraft Interactive"
+      },
+      {
+        "id": "aircraft-parts",
+        "label": "Aircraft Parts",
+        "groupId": "aircraft",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "Aircraft Parts"
+      }
+    ]
+  }
+}

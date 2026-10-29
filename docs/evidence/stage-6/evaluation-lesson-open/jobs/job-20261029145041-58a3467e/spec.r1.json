@@ -1,0 +1,187 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "usgs-powell-geologic-time-job-20261029145041-58a3467e",
+  "title": "Geologic Time: Then and Now",
+  "learningObjectives": [
+    "Order key developments in understanding geologic time from Steno's laws to early radiometric dating",
+    "Explain how stratigraphic principles and uniformitarianism support relative age ordering",
+    "Describe how discovery of radioactivity and half-life dating revised Earth's age estimates"
+  ],
+  "sources": [
+    {
+      "id": "usgs-powell-geologic-time",
+      "title": "Powell Expedition—Geologic Time. Then and Now. — U.S. Geological Survey",
+      "locator": "https://www.usgs.gov/news/powell-expedition-geologic-time-then-and-now",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: U.S. Geological Survey, 'Powell Expedition—Geologic Time. Then and Now.' (2019). Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+      "sha256": "fa7498537478e10722976127bedd9cf61ccb5dda39090e0a4f844635b5a8f71f"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "exp1",
+      "text": "Geologic time spans billions of years, far beyond human experience, requiring tools that order events relatively and measure them numerically.",
+      "evidence": [
+        {
+          "sourceId": "usgs-powell-geologic-time",
+          "quote": "Earth is 4.54 billion years old, a span of time that is hard for many people to grasp."
+        }
+      ]
+    },
+    {
+      "id": "exp2",
+      "text": "Early geologists ordered rock layers using superposition, original horizontality, and faunal succession, and Hutton argued present processes explain past deposits.",
+      "evidence": [
+        {
+          "sourceId": "usgs-powell-geologic-time",
+          "quote": "The law of superposition says that older rocks are on the bottom and younger rocks are on the top."
+        },
+        {
+          "sourceId": "usgs-powell-geologic-time",
+          "quote": "In 1788, James Hutton proposed what would become the foundational principle of geology — uniformitarianism."
+        }
+      ]
+    },
+    {
+      "id": "exp3",
+      "text": "Radioactivity gave a heat source and a clock; later work dated meteorites and refined the geologic time scale with sensitive instruments.",
+      "evidence": [
+        {
+          "sourceId": "usgs-powell-geologic-time",
+          "quote": "It was the discovery of radioactivity in 1896 that changed the heat-flow picture dramatically."
+        },
+        {
+          "sourceId": "usgs-powell-geologic-time",
+          "quote": "A half-life is the length of time it takes for half of the number of original, or parent, isotopes to decay to a stable daughter isotope."
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "timeline-v1",
+    "events": [
+      {
+        "id": "e1",
+        "label": "Steno formulates laws of stratigraphy",
+        "year": 1669,
+        "month": 0,
+        "day": 0,
+        "evidence": [
+          {
+            "sourceId": "usgs-powell-geologic-time",
+            "quote": "Nicholas Steno, 1669, gets credit for first writing down basic geological principles as laws."
+          }
+        ]
+      },
+      {
+        "id": "e2",
+        "label": "Hutton proposes uniformitarianism",
+        "year": 1788,
+        "month": 0,
+        "day": 0,
+        "evidence": [
+          {
+            "sourceId": "usgs-powell-geologic-time",
+            "quote": "In 1788, James Hutton proposed what would become the foundational principle of geology — uniformitarianism."
+          }
+        ]
+      },
+      {
+        "id": "e3",
+        "label": "First geologic time scale published",
+        "year": 1841,
+        "month": 0,
+        "day": 0,
+        "evidence": [
+          {
+            "sourceId": "usgs-powell-geologic-time",
+            "quote": "The first geologic time scale was published in 1841 — Powell certainly would have known of it and used it in his geologic trips to the West."
+          }
+        ]
+      },
+      {
+        "id": "e4",
+        "label": "Discovery of radioactivity",
+        "year": 1896,
+        "month": 0,
+        "day": 0,
+        "evidence": [
+          {
+            "sourceId": "usgs-powell-geologic-time",
+            "quote": "It was the discovery of radioactivity in 1896 that changed the heat-flow picture dramatically."
+          }
+        ]
+      },
+      {
+        "id": "e5",
+        "label": "Holmes calculates age by radiometric dating",
+        "year": 1913,
+        "month": 0,
+        "day": 0,
+        "evidence": [
+          {
+            "sourceId": "usgs-powell-geologic-time",
+            "quote": "English geologist Arthur Holmes in 1913 calculated an age of 1.6 billion years, the first such estimate based on radiometric dating."
+          }
+        ]
+      }
+    ],
+    "scenario": {
+      "subjectLabel": "Geologic Time and Earth's Age",
+      "settingLabel": "From Steno to Early Radiometric Dating"
+    }
+  },
+  "behavioralTests": [
+    {
+      "name": "Steno before Hutton",
+      "earlierEventId": "e1",
+      "laterEventId": "e2"
+    },
+    {
+      "name": "Hutton before Time Scale",
+      "earlierEventId": "e2",
+      "laterEventId": "e3"
+    },
+    {
+      "name": "Time Scale before Radioactivity",
+      "earlierEventId": "e3",
+      "laterEventId": "e4"
+    },
+    {
+      "name": "Radioactivity before Holmes",
+      "earlierEventId": "e4",
+      "laterEventId": "e5"
+    }
+  ],
+  "predictions": [
+    {
+      "id": "p1",
+      "prompt": "Which happened first: Steno formulating laws of stratigraphy or Hutton proposing uniformitarianism?",
+      "earlierEventId": "e1",
+      "laterEventId": "e2"
+    },
+    {
+      "id": "p2",
+      "prompt": "Which happened first: publication of the first geologic time scale or discovery of radioactivity?",
+      "earlierEventId": "e3",
+      "laterEventId": "e4"
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "976771cedc524897b42661d0250d747f",
+    "runId": "job-20261029145041-58a3467e",
+    "promptVersion": "v9",
+    "generatedAt": "2026-10-29T14:53:23.502Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

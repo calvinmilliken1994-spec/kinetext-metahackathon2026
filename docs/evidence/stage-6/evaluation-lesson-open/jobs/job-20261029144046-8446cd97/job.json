@@ -1,0 +1,72 @@
+{
+  "jobId": "job-20261029144046-8446cd97",
+  "sourceId": "nasa-grc-effect-of-size-on-lift",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T14:40:46.830Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.241605,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 41044,
+    "startedAt": "2026-10-29T14:40:46.830Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 3,
+    "componentsPublished": 2,
+    "componentsFailed": 1,
+    "partialPublish": true
+  },
+  "componentRepairs": [
+    {
+      "componentId": "formula-explorer-v1",
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "schema.gen",
+        "FE-02",
+        "FE-08"
+      ],
+      "fixed": [
+        "schema.gen",
+        "FE-02"
+      ],
+      "remaining": [
+        "FE-05",
+        "FE-08",
+        "repair.no-weakening"
+      ],
+      "passed": false
+    },
+    {
+      "componentId": "formula-explorer-v1",
+      "attempt": 2,
+      "revision": 3,
+      "targeted": [
+        "FE-05",
+        "FE-08",
+        "repair.no-weakening"
+      ],
+      "fixed": [
+        "FE-05",
+        "repair.no-weakening"
+      ],
+      "remaining": [
+        "schema.gen",
+        "FE-02",
+        "FE-08"
+      ],
+      "passed": false
+    }
+  ],
+  "finishedAt": "2026-10-29T14:43:18.716Z"
+}

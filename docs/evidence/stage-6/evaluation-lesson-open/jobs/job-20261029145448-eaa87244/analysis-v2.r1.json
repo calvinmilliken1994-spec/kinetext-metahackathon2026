@@ -1,0 +1,198 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "history",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "Page covers the 1803 purchase of 828,000 square miles for $15 million at 4 cents an acre, the $10 million plan for New Orleans and the Floridas, Jeffersons doubts, cession leading to 19th century expansions and the Gadsden Purchase, and conflicts over free states, slave states and reservations",
+    "overview": {
+      "headline": "United States doubled in size with 1803 purchase of 828,000 square miles from France for $15 million",
+      "keyPoints": [
+        {
+          "id": "purchase-scale",
+          "point": "The United States purchased 828,000 square miles west of the Mississippi River for $15 million in the 1803 transaction with France",
+          "sourceId": "nara-louisiana-purchase-treaty",
+          "quote": "the United States purchased 828,000 square miles of land west of the Mississippi River for $15 million"
+        },
+        {
+          "id": "authorized-mission",
+          "point": "Negotiators Livingston and Monroe were authorized to pay up to $10 million solely for the port of New Orleans and the Floridas",
+          "sourceId": "nara-louisiana-purchase-treaty",
+          "quote": "negotiators Robert Livingston and James Monroe were authorized to pay France up to $10 million solely for the port of New Orleans and the Floridas"
+        },
+        {
+          "id": "jefferson-doubts",
+          "point": "President Jefferson as a generally strict interpreter of the Constitution wondered if the Government was authorized to acquire new territory",
+          "sourceId": "nara-louisiana-purchase-treaty",
+          "quote": "who wondered if the U.S. Government (and especially the President) was authorized to acquire new territory"
+        },
+        {
+          "id": "sectional-compromises",
+          "point": "Desire to maintain balance between free states and slave states required fragile compromises as sectional weaknesses grew over slavery",
+          "sourceId": "nara-louisiana-purchase-treaty",
+          "quote": "the desire to maintain a balance between \"free states\" and \"slave states\" required a series of fragile compromises"
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "mississippi-river",
+          "term": "Mississippi River",
+          "gloss": "major river marking eastern edge of the purchased 828,000 square miles of western land",
+          "sourceId": "nara-louisiana-purchase-treaty",
+          "quote": "the United States purchased 828,000 square miles of land west of the Mississippi River for $15 million"
+        },
+        {
+          "id": "strict-interpreter",
+          "term": "strict interpreter",
+          "gloss": "person who as a strict interpreter reads the Constitution narrowly on government authority",
+          "sourceId": "nara-louisiana-purchase-treaty",
+          "quote": "President Thomas Jefferson was generally a strict interpreter of the Constitution who wondered if the U.S. Government"
+        },
+        {
+          "id": "cession",
+          "term": "cession",
+          "gloss": "formal transfer of land as a cession that began a series of expansions",
+          "sourceId": "nara-louisiana-purchase-treaty",
+          "quote": "The Louisiana Purchase was the first major cession of land in a long series of expansions that span the 19th century."
+        },
+        {
+          "id": "sectional-weaknesses",
+          "term": "sectional weaknesses",
+          "gloss": "divisions that exposed sectional weaknesses between North and South over slavery",
+          "sourceId": "nara-louisiana-purchase-treaty",
+          "quote": "also exposed the sectional weaknesses between the North and South, especially related to the issue of slavery"
+        },
+        {
+          "id": "reservations",
+          "term": "reservations",
+          "gloss": "lands where Native people were forcibly moved on to reservations losing tribal acreage",
+          "sourceId": "nara-louisiana-purchase-treaty",
+          "quote": "Ultimately, Native people were forcibly moved on to reservations, losing vast acreage of their tribal lands"
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "sequence-v1",
+        "pedagogicalReason": "Traces cause-effect chain from limited mission to continental expansion and sectional tension in page order",
+        "focusQuote": "The Louisiana Purchase was the first major cession of land in a long series of expansions that span the 19th century.",
+        "focusSourceId": "nara-louisiana-purchase-treaty"
+      },
+      {
+        "componentId": "quiz-cards-v1",
+        "pedagogicalReason": "Checks recall of key facts about cost acreage negotiators and compromises stated on page",
+        "focusQuote": "For roughly 4 cents an acre, the United States doubled its size, expanding the nation westward.",
+        "focusSourceId": "nara-louisiana-purchase-treaty"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029145448-eaa87244:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"history\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 2589 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 11 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 4, keyTerms 5, componentPlan 2; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (2 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": false,
+        "message": "pageCoverage states the number 828000, which does not appear on the page or in the same quote (N-01); overview.headline states the number 828000, which does not appear on the page or in the same quote (N-01); keyPoints[0].point states the number 828000, which does not appear on the page or in the same quote (N-01); keyTerms[0].gloss states the number 828000, which does not appear on the page or in the same quote (N-01)",
+        "path": "/pageCoverage",
+        "affected": [
+          "/pageCoverage",
+          "/overview/headline",
+          "/overview/keyPoints/0/point",
+          "/overview/keyTerms/0/gloss"
+        ]
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "b2ac9fd4bf8b4194ac6773e9c3b3e2c6",
+    "usage": {
+      "promptTokens": 3914,
+      "completionTokens": 22227,
+      "reasoningTokens": 21250,
+      "cachedTokens": 0
+    },
+    "latencyMs": 76573,
+    "estCostUSD": 0.09935725,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

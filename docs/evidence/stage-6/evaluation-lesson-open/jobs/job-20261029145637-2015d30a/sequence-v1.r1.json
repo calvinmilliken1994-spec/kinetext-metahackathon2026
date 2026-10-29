@@ -1,0 +1,211 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "How timing concerns shaped independence actions",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follow causes and effects in the order they appear in the text.",
+    "steps": [
+      {
+        "id": "abandoned-hope",
+        "label": "abandoned hope of reconciliation",
+        "sourceId": "nara-lee-resolution",
+        "quote": "In less than a year, most of the delegates abandoned hope of reconciliation with Britain.",
+        "orderHint": "Early shift made later proposals possible."
+      },
+      {
+        "id": "introduced-resolution",
+        "label": "introduced a resolution",
+        "sourceId": "nara-lee-resolution",
+        "quote": "On June 7, 1776, Richard Henry Lee introduced a resolution",
+        "orderHint": "A proposal is put forward under colony instructions."
+      },
+      {
+        "id": "contained-three-parts",
+        "label": "contained three parts",
+        "sourceId": "nara-lee-resolution",
+        "quote": "The Lee Resolution contained three parts: a declaration of independence, a call to form foreign alliances,",
+        "orderHint": "Notice the three linked goals."
+      },
+      {
+        "id": "appointed-three-committees",
+        "label": "appointed three concurrent committees",
+        "sourceId": "nara-lee-resolution",
+        "quote": "On June 11, 1776, the Congress appointed three concurrent committees in response to the Lee Resolution",
+        "orderHint": "Work is divided to handle each goal."
+      },
+      {
+        "id": "believed-premature",
+        "label": "believed the actions Lee proposed to be premature",
+        "sourceId": "nara-lee-resolution",
+        "quote": "Because many members of the Congress believed the actions Lee proposed to be premature or wanted instructions from their colonies before voting,",
+        "orderHint": "Concern causes hesitation."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029145637-2015d30a:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step label occurs in its own quote after normalisation (labels-in-quotes)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 5 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "6afb4c0a0de44fac96974aefa0250cf4",
+    "usage": {
+      "promptTokens": 2680,
+      "completionTokens": 5577,
+      "reasoningTokens": 5122,
+      "cachedTokens": 0
+    },
+    "latencyMs": 23194,
+    "estCostUSD": 0.02705225,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "pruned": true,
+  "dropped": [
+    {
+      "index": 6,
+      "id": "cause-effect-from-concerns-to-deferral",
+      "reason": "step failed SEQ-03, SEQ-04",
+      "checks": [
+        "SEQ-03",
+        "SEQ-04"
+      ]
+    },
+    {
+      "index": 5,
+      "id": "approval-deferred",
+      "reason": "step failed SEQ-06",
+      "checks": [
+        "SEQ-06"
+      ]
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029145637-2015d30a:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "How timing concerns shaped independence actions",
+    "sources": [
+      {
+        "id": "nara-lee-resolution",
+        "title": "Lee Resolution (1776) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/lee-resolution",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Lee Resolution (1776)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "a18b4131b1c5223c9b0685aed8fa77a746537b2af6e2084d892549e8808ce9e3"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "6afb4c0a0de44fac96974aefa0250cf4",
+      "runId": "job-20261029145637-2015d30a",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T14:59:20.312Z"
+    },
+    "seed": 1138913473,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follow causes and effects in the order they appear in the text.",
+    "steps": [
+      {
+        "id": "abandoned-hope",
+        "label": "abandoned hope of reconciliation",
+        "sourceId": "nara-lee-resolution",
+        "quote": "In less than a year, most of the delegates abandoned hope of reconciliation with Britain.",
+        "orderHint": "Early shift made later proposals possible."
+      },
+      {
+        "id": "introduced-resolution",
+        "label": "introduced a resolution",
+        "sourceId": "nara-lee-resolution",
+        "quote": "On June 7, 1776, Richard Henry Lee introduced a resolution",
+        "orderHint": "A proposal is put forward under colony instructions."
+      },
+      {
+        "id": "contained-three-parts",
+        "label": "contained three parts",
+        "sourceId": "nara-lee-resolution",
+        "quote": "The Lee Resolution contained three parts: a declaration of independence, a call to form foreign alliances,",
+        "orderHint": "Notice the three linked goals."
+      },
+      {
+        "id": "appointed-three-committees",
+        "label": "appointed three concurrent committees",
+        "sourceId": "nara-lee-resolution",
+        "quote": "On June 11, 1776, the Congress appointed three concurrent committees in response to the Lee Resolution",
+        "orderHint": "Work is divided to handle each goal."
+      },
+      {
+        "id": "believed-premature",
+        "label": "believed the actions Lee proposed to be premature",
+        "sourceId": "nara-lee-resolution",
+        "quote": "Because many members of the Congress believed the actions Lee proposed to be premature or wanted instructions from their colonies before voting,",
+        "orderHint": "Concern causes hesitation."
+      }
+    ]
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "jobId": "job-20261029145325-bfb2efb9",
+  "analysisRef": "job-20261029145325-bfb2efb9/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029145325-bfb2efb9:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How allele frequencies and population structure describe genetic variation",
+    "sources": [
+      {
+        "id": "nij-population-genetics",
+        "title": "Population Genetics — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+        "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/population-genetics",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Population Genetics'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+        "sha256": "3b67b8bbab70fa3f03067b217df5601f05ff044f0f6c0c6cad7b44b5191a29db"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "b0ef39e8666145fcb70f96c70930738f",
+      "runId": "job-20261029145325-bfb2efb9",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T14:54:13.324Z"
+    },
+    "seed": 3298507501,
+    "headline": "How allele frequencies and population structure describe genetic variation",
+    "keyPoints": [
+      {
+        "id": "pop-gen-definition",
+        "point": "Population genetics studies the distribution and change of allele frequencies under influence of evolutionary forces",
+        "sourceId": "nij-population-genetics",
+        "quote": "Population genetics is the study of the distribution of and change in allele frequencies under the influence of the four evolutionary forces"
+      },
+      {
+        "id": "descriptive-stats-use",
+        "point": "Descriptive statistics summarize a collection of population data in a clear and concise manner for large volumes of information",
+        "sourceId": "nij-population-genetics",
+        "quote": "Descriptive statistics are used to summarize a collection of population data in a clear and concise manner"
+      },
+      {
+        "id": "biology-population-def",
+        "point": "In biology a population denotes a group whose members breed primarily or solely among themselves due to physical isolation",
+        "sourceId": "nij-population-genetics",
+        "quote": "In biology, a population generally denotes a group whose members breed primarily or solely among themselves"
+      },
+      {
+        "id": "misconception-racial-boundaries",
+        "point": "A common misconception that human populations fall into uniform groups along racial boundaries reflects inadequate biological differences",
+        "sourceId": "nij-population-genetics",
+        "quote": "A common misconception is that human populations fall into uniform groups with large biological differences, which lie along racial boundaries"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "allele-frequencies",
+        "term": "allele frequencies",
+        "gloss": "distribution and change of gene variants across groups measured as frequencies",
+        "sourceId": "nij-population-genetics",
+        "quote": "Population genetics is the study of the distribution of and change in allele frequencies under the influence of the four evolutionary forces"
+      },
+      {
+        "id": "evolutionary-forces",
+        "term": "evolutionary forces",
+        "gloss": "forces such as natural selection that influence how allele frequencies shift in populations",
+        "sourceId": "nij-population-genetics",
+        "quote": "the four evolutionary forces: natural selection, genetic drift, mutation, and migration"
+      },
+      {
+        "id": "descriptive-statistics",
+        "term": "Descriptive statistics",
+        "gloss": "methods used to summarize a collection of population data in a clear and concise manner",
+        "sourceId": "nij-population-genetics",
+        "quote": "Descriptive statistics are used to summarize a collection of population data in a clear and concise manner"
+      },
+      {
+        "id": "population-def",
+        "term": "population",
+        "gloss": "a group whose members breed primarily among themselves often due to physical isolation",
+        "sourceId": "nij-population-genetics",
+        "quote": "In biology, a population generally denotes a group whose members breed primarily or solely among themselves"
+      },
+      {
+        "id": "racial-classifications",
+        "term": "racial classifications",
+        "gloss": "groupings by race shown to be inadequate descriptors of genetic variation distribution",
+        "sourceId": "nij-population-genetics",
+        "quote": "Research has demonstrated that racial classifications are inadequate descriptors of the distribution of genetic variation in the human species"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029145325-bfb2efb9:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sort-groups-v1",
+      "specId": "job-20261029145325-bfb2efb9:sort-groups-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "concept-map-v1",
+      "specId": "job-20261029145325-bfb2efb9:concept-map-v1:r1",
+      "status": "failed",
+      "reason": "Muse ran out of room while writing this part, so it was left out.",
+      "revision": 1
+    }
+  ]
+}

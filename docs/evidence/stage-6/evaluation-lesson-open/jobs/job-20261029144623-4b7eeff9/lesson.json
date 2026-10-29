@@ -1,0 +1,125 @@
+{
+  "jobId": "job-20261029144623-4b7eeff9",
+  "analysisRef": "job-20261029144623-4b7eeff9/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029144623-4b7eeff9:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Thin atmosphere with temperature pressure and density changes by altitude",
+    "sources": [
+      {
+        "id": "nasa-grc-earth-atmosphere-equation-english",
+        "title": "Earth Atmosphere Equation – English — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/earth-atmosphere-equation-english/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "27cabc2c092bc294e05f921ebe3f7e6c73775f3986f7aed07bf86ba89fff17f5"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "5a601153eb3f4981abaf503f330bdd93",
+      "runId": "job-20261029144623-4b7eeff9",
+      "promptVersion": "s6-v1",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T14:47:13.477Z"
+    },
+    "seed": 2747672027,
+    "headline": "Thin atmosphere with temperature pressure and density changes by altitude",
+    "keyPoints": [
+      {
+        "id": "thin-atmosphere-extent",
+        "point": "Earth atmosphere is extremely thin sheet extending about 60 miles to edge of space",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "The Earth’s atmosphere is an extremely thin sheet of air extending from the surface of the Earth to the edge of space"
+      },
+      {
+        "id": "temperature-altitude",
+        "point": "air temperature is highest near surface and decreases as altitude increases",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "Thus the air temperature is highest near the surface and decreases as altitude increases."
+      },
+      {
+        "id": "pressure-altitude",
+        "point": "air pressure decreases as we increase altitude due to less air above",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "Therefore, air pressure decreases as we increase altitude."
+      },
+      {
+        "id": "three-zone-model",
+        "point": "model has three zones with separate curve fits for troposphere and stratosphere layers",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "The model has three zones with separate curve fits for the troposphere, the lower stratosphere, and the upper stratosphere."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "atmosphere",
+        "term": "atmosphere",
+        "gloss": "extremely thin sheet of air held to Earth surface by gravity",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "Gravity holds the atmosphere to the Earth’s surface."
+      },
+      {
+        "id": "lapse-rate",
+        "term": "lapse rate",
+        "gloss": "rate of temperature decrease with altitude in troposphere",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "The rate of temperature decrease is called the lapse rate."
+      },
+      {
+        "id": "troposphere",
+        "term": "troposphere",
+        "gloss": "lowest zone from surface where temperature decreases linearly",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "The troposphere runs from the surface of the Earth to 36,152 feet."
+      },
+      {
+        "id": "density",
+        "term": "density",
+        "gloss": "air property that directly affects aerodynamic forces",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "Aerodynamic forces directly depend on the air density."
+      },
+      {
+        "id": "equation-of-state",
+        "term": "equation of state",
+        "gloss": "relation linking air density to temperature and pressure",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "The air density depends on both the temperature and the pressure through the equation of state and also decreases with increasing altitude."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261029144623-4b7eeff9:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "formula-explorer-v1",
+      "specId": "job-20261029144623-4b7eeff9:formula-explorer-v1:r3",
+      "status": "failed",
+      "reason": "FE-02, FE-08: expression \"t = 59 - .00356 * h\" does not parse in the frozen calculator grammar: unexpected character \"=\" at position 1",
+      "revision": 3
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029144623-4b7eeff9:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

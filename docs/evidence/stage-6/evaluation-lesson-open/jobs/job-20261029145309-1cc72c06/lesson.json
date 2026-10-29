@@ -1,0 +1,145 @@
+{
+  "jobId": "job-20261029145309-1cc72c06",
+  "analysisRef": "job-20261029145309-1cc72c06/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029145309-1cc72c06:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Random mating and assortative mating effects on Hardy Weinberg equilibrium in humans",
+    "sources": [
+      {
+        "id": "nij-random-mating",
+        "title": "Random Mating — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+        "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/hardy-weinberg-principle/random-mating",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Random Mating'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+        "sha256": "9f06caf792ddeb146476c0c5d2cf1851b1f5e8bd6f0fc7dfae8cb33d50725ad8"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "4b2384e8ac504af4886449d554877c2d",
+      "runId": "job-20261029145309-1cc72c06",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T14:54:00.696Z"
+    },
+    "seed": 2397381355,
+    "headline": "Random mating and assortative mating effects on Hardy Weinberg equilibrium in humans",
+    "keyPoints": [
+      {
+        "id": "random-mating-condition",
+        "point": "Hardy-Weinberg equilibrium requires random mating that does not always occur in humans",
+        "sourceId": "nij-random-mating",
+        "quote": "One reason that Hardy-Weinberg does not always apply to humans is that random mating, a condition of HWE (Hardy-Weinberg Equilibrium), does not occur."
+      },
+      {
+        "id": "mating-arbitrary-locus",
+        "point": "Random mating implies mating should be arbitrary with regard to the locus considered",
+        "sourceId": "nij-random-mating",
+        "quote": "Random mating implies that mating should be arbitrary with regard to the locus being considered."
+      },
+      {
+        "id": "positive-assortative-effect",
+        "point": "Positive assortative mating leads to an increase in homozygotes for similar visible traits",
+        "sourceId": "nij-random-mating",
+        "quote": "Positive assortative mating leads to an increase in homozygotes whereas negative assortative mating leads to an increase in heterozygotes."
+      },
+      {
+        "id": "negative-assortative-effect",
+        "point": "Negative assortative mating is breeding between dissimilar genotypes and is more rare",
+        "sourceId": "nij-random-mating",
+        "quote": "In contrast, negative assortative mating is breeding between individuals with dissimilar genotypes, and is more rare."
+      },
+      {
+        "id": "assortative-never-complete",
+        "point": "Assortative mating is never complete and humans mate randomly for blood type and short tandem repeat genotype",
+        "sourceId": "nij-random-mating",
+        "quote": "they mate randomly with respect to other traits such as blood type and short tandem repeat (STR) genotype."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "random-mating",
+        "term": "Random mating",
+        "gloss": "mating that is arbitrary with regard to the locus",
+        "sourceId": "nij-random-mating",
+        "quote": "Random mating implies that mating should be arbitrary with regard to the locus being considered."
+      },
+      {
+        "id": "positive-assortative",
+        "term": "positive assortative mating",
+        "gloss": "non-random mating between similar individuals that is positive",
+        "sourceId": "nij-random-mating",
+        "quote": "This constitutes non-random, positive assortative mating."
+      },
+      {
+        "id": "negative-assortative",
+        "term": "negative assortative mating",
+        "gloss": "breeding between dissimilar genotypes that is more rare",
+        "sourceId": "nij-random-mating",
+        "quote": "In contrast, negative assortative mating is breeding between individuals with dissimilar genotypes, and is more rare."
+      },
+      {
+        "id": "homozygotes",
+        "term": "homozygotes",
+        "gloss": "individuals with identical alleles that show increase in homozygotes",
+        "sourceId": "nij-random-mating",
+        "quote": "Positive assortative mating leads to an increase in homozygotes whereas negative assortative mating leads to an increase in heterozygotes."
+      },
+      {
+        "id": "heterozygotes",
+        "term": "heterozygotes",
+        "gloss": "individuals with different alleles that show increase in heterozygotes",
+        "sourceId": "nij-random-mating",
+        "quote": "Positive assortative mating leads to an increase in homozygotes whereas negative assortative mating leads to an increase in heterozygotes."
+      },
+      {
+        "id": "locus-term",
+        "term": "locus",
+        "gloss": "genomic position that is arbitrary with regard to mating",
+        "sourceId": "nij-random-mating",
+        "quote": "Random mating implies that mating should be arbitrary with regard to the locus being considered."
+      },
+      {
+        "id": "blood-type",
+        "term": "blood type",
+        "gloss": "trait that mates randomly along with short tandem repeat genotype",
+        "sourceId": "nij-random-mating",
+        "quote": "they mate randomly with respect to other traits such as blood type and short tandem repeat (STR) genotype."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sort-groups-v1",
+      "specId": "job-20261029145309-1cc72c06:sort-groups-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "concept-map-v1",
+      "specId": "job-20261029145309-1cc72c06:concept-map-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029145309-1cc72c06:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

@@ -1,0 +1,211 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "history",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "The page covers why a bill of rights was demanded during Constitution adoption debates, how the First Congress proposed 12 amendments, and how Articles 3 to 12 became 10 ratified amendments known as the Bill of Rights in 1791 with later notes on the remaining articles.",
+    "overview": {
+      "headline": "How 12 proposals became 10 ratified rights in 1791",
+      "keyPoints": [
+        {
+          "id": "kp-proposal-ratification",
+          "point": "The page notes 12 amendments originally proposed and 10 ratified as the Bill of Rights in 1791",
+          "sourceId": "nara-bill-of-rights",
+          "quote": "Although 12 amendments were originally proposed, the 10 that were ratified became the Bill of Rights in 1791."
+        },
+        {
+          "id": "kp-tyranny-charge",
+          "point": "opponents in adoption debates charged the Constitution as drafted would open the way to tyranny by central government",
+          "sourceId": "nara-bill-of-rights",
+          "quote": "During the debates on the adoption of the Constitution, its opponents repeatedly charged that the Constitution as drafted would open the way to tyranny by the central government."
+        },
+        {
+          "id": "kp-british-memory",
+          "point": "memory of British violation of civil rights before and during the Revolution shaped demands for protection",
+          "sourceId": "nara-bill-of-rights",
+          "quote": "Fresh in their minds was the memory of the British violation of civil rights before and during the Revolution."
+        },
+        {
+          "id": "kp-conventions-offer",
+          "point": "state conventions in formal ratification asked for amendments with understanding they would be offered",
+          "sourceId": "nara-bill-of-rights",
+          "quote": "Several state conventions in their formal ratification of the Constitution asked for such amendments;"
+        },
+        {
+          "id": "kp-first-congress-proposal",
+          "point": "the First Congress proposed 12 amendments to the state legislatures on September 25, 1789 meeting frequent arguments",
+          "sourceId": "nara-bill-of-rights",
+          "quote": "On September 25, 1789, the First Congress of the United States therefore proposed to the state legislatures 12 amendments to the Constitution"
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "kt-amendments",
+          "term": "amendments",
+          "gloss": "formal changes to the Constitution originally proposed to meet arguments raised against it",
+          "sourceId": "nara-bill-of-rights",
+          "quote": "Although 12 amendments were originally proposed, the 10 that were ratified became the Bill of Rights in 1791."
+        },
+        {
+          "id": "kt-tyranny",
+          "term": "tyranny",
+          "gloss": "central government dominance opponents feared the Constitution as drafted would enable",
+          "sourceId": "nara-bill-of-rights",
+          "quote": "During the debates on the adoption of the Constitution, its opponents repeatedly charged that the Constitution as drafted would open the way to tyranny by the central government."
+        },
+        {
+          "id": "kt-immunities",
+          "term": "immunities",
+          "gloss": "individual citizens protections demanded to be spelled out in a bill of rights",
+          "sourceId": "nara-bill-of-rights",
+          "quote": "They demanded a \"bill of rights\" that would spell out the immunities of individual citizens."
+        },
+        {
+          "id": "kt-ratification",
+          "term": "ratification",
+          "gloss": "formal approval action by state conventions that asked for amendments",
+          "sourceId": "nara-bill-of-rights",
+          "quote": "Several state conventions in their formal ratification of the Constitution asked for such amendments;"
+        },
+        {
+          "id": "kt-compensation",
+          "term": "compensation",
+          "gloss": "payment for services of Senators and Representatives subject to varying proposal",
+          "sourceId": "nara-bill-of-rights",
+          "quote": "Article 2 concerning “varying the compensation for the services of the Senators and Representatives” was finally ratified on May 7, 1992 as the 27th Amendment to the Constitution."
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "sequence-v1",
+        "pedagogicalReason": "Connecting British violation memory to citizen demands and legislative action lets learners follow cause and effect in the order presented",
+        "focusQuote": "Fresh in their minds was the memory of the British violation of civil rights before and during the Revolution.",
+        "focusSourceId": "nara-bill-of-rights"
+      },
+      {
+        "componentId": "quiz-cards-v1",
+        "pedagogicalReason": "Fact cards reinforce checkable details such as proposal and ratification dates and distinct fates of articles",
+        "focusQuote": "Articles 3 to 12, ratified December 15, 1791, by three-fourths of the state legislatures, constitute the first 10 amendments of the Constitution, known as the Bill of Rights.",
+        "focusSourceId": "nara-bill-of-rights"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029145655-fa348b9a:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"history\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 1476 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": false,
+        "message": "keyPoints[1] (kp-tyranny-charge): quote \"During the debates on the adoption of the Constitution, its \" is 178 characters, expected <= 150; keyTerms[1] (kt-tyranny): quote \"During the debates on the adoption of the Constitution, its \" is 178 characters, expected <= 150; keyTerms[4] (kt-compensation): quote \"Article 2 concerning “varying the compensation for the servi\" is 179 characters, expected <= 150; componentPlan[1] (quiz-cards-v1): quote \"Articles 3 to 12, ratified December 15, 1791, by three-fourt\" is 174 characters, expected <= 150 (expected verbatim quotes of 1-150 characters that appear in the cited source)",
+        "path": "/overview/keyPoints/1/quote",
+        "affected": [
+          "/overview/keyPoints/1/quote",
+          "/overview/keyTerms/1/quote",
+          "/overview/keyTerms/4/quote",
+          "/componentPlan/1/focusQuote"
+        ]
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": false,
+        "message": "keyPoints[1].quote is 178 characters, expected 1-150; keyTerms[1].quote is 178 characters, expected 1-150; keyTerms[4].quote is 179 characters, expected 1-150; componentPlan[1].focusQuote is 174 characters, expected 1-150",
+        "path": "/overview/keyPoints/1/quote",
+        "affected": [
+          "/overview/keyPoints/1/quote",
+          "/overview/keyTerms/1/quote",
+          "/overview/keyTerms/4/quote",
+          "/componentPlan/1/focusQuote"
+        ]
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (2 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "99f6854d70344abb97567a8164f7d72c",
+    "usage": {
+      "promptTokens": 3701,
+      "completionTokens": 14815,
+      "reasoningTokens": 13851,
+      "cachedTokens": 0
+    },
+    "latencyMs": 54475,
+    "estCostUSD": 0.06759,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

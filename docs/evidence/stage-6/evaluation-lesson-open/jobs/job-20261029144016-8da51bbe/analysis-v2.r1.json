@@ -1,0 +1,203 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "physics",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "Page covers constant speed level flight with balanced lift weight thrust and drag, ground speed influenced by wind, distance as ground speed times time aloft, maximum range limited by fuel time, one way versus round trip combat radius, and why real flight varies speed and weight.",
+    "overview": {
+      "headline": "Constant speed cruise and distance as ground speed times time aloft",
+      "keyPoints": [
+        {
+          "id": "balanced-forces-cruise",
+          "point": "Aircraft maintains constant airspeed in level flight when net external force is absent with lift equal to weight and thrust equal to drag",
+          "sourceId": "nasa-grc-range-constant-velocity",
+          "quote": "Since there is no net external force on the aircraft, the aircraft maintains a constant airspeed as described by Newton’s First Law of Motion."
+        },
+        {
+          "id": "general-rate-equation",
+          "point": "General rate equation states rate times time equals amount for relating how much is produced over time",
+          "sourceId": "nasa-grc-range-constant-velocity",
+          "quote": "The general rate equation is “rate times time equals amount”."
+        },
+        {
+          "id": "distance-ground-speed-time",
+          "point": "Distance flown equals ground speed times time aloft when cruising at constant ground speed",
+          "sourceId": "nasa-grc-range-constant-velocity",
+          "quote": "the distance flown is equal to the ground speed times the time aloft."
+        },
+        {
+          "id": "maximum-range-fuel-limit",
+          "point": "Maximum distance aircraft can fly equals ground speed times maximum time set by fuel load after which drag slows aircraft and lift decreases",
+          "sourceId": "nasa-grc-range-constant-velocity",
+          "quote": "The maximum distance that the aircraft can fly is then equal to the ground speed times the maximum time (tmax)."
+        },
+        {
+          "id": "combat-radius-definition",
+          "point": "Combat radius is defined as half the one way range to reflect round trip missions without refueling in enemy territory",
+          "sourceId": "nasa-grc-range-constant-velocity",
+          "quote": "The combat radius would be half of the range as specified here."
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "lift",
+          "term": "lift",
+          "gloss": "upward force that balances weight in level flight",
+          "sourceId": "nasa-grc-range-constant-velocity",
+          "quote": "in which the lift is equal to the weight, and the thrust is equal to the drag."
+        },
+        {
+          "id": "thrust",
+          "term": "thrust",
+          "gloss": "forward force that balances drag to keep speed constant",
+          "sourceId": "nasa-grc-range-constant-velocity",
+          "quote": "So, the lift, drag, thrust, and fuel consumption rate also continually change."
+        },
+        {
+          "id": "ground-speed",
+          "term": "ground speed",
+          "gloss": "speed over ground used with time aloft to compute distance flown",
+          "sourceId": "nasa-grc-range-constant-velocity",
+          "quote": "the distance flown is equal to the ground speed times the time aloft."
+        },
+        {
+          "id": "maximum-range",
+          "term": "maximum range",
+          "gloss": "greatest distance covered at given ground speed before maximum time expires",
+          "sourceId": "nasa-grc-range-constant-velocity",
+          "quote": "We call this distance the maximum range (R) of the aircraft."
+        },
+        {
+          "id": "combat-radius",
+          "term": "combat radius",
+          "gloss": "range for one leg of a round trip taken as half of total range",
+          "sourceId": "nasa-grc-range-constant-velocity",
+          "quote": "The combat radius would be half of the range as specified here."
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "quiz-cards-v1",
+        "pedagogicalReason": "Reinforces balanced force condition for constant speed before introducing rate ideas",
+        "focusQuote": "an airplane can maintain a constant speed and level flight, in which the lift is equal to the weight, and the thrust is equal to the drag.",
+        "focusSourceId": "nasa-grc-range-constant-velocity"
+      },
+      {
+        "componentId": "formula-explorer-v1",
+        "pedagogicalReason": "Explores direct variation of distance with ground speed and time aloft using the stated relation",
+        "focusQuote": "d = V * t",
+        "focusSourceId": "nasa-grc-range-constant-velocity"
+      },
+      {
+        "componentId": "sequence-v1",
+        "pedagogicalReason": "Orders progression from general rate law to distance to maximum range to combat radius distinction",
+        "focusQuote": "The general rate equation is “rate times time equals amount”.",
+        "focusSourceId": "nasa-grc-range-constant-velocity"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029144016-8da51bbe:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"physics\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 3104 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 13 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 5, keyTerms 5, componentPlan 3; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (3 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "6ad16ce7aeb44e61b2ff5602360d3eec",
+    "usage": {
+      "promptTokens": 4046,
+      "completionTokens": 9822,
+      "reasoningTokens": 8938,
+      "cachedTokens": 0
+    },
+    "latencyMs": 43014,
+    "estCostUSD": 0.046801,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

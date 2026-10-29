@@ -1,0 +1,125 @@
+{
+  "jobId": "job-20261029150116-4de7c5e7",
+  "analysisRef": "job-20261029150116-4de7c5e7/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029150116-4de7c5e7:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Index of flight fundamentals linking physics principles to aerodynamics and aircraft study",
+    "sources": [
+      {
+        "id": "nasa-grc-re-living-the-wright-way",
+        "title": "Guide to Reliving the Wright Way — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/re-living-the-wright-way/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "c7d0a44cd306a87e59d38d81850a825080de38231c0242f7086f5336a80c94c2"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "37b290b9c74b414d8c6941037bf76ea8",
+      "runId": "job-20261029150116-4de7c5e7",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T15:01:42.745Z"
+    },
+    "seed": 1628440529,
+    "headline": "Index of flight fundamentals linking physics principles to aerodynamics and aircraft study",
+    "keyPoints": [
+      {
+        "id": "newton-laws-fundamentals",
+        "point": "Covers Newton Laws of Motion as core fundamentals for flight physics",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "Newton’s Laws of Motion"
+      },
+      {
+        "id": "aerodynamic-forces-lesson",
+        "point": "Explores Aerodynamic Forces and related concepts in aerodynamics lessons",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "Aerodynamic Forces"
+      },
+      {
+        "id": "bernoulli-equation-aerodynamics",
+        "point": "Includes Bernoulli Equation to explain pressure and velocity in aerodynamics",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "Bernoulli’s Equation"
+      },
+      {
+        "id": "unpowered-aircraft-contrast",
+        "point": "Contrasts Unpowered Aircraft types with powered designs developed for early flight",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "Unpowered Aircraft (1900 – 1902)"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "torque",
+        "term": "Torque",
+        "gloss": "Rotational effect linked to Moments that causes turning about a pivot",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "Torque (Moments)"
+      },
+      {
+        "id": "equilibrium",
+        "term": "Equilibrium",
+        "gloss": "Balanced state where forces cancel to maintain Equilibrium",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "Equilibrium"
+      },
+      {
+        "id": "functions",
+        "term": "Functions",
+        "gloss": "Mathematical idea where Functions relate inputs to outputs",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "The Idea of Functions"
+      },
+      {
+        "id": "combustion",
+        "term": "Combustion",
+        "gloss": "Chemical Process involving Combustion that releases energy",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "The Process of Combustion"
+      },
+      {
+        "id": "lift",
+        "term": "Lift",
+        "gloss": "Upward force described by Lift Equation for flight",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "Lift Equation of the 1900’s"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261029150116-4de7c5e7:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sort-groups-v1",
+      "specId": "job-20261029150116-4de7c5e7:sort-groups-v1:r1",
+      "status": "passed",
+      "reason": "2 items were left out because they could not be verified against the page: lift-alone (SORT-01), drag-alone (SORT-01).",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029150116-4de7c5e7:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

@@ -1,0 +1,247 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Gene pool fitness and related definitions",
+    "cards": [
+      {
+        "id": "gene-pool-concept",
+        "stem": "What is a gene pool described as in the material",
+        "options": [
+          ":text",
+          "complete fossil record",
+          "identical twin pair",
+          "single parental lineage"
+        ],
+        "sourceId": "nij-heterozygosity",
+        "quote": "A gene pool is the unique set of alleles that could be found by analyzing the DNA from every member of a species or population.",
+        "hint": "Recall the definition that lists all alleles in a group"
+      },
+      {
+        "id": "fitness-definition",
+        "stem": "How is fitness defined for an organism in a population",
+        "options": [
+          ":text",
+          "count of visible traits per individual",
+          "total number of cell divisions",
+          "rate of random environmental change"
+        ],
+        "sourceId": "nij-heterozygosity",
+        "quote": "Fitness is the probability of transmitting one's genes to the next generation in relation to the average probability for that population.",
+        "hint": "Think about passing genes on compared to others"
+      },
+      {
+        "id": "heterozygous-definition",
+        "stem": "When is an individual considered heterozygous at a locus",
+        "options": [
+          ":text",
+          "two identical copies at a specific locus",
+          "absence of any allele at a locus",
+          "presence of an extra chromosome"
+        ],
+        "sourceId": "nij-heterozygosity",
+        "quote": "If an individual has two different alleles at a specific locus, the individual is heterozygous at that locus",
+        "hint": "Focus on having two distinct alleles at one location"
+      },
+      {
+        "id": "punnett-square-function",
+        "stem": "What tool is described as a grid for showing expected genotypes",
+        "options": [
+          ":text",
+          "chart that permanently alters allele counts",
+          "table that eliminates variation within groups",
+          "diagram that measures extinction probability"
+        ],
+        "sourceId": "nij-heterozygosity",
+        "quote": "A Punnett square is simply a grid that graphically represents expected genotypes.",
+        "hint": "Remember the visual grid used for genotype predictions"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029145104-b0ce87c7:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": false,
+        "message": "cards[0] (gene-pool-concept): the correct answer \":text\" (options[0]) does not occur in the card quote (answer-in-quote); cards[1] (fitness-definition): the correct answer \":text\" (options[0]) does not occur in the card quote (answer-in-quote); cards[2] (heterozygous-definition): the correct answer \":text\" (options[0]) does not occur in the card quote (answer-in-quote); cards[3] (punnett-square-function): the correct answer \":text\" (options[0]) does not occur in the card quote (answer-in-quote)",
+        "path": "/cards/0/options/0",
+        "affected": [
+          "/cards/0/options/0",
+          "/cards/0/quote",
+          "/cards/1/options/0",
+          "/cards/1/quote",
+          "/cards/2/options/0",
+          "/cards/2/quote",
+          "/cards/3/options/0",
+          "/cards/3/quote"
+        ]
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": false,
+        "message": "cards[0] (gene-pool-concept): no option occurs in the quote, expected exactly one (the correct answer) to match (one-correct); cards[1] (fitness-definition): no option occurs in the quote, expected exactly one (the correct answer) to match (one-correct); cards[2] (heterozygous-definition): no option occurs in the quote, expected exactly one (the correct answer) to match (one-correct); cards[3] (punnett-square-function): no option occurs in the quote, expected exactly one (the correct answer) to match (one-correct)",
+        "path": "/cards/0/options/0",
+        "affected": [
+          "/cards/0/options/0",
+          "/cards/0/quote",
+          "/cards/1/options/0",
+          "/cards/1/quote",
+          "/cards/2/options/0",
+          "/cards/2/quote",
+          "/cards/3/options/0",
+          "/cards/3/quote"
+        ]
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "affd7cfb6d52470cb8af1220d21c0e98",
+    "usage": {
+      "promptTokens": 2608,
+      "completionTokens": 5907,
+      "reasoningTokens": 5533,
+      "cachedTokens": 0
+    },
+    "latencyMs": 24783,
+    "estCostUSD": 0.02836475,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029145104-b0ce87c7:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Gene pool fitness and related definitions",
+    "sources": [
+      {
+        "id": "nij-heterozygosity",
+        "title": "Heterozygosity — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+        "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/population-genetics/heterozygosity",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Heterozygosity'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+        "sha256": "b88d68137ace380387528e9b0d424ad162ee448ea6d48d6646cb090dbfc4e1e9"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "affd7cfb6d52470cb8af1220d21c0e98",
+      "runId": "job-20261029145104-b0ce87c7",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T14:53:11.870Z"
+    },
+    "seed": 3380685362,
+    "cards": [
+      {
+        "id": "gene-pool-concept",
+        "stem": "What is a gene pool described as in the material",
+        "options": [
+          ":text",
+          "complete fossil record",
+          "identical twin pair",
+          "single parental lineage"
+        ],
+        "sourceId": "nij-heterozygosity",
+        "quote": "A gene pool is the unique set of alleles that could be found by analyzing the DNA from every member of a species or population.",
+        "hint": "Recall the definition that lists all alleles in a group"
+      },
+      {
+        "id": "fitness-definition",
+        "stem": "How is fitness defined for an organism in a population",
+        "options": [
+          ":text",
+          "count of visible traits per individual",
+          "total number of cell divisions",
+          "rate of random environmental change"
+        ],
+        "sourceId": "nij-heterozygosity",
+        "quote": "Fitness is the probability of transmitting one's genes to the next generation in relation to the average probability for that population.",
+        "hint": "Think about passing genes on compared to others"
+      },
+      {
+        "id": "heterozygous-definition",
+        "stem": "When is an individual considered heterozygous at a locus",
+        "options": [
+          ":text",
+          "two identical copies at a specific locus",
+          "absence of any allele at a locus",
+          "presence of an extra chromosome"
+        ],
+        "sourceId": "nij-heterozygosity",
+        "quote": "If an individual has two different alleles at a specific locus, the individual is heterozygous at that locus",
+        "hint": "Focus on having two distinct alleles at one location"
+      },
+      {
+        "id": "punnett-square-function",
+        "stem": "What tool is described as a grid for showing expected genotypes",
+        "options": [
+          ":text",
+          "chart that permanently alters allele counts",
+          "table that eliminates variation within groups",
+          "diagram that measures extinction probability"
+        ],
+        "sourceId": "nij-heterozygosity",
+        "quote": "A Punnett square is simply a grid that graphically represents expected genotypes.",
+        "hint": "Remember the visual grid used for genotype predictions"
+      }
+    ]
+  }
+}

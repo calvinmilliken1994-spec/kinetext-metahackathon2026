@@ -1,0 +1,92 @@
+{
+  "jobId": "job-20261029145637-2015d30a",
+  "sourceId": "nara-lee-resolution",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T14:56:37.561Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.437952,
+  "reservedUnknownUSD": 0,
+  "engine": "timeline-v1",
+  "revisions": 3,
+  "repairs": [
+    {
+      "revision": 2,
+      "repairOf": 1,
+      "targeted": [
+        "timeline.date-grounded"
+      ],
+      "fixed": [],
+      "remaining": [
+        "timeline.date-grounded"
+      ],
+      "publishable": false,
+      "afterInjectedFault": false
+    },
+    {
+      "revision": 3,
+      "repairOf": 2,
+      "targeted": [
+        "timeline.date-grounded"
+      ],
+      "fixed": [],
+      "remaining": [
+        "timeline.date-grounded"
+      ],
+      "publishable": false,
+      "afterInjectedFault": false
+    }
+  ],
+  "analysisRepairs": [
+    {
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "A-05",
+        "A-07",
+        "A-10"
+      ],
+      "fixed": [
+        "A-05",
+        "A-07",
+        "A-10"
+      ],
+      "remaining": [],
+      "passed": true
+    }
+  ],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 41044,
+    "startedAt": "2026-10-29T14:56:37.561Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 3,
+    "componentsPublished": 2,
+    "componentsFailed": 1,
+    "partialPublish": true
+  },
+  "componentRepairs": [
+    {
+      "componentId": "quiz-cards-v1",
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "schema.gen"
+      ],
+      "fixed": [
+        "schema.gen"
+      ],
+      "remaining": [],
+      "passed": true
+    }
+  ],
+  "bestRevision": 1,
+  "checksPassed": 10,
+  "checksTotal": 11,
+  "finishedAt": "2026-10-29T15:01:45.210Z"
+}

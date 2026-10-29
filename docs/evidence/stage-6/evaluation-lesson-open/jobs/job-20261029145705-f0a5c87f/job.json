@@ -1,0 +1,46 @@
+{
+  "jobId": "job-20261029145705-f0a5c87f",
+  "sourceId": "nara-emancipation-proclamation",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T14:57:05.818Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.246451,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [
+    {
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "A-05",
+        "A-07"
+      ],
+      "fixed": [
+        "A-05",
+        "A-07"
+      ],
+      "remaining": [],
+      "passed": true
+    }
+  ],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 41044,
+    "startedAt": "2026-10-29T14:57:05.818Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 3,
+    "componentsPublished": 2,
+    "componentsFailed": 1,
+    "partialPublish": true
+  },
+  "componentRepairs": [],
+  "finishedAt": "2026-10-29T14:59:42.589Z"
+}

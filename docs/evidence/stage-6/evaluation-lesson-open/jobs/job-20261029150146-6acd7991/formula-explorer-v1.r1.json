@@ -1,0 +1,249 @@
+{
+  "gen": {
+    "schemaVersion": "formula-explorer-v1",
+    "title": "glide tangent explorer",
+    "formulaText": "tan(a) = h / d",
+    "sourceId": "nasa-grc-glider-trajectory-problem",
+    "quote": "tan(a) = h / d",
+    "expression": "h / d",
+    "variables": [
+      {
+        "name": "h",
+        "pageSymbol": "h",
+        "meaning": "change in height",
+        "meaningQuoted": true,
+        "quote": "The tangent tan of the glide angle a is equal to the change in height h divided by the distance flown d:",
+        "unit": "",
+        "min": 1,
+        "max": 100,
+        "default": 10
+      },
+      {
+        "name": "d",
+        "pageSymbol": "d",
+        "meaning": "distance flown",
+        "meaningQuoted": true,
+        "quote": "The tangent tan of the glide angle a is equal to the change in height h divided by the distance flown d:",
+        "unit": "",
+        "min": 10,
+        "max": 1000,
+        "default": 100
+      }
+    ],
+    "xVariable": "h",
+    "cases": [
+      {
+        "id": "case-1",
+        "inputs": [
+          {
+            "name": "h",
+            "value": 10
+          },
+          {
+            "name": "d",
+            "value": 100
+          }
+        ]
+      },
+      {
+        "id": "case-2",
+        "inputs": [
+          {
+            "name": "h",
+            "value": 20
+          },
+          {
+            "name": "d",
+            "value": 100
+          }
+        ]
+      }
+    ],
+    "sourceExample": {
+      "quote": "",
+      "resultNumber": 0,
+      "tolerance": 0
+    },
+    "hasSourceExample": false
+  },
+  "report": {
+    "artifactId": "job-20261029150146-6acd7991:formula-explorer-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every formula-explorer case id and title shape is within the frozen limits"
+      },
+      {
+        "id": "FE-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "the formula quote (1 quote) appears verbatim in source \"nasa-grc-glider-trajectory-problem\" and formulaText occurs inside the quote after normalisation (formula-quoted)"
+      },
+      {
+        "id": "FE-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "expression parses in the frozen grammar (<= 120 chars, AST <= 50 nodes, no \"**\", no implicit multiplication) and its variable set equals the declared set (expression-parses)"
+      },
+      {
+        "id": "FE-03",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 2 variables are declared with valid unique non-reserved names, exact page symbols, grounded quotes (top-level sourceId) and xVariable \"h\" is one of them (variables-declared)"
+      },
+      {
+        "id": "FE-04",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "all 2 case(s) carry exactly the declared variables with finite in-range inputs and every recomputed output is finite (the system sets the outputs) (cases-recomputed)"
+      },
+      {
+        "id": "FE-05",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "hasSourceExample=false with the empty sourceExample shape (sourceExample-check)"
+      },
+      {
+        "id": "FE-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every slider range is sane (finite, min < max, default inside, positive-range ratio <= 1000000) and no literal exponent exceeds 100 (ranges-sane)"
+      },
+      {
+        "id": "FE-07",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title and variable meanings appears on the page or in the same quote (N-01); units and formula fields are notation and exempt (numbers-checkable)"
+      },
+      {
+        "id": "FE-08",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the expression matches the page formula \"h / d\" parsed from the quote with the same grammar: 5/5 finite slider-range sample points agree within relative 1e-9 (expression-matches-page-formula)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "6145e059203a4b9bba140802d69b1a8b",
+    "usage": {
+      "promptTokens": 2997,
+      "completionTokens": 7082,
+      "reasoningTokens": 6771,
+      "cachedTokens": 0
+    },
+    "latencyMs": 24865,
+    "estCostUSD": 0.03384475,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029150146-6acd7991:formula-explorer-v1:r1",
+    "componentId": "formula-explorer-v1",
+    "title": "glide tangent explorer",
+    "sources": [
+      {
+        "id": "nasa-grc-glider-trajectory-problem",
+        "title": "Glider Trajectory Problem — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/glider-trajectory-problem/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "66e6cfc191fb83e9cfff3bc323a0394b392cbb4e0278aba87b367f3203c3c1e2"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "6145e059203a4b9bba140802d69b1a8b",
+      "runId": "job-20261029150146-6acd7991",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T15:02:50.828Z"
+    },
+    "seed": 2314730066,
+    "formulaText": "tan(a) = h / d",
+    "sourceId": "nasa-grc-glider-trajectory-problem",
+    "quote": "tan(a) = h / d",
+    "expression": "h / d",
+    "variables": [
+      {
+        "name": "h",
+        "pageSymbol": "h",
+        "meaning": "change in height",
+        "meaningQuoted": true,
+        "quote": "The tangent tan of the glide angle a is equal to the change in height h divided by the distance flown d:",
+        "unit": "",
+        "min": 1,
+        "max": 100,
+        "default": 10
+      },
+      {
+        "name": "d",
+        "pageSymbol": "d",
+        "meaning": "distance flown",
+        "meaningQuoted": true,
+        "quote": "The tangent tan of the glide angle a is equal to the change in height h divided by the distance flown d:",
+        "unit": "",
+        "min": 10,
+        "max": 1000,
+        "default": 100
+      }
+    ],
+    "xVariable": "h",
+    "cases": [
+      {
+        "id": "case-1",
+        "inputs": [
+          {
+            "name": "h",
+            "value": 10
+          },
+          {
+            "name": "d",
+            "value": 100
+          }
+        ]
+      },
+      {
+        "id": "case-2",
+        "inputs": [
+          {
+            "name": "h",
+            "value": 20
+          },
+          {
+            "name": "d",
+            "value": 100
+          }
+        ]
+      }
+    ],
+    "sourceExample": {
+      "quote": "",
+      "resultNumber": 0,
+      "tolerance": 0
+    },
+    "hasSourceExample": false
+  }
+}

@@ -1,0 +1,197 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "earth-science",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "Covers the numeric geologic time scale, how radioactivity enabled age assignment, definitions of atoms and isotopes, half-life, four radiometric parent to daughter series, measurement error, and linking isotopic mineral dates with fossil relative ages to set boundaries.",
+    "overview": {
+      "headline": "Radioactive decay provides numeric ages for the geologic time scale",
+      "keyPoints": [
+        {
+          "id": "assignment-by-radioactivity",
+          "point": "The assignment of rock ages in thousands, millions, and billions of years was made possible by the discovery of radioactivity",
+          "sourceId": "usgs-fossils-numeric-time-scale",
+          "quote": "The assignment of ages of rocks in thousands, millions, and billions of years was made possible by the discovery of radioactivity."
+        },
+        {
+          "id": "half-life-definition",
+          "point": "The half-life of a radioactive isotope is the length of time for one-half of parent atoms to decay to daughter atoms",
+          "sourceId": "usgs-fossils-numeric-time-scale",
+          "quote": "The half-life of a radioactive isotope is the length of time required for exactly one-half of the parent atoms to decay to daughter atoms."
+        },
+        {
+          "id": "decay-series-useful",
+          "point": "four parent/daughter decay series are especially useful for dating and include carbon to nitrogen and potassium to argon",
+          "sourceId": "usgs-fossils-numeric-time-scale",
+          "quote": "four parent/daughter decay series are especially useful: carbon to nitrogen, potassium to argon, rubidium to strontium, and uranium to lead."
+        },
+        {
+          "id": "isotopic-mineral-formation",
+          "point": "Isotopic techniques are used to measure the time at which a particular mineral within a rock was formed",
+          "sourceId": "usgs-fossils-numeric-time-scale",
+          "quote": "Isotopic techniques are used to measure the time at which a particular mineral within a rock was formed."
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "radioactivity-term",
+          "term": "radioactivity",
+          "gloss": "discovery that enabled assignment of numeric ages in thousands of years to rocks",
+          "sourceId": "usgs-fossils-numeric-time-scale",
+          "quote": "The assignment of ages of rocks in thousands, millions, and billions of years was made possible by the discovery of radioactivity."
+        },
+        {
+          "id": "half-life-term",
+          "term": "half-life",
+          "gloss": "length of time required for one half of parent atoms to decay to daughter atoms",
+          "sourceId": "usgs-fossils-numeric-time-scale",
+          "quote": "The half-life of a radioactive isotope is the length of time required for exactly one-half of the parent atoms to decay to daughter atoms."
+        },
+        {
+          "id": "isotope-term",
+          "term": "isotope",
+          "gloss": "radioactive form of an element with different number of neutrons but same protons",
+          "sourceId": "usgs-fossils-numeric-time-scale",
+          "quote": "The half-life of a radioactive isotope is the length of time required for exactly one-half of the parent atoms to decay to daughter atoms."
+        },
+        {
+          "id": "atom-term",
+          "term": "atom",
+          "gloss": "basic unit of each chemical element containing a nucleus with protons and neutrons",
+          "sourceId": "usgs-fossils-numeric-time-scale",
+          "quote": "The basic unit of each chemical element is the atom."
+        },
+        {
+          "id": "isotopic-techniques-term",
+          "term": "Isotopic techniques",
+          "gloss": "methods used to measure time of mineral formation within a rock",
+          "sourceId": "usgs-fossils-numeric-time-scale",
+          "quote": "Isotopic techniques are used to measure the time at which a particular mineral within a rock was formed."
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "half-life-v1",
+        "pedagogicalReason": "Teaches the constant-rate half-life definition that underlies numeric age calculations from parent and daughter counts.",
+        "focusQuote": "The half-life of a radioactive isotope is the length of time required for exactly one-half of the parent atoms to decay to daughter atoms.",
+        "focusSourceId": "usgs-fossils-numeric-time-scale"
+      },
+      {
+        "componentId": "quiz-cards-v1",
+        "pedagogicalReason": "Reinforces memorable numeric facts about Earth and fossils and the stated limits on measurement accuracy.",
+        "focusQuote": "Earth is about 4.6 billion years old?",
+        "focusSourceId": "usgs-fossils-numeric-time-scale"
+      },
+      {
+        "componentId": "sort-groups-v1",
+        "pedagogicalReason": "Groups the four parent to daughter systems the page identifies as especially useful for dating geologic materials.",
+        "focusQuote": "four parent/daughter decay series are especially useful: carbon to nitrogen, potassium to argon, rubidium to strontium, and uranium to lead.",
+        "focusSourceId": "usgs-fossils-numeric-time-scale"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029145051-afad87ef:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"earth-science\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 3568 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 12 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 4, keyTerms 5, componentPlan 3; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (3 entries, 1 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "6bcb2449d68e49b3a6fcfadd6cc588ca",
+    "usage": {
+      "promptTokens": 4122,
+      "completionTokens": 13642,
+      "reasoningTokens": 12690,
+      "cachedTokens": 0
+    },
+    "latencyMs": 49966,
+    "estCostUSD": 0.063131,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

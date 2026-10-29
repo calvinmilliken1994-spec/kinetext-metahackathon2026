@@ -1,0 +1,205 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "physics",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "Page covers free fall definition, constant acceleration due to gravity, velocity and displacement formulas, tabulated values over time intervals, and contrast with atmospheric drag including Galileo observation",
+    "overview": {
+      "headline": "Free fall motion under constant gravity with velocity and displacement relations",
+      "keyPoints": [
+        {
+          "id": "free-fall-definition",
+          "point": "Free falling defined as motion only because of gravity and described by Newtonian motion laws",
+          "sourceId": "nasa-grc-motion-of-free-falling-object",
+          "quote": "An object that is moving only because of the action of gravity is said to be free falling and its motion is described by Newton’s second law of motion."
+        },
+        {
+          "id": "constant-acceleration",
+          "point": "Acceleration is constant and equal to gravitational acceleration at sea level",
+          "sourceId": "nasa-grc-motion-of-free-falling-object",
+          "quote": "The acceleration is constant and equal to the gravitational acceleration g which is 9.8 meters per square second at sea level on the Earth."
+        },
+        {
+          "id": "shape-not-factor",
+          "point": "Weight size and shape are not a factor in describing free fall",
+          "sourceId": "nasa-grc-motion-of-free-falling-object",
+          "quote": "The weight, size, and shape of the object are not a factor in describing a free fall."
+        },
+        {
+          "id": "velocity-location",
+          "point": "Knowing acceleration we can determine velocity and location at any time",
+          "sourceId": "nasa-grc-motion-of-free-falling-object",
+          "quote": "Knowing the acceleration, we can determine the velocity and location of any free falling object at any time using the following equations."
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "gravitational-force",
+          "term": "gravitational force",
+          "gloss": "external force expressed as weight acting on object in vacuum",
+          "sourceId": "nasa-grc-motion-of-free-falling-object",
+          "quote": "An object that falls through a vacuum is subjected to only one external force, the gravitational force, expressed as the weight of the object."
+        },
+        {
+          "id": "acceleration",
+          "term": "acceleration",
+          "gloss": "constant gravitational acceleration causing steady change in velocity",
+          "sourceId": "nasa-grc-motion-of-free-falling-object",
+          "quote": "The acceleration is constant and equal to the gravitational acceleration g which is 9.8 meters per square second at sea level on the Earth."
+        },
+        {
+          "id": "velocity-term",
+          "term": "velocity",
+          "gloss": "velocity determined from acceleration and time showing motion change",
+          "sourceId": "nasa-grc-motion-of-free-falling-object",
+          "quote": "Knowing the acceleration, we can determine the velocity and location of any free falling object at any time using the following equations."
+        },
+        {
+          "id": "displacement",
+          "term": "displacement",
+          "gloss": "displacement from initial location linked to acceleration",
+          "sourceId": "nasa-grc-motion-of-free-falling-object",
+          "quote": "where a is the acceleration, V is the velocity, and X is the displacement from an initial location."
+        },
+        {
+          "id": "drag-force",
+          "term": "drag force",
+          "gloss": "additional drag force acting through atmosphere complicating motion description",
+          "sourceId": "nasa-grc-motion-of-free-falling-object",
+          "quote": "there is an additional drag force acting on the object and the physics involved with describing the motion of the object is more complex"
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "formula-explorer-v1",
+        "pedagogicalReason": "Exploring the velocity relationship helps learners see linear dependence on time under constant acceleration",
+        "focusQuote": "V = a * t",
+        "focusSourceId": "nasa-grc-motion-of-free-falling-object"
+      },
+      {
+        "componentId": "sequence-v1",
+        "pedagogicalReason": "Ordering constant acceleration then linear velocity then quadratic displacement mirrors taught progression and reinforces time relationships",
+        "focusQuote": "Notice that the acceleration is a constant, the velocity increases linearly, and the location increases quadratically.",
+        "focusSourceId": "nasa-grc-motion-of-free-falling-object"
+      },
+      {
+        "componentId": "compare-table-v1",
+        "pedagogicalReason": "Contrasting vacuum free fall with atmospheric fall highlights role of drag force and limits of idealised motion description",
+        "focusQuote": "there is an additional drag force acting on the object and the physics involved with describing the motion of the object is more complex",
+        "focusSourceId": "nasa-grc-motion-of-free-falling-object"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029143831-3c94cf97:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"physics\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 2615 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": false,
+        "message": "keyPoints[0] (free-fall-definition): quote \"An object that is moving only because of the action of gravi\" is 151 characters, expected <= 150 (expected verbatim quotes of 1-150 characters that appear in the cited source)",
+        "path": "/overview/keyPoints/0/quote",
+        "affected": [
+          "/overview/keyPoints/0/quote"
+        ]
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": false,
+        "message": "keyPoints[0].quote is 151 characters, expected 1-150",
+        "path": "/overview/keyPoints/0/quote",
+        "affected": [
+          "/overview/keyPoints/0/quote"
+        ]
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (3 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "760c31eca3b54167a9a8c80c3769acd5",
+    "usage": {
+      "promptTokens": 4038,
+      "completionTokens": 10671,
+      "reasoningTokens": 9800,
+      "cachedTokens": 0
+    },
+    "latencyMs": 44470,
+    "estCostUSD": 0.05039925,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

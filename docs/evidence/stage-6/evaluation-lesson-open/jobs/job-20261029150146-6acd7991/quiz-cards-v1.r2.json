@@ -1,0 +1,231 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Unpowered Flight and Steady Descent Review",
+    "cards": [
+      {
+        "id": "glider-definition",
+        "stem": "What characterizes a glider as a special kind of aircraft",
+        "options": [
+          "has no engine",
+          "has a powered jet",
+          "uses a rocket motor",
+          "includes a turboprop"
+        ],
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "A glider is a special kind of aircraft that has no engine.",
+        "hint": "Think about what powers this aircraft type"
+      },
+      {
+        "id": "glide-angle-term",
+        "stem": "What name is given to the angle where the steady flight path meets the ground",
+        "options": [
+          "glide angle",
+          "climb vector",
+          "stall margin",
+          "thrust line"
+        ],
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The flight path intersects the ground at an angle a called the glide angle.",
+        "hint": "Recall the term for the inclined flight path intersection"
+      },
+      {
+        "id": "tangent-relation",
+        "stem": "For calculating the glide angle with trigonometry what is divided by distance flown",
+        "options": [
+          "change in height h",
+          "total wing area",
+          "engine thrust value",
+          "fuel load mass"
+        ],
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The tangent tan of the glide angle a is equal to the change in height h divided by the distance flown d:",
+        "hint": "Focus on the height component in the ratio"
+      },
+      {
+        "id": "force-balance-weight",
+        "stem": "In the steady descent vector balance what equals the combined lift and drag components",
+        "options": [
+          "weight W",
+          "engine power",
+          "forward speed",
+          "air density"
+        ],
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The lift L times the cosine cos of the glide angle plus the drag D times the sine sin of the glide angle is equal to the weight W:",
+        "hint": "Consider which downward force is balanced in steady flight"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029150146-6acd7991:quiz-cards-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "quiz-cards-v1: no weakening — every one of the 1 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "fc66fe180fcb48f683b50dad26d76b0f",
+    "usage": {
+      "promptTokens": 4003,
+      "completionTokens": 2466,
+      "reasoningTokens": 2089,
+      "cachedTokens": 0
+    },
+    "latencyMs": 7809,
+    "estCostUSD": 0.01548425,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029150146-6acd7991:quiz-cards-v1:r2",
+    "componentId": "quiz-cards-v1",
+    "title": "Unpowered Flight and Steady Descent Review",
+    "sources": [
+      {
+        "id": "nasa-grc-glider-trajectory-problem",
+        "title": "Glider Trajectory Problem — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/glider-trajectory-problem/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "66e6cfc191fb83e9cfff3bc323a0394b392cbb4e0278aba87b367f3203c3c1e2"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "fc66fe180fcb48f683b50dad26d76b0f",
+      "runId": "job-20261029150146-6acd7991",
+      "promptVersion": "s6-v1",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T15:02:49.174Z"
+    },
+    "seed": 1635931037,
+    "cards": [
+      {
+        "id": "glider-definition",
+        "stem": "What characterizes a glider as a special kind of aircraft",
+        "options": [
+          "has no engine",
+          "has a powered jet",
+          "uses a rocket motor",
+          "includes a turboprop"
+        ],
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "A glider is a special kind of aircraft that has no engine.",
+        "hint": "Think about what powers this aircraft type"
+      },
+      {
+        "id": "glide-angle-term",
+        "stem": "What name is given to the angle where the steady flight path meets the ground",
+        "options": [
+          "glide angle",
+          "climb vector",
+          "stall margin",
+          "thrust line"
+        ],
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The flight path intersects the ground at an angle a called the glide angle.",
+        "hint": "Recall the term for the inclined flight path intersection"
+      },
+      {
+        "id": "tangent-relation",
+        "stem": "For calculating the glide angle with trigonometry what is divided by distance flown",
+        "options": [
+          "change in height h",
+          "total wing area",
+          "engine thrust value",
+          "fuel load mass"
+        ],
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The tangent tan of the glide angle a is equal to the change in height h divided by the distance flown d:",
+        "hint": "Focus on the height component in the ratio"
+      },
+      {
+        "id": "force-balance-weight",
+        "stem": "In the steady descent vector balance what equals the combined lift and drag components",
+        "options": [
+          "weight W",
+          "engine power",
+          "forward speed",
+          "air density"
+        ],
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The lift L times the cosine cos of the glide angle plus the drag D times the sine sin of the glide angle is equal to the weight W:",
+        "hint": "Consider which downward force is balanced in steady flight"
+      }
+    ]
+  }
+}

@@ -1,0 +1,191 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "Progression of free fall motion",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Order follows the text from definition to the summary of motion relationships",
+    "steps": [
+      {
+        "id": "free-falling-definition",
+        "label": "free falling",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "is said to be free falling and its motion is described by Newton’s second law of motion.",
+        "orderHint": "Think how constant acceleration leads to changes in velocity and then in position"
+      },
+      {
+        "id": "acceleration-is-constant",
+        "label": "acceleration is constant",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "The acceleration is constant and equal to the gravitational acceleration g which is 9.8 meters per square second at sea level on the Earth.",
+        "orderHint": "Think how constant acceleration leads to changes in velocity and then in position"
+      },
+      {
+        "id": "velocity-relation",
+        "label": "velocity",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Knowing the acceleration, we can determine the velocity and location of any free falling object at any time using the following equations.",
+        "orderHint": "Think how constant acceleration leads to changes in velocity and then in position"
+      },
+      {
+        "id": "displacement-from-initial-location",
+        "label": "displacement from an initial location",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "where a is the acceleration, V is the velocity, and X is the displacement from an initial location.",
+        "orderHint": "Think how constant acceleration leads to changes in velocity and then in position"
+      },
+      {
+        "id": "location-increases-quadratically",
+        "label": "location increases quadratically",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Notice that the acceleration is a constant, the velocity increases linearly, and the location increases quadratically.",
+        "orderHint": "Think how constant acceleration leads to changes in velocity and then in position"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029143831-3c94cf97:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step label occurs in its own quote after normalisation (labels-in-quotes)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 5 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "cf6ec7805bb44bc1bed340bd5d129417",
+    "usage": {
+      "promptTokens": 2856,
+      "completionTokens": 5834,
+      "reasoningTokens": 5436,
+      "cachedTokens": 0
+    },
+    "latencyMs": 24633,
+    "estCostUSD": 0.0283645,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029143831-3c94cf97:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "Progression of free fall motion",
+    "sources": [
+      {
+        "id": "nasa-grc-motion-of-free-falling-object",
+        "title": "Motion of Free Falling Object — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/motion-of-free-falling-object/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "f94199ea21e14dad578baee19694e534fff3dba5dc88f9bc2ea6ec082445c317"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "cf6ec7805bb44bc1bed340bd5d129417",
+      "runId": "job-20261029143831-3c94cf97",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T14:39:54.009Z"
+    },
+    "seed": 2245680887,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Order follows the text from definition to the summary of motion relationships",
+    "steps": [
+      {
+        "id": "free-falling-definition",
+        "label": "free falling",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "is said to be free falling and its motion is described by Newton’s second law of motion.",
+        "orderHint": "Think how constant acceleration leads to changes in velocity and then in position"
+      },
+      {
+        "id": "acceleration-is-constant",
+        "label": "acceleration is constant",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "The acceleration is constant and equal to the gravitational acceleration g which is 9.8 meters per square second at sea level on the Earth.",
+        "orderHint": "Think how constant acceleration leads to changes in velocity and then in position"
+      },
+      {
+        "id": "velocity-relation",
+        "label": "velocity",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Knowing the acceleration, we can determine the velocity and location of any free falling object at any time using the following equations.",
+        "orderHint": "Think how constant acceleration leads to changes in velocity and then in position"
+      },
+      {
+        "id": "displacement-from-initial-location",
+        "label": "displacement from an initial location",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "where a is the acceleration, V is the velocity, and X is the displacement from an initial location.",
+        "orderHint": "Think how constant acceleration leads to changes in velocity and then in position"
+      },
+      {
+        "id": "location-increases-quadratically",
+        "label": "location increases quadratically",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Notice that the acceleration is a constant, the velocity increases linearly, and the location increases quadratically.",
+        "orderHint": "Think how constant acceleration leads to changes in velocity and then in position"
+      }
+    ]
+  }
+}

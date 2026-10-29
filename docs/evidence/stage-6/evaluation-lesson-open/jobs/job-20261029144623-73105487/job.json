@@ -1,0 +1,63 @@
+{
+  "jobId": "job-20261029144623-73105487",
+  "sourceId": "nasa-grc-role-of-the-mach-number",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T14:46:23.388Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.215032,
+  "reservedUnknownUSD": 0,
+  "engine": "speed-of-sound-v1",
+  "revisions": 3,
+  "repairs": [
+    {
+      "revision": 2,
+      "repairOf": 1,
+      "targeted": [
+        "schema.full"
+      ],
+      "fixed": [
+        "schema.full"
+      ],
+      "remaining": [
+        "repair.no-weakening"
+      ],
+      "publishable": false,
+      "afterInjectedFault": false
+    },
+    {
+      "revision": 3,
+      "repairOf": 2,
+      "targeted": [
+        "repair.no-weakening"
+      ],
+      "fixed": [],
+      "remaining": [
+        "repair.no-weakening"
+      ],
+      "publishable": false,
+      "afterInjectedFault": false
+    }
+  ],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 41044,
+    "startedAt": "2026-10-29T14:46:23.388Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 3,
+    "componentsPublished": 2,
+    "componentsFailed": 1,
+    "partialPublish": true
+  },
+  "componentRepairs": [],
+  "bestRevision": 1,
+  "checksPassed": 0,
+  "checksTotal": 1,
+  "finishedAt": "2026-10-29T14:48:36.188Z"
+}

@@ -1,0 +1,131 @@
+{
+  "jobId": "job-20261029144016-8da51bbe",
+  "analysisRef": "job-20261029144016-8da51bbe/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029144016-8da51bbe:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Constant speed cruise and distance as ground speed times time aloft",
+    "sources": [
+      {
+        "id": "nasa-grc-range-constant-velocity",
+        "title": "Range – Constant Velocity — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/range-constant-velocity/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "f1f4102e23398f882264cb387f0c4115207597b855cadae074925c9e7c1a4127"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "6ad16ce7aeb44e61b2ff5602360d3eec",
+      "runId": "job-20261029144016-8da51bbe",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T14:40:59.505Z"
+    },
+    "seed": 3528377399,
+    "headline": "Constant speed cruise and distance as ground speed times time aloft",
+    "keyPoints": [
+      {
+        "id": "balanced-forces-cruise",
+        "point": "Aircraft maintains constant airspeed in level flight when net external force is absent with lift equal to weight and thrust equal to drag",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "Since there is no net external force on the aircraft, the aircraft maintains a constant airspeed as described by Newton’s First Law of Motion."
+      },
+      {
+        "id": "general-rate-equation",
+        "point": "General rate equation states rate times time equals amount for relating how much is produced over time",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "The general rate equation is “rate times time equals amount”."
+      },
+      {
+        "id": "distance-ground-speed-time",
+        "point": "Distance flown equals ground speed times time aloft when cruising at constant ground speed",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "the distance flown is equal to the ground speed times the time aloft."
+      },
+      {
+        "id": "maximum-range-fuel-limit",
+        "point": "Maximum distance aircraft can fly equals ground speed times maximum time set by fuel load after which drag slows aircraft and lift decreases",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "The maximum distance that the aircraft can fly is then equal to the ground speed times the maximum time (tmax)."
+      },
+      {
+        "id": "combat-radius-definition",
+        "point": "Combat radius is defined as half the one way range to reflect round trip missions without refueling in enemy territory",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "The combat radius would be half of the range as specified here."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "lift",
+        "term": "lift",
+        "gloss": "upward force that balances weight in level flight",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "in which the lift is equal to the weight, and the thrust is equal to the drag."
+      },
+      {
+        "id": "thrust",
+        "term": "thrust",
+        "gloss": "forward force that balances drag to keep speed constant",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "So, the lift, drag, thrust, and fuel consumption rate also continually change."
+      },
+      {
+        "id": "ground-speed",
+        "term": "ground speed",
+        "gloss": "speed over ground used with time aloft to compute distance flown",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "the distance flown is equal to the ground speed times the time aloft."
+      },
+      {
+        "id": "maximum-range",
+        "term": "maximum range",
+        "gloss": "greatest distance covered at given ground speed before maximum time expires",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "We call this distance the maximum range (R) of the aircraft."
+      },
+      {
+        "id": "combat-radius",
+        "term": "combat radius",
+        "gloss": "range for one leg of a round trip taken as half of total range",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "The combat radius would be half of the range as specified here."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029144016-8da51bbe:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "formula-explorer-v1",
+      "specId": "job-20261029144016-8da51bbe:formula-explorer-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261029144016-8da51bbe:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

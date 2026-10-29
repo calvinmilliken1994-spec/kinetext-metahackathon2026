@@ -1,0 +1,195 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "chemistry",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "Page covers plutonium creation in reactors, radiation types and toxicity, common isotopes and half-lives, transformation to daughter products, uses in pacemakers and space missions, and reprocessing of spent fuel into mixed oxide fuel.",
+    "overview": {
+      "headline": "Plutonium isotopes, half-lives, decay and reactor fuel cycle",
+      "keyPoints": [
+        {
+          "id": "plutonium-origin",
+          "point": "Plutonium is a radioactive metallic element produced in reactors when uranium absorbs neutrons",
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "Plutonium is a radioactive metallic element with the atomic number 94."
+        },
+        {
+          "id": "radiation-alpha",
+          "point": "Plutonium emits alpha particles that are easily stopped with short range and can be toxic if inhaled",
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "Plutonium predominantly emits alpha particles – a type of radiation that is easily stopped and has a short range."
+        },
+        {
+          "id": "half-lives-decay",
+          "point": "Different plutonium isotopes have different half-lives and shorter half-lives decay more quickly with more energetic radioactivity",
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "Substances with shorter half-lives decay more quickly than those with longer half-lives, so they emit more energetic radioactivity."
+        },
+        {
+          "id": "spent-fuel-mox",
+          "point": "Spent fuel contains plutonium that can be separated by reprocessing to produce mixed oxide fuel for power reactors",
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "Spent nuclear fuel from U.S. reactors contains about 1 percent plutonium by weight."
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "plutonium-term",
+          "term": "plutonium",
+          "gloss": "radioactive metallic element with atomic number 94 that is created in reactors",
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "Plutonium is a radioactive metallic element with the atomic number 94."
+        },
+        {
+          "id": "isotopes-term",
+          "term": "isotopes",
+          "gloss": "different forms of plutonium with different half-lives such as common plutonium types",
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "There are five “common” isotopes of plutonium, Pu-238, Pu-239, Pu-240, Pu-241, and Pu-242."
+        },
+        {
+          "id": "half-life-term",
+          "term": "half-life",
+          "gloss": "interval measured in years for plutonium to lose half its radioactivity",
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "Pu-239 has a half-life of 24,100 years and Pu-241’s half-life is 14.4 years."
+        },
+        {
+          "id": "fissionable-term",
+          "term": "fissionable",
+          "gloss": "nucleus can easily split apart when struck by a neutron",
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "These are all “fissionable” – the atom’s nucleus can easily split apart if it is struck by a neutron."
+        },
+        {
+          "id": "reprocessing-term",
+          "term": "reprocessing",
+          "gloss": "uses chemicals to separate plutonium from uranium and other fission products",
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "This process, known as reprocessing, uses chemicals to separate plutonium from uranium and other fission products."
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "half-life-v1",
+        "pedagogicalReason": "Teaches half-life definition and provides isotope half-lives for interactive decay modeling",
+        "focusQuote": "The different isotopes have different “half-lives” – the time it takes to lose half of its radioactivity.",
+        "focusSourceId": "nrc-backgrounder-plutonium"
+      },
+      {
+        "componentId": "quiz-cards-v1",
+        "pedagogicalReason": "Supports recall of checkable facts about plutonium uses and spent fuel composition",
+        "focusQuote": "Spent nuclear fuel from U.S. reactors contains about 1 percent plutonium by weight.",
+        "focusSourceId": "nrc-backgrounder-plutonium"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029144939-795eccda:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"chemistry\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 2853 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 11 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 4, keyTerms 5, componentPlan 2; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (2 entries, 1 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": false,
+        "message": "keyTerms[0].gloss states the number 94, which does not appear on the page or in the same quote (N-01)",
+        "path": "/overview/keyTerms/0/gloss",
+        "affected": [
+          "/overview/keyTerms/0/gloss"
+        ]
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "7ddeb5d505304b38bdb28f2b215a7a6e",
+    "usage": {
+      "promptTokens": 4010,
+      "completionTokens": 10479,
+      "reasoningTokens": 9529,
+      "cachedTokens": 0
+    },
+    "latencyMs": 42747,
+    "estCostUSD": 0.04954825,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

@@ -1,0 +1,298 @@
+{
+  "gen": {
+    "schemaVersion": "formula-explorer-v1",
+    "title": "Exploring the velocity relationship helps learners see linear dependence on time under constant acceleration",
+    "formulaText": "V = a * t",
+    "sourceId": "nasa-grc-motion-of-free-falling-object",
+    "quote": "V = a * t",
+    "expression": "a * t",
+    "variables": [
+      {
+        "name": "a",
+        "pageSymbol": "a",
+        "meaning": "acceleration",
+        "meaningQuoted": true,
+        "quote": "where a is the acceleration, V is the velocity, and X is the displacement from an initial location.",
+        "unit": "m/sec^2",
+        "min": 4.9,
+        "max": 19.6,
+        "default": 9.8
+      },
+      {
+        "name": "v",
+        "pageSymbol": "V",
+        "meaning": "velocity",
+        "meaningQuoted": true,
+        "quote": "where a is the acceleration, V is the velocity, and X is the displacement from an initial location.",
+        "unit": "m/sec",
+        "min": 9.8,
+        "max": 78.4,
+        "default": 19.6
+      },
+      {
+        "name": "t",
+        "pageSymbol": "t",
+        "meaning": "time",
+        "meaningQuoted": false,
+        "quote": "Knowing the acceleration, we can determine the velocity and location of any free falling object at any time using the following equations.",
+        "unit": "sec",
+        "min": 1,
+        "max": 8,
+        "default": 2
+      }
+    ],
+    "xVariable": "t",
+    "cases": [
+      {
+        "id": "case-1",
+        "inputs": [
+          {
+            "name": "a",
+            "value": 9.8
+          },
+          {
+            "name": "v",
+            "value": 19.6
+          },
+          {
+            "name": "t",
+            "value": 2
+          }
+        ]
+      },
+      {
+        "id": "case-2",
+        "inputs": [
+          {
+            "name": "a",
+            "value": 9.8
+          },
+          {
+            "name": "v",
+            "value": 39.2
+          },
+          {
+            "name": "t",
+            "value": 4
+          }
+        ]
+      }
+    ],
+    "sourceExample": {
+      "quote": "",
+      "resultNumber": 0,
+      "tolerance": 0
+    },
+    "hasSourceExample": false
+  },
+  "report": {
+    "artifactId": "job-20261029143831-3c94cf97:formula-explorer-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every formula-explorer case id and title shape is within the frozen limits"
+      },
+      {
+        "id": "FE-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "the formula quote (1 quote) appears verbatim in source \"nasa-grc-motion-of-free-falling-object\" and formulaText occurs inside the quote after normalisation (formula-quoted)"
+      },
+      {
+        "id": "FE-02",
+        "kind": "semantic",
+        "passed": false,
+        "message": "variable \"v\" is declared but never used in the expression (the variable sets must be equal)",
+        "path": "/variables/1/name",
+        "affected": [
+          "/variables/1/name",
+          "/expression"
+        ]
+      },
+      {
+        "id": "FE-03",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 variables are declared with valid unique non-reserved names, exact page symbols, grounded quotes (top-level sourceId) and xVariable \"t\" is one of them (variables-declared)"
+      },
+      {
+        "id": "FE-04",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "all 2 case(s) carry exactly the declared variables with finite in-range inputs and every recomputed output is finite (the system sets the outputs) (cases-recomputed)"
+      },
+      {
+        "id": "FE-05",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "hasSourceExample=false with the empty sourceExample shape (sourceExample-check)"
+      },
+      {
+        "id": "FE-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every slider range is sane (finite, min < max, default inside, positive-range ratio <= 1000000) and no literal exponent exceeds 100 (ranges-sane)"
+      },
+      {
+        "id": "FE-07",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title and variable meanings appears on the page or in the same quote (N-01); units and formula fields are notation and exempt (numbers-checkable)"
+      },
+      {
+        "id": "FE-08",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the expression matches the page formula \"a * t\" parsed from the quote with the same grammar: 5/5 finite slider-range sample points agree within relative 1e-9 (expression-matches-page-formula)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "formula-explorer-v1: no weakening — every one of the 1 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "b6b4be06ed474a54bd3dbfafce923069",
+    "usage": {
+      "promptTokens": 4851,
+      "completionTokens": 1879,
+      "reasoningTokens": 1510,
+      "cachedTokens": 0
+    },
+    "latencyMs": 8231,
+    "estCostUSD": 0.0140495,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029143831-3c94cf97:formula-explorer-v1:r2",
+    "componentId": "formula-explorer-v1",
+    "title": "Exploring the velocity relationship helps learners see linear dependence on time under constant acceleration",
+    "sources": [
+      {
+        "id": "nasa-grc-motion-of-free-falling-object",
+        "title": "Motion of Free Falling Object — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/motion-of-free-falling-object/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "f94199ea21e14dad578baee19694e534fff3dba5dc88f9bc2ea6ec082445c317"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "b6b4be06ed474a54bd3dbfafce923069",
+      "runId": "job-20261029143831-3c94cf97",
+      "promptVersion": "s6-v1",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T14:40:39.997Z"
+    },
+    "seed": 2683802155,
+    "formulaText": "V = a * t",
+    "sourceId": "nasa-grc-motion-of-free-falling-object",
+    "quote": "V = a * t",
+    "expression": "a * t",
+    "variables": [
+      {
+        "name": "a",
+        "pageSymbol": "a",
+        "meaning": "acceleration",
+        "meaningQuoted": true,
+        "quote": "where a is the acceleration, V is the velocity, and X is the displacement from an initial location.",
+        "unit": "m/sec^2",
+        "min": 4.9,
+        "max": 19.6,
+        "default": 9.8
+      },
+      {
+        "name": "v",
+        "pageSymbol": "V",
+        "meaning": "velocity",
+        "meaningQuoted": true,
+        "quote": "where a is the acceleration, V is the velocity, and X is the displacement from an initial location.",
+        "unit": "m/sec",
+        "min": 9.8,
+        "max": 78.4,
+        "default": 19.6
+      },
+      {
+        "name": "t",
+        "pageSymbol": "t",
+        "meaning": "time",
+        "meaningQuoted": false,
+        "quote": "Knowing the acceleration, we can determine the velocity and location of any free falling object at any time using the following equations.",
+        "unit": "sec",
+        "min": 1,
+        "max": 8,
+        "default": 2
+      }
+    ],
+    "xVariable": "t",
+    "cases": [
+      {
+        "id": "case-1",
+        "inputs": [
+          {
+            "name": "a",
+            "value": 9.8
+          },
+          {
+            "name": "v",
+            "value": 19.6
+          },
+          {
+            "name": "t",
+            "value": 2
+          }
+        ]
+      },
+      {
+        "id": "case-2",
+        "inputs": [
+          {
+            "name": "a",
+            "value": 9.8
+          },
+          {
+            "name": "v",
+            "value": 39.2
+          },
+          {
+            "name": "t",
+            "value": 4
+          }
+        ]
+      }
+    ],
+    "sourceExample": {
+      "quote": "",
+      "resultNumber": 0,
+      "tolerance": 0
+    },
+    "hasSourceExample": false
+  }
+}

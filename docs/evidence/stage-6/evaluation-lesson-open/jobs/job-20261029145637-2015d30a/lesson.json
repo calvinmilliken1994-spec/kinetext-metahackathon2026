@@ -1,0 +1,125 @@
+{
+  "jobId": "job-20261029145637-2015d30a",
+  "analysisRef": "job-20261029145637-2015d30a/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029145637-2015d30a:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Lee Resolution proposed independence and led to committees for declaration and alliances in 1776",
+    "sources": [
+      {
+        "id": "nara-lee-resolution",
+        "title": "Lee Resolution (1776) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/lee-resolution",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Lee Resolution (1776)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "a18b4131b1c5223c9b0685aed8fa77a746537b2af6e2084d892549e8808ce9e3"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "6d674b2a777a4d23a61aac63937956d2",
+      "runId": "job-20261029145637-2015d30a",
+      "promptVersion": "s6-v1",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T14:58:01.875Z"
+    },
+    "seed": 1238029576,
+    "headline": "Lee Resolution proposed independence and led to committees for declaration and alliances in 1776",
+    "keyPoints": [
+      {
+        "id": "resolution-introduced",
+        "point": "Richard Henry Lee introduced a resolution proposing independence in the Second Continental Congress on June 7 1776",
+        "sourceId": "nara-lee-resolution",
+        "quote": "On June 7, 1776, Richard Henry Lee of Virginia, introduced this resolution in the Second Continental Congress"
+      },
+      {
+        "id": "three-parts",
+        "point": "The Lee Resolution contained three parts including a declaration of independence and a plan for confederation",
+        "sourceId": "nara-lee-resolution",
+        "quote": "The Lee Resolution contained three parts: a declaration of independence, a call to form foreign alliances, and \"a plan for confederation.\""
+      },
+      {
+        "id": "committees-appointed",
+        "point": "Congress appointed three concurrent committees to draft the declaration and to prepare alliance and confederation plans",
+        "sourceId": "nara-lee-resolution",
+        "quote": "On June 11, 1776, the Congress appointed three concurrent committees in response to the Lee Resolution"
+      },
+      {
+        "id": "deferred-vote",
+        "point": "Approval was deferred until July while members obtained instructions and Congress adopted the declaration portion",
+        "sourceId": "nara-lee-resolution",
+        "quote": "approval was deferred until July 2. On that date, Congress adopted the first part (the declaration)."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "continental-congress",
+        "term": "Continental Congress",
+        "gloss": "delegates gathering that became the governing body of the union during the Revolution",
+        "sourceId": "nara-lee-resolution",
+        "quote": "The colonists elected delegates to attend a Continental Congress that eventually became the governing body of the union during the Revolution."
+      },
+      {
+        "id": "virginia-convention",
+        "term": "Virginia Convention",
+        "gloss": "authorizing body in Virginia that gave instruction to propose independence",
+        "sourceId": "nara-lee-resolution",
+        "quote": "acting under the instruction of the Virginia Convention."
+      },
+      {
+        "id": "lee-resolution",
+        "term": "Lee Resolution",
+        "gloss": "resolution with declaration and alliance and confederation elements",
+        "sourceId": "nara-lee-resolution",
+        "quote": "The Lee Resolution contained three parts: a declaration of independence, a call to form foreign alliances, and \"a plan for confederation.\""
+      },
+      {
+        "id": "foreign-alliances",
+        "term": "foreign alliances",
+        "gloss": "planned partnerships forming support from other nations",
+        "sourceId": "nara-lee-resolution",
+        "quote": "a second to draw up a plan \"for forming foreign alliances,\" and a third to \"prepare and digest the form of a confederation.\""
+      },
+      {
+        "id": "confederation-term",
+        "term": "confederation",
+        "gloss": "plan for uniting colonies under a shared structure delayed until later approval",
+        "sourceId": "nara-lee-resolution",
+        "quote": "The plan for making treaties was not approved until September of 1776; the plan of confederation was delayed until November of 1777."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "timeline-v1",
+      "specId": "nara-lee-resolution-job-20261029145637-2015d30a",
+      "status": "failed",
+      "reason": "timeline.date-grounded: event \"e4\" (1776-09): date not grounded — quote \"September of 1776; the plan of confederation was delayed unt\" contains no COMPLETE source date expression stating 1776-09 as ONE connected expression in a CLEAN context — the quote contains \"September of 1776\" (the preceding word \"until\" is an approx,",
+      "revision": 3
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029145637-2015d30a:quiz-cards-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261029145637-2015d30a:sequence-v1:r1",
+      "status": "passed",
+      "reason": "2 steps were left out because they could not be verified against the page: cause-effect-from-concerns-to-deferral (SEQ-03, SEQ-04), approval-deferred (SEQ-06).",
+      "revision": 1
+    }
+  ]
+}

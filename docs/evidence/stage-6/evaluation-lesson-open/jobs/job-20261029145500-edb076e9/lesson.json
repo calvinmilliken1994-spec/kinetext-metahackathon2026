@@ -1,0 +1,111 @@
+{
+  "jobId": "job-20261029145500-edb076e9",
+  "analysisRef": "job-20261029145500-edb076e9/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029145500-edb076e9:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Secret summer meeting in Philadelphia creates new frame of government",
+    "sources": [
+      {
+        "id": "nara-constitution",
+        "title": "Constitution of the United States (1787) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/constitution",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Constitution of the United States (1787)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "a14175b009333bebd61eaff70e3393928a8f0dbd0ae00027067c07b15d176db4"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "e6bf21cbcb244a40ae1986e0ffb9d3a6",
+      "runId": "job-20261029145500-edb076e9",
+      "promptVersion": "s6-v1",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T14:56:04.147Z"
+    },
+    "seed": 523185061,
+    "headline": "Secret summer meeting in Philadelphia creates new frame of government",
+    "keyPoints": [
+      {
+        "id": "secret-draft",
+        "point": "Delegates worked in secret during the summer to draft the new government document",
+        "sourceId": "nara-constitution",
+        "quote": "Drafted in secret by delegates to the Constitutional Convention during the summer of 1787"
+      },
+      {
+        "id": "philadelphia-convene",
+        "point": "The Federal Convention convened in Philadelphia intending to revise the Articles of Confederation",
+        "sourceId": "nara-constitution",
+        "quote": "The Federal Convention convened in the State House (Independence Hall) in Philadelphia on May 14, 1787, to revise the Articles of Confederation."
+      },
+      {
+        "id": "quorum-delay",
+        "point": "Members adjourned day to day until a quorum of seven states was obtained because only two were present",
+        "sourceId": "nara-constitution",
+        "quote": "the members adjourned from day to day until a quorum of seven states was obtained on May 25."
+      },
+      {
+        "id": "new-frame",
+        "point": "By mid-June discussion made clear the Convention would draft an entirely new frame of government instead of amending",
+        "sourceId": "nara-constitution",
+        "quote": "rather than amend the existing Articles, the Convention would draft an entirely new frame of government."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "quorum",
+        "term": "quorum",
+        "gloss": "minimum number of members needed for states to conduct business and make decisions",
+        "sourceId": "nara-constitution",
+        "quote": "the members adjourned from day to day until a quorum of seven states was obtained on May 25."
+      },
+      {
+        "id": "articles-of-confederation",
+        "term": "Articles of Confederation",
+        "gloss": "earlier agreement created for the states that the Convention gathered to revise",
+        "sourceId": "nara-constitution",
+        "quote": "The Federal Convention convened in the State House (Independence Hall) in Philadelphia on May 14, 1787, to revise the Articles of Confederation."
+      },
+      {
+        "id": "central-government",
+        "term": "central government",
+        "gloss": "national level that holds power debated for balance with state interests",
+        "sourceId": "nara-constitution",
+        "quote": "Among the chief points at issue were how much power to allow the central government, how many representatives in Congress to allow each state"
+      },
+      {
+        "id": "compromise",
+        "term": "compromise",
+        "gloss": "cooperative result shaped by many minds balancing different views with statesmanship",
+        "sourceId": "nara-constitution",
+        "quote": "The work of many minds, the Constitution stands as a model of cooperative statesmanship and the art of compromise."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261029145500-edb076e9:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029145500-edb076e9:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "1 card was left out because they could not be verified against the page: card-quorum-requirement (Q-06).",
+      "revision": 1
+    }
+  ]
+}

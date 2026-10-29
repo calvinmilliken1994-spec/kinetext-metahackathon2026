@@ -1,0 +1,68 @@
+{
+  "jobId": "job-20261029144623-29f52c03",
+  "sourceId": "cfpb-teenagers-and-saving",
+  "status": "failed",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T14:46:23.431Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.130449,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [
+    {
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "A-05",
+        "A-07",
+        "A-10"
+      ],
+      "fixed": [
+        "A-05",
+        "A-07"
+      ],
+      "remaining": [
+        "A-10"
+      ],
+      "passed": false
+    },
+    {
+      "attempt": 2,
+      "revision": 3,
+      "targeted": [
+        "A-10"
+      ],
+      "fixed": [
+        "A-10"
+      ],
+      "remaining": [
+        "A-05",
+        "A-07"
+      ],
+      "passed": false
+    }
+  ],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 41044,
+    "startedAt": "2026-10-29T14:46:23.431Z"
+  },
+  "lesson": {
+    "overviewReady": false,
+    "componentsPlanned": 0,
+    "componentsPublished": 0,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "error": {
+    "code": "ANALYSIS_INVALID",
+    "message": "analysis failed validation"
+  },
+  "finishedAt": "2026-10-29T14:48:10.852Z"
+}

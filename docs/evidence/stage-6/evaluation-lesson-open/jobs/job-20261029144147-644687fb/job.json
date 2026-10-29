@@ -1,0 +1,63 @@
+{
+  "jobId": "job-20261029144147-644687fb",
+  "sourceId": "nasa-grc-specific-heat-cp-cv",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T14:41:47.524Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.212248,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 41044,
+    "startedAt": "2026-10-29T14:41:47.524Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 3,
+    "componentsPublished": 2,
+    "componentsFailed": 1,
+    "partialPublish": true
+  },
+  "componentRepairs": [
+    {
+      "componentId": "formula-explorer-v1",
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "FE-02",
+        "FE-08"
+      ],
+      "fixed": [
+        "FE-08"
+      ],
+      "remaining": [
+        "FE-02"
+      ],
+      "passed": false
+    },
+    {
+      "componentId": "formula-explorer-v1",
+      "attempt": 2,
+      "revision": 3,
+      "targeted": [
+        "FE-02"
+      ],
+      "fixed": [
+        "FE-02"
+      ],
+      "remaining": [
+        "FE-08"
+      ],
+      "passed": false
+    }
+  ],
+  "finishedAt": "2026-10-29T14:44:01.706Z"
+}

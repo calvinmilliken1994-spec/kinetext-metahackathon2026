@@ -1,0 +1,203 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "history",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "Page covers issuance and purpose of proclamation as military measure, its scope limits, transformation of war character and expanded service by Black soldiers and sailors seeking liberty",
+    "overview": {
+      "headline": "Proclamation shifted war aims and expanded freedom through military measure",
+      "keyPoints": [
+        {
+          "id": "initial-war-aim",
+          "point": "Southern secession prompted Northern fight to preserve Union without initially targeting slavery for removal",
+          "sourceId": "nara-emancipation-proclamation",
+          "quote": "Initially, the Civil War between North and South was fought by the North to prevent the secession of the Southern states and preserve the Union."
+        },
+        {
+          "id": "preliminary-proclamation",
+          "point": "Preliminary Emancipation Proclamation issued by President Lincoln changed stated policy for states still in rebellion",
+          "sourceId": "nara-emancipation-proclamation",
+          "quote": "That changed on September 22, 1862, when President Lincoln issued his Preliminary Emancipation Proclamation"
+        },
+        {
+          "id": "limited-military-scope",
+          "point": "Military measure applied only to seceded states while leaving slavery untouched in loyal border states",
+          "sourceId": "nara-emancipation-proclamation",
+          "quote": "It applied only to states that had seceded from the Union, leaving slavery untouched in the loyal border states."
+        },
+        {
+          "id": "transformed-character",
+          "point": "Proclamation acceptance enabled Black men to join Union Army and Navy as liberators expanding military strength",
+          "sourceId": "nara-emancipation-proclamation",
+          "quote": "the Proclamation announced the acceptance of Black men into the Union Army and Navy, enabling the liberated to become liberators"
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "secession",
+          "term": "secession",
+          "gloss": "withdrawal of Southern states from Union that prompted initial war to preserve Union",
+          "sourceId": "nara-emancipation-proclamation",
+          "quote": "Initially, the Civil War between North and South was fought by the North to prevent the secession of the Southern states and preserve the Union."
+        },
+        {
+          "id": "rebellious-areas",
+          "term": "rebellious areas",
+          "gloss": "Confederate regions still in rebellion where persons held as slaves were declared free",
+          "sourceId": "nara-emancipation-proclamation",
+          "quote": "\"that all persons held as slaves\" within the rebellious areas \"are, and henceforward shall be free.\""
+        },
+        {
+          "id": "border-states",
+          "term": "border states",
+          "gloss": "loyal slaveholding states where slavery was left untouched by limited military measure",
+          "sourceId": "nara-emancipation-proclamation",
+          "quote": "It applied only to states that had seceded from the Union, leaving slavery untouched in the loyal border states."
+        },
+        {
+          "id": "antietam",
+          "term": "Battle of Antietam",
+          "gloss": "Union victory that preceded decision to change war goals through military measure",
+          "sourceId": "nara-emancipation-proclamation",
+          "quote": "Lincoln’s bold step to change the goals of the war was a military measure and came just a few days after the Union’s victory in the Battle of Antietam"
+        },
+        {
+          "id": "union-army-navy",
+          "term": "Union Army and Navy",
+          "gloss": "military branches that accepted Black men enabling liberated people to become liberators",
+          "sourceId": "nara-emancipation-proclamation",
+          "quote": "the Proclamation announced the acceptance of Black men into the Union Army and Navy, enabling the liberated to become liberators"
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "sequence-v1",
+        "pedagogicalReason": "Build cause effect chain from preliminary declaration to final measure and its limits in page order",
+        "focusQuote": "That changed on September 22, 1862, when President Lincoln issued his Preliminary Emancipation Proclamation",
+        "focusSourceId": "nara-emancipation-proclamation"
+      },
+      {
+        "componentId": "quiz-cards-v1",
+        "pedagogicalReason": "Check recall of scope limits and military conditions described for proclamation",
+        "focusQuote": "It applied only to states that had seceded from the Union, leaving slavery untouched in the loyal border states.",
+        "focusSourceId": "nara-emancipation-proclamation"
+      },
+      {
+        "componentId": "compare-table-v1",
+        "pedagogicalReason": "Contrast before and after war aims and proclamation effects using parallel attributes",
+        "focusQuote": "Although the Emancipation Proclamation did not end slavery in the nation, it did fundamentally transform the character of the war.",
+        "focusSourceId": "nara-emancipation-proclamation"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029145705-f0a5c87f:analysis",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"history\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 2659 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 12 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 4, keyTerms 5, componentPlan 3; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (3 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "source-analysis-v2: no weakening — every one of the 1 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "02997e7aa5564cc799f89184e9158c5c",
+    "usage": {
+      "promptTokens": 6764,
+      "completionTokens": 5387,
+      "reasoningTokens": 4478,
+      "cachedTokens": 0
+    },
+    "latencyMs": 18397,
+    "estCostUSD": 0.03134975,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

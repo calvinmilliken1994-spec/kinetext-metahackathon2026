@@ -1,0 +1,306 @@
+{
+  "gen": {
+    "schemaVersion": "formula-explorer-v1",
+    "title": "Cp Cv R Relation Explorer",
+    "formulaText": "cp = cv + R",
+    "sourceId": "nasa-grc-specific-heat-cp-cv",
+    "quote": "cp = cv + R",
+    "expression": "cp - (cv + r)",
+    "variables": [
+      {
+        "name": "cp",
+        "pageSymbol": "cp",
+        "meaning": "specific heat capacity at constant pressure",
+        "meaningQuoted": false,
+        "quote": "Delta h = cp * Delta T",
+        "unit": "normalized",
+        "min": 1,
+        "max": 2,
+        "default": 1.4
+      },
+      {
+        "name": "cv",
+        "pageSymbol": "cv",
+        "meaning": "specific heat capacity at constant volume",
+        "meaningQuoted": false,
+        "quote": "Delta e = cv * Delta T",
+        "unit": "normalized",
+        "min": 1,
+        "max": 2,
+        "default": 1.4
+      },
+      {
+        "name": "r",
+        "pageSymbol": "R",
+        "meaning": "specific gas constant for the gas",
+        "meaningQuoted": false,
+        "quote": "p * v = R * T",
+        "unit": "normalized",
+        "min": 1,
+        "max": 2,
+        "default": 1.4
+      }
+    ],
+    "xVariable": "r",
+    "cases": [
+      {
+        "id": "case-1",
+        "inputs": [
+          {
+            "name": "cp",
+            "value": 1.4
+          },
+          {
+            "name": "cv",
+            "value": 1
+          },
+          {
+            "name": "r",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "id": "case-2",
+        "inputs": [
+          {
+            "name": "cp",
+            "value": 2
+          },
+          {
+            "name": "cv",
+            "value": 1.4
+          },
+          {
+            "name": "r",
+            "value": 1
+          }
+        ]
+      }
+    ],
+    "sourceExample": {
+      "quote": "",
+      "resultNumber": 0,
+      "tolerance": 0
+    },
+    "hasSourceExample": false
+  },
+  "report": {
+    "artifactId": "job-20261029144147-644687fb:formula-explorer-v1:r3",
+    "revision": 3,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every formula-explorer case id and title shape is within the frozen limits"
+      },
+      {
+        "id": "FE-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "the formula quote (1 quote) appears verbatim in source \"nasa-grc-specific-heat-cp-cv\" and formulaText occurs inside the quote after normalisation (formula-quoted)"
+      },
+      {
+        "id": "FE-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "expression parses in the frozen grammar (<= 120 chars, AST <= 50 nodes, no \"**\", no implicit multiplication) and its variable set equals the declared set (expression-parses)"
+      },
+      {
+        "id": "FE-03",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 variables are declared with valid unique non-reserved names, exact page symbols, grounded quotes (top-level sourceId) and xVariable \"r\" is one of them (variables-declared)"
+      },
+      {
+        "id": "FE-04",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "all 2 case(s) carry exactly the declared variables with finite in-range inputs and every recomputed output is finite (the system sets the outputs) (cases-recomputed)"
+      },
+      {
+        "id": "FE-05",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "hasSourceExample=false with the empty sourceExample shape (sourceExample-check)"
+      },
+      {
+        "id": "FE-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every slider range is sane (finite, min < max, default inside, positive-range ratio <= 1000000) and no literal exponent exceeds 100 (ranges-sane)"
+      },
+      {
+        "id": "FE-07",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title and variable meanings appears on the page or in the same quote (N-01); units and formula fields are notation and exempt (numbers-checkable)"
+      },
+      {
+        "id": "FE-08",
+        "kind": "behavioral",
+        "passed": false,
+        "message": "the expression \"cp - (cv + r)\" does not match the page formula \"cv + R\" from the quote: 0/5 finite sample points agree within relative 1e-9 (need >= 3 agreeing and no mismatch). at {cp=1.1, cv=1.1, r=1.1}: expression=-1.1, page formula=\"cv + R\"=2.2; at {cp=1.3, cv=1.3, r=1.3}: expression=-1.3, page formula=\"cv + R\"=2.6; at {cp=1.5, cv=1.5, r=1.5}: expression=-1.5, page formula=\"cv + R\"=3. The formula could not be checked with our calculator.",
+        "path": "/expression",
+        "affected": [
+          "/expression",
+          "/quote",
+          "/formulaText",
+          "/hasSourceExample",
+          "/sourceExample/quote",
+          "/sourceExample/resultNumber",
+          "/sourceExample/tolerance",
+          "/variables/0/pageSymbol",
+          "/variables/1/pageSymbol",
+          "/variables/2/pageSymbol"
+        ]
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "formula-explorer-v1: no weakening — every one of the 1 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "242b68b94299439a90ae195d881d615a",
+    "usage": {
+      "promptTokens": 5156,
+      "completionTokens": 3149,
+      "reasoningTokens": 2826,
+      "cachedTokens": 0
+    },
+    "latencyMs": 14648,
+    "estCostUSD": 0.01982825,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029144147-644687fb:formula-explorer-v1:r3",
+    "componentId": "formula-explorer-v1",
+    "title": "Cp Cv R Relation Explorer",
+    "sources": [
+      {
+        "id": "nasa-grc-specific-heat-cp-cv",
+        "title": "Specific Heat – Cp & Cv — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/specific-heat-cp-cv/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "9df5f948a44c3fd060dd74c26ccaa8247cb311d0b0d618ceaafaf6382ba4d1b8"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "242b68b94299439a90ae195d881d615a",
+      "runId": "job-20261029144147-644687fb",
+      "promptVersion": "s6-v1",
+      "revision": 3,
+      "repairOf": 2,
+      "generatedAt": "2026-10-29T14:44:01.700Z"
+    },
+    "seed": 1942089448,
+    "formulaText": "cp = cv + R",
+    "sourceId": "nasa-grc-specific-heat-cp-cv",
+    "quote": "cp = cv + R",
+    "expression": "cp - (cv + r)",
+    "variables": [
+      {
+        "name": "cp",
+        "pageSymbol": "cp",
+        "meaning": "specific heat capacity at constant pressure",
+        "meaningQuoted": false,
+        "quote": "Delta h = cp * Delta T",
+        "unit": "normalized",
+        "min": 1,
+        "max": 2,
+        "default": 1.4
+      },
+      {
+        "name": "cv",
+        "pageSymbol": "cv",
+        "meaning": "specific heat capacity at constant volume",
+        "meaningQuoted": false,
+        "quote": "Delta e = cv * Delta T",
+        "unit": "normalized",
+        "min": 1,
+        "max": 2,
+        "default": 1.4
+      },
+      {
+        "name": "r",
+        "pageSymbol": "R",
+        "meaning": "specific gas constant for the gas",
+        "meaningQuoted": false,
+        "quote": "p * v = R * T",
+        "unit": "normalized",
+        "min": 1,
+        "max": 2,
+        "default": 1.4
+      }
+    ],
+    "xVariable": "r",
+    "cases": [
+      {
+        "id": "case-1",
+        "inputs": [
+          {
+            "name": "cp",
+            "value": 1.4
+          },
+          {
+            "name": "cv",
+            "value": 1
+          },
+          {
+            "name": "r",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "id": "case-2",
+        "inputs": [
+          {
+            "name": "cp",
+            "value": 2
+          },
+          {
+            "name": "cv",
+            "value": 1.4
+          },
+          {
+            "name": "r",
+            "value": 1
+          }
+        ]
+      }
+    ],
+    "sourceExample": {
+      "quote": "",
+      "resultNumber": 0,
+      "tolerance": 0
+    },
+    "hasSourceExample": false
+  }
+}

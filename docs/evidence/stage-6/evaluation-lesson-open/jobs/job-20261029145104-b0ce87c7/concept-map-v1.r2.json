@@ -1,0 +1,233 @@
+{
+  "gen": {
+    "schemaVersion": "concept-map-v1",
+    "title": "How allele frequencies and gene pools describe variation",
+    "nodes": [
+      {
+        "id": "allele-frequency",
+        "label": "Allele frequency"
+      },
+      {
+        "id": "genetic-diversity",
+        "label": "Allele frequency"
+      },
+      {
+        "id": "heterozygosity",
+        "label": "Allele frequency"
+      },
+      {
+        "id": "fitness",
+        "label": "Allele frequency"
+      }
+    ],
+    "links": [
+      {
+        "id": "allele-frequency-uses-genetic-diversity",
+        "fromId": "allele-frequency",
+        "toId": "genetic-diversity",
+        "relation": "uses",
+        "sourceId": "nij-heterozygosity",
+        "quote": "Allele frequency is used to characterize the genetic diversity, or richness of the gene pool, in a population."
+      },
+      {
+        "id": "heterozygosity-uses-genetic-diversity",
+        "fromId": "heterozygosity",
+        "toId": "genetic-diversity",
+        "relation": "uses",
+        "sourceId": "nij-heterozygosity",
+        "quote": "The measure of the amount of heterozygosity across loci can be used as a general indicator of the amount of genetic variability."
+      },
+      {
+        "id": "gene-pool-causes-fitness",
+        "fromId": "genetic-diversity",
+        "toId": "fitness",
+        "relation": "causes",
+        "sourceId": "nij-heterozygosity",
+        "quote": "a small gene pool is associated with poor genetic diversity and can lead to decreased fitness and an increased chance of extinction."
+      },
+      {
+        "id": "genetic-diversity-causes-fitness",
+        "fromId": "heterozygosity",
+        "toId": "fitness",
+        "relation": "causes",
+        "sourceId": "nij-heterozygosity",
+        "quote": "a small gene pool is associated with poor genetic diversity and can lead to decreased fitness and an increased chance of extinction."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029145104-b0ce87c7:concept-map-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every concept-map id pattern, id uniqueness and label shape is within the frozen limits"
+      },
+      {
+        "id": "CM-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 link quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "CM-02",
+        "kind": "grounding",
+        "passed": false,
+        "message": "links[1] (heterozygosity-uses-genetic-diversity): neither endpoint label (\"Allele frequency\", \"Allele frequency\") occurs in the quote — one endpoint label must be IN the quote (endpoints-in-quote); links[2] (gene-pool-causes-fitness): neither endpoint label (\"Allele frequency\", \"Allele frequency\") occurs in the quote — one endpoint label must be IN the quote (endpoints-in-quote); links[3] (genetic-diversity-causes-fitness): neither endpoint label (\"Allele frequency\", \"Allele frequency\") occurs in the quote — one endpoint label must be IN the quote (endpoints-in-quote)",
+        "path": "/links/1/fromId",
+        "affected": [
+          "/links/1/fromId",
+          "/links/1/toId",
+          "/links/1/quote",
+          "/links/2/fromId",
+          "/links/2/toId",
+          "/links/2/quote",
+          "/links/3/fromId",
+          "/links/3/toId",
+          "/links/3/quote"
+        ]
+      },
+      {
+        "id": "CM-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every link relation is in the frozen vocabulary and grounded by the relation phrase or a frozen trigger word in the quote or its source sentence (relation-in-quote)"
+      },
+      {
+        "id": "CM-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the map is connected over all 4 nodes with no self-loops or duplicate links (graph-connected)"
+      },
+      {
+        "id": "CM-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "nodes 4 (4-8) and links 4 (3-10) are within the frozen counts (counts-valid)"
+      },
+      {
+        "id": "CM-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in node labels and the title appears on a provided page (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "concept-map-v1: no weakening — every one of the 5 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "eab02ec9d5ed499e895029683e9b2a89",
+    "usage": {
+      "promptTokens": 4400,
+      "completionTokens": 14143,
+      "reasoningTokens": 13792,
+      "cachedTokens": 0
+    },
+    "latencyMs": 54195,
+    "estCostUSD": 0.06560775,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029145104-b0ce87c7:concept-map-v1:r2",
+    "componentId": "concept-map-v1",
+    "title": "How allele frequencies and gene pools describe variation",
+    "sources": [
+      {
+        "id": "nij-heterozygosity",
+        "title": "Heterozygosity — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+        "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/population-genetics/heterozygosity",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Heterozygosity'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+        "sha256": "b88d68137ace380387528e9b0d424ad162ee448ea6d48d6646cb090dbfc4e1e9"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "eab02ec9d5ed499e895029683e9b2a89",
+      "runId": "job-20261029145104-b0ce87c7",
+      "promptVersion": "s6-v1",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T14:54:02.730Z"
+    },
+    "seed": 1202246498,
+    "nodes": [
+      {
+        "id": "allele-frequency",
+        "label": "Allele frequency"
+      },
+      {
+        "id": "genetic-diversity",
+        "label": "Allele frequency"
+      },
+      {
+        "id": "heterozygosity",
+        "label": "Allele frequency"
+      },
+      {
+        "id": "fitness",
+        "label": "Allele frequency"
+      }
+    ],
+    "links": [
+      {
+        "id": "allele-frequency-uses-genetic-diversity",
+        "fromId": "allele-frequency",
+        "toId": "genetic-diversity",
+        "relation": "uses",
+        "sourceId": "nij-heterozygosity",
+        "quote": "Allele frequency is used to characterize the genetic diversity, or richness of the gene pool, in a population."
+      },
+      {
+        "id": "heterozygosity-uses-genetic-diversity",
+        "fromId": "heterozygosity",
+        "toId": "genetic-diversity",
+        "relation": "uses",
+        "sourceId": "nij-heterozygosity",
+        "quote": "The measure of the amount of heterozygosity across loci can be used as a general indicator of the amount of genetic variability."
+      },
+      {
+        "id": "gene-pool-causes-fitness",
+        "fromId": "genetic-diversity",
+        "toId": "fitness",
+        "relation": "causes",
+        "sourceId": "nij-heterozygosity",
+        "quote": "a small gene pool is associated with poor genetic diversity and can lead to decreased fitness and an increased chance of extinction."
+      },
+      {
+        "id": "genetic-diversity-causes-fitness",
+        "fromId": "heterozygosity",
+        "toId": "fitness",
+        "relation": "causes",
+        "sourceId": "nij-heterozygosity",
+        "quote": "a small gene pool is associated with poor genetic diversity and can lead to decreased fitness and an increased chance of extinction."
+      }
+    ]
+  }
+}

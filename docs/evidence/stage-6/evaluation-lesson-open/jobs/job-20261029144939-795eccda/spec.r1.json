@@ -1,0 +1,166 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nrc-backgrounder-plutonium-job-20261029144939-795eccda",
+  "title": "Plutonium decay half-life activity",
+  "learningObjectives": [
+    "Describe half-life as the time required for a radioactive substance to lose half of its radioactivity, with different isotopes having different half-lives",
+    "Calculate the amount remaining after elapsed time using N=N0*(1/2)^(t/T)",
+    "Explain that radioactive isotopes transform over time into different isotopes or elements as they decay"
+  ],
+  "sources": [
+    {
+      "id": "nrc-backgrounder-plutonium",
+      "title": "Backgrounder on Plutonium — U.S. Nuclear Regulatory Commission",
+      "locator": "https://www.nrc.gov/regulations-legislation/fact-sheets-brochures/backgrounder-on-plutonium",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: U.S. Nuclear Regulatory Commission, 'Backgrounder on Plutonium', Fact Sheets & Brochures. NRC's website constitutes a U.S. Government Work under federal copyright law and is not subject to copyright. The U.S. Nuclear Regulatory Commission has not reviewed, approved or endorsed this activity.",
+      "sha256": "03700e48439f4a60c4b8ff3676122131acf7c23ff26eaacb5700f29a06768737"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "explanation-1",
+      "text": "A half-life is defined as the time it takes for a radioactive substance to lose half of its radioactivity. Different isotopes of the same element can have very different half-lives, which determines how quickly they decay.",
+      "evidence": [
+        {
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "The different isotopes have different “half-lives” – the time it takes to lose half of its radioactivity."
+        },
+        {
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "Pu-239 has a half-life of 24,100 years and Pu-241’s half-life is 14.4 years."
+        }
+      ]
+    },
+    {
+      "id": "explanation-2",
+      "text": "Substances with shorter half-lives decay more quickly than those with longer half-lives, emitting more energetic radiation over the same period. This relationship is modeled by the exponential halving equation.",
+      "evidence": [
+        {
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "Substances with shorter half-lives decay more quickly than those with longer half-lives, so they emit more energetic radioactivity."
+        }
+      ]
+    },
+    {
+      "id": "explanation-3",
+      "text": "Radioactive decay transforms the original isotopes into other products over time. The remaining amount after elapsed time can be predicted from the starting amount and the half-life.",
+      "evidence": [
+        {
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "Like any radioactive isotopes, plutonium isotopes transform when they decay."
+        },
+        {
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "They might become different plutonium isotopes or different elements, such as uranium or neptunium."
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "half-life-v1",
+    "equation": "N=N0*(1/2)^(t/T)",
+    "initialAmount": {
+      "unit": "1",
+      "min": 10,
+      "max": 500,
+      "default": 100
+    },
+    "halfLife": {
+      "unit": "time",
+      "min": 2,
+      "max": 30,
+      "default": 14.4
+    },
+    "elapsedTime": {
+      "unit": "time",
+      "min": 0,
+      "max": 72,
+      "default": 14.4
+    },
+    "scenario": {
+      "objectLabel": "Plutonium sample (grams)",
+      "settingLabel": "Storage time in years"
+    }
+  },
+  "behavioralTests": [
+    {
+      "name": "half-life-equal",
+      "initialAmount": 100,
+      "halfLife": 14.4,
+      "elapsedTime": 14.4,
+      "expectedRemaining": 50,
+      "tolerance": 0.1
+    },
+    {
+      "name": "two-half-lives",
+      "initialAmount": 100,
+      "halfLife": 14.4,
+      "elapsedTime": 28.8,
+      "expectedRemaining": 25,
+      "tolerance": 0.05
+    },
+    {
+      "name": "no-decay",
+      "initialAmount": 200,
+      "halfLife": 10,
+      "elapsedTime": 0,
+      "expectedRemaining": 200,
+      "tolerance": 0.5
+    },
+    {
+      "name": "three-half-lives",
+      "initialAmount": 80,
+      "halfLife": 5,
+      "elapsedTime": 15,
+      "expectedRemaining": 10,
+      "tolerance": 0.02
+    }
+  ],
+  "predictions": [
+    {
+      "id": "pred-1",
+      "prompt": "Predict the amount remaining after 2 half-lives",
+      "initialAmount": 120,
+      "halfLife": 12,
+      "elapsedTime": 24,
+      "expectedRemaining": 30,
+      "tolerance": 0.05
+    },
+    {
+      "id": "pred-2",
+      "prompt": "Predict the amount remaining after 2 half-lives",
+      "initialAmount": 80,
+      "halfLife": 8,
+      "elapsedTime": 16,
+      "expectedRemaining": 20,
+      "tolerance": 0.05
+    },
+    {
+      "id": "pred-3",
+      "prompt": "Predict the amount remaining after one half-life",
+      "initialAmount": 100,
+      "halfLife": 10,
+      "elapsedTime": 10,
+      "expectedRemaining": 50,
+      "tolerance": 0.1
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "9fdd9daf25774d71b58df5e3a6f98edf",
+    "runId": "job-20261029144939-795eccda",
+    "promptVersion": "v9",
+    "generatedAt": "2026-10-29T14:51:01.709Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

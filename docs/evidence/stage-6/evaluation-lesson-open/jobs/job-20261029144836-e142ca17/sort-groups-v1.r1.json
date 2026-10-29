@@ -1,0 +1,247 @@
+{
+  "gen": {
+    "schemaVersion": "sort-groups-v1",
+    "title": "Sort waste types by classification",
+    "groups": [
+      {
+        "id": "high-level-waste",
+        "label": "high-level waste"
+      },
+      {
+        "id": "low-level-waste",
+        "label": "Low-level waste"
+      }
+    ],
+    "items": [
+      {
+        "id": "fission-products",
+        "label": "fission products",
+        "groupId": "high-level-waste",
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "quote": "These isotopes, called \"fission products,\" account for most of the heat and penetrating radiation in high-level waste."
+      },
+      {
+        "id": "transuranic-wastes",
+        "label": "Transuranic wastes",
+        "groupId": "high-level-waste",
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "quote": "Transuranic wastes, sometimes called TRU, account for most of the radioactive hazard remaining in high-level waste after 1,000 years."
+      },
+      {
+        "id": "cesium-137",
+        "label": "cesium-137",
+        "groupId": "high-level-waste",
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "quote": "The fission creates radioactive isotopes of lighter elements such as cesium-137 and strontium-90."
+      },
+      {
+        "id": "plutonium",
+        "label": "plutonium",
+        "groupId": "high-level-waste",
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "quote": "These atoms form heavier elements such as plutonium."
+      },
+      {
+        "id": "protective-shoe-covers",
+        "label": "protective shoe covers",
+        "groupId": "low-level-waste",
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "quote": "This waste typically consists of contaminated protective shoe covers and clothing, wiping rags, mops, filters"
+      },
+      {
+        "id": "wiping-rags",
+        "label": "wiping rags",
+        "groupId": "low-level-waste",
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "quote": "contaminated protective shoe covers and clothing, wiping rags, mops, filters, reactor water treatment residues"
+      },
+      {
+        "id": "medical-tubes",
+        "label": "medical tubes",
+        "groupId": "low-level-waste",
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "quote": "equipment and tools, luminous dials, medical tubes, swabs, injection needles, syringes, and laboratory animal carcasses and tissues."
+      },
+      {
+        "id": "laboratory-animal-carcasses",
+        "label": "laboratory animal carcasses",
+        "groupId": "low-level-waste",
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "quote": "syringes, and laboratory animal carcasses and tissues."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029144836-e142ca17:sort-groups-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sort text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SORT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 8 item quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SORT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every item label occurs in its quote and every group label occurs in the quote or the same source paragraph (item-and-group-in-quote; the design discloses the weak-link false accept on long paragraphs — every quote is shown to the teacher)"
+      },
+      {
+        "id": "SORT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every declared group is referenced by >= 2 items and every item groupId resolves (groups-covered)"
+      },
+      {
+        "id": "SORT-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every item has a distinct label after normalisation (distinct-items)"
+      },
+      {
+        "id": "SORT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "groups 2 (2-4) and items 8 (6-12) are within the frozen counts (counts-valid)"
+      },
+      {
+        "id": "SORT-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in group and item labels appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "8cd89f01bd124507b665c75d763b3e63",
+    "usage": {
+      "promptTokens": 4434,
+      "completionTokens": 9577,
+      "reasoningTokens": 9053,
+      "cachedTokens": 0
+    },
+    "latencyMs": 41143,
+    "estCostUSD": 0.04624475,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029144836-e142ca17:sort-groups-v1:r1",
+    "componentId": "sort-groups-v1",
+    "title": "Sort waste types by classification",
+    "sources": [
+      {
+        "id": "nrc-backgrounder-radioactive-waste",
+        "title": "Backgrounder on Radioactive Waste — U.S. Nuclear Regulatory Commission",
+        "locator": "https://www.nrc.gov/regulations-legislation/fact-sheets-brochures/backgrounder-on-radioactive-waste",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Nuclear Regulatory Commission, 'Backgrounder on Radioactive Waste', Fact Sheets & Brochures. NRC's website constitutes a U.S. Government Work under federal copyright law and is not subject to copyright. The U.S. Nuclear Regulatory Commission has not reviewed, approved or endorsed this activity.",
+        "sha256": "096bd0acfbc24540be6110113c96ed0fa4b892969980ff5bcf1d7834bc1d71b7"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "8cd89f01bd124507b665c75d763b3e63",
+      "runId": "job-20261029144836-e142ca17",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T14:49:56.993Z"
+    },
+    "seed": 334014803,
+    "groups": [
+      {
+        "id": "high-level-waste",
+        "label": "high-level waste"
+      },
+      {
+        "id": "low-level-waste",
+        "label": "Low-level waste"
+      }
+    ],
+    "items": [
+      {
+        "id": "fission-products",
+        "label": "fission products",
+        "groupId": "high-level-waste",
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "quote": "These isotopes, called \"fission products,\" account for most of the heat and penetrating radiation in high-level waste."
+      },
+      {
+        "id": "transuranic-wastes",
+        "label": "Transuranic wastes",
+        "groupId": "high-level-waste",
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "quote": "Transuranic wastes, sometimes called TRU, account for most of the radioactive hazard remaining in high-level waste after 1,000 years."
+      },
+      {
+        "id": "cesium-137",
+        "label": "cesium-137",
+        "groupId": "high-level-waste",
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "quote": "The fission creates radioactive isotopes of lighter elements such as cesium-137 and strontium-90."
+      },
+      {
+        "id": "plutonium",
+        "label": "plutonium",
+        "groupId": "high-level-waste",
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "quote": "These atoms form heavier elements such as plutonium."
+      },
+      {
+        "id": "protective-shoe-covers",
+        "label": "protective shoe covers",
+        "groupId": "low-level-waste",
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "quote": "This waste typically consists of contaminated protective shoe covers and clothing, wiping rags, mops, filters"
+      },
+      {
+        "id": "wiping-rags",
+        "label": "wiping rags",
+        "groupId": "low-level-waste",
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "quote": "contaminated protective shoe covers and clothing, wiping rags, mops, filters, reactor water treatment residues"
+      },
+      {
+        "id": "medical-tubes",
+        "label": "medical tubes",
+        "groupId": "low-level-waste",
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "quote": "equipment and tools, luminous dials, medical tubes, swabs, injection needles, syringes, and laboratory animal carcasses and tissues."
+      },
+      {
+        "id": "laboratory-animal-carcasses",
+        "label": "laboratory animal carcasses",
+        "groupId": "low-level-waste",
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "quote": "syringes, and laboratory animal carcasses and tissues."
+      }
+    ]
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "jobId": "job-20261029143831-3c94cf97",
+  "analysisRef": "job-20261029143831-3c94cf97/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029143831-3c94cf97:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Free fall motion under constant gravity with velocity and displacement relations",
+    "sources": [
+      {
+        "id": "nasa-grc-motion-of-free-falling-object",
+        "title": "Motion of Free Falling Object — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/motion-of-free-falling-object/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "f94199ea21e14dad578baee19694e534fff3dba5dc88f9bc2ea6ec082445c317"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "1f0b7016dda94e0ca887281788b9b229",
+      "runId": "job-20261029143831-3c94cf97",
+      "promptVersion": "s6-v1",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T14:39:29.352Z"
+    },
+    "seed": 1052488624,
+    "headline": "Free fall motion under constant gravity with velocity and displacement relations",
+    "keyPoints": [
+      {
+        "id": "free-fall-definition",
+        "point": "Free falling defined as motion only because of gravity and described by Newtonian motion laws",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "is said to be free falling and its motion is described by Newton’s second law of motion."
+      },
+      {
+        "id": "constant-acceleration",
+        "point": "Acceleration is constant and equal to gravitational acceleration at sea level",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "The acceleration is constant and equal to the gravitational acceleration g which is 9.8 meters per square second at sea level on the Earth."
+      },
+      {
+        "id": "shape-not-factor",
+        "point": "Weight size and shape are not a factor in describing free fall",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "The weight, size, and shape of the object are not a factor in describing a free fall."
+      },
+      {
+        "id": "velocity-location",
+        "point": "Knowing acceleration we can determine velocity and location at any time",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Knowing the acceleration, we can determine the velocity and location of any free falling object at any time using the following equations."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "gravitational-force",
+        "term": "gravitational force",
+        "gloss": "external force expressed as weight acting on object in vacuum",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "An object that falls through a vacuum is subjected to only one external force, the gravitational force, expressed as the weight of the object."
+      },
+      {
+        "id": "acceleration",
+        "term": "acceleration",
+        "gloss": "constant gravitational acceleration causing steady change in velocity",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "The acceleration is constant and equal to the gravitational acceleration g which is 9.8 meters per square second at sea level on the Earth."
+      },
+      {
+        "id": "velocity-term",
+        "term": "velocity",
+        "gloss": "velocity determined from acceleration and time showing motion change",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Knowing the acceleration, we can determine the velocity and location of any free falling object at any time using the following equations."
+      },
+      {
+        "id": "displacement",
+        "term": "displacement",
+        "gloss": "displacement from initial location linked to acceleration",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "where a is the acceleration, V is the velocity, and X is the displacement from an initial location."
+      },
+      {
+        "id": "drag-force",
+        "term": "drag force",
+        "gloss": "additional drag force acting through atmosphere complicating motion description",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "there is an additional drag force acting on the object and the physics involved with describing the motion of the object is more complex"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "formula-explorer-v1",
+      "specId": "job-20261029143831-3c94cf97:formula-explorer-v1:r3",
+      "status": "failed",
+      "reason": "FE-02, FE-08: expression \"v = a * t\" does not parse in the frozen calculator grammar: unexpected character \"=\" at position 1",
+      "revision": 3
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261029143831-3c94cf97:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261029143831-3c94cf97:compare-table-v1:r1",
+      "status": "failed",
+      "reason": "Muse ran out of room while writing this part, so it was left out.",
+      "revision": 1
+    }
+  ]
+}

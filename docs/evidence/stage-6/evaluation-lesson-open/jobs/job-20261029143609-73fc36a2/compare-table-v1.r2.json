@@ -1,0 +1,504 @@
+{
+  "gen": {
+    "schemaVersion": "compare-table-v1",
+    "title": "Field Force Versus Mechanical Forces",
+    "entities": [
+      "{id} : weight",
+      "id: weight",
+      "name: Weight",
+      "{id} : aerodynamic-forces"
+    ],
+    "attributes": [
+      "{id} : force-type",
+      "id: force-type",
+      "name: Force type",
+      "{id} : contact-requirement",
+      "id: contact-requirement"
+    ],
+    "cells": [
+      {
+        "id": "cell-e0-a0",
+        "entityIndex": 0,
+        "attributeIndex": 0,
+        "value": "gravitational force",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "The weight W, or gravitational force, is then just the mass of an object times the gravitational acceleration."
+      },
+      {
+        "id": "cell-e0-a1",
+        "entityIndex": 0,
+        "attributeIndex": 1,
+        "value": "gravitational acceleration",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "The weight W, or gravitational force, is then just the mass of an object times the gravitational acceleration."
+      },
+      {
+        "id": "cell-e0-a2",
+        "entityIndex": 0,
+        "attributeIndex": 2,
+        "value": "The weight W",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "The weight W, or gravitational force, is then just the mass of an object times the gravitational acceleration."
+      },
+      {
+        "id": "cell-e0-a3",
+        "entityIndex": 0,
+        "attributeIndex": 3,
+        "value": "mass of an object",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "The weight W, or gravitational force, is then just the mass of an object times the gravitational acceleration."
+      },
+      {
+        "id": "cell-e0-a4",
+        "entityIndex": 0,
+        "attributeIndex": 4,
+        "value": "is then just the mass",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "The weight W, or gravitational force, is then just the mass of an object times the gravitational acceleration."
+      },
+      {
+        "id": "cell-e1-a0",
+        "entityIndex": 1,
+        "attributeIndex": 0,
+        "value": "35000 feet",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "If an airplane is flying at 35000 feet (about 7 miles) the distance to the center of the earth is about 4007 miles."
+      },
+      {
+        "id": "cell-e1-a1",
+        "entityIndex": 1,
+        "attributeIndex": 1,
+        "value": "4007 miles",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "If an airplane is flying at 35000 feet (about 7 miles) the distance to the center of the earth is about 4007 miles."
+      },
+      {
+        "id": "cell-e1-a2",
+        "entityIndex": 1,
+        "attributeIndex": 2,
+        "value": "airplane is flying",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "If an airplane is flying at 35000 feet (about 7 miles) the distance to the center of the earth is about 4007 miles."
+      },
+      {
+        "id": "cell-e1-a3",
+        "entityIndex": 1,
+        "attributeIndex": 3,
+        "value": "distance to the center of the earth",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "If an airplane is flying at 35000 feet (about 7 miles) the distance to the center of the earth is about 4007 miles."
+      },
+      {
+        "id": "cell-e1-a4",
+        "entityIndex": 1,
+        "attributeIndex": 4,
+        "value": "about 7 miles",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "If an airplane is flying at 35000 feet (about 7 miles) the distance to the center of the earth is about 4007 miles."
+      },
+      {
+        "id": "cell-e2-a0",
+        "entityIndex": 2,
+        "attributeIndex": 0,
+        "value": "field force",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "The gravitational force is a field force; the source of the force does not have to be in physical contact with the object to generate a force."
+      },
+      {
+        "id": "cell-e2-a1",
+        "entityIndex": 2,
+        "attributeIndex": 1,
+        "value": "does not have to be in physical contact",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "The gravitational force is a field force; the source of the force does not have to be in physical contact with the object to generate a force."
+      },
+      {
+        "id": "cell-e2-a2",
+        "entityIndex": 2,
+        "attributeIndex": 2,
+        "value": "The gravitational force",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "The gravitational force is a field force; the source of the force does not have to be in physical contact with the object to generate a force."
+      },
+      {
+        "id": "cell-e2-a3",
+        "entityIndex": 2,
+        "attributeIndex": 3,
+        "value": "source of the force",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "The gravitational force is a field force; the source of the force does not have to be in physical contact with the object to generate a force."
+      },
+      {
+        "id": "cell-e2-a4",
+        "entityIndex": 2,
+        "attributeIndex": 4,
+        "value": "to generate a force",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "The gravitational force is a field force; the source of the force does not have to be in physical contact with the object to generate a force."
+      },
+      {
+        "id": "cell-e3-a0",
+        "entityIndex": 3,
+        "attributeIndex": 0,
+        "value": "mechanical forces",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "Aerodynamic forces are mechanical forces and the object has to be in physical contact with the air which generates the force."
+      },
+      {
+        "id": "cell-e3-a1",
+        "entityIndex": 3,
+        "attributeIndex": 1,
+        "value": "has to be in physical contact with the air",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "Aerodynamic forces are mechanical forces and the object has to be in physical contact with the air which generates the force."
+      },
+      {
+        "id": "cell-e3-a2",
+        "entityIndex": 3,
+        "attributeIndex": 2,
+        "value": "Aerodynamic forces",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "Aerodynamic forces are mechanical forces and the object has to be in physical contact with the air which generates the force."
+      },
+      {
+        "id": "cell-e3-a3",
+        "entityIndex": 3,
+        "attributeIndex": 3,
+        "value": "which generates the force",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "Aerodynamic forces are mechanical forces and the object has to be in physical contact with the air which generates the force."
+      },
+      {
+        "id": "cell-e3-a4",
+        "entityIndex": 3,
+        "attributeIndex": 4,
+        "value": "are mechanical forces and the object",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "Aerodynamic forces are mechanical forces and the object has to be in physical contact with the air which generates the force."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029143609-73fc36a2:compare-table-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every compare-table text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "CT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 20 cell quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "CT-02",
+        "kind": "grounding",
+        "passed": false,
+        "message": "cells[0] (cell-e0-a0): the entity \"{id} : weight\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[1] (cell-e0-a1): the entity \"{id} : weight\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[2] (cell-e0-a2): the entity \"{id} : weight\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[3] (cell-e0-a3): the entity \"{id} : weight\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[4] (cell-e0-a4): the entity \"{id} : weight\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[5] (cell-e1-a0): the entity \"id: weight\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[6] (cell-e1-a1): the entity \"id: weight\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[7] (cell-e1-a2): the entity \"id: weight\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[8] (cell-e1-a3): the entity \"id: weight\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[9] (cell-e1-a4): the entity \"id: weight\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[10] (cell-e2-a0): the entity \"name: Weight\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[11] (cell-e2-a1): the entity \"name: Weight\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[12] (cell-e2-a2): the entity \"name: Weight\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[13] (cell-e2-a3): the entity \"name: Weight\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[14] (cell-e2-a4): the entity \"name: Weight\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[15] (cell-e3-a0): the entity \"{id} : aerodynamic-forces\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[16] (cell-e3-a1): the entity \"{id} : aerodynamic-forces\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[17] (cell-e3-a2): the entity \"{id} : aerodynamic-forces\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[18] (cell-e3-a3): the entity \"{id} : aerodynamic-forces\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[19] (cell-e3-a4): the entity \"{id} : aerodynamic-forces\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote)",
+        "path": "/cells/0/entityIndex",
+        "affected": [
+          "/cells/0/entityIndex",
+          "/cells/0/quote",
+          "/cells/1/entityIndex",
+          "/cells/1/quote",
+          "/cells/2/entityIndex",
+          "/cells/2/quote",
+          "/cells/3/entityIndex",
+          "/cells/3/quote",
+          "/cells/4/entityIndex",
+          "/cells/4/quote",
+          "/cells/5/entityIndex",
+          "/cells/5/quote",
+          "/cells/6/entityIndex",
+          "/cells/6/quote",
+          "/cells/7/entityIndex",
+          "/cells/7/quote",
+          "/cells/8/entityIndex",
+          "/cells/8/quote",
+          "/cells/9/entityIndex",
+          "/cells/9/quote",
+          "/cells/10/entityIndex",
+          "/cells/10/quote",
+          "/cells/11/entityIndex",
+          "/cells/11/quote",
+          "/cells/12/entityIndex",
+          "/cells/12/quote",
+          "/cells/13/entityIndex",
+          "/cells/13/quote",
+          "/cells/14/entityIndex",
+          "/cells/14/quote",
+          "/cells/15/entityIndex",
+          "/cells/15/quote",
+          "/cells/16/entityIndex",
+          "/cells/16/quote",
+          "/cells/17/entityIndex",
+          "/cells/17/quote",
+          "/cells/18/entityIndex",
+          "/cells/18/quote",
+          "/cells/19/entityIndex",
+          "/cells/19/quote"
+        ]
+      },
+      {
+        "id": "CT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the table shape is valid: 4 entities x 5 attributes with all 20 cells present exactly once (shape-valid)"
+      },
+      {
+        "id": "CT-04",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in entity names, attributes and cell values appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "CT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "predict mode is available: attribute \"{id} : force-type\" offers >= 3 distinct seeded same-column options (predict-cell-valid)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": false,
+        "message": "repair weakened the spec: /cells changed shape or list length (item counts and structure are frozen in a repair; the system prunes bad items via the drop helpers, the model never adds, removes or reorders items) (a compare-table-v1 repair must fix the failing checks by changing ONLY fields under the affected paths recomputed from revision 1, must keep every item and id stable — the system prunes bad items, never the model — and must never increase a tolerance or otherwise weaken the spec)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "8f155b82007048099812791e0e3d8fec",
+    "usage": {
+      "promptTokens": 5633,
+      "completionTokens": 18576,
+      "reasoningTokens": 17187,
+      "cachedTokens": 0
+    },
+    "latencyMs": 82274,
+    "estCostUSD": 0.08598925,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029143609-73fc36a2:compare-table-v1:r2",
+    "componentId": "compare-table-v1",
+    "title": "Field Force Versus Mechanical Forces",
+    "sources": [
+      {
+        "id": "nasa-grc-weight-equation",
+        "title": "Weight Equation — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/weight-equation/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "3bce4bd7de875c5dc08f1b682c3179be302140b673e9a7ea4ee516e778de172c"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "8f155b82007048099812791e0e3d8fec",
+      "runId": "job-20261029143609-73fc36a2",
+      "promptVersion": "s6-v1",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T14:39:42.554Z"
+    },
+    "seed": 3144394994,
+    "entities": [
+      "{id} : weight",
+      "id: weight",
+      "name: Weight",
+      "{id} : aerodynamic-forces"
+    ],
+    "attributes": [
+      "{id} : force-type",
+      "id: force-type",
+      "name: Force type",
+      "{id} : contact-requirement",
+      "id: contact-requirement"
+    ],
+    "cells": [
+      {
+        "id": "cell-e0-a0",
+        "entityIndex": 0,
+        "attributeIndex": 0,
+        "value": "gravitational force",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "The weight W, or gravitational force, is then just the mass of an object times the gravitational acceleration."
+      },
+      {
+        "id": "cell-e0-a1",
+        "entityIndex": 0,
+        "attributeIndex": 1,
+        "value": "gravitational acceleration",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "The weight W, or gravitational force, is then just the mass of an object times the gravitational acceleration."
+      },
+      {
+        "id": "cell-e0-a2",
+        "entityIndex": 0,
+        "attributeIndex": 2,
+        "value": "The weight W",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "The weight W, or gravitational force, is then just the mass of an object times the gravitational acceleration."
+      },
+      {
+        "id": "cell-e0-a3",
+        "entityIndex": 0,
+        "attributeIndex": 3,
+        "value": "mass of an object",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "The weight W, or gravitational force, is then just the mass of an object times the gravitational acceleration."
+      },
+      {
+        "id": "cell-e0-a4",
+        "entityIndex": 0,
+        "attributeIndex": 4,
+        "value": "is then just the mass",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "The weight W, or gravitational force, is then just the mass of an object times the gravitational acceleration."
+      },
+      {
+        "id": "cell-e1-a0",
+        "entityIndex": 1,
+        "attributeIndex": 0,
+        "value": "35000 feet",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "If an airplane is flying at 35000 feet (about 7 miles) the distance to the center of the earth is about 4007 miles."
+      },
+      {
+        "id": "cell-e1-a1",
+        "entityIndex": 1,
+        "attributeIndex": 1,
+        "value": "4007 miles",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "If an airplane is flying at 35000 feet (about 7 miles) the distance to the center of the earth is about 4007 miles."
+      },
+      {
+        "id": "cell-e1-a2",
+        "entityIndex": 1,
+        "attributeIndex": 2,
+        "value": "airplane is flying",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "If an airplane is flying at 35000 feet (about 7 miles) the distance to the center of the earth is about 4007 miles."
+      },
+      {
+        "id": "cell-e1-a3",
+        "entityIndex": 1,
+        "attributeIndex": 3,
+        "value": "distance to the center of the earth",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "If an airplane is flying at 35000 feet (about 7 miles) the distance to the center of the earth is about 4007 miles."
+      },
+      {
+        "id": "cell-e1-a4",
+        "entityIndex": 1,
+        "attributeIndex": 4,
+        "value": "about 7 miles",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "If an airplane is flying at 35000 feet (about 7 miles) the distance to the center of the earth is about 4007 miles."
+      },
+      {
+        "id": "cell-e2-a0",
+        "entityIndex": 2,
+        "attributeIndex": 0,
+        "value": "field force",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "The gravitational force is a field force; the source of the force does not have to be in physical contact with the object to generate a force."
+      },
+      {
+        "id": "cell-e2-a1",
+        "entityIndex": 2,
+        "attributeIndex": 1,
+        "value": "does not have to be in physical contact",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "The gravitational force is a field force; the source of the force does not have to be in physical contact with the object to generate a force."
+      },
+      {
+        "id": "cell-e2-a2",
+        "entityIndex": 2,
+        "attributeIndex": 2,
+        "value": "The gravitational force",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "The gravitational force is a field force; the source of the force does not have to be in physical contact with the object to generate a force."
+      },
+      {
+        "id": "cell-e2-a3",
+        "entityIndex": 2,
+        "attributeIndex": 3,
+        "value": "source of the force",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "The gravitational force is a field force; the source of the force does not have to be in physical contact with the object to generate a force."
+      },
+      {
+        "id": "cell-e2-a4",
+        "entityIndex": 2,
+        "attributeIndex": 4,
+        "value": "to generate a force",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "The gravitational force is a field force; the source of the force does not have to be in physical contact with the object to generate a force."
+      },
+      {
+        "id": "cell-e3-a0",
+        "entityIndex": 3,
+        "attributeIndex": 0,
+        "value": "mechanical forces",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "Aerodynamic forces are mechanical forces and the object has to be in physical contact with the air which generates the force."
+      },
+      {
+        "id": "cell-e3-a1",
+        "entityIndex": 3,
+        "attributeIndex": 1,
+        "value": "has to be in physical contact with the air",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "Aerodynamic forces are mechanical forces and the object has to be in physical contact with the air which generates the force."
+      },
+      {
+        "id": "cell-e3-a2",
+        "entityIndex": 3,
+        "attributeIndex": 2,
+        "value": "Aerodynamic forces",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "Aerodynamic forces are mechanical forces and the object has to be in physical contact with the air which generates the force."
+      },
+      {
+        "id": "cell-e3-a3",
+        "entityIndex": 3,
+        "attributeIndex": 3,
+        "value": "which generates the force",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "Aerodynamic forces are mechanical forces and the object has to be in physical contact with the air which generates the force."
+      },
+      {
+        "id": "cell-e3-a4",
+        "entityIndex": 3,
+        "attributeIndex": 4,
+        "value": "are mechanical forces and the object",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "Aerodynamic forces are mechanical forces and the object has to be in physical contact with the air which generates the force."
+      }
+    ]
+  }
+}

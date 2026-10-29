@@ -1,0 +1,17 @@
+{
+  "artifactId": "nasa-grc-role-of-the-mach-number-job-20261029144623-73105487",
+  "revision": 1,
+  "checks": [
+    {
+      "id": "schema.full",
+      "kind": "schema",
+      "passed": false,
+      "message": "spec failed schema.full: /simulation/gamma/min must be > 1; /predictions/1/id must match pattern \"^[a-z0-9][a-z0-9-]{0,39}$\"",
+      "affected": [
+        "/simulation/gamma/min",
+        "/predictions/1/id"
+      ]
+    }
+  ],
+  "publishable": false
+}

@@ -1,0 +1,125 @@
+{
+  "jobId": "job-20261029145943-048d50e0",
+  "analysisRef": "job-20261029145943-048d50e0/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029145943-048d50e0:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Bernoulli links static and dynamic pressure in steady inviscid flow",
+    "sources": [
+      {
+        "id": "nasa-grc-bernoullis-equation",
+        "title": "Bernoulli's Equation — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/bernoullis-equation/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "ce3917d5b0b1392825d9f0c16d2d9b78898e119122bec3a1dd940e1d45437799"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "ae61eac5df44426e8aa59c97a625da85",
+      "runId": "job-20261029145943-048d50e0",
+      "promptVersion": "s6-v1",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T15:00:51.578Z"
+    },
+    "seed": 1266387695,
+    "headline": "Bernoulli links static and dynamic pressure in steady inviscid flow",
+    "keyPoints": [
+      {
+        "id": "bernoulli-sum",
+        "point": "Bernoulli relation shows static pressure plus dynamic pressure equals total pressure constant throughout flow",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "the static pressure plus the dynamic pressure is equal to the original total pressure in a flow"
+      },
+      {
+        "id": "flow-restrictions",
+        "point": "This Bernoulli form requires inviscid incompressible steady flow without heat addition and negligible height change",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "the restrictions for this form are that the flow is inviscid, incompressible, steady, without heat addition, and with negligible change in height"
+      },
+      {
+        "id": "ordered-random-motion",
+        "point": "Ordered directed motion creates dynamic pressure while random molecular motion creates static pressure",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "We can associate a “pressure” with the momentum of the ordered motion of the gas."
+      },
+      {
+        "id": "pitot-measurement",
+        "point": "Pitot static tube measures static and total pressure to compute velocity using Bernoulli relation",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "In a pitot-static tube, we measure the static and total pressure and can then use Bernoulli’s equation to compute the velocity."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "static-pressure",
+        "term": "static pressure",
+        "gloss": "pressure from random molecular motion still present in flow",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "The remaining random motion of the molecules still produces a pressure called the static pressure."
+      },
+      {
+        "id": "dynamic-pressure",
+        "term": "dynamic pressure",
+        "gloss": "pressure linked to momentum of ordered motion of gas",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "We call this pressure the dynamic pressure."
+      },
+      {
+        "id": "total-pressure",
+        "term": "total pressure",
+        "gloss": "constant sum of static and dynamic pressure along flow",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "We call this constant the total pressure pt of the flow."
+      },
+      {
+        "id": "incompressible",
+        "term": "incompressible",
+        "gloss": "flow where density remains constant throughout motion",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "Assuming that the flow is incompressible, the density is a constant."
+      },
+      {
+        "id": "streamline",
+        "term": "streamline",
+        "gloss": "path that confines Bernoulli constant when restrictions apply",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "In the integration of the general equations, an assumption was also introduced that restricts this equation to be true only along a single streamline."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "formula-explorer-v1",
+      "specId": "job-20261029145943-048d50e0:formula-explorer-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261029145943-048d50e0:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029145943-048d50e0:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

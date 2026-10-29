@@ -1,0 +1,197 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "finance",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "The page covers saving for post-secondary education, why starting early helps compound interest grow savings, how to use an online calculator with contributions and rates and compounding, and example scenario totals showing growth over time.",
+    "overview": {
+      "headline": "Early saving lets compound interest grow money faster for future education costs",
+      "keyPoints": [
+        {
+          "id": "early-start-growth",
+          "point": "Starting early lets your money grow faster from compound interest for post-secondary education",
+          "sourceId": "cfpb-saving-post-secondary-education",
+          "quote": "The sooner you start saving for post-secondary education, the faster your money can grow from compound interest."
+        },
+        {
+          "id": "interest-on-interest",
+          "point": "Compound interest means you earn interest on both saved money and prior interest",
+          "sourceId": "cfpb-saving-post-secondary-education",
+          "quote": "Compound interest is when you earn interest on both the money you save and the interest you earn."
+        },
+        {
+          "id": "growth-factors",
+          "point": "Increasing compounding frequency, interest rate, or principal helps your savings grow faster",
+          "sourceId": "cfpb-saving-post-secondary-education",
+          "quote": "Increasing the compounding frequency or your interest rate or adding to your principal can help your savings grow even faster."
+        },
+        {
+          "id": "calculator-exploration",
+          "point": "An online calculator shows how time and compound interest increase savings",
+          "sourceId": "cfpb-saving-post-secondary-education",
+          "quote": "Use an online calculator to understand how time and compound interest can increase savings."
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "compound-interest",
+          "term": "Compound interest",
+          "gloss": "interest earned on both saved money and previously earned interest that builds savings",
+          "sourceId": "cfpb-saving-post-secondary-education",
+          "quote": "Compound interest is when you earn interest on both the money you save and the interest you earn."
+        },
+        {
+          "id": "principal",
+          "term": "principal",
+          "gloss": "initial principal amount you invest that can earn interest over time",
+          "sourceId": "cfpb-saving-post-secondary-education",
+          "quote": "So let's say you invest $1,000 (your principal) and it earns 5 percent (interest rate) once a year (the compounding frequency)."
+        },
+        {
+          "id": "interest-rate",
+          "term": "Interest rate",
+          "gloss": "percentage charged for borrowing or paid for saving that determines interest earned",
+          "sourceId": "cfpb-saving-post-secondary-education",
+          "quote": "Interest rate: A percentage of a sum borrowed that is charged by a lender or merchant for letting you use its money."
+        },
+        {
+          "id": "investment",
+          "term": "Investment",
+          "gloss": "something you spend money on expecting a financial return later",
+          "sourceId": "cfpb-saving-post-secondary-education",
+          "quote": "Investment: Something you spend your money on that you expect will earn a financial return."
+        },
+        {
+          "id": "post-secondary-education",
+          "term": "Post-secondary education",
+          "gloss": "all forms of schooling after high school including college and other training paths",
+          "sourceId": "cfpb-saving-post-secondary-education",
+          "quote": "Post-secondary education: Includes all forms of schooling after high school, not just college."
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "compound-interest-v1",
+        "pedagogicalReason": "Begin with the lump sum growth story so learners grasp why time and interest on interest matter before adding monthly contributions",
+        "focusQuote": "The sooner you start saving in an account that pays interest, the faster your money can grow. That's because of the effect of compound interest.",
+        "focusSourceId": "cfpb-saving-post-secondary-education"
+      },
+      {
+        "componentId": "quiz-cards-v1",
+        "pedagogicalReason": "Reinforce vocabulary and factor knowledge with short checks that link directly to quoted definitions",
+        "focusQuote": "Compound interest: When you earn interest on both the money you save and the interest you earn.",
+        "focusSourceId": "cfpb-saving-post-secondary-education"
+      },
+      {
+        "componentId": "sequence-v1",
+        "pedagogicalReason": "Walk through the calculator inputs in page order to show how initial amount, monthly addition, time, rate and compounding combine",
+        "focusQuote": "Step 1. Initial investment: Enter the amount of money you have to start this savings investment.",
+        "focusSourceId": "cfpb-saving-post-secondary-education"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029144812-cdd1a3eb:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"finance\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 9713 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 12 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 4, keyTerms 5, componentPlan 3; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (3 entries, 1 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "ead053c543f443d49bca0e3f8361815d",
+    "usage": {
+      "promptTokens": 5358,
+      "completionTokens": 25450,
+      "reasoningTokens": 24611,
+      "cachedTokens": 0
+    },
+    "latencyMs": 98638,
+    "estCostUSD": 0.11486,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

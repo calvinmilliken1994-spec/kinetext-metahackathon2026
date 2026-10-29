@@ -1,0 +1,395 @@
+{
+  "gen": {
+    "schemaVersion": "compare-table-v1",
+    "title": "Contrasting Vertical and Horizontal Force Imbalances",
+    "entities": [
+      "Lift > Weight = Aircraft Rises",
+      "Lift > Weight = Aircraft Rises",
+      "Lift > Weight = Aircraft Rises",
+      "Weight > Lift = Aircraft Falls"
+    ],
+    "attributes": [
+      "Lift > Weight = Aircraft Rises",
+      "Lift > Weight = Aircraft Rises",
+      "Lift > Weight = Aircraft Rises",
+      "Weight > Lift = Aircraft Falls"
+    ],
+    "cells": [
+      {
+        "id": "cell-0-0-lift-rises-a",
+        "entityIndex": 0,
+        "attributeIndex": 0,
+        "value": "Lift",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Lift > Weight = Aircraft Rises"
+      },
+      {
+        "id": "cell-0-1-lift-rises-b",
+        "entityIndex": 0,
+        "attributeIndex": 1,
+        "value": "Lift > Weight",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Lift > Weight = Aircraft Rises"
+      },
+      {
+        "id": "cell-0-2-lift-rises-c",
+        "entityIndex": 0,
+        "attributeIndex": 2,
+        "value": "Aircraft Rises",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Lift > Weight = Aircraft Rises"
+      },
+      {
+        "id": "cell-0-3-lift-rises-d",
+        "entityIndex": 0,
+        "attributeIndex": 3,
+        "value": "Weight",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Lift > Weight = Aircraft Rises"
+      },
+      {
+        "id": "cell-1-0-lift-rises-a",
+        "entityIndex": 1,
+        "attributeIndex": 0,
+        "value": "Lift",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Lift > Weight = Aircraft Rises"
+      },
+      {
+        "id": "cell-1-1-lift-rises-b",
+        "entityIndex": 1,
+        "attributeIndex": 1,
+        "value": "Lift > Weight",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Lift > Weight = Aircraft Rises"
+      },
+      {
+        "id": "cell-1-2-lift-rises-c",
+        "entityIndex": 1,
+        "attributeIndex": 2,
+        "value": "Aircraft Rises",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Lift > Weight = Aircraft Rises"
+      },
+      {
+        "id": "cell-1-3-lift-rises-d",
+        "entityIndex": 1,
+        "attributeIndex": 3,
+        "value": "Weight",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Lift > Weight = Aircraft Rises"
+      },
+      {
+        "id": "cell-2-0-lift-rises-a",
+        "entityIndex": 2,
+        "attributeIndex": 0,
+        "value": "Lift",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Lift > Weight = Aircraft Rises"
+      },
+      {
+        "id": "cell-2-1-lift-rises-b",
+        "entityIndex": 2,
+        "attributeIndex": 1,
+        "value": "Lift > Weight",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Lift > Weight = Aircraft Rises"
+      },
+      {
+        "id": "cell-2-2-lift-rises-c",
+        "entityIndex": 2,
+        "attributeIndex": 2,
+        "value": "Aircraft Rises",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Lift > Weight = Aircraft Rises"
+      },
+      {
+        "id": "cell-2-3-lift-rises-d",
+        "entityIndex": 2,
+        "attributeIndex": 3,
+        "value": "Weight",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Lift > Weight = Aircraft Rises"
+      },
+      {
+        "id": "cell-3-0-weight-falls-a",
+        "entityIndex": 3,
+        "attributeIndex": 0,
+        "value": "Weight",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Weight > Lift = Aircraft Falls"
+      },
+      {
+        "id": "cell-3-1-weight-falls-b",
+        "entityIndex": 3,
+        "attributeIndex": 1,
+        "value": "Weight > Lift",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Weight > Lift = Aircraft Falls"
+      },
+      {
+        "id": "cell-3-2-weight-falls-c",
+        "entityIndex": 3,
+        "attributeIndex": 2,
+        "value": "Aircraft Falls",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Weight > Lift = Aircraft Falls"
+      },
+      {
+        "id": "cell-3-3-weight-falls-d",
+        "entityIndex": 3,
+        "attributeIndex": 3,
+        "value": "Lift",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Weight > Lift = Aircraft Falls"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029143609-b3ac3e67:compare-table-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every compare-table text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "CT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 16 cell quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "CT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cell value occurs in its quote and every cell entity occurs in the quote or the same source paragraph (cell-in-quote; paragraph-level entity attribution is the design-disclosed false accept — quotes are visible)"
+      },
+      {
+        "id": "CT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the table shape is valid: 4 entities x 4 attributes with all 16 cells present exactly once (shape-valid)"
+      },
+      {
+        "id": "CT-04",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in entity names, attributes and cell values appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "CT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no attribute column offers 3 distinct cell values, so the UI falls back to reveal-only with unverified cells blanked as \"Not stated on this page\" — by design this is not a component failure (predict-cell-valid)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": false,
+        "message": "repair weakened the spec: /cells changed shape or list length (item counts and structure are frozen in a repair; the system prunes bad items via the drop helpers, the model never adds, removes or reorders items) (a compare-table-v1 repair must fix the failing checks by changing ONLY fields under the affected paths recomputed from revision 1, must keep every item and id stable — the system prunes bad items, never the model — and must never increase a tolerance or otherwise weaken the spec)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "d438b6f2f73547a89839baadfd536912",
+    "usage": {
+      "promptTokens": 6177,
+      "completionTokens": 11241,
+      "reasoningTokens": 10319,
+      "cachedTokens": 0
+    },
+    "latencyMs": 49353,
+    "estCostUSD": 0.0554955,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029143609-b3ac3e67:compare-table-v1:r2",
+    "componentId": "compare-table-v1",
+    "title": "Contrasting Vertical and Horizontal Force Imbalances",
+    "sources": [
+      {
+        "id": "nasa-grc-simplified-aircraft-motion",
+        "title": "Simplified Aircraft Motion — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/simplified-aircraft-motion/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "21d6273d590cd157b690fe9491c4c0d202f5b35c5e5a31a8c072b37bbe89edd5"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "d438b6f2f73547a89839baadfd536912",
+      "runId": "job-20261029143609-b3ac3e67",
+      "promptVersion": "s6-v1",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T14:38:11.476Z"
+    },
+    "seed": 1716082199,
+    "entities": [
+      "Lift > Weight = Aircraft Rises",
+      "Lift > Weight = Aircraft Rises",
+      "Lift > Weight = Aircraft Rises",
+      "Weight > Lift = Aircraft Falls"
+    ],
+    "attributes": [
+      "Lift > Weight = Aircraft Rises",
+      "Lift > Weight = Aircraft Rises",
+      "Lift > Weight = Aircraft Rises",
+      "Weight > Lift = Aircraft Falls"
+    ],
+    "cells": [
+      {
+        "id": "cell-0-0-lift-rises-a",
+        "entityIndex": 0,
+        "attributeIndex": 0,
+        "value": "Lift",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Lift > Weight = Aircraft Rises"
+      },
+      {
+        "id": "cell-0-1-lift-rises-b",
+        "entityIndex": 0,
+        "attributeIndex": 1,
+        "value": "Lift > Weight",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Lift > Weight = Aircraft Rises"
+      },
+      {
+        "id": "cell-0-2-lift-rises-c",
+        "entityIndex": 0,
+        "attributeIndex": 2,
+        "value": "Aircraft Rises",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Lift > Weight = Aircraft Rises"
+      },
+      {
+        "id": "cell-0-3-lift-rises-d",
+        "entityIndex": 0,
+        "attributeIndex": 3,
+        "value": "Weight",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Lift > Weight = Aircraft Rises"
+      },
+      {
+        "id": "cell-1-0-lift-rises-a",
+        "entityIndex": 1,
+        "attributeIndex": 0,
+        "value": "Lift",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Lift > Weight = Aircraft Rises"
+      },
+      {
+        "id": "cell-1-1-lift-rises-b",
+        "entityIndex": 1,
+        "attributeIndex": 1,
+        "value": "Lift > Weight",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Lift > Weight = Aircraft Rises"
+      },
+      {
+        "id": "cell-1-2-lift-rises-c",
+        "entityIndex": 1,
+        "attributeIndex": 2,
+        "value": "Aircraft Rises",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Lift > Weight = Aircraft Rises"
+      },
+      {
+        "id": "cell-1-3-lift-rises-d",
+        "entityIndex": 1,
+        "attributeIndex": 3,
+        "value": "Weight",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Lift > Weight = Aircraft Rises"
+      },
+      {
+        "id": "cell-2-0-lift-rises-a",
+        "entityIndex": 2,
+        "attributeIndex": 0,
+        "value": "Lift",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Lift > Weight = Aircraft Rises"
+      },
+      {
+        "id": "cell-2-1-lift-rises-b",
+        "entityIndex": 2,
+        "attributeIndex": 1,
+        "value": "Lift > Weight",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Lift > Weight = Aircraft Rises"
+      },
+      {
+        "id": "cell-2-2-lift-rises-c",
+        "entityIndex": 2,
+        "attributeIndex": 2,
+        "value": "Aircraft Rises",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Lift > Weight = Aircraft Rises"
+      },
+      {
+        "id": "cell-2-3-lift-rises-d",
+        "entityIndex": 2,
+        "attributeIndex": 3,
+        "value": "Weight",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Lift > Weight = Aircraft Rises"
+      },
+      {
+        "id": "cell-3-0-weight-falls-a",
+        "entityIndex": 3,
+        "attributeIndex": 0,
+        "value": "Weight",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Weight > Lift = Aircraft Falls"
+      },
+      {
+        "id": "cell-3-1-weight-falls-b",
+        "entityIndex": 3,
+        "attributeIndex": 1,
+        "value": "Weight > Lift",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Weight > Lift = Aircraft Falls"
+      },
+      {
+        "id": "cell-3-2-weight-falls-c",
+        "entityIndex": 3,
+        "attributeIndex": 2,
+        "value": "Aircraft Falls",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Weight > Lift = Aircraft Falls"
+      },
+      {
+        "id": "cell-3-3-weight-falls-d",
+        "entityIndex": 3,
+        "attributeIndex": 3,
+        "value": "Lift",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Weight > Lift = Aircraft Falls"
+      }
+    ]
+  }
+}

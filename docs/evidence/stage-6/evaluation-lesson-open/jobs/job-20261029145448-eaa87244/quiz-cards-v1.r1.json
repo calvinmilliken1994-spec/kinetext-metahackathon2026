@@ -1,0 +1,210 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Westward Growth and Its Consequences",
+    "cards": [
+      {
+        "id": "card-acre-cost",
+        "stem": "What cost per acre is given for doubling the nations size westward?",
+        "options": [
+          "For roughly 4 cents an acre",
+          "At no cost to the government",
+          "Through annual tribute payments",
+          "In exchange for military service"
+        ],
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "For roughly 4 cents an acre, the United States doubled its size, expanding the nation westward.",
+        "hint": "Recall the per-acre figure linked to expanded size."
+      },
+      {
+        "id": "card-authorized-limit",
+        "stem": "What payment limit was authorized for the original mission for New Orleans and the Floridas?",
+        "options": [
+          "up to $10 million",
+          "without any spending limit",
+          "through donated supplies only",
+          "by trading eastern counties"
+        ],
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "negotiators Robert Livingston and James Monroe were authorized to pay France up to $10 million solely for the port of New Orleans and the Floridas",
+        "hint": "Focus on the initial authorization before the larger offer."
+      },
+      {
+        "id": "card-fragile-compromises",
+        "stem": "What was required to maintain balance between free states and slave states?",
+        "options": [
+          "a series of fragile compromises",
+          "immediate emancipation everywhere",
+          "permanent separation of regions",
+          "unrestricted expansion of slavery"
+        ],
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "the desire to maintain a balance between \"free states\" and \"slave states\" required a series of fragile compromises",
+        "hint": "Recall how the balance effort was described after expansion."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029145448-eaa87244:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "e86e66b415c745ff88057f45e14ffff6",
+    "usage": {
+      "promptTokens": 2716,
+      "completionTokens": 7012,
+      "reasoningTokens": 6571,
+      "cachedTokens": 0
+    },
+    "latencyMs": 29691,
+    "estCostUSD": 0.033196,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "pruned": true,
+  "dropped": [
+    {
+      "index": 1,
+      "id": "card-land-size",
+      "reason": "card failed Q-06",
+      "checks": [
+        "Q-06"
+      ]
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029145448-eaa87244:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Westward Growth and Its Consequences",
+    "sources": [
+      {
+        "id": "nara-louisiana-purchase-treaty",
+        "title": "Louisiana Purchase Treaty (1803) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/louisiana-purchase-treaty",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Louisiana Purchase Treaty (1803)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "6da19e2b0134ca81169b3c5b0a0461ae48243446219561e760b32cb2ed7cce4b"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "e86e66b415c745ff88057f45e14ffff6",
+      "runId": "job-20261029145448-eaa87244",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T14:57:05.320Z"
+    },
+    "seed": 2471106895,
+    "cards": [
+      {
+        "id": "card-acre-cost",
+        "stem": "What cost per acre is given for doubling the nations size westward?",
+        "options": [
+          "For roughly 4 cents an acre",
+          "At no cost to the government",
+          "Through annual tribute payments",
+          "In exchange for military service"
+        ],
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "For roughly 4 cents an acre, the United States doubled its size, expanding the nation westward.",
+        "hint": "Recall the per-acre figure linked to expanded size."
+      },
+      {
+        "id": "card-authorized-limit",
+        "stem": "What payment limit was authorized for the original mission for New Orleans and the Floridas?",
+        "options": [
+          "up to $10 million",
+          "without any spending limit",
+          "through donated supplies only",
+          "by trading eastern counties"
+        ],
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "negotiators Robert Livingston and James Monroe were authorized to pay France up to $10 million solely for the port of New Orleans and the Floridas",
+        "hint": "Focus on the initial authorization before the larger offer."
+      },
+      {
+        "id": "card-fragile-compromises",
+        "stem": "What was required to maintain balance between free states and slave states?",
+        "options": [
+          "a series of fragile compromises",
+          "immediate emancipation everywhere",
+          "permanent separation of regions",
+          "unrestricted expansion of slavery"
+        ],
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "the desire to maintain a balance between \"free states\" and \"slave states\" required a series of fragile compromises",
+        "hint": "Recall how the balance effort was described after expansion."
+      }
+    ]
+  }
+}
