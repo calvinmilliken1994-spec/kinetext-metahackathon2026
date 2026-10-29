@@ -1,7 +1,7 @@
 // S5B-08 (Stage 5b review, Wave C) — INTERNAL diagnostics use a FIXED enumerated
 // cause vocabulary; everything else maps to 'unknown'. The last-resort stderr line
 // prints only the job id, stage and that same safe code — never the exception object,
-// its message or its stack — unless MKI_DEBUG_INTERNAL=1 is set, and even then only
+// its message or its stack — (S5B-16: there is no opt-in raw mode; formerly MKI_DEBUG_INTERNAL=1 printed only
 // the exception's own name/message/stack strings (never source or provider payloads,
 // and nothing richer is ever persisted).
 //
@@ -169,20 +169,19 @@ test('S5B-08: a regex-valid arbitrary marker maps to unknown and leaks nowhere (
   assert.ok(!/at .*jobs\.ts/.test(r.stderr), 'no stack frames on stderr');
 });
 
-test('S5B-08: MKI_DEBUG_INTERNAL=1 adds local-only detail but persisted artifacts stay clean', async () => {
+test('S5B-16: there is no raw debug mode — MKI_DEBUG_INTERNAL=1 changes nothing on stderr or disk', async () => {
   process.env.MKI_DEBUG_INTERNAL = '1';
   try {
     const r = await runMarkerJob();
     assert.equal(r.status, 'failed');
     assert.equal(r.code, 'INTERNAL');
-    // Opt-in local diagnostics: the exception's own name/message/stack strings.
-    assert.ok(r.stderr.includes('cause unknown'), 'the safe code is printed in both modes');
-    assert.ok(r.stderr.includes('PRIVATE_EXCEPTION_MESSAGE'), 'opt-in mode may print the message locally');
-    // Persisted state NEVER carries the marker or the message, even in debug mode.
-    assert.ok(!r.eventsBlob.includes('PRIVATE_MARKER_TOKEN'));
-    assert.ok(!r.eventsBlob.includes('PRIVATE_EXCEPTION_MESSAGE'));
-    assert.ok(!r.jobJsonBlob.includes('PRIVATE_MARKER_TOKEN'));
-    assert.ok(!r.jobJsonBlob.includes('PRIVATE_EXCEPTION_MESSAGE'));
+    assert.ok(r.stderr.includes('cause unknown'), 'the safe code is printed');
+    for (const marker of ['PRIVATE_EXCEPTION_MESSAGE', 'PRIVATE_MARKER_TOKEN']) {
+      assert.ok(!r.stderr.includes(marker), `stderr never carries ${marker}`);
+      assert.ok(!r.eventsBlob.includes(marker));
+      assert.ok(!r.jobJsonBlob.includes(marker));
+    }
+    assert.ok(!/at .*jobs\.ts/.test(r.stderr), 'no stack frames on stderr');
     const last = r.events[r.events.length - 1];
     assert.equal(last?.detail, 'INTERNAL; during analyze; cause unknown');
   } finally {

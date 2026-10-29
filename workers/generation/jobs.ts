@@ -594,23 +594,11 @@ export function startJob(
       // state is written best-effort inside its own try/catch.
       const at = now().toISOString();
       const cause = sanitisedCause(err);
-      // S5B-08 (R-01): default stderr carries ONLY the job id, the stage and the same
+      // S5B-08/S5B-16 (R-01): stderr carries ONLY the job id, the stage and the same
       // fixed-vocabulary cause code — never the exception object, its message or its
-      // stack. MKI_DEBUG_INTERNAL=1 opts into richer LOCAL-ONLY diagnostics, and even
-      // then only the exception's own name/message/stack strings are printed (never an
-      // object dump that could carry receipts, and never source or provider payloads);
-      // nothing beyond the safe code is ever persisted.
-      if (process.env['MKI_DEBUG_INTERNAL'] === '1') {
-        const e = (typeof err === 'object' && err !== null ? err : {}) as { name?: unknown; message?: unknown; stack?: unknown };
-        console.error(
-          `[${jobId}] INTERNAL during ${progress.stage}: cause ${cause} (MKI_DEBUG_INTERNAL)` +
-            `\n  name: ${typeof e.name === 'string' ? e.name : 'unknown'}` +
-            `\n  message: ${typeof e.message === 'string' ? e.message : ''}` +
-            `\n  stack: ${typeof e.stack === 'string' ? e.stack : ''}`,
-        );
-      } else {
-        console.error(`[${jobId}] INTERNAL during ${progress.stage}: cause ${cause}`);
-      }
+      // stack, in any mode. Exception text can carry source or provider payloads, so
+      // there is deliberately no opt-in raw debug branch; reproduce failures with tests.
+      console.error(`[${jobId}] INTERNAL during ${progress.stage}: cause ${cause}`);
       // BUG-002/S5B-06: summary.totalCostUSD / reservedUnknownUSD are kept current by
       // runJob's single cost accumulator on EVERY charge path (receipts,
       // GeneratedOutputError receipts and MetaError chargedUSD alike), so billed calls
