@@ -4,6 +4,8 @@ import { dirname, resolve } from 'node:path';
 import { createServer } from 'node:net';
 import type { Server, Socket } from 'node:net';
 import type { Usage } from '../contracts/index.ts';
+import { isMetaProvider } from './pricing.ts';
+import type { MetaProvider } from './pricing.ts';
 
 export interface LedgerEntry {
   id: string;
@@ -11,6 +13,7 @@ export interface LedgerEntry {
   kind: 'reserve' | 'reconcile';
   purpose: 'test-live' | 'demo';
   model: string;
+  provider: MetaProvider;
   amountUSD: number;
   reservationId?: string;
   responseId?: string;
@@ -20,18 +23,20 @@ export interface LedgerEntry {
 
 export interface Ledger {
   readonly capUSD: number;
-  reserve(req: { purpose: 'test-live' | 'demo'; model: string; estUSD: number }): string;
+  readonly providerCapsUSD?: Readonly<Partial<Record<MetaProvider, number>>>;
+  reserve(req: { purpose: 'test-live' | 'demo'; model: string; estUSD: number; provider?: MetaProvider }): string;
   reconcile(
     reservationId: string,
     actual: { costUSD: number; responseId?: string; usage?: Usage | null; note?: string },
   ): void;
-  committedUSD(): number;
+  committedUSD(provider?: MetaProvider): number;
   close(): void;
 }
 
 interface ReservationState {
   purpose: 'test-live' | 'demo';
   model: string;
+  provider: MetaProvider;
   estUSD: number;
   reconciled: boolean;
   actualUSD: number;
@@ -89,6 +94,16 @@ function replayLedgerFile(ledgerPath: string): Map<string, ReservationState> {
       throw new Error('LEDGER_CORRUPT');
     }
     seenEntryIds.add(id);
+    let provider: MetaProvider;
+    if (!Object.hasOwn(entry, 'provider')) {
+      provider = 'meta-api';
+    } else {
+      const providerRaw: unknown = entry['provider'];
+      if (!isMetaProvider(providerRaw)) {
+        throw new Error('LEDGER_CORRUPT');
+      }
+      provider = providerRaw;
+    }
     if (kind === 'reserve') {
       const reservationIdRaw: unknown = entry['reservationId'];
       const key: string =
@@ -99,6 +114,7 @@ function replayLedgerFile(ledgerPath: string): Map<string, ReservationState> {
       reservations.set(key, {
         purpose: purpose as 'test-live' | 'demo',
         model,
+        provider,
         estUSD: amountUSD,
         reconciled: false,
         actualUSD: 0,
@@ -110,6 +126,9 @@ function replayLedgerFile(ledgerPath: string): Map<string, ReservationState> {
       }
       const existing: ReservationState | undefined = reservations.get(reservationId);
       if (existing === undefined || existing.reconciled) {
+        throw new Error('LEDGER_CORRUPT');
+      }
+      if (existing.provider !== provider) {
         throw new Error('LEDGER_CORRUPT');
       }
       existing.reconciled = true;
@@ -135,11 +154,34 @@ export async function openLedger(opts: {
   now?: () => Date;
   newId?: () => string;
   lockPort?: number;
+  providerCapsUSD?: Readonly<Partial<Record<MetaProvider, number>>>;
 }): Promise<Ledger> {
   const ledgerPath: string = opts.path;
   const capUSD: number = opts.capUSD;
   if (typeof capUSD !== 'number' || !Number.isFinite(capUSD) || capUSD < 0) {
     throw new Error('INVALID_AMOUNT');
+  }
+  let frozenCaps: Readonly<Partial<Record<MetaProvider, number>>> | undefined;
+  if (opts.providerCapsUSD !== undefined) {
+    const raw: unknown = opts.providerCapsUSD;
+    if (typeof raw !== 'object' || raw === null || Array.isArray(raw)) {
+      throw new Error('INVALID_PROVIDER');
+    }
+    const rec = raw as Record<string, unknown>;
+    const copy: Partial<Record<MetaProvider, number>> = {};
+    for (const key of Object.keys(rec)) {
+      if (!isMetaProvider(key)) {
+        throw new Error('INVALID_PROVIDER');
+      }
+      const v: unknown = rec[key];
+      if (typeof v !== 'number' || !Number.isFinite(v) || v < 0) {
+        throw new Error('INVALID_AMOUNT');
+      }
+      copy[key] = v;
+    }
+    frozenCaps = Object.freeze(copy);
+  } else {
+    frozenCaps = undefined;
   }
   let port: number;
   if (opts.lockPort !== undefined) {
@@ -211,9 +253,15 @@ export async function openLedger(opts: {
     }
   }
 
-  function committedUSD(): number {
+  function committedUSD(provider?: MetaProvider): number {
+    if (provider !== undefined && !isMetaProvider(provider)) {
+      throw new Error('INVALID_PROVIDER');
+    }
     let total = 0;
     for (const state of reservations.values()) {
+      if (provider !== undefined && state.provider !== provider) {
+        continue;
+      }
       total += state.reconciled ? state.actualUSD : state.estUSD;
     }
     return total;
@@ -224,8 +272,15 @@ export async function openLedger(opts: {
     appendFileSync(ledgerPath, JSON.stringify(entry) + '\n');
   }
 
-  function reserve(req: { purpose: 'test-live' | 'demo'; model: string; estUSD: number }): string {
+  function reserve(req: { purpose: 'test-live' | 'demo'; model: string; estUSD: number; provider?: MetaProvider }): string {
     ensureOpen();
+    let provider: MetaProvider = 'meta-api';
+    if (req.provider !== undefined) {
+      if (!isMetaProvider(req.provider)) {
+        throw new Error('INVALID_PROVIDER');
+      }
+      provider = req.provider;
+    }
     if (typeof req.estUSD !== 'number' || !Number.isFinite(req.estUSD) || req.estUSD < 0) {
       throw new Error('INVALID_AMOUNT');
     }
@@ -234,8 +289,23 @@ export async function openLedger(opts: {
     for (const [key, state] of fresh) {
       reservations.set(key, state);
     }
-    if (committedUSD() + req.estUSD > capUSD) {
-      throw new Error('BUDGET_EXCEEDED');
+    if (frozenCaps === undefined) {
+      if (committedUSD() + req.estUSD > capUSD) {
+        throw new Error('BUDGET_EXCEEDED');
+      }
+    } else {
+      const capForP: number | undefined = frozenCaps[provider];
+      if (capForP === undefined) {
+        throw new Error('BUDGET_EXCEEDED');
+      }
+      if (committedUSD(provider) + req.estUSD > capForP) {
+        throw new Error('BUDGET_EXCEEDED');
+      }
+      if (provider === 'meta-api') {
+        if (committedUSD('meta-api') + req.estUSD > capUSD) {
+          throw new Error('BUDGET_EXCEEDED');
+        }
+      }
     }
     const reservationId: string = newId();
     const entry: LedgerEntry = {
@@ -244,6 +314,7 @@ export async function openLedger(opts: {
       kind: 'reserve',
       purpose: req.purpose,
       model: req.model,
+      provider,
       amountUSD: req.estUSD,
       reservationId,
     };
@@ -251,6 +322,7 @@ export async function openLedger(opts: {
     reservations.set(reservationId, {
       purpose: req.purpose,
       model: req.model,
+      provider,
       estUSD: req.estUSD,
       reconciled: false,
       actualUSD: 0,
@@ -276,6 +348,7 @@ export async function openLedger(opts: {
       kind: 'reconcile',
       purpose: state.purpose,
       model: state.model,
+      provider: state.provider,
       amountUSD: actual.costUSD,
       reservationId,
     };
@@ -307,6 +380,7 @@ export async function openLedger(opts: {
 
   return {
     capUSD,
+    providerCapsUSD: frozenCaps,
     reserve,
     reconcile,
     committedUSD,

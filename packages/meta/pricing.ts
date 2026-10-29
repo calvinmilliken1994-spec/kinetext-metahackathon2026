@@ -1,7 +1,22 @@
 import type { Usage } from '../contracts/index.ts';
 
-export const PRICES_PER_MTOK: Record<'muse-spark-1.3', { input: number; cachedInput: number; output: number }> = {
+export type ModelChoice = 'muse-spark-1.3' | 'muse-spark-open';
+export type MetaProvider = 'meta-api' | 'modal';
+
+export const MODEL_CHOICES: readonly ModelChoice[] = ['muse-spark-1.3', 'muse-spark-open'];
+export const META_PROVIDERS: readonly MetaProvider[] = ['meta-api', 'modal'];
+
+export function isModelChoice(v: unknown): v is ModelChoice {
+  return v === 'muse-spark-1.3' || v === 'muse-spark-open';
+}
+
+export function isMetaProvider(v: unknown): v is MetaProvider {
+  return v === 'meta-api' || v === 'modal';
+}
+
+export const PRICES_PER_MTOK: Record<ModelChoice, { input: number; cachedInput: number; output: number }> = {
   'muse-spark-1.3': { input: 1.25, cachedInput: 0.15, output: 4.25 },
+  'muse-spark-open': { input: 1.25, cachedInput: 0.15, output: 4.25 },
 };
 
 export function isValidUsage(usage: Usage): boolean {
@@ -43,7 +58,13 @@ export function isValidUsage(usage: Usage): boolean {
   return true;
 }
 
-export function costFromUsage(model: 'muse-spark-1.3', usage: Usage): number {
+// Note: cached tokens that a provider does not report are passed in as
+// cachedTokens: 0 by the client, so costFromUsage charges the full input
+// price for them (conservative). No model-specific adjustment is needed.
+export function costFromUsage(model: ModelChoice, usage: Usage): number {
+  if (!isModelChoice(model)) {
+    throw new Error('UNKNOWN_MODEL');
+  }
   if (!isValidUsage(usage)) {
     throw new Error('INVALID_USAGE');
   }
@@ -75,7 +96,10 @@ export function inputTokenBound(
   return bytes;
 }
 
-export function reservationUSD(model: 'muse-spark-1.3', inputTokens: number, maxOutputTokens: number): number {
+export function reservationUSD(model: ModelChoice, inputTokens: number, maxOutputTokens: number): number {
+  if (!isModelChoice(model)) {
+    throw new Error('UNKNOWN_MODEL');
+  }
   if (typeof inputTokens !== 'number' || !Number.isFinite(inputTokens) || inputTokens < 0) {
     throw new Error('INVALID_AMOUNT');
   }

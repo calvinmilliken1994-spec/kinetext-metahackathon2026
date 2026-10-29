@@ -1,10 +1,35 @@
-import { costFromUsage, inputTokenBound, isValidUsage, reservationUSD } from './pricing.ts';
+import { costFromUsage, inputTokenBound, isMetaProvider, isValidUsage, reservationUSD } from './pricing.ts';
 import type { Ledger } from './ledger.ts';
 import type { MetaReceipt, Usage } from '../contracts/index.ts';
+import type { MetaProvider, ModelChoice } from './pricing.ts';
+
+export type { MetaProvider, ModelChoice } from './pricing.ts';
+
+export const MODAL_MUSE_SPARK_OPEN_MODEL: 'meta-models/Muse-Spark-Open-816B-A42B' =
+  'meta-models/Muse-Spark-Open-816B-A42B';
+
+export type ProviderConfig =
+  | { provider: 'meta-api' }
+  | {
+      provider: 'modal';
+      baseUrl: string;
+      proxyKey: string | undefined;
+      proxySecret: string | undefined;
+      modelString: string;
+    };
+
+export type ClientReceipt = MetaReceipt & {
+  provider?: MetaProvider;
+  model?: ModelChoice;
+  providerModel?: string;
+  cachedUnknown?: boolean;
+};
 
 export type MetaErrorCode =
   | 'LIVE_CALLS_DISABLED'
   | 'MODEL_API_KEY_MISSING'
+  | 'MODAL_PROXY_TOKEN_MISSING'
+  | 'PROVIDER_CONFIG_INVALID'
   | 'BUDGET_EXCEEDED'
   | 'LEDGER_ERROR'
   | 'TIMEOUT'
@@ -25,6 +50,8 @@ export type MetaErrorCode =
 export const META_ERROR_MESSAGES: Readonly<Record<MetaErrorCode, string>> = {
   LIVE_CALLS_DISABLED: 'live calls disabled',
   MODEL_API_KEY_MISSING: 'model API key missing',
+  MODAL_PROXY_TOKEN_MISSING: 'modal proxy token missing',
+  PROVIDER_CONFIG_INVALID: 'provider configuration invalid',
   BUDGET_EXCEEDED: 'budget exceeded',
   LEDGER_ERROR: 'spend ledger unavailable; operator recovery required',
   TIMEOUT: 'timeout',
@@ -46,11 +73,12 @@ export const META_ERROR_MESSAGES: Readonly<Record<MetaErrorCode, string>> = {
 export class MetaError extends Error {
   code: MetaErrorCode;
   status?: number;
-  receipt?: MetaReceipt;
+  receipt?: ClientReceipt;
   chargedUSD?: number;
   reservedUnknownUSD?: number;
   costBasis?: 'usage' | 'reservation';
   providerErrorType?: string;
+  provider?: MetaProvider;
   /**
    * The second `message` argument is IGNORED for source compatibility only
    * (callers may pass the old message). `this.message` is always
@@ -61,11 +89,12 @@ export class MetaError extends Error {
     message?: string,
     opts?: {
       status?: number;
-      receipt?: MetaReceipt;
+      receipt?: ClientReceipt;
       chargedUSD?: number;
       reservedUnknownUSD?: number;
       costBasis?: 'usage' | 'reservation';
       providerErrorType?: string;
+      provider?: MetaProvider;
     },
   ) {
     super(META_ERROR_MESSAGES[code]);
@@ -94,6 +123,9 @@ export class MetaError extends Error {
       ) {
         this.providerErrorType = opts.providerErrorType;
       }
+      if (opts.provider !== undefined && isMetaProvider(opts.provider)) {
+        this.provider = opts.provider;
+      }
     }
   }
 }
@@ -113,7 +145,10 @@ export interface CompleteRequest {
 }
 
 export interface MetaClient {
-  complete<T>(req: CompleteRequest): Promise<{ data: T; receipt: MetaReceipt }>;
+  complete<T>(req: CompleteRequest): Promise<{ data: T; receipt: ClientReceipt }>;
+  readonly provider?: MetaProvider;
+  readonly model?: ModelChoice;
+  readonly providerModel?: string;
 }
 
 export interface MetaClientOptions {
@@ -128,63 +163,97 @@ export interface MetaClientOptions {
   fetchImpl?: typeof fetch;
   sleep?: (ms: number, signal?: AbortSignal) => Promise<void>;
   now?: () => number;
+  providerConfig?: ProviderConfig;
 }
 
-function toUsage(raw: unknown): Usage | null {
+function toUsage(raw: unknown): { usage: Usage | null; cachedUnknown: boolean } {
   if (raw === null || raw === undefined) {
-    return null;
+    return { usage: null, cachedUnknown: true };
   }
   if (typeof raw !== 'object') {
-    return null;
+    return { usage: null, cachedUnknown: true };
   }
   const o = raw as Record<string, unknown>;
   const pt: unknown = o['prompt_tokens'];
   const ct: unknown = o['completion_tokens'];
   if (typeof pt !== 'number' || typeof ct !== 'number') {
-    return null;
+    return { usage: null, cachedUnknown: true };
   }
   if (!Number.isFinite(pt) || !Number.isFinite(ct)) {
-    return null;
+    return { usage: null, cachedUnknown: true };
   }
   if (!Number.isInteger(pt) || !Number.isInteger(ct)) {
-    return null;
+    return { usage: null, cachedUnknown: true };
   }
   if (pt < 0 || ct < 0) {
-    return null;
+    return { usage: null, cachedUnknown: true };
   }
   let cached = 0;
-  let reasoning = 0;
+  let cachedUnknown = true;
   const promptDetails: unknown = o['prompt_tokens_details'];
   if (promptDetails !== undefined && promptDetails !== null) {
     if (typeof promptDetails !== 'object') {
-      return null;
+      return { usage: null, cachedUnknown: true };
     }
     const c: unknown = (promptDetails as Record<string, unknown>)['cached_tokens'];
     if (c !== undefined) {
       if (typeof c !== 'number' || !Number.isFinite(c) || !Number.isInteger(c) || c < 0) {
-        return null;
+        return { usage: null, cachedUnknown: true };
       }
       cached = c;
+      cachedUnknown = false;
+    } else {
+      cached = 0;
+      cachedUnknown = true;
     }
+  } else {
+    cached = 0;
+    cachedUnknown = true;
   }
+  let nestedHas = false;
+  let nestedVal = 0;
+  let topHas = false;
+  let topVal = 0;
   const compDetails: unknown = o['completion_tokens_details'];
   if (compDetails !== undefined && compDetails !== null) {
     if (typeof compDetails !== 'object') {
-      return null;
+      return { usage: null, cachedUnknown: true };
     }
     const r: unknown = (compDetails as Record<string, unknown>)['reasoning_tokens'];
     if (r !== undefined) {
       if (typeof r !== 'number' || !Number.isFinite(r) || !Number.isInteger(r) || r < 0) {
-        return null;
+        return { usage: null, cachedUnknown: true };
       }
-      reasoning = r;
+      nestedHas = true;
+      nestedVal = r;
     }
   }
+  const topR: unknown = o['reasoning_tokens'];
+  if (topR !== undefined) {
+    if (typeof topR !== 'number' || !Number.isFinite(topR) || !Number.isInteger(topR) || topR < 0) {
+      return { usage: null, cachedUnknown: true };
+    }
+    topHas = true;
+    topVal = topR;
+  }
+  let reasoning = 0;
+  if (nestedHas && topHas) {
+    if (nestedVal !== topVal) {
+      return { usage: null, cachedUnknown: true };
+    }
+    reasoning = nestedVal;
+  } else if (nestedHas) {
+    reasoning = nestedVal;
+  } else if (topHas) {
+    reasoning = topVal;
+  } else {
+    reasoning = 0;
+  }
   if (cached > pt) {
-    return null;
+    return { usage: null, cachedUnknown: true };
   }
   if (reasoning > ct) {
-    return null;
+    return { usage: null, cachedUnknown: true };
   }
   const usage: Usage = {
     promptTokens: pt,
@@ -193,9 +262,9 @@ function toUsage(raw: unknown): Usage | null {
     cachedTokens: cached,
   };
   if (!isValidUsage(usage)) {
-    return null;
+    return { usage: null, cachedUnknown: true };
   }
-  return usage;
+  return { usage, cachedUnknown };
 }
 
 function isTimeoutError(err: unknown): boolean {
@@ -266,14 +335,112 @@ export function createMetaClient(opts: MetaClientOptions): MetaClient {
   if (opts.allowLive !== true) {
     throw new MetaError('LIVE_CALLS_DISABLED', 'live calls disabled');
   }
-  const apiKey: string | undefined = opts.apiKey;
-  if (typeof apiKey !== 'string' || apiKey.length === 0) {
-    throw new MetaError('MODEL_API_KEY_MISSING', 'model API key missing');
+  let effectiveProvider: MetaProvider;
+  let effectiveModelChoice: ModelChoice;
+  let effectiveProviderModel: string;
+  let requestUrl: string;
+  let headers: Record<string, string>;
+  const pc: unknown = opts.providerConfig;
+  if (pc === undefined) {
+    const apiKey: string | undefined = opts.apiKey;
+    if (typeof apiKey !== 'string' || apiKey.length === 0) {
+      throw new MetaError('MODEL_API_KEY_MISSING', 'model API key missing');
+    }
+    const key: string = apiKey;
+    const base: string = opts.baseUrl ?? 'https://api.meta.ai/v1';
+    effectiveProvider = 'meta-api';
+    effectiveModelChoice = opts.model ?? 'muse-spark-1.3';
+    effectiveProviderModel = effectiveModelChoice;
+    requestUrl = `${base}/chat/completions`;
+    headers = {
+      Authorization: `Bearer ${key}`,
+      'Content-Type': 'application/json',
+    };
+  } else {
+    if (!isPlainObject(pc)) {
+      throw new MetaError('PROVIDER_CONFIG_INVALID', undefined);
+    }
+    const prov: unknown = (pc as Record<string, unknown>)['provider'];
+    if (prov !== 'meta-api' && prov !== 'modal') {
+      throw new MetaError('PROVIDER_CONFIG_INVALID', undefined);
+    }
+    if (prov === 'meta-api') {
+      const apiKey: string | undefined = opts.apiKey;
+      if (typeof apiKey !== 'string' || apiKey.length === 0) {
+        throw new MetaError('MODEL_API_KEY_MISSING', 'model API key missing');
+      }
+      const key: string = apiKey;
+      const base: string = opts.baseUrl ?? 'https://api.meta.ai/v1';
+      effectiveProvider = 'meta-api';
+      effectiveModelChoice = opts.model ?? 'muse-spark-1.3';
+      effectiveProviderModel = effectiveModelChoice;
+      requestUrl = `${base}/chat/completions`;
+      headers = {
+        Authorization: `Bearer ${key}`,
+        'Content-Type': 'application/json',
+      };
+    } else {
+      const rec = pc as Record<string, unknown>;
+      const proxyKeyU: unknown = rec['proxyKey'];
+      const proxySecretU: unknown = rec['proxySecret'];
+      const baseUrlU: unknown = rec['baseUrl'];
+      const modelStringU: unknown = rec['modelString'];
+      if (
+        typeof proxyKeyU !== 'string' ||
+        proxyKeyU.length === 0 ||
+        typeof proxySecretU !== 'string' ||
+        proxySecretU.length === 0
+      ) {
+        throw new MetaError('MODAL_PROXY_TOKEN_MISSING', undefined);
+      }
+      const proxyKey: string = proxyKeyU;
+      const proxySecret: string = proxySecretU;
+      if (!proxyKey.startsWith('wk-') || !proxySecret.startsWith('ws-')) {
+        throw new MetaError('PROVIDER_CONFIG_INVALID', undefined);
+      }
+      if (!/^[\x21-\x7e]+$/.test(proxyKey) || !/^[\x21-\x7e]+$/.test(proxySecret)) {
+        throw new MetaError('PROVIDER_CONFIG_INVALID', undefined);
+      }
+      if (typeof baseUrlU !== 'string') {
+        throw new MetaError('PROVIDER_CONFIG_INVALID', undefined);
+      }
+      let parsed: URL;
+      try {
+        parsed = new URL(baseUrlU);
+      } catch {
+        throw new MetaError('PROVIDER_CONFIG_INVALID', undefined);
+      }
+      if (
+        parsed.protocol !== 'https:' ||
+        parsed.username !== '' ||
+        parsed.password !== '' ||
+        parsed.search !== '' ||
+        parsed.hash !== ''
+      ) {
+        throw new MetaError('PROVIDER_CONFIG_INVALID', undefined);
+      }
+      const stripped: string = (baseUrlU as string).replace(/\/+$/, '');
+      if (stripped.length === 0) {
+        throw new MetaError('PROVIDER_CONFIG_INVALID', undefined);
+      }
+      if (modelStringU !== MODAL_MUSE_SPARK_OPEN_MODEL) {
+        throw new MetaError('PROVIDER_CONFIG_INVALID', undefined);
+      }
+      if (opts.baseUrl !== undefined || opts.model !== undefined) {
+        throw new MetaError('PROVIDER_CONFIG_INVALID', undefined);
+      }
+      effectiveProvider = 'modal';
+      effectiveModelChoice = 'muse-spark-open';
+      effectiveProviderModel = MODAL_MUSE_SPARK_OPEN_MODEL;
+      requestUrl = `${stripped}/chat/completions`;
+      headers = {
+        'Modal-Key': proxyKey,
+        'Modal-Secret': proxySecret,
+        'Content-Type': 'application/json',
+      };
+    }
   }
-  const key: string = apiKey;
   const ledger: Ledger = opts.ledger;
-  const model: 'muse-spark-1.3' = opts.model ?? 'muse-spark-1.3';
-  const baseUrl: string = opts.baseUrl ?? 'https://api.meta.ai/v1';
   const timeoutMs: number = opts.timeoutMs ?? 120000;
   const retryDelayMs: number = opts.retryDelayMs ?? 1000;
   const maxInputTokens: number = opts.maxInputTokens ?? 16000;
@@ -303,7 +470,7 @@ export function createMetaClient(opts: MetaClientOptions): MetaClient {
     }
   }
 
-  async function complete<T>(req: CompleteRequest): Promise<{ data: T; receipt: MetaReceipt }> {
+  async function complete<T>(req: CompleteRequest): Promise<{ data: T; receipt: ClientReceipt }> {
     let knownUSD = 0;
     let reservedUnknownUSD = 0;
 
@@ -317,7 +484,7 @@ export function createMetaClient(opts: MetaClientOptions): MetaClient {
 
     function fail(
       code: MetaErrorCode,
-      extra?: { status?: number; receipt?: MetaReceipt; providerErrorType?: string },
+      extra?: { status?: number; receipt?: ClientReceipt; providerErrorType?: string },
     ): MetaError {
       return new MetaError(code, undefined, {
         status: extra?.status,
@@ -326,6 +493,7 @@ export function createMetaClient(opts: MetaClientOptions): MetaClient {
         reservedUnknownUSD,
         costBasis: currentBasis(),
         providerErrorType: extra?.providerErrorType,
+        provider: effectiveProvider,
       });
     }
 
@@ -335,6 +503,7 @@ export function createMetaClient(opts: MetaClientOptions): MetaClient {
         chargedUSD: 0,
         reservedUnknownUSD: 0,
         costBasis: 'usage',
+        provider: effectiveProvider,
       });
     }
     if (jobAborted(req.signal)) {
@@ -342,14 +511,19 @@ export function createMetaClient(opts: MetaClientOptions): MetaClient {
         chargedUSD: 0,
         reservedUnknownUSD: 0,
         costBasis: 'usage',
+        provider: effectiveProvider,
       });
     }
-    const perAttemptReservation: number = reservationUSD(model, bound, req.maxOutputTokens);
+    const perAttemptReservation: number = reservationUSD(
+      effectiveModelChoice,
+      bound,
+      req.maxOutputTokens,
+    );
 
     const start: number = now();
-    const url: string = `${baseUrl}/chat/completions`;
+    const url: string = requestUrl;
     const body: Record<string, unknown> = {
-      model,
+      model: effectiveProviderModel,
       messages: req.messages,
       max_tokens: req.maxOutputTokens,
       reasoning_effort: 'high',
@@ -360,10 +534,6 @@ export function createMetaClient(opts: MetaClientOptions): MetaClient {
       },
     };
     const bodyJson: string = JSON.stringify(body);
-    const headers: Record<string, string> = {
-      Authorization: `Bearer ${key}`,
-      'Content-Type': 'application/json',
-    };
 
     for (let attempt = 1; attempt <= 2; attempt++) {
       if (jobAborted(req.signal)) {
@@ -371,7 +541,12 @@ export function createMetaClient(opts: MetaClientOptions): MetaClient {
       }
       let reservationId: string;
       try {
-        reservationId = ledger.reserve({ purpose: req.purpose, model, estUSD: perAttemptReservation });
+        reservationId = ledger.reserve({
+          purpose: req.purpose,
+          model: effectiveProviderModel,
+          estUSD: perAttemptReservation,
+          provider: effectiveProvider,
+        });
       } catch (reserveErr: unknown) {
         if (reserveErr instanceof Error && reserveErr.message === 'BUDGET_EXCEEDED') {
           throw fail('BUDGET_EXCEEDED');
@@ -478,7 +653,9 @@ export function createMetaClient(opts: MetaClientOptions): MetaClient {
               content = c;
             }
           }
-          const usage: Usage | null = toUsage(data['usage']);
+          const parsedUsage = toUsage(data['usage']);
+          const usage: Usage | null = parsedUsage.usage;
+          const cachedUnknown: boolean = parsedUsage.cachedUnknown;
           let attemptCost: number;
           let attemptBasis: 'usage' | 'reservation';
           let attemptNote = '';
@@ -487,16 +664,16 @@ export function createMetaClient(opts: MetaClientOptions): MetaClient {
             attemptBasis = 'reservation';
             attemptNote = 'uncertain outcome';
           } else {
-            attemptCost = costFromUsage(model, usage);
+            attemptCost = costFromUsage(effectiveModelChoice, usage);
             attemptBasis = 'usage';
             attemptNote = 'usage';
           }
           settle(attemptCost, attemptBasis, attemptNote, responseId, usage);
           const end: number = now();
           const latencyMs: number = Math.max(0, Math.round(end - start));
-          const receipt: MetaReceipt = {
+          const receipt: ClientReceipt = {
             purpose: req.purpose,
-            requestedModel: model,
+            requestedModel: effectiveProviderModel,
             returnedModel,
             responseId,
             usage,
@@ -506,9 +683,13 @@ export function createMetaClient(opts: MetaClientOptions): MetaClient {
             finishReason,
             attempts: attempt,
             costBasis: currentBasis(),
+            provider: effectiveProvider,
+            model: effectiveModelChoice,
+            providerModel: effectiveProviderModel,
+            cachedUnknown,
           };
 
-          if (data['model'] !== model) {
+          if (data['model'] !== effectiveProviderModel) {
             throw fail('RETURNED_MODEL_MISMATCH', { receipt });
           }
           if (finishReason !== 'stop') {
@@ -611,8 +792,14 @@ export function createMetaClient(opts: MetaClientOptions): MetaClient {
       chargedUSD: chargedUSD(),
       reservedUnknownUSD,
       costBasis: currentBasis(),
+      provider: effectiveProvider,
     });
   }
 
-  return { complete };
+  return {
+    complete,
+    provider: effectiveProvider,
+    model: effectiveModelChoice,
+    providerModel: effectiveProviderModel,
+  };
 }
