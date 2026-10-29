@@ -5,6 +5,12 @@
 // Usage (foreground; the local live API must already be running):
 //   node scripts/evaluation-run.ts --list                # print the plan, no API calls
 //   node scripts/evaluation-run.ts                       # run everything not yet in results.jsonl
+//   node scripts/evaluation-run.ts --model muse-spark-open  # OW-2: run the SAME manifest on the
+//       # Modal-hosted open weights instead of the default muse-spark-1.3 (Meta API). The model is
+//       # sent with EVERY job POST, admission arithmetic uses the chosen model's pricing, and each
+//       # results line records the model/provider the job actually ran on. Use with EVAL_OUT_DIR
+//       # (e.g. docs/evidence/open-weights/evaluation/) so the run stays apart from the
+//       # pre-registered hosted evaluation — never re-run into the pre-registered directory.
 //   node scripts/evaluation-run.ts --only <sourceId>     # run a single page
 //   node scripts/evaluation-run.ts --from <n>            # resume at candidate number n (1-29)
 //   node scripts/evaluation-run.ts --max-usd <x>         # admission cap (default 4). The rule
@@ -54,11 +60,14 @@ import {
   admissionLimitsFromConfig,
   assessLiabilities,
   describeLiability,
+  evalModelFromArgv,
   parseJournal,
   perJobAdmissionUSD,
+  PROVIDER_FOR_MODEL,
   recoveredRecord,
 } from './evaluation-budget.ts';
 import type { AssessLiabilitiesResult, ResultPageFields } from './evaluation-budget.ts';
+import type { ModelChoice } from '../packages/meta/pricing.ts';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = 'http://127.0.0.1:8787';
@@ -68,10 +77,22 @@ const RESULTS = join(OUT_DIR, 'results.jsonl');
 const JOURNAL = join(OUT_DIR, 'journal.jsonl');
 const MANIFEST = join(ROOT, 'data', 'evaluation', 'manifest.json');
 const STORAGE_DIR = process.env.STORAGE_DIR ?? 'storage';
+// OW-2: the model every job of THIS run is submitted with (default muse-spark-1.3);
+// an invalid --model exits 2 before anything is read, reserved or submitted.
+let MODEL: ModelChoice;
+try {
+  MODEL = evalModelFromArgv(process.argv);
+} catch {
+  console.error('--model must be one of: muse-spark-1.3, muse-spark-open (default muse-spark-1.3)');
+  process.exit(2);
+}
+const MODEL_PROVIDER = PROVIDER_FOR_MODEL[MODEL];
 // S5B-07: conservative per-job admission amount, derived from the configured limits
 // (never the old fixed 0.15, which bounded less than a single spec attempt).
+// OW-2: priced with the CHOSEN model's rates (identical numbers today).
 const PER_JOB_ADMISSION_USD = perJobAdmissionUSD(
   admissionLimitsFromConfig(JSON.parse(readFileSync(join(ROOT, 'config', 'resource-limits.json'), 'utf8'))),
+  MODEL,
 );
 
 interface ManifestEntry {
@@ -144,6 +165,11 @@ function recordFromDetail(page: ResultPageFields, jobId: string, detail: any, wa
     sourceId: page.sourceId, candidate: page.candidate, subject: page.subject, expected: page.expected,
     acceptable: page.acceptable, difficulty: page.difficulty,
     jobId,
+    // OW-2: what the job ACTUALLY ran on (job summary fields); a summary from a
+    // server that predates the fields falls back to this run's requested model —
+    // never null, never an invented provider.
+    model: typeof s.model === 'string' && s.model !== '' ? s.model : MODEL,
+    provider: typeof s.provider === 'string' && s.provider !== '' ? s.provider : MODEL_PROVIDER,
     status: s.status as string,
     engine: s.engine ?? null,
     publishedRevision: s.publishedRevision ?? null,
@@ -214,6 +240,10 @@ async function rescan(): Promise<void> {
       view?.detail !== undefined
         ? recordFromDetail(page, entry.jobId, view.detail, null, true)
         : recoveredRecord(page, summary, new Date().toISOString());
+    // OW-2: a recovered record from a pre-OW-2 summary carries null model/provider;
+    // this run's requested model is the honest fallback (the journal is per-run).
+    record.model ??= MODEL;
+    record.provider ??= MODEL_PROVIDER;
     appendFileSync(RESULTS, JSON.stringify(record) + '\n');
     const cost = record.totalCostUSD;
     console.log(
@@ -267,7 +297,7 @@ if (only !== null && !pages.some(p => p.sourceId === only)) {
 }
 
 if (listMode) {
-  console.log(`Evaluation plan: ${plan.length} of ${pages.length} pages to run (already done: ${doneIds.size}; spent so far: $${spentUsd.toFixed(2)}; budget: $${maxUsd.toFixed(2)}; per-job admission: $${PER_JOB_ADMISSION_USD.toFixed(3)} worst-case reservation from config/resource-limits.json)`);
+  console.log(`Evaluation plan: ${plan.length} of ${pages.length} pages to run (model ${MODEL} via ${MODEL_PROVIDER}; already done: ${doneIds.size}; spent so far: $${spentUsd.toFixed(2)}; budget: $${maxUsd.toFixed(2)}; per-job admission: $${PER_JOB_ADMISSION_USD.toFixed(3)} worst-case reservation from config/resource-limits.json)`);
   for (const p of plan) {
     const acc = p.acceptable.length > 0 ? ` (also acceptable: ${p.acceptable.join(', ')})` : '';
     console.log(`[${String(p.candidate).padStart(2)}/${pages.length}] ${p.sourceId.padEnd(42)} ${p.subject.padEnd(16)} ${p.difficulty.padEnd(6)} expected ${p.expected}${acc}`);
@@ -284,7 +314,7 @@ async function waitIdle(): Promise<void> {
   throw new Error('server stayed busy');
 }
 
-console.log(`Running ${plan.length} evaluation job(s), one at a time. Budget $${maxUsd.toFixed(2)}, spent $${spentUsd.toFixed(2)} (known settled), reserved $${reservedUsd.toFixed(3)} (outstanding liabilities), per-job admission $${PER_JOB_ADMISSION_USD.toFixed(3)}.`);
+console.log(`Running ${plan.length} evaluation job(s), one at a time, model ${MODEL} via ${MODEL_PROVIDER}. Budget $${maxUsd.toFixed(2)}, spent $${spentUsd.toFixed(2)} (known settled), reserved $${reservedUsd.toFixed(3)} (outstanding liabilities), per-job admission $${PER_JOB_ADMISSION_USD.toFixed(3)}.`);
 
 function admissionFails(): boolean {
   return !admissionAllowed({ spentUsd, reservedUsd, perJobAdmissionUSD: PER_JOB_ADMISSION_USD, maxUsd });
@@ -323,7 +353,9 @@ for (const p of plan) {
   const intentId = `intent-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
   appendFileSync(JOURNAL, JSON.stringify({ intentId, sourceId: p.sourceId, at: new Date().toISOString() }) + '\n');
   const started = Date.now();
-  const j = await api('/api/jobs', { method: 'POST', body: JSON.stringify({ sourceId: p.sourceId }) });
+  // OW-2: the model travels with EVERY submission; the server builds the right
+  // client per job and rejects unknown models with 400 MODEL_INVALID.
+  const j = await api('/api/jobs', { method: 'POST', body: JSON.stringify({ sourceId: p.sourceId, model: MODEL }) });
   if (j.status !== 202) {
     console.error(
       `${tag} → JOB_POST failed (HTTP ${j.status}): ${JSON.stringify(j.body).slice(0, 200)}. Aborting run; nothing recorded. ` +
@@ -368,4 +400,4 @@ for (const p of plan) {
   console.log(`${tag} → ${outcome} · ${checks} · ${cost} · ${Math.round(wallS)}s`);
 }
 
-console.log(`Done. Spent (known settled) $${spentUsd.toFixed(2)} + reserved (outstanding liabilities) $${reservedUsd.toFixed(3)} of budget $${maxUsd.toFixed(2)} (per-job admission $${PER_JOB_ADMISSION_USD.toFixed(3)}). Results: ${RESULTS}`);
+console.log(`Done. Model ${MODEL} via ${MODEL_PROVIDER}. Spent (known settled) $${spentUsd.toFixed(2)} + reserved (outstanding liabilities) $${reservedUsd.toFixed(3)} of budget $${maxUsd.toFixed(2)} (per-job admission $${PER_JOB_ADMISSION_USD.toFixed(3)}). Results: ${RESULTS}`);

@@ -14,9 +14,11 @@ import {
   assessLiabilities,
   classifyJournalLine,
   describeLiability,
+  evalModelFromArgv,
   parseJournal,
   parseJournalLine,
   perJobAdmissionUSD,
+  PROVIDER_FOR_MODEL,
   reconcileJournal,
   recoveredRecord,
 } from '../scripts/evaluation-budget.ts';
@@ -492,4 +494,75 @@ test('S5B-14: describeLiability names the charge and the manual fix for every li
   // The message must tell the operator exactly how to resolve the intent manually.
   assert.match(intentMsg, /"intentId":"i-9","resolution":"not-submitted"/);
   assert.match(intentMsg, /"jobId":"<id>","sourceId":"src-x","intentId":"i-9"/);
+});
+
+/* ------------------------------------------------------------------ */
+/* OW-2: model-aware admission and --model parsing                      */
+/* ------------------------------------------------------------------ */
+
+test('OW-2: perJobAdmissionUSD uses the chosen model pricing (same rates today)', () => {
+  const dflt = perJobAdmissionUSD(CURRENT);
+  const hosted = perJobAdmissionUSD(CURRENT, 'muse-spark-1.3');
+  const open = perJobAdmissionUSD(CURRENT, 'muse-spark-open');
+  assert.equal(dflt, hosted, 'the default model stays muse-spark-1.3');
+  assert.ok(Math.abs(dflt - 1.704) < 1e-9, 'unchanged at the current caps');
+  // Both models price identically today, so the admission amount must match exactly —
+  // computed through reservationUSD with the CHOSEN model, never a hardcoded number.
+  assert.equal(open, hosted);
+  const manual =
+    (reservationUSD('muse-spark-open', CURRENT.maxInputTokens, CURRENT.analysisMaxOutputTokens) +
+      reservationUSD('muse-spark-open', CURRENT.maxInputTokens, CURRENT.maxOutputTokens)) *
+    (1 + CURRENT.maxRepairAttempts) *
+    (1 + CURRENT.maxRetries);
+  assert.ok(Math.abs(open - manual) < 1e-12);
+  // An unknown model fails closed with pricing's fixed code — never priced as 1.3.
+  assert.throws(
+    () => perJobAdmissionUSD(CURRENT, 'muse-spark-9' as 'muse-spark-open'),
+    (err: unknown) => err instanceof Error && err.message === 'UNKNOWN_MODEL',
+  );
+});
+
+test('OW-2: evalModelFromArgv defaults to muse-spark-1.3 and fails closed on anything else', () => {
+  assert.equal(evalModelFromArgv(['node', 'evaluation-run.ts']), 'muse-spark-1.3');
+  assert.equal(evalModelFromArgv(['node', 'x', '--only', 'src']), 'muse-spark-1.3');
+  assert.equal(evalModelFromArgv(['--model', 'muse-spark-open']), 'muse-spark-open');
+  assert.equal(evalModelFromArgv(['--model', 'muse-spark-1.3', '--only', 'src']), 'muse-spark-1.3');
+  for (const argv of [
+    ['--model', 'muse-spark-9'],
+    ['--model', 'MUSE-SPARK-OPEN'],
+    ['--model', ''],
+    ['--model'], // flag without a value
+    ['--model', '--rerun'], // next token is a flag, not a model
+  ]) {
+    assert.throws(
+      () => evalModelFromArgv(argv),
+      (err: unknown) => err instanceof Error && err.message === 'EVAL_MODEL_INVALID',
+      `${JSON.stringify(argv)} must fail closed`,
+    );
+  }
+});
+
+test('OW-2: PROVIDER_FOR_MODEL maps each model choice to its provider', () => {
+  assert.deepEqual(PROVIDER_FOR_MODEL, { 'muse-spark-1.3': 'meta-api', 'muse-spark-open': 'modal' });
+});
+
+test('OW-2: recoveredRecord carries model/provider when the summary has them, null otherwise', () => {
+  const page = {
+    sourceId: 'nasa-grc-equations-of-motion',
+    candidate: 1,
+    subject: 'physics',
+    expected: 'forces-1d-v1',
+    acceptable: [] as string[],
+    difficulty: 'easy',
+  };
+  const withModel = recoveredRecord(
+    page,
+    { jobId: 'j1', status: 'succeeded', totalCostUSD: 0.1, model: 'muse-spark-open', provider: 'modal' },
+    '2026-10-29T01:00:00.000Z',
+  );
+  assert.equal(withModel.model, 'muse-spark-open');
+  assert.equal(withModel.provider, 'modal');
+  const legacy = recoveredRecord(page, { jobId: 'j2', status: 'failed', totalCostUSD: 0.1 }, '2026-10-29T01:00:00.000Z');
+  assert.equal(legacy.model, null, 'an old summary without the fields records null, never an invented model');
+  assert.equal(legacy.provider, null);
 });

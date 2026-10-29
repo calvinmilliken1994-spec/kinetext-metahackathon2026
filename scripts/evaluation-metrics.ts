@@ -51,6 +51,9 @@ export interface EvalResultLine {
   acceptable?: string[];
   difficulty?: Difficulty;
   jobId?: string | null;
+  /** OW-2: the model/provider the job actually ran on; absent on pre-OW-2 records. */
+  model?: string | null;
+  provider?: string | null;
   status?: string | null;
   engine?: string | null;
   publishedRevision?: number | null;
@@ -368,6 +371,179 @@ export function renderSummaryMarkdown(m: MetricsSummary, opts: { manifestTotal: 
       L.push(`| ${p.candidate ?? '?'} | \`${p.sourceId}\` | ${p.subject ?? '?'} | ${p.difficulty ?? '?'} | ${p.expected ?? '?'} | ${p.class} | ${p.engine ?? '—'} | ${p.publishedRevision ?? '—'} | ${usd(p.totalCostUSD ?? null)} | ${p.wallS == null ? 'n/a' : `${p.wallS}s`} |`);
     }
   }
+  L.push('');
+  return L.join('\n');
+}
+
+/* ------------------------------------------------------------------ */
+/* OW-2: hosted vs open-weights comparison (pure)                       */
+/* ------------------------------------------------------------------ */
+
+/** Exact median of the finite entries; null when there are none (never 0 by assumption). */
+export function median(values: readonly number[]): number | null {
+  const finite = values
+    .filter((v): v is number => typeof v === 'number' && Number.isFinite(v))
+    .sort((x, y) => x - y);
+  if (finite.length === 0) {
+    return null;
+  }
+  const mid = Math.floor(finite.length / 2);
+  return finite.length % 2 === 0 ? (finite[mid - 1] + finite[mid]) / 2 : finite[mid];
+}
+
+/** The newest line per sourceId (a --rerun supersedes), in first-seen order. */
+export function latestPerSource(results: readonly EvalResultLine[]): EvalResultLine[] {
+  const latest = new Map<string, EvalResultLine>();
+  for (const r of results) {
+    latest.set(r.sourceId, r);
+  }
+  return [...latest.values()];
+}
+
+function distinctStrings(values: readonly (string | null | undefined)[]): string[] {
+  return [...new Set(values.filter((v): v is string => typeof v === 'string' && v !== ''))].sort();
+}
+
+/** One side of the comparison: everything the side-by-side report shows for one run. */
+export interface ComparisonSide {
+  label: string;
+  dir: string;
+  total: number;
+  /** Distinct recorded model ids (pre-OW-2 records have none → empty). */
+  models: string[];
+  providers: string[];
+  byClass: ClassCounts;
+  accuracyRate: number | null;
+  /** Jobs that published revision 1 (whatever the engine correctness class). */
+  publishedFirstTry: number;
+  publishedFirstTryRate: number | null;
+  repairsTotal: number;
+  jobsWithRepairs: number;
+  analysisRepairsTotal: number;
+  /** Jobs whose revision 1 had at least one failing check. */
+  jobsWithFirstTryFailures: number;
+  firstTryFailedChecksTotal: number;
+  publishedLessons: number;
+  costTotalUSD: number;
+  meanPerPublishedUSD: number | null;
+  maxPerPublishedUSD: number | null;
+  medianWallS: number | null;
+  meanWallS: number | null;
+}
+
+/**
+ * Compute one comparison side from its (already deduplicated) results lines.
+ * Reuses computeMetrics so class definitions, repair counting and cost rules
+ * stay IDENTICAL to the single-run summary — the comparison never re-defines a
+ * metric. Pass [] as the manifest: every field falls back to the recorded line.
+ */
+export function comparisonSide(
+  results: readonly EvalResultLine[],
+  opts: { label: string; dir?: string },
+): ComparisonSide {
+  const m = computeMetrics([...results], []);
+  const publishedFirstTry = results.filter(r => r.publishedRevision === 1).length;
+  let jobsWithFirstTryFailures = 0;
+  let firstTryFailedChecksTotal = 0;
+  for (const r of results) {
+    const failed = r.firstRevisionFailedChecks ?? [];
+    if (failed.length > 0) {
+      jobsWithFirstTryFailures += 1;
+    }
+    firstTryFailedChecksTotal += failed.length;
+  }
+  return {
+    label: opts.label,
+    dir: opts.dir ?? '',
+    total: m.total,
+    models: distinctStrings(results.map(r => r.model)),
+    providers: distinctStrings(results.map(r => r.provider)),
+    byClass: m.byClass,
+    accuracyRate: m.accuracyRate,
+    publishedFirstTry,
+    publishedFirstTryRate: m.total === 0 ? null : publishedFirstTry / m.total,
+    repairsTotal: m.repairs.total,
+    jobsWithRepairs: m.repairs.jobsWithRepairs,
+    analysisRepairsTotal: m.repairs.analysisTotal,
+    jobsWithFirstTryFailures,
+    firstTryFailedChecksTotal,
+    publishedLessons: m.cost.publishedLessons,
+    costTotalUSD: m.cost.totalUSD,
+    meanPerPublishedUSD: m.cost.meanPerPublishedUSD,
+    maxPerPublishedUSD: m.cost.maxPerPublishedUSD,
+    medianWallS: median(results.map(r => r.wallS).filter((v): v is number => typeof v === 'number')),
+    meanWallS: m.timing.meanWallS,
+  };
+}
+
+function countOrNa(n: number): string {
+  return String(n);
+}
+
+function secondsOrNull(s: number | null): string {
+  return s === null ? 'n/a' : `${s.toFixed(1)} s`;
+}
+
+function listOrDash(values: readonly string[]): string {
+  return values.length === 0 ? '—' : values.map(v => `\`${v}\``).join(', ');
+}
+
+/**
+ * Side-by-side markdown of two runs of the SAME pre-registered manifest. States
+ * sample sizes and computes nothing beyond the two results files; unknown money
+ * or timing stays 'n/a', never 0.
+ */
+export function renderComparisonMarkdown(
+  a: ComparisonSide,
+  b: ComparisonSide,
+  opts: { generatedAt?: string } = {},
+): string {
+  const L: string[] = [];
+  L.push(`# Evaluation comparison — ${a.label} vs ${b.label}`);
+  L.push('');
+  L.push(
+    `Two runs of the SAME pre-registered manifest (\`data/evaluation/manifest.json\`) with the same prompts, ` +
+      `checks and repair loop; the intended difference is the model/provider only. No demo faults are ` +
+      `injected in evaluation runs, so every repair below is a natural model failure repaired by Muse. ` +
+      `Generated ${opts.generatedAt ?? new Date().toISOString()}.`,
+  );
+  L.push('');
+  L.push(`- **${a.label}** — results: \`${a.dir === '' ? '(directory A)' : a.dir}\` (${a.total} result line(s))`);
+  L.push(`- **${b.label}** — results: \`${b.dir === '' ? '(directory B)' : b.dir}\` (${b.total} result line(s))`);
+  L.push('');
+  const row = (metric: string, va: string, vb: string): void => {
+    L.push(`| ${metric} | ${va} | ${vb} |`);
+  };
+  L.push(`| Metric | ${a.label} | ${b.label} |`);
+  L.push('|---|---|---|');
+  row('Result lines', countOrNa(a.total), countOrNa(b.total));
+  row('Model(s)', listOrDash(a.models), listOrDash(b.models));
+  row('Provider(s)', listOrDash(a.providers), listOrDash(b.providers));
+  const correct = (s: ComparisonSide): string =>
+    `${s.byClass['correct-first-try'] + s.byClass['correct-after-repair'] + s.byClass['correct-decline']} of ${s.total} (${pct(s.accuracyRate)})`;
+  row('Correct decisions', correct(a), correct(b));
+  for (const cls of OUTCOME_CLASSES) {
+    row(cls, countOrNa(a.byClass[cls]), countOrNa(b.byClass[cls]));
+  }
+  const firstTry = (s: ComparisonSide): string => `${s.publishedFirstTry} (${pct(s.publishedFirstTryRate)})`;
+  row('Published first try', firstTry(a), firstTry(b));
+  row('Repair attempts', countOrNa(a.repairsTotal), countOrNa(b.repairsTotal));
+  row('Jobs with repairs', countOrNa(a.jobsWithRepairs), countOrNa(b.jobsWithRepairs));
+  row('Analysis repair attempts', countOrNa(a.analysisRepairsTotal), countOrNa(b.analysisRepairsTotal));
+  row('Jobs with a first-try check failure', countOrNa(a.jobsWithFirstTryFailures), countOrNa(b.jobsWithFirstTryFailures));
+  row('First-try check failures (total)', countOrNa(a.firstTryFailedChecksTotal), countOrNa(b.firstTryFailedChecksTotal));
+  row('Published lessons', countOrNa(a.publishedLessons), countOrNa(b.publishedLessons));
+  row('Total cost', usd(a.costTotalUSD), usd(b.costTotalUSD));
+  row('Mean cost per published lesson', usd(a.meanPerPublishedUSD), usd(b.meanPerPublishedUSD));
+  row('Max cost per published lesson', usd(a.maxPerPublishedUSD), usd(b.maxPerPublishedUSD));
+  row('Median wall time', secondsOrNull(a.medianWallS), secondsOrNull(b.medianWallS));
+  row('Mean wall time', secondsOrNull(a.meanWallS), secondsOrNull(b.meanWallS));
+  L.push('');
+  L.push(
+    'Class meanings are the ones used by the single-run summary (`scripts/evaluation-metrics.ts`): ' +
+      'correct-first-try, correct-after-repair, correct-decline count as correct decisions; ' +
+      'wrong-engine, wrong-decline, false-accept and failed do not; unknown is never counted as correct.',
+  );
   L.push('');
   return L.join('\n');
 }

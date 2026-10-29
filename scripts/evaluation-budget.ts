@@ -26,9 +26,35 @@
 //     (documented per the round-2 fix spec): reservations, not a whole-run stop — the
 //     simpler safe option; the run may continue on OTHER pages only while every
 //     outstanding liability's worst case still fits under the cap.
-import { reservationUSD } from '../packages/meta/pricing.ts';
+import { isModelChoice, reservationUSD } from '../packages/meta/pricing.ts';
+import type { MetaProvider, ModelChoice } from '../packages/meta/pricing.ts';
 
-const MODEL = 'muse-spark-1.3' as const;
+/** The driver's default model (OW-2: --model muse-spark-open switches to the Modal-hosted open weights). */
+export const DEFAULT_EVAL_MODEL: ModelChoice = 'muse-spark-1.3';
+
+/** OW-2: which provider serves which model choice — fixed, never inferred at runtime. */
+export const PROVIDER_FOR_MODEL: Readonly<Record<ModelChoice, MetaProvider>> = {
+  'muse-spark-1.3': 'meta-api',
+  'muse-spark-open': 'modal',
+};
+
+/**
+ * OW-2: parse `--model <id>` from an argv (default muse-spark-1.3). Anything
+ * else — an unknown id, an empty value, a missing value, or another flag in the
+ * value position — throws EVAL_MODEL_INVALID; the driver exits 2 with a fixed
+ * message and submits nothing.
+ */
+export function evalModelFromArgv(argv: readonly string[]): ModelChoice {
+  const i = argv.indexOf('--model');
+  if (i < 0) {
+    return DEFAULT_EVAL_MODEL;
+  }
+  const value: string | undefined = argv[i + 1];
+  if (value === undefined || !isModelChoice(value)) {
+    throw new Error('EVAL_MODEL_INVALID');
+  }
+  return value;
+}
 
 /** Mirrors the worker's absolute repair bound (S5-06) — admission never assumes more. */
 export const MAX_REPAIR_ATTEMPTS_BOUND = 2;
@@ -100,13 +126,16 @@ export function admissionLimitsFromConfig(config: unknown): AdmissionLimits {
  * times (1 + maxRetries) transport attempts. An admission check against this amount
  * bounds what a run can commit at the configured caps (estimates under DEBT-003's
  * tokenizer/pricing assumptions — not verified provider invoices).
+ *
+ * OW-2: priced with the CHOSEN model's rates (both models price identically today;
+ * an unknown model fails closed with pricing's UNKNOWN_MODEL, never as 1.3).
  */
-export function perJobAdmissionUSD(limits: AdmissionLimits): number {
+export function perJobAdmissionUSD(limits: AdmissionLimits, model: ModelChoice = DEFAULT_EVAL_MODEL): number {
   validateAdmissionLimits(limits);
   const logicalCalls = 1 + limits.maxRepairAttempts;
   const transportAttempts = 1 + limits.maxRetries;
-  const analysisAttempt = reservationUSD(MODEL, limits.maxInputTokens, limits.analysisMaxOutputTokens);
-  const specAttempt = reservationUSD(MODEL, limits.maxInputTokens, limits.maxOutputTokens);
+  const analysisAttempt = reservationUSD(model, limits.maxInputTokens, limits.analysisMaxOutputTokens);
+  const specAttempt = reservationUSD(model, limits.maxInputTokens, limits.maxOutputTokens);
   return (analysisAttempt + specAttempt) * logicalCalls * transportAttempts;
 }
 
@@ -260,6 +289,9 @@ export interface JobSummaryLike {
   analysisRepairs?: unknown;
   error?: unknown;
   totalCostUSD?: unknown;
+  /** OW-2: recorded on jobs run since the model-choice wave; absent on older summaries. */
+  model?: unknown;
+  provider?: unknown;
 }
 
 export interface ReconcileArgs {
@@ -380,6 +412,11 @@ export function recoveredRecord(
     jobId: typeof summary.jobId === 'string' ? summary.jobId : null,
     status: typeof summary.status === 'string' ? summary.status : null,
     engine: typeof summary.engine === 'string' ? summary.engine : null,
+    // OW-2: record what the job actually ran; null for summaries from before the
+    // fields existed (the driver falls back to the REQUESTED model — never an
+    // invented one here).
+    model: typeof summary.model === 'string' ? summary.model : null,
+    provider: typeof summary.provider === 'string' ? summary.provider : null,
     publishedRevision: finiteOrNull(summary.publishedRevision),
     revisions: finiteOrNull(summary.revisions),
     repairs,

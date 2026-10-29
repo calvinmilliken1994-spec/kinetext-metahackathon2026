@@ -3,7 +3,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  classifyResult, computeMetrics, parseResultsJsonl, renderSummaryMarkdown,
+  classifyResult, comparisonSide, computeMetrics, latestPerSource, median, parseResultsJsonl, renderComparisonMarkdown, renderSummaryMarkdown,
 } from '../scripts/evaluation-metrics.ts';
 import type { EvalResultLine, ManifestEntry } from '../scripts/evaluation-metrics.ts';
 
@@ -259,4 +259,181 @@ test('renderSummaryMarkdown: mentions analysis repairs and stays valid without t
   const without = renderSummaryMarkdown(computeMetrics([line({ sourceId: 'b' })], []), { manifestTotal: 29 });
   assert.match(without, /Analysis repair attempts: \*\*0\*\*/);
   assert.doesNotMatch(without, /NaN/);
+});
+
+/* ------------------------------------------------------------------ */
+/* OW-2: model/provider fields, median, dedup and the comparison report */
+/* ------------------------------------------------------------------ */
+
+test('OW-2: EvalResultLine carries model/provider without changing classification', () => {
+  const open = line({ model: 'muse-spark-open', provider: 'modal' });
+  assert.equal(classifyResult(open), 'correct-first-try');
+  assert.equal(open.model, 'muse-spark-open');
+  assert.equal(open.provider, 'modal');
+});
+
+test('OW-2: median is exact for odd/even samples and null for empty/non-finite input', () => {
+  assert.equal(median([5]), 5);
+  assert.equal(median([3, 1, 2]), 2);
+  assert.equal(median([10, 20, 30, 50]), 25, 'even samples average the two middle values');
+  assert.equal(median([]), null);
+  assert.equal(median([Number.NaN, null as unknown as number, 'x' as unknown as number]), null, 'non-finite junk is filtered, never counted');
+  assert.equal(median([1, Number.NaN, 3]), 2, 'finite values still produce a median');
+});
+
+test('OW-2: latestPerSource keeps the newest line per source, in first-seen order', () => {
+  const a = line({ sourceId: 's1', candidate: 1, totalCostUSD: 0.1 });
+  const b = line({ sourceId: 's2', candidate: 2, totalCostUSD: 0.2 });
+  const aRerun = line({ sourceId: 's1', candidate: 1, totalCostUSD: 0.9, publishedRevision: 3, revisions: 3 });
+  const deduped = latestPerSource([a, b, aRerun]);
+  assert.equal(deduped.length, 2);
+  assert.equal(deduped[0].sourceId, 's1');
+  assert.equal(deduped[0].totalCostUSD, 0.9, 'the later line wins (a --rerun supersedes)');
+  assert.equal(deduped[1].sourceId, 's2');
+});
+
+function sideAResults(): EvalResultLine[] {
+  return [
+    line({ sourceId: 'a1', candidate: 1, model: 'muse-spark-1.3', provider: 'meta-api', totalCostUSD: 0.1, wallS: 30 }),
+    line({
+      sourceId: 'a2', candidate: 2, model: 'muse-spark-1.3', provider: 'meta-api',
+      publishedRevision: 2, revisions: 2, totalCostUSD: 0.3, wallS: 50,
+      repairs: [{ revision: 2, targeted: ['behavior.tests'], fixed: ['behavior.tests'], remaining: [] }],
+      firstRevisionFailedChecks: ['behavior.tests'],
+    }),
+    line({
+      sourceId: 'a3', candidate: 3, model: 'muse-spark-1.3', provider: 'meta-api',
+      status: 'unsupported', engine: null, publishedRevision: null, expected: 'decline',
+      totalCostUSD: 0.05, wallS: 20,
+    }),
+    line({
+      sourceId: 'a4', candidate: 4, model: 'muse-spark-1.3', provider: 'meta-api',
+      status: 'failed', error: 'ANALYSIS_INVALID', engine: null, publishedRevision: null,
+      totalCostUSD: 0.02, wallS: 10,
+    }),
+  ];
+}
+
+function sideBResults(): EvalResultLine[] {
+  return [
+    line({ sourceId: 'a1', candidate: 1, model: 'muse-spark-open', provider: 'modal', totalCostUSD: 0.12, wallS: 41 }),
+    line({
+      sourceId: 'a2', candidate: 2, model: 'muse-spark-open', provider: 'modal',
+      publishedRevision: 3, revisions: 3, totalCostUSD: 0.5, wallS: 80,
+      repairs: [
+        { revision: 2, targeted: ['behavior.tests', 'grounding.quotes'], fixed: ['behavior.tests'], remaining: ['grounding.quotes'] },
+        { revision: 3, targeted: ['grounding.quotes'], fixed: ['grounding.quotes'], remaining: [] },
+      ],
+      firstRevisionFailedChecks: ['behavior.tests', 'grounding.quotes'],
+      analysisRepairs: [{ attempt: 1, revision: 2, targeted: ['analysis.concept-ids'], fixed: ['analysis.concept-ids'], remaining: [], passed: true }],
+    }),
+    line({
+      sourceId: 'a3', candidate: 3, model: 'muse-spark-open', provider: 'modal',
+      status: 'unsupported', engine: null, publishedRevision: null, expected: 'decline',
+      totalCostUSD: 0.04, wallS: 19,
+    }),
+    line({
+      sourceId: 'a4', candidate: 4, model: 'muse-spark-open', provider: 'modal',
+      status: 'failed', error: 'ANALYSIS_INVALID', engine: null, publishedRevision: null,
+      totalCostUSD: 0.03, wallS: 12,
+    }),
+  ];
+}
+
+test('OW-2: comparisonSide computes decisions, first-try publication, repairs, first-time failures, cost and median latency', () => {
+  const a = comparisonSide(sideAResults(), { label: 'Muse Spark 1.3 (Meta API)', dir: 'docs/evidence/stage-5b/evaluation' });
+  assert.equal(a.label, 'Muse Spark 1.3 (Meta API)');
+  assert.equal(a.total, 4);
+  assert.deepEqual(a.models, ['muse-spark-1.3']);
+  assert.deepEqual(a.providers, ['meta-api']);
+  // decisions
+  assert.equal(a.byClass['correct-first-try'], 1);
+  assert.equal(a.byClass['correct-after-repair'], 1);
+  assert.equal(a.byClass['correct-decline'], 1);
+  assert.equal(a.byClass.failed, 1);
+  assert.equal(a.accuracyRate, 0.75);
+  // published first try: exactly one job published revision 1
+  assert.equal(a.publishedFirstTry, 1);
+  assert.equal(a.publishedFirstTryRate, 0.25);
+  // repairs
+  assert.equal(a.repairsTotal, 1);
+  assert.equal(a.jobsWithRepairs, 1);
+  assert.equal(a.analysisRepairsTotal, 0);
+  // checks failed first time
+  assert.equal(a.jobsWithFirstTryFailures, 1);
+  assert.equal(a.firstTryFailedChecksTotal, 1);
+  // cost
+  assert.equal(a.publishedLessons, 2);
+  assert.ok(Math.abs(a.costTotalUSD - 0.47) < 1e-9);
+  assert.ok(a.meanPerPublishedUSD !== null && Math.abs(a.meanPerPublishedUSD - 0.2) < 1e-6);
+  assert.ok(a.maxPerPublishedUSD !== null && Math.abs(a.maxPerPublishedUSD - 0.3) < 1e-9);
+  // latency: median of [10, 20, 30, 50] = 25
+  assert.equal(a.medianWallS, 25);
+
+  const b = comparisonSide(sideBResults(), { label: 'Muse Spark Open (Modal)', dir: 'docs/evidence/open-weights/evaluation' });
+  assert.deepEqual(b.models, ['muse-spark-open']);
+  assert.deepEqual(b.providers, ['modal']);
+  assert.equal(b.publishedFirstTry, 1);
+  assert.equal(b.repairsTotal, 3, 'two spec repairs + one analysis repair');
+  assert.equal(b.analysisRepairsTotal, 1);
+  assert.equal(b.jobsWithFirstTryFailures, 1);
+  assert.equal(b.firstTryFailedChecksTotal, 2, 'behavior.tests + grounding.quotes on revision 1');
+  assert.equal(b.medianWallS, 30, 'median of [12, 19, 41, 80]');
+  assert.ok(Math.abs(b.costTotalUSD - 0.69) < 1e-9);
+});
+
+test('OW-2: comparisonSide on an empty side stays honest (nulls, never zeros-by-assumption)', () => {
+  const empty = comparisonSide([], { label: 'nothing ran', dir: 'x' });
+  assert.equal(empty.total, 0);
+  assert.equal(empty.accuracyRate, null);
+  assert.equal(empty.publishedFirstTryRate, null);
+  assert.equal(empty.medianWallS, null);
+  assert.equal(empty.meanPerPublishedUSD, null);
+  assert.deepEqual(empty.models, []);
+});
+
+test('OW-2: renderComparisonMarkdown puts both sides side by side', () => {
+  const a = comparisonSide(sideAResults(), { label: 'Muse Spark 1.3 — Meta API', dir: 'dirA' });
+  const b = comparisonSide(sideBResults(), { label: 'Muse Spark Open — Modal', dir: 'dirB' });
+  const md = renderComparisonMarkdown(a, b, { generatedAt: '2026-10-29T00:00:00.000Z' });
+  // Both labels and both dirs appear.
+  assert.match(md, /Muse Spark 1\.3 — Meta API/);
+  assert.match(md, /Muse Spark Open — Modal/);
+  assert.match(md, /dirA/);
+  assert.match(md, /dirB/);
+  assert.match(md, /2026-10-29T00:00:00\.000Z/);
+  // Markdown table structure: a metric column and one column per side.
+  assert.match(md, /\| Metric \| Muse Spark 1\.3 — Meta API \| Muse Spark Open — Modal \|/);
+  // The requested comparison dimensions are all present as rows.
+  for (const row of [
+    'Result lines',
+    'Model(s)',
+    'Provider(s)',
+    'Correct decisions',
+    'correct-first-try',
+    'correct-after-repair',
+    'correct-decline',
+    'wrong-engine',
+    'wrong-decline',
+    'false-accept',
+    'failed',
+    'Published first try',
+    'Repair attempts',
+    'Jobs with repairs',
+    'Analysis repair attempts',
+    'Jobs with a first-try check failure',
+    'First-try check failures (total)',
+    'Published lessons',
+    'Total cost',
+    'Mean cost per published lesson',
+    'Max cost per published lesson',
+    'Median wall time',
+    'Mean wall time',
+  ]) {
+    assert.ok(md.includes(row), `missing comparison row: ${row}`);
+  }
+  // Spot-check values from both sides land in the table.
+  assert.match(md, /\| Median wall time \| 25(?:\.0)? ?s \| 30\.0 ?s \|/);
+  assert.match(md, /75\.0%/);
+  assert.ok(!/NaN/.test(md), 'no NaN may leak into the report');
 });

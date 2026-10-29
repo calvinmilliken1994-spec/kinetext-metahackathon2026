@@ -6,13 +6,17 @@
 // Nothing is logged here (the server must never echo request bodies).
 //
 // Routes:
-//   GET  /api/health      → {ok, live, busy}
+//   GET  /api/health      → {ok, live, busy, models} — models is a per-ModelChoice availability map (booleans only)
+//   GET  /api/models      → [{id, label, provider, available}] for the web model picker (OW-2)
 //   GET  /api/sources     → metadata list (no text), library + teacher ('user') sources with kind
 //   POST /api/sources     → store a teacher-pasted source (JSON ≤ 64 KB); 201 created / 200 existing
 //   GET  /api/sources/:id → metadata + hash-checked text (library and user sources)
 //   GET  /api/jobs        → newest-first job summaries
 //   GET  /api/jobs/:id    → {summary, events, revisions, analysis?, spec?, report?}
-//   POST /api/jobs        → 202 {jobId}; body {sourceId, demoFault?}; one live job at a time (409 while running)
+//   POST /api/jobs        → 202 {jobId}; body {sourceId, demoFault?, model?}; one live job at a time
+//                           (409 while running). model (OW-2) is optional and defaults to
+//                           'muse-spark-1.3'; anything outside the two ModelChoice values is a
+//                           400 MODEL_INVALID.
 //
 // Authorization (TASK-009 R-07): every request must carry an allowed Host
 // (127.0.0.1:<bound port>, localhost:<bound port>, or an allowedHosts entry —
@@ -37,6 +41,9 @@ import {
 } from '../../packages/sources/index.ts';
 import { DEMO_FAULTS, validateUserSourceInput } from '../../packages/contracts/index.ts';
 import type { DemoFault } from '../../packages/contracts/index.ts';
+import { isModelChoice } from '../../packages/meta/pricing.ts';
+import type { ModelChoice } from '../../packages/meta/pricing.ts';
+import { DEFAULT_MODEL, MODEL_INFO } from './model-clients.ts';
 import { listJobs, readJob } from '../../workers/generation/jobs.ts';
 import type { JobSummary } from '../../workers/generation/jobs.ts';
 
@@ -47,10 +54,21 @@ export interface ApiOptions {
   userSourcesDir?: string;
   /** null disables live generation: POST /api/jobs then answers 503 LIVE_DISABLED. */
   startJob:
-    | ((sourceId: string, opts?: { demoFault?: DemoFault }) => { jobId: string; done: Promise<JobSummary> })
+    | ((
+        sourceId: string,
+        opts?: { demoFault?: DemoFault; model?: ModelChoice },
+      ) => { jobId: string; done: Promise<JobSummary> })
     | null;
   /** Extra allowed Host values (and http://<value> Origins); replaces the Vite defaults. */
   allowedHosts?: string[];
+  /**
+   * OW-2: which ModelChoice values this server can actually run right now —
+   * reported as BOOLEANS ONLY by GET /api/health and GET /api/models (never why,
+   * never any credential state). A function is re-evaluated per request, so a
+   * token appearing in the environment is reflected without a restart. Default:
+   * 'muse-spark-1.3' when a startJob function exists, nothing otherwise.
+   */
+  availableModels?: readonly ModelChoice[] | (() => readonly ModelChoice[]);
 }
 
 const MAX_BODY_BYTES = 10 * 1024;
@@ -147,6 +165,23 @@ export function createApiServer(opts: ApiOptions): Server {
     return opts.userSourcesDir ?? userSourcesDirOf(opts.storageDir);
   }
 
+  /**
+   * OW-2: per-model availability as BOOLEANS ONLY — the health/models routes
+   * must never leak why a model is unavailable (that could reveal credential
+   * state). Re-evaluated per request when given as a function.
+   */
+  function modelAvailability(): Record<ModelChoice, boolean> {
+    const configured =
+      typeof opts.availableModels === 'function' ? opts.availableModels() : opts.availableModels;
+    const list: readonly ModelChoice[] =
+      configured ?? (opts.startJob !== null ? [DEFAULT_MODEL] : []);
+    const available = new Set<ModelChoice>(list.filter(isModelChoice));
+    return {
+      'muse-spark-1.3': available.has('muse-spark-1.3'),
+      'muse-spark-open': available.has('muse-spark-open'),
+    };
+  }
+
   /** R-07: POST routes require an Origin of http:// + an allowed host when present. */
   function originAllowed(req: IncomingMessage): boolean {
     const origin = req.headers.origin;
@@ -183,7 +218,32 @@ export function createApiServer(opts: ApiOptions): Server {
         return sendError(res, 405, 'METHOD_NOT_ALLOWED');
       }
       // busy (R-10): an in-process job is running right now.
-      return sendJson(res, 200, { ok: true, live: opts.startJob !== null, busy: inFlight !== null });
+      // models (OW-2): which ModelChoice values are available — booleans only.
+      return sendJson(res, 200, {
+        ok: true,
+        live: opts.startJob !== null,
+        busy: inFlight !== null,
+        models: modelAvailability(),
+      });
+    }
+
+    if (pathname === '/api/models') {
+      if (method !== 'GET') {
+        return sendError(res, 405, 'METHOD_NOT_ALLOWED');
+      }
+      // OW-2: the picker list for the web app — fixed labels, provider mapping
+      // and the same availability booleans as /api/health. Nothing else.
+      const availability = modelAvailability();
+      return sendJson(
+        res,
+        200,
+        MODEL_INFO.map(info => ({
+          id: info.id,
+          label: info.label,
+          provider: info.provider,
+          available: availability[info.id],
+        })),
+      );
     }
 
     if (pathname === '/api/sources') {
@@ -433,6 +493,18 @@ export function createApiServer(opts: ApiOptions): Server {
       }
       demoFault = rawFault as DemoFault;
     }
+    // OW-2: optional model choice; the default is muse-spark-1.3 and ANY other
+    // value is a 400 with the fixed MODEL_INVALID code (no reflected input, no
+    // provider text). There is no fallback between providers — the choice is
+    // explicit per job.
+    let model: ModelChoice = DEFAULT_MODEL;
+    if ('model' in (parsed as Record<string, unknown>)) {
+      const rawModel: unknown = (parsed as Record<string, unknown>)['model'];
+      if (!isModelChoice(rawModel)) {
+        return sendError(res, 400, 'MODEL_INVALID');
+      }
+      model = rawModel;
+    }
     let knownIds: string[] = [];
     try {
       knownIds = listSourceIds(opts.sourcesDir);
@@ -449,7 +521,9 @@ export function createApiServer(opts: ApiOptions): Server {
     }
     let started: { jobId: string; done: Promise<JobSummary> };
     try {
-      started = start(sourceId, demoFault !== undefined ? { demoFault } : undefined);
+      // OW-2: the model always travels with the job (defaulted above), so the
+      // server-side startJob builds the right client per job.
+      started = start(sourceId, demoFault !== undefined ? { demoFault, model } : { model });
     } catch {
       return sendError(res, 500, 'JOB_START_FAILED');
     }

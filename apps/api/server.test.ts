@@ -93,7 +93,13 @@ test('GET /api/health reports ok, the live flag and busy', async () => {
   await withServer({ storageDir: tempStorage(), startJob: noStart }, async base => {
     const off = await getJson(base, '/api/health');
     assert.equal(off.status, 200);
-    assert.deepEqual(off.body, { ok: true, live: false, busy: false });
+    // OW-2: health also reports per-model availability (booleans only).
+    assert.deepEqual(off.body, {
+      ok: true,
+      live: false,
+      busy: false,
+      models: { 'muse-spark-1.3': false, 'muse-spark-open': false },
+    });
     assertSecurityHeaders(off.headers);
   });
   const fakeStart = (sourceId: string) => ({
@@ -115,7 +121,12 @@ test('GET /api/health reports ok, the live flag and busy', async () => {
   await withServer({ storageDir: tempStorage(), startJob: fakeStart }, async base => {
     const on = await getJson(base, '/api/health');
     assert.equal(on.status, 200);
-    assert.deepEqual(on.body, { ok: true, live: true, busy: false });
+    assert.deepEqual(on.body, {
+      ok: true,
+      live: true,
+      busy: false,
+      models: { 'muse-spark-1.3': true, 'muse-spark-open': false },
+    });
   });
 });
 
@@ -130,7 +141,12 @@ test('GET /api/health busy is true while an in-process job runs (R-10)', async (
   });
   await withServer({ storageDir: tempStorage(), startJob: fakeStart }, async base => {
     const before = await getJson(base, '/api/health');
-    assert.deepEqual(before.body, { ok: true, live: true, busy: false });
+    assert.deepEqual(before.body, {
+      ok: true,
+      live: true,
+      busy: false,
+      models: { 'muse-spark-1.3': true, 'muse-spark-open': false },
+    });
     const post = await fetch(`${base}/api/jobs`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -138,7 +154,16 @@ test('GET /api/health busy is true while an in-process job runs (R-10)', async (
     });
     assert.equal(post.status, 202);
     const during = await getJson(base, '/api/health');
-    assert.deepEqual(during.body, { ok: true, live: true, busy: true }, 'busy while the job is in flight');
+    assert.deepEqual(
+      during.body,
+      {
+        ok: true,
+        live: true,
+        busy: true,
+        models: { 'muse-spark-1.3': true, 'muse-spark-open': false },
+      },
+      'busy while the job is in flight',
+    );
     release({
       jobId: 'job-busy',
       sourceId: 'nasa-grc-equations-of-motion',
@@ -154,7 +179,16 @@ test('GET /api/health busy is true while an in-process job runs (R-10)', async (
     });
     await new Promise(resolve => setTimeout(resolve, 20));
     const after = await getJson(base, '/api/health');
-    assert.deepEqual(after.body, { ok: true, live: true, busy: false }, 'busy clears once the job settles');
+    assert.deepEqual(
+      after.body,
+      {
+        ok: true,
+        live: true,
+        busy: false,
+        models: { 'muse-spark-1.3': true, 'muse-spark-open': false },
+      },
+      'busy clears once the job settles',
+    );
   });
 });
 

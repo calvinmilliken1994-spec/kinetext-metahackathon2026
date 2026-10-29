@@ -35,6 +35,8 @@ import { analyzeSource, generateSpec, repairAnalysis, repairSpec, GeneratedOutpu
 import type { TimelineSourceAnalysis } from '../../packages/meta/pipeline.ts';
 import { MetaError, META_ERROR_MESSAGES } from '../../packages/meta/client.ts';
 import type { MetaClient, MetaErrorCode } from '../../packages/meta/client.ts';
+import { isMetaProvider, isModelChoice } from '../../packages/meta/pricing.ts';
+import type { MetaProvider, ModelChoice } from '../../packages/meta/pricing.ts';
 import {
   loadSource,
   loadUserSource,
@@ -160,6 +162,17 @@ export interface JobSummary {
   /** Where the source came from: the licensed library or a teacher's pasted text. */
   sourceKind: 'library' | 'user';
   /**
+   * OW-2: which model ran this job — the display ModelChoice id. Optional in the
+   * type because job records written before OW-2 carry no such field; every read
+   * path (listJobs/readJob) fills the legacy default 'muse-spark-1.3', and every
+   * new job records it from the first job.json write on.
+   */
+  model?: ModelChoice;
+  /** OW-2: the provider that served this job ('meta-api' | 'modal'); legacy default 'meta-api'. */
+  provider?: MetaProvider;
+  /** OW-2: the provider's exact model string (e.g. 'meta-models/Muse-Spark-Open-816B-A42B' on Modal). */
+  providerModel?: string;
+  /**
    * N-05: the process that owns this job, recorded in job.json from the first
    * write so recovery never interrupts a job whose owner is still alive.
    * Optional: records written before this field existed carry no owner.
@@ -206,7 +219,19 @@ export const MAX_REPAIR_ATTEMPTS_BOUND = 2;
 
 type EventExtra = Partial<
   Pick<StageEvent, 'model' | 'responseId' | 'usage' | 'latencyMs' | 'estCostUSD' | 'detail' | 'revision' | 'target'>
->;
+> & { provider?: MetaProvider; providerModel?: string };
+
+/**
+ * OW-2: the persisted event shape — the contracts' StageEvent plus the job's
+ * provider and exact provider model string. packages/contracts is frozen, so
+ * the two extra keys are declared here (additive JSON fields; every consumer
+ * that reads StageEvent keeps working). `model` on an event is ALWAYS the
+ * display ModelChoice id of the job, never the raw returnedModel.
+ */
+export type JobStageEvent = StageEvent & {
+  provider?: MetaProvider;
+  providerModel?: string;
+};
 
 /** Stage 5b: anything Muse may generate — a numeric engine's generated spec or the timeline's. */
 type AnyGeneratedSpec = GeneratedSpec | TimelineGeneratedSpec;
@@ -555,6 +580,20 @@ export function startJob(
   const runDir: string = join(deps.storageDir, 'runs', jobId);
   mkdirSync(runDir, { recursive: true });
 
+  // OW-2: the job's model identity comes from the client it will run on — the
+  // server builds one client per job (meta-api or modal), so the summary, every
+  // event and every receipt of this job carry the same explicit choice. A
+  // client that predates OW-1 (e.g. older test fakes) declares none of the
+  // fields; those jobs read as muse-spark-1.3/meta-api, exactly like stored
+  // records from before this wave. There is no silent provider fallback: the
+  // choice is whatever the injected client is.
+  const clientModel: ModelChoice = isModelChoice(deps.client.model) ? deps.client.model : 'muse-spark-1.3';
+  const clientProvider: MetaProvider = isMetaProvider(deps.client.provider) ? deps.client.provider : 'meta-api';
+  const clientProviderModel: string =
+    typeof deps.client.providerModel === 'string' && deps.client.providerModel !== ''
+      ? deps.client.providerModel
+      : clientModel;
+
   const createdAt: string = now().toISOString();
   const summary: JobSummary = {
     jobId,
@@ -562,6 +601,11 @@ export function startJob(
     status: 'running',
     purpose: deps.purpose,
     createdAt,
+    // OW-2: recorded from the FIRST job.json write, so even a crashed job says
+    // which model/provider it was running on.
+    model: clientModel,
+    provider: clientProvider,
+    providerModel: clientProviderModel,
     totalCostUSD: 0,
     reservedUnknownUSD: 0,
     // Stage 5: engine/revision/repair bookkeeping starts empty; sourceKind is derived from the id.
@@ -622,13 +666,17 @@ export function startJob(
         } catch {
           seq = 0; // no events file yet; the terminal event starts the sequence
         }
-        const event: StageEvent = {
+        const event: JobStageEvent = {
           jobId,
           seq,
           stage: 'done',
           status: 'failed',
           at,
           detail: `INTERNAL; during ${progress.stage}; cause ${cause}`,
+          // OW-2: even the last-resort event records the job's model identity.
+          model: summary.model,
+          provider: summary.provider,
+          providerModel: summary.providerModel,
         };
         appendFileSync(join(runDir, 'events.jsonl'), `${JSON.stringify(event)}\n`);
       } catch {
@@ -656,7 +704,13 @@ async function runJob(
   let reservedUnknownUSD = 0;
 
   function emit(stage: Stage, status: StageStatus, extra?: EventExtra): StageEvent {
-    const event: StageEvent = { jobId, seq, stage, status, at: now().toISOString(), ...extra };
+    const event: JobStageEvent = { jobId, seq, stage, status, at: now().toISOString(), ...extra };
+    // OW-2: EVERY event records the job's model (display id), provider and the
+    // provider's exact model string — normalising over any receipt-derived
+    // `model` in extra, which on Modal carries the raw provider string.
+    event.model = summary.model;
+    event.provider = summary.provider;
+    event.providerModel = summary.providerModel;
     if (status === 'started') {
       progress.stage = stage;
     }
@@ -1195,6 +1249,20 @@ async function runJob(
   return finish('failed');
 }
 
+/**
+ * OW-2 read-path normalisation: a stored job summary from before this wave (or
+ * one with corrupt/unknown values) reads as muse-spark-1.3/meta-api, with the
+ * provider model string defaulting to the display id — the only model that ever
+ * ran before OW-2. Never invents a modal identity for an old record.
+ */
+export function withModelDefaults(summary: JobSummary): JobSummary {
+  const model: ModelChoice = isModelChoice(summary.model) ? summary.model : 'muse-spark-1.3';
+  const provider: MetaProvider = isMetaProvider(summary.provider) ? summary.provider : 'meta-api';
+  const providerModel: string =
+    typeof summary.providerModel === 'string' && summary.providerModel !== '' ? summary.providerModel : model;
+  return { ...summary, model, provider, providerModel };
+}
+
 export function listJobs(storageDir: string): JobSummary[] {
   let entries;
   try {
@@ -1215,7 +1283,8 @@ export function listJobs(storageDir: string): JobSummary[] {
     if (typeof candidate.jobId !== 'string') {
       continue;
     }
-    jobs.push(parsed as JobSummary);
+    // OW-2: legacy records without model/provider read with the defaults.
+    jobs.push(withModelDefaults(parsed as JobSummary));
   }
   jobs.sort((a, b) => b.createdAt.localeCompare(a.createdAt)); // newest first
   return jobs;
@@ -1283,7 +1352,8 @@ export function readJob(
     revisions: JobRevisionView[];
     analysisRevisions: JobAnalysisRevisionView[];
   } = {
-    summary: summary as JobSummary,
+    // OW-2: legacy records without model/provider read with the defaults.
+    summary: withModelDefaults(summary as JobSummary),
     events,
     revisions: [],
     analysisRevisions: [],
@@ -1490,13 +1560,19 @@ export function recoverInterruptedJobs(
     } catch {
       seq = 0; // no events file yet; the recovery event starts the sequence
     }
-    const event: StageEvent = {
+    // OW-2: the recovery event states the model identity too; a legacy record
+    // reads with the muse-spark-1.3/meta-api defaults (the file is not rewritten).
+    const modelView = withModelDefaults(summary);
+    const event: JobStageEvent = {
       jobId: summary.jobId,
       seq,
       stage: 'done',
       status: 'failed',
       at,
       detail: 'INTERRUPTED',
+      model: modelView.model,
+      provider: modelView.provider,
+      providerModel: modelView.providerModel,
     };
     appendFileSync(join(runDir, 'events.jsonl'), `${JSON.stringify(event)}\n`);
     summary.status = 'failed';
