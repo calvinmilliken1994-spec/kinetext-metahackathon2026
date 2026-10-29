@@ -1,0 +1,55 @@
+{
+ "at": "2026-10-29T03:06:18.888Z",
+ "endpoint": "modal shared endpoint ep-MLCNvmXXXhpE1DOD6Ya2RA (us-west)",
+ "request": {
+  "model": "meta-models/Muse-Spark-Open-816B-A42B",
+  "reasoning_effort": "high",
+  "max_tokens": 4000,
+  "messages": [
+   {
+    "role": "system",
+    "content": "Return JSON only."
+   },
+   {
+    "role": "user",
+    "content": "A ball is dropped from rest. Using g = 9.81 m/s^2, how far does it fall in 2 s? Give the distance in metres."
+   }
+  ],
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "answer",
+    "strict": true,
+    "schema": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "distanceM",
+      "formula"
+     ],
+     "properties": {
+      "distanceM": {
+       "type": "number"
+      },
+      "formula": {
+       "type": "string"
+      }
+     }
+    }
+   }
+  }
+ },
+ "status": 200,
+ "latencyMs": 1897,
+ "model": "meta-models/Muse-Spark-Open-816B-A42B",
+ "id": "18a39d89838b4d1b833af7fd3794b9f6",
+ "finish": "stop",
+ "content": "{\"distanceM\":19.62,\"formula\":\"s=0.5*g*t^2=0.5*9.81*4\"}",
+ "usage": {
+  "prompt_tokens": 183,
+  "total_tokens": 598,
+  "completion_tokens": 415,
+  "prompt_tokens_details": null,
+  "reasoning_tokens": 379
+ }
+}

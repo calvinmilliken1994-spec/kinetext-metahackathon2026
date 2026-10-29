@@ -16,7 +16,8 @@ Rules that enforce the split:
 - Billing currency displays GBP while credits are USD; reconcile actual consumption from the Billing page, not only from local estimates.
 - Recommended (user action, not doable by the agent): set the Billing page "Spend Limit" notification at or below the credit amount.
 - **Privacy consequence:** the page states "While using free credits your content may be used for product improvement." Treat every Meta Model API request made on these credits as potentially retained for product improvement, *regardless of choosing Standard rather than Contributor model IDs*. Send only licensed public sources, project-authored fixtures and synthetic test content. No private, student or third-party-confidential material while free credits are active.
-- All other metered spend (Baseten, Modal, Fireworks, other APIs) remains USD 0.
+- All other metered spend (Fireworks, other APIs) remains USD 0.
+- **Modal and Baseten hackathon credits (Calvin, 2026-10-29):** USD 100 each, for Meta open-weight models, confirmed by Calvin as free hackathon tokens ("spend limit doesn't matter too much"). Modal Shared Endpoint `ep-MLCNvmXXXhpE1DOD6Ya2RA` (`mki-muse-spark-open`, us-west) serves `meta-models/Muse-Spark-Open-816B-A42B` at USD 1.25 / 0.15 cached / 4.25 per Mtok (same as Meta's API). Modal's docs state that plan-included credits do not cover Shared Endpoints; Calvin was told and confirmed the tokens are free for the hackathon. Use is still recorded per call with estimated cost, under a project soft cap of USD 50 per provider. Same privacy rule as Meta credits: licensed public, project-authored or synthetic content only. Modal proxy token: profile `.env` `MODAL_PROXY_TOKEN` (never printed or committed). Baseten key not yet provisioned.
 - Every Meta API call is recorded in the ledger in `PROVIDER_USAGE.md`; the per-command reservation check below still applies until the durable ledger exists.
 
 ## Default
