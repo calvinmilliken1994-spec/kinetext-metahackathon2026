@@ -1,0 +1,184 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "componentPlan": [
+      {
+        "componentId": "quiz-cards-v1",
+        "focusQuote": "Chemosynthesis: The process by which microbes create sugars (food) using energy released from chemical reactions.",
+        "focusSourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+        "pedagogicalReason": "Learners check core vocabulary and energy sources before comparing pathways."
+      },
+      {
+        "componentId": "sequence-v1",
+        "focusQuote": "Guide students to start with photosynthesis since they should be familiar with this process.",
+        "focusSourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+        "pedagogicalReason": "Learners order reactant building then product building to model conservation step by step."
+      },
+      {
+        "componentId": "balance-equation-v1",
+        "focusQuote": "6CO2 + 6H2O → C6H12O6 + 6O2",
+        "focusSourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+        "pedagogicalReason": "Learners balance the printed photosynthesis equation to see conservation of atoms in action."
+      }
+    ],
+    "declineCode": "",
+    "declineSummary": "",
+    "overview": {
+      "headline": "Comparing sunlight and chemical energy pathways that fuel life",
+      "keyPoints": [
+        {
+          "id": "sunlit-food-webs",
+          "point": "Sunlit food webs show plants use sunlight to make food through photosynthesis",
+          "quote": "The majority of life on Earth is based on a food web which revolves around the Sun, as plants use sunlight to make food via photosynthesis.",
+          "sourceId": "noaa-oceanexplorer-fueling-life-on-earth"
+        },
+        {
+          "id": "chemical-energy-life",
+          "point": "Microbes rely on chemical energy through chemosynthesis where sunlight is absent",
+          "quote": "organisms instead rely on primary production through a process called chemosynthesis, which runs on chemical energy.",
+          "sourceId": "noaa-oceanexplorer-fueling-life-on-earth"
+        },
+        {
+          "id": "matter-conservation",
+          "point": "Matter cannot be created or destroyed so reactant atoms must form products",
+          "quote": "the law of conservation of matter states that matter cannot be created or destroyed.",
+          "sourceId": "noaa-oceanexplorer-fueling-life-on-earth"
+        }
+      ],
+      "keyTerms": [
+        {
+          "gloss": "process where plants convert carbon dioxide and water into food using sunlight",
+          "id": "photosynthesis",
+          "quote": "Photosynthesis: The process used by plants to convert carbon dioxide and water into oxygen and sugars (food), using energy from the sun.",
+          "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+          "term": "Photosynthesis"
+        },
+        {
+          "gloss": "process where microbes create food using energy from chemical reactions",
+          "id": "chemosynthesis",
+          "quote": "Chemosynthesis: The process by which microbes create sugars (food) using energy released from chemical reactions.",
+          "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+          "term": "Chemosynthesis"
+        },
+        {
+          "gloss": "organism able to make food from raw materials and energy as producer",
+          "id": "autotroph",
+          "quote": "Autotroph: Organisms that are able to make their own food from raw materials and energy, also known as producers.",
+          "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+          "term": "Autotroph"
+        },
+        {
+          "gloss": "starting materials that change in a chemical reaction",
+          "id": "reactants",
+          "quote": "Reactants: A substance that changes in a chemical reaction.",
+          "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+          "term": "Reactants"
+        }
+      ]
+    },
+    "pageCoverage": "Page compares photosynthesis and chemosynthesis as energy pathways, presents balanced chemical equations, conservation of matter, and deep sea vent food webs with modeling activity.",
+    "subject": "chemistry",
+    "usable": true
+  },
+  "report": {
+    "artifactId": "job-20261029123057-ea478a2a:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"chemistry\" is valid and the balance plan is chemistry (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 13503 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 10 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 3, keyTerms 4, componentPlan 3; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (3 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a187a4-ebf3-71e3-b7c3-65515cf0b7d0",
+    "usage": {
+      "promptTokens": 7153,
+      "completionTokens": 11170,
+      "reasoningTokens": 10346,
+      "cachedTokens": 7025
+    },
+    "latencyMs": 37537,
+    "estCostUSD": 0.04868625,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  }
+}

@@ -1,0 +1,205 @@
+{
+  "gen": {
+    "cyclic": false,
+    "orderBasis": "page-order",
+    "orderNote": "Work in page order from sorting cubes to conserving matter",
+    "schemaVersion": "sequence-v1",
+    "steps": [
+      {
+        "id": "sort-equation-pieces",
+        "label": "separate out the equation pieces",
+        "orderHint": "sort and organize materials",
+        "quote": "separate out the equation pieces plus sort their cubes by color",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth"
+      },
+      {
+        "id": "start-with-photosynthesis",
+        "label": "start with photosynthesis",
+        "orderHint": "begin with familiar process",
+        "quote": "Guide students to start with photosynthesis since they should be familiar with this process.",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth"
+      },
+      {
+        "id": "build-reactants-chemosynthesis",
+        "label": "building the REACTANTS for chemosynthesis",
+        "orderHint": "build second set next",
+        "quote": "Then they can proceed to building the REACTANTS for chemosynthesis.",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth"
+      },
+      {
+        "id": "start-with-images-arrows",
+        "label": "start with images and arrows",
+        "orderHint": "place pictures before words",
+        "quote": "Instruct the groups to start with images and arrows and add chemicals and words as they think through the process.",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth"
+      },
+      {
+        "id": "figure-out-products",
+        "label": "figure out the products",
+        "orderHint": "solve for end materials",
+        "quote": "Once they have the reactants, then they can work together to figure out the products.",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth"
+      },
+      {
+        "id": "reactants-left-to-products-right",
+        "label": "reactant components on the left",
+        "orderHint": "use all starting matter",
+        "quote": "So, all the reactant components on the left must be used to create the products on the right.",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth"
+      }
+    ],
+    "title": "Modeling how food is made step by step"
+  },
+  "report": {
+    "artifactId": "job-20261029123057-ea478a2a:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step label occurs in its own quote after normalisation (labels-in-quotes)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 6 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a187a5-5b88-7571-8636-28942e942fd6",
+    "usage": {
+      "promptTokens": 5249,
+      "completionTokens": 8911,
+      "reasoningTokens": 8510,
+      "cachedTokens": 0
+    },
+    "latencyMs": 28480,
+    "estCostUSD": 0.044433,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029123057-ea478a2a:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "Modeling how food is made step by step",
+    "sources": [
+      {
+        "id": "noaa-oceanexplorer-fueling-life-on-earth",
+        "title": "Fueling Life on Earth: Chemosynthesis versus Photosynthesis — NOAA Office of Ocean Exploration, Educator Guide and Teacher Key (grades 9-12 chemistry)",
+        "locator": "https://oceanexplorer.noaa.gov/wp-content/uploads/2025/04/educator-guide-fueling-life-on-earth.pdf",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NOAA Office of Ocean Exploration and Research (NOAA Ocean Exploration), education materials, 'Fueling Life on Earth: Chemosynthesis versus Photosynthesis' educator guide. NOAA's Education and Outreach FAQ (https://www.noaa.gov/office-education/outreach-communication/faq) states: 'Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission', and requires credit to NOAA without claiming or endorsing; edits and generative-AI outputs must not be presented as official NOAA material. The document itself asks: 'If reproducing this activity, please cite NOAA as the source, and provide the following URL: https://oceanexplorer.noaa.gov.' Text only: the third-party photo credit printed on page 1 ('Image courtesy of NOAA Ocean Exploration, NSF/NOAA, Jason, Copyright WHOI') and the video/image links on the resources page are not stored. NOAA has not reviewed, approved or endorsed this activity.",
+        "sha256": "9b2415e432e49be30eed9aa244d306d6231675cab53c566a4a4c874215b23c92"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a187a5-5b88-7571-8636-28942e942fd6",
+      "runId": "job-20261029123057-ea478a2a",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T12:32:03.576Z"
+    },
+    "seed": 4187275900,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Work in page order from sorting cubes to conserving matter",
+    "steps": [
+      {
+        "id": "sort-equation-pieces",
+        "label": "separate out the equation pieces",
+        "orderHint": "sort and organize materials",
+        "quote": "separate out the equation pieces plus sort their cubes by color",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth"
+      },
+      {
+        "id": "start-with-photosynthesis",
+        "label": "start with photosynthesis",
+        "orderHint": "begin with familiar process",
+        "quote": "Guide students to start with photosynthesis since they should be familiar with this process.",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth"
+      },
+      {
+        "id": "build-reactants-chemosynthesis",
+        "label": "building the REACTANTS for chemosynthesis",
+        "orderHint": "build second set next",
+        "quote": "Then they can proceed to building the REACTANTS for chemosynthesis.",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth"
+      },
+      {
+        "id": "start-with-images-arrows",
+        "label": "start with images and arrows",
+        "orderHint": "place pictures before words",
+        "quote": "Instruct the groups to start with images and arrows and add chemicals and words as they think through the process.",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth"
+      },
+      {
+        "id": "figure-out-products",
+        "label": "figure out the products",
+        "orderHint": "solve for end materials",
+        "quote": "Once they have the reactants, then they can work together to figure out the products.",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth"
+      },
+      {
+        "id": "reactants-left-to-products-right",
+        "label": "reactant components on the left",
+        "orderHint": "use all starting matter",
+        "quote": "So, all the reactant components on the left must be used to create the products on the right.",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth"
+      }
+    ]
+  }
+}

@@ -1,0 +1,217 @@
+{
+  "gen": {
+    "cards": [
+      {
+        "hint": "Focus on what the document created after signing.",
+        "id": "document-purpose",
+        "options": [
+          "established the government of the United States",
+          "revised the Articles of Confederation",
+          "adjourned from day to day until a quorum"
+        ],
+        "quote": "signed on September 17, 1787, established the government of the United States",
+        "sourceId": "nara-constitution",
+        "stem": "What did the four-page document signed in September do?"
+      },
+      {
+        "hint": "Think of the hall where the meeting gathered.",
+        "id": "convention-city",
+        "options": [
+          "Philadelphia",
+          "Boston",
+          "Charleston"
+        ],
+        "quote": "convened in the State House (Independence Hall) in Philadelphia on May 14, 1787",
+        "sourceId": "nara-constitution",
+        "stem": "In which city did the Federal Convention convene?"
+      },
+      {
+        "hint": "Remember the earlier plan the delegates meant to fix.",
+        "id": "convention-original-aim",
+        "options": [
+          "to revise the Articles of Confederation",
+          "to draft an entirely new frame of government",
+          "to elect representatives directly by the people"
+        ],
+        "quote": "in Philadelphia on May 14, 1787, to revise the Articles of Confederation",
+        "sourceId": "nara-constitution",
+        "stem": "Why did the Federal Convention first meet in Philadelphia?"
+      },
+      {
+        "hint": "Consider the balance between center and states.",
+        "id": "debate-central-power",
+        "options": [
+          "how much power to allow the central government",
+          "how to punish delegates for secrecy",
+          "how to name the new capital city"
+        ],
+        "quote": "Among the chief points at issue were how much power to allow the central government",
+        "sourceId": "nara-constitution",
+        "stem": "What was one chief point at issue during the debates?"
+      }
+    ],
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Drafting a New Frame of Government"
+  },
+  "report": {
+    "artifactId": "job-20261029122338-61b5ee12:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a1879e-7aa8-71f9-bca9-74a9b9ec68d9",
+    "usage": {
+      "promptTokens": 2291,
+      "completionTokens": 7974,
+      "reasoningTokens": 7551,
+      "cachedTokens": 0
+    },
+    "latencyMs": 27978,
+    "estCostUSD": 0.03675325,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029122338-61b5ee12:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Drafting a New Frame of Government",
+    "sources": [
+      {
+        "id": "nara-constitution",
+        "title": "Constitution of the United States (1787) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/constitution",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Constitution of the United States (1787)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "a14175b009333bebd61eaff70e3393928a8f0dbd0ae00027067c07b15d176db4"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a1879e-7aa8-71f9-bca9-74a9b9ec68d9",
+      "runId": "job-20261029122338-61b5ee12",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T12:24:32.772Z"
+    },
+    "seed": 4288777578,
+    "cards": [
+      {
+        "hint": "Focus on what the document created after signing.",
+        "id": "document-purpose",
+        "options": [
+          "established the government of the United States",
+          "revised the Articles of Confederation",
+          "adjourned from day to day until a quorum"
+        ],
+        "quote": "signed on September 17, 1787, established the government of the United States",
+        "sourceId": "nara-constitution",
+        "stem": "What did the four-page document signed in September do?"
+      },
+      {
+        "hint": "Think of the hall where the meeting gathered.",
+        "id": "convention-city",
+        "options": [
+          "Philadelphia",
+          "Boston",
+          "Charleston"
+        ],
+        "quote": "convened in the State House (Independence Hall) in Philadelphia on May 14, 1787",
+        "sourceId": "nara-constitution",
+        "stem": "In which city did the Federal Convention convene?"
+      },
+      {
+        "hint": "Remember the earlier plan the delegates meant to fix.",
+        "id": "convention-original-aim",
+        "options": [
+          "to revise the Articles of Confederation",
+          "to draft an entirely new frame of government",
+          "to elect representatives directly by the people"
+        ],
+        "quote": "in Philadelphia on May 14, 1787, to revise the Articles of Confederation",
+        "sourceId": "nara-constitution",
+        "stem": "Why did the Federal Convention first meet in Philadelphia?"
+      },
+      {
+        "hint": "Consider the balance between center and states.",
+        "id": "debate-central-power",
+        "options": [
+          "how much power to allow the central government",
+          "how to punish delegates for secrecy",
+          "how to name the new capital city"
+        ],
+        "quote": "Among the chief points at issue were how much power to allow the central government",
+        "sourceId": "nara-constitution",
+        "stem": "What was one chief point at issue during the debates?"
+      }
+    ]
+  }
+}

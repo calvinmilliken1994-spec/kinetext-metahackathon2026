@@ -1,0 +1,31 @@
+{
+  "jobId": "job-20261029122338-61b5ee12",
+  "sourceId": "nara-constitution",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T12:23:38.025Z",
+  "flow": "lesson",
+  "model": "muse-spark-1.3",
+  "provider": "meta-api",
+  "providerModel": "muse-spark-1.3",
+  "totalCostUSD": 0.102334,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 17656,
+    "startedAt": "2026-10-29T12:23:38.025Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 2,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "finishedAt": "2026-10-29T12:24:32.777Z"
+}

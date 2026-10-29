@@ -1,0 +1,111 @@
+{
+  "jobId": "job-20261029122338-61b5ee12",
+  "analysisRef": "job-20261029122338-61b5ee12/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029122338-61b5ee12:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Secret convention that drafted a new American government",
+    "sources": [
+      {
+        "id": "nara-constitution",
+        "title": "Constitution of the United States (1787) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/constitution",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Constitution of the United States (1787)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "a14175b009333bebd61eaff70e3393928a8f0dbd0ae00027067c07b15d176db4"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a1879e-0d3c-7640-b906-a1169ff8e2d7",
+      "runId": "job-20261029122338-61b5ee12",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T12:24:04.769Z"
+    },
+    "seed": 823274503,
+    "headline": "Secret convention that drafted a new American government",
+    "keyPoints": [
+      {
+        "id": "secret-drafting",
+        "point": "delegates worked in secret during the summer to draft a new frame of government",
+        "quote": "Drafted in secret by delegates to the Constitutional Convention during the summer of 1787",
+        "sourceId": "nara-constitution"
+      },
+      {
+        "id": "convention-start",
+        "point": "delegates convened in Philadelphia to revise the Articles of Confederation",
+        "quote": "convened in the State House (Independence Hall) in Philadelphia on May 14, 1787",
+        "sourceId": "nara-constitution"
+      },
+      {
+        "id": "new-frame-decision",
+        "point": "discussion made clear the Convention would draft an entirely new frame of government",
+        "quote": "the Convention would draft an entirely new frame of government",
+        "sourceId": "nara-constitution"
+      },
+      {
+        "id": "compromise-issues",
+        "point": "central power and representation and election methods were chief points at issue",
+        "quote": "Among the chief points at issue were how much power to allow the central government",
+        "sourceId": "nara-constitution"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "delegates who met in secret to draft the new government frame",
+        "id": "constitutional-convention",
+        "quote": "Drafted in secret by delegates to the Constitutional Convention during the summer of 1787",
+        "sourceId": "nara-constitution",
+        "term": "Constitutional Convention"
+      },
+      {
+        "gloss": "existing plan of government that the Convention first met to revise",
+        "id": "articles-of-confederation",
+        "quote": "to revise the Articles of Confederation",
+        "sourceId": "nara-constitution",
+        "term": "Articles of Confederation"
+      },
+      {
+        "gloss": "minimum number of states needed to conduct convention business",
+        "id": "quorum",
+        "quote": "until a quorum of seven states was obtained on May 25",
+        "sourceId": "nara-constitution",
+        "term": "quorum"
+      },
+      {
+        "gloss": "national authority whose power was a chief point of debate",
+        "id": "central-government",
+        "quote": "how much power to allow the central government",
+        "sourceId": "nara-constitution",
+        "term": "central government"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261029122338-61b5ee12:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029122338-61b5ee12:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}
