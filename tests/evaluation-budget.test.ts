@@ -9,13 +9,18 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import {
+  admissionAllowed,
   admissionLimitsFromConfig,
+  assessLiabilities,
+  classifyJournalLine,
+  describeLiability,
+  parseJournal,
   parseJournalLine,
   perJobAdmissionUSD,
   reconcileJournal,
   recoveredRecord,
 } from '../scripts/evaluation-budget.ts';
-import type { AdmissionLimits, JournalEntry } from '../scripts/evaluation-budget.ts';
+import type { AdmissionLimits, JournalEntry, Liability, ParsedJournal } from '../scripts/evaluation-budget.ts';
 import { reservationUSD } from '../packages/meta/pricing.ts';
 
 const CONFIG = JSON.parse(
@@ -199,4 +204,279 @@ test('S5B-07: recoveredRecord marks the record recovered:true and carries the su
   // A non-numeric cost never becomes 0-by-assumption.
   const noCost = recoveredRecord(page, { ...summary, totalCostUSD: undefined }, '2026-10-29T01:00:00.000Z');
   assert.equal(noCost.totalCostUSD, null);
+});
+
+/* ------------------------------------------------------------------ */
+/* S5B-14: journal classification (job / intent / resolution / malformed) */
+/* ------------------------------------------------------------------ */
+
+test('S5B-14: classifyJournalLine sorts job, intent, resolution, malformed and blank lines', () => {
+  assert.deepEqual(classifyJournalLine('{"jobId":"j1","sourceId":"s","at":"t"}'), {
+    kind: 'job',
+    entry: { jobId: 'j1', sourceId: 's', at: 't' },
+  });
+  assert.deepEqual(classifyJournalLine('{"jobId":"j1","sourceId":"s","intentId":"i1","at":"t"}'), {
+    kind: 'job',
+    entry: { jobId: 'j1', sourceId: 's', at: 't', intentId: 'i1' },
+  });
+  assert.deepEqual(classifyJournalLine('{"intentId":"i1","sourceId":"s","at":"t"}'), {
+    kind: 'intent',
+    entry: { intentId: 'i1', sourceId: 's', at: 't' },
+  });
+  assert.deepEqual(classifyJournalLine('{"intentId":"i1","resolution":"not-submitted"}'), {
+    kind: 'resolution',
+    entry: { intentId: 'i1', resolution: 'not-submitted', at: '' },
+  });
+  // Blank lines are not liabilities.
+  assert.equal(classifyJournalLine(''), null);
+  assert.equal(classifyJournalLine('   \r'), null);
+  // Every NONEMPTY line that is not a well-formed job/intent/resolution record is malformed —
+  // a blocking liability, never silently skipped (S5B-14).
+  for (const bad of [
+    'not json',
+    '{"jobId":"j1","sourceId":"s","at":"t', // truncated mid-line (crash while appending)
+    '{}',
+    '{"jobId":"j"}',
+    '{"sourceId":"s"}',
+    '{"intentId":"i1"}', // intent without sourceId and without a resolution token
+    '{"jobId":42,"sourceId":"s"}',
+    '[1,2]',
+  ]) {
+    const c = classifyJournalLine(bad);
+    assert.equal(c?.kind, 'malformed', bad);
+    assert.equal(c?.kind === 'malformed' ? c.line : '', bad.trim(), bad);
+  }
+  // An unknown resolution token never resolves an intent; it degrades to a plain intent
+  // (still a liability) rather than cancelling one.
+  assert.equal(classifyJournalLine('{"intentId":"i1","resolution":"whatever","sourceId":"s"}')?.kind, 'intent');
+});
+
+test('S5B-14: parseJournal partitions a whole journal file', () => {
+  const text = [
+    '{"jobId":"j1","sourceId":"s1","at":"t"}',
+    '',
+    '   ',
+    '{"intentId":"i2","sourceId":"s2","at":"t"}',
+    '{"intentId":"i1","resolution":"not-submitted"}',
+    '{"jobId":"j2","sourceId":"s2","intentId":"i2","at":"t"}',
+    '{"jobId":"j3","source',
+  ].join('\n');
+  const j = parseJournal(text);
+  assert.deepEqual(j.jobs.map(e => e.jobId), ['j1', 'j2']);
+  assert.equal(j.jobs[1]?.intentId, 'i2');
+  assert.deepEqual(j.intents.map(e => e.intentId), ['i2']);
+  assert.deepEqual(j.resolutions.map(e => e.intentId), ['i1']);
+  assert.deepEqual(j.malformed, ['{"jobId":"j3","source']);
+  // An empty file parses to an empty journal.
+  assert.deepEqual(parseJournal(''), { jobs: [], intents: [], resolutions: [], malformed: [] });
+});
+
+/* ------------------------------------------------------------------ */
+/* S5B-14: run-liability assessment                                     */
+/* ------------------------------------------------------------------ */
+
+const ADM = 1.704;
+
+function emptyJournal(): ParsedJournal {
+  return { jobs: [], intents: [], resolutions: [], malformed: [] };
+}
+
+function assess(over: Partial<Parameters<typeof assessLiabilities>[0]> = {}) {
+  return assessLiabilities({
+    resultsLines: [],
+    journal: emptyJournal(),
+    summaryOf: () => undefined,
+    perJobAdmissionUSD: ADM,
+    manifestSourceIds: new Set(['src-a', 'src-b', 'src-c']),
+    ...over,
+  });
+}
+
+test('S5B-14: an empty run has no spend, no reservations and no liabilities', () => {
+  const r = assess();
+  assert.equal(r.spentUsd, 0);
+  assert.equal(r.reservedUsd, 0);
+  assert.deepEqual(r.liabilities, []);
+  assert.deepEqual(r.recoverable, []);
+  assert.deepEqual(r.unrecordable, []);
+  assert.equal(r.blockedSourceIds.size, 0);
+});
+
+test('S5B-14: results lines — known costs count, null/unknown costs are charged blocking liabilities (never 0)', () => {
+  const r = assess({
+    resultsLines: [
+      { sourceId: 'src-a', jobId: 'j-a', totalCostUSD: 0.5 },
+      { sourceId: 'src-b', jobId: 'j-b', totalCostUSD: null },
+      { sourceId: 'src-c' }, // cost field missing entirely
+    ],
+  });
+  assert.ok(Math.abs(r.spentUsd - 0.5) < 1e-12);
+  assert.deepEqual(r.liabilities.map(l => l.kind), ['result-unknown-cost', 'result-unknown-cost']);
+  assert.ok(Math.abs(r.reservedUsd - 2 * ADM) < 1e-9);
+  assert.deepEqual([...r.blockedSourceIds].sort(), ['src-b', 'src-c']);
+});
+
+test('S5B-14: known settled journal costs count toward spent even when the source left the manifest; duplicates count once', () => {
+  const journal: ParsedJournal = {
+    ...emptyJournal(),
+    jobs: [
+      { jobId: 'j-in', sourceId: 'src-a', at: 't' },
+      { jobId: 'j-out', sourceId: 'src-gone', at: 't' },
+      { jobId: 'j-in', sourceId: 'src-a', at: 't' }, // duplicate submission line
+    ],
+  };
+  const summaries: Record<string, { status: string; totalCostUSD: number }> = {
+    'j-in': { status: 'failed', totalCostUSD: 1.7 },
+    'j-out': { status: 'succeeded', totalCostUSD: 0.9 },
+  };
+  const r = assess({ journal, summaryOf: id => summaries[id] });
+  assert.ok(Math.abs(r.spentUsd - 2.6) < 1e-9, 'both known costs count, j-in exactly once');
+  assert.equal(r.reservedUsd, 0);
+  assert.deepEqual(r.liabilities, []);
+  assert.deepEqual(r.recoverable.map(x => x.entry.jobId), ['j-in'], 'in-manifest settled job gets a results line');
+  assert.deepEqual(r.unrecordable.map(x => x.entry.jobId), ['j-out'], 'out-of-manifest settled job cannot get a line');
+  assert.equal(r.unrecordable[0]?.costUsd, 0.9);
+});
+
+test('S5B-14: running, unresolved and settled-unknown-cost journal jobs each hold a full reservation and block their page', () => {
+  const journal: ParsedJournal = {
+    ...emptyJournal(),
+    jobs: [
+      { jobId: 'j-null', sourceId: 'src-c', at: 't' },
+      { jobId: 'j-run', sourceId: 'src-a', at: 't' },
+      { jobId: 'j-gone', sourceId: 'src-b', at: 't' },
+      { jobId: 'j-weird', sourceId: 'src-a', at: 't' },
+    ],
+  };
+  const summaries: Record<string, { status: string; totalCostUSD?: null }> = {
+    'j-null': { status: 'failed', totalCostUSD: null },
+    'j-run': { status: 'running' },
+    'j-weird': { status: 'nonsense' },
+  };
+  const r = assess({ journal, summaryOf: id => summaries[id] });
+  assert.equal(r.spentUsd, 0);
+  // Deterministic order: recovered-unknown-cost, running, then unresolved entries.
+  assert.deepEqual(r.liabilities.map(l => l.kind), [
+    'job-settled-unknown-cost',
+    'job-running',
+    'job-unresolved',
+    'job-unresolved',
+  ]);
+  assert.ok(Math.abs(r.reservedUsd - 4 * ADM) < 1e-9);
+  assert.deepEqual([...r.blockedSourceIds].sort(), ['src-a', 'src-b', 'src-c']);
+  // The settled-unknown-cost job still gets a results line (its outcome is known) — but it is charged.
+  assert.deepEqual(r.recoverable.map(x => x.entry.jobId), ['j-null']);
+});
+
+test('S5B-14: an out-of-manifest settled job with UNKNOWN cost is a charged liability, not a silent skip', () => {
+  const r = assess({
+    journal: { ...emptyJournal(), jobs: [{ jobId: 'j-x', sourceId: 'src-gone', at: 't' }] },
+    summaryOf: () => ({ status: 'failed', totalCostUSD: null }),
+  });
+  assert.deepEqual(r.liabilities.map(l => l.kind), ['job-settled-unknown-cost']);
+  assert.ok(Math.abs(r.reservedUsd - ADM) < 1e-12);
+  assert.deepEqual(r.recoverable, [], 'no manifest page → no results line can be written');
+  assert.deepEqual(r.unrecordable, [], 'unknown cost is never "unrecordable with a known cost"');
+});
+
+test('S5B-14: nonempty malformed journal lines are blocking liabilities charged at the per-job admission amount', () => {
+  const r = assess({ journal: { ...emptyJournal(), malformed: ['{"jobId":"j1","source'] } });
+  assert.deepEqual(r.liabilities.map(l => l.kind), ['malformed-journal-line']);
+  assert.ok(Math.abs(r.reservedUsd - ADM) < 1e-12);
+  assert.equal(r.spentUsd, 0);
+});
+
+test('S5B-14: an intent without a job line is an uncertain-submission liability; job lines and resolutions pair it away', () => {
+  const journal: ParsedJournal = {
+    jobs: [{ jobId: 'j-p', sourceId: 'src-b', at: 't', intentId: 'i-paired' }],
+    intents: [
+      { intentId: 'i-open', sourceId: 'src-a', at: 't' },
+      { intentId: 'i-paired', sourceId: 'src-b', at: 't' },
+      { intentId: 'i-resolved', sourceId: 'src-c', at: 't' },
+      { intentId: 'i-open', sourceId: 'src-a', at: 't' }, // duplicate intent line charges once
+    ],
+    resolutions: [{ intentId: 'i-resolved', resolution: 'not-submitted', at: 't' }],
+    malformed: [],
+  };
+  const r = assess({ journal, summaryOf: id => (id === 'j-p' ? { status: 'failed', totalCostUSD: 0.3 } : undefined) });
+  assert.deepEqual(r.liabilities.map(l => l.kind), ['intent-without-job']);
+  assert.ok(Math.abs(r.spentUsd - 0.3) < 1e-12, 'the paired job line is reconciled normally');
+  assert.ok(Math.abs(r.reservedUsd - ADM) < 1e-12);
+  assert.deepEqual([...r.blockedSourceIds], ['src-a'], 'the uncertain page is never re-submitted');
+});
+
+test('S5B-14: a journal job whose id already has a results line is never reconciled or charged twice', () => {
+  const r = assess({
+    resultsLines: [{ sourceId: 'src-a', jobId: 'j1', totalCostUSD: 0.4 }],
+    journal: { ...emptyJournal(), jobs: [{ jobId: 'j1', sourceId: 'src-a', at: 't' }] },
+    summaryOf: () => {
+      throw new Error('recorded jobs must not be looked up');
+    },
+  });
+  assert.ok(Math.abs(r.spentUsd - 0.4) < 1e-12);
+  assert.equal(r.reservedUsd, 0);
+  assert.deepEqual(r.liabilities, []);
+});
+
+test('S5B-14: assessLiabilities rejects a non-conservative admission amount', () => {
+  for (const bad of [0, -1, Number.NaN, Number.POSITIVE_INFINITY]) {
+    assert.throws(() => assess({ perJobAdmissionUSD: bad }), { message: 'ADMISSION_AMOUNT_INVALID' }, String(bad));
+  }
+});
+
+/* ------------------------------------------------------------------ */
+/* S5B-14: admission rule                                               */
+/* ------------------------------------------------------------------ */
+
+test('S5B-14: admission rule is spent + reserved + perJobAdmission <= maxUsd, boundary inclusive', () => {
+  assert.equal(admissionAllowed({ spentUsd: 1, reservedUsd: 0.5, perJobAdmissionUSD: 0.25, maxUsd: 1.75 }), true);
+  assert.equal(admissionAllowed({ spentUsd: 1, reservedUsd: 0.5, perJobAdmissionUSD: 0.25, maxUsd: 1.749999 }), false);
+  assert.equal(admissionAllowed({ spentUsd: 0, reservedUsd: 0, perJobAdmissionUSD: ADM, maxUsd: ADM }), true);
+  // A reservation makes the difference: the same run without it would be admitted.
+  assert.equal(admissionAllowed({ spentUsd: 0, reservedUsd: ADM, perJobAdmissionUSD: ADM, maxUsd: 1.8 }), false);
+  assert.equal(admissionAllowed({ spentUsd: 0, reservedUsd: 0, perJobAdmissionUSD: ADM, maxUsd: 1.8 }), true);
+  for (const bad of [
+    { spentUsd: Number.NaN, reservedUsd: 0, perJobAdmissionUSD: 1, maxUsd: 5 },
+    { spentUsd: 0, reservedUsd: Number.POSITIVE_INFINITY, perJobAdmissionUSD: 1, maxUsd: 5 },
+    { spentUsd: -0.1, reservedUsd: 0, perJobAdmissionUSD: 1, maxUsd: 5 },
+    { spentUsd: 0, reservedUsd: -1, perJobAdmissionUSD: 1, maxUsd: 5 },
+    { spentUsd: 0, reservedUsd: 0, perJobAdmissionUSD: 0, maxUsd: 5 },
+    { spentUsd: 0, reservedUsd: 0, perJobAdmissionUSD: 1, maxUsd: Number.NaN },
+  ]) {
+    assert.throws(() => admissionAllowed(bad), /ADMISSION_CHECK_INVALID/, JSON.stringify(bad));
+  }
+});
+
+/* ------------------------------------------------------------------ */
+/* S5B-14: liability messages                                           */
+/* ------------------------------------------------------------------ */
+
+test('S5B-14: describeLiability names the charge and the manual fix for every liability kind', () => {
+  const cases: Liability[] = [
+    { kind: 'result-unknown-cost', sourceId: 'src-r', jobId: 'j-r', chargeUsd: ADM },
+    { kind: 'result-unknown-cost', sourceId: 'src-r', jobId: null, chargeUsd: ADM },
+    { kind: 'malformed-journal-line', line: '{"jobId":"j1","source', chargeUsd: ADM },
+    { kind: 'job-running', entry: { jobId: 'j-run', sourceId: 'src-a', at: 't' }, chargeUsd: ADM },
+    { kind: 'job-unresolved', entry: { jobId: 'j-gone', sourceId: 'src-b', at: 't' }, chargeUsd: ADM },
+    { kind: 'job-settled-unknown-cost', entry: { jobId: 'j-null', sourceId: 'src-c', at: 't' }, summary: { status: 'failed' }, chargeUsd: ADM },
+    { kind: 'intent-without-job', intent: { intentId: 'i-9', sourceId: 'src-x', at: 't' }, chargeUsd: ADM },
+  ];
+  for (const l of cases) {
+    const m = describeLiability(l);
+    assert.match(m, /1\.704/, `${l.kind} must state its charge`);
+  }
+  assert.match(describeLiability(cases[0]!), /src-r/);
+  assert.match(describeLiability(cases[0]!), /no known cost/);
+  assert.match(describeLiability(cases[2]!), /malformed/i);
+  assert.match(describeLiability(cases[2]!), /\{"jobId":"j1","source/, 'quotes the offending line');
+  assert.match(describeLiability(cases[3]!), /RUNNING/);
+  assert.match(describeLiability(cases[4]!), /could not be resolved/);
+  assert.match(describeLiability(cases[5]!), /UNKNOWN cost/);
+  const intentMsg = describeLiability(cases[6]!);
+  assert.match(intentMsg, /i-9/);
+  assert.match(intentMsg, /src-x/);
+  assert.match(intentMsg, /UNCERTAIN/);
+  // The message must tell the operator exactly how to resolve the intent manually.
+  assert.match(intentMsg, /"intentId":"i-9","resolution":"not-submitted"/);
+  assert.match(intentMsg, /"jobId":"<id>","sourceId":"src-x","intentId":"i-9"/);
 });
