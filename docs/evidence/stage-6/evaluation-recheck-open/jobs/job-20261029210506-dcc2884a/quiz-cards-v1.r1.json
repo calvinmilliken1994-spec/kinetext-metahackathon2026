@@ -1,0 +1,217 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Land Purchase and Its Consequences",
+    "cards": [
+      {
+        "id": "land-price-per-acre",
+        "stem": "What was the approximate cost for each acre in the transaction described?",
+        "options": [
+          "For roughly 4 cents an acre",
+          "$10 million",
+          "828,000 square miles"
+        ],
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "For roughly 4 cents an acre, the United States doubled its size, expanding the nation westward.",
+        "hint": "Think about the per acre price mentioned early on"
+      },
+      {
+        "id": "purchase-total-cost",
+        "stem": "How much was paid for the land west of the Mississippi River?",
+        "options": [
+          "$15 million",
+          "$10 million",
+          "4 cents an acre"
+        ],
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "the United States purchased 828,000 square miles of land west of the Mississippi River for $15 million",
+        "hint": "Recall the total sum noted for the large tract"
+      },
+      {
+        "id": "sectional-divisions-revealed",
+        "stem": "What did the growth of the country bring to light between the North and South?",
+        "options": [
+          "sectional weaknesses between the North and South",
+          "immediate national unity",
+          "a lasting peace agreement"
+        ],
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "also exposed the sectional weaknesses between the North and South, especially related to the issue of slavery",
+        "hint": "Consider what divisions were revealed by expansion"
+      },
+      {
+        "id": "native-people-relocation",
+        "stem": "What ultimately happened to Native people as new lands were organized?",
+        "options": [
+          "forcibly moved on to reservations",
+          "voluntarily granted new homelands",
+          "left undisturbed in place"
+        ],
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "Ultimately, Native people were forcibly moved on to reservations, losing vast acreage of their tribal lands",
+        "hint": "Remember the consequence for Indigenous communities"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029210506-dcc2884a:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "f1601d61f43d42e481a886503225f2eb",
+    "usage": {
+      "promptTokens": 2751,
+      "completionTokens": 5313,
+      "reasoningTokens": 4919,
+      "cachedTokens": 0
+    },
+    "latencyMs": 30878,
+    "estCostUSD": 0.026019,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029210506-dcc2884a:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Land Purchase and Its Consequences",
+    "sources": [
+      {
+        "id": "nara-louisiana-purchase-treaty",
+        "title": "Louisiana Purchase Treaty (1803) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/louisiana-purchase-treaty",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Louisiana Purchase Treaty (1803)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "6da19e2b0134ca81169b3c5b0a0461ae48243446219561e760b32cb2ed7cce4b"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "f1601d61f43d42e481a886503225f2eb",
+      "runId": "job-20261029210506-dcc2884a",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T21:06:38.990Z"
+    },
+    "seed": 4183129452,
+    "cards": [
+      {
+        "id": "land-price-per-acre",
+        "stem": "What was the approximate cost for each acre in the transaction described?",
+        "options": [
+          "For roughly 4 cents an acre",
+          "$10 million",
+          "828,000 square miles"
+        ],
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "For roughly 4 cents an acre, the United States doubled its size, expanding the nation westward.",
+        "hint": "Think about the per acre price mentioned early on"
+      },
+      {
+        "id": "purchase-total-cost",
+        "stem": "How much was paid for the land west of the Mississippi River?",
+        "options": [
+          "$15 million",
+          "$10 million",
+          "4 cents an acre"
+        ],
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "the United States purchased 828,000 square miles of land west of the Mississippi River for $15 million",
+        "hint": "Recall the total sum noted for the large tract"
+      },
+      {
+        "id": "sectional-divisions-revealed",
+        "stem": "What did the growth of the country bring to light between the North and South?",
+        "options": [
+          "sectional weaknesses between the North and South",
+          "immediate national unity",
+          "a lasting peace agreement"
+        ],
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "also exposed the sectional weaknesses between the North and South, especially related to the issue of slavery",
+        "hint": "Consider what divisions were revealed by expansion"
+      },
+      {
+        "id": "native-people-relocation",
+        "stem": "What ultimately happened to Native people as new lands were organized?",
+        "options": [
+          "forcibly moved on to reservations",
+          "voluntarily granted new homelands",
+          "left undisturbed in place"
+        ],
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "Ultimately, Native people were forcibly moved on to reservations, losing vast acreage of their tribal lands",
+        "hint": "Remember the consequence for Indigenous communities"
+      }
+    ]
+  }
+}

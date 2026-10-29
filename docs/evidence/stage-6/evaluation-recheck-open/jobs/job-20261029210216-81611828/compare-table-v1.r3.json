@@ -1,0 +1,273 @@
+{
+  "gen": {
+    "schemaVersion": "compare-table-v1",
+    "title": "Early versus later saving at 5 percent",
+    "attributes": [
+      "Starting at age",
+      "Annual saving",
+      "Saving to age 65",
+      "Amount at age 65",
+      "Interest rate"
+    ],
+    "rows": [
+      {
+        "entity": "age 14",
+        "values": [
+          {
+            "value": "starting at age 14",
+            "sourceId": "cfpb-teenagers-and-saving",
+            "quote": "If they set aside $100 every year starting at age 14, they'd have about $23,000 at age 65."
+          },
+          {
+            "value": "$100 every year",
+            "sourceId": "cfpb-teenagers-and-saving",
+            "quote": "If they set aside $100 every year starting at age 14, they'd have about $23,000 at age 65."
+          },
+          {
+            "value": "at age 65",
+            "sourceId": "cfpb-teenagers-and-saving",
+            "quote": "If they set aside $100 every year starting at age 14, they'd have about $23,000 at age 65."
+          },
+          {
+            "value": "about $23,000",
+            "sourceId": "cfpb-teenagers-and-saving",
+            "quote": "If they set aside $100 every year starting at age 14, they'd have about $23,000 at age 65."
+          },
+          {
+            "value": "5 percent every year",
+            "sourceId": "cfpb-teenagers-and-saving",
+            "quote": "The example assumes the account earns 5 percent every year."
+          }
+        ]
+      },
+      {
+        "entity": "age 35",
+        "values": [
+          {
+            "value": "begin saving at age 35",
+            "sourceId": "cfpb-teenagers-and-saving",
+            "quote": "However, if they begin saving at age 35, they'd have about $7,000 at age 65."
+          },
+          {
+            "value": "$100 every year",
+            "sourceId": "cfpb-teenagers-and-saving",
+            "quote": "If they set aside $100 every year starting at age 14, they'd have about $23,000 at age 65."
+          },
+          {
+            "value": "at age 65",
+            "sourceId": "cfpb-teenagers-and-saving",
+            "quote": "However, if they begin saving at age 35, they'd have about $7,000 at age 65."
+          },
+          {
+            "value": "about $7,000",
+            "sourceId": "cfpb-teenagers-and-saving",
+            "quote": "However, if they begin saving at age 35, they'd have about $7,000 at age 65."
+          },
+          {
+            "value": "5 percent every year",
+            "sourceId": "cfpb-teenagers-and-saving",
+            "quote": "The example assumes the account earns 5 percent every year."
+          }
+        ]
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029210216-81611828:compare-table-v1:r3",
+    "revision": 3,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every compare-table text length is within the frozen limits and every row and column name uses page words, never an id"
+      },
+      {
+        "id": "CT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 10 cell quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "CT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cell value occurs in its quote and every row entity occurs in the quote or the same source paragraph (cell-in-quote; paragraph-level entity attribution is the design-disclosed false accept — quotes are visible)"
+      },
+      {
+        "id": "CT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the table shape is valid: 2 rows x 5 attributes with exactly one value per row-column slot (shape-valid)"
+      },
+      {
+        "id": "CT-04",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in entity names, attributes and cell values appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "CT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no attribute column offers 3 distinct cell values, so the UI falls back to reveal-only with unverified cells blanked as \"Not stated on this page\" — by design this is not a component failure (predict-cell-valid)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": false,
+        "message": "repair weakened the spec: /rows/0/values/0/value changed from \"$100 every year\" to \"starting at age 14\" outside the affected paths recomputed from revision 1 (authorized: /attributes/0, /attributes/2, /attributes/4, /rows/1/values) — a list-length finding licenses the resize only, not the content of the items it keeps; /rows/0/values/1/value changed from \"about $23,000\" to \"$100 every year\" outside the affected paths recomputed from revision 1 (authorized: /attributes/0, /attributes/2, /attributes/4, /rows/1/values) — a list-length finding licenses the resize only, not the content of the items it keeps; /rows/0/values/2/quote changed from \"The example assumes the account earns 5 percent every year.\" to \"If they set aside $100 every year starting at age 14, they'd\" outside the affected paths recomputed from revision 1 (authorized: /attributes/0, /attributes/2, /attributes/4, /rows/1/values) — a list-length finding licenses the resize only, not the content of the items it keeps; /rows/0/values/2/value changed from \"5 percent every year\" to \"at age 65\" outside the affected paths recomputed from revision 1 (authorized: /attributes/0, /attributes/2, /attributes/4, /rows/1/values) — a list-length finding licenses (a compare-table-v1 repair must fix the failing checks by changing ONLY fields under the affected paths recomputed from revision 1, must keep every item and id stable — the system prunes bad items, never the model — and must never increase a tolerance or otherwise weaken the spec)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "d5c9522e71264562957ce665efe546bc",
+    "usage": {
+      "promptTokens": 4666,
+      "completionTokens": 5240,
+      "reasoningTokens": 4732,
+      "cachedTokens": 0
+    },
+    "latencyMs": 21102,
+    "estCostUSD": 0.0281025,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029210216-81611828:compare-table-v1:r3",
+    "componentId": "compare-table-v1",
+    "title": "Early versus later saving at 5 percent",
+    "sources": [
+      {
+        "id": "cfpb-teenagers-and-saving",
+        "title": "Teenagers and saving — Consumer Financial Protection Bureau, Money as You Grow",
+        "locator": "https://www.consumerfinance.gov/consumer-tools/money-as-you-grow/teen-young-adult/explore-saving/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Consumer Financial Protection Bureau, Money as You Grow, 'Teenagers and saving'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+        "sha256": "a438468abdb47ce3f3afb4ed9e5c4bafa5ebf39e76f40973647383ef8df00b58"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "d5c9522e71264562957ce665efe546bc",
+      "runId": "job-20261029210216-81611828",
+      "promptVersion": "s6-v3",
+      "revision": 3,
+      "repairOf": 2,
+      "generatedAt": "2026-10-29T21:05:04.725Z"
+    },
+    "seed": 2488067047,
+    "entities": [
+      "age 14",
+      "age 35"
+    ],
+    "attributes": [
+      "Starting at age",
+      "Annual saving",
+      "Saving to age 65",
+      "Amount at age 65",
+      "Interest rate"
+    ],
+    "cells": [
+      {
+        "id": "cell-0-0",
+        "entityIndex": 0,
+        "attributeIndex": 0,
+        "value": "starting at age 14",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "If they set aside $100 every year starting at age 14, they'd have about $23,000 at age 65."
+      },
+      {
+        "id": "cell-0-1",
+        "entityIndex": 0,
+        "attributeIndex": 1,
+        "value": "$100 every year",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "If they set aside $100 every year starting at age 14, they'd have about $23,000 at age 65."
+      },
+      {
+        "id": "cell-0-2",
+        "entityIndex": 0,
+        "attributeIndex": 2,
+        "value": "at age 65",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "If they set aside $100 every year starting at age 14, they'd have about $23,000 at age 65."
+      },
+      {
+        "id": "cell-0-3",
+        "entityIndex": 0,
+        "attributeIndex": 3,
+        "value": "about $23,000",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "If they set aside $100 every year starting at age 14, they'd have about $23,000 at age 65."
+      },
+      {
+        "id": "cell-0-4",
+        "entityIndex": 0,
+        "attributeIndex": 4,
+        "value": "5 percent every year",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "The example assumes the account earns 5 percent every year."
+      },
+      {
+        "id": "cell-1-0",
+        "entityIndex": 1,
+        "attributeIndex": 0,
+        "value": "begin saving at age 35",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "However, if they begin saving at age 35, they'd have about $7,000 at age 65."
+      },
+      {
+        "id": "cell-1-1",
+        "entityIndex": 1,
+        "attributeIndex": 1,
+        "value": "$100 every year",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "If they set aside $100 every year starting at age 14, they'd have about $23,000 at age 65."
+      },
+      {
+        "id": "cell-1-2",
+        "entityIndex": 1,
+        "attributeIndex": 2,
+        "value": "at age 65",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "However, if they begin saving at age 35, they'd have about $7,000 at age 65."
+      },
+      {
+        "id": "cell-1-3",
+        "entityIndex": 1,
+        "attributeIndex": 3,
+        "value": "about $7,000",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "However, if they begin saving at age 35, they'd have about $7,000 at age 65."
+      },
+      {
+        "id": "cell-1-4",
+        "entityIndex": 1,
+        "attributeIndex": 4,
+        "value": "5 percent every year",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "The example assumes the account earns 5 percent every year."
+      }
+    ]
+  }
+}

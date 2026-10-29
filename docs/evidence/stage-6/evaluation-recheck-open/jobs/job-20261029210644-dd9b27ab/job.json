@@ -1,0 +1,31 @@
+{
+  "jobId": "job-20261029210644-dd9b27ab",
+  "sourceId": "nrc-glossary-half-life",
+  "status": "unsupported",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T21:06:44.052Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.020324,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 19076,
+    "startedAt": "2026-10-29T21:06:44.052Z"
+  },
+  "lesson": {
+    "overviewReady": false,
+    "componentsPlanned": 0,
+    "componentsPublished": 0,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "finishedAt": "2026-10-29T21:07:06.051Z"
+}

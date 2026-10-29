@@ -1,0 +1,111 @@
+{
+  "jobId": "job-20261029210216-81611828",
+  "analysisRef": "job-20261029210216-81611828/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029210216-81611828:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Teen saving guide for emergency funds and early compound interest",
+    "sources": [
+      {
+        "id": "cfpb-teenagers-and-saving",
+        "title": "Teenagers and saving — Consumer Financial Protection Bureau, Money as You Grow",
+        "locator": "https://www.consumerfinance.gov/consumer-tools/money-as-you-grow/teen-young-adult/explore-saving/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Consumer Financial Protection Bureau, Money as You Grow, 'Teenagers and saving'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+        "sha256": "a438468abdb47ce3f3afb4ed9e5c4bafa5ebf39e76f40973647383ef8df00b58"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "de558dce6ff4490ba1203949e7523e30",
+      "runId": "job-20261029210216-81611828",
+      "promptVersion": "s6-v3",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T21:03:45.661Z"
+    },
+    "seed": 669166000,
+    "headline": "Teen saving guide for emergency funds and early compound interest",
+    "keyPoints": [
+      {
+        "id": "save-ten-percent",
+        "point": "Save at least 10 percent of earnings directly into a savings account for emergencies",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "Once your teen has a steady job, help them set up a savings program so that at least 10 percent of earnings goes directly into their savings account."
+      },
+      {
+        "id": "emergency-three-months",
+        "point": "Build an emergency fund covering at least three months of living expenses for emergencies",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "have at least three months’ worth of living expenses saved up in case of an emergency."
+      },
+      {
+        "id": "compound-interest-earns",
+        "point": "Compound interest earns interest on both saved money and previously earned interest over time",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "Compound interest is when your child earns interest on both the money they save and the interest they earn."
+      },
+      {
+        "id": "early-start-advantage",
+        "point": "Starting to save $100 every year at age 14 can grow to about $23,000 by age 65 at 5 percent, versus about $7,000 when starting at age 35",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "If they set aside $100 every year starting at age 14, they'd have about $23,000 at age 65."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "savings-account",
+        "term": "savings account",
+        "gloss": "account at a bank or credit union for holding savings to cover emergency expenses",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "Once your teen has a steady job, help them set up a savings program so that at least 10 percent of earnings goes directly into their savings account."
+      },
+      {
+        "id": "compound-interest",
+        "term": "compound interest",
+        "gloss": "interest earned on both original money saved and accumulated interest",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "Compound interest is when your child earns interest on both the money they save and the interest they earn."
+      },
+      {
+        "id": "interest-rate",
+        "term": "interest rate",
+        "gloss": "percent charged or earned for borrowing or saving, relevant when choosing a bank account",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "the interest rate may not be as relevant since the goal is to save enough money to cover emergency expenses."
+      },
+      {
+        "id": "matching-contributions",
+        "term": "matching contributions",
+        "gloss": "employer added money that matches employee savings in a 401(k) as an incentive to save",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "Some employers provide matching contributions as an incentive to save, so it’s smart to save at least enough for the maximum matching contribution."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029210216-81611828:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261029210216-81611828:compare-table-v1:r3",
+      "status": "failed",
+      "reason": "repair.no-weakening: repair weakened the spec: /rows/0/values/0/value changed from \"$100 every year\" to \"starting at age 14\" outside the affected paths recomputed from revision 1 (authorized: /attributes/0, /attributes/2, /attributes/4, /rows/1/values) — a list-length finding licenses the resize only, not the content of",
+      "revision": 3
+    }
+  ]
+}

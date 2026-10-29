@@ -1,0 +1,217 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Saving rules and compound interest",
+    "cards": [
+      {
+        "id": "compound-interest-meaning",
+        "stem": "How is compound interest described for a savings account?",
+        "options": [
+          "earns interest on both the money they save and the interest they earn",
+          "charges interest only on money borrowed from a bank",
+          "pays interest only on the first deposit made"
+        ],
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "Compound interest is when your child earns interest on both the money they save and the interest they earn.",
+        "hint": "Think about earning on both principal and previous interest."
+      },
+      {
+        "id": "saving-ten-percent-rule",
+        "stem": "What portion of earnings should go directly to savings after getting a steady job?",
+        "options": [
+          "at least 10 percent",
+          "at least 5 percent",
+          "only with extra leftover money"
+        ],
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "Once your teen has a steady job, help them set up a savings program so that at least 10 percent of earnings goes directly into their savings account.",
+        "hint": "Recall the savings program target for steady work."
+      },
+      {
+        "id": "emergency-three-months",
+        "stem": "What is the basic emergency saving goal mentioned as a good rule?",
+        "options": [
+          "three months’ worth of living expenses",
+          "a few weeks of allowance",
+          "a single paycheck amount"
+        ],
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "have at least three months’ worth of living expenses saved up in case of an emergency.",
+        "hint": "Consider how many months of expenses are recommended for emergencies."
+      },
+      {
+        "id": "early-saving-example",
+        "stem": "In the example, what could saving $100 every year from age 14 grow to by the later age?",
+        "options": [
+          "$23,000 at age 65",
+          "$7,000 at age 65",
+          "$100 at age 65"
+        ],
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "If they set aside $100 every year starting at age 14, they'd have about $23,000 at age 65.",
+        "hint": "Compare starting early with starting later in the example."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029210216-81611828:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "3f809b06477549c4be3d26e5ede42bc8",
+    "usage": {
+      "promptTokens": 2710,
+      "completionTokens": 9582,
+      "reasoningTokens": 9152,
+      "cachedTokens": 0
+    },
+    "latencyMs": 44588,
+    "estCostUSD": 0.044111,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029210216-81611828:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Saving rules and compound interest",
+    "sources": [
+      {
+        "id": "cfpb-teenagers-and-saving",
+        "title": "Teenagers and saving — Consumer Financial Protection Bureau, Money as You Grow",
+        "locator": "https://www.consumerfinance.gov/consumer-tools/money-as-you-grow/teen-young-adult/explore-saving/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Consumer Financial Protection Bureau, Money as You Grow, 'Teenagers and saving'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+        "sha256": "a438468abdb47ce3f3afb4ed9e5c4bafa5ebf39e76f40973647383ef8df00b58"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "3f809b06477549c4be3d26e5ede42bc8",
+      "runId": "job-20261029210216-81611828",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T21:04:30.255Z"
+    },
+    "seed": 1992081401,
+    "cards": [
+      {
+        "id": "compound-interest-meaning",
+        "stem": "How is compound interest described for a savings account?",
+        "options": [
+          "earns interest on both the money they save and the interest they earn",
+          "charges interest only on money borrowed from a bank",
+          "pays interest only on the first deposit made"
+        ],
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "Compound interest is when your child earns interest on both the money they save and the interest they earn.",
+        "hint": "Think about earning on both principal and previous interest."
+      },
+      {
+        "id": "saving-ten-percent-rule",
+        "stem": "What portion of earnings should go directly to savings after getting a steady job?",
+        "options": [
+          "at least 10 percent",
+          "at least 5 percent",
+          "only with extra leftover money"
+        ],
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "Once your teen has a steady job, help them set up a savings program so that at least 10 percent of earnings goes directly into their savings account.",
+        "hint": "Recall the savings program target for steady work."
+      },
+      {
+        "id": "emergency-three-months",
+        "stem": "What is the basic emergency saving goal mentioned as a good rule?",
+        "options": [
+          "three months’ worth of living expenses",
+          "a few weeks of allowance",
+          "a single paycheck amount"
+        ],
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "have at least three months’ worth of living expenses saved up in case of an emergency.",
+        "hint": "Consider how many months of expenses are recommended for emergencies."
+      },
+      {
+        "id": "early-saving-example",
+        "stem": "In the example, what could saving $100 every year from age 14 grow to by the later age?",
+        "options": [
+          "$23,000 at age 65",
+          "$7,000 at age 65",
+          "$100 at age 65"
+        ],
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "If they set aside $100 every year starting at age 14, they'd have about $23,000 at age 65.",
+        "hint": "Compare starting early with starting later in the example."
+      }
+    ]
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261029210049-64aedb65",
+  "analysisRef": "job-20261029210049-64aedb65/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029210049-64aedb65:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Teen saving habits build emergency funds and early compound growth",
+    "sources": [
+      {
+        "id": "cfpb-teenagers-and-saving",
+        "title": "Teenagers and saving — Consumer Financial Protection Bureau, Money as You Grow",
+        "locator": "https://www.consumerfinance.gov/consumer-tools/money-as-you-grow/teen-young-adult/explore-saving/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Consumer Financial Protection Bureau, Money as You Grow, 'Teenagers and saving'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+        "sha256": "a438468abdb47ce3f3afb4ed9e5c4bafa5ebf39e76f40973647383ef8df00b58"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18977-bb5e-7763-b49d-15a6303bd498",
+      "runId": "job-20261029210049-64aedb65",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T21:01:27.893Z"
+    },
+    "seed": 3267148025,
+    "headline": "Teen saving habits build emergency funds and early compound growth",
+    "keyPoints": [
+      {
+        "id": "save-ten-percent",
+        "point": "Teens with steady jobs should direct at least 10 percent of earnings into their savings account.",
+        "quote": "help them set up a savings program so that at least 10 percent of earnings goes directly into their savings account.",
+        "sourceId": "cfpb-teenagers-and-saving"
+      },
+      {
+        "id": "emergency-credit-avoid",
+        "point": "Emergency savings help avoid relying on credit cards or high interest loans in an emergency.",
+        "quote": "can help your child avoid having to rely on credit cards or loan options that charge a high interest rate in case of emergency.",
+        "sourceId": "cfpb-teenagers-and-saving"
+      },
+      {
+        "id": "early-compound-growth",
+        "point": "Starting at age 14 with $100 every year builds about $23,000 at age 65.",
+        "quote": "If they set aside $100 every year starting at age 14, they'd have about $23,000 at age 65.",
+        "sourceId": "cfpb-teenagers-and-saving"
+      },
+      {
+        "id": "matching-contribution-max",
+        "point": "Teens offered a retirement account should save enough to earn the maximum matching contribution.",
+        "quote": "Some employers provide matching contributions as an incentive to save, so it’s smart to save at least enough for the maximum matching contribution.",
+        "sourceId": "cfpb-teenagers-and-saving"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "Automatic plan directing part of earnings into savings",
+        "id": "savings-program",
+        "quote": "help them set up a savings program so that at least 10 percent of earnings goes directly into their savings account.",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "term": "savings program"
+      },
+      {
+        "gloss": "Monthly costs used to estimate months of emergency coverage",
+        "id": "living-expenses",
+        "quote": "have at least three months’ worth of living expenses saved up in case of an emergency.",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "term": "living expenses"
+      },
+      {
+        "gloss": "Interest earned on saved money plus previously earned interest",
+        "id": "compound-interest",
+        "quote": "Compound interest is when your child earns interest on both the money they save and the interest they earn.",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "term": "Compound interest"
+      },
+      {
+        "gloss": "Maximum employer match earned by saving enough in a retirement account",
+        "id": "matching-contribution",
+        "quote": "so it’s smart to save at least enough for the maximum matching contribution.",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "term": "matching contribution"
+      },
+      {
+        "gloss": "Federally insured place to keep money safe",
+        "id": "credit-union",
+        "quote": "Talk about how to keep money in a safe place, like a federally insured bank or credit union.",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "term": "credit union"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029210049-64aedb65:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261029210049-64aedb65:compare-table-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

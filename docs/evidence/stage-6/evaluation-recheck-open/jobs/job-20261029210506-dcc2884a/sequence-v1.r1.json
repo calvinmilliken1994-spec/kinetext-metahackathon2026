@@ -1,0 +1,205 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "From Limited Offer to Wider Divides",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Trace the cause and effect chain as the text unfolds from negotiation to aftermath.",
+    "steps": [
+      {
+        "id": "authorized-for-port",
+        "label": "authorized to pay France up to $10 million",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "negotiators Robert Livingston and James Monroe were authorized to pay France up to $10 million solely for the port of New Orleans",
+        "orderHint": ""
+      },
+      {
+        "id": "offered-entire-territory",
+        "label": "offered the entire territory of Louisiana",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "when they were offered the entire territory of Louisiana – an area larger than Great Britain, France, Germany, Italy, Spain, and Portugal combined",
+        "orderHint": ""
+      },
+      {
+        "id": "strict-interpreter-doubts",
+        "label": "strict interpreter of the Constitution",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "President Thomas Jefferson was generally a strict interpreter of the Constitution who wondered if the U.S. Government",
+        "orderHint": ""
+      },
+      {
+        "id": "squelched-doubts",
+        "label": "Jefferson squelched whatever doubts he had",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "As Napoleon threatened to take back the offer, Jefferson squelched whatever doubts he had and prepared to occupy a land of unimaginable riches.",
+        "orderHint": ""
+      },
+      {
+        "id": "first-major-cession",
+        "label": "first major cession of land",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "The Louisiana Purchase was the first major cession of land in a long series of expansions that span the 19th century.",
+        "orderHint": ""
+      },
+      {
+        "id": "sectional-weaknesses-exposed",
+        "label": "sectional weaknesses between the North and South",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "also exposed the sectional weaknesses between the North and South, especially related to the issue of slavery",
+        "orderHint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029210506-dcc2884a:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step label occurs in its own quote after normalisation (labels-in-quotes)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 6 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "22f74d733cc54df59f0cec48218369b4",
+    "usage": {
+      "promptTokens": 2782,
+      "completionTokens": 6574,
+      "reasoningTokens": 6136,
+      "cachedTokens": 0
+    },
+    "latencyMs": 34421,
+    "estCostUSD": 0.031417,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029210506-dcc2884a:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "From Limited Offer to Wider Divides",
+    "sources": [
+      {
+        "id": "nara-louisiana-purchase-treaty",
+        "title": "Louisiana Purchase Treaty (1803) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/louisiana-purchase-treaty",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Louisiana Purchase Treaty (1803)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "6da19e2b0134ca81169b3c5b0a0461ae48243446219561e760b32cb2ed7cce4b"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "22f74d733cc54df59f0cec48218369b4",
+      "runId": "job-20261029210506-dcc2884a",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T21:06:42.532Z"
+    },
+    "seed": 1536450573,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Trace the cause and effect chain as the text unfolds from negotiation to aftermath.",
+    "steps": [
+      {
+        "id": "authorized-for-port",
+        "label": "authorized to pay France up to $10 million",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "negotiators Robert Livingston and James Monroe were authorized to pay France up to $10 million solely for the port of New Orleans",
+        "orderHint": ""
+      },
+      {
+        "id": "offered-entire-territory",
+        "label": "offered the entire territory of Louisiana",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "when they were offered the entire territory of Louisiana – an area larger than Great Britain, France, Germany, Italy, Spain, and Portugal combined",
+        "orderHint": ""
+      },
+      {
+        "id": "strict-interpreter-doubts",
+        "label": "strict interpreter of the Constitution",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "President Thomas Jefferson was generally a strict interpreter of the Constitution who wondered if the U.S. Government",
+        "orderHint": ""
+      },
+      {
+        "id": "squelched-doubts",
+        "label": "Jefferson squelched whatever doubts he had",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "As Napoleon threatened to take back the offer, Jefferson squelched whatever doubts he had and prepared to occupy a land of unimaginable riches.",
+        "orderHint": ""
+      },
+      {
+        "id": "first-major-cession",
+        "label": "first major cession of land",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "The Louisiana Purchase was the first major cession of land in a long series of expansions that span the 19th century.",
+        "orderHint": ""
+      },
+      {
+        "id": "sectional-weaknesses-exposed",
+        "label": "sectional weaknesses between the North and South",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "also exposed the sectional weaknesses between the North and South, especially related to the issue of slavery",
+        "orderHint": ""
+      }
+    ]
+  }
+}

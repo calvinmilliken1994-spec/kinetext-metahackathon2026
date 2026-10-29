@@ -1,0 +1,124 @@
+{
+  "jobId": "job-20261029210506-dcc2884a",
+  "analysisRef": "job-20261029210506-dcc2884a/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029210506-dcc2884a:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Territory purchase doubled nation size and deepened sectional conflict",
+    "sources": [
+      {
+        "id": "nara-louisiana-purchase-treaty",
+        "title": "Louisiana Purchase Treaty (1803) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/louisiana-purchase-treaty",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Louisiana Purchase Treaty (1803)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "6da19e2b0134ca81169b3c5b0a0461ae48243446219561e760b32cb2ed7cce4b"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "6a449c32c48844e8adaf19a7584dfff4",
+      "runId": "job-20261029210506-dcc2884a",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T21:06:08.096Z"
+    },
+    "seed": 1411547232,
+    "headline": "Territory purchase doubled nation size and deepened sectional conflict",
+    "keyPoints": [
+      {
+        "id": "purchase-doubled-size",
+        "point": "The purchase doubled the size of the nation while expanding westward",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "For roughly 4 cents an acre, the United States doubled its size, expanding the nation westward."
+      },
+      {
+        "id": "negotiators-authorized-port",
+        "point": "Negotiators Livingston and Monroe were authorized to pay for the port of New Orleans and the Floridas",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "negotiators Robert Livingston and James Monroe were authorized to pay France up to $10 million"
+      },
+      {
+        "id": "jefferson-strict-interpreter",
+        "point": "Jefferson was a strict interpreter who wondered if Government was authorized to acquire new territory",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "President Thomas Jefferson was generally a strict interpreter of the Constitution who wondered if the U.S. Government"
+      },
+      {
+        "id": "expansion-sectional-weaknesses",
+        "point": "Expansion exposed sectional weaknesses between North and South related to slavery",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "also exposed the sectional weaknesses between the North and South, especially related to the issue of slavery"
+      },
+      {
+        "id": "native-impact-reservations",
+        "point": "Purchase ignored impact on Native people who were forcibly moved to reservations and lost tribal lands",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "Ultimately, Native people were forcibly moved on to reservations, losing vast acreage of their tribal lands"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "cession-term",
+        "term": "cession",
+        "gloss": "formal transfer of land by treaty from one holder to another",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "The Louisiana Purchase was the first major cession of land in a long series of expansions that span the 19th century."
+      },
+      {
+        "id": "sectional-weaknesses-term",
+        "term": "sectional weaknesses",
+        "gloss": "divisions between North and South over slavery that threatened national unity",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "also exposed the sectional weaknesses between the North and South, especially related to the issue of slavery"
+      },
+      {
+        "id": "missouri-compromise-term",
+        "term": "Missouri Compromise",
+        "gloss": "fragile compromise agreement meant to keep balance between free states and slave states",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "required a series of fragile compromises (notably the Missouri Compromise and the Compromise of 1850)"
+      },
+      {
+        "id": "reservations-term",
+        "term": "reservations",
+        "gloss": "tribal lands where Native people were forcibly moved and confined",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "Ultimately, Native people were forcibly moved on to reservations, losing vast acreage of their tribal lands"
+      },
+      {
+        "id": "strict-interpreter-term",
+        "term": "strict interpreter",
+        "gloss": "leader who reads the Constitution narrowly and questions Government authority to act",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "President Thomas Jefferson was generally a strict interpreter of the Constitution who wondered if the U.S. Government"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261029210506-dcc2884a:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029210506-dcc2884a:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}
