@@ -95,6 +95,36 @@ export function lessonCards(lesson: LessonSpec, specs: Readonly<Record<string, K
   });
 }
 
+// ---- cards and placeholders in plan order -------------------------------------------------------------------------
+
+/** A planned component that is not ready yet: queued, being built, or being repaired after a failed check. */
+export interface PendingSlot {
+  componentId: PlanComponentId;
+  label: string;
+  state: 'queued' | 'building' | 'repairing';
+  /** The plain sentence the placeholder shows. */
+  message: string;
+}
+
+export type LessonItem = { kind: 'card'; card: LessonCard } | { kind: 'pending'; slot: PendingSlot };
+
+/**
+ * The lesson body in plan order: each planned component is either its settled card or its placeholder. Cards the plan does
+ * not name (unexpected, but stored) keep their stored order after the planned ones; nothing a card carries is dropped.
+ */
+export function lessonItems(cards: readonly LessonCard[], pending: readonly PendingSlot[], order: readonly PlanComponentId[]): LessonItem[] {
+  const out: LessonItem[] = [];
+  const used = new Set<LessonCard>();
+  for (const id of order) {
+    const card = cards.find((c) => c.componentId === id && !used.has(c));
+    if (card !== undefined) { used.add(card); out.push({ kind: 'card', card }); continue; }
+    const slot = pending.find((p) => p.componentId === id);
+    if (slot !== undefined) out.push({ kind: 'pending', slot });
+  }
+  for (const card of cards) if (!used.has(card)) out.push({ kind: 'card', card });
+  return out;
+}
+
 // ---- quotes for the source panel ----------------------------------------------------------------------------------
 
 export function lessonQuoteKey(componentId: string, part: string, id: string): string {

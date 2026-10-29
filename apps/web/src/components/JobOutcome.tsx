@@ -5,6 +5,7 @@ import { INTERRUPTED_TEXT, isInterrupted } from '../lib/jobs.ts';
 import { analysisRepairNote, analysisRepairOverall } from '../lib/analysisRepairs.ts';
 import { demoFaultNotice, repairAttemptCount } from '../lib/repairs.ts';
 import { friendlyJobError } from '../lib/models.ts';
+import { lessonCheckName } from '../lib/lessonJob.ts';
 
 /** Centre-column states for jobs that did not produce a runnable activity. `serverBusy`: /api/health busy flag (null = unknown). */
 export function JobOutcome({ detail, serverBusy }: { detail: JobDetail; serverBusy: boolean | null }) {
@@ -24,9 +25,13 @@ export function JobOutcome({ detail, serverBusy }: { detail: JobDetail; serverBu
       <div className="outcome outcome-running" role="status">
         <div className="spinner" aria-hidden="true" />
         <h2>Muse Spark is working…</h2>
-        <p className="muted">
-          {last ? `Latest stage: ${last.stage} (${last.status}).` : 'Starting the pipeline.'} When it finishes, deterministic code machine-checks the result; explanation wording will still need teacher review.
-        </p>
+        {detail.lessonData !== undefined
+          ? <p className="muted">Reading the page. The overview appears here as soon as it is ready, and the interactive components follow one by one.</p>
+          : (
+            <p className="muted">
+              {last ? `Latest stage: ${last.stage} (${last.status}).` : 'Starting the pipeline.'} When it finishes, deterministic code machine-checks the result; explanation wording will still need teacher review.
+            </p>
+          )}
       </div>
     );
   }
@@ -60,7 +65,7 @@ export function JobOutcome({ detail, serverBusy }: { detail: JobDetail; serverBu
       </div>
     );
   }
-  const failed = (report?.checks ?? []).filter((c) => !c.passed);
+  const failed = (report ?? detail.lessonData?.analysisReport ?? undefined)?.checks.filter((c) => !c.passed) ?? [];
   const chosen = engineTitle(summary.engine);
   const friendly = friendlyJobError(summary.error?.code);
   const repairCount = repairAttemptCount(summary.repairs, detail.events);
@@ -68,6 +73,7 @@ export function JobOutcome({ detail, serverBusy }: { detail: JobDetail; serverBu
     <div className="outcome outcome-failed" role="alert">
       <p className="eyebrow">Generation did not finish</p>
       <h2>Blocked</h2>
+      {detail.lessonData !== undefined && <p className="muted">No lesson was published: the page analysis or overview did not pass its checks, so nothing from this run is shown.</p>}
       {chosen !== null && <p className="muted">Activity type Muse chose: <strong>{chosen}</strong> (<code>{summary.engine}</code>)</p>}
       {summary.demoFault !== undefined && <p className="callout callout-fault" role="note">{demoFaultNotice(summary.demoFault)}</p>}
       {friendly !== null && <p className="callout callout-error" data-testid="friendly-error">{friendly}</p>}
@@ -84,7 +90,7 @@ export function JobOutcome({ detail, serverBusy }: { detail: JobDetail; serverBu
         <>
           <p>Failed checks:</p>
           <ul>
-            {failed.map((c) => <li key={c.id}><code>{c.id}</code> — {c.message}</li>)}
+            {failed.map((c) => <li key={c.id}>{lessonCheckName(c.id) !== null && <>{lessonCheckName(c.id)} </>}<code>{c.id}</code> — {c.message}</li>)}
           </ul>
         </>
       )}

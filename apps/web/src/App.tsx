@@ -8,6 +8,9 @@ import { generateState, isServerBusy } from './lib/health.ts';
 import { madeWithPhrase, modelToSend, pickModel, readStoredModel, resolveJobModel, writeStoredModel } from './lib/models.ts';
 import type { ModelId } from './lib/models.ts';
 import { analysisCheckName, analysisRepairOverall, buildAnalysisRepairSteps, repairSummaryText } from './lib/analysisRepairs.ts';
+import { buildLessonRepairs, buildLessonStream, lessonAnalysisOverall, lessonAnalysisSteps, lessonCheckSections, lessonRenderMode, lessonRepairSummary } from './lib/lessonJob.ts';
+import type { FlowId } from './lib/lessonJob.ts';
+import { collectLessonQuotes } from './lib/lesson.ts';
 import { checkName } from './lib/checks.ts';
 import { defaultRevision, overallRepairBadge, revisionInputs, validationHeading } from './lib/repairs.ts';
 import { timelineEventLabels } from './lib/timeline.ts';
@@ -23,6 +26,10 @@ import { JobOutcome } from './components/JobOutcome.tsx';
 import { AnalysisRepairTimeline } from './components/AnalysisRepairTimeline.tsx';
 import { RepairTimeline } from './components/RepairTimeline.tsx';
 import { ValidationPanel } from './components/ValidationPanel.tsx';
+import { LessonView } from './components/LessonView.tsx';
+import { ComponentRepairTimeline } from './components/ComponentRepairTimeline.tsx';
+import { LessonChecksPanel } from './components/LessonChecksPanel.tsx';
+import type { SourceRef } from '../../../packages/contracts/index.ts';
 
 const NO_JOBS: never[] = [];
 
@@ -45,6 +52,7 @@ export function App() {
   const [generateError, setGenerateError] = useState<string | null>(null);
   const [demoChoice, setDemoChoice] = useState<DemoChoice>('none');
   const [flash, setFlash] = useState<Flash | null>(null);
+  const [flow, setFlow] = useState<FlowId>('lesson');
   const models = useModels(health);
   const [wantedModel, setWantedModel] = useState<ModelId | null>(() => readStoredModel(sessionStore()));
   const modelChoice = pickModel(models, wantedModel);
@@ -67,10 +75,15 @@ export function App() {
   const ready = detail?.state === 'ready' && detail.data.summary.sourceId === selectedSourceId ? detail.data : null;
 
   const doc = useSourceDoc(selectedSourceId);
-  const quotes = useMemo(
-    () => (selectedSourceId === null ? [] : collectQuoteRefs(selectedSourceId, ready?.spec, ready?.analysis?.analysis)),
-    [selectedSourceId, ready],
-  );
+  // Stage 6: a lesson job streams in; `stream` says what is ready now (overview, which components, which are placeholders).
+  const lessonMode = useMemo(() => (ready === null ? 'v1' : lessonRenderMode(ready)), [ready]);
+  const stream = useMemo(() => (ready === null || ready.lessonData === undefined ? null : buildLessonStream(ready)), [ready]);
+  const quotes = useMemo(() => {
+    if (selectedSourceId === null) return [];
+    const v1 = collectQuoteRefs(selectedSourceId, ready?.spec, ready?.analysis?.analysis);
+    if (ready === null || ready.lessonData === undefined || stream === null) return v1;
+    return [...collectLessonQuotes(selectedSourceId, stream.overview, ready.lessonData.kitSpecs), ...v1];
+  }, [selectedSourceId, ready, stream]);
   const sourceText = doc?.state === 'ready' ? doc.data.text : null;
   const highlights = useMemo(
     () => (sourceText === null ? null : buildHighlights(sourceText, quotes.map((q) => ({ key: q.key, quote: q.quote })))),
@@ -85,7 +98,7 @@ export function App() {
     const sourceId = selectedSourceId;
     setGenerating(true);
     setGenerateError(null);
-    api.createJob(sourceId, demoFaultToSend(demoChoice), modelToSend(models, modelChoice)).then(
+    api.createJob(sourceId, demoFaultToSend(demoChoice), modelToSend(models, modelChoice), flow).then(
       ({ jobId }) => {
         setLiveJobIds((prev) => new Set(prev).add(jobId));
         setPickedJob({ jobId, sourceId });
@@ -96,7 +109,7 @@ export function App() {
       // Keep the button locked until /api/health has been re-read, so it never flickers enabled.
       void refreshHealth().finally(() => setGenerating(false));
     });
-  }, [selectedSourceId, demoChoice, models, modelChoice, refreshJobs, refreshHealth]);
+  }, [selectedSourceId, demoChoice, models, modelChoice, flow, refreshJobs, refreshHealth]);
   const onModelChoice = useCallback((id: ModelId) => { setWantedModel(id); writeStoredModel(sessionStore(), id); }, []);
 
   const onSelectSource = useCallback((id: string) => { setPickedSource(id); setFlash(null); }, []);
@@ -127,14 +140,25 @@ export function App() {
   );
 
   // Analysis repairs (TASK-024c): Muse repairing its own first analysis, shown before the spec repairs.
-  const analysisSteps = useMemo(
-    () => (ready === null ? [] : buildAnalysisRepairSteps({ revisions: ready.analysisRevisions ?? [], analysisRepairs: ready.summary.analysisRepairs, events: ready.events })),
-    [ready],
-  );
-  const analysisOverall = analysisRepairOverall({ analysisRepairs: ready?.summary.analysisRepairs, events: ready?.events });
-  const repairBanner = ready === null || analysisOverall.state === 'none'
+  const analysisSteps = useMemo(() => {
+    if (ready === null) return [];
+    if (ready.lessonData !== undefined) return lessonAnalysisSteps(ready);
+    return buildAnalysisRepairSteps({ revisions: ready.analysisRevisions ?? [], analysisRepairs: ready.summary.analysisRepairs, events: ready.events });
+  }, [ready]);
+  const analysisOverall = ready?.lessonData !== undefined
+    ? lessonAnalysisOverall(analysisSteps)
+    : analysisRepairOverall({ analysisRepairs: ready?.summary.analysisRepairs, events: ready?.events });
+  const repairBanner = ready === null || ready.lessonData !== undefined || analysisOverall.state === 'none'
     ? null
     : repairSummaryText(ready.summary) ?? 'Analysis repair in progress';
+  // Lesson jobs: component repairs (natural vs system-made), the one-line summary and the quiet checks list.
+  const componentRepairs = useMemo(() => (ready === null ? [] : buildLessonRepairs(ready)), [ready]);
+  const lessonSummary = useMemo(() => (ready === null || ready.lessonData === undefined ? null : lessonRepairSummary(ready)), [ready]);
+  const checkSections = useMemo(() => (ready === null || ready.lessonData === undefined ? [] : lessonCheckSections(ready)), [ready]);
+  const lessonSources = useMemo((): SourceRef[] => (selectedSource === null ? [] : [{
+    id: selectedSource.id, title: selectedSource.title, locator: selectedSource.locator, license: selectedSource.license,
+    attribution: selectedSource.attribution, sha256: selectedSource.sha256,
+  }]), [selectedSource]);
 
   return (
     <div className="app">
@@ -161,7 +185,9 @@ export function App() {
               <p className="muted">
                 {health !== null && !health.live
                   ? 'Live generation is off on this server and there are no recorded runs for this source. Pick another source, or start the API with live generation enabled.'
-                  : 'Press “Generate with Muse Spark”. Muse reads the source, plans an activity, and deterministic code machine-checks its quotes, numbers, ranges, sources and physics. Explanation wording is AI-generated and needs teacher review.'}
+                  : flow === 'lesson'
+                    ? 'Press “Generate lesson with Muse Spark”. Muse reads the page and shows a quick overview first, then builds a few interactive components from it. Deterministic code checks quotes and numbers quietly in the background. The wording is AI-generated and needs teacher review.'
+                    : 'Press “Generate with Muse Spark”. Muse reads the source, plans an activity, and deterministic code machine-checks its quotes, numbers, ranges, sources and physics. Explanation wording is AI-generated and needs teacher review.'}
               </p>
             </div>
           )}
@@ -175,7 +201,17 @@ export function App() {
               {analysisOverall.state === 'failed' ? ' — Muse’s own analysis did not pass.' : ' — Natural repair (Muse’s own mistake), details under “Analysis repair”.'}
             </p>
           )}
-          {ready !== null && spec !== undefined && ready.summary.status === 'succeeded' && (
+          {ready !== null && lessonSummary !== null && (
+            <p className={`callout ${lessonSummary.tone === 'bad' ? 'callout-error' : lessonSummary.tone === 'fault' ? 'callout-fault' : 'callout-natural'} pad-m repair-banner`} role="note" data-testid="repair-summary">
+              <strong>{lessonSummary.text}</strong>
+              {lessonSummary.tone === 'bad'
+                ? ' — the affected part is not shown unless it passed.'
+                : lessonSummary.tone === 'fault'
+                  ? ' — a demonstration fault planted by the system on purpose, not a model error. Details under “Component repairs”.'
+                  : ' — Natural repair (Muse’s own mistake), details under “Analysis repair” and “Component repairs”.'}
+            </p>
+          )}
+          {ready !== null && lessonMode === 'v1' && spec !== undefined && ready.summary.status === 'succeeded' && (
             <ActivityPanel
               key={spec.id}
               spec={spec}
@@ -184,7 +220,22 @@ export function App() {
               repairBadge={repairBadge}
             />
           )}
-          {ready !== null && (spec === undefined || ready.summary.status !== 'succeeded') && (
+          {ready !== null && stream !== null && lessonMode === 'lesson' && (
+            <LessonView
+              key={ready.summary.jobId}
+              lesson={stream.lesson}
+              specs={ready.lessonData?.kitSpecs ?? {}}
+              analysis={ready.lessonData?.analysis ?? null}
+              sources={lessonSources}
+              cite={{ sourceId: ready.summary.sourceId, located, onCite }}
+              disclosure={disclosureText(selectedSource, jobModel === null ? undefined : madeWithPhrase(jobModel))}
+              premium={spec ?? null}
+              repairBadge={repairBadge}
+              pending={stream.pending}
+              order={stream.order}
+            />
+          )}
+          {ready !== null && ((lessonMode === 'v1' && (spec === undefined || ready.summary.status !== 'succeeded')) || lessonMode === 'working' || lessonMode === 'outcome') && (
             <JobOutcome detail={ready} serverBusy={health === null ? null : generate.busy} />
           )}
         </main>
@@ -209,6 +260,8 @@ export function App() {
             modelChoice={modelChoice}
             onModelChoice={onModelChoice}
             live={health === null ? null : health.live}
+            flow={flow}
+            onFlow={setFlow}
           />
           {ready !== null && jobModel !== null && <AnalysisRepairTimeline steps={analysisSteps} overall={analysisOverall} model={jobModel} />}
           {ready !== null && jobModel !== null && (
@@ -225,6 +278,8 @@ export function App() {
               onView={onViewRevision}
             />
           )}
+          {ready !== null && jobModel !== null && <ComponentRepairTimeline cards={componentRepairs} model={jobModel} />}
+          {ready !== null && ready.lessonData !== undefined && <LessonChecksPanel sections={checkSections} />}
           {report !== null && (
             <ValidationPanel
               report={report}

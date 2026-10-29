@@ -5,6 +5,8 @@ import type { CreatedSource } from './lib/sources.ts';
 import type { AnyActivitySpec } from './lib/timeline.ts';
 import type { AnalysisRepairRecord } from './lib/analysisRepairs.ts';
 import { parseModels } from './lib/models.ts';
+import { createJobBody, normaliseJobDetail, parseJobSummary } from './lib/lessonJob.ts';
+import type { FlowId, LessonData, LessonProgress } from './lib/lessonJob.ts';
 import type { ModelId, ModelOption } from './lib/models.ts';
 import type { ActivityId, DemoFault, FaultRecord, MetaReceipt, RepairRecord, SourceAnalysis, StageEvent, UserSourceInput, ValidationReport } from '../../../packages/contracts/index.ts';
 
@@ -47,6 +49,10 @@ export interface JobSummary {
   provider?: string;
   /** The exact model string sent to the provider (e.g. meta-models/Muse-Spark-Open-816B-A42B). */
   providerModel?: string;
+  /** Stage 6: 'lesson' (overview + components, the default) or 'activity' (the classic single activity). Absent on older jobs. */
+  flow?: FlowId;
+  /** Stage 6 lesson jobs: progress counters. Absent on other jobs. */
+  lesson?: LessonProgress;
 }
 
 /** One stored revision of the activity spec and its validation report (Stage 5). */
@@ -66,6 +72,8 @@ export interface JobDetail {
   revisions?: JobRevision[];
   /** TASK-024b: revision 1 = Muse's first analysis, then each repair. Empty / absent when the analysis was never repaired. */
   analysisRevisions?: JobAnalysisRevision[];
+  /** Stage 6: the lesson fields of a lesson job, parsed defensively (analysisV2, lesson, kitSpecs, component reports and repairs). Absent for other jobs. */
+  lessonData?: LessonData;
 }
 
 export class ApiError extends Error {
@@ -113,14 +121,17 @@ export const api = {
   source: (id: string, signal?: AbortSignal) => request<SourceDoc>(`/api/sources/${encodeURIComponent(id)}`, { signal }),
   /** The picker list. Parsed defensively: anything unexpected becomes an empty list (picker hidden). */
   models: async (signal?: AbortSignal): Promise<ModelOption[]> => parseModels(await request<unknown>('/api/models', { signal })),
-  jobs: (signal?: AbortSignal) => request<JobSummary[]>('/api/jobs', { signal }),
-  job: (id: string, signal?: AbortSignal) => request<JobDetail>(`/api/jobs/${encodeURIComponent(id)}`, { signal }),
+  jobs: async (signal?: AbortSignal): Promise<JobSummary[]> => {
+    const raw = await request<unknown>('/api/jobs', { signal });
+    return Array.isArray(raw) ? raw.map(parseJobSummary) : [];
+  },
+  job: async (id: string, signal?: AbortSignal): Promise<JobDetail> => normaliseJobDetail(await request<unknown>(`/api/jobs/${encodeURIComponent(id)}`, { signal })),
   /** `demoFault` asks the SYSTEM to inject a labelled fault into revision 1 (a demonstration, not a model error). */
-  createJob: (sourceId: string, demoFault?: DemoFault, model?: ModelId) =>
+  createJob: (sourceId: string, demoFault?: DemoFault, model?: ModelId, flow: FlowId = 'lesson') =>
     request<{ jobId: string }>('/api/jobs', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ sourceId, ...(demoFault === undefined ? {} : { demoFault }), ...(model === undefined ? {} : { model }) }),
+      body: JSON.stringify(createJobBody(sourceId, demoFault, model, flow)),
     }),
   /** Store a teacher-pasted text. 201 = created, 200 = the same text was stored before. */
   createSource: (input: UserSourceInput) =>
@@ -147,6 +158,7 @@ const MESSAGES: Record<string, string> = {
   UNSUPPORTED_MEDIA_TYPE: 'The server refused the request format.',
   BAD_REQUEST: 'The server did not understand the request.',
   MODEL_INVALID: 'The server did not recognise that model. Pick one from the list.',
+  FLOW_INVALID: 'The server did not recognise that way of building (lesson or classic activity).',
   INTERNAL: 'The server hit an unexpected error.',
 };
 

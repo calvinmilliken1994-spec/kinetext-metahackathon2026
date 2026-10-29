@@ -5,12 +5,15 @@ import { engineTitle } from '../lib/engines.ts';
 import type { GenerateState } from '../lib/health.ts';
 import { INTERRUPTED_TEXT, isInterrupted, jobStatusLabel, runBadge } from '../lib/jobs.ts';
 import { analysisRepairTags } from '../lib/analysisRepairs.ts';
+import { buildLessonSteps, lessonRunTags, lessonStatusLabel } from '../lib/lessonJob.ts';
+import type { FlowId } from '../lib/lessonJob.ts';
 import { runTags } from '../lib/repairs.ts';
 import { modelRunTag, resolveJobModel } from '../lib/models.ts';
 import type { ModelId, ModelOption } from '../lib/models.ts';
 import { DEMO_FAULT_HELP, DEMO_FAULT_LABEL, demoFaultOptions, FREE_CREDITS_NOTE } from '../lib/sources.ts';
 import type { DemoChoice } from '../lib/sources.ts';
 import { ModelPicker } from './ModelPicker.tsx';
+import { LessonSteps } from './LessonSteps.tsx';
 import { Timeline } from './Timeline.tsx';
 
 export interface PipelinePanelProps {
@@ -37,6 +40,9 @@ export interface PipelinePanelProps {
   onModelChoice: (id: ModelId) => void;
   /** /api/health live flag; null until loaded. */
   live: boolean | null;
+  /** Stage 6: build a lesson (default) or the classic single activity. */
+  flow: FlowId;
+  onFlow: (flow: FlowId) => void;
 }
 
 export function PipelinePanel(p: PipelinePanelProps) {
@@ -54,11 +60,23 @@ export function PipelinePanel(p: PipelinePanelProps) {
       <div className="pad">
         <ModelPicker options={p.models} selected={p.modelChoice} onSelect={p.onModelChoice} live={p.live} locked={generate.busy} />
         <button type="button" className="btn btn-primary btn-wide" onClick={p.onGenerate} disabled={disabled} aria-describedby={why !== null ? 'generate-why' : undefined}>
-          {generate.busy ? '⏳ Generating…' : '✦ Generate with Muse Spark'}
+          {generate.busy ? '⏳ Generating…' : p.flow === 'lesson' ? '✦ Generate lesson with Muse Spark' : '✦ Generate with Muse Spark'}
         </button>
         {why !== null && <p id="generate-why" className="muted small gen-why">{why}</p>}
         {p.generateError !== null && <p className="field-error" role="alert">{p.generateError}</p>}
         {p.teacherSource && <p className="callout callout-warn small gen-why" role="note">{FREE_CREDITS_NOTE}</p>}
+
+        <div className="flow-toggle">
+          <label htmlFor="flow-classic" className="flow-toggle-label">
+            <input id="flow-classic" type="checkbox" checked={p.flow === 'activity'} disabled={generate.busy} aria-describedby="flow-classic-help" onChange={(e) => p.onFlow(e.target.checked ? 'activity' : 'lesson')} />
+            {' '}Advanced: classic single activity
+          </label>
+          <p id="flow-classic-help" className="muted small">
+            {p.flow === 'activity'
+              ? 'The next run builds one simulation or timeline, the way earlier versions did, with no overview and no other components.'
+              : 'Off: the next run builds a lesson, a quick overview of the page first and then a few interactive components.'}
+          </p>
+        </div>
 
         <div className={`demo-fault${p.demoChoice !== 'none' ? ' demo-fault-on' : ''}`}>
           <label htmlFor="demo-fault-select" className="field-label">{DEMO_FAULT_LABEL}</label>
@@ -84,13 +102,13 @@ export function PipelinePanel(p: PipelinePanelProps) {
         <ul className="run-list">
           {p.jobsForSource.map((j) => {
             const badge = runBadge(j, p.liveJobIds);
-            const st = jobStatusLabel(j, p.serverBusy);
+            const st = lessonStatusLabel(j) ?? jobStatusLabel(j, p.serverBusy);
             const interrupted = isInterrupted(j);
             const selected = j.jobId === p.selectedJobId;
             const cost = describeJobCost({ totalCostUSD: j.totalCostUSD, reservedUnknownUSD: j.reservedUnknownUSD, interrupted });
             const engine = engineTitle(j.engine);
             const jobModel = modelRunTag(resolveJobModel(j));
-            const tags = [...analysisRepairTags(j), ...runTags(j)];
+            const tags = [...lessonRunTags(j), ...analysisRepairTags(j), ...runTags(j)];
             return (
               <li key={j.jobId}>
                 <button type="button" className={`run${selected ? ' selected' : ''}`} aria-pressed={selected} onClick={() => p.onSelectJob(j.jobId)}>
@@ -113,11 +131,22 @@ export function PipelinePanel(p: PipelinePanelProps) {
       </div>
 
       <div className="stages">
-        <h3>Stage timeline</h3>
+        <h3>{p.detail?.state === 'ready' && p.detail.data.lessonData !== undefined ? 'Lesson steps' : 'Stage timeline'}</h3>
         {p.detail === null && <p className="muted small pad">Select a run to see its stages.</p>}
         {p.detail?.state === 'loading' && <p className="muted small pad">Loading run…</p>}
         {p.detail?.state === 'error' && <p className="field-error pad" role="alert">{p.detail.message}</p>}
-        {p.detail?.state === 'ready' && (
+        {p.detail?.state === 'ready' && p.detail.data.lessonData !== undefined && (
+          <LessonSteps
+            steps={buildLessonSteps(p.detail.data)}
+            events={p.detail.data.events}
+            jobStatus={p.detail.data.summary.status}
+            totalCostUSD={p.detail.data.summary.totalCostUSD}
+            reservedUnknownUSD={p.detail.data.summary.reservedUnknownUSD}
+            interrupted={isInterrupted(p.detail.data.summary)}
+            jobModel={resolveJobModel(p.detail.data.summary)}
+          />
+        )}
+        {p.detail?.state === 'ready' && p.detail.data.lessonData === undefined && (
           <Timeline
             events={p.detail.data.events}
             jobStatus={p.detail.data.summary.status}

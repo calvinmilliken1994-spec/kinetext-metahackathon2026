@@ -1,11 +1,11 @@
 import { Component, useId } from 'react';
 import type { ErrorInfo, ReactNode } from 'react';
-import type { KitSpec, LessonSpec, SourceAnalysisV2 } from '../../../../packages/contracts/kit.ts';
+import type { KitSpec, LessonSpec, PlanComponentId, SourceAnalysisV2 } from '../../../../packages/contracts/kit.ts';
 import type { SourceRef } from '../../../../packages/contracts/index.ts';
 import type { Badge } from '../lib/repairs.ts';
 import type { AnyActivitySpec } from '../lib/timeline.ts';
-import { declineText, lessonCards } from '../lib/lesson.ts';
-import type { LessonCard } from '../lib/lesson.ts';
+import { declineText, lessonCards, lessonItems } from '../lib/lesson.ts';
+import type { LessonCard, PendingSlot } from '../lib/lesson.ts';
 import { ActivityPanel } from './ActivityPanel.tsx';
 import { BalanceView } from './BalanceView.tsx';
 import { CompareView } from './CompareView.tsx';
@@ -15,6 +15,7 @@ import type { CiteProps } from './Explanations.tsx';
 import { FormulaExplorerView } from './FormulaExplorerView.tsx';
 import { KitCard } from './KitCard.tsx';
 import { OverviewView } from './OverviewView.tsx';
+import { PendingCard } from './PendingCard.tsx';
 import { QuizCardsView } from './QuizCardsView.tsx';
 import { SequenceView } from './SequenceView.tsx';
 import { SortView } from './SortView.tsx';
@@ -33,6 +34,10 @@ export interface LessonViewProps {
   /** The premium activity (simulation or timeline) when the plan includes one; mounted through the existing ActivityPanel. */
   premium?: AnyActivitySpec | null;
   repairBadge?: Badge | null;
+  /** Components that are planned but not ready yet (placeholders). Absent for a finished or recorded lesson. */
+  pending?: readonly PendingSlot[];
+  /** Plan order of the components, so each placeholder and each finished card sits in its place. */
+  order?: readonly PlanComponentId[];
 }
 
 // ---- a render error in one component must not take the lesson down -------------------------------------------------
@@ -107,12 +112,13 @@ function PremiumCard({ card, premium, cite, disclosure, repairBadge }: { card: L
  * One lesson: the overview first, then the components in plan order as a vertical stack. A declined page shows the decline
  * card instead. A component that did not pass shows only its message, never its content.
  */
-export function LessonView({ lesson, specs, analysis, sources, cite, disclosure, premium = null, repairBadge = null }: LessonViewProps) {
+export function LessonView({ lesson, specs, analysis, sources, cite, disclosure, premium = null, repairBadge = null, pending = [], order = [] }: LessonViewProps) {
   const declined = analysis !== null && !analysis.usable;
   if (declined) return <div className="lesson" data-testid="lesson"><DeclineCard analysis={analysis} sources={sources} disclosure={disclosure} /></div>;
 
   const cards = lessonCards(lesson, specs, premium !== null);
-  const empty = lesson.overview === null && cards.length === 0;
+  const items = lessonItems(cards, pending, order);
+  const empty = lesson.overview === null && items.length === 0;
   return (
     <div className="lesson" data-testid="lesson">
       <Disclosure text={disclosure} />
@@ -123,18 +129,22 @@ export function LessonView({ lesson, specs, analysis, sources, cite, disclosure,
           <p className="muted">No overview and no components were stored for this run.</p>
         </div>
       )}
-      {cards.map((card, i) => (
-        <CardBoundary key={card.key}>
-          {card.premium && card.status === 'passed' && premium !== null
-            ? <PremiumCard card={card} premium={premium} cite={cite} disclosure={disclosure} repairBadge={repairBadge} />
-            : (
-              <KitCard index={i + 1} card={card} disclosure={disclosure}>
-                {card.spec !== null && <KitBody spec={card.spec} cite={cite} />}
-              </KitCard>
-            )}
-        </CardBoundary>
+      {items.map((item, i) => (
+        item.kind === 'pending'
+          ? <PendingCard key={`pending:${item.slot.componentId}`} index={i + 1} slot={item.slot} />
+          : (
+            <CardBoundary key={item.card.key}>
+              {item.card.premium && item.card.status === 'passed' && premium !== null
+                ? <PremiumCard card={item.card} premium={premium} cite={cite} disclosure={disclosure} repairBadge={repairBadge} />
+                : (
+                  <KitCard index={i + 1} card={item.card} disclosure={disclosure}>
+                    {item.card.spec !== null && <KitBody spec={item.card.spec} cite={cite} />}
+                  </KitCard>
+                )}
+            </CardBoundary>
+          )
       ))}
-      {(lesson.overview !== null || cards.length > 0) && (
+      {(lesson.overview !== null || items.length > 0) && (
         <p className="muted small lesson-foot">Code checks that every quote appears on the page and that numbers are computed correctly. The wording is AI-written and needs teacher review.</p>
       )}
     </div>

@@ -85,7 +85,10 @@ export function analysisCheckPlain(id: string): string | null {
 
 export type AnalysisChangeKind =
   | 'decision' | 'reason' | 'objective'
-  | 'concept-id' | 'concept-name' | 'concept-added' | 'concept-removed' | 'quote-added' | 'quote-removed';
+  | 'concept-id' | 'concept-name' | 'concept-added' | 'concept-removed' | 'quote-added' | 'quote-removed'
+  /** Stage 6 (analysis v2) kinds, produced by diffAnalysisV2 in lessonJob.ts. */
+  | 'usable' | 'coverage' | 'headline' | 'point-text' | 'point-quote' | 'point-added' | 'point-removed'
+  | 'term-text' | 'term-quote' | 'term-added' | 'term-removed' | 'plan' | 'plan-quote';
 
 export interface AnalysisChange {
   kind: AnalysisChangeKind;
@@ -337,7 +340,6 @@ export interface AnalysisRepairStep {
   outcome: string;
 }
 
-const ref = (id: string): CheckRef => ({ id, name: analysisCheckName(id) ?? id });
 const failedIdsOf = (r: ValidationReport | undefined): string[] => (r?.checks ?? []).filter((c) => !c.passed).map((c) => c.id);
 const plural = (n: number, one: string, many: string): string => `${n} ${n === 1 ? one : many}`;
 
@@ -349,7 +351,14 @@ export function buildAnalysisRepairSteps(input: {
   revisions: readonly AnalysisRevisionInput[];
   analysisRepairs?: readonly AnalysisRepairRecord[] | undefined;
   events?: readonly StageEvent[] | undefined;
+  /** Readable check names (default: the v1 analysis names). The lesson flow passes the Stage 6 names. */
+  nameOf?: ((id: string) => string | null) | undefined;
+  /** What changed between two analyses (default: the v1 diff). The lesson flow passes the v2 diff. */
+  diff?: ((before: unknown, after: unknown) => AnalysisChange[]) | undefined;
 }): AnalysisRepairStep[] {
+  const nameOf = input.nameOf ?? analysisCheckName;
+  const diff = input.diff ?? diffAnalyses;
+  const ref = (id: string): CheckRef => ({ id, name: nameOf(id) ?? id });
   const records = input.analysisRepairs ?? [];
   const events = (input.events ?? []).filter(isAnalysisRepairEvent);
   const byRev = new Map(input.revisions.map((r) => [r.revision, r] as const));
@@ -402,7 +411,7 @@ export function buildAnalysisRepairSteps(input: {
     steps.push({
       attempt: rec?.attempt ?? n - 1, revision: n, repairOf: n - 1, state, label: ANALYSIS_REPAIR_LABEL,
       failedBefore, targeted: targetedIds.map(ref), fixed: fixedIds.map(ref), remaining: remainingIds.map(ref), introduced: introduced.map(ref),
-      changes: hasDiff ? diffAnalyses(prev?.analysis, cur?.analysis) : [], hasDiff, after, actor, costUSD, outcome,
+      changes: hasDiff ? diff(prev?.analysis, cur?.analysis) : [], hasDiff, after, actor, costUSD, outcome,
     });
   }
   return steps;
