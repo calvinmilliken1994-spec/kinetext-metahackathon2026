@@ -25,6 +25,12 @@
 //     cost); titles use the same guard and lend only exactly one plain YYYY, taken from the title
 //     field and the FIRST NON-EMPTY '#' heading line. A sentence-final period is never part of an
 //     era spelling (a quote ending at 'BCE' of 'March 3, 500 BCE.' grounds).
+//   ROUND 4 (S5B-22/23/24, narrow): 'until'/'till' is ALWAYS a bound (the negated-until exception
+//     is removed); every numeric part of a date is a WHOLE token (no letter/digit/apostrophe
+//     attached; only an ordinal day suffix or an attached era suffix is allowed) and a poisoned
+//     token grounds nothing, lends no title year and is never retried by its interior prefix; a
+//     prefix era and a suffix era on one year/endpoint that disagree make the expression
+//     ungroundable (mixed eras on DIFFERENT range endpoints stay supported).
 //
 // A timeline has no formula, so the SOURCE TEXT is the deterministic oracle:
 //   date-grounded   every event's full stated date (year, and month/day where stated) must be
@@ -261,24 +267,28 @@ const MONTH_ALT = `(?:${MONTH_SOURCES.join('|')})`;
 /** A month name with word boundaries and an optional trailing period ("Sept.", "dec"). */
 const MONTH_PAT = `\\b${MONTH_ALT}\\b\\.?`;
 /** A day number with an optional ordinal suffix and digit boundaries ("4", "04", "19th"). */
-const DAY_PAT = '(?<![0-9])(?:0?[1-9]|[12][0-9]|3[01])(?:st|nd|rd|th)?(?![0-9])';
+const DAY_PAT =
+  "(?<![A-Za-z0-9'\u2019])(?:0?[1-9]|[12][0-9]|3[01])(?:(?:st|nd|rd|th)(?![A-Za-z0-9'\u2019])|(?![A-Za-z0-9'\u2019]))";
 /**
- * A standalone 1–4 digit year core (round-3 allow-list): digit boundaries on both sides, never a
- * decade form ("1770s" — S5B-13), never an ordinal ("18th" — S5B-20: a century ordinal is never a
- * literal year) and never apostrophe-clipped ("'76", "1776'" — round-3 decision 3).
+ * Round 4 (S5B-23): a numeric date token must be WHOLE — no letter, digit or apostrophe attached
+ * on either side. The only attachment allowed is an era suffix that is itself a complete era
+ * spelling ('500BCE'); so '1888ish', '1889xyz', 'xyz1889', '18thousand', '1770s', '18th' and
+ * "'76" / "1776'" are poisoned: they match nothing, and because every digit-run boundary is
+ * anchored no interior numeric prefix ('188' of '1888ish') is ever retried.
  */
-const YEAR_CORE =
-  "(?<![0-9'\u2019])[0-9]{1,4}(?![0-9])(?!s(?![a-z]))(?!(?:st|nd|rd|th)(?![a-z]))(?!['\u2019])";
+const numericToken = (digits: string): string =>
+  `(?<![A-Za-z0-9'\u2019])[0-9]${digits}(?![0-9'\u2019])(?:(?=${ERA_SUF})|(?![A-Za-z]))`;
+/** A standalone 1–4 digit year core (never a decade form, an ordinal, or an attached-letter token). */
+const YEAR_CORE = numericToken('{1,4}');
 /** A 3–4 digit year core (never a day number) — used where no day precedes/follows. */
-const YEAR34_CORE =
-  "(?<![0-9'\u2019])[0-9]{3,4}(?![0-9])(?!s(?![a-z]))(?!(?:st|nd|rd|th)(?![a-z]))(?!['\u2019])";
+const YEAR34_CORE = numericToken('{3,4}');
 /** The year slot of a Month-Day[-Year] / Day-Month[-Year] expression: any standalone year, era-suffixed allowed. */
 const YEAR_MDY = `(?:${YEAR_CORE}${ERA_SUF}?)`;
 /**
  * The year slot of a Month[-of] Year expression: 3–4 digits, or any digits WITH an era suffix.
  * A bare 1–2 digit number after a month name is a DAY ("April 14"), never a year.
  */
-const YEAR_MY = `(?:(?<![0-9'\u2019])[0-9]{1,4}(?![0-9])${ERA_SUF}|${YEAR34_CORE})`;
+const YEAR_MY = `(?:(?<![A-Za-z0-9'\u2019])[0-9]{1,4}(?![0-9'\u2019])${ERA_SUF}|${YEAR34_CORE})`;
 
 /**
  * S5B-01 (frozen decision 3) + the round-3 lead decision (allow-list of supported EXACT forms):
@@ -479,19 +489,15 @@ function isNumberToken(token: string): boolean {
 }
 
 /**
- * True when the "until"/"till" directly before `pos` is negated within its own clause: one of the
- * (up to) four words before it is "not"/"never" or ends in "n't". Only the clause containing
- * "until" counts (the scan stops at , ; : . ! ?), so a distant or earlier-sentence "not" never
- * applies. Un-negated "until" (deferred/delayed until, from X until Y) stays a temporal bound.
+ * Round 4 (S5B-23): true when the digit run text[start, end) has a letter or apostrophe attached on
+ * either side — except an era suffix directly after it ('500BCE'), which is part of the date.
  */
-function negatedUntil(text: string, pos: number): boolean {
-  const slice = text.slice(Math.max(0, pos - CONTEXT_WINDOW_CHARS), pos);
-  const m = /\b(?:until|till)\W*$/i.exec(slice);
-  if (m === null) return false;
-  const head = slice.slice(0, m.index);
-  const clauseStart = Math.max(...[',', ';', ':', '.', '!', '?'].map((c) => head.lastIndexOf(c)));
-  const words = head.slice(clauseStart + 1).split(/\s+/).filter((w) => w !== '').slice(-4);
-  return words.some((w) => /^(?:not|never)$/i.test(w.replace(/[^A-Za-z']/g, '')) || /n['\u2019]t$/i.test(w));
+function poisonedNumberRun(text: string, start: number, end: number): boolean {
+  if (start > 0 && /[A-Za-z'’]/.test(text[start - 1] as string)) return true;
+  const rest = text.slice(end);
+  if (/^['’]/.test(rest)) return true;
+  if (/^[A-Za-z]/.test(rest)) return !new RegExp(`^${ERA_SUF}`, 'i').test(rest);
+  return false;
 }
 
 /**
@@ -499,7 +505,7 @@ function negatedUntil(text: string, pos: number): boolean {
  * not recognised as a supported exact form in clean context does not ground (fail closed); false
  * rejections of legitimate dates are the accepted safe cost.
  */
-function contextRejection(text: string, start: number, end: number): string | null {
+function contextRejection(text: string, start: number, end: number, yearless = false): string | null {
   // Markup splitting the expression or directly touching it.
   for (let i = start; i < end; i++) {
     if (MARKUP_CHARS.has(text[i] as string)) return `markup splits the expression (${text[i]})`;
@@ -509,9 +515,7 @@ function contextRejection(text: string, start: number, end: number): string | nu
   const before = tokensBefore(text, start);
   for (let k = 0; k < before.length; k++) {
     const t = before[k] as string;
-    // Lead decision (round-3 STOP items): a NEGATED "until" directly before the date states when
-    // the event happened ("was not approved until September of 1776"), so it is not a bound.
-    if ((t === 'until' || t === 'till') && k === before.length - 1 && negatedUntil(text, start)) continue;
+    // Round 4 (S5B-22): "until"/"till" is ALWAYS a temporal bound — a negation nearby never lifts it.
     if (PRECEDING_DISQUALIFIERS.has(t)) return `the preceding word "${t}" is an approximation qualifier or temporal bound`;
   }
   if (before.length === 2 && before[0] === 'the' && ORDINAL_TOKEN_RE.test(before[1] as string)) {
@@ -523,6 +527,18 @@ function contextRejection(text: string, start: number, end: number): string | nu
     (isNumberToken(before[0] as string) || ERA_TOKENS.has(before[0] as string))
   ) {
     return `the preceding words "${before[0]} ${before[1]}" continue an unsupported range expression`;
+  }
+  // Round 4 (S5B-23): a YEAR-LESS expression (a month/day that may borrow the title year) must not
+  // sit directly before a poisoned numeric token ('March 3, 1889xyz', 'March 3ish'): the token is
+  // the year/day the text really states, and it is not a whole number.
+  if (yearless) {
+    const follower = /^[\s,]*(?:of\s+)?[0-9]+/.exec(text.slice(end, end + CONTEXT_WINDOW_CHARS));
+    if (follower !== null) {
+      const runStart = end + follower[0].length - /[0-9]+$/.exec(follower[0])![0].length;
+      if (poisonedNumberRun(text, runStart, end + follower[0].length)) {
+        return 'the following number is not a whole token (letters or an apostrophe are attached to it)';
+      }
+    }
   }
   const after = tokensAfter(text, end);
   for (const t of after) {
@@ -589,7 +605,6 @@ export function parseDateExpressions(unit: string): DateExpression[] {
     lastEnd = end;
     // Round-3 clean-context guard, computed against the parsed string (unit-local here; the raw
     // source layer overrides it in buildSourceUnitIndex).
-    const contextRejected = contextRejection(masked, start, end);
     const approxFor = (year: number | null, digits: number, bce: boolean, month: number | null, day: number | null): string | null => {
       if (qual === null) return null;
       const dateLike = month !== null || day !== null || (year !== null && (digits >= 3 || bce));
@@ -618,7 +633,7 @@ export function parseDateExpressions(unit: string): DateExpression[] {
         eraAmbiguous,
         form,
         eraMarked,
-        contextRejected,
+        contextRejected: contextRejection(masked, start, end, year === null),
       });
     };
     if (g.mdyM !== undefined) {
@@ -639,6 +654,11 @@ export function parseDateExpressions(unit: string): DateExpression[] {
       const aSuf = g.rngASuf;
       const bPre = g.rngBPre;
       const bSuf = g.rngBSuf;
+      // Round 4 (S5B-24): a prefix era and a suffix era on ONE endpoint that disagree ('AD 500 BCE')
+      // make the whole expression ungroundable — no endpoint is exposed (different endpoints may
+      // still carry different eras: '500 BC–400 AD').
+      const endpointConflict = (pre: string | undefined, suf: string | undefined): boolean =>
+        pre !== undefined && suf !== undefined && prefixIsNegative(pre) !== (eraOfText(suf) === 'neg');
       const aMarked = aPre !== undefined || aSuf !== undefined;
       const bMarked = bPre !== undefined || bSuf !== undefined;
       const aNeg = aPre !== undefined ? prefixIsNegative(aPre) : aSuf !== undefined && eraOfText(aSuf) === 'neg';
@@ -647,7 +667,9 @@ export function parseDateExpressions(unit: string): DateExpression[] {
         const value = Number(part);
         pushOne('range', neg ? -value : value, part.length, neg, eraMarked, null, null);
       };
-      if (!aMarked && !bMarked) {
+      if (endpointConflict(aPre, aSuf) || endpointConflict(bPre, bSuf)) {
+        pushOne('range', null, 0, false, true, null, null, true);
+      } else if (!aMarked && !bMarked) {
         // No era anywhere: only 3–4 digit endpoints are years ('1775–1783'). An abbreviated right
         // endpoint ('1775–83') is NEVER expanded; a short left endpoint grounds nothing.
         if (g.rngA.length >= 3) pushEndpoint(g.rngA, false, false);
@@ -681,9 +703,15 @@ export function parseDateExpressions(unit: string): DateExpression[] {
       const value = Number(digitsText);
       const sufEra = g.ySuf !== undefined ? eraOfText(g.ySuf) : null;
       const preEra = g.yPre !== undefined ? (prefixIsNegative(g.yPre) ? 'neg' : 'pos') : null;
-      const era = sufEra ?? preEra;
-      const neg = era === 'neg';
-      pushOne('year', neg ? -value : value, digitsText.length, neg, era !== null, null, null);
+      if (sufEra !== null && preEra !== null && sufEra !== preEra) {
+        // Round 4 (S5B-24): a prefix era and a suffix era that disagree ('AD 500 BCE', 'BCE 500 AD')
+        // make the whole expression ungroundable (it still counts as year-LIKE for the title rule).
+        pushOne('year', null, digitsText.length, false, true, null, null, true);
+      } else {
+        const era = sufEra ?? preEra;
+        const neg = era === 'neg';
+        pushOne('year', neg ? -value : value, digitsText.length, neg, era !== null, null, null);
+      }
     } else if (g.mM !== undefined) {
       pushOne('month', null, 0, false, false, monthNumberOf(g.mM), null);
     }
@@ -788,6 +816,11 @@ const TITLE_DECADE_FORM = /[0-9]{3,4}s(?![0-9a-z])/i;
 const TITLE_YEAR_RANGE = /(?<![0-9])[0-9]{3,4}\s*[-\u2013\u2014/]\s*[0-9]{2,4}(?![0-9])/;
 
 function titleCandidateRejected(candidate: string): boolean {
+  // Round 4 (S5B-23): a 3–4 digit run with letters/apostrophes attached ('1889xyz', "'1889") is a
+  // poisoned year token — the title lends nothing (it also never counts as 'exactly one' year).
+  for (const m of candidate.matchAll(/(?<![0-9])[0-9]{3,4}(?![0-9])/g)) {
+    if (poisonedNumberRun(candidate, m.index ?? 0, (m.index ?? 0) + m[0].length)) return true;
+  }
   return (
     TITLE_APPROX_MARKER.test(candidate) ||
     TITLE_DECADE_FORM.test(candidate) ||
@@ -965,7 +998,7 @@ export function buildSourceUnitIndex(raw: string): SourceUnitIndex {
       exprs: parseDateExpressions(slice).map(e => {
         const rawStart = s.start + e.start;
         const rawEnd = s.start + e.end;
-        return { ...e, rawStart, rawEnd, contextRejected: contextRejection(raw, rawStart, rawEnd) };
+        return { ...e, rawStart, rawEnd, contextRejected: contextRejection(raw, rawStart, rawEnd, e.year === null) };
       }),
     };
   });

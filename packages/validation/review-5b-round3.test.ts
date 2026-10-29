@@ -246,8 +246,8 @@ test('S5B-19: the two-word window is exact — a bound farther away never contam
   assert.equal(quoteGroundsDate('They arrived by train on March 3, 1889.', D(1889, 3, 3), null), true);
   // 'until' as a bound: rejected (fail closed) ...
   assert.equal(quoteGroundsDate('The plan was delayed until September of 1776.', D(1776, 9), null), false);
-  // ... except a NEGATED 'until', which states when it happened (lead decision; negated-until.test.ts).
-  assert.equal(quoteGroundsDate('The plan was not approved until September of 1776.', D(1776, 9), null), true);
+  // ... and a NEGATED 'until' is a bound too (round-4 S5B-22 removed the lead's round-3 exception).
+  assert.equal(quoteGroundsDate('The plan was not approved until September of 1776.', D(1776, 9), null), false);
   // 'to' before an era year is not a bound ('dates to 500 B.C.' stays grounded).
   assert.equal(quoteGroundsDate('A stone dates to 500 B.C. in the valley records.', D(-500), null), true);
   // A qualifier separated by a newline can never be left behind (fail closed across the unit edge).
