@@ -32,10 +32,21 @@ class ErrorBoundary extends Component<{ children: ReactNode }, BoundaryState> {
 
 const root = document.getElementById('root');
 if (root === null) throw new Error('#root missing');
-createRoot(root).render(
-  <StrictMode>
-    <ErrorBoundary>
-      <App />
-    </ErrorBoundary>
-  </StrictMode>,
-);
+
+// The lesson demo harness (?lesson-demo=1) exists only in development: the import.meta.env.DEV guard is replaced by
+// `false` in a production build, so the fixtures and the harness are not bundled.
+async function pickPage(): Promise<ReactNode> {
+  if (import.meta.env.DEV && new URLSearchParams(window.location.search).has('lesson-demo')) {
+    const { LessonDemo } = await import('./components/LessonDemo.tsx');
+    return <LessonDemo />;
+  }
+  return <App />;
+}
+
+void pickPage().then((page) => {
+  createRoot(root).render(
+    <StrictMode>
+      <ErrorBoundary>{page}</ErrorBoundary>
+    </StrictMode>,
+  );
+});

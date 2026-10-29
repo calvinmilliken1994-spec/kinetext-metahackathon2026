@@ -2,7 +2,7 @@
 
 import type { Evidence, SourceAnalysis } from '../../../../packages/contracts/index.ts';
 
-export type QuoteKind = 'explanation' | 'concept' | 'event';
+export type QuoteKind = 'explanation' | 'concept' | 'event' | 'lesson';
 
 export interface QuoteRef {
   /** Unique key: `${kind}:${ownerId}:${index}` */
@@ -15,7 +15,7 @@ export interface QuoteRef {
 
 /** Explanation and timeline-event quotes are the activity's evidence; analysis concepts are Muse's own finds. */
 export function isEvidenceKey(key: string): boolean {
-  return key.startsWith('explanation:') || key.startsWith('event:');
+  return key.startsWith('explanation:') || key.startsWith('event:') || key.startsWith('lesson:');
 }
 
 export function quoteKey(kind: QuoteKind, ownerId: string, index: number): string {

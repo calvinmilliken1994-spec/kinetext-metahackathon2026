@@ -50,3 +50,29 @@ src/lib/          pure logic + node:test tests: highlight, evidence, predictions
 ```
 
 Publishing is intentionally disabled (“Teacher approval & publishing arrive in Stage 6”).
+
+## Stage 6 lesson UI (S6-U)
+
+`LessonView` shows one lesson: the **overview first** (headline, numbered key points, key terms, each with its quote), then the
+components **in plan order** as a vertical stack. Each component sits in a `KitCard` with its title, the single `Disclosure`
+“AI-written” badge, a quiet status (✓ checked / ✓ checked, some items left out / ✗ could not be verified / not built) and its
+quotes on reveal. A component that did not pass shows only its plain message, never its content. A declined page shows the
+decline card (coverage, reason, attribution). A premium `ActivitySpec` mounts through the existing `ActivityPanel`.
+
+Views: `QuizCardsView`, `SequenceView` (shared `OrderBoard`, also used by the timeline `OrderActivity`), `SortView`
+(keys 1-4 or click), `ConceptMapView` (SVG, read-only plus an optional hide-one-word mode), `CompareView` (predict a hidden
+cell, or reveal-only), `FormulaExplorerView` (sliders, live result, SVG graph of the result against the x variable, value table,
+predict-then-reveal), `BalanceView` (coefficient steppers, live atom table, check, reveal).
+
+Pure logic (all in `src/lib`, tested with `node:test`): `seeded`, `quiz`, `sequence`, `sort`, `conceptMap` (layout),
+`compare`, `formula` (safe evaluator for the frozen grammar, no eval/Function), `explorer` (curve sampling, axes, graph
+geometry, case grading), `balance` (formula parser, atom counter, exact solver), `lesson` (cards, messages, quote keys).
+
+Demo harness (development only): `npm --prefix apps/web run dev`, then open `/?lesson-demo=1` (optional `&lesson=drag|gallery|partial|declined|premium`).
+It renders hand-written fixtures from `tests/fixtures/stage6` and is marked as a demo; it is behind `import.meta.env.DEV`, so a
+production build contains neither the harness nor the fixtures.
+
+What the views read from the stored specs (nothing else): see `packages/contracts/kit.ts`. Outputs, curve samples and the balance
+solution are computed in the browser from the spec's inputs; none are stored. `LessonView` props: `lesson` (`LessonSpec`), `specs`
+(stored kit specs by spec id), `analysis` (`SourceAnalysisV2`, drives the decline card), `sources` (`SourceRef[]`), `cite`, `disclosure`,
+optional `premium` spec. `collectLessonQuotes()` returns the quotes to highlight in the source panel (kind `lesson`).

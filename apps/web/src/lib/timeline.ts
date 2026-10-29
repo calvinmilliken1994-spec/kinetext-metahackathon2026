@@ -86,7 +86,7 @@ export function hasUnorderedPair(events: readonly DateLike[]): boolean {
 
 // ---- seeded shuffle -------------------------------------------------------------------------------------
 
-function hash32(s: string): number {
+export function hash32(s: string): number {
   let h = 0x811c9dc5;
   for (let i = 0; i < s.length; i++) {
     h ^= s.charCodeAt(i);
@@ -95,7 +95,7 @@ function hash32(s: string): number {
   return h >>> 0;
 }
 
-function mulberry32(seed: number): () => number {
+export function mulberry32(seed: number): () => number {
   let a = seed >>> 0;
   return () => {
     a = (a + 0x6d2b79f5) >>> 0;
