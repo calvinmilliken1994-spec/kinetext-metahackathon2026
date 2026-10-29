@@ -316,6 +316,19 @@ test('S5B-14: results lines — known costs count, null/unknown costs are charge
   assert.deepEqual([...r.blockedSourceIds].sort(), ['src-b', 'src-c']);
 });
 
+test('round-3 hardening: a negative recorded cost never offsets spend; it is an unknown-cost liability', () => {
+  const r = assess({
+    resultsLines: [
+      { sourceId: 'src-a', jobId: 'j-a', totalCostUSD: 1.7 },
+      { sourceId: 'src-neg', jobId: 'j-neg', totalCostUSD: -1 },
+    ],
+  });
+  assert.ok(Math.abs(r.spentUsd - 1.7) < 1e-12, 'the negative amount is not subtracted');
+  assert.deepEqual(r.liabilities.map(l => l.kind), ['result-unknown-cost']);
+  assert.ok(Math.abs(r.reservedUsd - ADM) < 1e-9);
+  assert.deepEqual([...r.blockedSourceIds], ['src-neg']);
+});
+
 test('S5B-14: known settled journal costs count toward spent even when the source left the manifest; duplicates count once', () => {
   const journal: ParsedJournal = {
     ...emptyJournal(),

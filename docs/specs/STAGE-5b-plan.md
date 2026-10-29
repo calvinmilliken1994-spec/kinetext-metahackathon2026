@@ -170,3 +170,18 @@ All ten findings accepted. Fix waves (serial, one owner per path):
 3. **Dates are expressions, not token bags (S5B-01).** A claimed date is grounded only by one connected date expression in a unit: `Month D[, ]YYYY`, `D Month YYYY`, `Month YYYY`, `Month D` (+ title-year rule), `YYYY`, BCE forms, range endpoints — with day only as part of a month-day expression (ordinal suffix allowed). Numbers outside a date expression never count.
 4. **Context comes from the source, not the quote (S5B-02).** The quote is located in the source text; approximation qualifiers are checked in the full containing source sentence/heading; a quote that occurs more than once with different qualifier contexts fails closed; the title-year rule rejects titles with approximation/range/ambiguity markers.
 5. **Evidence corrections (S5B-09)** are additive notes beside the original files; pre-registered scores stay unchanged; wording becomes "passed the implemented deterministic checks".
+
+## Stage 5b review round 3 — lead decision: fail-closed date grounding (2026-10-29)
+
+Rounds 2–3 kept finding unlisted wordings (era prefixes, `to`-ranges, centuries, qualifiers behind punctuation, `by 1776`). Enumerating bad forms cannot converge, so grounding becomes **allow-list + fail-closed context**:
+
+1. **One authority (S5B-17).** With sources, the only per-event grounding result is the source-span validator's. Repair unlocks come only from the recomputed revision-1 check/path map; the quote-only `quoteGroundsDate` fallback is removed from authorization. Without sources, date/evidence/pair changes fail closed. Caller findings may only narrow (exact check id + path) or are dropped from the API.
+2. **Exact forms only.** A source expression grounds a date only if it is one of the supported exact forms (`Month D, YYYY`, `Month Dth, YYYY`, `D Month YYYY`, `the Dth of Month YYYY`, `Month YYYY`, `Month D` + title year, plain `YYYY`, `YYYY BC/BCE/B.C./B.C.E.` and `AD/A.D./CE/C.E. YYYY` / `YYYY AD/CE`, and `YYYY–YYYY` ranges with an explicit era rule) **and** its context is clean.
+3. **Clean-context guard (fail closed).** Within the same source unit, ignoring punctuation/markup/whitespace between words:
+   - **preceding two words** must not contain a qualifier or bound (`circa`, `c`, `ca`, `approx*`, `about`, `around`, `roughly`, `nearly`, `almost`, `some`, `sometime`, `probably`, `possibly`, `perhaps`, `likely`, `estimated`, `est`, `before`, `after`, `by`, `until`, `till`, `than`, `since`, `prior`, `early`, `mid`, `middle`, `late`, `between`, `from`, `the` + ordinal);
+   - **following two words** must not contain an era token not consumed by the expression, `century`/`centuries`/`millennium`, `or`, `so`, `?`, a range connector (`–`, `-`, `/`, `to`, `until`, `through`, `and`) followed by a number;
+   - the year token must not carry an ordinal/word suffix (`18th`, `1770s`) or a leading/trailing apostrophe;
+   - markup characters (`*`, `_`, `` ` ``, `[`, `]`, `<`, `>`) touching the expression or splitting it → not grounded.
+   Anything not recognised as a supported exact form in clean context **does not ground** (the event must be re-grounded or dropped; a decline is acceptable). False rejections of legitimate dates are accepted as the safe cost.
+4. **Titles** use the same guard: the title year is lent only if the title (and the first non-empty heading) contains exactly one plain `YYYY` in clean context.
+5. Sentence punctuation is not part of an era spelling (`500 BCE.` grounds; hardening item).

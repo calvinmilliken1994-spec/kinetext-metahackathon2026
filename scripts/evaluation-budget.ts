@@ -325,6 +325,14 @@ function finiteOrNull(v: unknown): number | null {
   return typeof v === 'number' && Number.isFinite(v) ? v : null;
 }
 
+/** A spend amount the admission rule may count: finite and non-negative. A negative
+ * (hand-edited) amount could offset real spend, so it is treated as unknown — charged
+ * a full reservation — never subtracted (round-3 review hardening). */
+function knownCostOrNull(v: unknown): number | null {
+  const n = finiteOrNull(v);
+  return n !== null && n >= 0 ? n : null;
+}
+
 /**
  * Build a results.jsonl record for a RECOVERED journaled job, marked `recovered: true`
  * (S5B-07). Costs stay unknown (null) when the summary carries no finite amount —
@@ -466,7 +474,7 @@ export function assessLiabilities(args: AssessLiabilitiesArgs): AssessLiabilitie
     const sourceId = typeof line.sourceId === 'string' ? line.sourceId : '';
     const jobId = typeof line.jobId === 'string' && line.jobId !== '' ? line.jobId : null;
     if (jobId !== null) recordedJobIds.add(jobId);
-    const cost = finiteOrNull(line.totalCostUSD);
+    const cost = knownCostOrNull(line.totalCostUSD);
     if (cost !== null) {
       spentUsd += cost;
       continue;
@@ -480,7 +488,7 @@ export function assessLiabilities(args: AssessLiabilitiesArgs): AssessLiabilitie
   const recoverable: AssessLiabilitiesResult['recoverable'] = [];
   const unrecordable: AssessLiabilitiesResult['unrecordable'] = [];
   for (const { entry, summary } of recon.recovered) {
-    const cost = finiteOrNull(summary.totalCostUSD);
+    const cost = knownCostOrNull(summary.totalCostUSD);
     const inManifest = args.manifestSourceIds.has(entry.sourceId);
     if (cost === null) {
       // Settled but the money is unknown: record the outcome, hold the reservation, block the page.
