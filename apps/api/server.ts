@@ -6,15 +6,21 @@
 // Nothing is logged here (the server must never echo request bodies).
 //
 // Routes:
-//   GET  /api/health      → {ok, live, busy, models} — models is a per-ModelChoice availability map (booleans only)
+//   GET  /api/health      → {ok, live, busy, running, maxConcurrentJobs, models} — models is a
+//                           per-ModelChoice availability map (booleans only); running is the
+//                           in-process live-job count and busy stays running >= limit (R-10
+//                           compatibility)
 //   GET  /api/models      → [{id, label, provider, available}] for the web model picker (OW-2)
 //   GET  /api/sources     → metadata list (no text), library + teacher ('user') sources with kind
 //   POST /api/sources     → store a teacher-pasted source (JSON ≤ 64 KB); 201 created / 200 existing
 //   GET  /api/sources/:id → metadata + hash-checked text (library and user sources)
 //   GET  /api/jobs        → newest-first job summaries
 //   GET  /api/jobs/:id    → {summary, events, revisions, analysis?, spec?, report?}
-//   POST /api/jobs        → 202 {jobId}; body {sourceId, demoFault?, model?, flow?}; one live
-//                           job at a time (409 while running). model (OW-2) is optional and
+//   POST /api/jobs        → 202 {jobId}; body {sourceId, demoFault?, model?, flow?}; at most
+//                           `maxConcurrentJobs` live jobs at a time (409 JOB_RUNNING while
+//                           that many are running — the pre-concurrency single-job gate is
+//                           the option default 1; the product config default is 3).
+//                           model (OW-2) is optional and
 //                           defaults to 'muse-spark-1.3'; anything outside the two ModelChoice
 //                           values is a 400 MODEL_INVALID. flow (S6-W) defaults to 'lesson'
 //                           (the Stage 6 pipeline); 'activity' runs the unchanged v1 pipeline;
@@ -46,6 +52,7 @@ import type { DemoFault } from '../../packages/contracts/index.ts';
 import { isModelChoice } from '../../packages/meta/pricing.ts';
 import type { ModelChoice } from '../../packages/meta/pricing.ts';
 import { DEFAULT_MODEL, MODEL_INFO } from './model-clients.ts';
+import { MAX_CONCURRENT_JOBS_BOUND } from './resource-limits.ts';
 import { listJobs, readJob } from '../../workers/generation/jobs.ts';
 import type { JobFlow, JobSummary } from '../../workers/generation/jobs.ts';
 
@@ -63,6 +70,17 @@ export interface ApiOptions {
     | null;
   /** Extra allowed Host values (and http://<value> Origins); replaces the Vite defaults. */
   allowedHosts?: string[];
+  /**
+   * Concurrency (BUG-006 wave, part B): how many live jobs this server runs at once.
+   * Must be an integer in [1, MAX_CONCURRENT_JOBS_BOUND] (fail closed at construction);
+   * the OPTION default is 1 — the pre-concurrency single-job gate every direct embedder
+   * (e2e harness) has always had. The product default is 3, wired by main.ts from the
+   * validated config/resource-limits.json `maxConcurrentJobs` field. Each job keeps its
+   * own abort/wall-time budget and its own cost accumulator (workers/generation/jobs.ts);
+   * the shared spending ledger serialises its synchronous reserve/reconcile writes and
+   * holds every outstanding reservation against the stage cap.
+   */
+  maxConcurrentJobs?: number;
   /**
    * OW-2: which ModelChoice values this server can actually run right now —
    * reported as BOOLEANS ONLY by GET /api/health and GET /api/models (never why,
@@ -158,8 +176,21 @@ function readBodyLimited(req: IncomingMessage, limit: number): Promise<string> {
 }
 
 export function createApiServer(opts: ApiOptions): Server {
-  /** Guards runaway spend: at most one live job between start and settlement. */
-  let inFlight: Promise<JobSummary> | null = null;
+  /**
+   * Guards runaway spend: at most `maxConcurrentJobs` live jobs between start and
+   * settlement (concurrency, part B). The OPTION default is 1 — the pre-concurrency
+   * single-job gate; main.ts wires the validated config value (product default 3).
+   * Fail closed on an invalid option value.
+   */
+  const maxConcurrentJobs: number = opts.maxConcurrentJobs === undefined ? 1 : opts.maxConcurrentJobs;
+  if (
+    !Number.isInteger(maxConcurrentJobs) ||
+    (maxConcurrentJobs as number) < 1 ||
+    (maxConcurrentJobs as number) > MAX_CONCURRENT_JOBS_BOUND
+  ) {
+    throw new Error('MAX_CONCURRENT_JOBS_INVALID');
+  }
+  const inFlight: Set<Promise<JobSummary>> = new Set();
   const allowedHosts: readonly string[] = opts.allowedHosts ?? DEFAULT_ALLOWED_HOSTS;
 
   /** Stage 5: teacher-source store (defaults to `<storageDir>/user-sources`). */
@@ -219,12 +250,15 @@ export function createApiServer(opts: ApiOptions): Server {
       if (method !== 'GET') {
         return sendError(res, 405, 'METHOD_NOT_ALLOWED');
       }
-      // busy (R-10): an in-process job is running right now.
+      // busy (R-10): kept for compatibility as running >= maxConcurrentJobs.
+      // running / maxConcurrentJobs (concurrency, part B): the live-job count and its limit.
       // models (OW-2): which ModelChoice values are available — booleans only.
       return sendJson(res, 200, {
         ok: true,
         live: opts.startJob !== null,
-        busy: inFlight !== null,
+        busy: inFlight.size >= maxConcurrentJobs,
+        running: inFlight.size,
+        maxConcurrentJobs,
         models: modelAvailability(),
       });
     }
@@ -530,7 +564,9 @@ export function createApiServer(opts: ApiOptions): Server {
     if (!knownIds.includes(sourceId)) {
       return sendError(res, 404, 'SOURCE_NOT_FOUND');
     }
-    if (inFlight !== null) {
+    if (inFlight.size >= maxConcurrentJobs) {
+      // Concurrency (part B): the busy 409 only fires when the configured number of jobs
+      // is already running — same error code/shape as the pre-concurrency single-job gate.
       return sendError(res, 409, 'JOB_RUNNING');
     }
     let started: { jobId: string; done: Promise<JobSummary> };
@@ -547,11 +583,9 @@ export function createApiServer(opts: ApiOptions): Server {
       return sendError(res, 500, 'JOB_START_FAILED');
     }
     const donePromise = started.done;
-    inFlight = donePromise;
+    inFlight.add(donePromise);
     const clear = (): void => {
-      if (inFlight === donePromise) {
-        inFlight = null;
-      }
+      inFlight.delete(donePromise);
     };
     void donePromise.then(clear, clear);
     return sendJson(res, 202, { jobId: started.jobId });

@@ -88,7 +88,13 @@ import type {
 } from '../../packages/contracts/kit.ts';
 import { sha256 } from '../../packages/sources/index.ts';
 import { applyLessonDemoFault, lessonFaultTarget, lessonIntendedChecks } from './demo-faults.ts';
-import { checksPassed, failedCheckIds, generatedOutputReceipt, receiptFields } from './job-support.ts';
+import {
+  checksPassed,
+  failedCheckIds,
+  generatedOutputReceipt,
+  receiptFields,
+  reservedUnknownOf,
+} from './job-support.ts';
 import type { JobStatus, JobSummary } from './jobs.ts';
 
 /* ------------------------------------------------------------------ */
@@ -161,6 +167,12 @@ export interface LessonContext {
   summary: JobSummary;
   emit(stage: LessonStage, status: StageStatus, extra?: LessonEventExtra): void;
   accountReceipt(receipt: MetaReceipt): void;
+  /**
+   * BUG-006: the job's ONE cost accumulator for amounts that arrive without a full receipt
+   * (a MetaError's settled chargedUSD/reservedUnknownUSD). Same discipline as accountReceipt:
+   * the summary is updated BEFORE any fallible event/artifact write.
+   */
+  account(chargedUSD: number, unknownUSD: number): void;
   writeJson(fileName: string, data: unknown): void;
   writeJob(): void;
   fail(stage: LessonStage, code: string, extra?: LessonEventExtra): JobSummary;
@@ -320,7 +332,151 @@ interface FatalError {
   extra?: LessonEventExtra;
 }
 
-const OUTPUT_INVALID_REASON = 'The model returned output that does not match the required structure.';
+/** Plain-sentence entry reason for a component whose OUTPUT failed its structure gate. */
+export const OUTPUT_INVALID_REASON = 'The model returned output that does not match the required structure.';
+/**
+ * BUG-006 plain-sentence entry reason for a component whose generation or repair call ended
+ * OUTPUT_TRUNCATED (the provider ran out of output room — e.g. the 24k component cap went
+ * into reasoning). Fixed system-owned wording; provider text never reaches an entry.
+ */
+export const OUTPUT_TRUNCATED_REASON = 'Muse ran out of room while writing this part, so it was left out.';
+
+/**
+ * BUG-006: recognise the client's OUTPUT_TRUNCATED MetaError — a PAID, settled call whose
+ * response finished early (finish_reason != 'stop'). Duck-typed on the fixed code (like
+ * generatedOutputReceipt) so a copy from another module instance is handled identically.
+ * The charge extraction mirrors jobs.ts failFromError exactly: chargedUSD when finite, else
+ * the receipt's estCostUSD; the unknown portion is the EXPLICIT reservedUnknownUSD amount.
+ */
+export interface TruncatedOutputFailure {
+  chargedUSD: number;
+  reservedUnknownUSD: number;
+  reserved: boolean;
+  receipt: MetaReceipt | undefined;
+  hasChargedUSD: boolean;
+  /** R-01: the fixed code — plus the cost-basis note on a reservation charge. */
+  detail: string;
+}
+
+export function truncatedOutputFailure(err: unknown): TruncatedOutputFailure | undefined {
+  if (typeof err !== 'object' || err === null) {
+    return undefined;
+  }
+  const e = err as {
+    code?: unknown;
+    chargedUSD?: unknown;
+    reservedUnknownUSD?: unknown;
+    costBasis?: unknown;
+    receipt?: unknown;
+  };
+  if (e.code !== 'OUTPUT_TRUNCATED') {
+    return undefined;
+  }
+  const receipt: MetaReceipt | undefined =
+    typeof e.receipt === 'object' && e.receipt !== null
+      ? (e.receipt as MetaReceipt)
+      : undefined;
+  const hasChargedUSD = typeof e.chargedUSD === 'number' && Number.isFinite(e.chargedUSD);
+  const chargedUSD: number = hasChargedUSD
+    ? (e.chargedUSD as number)
+    : receipt !== undefined && Number.isFinite(receipt.estCostUSD)
+      ? receipt.estCostUSD
+      : 0;
+  const basis: unknown = e.costBasis ?? receipt?.costBasis;
+  const reserved = basis === 'reservation';
+  const reservedUnknownUSD =
+    typeof e.reservedUnknownUSD === 'number'
+      ? reservedUnknownOf(e.reservedUnknownUSD)
+      : reservedUnknownOf(receipt?.reservedUnknownUSD);
+  return {
+    chargedUSD,
+    reservedUnknownUSD,
+    reserved,
+    receipt,
+    hasChargedUSD,
+    detail: reserved ? 'OUTPUT_TRUNCATED; cost basis: reservation (outcome uncertain)' : 'OUTPUT_TRUNCATED',
+  };
+}
+
+/**
+ * BUG-006: account a component-level output failure through the ONE accumulator and build
+ * the failed-event extras (receipt fields + fixed-code detail, R-01). The summary is
+ * current BEFORE the caller's fallible event/artifact writes.
+ */
+function accountComponentOutputFailure(
+  ctx: LessonContext,
+  failure: { chargedUSD: number; reservedUnknownUSD: number; receipt: MetaReceipt | undefined; hasChargedUSD: boolean; detail: string },
+  extra: LessonEventExtra,
+): LessonEventExtra {
+  if (failure.receipt !== undefined && failure.hasChargedUSD === false) {
+    ctx.accountReceipt(failure.receipt);
+  } else {
+    ctx.account(failure.chargedUSD, failure.reservedUnknownUSD);
+  }
+  const out: LessonEventExtra = { ...extra, detail: failure.detail };
+  if (failure.receipt !== undefined) {
+    Object.assign(out, receiptFields(failure.receipt));
+  }
+  if (failure.hasChargedUSD || failure.receipt !== undefined) {
+    out.estCostUSD = failure.chargedUSD;
+  }
+  return out;
+}
+
+/**
+ * BUG-006/F-01: classify a component REPAIR call error whose OUTPUT completed-but-failed —
+ * OUTPUT_INVALID (GeneratedOutputError) or OUTPUT_TRUNCATED (the client's settled MetaError).
+ * Accounts the paid call through the ONE accumulator (summary current BEFORE any fallible
+ * write) and returns the plain entry reason plus the failed-event extras; undefined for
+ * everything else, which stays fatal for the whole job exactly as before.
+ */
+function repairOutputFailure(
+  ctx: LessonContext,
+  err: unknown,
+  base: LessonEventExtra,
+): { reason: string; extra: LessonEventExtra } | undefined {
+  const outputReceipt = generatedOutputReceipt(err);
+  if (outputReceipt !== undefined) {
+    ctx.accountReceipt(outputReceipt);
+    const extra: LessonEventExtra = {
+      ...base,
+      ...receiptFields(outputReceipt),
+      detail:
+        outputReceipt.costBasis === 'reservation'
+          ? 'OUTPUT_INVALID; cost basis: reservation (outcome uncertain)'
+          : 'OUTPUT_INVALID',
+    };
+    return { reason: OUTPUT_INVALID_REASON, extra };
+  }
+  const truncated = truncatedOutputFailure(err);
+  if (truncated !== undefined) {
+    return { reason: OUTPUT_TRUNCATED_REASON, extra: accountComponentOutputFailure(ctx, truncated, base) };
+  }
+  return undefined;
+}
+
+/**
+ * BUG-006: the componentRepairs record for a repair call whose output died (truncated or
+ * structurally invalid): the attempt ran, was paid, and did not pass — remaining = targeted,
+ * fixed = []. Recorded so the job (and every results line) reflects the repair that ran.
+ */
+function pushDiedRepairRecord(
+  summary: JobSummary,
+  componentId: string,
+  attempt: number,
+  revision: number,
+  targeted: string[],
+): void {
+  (summary.componentRepairs ??= []).push({
+    componentId,
+    attempt,
+    revision,
+    targeted,
+    fixed: [],
+    remaining: targeted,
+    passed: false,
+  });
+}
 
 export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
   const { jobId, source, summary } = ctx;
@@ -550,8 +706,9 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
     finalize();
   }
 
-  /** A component-call error: OUTPUT_INVALID is component-level (its receipt is accounted);
-   *  anything else (MetaError, unexpected) is fatal for the whole job. */
+  /** A component-call error: OUTPUT_INVALID and OUTPUT_TRUNCATED are component-level (their
+   *  paid calls are accounted); anything else (other MetaErrors, unexpected) is fatal for the
+   *  whole job. BUG-006: a truncated generation never fails a lesson that has its overview. */
   function componentCallError(
     err: unknown,
     index: number,
@@ -573,6 +730,15 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
             : 'OUTPUT_INVALID',
       });
       failOutcome(index, componentId, specId, revision, OUTPUT_INVALID_REASON);
+      return;
+    }
+    const truncated = truncatedOutputFailure(err);
+    if (truncated !== undefined) {
+      // BUG-006: the provider call COMPLETED and settled (the client bills before throwing).
+      // Account it, then fail ONLY this component with the plain truncated reason.
+      const failExtra = accountComponentOutputFailure(ctx, truncated, extra);
+      ctx.emit(stage, 'failed', failExtra);
+      failOutcome(index, componentId, specId, revision, OUTPUT_TRUNCATED_REASON);
       return;
     }
     if (err instanceof Error && (err.message === 'ENGINE_REQUIRED' || err.message === 'ANALYSIS_DECLINED')) {
@@ -708,6 +874,8 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
     // --- bounded repair loop (immutable revision-1 baseline, compareKitRevisions) ---
     const baselineFindingsK = repairFindings(baselineComponentReport);
     let repairsDone = 0;
+    /** BUG-006: plain reason when a repair call's OUTPUT died (truncated/invalid). */
+    let diedReason: string | null = null;
     while (!report.publishable && repairsDone < ctx.maxRepairAttempts && fatalRef.current === null) {
       const attempt = repairsDone + 1;
       const nextRevision = revision + 1;
@@ -736,21 +904,19 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
           },
         );
       } catch (err: unknown) {
-        const outputReceipt = generatedOutputReceipt(err);
-        if (outputReceipt !== undefined) {
-          // F-01: the repair call COMPLETED and was billed. Account it, record the failed
-          // repair event and STOP repairing this component (partial publish keeps the rest).
-          ctx.accountReceipt(outputReceipt);
-          ctx.emit('repair', 'failed', {
-            target: 'component',
-            componentId: cid,
-            revision: nextRevision,
-            ...receiptFields(outputReceipt),
-            detail:
-              outputReceipt.costBasis === 'reservation'
-                ? 'OUTPUT_INVALID; cost basis: reservation (outcome uncertain)'
-                : 'OUTPUT_INVALID',
-          });
+        const died = repairOutputFailure(ctx, err, {
+          target: 'component',
+          componentId: cid,
+          revision: nextRevision,
+        });
+        if (died !== undefined) {
+          // F-01/BUG-006: the repair call COMPLETED and was billed (a truncated call settled
+          // before the throw). Record the attempt, the failed repair event, and fail ONLY
+          // this component with the plain reason — partial publish keeps the rest.
+          pushDiedRepairRecord(summary, cid, attempt, nextRevision, targeted);
+          ctx.emit('repair', 'failed', died.extra);
+          diedReason = died.reason;
+          ctx.writeJob();
           break;
         }
         fatalRef.current = {
@@ -801,7 +967,9 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
       componentId: cid,
       specId: specIdFor(revision),
       status: report.publishable ? 'passed' : 'failed',
-      reason: report.publishable ? droppedNote : failureReason(report),
+      // BUG-006: a repair call whose output died leaves the plain reason (truncated/invalid),
+      // never the check-failure text of the revision the repair started from.
+      reason: report.publishable ? droppedNote : (diedReason ?? failureReason(report)),
       revision,
     };
     finalize();
@@ -881,7 +1049,10 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
     const baseline = { spec: current.spec, failedIds: failedCheckIds(current.report) };
     const findingsHistory: RepairFinding[][] = [];
     let repairsDone = 0;
+    /** BUG-006: plain reason when a repair call's OUTPUT died (truncated/invalid). */
+    let diedReason: string | null = null;
     while (!current.report.publishable && repairsDone < ctx.maxRepairAttempts && fatalRef.current === null) {
+      const attempt = repairsDone + 1;
       const nextRevision = current.revision + 1;
       const targeted = failedCheckIds(current.report);
       ctx.emit('repair', 'started', {
@@ -934,19 +1105,18 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
               { signal: ctx.signal, maxOutputTokens: ctx.specMaxOutputTokens },
             );
       } catch (err: unknown) {
-        const outputReceipt = generatedOutputReceipt(err);
-        if (outputReceipt !== undefined) {
-          ctx.accountReceipt(outputReceipt);
-          ctx.emit('repair', 'failed', {
-            target: 'component',
-            componentId: activity,
-            revision: nextRevision,
-            ...receiptFields(outputReceipt),
-            detail:
-              outputReceipt.costBasis === 'reservation'
-                ? 'OUTPUT_INVALID; cost basis: reservation (outcome uncertain)'
-                : 'OUTPUT_INVALID',
-          });
+        const died = repairOutputFailure(ctx, err, {
+          target: 'component',
+          componentId: activity,
+          revision: nextRevision,
+        });
+        if (died !== undefined) {
+          // F-01/BUG-006: the premium repair call COMPLETED and was billed (a truncated call
+          // settled before the throw). Record the attempt and fail ONLY this component.
+          pushDiedRepairRecord(summary, activity, attempt, nextRevision, targeted);
+          ctx.emit('repair', 'failed', died.extra);
+          diedReason = died.reason;
+          ctx.writeJob();
           break;
         }
         fatalRef.current = {
@@ -1021,7 +1191,8 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
         componentId: activity,
         specId,
         status: 'failed',
-        reason: failureReason(current.report),
+        // BUG-006: a repair call whose output died leaves the plain reason.
+        reason: diedReason ?? failureReason(current.report),
         revision: current.revision,
       };
     }

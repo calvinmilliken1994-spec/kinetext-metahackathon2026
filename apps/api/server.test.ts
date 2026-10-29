@@ -94,10 +94,13 @@ test('GET /api/health reports ok, the live flag and busy', async () => {
     const off = await getJson(base, '/api/health');
     assert.equal(off.status, 200);
     // OW-2: health also reports per-model availability (booleans only).
+    // Concurrency (part B): health also reports the running count and its limit.
     assert.deepEqual(off.body, {
       ok: true,
       live: false,
       busy: false,
+      running: 0,
+      maxConcurrentJobs: 1,
       models: { 'muse-spark-1.3': false, 'muse-spark-open': false },
     });
     assertSecurityHeaders(off.headers);
@@ -125,6 +128,8 @@ test('GET /api/health reports ok, the live flag and busy', async () => {
       ok: true,
       live: true,
       busy: false,
+      running: 0,
+      maxConcurrentJobs: 1,
       models: { 'muse-spark-1.3': true, 'muse-spark-open': false },
     });
   });
@@ -145,6 +150,8 @@ test('GET /api/health busy is true while an in-process job runs (R-10)', async (
       ok: true,
       live: true,
       busy: false,
+      running: 0,
+      maxConcurrentJobs: 1,
       models: { 'muse-spark-1.3': true, 'muse-spark-open': false },
     });
     const post = await fetch(`${base}/api/jobs`, {
@@ -160,6 +167,8 @@ test('GET /api/health busy is true while an in-process job runs (R-10)', async (
         ok: true,
         live: true,
         busy: true,
+        running: 1,
+        maxConcurrentJobs: 1,
         models: { 'muse-spark-1.3': true, 'muse-spark-open': false },
       },
       'busy while the job is in flight',
@@ -185,6 +194,8 @@ test('GET /api/health busy is true while an in-process job runs (R-10)', async (
         ok: true,
         live: true,
         busy: false,
+        running: 0,
+        maxConcurrentJobs: 1,
         models: { 'muse-spark-1.3': true, 'muse-spark-open': false },
       },
       'busy clears once the job settles',

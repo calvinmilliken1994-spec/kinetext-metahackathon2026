@@ -7,7 +7,12 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { MAX_REPAIR_ATTEMPTS_BOUND, parseResourceLimits } from './resource-limits.ts';
+import {
+  DEFAULT_MAX_CONCURRENT_JOBS,
+  MAX_CONCURRENT_JOBS_BOUND,
+  MAX_REPAIR_ATTEMPTS_BOUND,
+  parseResourceLimits,
+} from './resource-limits.ts';
 import { openLedger } from '../../packages/meta/ledger.ts';
 import { MODAL_MUSE_SPARK_OPEN_MODEL } from '../../packages/meta/client.ts';
 
@@ -215,5 +220,39 @@ test('OW-2: the config caps, handed to openLedger, cap each provider independent
     assert.ok(Math.abs(ledger.committedUSD('meta-api') - 49.99) < 1e-9);
   } finally {
     ledger.close();
+  }
+});
+
+/* ------------------------------------------------------------------ */
+/* Concurrency (BUG-006 wave, part B): maxConcurrentJobs                 */
+/* ------------------------------------------------------------------ */
+
+test('concurrency: the checked-in config carries maxConcurrentJobs = 3 (the product default)', () => {
+  const limits = parseResourceLimits(realConfig);
+  assert.equal(limits.maxConcurrentJobs, 3);
+  assert.equal(DEFAULT_MAX_CONCURRENT_JOBS, 3);
+  assert.equal(MAX_CONCURRENT_JOBS_BOUND, 8);
+});
+
+test('concurrency: maxConcurrentJobs accepts integers 1..8 and defaults to 3 when absent', () => {
+  for (const valid of [1, 2, 3, 8]) {
+    assert.equal(parseResourceLimits(config({ maxConcurrentJobs: valid })).maxConcurrentJobs, valid);
+  }
+  const missing = config();
+  delete missing['maxConcurrentJobs'];
+  assert.equal(
+    parseResourceLimits(missing).maxConcurrentJobs,
+    DEFAULT_MAX_CONCURRENT_JOBS,
+    'a pre-concurrency config still parses, at the documented default',
+  );
+});
+
+test('concurrency: maxConcurrentJobs 0, 9, negatives, fractions and non-numbers fail closed', () => {
+  for (const invalid of [0, 9, -1, 1.5, Number.NaN, '3', null, Number.POSITIVE_INFINITY]) {
+    assert.throws(
+      () => parseResourceLimits(config({ maxConcurrentJobs: invalid })),
+      (err: unknown) => err instanceof Error && err.message === 'RESOURCE_LIMITS_INVALID',
+      `maxConcurrentJobs=${String(invalid)} must fail closed at startup`,
+    );
   }
 });

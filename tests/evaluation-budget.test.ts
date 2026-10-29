@@ -13,7 +13,9 @@ import {
   admissionLimitsFromConfig,
   assessLiabilities,
   classifyJournalLine,
+  DEFAULT_EVAL_CONCURRENCY,
   describeLiability,
+  evalConcurrencyFromArgv,
   evalModelFromArgv,
   parseJournal,
   parseJournalLine,
@@ -567,4 +569,69 @@ test('OW-2: recoveredRecord carries model/provider when the summary has them, nu
   const legacy = recoveredRecord(page, { jobId: 'j2', status: 'failed', totalCostUSD: 0.1 }, '2026-10-29T01:00:00.000Z');
   assert.equal(legacy.model, null, 'an old summary without the fields records null, never an invented model');
   assert.equal(legacy.provider, null);
+});
+
+/* ------------------------------------------------------------------ */
+/* Concurrency (BUG-006 wave, part B): --concurrency parsing             */
+/* ------------------------------------------------------------------ */
+
+test('concurrency: evalConcurrencyFromArgv defaults to 1, accepts integers >= 1, and fails closed otherwise', () => {
+  assert.equal(DEFAULT_EVAL_CONCURRENCY, 1, 'the default keeps the pre-registered sequential behaviour');
+  assert.equal(evalConcurrencyFromArgv(['node', 'run.ts']), 1);
+  assert.equal(evalConcurrencyFromArgv(['node', 'run.ts', '--concurrency', '1']), 1);
+  assert.equal(evalConcurrencyFromArgv(['node', 'run.ts', '--concurrency', '3']), 3);
+  assert.equal(evalConcurrencyFromArgv(['node', 'run.ts', '--concurrency', '8']), 8);
+  for (const bad of [
+    ['--concurrency'],
+    ['--concurrency', '0'],
+    ['--concurrency', '-1'],
+    ['--concurrency', '1.5'],
+    ['--concurrency', ''],
+    ['--concurrency', 'abc'],
+    ['--concurrency', '9'],
+    ['--concurrency', '--max-usd'],
+  ]) {
+    assert.throws(
+      () => evalConcurrencyFromArgv(['node', 'run.ts', ...bad]),
+      (err: unknown) => err instanceof Error && err.message === 'EVAL_CONCURRENCY_INVALID',
+      `--concurrency ${JSON.stringify(bad)} must fail closed`,
+    );
+  }
+});
+
+/* ------------------------------------------------------------------ */
+/* BUG-006: recovered lesson lines carry the summary componentRepairs    */
+/* ------------------------------------------------------------------ */
+
+test('BUG-006: recoveredRecord passes summary componentRepairs through and records null componentFailures without a detail view', () => {
+  const page = {
+    sourceId: 'nij-population-genetics',
+    candidate: 12,
+    subject: 'biology',
+    expected: 'quiz-cards-v1',
+    acceptable: [] as string[],
+    difficulty: 'hard',
+  };
+  const repairs = [
+    {
+      componentId: 'concept-map-v1',
+      attempt: 1,
+      revision: 2,
+      targeted: ['CM-03'],
+      fixed: [],
+      remaining: ['CM-03'],
+      passed: false,
+    },
+  ];
+  const lessonLine = recoveredRecord(
+    page,
+    { jobId: 'j1', status: 'succeeded', totalCostUSD: 0.2, flow: 'lesson', componentRepairs: repairs },
+    '2026-10-30T01:00:00.000Z',
+  );
+  assert.deepEqual(lessonLine['componentRepairs'], repairs);
+  assert.equal(lessonLine['componentFailures'], null, 'a summary-only recovery cannot know component failures — null, never invented');
+
+  const legacy = recoveredRecord(page, { jobId: 'j2', status: 'failed', totalCostUSD: 0.1 }, '2026-10-30T01:00:00.000Z');
+  assert.deepEqual(legacy['componentRepairs'], [], 'a summary without the field records an empty list');
+  assert.equal(legacy['componentFailures'], null);
 });

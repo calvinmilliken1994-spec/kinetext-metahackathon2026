@@ -137,6 +137,8 @@ test('OW-2: GET /api/health reports per-model availability booleans only', async
       ok: true,
       live: false,
       busy: false,
+      running: 0,
+      maxConcurrentJobs: 1,
       models: { 'muse-spark-1.3': false, 'muse-spark-open': false },
     });
   });
@@ -148,6 +150,8 @@ test('OW-2: GET /api/health reports per-model availability booleans only', async
       ok: true,
       live: true,
       busy: false,
+      running: 0,
+      maxConcurrentJobs: 1,
       models: { 'muse-spark-1.3': true, 'muse-spark-open': false },
     });
   });
@@ -159,6 +163,8 @@ test('OW-2: GET /api/health reports per-model availability booleans only', async
         ok: true,
         live: true,
         busy: false,
+        running: 0,
+        maxConcurrentJobs: 1,
         models: { 'muse-spark-1.3': false, 'muse-spark-open': true },
       });
     },

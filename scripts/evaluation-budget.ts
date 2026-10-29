@@ -82,6 +82,41 @@ export function evalFlowFromArgv(argv: readonly string[]): EvalFlow {
   return value;
 }
 
+/* ------------------------------------------------------------------ */
+/* Concurrency (BUG-006 wave, part B): how many pages run at once        */
+/* ------------------------------------------------------------------ */
+
+/**
+ * The driver's default concurrency is 1 — the pre-registered sequential behaviour (one job
+ * at a time, results in plan order) stays the default so existing runs and tests are
+ * unchanged. `--concurrency N` runs up to N pages at once against the concurrent API.
+ */
+export const DEFAULT_EVAL_CONCURRENCY = 1;
+/** Mirrors the server's absolute bound (config maxConcurrentJobs is validated ≤ 8). */
+export const MAX_EVAL_CONCURRENCY = 8;
+
+/**
+ * Parse `--concurrency <n>` (default 1). Anything but an integer in
+ * [1, MAX_EVAL_CONCURRENCY] — a missing value, another flag in the value position, 0,
+ * negatives, fractions or non-numbers — throws EVAL_CONCURRENCY_INVALID; the driver
+ * exits 2 with a fixed message and submits nothing.
+ */
+export function evalConcurrencyFromArgv(argv: readonly string[]): number {
+  const i = argv.indexOf('--concurrency');
+  if (i < 0) {
+    return DEFAULT_EVAL_CONCURRENCY;
+  }
+  const value: string | undefined = argv[i + 1];
+  if (value === undefined || !/^[0-9]+$/.test(value)) {
+    throw new Error('EVAL_CONCURRENCY_INVALID');
+  }
+  const n = Number.parseInt(value, 10);
+  if (!Number.isInteger(n) || n < 1 || n > MAX_EVAL_CONCURRENCY) {
+    throw new Error('EVAL_CONCURRENCY_INVALID');
+  }
+  return n;
+}
+
 /**
  * S6-W: the Stage 6 output caps, mirrored from packages/meta/pipeline-v2.ts
  * (ANALYSIS_V2_MAX_OUTPUT_TOKENS / KIT_CALL_MAX_OUTPUT_TOKENS — Muse-frozen constants).
@@ -365,6 +400,8 @@ export interface JobSummaryLike {
   flow?: unknown;
   /** S6-W: lesson progress on lesson-flow summaries. */
   lesson?: unknown;
+  /** BUG-006: one record per component repair attempt, persisted on lesson summaries. */
+  componentRepairs?: unknown;
 }
 
 export interface ReconcileArgs {
@@ -430,6 +467,36 @@ function finiteOrNull(v: unknown): number | null {
   return typeof v === 'number' && Number.isFinite(v) ? v : null;
 }
 
+/**
+ * BUG-006: one normalised component-repair record for a results line. Untrusted shapes are
+ * coerced field by field (arrays stay arrays, `passed` stays a boolean) so a results line
+ * never carries a malformed repair record through to the metrics.
+ */
+export interface ComponentRepairLine {
+  componentId: string | null;
+  attempt: number | null;
+  revision: number | null;
+  targeted: string[];
+  fixed: string[];
+  remaining: string[];
+  passed: boolean;
+}
+
+export function normaliseComponentRepairs(raw: unknown): ComponentRepairLine[] {
+  if (!Array.isArray(raw)) {
+    return [];
+  }
+  return (raw as Record<string, unknown>[]).map(r => ({
+    componentId: typeof r?.['componentId'] === 'string' ? (r['componentId'] as string) : null,
+    attempt: finiteOrNull(r?.['attempt']),
+    revision: finiteOrNull(r?.['revision']),
+    targeted: Array.isArray(r?.['targeted']) ? (r['targeted'] as string[]) : [],
+    fixed: Array.isArray(r?.['fixed']) ? (r['fixed'] as string[]) : [],
+    remaining: Array.isArray(r?.['remaining']) ? (r['remaining'] as string[]) : [],
+    passed: r?.['passed'] === true,
+  }));
+}
+
 /** A spend amount the admission rule may count: finite and non-negative. A negative
  * (hand-edited) amount could offset real spend, so it is treated as unknown — charged
  * a full reservation — never subtracted (round-3 review hardening). */
@@ -470,6 +537,10 @@ export function recoveredRecord(
         passed: r?.['passed'] === true,
       }))
     : [];
+  // BUG-006: the results line records the job's component repairs. A summary-only recovery
+  // cannot know the component-level failure details (those need the lesson/componentReports
+  // detail view), so componentFailures stays null there — unknown, never invented.
+  const componentRepairs = normaliseComponentRepairs(summary.componentRepairs);
   const error = summary.error;
   const errorCode =
     typeof error === 'object' && error !== null && typeof (error as { code?: unknown }).code === 'string'
@@ -512,6 +583,8 @@ export function recoveredRecord(
     revisions: finiteOrNull(summary.revisions),
     repairs,
     analysisRepairs,
+    componentRepairs,
+    componentFailures: null,
     failedChecks: extra?.failedChecks ?? null,
     firstRevisionFailedChecks: extra?.firstRevisionFailedChecks ?? null,
     error: errorCode,

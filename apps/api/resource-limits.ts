@@ -52,6 +52,13 @@ export interface RuntimeLimits {
   maxInputTokensV2: number;
   /** Integer in [0, MAX_REPAIR_ATTEMPTS_BOUND]. */
   maxRepairAttempts: number;
+  /**
+   * Concurrency (BUG-006 wave, part B): how many live jobs the API runs at once.
+   * Integer in [1, MAX_CONCURRENT_JOBS_BOUND]; DEFAULT_MAX_CONCURRENT_JOBS (3) when the
+   * field is absent (a pre-concurrency config still parses). Wired into createApiServer
+   * by main.ts; POST /api/jobs answers the busy 409 only when that many jobs are running.
+   */
+  maxConcurrentJobs: number;
   ledgerLockPort: number;
 }
 
@@ -86,6 +93,16 @@ function validLockPort(v: unknown): v is number {
 /** S5-06: the repair bound must be an integer in [0, 2] — never a fraction, never larger. */
 export function validRepairAttempts(v: unknown): v is number {
   return typeof v === 'number' && Number.isInteger(v) && v >= 0 && v <= MAX_REPAIR_ATTEMPTS_BOUND;
+}
+
+/** Concurrency (part B): the absolute bound on simultaneously running jobs. */
+export const MAX_CONCURRENT_JOBS_BOUND = 8;
+/** Concurrency (part B): the product default when the config predates the field. */
+export const DEFAULT_MAX_CONCURRENT_JOBS = 3;
+
+/** Concurrency (part B): a positive integer in [1, MAX_CONCURRENT_JOBS_BOUND] — fail closed. */
+export function validMaxConcurrentJobs(v: unknown): v is number {
+  return typeof v === 'number' && Number.isInteger(v) && v >= 1 && v <= MAX_CONCURRENT_JOBS_BOUND;
 }
 
 const PROVIDER_KEYS: readonly MetaProvider[] = ['meta-api', 'modal'];
@@ -169,6 +186,7 @@ export function parseResourceLimits(raw: unknown): RuntimeLimits {
     maxInputTokens?: unknown;
     maxInputTokensV2?: unknown;
     maxRepairAttempts?: unknown;
+    maxConcurrentJobs?: unknown;
     ledgerLockPort?: unknown;
   };
   const stage2: unknown = limits.stageCapsUSD?.stage2;
@@ -179,6 +197,16 @@ export function parseResourceLimits(raw: unknown): RuntimeLimits {
   const maxInputTokens: unknown = limits.maxInputTokens;
   const maxInputTokensV2: unknown = limits.maxInputTokensV2;
   const maxRepairAttempts: unknown = limits.maxRepairAttempts;
+  const maxConcurrentJobsRaw: unknown = limits.maxConcurrentJobs;
+  // Concurrency (part B): absent → the documented product default; present but not an
+  // integer in [1, MAX_CONCURRENT_JOBS_BOUND] → fail closed like every other bound.
+  let maxConcurrentJobs: number = DEFAULT_MAX_CONCURRENT_JOBS;
+  if (maxConcurrentJobsRaw !== undefined) {
+    if (!validMaxConcurrentJobs(maxConcurrentJobsRaw)) {
+      throw new Error('RESOURCE_LIMITS_INVALID');
+    }
+    maxConcurrentJobs = maxConcurrentJobsRaw;
+  }
   const lockPort: unknown = limits.ledgerLockPort;
   if (
     !finitePositive(wallTimeMs) ||
@@ -207,6 +235,7 @@ export function parseResourceLimits(raw: unknown): RuntimeLimits {
     maxInputTokens,
     maxInputTokensV2,
     maxRepairAttempts,
+    maxConcurrentJobs,
     ledgerLockPort: lockPort,
   };
 }

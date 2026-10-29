@@ -188,3 +188,123 @@ test('S6-W: lesson declined analysis billed by usage + failing event write — t
   assert.equal(jobJson.reservedUnknownUSD, 0, 'the usage-based charge has no unknown portion');
   assert.ok(!persistedBlob.includes('PRIVATE_PROVIDER_MESSAGE'), 'no provider text is persisted (R-01)');
 });
+
+/* ------------------------------------------------------------------ */
+/* BUG-006: a component repair call that ends OUTPUT_TRUNCATED is a      */
+/* COMPONENT-level failure — and its paid, ledger-settled cost still     */
+/* lands in job.json through the one accumulator.                        */
+/* ------------------------------------------------------------------ */
+
+const usableAnalysisText = readFileSync(
+  new URL('../../tests/fixtures/stage6/source-analysis-v2.usable.json', import.meta.url),
+  'utf8',
+);
+const quizGenText = readFileSync(
+  new URL('../../tests/fixtures/stage6/quiz-cards.gen.json', import.meta.url),
+  'utf8',
+);
+const feGenJson = JSON.parse(
+  readFileSync(new URL('../../tests/fixtures/stage6/formula-explorer.gen.json', import.meta.url), 'utf8'),
+) as { expression: string };
+// An expression that no longer matches the page formula → FE-08 fails → the repair loop runs.
+const brokenFeText = JSON.stringify({ ...feGenJson, expression: `(${feGenJson.expression}) + 1` });
+
+test('BUG-006: component repair truncated by the provider — the job succeeds partial, and job.json totals equal the ledger committed cost', async () => {
+  const storageDir = mkdtempSync(join(tmpdir(), 's6w-bug006-cost-'));
+  const lockPort = await freeLockPort();
+  const ledger: Ledger = await openLedger({
+    path: join(storageDir, 'ledger.jsonl'),
+    capUSD: 50,
+    lockPort,
+  });
+  try {
+    let calls = 0;
+    // Dispatch on the v2 prompt markers (prompts-v2.ts): every kit gen message starts
+    // 'Design a <componentId> component…', every kit repair 'Repair the <componentId>
+    // component…', the analysis call 'Analyse this licensed source…'.
+    const fetchImpl: typeof fetch = async (_url, init) => {
+      calls += 1;
+      const body = JSON.parse(String(init?.body ?? '{}')) as {
+        messages?: { role: string; content: string }[];
+      };
+      const user = body.messages?.find(m => m.role === 'user')?.content ?? '';
+      let content = usableAnalysisText;
+      let finishReason = 'stop';
+      if (user.startsWith('Repair the formula-explorer-v1 component')) {
+        // The BUG-006 provider outcome: the 24k cap went into reasoning and the
+        // response finished truncated — a PAID call (the client settles before throwing).
+        content = '{}';
+        finishReason = 'length';
+      } else if (user.startsWith('Design a formula-explorer-v1 component')) {
+        content = brokenFeText;
+      } else if (user.startsWith('Design a quiz-cards-v1 component')) {
+        content = quizGenText;
+      }
+      return new Response(
+        JSON.stringify({
+          id: `fake-bug006-${calls}`,
+          model: 'muse-spark-1.3',
+          choices: [
+            {
+              index: 0,
+              finish_reason: finishReason,
+              message: { role: 'assistant', content },
+            },
+          ],
+          usage: { prompt_tokens: 100, completion_tokens: 2000 },
+        }),
+        { status: 200, headers: { 'content-type': 'application/json' } },
+      );
+    };
+    const client: MetaClient = createMetaClient({
+      apiKey: FAKE_KEY,
+      ledger,
+      allowLive: true,
+      maxInputTokens: LIMITS.maxInputTokensV2,
+      fetchImpl,
+      sleep: async () => {},
+    });
+    const { done } = startJob('nasa-grc-drag-equation', {
+      client,
+      storageDir,
+      purpose: 'test-live',
+      flow: 'lesson',
+      newJobId: () => 's6w-bug006-cost-01',
+      limits: {
+        specMaxOutputTokens: LIMITS.maxOutputTokens,
+        maxJobWallTimeMs: LIMITS.maxJobWallTimeMs,
+      },
+    });
+    const summary = await done;
+
+    assert.equal(summary.status, 'succeeded', 'the truncated repair fails only its component');
+    assert.equal(summary.error, undefined);
+    assert.equal(summary.lesson?.partialPublish, true);
+    assert.equal(summary.lesson?.componentsPublished, 1);
+    assert.equal(summary.lesson?.componentsFailed, 1);
+
+    const jobJson = JSON.parse(
+      readFileSync(join(storageDir, 'runs', 's6w-bug006-cost-01', 'job.json'), 'utf8'),
+    ) as JobSummary;
+    const committedUSD = ledger.committedUSD();
+    // analysis + fe gen + quiz gen + the truncated repair = 4 settled reservations.
+    assert.equal(calls, 4);
+    assert.ok(committedUSD > 0, `the ledger committed every call including the truncated one (got ${committedUSD})`);
+    assert.ok(
+      Math.abs(jobJson.totalCostUSD - committedUSD) <= 1e-6,
+      `job.json total ${jobJson.totalCostUSD} must equal ledger committed ${committedUSD}`,
+    );
+    assert.equal(jobJson.reservedUnknownUSD, 0, 'every call settled usage-based');
+
+    const view = readJob(storageDir, 's6w-bug006-cost-01');
+    const lessonSpec = view?.lesson as { components: { componentId: string; status: string; reason: string }[] };
+    const feEntry = lessonSpec.components.find(c => c.componentId === 'formula-explorer-v1');
+    assert.equal(feEntry?.status, 'failed');
+    assert.equal(feEntry?.reason, 'Muse ran out of room while writing this part, so it was left out.');
+    assert.deepEqual(view?.componentRepairs?.map(r => [r.componentId, r.passed]), [
+      ['formula-explorer-v1', false],
+    ]);
+  } finally {
+    ledger.close();
+  }
+});

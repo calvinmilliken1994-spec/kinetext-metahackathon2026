@@ -843,6 +843,9 @@ async function runJob(
       summary,
       emit,
       accountReceipt,
+      // BUG-006: the lesson flow accounts MetaError-settled charges (OUTPUT_TRUNCATED)
+      // through the SAME single accumulator as every receipt.
+      account,
       writeJson: (fileName: string, data: unknown): void => {
         writeJsonAtomic(join(runDir, fileName), data);
       },

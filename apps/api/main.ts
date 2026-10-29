@@ -46,6 +46,12 @@ const purpose: 'test-live' | 'demo' = process.env.META_PURPOSE === 'demo' ? 'dem
 
 let startJob: ApiOptions['startJob'] = null;
 let activeLedger: Ledger | null = null;
+/**
+ * Concurrency (part B): the validated config value (product default 3). Only live mode
+ * reads the config; an offline server keeps the createApiServer option default (1) —
+ * it can never run a job anyway (POST answers 503 LIVE_DISABLED).
+ */
+let maxConcurrentJobs: number | undefined;
 
 async function startup(): Promise<void> {
   if (live) {
@@ -56,6 +62,7 @@ async function startup(): Promise<void> {
       const limits = parseResourceLimits(
         JSON.parse(readFileSync(new URL('../../config/resource-limits.json', import.meta.url), 'utf8')),
       );
+      maxConcurrentJobs = limits.maxConcurrentJobs;
       // N-01: the OS-backed ledger lock — a second process fails closed below.
       // OW-2: per-provider caps from config (meta-api additionally bounded by
       // the stage-2 cap; modal capped separately).
@@ -146,6 +153,10 @@ async function startup(): Promise<void> {
   const server = createApiServer({
     storageDir,
     startJob,
+    // Concurrency (part B): up to the validated config limit of simultaneous live jobs
+    // (each with its own abort/wall-time budget and cost accumulator); the busy 409 only
+    // fires when that many are running.
+    ...(maxConcurrentJobs !== undefined ? { maxConcurrentJobs } : {}),
     // OW-2: which models are available — BOOLEANS ONLY, re-evaluated per
     // request. In live mode the Meta-API client exists by construction (startup
     // fails without its key), so muse-spark-1.3 is available; muse-spark-open

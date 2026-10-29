@@ -1,10 +1,20 @@
 // TASK-023b evaluation driver. Runs the data/evaluation/manifest.json pages through the LIVE API
-// (http://127.0.0.1:8787, META_LIVE=1) one job at a time — never two at once — with NO demo faults,
-// so every repair it records is a natural model failure repaired by Muse.
+// (http://127.0.0.1:8787, META_LIVE=1) — by default one job at a time, never two at once — with NO
+// demo faults, so every repair it records is a natural model failure repaired by Muse.
 //
 // Usage (foreground; the local live API must already be running):
 //   node scripts/evaluation-run.ts --list                # print the plan, no API calls
 //   node scripts/evaluation-run.ts                       # run everything not yet in results.jsonl
+//   node scripts/evaluation-run.ts --concurrency 2       # concurrency (BUG-006 wave, part B):
+//       # keep up to N pages in flight at once (integer 1-8; DEFAULT 1 = the pre-registered
+//       # sequential behaviour, unchanged). Admission still reserves perJob(Lesson)AdmissionUSD
+//       # for EVERY in-flight job plus every outstanding journal liability before each submit,
+//       # so spent + reserved + admission <= --max-usd holds under concurrency (no overshoot);
+//       # when only the run's own in-flight reservations block the next page, the driver waits
+//       # for them to settle and re-checks their REAL costs before deciding. Results-line order
+//       # may differ from the plan order, but each page is recorded exactly once, and the same
+//       # per-page lines are printed. The API must itself allow the concurrency
+//       # (config maxConcurrentJobs); the driver waits for a free server slot before each POST.
 //   node scripts/evaluation-run.ts --flow lesson           # S6-W: run the Stage 6 LESSON flow
 //       # instead of the default v1 activity flow. The DEFAULT STAYS 'activity' so the
 //       # pre-registered Stage 5b evaluation is unchanged; lesson runs record flow, component
@@ -66,8 +76,10 @@ import {
   admissionLimitsFromConfig,
   assessLiabilities,
   describeLiability,
+  evalConcurrencyFromArgv,
   evalFlowFromArgv,
   evalModelFromArgv,
+  normaliseComponentRepairs,
   parseJournal,
   perJobAdmissionUSD,
   perJobLessonAdmissionUSD,
@@ -76,6 +88,9 @@ import {
 } from './evaluation-budget.ts';
 import type { AssessLiabilitiesResult, EvalFlow, ResultPageFields } from './evaluation-budget.ts';
 import type { ModelChoice } from '../packages/meta/pricing.ts';
+// BUG-006: the worker's fixed plain-sentence entry reasons, so a results line can map a
+// failed component's reason back to its fixed code without duplicating the wording.
+import { OUTPUT_INVALID_REASON, OUTPUT_TRUNCATED_REASON } from '../workers/generation/lesson.ts';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = 'http://127.0.0.1:8787';
@@ -103,6 +118,16 @@ try {
   FLOW = evalFlowFromArgv(process.argv);
 } catch {
   console.error('--flow must be one of: lesson, activity (default activity)');
+  process.exit(2);
+}
+// Concurrency (part B): how many pages THIS run keeps in flight at once. The default stays 1
+// (the pre-registered sequential behaviour); an invalid --concurrency exits 2 before anything
+// is read, reserved or submitted.
+let CONCURRENCY: number;
+try {
+  CONCURRENCY = evalConcurrencyFromArgv(process.argv);
+} catch {
+  console.error('--concurrency must be an integer in [1, 8] (default 1)');
   process.exit(2);
 }
 // S5B-07: conservative per-job admission amount, derived from the configured limits
@@ -176,6 +201,48 @@ async function fetchJobView(jobId: string): Promise<{ summary: Record<string, an
   return undefined;
 }
 
+/**
+ * BUG-006: the lesson components that were NOT published (failed/skipped), each with its
+ * failed check ids (from the latest component report — kit components key componentReports
+ * by spec id; a premium entry falls back to the persisted v1 revision report) and the fixed
+ * code when its plain reason is one of the worker's two fixed output-failure sentences.
+ * Empty on activity-flow jobs (no lesson detail); never invents checks or codes.
+ */
+function componentFailuresFromDetail(detail: any): Record<string, unknown>[] {
+  const components: any[] = Array.isArray(detail?.lesson?.components) ? detail.lesson.components : [];
+  const reports: Record<string, any> =
+    typeof detail?.componentReports === 'object' && detail?.componentReports !== null ? detail.componentReports : {};
+  const revisions: any[] = Array.isArray(detail?.revisions) ? detail.revisions : [];
+  const out: Record<string, unknown>[] = [];
+  for (const c of components) {
+    if (c?.status === 'passed') {
+      continue;
+    }
+    let report: any = typeof c?.specId === 'string' ? reports[c.specId] : undefined;
+    if (report === undefined && typeof c?.revision === 'number') {
+      report = revisions.find(r => r?.revision === c.revision)?.report;
+    }
+    const checks: string[] = Array.isArray(report?.checks)
+      ? report.checks.filter((x: any) => x?.passed === false).map((x: any) => String(x.id))
+      : [];
+    const reason: string | null = typeof c?.reason === 'string' ? c.reason : null;
+    let code: string | null = null;
+    if (reason === OUTPUT_TRUNCATED_REASON) {
+      code = 'OUTPUT_TRUNCATED';
+    } else if (reason === OUTPUT_INVALID_REASON) {
+      code = 'OUTPUT_INVALID';
+    }
+    out.push({
+      componentId: typeof c?.componentId === 'string' ? c.componentId : null,
+      status: typeof c?.status === 'string' ? c.status : null,
+      checks,
+      code,
+      reason,
+    });
+  }
+  return out;
+}
+
 /** The results.jsonl record shape, built from a full API job view (normal + recovered paths). */
 function recordFromDetail(page: ResultPageFields, jobId: string, detail: any, wallS: number | null, recovered: boolean): Record<string, any> {
   const s = detail?.summary ?? {};
@@ -224,6 +291,12 @@ function recordFromDetail(page: ResultPageFields, jobId: string, detail: any, wa
       remaining: r.remaining ?? [],
       passed: r.passed === true,
     })),
+    // BUG-006 (additive): the job's COMPONENT repairs (lesson flow; empty on activity jobs —
+    // previously every results line lost them) and the component-level failures list with the
+    // failed check ids and, when the entry reason is one of the worker's fixed sentences,
+    // the fixed code (OUTPUT_TRUNCATED / OUTPUT_INVALID).
+    componentRepairs: normaliseComponentRepairs(s.componentRepairs ?? detail?.componentRepairs),
+    componentFailures: componentFailuresFromDetail(detail),
     failedChecks,
     firstRevisionFailedChecks,
     error: s.error?.code ?? null,
@@ -244,6 +317,13 @@ let doneIds = new Set<string>();
 let blockedSourceIds = new Set<string>();
 let spentUsd = 0;
 let reservedUsd = 0;
+
+/**
+ * Concurrency (part B): jobId → tracking promise for every job THIS run submitted and is
+ * still polling. A job's own poller writes its results line (rescan must never record it a
+ * second time), and the entry is deleted once the line is written.
+ */
+const inFlight = new Map<string, Promise<void>>();
 
 /**
  * Reconcile EVERY outstanding run liability from scratch: re-read results.jsonl and journal.jsonl,
@@ -273,6 +353,11 @@ async function rescan(): Promise<void> {
   });
   // Persist settled-but-unrecorded jobs (once — the results file then covers them on later passes).
   for (const { entry, summary } of res.recoverable) {
+    // Concurrency (part B): a job THIS run is still polling records its own results line when
+    // its poller sees the settle — writing a recovery line here would duplicate the page. Its
+    // settled cost is already counted into spentUsd by assessLiabilities, so the admission
+    // arithmetic stays correct while the line is still outstanding.
+    if (inFlight.has(entry.jobId)) continue;
     const page = pages.find(p => p.sourceId === entry.sourceId);
     if (page === undefined) continue; // defensive; assessLiabilities routes out-of-manifest to unrecordable
     const view = views.get(entry.jobId);
@@ -345,16 +430,43 @@ if (listMode) {
   process.exit(0);
 }
 
-async function waitIdle(): Promise<void> {
+/** Concurrency (part B): wait until THIS run's own pool has a free slot. */
+async function waitForSlot(): Promise<void> {
+  while (inFlight.size >= CONCURRENCY) {
+    await Promise.race([...inFlight.values()]);
+  }
+}
+
+/** Concurrency (part B): wait until every job this run submitted has settled and been recorded. */
+async function drainInFlight(): Promise<void> {
+  while (inFlight.size > 0) {
+    await Promise.race([...inFlight.values()]);
+  }
+}
+
+/**
+ * Wait until the SERVER has a free job slot — the successor of the old waitIdle. A server
+ * that reports running/maxConcurrentJobs (concurrency, part B) has capacity while
+ * running < limit; an older server (or the S5B-14 test fake) that only reports `busy` keeps
+ * the old capacity signal (busy === false), so the default sequential behaviour is unchanged.
+ */
+async function waitForCapacity(): Promise<void> {
   for (let i = 0; i < 120; i++) {
     const h = await api('/api/health');
-    if (h.body?.busy === false) return;
+    const body = (h.body ?? {}) as Record<string, unknown>;
+    const running = typeof body['running'] === 'number' ? (body['running'] as number) : null;
+    const limit =
+      typeof body['maxConcurrentJobs'] === 'number' && (body['maxConcurrentJobs'] as number) > 0
+        ? (body['maxConcurrentJobs'] as number)
+        : null;
+    const capacity = running !== null && limit !== null ? running < limit : body['busy'] === false;
+    if (capacity) return;
     await new Promise(r => setTimeout(r, 2000));
   }
   throw new Error('server stayed busy');
 }
 
-console.log(`Running ${plan.length} evaluation job(s), one at a time, model ${MODEL} via ${MODEL_PROVIDER}, flow ${FLOW}. Budget $${maxUsd.toFixed(2)}, spent $${spentUsd.toFixed(2)} (known settled), reserved $${reservedUsd.toFixed(3)} (outstanding liabilities), per-job admission $${PER_JOB_ADMISSION_USD.toFixed(3)}.`);
+console.log(`Running ${plan.length} evaluation job(s), ${CONCURRENCY === 1 ? 'one at a time' : `up to ${CONCURRENCY} at a time`}, model ${MODEL} via ${MODEL_PROVIDER}, flow ${FLOW}. Budget $${maxUsd.toFixed(2)}, spent $${spentUsd.toFixed(2)} (known settled), reserved $${reservedUsd.toFixed(3)} (outstanding liabilities), per-job admission $${PER_JOB_ADMISSION_USD.toFixed(3)}.`);
 
 function admissionFails(): boolean {
   return !admissionAllowed({ spentUsd, reservedUsd, perJobAdmissionUSD: PER_JOB_ADMISSION_USD, maxUsd });
@@ -369,47 +481,49 @@ function budgetStop(p: ManifestEntry): void {
   );
 }
 
-for (const p of plan) {
+/**
+ * The S5B-14 admission decision for one page, concurrency-aware: 'ok' → submit; 'skip' →
+ * this page is blocked by an outstanding liability (continue with the next page); 'stop' →
+ * the budget is exhausted (end the run). When the run's OWN in-flight jobs hold the
+ * reservations that block the next page, wait for them to settle — their real costs replace
+ * the per-job reservations — rescan and check once more before deciding. With the default
+ * concurrency 1 the pool is always empty here, so this is exactly the old immediate
+ * blocked-continue / budget-stop-break behaviour.
+ */
+async function admissionGate(p: ManifestEntry): Promise<'ok' | 'skip' | 'stop'> {
   const tag = `[${p.candidate}/${pages.length}] ${p.sourceId}`;
-  // S5B-14: reconcile ALL outstanding run liabilities FRESHLY before every submission — not only
-  // at start — and admit only while spent + reserved + the per-job admission amount fits the cap.
-  await rescan();
-  if (blockedSourceIds.has(p.sourceId)) {
-    console.log(`${tag} → BLOCKED: an outstanding liability (see above) holds a reservation for this page — not submitting it. Resolve the liability and re-run.`);
-    continue;
+  for (let round = 0; round < 2; round++) {
+    if (blockedSourceIds.has(p.sourceId)) {
+      console.log(`${tag} → BLOCKED: an outstanding liability (see above) holds a reservation for this page — not submitting it. Resolve the liability and re-run.`);
+      return 'skip';
+    }
+    if (!admissionFails()) {
+      return 'ok';
+    }
+    if (inFlight.size > 0 && round === 0) {
+      console.log(
+        `${tag} → admission held: ${inFlight.size} in-flight job(s) hold $${(inFlight.size * PER_JOB_ADMISSION_USD).toFixed(3)} ` +
+          'in per-job reservations; waiting for them to settle so their REAL costs replace the reservations before re-checking the admission rule.',
+      );
+      await drainInFlight();
+      await rescan();
+      continue;
+    }
+    budgetStop(p);
+    return 'stop';
   }
-  if (admissionFails()) { budgetStop(p); break; }
-  await waitIdle();
-  // S5B-14: re-check AFTER the idle wait — a job that settled while waiting is re-read by the
-  // rescan and its real cost replaces its reservation before this submission is admitted.
-  await rescan();
-  if (blockedSourceIds.has(p.sourceId)) {
-    console.log(`${tag} → BLOCKED: an outstanding liability (see above) holds a reservation for this page — not submitting it. Resolve the liability and re-run.`);
-    continue;
-  }
-  if (admissionFails()) { budgetStop(p); break; }
-  // S5B-14: durable pre-submit intent BEFORE the POST — closes the POST→journal crash window.
-  // An intent left without a job line is an uncertain-submission liability on the next start.
-  const intentId = `intent-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
-  appendFileSync(JOURNAL, JSON.stringify({ intentId, sourceId: p.sourceId, at: new Date().toISOString() }) + '\n');
-  const started = Date.now();
-  // OW-2: the model travels with EVERY submission; the server builds the right
-  // client per job and rejects unknown models with 400 MODEL_INVALID.
-  const j = await api('/api/jobs', { method: 'POST', body: JSON.stringify({ sourceId: p.sourceId, model: MODEL, flow: FLOW }) });
-  if (j.status !== 202) {
-    console.error(
-      `${tag} → JOB_POST failed (HTTP ${j.status}): ${JSON.stringify(j.body).slice(0, 200)}. Aborting run; nothing recorded. ` +
-        `The pre-submit intent ${intentId} in journal.jsonl stays OUTSTANDING (a non-202 does not prove no job was created): ` +
-        `the next start holds a $${PER_JOB_ADMISSION_USD.toFixed(3)} reservation for it and will not re-submit "${p.sourceId}" ` +
-        `until you resolve it — append {"jobId":"<id>","sourceId":"${p.sourceId}","intentId":"${intentId}"} if a job was created, ` +
-        `or {"intentId":"${intentId}","resolution":"not-submitted"} once verified none was.`,
-    );
-    process.exit(1);
-  }
-  const jobId = j.body.jobId as string;
-  // S5B-07: journal the submission BEFORE waiting — a crash or poll failure can no
-  // longer leave paid work outside the budget bookkeeping on restart.
-  appendFileSync(JOURNAL, JSON.stringify({ jobId, sourceId: p.sourceId, intentId, at: new Date().toISOString() }) + '\n');
+  budgetStop(p);
+  return 'stop';
+}
+
+/**
+ * Poll ONE submitted job to settlement, write its results line and print the same per-page
+ * line the sequential driver has always printed. Runs concurrently with the other pollers
+ * when --concurrency > 1: results-line order may differ from the plan order, but each page
+ * is recorded exactly once.
+ */
+async function pollAndRecord(p: ManifestEntry, jobId: string, started: number): Promise<void> {
+  const tag = `[${p.candidate}/${pages.length}] ${p.sourceId}`;
   let detail: any = null;
   for (let i = 0; i < 300; i++) {
     await new Promise(r => setTimeout(r, 2000));
@@ -440,6 +554,68 @@ for (const p of plan) {
   else if (s.status === 'unsupported') outcome = `declined${record.declineCode ? ` (${record.declineCode})` : ''}`;
   else outcome = `failed ${record.error ?? ''}`.trim();
   console.log(`${tag} → ${outcome} · ${checks} · ${cost} · ${Math.round(wallS)}s`);
+}
+
+for (const p of plan) {
+  const tag = `[${p.candidate}/${pages.length}] ${p.sourceId}`;
+  // Concurrency (part B): never more than CONCURRENCY of this run's own jobs in flight.
+  await waitForSlot();
+  // S5B-14: reconcile ALL outstanding run liabilities FRESHLY before every submission — not
+  // only at start. Under concurrency the reserved figure includes a per-job admission
+  // reservation for EVERY in-flight job (each is journaled and still 'running') plus every
+  // other outstanding liability, so admitting another page beside them can never overshoot
+  // the cap: spent + reserved + perJobAdmissionUSD <= --max-usd is checked before each POST.
+  await rescan();
+  let gate = await admissionGate(p);
+  if (gate === 'skip') continue;
+  if (gate === 'stop') break;
+  await waitForCapacity();
+  // S5B-14: re-check AFTER the capacity wait — a job that settled while waiting is re-read by
+  // the rescan and its real cost replaces its reservation before this submission is admitted.
+  await rescan();
+  gate = await admissionGate(p);
+  if (gate === 'skip') continue;
+  if (gate === 'stop') break;
+  // S5B-14: durable pre-submit intent BEFORE the POST — closes the POST→journal crash window.
+  // An intent left without a job line is an uncertain-submission liability on the next start.
+  const intentId = `intent-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+  appendFileSync(JOURNAL, JSON.stringify({ intentId, sourceId: p.sourceId, at: new Date().toISOString() }) + '\n');
+  const started = Date.now();
+  // OW-2: the model travels with EVERY submission; the server builds the right
+  // client per job and rejects unknown models with 400 MODEL_INVALID.
+  const j = await api('/api/jobs', { method: 'POST', body: JSON.stringify({ sourceId: p.sourceId, model: MODEL, flow: FLOW }) });
+  if (j.status !== 202) {
+    console.error(
+      `${tag} → JOB_POST failed (HTTP ${j.status}): ${JSON.stringify(j.body).slice(0, 200)}. Aborting run; nothing recorded. ` +
+        `The pre-submit intent ${intentId} in journal.jsonl stays OUTSTANDING (a non-202 does not prove no job was created): ` +
+        `the next start holds a $${PER_JOB_ADMISSION_USD.toFixed(3)} reservation for it and will not re-submit "${p.sourceId}" ` +
+        `until you resolve it — append {"jobId":"<id>","sourceId":"${p.sourceId}","intentId":"${intentId}"} if a job was created, ` +
+        `or {"intentId":"${intentId}","resolution":"not-submitted"} once verified none was.`,
+    );
+    process.exit(1);
+  }
+  const jobId = j.body.jobId as string;
+  // S5B-07: journal the submission BEFORE waiting — a crash or poll failure can no
+  // longer leave paid work outside the budget bookkeeping on restart.
+  appendFileSync(JOURNAL, JSON.stringify({ jobId, sourceId: p.sourceId, intentId, at: new Date().toISOString() }) + '\n');
+  // Concurrency (part B): track the poller instead of awaiting it inline — it records the
+  // results line, prints the per-page line and frees the pool slot when the job settles.
+  const tracked = (async (): Promise<void> => {
+    try {
+      await pollAndRecord(p, jobId, started);
+    } finally {
+      inFlight.delete(jobId);
+    }
+  })();
+  inFlight.set(jobId, tracked);
+}
+// Every submitted job has settled and been recorded before the final accounting.
+await drainInFlight();
+if (CONCURRENCY > 1) {
+  // A concurrent run recomputes the final figures from the files (its results lines may have
+  // been written in a different order than the plan); the sequential run keeps its running
+  // totals, exactly as before.
+  await rescan();
 }
 
 console.log(`Done. Model ${MODEL} via ${MODEL_PROVIDER}, flow ${FLOW}. Spent (known settled) $${spentUsd.toFixed(2)} + reserved (outstanding liabilities) $${reservedUsd.toFixed(3)} of budget $${maxUsd.toFixed(2)} (per-job admission $${PER_JOB_ADMISSION_USD.toFixed(3)}). Results: ${RESULTS}`);
