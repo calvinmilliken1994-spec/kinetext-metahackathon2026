@@ -141,11 +141,11 @@ export function sourceOptionLabel(m: SourceMetaLike): string {
 }
 
 /** AI disclosure shown above an activity. NASA wording only for library (NASA) sources; teacher texts name their licence. */
-export function disclosureText(m: SourceMetaLike | null | undefined): string {
+export function disclosureText(m: SourceMetaLike | null | undefined, made = 'Muse Spark 1.3 (Meta)'): string {
   if (m?.kind === 'user') {
-    return `AI-generated with Muse Spark 1.3 (Meta) from a teacher-provided text (${sourceLicenseText(m)}). The wording needs teacher review.`;
+    return `AI-generated with ${made} from a teacher-provided text (${sourceLicenseText(m)}). The wording needs teacher review.`;
   }
-  return 'AI-generated with Muse Spark 1.3 (Meta). Includes NASA source material; NASA has not reviewed or endorsed this activity.';
+  return `AI-generated with ${made}. Includes NASA source material; NASA has not reviewed or endorsed this activity.`;
 }
 
 // ---- demo fault choice (generate control) --------------------------------------------------------------------

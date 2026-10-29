@@ -3,6 +3,8 @@ import type { RevisionInput } from '../lib/repairs.ts';
 import { buildRepairSteps, faultChangeLine, METRICS_NOTE, overallRepairBadge } from '../lib/repairs.ts';
 import { checkName } from '../lib/checks.ts';
 import { shortId } from '../lib/jobs.ts';
+import { modelRunTag, repairedByLine } from '../lib/models.ts';
+import type { JobModel } from '../lib/models.ts';
 
 export interface RepairTimelineProps {
   revisions: readonly RevisionInput[];
@@ -16,6 +18,8 @@ export interface RepairTimelineProps {
   onView: (revision: number) => void;
   /** Timeline jobs: event id -> label, so a swapped-answer fault is described in words. */
   eventLabels?: Readonly<Record<string, string>>;
+  /** The model that made this job: named on the repair steps. */
+  model: JobModel;
 }
 
 function CheckIds({ ids, tone }: { ids: readonly string[]; tone: 'ok' | 'bad' | 'neutral' }) {
@@ -50,6 +54,7 @@ export function RepairTimeline(p: RepairTimelineProps) {
         {overall !== null && <span className={`badge badge-${overall.tone}`} data-testid="overall-repair-badge">{overall.tone === 'ok' ? '✓ ' : '⚠ '}{overall.text}</span>}
       </div>
       <p className="muted small">Each revision is validated from scratch by deterministic code. When checks fail, Muse receives the failing checks and returns a corrected revision (at most two repairs).</p>
+      {steps.some((s) => s.role === 'repair') && <p className="small repair-model" data-testid="repair-model">{repairedByLine(p.model, 'spec')}</p>}
       {p.demoFault !== undefined && <p className="muted small">{METRICS_NOTE}</p>}
 
       <ol className="rev-list" aria-label="Revisions">
@@ -94,7 +99,8 @@ export function RepairTimeline(p: RepairTimelineProps) {
 
               {s.actor !== null && (
                 <p className="rev-actor small">
-                  {s.actor.model !== null && <span className="tag">{s.actor.model}</span>}{' '}
+                  {s.actor.model !== null && <span className={`tag tag-model-${modelRunTag(p.model).tone}`} title={p.model.label}>{p.model.name}</span>}{' '}
+                  {s.actor.model !== null && <span className="tag mono" title="Model string sent to the provider">{p.model.providerModel}</span>}{' '}
                   {s.actor.responseId !== null && <span className="tag mono" title={s.actor.responseId}>{shortId(s.actor.responseId)}</span>}{' '}
                   {s.actor.cost !== null && <span className={`tag${s.actor.cost.includes('reserved') || s.actor.cost === 'cost unknown' ? ' tag-warn' : ''}`}>{s.actor.cost}</span>}
                   {s.actor.failed && <span className="tag tag-warn">repair call failed{s.actor.detail !== null ? `: ${s.actor.detail}` : ''}</span>}

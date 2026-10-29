@@ -1,7 +1,8 @@
 /// <reference types="node" />
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildTimeline, formatCostUSD, formatDuration, INTERRUPTED_TEXT, isInterrupted, jobStatusLabel, newestFirst, pickDefaultJob, rowLabel, runBadge, shortId, totalEventCost } from './jobs.ts';
+import { buildTimeline, formatCostUSD, formatDuration, INTERRUPTED_TEXT, isInterrupted, jobStatusLabel, newestFirst, pickDefaultJob, rowLabel, runBadge, rowModel, shortId, totalEventCost } from './jobs.ts';
+import { resolveJobModel } from './models.ts';
 import type { StageEvent } from '../../../../packages/contracts/index.ts';
 import type { TimelineRow } from './jobs.ts';
 
@@ -163,4 +164,67 @@ test('buildTimeline: an analysis repair that still failed its checks is shown as
   assert.equal(withRecord.find((r) => r.stage === 'repair')?.status, 'failed');
   const detailOnly = buildTimeline(events, 'failed');
   assert.equal(detailOnly.find((r) => r.stage === 'repair')?.status, 'failed');
+});
+
+// ---- OW-3: the model behind each pipeline step ----------------------------------------------------------------
+
+const OPEN = { model: 'muse-spark-open', provider: 'modal', providerModel: 'meta-models/Muse-Spark-Open-816B-A42B' };
+
+test('buildTimeline carries provider and providerModel from the events', () => {
+  const events = [
+    ev(0, 'analyze', 'started', '2026-10-29T09:11:20.771Z', OPEN as Partial<StageEvent>),
+    ev(1, 'analyze', 'succeeded', '2026-10-29T09:11:50.000Z', { ...OPEN, responseId: 'c2a747b2' } as Partial<StageEvent>),
+  ];
+  const [row] = buildTimeline(events, 'succeeded');
+  assert.equal(row?.model, 'muse-spark-open');
+  assert.equal(row?.provider, 'modal');
+  assert.equal(row?.providerModel, 'meta-models/Muse-Spark-Open-816B-A42B');
+});
+
+test('rowModel: open-weights events show Muse Spark Open with the exact provider string on model-call steps', () => {
+  const events = [
+    ev(0, 'ingest', 'succeeded', '2026-10-29T09:11:20.770Z', OPEN as Partial<StageEvent>),
+    ev(1, 'analyze', 'succeeded', '2026-10-29T09:11:50.000Z', { ...OPEN, responseId: 'c2a747b2' } as Partial<StageEvent>),
+    ev(2, 'specify', 'succeeded', '2026-10-29T09:12:20.000Z', { ...OPEN, responseId: '6343d990' } as Partial<StageEvent>),
+    ev(3, 'validate', 'succeeded', '2026-10-29T09:12:25.000Z', OPEN as Partial<StageEvent>),
+    ev(4, 'done', 'succeeded', '2026-10-29T09:12:25.800Z', OPEN as Partial<StageEvent>),
+  ];
+  const rows = buildTimeline(events, 'succeeded');
+  const by = (s: string) => rows.find((r) => r.stage === s);
+  assert.equal(rowModel(by('ingest') as TimelineRow), null, 'ingest is plain code, no model tag');
+  assert.equal(rowModel(by('validate') as TimelineRow), null, 'validation is deterministic code');
+  assert.equal(rowModel(by('done') as TimelineRow), null);
+  const analyze = rowModel(by('analyze') as TimelineRow);
+  assert.equal(analyze?.name, 'Muse Spark Open');
+  assert.equal(analyze?.providerModel, 'meta-models/Muse-Spark-Open-816B-A42B');
+  assert.equal(rowModel(by('specify') as TimelineRow)?.provider, 'modal');
+});
+
+test('rowModel: legacy events (model "muse-spark-1.3", no provider) and bare legacy rows resolve to Muse Spark 1.3 / Meta API', () => {
+  const events = [
+    ev(0, 'analyze', 'started', '2026-10-26T23:40:08.285Z'),
+    ev(1, 'analyze', 'succeeded', '2026-10-26T23:40:20.801Z', { model: 'muse-spark-1.3', responseId: 'chatcmpl-abc' }),
+  ];
+  const [row] = buildTimeline(events, 'unsupported');
+  const m = rowModel(row as TimelineRow);
+  assert.equal(m?.id, 'muse-spark-1.3');
+  assert.equal(m?.provider, 'meta-api');
+  assert.equal(m?.providerModel, 'muse-spark-1.3');
+});
+
+test('rowModel: a pending step has no model yet; a bare step takes the job model as its fallback', () => {
+  const pending = buildTimeline([ev(0, 'ingest', 'started', '2026-10-29T09:00:00.000Z')], 'running').find((r) => r.stage === 'analyze');
+  assert.equal(pending?.status, 'pending');
+  assert.equal(rowModel(pending as TimelineRow, resolveJobModel(OPEN)), null);
+  const bare = buildTimeline([ev(0, 'specify', 'started', '2026-10-29T09:00:00.000Z')], 'running').find((r) => r.stage === 'specify');
+  assert.equal(rowModel(bare as TimelineRow, resolveJobModel(OPEN))?.id, 'muse-spark-open');
+});
+
+test('rowModel: analysis and spec repair steps name the model that made the repair', () => {
+  const events = [
+    ev(0, 'repair', 'started', '2026-10-29T09:11:54.446Z', { ...OPEN, target: 'analysis', revision: 2 } as Partial<StageEvent>),
+    ev(1, 'repair', 'succeeded', '2026-10-29T09:12:04.026Z', { ...OPEN, target: 'analysis', revision: 2, responseId: '9aa61991' } as Partial<StageEvent>),
+  ];
+  const [row] = buildTimeline(events, 'succeeded');
+  assert.equal(rowModel(row as TimelineRow)?.openWeights, true);
 });

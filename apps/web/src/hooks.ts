@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { api, describeError } from './api.ts';
 import type { Health, JobDetail, JobSummary, SourceDoc, SourceMeta } from './api.ts';
+import type { ModelOption } from './lib/models.ts';
 
 export const POLL_MS = 1500;
 /** /api/health poll: the authoritative busy flag for the Generate button (R-10). */
@@ -48,6 +49,24 @@ export function useHealth(): { health: Health | null; down: boolean; refresh: ()
     }
   }, []);
   return { health, down, refresh };
+}
+
+/**
+ * The model picker list from GET /api/models. Re-read whenever /api/health reports different model availability.
+ * A server without /api/models (older build) or a failed read gives an empty list, which hides the picker.
+ */
+export function useModels(health: Health | null): ModelOption[] {
+  const [models, setModels] = useState<ModelOption[]>([]);
+  const signature = health === null ? 'none' : `${health.live ? 1 : 0}:${health.models?.['muse-spark-1.3'] === true ? 1 : 0}:${health.models?.['muse-spark-open'] === true ? 1 : 0}`;
+  useEffect(() => {
+    const ctl = new AbortController();
+    api.models(ctl.signal).then(
+      (data) => setModels(data),
+      (e: unknown) => { if (!isAbort(e)) setModels([]); },
+    );
+    return () => ctl.abort();
+  }, [signature]);
+  return models;
 }
 
 export function useSources(): { sources: Loadable<SourceMeta[]>; reload: () => void } {

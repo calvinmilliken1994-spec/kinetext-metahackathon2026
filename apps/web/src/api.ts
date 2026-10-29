@@ -4,11 +4,17 @@
 import type { CreatedSource } from './lib/sources.ts';
 import type { AnyActivitySpec } from './lib/timeline.ts';
 import type { AnalysisRepairRecord } from './lib/analysisRepairs.ts';
+import { parseModels } from './lib/models.ts';
+import type { ModelId, ModelOption } from './lib/models.ts';
 import type { ActivityId, DemoFault, FaultRecord, MetaReceipt, RepairRecord, SourceAnalysis, StageEvent, UserSourceInput, ValidationReport } from '../../../packages/contracts/index.ts';
 
 export type JobStatus = 'running' | 'succeeded' | 'unsupported' | 'failed';
 
-export interface Health { ok: boolean; live: boolean; /** The server is running a job right now (absent on older servers). */ busy?: boolean }
+export interface Health {
+  ok: boolean; live: boolean; /** The server is running a job right now (absent on older servers). */ busy?: boolean;
+  /** OW-2: which models can be used right now (booleans only). Absent on older servers. */
+  models?: Partial<Record<ModelId, boolean>>;
+}
 
 export interface SourceMeta {
   id: string; title: string; locator: string; license: string; attribution: string; sha256: string; purpose: string;
@@ -36,6 +42,11 @@ export interface JobSummary {
   bestRevision?: number;
   demoFault?: FaultRecord;
   sourceKind?: 'library' | 'user';
+  /** OW-2: which model made the job. Servers normalise legacy jobs; the UI still treats absent as Muse Spark 1.3 / Meta API. */
+  model?: string;
+  provider?: string;
+  /** The exact model string sent to the provider (e.g. meta-models/Muse-Spark-Open-816B-A42B). */
+  providerModel?: string;
 }
 
 /** One stored revision of the activity spec and its validation report (Stage 5). */
@@ -100,14 +111,16 @@ export const api = {
   health: (signal?: AbortSignal) => request<Health>('/api/health', { signal }),
   sources: (signal?: AbortSignal) => request<SourceMeta[]>('/api/sources', { signal }),
   source: (id: string, signal?: AbortSignal) => request<SourceDoc>(`/api/sources/${encodeURIComponent(id)}`, { signal }),
+  /** The picker list. Parsed defensively: anything unexpected becomes an empty list (picker hidden). */
+  models: async (signal?: AbortSignal): Promise<ModelOption[]> => parseModels(await request<unknown>('/api/models', { signal })),
   jobs: (signal?: AbortSignal) => request<JobSummary[]>('/api/jobs', { signal }),
   job: (id: string, signal?: AbortSignal) => request<JobDetail>(`/api/jobs/${encodeURIComponent(id)}`, { signal }),
   /** `demoFault` asks the SYSTEM to inject a labelled fault into revision 1 (a demonstration, not a model error). */
-  createJob: (sourceId: string, demoFault?: DemoFault) =>
+  createJob: (sourceId: string, demoFault?: DemoFault, model?: ModelId) =>
     request<{ jobId: string }>('/api/jobs', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(demoFault === undefined ? { sourceId } : { sourceId, demoFault }),
+      body: JSON.stringify({ sourceId, ...(demoFault === undefined ? {} : { demoFault }), ...(model === undefined ? {} : { model }) }),
     }),
   /** Store a teacher-pasted text. 201 = created, 200 = the same text was stored before. */
   createSource: (input: UserSourceInput) =>
@@ -133,6 +146,7 @@ const MESSAGES: Record<string, string> = {
   PAYLOAD_TOO_LARGE: 'The request was too large for the server.',
   UNSUPPORTED_MEDIA_TYPE: 'The server refused the request format.',
   BAD_REQUEST: 'The server did not understand the request.',
+  MODEL_INVALID: 'The server did not recognise that model. Pick one from the list.',
   INTERNAL: 'The server hit an unexpected error.',
 };
 

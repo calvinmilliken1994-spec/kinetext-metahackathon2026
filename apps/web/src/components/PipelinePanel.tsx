@@ -6,8 +6,11 @@ import type { GenerateState } from '../lib/health.ts';
 import { INTERRUPTED_TEXT, isInterrupted, jobStatusLabel, runBadge } from '../lib/jobs.ts';
 import { analysisRepairTags } from '../lib/analysisRepairs.ts';
 import { runTags } from '../lib/repairs.ts';
+import { modelRunTag, resolveJobModel } from '../lib/models.ts';
+import type { ModelId, ModelOption } from '../lib/models.ts';
 import { DEMO_FAULT_HELP, DEMO_FAULT_LABEL, demoFaultOptions, FREE_CREDITS_NOTE } from '../lib/sources.ts';
 import type { DemoChoice } from '../lib/sources.ts';
+import { ModelPicker } from './ModelPicker.tsx';
 import { Timeline } from './Timeline.tsx';
 
 export interface PipelinePanelProps {
@@ -28,6 +31,12 @@ export interface PipelinePanelProps {
   onDemoChoice: (c: DemoChoice) => void;
   generateError: string | null;
   detail: Loadable<JobDetail> | null;
+  /** GET /api/models; empty (older server) hides the picker. */
+  models: readonly ModelOption[];
+  modelChoice: ModelId;
+  onModelChoice: (id: ModelId) => void;
+  /** /api/health live flag; null until loaded. */
+  live: boolean | null;
 }
 
 export function PipelinePanel(p: PipelinePanelProps) {
@@ -43,6 +52,7 @@ export function PipelinePanel(p: PipelinePanelProps) {
       </div>
 
       <div className="pad">
+        <ModelPicker options={p.models} selected={p.modelChoice} onSelect={p.onModelChoice} live={p.live} locked={generate.busy} />
         <button type="button" className="btn btn-primary btn-wide" onClick={p.onGenerate} disabled={disabled} aria-describedby={why !== null ? 'generate-why' : undefined}>
           {generate.busy ? '⏳ Generating…' : '✦ Generate with Muse Spark'}
         </button>
@@ -79,6 +89,7 @@ export function PipelinePanel(p: PipelinePanelProps) {
             const selected = j.jobId === p.selectedJobId;
             const cost = describeJobCost({ totalCostUSD: j.totalCostUSD, reservedUnknownUSD: j.reservedUnknownUSD, interrupted });
             const engine = engineTitle(j.engine);
+            const jobModel = modelRunTag(resolveJobModel(j));
             const tags = [...analysisRepairTags(j), ...runTags(j)];
             return (
               <li key={j.jobId}>
@@ -87,12 +98,11 @@ export function PipelinePanel(p: PipelinePanelProps) {
                     <span className={`badge ${badge.kind === 'live' ? 'badge-live' : 'badge-rec'}`}>{badge.label}</span>
                     <span className={`status st-${st.tone}`}>{st.text}</span>
                   </span>
-                  {(engine !== null || tags.length > 0) && (
-                    <span className="run-tags">
+                  <span className="run-tags">
+                    <span className={`tag tag-model-${jobModel.tone}`} data-testid="run-model-tag">{jobModel.text}</span>
                       {engine !== null && <span className="tag tag-engine" title={j.engine ?? undefined}>{engine}</span>}
                       {tags.map((t) => <span key={t.text} className={`tag tag-${t.tone}`}>{t.text}</span>)}
-                    </span>
-                  )}
+                  </span>
                   <span className="run-sub mono">{j.jobId} · est. cost {cost}</span>
                   {interrupted && <span className="run-note">{INTERRUPTED_TEXT}</span>}
                 </button>
@@ -115,6 +125,7 @@ export function PipelinePanel(p: PipelinePanelProps) {
             reservedUnknownUSD={p.detail.data.summary.reservedUnknownUSD}
             interrupted={isInterrupted(p.detail.data.summary)}
             analysisRepairs={p.detail.data.summary.analysisRepairs}
+            jobModel={resolveJobModel(p.detail.data.summary)}
           />
         )}
       </div>

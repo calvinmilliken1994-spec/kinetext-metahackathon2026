@@ -1,10 +1,14 @@
 import type { AnalysisRepairOverall, AnalysisRepairStep, CheckRef } from '../lib/analysisRepairs.ts';
 import { ANALYSIS_UNCHANGED_NAME, analysisRepairBadge, analysisRepairCostUSD, naturalRepairNoteParts, stepCostLabel } from '../lib/analysisRepairs.ts';
 import { formatCostUSD, shortId } from '../lib/jobs.ts';
+import { modelRunTag, repairedByLine } from '../lib/models.ts';
+import type { JobModel } from '../lib/models.ts';
 
 export interface AnalysisRepairTimelineProps {
   steps: readonly AnalysisRepairStep[];
   overall: AnalysisRepairOverall;
+  /** The model that made this job: named on the repair attempts. */
+  model: JobModel;
 }
 
 function Checks({ checks, tone }: { checks: readonly CheckRef[]; tone: 'ok' | 'bad' | 'neutral' }) {
@@ -24,7 +28,7 @@ function Checks({ checks, tone }: { checks: readonly CheckRef[]; tone: 'ok' | 'b
  * Source-analysis repairs (TASK-024c): Muse's first analysis failed a check → what failed, in words → Muse's repair
  * (a before/after diff) → checks passed. A NATURAL repair: Muse's own mistake, never a system-made demo fault.
  */
-export function AnalysisRepairTimeline({ steps, overall }: AnalysisRepairTimelineProps) {
+export function AnalysisRepairTimeline({ steps, overall, model }: AnalysisRepairTimelineProps) {
   if (steps.length === 0) return null;
   const badge = analysisRepairBadge(overall);
   const total = analysisRepairCostUSD(steps);
@@ -41,6 +45,7 @@ export function AnalysisRepairTimeline({ steps, overall }: AnalysisRepairTimelin
       <p className={`callout ${overall.state === 'failed' ? 'callout-error' : 'callout-natural'} small`} role="note" data-testid="natural-note">
         <strong>{note.lead}.</strong>{' '}{note.body}
       </p>
+      <p className="small repair-model" data-testid="repair-model">{repairedByLine(model, 'analysis')}</p>
       {total !== null && <p className="muted small">Analysis repair cost: <strong>{formatCostUSD(total)} est.</strong> (included in the run total)</p>}
 
       <ol className="rev-list" aria-label="Analysis repair attempts">
@@ -117,7 +122,8 @@ export function AnalysisRepairTimeline({ steps, overall }: AnalysisRepairTimelin
             {s.actor !== null && (
               <p className="rev-actor small" aria-label="Repair call">
                 <span className="tag">Repair call</span>{' '}
-                {s.actor.model !== null && <span className="tag">{s.actor.model}</span>}{' '}
+                {s.actor.model !== null && <span className={`tag tag-model-${modelRunTag(model).tone}`} title={model.label}>{model.name}</span>}{' '}
+                {s.actor.model !== null && <span className="tag mono" title="Model string sent to the provider">{model.providerModel}</span>}{' '}
                 {s.actor.responseId !== null && <span className="tag mono" title={s.actor.responseId}>{shortId(s.actor.responseId)}</span>}{' '}
                 {stepCostLabel(s) !== null && <span className={`tag${stepCostLabel(s) === 'cost unknown' ? ' tag-warn' : ''}`} data-testid="analysis-repair-cost">{stepCostLabel(s)}</span>}
                 {s.actor.failed && <span className="tag tag-warn">repair call failed{s.actor.detail !== null ? `: ${s.actor.detail}` : ''}</span>}

@@ -1,10 +1,12 @@
 import { useCallback, useMemo, useState } from 'react';
 import { api, describeError } from './api.ts';
-import { useHealth, useJobDetail, useJobs, useSourceDoc, useSources } from './hooks.ts';
+import { useHealth, useJobDetail, useJobs, useModels, useSourceDoc, useSources } from './hooks.ts';
 import { buildHighlights } from './lib/highlight.ts';
 import { collectQuoteRefs } from './lib/evidence.ts';
 import { newestFirst, pickDefaultJob } from './lib/jobs.ts';
 import { generateState, isServerBusy } from './lib/health.ts';
+import { madeWithPhrase, modelToSend, pickModel, readStoredModel, resolveJobModel, writeStoredModel } from './lib/models.ts';
+import type { ModelId } from './lib/models.ts';
 import { analysisCheckName, analysisRepairOverall, buildAnalysisRepairSteps, repairSummaryText } from './lib/analysisRepairs.ts';
 import { checkName } from './lib/checks.ts';
 import { defaultRevision, overallRepairBadge, revisionInputs, validationHeading } from './lib/repairs.ts';
@@ -12,6 +14,7 @@ import { timelineEventLabels } from './lib/timeline.ts';
 import { demoFaultToSend, disclosureText } from './lib/sources.ts';
 import type { DemoChoice } from './lib/sources.ts';
 import { Header } from './components/Header.tsx';
+import { ModelNote } from './components/ModelNote.tsx';
 import { SourcePanel } from './components/SourcePanel.tsx';
 import type { Flash } from './components/SourcePanel.tsx';
 import { PipelinePanel } from './components/PipelinePanel.tsx';
@@ -22,6 +25,11 @@ import { RepairTimeline } from './components/RepairTimeline.tsx';
 import { ValidationPanel } from './components/ValidationPanel.tsx';
 
 const NO_JOBS: never[] = [];
+
+/** The model choice lasts for the browser session (a reload keeps it); blocked storage just means it lasts for the page. */
+function sessionStore(): Storage | null {
+  try { return typeof window === 'undefined' ? null : window.sessionStorage; } catch { return null; }
+}
 
 export function App() {
   const { health, down, refresh: refreshHealth } = useHealth();
@@ -37,6 +45,9 @@ export function App() {
   const [generateError, setGenerateError] = useState<string | null>(null);
   const [demoChoice, setDemoChoice] = useState<DemoChoice>('none');
   const [flash, setFlash] = useState<Flash | null>(null);
+  const models = useModels(health);
+  const [wantedModel, setWantedModel] = useState<ModelId | null>(() => readStoredModel(sessionStore()));
+  const modelChoice = pickModel(models, wantedModel);
 
   const sourceList = sources.state === 'ready' ? sources.data : null;
   const selectedSourceId = pickedSource ?? sourceList?.[0]?.id ?? null;
@@ -74,7 +85,7 @@ export function App() {
     const sourceId = selectedSourceId;
     setGenerating(true);
     setGenerateError(null);
-    api.createJob(sourceId, demoFaultToSend(demoChoice)).then(
+    api.createJob(sourceId, demoFaultToSend(demoChoice), modelToSend(models, modelChoice)).then(
       ({ jobId }) => {
         setLiveJobIds((prev) => new Set(prev).add(jobId));
         setPickedJob({ jobId, sourceId });
@@ -85,7 +96,8 @@ export function App() {
       // Keep the button locked until /api/health has been re-read, so it never flickers enabled.
       void refreshHealth().finally(() => setGenerating(false));
     });
-  }, [selectedSourceId, demoChoice, refreshJobs, refreshHealth]);
+  }, [selectedSourceId, demoChoice, models, modelChoice, refreshJobs, refreshHealth]);
+  const onModelChoice = useCallback((id: ModelId) => { setWantedModel(id); writeStoredModel(sessionStore(), id); }, []);
 
   const onSelectSource = useCallback((id: string) => { setPickedSource(id); setFlash(null); }, []);
   const onSourceCreated = useCallback((id: string) => { reloadSources(); setPickedSource(id); setFlash(null); }, [reloadSources]);
@@ -94,6 +106,7 @@ export function App() {
   }, [selectedSourceId]);
 
   const spec = ready?.spec;
+  const jobModel = useMemo(() => (ready === null ? null : resolveJobModel(ready.summary)), [ready]);
   const analysisReport = ready?.analysis?.report ?? null;
 
   // Revisions (Stage 5): the validation panel shows the published (else best) revision unless the user picks another.
@@ -155,6 +168,7 @@ export function App() {
           {selectedJobId === null && jobs.state === 'loading' && <p className="muted pad">Loading…</p>}
           {detail?.state === 'loading' && <p className="muted pad">Loading run…</p>}
           {detail?.state === 'error' && <div className="callout callout-error pad-m" role="alert">{detail.message}</div>}
+          {jobModel !== null && <ModelNote model={jobModel} />}
           {ready !== null && repairBanner !== null && (
             <p className={`callout ${analysisOverall.state === 'failed' ? 'callout-error' : 'callout-natural'} pad-m repair-banner`} role="note" data-testid="repair-summary">
               <strong>{repairBanner}</strong>
@@ -166,7 +180,7 @@ export function App() {
               key={spec.id}
               spec={spec}
               cite={{ sourceId: ready.summary.sourceId, located, onCite }}
-              disclosure={disclosureText(selectedSource)}
+              disclosure={disclosureText(selectedSource, jobModel === null ? undefined : madeWithPhrase(jobModel))}
               repairBadge={repairBadge}
             />
           )}
@@ -191,10 +205,15 @@ export function App() {
             onDemoChoice={setDemoChoice}
             generateError={generateError}
             detail={detail}
+            models={models}
+            modelChoice={modelChoice}
+            onModelChoice={onModelChoice}
+            live={health === null ? null : health.live}
           />
-          {ready !== null && <AnalysisRepairTimeline steps={analysisSteps} overall={analysisOverall} />}
-          {ready !== null && (
+          {ready !== null && jobModel !== null && <AnalysisRepairTimeline steps={analysisSteps} overall={analysisOverall} model={jobModel} />}
+          {ready !== null && jobModel !== null && (
             <RepairTimeline
+              model={jobModel}
               revisions={revisions}
               repairs={ready.summary.repairs}
               demoFault={ready.summary.demoFault}

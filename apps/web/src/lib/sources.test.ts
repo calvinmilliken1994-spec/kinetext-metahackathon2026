@@ -122,6 +122,13 @@ test('source labels: teacher sources carry the tag and licence, library sources 
   assert.equal(sourceLicenseText(library), 'NASA media guidelines');
 });
 
+test('disclosureText names the model that made the activity (OW-3): Spark Open is never credited as Spark 1.3', () => {
+  const open = 'Muse Spark Open (Meta’s open weights, hosted on Modal)';
+  assert.equal(disclosureText(null, open), 'AI-generated with Muse Spark Open (Meta’s open weights, hosted on Modal). Includes NASA source material; NASA has not reviewed or endorsed this activity.');
+  assert.ok(disclosureText({ title: 't', license: 'cc-by', kind: 'user', licenseLabel: 'CC BY 4.0' }, open).startsWith(`AI-generated with ${open} from a teacher-provided text (`));
+  assert.ok(!disclosureText(null, open).includes('1.3'));
+});
+
 test('disclosureText: NASA wording only for library sources', () => {
   assert.equal(disclosureText(null), 'AI-generated with Muse Spark 1.3 (Meta). Includes NASA source material; NASA has not reviewed or endorsed this activity.');
   assert.ok(disclosureText({ title: 't', license: 'x', kind: 'library' }).includes('NASA has not reviewed'));

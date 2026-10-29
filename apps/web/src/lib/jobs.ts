@@ -2,6 +2,8 @@
 // No React, no DOM. Types come from the shared contracts.
 
 import type { Stage, StageEvent, Usage } from '../../../../packages/contracts/index.ts';
+import { resolveJobModel } from './models.ts';
+import type { JobModel } from './models.ts';
 
 export type JobStatus = 'running' | 'succeeded' | 'unsupported' | 'failed';
 
@@ -90,6 +92,9 @@ export interface TimelineRow {
   /** Wall time between the stage's started and finished events; null while running/pending. */
   durationMs: number | null;
   model?: string;
+  /** OW-2 events: 'meta-api' | 'modal' and the exact model string sent to it. Absent on older runs. */
+  provider?: string;
+  providerModel?: string;
   responseId?: string;
   usage?: Usage | null;
   latencyMs?: number;
@@ -114,6 +119,9 @@ function rowFromEvents(stage: Stage, evs: readonly StageEvent[], revision: numbe
   const src = finished ?? started;
   if (src) {
     if (src.model !== undefined) row.model = src.model;
+    const extra = src as StageEvent & { provider?: unknown; providerModel?: unknown };
+    if (typeof extra.provider === 'string') row.provider = extra.provider;
+    if (typeof extra.providerModel === 'string') row.providerModel = extra.providerModel;
     if (src.responseId !== undefined) row.responseId = src.responseId;
     if (src.usage !== undefined) row.usage = src.usage;
     if (src.latencyMs !== undefined) row.latencyMs = src.latencyMs;
@@ -161,6 +169,19 @@ export function buildTimeline(events: readonly StageEvent[], jobStatus: JobStatu
     }
   }
   return rows;
+}
+
+/** Steps in which the model itself is called (the others are plain code and carry no model tag). */
+const MODEL_STAGES: readonly Stage[] = ['analyze', 'specify', 'repair'];
+
+/**
+ * The model behind a pipeline step, or null for steps that run no model (ingest, validate, done, the injected
+ * demo fault) and for steps that have not started. `fallback` is the job's own model: used when an older
+ * event recorded none.
+ */
+export function rowModel(row: Pick<TimelineRow, 'stage' | 'status' | 'model' | 'provider' | 'providerModel'>, fallback?: JobModel): JobModel | null {
+  if (!MODEL_STAGES.includes(row.stage) || row.status === 'pending') return null;
+  return resolveJobModel({ model: row.model, provider: row.provider, providerModel: row.providerModel }, fallback);
 }
 
 /** Row heading: 'Validate · revision 2'. Revision-less rows keep their plain stage label. */

@@ -4,6 +4,7 @@ import { activityTitles, engineTitle } from '../lib/engines.ts';
 import { INTERRUPTED_TEXT, isInterrupted } from '../lib/jobs.ts';
 import { analysisRepairNote, analysisRepairOverall } from '../lib/analysisRepairs.ts';
 import { demoFaultNotice, repairAttemptCount } from '../lib/repairs.ts';
+import { friendlyJobError } from '../lib/models.ts';
 
 /** Centre-column states for jobs that did not produce a runnable activity. `serverBusy`: /api/health busy flag (null = unknown). */
 export function JobOutcome({ detail, serverBusy }: { detail: JobDetail; serverBusy: boolean | null }) {
@@ -61,6 +62,7 @@ export function JobOutcome({ detail, serverBusy }: { detail: JobDetail; serverBu
   }
   const failed = (report?.checks ?? []).filter((c) => !c.passed);
   const chosen = engineTitle(summary.engine);
+  const friendly = friendlyJobError(summary.error?.code);
   const repairCount = repairAttemptCount(summary.repairs, detail.events);
   return (
     <div className="outcome outcome-failed" role="alert">
@@ -68,6 +70,7 @@ export function JobOutcome({ detail, serverBusy }: { detail: JobDetail; serverBu
       <h2>Blocked</h2>
       {chosen !== null && <p className="muted">Activity type Muse chose: <strong>{chosen}</strong> (<code>{summary.engine}</code>)</p>}
       {summary.demoFault !== undefined && <p className="callout callout-fault" role="note">{demoFaultNotice(summary.demoFault)}</p>}
+      {friendly !== null && <p className="callout callout-error" data-testid="friendly-error">{friendly}</p>}
       {summary.error !== undefined && <p>Error code: <code>{summary.error.code}</code>{summary.error.message ? <span className="muted"> — {summary.error.message}</span> : null}</p>}
       {analysisNote !== null && <p className="callout callout-error small" role="note">{analysisNote}</p>}
       {repairCount > 0 && (
