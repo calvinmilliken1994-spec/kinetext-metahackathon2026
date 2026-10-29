@@ -207,3 +207,121 @@ No refund or lost prior-attempt liability appeared in those ordinary paths. The 
 4. Re-run `check`, schema check, scratch-directed web build and these probes after fixes. Continue supervised loopback-only operation, canonical ledger/port, licensed nonprivate data, explicit system-made fault labels and teacher review. No approval for unattended service, external publication or general claim verification is implied.
 
 No `.env` read, install, network retrieval, live Meta/Modal call, live server startup, Git write, implementation edit, evidence regeneration, commit, push or deployment was performed. Repository changes are limited to this report; probes, their job data and frontend build output are in scratch.
+
+## Re-review (round 2) at fb99f458b2d7e7d027ccbe1ef9b4d8b0c886d239
+
+**Updated verdict: CHANGES REQUIRED.** Independent reviewer: OpenAI `gpt-6-astra` via `openai-codex`. Reviewed all six commits after `682bebc`, including the additive evidence correction and Waves A–D. The original report above is preserved.
+
+The original exploit probes now produce the safe outcomes, including rejection of both repeated timeline repair candidates by the real worker. **The broader date-grounding and evaluation-budget contracts are not yet closed.** New source-boundary, BCE-range and approximation variants still publish incorrect exact dates on revision 1; restarting the evaluation driver with unresolved liability can still admit spending outside its advertised run budget. These are exercised failures, not speculative concerns about model behaviour.
+
+### Verification performed
+
+| Gate | Verified result |
+|---|---|
+| `npm run check` | Exit 0; TypeScript passed; **1,006 passed, 0 failed/cancelled/skipped**. Final run explicitly set `TEMP`, `TMP` and `TMPDIR` to review scratch. |
+| `node scripts/build-schemas.ts --check` | Exit 0; `schemas up to date`. |
+| `npm --prefix apps/web run build -- --outDir <review-scratch>/round2-web-dist` | Exit 0; frontend TypeScript and Vite passed; **78 modules transformed**. Expected outside-root output warning only. |
+| Original independent probes | Re-ran `probes.mjs`, `cost-probes.mjs`, `extra-probes.mjs`, `end-to-end.mjs`, `evidence.mjs`; every script exited 0. Inspected results rather than equating script exit with safety. |
+| New adversarial probes | `round2-adversarial.mjs`: **45 result rows**, including connected dates, source contexts, affected paths, analysis repairs and exhaustive order feedback. `round2-e2e.mjs`: seven real-worker synthetic jobs plus two real recorded analysis-repair replays. |
+| Billed-stage persistence matrix | **20/20** job totals agree with real scratch-ledger committed amounts within USD 0.000001: analyze, analysis repair, specify, spec repair × success, invalid generated output, truncation, timeout, uncertain retry. Each target deliberately loses its event file after the call begins; `job.json` remains writable and is read back. |
+| Demo matrix | Both fault kinds on **all eight activities: 16/16** succeeded at r3 after deliberately repeating faulty r1 as the first repair. Every injection was effective, retained the system-made label, recorded the first failed/second successful repair, and preserved all four different synthetic receipt charges (USD 0.10 total). |
+| Evaluation recovery | Eight isolated executions of the actual driver, with preloaded fake `fetch` and scratch-only result/journal paths. No API server or network request. Settled/duplicate recovery works; six other recovery cases incorrectly permit a new submission, detailed below. |
+| Stored evidence | Re-enumerated every `docs/evidence/stage-5b/**/jobs/`: **42 jobs, 18 spec revisions across 16 jobs**. Result rows and deduplicated receipt totals still agree with job files. All previously published specs still pass. Both recorded analysis repairs pass the new guard. The only stored-vs-current spec verdict differences remain the already-disclosed BUG-003 CFPB r2/r3 replays. |
+
+All new scripts, logs, generated jobs, fake journals and build output are under the active profile's `cache/scratch/review-5b/`. Durable result files: `round2-adversarial-results.json`, `round2-worker-results.json`, `round2-eval-results.json`, `round2-e2e-results.json`, `round2-verification-summary.json`; original probes retain their original result filenames, with fresh `round2-*.log` transcripts. The final suite log is `round2-check-scoped.log`.
+
+### Disposition of S5B-01–S5B-10
+
+| Finding | Round-2 status | Evidence and remaining boundary |
+|---|---|---|
+| **S5B-01** | **PARTIALLY CLOSED** | Original headcount/mixed-month exploits fail. Valid ordinal `the 4th of July 1776`, `Sept. 4th, 1776`, day-month and ordinary BCE dates pass; AD range endpoints pass and the interior fails. But quote-edge truncation/source-unit normalisation still fabricates dates (**S5B-11**), and BCE range suffixes are lost (**S5B-12**). |
+| **S5B-02** | **PARTIALLY CLOSED** | Original `around March` trimming and `circa` title probes fail safely. Repeated clean/approximate occurrences, headings, whitespace changes and quotes spanning sentences retain approximation context. `c.` sentence splitting, day-first qualifiers and `early` title inheritance still bypass it (**S5B-13**). |
+| **S5B-03** | **PARTIALLY CLOSED** | Reflected ids, own-label date rewrites and case-name pair rewrites are rejected. Worker r2 **and r3** fail `repair.no-weakening`; no publication. Legitimate label correction with reordered event arrays passes by event identity. The exported comparator still unions caller-supplied affected paths with recomputation, allowing a contradictory caller finding to unlock a clean event (**S5B-15**). The current worker is protected by pipeline-side recomputation; this is not a newly reproduced model-to-worker bypass. |
+| **S5B-04** | **CLOSED** | Id-only repair cannot delete, append, reorder or rewrite unaffected concepts, change an unrelated reason, or escape an empty-list finding by declining. Repeating rejected candidates against r1 still fails. Forged caller reports naming root/parent/decision paths do not expand permission. Legitimate empty-list additions, unsupportedReason-only repairs and all policy-field corrections pass. Both archived id-only repairs pass. See the fail-closed structural-input limitation below. |
+| **S5B-05** | **CLOSED** | Exhaustive assembly switch covers the catalogue. Full suite's immediate-repair matrix passes; the new 16-run second-repair matrix also passes, including all three new formula engines, fault effectiveness, labels and costs. |
+| **S5B-06** | **CLOSED** | Original paid-error/event-write failure now persists **USD 0.068125**, equal to the ledger. New 20-run matrix covers all four billed stages and both receipt/error accounting paths, including unknown retry/timeout liability. No loss or double count reproduced. |
+| **S5B-07** | **PARTIALLY CLOSED** | USD **1.704** admission is correctly derived at the configured caps; known settled journal jobs are recovered and duplicate entries counted once. Running/unresolved/unknown-cost/corrupt journal state still permits other pages without reserving its liability (**S5B-14**). |
+| **S5B-08** | **PARTIALLY CLOSED** | Default stderr and persisted diagnostics use the fixed allowlist; arbitrary code/name markers become `unknown`. Every declared allowlisted token was exercised. The newly introduced opt-in debug path prints raw message/stack without the required redaction (**S5B-16**). |
+| **S5B-09** | **CLOSED** | Additive correction sections agree with the stored files: original evaluation USD **0.928613**; follow-up's 12 rows USD **0.501058**, omitted failed job USD **0.139421**, all 13 jobs USD **0.640479**. Four follow-up repair attempts: two accepted analysis-format repairs, two historically rejected spec repairs. Original scores, manifest, summaries and historical claims remain preserved, explicitly superseded by the corrections. |
+| **S5B-10** | **CLOSED** | Original wrong order now marks the two reversed cards wrong (`rightCount:3`, one violated pair). Exhausted all **120** permutations of the mixed-precision example: **108 rejected**, zero mismatches between per-card feedback and endpoints of actual violated strict pairs. Legitimate partial-precision ties remain accepted. |
+
+### New findings and residual mechanisms
+
+#### S5B-11 — High: date expressions are bounded by the model's quote, not the actual source span
+
+**Location:** `packages/validation/timeline.ts:248-293,333-358,610-649`; source-location helpers at `430-560` are used for approximation but not to constrain the grounded date expression.
+
+**Evidence:** `round2-adversarial-results.json` and real-worker disk readbacks in `round2-e2e-results.json`:
+
+- Source: `The survey office opened on March 30, 1889 in the customs house.` Quote: `The survey office opened on March 3`. Claimed **1889-03-03** passes every check and the worker publishes r1. Substring-verbatim accepts a cut inside `30`; the parser sees a complete `3` at the quote edge and borrows 1889 from the title.
+- Source: `The survey office opened on March 3, 1889 BCE in the customs house.` Quote stops immediately after `1889`. The worker publishes **+1889-03-03**, although the source says **−1889-03-03**. Approximation-context lookup does not preserve the omitted era suffix.
+- Full-validator variant: source has an actual newline between `March` and `3, 1889 were reference numbers.` A whitespace-normalised quote joins them into `March 3, 1889`, producing `publishable:true` despite the documented newline-separated source-unit rule.
+
+**Concrete fix:** parse dates in the original source units with exact raw spans, including token boundaries and attached era/range syntax. Map the quote's occurrence to those spans; never let a quote edge manufacture a token end or a whitespace-normalised quote erase a source-unit boundary. Use the complete source expression when determining sign/precision/title inheritance. Add full-validator and worker regressions for all three variants, retaining legitimate whole-expression shortened quotes.
+
+#### S5B-12 — High: the year-range alternative strips BCE from the endpoint
+
+**Location:** `packages/validation/timeline.ts:194-201,276-282`.
+
+**Evidence:** `BCE-range-wrong-sign` accepts **+400** from the verbatim sentence `The office was active during 500–400 BCE.`; `BCE-range-right-sign` rejects **−400**. The range alternative consumes `500–400` without the suffix and emits positive years; the later standalone-year branch never gets to read `400 BCE`. The real worker publishes +400 at r1 (`BCE-range`, two fake calls, all checks passing).
+
+**Concrete fix:** include and resolve era markers as part of the range grammar, or reject era-bearing ranges until supported. At a minimum the explicitly suffixed right endpoint must be negative, never positive; ambiguous sign inheritance for the other endpoint must fail closed. Test BC/B.C./BCE suffixes, both endpoints, mixed eras and abbreviated ranges alongside existing AD controls.
+
+#### S5B-13 — High: approximation handling still loses abbreviations and misses supported date/title forms
+
+**Location:** `packages/validation/timeline.ts:110-139,366-397,408-423,459-485`.
+
+**Evidence:** each of the following passes full validation and publishes r1 in the real worker:
+
+1. `The office opened c. March 3, 1889 in the customs house.` Quoting just `March 3, 1889 in the customs house.` accepts an exact date. `c.` is not protected by the abbreviation masker, so source-context splitting puts the qualifier in a different unit. Even the full sentence quote passes the approximation check.
+2. `The office opened around the 4th of July 1776.` accepts exact 1776-07-04. The parser supports this day-first expression, but the approximation regex only recognises `around` directly before a year/month, not this date expression.
+3. Metadata title and first heading both `The Harbor Survey (early 1889)` lend exact 1889 to `The office opened on March 3.` The title rejection regex omits the already-recognised approximation words `early/mid/late`.
+
+**Concrete fix:** protect approximation abbreviations during unit segmentation, attach qualifiers to parsed expressions (including optional articles and ordinal day-first forms), and share a consistent approximation policy with title inheritance. Preserve existing tests that distinguish `about 40 delegates` from an approximate date. Re-run the positive ordinal/abbreviation controls as well as shortened-quote negatives.
+
+#### S5B-14 — Medium: journal recovery blocks a page, not its outstanding financial liability
+
+**Location:** `scripts/evaluation-run.ts:79-87,158-205,240-259,272-274`; `scripts/evaluation-budget.ts:110-136,171-198`.
+
+**Evidence:** `round2-eval.mjs` executes the actual driver against an in-process fake transport, with `--max-usd 1.8`, an old journaled job and another manifest page:
+
+- When the old job is already settled with cost **1.70**, recovery records it and correctly refuses the next job. A duplicate journal line is counted once.
+- When the old job is initially `running`, it is merely added to `blockedSourceIds`. The fake job then settles at **1.70** before `/api/health` returns idle. The driver does not re-reconcile or hold a reservation; it submits the next page, records **0.20**, and prints only **0.20** spent. Actual synthetic aggregate is **1.90 > 1.80**. No concurrent jobs are needed for this race.
+- An unresolved old job, recovered `totalCostUSD:null`, an existing results row with null cost, a truncated nonempty journal line, and a known-cost job whose source is absent from the manifest each also permit a new submission with no liability assigned to the old job. Malformed journal lines are silently skipped.
+
+The independent cumulative ledger cap is still intact; this is the evaluation-run admission guarantee, not a demonstrated USD 50 cap breach.
+
+**Concrete fix:** before any submission, reconcile **all run liabilities**, not only the page selected next. Retain a conservative reservation for each unresolved/running/unknown-cost job, or stop the entire run until it can be resolved; recheck after waiting for idle. Count known costs even for sources no longer in the manifest. Treat nonempty malformed journal lines and unknown result costs as blocking/charged liabilities, not zero. Also close the POST-to-journal crash window with a durable pre-submit intent and idempotent job identifier (or explicit uncertain-submission liability); a post-response append alone is not crash-safe admission accounting.
+
+#### S5B-15 — Medium: a contradictory caller finding overrides exact timeline recomputation
+
+**Location:** `packages/validation/timeline.ts:1235-1288,1398-1417`.
+
+**Evidence:** a clean baseline and a fully valid candidate changing event `s1` from 1889-03-03 to 1888-01-01 normally fail comparison. Supply `failedOnBaseline:[]`, real sources, and a fabricated finding `{ id:'timeline.date-grounded', affected:['/simulation/events/0'] }`: the guard passes. `'/simulation/events/0/year'` also passes. Root/collection-parent paths fail closed, but the event-parent path unlocks date/evidence even though recomputation says every baseline check passed.
+
+**Reachability qualification:** the current `repairSpec` integration (`packages/meta/pipeline.ts:514-526`) recomputes baseline findings before passing them, so this did **not** reproduce a model-controlled worker bypass. The issue is the exported comparator's authorization contract: externally supplied finding metadata takes precedence over the authoritative result instead of being checked against it.
+
+**Concrete fix:** when sources are present, derive scopes exclusively from failing checks in the recomputed immutable-r1 report. Do not union unchecked caller findings; if retained for diagnostics, intersect them with recomputed check ids and exact affected paths. Without sufficient source context, fail closed rather than broadening permission. Add direct comparator regressions with stale, fabricated, parent-path and wrong-check-id findings, plus the existing pipeline tests.
+
+#### S5B-16 — Medium: opt-in INTERNAL logging is not redacted
+
+**Location:** `workers/generation/jobs.ts:597-610`.
+
+**Evidence:** `round2-worker-results.json`, `debug-logging-false/true`: a fake receipt serializer throws an Error with `code:'PRIVATE_TOKEN'` and message `PRIVATE_SOURCE_PAYLOAD`. Default stderr and persisted output contain neither marker and report `unknown`. With `MKI_DEBUG_INTERNAL=1`, stderr contains the entire message and stack including `PRIVATE_SOURCE_PAYLOAD`; persisted output remains safe. The probe restores the environment setting afterwards.
+
+**Concrete fix:** remove the raw debug branch, or make its richer output an allowlisted, redacted structure that cannot include arbitrary exception message/stack text. Opt-in alone does not satisfy round 1's explicit “opt-in **and redaction**, without source/provider payloads” requirement. Add assertions for debug-mode stderr as well as the default path. This is a local diagnostic-mode issue, not evidence that production HTTP responses leak raw payloads.
+
+### Legitimate behaviour and evidence limits
+
+- The new analysis guard is intentionally position-based: concept reordering accompanying an id repair is rejected, including on the second attempt. The same id-only repair without reordering is accepted. Filling actually empty concepts/objectives and correcting every policy-affected group remain possible; affected lists survive display-message truncation.
+- Root-level required-property errors still emit no affected path (`schemaAffectedPaths` skips empty `instancePath` before refining `missingProperty`). A direct `repairAnalysis` call cannot restore missing `/supported`, even with an otherwise correct candidate. This is fail-closed, not a permission bypass; the current worker rejects such generation-schema-invalid initial analysis before entering repair (`pipeline.ts:90-95`). It is a known direct-API repairability limitation, **not** evidence that the two real recorded repairs regressed. Refine required root properties before skipping uninformative root errors if structural repair becomes an intended API capability.
+- Archived CFPB r2 and r3 still pass the legitimate id-rename exception; changing an already-correct numeric case and repeating it still fails. All published archive specs pass the current validators. That demonstrates compatibility with these fixtures, not independent correctness of event labels or teaching prose.
+- The S5B-09 corrections are additive and numerically correct. Keep the correction notes beside any reuse of historical summary tables; the old “all correct” wording is not restored by green deterministic tests.
+
+### Round-2 approval gate and execution boundary
+
+1. Fix **S5B-11–S5B-13** and re-run both full-validator and real-worker adversarial date probes, plus every stored timeline revision and positive date control. No claim of deterministically grounded dates is justified while these publish at r1.
+2. Fix **S5B-14** with conservative unresolved-liability accounting and recovery tests against the actual driver. Fix the comparator authority boundary (**S5B-15**) and debug redaction (**S5B-16**), or obtain an explicit narrowly scoped acceptance of those two limitations; they are not silently waived here.
+3. Retain immutable-r1 comparison, teacher review, canonical ledger/port, licensed nonprivate sources, supervised loopback-only use and explicit injected-fault labels. Re-run `check`, schema verification and scratch web build after changes. No new approval for external publication or unattended service is given.
+
+No `.env` was read; no install, external network request, live Meta/Modal call, API server launch, implementation/evidence edit, Git write, commit or push was performed. New standalone probes and final build/test outputs were directed to review scratch. **Execution note:** the initial standard suite invocation used Node's inherited Windows temporary directory; this differed from the advertised scratch environment, so the suite was re-run with all three temporary-directory variables explicitly pinned to review scratch. No cleanup outside the allowed scope was attempted. The only repository modification is this appended review section.
