@@ -28,6 +28,8 @@ export interface LessonProgress {
 
 export interface ComponentRepairRecord {
   componentId: string; attempt: number; revision: number; targeted: string[]; fixed: string[]; remaining: string[]; passed: boolean;
+  /** S6R-11: the worker's record that this component's baseline carried an injected demo fault. Absent on older jobs. */
+  afterInjectedFault?: boolean;
 }
 
 export interface LessonAnalysisRevision { revision: number; analysis?: SourceAnalysisV2; report?: ValidationReport }
@@ -150,6 +152,7 @@ export function parseLessonData(raw: unknown): LessonData | null {
     .map((r): ComponentRepairRecord => ({
       componentId: r.componentId as string, attempt: r.attempt as number, revision: r.revision as number,
       targeted: strings(r.targeted), fixed: strings(r.fixed), remaining: strings(r.remaining), passed: r.passed === true,
+      ...(typeof r.afterInjectedFault === 'boolean' ? { afterInjectedFault: r.afterInjectedFault } : {}),
     }));
   return {
     analysis: parseAnalysisV2(raw.analysisV2), analysisReport: parseReport(raw.analysisV2Report), analysisRevisions: revisions,
@@ -387,17 +390,38 @@ const checkRef = (id: string): CheckRef => ({ id, name: lessonCheckName(id) ?? i
 export const NATURAL_REPAIR_LABEL = ANALYSIS_REPAIR_LABEL;
 export const SYSTEM_REPAIR_LABEL = 'System-made fault, repaired by Muse';
 export const SYSTEM_REPAIR_FAILED_LABEL = 'System-made fault, repair did not pass';
+/** S6R-11: the planted fault did not trip its intended check; the part still carried it, so this is never a natural repair. */
+export const SYSTEM_UNCAUGHT_REPAIR_LABEL = 'System-made fault (not caught by its check), repaired by Muse';
+export const SYSTEM_UNCAUGHT_FAILED_LABEL = 'System-made fault (not caught by its check), repair did not pass';
 export const NATURAL_FAILURE_LABEL = 'Muse’s own mistake — repair did not pass';
 
-/** The component the demo fault was planted in: the inject event's component, else the fault kind's fixed target. */
+/**
+ * S6R-11: the component the demo fault was ACTUALLY planted in, or null. Derived only from a successful injection:
+ * an inject 'succeeded' event carrying the componentId (the worker emits it on every lesson injection). A requested
+ * fault that could not be injected (inject 'failed', no componentId, FaultRecord effective:false with an empty path)
+ * plants nothing, so it never makes a natural repair look system-made. Only a recorded injection (non-empty path)
+ * without any inject event (older details) falls back to the fault kind's fixed target.
+ */
 export function faultComponent(detail: JobDetail): string | null {
   const fault = detail.summary.demoFault;
   if (fault === undefined) return null;
-  const inject = asLessonEvents(detail.events).find((e) => e.stage === 'inject' && str(e.componentId));
-  if (inject?.componentId !== undefined) return inject.componentId;
+  const injects = asLessonEvents(detail.events).filter((e) => e.stage === 'inject');
+  const injected = injects.find((e) => e.status === 'succeeded' && str(e.componentId));
+  if (injected?.componentId !== undefined) return injected.componentId;
+  if (injects.length > 0 || typeof fault.path !== 'string' || fault.path === '') return null;
   if (fault.kind === 'fabricated-quote') return 'quiz-cards-v1';
   if (fault.kind === 'wrong-answer') return 'formula-explorer-v1';
   return null;
+}
+
+export type LessonFaultState = 'none' | 'requested-not-injected' | 'injected-not-caught' | 'injected-caught';
+
+/** S6R-11: requested/not injected, injected/not caught (effective false or unrecorded) and injected/caught stay distinct. */
+export function lessonFaultState(detail: JobDetail): LessonFaultState {
+  const fault = detail.summary.demoFault;
+  if (fault === undefined) return 'none';
+  if (faultComponent(detail) === null) return 'requested-not-injected';
+  return fault.effective === true ? 'injected-caught' : 'injected-not-caught';
 }
 
 export interface FailedRef extends CheckRef { message: string | null }
@@ -436,6 +460,13 @@ export function buildLessonRepairs(detail: JobDetail): ComponentRepairCard[] {
   if (data === undefined) return [];
   const events = asLessonEvents(detail.events);
   const faultId = faultComponent(detail);
+  const caught = lessonFaultState(detail) === 'injected-caught';
+  // S6R-11: origin is immutable per component — every attempt against an injected baseline is system-made.
+  const systemIds = new Set<string>(faultId === null ? [] : [faultId]);
+  for (const r of data.componentRepairs) if (r.afterInjectedFault === true) systemIds.add(r.componentId);
+  const originOf = (componentId: string): 'natural' | 'system' => (systemIds.has(componentId) ? 'system' : 'natural');
+  const systemPassed = caught ? SYSTEM_REPAIR_LABEL : SYSTEM_UNCAUGHT_REPAIR_LABEL;
+  const systemFailed = caught ? SYSTEM_REPAIR_FAILED_LABEL : SYSTEM_UNCAUGHT_FAILED_LABEL;
   const finishedRepair = (id: string, revision: number): LessonEvent | undefined =>
     events.filter((e) => e.stage === 'repair' && e.target === 'component' && e.componentId === id && e.revision === revision && e.status !== 'started').sort(bySeq).pop();
 
@@ -443,14 +474,14 @@ export function buildLessonRepairs(detail: JobDetail): ComponentRepairCard[] {
   const seen = new Set<string>();
   for (const r of data.componentRepairs) {
     seen.add(`${r.componentId}:${r.revision}`);
-    const origin: 'natural' | 'system' = faultId === r.componentId && r.attempt === 1 ? 'system' : 'natural';
+    const origin = originOf(r.componentId);
     const report = reportFor(data, r.componentId, r.revision);
     const remaining: FailedRef[] = r.remaining.map((id) => ({ ...checkRef(id), message: report?.checks.find((c) => c.id === id)?.message ?? null }));
     const introduced = r.remaining.filter((id) => !r.targeted.includes(id)).map(checkRef);
     const ev = finishedRepair(r.componentId, r.revision);
     const badge: ComponentRepairCard['badge'] = r.passed
-      ? (origin === 'system' ? { text: SYSTEM_REPAIR_LABEL, tone: 'fault' } : { text: NATURAL_REPAIR_LABEL, tone: 'natural' })
-      : (origin === 'system' ? { text: SYSTEM_REPAIR_FAILED_LABEL, tone: 'bad' } : { text: NATURAL_FAILURE_LABEL, tone: 'bad' });
+      ? (origin === 'system' ? { text: systemPassed, tone: 'fault' } : { text: NATURAL_REPAIR_LABEL, tone: 'natural' })
+      : (origin === 'system' ? { text: systemFailed, tone: 'bad' } : { text: NATURAL_FAILURE_LABEL, tone: 'bad' });
     const nTarget = plural(r.targeted.length, 'targeted check', 'targeted checks');
     cards.push({
       key: `${r.componentId}:r${r.revision}`, componentId: r.componentId, label: isPlanComponentId(r.componentId) ? componentLabel(r.componentId) : r.componentId,
@@ -469,11 +500,11 @@ export function buildLessonRepairs(detail: JobDetail): ComponentRepairCard[] {
     const key = `${e.componentId}:${e.revision}`;
     if (seen.has(key) || events.some((x) => x.stage === 'repair' && x.target === 'component' && x.componentId === e.componentId && x.revision === e.revision && x.status !== 'started')) continue;
     seen.add(key);
-    const origin: 'natural' | 'system' = faultId === e.componentId && e.revision === 2 ? 'system' : 'natural';
+    const origin = originOf(e.componentId);
     cards.push({
       key: `${e.componentId}:r${e.revision}`, componentId: e.componentId, label: isPlanComponentId(e.componentId) ? componentLabel(e.componentId) : e.componentId,
       attempt: e.revision - 1, revision: e.revision, origin,
-      badge: origin === 'system' ? { text: SYSTEM_REPAIR_LABEL, tone: 'fault' } : { text: NATURAL_REPAIR_LABEL, tone: 'natural' },
+      badge: origin === 'system' ? { text: systemPassed, tone: 'fault' } : { text: NATURAL_REPAIR_LABEL, tone: 'natural' },
       state: 'running', targeted: [], fixed: [], remaining: [], introduced: [], outcome: 'Muse is repairing this component…', costUSD: null, model: e.model ?? null, responseId: null,
     });
   }
@@ -646,7 +677,8 @@ export function buildLessonSteps(detail: JobDetail): LessonStep[] {
       case 'repairing': steps.push({ ...base, status: 'running', outcome: null, detail: slot.message, tags: [], ...spanOf([]) }); break;
       case 'passed': {
         const repaired = own.some((r) => r.state === 'passed') || (entry?.revision ?? 1) > 1;
-        const systemMade = repaired && faultId === slot.componentId && detail.summary.demoFault !== undefined;
+        // S6R-11: system-made when this component carried an ACTUAL injected fault (any repair attempt).
+        const systemMade = repaired && (faultId === slot.componentId || own.some((r) => r.origin === 'system'));
         const dropped = entry?.reason.trim() ?? '';
         const lead = repaired ? (systemMade ? SYSTEM_REPAIR_LABEL : 'Repaired by Muse after a check failed') : 'Passed all checks';
         steps.push({

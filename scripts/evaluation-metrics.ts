@@ -10,6 +10,9 @@
 //   wrong-decline       declined a page whose expectation is an engine and decline is not acceptable
 //   false-accept        published a page whose expectation is decline
 //   failed              the job ended in an error status (error code recorded)
+//   not-applicable      S6R-12: a lesson-flow page that published its overview (+ kit components)
+//                       WITHOUT a premium engine: the legacy engine-class decision does not apply,
+//                       so it is excluded from the accuracy denominator (never 'unknown')
 //   unknown             anything else (interrupted, malformed line) — never counted as correct
 
 export type Subject = 'physics' | 'finance' | 'chemistry-earth' | 'biology' | 'history';
@@ -40,6 +43,19 @@ export interface AnalysisRepairSummary {
   fixed?: string[];
   remaining?: string[];
   passed?: boolean;
+}
+
+/** S6R-12: one lesson-flow COMPONENT repair attempt (BUG-006 driver field `componentRepairs`). */
+export interface ComponentRepairSummary {
+  componentId?: string | null;
+  attempt?: number | null;
+  revision?: number | null;
+  targeted?: string[];
+  fixed?: string[];
+  remaining?: string[];
+  passed?: boolean;
+  /** S6R-11: true when the component's baseline carried a system-injected demo fault (never a natural repair). */
+  afterInjectedFault?: boolean;
 }
 
 /** One JSON line of docs/evidence/stage-5b/evaluation/results.jsonl. */
@@ -73,6 +89,8 @@ export interface EvalResultLine {
   repairs?: RepairSummary[] | null;
   /** TASK-024b (additive): absent on records written before analysis repair existed. */
   analysisRepairs?: AnalysisRepairSummary[] | null;
+  /** S6R-12: lesson-flow component repairs; absent on lesson records written before BUG-006 (= not recorded, never 0). */
+  componentRepairs?: ComponentRepairSummary[] | null;
   failedChecks?: string[] | null;
   firstRevisionFailedChecks?: string[] | null;
   error?: string | null;
@@ -84,22 +102,25 @@ export interface EvalResultLine {
 
 export type OutcomeClass =
   | 'correct-first-try' | 'correct-after-repair' | 'correct-decline'
-  | 'wrong-engine' | 'wrong-decline' | 'false-accept' | 'failed' | 'unknown';
+  | 'wrong-engine' | 'wrong-decline' | 'false-accept' | 'failed' | 'not-applicable' | 'unknown';
 
 export const OUTCOME_CLASSES: readonly OutcomeClass[] = [
   'correct-first-try', 'correct-after-repair', 'correct-decline',
-  'wrong-engine', 'wrong-decline', 'false-accept', 'failed', 'unknown',
+  'wrong-engine', 'wrong-decline', 'false-accept', 'failed', 'not-applicable', 'unknown',
 ] as const;
 
 export interface ClassCounts {
   'correct-first-try': number; 'correct-after-repair': number; 'correct-decline': number;
-  'wrong-engine': number; 'wrong-decline': number; 'false-accept': number; failed: number; unknown: number;
+  'wrong-engine': number; 'wrong-decline': number; 'false-accept': number; failed: number;
+  /** S6R-12: kit-only lesson outcomes — the engine-class decision does not apply. */
+  'not-applicable': number;
+  unknown: number;
 }
 
 export interface GroupMetrics {
   total: number;
   byClass: ClassCounts;
-  /** (correct-first-try + correct-after-repair + correct-decline) / total; null when total is 0. */
+  /** (correct-first-try + correct-after-repair + correct-decline) / (total − not-applicable); null when that is 0. */
   accuracyRate: number | null;
 }
 
@@ -178,10 +199,20 @@ export function computeLessonMetrics(results: readonly EvalResultLine[]): Lesson
   return out;
 }
 
+/** S6R-12: cost per job over one named publication denominator (mean/max null when there are no such jobs). */
+export interface CostStat {
+  jobs: number;
+  meanUSD: number | null;
+  maxUSD: number | null;
+}
+
 export interface MetricsSummary {
   total: number;
   byClass: ClassCounts;
+  /** Correct decisions over the engine-class-applicable lines (S6R-12: kit-only lessons excluded). */
   accuracyRate: number | null;
+  /** S6R-12: lines the engine-class decision applies to (total − not-applicable). */
+  engineClassApplicable: number;
   bySubject: Record<string, GroupMetrics>;
   byDifficulty: Record<string, GroupMetrics>;
   /** S6-W: lesson-flow metrics over the flow==='lesson' lines (lessonJobs 0 when none). */
@@ -193,19 +224,35 @@ export interface MetricsSummary {
     analysisTotal: number;
     /** TASK-024b: jobs with at least one analysis repair (included in `jobsWithRepairs`). */
     jobsWithAnalysisRepairs: number;
-    /** How many repair attempts targeted each check id. */
+    /** S6R-12: natural lesson COMPONENT repair attempts (included in `total`). */
+    componentTotal: number;
+    /** S6R-12: jobs with at least one natural component repair (included in `jobsWithRepairs`). */
+    jobsWithComponentRepairs: number;
+    /** S6R-12: component repairs after a system-injected demo fault — excluded from every natural count. */
+    componentAfterInjectedFault: number;
+    /** S6R-12: lesson-flow lines recorded before componentRepairs existed — their component repairs are unknown, not 0. */
+    componentRepairsNotRecorded: number;
+    /** How many repair attempts targeted each check id (component repairs as `<componentId>:<checkId>`). */
     byTargetedCheck: Record<string, number>;
     /** In how many jobs each check id failed on revision 1 (the natural trigger). */
     byFirstRevisionCheck: Record<string, number>;
   };
   cost: {
+    /** Activity flow: a published activity revision. Lesson flow (S6R-12): the overview was published. */
     publishedLessons: number;
     meanPerPublishedUSD: number | null;
     maxPerPublishedUSD: number | null;
     totalUSD: number;
+    /** S6R-12: lesson-flow lines only, by separately named publication denominator. */
+    lesson: { overview: CostStat; interactive: CostStat; premium: CostStat };
   };
   timing: { meanWallS: number | null };
   pages: PageOutcome[];
+}
+
+/** S6R-12: frozen lesson semantics — a lesson is published when its overview is (succeeded ⇔ overview published). */
+function lessonOverviewPublished(r: EvalResultLine): boolean {
+  return typeof r.overviewPublished === 'boolean' ? r.overviewPublished : r.status === 'succeeded';
 }
 
 export function classifyResult(r: EvalResultLine): OutcomeClass {
@@ -214,6 +261,11 @@ export function classifyResult(r: EvalResultLine): OutcomeClass {
   if (r.status === 'failed' || (r.error != null && r.error !== '')) return 'failed';
   if (r.status === 'unsupported') {
     return expected === 'decline' || acceptable.includes('decline') ? 'correct-decline' : 'wrong-decline';
+  }
+  // S6R-12: a lesson that published its overview (+ kit components) but no premium engine is
+  // outside the legacy engine-class decision — labelled not applicable, never 'unknown'.
+  if (r.flow === 'lesson' && r.status === 'succeeded' && r.publishedRevision == null && lessonOverviewPublished(r)) {
+    return 'not-applicable';
   }
   if (r.status === 'succeeded' && r.engine != null && r.publishedRevision != null) {
     // TASK-024b: an analysis repair counts as a repair too — a job that published
@@ -243,13 +295,30 @@ export function parseResultsJsonl(text: string): EvalResultLine[] {
 function emptyCounts(): ClassCounts {
   return {
     'correct-first-try': 0, 'correct-after-repair': 0, 'correct-decline': 0,
-    'wrong-engine': 0, 'wrong-decline': 0, 'false-accept': 0, failed: 0, unknown: 0,
+    'wrong-engine': 0, 'wrong-decline': 0, 'false-accept': 0, failed: 0, 'not-applicable': 0, unknown: 0,
   };
 }
 
-function finishGroup(total: number, byClass: ClassCounts): GroupMetrics {
+/** S6R-12: correct decisions over the engine-class-applicable lines; null when none apply. */
+function accuracyOf(total: number, byClass: ClassCounts): number | null {
+  const applicable = total - byClass['not-applicable'];
   const correct = byClass['correct-first-try'] + byClass['correct-after-repair'] + byClass['correct-decline'];
-  return { total, byClass, accuracyRate: total === 0 ? null : correct / total };
+  return applicable <= 0 ? null : correct / applicable;
+}
+
+function finishGroup(total: number, byClass: ClassCounts): GroupMetrics {
+  return { total, byClass, accuracyRate: accuracyOf(total, byClass) };
+}
+
+interface CostAcc { jobs: number; sum: number; max: number | null }
+const emptyCostAcc = (): CostAcc => ({ jobs: 0, sum: 0, max: null });
+function addCost(acc: CostAcc, cost: number): void {
+  acc.jobs += 1;
+  acc.sum += cost;
+  if (acc.max === null || cost > acc.max) acc.max = cost;
+}
+function costStat(acc: CostAcc): CostStat {
+  return { jobs: acc.jobs, meanUSD: acc.jobs === 0 ? null : Math.round((acc.sum / acc.jobs) * 1e6) / 1e6, maxUSD: acc.max };
 }
 
 function rate(n: number, d: number): number | null {
@@ -270,6 +339,10 @@ export function computeMetrics(results: EvalResultLine[], manifest: ManifestEntr
   let jobsWithRepairs = 0;
   let analysisRepairsTotal = 0;
   let jobsWithAnalysisRepairs = 0;
+  let componentRepairsTotal = 0;
+  let jobsWithComponentRepairs = 0;
+  let componentAfterInjectedFault = 0;
+  let componentRepairsNotRecorded = 0;
   const byTargetedCheck: Record<string, number> = {};
   const byFirstRevisionCheck: Record<string, number> = {};
 
@@ -277,6 +350,7 @@ export function computeMetrics(results: EvalResultLine[], manifest: ManifestEntr
   let publishedCostSum = 0;
   let publishedCostMax: number | null = null;
   let costSum = 0;
+  const lessonCost = { overview: emptyCostAcc(), interactive: emptyCostAcc(), premium: emptyCostAcc() };
   let wallSum = 0;
   let wallN = 0;
 
@@ -309,24 +383,49 @@ export function computeMetrics(results: EvalResultLine[], manifest: ManifestEntr
     const repairs = r.repairs ?? [];
     // TASK-024b: analysis-stage repairs are natural repairs too (old records simply have none).
     const analysisRepairs = r.analysisRepairs ?? [];
-    if (repairs.length > 0 || analysisRepairs.length > 0) jobsWithRepairs += 1;
-    repairsTotal += repairs.length + analysisRepairs.length;
+    // S6R-12: lesson COMPONENT repairs are natural repairs too, unless they ran against a
+    // system-injected demo fault. A lesson line without the field predates its recording:
+    // counted as "not recorded", never as zero repairs.
+    if (r.flow === 'lesson' && !Array.isArray(r.componentRepairs)) componentRepairsNotRecorded += 1;
+    const allComponentRepairs = Array.isArray(r.componentRepairs) ? r.componentRepairs : [];
+    const componentRepairs = allComponentRepairs.filter(c => c?.afterInjectedFault !== true);
+    componentAfterInjectedFault += allComponentRepairs.length - componentRepairs.length;
+    if (repairs.length > 0 || analysisRepairs.length > 0 || componentRepairs.length > 0) jobsWithRepairs += 1;
+    repairsTotal += repairs.length + analysisRepairs.length + componentRepairs.length;
     if (analysisRepairs.length > 0) jobsWithAnalysisRepairs += 1;
     analysisRepairsTotal += analysisRepairs.length;
+    if (componentRepairs.length > 0) jobsWithComponentRepairs += 1;
+    componentRepairsTotal += componentRepairs.length;
     for (const rep of repairs) {
       for (const id of rep.targeted ?? []) byTargetedCheck[id] = (byTargetedCheck[id] ?? 0) + 1;
     }
     for (const rep of analysisRepairs) {
       for (const id of rep.targeted ?? []) byTargetedCheck[id] = (byTargetedCheck[id] ?? 0) + 1;
     }
+    for (const rep of componentRepairs) {
+      const scope = typeof rep.componentId === 'string' && rep.componentId !== '' ? rep.componentId : 'unknown-component';
+      for (const id of rep.targeted ?? []) {
+        const key = `${scope}:${id}`;
+        byTargetedCheck[key] = (byTargetedCheck[key] ?? 0) + 1;
+      }
+    }
     for (const id of r.firstRevisionFailedChecks ?? []) byFirstRevisionCheck[id] = (byFirstRevisionCheck[id] ?? 0) + 1;
 
     const cost = typeof r.totalCostUSD === 'number' ? r.totalCostUSD : 0;
     costSum += cost;
-    if (r.publishedRevision != null) {
+    // S6R-12: activity flow publishes a revision; lesson flow publishes its overview (frozen
+    // lesson semantics), with the overview / interactive / premium denominators kept apart.
+    const isLesson = r.flow === 'lesson';
+    const published = isLesson ? lessonOverviewPublished(r) : r.publishedRevision != null;
+    if (published) {
       publishedLessons += 1;
       publishedCostSum += cost;
       if (publishedCostMax === null || cost > publishedCostMax) publishedCostMax = cost;
+    }
+    if (isLesson) {
+      if (lessonOverviewPublished(r)) addCost(lessonCost.overview, cost);
+      if (r.interactivePublished === true) addCost(lessonCost.interactive, cost);
+      if (r.publishedRevision != null) addCost(lessonCost.premium, cost);
     }
     if (typeof r.wallS === 'number') { wallSum += r.wallS; wallN += 1; }
   }
@@ -336,20 +435,25 @@ export function computeMetrics(results: EvalResultLine[], manifest: ManifestEntr
   const byDifficulty: Record<string, GroupMetrics> = {};
   for (const [d, t] of diffTotals) byDifficulty[d] = finishGroup(t, diffCounts.get(d) ?? emptyCounts());
 
-  const correct = byClass['correct-first-try'] + byClass['correct-after-repair'] + byClass['correct-decline'];
   return {
     total,
     byClass,
-    accuracyRate: total === 0 ? null : correct / total,
+    accuracyRate: accuracyOf(total, byClass),
+    engineClassApplicable: total - byClass['not-applicable'],
     bySubject,
     byDifficulty,
     lesson: computeLessonMetrics(results),
-    repairs: { total: repairsTotal, jobsWithRepairs, analysisTotal: analysisRepairsTotal, jobsWithAnalysisRepairs, byTargetedCheck, byFirstRevisionCheck },
+    repairs: {
+      total: repairsTotal, jobsWithRepairs, analysisTotal: analysisRepairsTotal, jobsWithAnalysisRepairs,
+      componentTotal: componentRepairsTotal, jobsWithComponentRepairs, componentAfterInjectedFault, componentRepairsNotRecorded,
+      byTargetedCheck, byFirstRevisionCheck,
+    },
     cost: {
       publishedLessons,
       meanPerPublishedUSD: publishedLessons === 0 ? null : Math.round((publishedCostSum / publishedLessons) * 1e6) / 1e6,
       maxPerPublishedUSD: publishedCostMax,
       totalUSD: Math.round(costSum * 1e6) / 1e6,
+      lesson: { overview: costStat(lessonCost.overview), interactive: costStat(lessonCost.interactive), premium: costStat(lessonCost.premium) },
     },
     timing: { meanWallS: rate(wallSum, wallN) },
     pages,
@@ -367,11 +471,13 @@ function usd(x: number | null): string {
 function groupTable(groups: Record<string, GroupMetrics>, label: string): string[] {
   const rows = Object.entries(groups).sort((a, b) => a[0].localeCompare(b[0]));
   if (rows.length === 0) return [`_No results with a recorded ${label}._`, ''];
-  const out = [`| ${label} | n | correct first try | correct after repair | correct decline | wrong engine | wrong decline | false accept | failed | accuracy |`,
-    '|---|---|---|---|---|---|---|---|---|---|'];
+  // S6R-12: the not-applicable column appears only when kit-only lessons exist (v1 tables unchanged).
+  const na = rows.some(([, g]) => g.byClass['not-applicable'] > 0);
+  const out = [`| ${label} | n | correct first try | correct after repair | correct decline | wrong engine | wrong decline | false accept | failed |${na ? ' not applicable (kit-only lesson) |' : ''} accuracy |`,
+    `|---|---|---|---|---|---|---|---|---|${na ? '---|' : ''}---|`];
   for (const [name, g] of rows) {
     const c = g.byClass;
-    out.push(`| ${name} | ${g.total} | ${c['correct-first-try']} | ${c['correct-after-repair']} | ${c['correct-decline']} | ${c['wrong-engine']} | ${c['wrong-decline']} | ${c['false-accept']} | ${c.failed} | ${pct(g.accuracyRate)} |`);
+    out.push(`| ${name} | ${g.total} | ${c['correct-first-try']} | ${c['correct-after-repair']} | ${c['correct-decline']} | ${c['wrong-engine']} | ${c['wrong-decline']} | ${c['false-accept']} | ${c.failed} |${na ? ` ${c['not-applicable']} |` : ''} ${pct(g.accuracyRate)} |`);
   }
   out.push('');
   return out;
@@ -390,12 +496,18 @@ export function renderSummaryMarkdown(m: MetricsSummary, opts: { manifestTotal: 
   L.push('| Class | Count | Share of sample |');
   L.push('|---|---|---|');
   for (const cls of OUTCOME_CLASSES) {
+    if (cls === 'not-applicable' && c[cls] === 0) continue; // S6R-12: v1-only reports keep their table
     L.push(`| ${cls} | ${c[cls]} | ${m.total === 0 ? 'n/a' : pct(c[cls] / m.total)} |`);
   }
   L.push('');
-  L.push(`Correct decisions (first try + after repair + correct decline): **${c['correct-first-try'] + c['correct-after-repair'] + c['correct-decline']} of ${m.total}** (${pct(m.accuracyRate)}).`);
+  const correctN = c['correct-first-try'] + c['correct-after-repair'] + c['correct-decline'];
+  if (c['not-applicable'] === 0) {
+    L.push(`Correct decisions (first try + after repair + correct decline): **${correctN} of ${m.total}** (${pct(m.accuracyRate)}).`);
+  } else {
+    L.push(`Correct decisions (first try + after repair + correct decline): **${correctN} of ${m.engineClassApplicable}** engine-class-applicable pages (${pct(m.accuracyRate)}). The engine-class decision is not applicable to **${c['not-applicable']}** lesson page(s) that published an overview and kit components without a premium engine; they are excluded from this denominator and reported in the lesson section below.`);
+  }
   L.push('');
-  L.push('Class meanings: _correct-first-try_ = published revision 1 with the expected or an acceptable engine; _correct-after-repair_ = published a later revision after natural (non-injected) repairs; _correct-decline_ = honestly declined when decline was expected or acceptable; _wrong-engine_ = published an engine outside expected/acceptable; _wrong-decline_ = declined a supported page; _false-accept_ = published a page that should have been declined; _failed_ = job ended with an error code; _unknown_ = anything else (never counted as correct).');
+  L.push(`Class meanings: _correct-first-try_ = published revision 1 with the expected or an acceptable engine; _correct-after-repair_ = published a later revision after natural (non-injected) repairs; _correct-decline_ = honestly declined when decline was expected or acceptable; _wrong-engine_ = published an engine outside expected/acceptable; _wrong-decline_ = declined a supported page; _false-accept_ = published a page that should have been declined; _failed_ = job ended with an error code; ${c['not-applicable'] > 0 ? '_not-applicable_ = a lesson page that published an overview (+ kit components) without a premium engine, where the engine-class decision does not apply (excluded from the accuracy denominator); ' : ''}_unknown_ = anything else (never counted as correct).`);
   L.push('');
   L.push('## By subject');
   L.push('');
@@ -409,6 +521,16 @@ export function renderSummaryMarkdown(m: MetricsSummary, opts: { manifestTotal: 
   L.push('');
   L.push(`- Repair attempts: **${m.repairs.total}** across **${m.repairs.jobsWithRepairs}** job(s).`);
   L.push(`- Analysis repair attempts: **${m.repairs.analysisTotal}** across **${m.repairs.jobsWithAnalysisRepairs}** job(s) (source-analysis stage, TASK-024b; included in the totals above).`);
+  // S6R-12: lesson component repairs (only shown when lesson results exist).
+  if (m.lesson.lessonJobs > 0) {
+    L.push(`- Component repair attempts: **${m.repairs.componentTotal}** across **${m.repairs.jobsWithComponentRepairs}** job(s) (lesson components; included in the totals above; checks counted as \`<componentId>:<checkId>\`).`);
+    if (m.repairs.componentRepairsNotRecorded > 0) {
+      L.push(`- ${m.repairs.componentRepairsNotRecorded} lesson result line(s) predate component-repair recording: their component repairs are not recorded (unknown, not zero).`);
+    }
+    if (m.repairs.componentAfterInjectedFault > 0) {
+      L.push(`- ${m.repairs.componentAfterInjectedFault} component repair attempt(s) after a system-injected demo fault are excluded from every natural-repair count.`);
+    }
+  }
   const targeted = Object.entries(m.repairs.byTargetedCheck).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
   if (targeted.length > 0) {
     L.push('- Checks targeted by repairs:');
@@ -447,9 +569,14 @@ export function renderSummaryMarkdown(m: MetricsSummary, opts: { manifestTotal: 
   }
   L.push('## Cost and timing');
   L.push('');
-  L.push(`- Published lessons: **${m.cost.publishedLessons}**`);
+  L.push(`- Published lessons: **${m.cost.publishedLessons}**${m.lesson.lessonJobs > 0 ? ' (activity flow: a published activity revision; lesson flow: the overview was published)' : ''}`);
   L.push(`- Mean cost per published lesson: **${usd(m.cost.meanPerPublishedUSD)}**; max: **${usd(m.cost.maxPerPublishedUSD)}**`);
   L.push(`- Total cost of all ${m.total} recorded job(s): **${usd(m.cost.totalUSD)}** (includes declines and failures)`);
+  if (m.lesson.lessonJobs > 0) {
+    const lc = m.cost.lesson;
+    const stat = (name: string, s: CostStat): string => `${name}: **${s.jobs}** job(s), mean **${usd(s.meanUSD)}**, max **${usd(s.maxUSD)}**`;
+    L.push(`- Lesson-flow cost per job by what was published — ${stat('overview', lc.overview)}; ${stat('overview + interactive component', lc.interactive)}; ${stat('premium activity', lc.premium)}`);
+  }
   L.push(`- Mean wall time per job: **${m.timing.meanWallS === null ? 'n/a' : `${m.timing.meanWallS.toFixed(1)} s`}**`);
   L.push('');
   L.push('## Per-page outcomes');
@@ -512,6 +639,12 @@ export interface ComparisonSide {
   repairsTotal: number;
   jobsWithRepairs: number;
   analysisRepairsTotal: number;
+  /** S6R-12: natural lesson component repair attempts (included in repairsTotal). */
+  componentRepairsTotal: number;
+  /** S6R-12: lesson lines recorded before componentRepairs existed (their component repairs are unknown). */
+  componentRepairsNotRecorded: number;
+  /** S6R-12: kit-only lesson pages outside the engine-class decision. */
+  notApplicable: number;
   /** Jobs whose revision 1 had at least one failing check. */
   jobsWithFirstTryFailures: number;
   firstTryFailedChecksTotal: number;
@@ -557,6 +690,9 @@ export function comparisonSide(
     repairsTotal: m.repairs.total,
     jobsWithRepairs: m.repairs.jobsWithRepairs,
     analysisRepairsTotal: m.repairs.analysisTotal,
+    componentRepairsTotal: m.repairs.componentTotal,
+    componentRepairsNotRecorded: m.repairs.componentRepairsNotRecorded,
+    notApplicable: m.byClass['not-applicable'],
     jobsWithFirstTryFailures,
     firstTryFailedChecksTotal,
     publishedLessons: m.cost.publishedLessons,
@@ -611,10 +747,13 @@ export function renderComparisonMarkdown(
   row('Result lines', countOrNa(a.total), countOrNa(b.total));
   row('Model(s)', listOrDash(a.models), listOrDash(b.models));
   row('Provider(s)', listOrDash(a.providers), listOrDash(b.providers));
+  // S6R-12: over the engine-class-applicable lines (kit-only lessons are not applicable).
   const correct = (s: ComparisonSide): string =>
-    `${s.byClass['correct-first-try'] + s.byClass['correct-after-repair'] + s.byClass['correct-decline']} of ${s.total} (${pct(s.accuracyRate)})`;
+    `${s.byClass['correct-first-try'] + s.byClass['correct-after-repair'] + s.byClass['correct-decline']} of ${s.total - s.notApplicable} (${pct(s.accuracyRate)})`;
   row('Correct decisions', correct(a), correct(b));
   for (const cls of OUTCOME_CLASSES) {
+    // S6R-12: the not-applicable row only when a side has kit-only lessons (v1 comparisons unchanged).
+    if (cls === 'not-applicable' && a.byClass[cls] === 0 && b.byClass[cls] === 0) continue;
     row(cls, countOrNa(a.byClass[cls]), countOrNa(b.byClass[cls]));
   }
   const firstTry = (s: ComparisonSide): string => `${s.publishedFirstTry} (${pct(s.publishedFirstTryRate)})`;
@@ -622,6 +761,11 @@ export function renderComparisonMarkdown(
   row('Repair attempts', countOrNa(a.repairsTotal), countOrNa(b.repairsTotal));
   row('Jobs with repairs', countOrNa(a.jobsWithRepairs), countOrNa(b.jobsWithRepairs));
   row('Analysis repair attempts', countOrNa(a.analysisRepairsTotal), countOrNa(b.analysisRepairsTotal));
+  const componentRepairs = (s: ComparisonSide): string =>
+    s.componentRepairsNotRecorded > 0
+      ? `${s.componentRepairsTotal} (+ ${s.componentRepairsNotRecorded} lesson line(s) not recorded)`
+      : countOrNa(s.componentRepairsTotal);
+  row('Component repair attempts', componentRepairs(a), componentRepairs(b));
   row('Jobs with a first-try check failure', countOrNa(a.jobsWithFirstTryFailures), countOrNa(b.jobsWithFirstTryFailures));
   row('First-try check failures (total)', countOrNa(a.firstTryFailedChecksTotal), countOrNa(b.firstTryFailedChecksTotal));
   row('Published lessons', countOrNa(a.publishedLessons), countOrNa(b.publishedLessons));

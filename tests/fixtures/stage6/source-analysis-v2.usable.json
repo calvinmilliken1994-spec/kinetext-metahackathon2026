@@ -16,7 +16,7 @@
       },
       {
         "id": "drag-coefficient",
-        "point": "One coefficient packs the complex shape and flow effects together.",
+        "point": "The variable called the drag coefficient packs the complex shape and flow effects together.",
         "sourceId": "nasa-grc-drag-equation",
         "quote": "this variable is called the drag coefficient, designated"
       },
@@ -31,14 +31,14 @@
       {
         "id": "drag-coefficient",
         "term": "drag coefficient",
-        "gloss": "Single number collecting shape and flow effects.",
+        "gloss": "Variable called the drag coefficient, collecting shape and flow effects.",
         "sourceId": "nasa-grc-drag-equation",
         "quote": "this variable is called the drag coefficient, designated"
       },
       {
         "id": "density",
         "term": "density",
-        "gloss": "Air mass per volume, written rho in the equation.",
+        "gloss": "Mass of air per volume, designated by the letter rho.",
         "sourceId": "nasa-grc-drag-equation",
         "quote": "density is designated by the letter rho"
       },

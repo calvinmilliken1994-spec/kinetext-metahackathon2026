@@ -38,11 +38,17 @@ export interface RevisionGuardOptions {
   extraRules?: (args: { baseline: unknown; next: unknown; report: ValidationReport; allowed: string[] }) => string[];
   /**
    * Opt-in exception to the frozen-list-length rule for ONE list the revision-1 authority
-   * explicitly names (compare-table-v1 CT-03: a short row's `/rows/i/values` — the repair must
-   * be able to add the missing per-column value). Return true only when the exact list pointer
-   * is authorized; the common-prefix items still diff leaf-by-leaf under the normal authority.
+   * explicitly names (compare-table-v1 CT-03: a short row's `/rows/i/values`; analysis-v2
+   * A-04/A-07/A-08: an undersized overview list or plan). Return true only when the exact list
+   * pointer is authorized AND the concrete length change is the structural one the finding
+   * licenses (e.g. a pure append, or a resize onto the column count).
+   *
+   * STRUCTURAL PERMISSION ONLY (S6R-06/S6R-10). Naming a list pointer licenses its length change
+   * but grants NO content authority over the retained prefix items: for every change beneath a
+   * resized list the list pointer and its ancestors are removed from the authority, so a prefix
+   * leaf may change only when its own validator-owned affected path names it.
    */
-  allowListResize?: (pointer: string, allowed: readonly string[]) => boolean;
+  allowListResize?: (args: { pointer: string; allowed: readonly string[]; before: number; after: number }) => boolean;
 }
 
 interface LeafChange { pointer: string; before: unknown; after: unknown }
@@ -53,8 +59,8 @@ function isPlainObject(v: unknown): v is Record<string, unknown> {
   return typeof v === 'object' && v !== null && !Array.isArray(v);
 }
 
-/** Positional deep diff. Array length changes and root-shape changes are `structural`, except a list whose length change `resizeAllowed` authorizes (recorded in `lengths`, common prefix still diffed). */
-export function leafDiff(a: unknown, b: unknown, pointer = '', resizeAllowed: (ptr: string) => boolean = () => false): DiffResult {
+/** Positional deep diff. Array length changes and root-shape changes are `structural`, except a list whose length change `resizeAllowed` authorizes (recorded in `lengths`, common prefix still diffed; the caller must then withhold the list pointer's own descendant authority). */
+export function leafDiff(a: unknown, b: unknown, pointer = '', resizeAllowed: (ptr: string, before: number, after: number) => boolean = () => false): DiffResult {
   const out: DiffResult = { changed: [], structural: [], lengths: [] };
   const walk = (x: unknown, y: unknown, ptr: string): void => {
     if (Array.isArray(x) || Array.isArray(y)) {
@@ -63,7 +69,7 @@ export function leafDiff(a: unknown, b: unknown, pointer = '', resizeAllowed: (p
         return;
       }
       if (x.length !== y.length) {
-        if (resizeAllowed(ptr)) {
+        if (resizeAllowed(ptr, x.length, y.length)) {
           out.lengths.push({ pointer: ptr === '' ? '(root list)' : ptr, before: x.length, after: y.length });
           for (let i = 0; i < Math.min(x.length, y.length); i++) walk(x[i], y[i], `${ptr}/${i}`);
           return;
@@ -94,6 +100,13 @@ export function leafDiff(a: unknown, b: unknown, pointer = '', resizeAllowed: (p
 /** True when `changed` is authorized by `allowed`: exact path or anywhere under an allowed path. */
 export function isAuthorized(changed: string, allowed: readonly string[]): boolean {
   return allowed.some(a => changed === a || changed.startsWith(a + '/'));
+}
+
+/** `allowed` minus every resized list pointer (and its ancestors) that encloses the changed leaf. */
+function withoutResizeAuthority(allowed: readonly string[], changed: string, resized: readonly string[]): string[] {
+  const enclosing = resized.filter(r => changed.startsWith(r + '/'));
+  if (enclosing.length === 0) return [...allowed];
+  return allowed.filter(a => !enclosing.some(r => a === r || r.startsWith(a + '/')));
 }
 
 function isIdentityPath(pointer: string): boolean {
@@ -159,7 +172,8 @@ export function compareGuardedRevisions(
       allowed = recomputed;
     }
 
-    const diff = leafDiff(baseline, next, '', (ptr) => opts.allowListResize?.(ptr, allowed) === true);
+    const diff = leafDiff(baseline, next, '', (ptr, before, after) => opts.allowListResize?.({ pointer: ptr, allowed, before, after }) === true);
+    const resizedPointers = diff.lengths.map(l => (l.pointer === '(root list)' ? '' : l.pointer));
     for (const s of diff.structural) {
       problems.push(`${s} changed shape or list length (item counts and structure are frozen in a repair; the system prunes bad items via the drop helpers, the model never adds, removes or reorders items)`);
     }
@@ -189,8 +203,11 @@ export function compareGuardedRevisions(
         problems.push('the root value changed shape');
         continue;
       }
-      if (!isAuthorized(c.pointer, allowed)) {
-        problems.push(`${c.pointer} changed from ${fmt(c.before)} to ${fmt(c.after)} outside the affected paths recomputed from revision 1 (${allowed.length === 0 ? 'no failing check authorized any field change' : 'authorized: ' + allowed.join(', ')})`);
+      // A resized list's own pointer (and its ancestors) licenses the length change only, never the
+      // content of the retained prefix items (S6R-06/S6R-10); those need their own affected paths.
+      const effective = resizedPointers.length === 0 ? allowed : withoutResizeAuthority(allowed, c.pointer, resizedPointers);
+      if (!isAuthorized(c.pointer, effective)) {
+        problems.push(`${c.pointer} changed from ${fmt(c.before)} to ${fmt(c.after)} outside the affected paths recomputed from revision 1 (${effective.length === 0 ? 'no failing check authorized any field change' : 'authorized: ' + effective.join(', ')})${effective.length < allowed.length ? ' — a list-length finding licenses the resize only, not the content of the items it keeps' : ''}`);
         continue;
       }
       if (isIdentityPath(c.pointer)) {
@@ -235,7 +252,7 @@ export function compareGuardedRevisions(
       id,
       kind,
       passed: true,
-      message: `${opts.targetLabel}: no weakening — every one of the ${diff.changed.length} changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable${diff.lengths.length > 0 ? ` except the ${diff.lengths.length} list resize(s) the authority itself named (${diff.lengths.map(l => `${l.pointer}: ${l.before} -> ${l.after}`).join(', ')})` : ''}, and no tolerance increased`,
+      message: `${opts.targetLabel}: no weakening — every one of the ${diff.changed.length} changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable${diff.lengths.length > 0 ? ` except the ${diff.lengths.length} list resize(s) the authority itself named (structural only; retained items stayed under their own paths) (${diff.lengths.map(l => `${l.pointer}: ${l.before} -> ${l.after}`).join(', ')})` : ''}, and no tolerance increased`,
     };
   } catch (err) {
     return { id, kind, passed: false, message: `comparison crashed before it could pass or fail cleanly: ${errMsg(err)}` };

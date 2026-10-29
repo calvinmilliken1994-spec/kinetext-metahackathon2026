@@ -339,5 +339,7 @@ test('repair: an id may be renamed only where the authority names the id itself'
 test('repair authority helper recomputes from revision 1', () => {
   const { report, allowed } = analysisV2RepairAuthority(brokenBaseline(), [dragSource()]);
   assert.deepEqual(allowed, affectedPathsOf(report));
-  assert.deepEqual(allowed, ['/overview/keyPoints/0/quote']);
+  // The fabricated quote is named by A-05; since the gate also runs OV-06 (S6R-01) the point that
+  // no longer overlaps the fabricated quote joins the same recomputed authority.
+  assert.deepEqual([...allowed].sort(), ['/overview/keyPoints/0/point', '/overview/keyPoints/0/quote']);
 });

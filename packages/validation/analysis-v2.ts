@@ -61,6 +61,7 @@ import {
 } from './kit/shared.ts';
 import { compareGuardedRevisions } from './kit/repair.ts';
 import type { RevisionGuardContext } from './kit/repair.ts';
+import { validateOverviewGen } from './kit/overview.ts';
 
 const ajv = new Ajv({ allErrors: true });
 const analysisV2SchemaValidate: ValidateFunction = ajv.compile(sourceAnalysisV2GenSchema as AnySchemaObject);
@@ -463,6 +464,54 @@ export function validateAnalysisV2(analysis: unknown, sources: SourceDocument[],
   return { artifactId, revision, checks, publishable: checks.every(c => c.passed) };
 }
 
+/**
+ * The publication gate for a lesson-flow analysis (S6R-01): validateAnalysisV2 (schema gate +
+ * A-01..A-11) PLUS, for a USABLE analysis, the overview's own grounding checks OV-01..OV-06 run on
+ * `analysis.overview` — term-in-quote, point/gloss-to-quote word overlap, overview number and
+ * publisher checks that A-05 (quote existence only) does not cover.
+ *
+ * Signature: (analysis, sources, opts?) => ValidationReport. `publishable` is true only when every
+ * check passes; every failing OV check carries validator-owned `affected` pointers PREFIXED with
+ * '/overview' (analysis-object pointers), so they join the revision-1 repair authority that
+ * compareAnalysisV2Revisions / analysisV2RepairAuthority recompute from this same gate.
+ *
+ * - Schema short-circuit: a schema-invalid analysis returns validateAnalysisV2's single failed
+ *   'schema.analysis-v2' check (no overview walk on unsafe shapes).
+ * - Honest declines (usable=false): the overview is empty by contract (R-DEC-4), so no OV check
+ *   (and no usable-overview minimum count) is added; the report is exactly validateAnalysisV2's.
+ * - The overview's own 'schema.gen' structural check is NOT added: A-04/A-07 already own the
+ *   shape, count, length and id rules of the same fields in the analysis (no double reporting).
+ *   OV-01/OV-03/OV-04/OV-05 re-check fields A-05/A-09/A-10/A-07 cover; the redundancy is
+ *   deliberate (one overview validator, one set of check ids) and harmless to the authority
+ *   (paths are unioned).
+ * Never throws.
+ */
+export function validateLessonAnalysisGate(analysis: unknown, sources: SourceDocument[], opts: AnalysisV2ValidateOptions = {}): ValidationReport {
+  const base = validateAnalysisV2(analysis, sources, opts);
+  try {
+    const a = analysis as Partial<SourceAnalysisV2> | null | undefined;
+    if (a === null || typeof a !== 'object' || a.usable !== true) return base;
+    if (base.checks.length === 1 && base.checks[0]?.id === 'schema.analysis-v2' && base.checks[0].passed === false) return base;
+    const ov = validateOverviewGen(a.overview, sources, { revision: base.revision });
+    const ovChecks: ValidationCheck[] = ov.checks
+      .filter(c => /^OV-0[1-6]$/.test(c.id))
+      .map(c => {
+        const { path, affected, ...rest } = c;
+        return {
+          ...rest,
+          ...(typeof path === 'string' ? { path: `/overview${path}` } : {}),
+          ...(Array.isArray(affected) ? { affected: affected.map(p => `/overview${p}`) } : {}),
+        };
+      });
+    if (ovChecks.length === 0) return base;
+    const checks = [...base.checks, ...ovChecks];
+    return { ...base, checks, publishable: checks.every(c => c.passed) };
+  } catch (err) {
+    const check: ValidationCheck = { id: 'OV-01', kind: 'grounding', passed: false, message: `overview checks crashed before they could pass or fail cleanly: ${err instanceof Error ? err.message : String(err)}` };
+    return { ...base, checks: [...base.checks, check], publishable: false };
+  }
+}
+
 /** Every AI-written text field of the analysis with its JSON pointer (quotes exempt). */
 function aiTextFieldEntries(a: LooseAnalysisV2): { path: string; text: string }[] {
   return [
@@ -487,6 +536,19 @@ function aiTextFieldEntries(a: LooseAnalysisV2): { path: string; text: string }[
 /* ------------------------------------------------------------------ */
 
 /**
+ * The analysis lists a repair may GROW (append-only) when the revision-1 gate names the exact list
+ * pointer (A-04 empty, A-07 count, A-08 plan, OV-05), mapped to their frozen maximum. Oversized
+ * lists are NOT repaired by deletion: the comparator keeps rejecting a shrink, so such a baseline
+ * simply exhausts its bounded repair attempts (documented limit; an honest regeneration/degrade
+ * rule belongs to the worker, not to a comparator exception).
+ */
+const APPENDABLE_LISTS: Readonly<Record<string, number>> = {
+  '/overview/keyPoints': A.keyPoints.max,
+  '/overview/keyTerms': A.keyTerms.max,
+  '/componentPlan': A.componentPlan.max,
+};
+
+/**
  * Guard a SourceAnalysisV2 repair revision against weakening (design §0.2/§5.4 frozen repair
  * discipline). The authority is the recomputed revision-1 report; caller findings may only
  * narrow it. Extra analysis rule: `usable` may never flip true → false to escape a format or
@@ -500,7 +562,15 @@ export function compareAnalysisV2Revisions(
 ): ValidationCheck {
   return compareGuardedRevisions(baseline, next, context, {
     targetLabel: 'source-analysis-v2',
-    recompute: (b, sources) => validateAnalysisV2(b, sources),
+    // The authority is the SAME gate that decides publication (A-checks + OV-01..OV-06).
+    recompute: (b, sources) => validateLessonAnalysisGate(b, sources),
+    allowListResize: ({ pointer, allowed, before, after }) => {
+      // S6R-10: append-only for an authorised, undersized list. Never a deletion, never beyond the
+      // frozen maximum; existing entries (and their ids) stay frozen (the list pointer licenses
+      // the length change only), appended entries are checked normally by the gate.
+      const max = APPENDABLE_LISTS[pointer];
+      return max !== undefined && allowed.includes(pointer) && after > before && after <= max;
+    },
     extraRules: ({ baseline: b, next: n, report }) => {
       const problems: string[] = [];
       const failed = new Set(report.checks.filter(c => !c.passed).map(c => c.id));
@@ -520,7 +590,7 @@ export function compareAnalysisV2Revisions(
  * compareAnalysisV2Revisions).
  */
 export function analysisV2RepairAuthority(baseline: unknown, sources: SourceDocument[]): { report: ValidationReport; allowed: string[] } {
-  const report = validateAnalysisV2(baseline, sources);
+  const report = validateLessonAnalysisGate(baseline, sources);
   return { report, allowed: affectedPathsOf(report) };
 }
 

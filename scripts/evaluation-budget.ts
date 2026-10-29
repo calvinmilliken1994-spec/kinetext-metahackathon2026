@@ -480,6 +480,8 @@ export interface ComponentRepairLine {
   fixed: string[];
   remaining: string[];
   passed: boolean;
+  /** S6R-11: true when this repair worked on a system-injected demo fault (absent on older records). */
+  afterInjectedFault?: boolean;
 }
 
 export function normaliseComponentRepairs(raw: unknown): ComponentRepairLine[] {
@@ -494,6 +496,7 @@ export function normaliseComponentRepairs(raw: unknown): ComponentRepairLine[] {
     fixed: Array.isArray(r?.['fixed']) ? (r['fixed'] as string[]) : [],
     remaining: Array.isArray(r?.['remaining']) ? (r['remaining'] as string[]) : [],
     passed: r?.['passed'] === true,
+    ...(typeof r?.['afterInjectedFault'] === 'boolean' ? { afterInjectedFault: r['afterInjectedFault'] as boolean } : {}),
   }));
 }
 

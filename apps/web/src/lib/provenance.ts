@@ -22,18 +22,25 @@ export interface RepairCardLike {
   state: 'passed' | 'still-failing' | 'running';
 }
 
-/** Counts for a lesson job: each component counts once, by its latest repair attempt; the analysis counts as one. */
+/**
+ * Counts for a lesson job: each component counts once, its state by its latest repair attempt; the analysis counts as one.
+ * S6R-11: the ORIGIN is per component and immutable — if any attempt of a component is system-made (its baseline carried
+ * an injected fault), the component is system-made, so a later attempt can never turn into a natural-repair claim.
+ */
 export function lessonRepairCounts(cards: readonly RepairCardLike[], analysis: AnalysisRepairState): RepairCounts {
   const latest = new Map<string, RepairCardLike>();
+  const systemMade = new Set<string>();
   for (const c of cards) {
+    if (c.origin === 'system') systemMade.add(c.componentId);
     const prev = latest.get(c.componentId);
     if (prev === undefined || c.attempt >= prev.attempt) latest.set(c.componentId, c);
   }
   const counts = { natural: 0, system: 0, failed: 0 };
   for (const c of latest.values()) {
-    if (c.origin === 'system') counts.system += 1;
+    const origin = systemMade.has(c.componentId) ? 'system' : 'natural';
+    if (origin === 'system') counts.system += 1;
     if (c.state === 'still-failing') counts.failed += 1;
-    else if (c.state === 'passed' && c.origin === 'natural') counts.natural += 1;
+    else if (c.state === 'passed' && origin === 'natural') counts.natural += 1;
   }
   if (analysis === 'passed') counts.natural += 1;
   if (analysis === 'failed') counts.failed += 1;

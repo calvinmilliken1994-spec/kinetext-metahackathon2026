@@ -217,7 +217,8 @@ test('lesson: the drag golden publishes overview + both planned components (conc
   assert.deepEqual(events.slice(0, 5).map(ev), [
     'ingest:started', 'ingest:succeeded', 'analyze:started', 'analyze:succeeded', 'overview:succeeded',
   ]);
-  assert.match(events[3]?.detail ?? '', /^usable; checks 12\/12 passed$/);
+  // S6R-01: the lesson gate = schema + A-01..A-11 + OV-01..OV-06 on a usable analysis (18 checks).
+  assert.match(events[3]?.detail ?? '', /^usable; checks 18\/18 passed$/);
   assert.match(events[4]?.detail ?? '', /^overview ready: 3 key points, 3 key terms$/);
   // Both components start (concurrency 2) before the lesson finishes; plan order at start.
   const starts = events.filter(e => e.stage === 'component' && e.status === 'started');
@@ -396,6 +397,7 @@ test('lesson: a component whose quote check fails is repaired to revision 2 and 
       fixed: ['Q-01', 'Q-02', 'Q-05'],
       remaining: [],
       passed: true,
+      afterInjectedFault: false, // S6R-11: no demo fault was injected
     },
   ]);
   assert.ok(client.calls.includes('quiz_cards_repair'));

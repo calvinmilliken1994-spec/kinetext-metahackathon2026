@@ -188,12 +188,12 @@ test('FE-08: an unparseable page formula publishes ONLY with a verified FE-05 ex
   assert.match(checkOf(r2, 'FE-08').message, /FE-05 bridge/);
 });
 
-test('FE-08: a parseable page formula compares at 5 slider-range sample points', () => {
+test('FE-08: a parseable page formula compares at independently varied points (S6R-02)', () => {
   const gen = wingLoadingGen({ withExample: true });
   const report = fe(gen, [WING_LOADING_SOURCE()]);
   assert.deepEqual(failedIds(report), [], report.checks.filter(c => !c.passed).map(c => c.message).join('\n'));
   assert.match(checkOf(report, 'FE-08').message, /matches the page formula/);
-  assert.match(checkOf(report, 'FE-08').message, /5 finite|\/5 finite/);
+  assert.match(checkOf(report, 'FE-08').message, /finite independent comparison points agree within relative/);
   // A wrong expression on the same page fails even though an example exists:
   const wrong = clone(gen);
   wrong.expression = 'wt * ar';

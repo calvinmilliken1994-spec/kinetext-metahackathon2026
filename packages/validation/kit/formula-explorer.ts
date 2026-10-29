@@ -3,14 +3,20 @@
 // (computeCaseOutputs below is the recomputation the pipeline stores). No eval/Function anywhere:
 // the safe parser/evaluator lives in ../expression.ts and implements the frozen grammar exactly.
 //
-// FE-08 per the ADDENDUM (which wins over §2.7d): parse the page's quoted formula line with the
-// same grammar when possible (after the fixed normalisation and the pageSymbol → name mapping)
-// and compare it with `expression` at 5 sample points spread over the slider ranges (fractions
-// [0.1, 0.3, 0.5, 0.7, 0.9] of every variable's [min, max], deterministic), relative tolerance
-// 1e-9, skipping non-finite points; at least 3 finite agreeing points are required. If the page
-// formula cannot be parsed (words, subscripts, greek-only names), FE-08 passes ONLY with a
-// verified FE-05 source example (the UI then shows "Formula entered by AI from the quoted
-// line - compare with the quote"); otherwise it fails with the frozen §2.7h message.
+// FE-08 per the ADDENDUM (which wins over §2.7d), tightened by Stage 6 review S6R-02/03/04:
+// parse the page's quoted formula line with the same grammar when possible (after the fixed
+// normalisation and the pageSymbol → name mapping) and compare it with `expression` at
+// INDEPENDENTLY varied points — the slider defaults, per-variable one-at-a-time variation around
+// the defaults, seeded pseudo-random points and the stored case inputs (never the old correlated
+// diagonal, on which x===y hid every (x-y)-shaped error) — with relative tolerance 1e-9, skipping
+// non-finite points; at least 3 finite agreeing points and NO mismatch are required. The page
+// formula parse is strict: trailing prose is stripped only at explicit prose boundaries and an
+// unsupported mathematical character makes the line unparseable — a prefix is never silently
+// parsed as the page formula. If the page formula cannot be parsed (words, subscripts, greek-only
+// names), FE-08 passes ONLY with a verified FE-05 source example whose quote EXPLICITLY binds
+// every variable to its value ("x = 6", "x is 6", "6 for x" — never a permutation search over the
+// quote's numbers, never the stated result as an input candidate); otherwise it fails with the
+// frozen §2.7h message.
 //
 // Recorded interpretations:
 //   - FE-04 tolerance bound [1e-9, 0.25] applies to sourceExample.tolerance (cases carry no
@@ -33,26 +39,30 @@ import {
   duplicateOccurrences,
   idProblems,
   KIT_FAILURE_MESSAGES,
+  normalizeWhitespace,
   numbersCheckProblems,
   numericTokens,
   quoteProblems,
+  truncate,
 } from './shared.ts';
 import {
   astNodeCount,
   astVariables,
+  compareAtPoints,
   evaluate,
+  independentSamplePoints,
   lexExpression,
   normalizePageFormula,
+  ONE_AT_A_TIME_FRACTIONS,
   parseExpression,
   parseTokens,
-  sliderSamplePoints,
 } from '../expression.ts';
-import type { AstNode, Token } from '../expression.ts';
+import type { AstNode } from '../expression.ts';
 
 const L = KIT_LIMITS.formulaExplorer;
 export const FE_FAILURE_MESSAGE: string = KIT_FAILURE_MESSAGES['formula-explorer-v1'] as string;
-/** FE-08 sample fractions of every slider range (addendum: "5 sample points spread over the slider ranges"). */
-export const FE08_SAMPLE_FRACTIONS = [0.1, 0.3, 0.5, 0.7, 0.9] as const;
+/** The FE-08 one-at-a-time variation fractions (kept for the frozen constant name; S6R-02 sampling now varies variables independently — see independentSamplePoints). */
+export const FE08_SAMPLE_FRACTIONS = ONE_AT_A_TIME_FRACTIONS;
 export const FE08_RELATIVE_TOLERANCE = 1e-9;
 export const FE08_MIN_AGREEING_POINTS = 3;
 
@@ -123,31 +133,52 @@ export interface PageFormulaAttempt {
 }
 
 /**
- * Lex a normalised page-formula string but TRUNCATE at the first token that cannot belong to the
- * formula (an identifier that is not a mapped variable, function or constant — i.e. the start of
- * trailing prose) and at the first non-formula character (greek letters, subscript unicode, ...).
+ * The small explicit list of prose-boundary connectives (S6R-03): whitespace + one of these
+ * words ends the formula line. Trailing prose is stripped ONLY here and at punctuation
+ * boundaries (comma/semicolon, sentence-ending period) or as a trailing run of pure-letter
+ * words — never at an unsupported mathematical character, which makes the line unparseable.
  */
-function lexTruncatedParse(normalized: string, names: string[]): { ok: true; ast: AstNode } | { ok: false; error: string } {
-  const allowed = new Set<string>([...names, ...FORMULA_FUNCTIONS, ...FORMULA_CONSTANTS]);
-  // Character-level prefix: stop at the first character that cannot appear in a final-form formula.
-  const badChar = /[^A-Za-z0-9_+\-*/^().]/.exec(normalized);
-  const prefix = badChar === null ? normalized : normalized.slice(0, badChar.index);
-  const lexed = lexExpression(prefix);
-  if (!lexed.ok) return { ok: false, error: lexed.error };
-  const tokens: Token[] = [];
-  for (const t of lexed.tokens) {
-    if (t.type === 'ident' && !allowed.has(t.value)) break;
-    tokens.push(t);
+const PROSE_BOUNDARY_WORDS = ['where', 'when', 'if', 'so', 'thus', 'which', 'then', 'and', 'or', 'with', 'for', 'is', 'are'] as const;
+
+/** Cut the RHS at the first explicit prose boundary (comma/semicolon, sentence period, connective word). */
+function cutAtProseBoundary(rhs: string): string {
+  let cut = rhs.length;
+  const comma = rhs.search(/[,;]/);
+  if (comma >= 0) cut = Math.min(cut, comma);
+  const period = rhs.search(/\.(?!\d)/); // a period that is not a decimal point ends the sentence
+  if (period >= 0) cut = Math.min(cut, period);
+  const word = new RegExp(`\\s+(?:${PROSE_BOUNDARY_WORDS.join('|')})\\b`, 'i').exec(rhs);
+  if (word !== null) cut = Math.min(cut, word.index);
+  return rhs.slice(0, cut).trim();
+}
+
+/**
+ * Drop a trailing run of whitespace-separated pure-letter words (>= 2 letters) that are not a
+ * page symbol, variable name, function or constant — i.e. trailing prose like "... / 2 exactly".
+ * Single letters, digits and anything mathematical are NEVER dropped: they make the strict
+ * whole-string parse fail instead (S6R-03: no silent prefix parses).
+ */
+function dropTrailingProseWords(rhs: string, formulaWords: ReadonlySet<string>): string {
+  let out = rhs;
+  for (;;) {
+    const m = /^(.*\s)([A-Za-z]{2,})$/.exec(out);
+    if (m === null) {
+      if (/^[A-Za-z]{2,}$/.test(out) && !formulaWords.has(out)) return '';
+      return out;
+    }
+    if (formulaWords.has(m[2] as string)) return out;
+    out = (m[1] as string).trim();
   }
-  if (tokens.length === 0) return { ok: false, error: 'the formula line has no parseable tokens' };
-  return parseTokens(tokens, { knownVariables: names, maxNodes: L.astMaxNodes });
 }
 
 /**
  * Extract and parse the page's formula line from the (verbatim) quote: split at the first '=',
- * cut trailing prose, map pageSymbols to variable names, apply the fixed normalisation and parse
- * the RHS with the SAME lexer/grammar (token truncation stops at trailing prose or unmappable
- * characters). Returns 'unparseable' with the reason on any failure.
+ * strip trailing prose ONLY at explicit prose boundaries, map pageSymbols to variable names,
+ * apply the fixed normalisation and lex+parse the COMPLETE remaining RHS with the same
+ * lexer/grammar. S6R-03: an unsupported mathematical character anywhere in the remaining RHS
+ * (÷, √, '=', greek letters, subscript unicode, stranded digits or adjacent letters) yields
+ * 'unparseable' — the parser never succeeds on a truncated prefix and silently discards real
+ * mathematical content.
  */
 export function parsePageFormulaFromQuote(
   quote: string,
@@ -160,26 +191,202 @@ export function parsePageFormulaFromQuote(
   const eq = normQuote.indexOf('=');
   const lhs = normQuote.slice(0, eq).trim();
   const rhsRaw = normQuote.slice(eq + 1).trim();
-  if (lhs === '' || rhsRaw === '') return { status: 'unparseable', error: 'the quote has an empty side around "="' };
+  if (lhs === '' || rhsRaw === '') return { status: 'unparseable', error: 'the quote has an empty side around "="', rhs: rhsRaw };
   const names = variables.map(v => v.name);
-  // Cut at prose boundaries: connectives, commas/semicolons and periods that are not decimals.
-  const cut = rhsRaw
-    .replace(/\s+\b(where|when|if|so|thus|which|and then)\b[\s\S]*$/i, ' ')
-    .replace(/[,;]/g, ' ')
-    .replace(/\.(?!\d)/g, ' ')
-    .trim();
-  let lastError = 'the formula line could not be parsed';
-  for (const cand of [cut, rhsRaw]) {
-    const mapped = mapPageSymbols(cand, variables);
-    const attempt = lexTruncatedParse(normalizePageFormula(mapped), names);
-    if (attempt.ok) return { status: 'parsed', ast: attempt.ast, rhs: cand };
-    lastError = attempt.error;
+  const formulaWords = new Set<string>(
+    [...names, ...variables.map(v => v.pageSymbol), ...FORMULA_FUNCTIONS, ...FORMULA_CONSTANTS].filter(
+      (w): w is string => typeof w === 'string' && w !== '',
+    ),
+  );
+  const rhs = dropTrailingProseWords(cutAtProseBoundary(rhsRaw), formulaWords);
+  if (rhs === '') {
+    return { status: 'unparseable', rhs: rhsRaw, error: 'the formula line has no parseable tokens (only prose after the "=")' };
   }
-  return { status: 'unparseable', rhs: cut, error: lastError };
+  const mapped = mapPageSymbols(rhs, variables);
+  const lexed = lexExpression(normalizePageFormula(mapped));
+  if (!lexed.ok) {
+    return { status: 'unparseable', rhs, error: `the complete formula line could not be lexed (${lexed.error}); unsupported mathematical content is never truncated away` };
+  }
+  if (lexed.tokens.length === 0) return { status: 'unparseable', rhs, error: 'the formula line has no parseable tokens' };
+  const parsed = parseTokens(lexed.tokens, { knownVariables: names, maxNodes: L.astMaxNodes });
+  if (!parsed.ok) {
+    return { status: 'unparseable', rhs, error: `the complete formula line does not parse in the frozen grammar (${parsed.error})` };
+  }
+  return { status: 'parsed', ast: parsed.ast, rhs };
+}
+
+/* ------------------------------------------------------------------ */
+/* Complete-formula quote edges (S6R-03)                               */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Characters that extend a mathematical token. When one of these sits at a formula-quote edge
+ * (immediately, or after whitespace for the right edge), the quote cropped real formula content
+ * — e.g. quoting "z = x/y" out of the page's "z = x/y^2" manufactures a shorter, wrong formula.
+ */
+const MATH_EDGE_SYMBOLS = new Set(['^', '*', '/', '+', '-', '=', '÷', '×', '√', '·', '∙', '⋅', '\u2212', '±', '<', '>', '≈', '≤', '≥', '%']);
+const SUPERSCRIPT_EDGE_CHARS = new Set(['\u2070', '\u00b9', '\u00b2', '\u00b3', '\u2074', '\u2075', '\u2076', '\u2077', '\u2078', '\u2079', '\u207a', '\u207b']);
+
+function isMathEdgeChar(ch: string, lettersBad: boolean): boolean {
+  if (MATH_EDGE_SYMBOLS.has(ch) || SUPERSCRIPT_EDGE_CHARS.has(ch)) return true;
+  if (/[0-9]/.test(ch)) return true;
+  if (lettersBad && /[A-Za-z_]/.test(ch)) return true;
+  return false;
+}
+
+/** True when the character sequence starting at `end` cuts a mathematical token (right edge). */
+function rightEdgeCuts(text: string, end: number, lettersBad: boolean): boolean {
+  if (end >= text.length) return false; // end of text: clean
+  const next = text[end] as string;
+  if (/\s/.test(next)) {
+    // After whitespace only mathematical symbols/digits betray a cut; prose words are fine
+    // ("W = m * g since ...", "V = a * t X = (1/2)*a*t^2 ...").
+    let i = end;
+    while (i < text.length && /\s/.test(text[i] as string)) i += 1;
+    const c = text[i];
+    return c !== undefined && isMathEdgeChar(c, false);
+  }
+  if (next === '.') return /\d/.test(text[end + 1] ?? ''); // sentence end is clean; "x/y.5" is a cut
+  if (next === ')') return false; // closing a parenthesised formula: clean
+  return isMathEdgeChar(next, lettersBad) || next === '('; // "(...)" right after is implicit multiplication
+}
+
+/** True when the character before `start` cuts a mathematical token (left edge). */
+function leftEdgeCuts(text: string, start: number, lettersBad: boolean): boolean {
+  if (start <= 0) return false; // start of text: clean
+  const prev = text[start - 1] as string;
+  if (/\s/.test(prev)) return false; // prose across whitespace is clean
+  if (prev === '.') return /\d/.test(text[start - 2] ?? ''); // a decimal point cut ("459.7" quoted as "7")
+  if (prev === '(') return false; // "(V = a * t)": an opening parenthesis is a clean frame
+  return isMathEdgeChar(prev, lettersBad) || prev === ')';
+}
+
+/** True when at least one occurrence of `needle` in `haystack` has clean mathematical edges. */
+function hasCompleteOccurrence(haystack: string, needle: string, lettersBad = true): boolean {
+  if (needle === '') return false;
+  let from = 0;
+  for (;;) {
+    const at = haystack.indexOf(needle, from);
+    if (at === -1) return false;
+    if (!leftEdgeCuts(haystack, at, lettersBad) && !rightEdgeCuts(haystack, at + needle.length, lettersBad)) return true;
+    from = at + 1;
+  }
+}
+
+/**
+ * S6R-03: the formula quote and formulaText must each be a COMPLETE source formula. Locates the
+ * (whitespace-normalised) quote's occurrences in the (whitespace-normalised) source text and the
+ * formulaText's occurrences in the quote, and rejects an occurrence set whose every occurrence
+ * has a mathematical token cut at an edge (source "z = x/y^2" quoted as "z = x/y" fails; prose
+ * continuations after whitespace stay fine). When the formulaText only matches the quote after
+ * the page-formula normalisation (whitespace removed), letters can no longer be told apart from
+ * prose, so only symbols/digits count as cuts there. Returns plain-language problems + the
+ * affected pointers ('/quote', '/formulaText'). An unlocatable source text is not judged here —
+ * the FE-01 verbatim-quote rule owns that failure.
+ */
+export function formulaCompletenessProblems(
+  quote: unknown,
+  formulaText: unknown,
+  sourceText: string | undefined,
+): { problems: string[]; affected: string[] } {
+  const problems: string[] = [];
+  const affected: string[] = [];
+  if (typeof quote !== 'string' || typeof formulaText !== 'string') return { problems, affected };
+  const nq = normalizeWhitespace(quote);
+  const nft = normalizeWhitespace(formulaText);
+  if (nq === '' || nft === '') return { problems, affected };
+  const nSource = typeof sourceText === 'string' ? normalizeWhitespace(sourceText) : undefined;
+  if (nSource !== undefined && nSource !== '' && nq !== '') {
+    if (!hasCompleteOccurrence(nSource, nq)) {
+      problems.push(`formula quote "${truncate(quote, 60)}" is not a complete formula in source: the page's mathematical content continues right at the quote edge (an operator, exponent, digit or adjacent letter follows) — quote the formula exactly as the page prints it, whole`);
+      affected.push('/quote', '/formulaText');
+    }
+  }
+  if (nq.includes(nft)) {
+    if (!hasCompleteOccurrence(nq, nft)) {
+      problems.push(`formulaText "${truncate(formulaText, 60)}" cuts a mathematical token inside the formula quote "${truncate(quote, 60)}" — formulaText must be the complete formula as printed`);
+      affected.push('/formulaText', '/quote');
+    }
+  } else {
+    const pq = normalizePageFormula(quote);
+    const pft = normalizePageFormula(formulaText);
+    if (pft !== '' && pq.includes(pft) && !hasCompleteOccurrence(pq, pft, false)) {
+      problems.push(`formulaText "${truncate(formulaText, 60)}" cuts a mathematical token inside the formula quote "${truncate(quote, 60)}" after the fixed normalisation — formulaText must be the complete formula as printed`);
+      affected.push('/formulaText', '/quote');
+    }
+  }
+  return { problems, affected };
 }
 
 /** The FE-05 verdict, shared with FE-08's unparseable fallback. */
 interface SourceExampleVerdict { passed: boolean; problems: string[]; affected: string[] }
+
+/* ------------------------------------------------------------------ */
+/* Explicit source-example bindings (S6R-04)                           */
+/* ------------------------------------------------------------------ */
+
+export interface SourceExampleBindings {
+  ok: boolean;
+  /** Variable NAME → value, for every declared variable (partial when !ok). */
+  bindings: Record<string, number>;
+  problems: string[];
+}
+
+/** A plain decimal number, optionally signed (unicode minus is normalised before matching). */
+const BIND_VALUE = String.raw`[+-]?\d+(?:\.\d+)?`;
+/** A bound value never swallows a following digit or thousands-comma ("1,000" is not "1"). */
+const BIND_VALUE_GUARD = String.raw`(?!\d)(?!,\d)`;
+
+/**
+ * S6R-04: bind every declared variable to the value the source-example quote EXPLICITLY states
+ * for it. Supported patterns (a small explicit list; <sym> is the variable's pageSymbol or name,
+ * matched case-sensitively as a whole token):
+ *   - "<sym> = <num>" and "<sym> equals <num>"
+ *   - "<sym> is <num>"
+ *   - "<num> for <sym>"
+ * Repeated equal input values ("x = 3 and y = 3") are supported. A variable with no explicit
+ * binding, or with conflicting bindings, fails closed: the quote's numbers are NEVER permuted
+ * to make the stated result work, and the result token is never an input candidate.
+ */
+export function bindSourceExampleInputs(
+  quote: string,
+  variables: readonly { name: string; pageSymbol: string }[],
+): SourceExampleBindings {
+  const problems: string[] = [];
+  const bindings: Record<string, number> = {};
+  const text = (typeof quote === 'string' ? quote : '').replace(/[\u2212\u2010\u2011]/g, '-').replace(/\s+/g, ' ');
+  for (const v of Array.isArray(variables) ? variables : []) {
+    if (typeof v?.name !== 'string' || v.name === '') continue;
+    const syms = [...new Set([v.pageSymbol, v.name].filter((s): s is string => typeof s === 'string' && s !== ''))];
+    const shown = syms[0] ?? v.name;
+    const values: number[] = [];
+    for (const sym of syms) {
+      const esc = escapeRegExp(sym);
+      const before = String.raw`(?<![A-Za-z0-9_])`;
+      const after = String.raw`(?![A-Za-z0-9_])`;
+      const patterns = [
+        new RegExp(`${before}${esc}\\s*(?:=|[eE]quals)\\s*(${BIND_VALUE})${BIND_VALUE_GUARD}`, 'g'),
+        new RegExp(`${before}${esc}\\s+[iI]s\\s+(${BIND_VALUE})${BIND_VALUE_GUARD}`, 'g'),
+        new RegExp(String.raw`(?<![\d.])` + `(${BIND_VALUE})${BIND_VALUE_GUARD}\\s+[fF]or\\s+${esc}${after}`, 'g'),
+      ];
+      for (const re of patterns) {
+        for (const m of text.matchAll(re)) {
+          const n = Number(m[1]);
+          if (Number.isFinite(n)) values.push(n);
+        }
+      }
+    }
+    const distinct = [...new Set(values)];
+    if (distinct.length === 0) {
+      problems.push(`the sourceExample quote does not explicitly bind "${shown}" to a value (supported patterns: "${shown} = <number>", "${shown} is <number>", "<number> for ${shown}") — unbound quote numbers are never assigned to variables`);
+    } else if (distinct.length > 1) {
+      problems.push(`the sourceExample quote binds "${shown}" to conflicting values (${distinct.join(', ')}); the binding must be unambiguous`);
+    } else {
+      bindings[v.name] = distinct[0] as number;
+    }
+  }
+  return { ok: problems.length === 0, bindings, problems };
+}
 
 function checkSourceExample(gen: FormulaExplorerGen, idx: ReturnType<typeof buildSourceIndex>): SourceExampleVerdict {
   const problems: string[] = [];
@@ -214,38 +421,30 @@ function checkSourceExample(gen: FormulaExplorerGen, idx: ReturnType<typeof buil
     }
   }
   if (problems.length === 0) {
-    // The quoted passage states inputs + result: some injective assignment of the quote's number
-    // tokens to the declared variables must reproduce resultNumber within tolerance.
+    // S6R-04: the quoted passage must EXPLICITLY bind every declared variable to its value
+    // ("x = 6", "x is 6", "6 for x"); the recomputation happens at those bindings ONLY. The
+    // quote's numbers are never permuted to make the stated result work, and the result token is
+    // never an input candidate. Unbound/ambiguous bindings fail closed — the bridge then does
+    // not count as grounding for FE-08.
     const parsed = parseExpression(gen.expression);
     if (!parsed.ok) {
       problems.push(`sourceExample cannot be recomputed because the expression does not parse (${parsed.error})`);
       affected.push('/expression');
     } else {
-      const tokens = [...new Set(numericTokens(ex.quote))].map(Number).filter(n => Number.isFinite(n));
-      const vars = gen.variables.map(v => v.name);
-      const tolerance = ex.tolerance;
-      const target = ex.resultNumber;
-      const point: Record<string, number> = {};
-      // Try every injective mapping of quote number tokens to variables; accept the first whose
-      // evaluation reproduces the stated result within tolerance.
-      const search = (vi: number, used: Set<number>): boolean => {
-        if (vi === vars.length) {
-          const value = evaluate(parsed.ast, point);
-          return Number.isFinite(value) && Math.abs(value - target) <= tolerance;
+      const bound = bindSourceExampleInputs(ex.quote, gen.variables);
+      if (!bound.ok) {
+        problems.push(...bound.problems);
+        affected.push('/sourceExample/quote');
+      } else {
+        const shown = Object.entries(bound.bindings).map(([k, x]) => `${k}=${x}`).join(', ');
+        const value = evaluate(parsed.ast, bound.bindings);
+        if (!Number.isFinite(value)) {
+          problems.push(`sourceExample does not match the recomputation: at the source-stated bindings (${shown}) the expression ${gen.expression} is not finite`);
+          affected.push('/sourceExample/resultNumber', '/sourceExample/quote', '/expression');
+        } else if (Math.abs(value - ex.resultNumber) > ex.tolerance) {
+          problems.push(`sourceExample does not match the recomputation at the source-stated bindings (${shown}): ${gen.expression} evaluates to ${value}, the quote states ${ex.resultNumber} (tolerance ${ex.tolerance})`);
+          affected.push('/sourceExample/resultNumber', '/sourceExample/quote', '/expression');
         }
-        for (let t = 0; t < tokens.length; t++) {
-          if (used.has(t)) continue;
-          used.add(t);
-          point[vars[vi] as string] = tokens[t] as number;
-          if (search(vi + 1, used)) return true;
-          used.delete(t);
-        }
-        return false;
-      };
-      const matched = search(0, new Set());
-      if (!matched) {
-        problems.push(`sourceExample does not match the recomputation: no assignment of the quote's numbers (${tokens.join(', ')}) to the variables (${vars.join(', ')}) evaluates ${gen.expression} to ${target} within tolerance ${tolerance}`);
-        affected.push('/sourceExample/resultNumber', '/sourceExample/quote', '/expression');
       }
     }
   }
@@ -285,10 +484,16 @@ export function validateFormulaExplorer(gen: FormulaExplorerGen, sources: Source
         if (!inQuote) {
           problems.push(`formulaText "${gen.formulaText}" does not occur in the formula quote "${String(gen.quote).slice(0, 60)}" after the fixed normalisation (the formula itself must be quoted, not paraphrased)`);
           affected.push('/formulaText', '/quote');
+        } else if (qp.length === 0) {
+          // S6R-03: the quote is grounded — now require that its occurrence in the source (and the
+          // formulaText's occurrence in the quote) does not cut a mathematical token at an edge.
+          const comp = formulaCompletenessProblems(gen.quote, gen.formulaText, idx.textOf(gen.sourceId));
+          problems.push(...comp.problems);
+          affected.push(...comp.affected);
         }
       }
       return problems.length === 0
-        ? { passed: true, message: `the formula quote (${grounded} quote) appears verbatim in source "${gen.sourceId}" and formulaText occurs inside the quote after normalisation (formula-quoted)` }
+        ? { passed: true, message: `the formula quote (${grounded} quote) appears verbatim in source "${gen.sourceId}" and formulaText occurs inside the quote after normalisation, with no mathematical token cut at the quote edges (formula-quoted)` }
         : { passed: false, message: problems.join('; '), path: affected[0], affected };
     }),
 
@@ -424,7 +629,7 @@ export function validateFormulaExplorer(gen: FormulaExplorerGen, sources: Source
               ? 'the declared source example is quoted verbatim, states its result, and matches the recomputation within its tolerance (sourceExample-check)'
               : 'hasSourceExample=false with the empty sourceExample shape (sourceExample-check)',
           }
-        : { passed: false, message: `${v.problems.join('; ')} (expected a single quotable passage stating inputs + result, with the result appearing in the quote and matching our evaluation within a tolerance in [${L.tolerance.min}, ${L.tolerance.max}])`, path: v.affected[0], affected: v.affected };
+        : { passed: false, message: `${v.problems.join('; ')} (expected a single quotable passage that explicitly binds every variable — "x = 6", "x is 6" or "6 for x" — and states the result, matching our evaluation at those bindings within a tolerance in [${L.tolerance.min}, ${L.tolerance.max}])`, path: v.affected[0], affected: v.affected };
     }),
 
     guarded('FE-06', 'semantic', () => {
@@ -492,27 +697,23 @@ export function validateFormulaExplorer(gen: FormulaExplorerGen, sources: Source
       }
       const attempt = parsePageFormulaFromQuote(gen.quote ?? '', gen.variables ?? []);
       if (attempt.status === 'parsed' && attempt.ast !== undefined) {
-        // Numeric comparison at 5 sample points spread over the slider ranges (addendum).
-        const samples = sliderSamplePoints(gen.variables.map(v => ({ name: v.name, min: v.min, max: v.max })));
-        let finite = 0;
-        let agreeing = 0;
-        const mismatches: string[] = [];
-        for (const point of samples) {
-          const a = evaluate(parsedExpr.ast, point);
-          const b = evaluate(attempt.ast, point);
-          if (!Number.isFinite(a) || !Number.isFinite(b)) continue; // skip non-finite points
-          finite += 1;
-          const denom = Math.max(Math.abs(a), Math.abs(b));
-          if (Math.abs(a - b) <= FE08_RELATIVE_TOLERANCE * denom) agreeing += 1;
-          else mismatches.push(`at {${Object.entries(point).map(([k, x]) => `${k}=${x}`).join(', ')}}: expression=${a}, page formula="${attempt.rhs}"=${b}`);
+        // Numeric comparison at INDEPENDENTLY varied points (S6R-02): the slider defaults,
+        // per-variable one-at-a-time variation around them, seeded pseudo-random points and the
+        // stored case inputs — never the old correlated diagonal, on which x===y at every sample
+        // hid every (x-y)-shaped error.
+        const points = independentSamplePoints(
+          gen.variables.map(v => ({ name: v.name, min: v.min, max: v.max, default: v.default })),
+          gen.cases.map(caseInputsOf),
+        );
+        const cmp = compareAtPoints(parsedExpr.ast, attempt.ast, points, FE08_RELATIVE_TOLERANCE);
+        if (cmp.finite < FE08_MIN_AGREEING_POINTS) {
+          return { passed: false, message: `only ${cmp.finite} of the ${points.length} independent comparison points give finite results on both sides, expected >= ${FE08_MIN_AGREEING_POINTS} finite agreeing points. ${FE_FAILURE_MESSAGE}`, path: '/expression', affected };
         }
-        if (finite < FE08_MIN_AGREEING_POINTS) {
-          return { passed: false, message: `only ${finite} of the 5 slider-range sample points give finite results on both sides, expected >= ${FE08_MIN_AGREEING_POINTS} finite agreeing points. ${FE_FAILURE_MESSAGE}`, path: '/expression', affected };
+        if (cmp.agreeing < FE08_MIN_AGREEING_POINTS || cmp.mismatches.length > 0) {
+          const shown = cmp.mismatches.slice(0, 3).map(m => `at {${Object.entries(m.point).map(([k, x]) => `${k}=${x}`).join(', ')}}: expression=${m.a}, page formula="${attempt.rhs}"=${m.b}`);
+          return { passed: false, message: `the expression "${gen.expression}" does not match the page formula "${attempt.rhs}" from the quote: ${cmp.agreeing}/${cmp.finite} finite independent comparison points (defaults, one-variable-at-a-time, seeded pseudo-random and stored case inputs) agree within relative ${FE08_RELATIVE_TOLERANCE} (need >= ${FE08_MIN_AGREEING_POINTS} agreeing and no mismatch). ${shown.join('; ')}. ${FE_FAILURE_MESSAGE}`, path: '/expression', affected };
         }
-        if (agreeing < FE08_MIN_AGREEING_POINTS || mismatches.length > 0) {
-          return { passed: false, message: `the expression "${gen.expression}" does not match the page formula "${attempt.rhs}" from the quote: ${agreeing}/${finite} finite sample points agree within relative ${FE08_RELATIVE_TOLERANCE} (need >= ${FE08_MIN_AGREEING_POINTS} agreeing and no mismatch). ${mismatches.slice(0, 3).join('; ')}. ${FE_FAILURE_MESSAGE}`, path: '/expression', affected };
-        }
-        return { passed: true, message: `the expression matches the page formula "${attempt.rhs}" parsed from the quote with the same grammar: ${agreeing}/${finite} finite slider-range sample points agree within relative ${FE08_RELATIVE_TOLERANCE} (expression-matches-page-formula)` };
+        return { passed: true, message: `the expression matches the page formula "${attempt.rhs}" parsed from the quote with the same grammar: ${cmp.agreeing}/${cmp.finite} finite independent comparison points agree within relative ${FE08_RELATIVE_TOLERANCE} with no mismatch (expression-matches-page-formula)` };
       }
       // Unparseable page formula (words, subscripts, greek-only names): publishes ONLY with a
       // verified FE-05 source example (addendum); else fail with the frozen message.

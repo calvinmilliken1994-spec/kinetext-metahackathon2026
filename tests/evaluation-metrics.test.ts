@@ -85,7 +85,8 @@ test('computeMetrics: overall counts and the accuracy rate', () => {
   assert.equal(m.total, 7);
   assert.deepEqual(m.byClass, {
     'correct-first-try': 1, 'correct-after-repair': 1, 'correct-decline': 1,
-    'wrong-engine': 1, 'wrong-decline': 1, 'false-accept': 1, failed: 1, unknown: 0,
+    // S6R-12: 'not-applicable' (kit-only lessons) is 0 on activity-flow results; values unchanged.
+    'wrong-engine': 1, 'wrong-decline': 1, 'false-accept': 1, failed: 1, 'not-applicable': 0, unknown: 0,
   });
   assert.equal(m.accuracyRate, 3 / 7);
 });

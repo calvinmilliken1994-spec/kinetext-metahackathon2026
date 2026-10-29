@@ -1,7 +1,13 @@
 // S6-V — quiz-cards-v1 validation (Q-01..Q-07, design §2.2 frozen) + the per-item drop helper
 // ("drop bad cards while >= 3 remain, else fail", design §2.2f). The correct answer is ALWAYS
 // options[0] pre-shuffle; Q-02/Q-05/Q-07 verify it against the card's own quote with
-// whitespace-normalised, case-insensitive substring matching.
+// whitespace-normalised, case-insensitive matching.
+//
+// S6R-09 (Stage 6 review): every number in an answer/option/distractor is compared as a WHOLE
+// SIGNED numeric token by value, so `2` is not the `2` inside `20`, `2.5`, `-2` or `1,200`, while
+// `5` still matches a printed `5.0`. Q-02/Q-05/Q-07 share one predicate (contentOccursWhole) and
+// Q-06 uses the signed variant of the shared N-01 numbers check. This is the narrow wrong-token
+// class only; it does not claim semantic entailment.
 
 import type { SourceDocument, ValidationCheck, ValidationReport } from '../../contracts/index.ts';
 import { KIT_LIMITS } from '../../contracts/kit.ts';
@@ -11,12 +17,13 @@ import {
   buildReport,
   buildSourceIndex,
   collectQuoteFailures,
-  containsNormalized,
+  contentOccursWhole,
   duplicateOccurrences,
   idProblems,
   itemIndicesWithFailures,
   KIT_FAILURE_MESSAGES,
   lengthProblems,
+  numbersCarryingToken,
   numbersCheckProblems,
   optionalLengthProblems,
 } from './shared.ts';
@@ -93,13 +100,21 @@ export function validateQuizCards(gen: QuizCardsGen, sources: SourceDocument[], 
       gen.cards.forEach((card, i) => {
         const answer = card.options[0];
         if (typeof answer !== 'string') return;
-        if (!containsNormalized(card.quote ?? '', answer)) {
+        const quote = card.quote ?? '';
+        const match = contentOccursWhole(quote, answer);
+        if (!match.contained) {
           problems.push(`cards[${i}] (${card.id}): the correct answer "${answer}" (options[0]) does not occur in the card quote (answer-in-quote)`);
+          affected.push(`/cards/${i}/options/0`, `/cards/${i}/quote`);
+        } else if (!match.ok) {
+          // S6R-09: the text is there, but a number in it is only part of a different number.
+          const shown = match.missingNumbers.map(n => `"${n}"`).join(', ');
+          const quoteNumbers = [...new Set(match.missingNumbers.flatMap(n => numbersCarryingToken(quote, n)))];
+          problems.push(`cards[${i}] (${card.id}): the correct answer "${answer}" states the number ${shown} as a whole number, but the card quote only contains ${quoteNumbers.length === 0 ? 'it inside a different number' : quoteNumbers.map(q => `"${q}"`).join(', ')} there — a number inside a larger number, a decimal or a signed number is a different value (answer-in-quote)`);
           affected.push(`/cards/${i}/options/0`, `/cards/${i}/quote`);
         }
       });
       return problems.length === 0
-        ? { passed: true, message: `every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)` }
+        ? { passed: true, message: `every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)` }
         : { passed: false, message: problems.join('; '), path: affected[0], affected };
     }),
 
@@ -142,7 +157,7 @@ export function validateQuizCards(gen: QuizCardsGen, sources: SourceDocument[], 
         const quote = card.quote ?? '';
         const matching = card.options
           .map((o, j) => ({ o, j }))
-          .filter(({ o }) => typeof o === 'string' && o !== '' && containsNormalized(quote, o));
+          .filter(({ o }) => typeof o === 'string' && o !== '' && contentOccursWhole(quote, o).ok);
         if (matching.length !== 1) {
           problems.push(
             matching.length === 0
@@ -178,7 +193,7 @@ export function validateQuizCards(gen: QuizCardsGen, sources: SourceDocument[], 
         }
       });
       return problems.length === 0
-        ? { passed: true, message: 'every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)' }
+        ? { passed: true, message: 'every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)' }
         : { passed: false, message: problems.join('; '), path: affected[0], affected };
     }),
 
@@ -188,7 +203,7 @@ export function validateQuizCards(gen: QuizCardsGen, sources: SourceDocument[], 
       gen.cards.forEach((card, i) => {
         card.options.slice(1).forEach((opt, k) => {
           const j = k + 1;
-          if (typeof opt === 'string' && opt !== '' && containsNormalized(card.quote ?? '', opt)) {
+          if (typeof opt === 'string' && opt !== '' && contentOccursWhole(card.quote ?? '', opt).ok) {
             problems.push(`cards[${i}] (${card.id}): the distractor "${opt}" (options[${j}]) occurs in the quote — distractors must be discriminating (distractors-not-in-quote)`);
             affected.push(`/cards/${i}/options/${j}`);
           }

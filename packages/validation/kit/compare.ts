@@ -13,7 +13,9 @@
 // distinct cell values (the "3 seeded same-column options" of §2.6e), the message records that
 // the UI falls back to reveal-only (design: "falls back to reveal-only, not component failure").
 // schema.gen additionally owns the page-wording rule (compare-grid step 1): an entity or
-// attribute name that looks like an id — kebab-case, or an underscore without any space — fails
+// attribute name that looks like an id — kebab-case, or an underscore without any space — and
+// does NOT occur in the cited source text (lead ruling: real hyphenated words the page uses, like
+// 'set-aside' or 'half-life', are page wording) fails
 // with `rows[0].entity "constant-pressure-process" looks like an id; use the words the page uses`
 // (the live Spark Open failure class: 'this-equation', 'constant-pressure-process',
 // 'starting-at-age-14'). There is no per-cell drop helper: a bad value fails the component with
@@ -45,22 +47,47 @@ const ID_LIKE_KEBAB = /^[a-z0-9]+(-[a-z0-9]+)+$/;
 
 /**
  * The page-wording rule for row/column names: a name that matches the kebab-case id pattern,
- * or contains '_' with no space, reads as an id rather than the words the page uses. Returns
- * the frozen problem message, or null when the name is ordinary page wording.
+ * or contains '_' with no space, reads as an id rather than the words the page uses — UNLESS the
+ * name really occurs in the cited source text (case-insensitive, whitespace-normalised, as a whole
+ * token), in which case it is page wording ('set-aside', 'half-life', 'long-term'). Returns the
+ * frozen problem message, or null when the name is ordinary page wording. Without `sourceTexts`
+ * nothing can be on a page, so the strict id-pattern rule applies.
  */
-export function idLikeNameProblem(label: string, name: unknown): string | null {
+export function idLikeNameProblem(label: string, name: unknown, sourceTexts: readonly (string | undefined)[] = []): string | null {
   if (typeof name !== 'string') return null;
   if (ID_LIKE_KEBAB.test(name) || (name.includes('_') && !/\s/.test(name))) {
+    if (occursInPage(name, sourceTexts)) return null;
     return `${label} "${name}" looks like an id; use the words the page uses`;
   }
   return null;
+}
+
+/** True when `name` occurs in any of the texts as a whole token (not inside a longer hyphenated/underscored word). */
+function occursInPage(name: string, texts: readonly (string | undefined)[]): boolean {
+  const needle = name.replace(/\s+/g, ' ').trim().toLowerCase();
+  if (needle === '') return false;
+  const re = new RegExp(`(?<![A-Za-z0-9_-])${needle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?![A-Za-z0-9_-])`);
+  return texts.some(t => typeof t === 'string' && re.test(t.replace(/\s+/g, ' ').toLowerCase()));
 }
 
 function valuesOf(row: CompareRowGen | undefined): CompareValueGen[] {
   return Array.isArray(row?.values) ? row.values : [];
 }
 
-export function compareStructuralProblems(gen: CompareTableGen): { problems: string[]; affected: string[] } {
+/** Texts of the sources the table's cells cite (all provided sources when none resolves). */
+function citedTexts(gen: CompareTableGen, texts: { sourceTextOf: (id: string) => string | undefined; all: string[] }): string[] {
+  const out: string[] = [];
+  for (const row of Array.isArray(gen.rows) ? gen.rows : []) {
+    for (const v of valuesOf(row)) {
+      const t = typeof v?.sourceId === 'string' ? texts.sourceTextOf(v.sourceId) : undefined;
+      if (t !== undefined && !out.includes(t)) out.push(t);
+    }
+  }
+  return out.length > 0 ? out : texts.all;
+}
+
+/** `pageTexts` = the cited source text(s), against which kebab-case / underscore names are tested. */
+export function compareStructuralProblems(gen: CompareTableGen, pageTexts: readonly (string | undefined)[] = []): { problems: string[]; affected: string[] } {
   const problems: string[] = [];
   const affected: string[] = [];
   const push = (p: string[], ptr: string): void => { if (p.length > 0) { problems.push(...p); affected.push(ptr); } };
@@ -72,7 +99,7 @@ export function compareStructuralProblems(gen: CompareTableGen): { problems: str
       affected.push(`/attributes/${j}`);
       return;
     }
-    const idLike = idLikeNameProblem(`attributes[${j}]`, at);
+    const idLike = idLikeNameProblem(`attributes[${j}]`, at, pageTexts);
     if (idLike !== null) { problems.push(idLike); affected.push(`/attributes/${j}`); }
   });
   const rows = Array.isArray(gen.rows) ? gen.rows : [];
@@ -82,7 +109,7 @@ export function compareStructuralProblems(gen: CompareTableGen): { problems: str
       problems.push(`rows[${i}].entity must be a non-empty string`);
       affected.push(`/rows/${i}/entity`);
     } else {
-      const idLike = idLikeNameProblem(`rows[${i}].entity`, entity);
+      const idLike = idLikeNameProblem(`rows[${i}].entity`, entity, pageTexts);
       if (idLike !== null) { problems.push(idLike); affected.push(`/rows/${i}/entity`); }
     }
     valuesOf(row).forEach((v, j) => {
@@ -95,7 +122,7 @@ export function compareStructuralProblems(gen: CompareTableGen): { problems: str
 export function validateCompareTable(gen: CompareTableGen, sources: SourceDocument[], opts: { revision?: number } = {}): ValidationReport {
   const idx = buildSourceIndex(sources);
   const all = idx.allTexts();
-  const structural = compareStructuralProblems(gen);
+  const structural = compareStructuralProblems(gen, citedTexts(gen, { sourceTextOf: id => idx.textOf(id), all }));
   const attributes: unknown[] = Array.isArray(gen.attributes) ? gen.attributes : [];
   const rows: CompareRowGen[] = Array.isArray(gen.rows) ? gen.rows : [];
 

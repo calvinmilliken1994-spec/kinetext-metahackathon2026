@@ -30,6 +30,7 @@ import type {
 import { kitGenSchemaFor } from '../../contracts/schemas.ts';
 import { schemaAffectedPaths, schemaFailureMessage } from '../validate.ts';
 import { buildReport } from './shared.ts';
+import { applyKitPolicy } from './policy.ts';
 import { validateOverviewGen } from './overview.ts';
 import { validateQuizCards, pruneQuizCards } from './quiz.ts';
 import { validateSequence, pruneSequenceSteps } from './sequence.ts';
@@ -82,7 +83,7 @@ export function validateKitComponent(
     };
   }
   if (componentId === 'overview-v1') {
-    return validateOverviewGen(gen, sources, { revision });
+    return applyKitPolicy(componentId, gen, sources, validateOverviewGen(gen, sources, { revision }));
   }
   const validate = genValidatorFor(componentId);
   let schemaOk = false;
@@ -119,6 +120,10 @@ export function validateKitComponent(
       };
     }
   }
+  return applyKitPolicy(componentId, gen, sources, validateKitBody(componentId, gen, sources, artifactId, revision));
+}
+
+function validateKitBody(componentId: KitGenComponentId, gen: unknown, sources: SourceDocument[], artifactId: string, revision: number): ValidationReport {
   switch (componentId) {
     case 'quiz-cards-v1': return validateQuizCards(gen as QuizCardsGen, sources, { revision });
     case 'sequence-v1': return validateSequence(gen as SequenceGen, sources, { revision });
@@ -134,6 +139,12 @@ export function validateKitComponent(
   }
 }
 
+/** The revision-1 column count (S6R-06: a CT-03 row resize may only land on exactly this many slots). */
+function columnCountOf(baseline: unknown): number {
+  const attributes = (baseline as { attributes?: unknown } | null | undefined)?.attributes;
+  return Array.isArray(attributes) ? attributes.length : -1;
+}
+
 /**
  * Guard a kit component repair revision (design §5.4 frozen discipline). The authority is the
  * recomputed revision-1 report over the provided sources; caller findings may only narrow it.
@@ -145,9 +156,13 @@ export function validateKitComponent(
  * compare-table-v1 (Stage 6 compare-grid): cell identity is (row index, attribute index), so the
  * positional diff already freezes rows and columns in place; a flagged id-like entity/attribute
  * rename is allowed exactly because schema.gen names `/rows/i/entity` or `/attributes/j` in its
- * affected paths. The one resize exception: when CT-03 names `/rows/i/values` (a row with fewer
- * values than columns), the repair may resize THAT values list — the per-slot count the authority
- * itself flagged; the rows and attributes lists stay frozen.
+ * affected paths. The one resize exception (S6R-06): when CT-03 names `/rows/i/values` (a row
+ * whose value count differs from the column count), the repair may add or remove TAIL slots of
+ * THAT values list so it ends on exactly the column count. The pointer licenses the resize only:
+ * the retained prefix cells stay frozen unless their own failing paths (CT-01/CT-02/CT-04 cell
+ * paths) authorize them (kit/repair.ts withholds descendant authority from a resized list). The
+ * rows and attributes lists stay frozen. A missing HEAD slot therefore cannot be repaired by
+ * shifting the prefix: the component fails honestly instead of rewriting a passing cell.
  */
 export function compareKitRevisions(
   componentId: KitComponentId | string,
@@ -183,7 +198,7 @@ export function compareKitRevisions(
     recompute: (b, sources) => validateKitComponent(componentId, b, sources),
     extraRules: extras,
     allowListResize: componentId === 'compare-table-v1'
-      ? (pointer, allowed) => /^\/rows\/\d+\/values$/.test(pointer) && allowed.includes(pointer)
+      ? ({ pointer, allowed, after }) => /^\/rows\/\d+\/values$/.test(pointer) && allowed.includes(pointer) && after === columnCountOf(baseline)
       : undefined,
   });
 }
@@ -208,6 +223,7 @@ export {
 } from './formula-explorer.ts';
 export { validateBalanceEquation, deriveBalanceSolution, balanceStructuralProblems, BAL_FAILURE_MESSAGE } from './balance.ts';
 export { compareGuardedRevisions, leafDiff, isAuthorized } from './repair.ts';
+export { kitDisplayFields, kitPolicyProblems, applyKitPolicy } from './policy.ts';
 export type { RevisionGuardContext } from './repair.ts';
 export type { DroppedItem, PruneResult } from './quiz.ts';
 export {

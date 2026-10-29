@@ -2,14 +2,10 @@
 // check of its component against the real licensed sources, and each report must carry exactly
 // 'schema.gen' plus the frozen check ids in order (retired ids always pass).
 //
-// KNOWN GOLDEN GAP (reported to the lead, NOT weakened here): the hand-written overview golden
-// (source-analysis-v2.usable.json → overview) fails OV-06 point-quote-overlap on exactly three
-// entries — keyPoints[1] shares only 1 content word ("coefficient") with its quote (needs >= 2),
-// keyTerms[0].gloss and keyTerms[1].gloss share none (need >= 1). This is the design's own
-// documented false-reject class (§2.1d: "paraphrase with synonyms fails despite faithful
-// meaning; repair path: rewrite point/gloss wording"), so the fixture predates the check and
-// should be reworded (or the lead confirms another reading). The test below pins the exact
-// failing pointers so any change is visible.
+// KNOWN GOLDEN GAP — RESOLVED (Wave A3, S6R-01): the hand-written overview golden used to fail
+// OV-06 point-quote-overlap on three paraphrased entries. The authored fixture wording
+// (tests/fixtures/stage6/source-analysis-v2.usable.json) is now faithful to its quotes and the
+// raw golden passes every OV check; no check was weakened or disabled.
 // Run: node --test packages/validation/stage6-kit-golden.test.ts
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -80,16 +76,11 @@ test('golden balance-equation passes every check; BAL-06 retired always passes',
   assert.match(checkOf(report, 'BAL-03').message, /\[1, 2, 1, 2\]/);
 });
 
-test('golden overview: OV-01..OV-05 pass; OV-06 fails on exactly the three paraphrased entries (KNOWN GOLDEN GAP — see file header)', () => {
+test('golden overview: OV-01..OV-06 all pass (the authored wording was made faithful to its quotes; OV-06 is not disabled)', () => {
   const report = validateKitComponent('overview-v1', usableAnalysis().overview, [dragSource()]);
   assert.deepEqual(report.checks.map(c => c.id), ['schema.gen', ...checkIdsFor('overview-v1')]);
-  for (const id of ['OV-01', 'OV-02', 'OV-03', 'OV-04', 'OV-05']) {
-    assert.equal(checkOf(report, id).passed, true, `${id} must pass on the golden: ${checkOf(report, id).message}`);
-  }
-  const ov06 = checkOf(report, 'OV-06');
-  assert.equal(ov06.passed, false);
-  assert.deepEqual(ov06.affected, ['/keyPoints/1/point', '/keyTerms/0/gloss', '/keyTerms/1/gloss']);
-  assert.equal(report.publishable, false);
+  assert.deepEqual(failedIds(report), [], failureDetail(report));
+  assert.equal(report.publishable, true);
 });
 
 test('an unknown componentId fails closed at the gate', () => {

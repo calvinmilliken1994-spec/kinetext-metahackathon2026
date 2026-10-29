@@ -9,6 +9,12 @@
 //   - BAL-09 (addendum defect fix) grounds each species quote verbatim in ITS OWN species.sourceId
 //     source and requires the species formula to appear in that quote (normalised), so no required
 //     field is unused and every species is tied to the page.
+//   - S6R-05 (Stage 6 review): the bridge from the page to the activity is boundary-checked. BAL-01
+//     requires equationText to occur in the cited source as a COMPLETE chemical-token span, BAL-02
+//     parses that source span and compares its (formula, side) multiset with the species, and
+//     BAL-09 requires the species formula to be a whole formula token in its own quote — so a
+//     product cropped out of a longer printed formula (H2O out of H2O2) can never publish. The
+//     exact integer solver is untouched: it balances whichever reaction it is given.
 //   - Nullity != 1 fails BAL-08 ('ambiguous' for nullity >= 2); a nullity-0 (impossible) equation
 //     fails BAL-03/04/05/08 together — they all describe the same root cause: no system solution.
 //   - hint follows the ''/5-120 optional-text convention of the other components.
@@ -20,13 +26,17 @@ import { guarded } from '../validate.ts';
 import {
   buildReport,
   buildSourceIndex,
+  chemicallyCompleteOccurrences,
+  chemicalFormulaTokens,
   collectQuoteFailures,
   duplicateOccurrences,
   idProblems,
   KIT_FAILURE_MESSAGES,
   numbersCheckProblems,
+  occurrenceContext,
   optionalLengthProblems,
 } from './shared.ts';
+import type { SourceIndex, TextSpan } from './shared.ts';
 import { balanceSpecies, normalizeChemFormula, normalizeEquationText, parseChemicalFormula, parseEquationParts } from '../chemistry.ts';
 import type { BalanceResult } from '../chemistry.ts';
 
@@ -36,6 +46,17 @@ export const BAL_FAILURE_MESSAGE: string = KIT_FAILURE_MESSAGES['balance-equatio
 /** The system-derived solution for one gen (the answer key source; UI/pipeline reuse this). */
 export function deriveBalanceSolution(gen: BalanceEquationGen): BalanceResult {
   return balanceSpecies((gen.species ?? []).map(s => ({ formula: s.formula, side: s.side })));
+}
+
+/**
+ * S6R-05: the source's OWN complete equation span for this gen, or null when the source is absent
+ * or does not print the equation as a whole token run. A span that ends inside a longer formula
+ * (`H2O` cut out of `H2O2`) is not a span, so the printed reaction cannot be substituted.
+ */
+export function sourceEquationSpan(gen: BalanceEquationGen, idx: SourceIndex): TextSpan | null {
+  const text = idx.textOf(gen.sourceId);
+  if (text === undefined || typeof gen.equationText !== 'string' || gen.equationText === '') return null;
+  return chemicallyCompleteOccurrences(text, gen.equationText)[0] ?? null;
 }
 
 export function balanceStructuralProblems(gen: BalanceEquationGen): { problems: string[]; affected: string[] } {
@@ -82,9 +103,18 @@ export function validateBalanceEquation(gen: BalanceEquationGen, sources: Source
       } else if (!normalizeEquationText(gen.quote ?? '').includes(normalizeEquationText(gen.equationText))) {
         problems.push(`equationText "${gen.equationText}" does not occur in the equation quote "${String(gen.quote).slice(0, 60)}" after normalisation (the printed equation itself must be quoted)`);
         affected.push('/equationText', '/quote');
+      } else {
+        const sourceText = idx.textOf(gen.sourceId);
+        if (sourceText !== undefined && chemicallyCompleteOccurrences(sourceText, gen.equationText).length === 0) {
+          // S6R-05: the equation (or a species inside it) is a crop of a longer formula the page
+          // prints. Substring containment cannot see this; the source occurrence must be complete.
+          const context = occurrenceContext(sourceText, gen.equationText);
+          problems.push(`equationText "${gen.equationText}" is not a complete equation on the page: source "${gen.sourceId}" prints ${context === null ? 'no such span' : `"${context}"`} there, so the equation or a formula inside it is cut short (a species cropped out of a longer formula, such as H2O out of H2O2, is a different substance) (equation-quoted)`);
+          affected.push('/equationText', ...speciesAffected);
+        }
       }
       return problems.length === 0
-        ? { passed: true, message: `the equation quote appears verbatim in source "${gen.sourceId}" and equationText occurs inside the quote after normalisation (equation-quoted)` }
+        ? { passed: true, message: `the equation quote appears verbatim in source "${gen.sourceId}" and equationText occurs inside the quote as a complete equation span with chemical-token boundaries (equation-quoted)` }
         : { passed: false, message: `${problems.join('; ')} — ${BAL_FAILURE_MESSAGE}`, path: affected[0], affected };
     }),
 
@@ -110,7 +140,11 @@ export function validateBalanceEquation(gen: BalanceEquationGen, sources: Source
         affected.push('/species');
       }
       // The printed equation must parse and its (formula, side) multiset must equal the species split.
-      const eq = parseEquationParts(gen.equationText ?? '');
+      // S6R-05: the split is compared with the SOURCE's own complete equation span (not with the
+      // gen's equationText alone), so a substituted product cannot ride on a matching wrong text.
+      const span = sourceEquationSpan(gen, idx);
+      const printed = span === null ? (gen.equationText ?? '') : span.text;
+      const eq = parseEquationParts(printed);
       if (!eq.ok) {
         problems.push(`equationText does not parse into a reaction: ${eq.error}`);
         affected.push('/equationText');
@@ -119,7 +153,7 @@ export function validateBalanceEquation(gen: BalanceEquationGen, sources: Source
         const fromText = eq.parts.map(p => key(p.formula, p.side)).sort();
         const fromSpecies = species.map(s => key(typeof s.formula === 'string' ? s.formula : '', String(s.side))).sort();
         if (fromText.join('|') !== fromSpecies.join('|')) {
-          problems.push(`the species split [${fromSpecies.join(', ')}] does not match the printed equationText parts [${fromText.join(', ')}] (same formulas on the same sides, coefficients aside)`);
+          problems.push(`the species split [${fromSpecies.join(', ')}] does not match the printed equationText parts [${fromText.join(', ')}]${span === null ? '' : ' (read from the source equation span)'} (same formulas on the same sides, coefficients aside)`);
           affected.push('/equationText', ...speciesAffected);
         }
       }
@@ -207,16 +241,18 @@ export function validateBalanceEquation(gen: BalanceEquationGen, sources: Source
       );
       species.forEach((s, i) => {
         if (typeof s.quote === 'string' && typeof s.formula === 'string' && idx.docById.has(s.sourceId)) {
-          const nq = normalizeChemFormula(s.quote.replace(/\s+/g, ' ')).toLowerCase();
           const nf = normalizeChemFormula(s.formula).toLowerCase();
-          if (nf !== '' && !nq.includes(nf)) {
-            problems.push(`species[${i}] (${s.id}): the formula "${s.formula}" does not appear in its quote "${s.quote.slice(0, 60)}" after normalisation (species-quote-verbatim ties each species to the page)`);
+          // S6R-05: the formula must be a COMPLETE chemical token in its own quote. Containment
+          // alone accepts `H2O` cropped out of the page's `H2O2`, which is a different substance.
+          const tokens = new Set(chemicalFormulaTokens(s.quote).map(t => t.toLowerCase()));
+          if (nf !== '' && !tokens.has(nf)) {
+            problems.push(`species[${i}] (${s.id}): the formula "${s.formula}" does not appear in its quote "${s.quote.slice(0, 60)}" as a whole formula (only a longer formula contains those letters and digits; H2O inside H2O2 is a different substance) (species-quote-verbatim ties each species to the page)`);
             affected.push(`/species/${i}/quote`);
           }
         }
       });
       return problems.length === 0
-        ? { passed: true, message: `all ${grounded} species quote(s) appear verbatim in their cited source and each species formula appears in its own quote (species-quote-verbatim)` }
+        ? { passed: true, message: `all ${grounded} species quote(s) appear verbatim in their cited source and each species formula appears in its own quote as a whole formula (species-quote-verbatim)` }
         : { passed: false, message: `${problems.join('; ')} (expected verbatim quotes of 1-${KIT_LIMITS.common.quote.max} characters from the cited source) — ${BAL_FAILURE_MESSAGE}`, path: affected[0], affected };
     }),
   ];

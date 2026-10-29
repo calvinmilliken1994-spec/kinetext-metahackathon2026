@@ -439,9 +439,11 @@ export function astStructurallyEqual(a: AstNode, b: AstNode): boolean {
 }
 
 /**
- * The five FE-08 sample points "spread over the slider ranges" (lead freeze
- * addendum): fractions [0.1, 0.3, 0.5, 0.7, 0.9] of every variable's
- * [min, max], deterministically. Returns one assignment per sample.
+ * DEPRECATED diagonal sampling (kept for reference and existing consumers): the five sample
+ * points "spread over the slider ranges" using the SAME fraction of every variable's [min, max].
+ * Stage 6 review S6R-02: every variable moves in lockstep, so errors containing a factor of
+ * (x - y) vanish on the diagonal. FE-08 now uses independentSamplePoints() below; do not add
+ * new callers of this function.
  */
 export function sliderSamplePoints(variables: readonly { name: string; min: number; max: number }[]): Record<string, number>[] {
   const fractions = [0.1, 0.3, 0.5, 0.7, 0.9];
@@ -450,4 +452,117 @@ export function sliderSamplePoints(variables: readonly { name: string; min: numb
     for (const v of variables) point[v.name] = v.min + f * (v.max - v.min);
     return point;
   });
+}
+
+/* ------------------------------------------------------------------ */
+/* Independent FE-08 comparison sampling (Stage 6 review S6R-02)       */
+/* ------------------------------------------------------------------ */
+
+export interface SampledVariable { name: string; min: number; max: number; default?: number }
+
+/** The one-at-a-time variation fractions (the frozen FE-08 fraction list). */
+export const ONE_AT_A_TIME_FRACTIONS = [0.1, 0.3, 0.5, 0.7, 0.9] as const;
+
+/** Fixed seed for the pseudo-random comparison points (deterministic; never Math.random). */
+export const FE08_SAMPLE_SEED = 0x46453038; // "FE08"
+
+/** Deterministic seeded PRNG (mulberry32): same seed → same sequence, run to run. */
+function mulberry32(seed: number): () => number {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/**
+ * Independently varied FE-08 comparison points (Stage 6 review S6R-02). The old diagonal
+ * sampling moved every variable by the same fraction of its range, so with equal ranges
+ * x === y at every sample and any error containing a factor of (x - y) disappeared. This set
+ * is built from:
+ *   1. the base point (each variable at its slider default, clamped into [min, max]);
+ *   2. per-variable ONE-AT-A-TIME variation around the base point (each fraction of
+ *      ONE_AT_A_TIME_FRACTIONS applied to one variable while the others stay at the base);
+ *   3. seeded pseudo-random points with every variable drawn INDEPENDENTLY (mulberry32,
+ *      fixed FE08_SAMPLE_SEED — deterministic across runs and machines);
+ *   4. caller-provided extra points (the stored case inputs, the slider defaults), kept only
+ *      when they carry a finite value for every variable.
+ * Exact-duplicate points are removed (first occurrence wins), so the count varies with the
+ * input. Pure: no clock, no Math.random, no I/O.
+ */
+export function independentSamplePoints(
+  variables: readonly SampledVariable[],
+  extraPoints: readonly Record<string, number>[] = [],
+  opts: { seed?: number; randomPointCount?: number } = {},
+): Record<string, number>[] {
+  const vars = (Array.isArray(variables) ? variables : []).filter(
+    (v): v is SampledVariable => typeof v?.name === 'string' && v.name !== '' && Number.isFinite(v.min) && Number.isFinite(v.max) && v.min < v.max,
+  );
+  if (vars.length === 0) return [];
+  const at = (v: SampledVariable, f: number): number => v.min + f * (v.max - v.min);
+  const base: Record<string, number> = {};
+  for (const v of vars) {
+    const d = v.default;
+    base[v.name] = typeof d === 'number' && Number.isFinite(d) && d >= v.min && d <= v.max ? d : at(v, 0.5);
+  }
+  const points: Record<string, number>[] = [{ ...base }];
+  for (const v of vars) {
+    for (const f of ONE_AT_A_TIME_FRACTIONS) points.push({ ...base, [v.name]: at(v, f) });
+  }
+  const rng = mulberry32(opts.seed ?? FE08_SAMPLE_SEED);
+  const randomCount = Number.isFinite(opts.randomPointCount) && (opts.randomPointCount as number) >= 0 ? Math.floor(opts.randomPointCount as number) : 5;
+  for (let i = 0; i < randomCount; i++) {
+    const p: Record<string, number> = {};
+    for (const v of vars) p[v.name] = at(v, rng());
+    points.push(p);
+  }
+  for (const extra of extraPoints ?? []) {
+    if (extra === null || typeof extra !== 'object') continue;
+    const p: Record<string, number> = {};
+    let complete = true;
+    for (const v of vars) {
+      const value = extra[v.name];
+      if (typeof value !== 'number' || !Number.isFinite(value)) { complete = false; break; }
+      p[v.name] = value;
+    }
+    if (complete) points.push(p);
+  }
+  const seen = new Set<string>();
+  const out: Record<string, number>[] = [];
+  for (const p of points) {
+    const key = vars.map(v => String(p[v.name])).join('|');
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(p);
+  }
+  return out;
+}
+
+export interface FormulaMismatch { point: Record<string, number>; a: number; b: number }
+export interface FormulaComparison { finite: number; agreeing: number; mismatches: FormulaMismatch[] }
+
+/**
+ * Pure numeric comparison of two ASTs over a point set (FE-08's comparison helper, exported so
+ * the browser can share the exact same implementation later). Points where either side is
+ * non-finite are skipped (never counted as agreements); a point agrees when
+ * |a - b| <= relativeTolerance * max(|a|, |b|). Grammar/AST-walk evaluation only — no
+ * eval/Function anywhere.
+ */
+export function compareAtPoints(a: AstNode, b: AstNode, points: readonly Record<string, number>[], relativeTolerance: number): FormulaComparison {
+  let finite = 0;
+  let agreeing = 0;
+  const mismatches: FormulaMismatch[] = [];
+  for (const point of points ?? []) {
+    const va = evaluate(a, point);
+    const vb = evaluate(b, point);
+    if (!Number.isFinite(va) || !Number.isFinite(vb)) continue;
+    finite += 1;
+    const denom = Math.max(Math.abs(va), Math.abs(vb));
+    if (Math.abs(va - vb) <= relativeTolerance * denom) agreeing += 1;
+    else mismatches.push({ point, a: va, b: vb });
+  }
+  return { finite, agreeing, mismatches };
 }

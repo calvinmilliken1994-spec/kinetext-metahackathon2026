@@ -20,6 +20,7 @@ import {
 } from '../validate.ts';
 import type { TextLookup } from '../validate.ts';
 import { KIT_LIMITS } from '../../contracts/kit.ts';
+import { normalizeChemFormula, normalizeEquationText } from '../chemistry.ts';
 
 /* ------------------------------------------------------------------ */
 /* Source index with paragraph/sentence context                        */
@@ -221,20 +222,173 @@ export function numberOccursIn(token: string, text: string): boolean {
 }
 
 /**
- * N-01: every number in an AI-written string must appear (as a whole numeric token) in the
- * cited page — or, for fields with no sourceId of their own, in ANY provided page. Returns one
- * plain-language problem per ungrounded number.
+ * N-01: every number in an AI-written string must appear (as a WHOLE SIGNED numeric token, by
+ * value) in the cited page — or, for fields with no sourceId of their own, in ANY provided page.
+ * Returns one plain-language problem per ungrounded number.
+ *
+ * Comparison is token-by-value on both sides, so a page's "828,000" grounds the text's "828000"
+ * and "$23,000" grounds "23000", while `2` is still NOT grounded by `20`, `2.5`, `-2` or `1,200`
+ * (S6R-09 / A-10 live-run false rejections).
  */
 export function numbersCheckProblems(label: string, text: unknown, searchTexts: (string | undefined)[]): string[] {
   if (typeof text !== 'string') return [];
   const texts = searchTexts.filter((t): t is string => typeof t === 'string');
   const problems: string[] = [];
-  for (const token of [...new Set(numericTokens(text))]) {
-    if (!texts.some(t => numberOccursIn(token, t))) {
-      problems.push(`${label} states the number ${token}, which does not appear on the page or in the same quote (N-01)`);
+  for (const value of signedNumericTokens(text)) {
+    if (!texts.some(t => signedNumberOccursIn(value, t))) {
+      problems.push(`${label} states the number ${value}, which does not appear as that whole number on the page or in the same quote (N-01)`);
     }
   }
   return problems;
+}
+
+/* ------------------------------------------------------------------ */
+/* Whole signed numeric tokens (S6R-09)                                */
+/* ------------------------------------------------------------------ */
+
+export interface SignedNumberToken {
+  /** The token exactly as written, e.g. "1,200", "-2", ".00326". */
+  raw: string;
+  /** Canonical value string, e.g. "1200", "-2", "0.00326" ("5.0" and "5" share one value). */
+  value: string;
+}
+
+/**
+ * A signed numeric token: optional sign, digits with optional thousands grouping, optional
+ * decimal part (a leading decimal point is allowed: ".00326"). A hyphen/dash that follows a
+ * digit is not a sign ("2-3" holds 2 and 3, never -3), and a token never begins inside another
+ * number, its grouping or its decimal part.
+ */
+const SIGNED_NUMBER_RE = /(?<![\d.,])(?:([-\u2212])?(?:(\d{1,3}(?:,\d{3})+)(?!\d)|(\d+))(?:\.(\d+))?|([-\u2212])?\.(\d+))/g;
+
+/** Canonical value string of a numeric token (sign kept, grouping removed, trailing zeros dropped). */
+function canonicalNumber(sign: string | undefined, intPart: string, fracPart: string): string {
+  const digits = intPart.replace(/,/g, '').replace(/^0+(?=\d)/, '') || '0';
+  const frac = fracPart.replace(/0+$/, '');
+  const negative = (sign === '-' || sign === '\u2212') && !(digits === '0' && frac === '');
+  return `${negative ? '-' : ''}${digits}${frac === '' ? '' : `.${frac}`}`;
+}
+
+/** Every whole signed numeric token of a string, with its canonical value. */
+export function signedNumberTokens(text: string): SignedNumberToken[] {
+  const out: SignedNumberToken[] = [];
+  if (typeof text !== 'string' || text === '') return out;
+  for (const m of text.matchAll(SIGNED_NUMBER_RE)) {
+    const start = m.index ?? 0;
+    const prev = start === 0 ? undefined : text[start - 1];
+    // A token never begins inside another number, its grouping or its decimal part.
+    if (prev !== undefined && /[0-9.,]/.test(prev)) continue;
+    const sign = m[1] ?? m[5];
+    const intPart = m[2] ?? m[3] ?? '';
+    const fracPart = m[4] ?? m[6] ?? '';
+    out.push({ raw: m[0], value: canonicalNumber(sign, intPart, fracPart) });
+  }
+  return out;
+}
+
+/** The canonical values of every whole signed numeric token of a string. */
+export function signedNumericTokens(text: string): string[] {
+  return [...new Set(signedNumberTokens(text).map(t => t.value))];
+}
+
+/** True when `value` (a canonical number) occurs in `text` as a whole signed numeric token. */
+export function signedNumberOccursIn(value: string, text: string): boolean {
+  return signedNumberTokens(text).some(t => t.value === value);
+}
+
+/** Canonical numbers stated in `content` that do NOT occur in `text` as the same whole number. */
+export function missingSignedNumbers(content: string, text: string): string[] {
+  const present = new Set(signedNumberTokens(text).map(t => t.value));
+  return signedNumericTokens(content).filter(v => !present.has(v));
+}
+
+/**
+ * The numbers of `text` that carry `value` inside themselves ("1,200" carries 200, "20" carries
+ * 2, "-2" carries 2). Used only for plain-language messages: "the quote prints 20 there".
+ */
+export function numbersCarryingToken(text: string, value: string): string[] {
+  const digits = value.replace(/^-/, '');
+  return signedNumberTokens(text)
+    .filter(t => t.value !== value && t.value.replace(/^-/, '').includes(digits))
+    .map(t => t.raw);
+}
+
+/**
+ * S6R-09: `content` occurs in `text` after normalisation AND every number in `content` occurs
+ * there as the same whole signed number. `2` does not match inside `20`, `2.5`, `-2` or `1,200`;
+ * `5` does match `5.0` (same value, different spelling).
+ */
+export function contentOccursWhole(text: string, content: string): { ok: boolean; contained: boolean; missingNumbers: string[] } {
+  const contained = containsNormalized(text, content);
+  const missingNumbers = contained ? missingSignedNumbers(content, text) : [];
+  return { ok: contained && missingNumbers.length === 0, contained, missingNumbers };
+}
+
+/* ------------------------------------------------------------------ */
+/* Chemical-token boundaries (S6R-05)                                  */
+/* ------------------------------------------------------------------ */
+
+/** Characters that continue a chemical token: letters, digits and unicode subscripts. */
+const CHEMICAL_CONTINUATION = /[0-9A-Za-z\u2080-\u2089]/;
+
+/** True when `ch` would continue a formula, so a match next to it is a crop, not a species. */
+export function isChemicalContinuation(ch: string | undefined): boolean {
+  return typeof ch === 'string' && ch !== '' && CHEMICAL_CONTINUATION.test(ch);
+}
+
+export interface TextSpan {
+  start: number;
+  end: number;
+  /** The matched text after equation normalisation (subscripts → ASCII, arrows → '->'). */
+  text: string;
+}
+
+/**
+ * Occurrences of `needle` in `haystack` that are complete chemical tokens: the characters right
+ * before and right after the match must not continue a formula. Both sides are compared after
+ * `normalizeEquationText`, so a printed "H2O2" and a written "H2O" are distinguishable even with
+ * unicode subscripts or a different arrow.
+ */
+export function chemicallyCompleteOccurrences(haystack: string, needle: string): TextSpan[] {
+  const hay = normalizeEquationText(typeof haystack === 'string' ? haystack : '');
+  const ndl = normalizeEquationText(typeof needle === 'string' ? needle : '');
+  const out: TextSpan[] = [];
+  if (ndl === '') return out;
+  for (let from = 0; from <= hay.length - ndl.length;) {
+    const start = hay.indexOf(ndl, from);
+    if (start === -1) break;
+    const end = start + ndl.length;
+    if (!isChemicalContinuation(start === 0 ? undefined : hay[start - 1]) && !isChemicalContinuation(end >= hay.length ? undefined : hay[end])) {
+      out.push({ start, end, text: ndl });
+    }
+    from = start + 1;
+  }
+  return out;
+}
+
+/** The source text around any occurrence of `needle` (±`pad` characters), for messages. Null when absent. */
+export function occurrenceContext(haystack: string, needle: string, pad = 28): string | null {
+  const hay = normalizeEquationText(typeof haystack === 'string' ? haystack : '');
+  const ndl = normalizeEquationText(typeof needle === 'string' ? needle : '');
+  if (ndl === '' || hay === '') return null;
+  const start = hay.indexOf(ndl);
+  if (start === -1) return null;
+  const end = start + ndl.length;
+  const from = Math.max(0, start - pad);
+  const to = Math.min(hay.length, end + pad);
+  return `${from > 0 ? '...' : ''}${hay.slice(from, to)}${to < hay.length ? '...' : ''}`;
+}
+
+/**
+ * Every complete chemical formula token in `text` (subscripts → ASCII, state symbols stripped).
+ * Tokenising the whole maximal run is what makes "H2O" inside "H2O2" or "H2O(water)" fail: only
+ * the longest run is a token.
+ */
+export function chemicalFormulaTokens(text: string): string[] {
+  const norm = normalizeEquationText(typeof text === 'string' ? text : '');
+  const out: string[] = [];
+  for (const m of norm.matchAll(/[A-Z][A-Za-z0-9()[\]]*/g)) out.push(normalizeChemFormula(m[0]));
+  return out;
 }
 
 /* ------------------------------------------------------------------ */
@@ -271,6 +425,50 @@ export interface PublisherTokens {
   singles: Set<string>;
   /** Lowercased all-caps acronyms from the attribution metadata, matched word-boundary. */
   acronyms: Set<string>;
+  /**
+   * KIT sweep only (lead ruling 4): acronyms of the publisher NAME — the all-caps words of the
+   * publisher phrase (NASA, NOAA) or the initials of its content words (NARA, CFPB, NIJ, NRC,
+   * USGS). Never ordinary words, never loose all-caps metadata words (FAQ, URL).
+   */
+  nameAcronyms: Set<string>;
+  /** KIT sweep only: the full publisher name without a leading "U.S." / "the" (>= 2 words), lowercased. */
+  namePhrases: string[];
+}
+
+export interface FindPublisherClaimOptions {
+  /**
+   * Kit display-field mode (lead rulings 3-4). "according to" counts only when a publisher name or
+   * acronym follows within ~4 words, and publisher matching uses the full name plus the name
+   * acronyms — not the distinctive single words. Default false = the A-09 / OV-03 behaviour.
+   */
+  kit?: boolean;
+}
+
+const NAME_STOPWORDS = new Set(['and', 'of', 'the', 'for', 'on', 'in', '&']);
+
+/** Kit-mode tokens of one publisher phrase: name acronyms + the "U.S."-stripped full name. */
+function kitNameTokens(norm: string, out: { nameAcronyms: Set<string>; namePhrases: string[] }, allowInitials: boolean): void {
+  const raw = norm.replace(/\([^)]*\)/g, ' ').split(/\s+/).map(w => w.replace(/^[^A-Za-z]+|[^A-Za-z.]+$/g, '')).filter(w => w !== '');
+  // All-caps words of the phrase itself (NASA, NOAA — including a parenthetical "(NOAA Ocean Exploration)").
+  for (const m of norm.matchAll(/\b[A-Z]{2,}\b/g)) {
+    if (!ACRONYM_EXCLUDE.has(m[0])) out.nameAcronyms.add(m[0].toLowerCase());
+  }
+  const hasUS = raw.length > 0 && /^U\.?S\.?$/.test(raw[0] as string);
+  const content = raw.slice(hasUS ? 1 : 0).filter(w => !NAME_STOPWORDS.has(w.toLowerCase().replace(/\./g, '')) && /^[A-Za-z][A-Za-z'-]*$/.test(w));
+  const hasCaps = /\b[A-Z]{2,}\b/.test(norm.replace(/\b(U\.?S\.?)\b/, ''));
+  if (!allowInitials) {
+    // title publisher segments: all-caps words and the U.S.-stripped name only, no derived initials
+  } else if (!hasCaps && content.length >= 3) {
+    const initials = content.map(w => (w[0] as string).toLowerCase()).join('');
+    out.nameAcronyms.add(initials);
+    if (hasUS) out.nameAcronyms.add(`us${initials}`);
+  } else if (!hasCaps && content.length === 2 && hasUS) {
+    out.nameAcronyms.add(`us${content.map(w => (w[0] as string).toLowerCase()).join('')}`);
+  }
+  if (hasUS && content.length >= 2) {
+    const stripped = raw.slice(1).join(' ').toLowerCase();
+    if (!out.namePhrases.includes(stripped)) out.namePhrases.push(stripped);
+  }
 }
 
 /**
@@ -280,7 +478,7 @@ export interface PublisherTokens {
  * attribution, plus the first comma-separated segment after the dash in the title.
  */
 export function publisherTokensOf(doc: Pick<SourceDocument, 'title' | 'attribution'>): PublisherTokens {
-  const tokens: PublisherTokens = { phrases: [], singles: new Set(), acronyms: new Set() };
+  const tokens: PublisherTokens = { phrases: [], singles: new Set(), acronyms: new Set(), nameAcronyms: new Set(), namePhrases: [] };
   const addPhrase = (phrase: string | undefined, withSingles: boolean): void => {
     if (phrase === undefined) return;
     const norm = normalizeWhitespace(phrase).replace(/[.,;:]+$/, '');
@@ -310,6 +508,12 @@ export function publisherTokensOf(doc: Pick<SourceDocument, 'title' | 'attributi
   // Title publisher part: text after an em/en dash, first comma segment.
   const titleParts = title.split(/\s+[—–]\s+/);
   if (titleParts.length >= 2) addPhrase((titleParts[titleParts.length - 1] as string).split(',')[0], true);
+  // KIT-mode name tokens (lead ruling 4), derived separately from the old A-09 builder: the publisher
+  // name is the whole first comma segment after "Source material:" (so "U.S. Nuclear Regulatory
+  // Commission" keeps its dots) — initials derived — plus the title's publisher segment (no initials).
+  const kitSegment = /Source material:\s*([^,]+)/i.exec(attribution)?.[1];
+  if (kitSegment !== undefined) kitNameTokens(normalizeWhitespace(kitSegment).replace(/[;:]+$/, ''), tokens, true);
+  if (titleParts.length >= 2) kitNameTokens(normalizeWhitespace((titleParts[titleParts.length - 1] as string).split(',')[0] as string), tokens, false);
   for (const m of attribution.matchAll(/\b[A-Z]{2,}\b/g)) {
     const acr = m[0];
     if (!ACRONYM_EXCLUDE.has(acr)) tokens.acronyms.add(acr.toLowerCase());
@@ -318,24 +522,74 @@ export function publisherTokensOf(doc: Pick<SourceDocument, 'title' | 'attributi
 }
 
 export function mergePublisherTokens(list: PublisherTokens[]): PublisherTokens {
-  const out: PublisherTokens = { phrases: [], singles: new Set(), acronyms: new Set() };
+  const out: PublisherTokens = { phrases: [], singles: new Set(), acronyms: new Set(), nameAcronyms: new Set(), namePhrases: [] };
   for (const t of list) {
     for (const p of t.phrases) if (!out.phrases.includes(p)) out.phrases.push(p);
     for (const s of t.singles) out.singles.add(s);
     for (const a of t.acronyms) out.acronyms.add(a);
+    for (const a of t.nameAcronyms) out.nameAcronyms.add(a);
+    for (const p of t.namePhrases) if (!out.namePhrases.includes(p)) out.namePhrases.push(p);
   }
   return out;
 }
 
+/** Words (letters, digits, apostrophes, dots) of `text`, with the character offset of each word's start. */
+function wordStarts(text: string): number[] {
+  return [...text.matchAll(/[A-Za-z0-9][A-Za-z0-9'.-]*/g)].map(m => m.index as number);
+}
+
+/** How many words may sit between "according to" and the publisher name that follows it (lead ruling 3). */
+const ACCORDING_TO_WINDOW_WORDS = 4;
+
+/** Kit mode: the publisher name/acronym token that starts within the window after "according to", or null. */
+function publisherAfterAccordingTo(norm: string, tokens: PublisherTokens): string | null {
+  const re = /\baccording to\b/gi;
+  for (let m = re.exec(norm); m !== null; m = re.exec(norm)) {
+    const after = norm.slice(m.index + m[0].length);
+    const lower = after.toLowerCase();
+    const starts = wordStarts(after);
+    const limit = starts[ACCORDING_TO_WINDOW_WORDS] ?? after.length + 1; // start offset of the 5th word
+    const names = [...tokens.phrases, ...tokens.namePhrases];
+    for (const phrase of names) {
+      const at = lower.indexOf(phrase);
+      if (at >= 0 && at < limit) return `according to ${phrase}`;
+    }
+    for (const acr of tokens.nameAcronyms) {
+      const hit = new RegExp(`\\b${escapeRegExp(acr)}\\b`, 'i').exec(after);
+      if (hit !== null && hit.index < limit) return `according to ${acr}`;
+    }
+  }
+  return null;
+}
+
 /**
- * The publisher-claim hit in an AI-written string, or null. Matches the frozen generic phrases
- * (according to | as stated by | official | endorsed), any publisher phrase from the sources'
- * own metadata, its distinctive single words and its acronyms (NASA, NIJ, ...).
+ * The publisher-claim hit in an AI-written string, or null. Default mode (A-09 / OV-03) matches the
+ * frozen generic phrases (according to | as stated by | official | endorsed), any publisher phrase
+ * from the sources' own metadata, its distinctive single words and its acronyms (NASA, NIJ, ...).
+ * Kit mode (`{ kit: true }`, lead rulings 3-4) matches "as stated by" / "official" / "endorsed", the
+ * FULL publisher name and the name acronyms; "according to" counts only when a publisher name or
+ * acronym follows within ~4 words ("according to the definition" passes), and ordinary single words
+ * of the name ("ocean" in "NOAA Office of Ocean Exploration") never match on their own.
  */
-export function findPublisherClaim(text: unknown, tokens: PublisherTokens): string | null {
+export function findPublisherClaim(text: unknown, tokens: PublisherTokens, opts: FindPublisherClaimOptions = {}): string | null {
   if (typeof text !== 'string' || text === '') return null;
   const norm = normalizeWhitespace(text);
   const lower = norm.toLowerCase();
+  if (opts.kit === true) {
+    for (const phrase of GENERIC_PUBLISHER_PHRASES) {
+      if (phrase === 'according to') continue;
+      if (new RegExp(`\\b${phrase}\\b`, 'i').test(norm)) return phrase;
+    }
+    const afterAccordingTo = publisherAfterAccordingTo(norm, tokens);
+    if (afterAccordingTo !== null) return afterAccordingTo;
+    for (const phrase of [...tokens.phrases, ...tokens.namePhrases]) {
+      if (lower.includes(phrase)) return phrase;
+    }
+    for (const acr of tokens.nameAcronyms) {
+      if (new RegExp(`\\b${escapeRegExp(acr)}\\b`, 'i').test(norm)) return acr;
+    }
+    return null;
+  }
   for (const phrase of GENERIC_PUBLISHER_PHRASES) {
     if (new RegExp(`\\b${phrase}\\b`, 'i').test(norm)) return phrase;
   }

@@ -14,7 +14,13 @@
 //     caller's failFromError); a component whose OUTPUT failed its checks is a COMPONENT-level
 //     failure (partial publish) — only the overview/analysis stage can fail the lesson;
 //   - INTERNAL causes stay the caller's fixed vocabulary; this module never persists raw
-//     exception text.
+//     exception text;
+//   - S6R-07: every caught error that carries money (MetaError chargedUSD/reservedUnknownUSD,
+//     a receipt) is accounted AT ITS OWN CATCH BOUNDARY via errorCharge + ctx.account,
+//     before any emit/write and before its terminal-cause metadata is stored. The FIRST
+//     fatal cause is kept separately from charge collection; the final failure goes
+//     through the NON-accounting ctx.fail, so nothing is counted twice or lost when two
+//     concurrent components fail (or one fails while the other crashes).
 //
 // Events (frozen contract): stages 'overview' and 'component' (componentId, revision, status)
 // extend the contracts' Stage union locally (JobStageEvent in jobs.ts) because packages/contracts
@@ -36,7 +42,7 @@ import { generateSpec, repairSpec } from '../../packages/meta/pipeline.ts';
 import type { TimelineSourceAnalysis } from '../../packages/meta/pipeline.ts';
 import { STAGE6_PROMPT_VERSION } from '../../packages/meta/prompts-v2.ts';
 import type { MetaProvider } from '../../packages/meta/pricing.ts';
-import { compareAnalysisV2Revisions, validateAnalysisV2 } from '../../packages/validation/analysis-v2.ts';
+import { compareAnalysisV2Revisions, validateLessonAnalysisGate } from '../../packages/validation/analysis-v2.ts';
 import {
   compareKitRevisions,
   pruneConceptMapLinks,
@@ -94,6 +100,7 @@ import { applyLessonDemoFault, lessonFaultTarget, lessonIntendedChecks } from '.
 import { formulaNormalisedNote, normaliseFormulaExplorerGen } from './formula-normalise.ts';
 import {
   checksPassed,
+  errorCharge,
   failedCheckIds,
   generatedOutputReceipt,
   receiptFields,
@@ -128,6 +135,14 @@ export interface ComponentRepairRecord {
   fixed: string[];
   remaining: string[];
   passed: boolean;
+  /**
+   * S6R-11: true when this component's revision 1 carried a system-injected demo fault
+   * (a SUCCESSFUL inject — summary.demoFaultComponentId). Immutable per component: every
+   * attempt (1, 2, …) against that injected baseline is system-made, never a natural
+   * repair. false for every other component, and when a requested fault was NOT injected.
+   * Absent on records written before S6R-11 (readers then use the inject event).
+   */
+  afterInjectedFault?: boolean;
 }
 
 /** The contracts' Stage union extended with the two frozen lesson stages. */
@@ -191,17 +206,15 @@ type AnyKitGen = KitGenByComponent[KitGenComponentId];
 /* ------------------------------------------------------------------ */
 
 /**
- * The lesson-flow analysis gate is validateAnalysisV2 (A-01..A-11), exactly as the task brief
- * freezes it. NOTE for the lead: the overview component's own OV-01..OV-06 checks
- * (validateKitComponent('overview-v1', ...)) do NOT gate the analysis call — the S6-V golden
- * suite documents a KNOWN GOLDEN GAP (the hand-written overview golden fails OV-06 on three
- * paraphrased entries), so gating on OV-06 would reject the canonical golden itself. Whether
- * the OV checks join the analysis gate (or the golden/prompt is fixed) is a lead decision; the
- * A-checks already own overview quotes verbatim (A-05), source ids (A-06), counts (A-07),
- * publisher claims (A-09), numbers (A-10) and plain text (A-11).
+ * S6R-01: the lesson-flow analysis gate is the validator-owned `validateLessonAnalysisGate`
+ * (packages/validation/analysis-v2.ts, wave A3): validateAnalysisV2 (A-01..A-11) PLUS the
+ * overview's own OV-01..OV-06 on a usable analysis, with every OV affected pointer prefixed
+ * '/overview' so OV failures join the immutable revision-1 repair authority and go through
+ * the existing bounded analysis repair loop. The overview is never published without its
+ * OV checks; an honest decline gets no usable-overview checks.
  */
 export function validateLessonAnalysis(analysis: unknown, sources: SourceDocument[]): ValidationReport {
-  return validateAnalysisV2(analysis, sources);
+  return validateLessonAnalysisGate(analysis, sources);
 }
 
 /**
@@ -330,10 +343,11 @@ interface ComponentOutcome {
   revision: number;
 }
 
+/** S6R-07: the FIRST terminal cause, already accounted (its charge is in the summary). */
 interface FatalError {
-  err: unknown;
   stage: LessonStage;
-  extra?: LessonEventExtra;
+  code: string;
+  extra: LessonEventExtra;
 }
 
 /** Plain-sentence entry reason for a component whose OUTPUT failed its structure gate. */
@@ -548,7 +562,19 @@ function pushDiedRepairRecord(
     fixed: [],
     remaining: targeted,
     passed: false,
+    afterInjectedFault: faultInjectedInto(summary, componentId),
   });
+}
+
+/**
+ * S6R-11: fault origin is immutable per component and derived ONLY from a successful
+ * injection (the inject branch sets demoFaultComponentId together with the inject
+ * 'succeeded' event carrying the componentId). A requested fault that could not be
+ * injected (effective:false, no component) never makes any repair system-made; an
+ * injected-but-not-caught fault still does (the baseline carries the planted change).
+ */
+function faultInjectedInto(summary: JobSummary, componentId: string): boolean {
+  return summary.demoFault !== undefined && summary.demoFaultComponentId === componentId;
 }
 
 export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
@@ -575,10 +601,13 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
   } catch (err: unknown) {
     // MetaError / GeneratedOutputErrorV2 at the analysis stage are lesson-level failures
     // (the overview is the minimum publishable unit).
+    // S6R-07: account the call FIRST (before the private file write and the fail event).
+    const charge = errorCharge(err);
+    ctx.account(charge.chargedUSD, charge.unknownUSD);
     // S6-W fix: keep the cut-off text of a truncated analysis call privately, beside the
     // job's other analysis artifacts (never in events/job.json/API responses).
     saveTruncatedOutput(ctx, 'analysis-v2.r1.truncated.txt', err);
-    return ctx.failFromError('analyze', err);
+    return ctx.fail('analyze', charge.code, charge.extra);
   }
   ctx.accountReceipt(call1.receipt);
   let curAnalysis: SourceAnalysisV2 = call1.analysis;
@@ -625,9 +654,12 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
         { signal: ctx.signal, validate: analysisValidator, compare: analysisComparator },
       );
     } catch (err: unknown) {
+      // S6R-07: account the call FIRST (before the private file write and the fail event).
+      const charge = errorCharge(err, { revision: nextRevision, target: 'analysis' });
+      ctx.account(charge.chargedUSD, charge.unknownUSD);
       // S6-W fix: keep the cut-off text of a truncated analysis REPAIR call privately.
       saveTruncatedOutput(ctx, `analysis-v2.r${nextRevision}.truncated.txt`, err);
-      return ctx.failFromError('repair', err, { revision: nextRevision, target: 'analysis' });
+      return ctx.fail('repair', charge.code, charge.extra);
     }
     ctx.accountReceipt(repaired.receipt);
     analysisAttemptsDone += 1;
@@ -743,6 +775,22 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
   const fatalRef: { current: FatalError | null } = { current: null };
   const crashRef: { crashed: boolean; err: unknown } = { crashed: false, err: undefined };
 
+  /**
+   * S6R-07: a job-fatal component/repair error. Its charge is accounted HERE, at its own
+   * catch boundary, before anything else; the FIRST such error becomes the terminal
+   * cause. A later one (a concurrent component that also failed) is never overwritten or
+   * dropped: its money is already in the summary and its failed event records where.
+   */
+  function recordFatal(err: unknown, stage: LessonStage, extra: LessonEventExtra): void {
+    const charge = errorCharge(err, extra);
+    ctx.account(charge.chargedUSD, charge.unknownUSD);
+    if (fatalRef.current === null) {
+      fatalRef.current = { stage, code: charge.code, extra: charge.extra };
+      return;
+    }
+    ctx.emit(stage, 'failed', charge.extra);
+  }
+
   function finalize(): void {
     const components: LessonComponentEntry[] = [];
     let published = 0;
@@ -827,7 +875,7 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
       failOutcome(index, componentId, specId, revision, 'ANALYSIS_INVALID');
       return;
     }
-    fatalRef.current = { err, stage, extra };
+    recordFatal(err, stage, extra);
   }
 
   function persistKitRevision(
@@ -1017,11 +1065,7 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
           ctx.writeJob();
           break;
         }
-        fatalRef.current = {
-          err,
-          stage: 'repair',
-          extra: { target: 'component', componentId: cid, revision: nextRevision },
-        };
+        recordFatal(err, 'repair', { target: 'component', componentId: cid, revision: nextRevision });
         return;
       }
       ctx.accountReceipt(rep.receipt);
@@ -1051,6 +1095,7 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
         fixed: targeted.filter(id => passingIds.has(id)),
         remaining,
         passed: report.publishable,
+        afterInjectedFault: faultInjectedInto(summary, cid),
       });
       ctx.emit('repair', 'succeeded', {
         target: 'component',
@@ -1227,11 +1272,7 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
           ctx.writeJob();
           break;
         }
-        fatalRef.current = {
-          err,
-          stage: 'repair',
-          extra: { target: 'component', componentId: activity, revision: nextRevision },
-        };
+        recordFatal(err, 'repair', { target: 'component', componentId: activity, revision: nextRevision });
         return;
       }
       ctx.accountReceipt(repaired.receipt);
@@ -1256,7 +1297,10 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
         remaining,
         publishable: current.report.publishable,
         // Decision 17: repairs after a system-injected fault never count in quality metrics.
-        afterInjectedFault: summary.demoFault !== undefined,
+        // S6R-11: only when a fault was ACTUALLY injected into this premium component — a
+        // requested-but-not-injected FaultRecord (effective:false, no component) must not
+        // relabel a natural premium repair.
+        afterInjectedFault: faultInjectedInto(summary, activity),
       };
       summary.repairs.push(record);
       ctx.emit('repair', 'succeeded', {
@@ -1368,10 +1412,12 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
     pump();
   });
   if (crashRef.crashed) {
+    // Every fatal error before or beside the crash was accounted at its own catch.
     throw crashRef.err;
   }
   if (fatalRef.current !== null) {
-    return ctx.failFromError(fatalRef.current.stage, fatalRef.current.err, fatalRef.current.extra);
+    // S6R-07: NON-accounting failure path — the charge was accounted in recordFatal.
+    return ctx.fail(fatalRef.current.stage, fatalRef.current.code, fatalRef.current.extra);
   }
 
   // --- done: succeeded = overview published (plus any passed components) ------

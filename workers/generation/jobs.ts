@@ -33,7 +33,7 @@ import { join } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { analyzeSource, generateSpec, repairAnalysis, repairSpec } from '../../packages/meta/pipeline.ts';
 import type { TimelineSourceAnalysis } from '../../packages/meta/pipeline.ts';
-import { MetaError, META_ERROR_MESSAGES } from '../../packages/meta/client.ts';
+import { META_ERROR_MESSAGES } from '../../packages/meta/client.ts';
 import type { MetaClient, MetaErrorCode } from '../../packages/meta/client.ts';
 import { isMetaProvider, isModelChoice } from '../../packages/meta/pricing.ts';
 import type { MetaProvider, ModelChoice } from '../../packages/meta/pricing.ts';
@@ -82,6 +82,7 @@ import type {
 } from '../../packages/contracts/index.ts';
 import {
   checksPassed,
+  errorCharge,
   failedCheckIds,
   generatedOutputReceipt,
   positiveOr,
@@ -749,63 +750,16 @@ async function runJob(
   }
 
   function failFromError(stage: LessonStage, err: unknown, failExtra?: EventExtra): JobSummary {
-    // F-01: a GeneratedOutputError means the provider call COMPLETED and the
-    // ledger already reconciled it at receipt.estCostUSD. Account the receipt
-    // exactly like a successful one (it was never accounted before the throw,
-    // so this cannot double count), then fail through the normal persisted path.
-    const outputReceipt = generatedOutputReceipt(err);
-    if (outputReceipt !== undefined) {
-      accountReceipt(outputReceipt);
-      const extra: EventExtra = {
-        ...failExtra,
-        ...receiptFields(outputReceipt),
-        // R-01: the failure detail is the fixed code — plus the cost-basis note.
-        detail:
-          outputReceipt.costBasis === 'reservation'
-            ? 'OUTPUT_INVALID; cost basis: reservation (outcome uncertain)'
-            : 'OUTPUT_INVALID',
-      };
-      return fail(stage, 'OUTPUT_INVALID', extra);
-    }
-    if (err instanceof MetaError) {
-      // R-09: a MetaError thrown after a reservation carries chargedUSD/costBasis.
-      const hasChargedUSD = typeof err.chargedUSD === 'number' && Number.isFinite(err.chargedUSD);
-      const charged: number = hasChargedUSD
-        ? (err.chargedUSD as number)
-        : err.receipt !== undefined
-          ? err.receipt.estCostUSD
-          : 0;
-      const basis: 'usage' | 'reservation' | undefined = err.costBasis ?? err.receipt?.costBasis;
-      const reserved = basis === 'reservation';
-      // N-04: the unknown-outcome part is the explicit reservedUnknownUSD amount
-      // (on the error, else on its receipt) — never the whole charge inferred
-      // from the costBasis flag. A missing amount counts as 0.
-      const unknownPart =
-        err.reservedUnknownUSD !== undefined
-          ? reservedUnknownOf(err.reservedUnknownUSD)
-          : reservedUnknownOf(err.receipt?.reservedUnknownUSD);
-      // S5B-06: through the ONE accumulator — the summary is current BEFORE the
-      // fail()/emit() below, so a failing event write can no longer leave the
-      // last-resort path persisting stale zero totals over billed spend.
-      account(charged, unknownPart);
-      // S5-05: failExtra carries the attempted revision so EVERY repair failure
-      // event (BAD_REQUEST, TIMEOUT, DEADLINE_EXCEEDED, BUDGET_EXCEEDED,
-      // LEDGER_ERROR, INPUT_TOO_LARGE, ...) keeps its place in the timeline.
-      const extra: EventExtra = {
-        ...failExtra,
-        // R-01: the failure detail is the fixed code — never err.message or provider text.
-        detail: reserved ? `${err.code}; cost basis: reservation (outcome uncertain)` : `${err.code}`,
-      };
-      if (err.receipt !== undefined) {
-        // A MetaError can carry a receipt for a call that was billed before it failed.
-        Object.assign(extra, receiptFields(err.receipt));
-      }
-      if (hasChargedUSD || err.receipt !== undefined) {
-        extra.estCostUSD = charged;
-      }
-      return fail(stage, err.code, extra);
-    }
-    return fail(stage, 'INTERNAL', { ...failExtra, detail: 'INTERNAL' });
+    // F-01 / R-09 / N-04 / S6R-07: the ONE charge extraction (job-support.ts errorCharge):
+    // a GeneratedOutputError's receipt, a MetaError's settled chargedUSD (else its
+    // receipt) with the EXPLICIT reservedUnknownUSD, and any money another error object
+    // carries. S5B-06: accounted through the ONE accumulator BEFORE the fail()/emit()
+    // below, so a failing event write cannot leave stale zero totals over billed spend.
+    // S5-05: failExtra carries the attempted revision so every repair failure event keeps
+    // its place in the timeline. R-01: the detail is the fixed code, never provider text.
+    const charge = errorCharge(err, failExtra);
+    account(charge.chargedUSD, charge.unknownUSD);
+    return fail(stage, charge.code, charge.extra);
   }
 
   // --- ingest -------------------------------------------------------------

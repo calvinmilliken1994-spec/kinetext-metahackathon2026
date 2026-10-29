@@ -38,16 +38,23 @@ export const balanceGen = (): BalanceEquationGen => stage6Fixture<BalanceEquatio
 export const overviewGen = (): OverviewGen => usableAnalysis().overview;
 
 /**
- * The golden overview with the THREE entries that fail the frozen OV-06 overlap rule reworded
- * toward their quotes (the design's own repair path: rewrite point/gloss wording, never the
- * quote). Used by the OV check-fixture tests so each mutation fails in isolation; the raw golden
- * gap stays pinned in stage6-kit-golden.test.ts for the lead.
+ * The golden overview, deep-copied. (It used to reword three OV-06-failing entries; since Wave A3
+ * the authored golden wording is itself faithful to its quotes, so this is now an identity copy.
+ * Kept so the OV check-fixture tests keep a single "OV-clean baseline" entry point.)
  */
 export function repairedOverviewGen(): OverviewGen {
+  return clone(overviewGen());
+}
+
+/**
+ * An overview whose three entries are paraphrased away from their quotes (the OV-06 false-reject
+ * class: synonym wording). Used to exercise the OV-06 repair path (point/gloss wording only).
+ */
+export function paraphrasedOverviewGen(): OverviewGen {
   const gen = clone(overviewGen());
-  gen.keyPoints[1]!.point = 'One drag coefficient variable collects the complex effects.';
-  gen.keyTerms[0]!.gloss = 'Single number collecting drag coefficient effects.';
-  gen.keyTerms[1]!.gloss = 'Mass of air per volume, the density in the equation.';
+  gen.keyPoints[1]!.point = 'One coefficient packs the complex shape and flow effects together.';
+  gen.keyTerms[0]!.gloss = 'Single number collecting shape and flow effects.';
+  gen.keyTerms[1]!.gloss = 'Air mass per volume, written rho in the equation.';
   return gen;
 }
 

@@ -4,6 +4,7 @@
 // jobs.ts values; jobs.ts imports lesson.ts). Behaviour is unchanged.
 import { readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { randomUUID } from 'node:crypto';
+import { MetaError } from '../../packages/meta/client.ts';
 import { GeneratedOutputError } from '../../packages/meta/pipeline.ts';
 import type { MetaReceipt, ValidationReport } from '../../packages/contracts/index.ts';
 import type { LessonEventExtra } from './lesson.ts';
@@ -82,4 +83,90 @@ export function generatedOutputReceipt(err: unknown): MetaReceipt | undefined {
   }
   const est: unknown = (receipt as { estCostUSD?: unknown }).estCostUSD;
   return typeof est === 'number' && Number.isFinite(est) ? (receipt as MetaReceipt) : undefined;
+}
+
+/**
+ * S6R-07: what one caught error costs and how it fails, extracted ONCE so every catch
+ * boundary (the v1 failFromError and each lesson-flow catch) accounts the same amounts:
+ *   - GeneratedOutputError (F-01): its receipt, exactly like a successful call;
+ *   - MetaError (R-09/N-04): chargedUSD when finite, else the receipt's estCostUSD; the
+ *     unknown part is the EXPLICIT reservedUnknownUSD (on the error, else its receipt);
+ *   - any other object that still carries a finite chargedUSD / reservedUnknownUSD /
+ *     receipt.estCostUSD: the same amounts (money is never dropped), code INTERNAL.
+ * The returned `extra` is the failed-event extras (fixed code detail, R-01: never
+ * err.message or provider text). The caller accounts {chargedUSD, unknownUSD} through
+ * the ONE accumulator BEFORE any fallible write, then fails with `code`/`extra` through a
+ * NON-accounting path (so nothing is counted twice).
+ */
+export interface ErrorCharge {
+  chargedUSD: number;
+  unknownUSD: number;
+  code: string;
+  extra: LessonEventExtra;
+}
+
+function finiteOr(value: unknown): number | undefined {
+  return typeof value === 'number' && Number.isFinite(value) ? value : undefined;
+}
+
+export function errorCharge(err: unknown, failExtra?: LessonEventExtra): ErrorCharge {
+  const outputReceipt = generatedOutputReceipt(err);
+  if (outputReceipt !== undefined) {
+    return {
+      chargedUSD: outputReceipt.estCostUSD,
+      unknownUSD: reservedUnknownOf(outputReceipt.reservedUnknownUSD),
+      code: 'OUTPUT_INVALID',
+      extra: {
+        ...failExtra,
+        ...receiptFields(outputReceipt),
+        detail:
+          outputReceipt.costBasis === 'reservation'
+            ? 'OUTPUT_INVALID; cost basis: reservation (outcome uncertain)'
+            : 'OUTPUT_INVALID',
+      },
+    };
+  }
+  if (typeof err !== 'object' || err === null) {
+    return { chargedUSD: 0, unknownUSD: 0, code: 'INTERNAL', extra: { ...failExtra, detail: 'INTERNAL' } };
+  }
+  const e = err as {
+    code?: unknown;
+    chargedUSD?: unknown;
+    reservedUnknownUSD?: unknown;
+    costBasis?: unknown;
+    receipt?: unknown;
+  };
+  const receipt: MetaReceipt | undefined =
+    typeof e.receipt === 'object' && e.receipt !== null && finiteOr((e.receipt as MetaReceipt).estCostUSD) !== undefined
+      ? (e.receipt as MetaReceipt)
+      : undefined;
+  const charged = finiteOr(e.chargedUSD);
+  const hasChargedUSD = charged !== undefined;
+  const chargedUSD = charged ?? receipt?.estCostUSD ?? 0;
+  const unknownUSD =
+    e.reservedUnknownUSD !== undefined
+      ? reservedUnknownOf(e.reservedUnknownUSD as number | undefined)
+      : reservedUnknownOf(receipt?.reservedUnknownUSD);
+  if (err instanceof MetaError) {
+    const basis: unknown = err.costBasis ?? err.receipt?.costBasis;
+    const reserved = basis === 'reservation';
+    const extra: LessonEventExtra = {
+      ...failExtra,
+      detail: reserved ? `${err.code}; cost basis: reservation (outcome uncertain)` : `${err.code}`,
+    };
+    if (receipt !== undefined) {
+      // A MetaError can carry a receipt for a call that was billed before it failed.
+      Object.assign(extra, receiptFields(receipt));
+    }
+    if (hasChargedUSD || receipt !== undefined) {
+      extra.estCostUSD = chargedUSD;
+    }
+    return { chargedUSD, unknownUSD, code: err.code, extra };
+  }
+  // Not a provider error: still never drop money an error object carries.
+  const extra: LessonEventExtra = { ...failExtra, detail: 'INTERNAL' };
+  if (hasChargedUSD || receipt !== undefined) {
+    extra.estCostUSD = chargedUSD;
+  }
+  return { chargedUSD, unknownUSD, code: 'INTERNAL', extra };
 }

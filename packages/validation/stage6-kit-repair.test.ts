@@ -10,7 +10,7 @@ import assert from 'node:assert/strict';
 import { compareKitRevisions, validateKitComponent } from './kit/index.ts';
 import {
   atmosphereSource, clone, compareGen, dragSource, failedIds, formulaGen, quizGen,
-  repairedOverviewGen, overviewGen,
+  repairedOverviewGen, paraphrasedOverviewGen,
 } from './fixtures/stage6.ts';
 import type { CompareTableGen, QuizCardsGen } from '../contracts/kit.ts';
 
@@ -126,10 +126,10 @@ test('formula explorer: range width may shrink only when FE-06 failed on the bas
   assert.match(bad.message, /\/variables\/2\/max changed/);
 });
 
-test('overview: the golden OV-06 gap is repairable within the frozen discipline', () => {
-  // The raw golden overview fails OV-06; the repaired wording changes exactly the three
-  // affected paths, so the comparator accepts it.
-  const baseline = overviewGen();
+test('overview: a paraphrased (OV-06-failing) overview is repairable within the frozen discipline', () => {
+  // The paraphrased overview fails OV-06; rewording exactly the three affected paths (never the
+  // quote) is accepted by the comparator.
+  const baseline = paraphrasedOverviewGen();
   const report = validateKitComponent('overview-v1', baseline, [dragSource()]);
   assert.deepEqual(report.checks.filter(c => !c.passed).map(c => c.id), ['OV-06']);
   const check = compareKitRevisions('overview-v1', baseline, repairedOverviewGen(), { sources: [dragSource()] });
