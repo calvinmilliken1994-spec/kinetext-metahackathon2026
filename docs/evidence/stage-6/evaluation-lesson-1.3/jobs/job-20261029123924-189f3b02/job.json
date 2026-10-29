@@ -1,0 +1,36 @@
+{
+  "jobId": "job-20261029123924-189f3b02",
+  "sourceId": "nasa-grc-simplified-aircraft-motion",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T12:39:24.888Z",
+  "flow": "lesson",
+  "model": "muse-spark-1.3",
+  "provider": "meta-api",
+  "providerModel": "muse-spark-1.3",
+  "totalCostUSD": 0.10907,
+  "reservedUnknownUSD": 0,
+  "engine": "forces-1d-v1",
+  "revisions": 1,
+  "repairs": [],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 40432,
+    "startedAt": "2026-10-29T12:39:24.888Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 2,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "specId": "nasa-grc-simplified-aircraft-motion-job-20261029123924-189f3b02",
+  "publishable": true,
+  "checksPassed": 15,
+  "checksTotal": 15,
+  "publishedRevision": 1,
+  "finishedAt": "2026-10-29T12:40:28.569Z"
+}

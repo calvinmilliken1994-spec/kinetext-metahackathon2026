@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261029124403-c049d145",
+  "analysisRef": "job-20261029124403-c049d145/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029124403-c049d145:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How wing size and area shape lift in flight",
+    "sources": [
+      {
+        "id": "nasa-grc-effect-of-size-on-lift",
+        "title": "Effect of Size on Lift — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/effect-of-size-on-lift/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "1bd1a2678b2c2cb6f162ebbeb4ec95d6aa439d14002682604d2ac9cd680d76f4"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a187b0-d85d-72d0-9774-185d5670b320",
+      "runId": "job-20261029124403-c049d145",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T12:44:36.438Z"
+    },
+    "seed": 2718100457,
+    "headline": "How wing size and area shape lift in flight",
+    "keyPoints": [
+      {
+        "id": "lift-area-link",
+        "point": "Lift grows with wing area, so doubling area doubles lift force.",
+        "quote": "Doubling the area doubles the lift.",
+        "sourceId": "nasa-grc-effect-of-size-on-lift"
+      },
+      {
+        "id": "lift-direction",
+        "point": "Lift acts as the component of aerodynamic force perpendicular to flight direction.",
+        "quote": "Lift is the component of this force perpendicular to the flight direction.",
+        "sourceId": "nasa-grc-effect-of-size-on-lift"
+      },
+      {
+        "id": "total-force-pressure",
+        "point": "Total aerodynamic force equals pressure times surface area around the body.",
+        "quote": "The total aerodynamic force is equal to the pressure times the surface area around the body.",
+        "sourceId": "nasa-grc-effect-of-size-on-lift"
+      },
+      {
+        "id": "flaps-slats-area",
+        "point": "Designers increase wing area by sliding flaps and shifting slats forward for takeoff and landing.",
+        "quote": "This is done by sliding the flaps backwards along metal tracks and shifting the slats forward to increase the wing area.",
+        "sourceId": "nasa-grc-effect-of-size-on-lift"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "aerodynamic force acting perpendicular to flight path",
+        "id": "lift-force",
+        "quote": "Lift is an aerodynamic force and therefore depends on the pressure variation of the air around the body as it moves through the air.",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "term": "Lift"
+      },
+      {
+        "gloss": "other aerodynamic force directly linked to area",
+        "id": "aerodynamic-drag",
+        "quote": "Like the other aerodynamic force, drag, the lift is directly proportional to the area of the object.",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "term": "drag"
+      },
+      {
+        "gloss": "wing area viewed from above used as reference area",
+        "id": "planform-area",
+        "quote": "the logical choice is the wing planform area.",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "term": "planform area"
+      },
+      {
+        "gloss": "movable panels slid backwards to increase wing area",
+        "id": "wing-flaps",
+        "quote": "This is done by sliding the flaps backwards along metal tracks and shifting the slats forward to increase the wing area.",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "term": "flaps"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "concept-map-v1",
+      "specId": "job-20261029124403-c049d145:concept-map-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    },
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261029124403-c049d145:compare-table-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029124403-c049d145:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

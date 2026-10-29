@@ -1,0 +1,189 @@
+{
+  "gen": {
+    "attributes": [
+      "Span",
+      "Planform shape"
+    ],
+    "cells": [
+      {
+        "attributeIndex": 0,
+        "entityIndex": 0,
+        "id": "lilienthal-span",
+        "quote": "Lilienthal’s wings had a rather short span and an elliptical planform, while the brothers used a long, thin",
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "value": "short span"
+      },
+      {
+        "attributeIndex": 1,
+        "entityIndex": 0,
+        "id": "lilienthal-planform",
+        "quote": "Lilienthal’s wings had a rather short span and an elliptical planform",
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "value": "elliptical planform"
+      },
+      {
+        "attributeIndex": 0,
+        "entityIndex": 1,
+        "id": "brothers-span",
+        "quote": "while the brothers used a long, thin, rectangular planform.",
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "value": "long, thin"
+      },
+      {
+        "attributeIndex": 1,
+        "entityIndex": 1,
+        "id": "brothers-planform",
+        "quote": "while the brothers used a long, thin, rectangular planform.",
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "value": "rectangular planform"
+      }
+    ],
+    "entities": [
+      "Lilienthal",
+      "the brothers"
+    ],
+    "schemaVersion": "compare-table-v1",
+    "title": "Comparing Early Wing Designs"
+  },
+  "report": {
+    "artifactId": "job-20261029124624-f21a1b0d:compare-table-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every compare-table text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "CT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 cell quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "CT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cell value occurs in its quote and every cell entity occurs in the quote or the same source paragraph (cell-in-quote; paragraph-level entity attribution is the design-disclosed false accept — quotes are visible)"
+      },
+      {
+        "id": "CT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the table shape is valid: 2 entities x 2 attributes with all 4 cells present exactly once (shape-valid)"
+      },
+      {
+        "id": "CT-04",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in entity names, attributes and cell values appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "CT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no attribute column offers 3 distinct cell values, so the UI falls back to reveal-only with unverified cells blanked as \"Not stated on this page\" — by design this is not a component failure (predict-cell-valid)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a187b3-7eb4-77d9-84db-603d27e1e1fc",
+    "usage": {
+      "promptTokens": 3326,
+      "completionTokens": 6333,
+      "reasoningTokens": 5990,
+      "cachedTokens": 0
+    },
+    "latencyMs": 25195,
+    "estCostUSD": 0.03107275,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029124624-f21a1b0d:compare-table-v1:r1",
+    "componentId": "compare-table-v1",
+    "title": "Comparing Early Wing Designs",
+    "sources": [
+      {
+        "id": "nasa-grc-lift-equation-of-the-1900s",
+        "title": "Lift Equation of the 1900's — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/lift-equation-of-the-1900s/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "41fb1b6349509be9b9478942fed514cd8d077b15436694132ecbfb588c477402"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a187b3-7eb4-77d9-84db-603d27e1e1fc",
+      "runId": "job-20261029124624-f21a1b0d",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T12:47:30.063Z"
+    },
+    "seed": 270948908,
+    "entities": [
+      "Lilienthal",
+      "the brothers"
+    ],
+    "attributes": [
+      "Span",
+      "Planform shape"
+    ],
+    "cells": [
+      {
+        "attributeIndex": 0,
+        "entityIndex": 0,
+        "id": "lilienthal-span",
+        "quote": "Lilienthal’s wings had a rather short span and an elliptical planform, while the brothers used a long, thin",
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "value": "short span"
+      },
+      {
+        "attributeIndex": 1,
+        "entityIndex": 0,
+        "id": "lilienthal-planform",
+        "quote": "Lilienthal’s wings had a rather short span and an elliptical planform",
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "value": "elliptical planform"
+      },
+      {
+        "attributeIndex": 0,
+        "entityIndex": 1,
+        "id": "brothers-span",
+        "quote": "while the brothers used a long, thin, rectangular planform.",
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "value": "long, thin"
+      },
+      {
+        "attributeIndex": 1,
+        "entityIndex": 1,
+        "id": "brothers-planform",
+        "quote": "while the brothers used a long, thin, rectangular planform.",
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "value": "rectangular planform"
+      }
+    ]
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "jobId": "job-20261029125546-f5021bc5",
+  "sourceId": "nrc-backgrounder-radioactive-waste",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T12:55:46.749Z",
+  "flow": "lesson",
+  "model": "muse-spark-1.3",
+  "provider": "meta-api",
+  "providerModel": "muse-spark-1.3",
+  "totalCostUSD": 0.194633,
+  "reservedUnknownUSD": 0,
+  "engine": "half-life-v1",
+  "revisions": 1,
+  "repairs": [],
+  "analysisRepairs": [
+    {
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "A-09"
+      ],
+      "fixed": [
+        "A-09"
+      ],
+      "remaining": [],
+      "passed": true
+    }
+  ],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 40432,
+    "startedAt": "2026-10-29T12:55:46.749Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 3,
+    "componentsPublished": 3,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "specId": "nrc-backgrounder-radioactive-waste-job-20261029125546-f5021bc5",
+  "publishable": true,
+  "checksPassed": 14,
+  "checksTotal": 14,
+  "publishedRevision": 1,
+  "finishedAt": "2026-10-29T12:57:30.002Z"
+}

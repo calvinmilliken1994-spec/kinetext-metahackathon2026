@@ -1,0 +1,36 @@
+{
+  "jobId": "job-20261029125108-45c9b8a3",
+  "sourceId": "nasa-grc-role-of-the-mach-number",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T12:51:08.640Z",
+  "flow": "lesson",
+  "model": "muse-spark-1.3",
+  "provider": "meta-api",
+  "providerModel": "muse-spark-1.3",
+  "totalCostUSD": 0.182268,
+  "reservedUnknownUSD": 0,
+  "engine": "speed-of-sound-v1",
+  "revisions": 1,
+  "repairs": [],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 40432,
+    "startedAt": "2026-10-29T12:51:08.640Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 3,
+    "componentsPublished": 3,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "specId": "nasa-grc-role-of-the-mach-number-job-20261029125108-45c9b8a3",
+  "publishable": true,
+  "checksPassed": 14,
+  "checksTotal": 14,
+  "publishedRevision": 1,
+  "finishedAt": "2026-10-29T12:52:45.746Z"
+}

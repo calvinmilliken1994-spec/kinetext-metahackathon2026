@@ -1,0 +1,132 @@
+{
+  "jobId": "job-20261029125546-f5021bc5",
+  "analysisRef": "job-20261029125546-f5021bc5/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029125546-f5021bc5:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Radioactive waste types, decay, storage and regulation basics",
+    "sources": [
+      {
+        "id": "nrc-backgrounder-radioactive-waste",
+        "title": "Backgrounder on Radioactive Waste — U.S. Nuclear Regulatory Commission",
+        "locator": "https://www.nrc.gov/regulations-legislation/fact-sheets-brochures/backgrounder-on-radioactive-waste",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Nuclear Regulatory Commission, 'Backgrounder on Radioactive Waste', Fact Sheets & Brochures. NRC's website constitutes a U.S. Government Work under federal copyright law and is not subject to copyright. The U.S. Nuclear Regulatory Commission has not reviewed, approved or endorsed this activity.",
+        "sha256": "096bd0acfbc24540be6110113c96ed0fa4b892969980ff5bcf1d7834bc1d71b7"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a187bc-1cb5-7105-a9ca-a3a6a195885c",
+      "runId": "job-20261029125546-f5021bc5",
+      "promptVersion": "s6-v1",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T12:56:54.830Z"
+    },
+    "seed": 1523104292,
+    "headline": "Radioactive waste types, decay, storage and regulation basics",
+    "keyPoints": [
+      {
+        "id": "waste-classifications",
+        "point": "Waste has broad classifications for management.",
+        "quote": "There are two broad classifications: high-level or low-level waste.",
+        "sourceId": "nrc-backgrounder-radioactive-waste"
+      },
+      {
+        "id": "spent-fuel-source",
+        "point": "High-level waste uses spent fuel removed from reactors.",
+        "quote": "High-level waste is primarily spent fuel removed from reactors after producing electricity.",
+        "sourceId": "nrc-backgrounder-radioactive-waste"
+      },
+      {
+        "id": "half-life-decay",
+        "point": "Radioactivity will decay over time measured by half-lives.",
+        "quote": "Strontium-90 and cesium-137 have half-lives of about 30 years (half the radioactivity will decay in 30 years).",
+        "sourceId": "nrc-backgrounder-radioactive-waste"
+      },
+      {
+        "id": "pool-storage",
+        "point": "Pools use reinforced concrete with steel liners for shielding.",
+        "quote": "These pools are made of reinforced concrete several feet thick, with steel liners.",
+        "sourceId": "nrc-backgrounder-radioactive-waste"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "radioactive hazard remaining after long decay",
+        "id": "high-level-waste",
+        "quote": "Transuranic wastes, sometimes called TRU, account for most of the radioactive hazard remaining in high-level waste after 1,000 years.",
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "term": "high-level waste"
+      },
+      {
+        "gloss": "waste with broad classifications for near-surface disposal",
+        "id": "low-level-waste",
+        "quote": "There are two broad classifications: high-level or low-level waste.",
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "term": "low-level waste"
+      },
+      {
+        "gloss": "fuel removed from reactors after producing electricity",
+        "id": "spent-fuel",
+        "quote": "High-level waste is primarily spent fuel removed from reactors after producing electricity.",
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "term": "spent fuel"
+      },
+      {
+        "gloss": "isotopes that account for most heat and penetrating radiation",
+        "id": "fission-products",
+        "quote": "These isotopes, called \"fission products,\" account for most of the heat and penetrating radiation in high-level waste.",
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "term": "fission products"
+      },
+      {
+        "gloss": "elements heavier than uranium that take longer to decay",
+        "id": "transuranic",
+        "quote": "These heavier-than-uranium, or \"transuranic,\" elements do not produce nearly the amount of heat",
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "term": "transuranic"
+      },
+      {
+        "gloss": "years needed for half the material to decay",
+        "id": "half-life",
+        "quote": "Plutonium-239 has a half-life of 24,000 years.",
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "term": "half-life"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "half-life-v1",
+      "specId": "nrc-backgrounder-radioactive-waste-job-20261029125546-f5021bc5",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261029125546-f5021bc5:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029125546-f5021bc5:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

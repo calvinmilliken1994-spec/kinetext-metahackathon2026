@@ -1,0 +1,31 @@
+{
+  "jobId": "job-20261029131845-8ba738b1",
+  "sourceId": "nasa-grc-glider-trajectory-problem",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T13:18:45.011Z",
+  "flow": "lesson",
+  "model": "muse-spark-1.3",
+  "provider": "meta-api",
+  "providerModel": "muse-spark-1.3",
+  "totalCostUSD": 0.101539,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 40432,
+    "startedAt": "2026-10-29T13:18:45.011Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 2,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "finishedAt": "2026-10-29T13:19:37.456Z"
+}

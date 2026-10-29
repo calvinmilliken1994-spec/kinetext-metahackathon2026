@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261029130220-9236d645",
+  "analysisRef": "job-20261029130220-9236d645/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029130220-9236d645:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Heterozygosity, gene pools and human genetic diversity",
+    "sources": [
+      {
+        "id": "nij-heterozygosity",
+        "title": "Heterozygosity — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+        "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/population-genetics/heterozygosity",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Heterozygosity'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+        "sha256": "b88d68137ace380387528e9b0d424ad162ee448ea6d48d6646cb090dbfc4e1e9"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a187c1-97d0-7590-80f1-8869e9a5129f",
+      "runId": "job-20261029130220-9236d645",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T13:02:53.998Z"
+    },
+    "seed": 4140393767,
+    "headline": "Heterozygosity, gene pools and human genetic diversity",
+    "keyPoints": [
+      {
+        "id": "variation-survival",
+        "point": "Allele variation is critical for species survival and adapting to changing environments",
+        "quote": "The variation in alleles is critical to the survival of a species and allows organisms to adapt to changing environments.",
+        "sourceId": "nij-heterozygosity"
+      },
+      {
+        "id": "diploid-inheritance",
+        "point": "Every diploid cell carries two alleles, one inherited from each parent",
+        "quote": "Every diploid cell has two alleles, one inherited from each parent.",
+        "sourceId": "nij-heterozygosity"
+      },
+      {
+        "id": "genotype-formula",
+        "point": "Possible genotypes can be calculated from allele number with formula k(k+1) over 2",
+        "quote": "and can be calculated using the formula k(k+1)/2, where k is the number of alleles at a particular locus.",
+        "sourceId": "nij-heterozygosity"
+      },
+      {
+        "id": "diversity-within-population",
+        "point": "Approximately 85% of human genetic diversity comes from individuals of the same population",
+        "quote": "The study of genetics has revealed that approximately 85% of human genetic diversity comes from individuals of the same population.",
+        "sourceId": "nij-heterozygosity"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "having two different alleles at a specific locus",
+        "id": "heterozygous",
+        "quote": "If an individual has two different alleles at a specific locus, the individual is heterozygous at that locus",
+        "sourceId": "nij-heterozygosity",
+        "term": "heterozygous"
+      },
+      {
+        "gloss": "having the same two alleles in an individual",
+        "id": "homozygous",
+        "quote": "if the two alleles are the same, the individual is homozygous",
+        "sourceId": "nij-heterozygosity",
+        "term": "homozygous"
+      },
+      {
+        "gloss": "unique set of alleles found across every member of a species",
+        "id": "gene-pool",
+        "quote": "A gene pool is the unique set of alleles that could be found by analyzing the DNA from every member of a species or population.",
+        "sourceId": "nij-heterozygosity",
+        "term": "gene pool"
+      },
+      {
+        "gloss": "probability of transmitting genes to the next generation",
+        "id": "fitness",
+        "quote": "Fitness is the probability of transmitting one's genes to the next generation in relation to the average probability for that population.",
+        "sourceId": "nij-heterozygosity",
+        "term": "Fitness"
+      },
+      {
+        "gloss": "grid that graphically represents expected genotypes",
+        "id": "punnett-square",
+        "quote": "A Punnett square is simply a grid that graphically represents expected genotypes.",
+        "sourceId": "nij-heterozygosity",
+        "term": "Punnett square"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029130220-9236d645:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "concept-map-v1",
+      "specId": "job-20261029130220-9236d645:concept-map-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

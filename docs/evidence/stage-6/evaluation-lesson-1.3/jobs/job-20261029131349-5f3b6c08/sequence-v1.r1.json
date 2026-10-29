@@ -1,0 +1,205 @@
+{
+  "gen": {
+    "cyclic": false,
+    "orderBasis": "page-order",
+    "orderNote": "Follow the story in the order the page tells it",
+    "schemaVersion": "sequence-v1",
+    "steps": [
+      {
+        "id": "preserve-union",
+        "label": "preserve the Union",
+        "orderHint": "",
+        "quote": "Initially, the Civil War between North and South was fought by the North to prevent the secession of the Southern states and preserve the Union.",
+        "sourceId": "nara-emancipation-proclamation"
+      },
+      {
+        "id": "slavery-not-a-goal",
+        "label": "ending slavery was not a goal",
+        "orderHint": "",
+        "quote": "Even though sectional conflicts over slavery had been a major cause of the war, ending slavery was not a goal of the war.",
+        "sourceId": "nara-emancipation-proclamation"
+      },
+      {
+        "id": "preliminary-proclamation",
+        "label": "Preliminary Emancipation Proclamation",
+        "orderHint": "",
+        "quote": "That changed on September 22, 1862, when President Lincoln issued his Preliminary Emancipation Proclamation",
+        "sourceId": "nara-emancipation-proclamation"
+      },
+      {
+        "id": "change-goals-of-war",
+        "label": "change the goals of the war",
+        "orderHint": "",
+        "quote": "Lincoln’s bold step to change the goals of the war was a military measure",
+        "sourceId": "nara-emancipation-proclamation"
+      },
+      {
+        "id": "domain-of-freedom",
+        "label": "expanded the domain of freedom",
+        "orderHint": "",
+        "quote": "After January 1, 1863, every advance of federal troops expanded the domain of freedom.",
+        "sourceId": "nara-emancipation-proclamation"
+      },
+      {
+        "id": "liberated-to-liberators",
+        "label": "enabling the liberated to become liberators",
+        "orderHint": "",
+        "quote": "Moreover, the Proclamation announced the acceptance of Black men into the Union Army and Navy, enabling the liberated to become liberators.",
+        "sourceId": "nara-emancipation-proclamation"
+      }
+    ],
+    "title": "How the War for Union Became a War for Freedom"
+  },
+  "report": {
+    "artifactId": "job-20261029131349-5f3b6c08:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step label occurs in its own quote after normalisation (labels-in-quotes)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 6 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a187cc-9290-7389-975d-b1aff2e4a024",
+    "usage": {
+      "promptTokens": 2877,
+      "completionTokens": 6259,
+      "reasoningTokens": 5862,
+      "cachedTokens": 0
+    },
+    "latencyMs": 18994,
+    "estCostUSD": 0.030197,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029131349-5f3b6c08:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "How the War for Union Became a War for Freedom",
+    "sources": [
+      {
+        "id": "nara-emancipation-proclamation",
+        "title": "Emancipation Proclamation (1863) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/emancipation-proclamation",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Emancipation Proclamation (1863)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "0d11585e47f04bd0a12b0ded4d23595943f21a5af522811db76a93ef0486f646"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a187cc-9290-7389-975d-b1aff2e4a024",
+      "runId": "job-20261029131349-5f3b6c08",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T13:14:53.559Z"
+    },
+    "seed": 2210814656,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follow the story in the order the page tells it",
+    "steps": [
+      {
+        "id": "preserve-union",
+        "label": "preserve the Union",
+        "orderHint": "",
+        "quote": "Initially, the Civil War between North and South was fought by the North to prevent the secession of the Southern states and preserve the Union.",
+        "sourceId": "nara-emancipation-proclamation"
+      },
+      {
+        "id": "slavery-not-a-goal",
+        "label": "ending slavery was not a goal",
+        "orderHint": "",
+        "quote": "Even though sectional conflicts over slavery had been a major cause of the war, ending slavery was not a goal of the war.",
+        "sourceId": "nara-emancipation-proclamation"
+      },
+      {
+        "id": "preliminary-proclamation",
+        "label": "Preliminary Emancipation Proclamation",
+        "orderHint": "",
+        "quote": "That changed on September 22, 1862, when President Lincoln issued his Preliminary Emancipation Proclamation",
+        "sourceId": "nara-emancipation-proclamation"
+      },
+      {
+        "id": "change-goals-of-war",
+        "label": "change the goals of the war",
+        "orderHint": "",
+        "quote": "Lincoln’s bold step to change the goals of the war was a military measure",
+        "sourceId": "nara-emancipation-proclamation"
+      },
+      {
+        "id": "domain-of-freedom",
+        "label": "expanded the domain of freedom",
+        "orderHint": "",
+        "quote": "After January 1, 1863, every advance of federal troops expanded the domain of freedom.",
+        "sourceId": "nara-emancipation-proclamation"
+      },
+      {
+        "id": "liberated-to-liberators",
+        "label": "enabling the liberated to become liberators",
+        "orderHint": "",
+        "quote": "Moreover, the Proclamation announced the acceptance of Black men into the Union Army and Navy, enabling the liberated to become liberators.",
+        "sourceId": "nara-emancipation-proclamation"
+      }
+    ]
+  }
+}

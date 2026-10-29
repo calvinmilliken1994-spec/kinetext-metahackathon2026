@@ -1,0 +1,271 @@
+{
+  "gen": {
+    "links": [
+      {
+        "fromId": "alleles",
+        "id": "alleles-part-of-pool",
+        "quote": "A gene pool is the unique set of alleles",
+        "relation": "is part of",
+        "sourceId": "nij-heterozygosity",
+        "toId": "gene-pool"
+      },
+      {
+        "fromId": "genetic-diversity",
+        "id": "diversity-uses-frequency",
+        "quote": "Allele frequency is used to characterize the genetic diversity",
+        "relation": "uses",
+        "sourceId": "nij-heterozygosity",
+        "toId": "allele-frequency"
+      },
+      {
+        "fromId": "gene-pool",
+        "id": "pool-uses-frequency",
+        "quote": "Allele frequency is used to characterize the genetic diversity, or richness of the gene pool, in a population.",
+        "relation": "uses",
+        "sourceId": "nij-heterozygosity",
+        "toId": "allele-frequency"
+      },
+      {
+        "fromId": "large-gene-pool",
+        "id": "large-contrasts-small",
+        "quote": "large gene pool is often associated with considerable genetic diversity whereas a small gene pool is associated with poor genetic diversity",
+        "relation": "contrasts with",
+        "sourceId": "nij-heterozygosity",
+        "toId": "small-gene-pool"
+      },
+      {
+        "fromId": "small-gene-pool",
+        "id": "small-causes-fitness",
+        "quote": "a small gene pool is associated with poor genetic diversity and can lead to decreased fitness",
+        "relation": "causes",
+        "sourceId": "nij-heterozygosity",
+        "toId": "decreased-fitness"
+      },
+      {
+        "fromId": "genetic-diversity",
+        "id": "diversity-causes-fitness",
+        "quote": "is associated with poor genetic diversity and can lead to decreased fitness",
+        "relation": "causes",
+        "sourceId": "nij-heterozygosity",
+        "toId": "decreased-fitness"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "alleles",
+        "label": "alleles"
+      },
+      {
+        "id": "gene-pool",
+        "label": "gene pool"
+      },
+      {
+        "id": "allele-frequency",
+        "label": "Allele frequency"
+      },
+      {
+        "id": "genetic-diversity",
+        "label": "genetic diversity"
+      },
+      {
+        "id": "large-gene-pool",
+        "label": "large gene pool"
+      },
+      {
+        "id": "small-gene-pool",
+        "label": "small gene pool"
+      },
+      {
+        "id": "decreased-fitness",
+        "label": "decreased fitness"
+      }
+    ],
+    "schemaVersion": "concept-map-v1",
+    "title": "Gene pools and genetic diversity"
+  },
+  "report": {
+    "artifactId": "job-20261029130220-9236d645:concept-map-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every concept-map id pattern, id uniqueness and label shape is within the frozen limits"
+      },
+      {
+        "id": "CM-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 link quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "CM-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every link has one endpoint label in its quote and the other in the quote or the same source paragraph (endpoints-in-quote; paragraph-level co-mention without a stated link is the design-disclosed false accept — quotes are visible)"
+      },
+      {
+        "id": "CM-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every link relation is in the frozen vocabulary and grounded by the relation phrase or a frozen trigger word in the quote or its source sentence (relation-in-quote)"
+      },
+      {
+        "id": "CM-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the map is connected over all 7 nodes with no self-loops or duplicate links (graph-connected)"
+      },
+      {
+        "id": "CM-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "nodes 7 (4-8) and links 6 (3-10) are within the frozen counts (counts-valid)"
+      },
+      {
+        "id": "CM-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in node labels and the title appears on a provided page (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a187c2-9171-76b2-8aaf-449b082dba17",
+    "usage": {
+      "promptTokens": 2702,
+      "completionTokens": 15439,
+      "reasoningTokens": 14884,
+      "cachedTokens": 0
+    },
+    "latencyMs": 63887,
+    "estCostUSD": 0.06899325,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029130220-9236d645:concept-map-v1:r1",
+    "componentId": "concept-map-v1",
+    "title": "Gene pools and genetic diversity",
+    "sources": [
+      {
+        "id": "nij-heterozygosity",
+        "title": "Heterozygosity — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+        "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/population-genetics/heterozygosity",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Heterozygosity'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+        "sha256": "b88d68137ace380387528e9b0d424ad162ee448ea6d48d6646cb090dbfc4e1e9"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a187c2-9171-76b2-8aaf-449b082dba17",
+      "runId": "job-20261029130220-9236d645",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T13:03:57.893Z"
+    },
+    "seed": 3629386732,
+    "nodes": [
+      {
+        "id": "alleles",
+        "label": "alleles"
+      },
+      {
+        "id": "gene-pool",
+        "label": "gene pool"
+      },
+      {
+        "id": "allele-frequency",
+        "label": "Allele frequency"
+      },
+      {
+        "id": "genetic-diversity",
+        "label": "genetic diversity"
+      },
+      {
+        "id": "large-gene-pool",
+        "label": "large gene pool"
+      },
+      {
+        "id": "small-gene-pool",
+        "label": "small gene pool"
+      },
+      {
+        "id": "decreased-fitness",
+        "label": "decreased fitness"
+      }
+    ],
+    "links": [
+      {
+        "fromId": "alleles",
+        "id": "alleles-part-of-pool",
+        "quote": "A gene pool is the unique set of alleles",
+        "relation": "is part of",
+        "sourceId": "nij-heterozygosity",
+        "toId": "gene-pool"
+      },
+      {
+        "fromId": "genetic-diversity",
+        "id": "diversity-uses-frequency",
+        "quote": "Allele frequency is used to characterize the genetic diversity",
+        "relation": "uses",
+        "sourceId": "nij-heterozygosity",
+        "toId": "allele-frequency"
+      },
+      {
+        "fromId": "gene-pool",
+        "id": "pool-uses-frequency",
+        "quote": "Allele frequency is used to characterize the genetic diversity, or richness of the gene pool, in a population.",
+        "relation": "uses",
+        "sourceId": "nij-heterozygosity",
+        "toId": "allele-frequency"
+      },
+      {
+        "fromId": "large-gene-pool",
+        "id": "large-contrasts-small",
+        "quote": "large gene pool is often associated with considerable genetic diversity whereas a small gene pool is associated with poor genetic diversity",
+        "relation": "contrasts with",
+        "sourceId": "nij-heterozygosity",
+        "toId": "small-gene-pool"
+      },
+      {
+        "fromId": "small-gene-pool",
+        "id": "small-causes-fitness",
+        "quote": "a small gene pool is associated with poor genetic diversity and can lead to decreased fitness",
+        "relation": "causes",
+        "sourceId": "nij-heterozygosity",
+        "toId": "decreased-fitness"
+      },
+      {
+        "fromId": "genetic-diversity",
+        "id": "diversity-causes-fitness",
+        "quote": "is associated with poor genetic diversity and can lead to decreased fitness",
+        "relation": "causes",
+        "sourceId": "nij-heterozygosity",
+        "toId": "decreased-fitness"
+      }
+    ]
+  }
+}

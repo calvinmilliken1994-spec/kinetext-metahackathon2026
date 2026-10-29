@@ -1,0 +1,225 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nara-lee-resolution-job-20261029131035-8838d5de",
+  "title": "Lee Resolution Timeline",
+  "learningObjectives": [
+    "Order Lee Resolution milestones from the 1775 Congress meeting through the 1777 confederation plan.",
+    "Identify the three parts of the Lee Resolution: independence, foreign alliances, and confederation.",
+    "Describe Congressional voting, including New York's delayed support on July 9, 1776."
+  ],
+  "sources": [
+    {
+      "id": "nara-lee-resolution",
+      "title": "Lee Resolution (1776) — National Archives, Milestone Documents (agency-written introduction)",
+      "locator": "https://www.archives.gov/milestone-documents/lee-resolution",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Lee Resolution (1776)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+      "sha256": "a18b4131b1c5223c9b0685aed8fa77a746537b2af6e2084d892549e8808ce9e3"
+    }
+  ],
+  "explanations": [
+    {
+      "evidence": [
+        {
+          "quote": "\"that these united colonies are and of right ought to be free and independent states,\"",
+          "sourceId": "nara-lee-resolution"
+        }
+      ],
+      "id": "resolution-proposes-independence",
+      "text": "The resolution proposed that the united colonies become free and independent states."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "one to draft a declaration of independence",
+          "sourceId": "nara-lee-resolution"
+        },
+        {
+          "quote": "a second to draw up a plan \"for forming foreign alliances,\"",
+          "sourceId": "nara-lee-resolution"
+        }
+      ],
+      "id": "three-committees-response",
+      "text": "Congress created three committees to draft independence, plan foreign alliances, and prepare confederation."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "the affirmative votes of 12 colonies are listed at the right",
+          "sourceId": "nara-lee-resolution"
+        },
+        {
+          "quote": "the plan of confederation was delayed until November of 1777",
+          "sourceId": "nara-lee-resolution"
+        }
+      ],
+      "id": "votes-and-delayed-plans",
+      "text": "Twelve colonies voted affirmative while New York waited, and treaty and confederation plans came months later."
+    }
+  ],
+  "simulation": {
+    "engine": "timeline-v1",
+    "events": [
+      {
+        "day": 0,
+        "evidence": [
+          {
+            "quote": "Its second meeting convened in Philadelphia in 1775.",
+            "sourceId": "nara-lee-resolution"
+          }
+        ],
+        "id": "e1",
+        "label": "Second Continental Congress convenes",
+        "month": 0,
+        "year": 1775
+      },
+      {
+        "day": 7,
+        "evidence": [
+          {
+            "quote": "On June 7, 1776, Richard Henry Lee of Virginia, introduced this resolution in the Second Continental Congress",
+            "sourceId": "nara-lee-resolution"
+          },
+          {
+            "quote": "proposing independence for the American colonies",
+            "sourceId": "nara-lee-resolution"
+          }
+        ],
+        "id": "e2",
+        "label": "Lee introduces independence resolution",
+        "month": 6,
+        "year": 1776
+      },
+      {
+        "day": 11,
+        "evidence": [
+          {
+            "quote": "On June 11, 1776, the Congress appointed three concurrent committees in response to the Lee Resolution",
+            "sourceId": "nara-lee-resolution"
+          },
+          {
+            "quote": "one to draft a declaration of independence",
+            "sourceId": "nara-lee-resolution"
+          }
+        ],
+        "id": "e3",
+        "label": "Congress appoints three committees",
+        "month": 6,
+        "year": 1776
+      },
+      {
+        "day": 2,
+        "evidence": [
+          {
+            "quote": "approval was deferred until July 2",
+            "sourceId": "nara-lee-resolution"
+          },
+          {
+            "quote": "On that date, Congress adopted the first part (the declaration).",
+            "sourceId": "nara-lee-resolution"
+          }
+        ],
+        "id": "e4",
+        "label": "Congress adopts declaration part",
+        "month": 7,
+        "year": 1776
+      },
+      {
+        "day": 9,
+        "evidence": [
+          {
+            "quote": "New York cast no vote until the newly elected New York Convention upheld the Declaration of Independence on July 9, 1776.",
+            "sourceId": "nara-lee-resolution"
+          }
+        ],
+        "id": "e5",
+        "label": "New York upholds Declaration of Independence",
+        "month": 7,
+        "year": 1776
+      },
+      {
+        "day": 0,
+        "evidence": [
+          {
+            "quote": "The plan for making treaties was not approved until September of 1776",
+            "sourceId": "nara-lee-resolution"
+          }
+        ],
+        "id": "e6",
+        "label": "Treaties plan approved",
+        "month": 9,
+        "year": 1776
+      },
+      {
+        "day": 0,
+        "evidence": [
+          {
+            "quote": "the plan of confederation was delayed until November of 1777",
+            "sourceId": "nara-lee-resolution"
+          }
+        ],
+        "id": "e7",
+        "label": "Confederation plan delayed",
+        "month": 11,
+        "year": 1777
+      }
+    ],
+    "scenario": {
+      "settingLabel": "Second Continental Congress, 1775-1777",
+      "subjectLabel": "Lee Resolution"
+    }
+  },
+  "behavioralTests": [
+    {
+      "earlierEventId": "e2",
+      "laterEventId": "e3",
+      "name": "introduction-before-committees"
+    },
+    {
+      "earlierEventId": "e3",
+      "laterEventId": "e4",
+      "name": "committees-before-adoption"
+    },
+    {
+      "earlierEventId": "e5",
+      "laterEventId": "e6",
+      "name": "new-york-before-treaties"
+    },
+    {
+      "earlierEventId": "e1",
+      "laterEventId": "e2",
+      "name": "convenes-before-resolution"
+    }
+  ],
+  "predictions": [
+    {
+      "earlierEventId": "e4",
+      "id": "p1",
+      "laterEventId": "e7",
+      "prompt": "Which happened first: Congress adopting the declaration part or the confederation plan being delayed until November 1777?"
+    },
+    {
+      "earlierEventId": "e3",
+      "id": "p2",
+      "laterEventId": "e6",
+      "prompt": "Which happened first: Congress appointing three committees or the treaties plan being approved in September 1776?"
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a187c9-b188-70fc-8719-50f117c9d049",
+    "runId": "job-20261029131035-8838d5de",
+    "promptVersion": "v9",
+    "generatedAt": "2026-10-29T13:11:44.860Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

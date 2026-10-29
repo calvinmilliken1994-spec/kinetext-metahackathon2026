@@ -1,0 +1,210 @@
+{
+  "gen": {
+    "cards": [
+      {
+        "hint": "Recall the tiny per-acre figure noted with the doubling in size.",
+        "id": "cost-per-acre",
+        "options": [
+          "4 cents an acre",
+          "15 cents an acre",
+          "10 cents an acre",
+          "30 cents an acre"
+        ],
+        "quote": "For roughly 4 cents an acre, the United States doubled its size, expanding the nation westward.",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "stem": "What was the approximate price paid for each acre of land?"
+      },
+      {
+        "hint": "Focus on the two negotiators named at the start of the offer story.",
+        "id": "negotiators-authorized",
+        "options": [
+          "Robert Livingston and James Monroe",
+          "Thomas Jefferson and James Monroe",
+          "Robert Livingston and Napoleon",
+          "Thomas Jefferson and Napoleon"
+        ],
+        "quote": "negotiators Robert Livingston and James Monroe were authorized to pay France up to $10 million",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "stem": "Which men were authorized to pay for the port and the Floridas?"
+      },
+      {
+        "hint": "Remember the formal cession document named at the end.",
+        "id": "agreement-parts",
+        "options": [
+          "Treaty of Cession",
+          "Missouri Compromise",
+          "Compromise of 1850",
+          "Gadsden Purchase"
+        ],
+        "quote": "The Louisiana Purchase Agreement is made up of the Treaty of Cession and the two conventions regarding the financial aspects of the transaction.",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "stem": "Which agreement plus two conventions formed the purchase deal?"
+      }
+    ],
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Louisiana Purchase Review"
+  },
+  "report": {
+    "artifactId": "job-20261029130820-693dd939:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a187c7-746b-7065-b269-74d2d37822bb",
+    "usage": {
+      "promptTokens": 2694,
+      "completionTokens": 8526,
+      "reasoningTokens": 8044,
+      "cachedTokens": 0
+    },
+    "latencyMs": 28146,
+    "estCostUSD": 0.039603,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "pruned": true,
+  "dropped": [
+    {
+      "index": 1,
+      "id": "purchase-size-miles",
+      "reason": "card failed Q-06",
+      "checks": [
+        "Q-06"
+      ]
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029130820-693dd939:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Louisiana Purchase Review",
+    "sources": [
+      {
+        "id": "nara-louisiana-purchase-treaty",
+        "title": "Louisiana Purchase Treaty (1803) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/louisiana-purchase-treaty",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Louisiana Purchase Treaty (1803)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "6da19e2b0134ca81169b3c5b0a0461ae48243446219561e760b32cb2ed7cce4b"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a187c7-746b-7065-b269-74d2d37822bb",
+      "runId": "job-20261029130820-693dd939",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T13:09:18.151Z"
+    },
+    "seed": 3968128691,
+    "cards": [
+      {
+        "hint": "Recall the tiny per-acre figure noted with the doubling in size.",
+        "id": "cost-per-acre",
+        "options": [
+          "4 cents an acre",
+          "15 cents an acre",
+          "10 cents an acre",
+          "30 cents an acre"
+        ],
+        "quote": "For roughly 4 cents an acre, the United States doubled its size, expanding the nation westward.",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "stem": "What was the approximate price paid for each acre of land?"
+      },
+      {
+        "hint": "Focus on the two negotiators named at the start of the offer story.",
+        "id": "negotiators-authorized",
+        "options": [
+          "Robert Livingston and James Monroe",
+          "Thomas Jefferson and James Monroe",
+          "Robert Livingston and Napoleon",
+          "Thomas Jefferson and Napoleon"
+        ],
+        "quote": "negotiators Robert Livingston and James Monroe were authorized to pay France up to $10 million",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "stem": "Which men were authorized to pay for the port and the Floridas?"
+      },
+      {
+        "hint": "Remember the formal cession document named at the end.",
+        "id": "agreement-parts",
+        "options": [
+          "Treaty of Cession",
+          "Missouri Compromise",
+          "Compromise of 1850",
+          "Gadsden Purchase"
+        ],
+        "quote": "The Louisiana Purchase Agreement is made up of the Treaty of Cession and the two conventions regarding the financial aspects of the transaction.",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "stem": "Which agreement plus two conventions formed the purchase deal?"
+      }
+    ]
+  }
+}

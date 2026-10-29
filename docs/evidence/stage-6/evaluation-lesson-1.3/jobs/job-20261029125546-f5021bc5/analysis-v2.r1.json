@@ -1,0 +1,208 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "componentPlan": [
+      {
+        "componentId": "half-life-v1",
+        "focusQuote": "Strontium-90 and cesium-137 have half-lives of about 30 years (half the radioactivity will decay in 30 years).",
+        "focusSourceId": "nrc-backgrounder-radioactive-waste",
+        "pedagogicalReason": "Introduces half-life with concrete isotopes before exploring storage and disposal."
+      },
+      {
+        "componentId": "sequence-v1",
+        "focusQuote": "As the pools near capacity, utilities move some of the older spent fuel into “dry cask” storage.",
+        "focusSourceId": "nrc-backgrounder-radioactive-waste",
+        "pedagogicalReason": "Shows storage order from pools to dry casks in taught sequence."
+      },
+      {
+        "componentId": "quiz-cards-v1",
+        "focusQuote": "Low-level waste includes items that have become contaminated with radioactive material",
+        "focusSourceId": "nrc-backgrounder-radioactive-waste",
+        "pedagogicalReason": "Checks facts about waste types and disposal after decay and storage."
+      }
+    ],
+    "declineCode": "",
+    "declineSummary": "",
+    "overview": {
+      "headline": "Radioactive waste types, decay, storage and regulation basics",
+      "keyPoints": [
+        {
+          "id": "waste-classifications",
+          "point": "Waste has broad classifications for management.",
+          "quote": "There are two broad classifications: high-level or low-level waste.",
+          "sourceId": "nrc-backgrounder-radioactive-waste"
+        },
+        {
+          "id": "spent-fuel-source",
+          "point": "High-level waste uses spent fuel removed from reactors.",
+          "quote": "High-level waste is primarily spent fuel removed from reactors after producing electricity.",
+          "sourceId": "nrc-backgrounder-radioactive-waste"
+        },
+        {
+          "id": "half-life-decay",
+          "point": "Radioactivity will decay over time measured by half-lives.",
+          "quote": "Strontium-90 and cesium-137 have half-lives of about 30 years (half the radioactivity will decay in 30 years).",
+          "sourceId": "nrc-backgrounder-radioactive-waste"
+        },
+        {
+          "id": "pool-storage",
+          "point": "Pools use reinforced concrete with steel liners for shielding.",
+          "quote": "These pools are made of reinforced concrete several feet thick, with steel liners.",
+          "sourceId": "nrc-backgrounder-radioactive-waste"
+        }
+      ],
+      "keyTerms": [
+        {
+          "gloss": "radioactive hazard remaining after long decay",
+          "id": "high-level-waste",
+          "quote": "Transuranic wastes, sometimes called TRU, account for most of the radioactive hazard remaining in high-level waste after 1,000 years.",
+          "sourceId": "nrc-backgrounder-radioactive-waste",
+          "term": "high-level waste"
+        },
+        {
+          "gloss": "waste with broad classifications for near-surface disposal",
+          "id": "low-level-waste",
+          "quote": "There are two broad classifications: high-level or low-level waste.",
+          "sourceId": "nrc-backgrounder-radioactive-waste",
+          "term": "low-level waste"
+        },
+        {
+          "gloss": "fuel removed from reactors after producing electricity",
+          "id": "spent-fuel",
+          "quote": "High-level waste is primarily spent fuel removed from reactors after producing electricity.",
+          "sourceId": "nrc-backgrounder-radioactive-waste",
+          "term": "spent fuel"
+        },
+        {
+          "gloss": "isotopes that account for most heat and penetrating radiation",
+          "id": "fission-products",
+          "quote": "These isotopes, called \"fission products,\" account for most of the heat and penetrating radiation in high-level waste.",
+          "sourceId": "nrc-backgrounder-radioactive-waste",
+          "term": "fission products"
+        },
+        {
+          "gloss": "elements heavier than uranium that take longer to decay",
+          "id": "transuranic",
+          "quote": "These heavier-than-uranium, or \"transuranic,\" elements do not produce nearly the amount of heat",
+          "sourceId": "nrc-backgrounder-radioactive-waste",
+          "term": "transuranic"
+        },
+        {
+          "gloss": "years needed for half the material to decay",
+          "id": "half-life",
+          "quote": "Plutonium-239 has a half-life of 24,000 years.",
+          "sourceId": "nrc-backgrounder-radioactive-waste",
+          "term": "half-life"
+        }
+      ]
+    },
+    "pageCoverage": "Covers high-level and low-level waste origins, radioactive decay and half-life, pool and dry-cask storage, disposal status, and regulatory roles.",
+    "subject": "chemistry",
+    "usable": true
+  },
+  "report": {
+    "artifactId": "job-20261029125546-f5021bc5:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"chemistry\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 11852 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 13 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 4, keyTerms 6, componentPlan 3; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (3 entries, 1 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": false,
+        "message": "publisher claim found at /pageCoverage: \"Covers high-level and low-level waste origins, radioactive d\" (token \"regulatory\") (R-SUB-4: never name the publisher in generated strings, and never use \"according to\" / \"as stated by\" / \"official\" / \"endorsed\" wording)",
+        "path": "/pageCoverage",
+        "affected": [
+          "/pageCoverage"
+        ]
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a187bb-febd-71ed-b381-7dd67ef5f0ae",
+    "usage": {
+      "promptTokens": 6372,
+      "completionTokens": 16876,
+      "reasoningTokens": 16023,
+      "cachedTokens": 0
+    },
+    "latencyMs": 60391,
+    "estCostUSD": 0.079688,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  }
+}

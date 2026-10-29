@@ -1,0 +1,111 @@
+{
+  "jobId": "job-20261029131035-8838d5de",
+  "analysisRef": "job-20261029131035-8838d5de/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029131035-8838d5de:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Colonists move toward independence through resolution and declaration",
+    "sources": [
+      {
+        "id": "nara-lee-resolution",
+        "title": "Lee Resolution (1776) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/lee-resolution",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Lee Resolution (1776)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "a18b4131b1c5223c9b0685aed8fa77a746537b2af6e2084d892549e8808ce9e3"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a187c9-05b1-74a9-92e0-5b8eac99f5d4",
+      "runId": "job-20261029131035-8838d5de",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T13:11:00.896Z"
+    },
+    "seed": 3729906019,
+    "headline": "Colonists move toward independence through resolution and declaration",
+    "keyPoints": [
+      {
+        "id": "lee-introduction",
+        "point": "Virginia delegate introduced resolution proposing independence in Congress",
+        "quote": "Richard Henry Lee of Virginia, introduced this resolution in the Second Continental Congress proposing independence",
+        "sourceId": "nara-lee-resolution"
+      },
+      {
+        "id": "three-parts",
+        "point": "Resolution contained declaration of independence and call to form foreign alliances",
+        "quote": "The Lee Resolution contained three parts: a declaration of independence, a call to form foreign alliances",
+        "sourceId": "nara-lee-resolution"
+      },
+      {
+        "id": "three-committees",
+        "point": "Congress appointed concurrent committees in response to resolution",
+        "quote": "the Congress appointed three concurrent committees in response to the Lee Resolution",
+        "sourceId": "nara-lee-resolution"
+      },
+      {
+        "id": "colony-votes",
+        "point": "affirmative votes of colonies listed at right recorded support",
+        "quote": "the affirmative votes of 12 colonies are listed at the right",
+        "sourceId": "nara-lee-resolution"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "Resolution proposing that colonies become independent states",
+        "id": "lee-resolution",
+        "quote": "The Lee Resolution contained three parts: a declaration of independence",
+        "sourceId": "nara-lee-resolution",
+        "term": "Lee Resolution"
+      },
+      {
+        "gloss": "Governing body where delegates voted on independence",
+        "id": "continental-congress",
+        "quote": "Richard Henry Lee of Virginia, introduced this resolution in the Second Continental Congress proposing independence",
+        "sourceId": "nara-lee-resolution",
+        "term": "Continental Congress"
+      },
+      {
+        "gloss": "plan for uniting states under shared government",
+        "id": "confederation",
+        "quote": "and \"a plan for confederation.\"",
+        "sourceId": "nara-lee-resolution",
+        "term": "confederation"
+      },
+      {
+        "gloss": "agreements for forming partnerships with foreign nations",
+        "id": "foreign-alliances",
+        "quote": "a second to draw up a plan \"for forming foreign alliances,\"",
+        "sourceId": "nara-lee-resolution",
+        "term": "foreign alliances"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "timeline-v1",
+      "specId": "nara-lee-resolution-job-20261029131035-8838d5de",
+      "status": "failed",
+      "reason": "timeline.date-grounded: event \"e7\" (1777-11): date not grounded — quote \"The plan for making treaties was not approved until Septembe\" contains no COMPLETE source date expression stating 1777-11 as ONE connected expression in a CLEAN context — the quote contains \"September of 1776\" (the preceding word \"until\" is an approx,",
+      "revision": 3
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029131035-8838d5de:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

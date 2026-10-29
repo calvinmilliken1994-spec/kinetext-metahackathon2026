@@ -1,0 +1,125 @@
+{
+  "jobId": "job-20261029131742-0c1177ce",
+  "analysisRef": "job-20261029131742-0c1177ce/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029131742-0c1177ce:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Wright brothers path to flight through math physics and aerodynamics",
+    "sources": [
+      {
+        "id": "nasa-grc-re-living-the-wright-way",
+        "title": "Guide to Reliving the Wright Way — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/re-living-the-wright-way/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "c7d0a44cd306a87e59d38d81850a825080de38231c0242f7086f5336a80c94c2"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a187cf-7d29-74a3-a619-e22716f04107",
+      "runId": "job-20261029131742-0c1177ce",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T13:18:04.649Z"
+    },
+    "seed": 4283828565,
+    "headline": "Wright brothers path to flight through math physics and aerodynamics",
+    "keyPoints": [
+      {
+        "id": "wright-journey",
+        "point": "Guide uses aeronautics technology lessons to explain the journey of flight.",
+        "quote": "In the spirit of the Wright Brothers, NASA is using aeronautics technology to provide access to space.",
+        "sourceId": "nasa-grc-re-living-the-wright-way"
+      },
+      {
+        "id": "basic-physics",
+        "point": "Guide shows basic math and physics behind invention of the airplane.",
+        "quote": "The Wright Way will show you the basic math and physics that led to the invention of the airplane by the Wright Brothers.",
+        "sourceId": "nasa-grc-re-living-the-wright-way"
+      },
+      {
+        "id": "elevator-control",
+        "point": "Elevators are front aircraft wings that control flight attitude.",
+        "quote": "At the front of all of the Wright brothers’ aircraft one finds the elevators.",
+        "sourceId": "nasa-grc-re-living-the-wright-way"
+      },
+      {
+        "id": "lift-weight",
+        "point": "Simulation seeks flight conditions where aircraft lift exceeds aircraft weight.",
+        "quote": "The objective of this simulation is to find the flight conditions that produce an aircraft lift greater than the aircraft weight.",
+        "sourceId": "nasa-grc-re-living-the-wright-way"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "Motion rules discussed in video introduction",
+        "id": "newtons-laws",
+        "quote": "The Wright Brothers’ discuss Newton’s Laws of Motion – Video",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "term": "Newton’s Laws of Motion"
+      },
+      {
+        "gloss": "Front aircraft wings that move to control flight",
+        "id": "elevators",
+        "quote": "At the front of all of the Wright brothers’ aircraft one finds the elevators.",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "term": "elevators"
+      },
+      {
+        "gloss": "Upward force from aircraft wings in flight conditions",
+        "id": "aircraft-lift",
+        "quote": "The objective of this simulation is to find the flight conditions that produce an aircraft lift greater than the aircraft weight.",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "term": "lift"
+      },
+      {
+        "gloss": "Ratio comparing drag and lift forces",
+        "id": "drag-ratio",
+        "quote": "Drag to Lift Ratio",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "term": "Drag"
+      },
+      {
+        "gloss": "Layer topic grouped with aerodynamics lessons",
+        "id": "boundary-layer",
+        "quote": "Boundary Layer",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "term": "Boundary Layer"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sort-groups-v1",
+      "specId": "job-20261029131742-0c1177ce:sort-groups-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261029131742-0c1177ce:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029131742-0c1177ce:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

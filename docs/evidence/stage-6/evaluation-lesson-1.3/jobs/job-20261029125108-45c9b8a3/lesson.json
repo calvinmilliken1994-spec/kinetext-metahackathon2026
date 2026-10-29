@@ -1,0 +1,125 @@
+{
+  "jobId": "job-20261029125108-45c9b8a3",
+  "analysisRef": "job-20261029125108-45c9b8a3/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029125108-45c9b8a3:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Mach number controls air compressibility and density changes in flight",
+    "sources": [
+      {
+        "id": "nasa-grc-role-of-the-mach-number",
+        "title": "Role of the Mach Number — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/role-of-the-mach-number/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "a7355b33f7126247cd0576ce48a0975a781814c8687022d8fdf12e11fdeaa3c8"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a187b7-7b13-7691-a0cc-37265d9b4173",
+      "runId": "job-20261029125108-45c9b8a3",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T12:51:51.336Z"
+    },
+    "seed": 3492818759,
+    "headline": "Mach number controls air compressibility and density changes in flight",
+    "keyPoints": [
+      {
+        "id": "low-speed-density",
+        "point": "Low speed flight leaves air density constant, while higher speed compresses air locally",
+        "quote": "If the aircraft passes at a low speed, typically less than 250 mph, it is observed that the density of the air remains constant.",
+        "sourceId": "nasa-grc-role-of-the-mach-number"
+      },
+      {
+        "id": "mach-definition",
+        "point": "Mach number compares aircraft speed to speed of sound in surrounding gas",
+        "quote": "The Mach number is the ratio of the speed of the aircraft, or the speed of the gas, to the speed of sound in the gas.",
+        "sourceId": "nasa-grc-role-of-the-mach-number"
+      },
+      {
+        "id": "supersonic-density-change",
+        "point": "Supersonic flows show density changes faster than velocity changes scaled by square",
+        "quote": "For supersonic and hypersonic flows, the density changes faster than the velocity changes by a factor equal to the square of the Mach number.",
+        "sourceId": "nasa-grc-role-of-the-mach-number"
+      },
+      {
+        "id": "subsonic-ignore",
+        "point": "Low subsonic conditions allow compressibility effects to be ignored",
+        "quote": "For the low subsonic conditions, compressibility can be ignored.",
+        "sourceId": "nasa-grc-role-of-the-mach-number"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "ratio of aircraft speed to speed of sound in gas",
+        "id": "mach-number",
+        "quote": "The Mach number is the ratio of the speed of the aircraft, or the speed of the gas, to the speed of sound in the gas.",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "term": "Mach number"
+      },
+      {
+        "gloss": "effect that alters resulting force when air density changes",
+        "id": "compressibility-effect",
+        "quote": "This compressibility effect alters the amount of resulting force on the aircraft since the aerodynamic force depends on the air density.",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "term": "compressibility effect"
+      },
+      {
+        "gloss": "speed equal to transmission of small disturbances in flow",
+        "id": "speed-of-sound",
+        "quote": "where a is equal to the speed of sound. So,",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "term": "speed of sound"
+      },
+      {
+        "gloss": "property gamma that describes specific heat behavior",
+        "id": "specific-heat-ratio",
+        "quote": "where gamma (γ) is the specific heat ratio.",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "term": "specific heat ratio"
+      },
+      {
+        "gloss": "flow regime where Mach number is nearly equal to one",
+        "id": "transonic",
+        "quote": "the flight Mach number is nearly equal to one, M = 1, and the flow is said to be transonic.",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "term": "transonic"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "speed-of-sound-v1",
+      "specId": "nasa-grc-role-of-the-mach-number-job-20261029125108-45c9b8a3",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261029125108-45c9b8a3:compare-table-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029125108-45c9b8a3:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

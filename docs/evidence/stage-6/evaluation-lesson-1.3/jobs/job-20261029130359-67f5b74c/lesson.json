@@ -1,0 +1,111 @@
+{
+  "jobId": "job-20261029130359-67f5b74c",
+  "analysisRef": "job-20261029130359-67f5b74c/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029130359-67f5b74c:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Random mating and assortative mating shape genetic variation",
+    "sources": [
+      {
+        "id": "nij-random-mating",
+        "title": "Random Mating — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+        "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/hardy-weinberg-principle/random-mating",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Random Mating'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+        "sha256": "9f06caf792ddeb146476c0c5d2cf1851b1f5e8bd6f0fc7dfae8cb33d50725ad8"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a187c3-23df-768c-be65-7aa9240dbfc0",
+      "runId": "job-20261029130359-67f5b74c",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T13:04:35.386Z"
+    },
+    "seed": 402022585,
+    "headline": "Random mating and assortative mating shape genetic variation",
+    "keyPoints": [
+      {
+        "id": "random-mating-meaning",
+        "point": "Random mating means mating is arbitrary with regard to the locus under study",
+        "quote": "Random mating implies that mating should be arbitrary with regard to the locus being considered.",
+        "sourceId": "nij-random-mating"
+      },
+      {
+        "id": "human-similar-mating",
+        "point": "In humans mating often involves individuals similar to themselves for visible traits",
+        "quote": "humans tend to mate with individuals that are similar to themselves, especially with respect to evident or visible traits",
+        "sourceId": "nij-random-mating"
+      },
+      {
+        "id": "assortative-outcomes",
+        "point": "Positive assortative mating increases homozygotes while negative assortative mating increases heterozygotes",
+        "quote": "Positive assortative mating leads to an increase in homozygotes whereas negative assortative mating leads to an increase in heterozygotes.",
+        "sourceId": "nij-random-mating"
+      },
+      {
+        "id": "random-traits",
+        "point": "Humans still mate randomly for traits like blood type and short tandem repeat genotype",
+        "quote": "they mate randomly with respect to other traits such as blood type and short tandem repeat (STR) genotype",
+        "sourceId": "nij-random-mating"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "mating that is arbitrary with regard to a locus",
+        "id": "random-mating",
+        "quote": "Random mating implies that mating should be arbitrary with regard to the locus being considered.",
+        "sourceId": "nij-random-mating",
+        "term": "Random mating"
+      },
+      {
+        "gloss": "genetic location considered for arbitrary mating",
+        "id": "locus",
+        "quote": "Random mating implies that mating should be arbitrary with regard to the locus being considered.",
+        "sourceId": "nij-random-mating",
+        "term": "locus"
+      },
+      {
+        "gloss": "positive mating between similar individuals with assortative choice",
+        "id": "positive-assortative-mating",
+        "quote": "This constitutes non-random, positive assortative mating.",
+        "sourceId": "nij-random-mating",
+        "term": "positive assortative mating"
+      },
+      {
+        "gloss": "breeding between individuals with dissimilar genotypes",
+        "id": "negative-assortative-mating",
+        "quote": "In contrast, negative assortative mating is breeding between individuals with dissimilar genotypes, and is more rare.",
+        "sourceId": "nij-random-mating",
+        "term": "negative assortative mating"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "concept-map-v1",
+      "specId": "job-20261029130359-67f5b74c:concept-map-v1:r3",
+      "status": "failed",
+      "reason": "CM-03: links[3] (hwe-needs-random): the relation \"needs\" is not grounded — neither the relation phrase nor one of its trigger words (need, needs, needed, require, requires, required, ...) occurs in the quote or its source sentence (relation-in-quote)",
+      "revision": 3
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029130359-67f5b74c:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

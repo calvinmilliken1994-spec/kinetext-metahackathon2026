@@ -1,0 +1,231 @@
+{
+  "gen": {
+    "cards": [
+      {
+        "hint": "Focus on the final updated figure noted in the text",
+        "id": "modern-accepted-value",
+        "options": [
+          "accepted value",
+          "lift coefficient",
+          "wing area",
+          "angle of attack"
+        ],
+        "quote": "The modern accepted value is .00326.",
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "stem": "What is the accepted pressure coefficient in modern use"
+      },
+      {
+        "hint": "Recall the revision the brothers made after early tests",
+        "id": "brothers-revised-value",
+        "options": [
+          "more closely approximated",
+          "wind tunnel results",
+          "wing shape",
+          "angle of attack"
+        ],
+        "quote": "they determined that a value of .0033 more closely approximated their data.",
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "stem": "What value did the brothers find matched their data more closely"
+      },
+      {
+        "hint": "Think of the earlier value linked to Lilienthal",
+        "id": "lilienthal-used-value",
+        "options": [
+          "design and testing",
+          "kite and glider experiments",
+          "wing shape",
+          "wind tunnel results"
+        ],
+        "quote": "Lilienthal had used the .005 value in the design and testing of his wings.",
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "stem": "Which coefficient value did Lilienthal use in his wing designs"
+      },
+      {
+        "hint": "Think about the gap between prediction and flight result",
+        "id": "flight-test-result",
+        "options": [
+          "barely lift itself",
+          "easily lift double its weight",
+          "maintain steady level cruising",
+          "exceed all performance predictions"
+        ],
+        "quote": "But in flight, it could barely lift itself in a 15 mile per hour wind at a much higher angle of attack.",
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "stem": "How did the 1901 aircraft actually perform in flight"
+      }
+    ],
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Early Lift Equation Tests"
+  },
+  "report": {
+    "artifactId": "job-20261029124624-f21a1b0d:quiz-cards-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "quiz-cards-v1: no weakening — every one of the 12 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a187b4-5511-7044-9dbe-b4c0b33c6703",
+    "usage": {
+      "promptTokens": 5316,
+      "completionTokens": 5315,
+      "reasoningTokens": 4931,
+      "cachedTokens": 0
+    },
+    "latencyMs": 20139,
+    "estCostUSD": 0.02923375,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029124624-f21a1b0d:quiz-cards-v1:r2",
+    "componentId": "quiz-cards-v1",
+    "title": "Early Lift Equation Tests",
+    "sources": [
+      {
+        "id": "nasa-grc-lift-equation-of-the-1900s",
+        "title": "Lift Equation of the 1900's — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/lift-equation-of-the-1900s/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "41fb1b6349509be9b9478942fed514cd8d077b15436694132ecbfb588c477402"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a187b4-5511-7044-9dbe-b4c0b33c6703",
+      "runId": "job-20261029124624-f21a1b0d",
+      "promptVersion": "s6-v1",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T12:48:24.957Z"
+    },
+    "seed": 2897978114,
+    "cards": [
+      {
+        "hint": "Focus on the final updated figure noted in the text",
+        "id": "modern-accepted-value",
+        "options": [
+          "accepted value",
+          "lift coefficient",
+          "wing area",
+          "angle of attack"
+        ],
+        "quote": "The modern accepted value is .00326.",
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "stem": "What is the accepted pressure coefficient in modern use"
+      },
+      {
+        "hint": "Recall the revision the brothers made after early tests",
+        "id": "brothers-revised-value",
+        "options": [
+          "more closely approximated",
+          "wind tunnel results",
+          "wing shape",
+          "angle of attack"
+        ],
+        "quote": "they determined that a value of .0033 more closely approximated their data.",
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "stem": "What value did the brothers find matched their data more closely"
+      },
+      {
+        "hint": "Think of the earlier value linked to Lilienthal",
+        "id": "lilienthal-used-value",
+        "options": [
+          "design and testing",
+          "kite and glider experiments",
+          "wing shape",
+          "wind tunnel results"
+        ],
+        "quote": "Lilienthal had used the .005 value in the design and testing of his wings.",
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "stem": "Which coefficient value did Lilienthal use in his wing designs"
+      },
+      {
+        "hint": "Think about the gap between prediction and flight result",
+        "id": "flight-test-result",
+        "options": [
+          "barely lift itself",
+          "easily lift double its weight",
+          "maintain steady level cruising",
+          "exceed all performance predictions"
+        ],
+        "quote": "But in flight, it could barely lift itself in a 15 mile per hour wind at a much higher angle of attack.",
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "stem": "How did the 1901 aircraft actually perform in flight"
+      }
+    ]
+  }
+}

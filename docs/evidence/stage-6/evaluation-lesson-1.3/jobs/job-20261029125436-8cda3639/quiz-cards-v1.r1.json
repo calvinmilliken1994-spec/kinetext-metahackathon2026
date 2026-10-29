@@ -1,0 +1,204 @@
+{
+  "gen": {
+    "cards": [
+      {
+        "hint": "Think about earning on past earnings too.",
+        "id": "compound-interest-meaning",
+        "options": [
+          "interest on both the money you save and the interest you earn",
+          "fees charged only when money is withdrawn",
+          "money added only from monthly deposits"
+        ],
+        "quote": "Compound interest: When you earn interest on both the money you save and the interest you earn.",
+        "sourceId": "cfpb-saving-post-secondary-education",
+        "stem": "What does compound interest mean for money in a savings account?"
+      },
+      {
+        "hint": "Think about timing and growth over time.",
+        "id": "start-saving-early",
+        "options": [
+          "The sooner you start saving for post-secondary education",
+          "Waiting longer always earns a higher return",
+          "Delaying saving keeps spending power steady"
+        ],
+        "quote": "The sooner you start saving for post-secondary education, the faster your money can grow from compound interest.",
+        "sourceId": "cfpb-saving-post-secondary-education",
+        "stem": "Why is it helpful to begin setting aside funds at a young age?"
+      },
+      {
+        "hint": "Think about adding to the starting amount.",
+        "id": "grow-savings-faster",
+        "options": [
+          "adding to your principal",
+          "withdrawing earnings every year",
+          "lowering the interest rate earned"
+        ],
+        "quote": "Increasing the compounding frequency or your interest rate or adding to your principal can help your savings grow even faster.",
+        "sourceId": "cfpb-saving-post-secondary-education",
+        "stem": "Which action can help savings grow even faster over time?"
+      }
+    ],
+    "schemaVersion": "quiz-cards-v1",
+    "title": "How Early Saving Helps Pay for School"
+  },
+  "report": {
+    "artifactId": "job-20261029125436-8cda3639:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a187ba-d072-730d-8fe4-21607593abea",
+    "usage": {
+      "promptTokens": 4159,
+      "completionTokens": 7165,
+      "reasoningTokens": 6703,
+      "cachedTokens": 0
+    },
+    "latencyMs": 22382,
+    "estCostUSD": 0.03565,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "pruned": true,
+  "dropped": [
+    {
+      "index": 3,
+      "id": "principal-example-amount",
+      "reason": "card failed Q-06",
+      "checks": [
+        "Q-06"
+      ]
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029125436-8cda3639:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "How Early Saving Helps Pay for School",
+    "sources": [
+      {
+        "id": "cfpb-saving-post-secondary-education",
+        "title": "Saving for post-secondary education (teacher guide) — Consumer Financial Protection Bureau, Building Blocks activities",
+        "locator": "https://files.consumerfinance.gov/f/documents/cfpb_building_block_activities_saving-post-secondary-education_guide.pdf",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Consumer Financial Protection Bureau, Building Blocks activities, 'Saving for post-secondary education (teacher guide)'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+        "sha256": "243a4b56c86936ecc243da4c7fc982bc76b85ee12116c97e4f751cfb8ba6c926"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a187ba-d072-730d-8fe4-21607593abea",
+      "runId": "job-20261029125436-8cda3639",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T12:55:29.799Z"
+    },
+    "seed": 3202663649,
+    "cards": [
+      {
+        "hint": "Think about earning on past earnings too.",
+        "id": "compound-interest-meaning",
+        "options": [
+          "interest on both the money you save and the interest you earn",
+          "fees charged only when money is withdrawn",
+          "money added only from monthly deposits"
+        ],
+        "quote": "Compound interest: When you earn interest on both the money you save and the interest you earn.",
+        "sourceId": "cfpb-saving-post-secondary-education",
+        "stem": "What does compound interest mean for money in a savings account?"
+      },
+      {
+        "hint": "Think about timing and growth over time.",
+        "id": "start-saving-early",
+        "options": [
+          "The sooner you start saving for post-secondary education",
+          "Waiting longer always earns a higher return",
+          "Delaying saving keeps spending power steady"
+        ],
+        "quote": "The sooner you start saving for post-secondary education, the faster your money can grow from compound interest.",
+        "sourceId": "cfpb-saving-post-secondary-education",
+        "stem": "Why is it helpful to begin setting aside funds at a young age?"
+      },
+      {
+        "hint": "Think about adding to the starting amount.",
+        "id": "grow-savings-faster",
+        "options": [
+          "adding to your principal",
+          "withdrawing earnings every year",
+          "lowering the interest rate earned"
+        ],
+        "quote": "Increasing the compounding frequency or your interest rate or adding to your principal can help your savings grow even faster.",
+        "sourceId": "cfpb-saving-post-secondary-education",
+        "stem": "Which action can help savings grow even faster over time?"
+      }
+    ]
+  }
+}

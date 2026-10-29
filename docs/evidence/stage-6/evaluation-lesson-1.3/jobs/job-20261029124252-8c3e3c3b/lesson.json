@@ -1,0 +1,125 @@
+{
+  "jobId": "job-20261029124252-8c3e3c3b",
+  "analysisRef": "job-20261029124252-8c3e3c3b/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029124252-8c3e3c3b:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Constant speed flight and how ground speed sets aircraft range",
+    "sources": [
+      {
+        "id": "nasa-grc-range-constant-velocity",
+        "title": "Range – Constant Velocity — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/range-constant-velocity/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "f1f4102e23398f882264cb387f0c4115207597b855cadae074925c9e7c1a4127"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a187af-ca57-71e8-a44f-4e95843b735b",
+      "runId": "job-20261029124252-8c3e3c3b",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T12:43:27.328Z"
+    },
+    "seed": 1120406868,
+    "headline": "Constant speed flight and how ground speed sets aircraft range",
+    "keyPoints": [
+      {
+        "id": "balanced-cruise",
+        "point": "Cruising airplane holds constant speed and level flight when lift is equal to weight and thrust is equal to drag",
+        "quote": "in which the lift is equal to the weight, and the thrust is equal to the drag.",
+        "sourceId": "nasa-grc-range-constant-velocity"
+      },
+      {
+        "id": "ground-speed-wind",
+        "point": "Ground speed remains constant while wind speed stays constant for cruising aircraft",
+        "quote": "The ground speed remains constant as long as the wind speed is constant.",
+        "sourceId": "nasa-grc-range-constant-velocity"
+      },
+      {
+        "id": "distance-equation",
+        "point": "Distance flown equals ground speed times time aloft for constant ground speed",
+        "quote": "the distance flown is equal to the ground speed times the time aloft.",
+        "sourceId": "nasa-grc-range-constant-velocity"
+      },
+      {
+        "id": "max-time-fuel",
+        "point": "Maximum time aloft is limited by fuel load and sets maximum range with ground speed",
+        "quote": "There is a time limit, or maximum time, that an airplane can stay aloft, which is usually determined by the fuel load.",
+        "sourceId": "nasa-grc-range-constant-velocity"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "upward force that equals weight in steady level flight",
+        "id": "lift-force",
+        "quote": "in which the lift is equal to the weight, and the thrust is equal to the drag.",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "term": "lift"
+      },
+      {
+        "gloss": "forward force that equals drag when speed stays steady",
+        "id": "thrust-force",
+        "quote": "in which the lift is equal to the weight, and the thrust is equal to the drag.",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "term": "thrust"
+      },
+      {
+        "gloss": "steady speed over ground while wind speed remains constant",
+        "id": "ground-speed",
+        "quote": "The ground speed remains constant as long as the wind speed is constant.",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "term": "ground speed"
+      },
+      {
+        "gloss": "distance called range, with combat radius as half portion",
+        "id": "range-distance",
+        "quote": "The combat radius would be half of the range as specified here.",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "term": "range"
+      },
+      {
+        "gloss": "amount of fuel carried that determines maximum time aloft",
+        "id": "fuel-load",
+        "quote": "There is a time limit, or maximum time, that an airplane can stay aloft, which is usually determined by the fuel load.",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "term": "fuel load"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029124252-8c3e3c3b:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "formula-explorer-v1",
+      "specId": "job-20261029124252-8c3e3c3b:formula-explorer-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261029124252-8c3e3c3b:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

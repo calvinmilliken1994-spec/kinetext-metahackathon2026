@@ -1,0 +1,125 @@
+{
+  "jobId": "job-20261029124624-f21a1b0d",
+  "analysisRef": "job-20261029124624-f21a1b0d/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029124624-f21a1b0d:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Wright brothers tested early lift formula to size wings",
+    "sources": [
+      {
+        "id": "nasa-grc-lift-equation-of-the-1900s",
+        "title": "Lift Equation of the 1900's — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/lift-equation-of-the-1900s/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "41fb1b6349509be9b9478942fed514cd8d077b15436694132ecbfb588c477402"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a187b3-1c38-70df-ba31-608e99017797",
+      "runId": "job-20261029124624-f21a1b0d",
+      "promptVersion": "s6-v1",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T12:47:04.857Z"
+    },
+    "seed": 3320907511,
+    "headline": "Wright brothers tested early lift formula to size wings",
+    "keyPoints": [
+      {
+        "id": "lift-weight-need",
+        "point": "Designers needed enough aerodynamic lift to overcome aircraft weight",
+        "quote": "They knew that they needed to generate enough aerodynamic lift to overcome the weight of their aircraft.",
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s"
+      },
+      {
+        "id": "velocity-area-rule",
+        "point": "Lift grows with square of velocity and linearly with surface area",
+        "quote": "lift depends on the square of the velocity and varies linearly with the surface area of the object.",
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s"
+      },
+      {
+        "id": "historic-formula",
+        "point": "Historic lift formula multiplies Smeaton coefficient velocity area and lift coefficient",
+        "quote": "where L is the lift, k is the Smeaton coefficient, V is the velocity, A is the wing area, and cl is the lift coefficient.",
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s"
+      },
+      {
+        "id": "smeaton-correction",
+        "point": "Brothers began to doubt Smeaton coefficient value and determined value more closely approximated data",
+        "quote": "the brothers began to doubt the .005 value for the Smeaton coefficient and they determined that a value of .0033 more closely approximated their data.",
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "upward aerodynamic force that must overcome weight to fly",
+        "id": "lift",
+        "quote": "They knew that they needed to generate enough aerodynamic lift to overcome the weight of their aircraft.",
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "term": "lift"
+      },
+      {
+        "gloss": "coefficient representing pressure force on moving flat plate",
+        "id": "smeaton-coefficient",
+        "quote": "k is the Smeaton coefficient",
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "term": "Smeaton coefficient"
+      },
+      {
+        "gloss": "portion of pressure force converted into lift for a shape",
+        "id": "lift-coefficient",
+        "quote": "they represented that portion by a lift coefficient.",
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "term": "lift coefficient"
+      },
+      {
+        "gloss": "angle of body inclination to flow",
+        "id": "angle-of-attack",
+        "quote": "also called the angle of attack.",
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "term": "angle of attack"
+      },
+      {
+        "gloss": "surface area over which air flows to generate lift",
+        "id": "wing-area",
+        "quote": "A is the wing area",
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "term": "wing area"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "formula-explorer-v1",
+      "specId": "job-20261029124624-f21a1b0d:formula-explorer-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261029124624-f21a1b0d:compare-table-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029124624-f21a1b0d:quiz-cards-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    }
+  ]
+}

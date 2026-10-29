@@ -1,0 +1,191 @@
+{
+  "gen": {
+    "cyclic": false,
+    "orderBasis": "page-order",
+    "orderNote": "In page order from pool storage through cask transfer",
+    "schemaVersion": "sequence-v1",
+    "steps": [
+      {
+        "id": "store-in-pools",
+        "label": "spent fuel pools",
+        "orderHint": "first in pools",
+        "quote": "All U.S. nuclear power plants store spent nuclear fuel in \"spent fuel pools.\"",
+        "sourceId": "nrc-backgrounder-radioactive-waste"
+      },
+      {
+        "id": "shield-and-cool",
+        "label": "shield the radiation",
+        "orderHint": "cool and shield in water",
+        "quote": "The water is typically about 40 feet deep and serves both to shield the radiation and cool the rods.",
+        "sourceId": "nrc-backgrounder-radioactive-waste"
+      },
+      {
+        "id": "move-to-dry-cask",
+        "label": "dry cask",
+        "orderHint": "next when pools fill",
+        "quote": "As the pools near capacity, utilities move some of the older spent fuel into “dry cask” storage.",
+        "sourceId": "nrc-backgrounder-radioactive-waste"
+      },
+      {
+        "id": "cooled-before-transfer",
+        "label": "before transfer to cask",
+        "orderHint": "after years of cooling",
+        "quote": "Fuel is typically cooled at least five years in the pool before transfer to cask.",
+        "sourceId": "nrc-backgrounder-radioactive-waste"
+      },
+      {
+        "id": "temporary-until-disposal",
+        "label": "considered temporary",
+        "orderHint": "last toward disposal goal",
+        "quote": "Spent fuel storage at power plant sites is considered temporary, with the ultimate goal being permanent disposal.",
+        "sourceId": "nrc-backgrounder-radioactive-waste"
+      }
+    ],
+    "title": "Spent Fuel Pool to Cask Storage Steps"
+  },
+  "report": {
+    "artifactId": "job-20261029125546-f5021bc5:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step label occurs in its own quote after normalisation (labels-in-quotes)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 5 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a187bc-5917-765a-a6bf-71d8ff230aa2",
+    "usage": {
+      "promptTokens": 4662,
+      "completionTokens": 3831,
+      "reasoningTokens": 3492,
+      "cachedTokens": 0
+    },
+    "latencyMs": 15468,
+    "estCostUSD": 0.02210925,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029125546-f5021bc5:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "Spent Fuel Pool to Cask Storage Steps",
+    "sources": [
+      {
+        "id": "nrc-backgrounder-radioactive-waste",
+        "title": "Backgrounder on Radioactive Waste — U.S. Nuclear Regulatory Commission",
+        "locator": "https://www.nrc.gov/regulations-legislation/fact-sheets-brochures/backgrounder-on-radioactive-waste",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Nuclear Regulatory Commission, 'Backgrounder on Radioactive Waste', Fact Sheets & Brochures. NRC's website constitutes a U.S. Government Work under federal copyright law and is not subject to copyright. The U.S. Nuclear Regulatory Commission has not reviewed, approved or endorsed this activity.",
+        "sha256": "096bd0acfbc24540be6110113c96ed0fa4b892969980ff5bcf1d7834bc1d71b7"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a187bc-5917-765a-a6bf-71d8ff230aa2",
+      "runId": "job-20261029125546-f5021bc5",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T12:57:10.306Z"
+    },
+    "seed": 2152343320,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "In page order from pool storage through cask transfer",
+    "steps": [
+      {
+        "id": "store-in-pools",
+        "label": "spent fuel pools",
+        "orderHint": "first in pools",
+        "quote": "All U.S. nuclear power plants store spent nuclear fuel in \"spent fuel pools.\"",
+        "sourceId": "nrc-backgrounder-radioactive-waste"
+      },
+      {
+        "id": "shield-and-cool",
+        "label": "shield the radiation",
+        "orderHint": "cool and shield in water",
+        "quote": "The water is typically about 40 feet deep and serves both to shield the radiation and cool the rods.",
+        "sourceId": "nrc-backgrounder-radioactive-waste"
+      },
+      {
+        "id": "move-to-dry-cask",
+        "label": "dry cask",
+        "orderHint": "next when pools fill",
+        "quote": "As the pools near capacity, utilities move some of the older spent fuel into “dry cask” storage.",
+        "sourceId": "nrc-backgrounder-radioactive-waste"
+      },
+      {
+        "id": "cooled-before-transfer",
+        "label": "before transfer to cask",
+        "orderHint": "after years of cooling",
+        "quote": "Fuel is typically cooled at least five years in the pool before transfer to cask.",
+        "sourceId": "nrc-backgrounder-radioactive-waste"
+      },
+      {
+        "id": "temporary-until-disposal",
+        "label": "considered temporary",
+        "orderHint": "last toward disposal goal",
+        "quote": "Spent fuel storage at power plant sites is considered temporary, with the ultimate goal being permanent disposal.",
+        "sourceId": "nrc-backgrounder-radioactive-waste"
+      }
+    ]
+  }
+}

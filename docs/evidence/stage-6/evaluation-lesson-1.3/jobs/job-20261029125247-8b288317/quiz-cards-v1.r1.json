@@ -1,0 +1,217 @@
+{
+  "gen": {
+    "cards": [
+      {
+        "hint": "Think about the minimum share for a new savings program.",
+        "id": "savings-percent-direct",
+        "options": [
+          "at least 10 percent of earnings",
+          "about 5 percent of earnings",
+          "six to nine percent of earnings"
+        ],
+        "quote": "help them set up a savings program so that at least 10 percent of earnings goes directly into their savings account.",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "stem": "What share of earnings should go directly to savings after steady work begins"
+      },
+      {
+        "hint": "Recall how many months of costs cover an emergency.",
+        "id": "emergency-three-months",
+        "options": [
+          "at least three months’ worth of living expenses",
+          "at least 10 percent of what you earn",
+          "six to nine months’ worth of living expenses"
+        ],
+        "quote": "have at least three months’ worth of living expenses saved up in case of an emergency.",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "stem": "What emergency cushion is described as a good rule to live by"
+      },
+      {
+        "hint": "Think about the higher range mentioned for extra safety.",
+        "id": "larger-emergency-goal",
+        "options": [
+          "six to nine months’ worth of living expenses",
+          "at least three months’ worth of living expenses",
+          "at least 10 percent of earnings"
+        ],
+        "quote": "it’s better to have more savings—like six to nine months’ worth of living expenses, instead of only three.",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "stem": "If possible, what larger cushion is described as better than only three"
+      },
+      {
+        "hint": "Think about the safe place mentioned for keeping money.",
+        "id": "safe-savings-place",
+        "options": [
+          "a federally insured bank or credit union",
+          "credit cards or loan options that charge a high interest rate",
+          "a retirement account at work called a 401(k)"
+        ],
+        "quote": "Talk about how to keep money in a safe place, like a federally insured bank or credit union.",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "stem": "Where should emergency money be kept for safety"
+      }
+    ],
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Smart Saving for Emergencies"
+  },
+  "report": {
+    "artifactId": "job-20261029125247-8b288317:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a187b9-8bc1-7183-972d-cbd4d1cd8d52",
+    "usage": {
+      "promptTokens": 2824,
+      "completionTokens": 10008,
+      "reasoningTokens": 9524,
+      "cachedTokens": 0
+    },
+    "latencyMs": 34669,
+    "estCostUSD": 0.046064,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029125247-8b288317:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Smart Saving for Emergencies",
+    "sources": [
+      {
+        "id": "cfpb-teenagers-and-saving",
+        "title": "Teenagers and saving — Consumer Financial Protection Bureau, Money as You Grow",
+        "locator": "https://www.consumerfinance.gov/consumer-tools/money-as-you-grow/teen-young-adult/explore-saving/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Consumer Financial Protection Bureau, Money as You Grow, 'Teenagers and saving'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+        "sha256": "a438468abdb47ce3f3afb4ed9e5c4bafa5ebf39e76f40973647383ef8df00b58"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a187b9-8bc1-7183-972d-cbd4d1cd8d52",
+      "runId": "job-20261029125247-8b288317",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T12:54:06.633Z"
+    },
+    "seed": 3009010446,
+    "cards": [
+      {
+        "hint": "Think about the minimum share for a new savings program.",
+        "id": "savings-percent-direct",
+        "options": [
+          "at least 10 percent of earnings",
+          "about 5 percent of earnings",
+          "six to nine percent of earnings"
+        ],
+        "quote": "help them set up a savings program so that at least 10 percent of earnings goes directly into their savings account.",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "stem": "What share of earnings should go directly to savings after steady work begins"
+      },
+      {
+        "hint": "Recall how many months of costs cover an emergency.",
+        "id": "emergency-three-months",
+        "options": [
+          "at least three months’ worth of living expenses",
+          "at least 10 percent of what you earn",
+          "six to nine months’ worth of living expenses"
+        ],
+        "quote": "have at least three months’ worth of living expenses saved up in case of an emergency.",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "stem": "What emergency cushion is described as a good rule to live by"
+      },
+      {
+        "hint": "Think about the higher range mentioned for extra safety.",
+        "id": "larger-emergency-goal",
+        "options": [
+          "six to nine months’ worth of living expenses",
+          "at least three months’ worth of living expenses",
+          "at least 10 percent of earnings"
+        ],
+        "quote": "it’s better to have more savings—like six to nine months’ worth of living expenses, instead of only three.",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "stem": "If possible, what larger cushion is described as better than only three"
+      },
+      {
+        "hint": "Think about the safe place mentioned for keeping money.",
+        "id": "safe-savings-place",
+        "options": [
+          "a federally insured bank or credit union",
+          "credit cards or loan options that charge a high interest rate",
+          "a retirement account at work called a 401(k)"
+        ],
+        "quote": "Talk about how to keep money in a safe place, like a federally insured bank or credit union.",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "stem": "Where should emergency money be kept for safety"
+      }
+    ]
+  }
+}

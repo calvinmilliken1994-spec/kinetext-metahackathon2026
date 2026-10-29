@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "cards": [
+      {
+        "hint": "Think about authority for the national level.",
+        "id": "central-power-debate",
+        "options": [
+          "how much power to allow the central government",
+          "whether to give states control over national laws",
+          "whether to require open sessions for all debates",
+          "whether to keep the Articles unchanged forever"
+        ],
+        "quote": "Among the chief points at issue were how much power to allow the central government",
+        "sourceId": "nara-constitution",
+        "stem": "What was a chief point at issue for delegates during the summer meetings?"
+      },
+      {
+        "hint": "Think about representation for each state.",
+        "id": "congress-representation",
+        "options": [
+          "how many representatives in Congress to allow each state",
+          "whether each state should have its own currency",
+          "whether delegates should meet in closed sessions",
+          "whether states should elect judges directly"
+        ],
+        "quote": "how many representatives in Congress to allow each state",
+        "sourceId": "nara-constitution",
+        "stem": "Which question about representation was among the chief issues?"
+      },
+      {
+        "hint": "Recall the city and hall where they gathered.",
+        "id": "philadelphia-meeting-place",
+        "options": [
+          "State House (Independence Hall) in Philadelphia",
+          "a meeting hall in New York",
+          "a state house in Boston",
+          "a courthouse in Charleston"
+        ],
+        "quote": "convened in the State House (Independence Hall) in Philadelphia on May 14, 1787, to revise the Articles of Confederation",
+        "sourceId": "nara-constitution",
+        "stem": "Where did the Federal Convention meet to begin its work?"
+      },
+      {
+        "hint": "Recall whether the work was done openly or not.",
+        "id": "secret-summer-drafting",
+        "options": [
+          "in secret",
+          "in public sessions",
+          "in open town meetings",
+          "by mail correspondence"
+        ],
+        "quote": "Drafted in secret by delegates to the Constitutional Convention during the summer of 1787",
+        "sourceId": "nara-constitution",
+        "stem": "How was the drafting carried out by delegates that summer?"
+      }
+    ],
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Summer Convention Facts"
+  },
+  "report": {
+    "artifactId": "job-20261029130919-1723a5c3:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a187c8-a16d-750c-96fa-4022632a1f59",
+    "usage": {
+      "promptTokens": 2338,
+      "completionTokens": 11551,
+      "reasoningTokens": 11094,
+      "cachedTokens": 0
+    },
+    "latencyMs": 39013,
+    "estCostUSD": 0.05201425,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029130919-1723a5c3:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Summer Convention Facts",
+    "sources": [
+      {
+        "id": "nara-constitution",
+        "title": "Constitution of the United States (1787) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/constitution",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Constitution of the United States (1787)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "a14175b009333bebd61eaff70e3393928a8f0dbd0ae00027067c07b15d176db4"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a187c8-a16d-750c-96fa-4022632a1f59",
+      "runId": "job-20261029130919-1723a5c3",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T13:10:35.207Z"
+    },
+    "seed": 1553739618,
+    "cards": [
+      {
+        "hint": "Think about authority for the national level.",
+        "id": "central-power-debate",
+        "options": [
+          "how much power to allow the central government",
+          "whether to give states control over national laws",
+          "whether to require open sessions for all debates",
+          "whether to keep the Articles unchanged forever"
+        ],
+        "quote": "Among the chief points at issue were how much power to allow the central government",
+        "sourceId": "nara-constitution",
+        "stem": "What was a chief point at issue for delegates during the summer meetings?"
+      },
+      {
+        "hint": "Think about representation for each state.",
+        "id": "congress-representation",
+        "options": [
+          "how many representatives in Congress to allow each state",
+          "whether each state should have its own currency",
+          "whether delegates should meet in closed sessions",
+          "whether states should elect judges directly"
+        ],
+        "quote": "how many representatives in Congress to allow each state",
+        "sourceId": "nara-constitution",
+        "stem": "Which question about representation was among the chief issues?"
+      },
+      {
+        "hint": "Recall the city and hall where they gathered.",
+        "id": "philadelphia-meeting-place",
+        "options": [
+          "State House (Independence Hall) in Philadelphia",
+          "a meeting hall in New York",
+          "a state house in Boston",
+          "a courthouse in Charleston"
+        ],
+        "quote": "convened in the State House (Independence Hall) in Philadelphia on May 14, 1787, to revise the Articles of Confederation",
+        "sourceId": "nara-constitution",
+        "stem": "Where did the Federal Convention meet to begin its work?"
+      },
+      {
+        "hint": "Recall whether the work was done openly or not.",
+        "id": "secret-summer-drafting",
+        "options": [
+          "in secret",
+          "in public sessions",
+          "in open town meetings",
+          "by mail correspondence"
+        ],
+        "quote": "Drafted in secret by delegates to the Constitutional Convention during the summer of 1787",
+        "sourceId": "nara-constitution",
+        "stem": "How was the drafting carried out by delegates that summer?"
+      }
+    ]
+  }
+}

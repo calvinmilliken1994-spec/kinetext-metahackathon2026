@@ -1,0 +1,197 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "componentPlan": [
+      {
+        "componentId": "quiz-cards-v1",
+        "focusQuote": "Once your teen has a steady job, help them set up a savings program so that at least 10 percent of earnings goes directly into their savings account.",
+        "focusSourceId": "cfpb-teenagers-and-saving",
+        "pedagogicalReason": "Checks core savings facts about percent saved and emergency targets before deeper comparison"
+      },
+      {
+        "componentId": "compare-table-v1",
+        "focusQuote": "If they set aside $100 every year starting at age 14, they'd have about $23,000 at age 65.",
+        "focusSourceId": "cfpb-teenagers-and-saving",
+        "pedagogicalReason": "Contrasts early and late starting ages on shared yearly saving and growth over time"
+      }
+    ],
+    "declineCode": "",
+    "declineSummary": "",
+    "overview": {
+      "headline": "Teen saving habits for emergencies and early compound growth",
+      "keyPoints": [
+        {
+          "id": "savings-program-percent",
+          "point": "Set up a savings program that puts at least 10 percent of earnings directly into savings",
+          "quote": "help them set up a savings program so that at least 10 percent of earnings goes directly into their savings account.",
+          "sourceId": "cfpb-teenagers-and-saving"
+        },
+        {
+          "id": "emergency-fund-target",
+          "point": "Aim to keep at least three months worth of living expenses saved for an emergency",
+          "quote": "have at least three months’ worth of living expenses saved up in case of an emergency.",
+          "sourceId": "cfpb-teenagers-and-saving"
+        },
+        {
+          "id": "compound-interest-growth",
+          "point": "Compound interest means earning interest on both saved money and prior interest earned",
+          "quote": "Compound interest is when your child earns interest on both the money they save and the interest they earn.",
+          "sourceId": "cfpb-teenagers-and-saving"
+        },
+        {
+          "id": "early-saving-benefit",
+          "point": "Starting early lets money set aside every year grow to about a larger amount over time",
+          "quote": "If they set aside $100 every year starting at age 14, they'd have about $23,000 at age 65.",
+          "sourceId": "cfpb-teenagers-and-saving"
+        }
+      ],
+      "keyTerms": [
+        {
+          "gloss": "A plan that moves earnings directly into savings for emergencies",
+          "id": "savings-program",
+          "quote": "help them set up a savings program so that at least 10 percent of earnings goes directly into their savings account.",
+          "sourceId": "cfpb-teenagers-and-saving",
+          "term": "savings program"
+        },
+        {
+          "gloss": "Household living costs used to size emergency savings",
+          "id": "living-expenses",
+          "quote": "have at least three months’ worth of living expenses saved up in case of an emergency.",
+          "sourceId": "cfpb-teenagers-and-saving",
+          "term": "living expenses"
+        },
+        {
+          "gloss": "Interest earned on saved money plus prior interest",
+          "id": "compound-interest",
+          "quote": "Compound interest is when your child earns interest on both the money they save and the interest they earn.",
+          "sourceId": "cfpb-teenagers-and-saving",
+          "term": "compound interest"
+        },
+        {
+          "gloss": "A retirement account at work with possible employer matching",
+          "id": "401k-account",
+          "quote": "they may be offered a retirement account at work called a 401(k).",
+          "sourceId": "cfpb-teenagers-and-saving",
+          "term": "401(k)"
+        },
+        {
+          "gloss": "Employer incentive to encourage saving enough for maximum matching",
+          "id": "matching-contribution",
+          "quote": "so it’s smart to save at least enough for the maximum matching contribution.",
+          "sourceId": "cfpb-teenagers-and-saving",
+          "term": "matching contribution"
+        }
+      ]
+    },
+    "pageCoverage": "Explains teen emergency savings targets and safe accounts plus retirement matching and early compound growth with examples.",
+    "subject": "finance",
+    "usable": true
+  },
+  "report": {
+    "artifactId": "job-20261029125247-8b288317:analysis",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"finance\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 3011 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 11 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 4, keyTerms 5, componentPlan 2; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (2 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "source-analysis-v2: no weakening — every one of the 2 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a187b9-0463-7436-99e7-9dec17196c63",
+    "usage": {
+      "promptTokens": 7150,
+      "completionTokens": 3158,
+      "reasoningTokens": 2418,
+      "cachedTokens": 0
+    },
+    "latencyMs": 11523,
+    "estCostUSD": 0.022359,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  }
+}

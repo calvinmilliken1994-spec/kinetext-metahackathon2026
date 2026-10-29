@@ -1,0 +1,61 @@
+{
+  "jobId": "job-20261029131035-8838d5de",
+  "sourceId": "nara-lee-resolution",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T13:10:35.651Z",
+  "flow": "lesson",
+  "model": "muse-spark-1.3",
+  "provider": "meta-api",
+  "providerModel": "muse-spark-1.3",
+  "totalCostUSD": 0.206871,
+  "reservedUnknownUSD": 0,
+  "engine": "timeline-v1",
+  "revisions": 3,
+  "repairs": [
+    {
+      "revision": 2,
+      "repairOf": 1,
+      "targeted": [
+        "timeline.date-grounded"
+      ],
+      "fixed": [],
+      "remaining": [
+        "timeline.date-grounded"
+      ],
+      "publishable": false,
+      "afterInjectedFault": false
+    },
+    {
+      "revision": 3,
+      "repairOf": 2,
+      "targeted": [
+        "timeline.date-grounded"
+      ],
+      "fixed": [],
+      "remaining": [
+        "timeline.date-grounded"
+      ],
+      "publishable": false,
+      "afterInjectedFault": false
+    }
+  ],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 40432,
+    "startedAt": "2026-10-29T13:10:35.651Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 1,
+    "componentsFailed": 1,
+    "partialPublish": true
+  },
+  "componentRepairs": [],
+  "bestRevision": 1,
+  "checksPassed": 10,
+  "checksTotal": 11,
+  "finishedAt": "2026-10-29T13:12:28.208Z"
+}

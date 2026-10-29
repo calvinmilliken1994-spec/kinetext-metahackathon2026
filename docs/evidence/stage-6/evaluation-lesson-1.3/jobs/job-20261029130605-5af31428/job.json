@@ -1,0 +1,35 @@
+{
+  "jobId": "job-20261029130605-5af31428",
+  "sourceId": "nij-population-genetics",
+  "status": "failed",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T13:06:05.452Z",
+  "flow": "lesson",
+  "model": "muse-spark-1.3",
+  "provider": "meta-api",
+  "providerModel": "muse-spark-1.3",
+  "totalCostUSD": 0.234428,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 40432,
+    "startedAt": "2026-10-29T13:06:05.452Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 3,
+    "componentsPublished": 2,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "error": {
+    "code": "OUTPUT_TRUNCATED",
+    "message": "output truncated"
+  },
+  "finishedAt": "2026-10-29T13:08:19.440Z"
+}

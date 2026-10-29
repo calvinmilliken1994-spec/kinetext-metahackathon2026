@@ -1,0 +1,125 @@
+{
+  "jobId": "job-20261029124147-7cc44bef",
+  "analysisRef": "job-20261029124147-7cc44bef/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029124147-7cc44bef:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Free fall motion under gravity with constant acceleration",
+    "sources": [
+      {
+        "id": "nasa-grc-motion-of-free-falling-object",
+        "title": "Motion of Free Falling Object — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/motion-of-free-falling-object/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "f94199ea21e14dad578baee19694e534fff3dba5dc88f9bc2ea6ec082445c317"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a187ae-c828-7224-aff6-67bd55375b3f",
+      "runId": "job-20261029124147-7cc44bef",
+      "promptVersion": "s6-v1",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T12:42:21.188Z"
+    },
+    "seed": 2129142597,
+    "headline": "Free fall motion under gravity with constant acceleration",
+    "keyPoints": [
+      {
+        "id": "free-fall-gravity-force",
+        "point": "An object in free fall has only one external force from gravity expressed as weight",
+        "quote": "An object that falls through a vacuum is subjected to only one external force, the gravitational force, expressed as the weight of the object.",
+        "sourceId": "nasa-grc-motion-of-free-falling-object"
+      },
+      {
+        "id": "constant-acceleration-gravity",
+        "point": "Free fall acceleration stays constant and equals gravitational acceleration at sea level on Earth",
+        "quote": "The acceleration is constant and equal to the gravitational acceleration g which is 9.8 meters per square second at sea level on the Earth.",
+        "sourceId": "nasa-grc-motion-of-free-falling-object"
+      },
+      {
+        "id": "velocity-distance-patterns",
+        "point": "Velocity grows linearly with time while location grows quadratically under constant acceleration",
+        "quote": "Notice that the acceleration is a constant, the velocity increases linearly, and the location increases quadratically.",
+        "sourceId": "nasa-grc-motion-of-free-falling-object"
+      },
+      {
+        "id": "galileo-mass-independence",
+        "point": "Galileo showed the relationship stayed same regardless of mass of ball used in experiment",
+        "quote": "The relationship was the same regardless of the mass of the ball used in the experiment.",
+        "sourceId": "nasa-grc-motion-of-free-falling-object"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "moving only under gravity action with no other force",
+        "id": "free-falling",
+        "quote": "An object that is moving only because of the action of gravity is said to be free falling",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "term": "free falling"
+      },
+      {
+        "gloss": "constant acceleration from gravity near sea level on Earth",
+        "id": "gravitational-acceleration",
+        "quote": "The acceleration is constant and equal to the gravitational acceleration g which is 9.8 meters per square second at sea level on the Earth.",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "term": "gravitational acceleration"
+      },
+      {
+        "gloss": "velocity gained over time under constant acceleration",
+        "id": "velocity",
+        "quote": "Knowing the acceleration, we can determine the velocity and location of any free falling object at any time using the following equations.",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "term": "velocity"
+      },
+      {
+        "gloss": "displacement from initial location growing with square of time",
+        "id": "displacement",
+        "quote": "where a is the acceleration, V is the velocity, and X is the displacement from an initial location.",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "term": "displacement"
+      },
+      {
+        "gloss": "additional force acting in atmosphere that makes motion complex",
+        "id": "drag-force",
+        "quote": "there is an additional drag force acting on the object",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "term": "drag force"
+      },
+      {
+        "gloss": "different falling speeds limited by air resistance",
+        "id": "terminal-velocities",
+        "quote": "Falling cannon balls are not actually free falling – they are subject to air resistance and would fall at different terminal velocities.",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "term": "terminal velocities"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029124147-7cc44bef:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "formula-explorer-v1",
+      "specId": "job-20261029124147-7cc44bef:formula-explorer-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}
