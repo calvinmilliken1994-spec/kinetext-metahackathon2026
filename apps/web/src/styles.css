@@ -506,6 +506,8 @@ svg text { fill: var(--ink); }
 .scrub-value { font-size: var(--fs-14); font-variant-numeric: tabular-nums; min-width: 96px; text-align: right; }
 
 .controls-row { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+/* four live readouts sit as a tidy 2 x 2 block instead of wrapping one orphan onto a second line */
+.controls-row > .readouts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 20px; }
 .sliders { display: grid; gap: 14px; }
 .slider-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 2px 12px; }
 .slider-head label { flex: 1 1 14ch; min-width: 0; }
@@ -568,7 +570,8 @@ svg text { fill: var(--ink); }
 .outcome-list { display: grid; gap: 6px; list-style: disc; padding-left: 20px; }
 .decline-reason { font-size: var(--fs-16); }
 .decline-summary { display: grid; gap: 6px; }
-.decline-summary blockquote { font-family: var(--serif); font-size: var(--fs-16); line-height: 1.55; color: var(--ink); }
+/* Muse's own words, not a quotation from the page: plain sans, never the serif used for page quotes. */
+.decline-summary blockquote { margin: 0; font-family: var(--font); font-weight: var(--fw-regular); font-size: var(--fs-16); line-height: 1.55; color: var(--ink); }
 .decline-facts { display: grid; gap: 12px; margin: 4px 0; }
 .decline-facts dt { font-size: var(--fs-14); color: var(--ink-2); }
 .decline-facts dd { margin: 2px 0 0; }

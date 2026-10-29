@@ -4,7 +4,7 @@ import type { FormulaExplorerSpec } from '../../../../packages/contracts/kit.ts'
 import { prettyUnit } from '../lib/engines.ts';
 import {
   CALCULATOR_FAILURE, buildExplorer, caseOutputs, casePrompt, curveSamples, defaultInputs, evalAt, graphGeometry, gradeCaseGuess, inputsOfCase, outputName,
-  pageFormulaStatus, sig6, sliderStep, valueTable,
+  niceValueRows, pageFormulaStatus, sig6, sliderStep,
 } from '../lib/explorer.ts';
 import type { Inputs } from '../lib/explorer.ts';
 import type { Grade } from '../lib/predictions.ts';
@@ -42,7 +42,7 @@ export function FormulaExplorerView({ spec, cite }: Props) {
     () => graphGeometry(samples, { x: inputs[spec.xVariable] ?? xVar?.default ?? 0, y: output }),
     [samples, inputs, spec.xVariable, xVar, output],
   );
-  const table = useMemo(() => valueTable(samples, 6), [samples]);
+  const table = useMemo(() => (model.ok ? niceValueRows(model, spec, inputs) : []), [model, spec, inputs]);
   const cases = useMemo(() => (model.ok ? caseOutputs(model, spec) : []), [model, spec]);
 
   const onSlider = useCallback((name: string, value: number) => setInputs((prev) => ({ ...prev, [name]: value })), []);

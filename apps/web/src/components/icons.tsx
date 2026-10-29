@@ -137,6 +137,15 @@ export function IconPlay(p: P) {
   return <Icon size={16} {...p}><path d="M7 5v14l12-7z" /></Icon>;
 }
 
+export function IconReset(p: P) {
+  return (
+    <Icon size={16} {...p}>
+      <path d="M4 12a8 8 0 1 0 2.5-5.8" />
+      <path d="M4 3.5v5h5" />
+    </Icon>
+  );
+}
+
 export function IconPause(p: P) {
   return <Icon size={16} {...p}><path d="M8 5v14M16 5v14" /></Icon>;
 }

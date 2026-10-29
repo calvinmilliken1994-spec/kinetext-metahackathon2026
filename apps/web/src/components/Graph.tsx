@@ -59,7 +59,7 @@ export function Graph({ title, yUnit, color, frames, pick, now, durationS, onScr
         <text x={L} y={B + 15} textAnchor="middle" className="graph-tick">0</text>
         <text x={R + 6} y={B + 15} textAnchor="end" className="graph-tick">{fixed(durationS, 1)} s</text>
         <text x={(L + R) / 2} y={VH - 6} textAnchor="middle" className="graph-axis">t (s)</text>
-        <text x={6} y={T - 5} className="graph-axis">{yUnit}</text>
+        <text x={L} y={T - 6} className="graph-axis">{yUnit}</text>
       </svg>
     </figure>
   );

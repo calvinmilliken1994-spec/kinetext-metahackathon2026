@@ -1,6 +1,6 @@
 import { useId } from 'react';
 import type { ChangeEvent } from 'react';
-import { trimmed } from '../lib/format.ts';
+import { readableNumber, sliderEndLabel } from '../lib/format.ts';
 import { stopIndex } from '../lib/compound.ts';
 import { unitForValue } from '../lib/engines.ts';
 
@@ -19,7 +19,7 @@ export interface SliderProps {
 
 export function Slider({ label, symbol, unit, min, max, step, value, onChange }: SliderProps) {
   const id = useId();
-  const shown = trimmed(value, 3);
+  const shown = readableNumber(value);
   const shownUnit = unitForValue(unit, Number(shown));
   return (
     <div className="slider">
@@ -37,7 +37,7 @@ export function Slider({ label, symbol, unit, min, max, step, value, onChange }:
         aria-valuetext={`${shown} ${shownUnit}`.trim()}
         onChange={(e: ChangeEvent<HTMLInputElement>) => onChange(Number(e.target.value))}
       />
-      <div className="slider-ends" aria-hidden="true"><span>{trimmed(min, 3)} {unit}</span><span>{trimmed(max, 3)} {unit}</span></div>
+      <div className="slider-ends" aria-hidden="true"><span>{sliderEndLabel(min, unit)}</span><span>{sliderEndLabel(max, unit)}</span></div>
     </div>
   );
 }

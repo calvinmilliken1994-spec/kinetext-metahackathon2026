@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import type { FormulaExplorerSpec } from '../../../../packages/contracts/kit.ts';
 import {
   buildExplorer, caseOutputs, casePrompt, curveSamples, defaultInputs, evalAt, graphGeometry, gradeCaseGuess, niceRange, outputName,
-  pageFormulaStatus, sig6, sliderStep, tickValues, valueTable,
+  niceValueRows, pageFormulaStatus, sig6, sliderStep, tickValues, valueTable,
 } from './explorer.ts';
 import { loadDemoLessons } from './stage6-fixtures.ts';
 
@@ -130,6 +130,21 @@ test('the page formula is compared with the expression using the page symbols', 
   assert.equal(pageFormulaStatus({ ...spec, formulaText: 'D = Cd * (rho * V^2 * A) / 2 * Zeta' }), 'unparseable');
 });
 
+test('the page formula comparison uses independently varied points, not only the five fixed fractions', () => {
+  const v = spec.variables.find((x) => x.name === 'v') as FormulaExplorerSpec['variables'][number];
+  const one: FormulaExplorerSpec = {
+    ...spec,
+    variables: [{ ...v, pageSymbol: 'V', min: 0, max: 10, default: 5.5 }],
+    xVariable: 'v',
+    cases: [],
+    formulaText: 'D = V',
+    expression: 'v',
+  };
+  assert.equal(pageFormulaStatus(one), 'matches');
+  // This extra term is zero at 1, 3, 5, 7 and 9 (the old fixed sample points) and nowhere near zero elsewhere.
+  assert.equal(pageFormulaStatus({ ...one, expression: 'v + (v - 1) * (v - 3) * (v - 5) * (v - 7) * (v - 9)' }), 'mismatch');
+});
+
 test('a spec whose expression does not parse does not build, with a plain reason', () => {
   const bad = buildExplorer({ ...spec, expression: 'cd * q' });
   assert.equal(bad.ok, false);
@@ -151,4 +166,20 @@ test('guesses are graded with the teaching margin of 2% of the engine value', ()
   assert.equal(gradeCaseGuess(32, 30).withinTolerance, false);
   assert.equal(gradeCaseGuess(32, 30).direction, 'high');
   assert.equal(gradeCaseGuess(30, 30).tolerance, 0.6);
+});
+
+test('the value table uses round x values between the two ends, each worked out by the calculator', () => {
+  const inputs = defaultInputs(spec);
+  const rows = niceValueRows(m, spec, inputs);
+  const xv = spec.variables.find((v) => v.name === spec.xVariable) as FormulaExplorerSpec['variables'][number];
+  assert.equal(rows[0]?.x, xv.min);
+  assert.equal(rows[rows.length - 1]?.x, xv.max);
+  assert.ok(rows.length >= 2 && rows.length <= 8);
+  const ticks = tickValues(xv.min, xv.max);
+  for (const r of rows.slice(1, -1)) assert.ok(ticks.includes(r.x), `${r.x} is a tick`);
+  for (let i = 1; i < rows.length; i++) assert.ok((rows[i] as { x: number }).x > (rows[i - 1] as { x: number }).x);
+  for (const r of rows) assert.equal(r.y, evalAt(m, { ...inputs, [spec.xVariable]: r.x }));
+  // A range that starts on a tick does not repeat that row.
+  const zero = niceValueRows(m, { ...spec, variables: spec.variables.map((v) => (v.name === spec.xVariable ? { ...v, min: 0, max: 10, default: 5 } : v)) }, { ...inputs, [spec.xVariable]: 5 });
+  assert.deepEqual(zero.map((r) => r.x), [0, 2, 4, 6, 8, 10]);
 });

@@ -1,5 +1,6 @@
 import { useId } from 'react';
 import type { ReactNode } from 'react';
+import { droppedNoteForTeacher } from '../lib/lesson.ts';
 import type { LessonCard } from '../lib/lesson.ts';
 import { AiWritten } from './Disclosure.tsx';
 import { Mark } from './icons.tsx';
@@ -39,7 +40,7 @@ export function KitCard({ card, children }: Props) {
           <StatusText card={card} />
         </p>
       </header>
-      {shown && card.note !== '' && <p className="note small" role="note">{card.note}</p>}
+      {shown && card.note !== '' && <p className="note small" role="note">{droppedNoteForTeacher(card.note)}</p>}
       {shown && children}
       {!shown && (
         <div className="kit-message" role="note">

@@ -7,6 +7,7 @@ import { linearScale, pointString } from './charts.ts';
 import { evaluate, parseFormula } from './formula.ts';
 import type { Ast } from './formula.ts';
 import { gradePrediction, studentTolerance } from './predictions.ts';
+import { compareAtPoints, independentSamplePoints, parseExpression, parsePageFormula } from '../../../../packages/validation/expression.ts';
 import type { Grade } from './predictions.ts';
 
 export const CALCULATOR_FAILURE = 'The formula could not be checked with our calculator.';
@@ -194,6 +195,18 @@ export function valueTable(samples: readonly Sample[], rows = 6): Sample[] {
   return Array.from({ length: rows }, (_, k) => samples[Math.round((k * last) / Math.max(1, rows - 1))] as Sample);
 }
 
+/**
+ * Value-table rows at round x values (the axis ticks) with both ends of the slider range kept, so a teacher reads
+ * "200, 400, 600" rather than "200.8, 400.6, 600.4". Every y is worked out by the calculator, other inputs as set.
+ */
+export function niceValueRows(model: ExplorerModel, spec: FormulaExplorerSpec, inputs: Readonly<Inputs>): Sample[] {
+  const xv = spec.variables.find((v) => v.name === model.xVariable) as FormulaVarGen;
+  const span = xv.max - xv.min;
+  const near = (a: number, b: number): boolean => Math.abs(a - b) <= span * 1e-9;
+  const xs = [xv.min, ...tickValues(xv.min, xv.max).filter((x) => !near(x, xv.min) && !near(x, xv.max)), xv.max];
+  return xs.map((x) => ({ x, y: evaluate(model.ast, { ...inputs, [model.xVariable]: x }) }));
+}
+
 // ---- naming and the page formula --------------------------------------------------------------------------------
 
 /** The page's name for the output: the single word before '=' in the formula text, else 'result'. */
@@ -208,11 +221,14 @@ export const unitSuffix = (unit: string): string => (unit === '' || unit === '1'
 
 export type PageFormulaStatus = 'matches' | 'mismatch' | 'unparseable';
 
-const FRACTIONS = [0.1, 0.3, 0.5, 0.7, 0.9];
+/** The same comparison rule the validator applies (FE-08): relative 1e-9 and at least three finite agreeing points. */
+const PAGE_FORMULA_TOLERANCE = 1e-9;
+const PAGE_FORMULA_MIN_POINTS = 3;
 
 /**
  * Re-read the quoted formula line with the same grammar (page symbols mapped to variable names) and compare it with the
- * stored expression at five points over the slider ranges (relative tolerance 1e-9, at least three finite agreeing points).
+ * stored expression at the validator's independently varied points (`independentSamplePoints` + `compareAtPoints` from
+ * packages/validation/expression.ts: slider defaults, one variable at a time, seeded random points and the stored cases).
  * 'unparseable' means the page line is not a plain formula (words, subscripts, unknown symbols): the view then tells the
  * teacher the formula was entered by AI and should be compared with the quote.
  */
@@ -230,20 +246,16 @@ export function pageFormulaStatus(spec: FormulaExplorerSpec): PageFormulaStatus 
   });
   if (unknown) return 'unparseable';
   const names = spec.variables.map((v) => v.name);
-  const page = parseFormula(mapped, names);
+  const page = parsePageFormula(mapped, { knownVariables: names });
   if (!page.ok) return 'unparseable';
-  const own = parseFormula(spec.expression, names);
+  const own = parseExpression(spec.expression, { knownVariables: names });
   if (!own.ok) return 'mismatch';
-  let agree = 0;
-  for (let k = 0; k < FRACTIONS.length; k++) {
-    const values: Inputs = Object.fromEntries(spec.variables.map((v, j) => [v.name, v.min + (FRACTIONS[(k + j) % FRACTIONS.length] as number) * (v.max - v.min)]));
-    const a = evaluate(page.ast, values);
-    const b = evaluate(own.ast, values);
-    if (!Number.isFinite(a) || !Number.isFinite(b)) continue;
-    if (Math.abs(a - b) > 1e-9 * Math.max(1, Math.abs(a), Math.abs(b))) return 'mismatch';
-    agree++;
-  }
-  return agree >= 3 ? 'matches' : 'mismatch';
+  const points = independentSamplePoints(
+    spec.variables.map((v) => ({ name: v.name, min: v.min, max: v.max, default: v.default })),
+    spec.cases.map(inputsOfCase),
+  );
+  const cmp = compareAtPoints(own.ast, page.ast, points, PAGE_FORMULA_TOLERANCE);
+  return cmp.finite >= PAGE_FORMULA_MIN_POINTS && cmp.agreeing >= PAGE_FORMULA_MIN_POINTS && cmp.mismatches.length === 0 ? 'matches' : 'mismatch';
 }
 
 // ---- predict, then reveal -----------------------------------------------------------------------------------------

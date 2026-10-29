@@ -95,6 +95,16 @@ export function lessonCards(lesson: LessonSpec, specs: Readonly<Record<string, K
   });
 }
 
+/**
+ * The backend's dropped-items note names each item by internal id and check code ("july-2-outcome (Q-06)"). A teacher
+ * gets the sentence only, with "it" for a single item; anything not in that shape is passed through untouched.
+ */
+export function droppedNoteForTeacher(note: string): string {
+  const m = /^(\d+) (.+? (?:was|were)) left out because they could not be verified against the page: .+\.$/.exec(note);
+  if (m === null) return note;
+  return `${m[1]} ${m[2]} left out because ${m[1] === '1' ? 'it' : 'they'} could not be verified against the page.`;
+}
+
 // ---- cards and placeholders in plan order -------------------------------------------------------------------------
 
 /** A planned component that is not ready yet: queued, being built, or being repaired after a failed check. */

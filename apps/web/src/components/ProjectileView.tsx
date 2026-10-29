@@ -6,7 +6,7 @@ import { fixed, trimmed } from '../lib/format.ts';
 import { projectileLayout } from '../lib/geometry.ts';
 import { Readout, SchematicTag, Slider } from './controls.tsx';
 import type { PlaybackCtl } from './usePlayback.ts';
-import { IconPause, IconPlay, IconReplay } from './icons.tsx';
+import { IconPause, IconPlay, IconReplay, IconReset } from './icons.tsx';
 
 export const PROJECTILE_LABEL = 'Schematic — drag-free model';
 
@@ -104,7 +104,7 @@ export function ProjectileView({ spec, inputs, onInput, pb }: ClosedFormViewProp
         <button type="button" className="btn btn-primary" onClick={pb.playing ? pb.pause : pb.play}>
           {pb.playing ? <><IconPause /> Pause</> : finished ? <><IconReplay /> Replay</> : <><IconPlay /> Play</>}
         </button>
-        <button type="button" className="btn" onClick={pb.reset}>⟲ Reset</button>
+        <button type="button" className="btn" onClick={pb.reset}><IconReset /> Reset</button>
         <div className="scrub">
           <label htmlFor={scrubId}>Time</label>
           <input

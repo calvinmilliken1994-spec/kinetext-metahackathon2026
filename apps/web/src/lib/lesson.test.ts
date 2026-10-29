@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { DECLINE_CODES, KIT_GEN_COMPONENT_IDS } from '../../../../packages/contracts/kit.ts';
 import type { KitSpec, LessonSpec } from '../../../../packages/contracts/kit.ts';
 import { isEvidenceKey } from './evidence.ts';
-import { FAILURE_MESSAGES, collectLessonQuotes, componentLabel, declineText, lessonCards, lessonQuoteKey } from './lesson.ts';
+import { FAILURE_MESSAGES, collectLessonQuotes, componentLabel, declineText, droppedNoteForTeacher, lessonCards, lessonQuoteKey } from './lesson.ts';
 import { loadDemoLessons } from './stage6-fixtures.ts';
 
 const lessons = loadDemoLessons();
@@ -120,4 +120,17 @@ test('quotes of every kit view are collected (gallery)', () => {
   assert.equal(bal.length, 1 + 4);
   const specs: KitSpec[] = Object.values(l.specs);
   assert.equal(specs.length, 4);
+});
+
+test('the left-out note keeps the plain sentence and drops internal ids and check codes', () => {
+  assert.equal(
+    droppedNoteForTeacher('1 card was left out because they could not be verified against the page: july-2-outcome (Q-06).'),
+    '1 card was left out because it could not be verified against the page.',
+  );
+  assert.equal(
+    droppedNoteForTeacher('2 steps were left out because they could not be verified against the page: a (SQ-02), b (SQ-04, SQ-05).'),
+    '2 steps were left out because they could not be verified against the page.',
+  );
+  assert.equal(droppedNoteForTeacher('1 link was left out because its quote did not support the connection.'), '1 link was left out because its quote did not support the connection.');
+  assert.equal(droppedNoteForTeacher(''), '');
 });
