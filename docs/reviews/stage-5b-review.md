@@ -325,3 +325,123 @@ The independent cumulative ledger cap is still intact; this is the evaluation-ru
 3. Retain immutable-r1 comparison, teacher review, canonical ledger/port, licensed nonprivate sources, supervised loopback-only use and explicit injected-fault labels. Re-run `check`, schema verification and scratch web build after changes. No new approval for external publication or unattended service is given.
 
 No `.env` was read; no install, external network request, live Meta/Modal call, API server launch, implementation/evidence edit, Git write, commit or push was performed. New standalone probes and final build/test outputs were directed to review scratch. **Execution note:** the initial standard suite invocation used Node's inherited Windows temporary directory; this differed from the advertised scratch environment, so the suite was re-run with all three temporary-directory variables explicitly pinned to review scratch. No cleanup outside the allowed scope was attempted. The only repository modification is this appended review section.
+
+## Re-review (round 3) at 50a86d4506b5c500ca5507150be54427f82dab17
+
+**Updated verdict: CHANGES REQUIRED.** Independent reviewer: OpenAI `gpt-6-astra` via `openai-codex`. Reviewed `f3e56d3`, `c340765` and `50a86d4` against the round-2 gate. Prior findings and historical evidence above remain unchanged.
+
+**The original round-2 exploit cases are now rejected. The broader date and repair guarantees still fail on new inputs.** Most importantly, the real worker again publishes a repair that changes a previously passing event date while correcting only another event's label. The new source-span validator and the comparator's retained quote-only grounding disagree; the latter bypasses the former's authoritative baseline result. New era, qualification and century variants also publish incorrect exact dates at r1. These are synthetic-client executions through the actual worker, not speculation about Muse output or external publication.
+
+The evaluation-liability and INTERNAL logging fixes are effective in the exercised operational paths. **Of S5B-01–S5B-16: ten CLOSED, six PARTIALLY CLOSED.** Of the five previously partial items, **S5B-07 and S5B-08 close; S5B-01, S5B-02 and S5B-03 do not.** Four new blocking findings are recorded below; separate hardening observations do not inflate that count.
+
+### Executed verification and evidence
+
+| Gate | Verified result |
+|---|---|
+| `npm run check` | Exit 0; TypeScript passed; **1,066 passed, 0 failed/cancelled/skipped**. `TEMP`, `TMP`, and `TMPDIR` were pinned to this review's scratch directory before execution. Log: `round3-check.log`. |
+| `node scripts/build-schemas.ts --check` | Exit 0; `schemas up to date`. |
+| Scratch-directed web build | `npm --prefix apps/web run build -- --outDir <review-scratch>/round3-web-dist`: exit 0, TypeScript/Vite passed, **78 modules transformed**. Only the expected outside-root output warning. Log: `round3-web-build.log`. |
+| All prior probes | Re-ran all **nine executable probe drivers**: `probes.mjs`, `cost-probes.mjs`, `extra-probes.mjs`, `end-to-end.mjs`, `evidence.mjs`, `round2-adversarial.mjs`, `round2-e2e.mjs`, `round2-worker.mjs`, `round2-eval.mjs`. All exited 0; inspected their newly written JSON results, not just exits. Fresh transcripts are `round3-rerun-*.log`. The evaluation preload is exercised by its driver. |
+| Retained cost/demo/error controls | **20/20** billed-stage persistence cases still match scratch-ledger commitments; **16/16** demo cases across all eight activities still publish r3, with effective injections and labels. Both debug settings now exclude the private payload from stderr and persisted output. Old forged-affected-path and reflected-label probes fail safely. |
+| New date/comparator variants | `round3-adversarial.mjs`: **74 rows**, comprising **65 date/source/title rows and nine comparator rows**. Includes repeated occurrences, Unicode quotes/dashes/NBSP, punctuation boundaries, markup/newlines, a **950,572-character** source, era grammar, new qualifiers, centuries, title headings, and narrowing semantics. |
+| New worker execution | `round3-adversarial.mjs`: **13 real-worker fake-client jobs**, including one new negative control for each of S5B-11/12/13. `round3-repairs.mjs`: **four more jobs**, three legitimate date repairs publishing r2 and the new unauthorized date rewrite publishing r3 after a rejected first repair. Every outcome was read back with `readJob`. |
+| Evaluation journal variants | `round3-eval.mjs`: **19 scenarios / 20 driver executions** including a restart, injected in-process `fetch`, no server/network. Covered CRLF/BOM, 100,000 duplicate intents (**7,100,000 bytes**), a **5,000,012-byte** malformed line, truncation, conflicting entries, manual-resolution forgery, idle-wait reconciliation, and POST failure/restart. |
+| Complete stored-spec enumeration | `round3-all-evidence.mjs` found and processed **35 spec revisions in 30 directories** under all `docs/evidence/`, a superset of `**/jobs` and `stage-5*/live`. **33 revisions have available source documents; all 25 source-backed published revisions pass.** All **seven timeline revisions across six jobs** retain their recorded check verdicts, including the stored injected-fault failure and accepted repair. See the unavailable-source qualification below. |
+
+New durable scratch results: `round3-adversarial-results.json`, `round3-new-worker-results.json`, `round3-repair-results.json`, `round3-eval-results.json`, `round3-all-evidence-results.json`, and `round3-verification-summary.json`. Scripts, logs, generated jobs, fake journals and build output are under the active profile's `cache/scratch/review-5b/`. Original probe result filenames were refreshed by their original scripts. No historical repository evidence was regenerated.
+
+### Per-finding disposition
+
+| Finding | Round-3 status | Evidence and residual boundary |
+|---|---|---|
+| **S5B-01** | **PARTIALLY CLOSED** | Original mixed-component/headcount and quote-edge attacks fail; positive ordinal/month/BCE controls work. Broader year parsing still invents positive years from BCE ranges/prefixes and a year from a century ordinal: **S5B-18/S5B-20**. |
+| **S5B-02** | **PARTIALLY CLOSED** | Original trimmed `around`, `c.` and approximate-title cases fail, including repeated mixed contexts. Punctuation/markup-separated qualifiers and temporal bounds still become exact dates: **S5B-19**. |
+| **S5B-03** | **PARTIALLY CLOSED** | Original reflected-id, own-label date rewrite and renamed-case pair attacks remain rejected on both attempts. New quote/source-unit disagreement unlocks a clean event in the real worker on r2 and r3: **S5B-17**. |
+| **S5B-04** | **CLOSED** | Prior analysis deletion/reordering/append/decline escape and forged-report probes remain rejected; honest id-only, empty-list and multi-policy-field repairs pass. Both recorded natural analysis repairs still pass. The previously disclosed missing-root-property direct-API limitation remains fail-closed, not a new bypass. |
+| **S5B-05** | **CLOSED** | Exhaustive two-fault/eight-activity second-repair matrix still gives 16/16 effective, labelled, successful r3 outcomes; all synthetic receipt charges retained. |
+| **S5B-06** | **CLOSED** | Paid-error/event-write failure still persists USD 0.068125, equal to the ledger; all 20 stage/outcome combinations agree with committed liability. |
+| **S5B-07** | **CLOSED** | Admission remains derived at USD 1.704; the driver now reserves unresolved liabilities, counts settled/out-of-manifest costs and persists pre-submit intent. The old eight driver cases submit nothing at USD 1.8. New recovery/restart controls confirm **S5B-14** closure within the supervised single-driver, trusted-local-record boundary. |
+| **S5B-08** | **CLOSED** | Arbitrary code/name becomes `unknown`; raw exception message/stack does not appear with debug off **or on**. All prior vocabulary and worker probes rerun. |
+| **S5B-09** | **CLOSED** | Additive correction notes remain present and agree with the refreshed 42-job audit and receipt totals. No summary, manifest, adjudication or historical verdict was rewritten. Passing validators still do not establish prose/event-label correctness. |
+| **S5B-10** | **CLOSED** | Exhaustive 120-order probe still reports 108 rejected and zero per-card/violated-pair mismatches; shared-precision ties are retained. |
+| **S5B-11** | **CLOSED** | Original day-token/era truncation and cross-newline fabrication fail in full validation and worker replay. New repeated-era/day-cut, LF/CRLF and NBSP variants behave correctly; complete-expression and long-source controls pass. Remaining grammar holes are **S5B-18/S5B-20**; the comparator integration disagreement is **S5B-17**, not a failure to locate raw spans. A punctuation false-negative is recorded separately below. |
+| **S5B-12** | **PARTIALLY CLOSED** | `500–400 BCE` now grounds negative endpoints and rejects the positive endpoint, including spaces/em dash; honest correction publishes r2. Short-year and `to`/`until` ranges fall through the range grammar and still produce the wrong sign: **S5B-18**. |
+| **S5B-13** | **PARTIALLY CLOSED** | `c.`, day-first ordinals, `early` titles, `approximately`, `roughly` and `sometime in` now block exact dates. Delimiters between the qualifier and expression defeat attachment; bounds such as `by`/`before` also remain exact: **S5B-19**. |
+| **S5B-14** | **CLOSED** | Old recovery exploits all blocked; CRLF/BOM journals, large duplicate sets and malformed lines retain liability. A running job changing to known cost during idle is re-read before submission. A thrown POST leaves an intent; restart reserves USD 1.704 and makes no second POST. A legitimate recovered USD 1.70 job with sufficient USD 3.50 room permits the next USD 0.20 job. Operator-edited records remain a trust boundary, not authenticated financial evidence. |
+| **S5B-15** | **PARTIALLY CLOSED** | All original contradictory caller findings now fail. Exact check-id/path intersection is implemented, but is not the sole authorization mechanism: `eventMayReground` still ORs it with a quote-only failure, producing the worker bypass in **S5B-17**. Empty/wrong caller scopes also do not consistently narrow genuine date-failure permission. |
+| **S5B-16** | **CLOSED** | Removed debug branch verified by source diff and both debug-mode worker readbacks. Neither `PRIVATE_SOURCE_PAYLOAD` nor raw stack is emitted. |
+
+### New blocking findings
+
+#### S5B-17 — High: quote-only fallback overrides the source-grounded immutable baseline
+
+**Location:** `packages/validation/timeline.ts:1647-1666,1697-1719,1754-1778`; `eventPassedGrounding` still calls `quoteGroundsDate` even with authoritative sources, and `eventMayReground` grants permission when that separate calculation fails.
+
+**Evidence:** `round3-adversarial-results.json`, `comparator-normalized-*`; worker disk readbacks in `round3-new-worker-results.json` and `round3-repair-results.json`:
+
+1. Source title/first heading is `The Harbor Survey (1889)`. Its opening source unit is `The office opened on March 3`, followed by a newline and `1900 was the report serial number.` The quote contains the same text with that newline normalized to a space. Baseline event `s1` is **1889-03-03**: the real source-span check passes under the allowed title-year rule, with no year in the first source unit.
+2. The only r1 failure is another event's label, `s5: "NASA final report"`, producing only `policy.no-publisher-attribution`. No date failure or affected date path exists.
+3. The candidate fixes that label but changes `s1` to **1888-01-01**, with a different valid quote from an additional source sentence. The comparator's quote-only parser sees `March 3 1900` in the old normalized quote and decides the baseline's 1889 date failed. Its fallback therefore unlocks the event despite the exact source revalidation saying it passed.
+4. The actual worker makes three fake calls and publishes **r2** with the unauthorized date change. A second job deliberately leaves an invalid pair in the first repair; it rejects r2 for pair checks, then publishes the date rewrite at **r3**. Immutable-r1 storage alone does not prevent this authorization disagreement.
+
+This is a reachable model-output-to-worker failure, unlike round 2's direct-caller-only S5B-15 probe. The first event's new date is independently grounded; the violation is changing what already passed while repairing an unrelated field.
+
+**Concrete fix:** with sources present, derive every event/pair unlock exclusively from the recomputed r1 check/path map. Remove the quote-only `|| !eventPassedGrounding(...)` authorization on that path; use one canonical per-event result from source-span validation. Without sufficient sources, fail closed on date/evidence mutation rather than assuming a textual failure authorizes it. Either enforce the advertised caller intersection consistently or remove caller narrowing from the API; it cannot be a second authority. Add full worker r2/r3 regressions for this normalized quote and preserve legitimate date repairs.
+
+#### S5B-18 — High: unsupported era/range forms silently degrade into positive standalone years
+
+**Location:** `packages/validation/timeline.ts:168-171,219-254,305-311,367-404`; the range alternative requires 3–4 digit endpoints and only dash/slash separators, while era recognition is suffix-only. Unmatched larger forms fall through to the standalone-year branch rather than failing closed.
+
+**Evidence:** full-validator rows and r1 worker publications:
+
+| Actual source wording | Incorrect accepted claim | Worker evidence |
+|---|---|---|
+| `The office was active during 50–40 BCE.` | **+50**, not −50 | `range-short`: succeeded, published r1 |
+| `The office was active during 500 to 400 BCE.` | **+500**, not −500 | `range-to`: succeeded, published r1 |
+| `The office was active during BCE 500.` | **+500**, not −500 | `BCE-prefix`: succeeded, published r1 |
+| `The office opened on March 3, 1889 **BCE**.` | **+1889-03-03**, not −1889-03-03 | `inline-markup-era`: succeeded, published r1 |
+
+The full validator also accepts the positive left endpoint of `500 until 400 BCE`, positive years after `BC`/`BCE` prefixes, and positive title-year inheritance from `(BCE 1889)`. AD/CE positive-prefix controls and the corrected 3-digit suffixed BCE range work. `500 BC–400 AD` currently fails closed rather than producing the expected positive endpoint; that compatibility limitation is safer than the positive-BCE acceptances.
+
+**Concrete fix:** recognize the complete surrounding era/range syntax before accepting a standalone year. Support prefix/suffix eras, short endpoints and word separators with explicit sign inheritance, **or reject the whole unsupported expression**. Treat inline formatting adjacent to a date/era as part of the same lexical context, with mapped spans, or conservatively reject it; do not parse only the convenient numeric prefix. Share this grammar with title-year extraction. Add wrong-sign and valid-sign controls through both validator and worker.
+
+#### S5B-19 — High: date qualification is lost across delimiters and temporal bounds become exact dates
+
+**Location:** `packages/validation/timeline.ts:178-202,333-342,500-510,599-625,688-716`. Qualifier attachment allows whitespace/hyphen/article combinations but not parentheses, commas, opening quotes or markup; unit segmentation can detach a preceding-line qualifier. Bound/uncertainty words are absent from the date and title policies.
+
+**Evidence:** `round3-adversarial-results.json` and actual worker r1 publications:
+
+- `The office opened circa, March 3, 1889 in the customs house.`; quote `March 3, 1889 in the customs house.` → exact **1889-03-03**, all checks pass, worker publishes r1 (`qualifier-circa%2C`).
+- `The office opened around ( March 3, 1889) in the customs house.`; quote omits `around (` → exact **1889-03-03**, worker publishes r1 (`qualifier-around%20(`).
+- `The office had opened by 1776.` → exact event year **1776**, worker publishes r1 (`by-year`). A latest possible date is not an exact occurrence date.
+- Full validation also accepts `c. (`, `approximately,`, `around “`, `circa **`, `circa` followed by a newline, `before`, `after`, `no later than`, and `probably in` before the claimed date. Titles `(before 1889)` and `(by 1889)` lend an exact 1889. These are broader forms of the same loss of temporal qualification, not proof that all natural-language qualifications can be recognized.
+
+**Concrete fix:** carry qualification/bound information in the source expression representation, not just a narrowly anchored pre-expression regex. Preserve attachment across ordinary delimiters/formatting and explicitly recognize bounds/uncertain dates; reject those as exact claims. For newline/markup ambiguity, fail closed or require a clearly delimited supported date form rather than guessing. Apply the same policy to inherited titles. Retain the positive `about 40 delegates` control and ordinary exact/ordinal/date repairs; all of those pass this review's controls.
+
+#### S5B-20 — High: century ordinals are parsed as literal years
+
+**Location:** `packages/validation/timeline.ts:219,253-254,402-404,471-472`. The standalone year core has digit boundaries only; it accepts the `18` inside `18th` and never classifies the surrounding century expression.
+
+**Evidence:** source/quote `The office was active during the 18th century.` produces a full-validator pass for year **18**. `century-number` runs through the actual worker and publishes **r1**, two fake calls, no failed checks. `the 5th century BCE` similarly passes full validation for **+5**. The negative control claiming 1700 from `the 18th century` fails, so the problem is specifically ordinal-prefix token extraction, not permitted century-to-year conversion.
+
+**Concrete fix:** reject ordinal/word suffixes on standalone year tokens, classify century expressions as non-exact ranges, and never reinterpret their ordinal number as a year. Keep day ordinals valid only in their connected month/day grammar. Test both CE/BCE centuries, quoted fragments within ordinals, and the already passing `the 4th of July 1776` control.
+
+### Legitimate behaviour, recovery limits and non-blocking hardening
+
+- **Real stored timelines are compatible.** Every stored timeline check retains its verdict, including published NARA/Wright-page timelines and the labelled injected case-order repair. Across all available-source spec revisions, the only historical-vs-current check differences are the already disclosed CFPB r2/r3 `repair.no-weakening` flips after BUG-003. These remain successful **replays**, not retroactively successful live repairs. Both real recorded id-only analysis repairs also pass.
+- **Two archived teacher sources are unavailable.** The first all-evidence replay stopped on missing `user-accf5f60ebed`; the revised driver explicitly records missing source IDs and continues, without synthesizing text. `job-20261027181336-572d603f` and `job-20261027181422-546e7594` reference uncommitted teacher sources (the second is `user-0e818e7ef9c1`). Their source-independent checks retain their recorded verdicts; `refs.sources` cannot pass without those documents. The standard evidence tests already disclose the same limitation. Therefore a claim that **all 35 full source-dependent verdicts were verified unchanged** would be false; 33 were source-backed, and two received only partial replay.
+- **Honest repairs remain possible.** Three new worker jobs repair a cut `March 30` quote/date, a +400→−400 BCE endpoint, and an approximate-date event by re-grounding it to a separately stated exact date; each publishes r2. Existing numeric id rename and real analysis-format repairs still pass; changing an unrelated correct numerical case still fails on both repair attempts.
+- **Hardening, non-blocking — punctuation false-negative.** From source `The office opened on March 3, 500 BCE.`, the otherwise complete quote ending at `BCE` without the sentence's period is rejected (`BCE-quote-before-period`); the BCE regex consumes the period into the required expression span. Distinguish sentence punctuation from era spelling in spans. This rejects legitimate evidence rather than accepting a false date. The mixed-era range rejection noted above is likewise fail-closed.
+- **Hardening, non-blocking — first-heading discovery.** With a leading blank line, `titleYearOf` ignores the now-second-line `# ... (around 1889)` and accepts the clean metadata title's year; the `heading-after-blank` worker publishes r1. The current documented rule literally checks the first text line, so this is a policy gap rather than a violation of that narrow implementation contract. Prefer the first nonempty top heading, or reject conflicting title/heading contexts explicitly. No claim is made that arbitrary section headings inherit dates safely.
+- **Hardening, non-blocking — trusted operator journal/results.** A hand-authored `{intentId, resolution:"not-submitted"}` releases an uncertain intent even if placed before it; a matching known job still counts. Negative hand-authored result costs can offset positive costs: −1 plus 1.70 is treated as 0.70 and admits under a USD 2.50 run cap. This is **not** a model/API-reachable cap bypass: the probes edit local financial files as the operator, who can already delete them, and no normal worker path producing negative costs was found. Validate each cost as nonnegative, reject conflicting ID/source pairings, document who may resolve intents, and use an auditable resolution command if records become multi-user/untrusted. Journal BOM/CRLF works; results BOM currently aborts before submission (safe but inconvenient). Large tested journals retained reservations; this is not a proof of arbitrary-size resource bounds.
+- **Hardening, non-blocking — durability/concurrency scope.** `appendFileSync` puts the intent before POST, which the fake transport verified, but no explicit fsync/transaction or multi-driver lock was added. This review covers process failure/restart in one supervised driver, not power-loss persistence or simultaneous independent drivers. Stronger guarantees require durable flushing and serialized admission. No USD 50 cumulative-ledger breach was reproduced.
+
+### Round-3 approval gate and execution boundary
+
+1. Close **S5B-17** by making source-recomputed r1 paths the sole repair authority. Re-run both unauthorized r2/r3 worker variants and legitimate repairs; do not certify non-weakening from comparator unit tests alone.
+2. Close **S5B-18–S5B-20** with a supported grammar that fails closed on unsupported surrounding date syntax. A growing list of positive regex examples without negative fallback tests does not establish exact-date grounding. Re-run all prior/new probes and every available-source stored revision; retain explicit unavailable-source qualifications.
+3. Keep the now-verified evaluation reservations/pre-submit intents and fixed-vocabulary logging. Keep supervised loopback-only operation, canonical ledger/port, licensed nonprivate sources, teacher review, and explicit system-made fault labels. No approval for external publication, unattended/multi-user service or general historical-claim verification is given.
+4. Re-run the 1,066-test check, schema check and scratch web build after fixes; preserve original evidence and scores. The current green suite/build is not an exemption from the reproduced worker failures.
+
+No `.env` read, install, external network request, live Meta/Modal call, real-account ledger access, Git write, implementation edit, evidence rewrite, commit, push or deployment was performed. Only own scratch fake-client jobs/ledgers and loopback test listeners were used; no live product server was launched. The only intentional repository modification is this appended round-3 review. All test commands set `TEMP`/`TMP`/`TMPDIR` to review scratch. HEAD was rechecked as `50a86d4506b5c500ca5507150be54427f82dab17` before writing.
+
