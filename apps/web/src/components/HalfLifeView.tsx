@@ -1,6 +1,6 @@
 import { useId, useMemo } from 'react';
 import type { HalfLifeActivitySpec } from '../../../../packages/contracts/index.ts';
-import { engineOutput, rangeMaxima, scenarioLabels, shortInputLabel, sliderModels } from '../lib/engines.ts';
+import { engineOutput, formatWithUnit, rangeMaxima, scenarioLabels, shortInputLabel, sliderModels } from '../lib/engines.ts';
 import { fixed, trimmed } from '../lib/format.ts';
 import { linearScale, niceAxis, pointString } from '../lib/charts.ts';
 import { decayPoints, formatAmount, fractionLabel, halfLifeMarkers, halfLivesElapsed, markerLabelStride } from '../lib/decay.ts';
@@ -48,7 +48,7 @@ export function HalfLifeView({ spec, inputs, onInput }: Props) {
   const lives = halfLivesElapsed(t, halfLife);
   const label = `${sc.objectLabel}${sc.placeLabel !== '' ? ` · ${sc.placeLabel}` : ''}`;
   const share = n0 > 0 ? (remaining / n0) * 100 : 0;
-  const alt = `${label}. Decay curve: ${formatAmount(n0)} at the start, halving every ${trimmed(halfLife, 3)} ${timeUnit}. After ${trimmed(t, 3)} ${timeUnit}${lives === null ? '' : `, which is ${trimmed(lives, 3)} half-lives`}, ${formatAmount(remaining)} remains. ${markers.length === 0 ? 'The half-life is longer than the time axis, so no half-life markers are shown.' : `${markers.length} half-life markers: ${markers.slice(0, 4).map((m) => `${m.fractionLabel} left after ${trimmed(m.t, 3)}`).join(', ')}${markers.length > 4 ? ', and so on' : ''}.`}`;
+  const alt = `${label}. Decay curve: ${formatAmount(n0)} at the start, halving every ${formatWithUnit(halfLife, timeUnit, (n) => trimmed(n, 3))}. After ${formatWithUnit(t, timeUnit, (n) => trimmed(n, 3))}${lives === null ? '' : `, which is ${trimmed(lives, 3)} half-lives`}, ${formatAmount(remaining)} remains. ${markers.length === 0 ? 'The half-life is longer than the time axis, so no half-life markers are shown.' : `${markers.length} half-life markers: ${markers.slice(0, 4).map((m) => `${m.fractionLabel} left after ${trimmed(m.t, 3)}`).join(', ')}${markers.length > 4 ? ', and so on' : ''}.`}`;
 
   return (
     <div className="simulation" data-engine="half-life-v1">
@@ -96,8 +96,8 @@ export function HalfLifeView({ spec, inputs, onInput }: Props) {
       </div>
       <p className="muted small chart-note">
         {markers.length > 0
-          ? `Dots mark each half-life (every ${trimmed(halfLife, 3)} ${timeUnit}); the label is the fraction of the starting amount still left.`
-          : `One half-life (${trimmed(halfLife, 3)} ${timeUnit}) is longer than the time axis, so no half-life dots are drawn.`}
+          ? `Dots mark each half-life (every ${formatWithUnit(halfLife, timeUnit, (n) => trimmed(n, 3))}); the label is the fraction of the starting amount still left.`
+          : `One half-life (${formatWithUnit(halfLife, timeUnit, (n) => trimmed(n, 3))}) is longer than the time axis, so no half-life dots are drawn.`}
       </p>
 
       <div className="controls-row">

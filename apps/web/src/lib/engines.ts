@@ -35,6 +35,26 @@ export function prettyUnit(unit: string): string {
   return unit.replace(/\^(\d)/g, (_m, d: string) => sup[d] ?? `^${d}`).replace(/\*/g, '·');
 }
 
+/**
+ * The display unit for a count: the generic 'time units' reads 'time unit' for exactly one
+ * (never '1 time units'), and every other unit word is returned untouched ('m/s', 'N', 'USD',
+ * 'per year', '' …) — those are not pluralised anywhere in the catalogue.
+ */
+export function unitForValue(unit: string, value: number): string {
+  return unit === 'time units' && value === 1 ? 'time unit' : unit;
+}
+
+/**
+ * A value shown with its unit: '1 time unit', '2 time units', '0.5 time units', '5 m/s'.
+ * The number is rendered by `format` (default: the compact readout format); a dimensionless
+ * unit adds no trailing space.
+ */
+export function formatWithUnit(value: number, unit: string, format: (n: number) => string = formatQuantity): string {
+  const shown = format(value);
+  const u = unitForValue(unit, value);
+  return u === '' ? shown : `${shown} ${u}`;
+}
+
 export interface SliderModel {
   key: string;
   label: string;
@@ -149,14 +169,14 @@ export function formatOutputValue(engine: EngineId, n: number): string {
 /** One-line explanation of how the engine got a prediction's answer (shown after "Run it"). */
 export function predictionExplanation(engine: EngineId, c: ActivityCase, actual: number): string {
   const out = outputInfo(engine);
-  const value = `${formatOutputValue(engine, actual)}${out.unit === '' ? '' : ` ${out.unit}`}`;
+  const value = formatWithUnit(actual, out.unit, (n) => formatOutputValue(engine, n));
   if (engine === 'forces-1d-v1') {
     const i = caseInputs(engine, c);
     return `a = F/m = ${trimmed(i['netForceN'] ?? Number.NaN, 4)} / ${trimmed(i['massKg'] ?? Number.NaN, 4)} = ${fixed(actual, 3)} m/s²`;
   }
   const i = caseInputs(engine, c);
   const given = ENGINES[engine].inputs
-    .map((inp) => `${shortInputLabel(inp.label)} = ${trimmed(i[inp.key] ?? Number.NaN, 4)}${prettyUnit(inp.unit) === '' ? '' : ` ${prettyUnit(inp.unit)}`}`)
+    .map((inp) => `${shortInputLabel(inp.label)} = ${formatWithUnit(i[inp.key] ?? Number.NaN, prettyUnit(inp.unit), (n) => trimmed(n, 4))}`)
     .join(', ');
   return `${given} → ${out.label.toLowerCase()} = ${value}`;
 }

@@ -63,6 +63,10 @@ globalThis.fetch = async (url, init) => {
       models: { 'muse-spark-1.3': true, 'muse-spark-open': false },
     });
   }
+  // A pre-existing (previous-run) job that never settles: the driver must report it ONCE.
+  if (u.endsWith('/api/jobs/old-job')) {
+    return Response.json({ summary: { jobId: 'old-job', status: 'running' } });
+  }
   if (method === 'POST' && u.endsWith('/api/jobs')) {
     submits += 1;
     const inflight = submits - settledCount();
@@ -366,4 +370,40 @@ test('BUG-006 results lines: lesson runs record the job componentRepairs and a c
     },
   ]);
   assert.equal(fresh.partialPublish, true);
+});
+
+/* ------------------------------------------------------------------ */
+/* log noise: a run's OWN in-flight jobs are not outstanding liabilities */
+/* ------------------------------------------------------------------ */
+
+test('driver concurrency: own in-flight jobs are never printed as OUTSTANDING LIABILITY; a foreign one is printed exactly once', () => {
+  // Three pages in flight at once (MIN_SUBMITS 3 keeps them all running until the third POST)
+  // plus a pre-existing journaled job ('old-job', still running) from an earlier run. Every
+  // rescan used to print one "OUTSTANDING LIABILITY: job … is still RUNNING" line for each of
+  // the driver's own polls; the run's own jobs must stay silent while the foreign one is
+  // reported once, and the reservations/budget arithmetic must not change.
+  const res = runDriver('no-own-liability-noise', {
+    journal: jobLine('old-job', PAGE0),
+    args: ['--from', '27', '--concurrency', '3', '--max-usd', '20'],
+    env: { FAKE_MIN_SUBMITS: '3', FAKE_SETTLE_POLLS: '2', FAKE_SETTLE_COST: '0.2' },
+  });
+  assert.equal(res.exit, 0, res.output);
+  assert.equal(res.submittedCount, 3, 'all three pages ran');
+  assert.match(res.output, /FAKE_PEAK 3/, 'all three jobs really were in flight together');
+
+  const lines = res.output.split('\n').filter(l => l.includes('OUTSTANDING LIABILITY'));
+  const own = lines.filter(l => /job-\d+\b/.test(l));
+  assert.equal(own.length, 0, `this run's own in-flight jobs were printed as liabilities:\n${own.join('\n')}`);
+  const foreign = lines.filter(l => l.includes('old-job'));
+  assert.equal(foreign.length, 1, `the foreign liability must be printed exactly once, not on every rescan:\n${foreign.join('\n')}`);
+  assert.match(foreign[0]!, /RUNNING/);
+  assert.equal(lines.length, 1, `no other liability lines expected:\n${lines.join('\n')}`);
+
+  // Budget behaviour is unchanged: every page recorded once, spent = 3 × 0.20, and the foreign
+  // job still holds its per-job-admission reservation at the end.
+  assert.equal(res.results.length, 3);
+  assert.deepEqual(res.results.map(r => r.sourceId).sort(), [PAGE27, PAGE28, PAGE29].sort());
+  assert.match(res.output, /Spent \(known settled\) \$0\.60/, 'final spent = 3 × 0.20');
+  assert.match(res.output, /reserved \(outstanding liabilities\) \$1\.704/, 'the foreign job still holds $1.704');
+  assertAccountingWithinMax(res, 20);
 });

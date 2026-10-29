@@ -87,6 +87,7 @@ import {
   recoveredRecord,
 } from './evaluation-budget.ts';
 import type { AssessLiabilitiesResult, EvalFlow, ResultPageFields } from './evaluation-budget.ts';
+import type { Liability } from './evaluation-budget.ts';
 import type { ModelChoice } from '../packages/meta/pricing.ts';
 // BUG-006: the worker's fixed plain-sentence entry reasons, so a results line can map a
 // failed component's reason back to its fixed code without duplicating the wording.
@@ -326,6 +327,47 @@ let reservedUsd = 0;
 const inFlight = new Map<string, Promise<void>>();
 
 /**
+ * Concurrency (part B): liability identities already reported in THIS run, so a genuinely
+ * foreign / previous-run liability is printed once instead of on every rescan.
+ */
+const reportedLiabilityKeys = new Set<string>();
+
+/** The job a liability belongs to, when it names one (so this run's own in-flight polls are recognisable). */
+function liabilityJobId(l: Liability): string | null {
+  switch (l.kind) {
+    case 'job-running':
+    case 'job-unresolved':
+    case 'job-settled-unknown-cost':
+      return l.entry.jobId;
+    case 'result-unknown-cost':
+      return l.jobId;
+    default:
+      return null;
+  }
+}
+
+/**
+ * Identity of one liability for the once-per-run report: a job keeps its identity as it moves
+ * from running to unresolved to settled-unknown-cost, so it is never re-printed under a new kind.
+ */
+function liabilityKey(l: Liability): string {
+  const jobId = liabilityJobId(l);
+  if (jobId !== null) return `job:${jobId}`;
+  switch (l.kind) {
+    case 'malformed-journal-line':
+      return `malformed:${l.line}`;
+    case 'intent-without-job':
+      return `intent:${l.intent.intentId}`;
+    case 'result-unknown-cost':
+      return `result:${l.sourceId}`;
+    default:
+      // Defensive: a job liability always names a job, so this is only reachable for a job
+      // liability whose id is empty.
+      return `job-without-id:${l.entry.jobId}`;
+  }
+}
+
+/**
  * Reconcile EVERY outstanding run liability from scratch: re-read results.jsonl and journal.jsonl,
  * look up every unrecorded journaled job, assess liabilities (conservative reservations for
  * anything unknown), persist `recovered: true` results lines for settled jobs, and print one clear
@@ -385,11 +427,29 @@ async function rescan(): Promise<void> {
         'still COUNTS toward the budget (S5B-14). Resolve manually if it needs a record.',
     );
   }
+  // Concurrency (part B): the run's OWN submitted-and-polling jobs are liabilities for the
+  // budget (they are reserved exactly as before) but they are not NEWS — printing one
+  // "still RUNNING" line per job per rescan buried the real ones. Silence those, and report a
+  // genuinely foreign / previous-run liability once per run rather than on every rescan.
+  let ownInFlight = 0;
+  let foreign = 0;
   for (const l of res.liabilities) {
+    const jobId = liabilityJobId(l);
+    if (jobId !== null && inFlight.has(jobId)) {
+      ownInFlight += 1;
+      continue;
+    }
+    foreign += 1;
+    const key = liabilityKey(l);
+    if (reportedLiabilityKeys.has(key)) continue;
+    reportedLiabilityKeys.add(key);
     console.warn(`OUTSTANDING LIABILITY: ${describeLiability(l)}`);
   }
-  if (res.liabilities.length > 0) {
-    console.log(`liabilities: ${res.liabilities.length} outstanding item(s) hold $${res.reservedUsd.toFixed(3)} in reservations.`);
+  if (foreign > 0) {
+    console.log(
+      `liabilities: ${foreign} outstanding item(s) hold $${res.reservedUsd.toFixed(3)} in reservations` +
+        (ownInFlight > 0 ? ` (plus ${ownInFlight} of this run's own in-flight job(s), also reserved).` : '.'),
+    );
   }
   spentUsd = res.spentUsd;
   reservedUsd = res.reservedUsd;
