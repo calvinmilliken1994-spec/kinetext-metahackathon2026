@@ -7,8 +7,8 @@ import { newestFirst, pickDefaultJob } from './lib/jobs.ts';
 import { generateState, isServerBusy } from './lib/health.ts';
 import { madeWithPhrase, modelToSend, pickModel, readStoredModel, resolveJobModel, writeStoredModel } from './lib/models.ts';
 import type { ModelId } from './lib/models.ts';
-import { analysisCheckName, analysisRepairOverall, buildAnalysisRepairSteps, repairSummaryText } from './lib/analysisRepairs.ts';
-import { buildLessonRepairs, buildLessonStream, lessonAnalysisOverall, lessonAnalysisSteps, lessonCheckSections, lessonRenderMode, lessonRepairSummary } from './lib/lessonJob.ts';
+import { analysisCheckName, analysisRepairOverall, buildAnalysisRepairSteps } from './lib/analysisRepairs.ts';
+import { buildLessonRepairs, buildLessonStream, lessonAnalysisOverall, lessonAnalysisSteps, lessonCheckSections, lessonRenderMode } from './lib/lessonJob.ts';
 import type { FlowId } from './lib/lessonJob.ts';
 import { collectLessonQuotes } from './lib/lesson.ts';
 import { checkName } from './lib/checks.ts';
@@ -16,13 +16,16 @@ import { defaultRevision, overallRepairBadge, revisionInputs, validationHeading 
 import { timelineEventLabels } from './lib/timeline.ts';
 import { demoFaultToSend, disclosureText } from './lib/sources.ts';
 import type { DemoChoice } from './lib/sources.ts';
+import { activityRepairCounts, lessonRepairCounts, repairPhrases } from './lib/provenance.ts';
+import { revealInPanels, scrollPanelToTop } from './lib/scroll.ts';
 import { ApiStatus } from './components/ApiStatus.tsx';
 import { AppWindow } from './components/AppWindow.tsx';
 import { IconRail } from './components/IconRail.tsx';
-import { ModelNote } from './components/ModelNote.tsx';
 import { SourcePanel } from './components/SourcePanel.tsx';
 import type { Flash } from './components/SourcePanel.tsx';
-import { PipelinePanel } from './components/PipelinePanel.tsx';
+import { NewLessonSection, RunsSection, StepsSection } from './components/PipelinePanel.tsx';
+import { RunsDrawer } from './components/RunsDrawer.tsx';
+import type { DrawerMode } from './components/RunsDrawer.tsx';
 import { ActivityPanel } from './components/ActivityPanel.tsx';
 import { JobOutcome } from './components/JobOutcome.tsx';
 import { AnalysisRepairTimeline } from './components/AnalysisRepairTimeline.tsx';
@@ -31,21 +34,18 @@ import { ValidationPanel } from './components/ValidationPanel.tsx';
 import { LessonView } from './components/LessonView.tsx';
 import { ComponentRepairTimeline } from './components/ComponentRepairTimeline.tsx';
 import { LessonChecksPanel } from './components/LessonChecksPanel.tsx';
+import { Provenance } from './components/Provenance.tsx';
 import type { SourceRef } from '../../../packages/contracts/index.ts';
 
 const NO_JOBS: never[] = [];
 
-function prefersReducedMotion(): boolean {
-  return typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-}
-
-/** Scroll an element into view and give its heading focus, after React has shown a panel that may have been hidden. */
+/** After React has shown a panel, scroll the drawer (never the page) to a section and move focus to its heading. */
 function revealAfterRender(find: () => HTMLElement | null): void {
   requestAnimationFrame(() => requestAnimationFrame(() => {
     const el = find();
     if (el === null) return;
-    el.scrollIntoView({ block: 'start', behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
-    const heading = el.querySelector<HTMLElement>('h2, h3');
+    revealInPanels(el, 'start', 8);
+    const heading = el.matches('h2, h3') ? el : el.querySelector<HTMLElement>('h2, h3');
     if (heading !== null) { heading.tabIndex = -1; heading.focus({ preventScroll: true }); }
   }));
 }
@@ -108,27 +108,25 @@ export function App() {
   );
   const located = useMemo(() => new Set(Object.keys(highlights?.ranges ?? {})), [highlights]);
 
-  // Window layout (rail): the source and side panels can be hidden to give the lesson the whole width.
+  // Window layout: the lesson and its source page fill the window; runs, steps and checks open in a drawer from the rail.
   const [showSource, setShowSource] = useState(true);
-  const [showSide, setShowSide] = useState(true);
+  const [drawer, setDrawer] = useState<DrawerMode | null>(null);
   const mainRef = useRef<HTMLElement>(null);
   // A citation highlights its quote in the source text, so it brings the source panel back if it was hidden.
   const onCite = useCallback((key: string) => { setShowSource(true); setFlash((f) => ({ key, n: (f?.n ?? 0) + 1 })); }, []);
-  const onPickSource = useCallback(() => {
-    setShowSource(true);
-    requestAnimationFrame(() => requestAnimationFrame(() => document.getElementById('source-select')?.focus()));
-  }, []);
   const onLesson = useCallback(() => {
     const main = mainRef.current;
     if (main === null) return;
-    main.scrollTo({ top: 0, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+    scrollPanelToTop(main);
     // In the stacked (narrow) layout the workspace scrolls, not the lesson column.
-    main.scrollIntoView({ block: 'start', behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+    revealInPanels(main, 'start', 0);
     main.focus({ preventScroll: true });
   }, []);
+  const openDrawer = useCallback((mode: DrawerMode) => setDrawer(mode), []);
+  const closeDrawer = useCallback(() => setDrawer(null), []);
   const onChecks = useCallback(() => {
-    setShowSide(true);
-    revealAfterRender(() => document.querySelector<HTMLElement>('.side .lesson-checks, .side .validation'));
+    setDrawer('runs');
+    revealAfterRender(() => document.getElementById('drawer-checks'));
   }, []);
 
   const onGenerate = useCallback(() => {
@@ -141,6 +139,8 @@ export function App() {
         setLiveJobIds((prev) => new Set(prev).add(jobId));
         setPickedJob({ jobId, sourceId });
         refreshJobs();
+        // Watch the new run's steps advance.
+        setDrawer('runs');
       },
       (e: unknown) => setGenerateError(describeError(e)),
     ).finally(() => {
@@ -186,12 +186,8 @@ export function App() {
   const analysisOverall = ready?.lessonData !== undefined
     ? lessonAnalysisOverall(analysisSteps)
     : analysisRepairOverall({ analysisRepairs: ready?.summary.analysisRepairs, events: ready?.events });
-  const repairBanner = ready === null || ready.lessonData !== undefined || analysisOverall.state === 'none'
-    ? null
-    : repairSummaryText(ready.summary) ?? 'Analysis repair in progress';
-  // Lesson jobs: component repairs (natural vs system-made), the one-line summary and the quiet checks list.
+  // Lesson jobs: component repairs (natural vs system-made) and the quiet checks list.
   const componentRepairs = useMemo(() => (ready === null ? [] : buildLessonRepairs(ready)), [ready]);
-  const lessonSummary = useMemo(() => (ready === null || ready.lessonData === undefined ? null : lessonRepairSummary(ready)), [ready]);
   const checkSections = useMemo(() => (ready === null || ready.lessonData === undefined ? [] : lessonCheckSections(ready)), [ready]);
   const lessonSources = useMemo((): SourceRef[] => (selectedSource === null ? [] : [{
     id: selectedSource.id, title: selectedSource.title, locator: selectedSource.locator, license: selectedSource.license,
@@ -200,155 +196,179 @@ export function App() {
 
   const hasChecks = ready !== null && (report !== null || analysisReport !== null || (ready.lessonData !== undefined && checkSections.length > 0));
 
+  // The one provenance line under the lesson title: who wrote it (and on which model), the publisher disclosure, that code
+  // checked it, that it needs teacher review, and which repairs happened (natural vs system-made), with a way to the details.
+  const disclosure = disclosureText(selectedSource, jobModel === null ? undefined : madeWithPhrase(jobModel));
+  const repairCounts = ready === null
+    ? null
+    : ready.lessonData !== undefined
+      ? lessonRepairCounts(componentRepairs, analysisOverall.state)
+      : activityRepairCounts({
+        analysis: analysisOverall.state,
+        repaired: repairBadge === null ? null : repairBadge.tone === 'fault' ? 'system' : 'natural',
+        demoFault: ready.summary.demoFault !== undefined,
+      });
+  const provenance = (
+    <Provenance
+      disclosure={disclosure}
+      phrases={repairCounts === null ? [] : repairPhrases(repairCounts)}
+      onDetails={ready === null ? undefined : () => openDrawer('runs')}
+    />
+  );
+
   return (
     <AppWindow title="Make knowledge interactive" titleIsHeading titlebarExtra={<ApiStatus health={health} down={down} />}>
-      <div className="window-body">
+      <div className={`window-body${drawer !== null ? ' drawer-open' : ''}`}>
         <IconRail
           showSource={showSource}
-          showSide={showSide}
-          onPickSource={onPickSource}
+          drawer={drawer}
+          onNewLesson={() => openDrawer('new')}
           onLesson={onLesson}
           onChecks={onChecks}
           hasChecks={hasChecks}
           onToggleSource={() => setShowSource((v) => !v)}
-          onToggleSide={() => setShowSide((v) => !v)}
+          onRuns={() => (drawer === 'runs' ? closeDrawer() : openDrawer('runs'))}
+          busy={generate.busy}
         />
-        <div className={`workspace${showSource ? '' : ' hide-source'}${showSide ? '' : ' hide-side'}`}>
-        <SourcePanel
-          sources={sources}
-          selectedId={selectedSourceId}
-          onSelect={onSelectSource}
-          onReload={reloadSources}
-          onCreated={onSourceCreated}
-          doc={doc}
-          highlights={highlights}
-          quotes={quotes}
-          flash={flash}
-          onCite={onCite}
-        />
-
-        <main className="panel activity-panel" aria-label="Interactive activity" ref={mainRef} tabIndex={-1}>
-          <div className="main-inner">
-          {jobs.state === 'error' && <div className="callout callout-error pad-m" role="alert">{jobs.message}</div>}
-          {selectedJobId === null && jobs.state === 'ready' && (
-            <div className="empty">
-              <h2>No activity yet for this source</h2>
-              <p className="muted">
-                {health !== null && !health.live
-                  ? 'Live generation is off on this server and there are no recorded runs for this source. Pick another source, or start the API with live generation enabled.'
-                  : flow === 'lesson'
-                    ? 'Press “Generate lesson with Muse Spark”. Muse reads the page and shows a quick overview first, then builds a few interactive components from it. Deterministic code checks quotes and numbers quietly in the background. The wording is AI-generated and needs teacher review.'
-                    : 'Press “Generate with Muse Spark”. Muse reads the source, plans an activity, and deterministic code machine-checks its quotes, numbers, ranges, sources and physics. Explanation wording is AI-generated and needs teacher review.'}
-              </p>
-            </div>
-          )}
-          {selectedJobId === null && jobs.state === 'loading' && <p className="muted pad">Loading…</p>}
-          {detail?.state === 'loading' && <p className="muted pad">Loading run…</p>}
-          {detail?.state === 'error' && <div className="callout callout-error pad-m" role="alert">{detail.message}</div>}
-          {jobModel !== null && <ModelNote model={jobModel} />}
-          {ready !== null && repairBanner !== null && (
-            <p className={`callout ${analysisOverall.state === 'failed' ? 'callout-error' : 'callout-natural'} pad-m repair-banner`} role="note" data-testid="repair-summary">
-              <strong>{repairBanner}</strong>
-              {analysisOverall.state === 'failed' ? ' — Muse’s own analysis did not pass.' : ' — Natural repair (Muse’s own mistake), details under “Analysis repair”.'}
-            </p>
-          )}
-          {ready !== null && lessonSummary !== null && (
-            <p className={`callout ${lessonSummary.tone === 'bad' ? 'callout-error' : lessonSummary.tone === 'fault' ? 'callout-fault' : 'callout-natural'} pad-m repair-banner`} role="note" data-testid="repair-summary">
-              <strong>{lessonSummary.text}</strong>
-              {lessonSummary.tone === 'bad'
-                ? ' — the affected part is not shown unless it passed.'
-                : lessonSummary.tone === 'fault'
-                  ? ' — a demonstration fault planted by the system on purpose, not a model error. Details under “Component repairs”.'
-                  : ' — Natural repair (Muse’s own mistake), details under “Analysis repair” and “Component repairs”.'}
-            </p>
-          )}
-          {ready !== null && lessonMode === 'v1' && spec !== undefined && ready.summary.status === 'succeeded' && (
-            <ActivityPanel
-              key={spec.id}
-              spec={spec}
-              cite={{ sourceId: ready.summary.sourceId, located, onCite }}
-              disclosure={disclosureText(selectedSource, jobModel === null ? undefined : madeWithPhrase(jobModel))}
-              repairBadge={repairBadge}
-            />
-          )}
-          {ready !== null && stream !== null && lessonMode === 'lesson' && (
-            <LessonView
-              key={ready.summary.jobId}
-              lesson={stream.lesson}
-              specs={ready.lessonData?.kitSpecs ?? {}}
-              analysis={ready.lessonData?.analysis ?? null}
-              sources={lessonSources}
-              cite={{ sourceId: ready.summary.sourceId, located, onCite }}
-              disclosure={disclosureText(selectedSource, jobModel === null ? undefined : madeWithPhrase(jobModel))}
-              premium={spec ?? null}
-              repairBadge={repairBadge}
-              pending={stream.pending}
-              order={stream.order}
-            />
-          )}
-          {ready !== null && ((lessonMode === 'v1' && (spec === undefined || ready.summary.status !== 'succeeded')) || lessonMode === 'working' || lessonMode === 'outcome') && (
-            <JobOutcome detail={ready} serverBusy={health === null ? null : generate.busy} />
-          )}
-          </div>
-        </main>
-
-        <aside className="side" aria-label="Pipeline and validation">
-          <PipelinePanel
-            sourceTitle={selectedSource?.title ?? null}
-            teacherSource={selectedSource?.kind === 'user'}
-            jobs={jobs}
-            jobsForSource={jobsForSource}
-            generate={generate}
-            serverBusy={health === null ? null : generate.busy}
-            selectedJobId={selectedJobId}
-            onSelectJob={onSelectJob}
-            liveJobIds={liveJobIds}
-            onGenerate={onGenerate}
-            demoChoice={demoChoice}
-            onDemoChoice={setDemoChoice}
-            generateError={generateError}
-            detail={detail}
-            models={models}
-            modelChoice={modelChoice}
-            onModelChoice={onModelChoice}
-            live={health === null ? null : health.live}
-            flow={flow}
-            onFlow={setFlow}
+        <div className={`workspace${showSource ? '' : ' hide-source'}`}>
+          <SourcePanel
+            sources={sources}
+            selectedId={selectedSourceId}
+            onSelect={onSelectSource}
+            onReload={reloadSources}
+            doc={doc}
+            highlights={highlights}
+            quotes={quotes}
+            flash={flash}
+            onCite={onCite}
           />
-          {ready !== null && jobModel !== null && <AnalysisRepairTimeline steps={analysisSteps} overall={analysisOverall} model={jobModel} />}
-          {ready !== null && jobModel !== null && (
-            <RepairTimeline
-              model={jobModel}
-              revisions={revisions}
-              repairs={ready.summary.repairs}
-              demoFault={ready.summary.demoFault}
-              events={ready.events}
-              publishedRevision={ready.summary.publishedRevision}
-              bestRevision={ready.summary.bestRevision}
-              viewing={viewRev}
-              eventLabels={eventLabels}
-              onView={onViewRevision}
-            />
-          )}
-          {ready !== null && jobModel !== null && <ComponentRepairTimeline cards={componentRepairs} model={jobModel} />}
-          {ready !== null && ready.lessonData !== undefined && <LessonChecksPanel sections={checkSections} />}
-          {report !== null && (
-            <ValidationPanel
-              report={report}
-              heading={validationHeading(viewRev, revisions.length, ready?.summary.publishedRevision)}
-              showPublish={spec !== undefined && viewRev === defaultRev}
-            />
-          )}
-          {report === null && analysisReport !== null && (
-            <ValidationPanel
-              report={analysisReport}
-              heading={analysisOverall.state === 'passed' ? 'Source analysis checks (after repair)' : 'Source analysis checks'}
-              showPublish={false}
-              nameOf={(id) => analysisCheckName(id) ?? checkName(id)}
-            />
-          )}
-        </aside>
+
+          <main className="panel activity-panel" aria-label="Lesson" ref={mainRef} tabIndex={-1}>
+            <div className="main-inner">
+              {jobs.state === 'error' && <div className="callout callout-error" role="alert">{jobs.message}</div>}
+              {selectedJobId === null && jobs.state === 'ready' && (
+                <div className="empty">
+                  <h2>No lesson for this page yet</h2>
+                  <p className="muted">
+                    {health !== null && !health.live
+                      ? 'Live generation is off on this server and nothing is stored for this page. Pick another page.'
+                      : 'Muse Spark reads the page, writes a short overview with the page’s own words, then builds a few interactive parts. Code checks every quote and number.'}
+                  </p>
+                  {(health === null || health.live) && (
+                    <button type="button" className="btn btn-primary" onClick={() => openDrawer('new')}>New lesson</button>
+                  )}
+                </div>
+              )}
+              {selectedJobId === null && jobs.state === 'loading' && <p className="muted">Loading…</p>}
+              {detail?.state === 'loading' && <p className="muted">Loading the lesson…</p>}
+              {detail?.state === 'error' && <div className="callout callout-error" role="alert">{detail.message}</div>}
+              {ready !== null && lessonMode === 'v1' && spec !== undefined && ready.summary.status === 'succeeded' && (
+                <ActivityPanel
+                  key={spec.id}
+                  spec={spec}
+                  cite={{ sourceId: ready.summary.sourceId, located, onCite }}
+                  disclosure={disclosure}
+                  repairBadge={repairBadge}
+                  provenance={provenance}
+                />
+              )}
+              {ready !== null && stream !== null && lessonMode === 'lesson' && (
+                <LessonView
+                  key={ready.summary.jobId}
+                  lesson={stream.lesson}
+                  specs={ready.lessonData?.kitSpecs ?? {}}
+                  analysis={ready.lessonData?.analysis ?? null}
+                  sources={lessonSources}
+                  cite={{ sourceId: ready.summary.sourceId, located, onCite }}
+                  disclosure={disclosure}
+                  provenance={provenance}
+                  fallbackTitle={selectedSource?.title ?? 'Lesson'}
+                  premium={spec ?? null}
+                  repairBadge={repairBadge}
+                  pending={stream.pending}
+                  order={stream.order}
+                />
+              )}
+              {ready !== null && ((lessonMode === 'v1' && (spec === undefined || ready.summary.status !== 'succeeded')) || lessonMode === 'working' || lessonMode === 'outcome') && (
+                <JobOutcome detail={ready} serverBusy={health === null ? null : generate.busy} />
+              )}
+            </div>
+          </main>
         </div>
+
+        {drawer !== null && (
+          <RunsDrawer mode={drawer} onMode={setDrawer} onClose={closeDrawer}>
+            {drawer === 'new' && (
+              <NewLessonSection
+                sources={sources}
+                selectedId={selectedSourceId}
+                onSelect={onSelectSource}
+                onCreated={onSourceCreated}
+                teacherSource={selectedSource?.kind === 'user'}
+                generate={generate}
+                onGenerate={onGenerate}
+                demoChoice={demoChoice}
+                onDemoChoice={setDemoChoice}
+                generateError={generateError}
+                models={models}
+                modelChoice={modelChoice}
+                onModelChoice={onModelChoice}
+                live={health === null ? null : health.live}
+                flow={flow}
+                onFlow={setFlow}
+              />
+            )}
+            {drawer === 'runs' && (
+              <>
+                <RunsSection
+                  jobs={jobs}
+                  jobsForSource={jobsForSource}
+                  serverBusy={health === null ? null : generate.busy}
+                  selectedJobId={selectedJobId}
+                  onSelectJob={onSelectJob}
+                  liveJobIds={liveJobIds}
+                  canGenerate={!generate.liveOff}
+                  onNewLesson={() => openDrawer('new')}
+                />
+                <StepsSection detail={detail} />
+                {ready !== null && jobModel !== null && <AnalysisRepairTimeline steps={analysisSteps} overall={analysisOverall} model={jobModel} />}
+                {ready !== null && jobModel !== null && (
+                  <RepairTimeline
+                    model={jobModel}
+                    revisions={revisions}
+                    repairs={ready.summary.repairs}
+                    demoFault={ready.summary.demoFault}
+                    events={ready.events}
+                    publishedRevision={ready.summary.publishedRevision}
+                    bestRevision={ready.summary.bestRevision}
+                    viewing={viewRev}
+                    eventLabels={eventLabels}
+                    onView={onViewRevision}
+                  />
+                )}
+                {ready !== null && jobModel !== null && <ComponentRepairTimeline cards={componentRepairs} model={jobModel} />}
+                <div id="drawer-checks" className="drawer-checks">
+                  {ready !== null && ready.lessonData !== undefined && <LessonChecksPanel sections={checkSections} />}
+                  {report !== null && (
+                    <ValidationPanel
+                      report={report}
+                      heading={validationHeading(viewRev, revisions.length, ready?.summary.publishedRevision)}
+                      showPublish={spec !== undefined && viewRev === defaultRev}
+                    />
+                  )}
+                  {report === null && analysisReport !== null && (
+                    <ValidationPanel
+                      report={analysisReport}
+                      heading={analysisOverall.state === 'passed' ? 'Source analysis checks (after repair)' : 'Source analysis checks'}
+                      showPublish={false}
+                      nameOf={(id) => analysisCheckName(id) ?? checkName(id)}
+                    />
+                  )}
+                </div>
+              </>
+            )}
+          </RunsDrawer>
+        )}
       </div>
     </AppWindow>
   );

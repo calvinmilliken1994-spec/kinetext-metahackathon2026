@@ -379,7 +379,7 @@ test('retired checks are named as retired; unknown ids have no name', () => {
 test('run-list tags and status for lesson jobs', () => {
   const sum = (s: LessonScenario) => detail(s).summary;
   assert.deepEqual(lessonRunTags(sum('complete')).map((t) => t.text), ['Lesson · 3 components']);
-  assert.deepEqual(lessonRunTags(sum('partial')).map((t) => t.text), ['Lesson · 2 components', 'Partly published']);
+  assert.deepEqual(lessonRunTags(sum('partial')).map((t) => t.text), ['Lesson · 2 components', 'Some parts left out']);
   assert.deepEqual(lessonRunTags(sum('building')).map((t) => t.text), ['Lesson · 3 components']);
   assert.deepEqual(lessonRunTags(sum('declined')).map((t) => t.text), ['Lesson']);
   assert.deepEqual(lessonRunTags(normaliseJobDetail(legacyWire()).summary), []);
@@ -387,7 +387,7 @@ test('run-list tags and status for lesson jobs', () => {
   const one = { ...sum('complete'), lesson: { overviewReady: true, componentsPlanned: 1, componentsPublished: 1, componentsFailed: 0, partialPublish: false } };
   assert.deepEqual(lessonRunTags(one).map((t) => t.text), ['Lesson · 1 component']);
   assert.equal(lessonStatusLabel(sum('complete'))?.text, 'Lesson ready');
-  assert.equal(lessonStatusLabel(sum('partial'))?.text, 'Partly published');
+  assert.equal(lessonStatusLabel(sum('partial'))?.text, 'Some parts left out');
   assert.equal(lessonStatusLabel(sum('declined'))?.text, 'Page declined');
   assert.equal(lessonStatusLabel(sum('building')), null);
   assert.equal(lessonStatusLabel(normaliseJobDetail(legacyWire()).summary), null);

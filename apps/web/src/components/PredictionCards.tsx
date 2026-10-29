@@ -9,6 +9,7 @@ import { formatEventDate, gradePair, pairOptions } from '../lib/timeline.ts';
 import type { PairGrade, PairPrediction } from '../lib/timeline.ts';
 import { EventEvidence } from './EventEvidence.tsx';
 import type { CiteProps } from './Explanations.tsx';
+import { Mark } from './icons.tsx';
 
 export type RunPrediction = (prediction: AnyPrediction, index: number, grade: Grade) => void;
 
@@ -49,10 +50,7 @@ function PredictionCard({ engine, prediction: p, index, onRun }: CardProps) {
   return (
     <li className="prediction">
       <form onSubmit={submit} noValidate>
-        <div className="prediction-head">
-          <span className="prediction-num">{index + 1}</span>
-          <p id={`${inputId}-prompt`}>{p.prompt}</p>
-        </div>
+        <p className="prediction-head" id={`${inputId}-prompt`}><span className="case-label">Case {index + 1}</span> {p.prompt}</p>
         <div className="prediction-row">
           <label htmlFor={inputId}>Your prediction: {out.label.toLowerCase()}</label>
           <div className="guess">
@@ -67,13 +65,13 @@ function PredictionCard({ engine, prediction: p, index, onRun }: CardProps) {
             />
             <span className="unit">{out.unit}</span>
           </div>
-          <button type="submit" className="btn btn-primary" disabled={guess === null}>Run it</button>
+          <button type="submit" className="btn btn-primary" disabled={guess === null} aria-describedby={guess === null ? `${inputId}-first` : undefined}>Run it</button>
         </div>
-        <p className="muted small" id={`${inputId}-tol`}>Counts as correct within 2% of the engine's value (or ±{trimmed(p.tolerance, 6)}{unit}, whichever is larger).</p>
+        <p className="muted small" id={`${inputId}-tol`}>{guess === null && <span id={`${inputId}-first`}>Make a prediction first. </span>}Counts as correct within 2% of the engine's value (or ±{trimmed(p.tolerance, 6)}{unit}, whichever is larger).</p>
         {error !== null && <p className="field-error" role="alert">{error}</p>}
         {grade !== null && (
           <div className={`grade ${grade.withinTolerance ? 'grade-ok' : 'grade-miss'}`} role="status">
-            <strong>{grade.withinTolerance ? '✓ Close enough' : `✗ Not close enough — your guess was too ${grade.direction === 'high' ? 'high' : 'low'}`}</strong>
+            <strong><Mark kind={grade.withinTolerance ? 'ok' : 'bad'} />{grade.withinTolerance ? 'Close enough' : `Not close enough — your guess was too ${grade.direction === 'high' ? 'high' : 'low'}`}</strong>
             <span>
               You guessed {trimmed(grade.guess, 4)}{unit} · engine says <b>{predictionExplanation(engine, p, grade.actual)}</b>
               {' '}· off by {formatOutputValue(engine, Math.abs(grade.error))} (allowed ±{trimmed(grade.tolerance, 4)})
@@ -90,7 +88,7 @@ export function PredictionCards({ engine, predictions, onRun }: { engine: Engine
   return (
     <section className="card" aria-labelledby="pred-heading">
       <h3 id="pred-heading">Predict, then run</h3>
-      <p className="muted small">Commit to a number first. “Run it” sets the sliders, plays the model, and checks your guess against the engine.</p>
+      <p className="muted small">Commit to a number first; “Run it” sets the sliders, plays the model and checks your guess.</p>
       <ol className="predictions">
         {predictions.map((p, i) => <PredictionCard key={p.id} engine={engine} prediction={p} index={i} onRun={onRun} />)}
       </ol>
@@ -115,7 +113,7 @@ function TimelinePredictionCard({ prediction: p, index, events, seed, cite }: Ti
   if (options === null) {
     return (
       <li className="prediction">
-        <div className="prediction-head"><span className="prediction-num">{index + 1}</span><p id={promptId}>{p.prompt}</p></div>
+        <p className="prediction-head" id={promptId}><span className="case-label">Question {index + 1}</span> {p.prompt}</p>
         <p className="field-error" role="alert">This question names an event that is not on the timeline, so it cannot be graded.</p>
       </li>
     );
@@ -125,10 +123,7 @@ function TimelinePredictionCard({ prediction: p, index, events, seed, cite }: Ti
 
   return (
     <li className="prediction">
-      <div className="prediction-head">
-        <span className="prediction-num">{index + 1}</span>
-        <p id={promptId}>{p.prompt}</p>
-      </div>
+      <p className="prediction-head" id={promptId}><span className="case-label">Question {index + 1}</span> {p.prompt}</p>
       <div className="pair-options" role="group" aria-labelledby={promptId}>
         {options.map((e) => {
           const picked = grade !== null && grade.pickedId === e.id;
@@ -149,9 +144,9 @@ function TimelinePredictionCard({ prediction: p, index, events, seed, cite }: Ti
       {grade === null && <p className="muted small">Pick the event you think happened first. The dates and quotes from the source appear once you answer.</p>}
       {grade !== null && grade.status === 'graded' && (
         <div className={`grade ${grade.correct ? 'grade-ok' : 'grade-miss'}`} role="status">
-          <strong>{grade.correct ? '✓ Right' : '✗ Not quite'} — “{grade.earlier.label}” came first.</strong>
+          <strong><Mark kind={grade.correct ? 'ok' : 'bad'} />{grade.correct ? 'Right' : 'Not quite'} — “{grade.earlier.label}” came first.</strong>
           <span>
-            {formatEventDate(grade.earlier)} → {formatEventDate(grade.later)}
+            {formatEventDate(grade.earlier)}, then {formatEventDate(grade.later)}
             {!grade.correct && <> · you picked “{(grade.pickedId === grade.later.id ? grade.later : grade.earlier).label}”</>}
           </span>
         </div>
@@ -181,7 +176,7 @@ export function TimelinePredictionCards({ events, predictions, seed, cite }: { e
   return (
     <section className="card" aria-labelledby="pred-heading">
       <h3 id="pred-heading">Predict, then reveal</h3>
-      <p className="muted small">Commit to an answer first. After you choose, the dates and the source’s own words show whether you were right.</p>
+      <p className="muted small">Choose first; the dates and the source’s own words appear after you answer.</p>
       <ol className="predictions">
         {predictions.map((p, i) => <TimelinePredictionCard key={p.id} prediction={p} index={i} events={events} seed={seed} cite={cite} />)}
       </ol>

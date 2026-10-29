@@ -126,7 +126,7 @@ export function buildDemoLessons(raw: DemoRaw): DemoLesson[] {
   const partialOverview = assembleOverviewSpec(raw.analysisUsable, { ...dragOpts('overview-v1'), id: kitSpecId(partialJob, 'overview-v1', 1) });
   const partial: DemoLesson = {
     id: 'partial',
-    tab: 'Partly published',
+    tab: 'Some parts left out',
     note: 'One component passed, one could not be verified against the page (nothing from it is shown), one was skipped.',
     lesson: {
       jobId: partialJob, analysisRef: `jobs/${partialJob}/analysis.json`, overview: partialOverview,

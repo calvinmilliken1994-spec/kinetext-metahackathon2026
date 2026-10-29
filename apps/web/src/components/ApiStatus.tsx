@@ -1,13 +1,10 @@
 import type { Health } from '../api.ts';
 
-/** API connection status, shown in the window's title bar. */
+/** API connection status in the title bar: quiet text, coloured only when something is wrong. */
 export function ApiStatus({ health, down }: { health: Health | null; down: boolean }) {
-  let cls = 'pill pill-wait';
-  let label = 'Connecting to API…';
-  if (down) { cls = 'pill pill-bad'; label = 'API unreachable'; }
-  else if (health !== null) {
-    cls = health.live ? 'pill pill-live' : 'pill pill-off';
-    label = health.live ? 'API online · live generation on' : 'API online · live generation off (recorded runs)';
-  }
-  return <span className={cls} role="status"><span className="dot" aria-hidden="true" />{label}</span>;
+  let tone = 'neutral';
+  let label = 'Connecting…';
+  if (down) { tone = 'bad'; label = 'API unreachable'; }
+  else if (health !== null) label = health.live ? 'Live generation on' : 'Live generation off · stored runs only';
+  return <span className={`api-status tone-${tone}`} role="status">{label}</span>;
 }

@@ -10,7 +10,7 @@ import { ActivityPanel } from './ActivityPanel.tsx';
 import { BalanceView } from './BalanceView.tsx';
 import { CompareView } from './CompareView.tsx';
 import { ConceptMapView } from './ConceptMapView.tsx';
-import { Disclosure } from './Disclosure.tsx';
+import { AiWritten } from './Disclosure.tsx';
 import type { CiteProps } from './Explanations.tsx';
 import { FormulaExplorerView } from './FormulaExplorerView.tsx';
 import { KitCard } from './KitCard.tsx';
@@ -29,8 +29,12 @@ export interface LessonViewProps {
   /** The lesson’s sources, for the decline card’s attribution. */
   sources: readonly SourceRef[];
   cite: CiteProps;
-  /** AI-disclosure wording for this source kind. */
+  /** AI-disclosure wording for this source kind (disclosureText). */
   disclosure: string;
+  /** The one provenance line under the lesson title (who wrote it, checks, teacher review, repairs). */
+  provenance?: ReactNode;
+  /** Title when the lesson has no overview headline yet (the source page title). */
+  fallbackTitle?: string;
   /** The premium activity (simulation or timeline) when the plan includes one; mounted through the existing ActivityPanel. */
   premium?: AnyActivitySpec | null;
   repairBadge?: Badge | null;
@@ -47,7 +51,7 @@ class CardBoundary extends Component<{ children: ReactNode }, { failed: boolean 
   static getDerivedStateFromError(): { failed: boolean } { return { failed: true }; }
   override componentDidCatch(error: Error, info: ErrorInfo): void { console.error('Lesson component error', error.message, info.componentStack); }
   override render(): ReactNode {
-    if (this.state.failed) return <p className="callout callout-error small" role="alert">This component could not be shown. The rest of the lesson is unaffected.</p>;
+    if (this.state.failed) return <p className="callout callout-error small" role="alert">This part could not be shown. The rest of the lesson is unaffected.</p>;
     return this.props.children;
   }
 }
@@ -70,14 +74,13 @@ export function DeclineCard({ analysis, sources, disclosure }: { analysis: Sourc
   const headId = useId();
   return (
     <section className="outcome outcome-declined" aria-labelledby={headId} data-testid="decline-card">
-      <p className="eyebrow">Muse Spark read this page</p>
       <h2 id={headId}>No lesson was built from this page</h2>
       <p className="decline-reason">{declineText(analysis.declineCode)}</p>
       {analysis.declineSummary !== '' && (
-        <blockquote>
-          {analysis.declineSummary}
-          <span className="decline-ai"><Disclosure variant="badge" text={disclosure} /></span>
-        </blockquote>
+        <figure className="decline-summary">
+          <blockquote>{analysis.declineSummary}</blockquote>
+          <figcaption className="small muted"><AiWritten extra="Muse Spark’s reading of the page" /> — {disclosure}</figcaption>
+        </figure>
       )}
       <dl className="decline-facts">
         <div><dt>What the page covers</dt><dd>{analysis.pageCoverage}</dd></div>
@@ -109,10 +112,10 @@ function PremiumCard({ card, premium, cite, disclosure, repairBadge }: { card: L
 }
 
 /**
- * One lesson: the overview first, then the components in plan order as a vertical stack. A declined page shows the decline
- * card instead. A component that did not pass shows only its message, never its content.
+ * One lesson: its title and the provenance line, the overview, then the parts in plan order as a vertical stack. A declined
+ * page shows the decline card instead. A part that did not pass shows only its message, never its content.
  */
-export function LessonView({ lesson, specs, analysis, sources, cite, disclosure, premium = null, repairBadge = null, pending = [], order = [] }: LessonViewProps) {
+export function LessonView({ lesson, specs, analysis, sources, cite, disclosure, provenance = null, fallbackTitle = 'Lesson', premium = null, repairBadge = null, pending = [], order = [] }: LessonViewProps) {
   const declined = analysis !== null && !analysis.usable;
   if (declined) return <div className="lesson" data-testid="lesson"><DeclineCard analysis={analysis} sources={sources} disclosure={disclosure} /></div>;
 
@@ -121,32 +124,32 @@ export function LessonView({ lesson, specs, analysis, sources, cite, disclosure,
   const empty = lesson.overview === null && items.length === 0;
   return (
     <div className="lesson" data-testid="lesson">
-      <Disclosure text={disclosure} />
-      {lesson.overview !== null && <CardBoundary><OverviewView overview={lesson.overview} pageCoverage={analysis?.pageCoverage} cite={cite} disclosure={disclosure} /></CardBoundary>}
+      <header className="lesson-head">
+        <h2 className="lesson-title">{lesson.overview?.headline ?? fallbackTitle}</h2>
+        {provenance}
+      </header>
+      {lesson.overview !== null && <CardBoundary><OverviewView overview={lesson.overview} pageCoverage={analysis?.pageCoverage} cite={cite} /></CardBoundary>}
       {empty && (
         <div className="empty" role="status">
           <h2>This lesson has nothing to show yet</h2>
-          <p className="muted">No overview and no components were stored for this run.</p>
+          <p className="muted">No overview and no parts were stored for this run.</p>
         </div>
       )}
-      {items.map((item, i) => (
+      {items.map((item) => (
         item.kind === 'pending'
-          ? <PendingCard key={`pending:${item.slot.componentId}`} index={i + 1} slot={item.slot} />
+          ? <PendingCard key={`pending:${item.slot.componentId}`} slot={item.slot} />
           : (
             <CardBoundary key={item.card.key}>
               {item.card.premium && item.card.status === 'passed' && premium !== null
                 ? <PremiumCard card={item.card} premium={premium} cite={cite} disclosure={disclosure} repairBadge={repairBadge} />
                 : (
-                  <KitCard index={i + 1} card={item.card} disclosure={disclosure}>
+                  <KitCard card={item.card}>
                     {item.card.spec !== null && <KitBody spec={item.card.spec} cite={cite} />}
                   </KitCard>
                 )}
             </CardBoundary>
           )
       ))}
-      {(lesson.overview !== null || items.length > 0) && (
-        <p className="muted small lesson-foot">Code checks that every quote appears on the page and that numbers are computed correctly. The wording is AI-written and needs teacher review.</p>
-      )}
     </div>
   );
 }

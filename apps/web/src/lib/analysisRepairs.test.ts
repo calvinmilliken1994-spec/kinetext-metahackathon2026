@@ -285,7 +285,7 @@ test('naturalRepairNote: never claims a repair that did not happen', () => {
   assert.match(naturalRepairNote('passed'), /^Natural repair \(Muse’s own mistake\)\./);
   assert.match(naturalRepairNote('passed'), /Muse repaired it/);
   const failed = naturalRepairNote('failed');
-  assert.match(failed, /^Natural failure \(Muse’s own mistake\)\./);
+  assert.match(failed, /^Muse’s own mistake — repair did not pass\./);
   assert.match(failed, /did not fix it/);
   assert.doesNotMatch(failed, /repaired it/);
   assert.match(failed, /system-made demo fault/);

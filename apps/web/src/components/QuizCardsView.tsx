@@ -4,6 +4,7 @@ import { gradeQuizCard, quizCards, quizSummary } from '../lib/quiz.ts';
 import type { QuizGrade } from '../lib/quiz.ts';
 import type { CiteProps } from './Explanations.tsx';
 import { QuoteBlock } from './QuoteBlock.tsx';
+import { Mark } from './icons.tsx';
 
 interface Props { spec: QuizCardsSpec; cite: CiteProps }
 
@@ -29,7 +30,7 @@ export function QuizCardsView({ spec, cite }: Props) {
 
   return (
     <div className="quiz" data-testid="quiz">
-      <p className="muted small">Pick an answer, then lock it in. The page’s own words appear after you lock in, so commit first.</p>
+      <p className="muted small">Pick an answer and lock it in; the page’s own words appear after that.</p>
       <ol className="predictions">
         {cards.map((c, i) => {
           const grade = locked[c.id] ?? null;
@@ -38,13 +39,12 @@ export function QuizCardsView({ spec, cite }: Props) {
             <li key={c.id} className="prediction quiz-card">
               <fieldset className="choice-set" aria-labelledby={legendId}>
                 <legend id={legendId} className="prediction-head">
-                  <span className="prediction-num">{i + 1}</span>
-                  <span className="quiz-stem">{c.stem}</span>
+                  <span className="case-label">Card {i + 1}</span> <span className="quiz-stem">{c.stem}</span>
                 </legend>
                 {c.options.map((o) => {
                   const mine = grade !== null && grade.pickedIndex === o.index;
                   const right = grade !== null && o.index === 0;
-                  const mark = grade === null ? null : right ? (mine ? '✓ Your answer — correct' : '✓ The page’s answer') : mine ? '✗ Your answer' : null;
+                  const mark = grade === null ? null : right ? (mine ? 'Your answer — correct' : 'The page’s answer') : mine ? 'Your answer' : null;
                   return (
                     <label key={o.index} className={`choice${picked[c.id] === o.index ? ' choice-picked' : ''}${right ? ' choice-right' : ''}${mine && !right ? ' choice-wrong' : ''}`}>
                       <input
@@ -55,7 +55,7 @@ export function QuizCardsView({ spec, cite }: Props) {
                         onChange={() => setPicked((prev) => ({ ...prev, [c.id]: o.index }))}
                       />
                       <span className="choice-text">{o.text}</span>
-                      {mark !== null && <span className="choice-mark">{mark}</span>}
+                      {mark !== null && <span className="choice-mark"><Mark kind={right ? 'ok' : 'bad'} />{mark}</span>}
                     </label>
                   );
                 })}
@@ -63,13 +63,14 @@ export function QuizCardsView({ spec, cite }: Props) {
               {grade === null && (
                 <div className="quiz-actions">
                   <button type="button" className="btn btn-primary" disabled={picked[c.id] === undefined} onClick={() => lock(c.id)}>Lock in answer</button>
+                  {picked[c.id] === undefined && <span className="muted small">Pick an answer first</span>}
                   {c.hint !== '' && <button type="button" className="btn" aria-expanded={hints[c.id] === true} onClick={() => setHints((h) => ({ ...h, [c.id]: !h[c.id] }))}>{hints[c.id] === true ? 'Hide hint' : 'Show hint'}</button>}
                 </div>
               )}
               {grade === null && hints[c.id] === true && c.hint !== '' && <p className="small quiz-hint"><strong>Hint:</strong> {c.hint}</p>}
               {grade !== null && (
                 <div className={`grade ${grade.correct ? 'grade-ok' : 'grade-miss'}`} role="status">
-                  <strong>{grade.correct ? '✓ Right' : '✗ Not quite'} — the page says “{grade.correctText}”.</strong>
+                  <strong><Mark kind={grade.correct ? 'ok' : 'bad'} />{grade.correct ? 'Right' : 'Not quite'} — the page says “{grade.correctText}”.</strong>
                   {!grade.correct && <span>You chose “{grade.pickedText}”.</span>}
                 </div>
               )}

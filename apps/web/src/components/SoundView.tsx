@@ -5,6 +5,7 @@ import { fixed, trimmed } from '../lib/format.ts';
 import { ringPx, soundScaleMaxM, wavefronts } from '../lib/geometry.ts';
 import { Readout, SchematicTag, Slider } from './controls.tsx';
 import type { ClosedFormViewProps } from './ProjectileView.tsx';
+import { IconPause, IconPlay } from './icons.tsx';
 
 export const SOUND_LABEL = 'Schematic';
 
@@ -73,7 +74,7 @@ export function SoundView({ spec, inputs, onInput, pb }: ClosedFormViewProps<Sou
 
       <div className="transport" role="group" aria-label="Playback">
         <button type="button" className="btn btn-primary" onClick={pb.playing ? pb.pause : pb.play}>
-          {pb.playing ? '❚❚ Pause' : '▶ Play'}
+          {pb.playing ? <><IconPause /> Pause</> : <><IconPlay /> Play</>}
         </button>
         <button type="button" className="btn" onClick={pb.reset}>⟲ Reset</button>
         <span className="muted small" aria-live="off">Simulated time {fixed(pb.t, 2)} s · one new wavefront every {SOUND_EMIT_EVERY_S} s</span>

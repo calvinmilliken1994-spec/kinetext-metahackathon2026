@@ -26,7 +26,7 @@ export function SequenceView({ spec, cite }: Props) {
     return {
       correct: g.correct,
       summary: sequenceSummary(g, labels, spec),
-      marks: order.map((_, i) => ({ ok: g.positions[i] === true, text: g.positions[i] === true ? '✓ Right place' : '✗ Not the right place' })),
+      marks: order.map((_, i) => ({ ok: g.positions[i] === true, text: g.positions[i] === true ? 'Right place' : 'Not the right place' })),
     };
   };
 

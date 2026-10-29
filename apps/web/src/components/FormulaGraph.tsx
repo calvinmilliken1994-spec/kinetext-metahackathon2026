@@ -15,7 +15,6 @@ export function FormulaGraph({ geometry: g, yName, xName }: Props) {
   const id = useId();
   const { plot, current } = g;
   const nowText = current.defined ? `${yName} = ${sig6(current.y)}` : 'not defined here';
-  const anchorEnd = current.px > (plot.l + plot.r) / 2;
   const summary = current.defined
     ? `${yName} against ${xName}. Now ${xName} is ${sig6(current.x)} and ${yName} is ${sig6(current.y)}. The line covers ${sig6(g.xMin)} to ${sig6(g.xMax)}.`
     : `${yName} against ${xName}. At ${sig6(current.x)} the formula has no value.`;
@@ -42,16 +41,14 @@ export function FormulaGraph({ geometry: g, yName, xName }: Props) {
             <line x1={current.px} y1={plot.b} x2={current.px} y2={current.py} className="graph-cursor" />
             <line x1={plot.l} y1={current.py} x2={current.px} y2={current.py} className="graph-cursor" />
             <circle cx={current.px} cy={current.py} r={6.5} className="explorer-dot" />
-            <text x={current.px + (anchorEnd ? -11 : 11)} y={Math.max(plot.t + 12, current.py - 12)} textAnchor={anchorEnd ? 'end' : 'start'} className="explorer-now">{nowText}</text>
           </>
         ) : (
-          <>
-            <line x1={current.px} y1={plot.t} x2={current.px} y2={plot.b} className="graph-cursor" />
-            <text x={current.px + (anchorEnd ? -8 : 8)} y={plot.t + 14} textAnchor={anchorEnd ? 'end' : 'start'} className="explorer-now">✕ {nowText}</text>
-          </>
+          <line x1={current.px} y1={plot.t} x2={current.px} y2={plot.b} className="graph-cursor" />
         )}
+        {/* The current value sits above the plot, clear of the line and the axes. */}
+        <text x={plot.r} y={plot.t - 6} textAnchor="end" className="explorer-now">Now: {nowText}</text>
         <text x={(plot.l + plot.r) / 2} y={g.height - 6} textAnchor="middle" className="graph-axis">{xName}</text>
-        <text x={12} y={plot.t - 6} className="graph-axis">{yName}</text>
+        <text x={plot.l} y={plot.t - 6} className="graph-axis">{yName}</text>
       </svg>
       {g.hasGap && <figcaption className="muted small">The line stops where the formula has no value for these inputs.</figcaption>}
     </figure>

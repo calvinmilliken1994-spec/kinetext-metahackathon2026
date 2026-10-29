@@ -5,15 +5,16 @@ import type { Badge } from '../lib/repairs.ts';
 import { caseInputs, defaultInputs, formatOutputValue, isEngineSpec, outputInfo, playbackPlan } from '../lib/engines.ts';
 import type { Grade } from '../lib/predictions.ts';
 import { trimmed } from '../lib/format.ts';
+import { revealInPanels } from '../lib/scroll.ts';
 import { isTimelineSpec } from '../lib/timeline.ts';
 import type { AnyActivitySpec } from '../lib/timeline.ts';
-import { Disclosure } from './Disclosure.tsx';
 import { ActivityHeader } from './ActivityHeader.tsx';
 import { TimelineActivity } from './TimelineActivity.tsx';
 import { Simulation } from './Simulation.tsx';
 import { PredictionCards } from './PredictionCards.tsx';
 import { Explanations } from './Explanations.tsx';
 import type { CiteProps } from './Explanations.tsx';
+import { Mark } from './icons.tsx';
 import { useSimulation } from './useSimulation.ts';
 import { usePlayback } from './usePlayback.ts';
 import { ProjectileView } from './ProjectileView.tsx';
@@ -33,6 +34,8 @@ export interface ActivityPanelProps {
   disclosure: string;
   /** 'Repaired by Muse' / 'System-made fault, repaired by Muse' when a later revision was published. */
   repairBadge: Badge | null;
+  /** The lesson's provenance line, when this activity is the whole lesson (classic flow). */
+  provenance?: ReactNode;
 }
 
 /** Props of the numeric-engine activities (everything except a timeline). */
@@ -46,18 +49,17 @@ interface ShellProps extends NumericProps {
   children: ReactNode;
 }
 
-/** Disclosure, header with the chosen activity type, last prediction result, engine view, predictions, explanations. */
-function Shell({ spec, cite, disclosure, repairBadge, engine, last, simRef, onRun, children }: ShellProps) {
+/** Header with the provenance line, last prediction result, engine view, predictions, explanations. */
+function Shell({ spec, cite, repairBadge, provenance, engine, last, simRef, onRun, children }: ShellProps) {
   const out = outputInfo(engine);
   const unit = out.unit === '' ? '' : ` ${out.unit}`;
   return (
     <article className="activity" aria-labelledby="activity-title" data-engine={engine}>
-      <Disclosure text={disclosure} />
-      <ActivityHeader title={spec.title} learningObjectives={spec.learningObjectives} engine={engine} repairBadge={repairBadge} />
+      <ActivityHeader title={spec.title} learningObjectives={spec.learningObjectives} engine={engine} repairBadge={repairBadge} provenance={provenance} />
       <div ref={simRef} className="sim-anchor">
         {last !== null && (
           <div className={`last-result ${last.grade.withinTolerance ? 'grade-ok' : 'grade-miss'}`} role="status">
-            <strong>Prediction {last.index + 1}: {last.grade.withinTolerance ? '✓ close enough' : '✗ not close enough'}</strong>
+            <strong><Mark kind={last.grade.withinTolerance ? 'ok' : 'bad'} />Prediction {last.index + 1}: {last.grade.withinTolerance ? 'close enough' : 'not close enough'}</strong>
             <span>
               you guessed {trimmed(last.grade.guess, 4)}{unit}, the engine gives {formatOutputValue(engine, last.grade.actual)}{unit} (±{trimmed(last.grade.tolerance, 6)} allowed)
             </span>
@@ -72,9 +74,8 @@ function Shell({ spec, cite, disclosure, repairBadge, engine, last, simRef, onRu
 }
 
 function scrollToScene(el: HTMLElement | null): void {
-  // Bring the scene into view so the student watches the motion that answers their prediction.
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  el?.scrollIntoView({ block: 'start', behavior: reduce ? 'auto' : 'smooth' });
+  // Bring the scene into view (inside the lesson column only) so the student watches the motion that answers their prediction.
+  revealInPanels(el, 'start');
 }
 
 function ForcesActivity(props: NumericProps & { spec: ForcesActivitySpec }) {
@@ -136,7 +137,7 @@ function ClosedFormActivity(props: NumericProps & { engine: Exclude<EngineId, 'f
 /** The interactive activity for one validated spec; dispatches on spec.simulation.engine. Mount with key={spec.id}. */
 export function ActivityPanel(props: ActivityPanelProps) {
   const { spec } = props;
-  if (isTimelineSpec(spec)) return <TimelineActivity spec={spec} cite={props.cite} disclosure={props.disclosure} repairBadge={props.repairBadge} />;
+  if (isTimelineSpec(spec)) return <TimelineActivity spec={spec} cite={props.cite} repairBadge={props.repairBadge} provenance={props.provenance} />;
   const numeric = { ...props, spec };
   if (isEngineSpec(spec, 'forces-1d-v1')) return <ForcesActivity {...numeric} spec={spec} />;
   if (isEngineSpec(spec, 'projectile-v1')) return <ClosedFormActivity {...numeric} engine="projectile-v1" />;
@@ -147,9 +148,8 @@ export function ActivityPanel(props: ActivityPanelProps) {
   if (isEngineSpec(spec, 'half-life-v1')) return <ClosedFormActivity {...numeric} engine="half-life-v1" />;
   return (
     <div className="outcome outcome-failed" role="alert">
-      <p className="eyebrow">Unknown activity type</p>
       <h2>This app cannot show this activity</h2>
-      <p className="muted">The spec names an activity engine this version of the workspace does not know, so nothing is rendered.</p>
+      <p className="muted">The spec names an activity type this version of the workspace does not know, so nothing is shown.</p>
     </div>
   );
 }

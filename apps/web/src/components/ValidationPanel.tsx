@@ -1,11 +1,10 @@
 import type { ValidationReport } from '../../../../packages/contracts/index.ts';
 import { checkName, groupChecks, KIND_BLURB, PROSE_CHECK_ID, proseScopeNotice, summarizeReport, validationBlurb } from '../lib/checks.ts';
+import { Mark } from './icons.tsx';
 
 function PassIcon({ id, passed }: { id: string; passed: boolean }) {
-  if (id === PROSE_CHECK_ID) return <span className="check-icon info" role="img" aria-label="scope notice">ⓘ</span>;
-  return passed
-    ? <span className="check-icon ok" role="img" aria-label="passed">✓</span>
-    : <span className="check-icon bad" role="img" aria-label="failed">✗</span>;
+  if (id === PROSE_CHECK_ID) return <Mark kind="info" label="scope notice" />;
+  return <Mark kind={passed ? 'ok' : 'bad'} label={passed ? 'passed' : 'failed'} />;
 }
 
 export interface ValidationPanelProps {
@@ -22,15 +21,15 @@ export function ValidationPanel({ report, heading, showPublish, nameOf = checkNa
   const groups = groupChecks(report);
   const scope = proseScopeNotice(report);
   return (
-    <section className="card validation" aria-labelledby="val-heading">
+    <section className="drawer-section validation" aria-labelledby="val-heading">
       <div className="card-head">
-        <h3 id="val-heading">{heading}</h3>
-        <span className={`badge ${summary.allPassed ? 'badge-ok' : 'badge-bad'}`}>{summary.allPassed ? '✓ ' : '⛔ '}{summary.label}</span>
+        <h3 id="val-heading" className="section-title">{heading}</h3>
+        <span className={`card-status ${summary.allPassed ? 'tone-ok' : 'tone-bad'}`}>{summary.label}</span>
       </div>
       <p className="muted small">{validationBlurb(report)}</p>
-      <div className="callout callout-info scope-notice" role="note" data-testid="scope-notice">
+      <p className="note small" role="note" data-testid="scope-notice">
         <strong>Not machine-verified:</strong> {scope.message}
-      </div>
+      </p>
       {groups.map((g) => (
         <details key={g.kind} className="check-group" open>
           <summary>
@@ -39,25 +38,30 @@ export function ValidationPanel({ report, heading, showPublish, nameOf = checkNa
             <span className={`group-count ${g.failed > 0 ? 'bad' : 'ok'}`}>{g.passed}/{g.checks.length}</span>
           </summary>
           <ul>
-            {g.checks.map((c) => (
-              <li key={c.id}>
-                <details className={`check ${c.passed ? 'check-pass' : 'check-fail'}`} open={!c.passed}>
-                  <summary>
-                    <PassIcon id={c.id} passed={c.passed} />{' '}
-                    {nameOf(c.id) !== null && <><strong className="check-name">{nameOf(c.id)}</strong>{' '}</>}
-                    <code>{c.id}</code>
-                  </summary>
-                  <p>{c.message}{c.path !== undefined && <span className="muted"> · {c.path}</span>}</p>
-                </details>
-              </li>
-            ))}
+            {g.checks.map((c) => {
+              const name = nameOf(c.id);
+              return (
+                <li key={c.id}>
+                  <details className={`check ${c.passed ? 'check-pass' : 'check-fail'}`} open={!c.passed}>
+                    <summary>
+                      <PassIcon id={c.id} passed={c.passed} />
+                      {name !== null ? <strong className="check-name">{name}</strong> : <code>{c.id}</code>}
+                    </summary>
+                    <p>{c.message}</p>
+                    {(name !== null || c.path !== undefined) && (
+                      <p className="tech">{name !== null && <>Check <code>{c.id}</code></>}{c.path !== undefined && <> · <code>{c.path}</code></>}</p>
+                    )}
+                  </details>
+                </li>
+              );
+            })}
           </ul>
         </details>
       ))}
       {showPublish && (
         <div className="publish">
           <button type="button" className="btn" disabled aria-describedby="publish-note">Publish</button>
-          <p id="publish-note" className="muted small">Teacher approval &amp; publishing arrive in Stage 6.</p>
+          <p id="publish-note" className="muted small">Teacher approval and publishing are not built yet.</p>
         </div>
       )}
     </section>

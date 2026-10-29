@@ -1,43 +1,36 @@
 import { useId } from 'react';
 import type { OverviewSpec } from '../../../../packages/contracts/kit.ts';
-import { Disclosure } from './Disclosure.tsx';
+import { AiWritten } from './Disclosure.tsx';
 import type { CiteProps } from './Explanations.tsx';
 import { QuoteBlock } from './QuoteBlock.tsx';
 
 interface Props {
   overview: OverviewSpec;
-  /** What the page covers (from the analysis); shown under the headline when present. */
+  /** What the page covers (from the analysis); shown first when present. */
   pageCoverage?: string;
   cite: CiteProps;
-  disclosure: string;
 }
 
-/** The page overview, shown first: headline, numbered key points each with the page's own words, then key terms with glosses. */
-export function OverviewView({ overview, pageCoverage, cite, disclosure }: Props) {
+/** The page overview, shown first under the lesson title: what the page covers, key points with the page's own words, key terms. */
+export function OverviewView({ overview, pageCoverage, cite }: Props) {
   const headId = useId();
   return (
     <section className="card overview" aria-labelledby={headId} data-testid="overview">
       <header className="kit-head">
-        <div className="kit-title">
-          <p className="eyebrow">Page overview</p>
-          <h2 id={headId}>{overview.headline}</h2>
-        </div>
-        <div className="kit-badges"><Disclosure variant="badge" text={disclosure} /></div>
+        <h2 id={headId}>Page overview</h2>
+        <p className="card-meta"><AiWritten /></p>
       </header>
-      {pageCoverage !== undefined && pageCoverage !== '' && <p className="muted overview-coverage"><strong>What the page covers:</strong> {pageCoverage}</p>}
+      {pageCoverage !== undefined && pageCoverage !== '' && <p className="overview-coverage">{pageCoverage}</p>}
 
       <h3>Key points</h3>
-      <ol className="key-points">
-        {overview.keyPoints.map((p, i) => (
+      <ul className="key-points">
+        {overview.keyPoints.map((p) => (
           <li key={p.id}>
-            <span className="prediction-num" aria-hidden="true">{i + 1}</span>
-            <div className="key-body">
-              <p><span className="sr-only">Key point {i + 1}: </span>{p.point}</p>
-              <QuoteBlock componentId="overview-v1" part="point" id={p.id} sourceId={p.sourceId} quote={p.quote} cite={cite} />
-            </div>
+            <p>{p.point}</p>
+            <QuoteBlock componentId="overview-v1" part="point" id={p.id} sourceId={p.sourceId} quote={p.quote} cite={cite} />
           </li>
         ))}
-      </ol>
+      </ul>
 
       {overview.keyTerms.length > 0 && (
         <>

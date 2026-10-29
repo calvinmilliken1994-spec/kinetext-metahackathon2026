@@ -1,39 +1,37 @@
-import type { JobDetail, JobSummary } from '../api.ts';
+import { useState } from 'react';
+import type { JobDetail, JobSummary, SourceMeta } from '../api.ts';
 import type { Loadable } from '../hooks.ts';
-import { describeJobCost } from '../lib/cost.ts';
-import { engineTitle } from '../lib/engines.ts';
 import type { GenerateState } from '../lib/health.ts';
-import { INTERRUPTED_TEXT, isInterrupted, jobStatusLabel, runBadge } from '../lib/jobs.ts';
-import { analysisRepairTags } from '../lib/analysisRepairs.ts';
-import { buildLessonSteps, lessonRunTags, lessonStatusLabel } from '../lib/lessonJob.ts';
+import { isInterrupted } from '../lib/jobs.ts';
+import { buildLessonSteps } from '../lib/lessonJob.ts';
 import type { FlowId } from '../lib/lessonJob.ts';
-import { runTags } from '../lib/repairs.ts';
-import { modelRunTag, resolveJobModel } from '../lib/models.ts';
+import { resolveJobModel } from '../lib/models.ts';
 import type { ModelId, ModelOption } from '../lib/models.ts';
-import { DEMO_FAULT_HELP, DEMO_FAULT_LABEL, demoFaultOptions, FREE_CREDITS_NOTE } from '../lib/sources.ts';
+import { runLine } from '../lib/runs.ts';
+import { DEMO_FAULT_HELP, DEMO_FAULT_LABEL, demoFaultOptions, FREE_CREDITS_NOTE, sourceOptionLabel, TEACHER_TAG } from '../lib/sources.ts';
 import type { DemoChoice } from '../lib/sources.ts';
-import { ModelPicker } from './ModelPicker.tsx';
+import { IconPlus } from './icons.tsx';
 import { LessonSteps } from './LessonSteps.tsx';
+import { ModelPicker } from './ModelPicker.tsx';
+import { PasteSourceForm } from './PasteSourceForm.tsx';
 import { Timeline } from './Timeline.tsx';
 
-export interface PipelinePanelProps {
-  sourceTitle: string | null;
+// ---- New lesson: page, model, Generate, run options -------------------------------------------------------------
+
+export interface NewLessonSectionProps {
+  sources: Loadable<SourceMeta[]>;
+  selectedId: string | null;
+  onSelect: (id: string) => void;
+  /** A pasted source was stored: reload the list and select it. */
+  onCreated: (sourceId: string) => void;
   /** The selected source is a teacher's pasted text (shows the free-credits notice next to Generate). */
   teacherSource: boolean;
-  jobs: Loadable<JobSummary[]>;
-  jobsForSource: readonly JobSummary[];
   /** Button state derived from /api/health (busy flag), not from job history. */
   generate: GenerateState;
-  /** /api/health busy (incl. a POST in flight); null until health has loaded. */
-  serverBusy: boolean | null;
-  selectedJobId: string | null;
-  onSelectJob: (id: string) => void;
-  liveJobIds: ReadonlySet<string>;
   onGenerate: () => void;
   demoChoice: DemoChoice;
   onDemoChoice: (c: DemoChoice) => void;
   generateError: string | null;
-  detail: Loadable<JobDetail> | null;
   /** GET /api/models; empty (older server) hides the picker. */
   models: readonly ModelOption[];
   modelChoice: ModelId;
@@ -45,119 +43,182 @@ export interface PipelinePanelProps {
   onFlow: (flow: FlowId) => void;
 }
 
-export function PipelinePanel(p: PipelinePanelProps) {
+export function NewLessonSection(p: NewLessonSectionProps) {
   const { generate } = p;
-  const liveOff = generate.liveOff;
-  const disabled = generate.disabled || p.sourceTitle === null;
+  const [pasting, setPasting] = useState(false);
+  const [reuseMsg, setReuseMsg] = useState<string | null>(null);
+  const list = p.sources.state === 'ready' ? p.sources.data : [];
+  const library = list.filter((s) => s.kind !== 'user');
+  const teacher = list.filter((s) => s.kind === 'user');
+  const disabled = generate.disabled || p.selectedId === null;
   const why = generate.reason;
 
   return (
-    <section className="panel pipeline-panel" aria-labelledby="pipeline-heading">
-      <div className="panel-head">
-        <h2 id="pipeline-heading"><span className="step-num">2</span> Muse Spark pipeline</h2>
+    <section className="drawer-section" aria-label="New lesson">
+      <div className="field">
+        <label htmlFor="new-lesson-source" className="field-label">Page</label>
+        <select id="new-lesson-source" value={p.selectedId ?? ''} onChange={(e) => p.onSelect(e.target.value)} disabled={list.length === 0}>
+          {teacher.length === 0
+            ? library.map((s) => <option key={s.id} value={s.id}>{sourceOptionLabel(s)}</option>)
+            : (
+              <>
+                <optgroup label="Licensed library">
+                  {library.map((s) => <option key={s.id} value={s.id}>{sourceOptionLabel(s)}</option>)}
+                </optgroup>
+                <optgroup label={`${TEACHER_TAG}s (pasted)`}>
+                  {teacher.map((s) => <option key={s.id} value={s.id}>{sourceOptionLabel(s)}</option>)}
+                </optgroup>
+              </>
+            )}
+        </select>
+        {!pasting && (
+          <button type="button" className="btn btn-quiet btn-small paste-open" onClick={() => { setPasting(true); setReuseMsg(null); }}>
+            <IconPlus /> Paste your own text
+          </button>
+        )}
+        {reuseMsg !== null && <p className="callout small" role="status">{reuseMsg}</p>}
       </div>
+      {pasting && (
+        <PasteSourceForm
+          onCancel={() => setPasting(false)}
+          onCreated={(id, notice) => { setPasting(false); setReuseMsg(notice); p.onCreated(id); }}
+        />
+      )}
 
-      <div className="pad">
-        <ModelPicker options={p.models} selected={p.modelChoice} onSelect={p.onModelChoice} live={p.live} locked={generate.busy} />
-        <button type="button" className="btn btn-primary btn-wide" onClick={p.onGenerate} disabled={disabled} aria-describedby={why !== null ? 'generate-why' : undefined}>
-          {generate.busy ? '⏳ Generating…' : p.flow === 'lesson' ? '✦ Generate lesson with Muse Spark' : '✦ Generate with Muse Spark'}
+      <ModelPicker options={p.models} selected={p.modelChoice} onSelect={p.onModelChoice} live={p.live} locked={generate.busy} />
+
+      <div className="generate-row">
+        <button type="button" className="btn btn-primary" onClick={p.onGenerate} disabled={disabled} aria-describedby={why !== null ? 'generate-why' : undefined}>
+          {generate.busy ? 'Generating…' : p.flow === 'lesson' ? 'Generate lesson' : 'Generate activity'}
         </button>
-        {why !== null && <p id="generate-why" className="muted small gen-why">{why}</p>}
-        {p.generateError !== null && <p className="field-error" role="alert">{p.generateError}</p>}
-        {p.teacherSource && <p className="callout callout-warn small gen-why" role="note">{FREE_CREDITS_NOTE}</p>}
+        {p.demoChoice !== 'none' && <span className="tone-fault small" data-testid="demo-fault-armed">With a system-made demo fault</span>}
+      </div>
+      {why !== null && <p id="generate-why" className="muted small">{why}</p>}
+      {p.generateError !== null && <p className="field-error" role="alert">{p.generateError}</p>}
+      {p.teacherSource && <p className="callout small" role="note">{FREE_CREDITS_NOTE}</p>}
 
-        <div className="flow-toggle">
-          <label htmlFor="flow-classic" className="flow-toggle-label">
+      <details className="run-options" open={p.demoChoice !== 'none' || p.flow === 'activity' ? true : undefined}>
+        <summary>Run options</summary>
+        <div className="run-options-body">
+          <label htmlFor="flow-classic" className="check-label">
             <input id="flow-classic" type="checkbox" checked={p.flow === 'activity'} disabled={generate.busy} aria-describedby="flow-classic-help" onChange={(e) => p.onFlow(e.target.checked ? 'activity' : 'lesson')} />
-            {' '}Advanced: classic single activity
+            <span>Classic single activity</span>
           </label>
-          <p id="flow-classic-help" className="muted small">
+          <p id="flow-classic-help" className="muted small field-help">
             {p.flow === 'activity'
-              ? 'The next run builds one simulation or timeline, the way earlier versions did, with no overview and no other components.'
-              : 'Off: the next run builds a lesson, a quick overview of the page first and then a few interactive components.'}
+              ? 'The next run builds one simulation or timeline, with no overview and no other parts.'
+              : 'Off: the next run builds a lesson — an overview of the page, then a few interactive parts.'}
           </p>
+          <div className="field">
+            <label htmlFor="demo-fault-select" className="field-label">{DEMO_FAULT_LABEL}</label>
+            <select id="demo-fault-select" value={p.demoChoice} disabled={generate.busy} aria-describedby="demo-fault-help" onChange={(e) => p.onDemoChoice(e.target.value as DemoChoice)}>
+              {demoFaultOptions().map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+            </select>
+            <p id="demo-fault-help" className="muted small field-help">{DEMO_FAULT_HELP}</p>
+            {p.demoChoice !== 'none' && (
+              <p className="callout callout-fault small" role="note">
+                The next run will carry a fault planted by the system, not made by Muse.
+              </p>
+            )}
+          </div>
         </div>
+      </details>
+    </section>
+  );
+}
 
-        <div className={`demo-fault${p.demoChoice !== 'none' ? ' demo-fault-on' : ''}`}>
-          <label htmlFor="demo-fault-select" className="field-label">{DEMO_FAULT_LABEL}</label>
-          <select id="demo-fault-select" value={p.demoChoice} disabled={generate.busy} aria-describedby="demo-fault-help" onChange={(e) => p.onDemoChoice(e.target.value as DemoChoice)}>
-            {demoFaultOptions().map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
-          </select>
-          <p id="demo-fault-help" className="muted small">{DEMO_FAULT_HELP}</p>
-          {p.demoChoice !== 'none' && (
-            <p className="callout callout-fault small" role="note">
-              Demonstration: the next run will carry a fault injected by the system (<code>{p.demoChoice}</code>), not made by Muse.
-            </p>
-          )}
-        </div>
-      </div>
+// ---- Runs for this page: one line each, details under the selected one -------------------------------------------
 
-      <div className="runs">
-        <h3>Runs for this source</h3>
-        {p.jobs.state === 'loading' && <p className="muted small pad">Loading runs…</p>}
-        {p.jobs.state === 'error' && <p className="field-error pad" role="alert">{p.jobs.message}</p>}
-        {p.jobs.state === 'ready' && p.jobsForSource.length === 0 && (
-          <p className="muted small pad">No runs for this source yet.{liveOff ? '' : ' Generate one above.'}</p>
-        )}
-        <ul className="run-list">
-          {p.jobsForSource.map((j) => {
-            const badge = runBadge(j, p.liveJobIds);
-            const st = lessonStatusLabel(j) ?? jobStatusLabel(j, p.serverBusy);
-            const interrupted = isInterrupted(j);
-            const selected = j.jobId === p.selectedJobId;
-            const cost = describeJobCost({ totalCostUSD: j.totalCostUSD, reservedUnknownUSD: j.reservedUnknownUSD, interrupted });
-            const engine = engineTitle(j.engine);
-            const jobModel = modelRunTag(resolveJobModel(j));
-            const tags = [...lessonRunTags(j), ...analysisRepairTags(j), ...runTags(j)];
-            return (
-              <li key={j.jobId}>
-                <button type="button" className={`run${selected ? ' selected' : ''}`} aria-pressed={selected} onClick={() => p.onSelectJob(j.jobId)}>
-                  <span className="run-top">
-                    <span className={`badge ${badge.kind === 'live' ? 'badge-live' : 'badge-rec'}`}>{badge.label}</span>
-                    <span className={`status st-${st.tone}`}>{st.text}</span>
-                  </span>
-                  <span className="run-tags">
-                    <span className={`tag tag-model-${jobModel.tone}`} data-testid="run-model-tag">{jobModel.text}</span>
-                      {engine !== null && <span className="tag tag-engine" title={j.engine ?? undefined}>{engine}</span>}
-                      {tags.map((t) => <span key={t.text} className={`tag tag-${t.tone}`}>{t.text}</span>)}
-                  </span>
-                  <span className="run-sub mono">{j.jobId} · est. cost {cost}</span>
-                  {interrupted && <span className="run-note">{INTERRUPTED_TEXT}</span>}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
+export interface RunsSectionProps {
+  jobs: Loadable<JobSummary[]>;
+  jobsForSource: readonly JobSummary[];
+  /** /api/health busy (incl. a POST in flight); null until health has loaded. */
+  serverBusy: boolean | null;
+  selectedJobId: string | null;
+  onSelectJob: (id: string) => void;
+  liveJobIds: ReadonlySet<string>;
+  canGenerate: boolean;
+  onNewLesson: () => void;
+}
 
-      <div className="stages">
-        <h3>{p.detail?.state === 'ready' && p.detail.data.lessonData !== undefined ? 'Lesson steps' : 'Stage timeline'}</h3>
-        {p.detail === null && <p className="muted small pad">Select a run to see its stages.</p>}
-        {p.detail?.state === 'loading' && <p className="muted small pad">Loading run…</p>}
-        {p.detail?.state === 'error' && <p className="field-error pad" role="alert">{p.detail.message}</p>}
-        {p.detail?.state === 'ready' && p.detail.data.lessonData !== undefined && (
-          <LessonSteps
-            steps={buildLessonSteps(p.detail.data)}
-            events={p.detail.data.events}
-            jobStatus={p.detail.data.summary.status}
-            totalCostUSD={p.detail.data.summary.totalCostUSD}
-            reservedUnknownUSD={p.detail.data.summary.reservedUnknownUSD}
-            interrupted={isInterrupted(p.detail.data.summary)}
-            jobModel={resolveJobModel(p.detail.data.summary)}
-          />
-        )}
-        {p.detail?.state === 'ready' && p.detail.data.lessonData === undefined && (
-          <Timeline
-            events={p.detail.data.events}
-            jobStatus={p.detail.data.summary.status}
-            totalCostUSD={p.detail.data.summary.totalCostUSD}
-            reservedUnknownUSD={p.detail.data.summary.reservedUnknownUSD}
-            interrupted={isInterrupted(p.detail.data.summary)}
-            analysisRepairs={p.detail.data.summary.analysisRepairs}
-            jobModel={resolveJobModel(p.detail.data.summary)}
-          />
-        )}
-      </div>
+export function RunsSection(p: RunsSectionProps) {
+  return (
+    <section className="drawer-section" aria-labelledby="runs-heading">
+      <h3 id="runs-heading" className="section-title">Runs for this page</h3>
+      {p.jobs.state === 'loading' && <p className="muted small">Loading runs…</p>}
+      {p.jobs.state === 'error' && <p className="field-error" role="alert">{p.jobs.message}</p>}
+      {p.jobs.state === 'ready' && p.jobsForSource.length === 0 && (
+        <p className="muted small">
+          No runs for this page yet.{' '}
+          {p.canGenerate && <button type="button" className="link-btn" onClick={p.onNewLesson}>Start a new lesson</button>}
+        </p>
+      )}
+      {p.jobsForSource.length > 0 && <p className="muted small">Stored results unless marked Live.</p>}
+      <ul className="run-list">
+        {p.jobsForSource.map((j) => {
+          const r = runLine(j, { liveJobIds: p.liveJobIds, serverBusy: p.serverBusy });
+          const selected = j.jobId === p.selectedJobId;
+          const tags = r.tags.filter((t) => t.text !== r.status.text);
+          return (
+            <li key={j.jobId} className={`run${selected ? ' selected' : ''}`}>
+              <button type="button" className="run-line" aria-pressed={selected} onClick={() => p.onSelectJob(j.jobId)}>
+                <span className="run-when">{r.when}</span>
+                <span className="run-model"><span className="run-sep" aria-hidden="true">·</span>{r.model}</span>
+                <span className={`run-status tone-${r.status.tone}`}><span className="run-sep" aria-hidden="true">·</span>{r.status.text}</span>
+                {r.live && <span className="status-chip">Live</span>}
+                {r.systemFault && <span className="run-fault tone-fault">Demo fault</span>}
+              </button>
+              {selected && (
+                <div className="run-details" data-testid="run-details">
+                  <p className="run-tags">
+                    <span>{r.modelHow}</span>
+                    {tags.map((t) => <span key={t.text} className={`tone-${t.tone}`}>{t.text}</span>)}
+                  </p>
+                  <p>Estimated cost {r.cost}</p>
+                  {r.note !== null && <p className="muted">{r.note}</p>}
+                  <p className="tech">Job <code>{r.jobId}</code></p>
+                </div>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
+}
+
+// ---- Steps of the selected run --------------------------------------------------------------------------------------
+
+export function StepsSection({ detail }: { detail: Loadable<JobDetail> | null }) {
+  const lesson = detail?.state === 'ready' && detail.data.lessonData !== undefined;
+  return (
+    <section className="drawer-section" aria-labelledby="steps-heading">
+      <h3 id="steps-heading" className="section-title">{lesson ? 'Lesson steps' : 'Steps'}</h3>
+      {detail === null && <p className="muted small">Select a run to see its steps.</p>}
+      {detail?.state === 'loading' && <p className="muted small">Loading run…</p>}
+      {detail?.state === 'error' && <p className="field-error" role="alert">{detail.message}</p>}
+      {detail?.state === 'ready' && detail.data.lessonData !== undefined && (
+        <LessonSteps
+          steps={buildLessonSteps(detail.data)}
+          events={detail.data.events}
+          jobStatus={detail.data.summary.status}
+          totalCostUSD={detail.data.summary.totalCostUSD}
+          reservedUnknownUSD={detail.data.summary.reservedUnknownUSD}
+          interrupted={isInterrupted(detail.data.summary)}
+          jobModel={resolveJobModel(detail.data.summary)}
+        />
+      )}
+      {detail?.state === 'ready' && detail.data.lessonData === undefined && (
+        <Timeline
+          events={detail.data.events}
+          jobStatus={detail.data.summary.status}
+          totalCostUSD={detail.data.summary.totalCostUSD}
+          reservedUnknownUSD={detail.data.summary.reservedUnknownUSD}
+          interrupted={isInterrupted(detail.data.summary)}
+          analysisRepairs={detail.data.summary.analysisRepairs}
+          jobModel={resolveJobModel(detail.data.summary)}
+        />
+      )}
     </section>
   );
 }

@@ -3,6 +3,7 @@ import type { CompareTableSpec } from '../../../../packages/contracts/kit.ts';
 import { NOT_STATED, compareGrid, gradePredict, planPredict } from '../lib/compare.ts';
 import type { CiteProps } from './Explanations.tsx';
 import { QuoteBlock } from './QuoteBlock.tsx';
+import { Mark } from './icons.tsx';
 
 interface Props { spec: CompareTableSpec; cite: CiteProps }
 
@@ -71,8 +72,8 @@ export function CompareView({ spec, cite }: Props) {
                 <label key={o} className={`choice${pick === o ? ' choice-picked' : ''}${right ? ' choice-right' : ''}${mine && !right ? ' choice-wrong' : ''}`}>
                   <input type="radio" name={`${uid}-predict`} checked={pick === o} onChange={() => setPick(o)} />
                   <span className="choice-text">{o}</span>
-                  {right && <span className="choice-mark">{mine ? '✓ Your answer — correct' : '✓ The page’s answer'}</span>}
-                  {mine && !right && <span className="choice-mark">✗ Your answer</span>}
+                  {right && <span className="choice-mark"><Mark kind="ok" />{mine ? 'Your answer — correct' : 'The page’s answer'}</span>}
+                  {mine && !right && <span className="choice-mark"><Mark kind="bad" />Your answer</span>}
                 </label>
               );
             })}
@@ -80,7 +81,7 @@ export function CompareView({ spec, cite }: Props) {
           {!locked && <button type="button" className="btn btn-primary" disabled={pick === null} onClick={() => { setLocked(true); setOpen(plan.cellId); }}>Lock in and reveal</button>}
           {locked && (
             <div className={`grade ${correct ? 'grade-ok' : 'grade-miss'}`} role="status">
-              <strong>{correct ? '✓ Right' : '✗ Not quite'} — the page says “{plan.correct}”.</strong>
+              <strong><Mark kind={correct ? 'ok' : 'bad'} />{correct ? 'Right' : 'Not quite'} — the page says “{plan.correct}”.</strong>
             </div>
           )}
         </section>

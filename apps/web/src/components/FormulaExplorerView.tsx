@@ -14,6 +14,7 @@ import { Readout, Slider } from './controls.tsx';
 import type { CiteProps } from './Explanations.tsx';
 import { FormulaGraph } from './FormulaGraph.tsx';
 import { QuoteBlock } from './QuoteBlock.tsx';
+import { Mark } from './icons.tsx';
 
 interface Props { spec: FormulaExplorerSpec; cite: CiteProps }
 
@@ -67,11 +68,11 @@ export function FormulaExplorerView({ spec, cite }: Props) {
 
   return (
     <div className="explorer" data-testid="formula-explorer">
-      <div className="formula explorer-formula">
-        <p className="muted small">Formula on the page</p>
+      <div className="explorer-formula">
+        <p className="field-label">Formula on the page</p>
         <code>{spec.formulaText}</code>
         <QuoteBlock componentId="formula-explorer-v1" part="equation" id="equation" sourceId={spec.sourceId} quote={spec.quote} cite={cite} caption="The page’s words" />
-        {formulaStatus !== 'matches' && <p className="callout callout-warn small" role="note" data-testid="ai-formula-notice">{AI_FORMULA_NOTICE}</p>}
+        {formulaStatus !== 'matches' && <p className="note small" role="note" data-testid="ai-formula-notice">{AI_FORMULA_NOTICE}</p>}
       </div>
 
       <div className="explorer-main">
@@ -93,7 +94,7 @@ export function FormulaExplorerView({ spec, cite }: Props) {
             ))}
           </div>
           <dl className="readouts explorer-readout" aria-live="polite">
-            <Readout name={yName} value={sig6(output)} unit="" accent="force" />
+            <Readout name={yName} value={sig6(output)} unit="" />
           </dl>
           {!Number.isFinite(output) && <p className="field-error" role="status">Not defined for these inputs.</p>}
           <button type="button" className="btn btn-small" onClick={() => setInputs(defaultInputs(spec))}>Reset sliders</button>
@@ -127,7 +128,7 @@ export function FormulaExplorerView({ spec, cite }: Props) {
       {spec.cases.length > 0 && (
         <section aria-labelledby={`${uid}-predict`}>
           <h3 id={`${uid}-predict`}>Predict, then reveal</h3>
-          <p className="muted small">Commit to a number first. “Check my prediction” sets the sliders to that case, shows the graph point, and compares your number with the calculator’s.</p>
+          <p className="muted small">Commit to a number first; checking moves the sliders and the graph to that case.</p>
           <ol className="predictions">
             {spec.cases.map((c, i) => {
               const r = results[c.id];
@@ -136,10 +137,7 @@ export function FormulaExplorerView({ spec, cite }: Props) {
               return (
                 <li key={c.id} className="prediction">
                   <form onSubmit={(e) => submit(e, c.id)} noValidate>
-                    <div className="prediction-head">
-                      <span className="prediction-num">{i + 1}</span>
-                      <p id={`${inputId}-prompt`}>{casePrompt(spec, c)}</p>
-                    </div>
+                    <p className="prediction-head" id={`${inputId}-prompt`}><span className="case-label">Case {i + 1}</span> {casePrompt(spec, c)}</p>
                     <div className="prediction-row">
                       <label htmlFor={inputId}>Your prediction: {yName}</label>
                       <div className="guess">
@@ -153,13 +151,13 @@ export function FormulaExplorerView({ spec, cite }: Props) {
                           onChange={(e) => setResults((prev) => ({ ...prev, [c.id]: { raw: e.target.value, grade: null, error: null } }))}
                         />
                       </div>
-                      <button type="submit" className="btn btn-primary" disabled={parseGuess(r?.raw ?? '') === null}>Check my prediction</button>
+                      <button type="submit" className="btn btn-primary" disabled={parseGuess(r?.raw ?? '') === null} aria-describedby={parseGuess(r?.raw ?? '') === null ? `${inputId}-first` : undefined}>Check my prediction</button>
                     </div>
-                    <p className="muted small" id={`${inputId}-tol`}>Counts as correct within 2% of the calculator’s value.</p>
+                    <p className="muted small" id={`${inputId}-tol`}>{parseGuess(r?.raw ?? '') === null && <span id={`${inputId}-first`}>Make a prediction first. </span>}Counts as correct within 2% of the calculator’s value.</p>
                     {r?.error != null && <p className="field-error" role="alert">{r.error}</p>}
                     {r?.grade != null && (
                       <div className={`grade ${r.grade.withinTolerance ? 'grade-ok' : 'grade-miss'}`} role="status">
-                        <strong>{r.grade.withinTolerance ? '✓ Close enough' : `✗ Not close enough — your guess was too ${r.grade.direction === 'high' ? 'high' : 'low'}`}</strong>
+                        <strong><Mark kind={r.grade.withinTolerance ? 'ok' : 'bad'} />{r.grade.withinTolerance ? 'Close enough' : `Not close enough — your guess was too ${r.grade.direction === 'high' ? 'high' : 'low'}`}</strong>
                         <span>You guessed {trimmed(r.grade.guess, 4)} · the calculator says <b>{yName} = {sig6(out?.output ?? Number.NaN)}</b> · off by {sig6(Math.abs(r.grade.error))} (allowed ±{sig6(r.grade.tolerance)}). The sliders and the graph now show this case.</span>
                       </div>
                     )}

@@ -91,5 +91,5 @@ export function Readout({ name, value, unit, accent }: { name: string; value: st
 
 /** The honesty label every closed-form animation carries. */
 export function SchematicTag({ text }: { text: string }) {
-  return <p className="schematic-tag" role="note"><span aria-hidden="true">◇</span> {text}</p>;
+  return <p className="schematic-tag" role="note">{text}</p>;
 }

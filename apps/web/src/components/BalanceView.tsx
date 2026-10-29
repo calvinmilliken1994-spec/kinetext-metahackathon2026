@@ -6,6 +6,7 @@ import type { BalanceGrade } from '../lib/balance.ts';
 import { FAILURE_MESSAGES } from '../lib/lesson.ts';
 import type { CiteProps } from './Explanations.tsx';
 import { QuoteBlock } from './QuoteBlock.tsx';
+import { IconArrowRight, IconMinus, IconPlus, Mark } from './icons.tsx';
 
 interface Props { spec: BalanceEquationSpec; cite: CiteProps }
 
@@ -15,12 +16,12 @@ function Formula({ formula }: { formula: string }) {
   return <span className="chem">{formulaParts(formula).map((p, i) => (p.sub ? <sub key={i}>{p.text}</sub> : <span key={i}>{p.text}</span>))}</span>;
 }
 
-function gradeMessage(g: BalanceGrade): { tone: 'ok' | 'miss'; text: string } {
+function gradeMessage(g: BalanceGrade): { tone: 'ok' | 'miss'; mark: 'ok' | 'bad'; text: string } {
   switch (g.status) {
-    case 'correct': return { tone: 'ok', text: '✓ Balanced: every element has the same number of atoms on both sides, in the smallest whole numbers.' };
-    case 'balanced-multiple': return { tone: 'miss', text: `✓ Balanced, but not in the smallest whole numbers. Divide every coefficient by ${g.factor}.` };
-    case 'unbalanced': return { tone: 'miss', text: `✗ Not balanced yet. Atoms of ${g.elements.join(' and ')} differ between the two sides.` };
-    default: return { tone: 'miss', text: '✗ Each coefficient must be a whole number from 1 to 12.' };
+    case 'correct': return { tone: 'ok', mark: 'ok', text: 'Balanced: every element has the same number of atoms on both sides, in the smallest whole numbers.' };
+    case 'balanced-multiple': return { tone: 'miss', mark: 'ok', text: `Balanced, but not in the smallest whole numbers. Divide every coefficient by ${g.factor}.` };
+    case 'unbalanced': return { tone: 'miss', mark: 'bad', text: `Not balanced yet. Atoms of ${g.elements.join(' and ')} differ between the two sides.` };
+    default: return { tone: 'miss', mark: 'bad', text: 'Each coefficient must be a whole number from 1 to 12.' };
   }
 }
 
@@ -59,14 +60,16 @@ export function BalanceView({ spec, cite }: Props) {
   };
   const msg = checked === null ? null : gradeMessage(checked);
   const side = (which: 'left' | 'right') => spec.species.map((s, i) => ({ s, i })).filter((x) => x.s.side === which);
+  // Each term carries its own '+' (or, for the first product, the reaction arrow), so a line never ends on a lone sign.
   const sideRow = (which: 'left' | 'right') => side(which).map(({ s, i }, k) => (
     <span key={s.id} className="bal-term">
       {k > 0 && <span className="bal-plus" aria-hidden="true">+</span>}
+      {k === 0 && which === 'right' && <span className="bal-arrow" role="img" aria-label="yields"><IconArrowRight size={26} /></span>}
       <span className="bal-species">
         <span className="stepper" role="group" aria-label={`Coefficient for ${s.formula}`}>
-          <button type="button" className="btn btn-small" aria-label={`Decrease the coefficient of ${s.formula}`} disabled={(coefs[i] ?? 1) <= MIN_COEF} onClick={() => set(i, (coefs[i] ?? 1) - 1)}>−</button>
+          <button type="button" className="btn btn-small" aria-label={`Decrease the coefficient of ${s.formula}`} disabled={(coefs[i] ?? 1) <= MIN_COEF} onClick={() => set(i, (coefs[i] ?? 1) - 1)}><IconMinus /></button>
           <output className="stepper-value" aria-live="polite" aria-label={`${s.formula} coefficient`}>{coefs[i] ?? 1}</output>
-          <button type="button" className="btn btn-small" aria-label={`Increase the coefficient of ${s.formula}`} disabled={(coefs[i] ?? 1) >= MAX_COEF} onClick={() => set(i, (coefs[i] ?? 1) + 1)}>+</button>
+          <button type="button" className="btn btn-small" aria-label={`Increase the coefficient of ${s.formula}`} disabled={(coefs[i] ?? 1) >= MAX_COEF} onClick={() => set(i, (coefs[i] ?? 1) + 1)}><IconPlus /></button>
         </span>
         <span className="bal-formula"><Formula formula={s.formula} /></span>
       </span>
@@ -75,11 +78,10 @@ export function BalanceView({ spec, cite }: Props) {
 
   return (
     <div className="balance" data-testid="balance">
-      <p className="muted small">Set a whole-number coefficient (1 to 12) in front of each substance so every element has the same number of atoms on both sides. The table counts the atoms as you go.</p>
+      <p className="muted small">Set a whole number (1 to 12) in front of each substance until every element has the same number of atoms on both sides.</p>
       <div className="bal-equation" role="group" aria-label="Chemical equation with coefficient steppers">
-        <div className="bal-side">{sideRow('left')}</div>
-        <span className="bal-arrow" aria-label="yields">→</span>
-        <div className="bal-side">{sideRow('right')}</div>
+        {sideRow('left')}
+        {sideRow('right')}
       </div>
 
       <table className="atom-table">
@@ -91,7 +93,7 @@ export function BalanceView({ spec, cite }: Props) {
               <th scope="row">{r.element}</th>
               <td>{r.left}</td>
               <td>{r.right}</td>
-              <td>{r.balanced ? '✓ equal' : `✗ ${r.left > r.right ? 'left has more' : 'right has more'}`}</td>
+              <td className="atom-same">{r.balanced ? <><Mark kind="ok" />equal</> : <><Mark kind="bad" />{r.left > r.right ? 'left has more' : 'right has more'}</>}</td>
             </tr>
           ))}
         </tbody>
@@ -105,7 +107,7 @@ export function BalanceView({ spec, cite }: Props) {
         <button type="button" className="btn" onClick={() => { setCoefs(spec.species.map(() => 1)); setChecked(null); }}>Reset to 1</button>
       </div>
       <p id={`${uid}-hint`} className="small" hidden={!showHint}>{spec.hint === '' ? 'Count the atoms of each element on both sides.' : spec.hint}</p>
-      {msg !== null && <div className={`grade grade-${msg.tone}`} role="status"><strong>{msg.text}</strong></div>}
+      {msg !== null && <div className={`grade grade-${msg.tone}`} role="status"><strong><Mark kind={msg.mark} />{msg.text}</strong></div>}
 
       {revealed && (
         <div className="bal-reveal" data-testid="balance-reveal">
@@ -113,7 +115,7 @@ export function BalanceView({ spec, cite }: Props) {
           <p className="bal-answer"><span className="sr-only">{formatEquation(spec.species, key)}</span>
             <span aria-hidden="true">
               {side('left').map(({ s, i }, k) => <span key={s.id}>{k > 0 && ' + '}{key[i] === 1 ? '' : `${key[i]} `}<Formula formula={s.formula} /></span>)}
-              {' → '}
+              <IconArrowRight className="inline-arrow" />
               {side('right').map(({ s, i }, k) => <span key={s.id}>{k > 0 && ' + '}{key[i] === 1 ? '' : `${key[i]} `}<Formula formula={s.formula} /></span>)}
             </span>
           </p>

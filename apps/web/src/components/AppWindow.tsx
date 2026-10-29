@@ -71,7 +71,6 @@ export function AppWindow({ title, titleIsHeading = false, titlebarExtra, childr
             <img className="footer-logo footer-logo-on-light" src="/brand/meta-logo-with-text.svg" alt="Meta" width={64} height={14} />
             <span className="footer-event-name">Global AI Developer Hackathon 2026</span>
           </span>
-          <span className="footer-note">Hackathon entry</span>
         </footer>
       </div>
     </div>

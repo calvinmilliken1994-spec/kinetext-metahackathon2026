@@ -5,6 +5,7 @@ import { assignItem, gradeSort, groupForKey, nextUnassigned, sortPile } from '..
 import type { Assignments } from '../lib/sort.ts';
 import type { CiteProps } from './Explanations.tsx';
 import { QuoteBlock } from './QuoteBlock.tsx';
+import { Mark } from './icons.tsx';
 
 interface Props { spec: SortGroupsSpec; cite: CiteProps }
 
@@ -89,7 +90,7 @@ export function SortView({ spec, cite }: Props) {
               {committed && r !== undefined && (
                 <div className="sort-reveal">
                   <p className={`order-mark ${r.correct ? 'ok' : 'bad'}`}>
-                    {r.correct ? `✓ Right group: ${groupLabel.get(r.correctGroupId) ?? r.correctGroupId}` : `✗ The page puts this in “${groupLabel.get(r.correctGroupId) ?? r.correctGroupId}”${r.assigned !== null ? `, not “${groupLabel.get(r.assigned) ?? r.assigned}”` : ''}`}
+                    <Mark kind={r.correct ? 'ok' : 'bad'} />{r.correct ? `Right group: ${groupLabel.get(r.correctGroupId) ?? r.correctGroupId}` : `The page puts this in “${groupLabel.get(r.correctGroupId) ?? r.correctGroupId}”${r.assigned !== null ? `, not “${groupLabel.get(r.assigned) ?? r.assigned}”` : ''}`}
                   </p>
                   <QuoteBlock componentId="sort-groups-v1" part="item" id={id} sourceId={item.sourceId} quote={item.quote} cite={cite} />
                 </div>
@@ -108,7 +109,7 @@ export function SortView({ spec, cite }: Props) {
       <p className="sr-only" role="status" aria-live="polite">{announce}</p>
       {committed && (
         <div className={`grade ${grade.perfect ? 'grade-ok' : 'grade-miss'}`} role="status">
-          <strong>{grade.perfect ? `✓ All ${grade.total} items are in the right group.` : `${grade.correctCount} of ${grade.total} items are in the right group.`}</strong>
+          <strong>{grade.perfect && <Mark kind="ok" />}{grade.perfect ? `All ${grade.total} items are in the right group.` : `${grade.correctCount} of ${grade.total} items are in the right group.`}</strong>
           <span>The page’s words are shown under each item.</span>
         </div>
       )}

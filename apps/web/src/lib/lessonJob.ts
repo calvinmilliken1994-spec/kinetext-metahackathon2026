@@ -387,7 +387,7 @@ const checkRef = (id: string): CheckRef => ({ id, name: lessonCheckName(id) ?? i
 export const NATURAL_REPAIR_LABEL = ANALYSIS_REPAIR_LABEL;
 export const SYSTEM_REPAIR_LABEL = 'System-made fault, repaired by Muse';
 export const SYSTEM_REPAIR_FAILED_LABEL = 'System-made fault, repair did not pass';
-export const NATURAL_FAILURE_LABEL = 'Natural failure (Muse’s own mistake)';
+export const NATURAL_FAILURE_LABEL = 'Muse’s own mistake — repair did not pass';
 
 /** The component the demo fault was planted in: the inject event's component, else the fault kind's fixed target. */
 export function faultComponent(detail: JobDetail): string | null {
@@ -677,7 +677,7 @@ export function buildLessonSteps(detail: JobDetail): LessonStep[] {
 
 export interface LessonTag { text: string; tone: 'lesson' | 'warn' }
 
-/** Run-list tags for a lesson job: 'Lesson · N components' and 'Partly published'. Empty for any other job. */
+/** Run-list tags for a lesson job: 'Lesson · N components' and 'Some parts left out'. Empty for any other job. */
 export function lessonRunTags(s: Pick<JobSummary, 'flow' | 'status' | 'lesson'>): LessonTag[] {
   if (s.flow !== 'lesson') return [];
   const p = s.lesson;
@@ -687,7 +687,7 @@ export function lessonRunTags(s: Pick<JobSummary, 'flow' | 'status' | 'lesson'>)
   if (n > 0) tags.push({ text: `Lesson · ${plural(n, 'component', 'components')}`, tone: 'lesson' });
   else if (p.overviewReady && s.status === 'succeeded') tags.push({ text: 'Lesson · overview only', tone: 'lesson' });
   else tags.push({ text: 'Lesson', tone: 'lesson' });
-  if (p.partialPublish) tags.push({ text: 'Partly published', tone: 'warn' });
+  if (p.partialPublish) tags.push({ text: 'Some parts left out', tone: 'warn' });
   return tags;
 }
 
@@ -696,7 +696,7 @@ export interface LessonStatus { text: string; tone: 'ok' | 'warn' }
 /** Run-list status for a finished lesson job; null when the usual status label applies. */
 export function lessonStatusLabel(s: Pick<JobSummary, 'flow' | 'status' | 'lesson'>): LessonStatus | null {
   if (s.flow !== 'lesson') return null;
-  if (s.status === 'succeeded') return s.lesson?.partialPublish === true ? { text: 'Partly published', tone: 'warn' } : { text: 'Lesson ready', tone: 'ok' };
+  if (s.status === 'succeeded') return s.lesson?.partialPublish === true ? { text: 'Some parts left out', tone: 'warn' } : { text: 'Lesson ready', tone: 'ok' };
   if (s.status === 'unsupported') return { text: 'Page declined', tone: 'warn' };
   return null;
 }

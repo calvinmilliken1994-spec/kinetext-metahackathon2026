@@ -1,6 +1,8 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import type { DragEvent, ReactNode } from 'react';
 import { moveItem } from '../lib/timeline.ts';
+import { IconChevronDown, IconChevronUp, IconGrip, Mark } from './icons.tsx';
+import { splitMark } from '../lib/marks.ts';
 
 export interface BoardItem { id: string; label: string }
 
@@ -126,22 +128,22 @@ export function OrderBoard<T extends BoardItem>({ items, startOrder, heading, hi
               onDrop={(ev) => onDrop(ev, i)}
               onDragEnd={endDrag}
             >
-              <span className="order-pos" aria-hidden="true">{i + 1}</span>
+              <span className="order-pos" aria-hidden="true">{i + 1}.</span>
               <div className="order-body">
                 <p className="order-label">
-                  <span className="order-grip" aria-hidden="true" title="Drag to move">⠿</span>
+                  <span className="order-grip" title="Drag to move"><IconGrip /></span>
                   <strong>{e.label}</strong>
                   <span className="sr-only"> (position {i + 1} of {n})</span>
                 </p>
-                {mark !== null && <p className={`order-mark ${mark.ok ? 'ok' : 'bad'}`}>{mark.text}</p>}
+                {mark !== null && <p className={`order-mark ${mark.ok ? 'ok' : 'bad'}`}><Mark kind={mark.ok ? 'ok' : 'bad'} />{splitMark(mark.text).text}</p>}
                 {revealed && <div className="order-reveal">{renderReveal(e)}</div>}
               </div>
               <div className="order-buttons">
                 <button type="button" className="btn btn-small" data-dir="up" disabled={i === 0} onClick={() => move(id, -1)} aria-label={`Move “${e.label}” up`}>
-                  <span aria-hidden="true">↑</span> Up
+                  <IconChevronUp /> Up
                 </button>
                 <button type="button" className="btn btn-small" data-dir="down" disabled={i === n - 1} onClick={() => move(id, 1)} aria-label={`Move “${e.label}” down`}>
-                  <span aria-hidden="true">↓</span> Down
+                  <IconChevronDown /> Down
                 </button>
               </div>
             </li>
@@ -155,7 +157,7 @@ export function OrderBoard<T extends BoardItem>({ items, startOrder, heading, hi
       <p className="sr-only" role="status" aria-live="polite">{announce}</p>
       {result !== null && (
         <div className={`grade ${result.correct ? 'grade-ok' : 'grade-miss'}`} role="status" data-testid="order-result">
-          <strong>{result.summary}</strong>
+          <strong>{splitMark(result.summary).mark !== null && <Mark kind={splitMark(result.summary).mark ?? 'ok'} />}{splitMark(result.summary).text}</strong>
           <span>{resultNote}</span>
         </div>
       )}

@@ -35,7 +35,7 @@ const NOT_A_DEMO_FAULT = 'Nothing was injected here, and this is different from 
 export function naturalRepairNoteParts(state: 'passed' | 'failed' | 'running' | 'none'): { lead: string; body: string } {
   switch (state) {
     case 'passed': return { lead: ANALYSIS_REPAIR_LABEL, body: `Muse’s own first analysis failed a deterministic check, and Muse repaired it. ${NOT_A_DEMO_FAULT}` };
-    case 'failed': return { lead: 'Natural failure (Muse’s own mistake)', body: `Muse’s own analysis failed a deterministic check and Muse’s repair did not fix it. ${NOT_A_DEMO_FAULT}` };
+    case 'failed': return { lead: 'Muse’s own mistake — repair did not pass', body: `Muse’s own analysis failed a deterministic check and Muse’s repair did not fix it. ${NOT_A_DEMO_FAULT}` };
     case 'running': return { lead: ANALYSIS_REPAIR_LABEL, body: `Muse’s own first analysis failed a deterministic check and Muse is repairing it. ${NOT_A_DEMO_FAULT}` };
     case 'none': return { lead: '', body: '' };
   }

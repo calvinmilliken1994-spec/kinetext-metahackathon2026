@@ -5,6 +5,7 @@ import { gapOptions, gradeGap, layoutConceptMap, pickGapLink, relationSentence }
 import type { PlacedLink } from '../lib/conceptMap.ts';
 import type { CiteProps } from './Explanations.tsx';
 import { QuoteBlock } from './QuoteBlock.tsx';
+import { Mark } from './icons.tsx';
 
 interface Props { spec: ConceptMapSpec; cite: CiteProps }
 
@@ -114,8 +115,8 @@ export function ConceptMapView({ spec, cite }: Props) {
                 <label key={o} className={`choice${gap.picked === o ? ' choice-picked' : ''}${right ? ' choice-right' : ''}${mine && !right ? ' choice-wrong' : ''}`}>
                   <input type="radio" name={`${uid}-gap`} checked={gap.picked === o} onChange={() => setGap({ mode: 'on', picked: o, checked: false })} />
                   <span className="choice-text">{o}</span>
-                  {gap.checked && right && <span className="choice-mark">{mine ? '✓ Your answer — correct' : '✓ The page’s word'}</span>}
-                  {mine && !right && <span className="choice-mark">✗ Your answer</span>}
+                  {gap.checked && right && <span className="choice-mark"><Mark kind="ok" />{mine ? 'Your answer — correct' : 'The page’s word'}</span>}
+                  {mine && !right && <span className="choice-mark"><Mark kind="bad" />Your answer</span>}
                 </label>
               );
             })}
@@ -124,7 +125,7 @@ export function ConceptMapView({ spec, cite }: Props) {
           {gap.checked && (
             <>
               <div className={`grade ${gap.picked !== null && gradeGap(gapLink, gap.picked) ? 'grade-ok' : 'grade-miss'}`} role="status">
-                <strong>{gap.picked !== null && gradeGap(gapLink, gap.picked) ? '✓ Right' : '✗ Not quite'} — the page says “{relationSentence(spec, gapLink)}”.</strong>
+                <strong><Mark kind={gap.picked !== null && gradeGap(gapLink, gap.picked) ? 'ok' : 'bad'} />{gap.picked !== null && gradeGap(gapLink, gap.picked) ? 'Right' : 'Not quite'} — the page says “{relationSentence(spec, gapLink)}”.</strong>
               </div>
               <QuoteBlock componentId="concept-map-v1" part="link" id={gapLink.id} sourceId={gapLink.sourceId} quote={gapLink.quote} cite={cite} caption="The page’s words" />
             </>

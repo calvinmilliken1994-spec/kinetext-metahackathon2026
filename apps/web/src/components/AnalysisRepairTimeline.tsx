@@ -3,6 +3,7 @@ import { ANALYSIS_UNCHANGED_NAME, analysisRepairBadge, analysisRepairCostUSD, na
 import { formatCostUSD, shortId } from '../lib/jobs.ts';
 import { modelRunTag, repairedByLine } from '../lib/models.ts';
 import type { JobModel } from '../lib/models.ts';
+import { IconArrowRight, IconCross, Mark } from './icons.tsx';
 
 export interface AnalysisRepairTimelineProps {
   steps: readonly AnalysisRepairStep[];
@@ -17,7 +18,7 @@ function Checks({ checks, tone }: { checks: readonly CheckRef[]; tone: 'ok' | 'b
     <span className="check-ids">
       {checks.map((c) => (
         <span key={c.id} className={`check-id check-id-${tone}`} title={c.id}>
-          {c.name !== c.id && <>{c.name} </>}<code className="check-code">{c.id}</code>
+          {c.name !== c.id ? <>{c.name} <code className="check-code tech">{c.id}</code></> : <code className="check-code">{c.id}</code>}
         </span>
       ))}
     </span>
@@ -38,10 +39,10 @@ export function AnalysisRepairTimeline({ steps, overall, model }: AnalysisRepair
       <div className="card-head">
         <h3 id="analysis-repair-heading">Analysis repair</h3>
         {badge !== null && (
-          <span className={`badge badge-${badge.tone}`} data-testid="analysis-repair-badge">{badge.tone === 'natural' ? '✓ ' : '⚠ '}{badge.text}</span>
+          <span className={`badge badge-${badge.tone}`} data-testid="analysis-repair-badge">{badge.text}</span>
         )}
       </div>
-      <p className="muted small">Before an activity is written, deterministic code checks Muse’s analysis of the source. When a check fails, Muse receives it and returns a corrected analysis (at most two repairs).</p>
+      <p className="muted small">Code checks Muse’s reading of the page before anything is built. When a check fails, Muse gets the failure back and corrects its analysis (at most two repairs).</p>
       <p className={`callout ${overall.state === 'failed' ? 'callout-error' : 'callout-natural'} small`} role="note" data-testid="natural-note">
         <strong>{note.lead}.</strong>{' '}{note.body}
       </p>
@@ -67,7 +68,7 @@ export function AnalysisRepairTimeline({ steps, overall, model }: AnalysisRepair
                 <ul className="fail-list">
                   {s.failedBefore.map((f) => (
                     <li key={f.id}>
-                      <span className="check-id check-id-bad" title={f.id}>{f.name !== f.id && <>{f.name} </>}<code className="check-code">{f.id}</code></span>
+                      <span className="check-id check-id-bad" title={f.id}>{f.name !== f.id ? <>{f.name} <code className="check-code tech">{f.id}</code></> : <code className="check-code">{f.id}</code>}</span>
                       {f.plain !== null && <span className="plain"> {f.plain}</span>}
                       {f.message !== null && <span className="muted"> Checker said: <q className="checker-msg">{f.message}</q></span>}
                     </li>
@@ -87,7 +88,7 @@ export function AnalysisRepairTimeline({ steps, overall, model }: AnalysisRepair
                         <span className="diff-label">{c.label}</span>
                         {c.before !== null && <span className="diff-side"><del className="diff-del">{c.kind === 'decision' ? c.before : `“${c.before}”`}</del>{c.beforeNote !== undefined && <span className="muted"> ({c.beforeNote})</span>}</span>}
                         {c.before === null && <span className="muted">added</span>}
-                        <span aria-hidden="true" className="diff-arrow">{c.after === null ? '✕' : '→'}</span>
+                        <span className="diff-arrow">{c.after === null ? <IconCross /> : <IconArrowRight size={16} />}</span>
                         {c.after !== null && <span className="diff-side"><ins className="diff-ins">{c.kind === 'decision' ? c.after : `“${c.after}”`}</ins>{c.afterNote !== undefined && <span className="muted"> ({c.afterNote})</span>}</span>}
                         {c.after === null && <span className="muted">removed</span>}
                       </li>
@@ -105,8 +106,8 @@ export function AnalysisRepairTimeline({ steps, overall, model }: AnalysisRepair
                     <ul className="after-checks">
                       {s.after.checks.map((c) => (
                         <li key={c.id} className={c.passed ? 'after-ok' : 'after-bad'}>
-                          <span className={`check-icon ${c.passed ? 'ok' : 'bad'}`} role="img" aria-label={c.passed ? 'passed' : 'failed'}>{c.passed ? '✓' : '✗'}</span>{' '}
-                          {c.name !== c.id && <>{c.name} </>}<code className="check-code">{c.id}</code>
+                          <Mark kind={c.passed ? 'ok' : 'bad'} label={c.passed ? 'passed' : 'failed'} />
+                          {c.name !== c.id ? <>{c.name} <code className="check-code tech">{c.id}</code></> : <code className="check-code">{c.id}</code>}
                         </li>
                       ))}
                     </ul>
@@ -123,8 +124,8 @@ export function AnalysisRepairTimeline({ steps, overall, model }: AnalysisRepair
               <p className="rev-actor small" aria-label="Repair call">
                 <span className="tag">Repair call</span>{' '}
                 {s.actor.model !== null && <span className={`tag tag-model-${modelRunTag(model).tone}`} title={model.label}>{model.name}</span>}{' '}
-                {s.actor.model !== null && <span className="tag mono" title="Model string sent to the provider">{model.providerModel}</span>}{' '}
-                {s.actor.responseId !== null && <span className="tag mono" title={s.actor.responseId}>{shortId(s.actor.responseId)}</span>}{' '}
+                {s.actor.model !== null && <span className="tag mono tech" title="Model string sent to the provider">{model.providerModel}</span>}{' '}
+                {s.actor.responseId !== null && <span className="tag mono tech" title={s.actor.responseId}>{shortId(s.actor.responseId)}</span>}{' '}
                 {stepCostLabel(s) !== null && <span className={`tag${stepCostLabel(s) === 'cost unknown' ? ' tag-warn' : ''}`} data-testid="analysis-repair-cost">{stepCostLabel(s)}</span>}
                 {s.actor.failed && <span className="tag tag-warn">repair call failed{s.actor.detail !== null ? `: ${s.actor.detail}` : ''}</span>}
               </p>

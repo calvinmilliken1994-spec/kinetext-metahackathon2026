@@ -15,8 +15,8 @@ export interface ModelPickerProps {
 export function ModelPicker({ options, selected, onSelect, live, locked }: ModelPickerProps) {
   if (options.length === 0) return null;
   return (
-    <fieldset className="model-picker" disabled={locked} aria-describedby="model-explainer">
-      <legend className="field-label">Model for the next run</legend>
+    <fieldset className="model-picker" disabled={locked}>
+      <legend className="field-label">Model</legend>
       <div className="model-options">
         {options.map((o) => {
           const reason = unavailableReason(o, live);
@@ -42,7 +42,10 @@ export function ModelPicker({ options, selected, onSelect, live, locked }: Model
           );
         })}
       </div>
-      <p id="model-explainer" className="muted small model-explainer">{MODEL_EXPLAINER}</p>
+      <details className="small model-about">
+        <summary>About the two models</summary>
+        <p className="muted">{MODEL_EXPLAINER}</p>
+      </details>
     </fieldset>
   );
 }

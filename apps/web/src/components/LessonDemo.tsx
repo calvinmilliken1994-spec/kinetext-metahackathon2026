@@ -3,6 +3,7 @@ import { collectLessonQuotes } from '../lib/lesson.ts';
 import { demoLessons } from '../demo/lessonFixtures.ts';
 import { LessonView } from './LessonView.tsx';
 import { AppWindow } from './AppWindow.tsx';
+import { Provenance } from './Provenance.tsx';
 import type { CiteProps } from './Explanations.tsx';
 
 const DEMO_DISCLOSURE = 'AI-written lesson text (demo fixture). Real lessons are written by Muse Spark 1.3 and checked against the page; this one is hand-written test data.';
@@ -63,6 +64,7 @@ export function LessonDemo() {
           sources={demo.sources}
           cite={cite}
           disclosure={DEMO_DISCLOSURE}
+          provenance={<Provenance disclosure={DEMO_DISCLOSURE} phrases={[]} />}
           premium={demo.premium}
         />
       </main>

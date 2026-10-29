@@ -30,7 +30,7 @@ function CheckIds({ ids, tone }: { ids: readonly string[]; tone: 'ok' | 'bad' | 
         const name = checkName(id);
         return name === null
           ? <code key={id} className={`check-id check-id-${tone}`}>{id}</code>
-          : <span key={id} className={`check-id check-id-${tone}`} title={id}>{name} <code className="check-code">{id}</code></span>;
+          : <span key={id} className={`check-id check-id-${tone}`} title={id}>{name} <code className="check-code tech">{id}</code></span>;
       })}
     </span>
   );
@@ -51,9 +51,9 @@ export function RepairTimeline(p: RepairTimelineProps) {
     <section className="card repair-timeline" aria-labelledby="repair-heading">
       <div className="card-head">
         <h3 id="repair-heading">Repair timeline</h3>
-        {overall !== null && <span className={`badge badge-${overall.tone}`} data-testid="overall-repair-badge">{overall.tone === 'ok' ? '✓ ' : '⚠ '}{overall.text}</span>}
+        {overall !== null && <span className={`badge badge-${overall.tone}`} data-testid="overall-repair-badge">{overall.text}</span>}
       </div>
-      <p className="muted small">Each revision is validated from scratch by deterministic code. When checks fail, Muse receives the failing checks and returns a corrected revision (at most two repairs).</p>
+      <p className="muted small">Code checks every revision from scratch. When checks fail, Muse gets them back and returns a corrected revision (at most two repairs).</p>
       {steps.some((s) => s.role === 'repair') && <p className="small repair-model" data-testid="repair-model">{repairedByLine(p.model, 'spec')}</p>}
       {p.demoFault !== undefined && <p className="muted small">{METRICS_NOTE}</p>}
 
@@ -80,7 +80,7 @@ export function RepairTimeline(p: RepairTimelineProps) {
               )}
 
               {s.badge !== null && s.role === 'repair' && (
-                <p><span className={`badge badge-${s.badge.tone}`} data-testid="step-repair-badge">{s.badge.tone === 'ok' ? '✓ ' : '⚠ '}{s.badge.text}</span></p>
+                <p><span className={`badge badge-${s.badge.tone}`} data-testid="step-repair-badge">{s.badge.text}</span></p>
               )}
 
               {s.role === 'initial' && s.failedIds.length > 0 && (
@@ -100,8 +100,8 @@ export function RepairTimeline(p: RepairTimelineProps) {
               {s.actor !== null && (
                 <p className="rev-actor small">
                   {s.actor.model !== null && <span className={`tag tag-model-${modelRunTag(p.model).tone}`} title={p.model.label}>{p.model.name}</span>}{' '}
-                  {s.actor.model !== null && <span className="tag mono" title="Model string sent to the provider">{p.model.providerModel}</span>}{' '}
-                  {s.actor.responseId !== null && <span className="tag mono" title={s.actor.responseId}>{shortId(s.actor.responseId)}</span>}{' '}
+                  {s.actor.model !== null && <span className="tag mono tech" title="Model string sent to the provider">{p.model.providerModel}</span>}{' '}
+                  {s.actor.responseId !== null && <span className="tag mono tech" title={s.actor.responseId}>{shortId(s.actor.responseId)}</span>}{' '}
                   {s.actor.cost !== null && <span className={`tag${s.actor.cost.includes('reserved') || s.actor.cost === 'cost unknown' ? ' tag-warn' : ''}`}>{s.actor.cost}</span>}
                   {s.actor.failed && <span className="tag tag-warn">repair call failed{s.actor.detail !== null ? `: ${s.actor.detail}` : ''}</span>}
                 </p>

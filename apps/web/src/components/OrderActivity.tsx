@@ -31,7 +31,7 @@ export function OrderActivity({ events, seed, revealed, onCheck, cite }: Props) 
         const ok = g.positions[i] === true;
         const partners = wrongPartners(g, id).map((pid) => `“${labels[pid] ?? pid}”`);
         const shown = partners.length > 2 ? `${partners.slice(0, 2).join(', ')} and ${partners.length - 2} more` : partners.join(' and ');
-        return { ok, text: ok ? '✓ Right place' : (shown === '' ? '✗ Not the right place' : `✗ Wrong way round with ${shown}`) };
+        return { ok, text: ok ? 'Right place' : (shown === '' ? 'Not the right place' : `Wrong way round with ${shown}`) };
       }),
     };
   };

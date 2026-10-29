@@ -1,17 +1,18 @@
+import type { ReactNode } from 'react';
 import type { StageEvent } from '../../../../packages/contracts/index.ts';
 import { ANALYSIS_REPAIR_LABEL } from '../lib/analysisRepairs.ts';
 import type { AnalysisRepairRecord } from '../lib/analysisRepairs.ts';
 import { stageCostLabel, timelineTotal } from '../lib/cost.ts';
 import { buildTimeline, formatDuration, formatTokens, rowLabel, rowModel, shortId } from '../lib/jobs.ts';
-import { modelRunTag } from '../lib/models.ts';
 import type { JobModel } from '../lib/models.ts';
 import type { JobStatus, RowStatus } from '../lib/jobs.ts';
+import { IconCheck, IconCross, IconPending, IconRunning } from './icons.tsx';
 
-const ICON: Record<RowStatus, { glyph: string; label: string }> = {
-  pending: { glyph: '○', label: 'pending' },
-  running: { glyph: '◔', label: 'running' },
-  succeeded: { glyph: '✓', label: 'succeeded' },
-  failed: { glyph: '✗', label: 'failed' },
+export const STEP_ICON: Record<RowStatus, { icon: ReactNode; label: string }> = {
+  pending: { icon: <IconPending />, label: 'pending' },
+  running: { icon: <IconRunning />, label: 'running' },
+  succeeded: { icon: <IconCheck />, label: 'succeeded' },
+  failed: { icon: <IconCross />, label: 'failed' },
 };
 
 export interface TimelineProps {
@@ -26,46 +27,47 @@ export interface TimelineProps {
   jobModel?: JobModel | undefined;
 }
 
+/** The steps of a classic single-activity run. Tokens, response ids and model strings sit under Technical details. */
 export function Timeline({ events, jobStatus, totalCostUSD, reservedUnknownUSD, interrupted, analysisRepairs, jobModel }: TimelineProps) {
   const rows = buildTimeline(events, jobStatus, analysisRepairs);
   const total = timelineTotal(events, jobStatus, { totalCostUSD, reservedUnknownUSD, interrupted: interrupted === true });
   return (
     <div className="timeline-wrap">
-      <ol className="timeline" aria-label="Pipeline stages">
+      <ol className="timeline" aria-label="Pipeline steps">
         {rows.map((r) => {
           const tokens = formatTokens(r.usage);
           const cost = stageCostLabel(r);
           const model = rowModel(r, jobModel);
           return (
-            <li key={`${r.stage}:${r.target ?? ''}:${r.revision ?? ''}`} className={`stage stage-${r.status}${r.stage === 'inject' ? ' stage-inject' : ''}${r.target === 'analysis' ? ' stage-analysis-repair' : ''}`}>
-              <span className={`stage-icon ${r.status}`} role="img" aria-label={ICON[r.status].label}>{ICON[r.status].glyph}</span>
+            <li key={`${r.stage}:${r.target ?? ''}:${r.revision ?? ''}`} className={`stage stage-${r.status}${r.stage === 'inject' ? ' stage-inject' : ''}`}>
+              <span className={`stage-icon ${r.status}`} role="img" aria-label={STEP_ICON[r.status].label}>{STEP_ICON[r.status].icon}</span>
               <div className="stage-body">
                 <div className="stage-top">
                   <strong>{rowLabel(r)}</strong>
                   {r.durationMs !== null && <span className="stage-dur">{formatDuration(r.durationMs)}</span>}
-                  {r.status === 'running' && <span className="stage-dur pulse">running…</span>}
+                  {r.status === 'running' && <span className="stage-dur">running…</span>}
                 </div>
-                {r.stage === 'inject' && <div className="stage-meta"><span className="tag tag-fault">System-made — not a model error</span></div>}
-                {r.target === 'analysis' && <div className="stage-meta"><span className="tag tag-natural">{ANALYSIS_REPAIR_LABEL}</span></div>}
+                {r.stage === 'inject' && <p className="stage-detail tone-fault">System-made — not a model error</p>}
+                {r.target === 'analysis' && <p className="stage-detail">{ANALYSIS_REPAIR_LABEL}</p>}
                 {(model !== null || cost !== null) && (
-                  <div className="stage-meta">
-                    {model !== null && <span className={`tag tag-model-${modelRunTag(model).tone}`} title={model.label}>{model.name}</span>}
-                    {r.responseId !== undefined && <span className="tag mono" title={r.responseId}>{shortId(r.responseId)}</span>}
-                    {cost !== null && <span className={`tag${cost.includes('reserved') || cost === 'cost unknown' ? ' tag-warn' : ''}`}>{cost}</span>}
-                  </div>
+                  <p className="stage-meta">
+                    {model !== null && <span>{model.name}</span>}
+                    {cost !== null && <span>{cost}</span>}
+                    {r.responseId !== undefined && <span className="tech" title={r.responseId}><code>{shortId(r.responseId)}</code></span>}
+                  </p>
                 )}
-                {tokens !== null && <div className="stage-tokens">{tokens} tokens</div>}
-                {r.detail !== undefined && <div className="stage-detail">{r.detail}</div>}
-                {model !== null && <div className="stage-detail" data-testid="stage-model">Model: {model.label} · <code>{model.providerModel}</code></div>}
+                {tokens !== null && <p className="stage-detail tech">{tokens} tokens</p>}
+                {r.detail !== undefined && <p className="stage-detail">{r.detail}</p>}
+                {model !== null && <p className="stage-detail tech" data-testid="stage-model">Model: {model.label} · <code>{model.providerModel}</code></p>}
               </div>
             </li>
           );
         })}
       </ol>
-      <div className="timeline-total">
-        <span>Total est. cost</span>
+      <p className="timeline-total">
+        <span>Total estimated cost</span>
         <strong>{total.text}</strong>
-      </div>
+      </p>
     </div>
   );
 }

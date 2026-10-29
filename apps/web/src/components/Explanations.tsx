@@ -1,5 +1,7 @@
 import type { ActivitySpec } from '../../../../packages/contracts/index.ts';
 import { previewQuote, quoteKey } from '../lib/evidence.ts';
+import { AiWritten } from './Disclosure.tsx';
+import { IconLocate } from './icons.tsx';
 
 export interface CiteProps {
   /** Source currently shown in the Source panel. */
@@ -18,30 +20,24 @@ export function CitationChip({ label, quote, citeKey, enabled, onCite }: { label
       onClick={() => onCite(citeKey)}
       title={enabled ? `Show in source: “${quote}”` : 'This quote is not from the source currently shown'}
     >
-      <span className="chip-icon" aria-hidden="true">❝</span>
+      <IconLocate className="chip-icon" />
       <span className="chip-text">{label ?? previewQuote(quote, 54)}</span>
     </button>
   );
 }
 
-export const AI_TAG_TEXT = 'AI-generated · needs teacher review';
-
-/** Small label: the wording is model prose; only its quotes/numbers are machine-checked. */
-export function AiTag() {
-  return <span className="tag tag-ai" title="The quotes, numbers and ranges are machine-checked; the wording is AI-generated and has not been reviewed.">{AI_TAG_TEXT}</span>;
-}
+export const AI_TAG_TEXT = 'AI-written · needs teacher review';
 
 export function Explanations({ explanations, cite }: { explanations: ActivitySpec['explanations']; cite: CiteProps }) {
   return (
     <section className="card" aria-labelledby="expl-heading">
       <div className="card-head">
         <h3 id="expl-heading">Explanations, grounded in the source</h3>
-        <AiTag />
+        <AiWritten extra="needs teacher review" />
       </div>
       <ul className="explanations">
         {explanations.map((ex) => (
           <li key={ex.id}>
-            <div className="expl-top"><AiTag /></div>
             <p>{ex.text}</p>
             <div className="chips" role="group" aria-label={`Evidence for ${ex.id}`}>
               {ex.evidence.map((ev, i) => {

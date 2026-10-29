@@ -4,9 +4,11 @@ import type { SourceDoc, SourceMeta } from '../api.ts';
 import type { HighlightResult } from '../lib/highlight.ts';
 import { isEvidenceKey } from '../lib/evidence.ts';
 import type { QuoteRef } from '../lib/evidence.ts';
+import { revealInPanels } from '../lib/scroll.ts';
+import { markdownDecorations, sourcePieces } from '../lib/sourceText.ts';
 import { isHttpUrl, sourceLicenseText, sourceOptionLabel, TEACHER_TAG } from '../lib/sources.ts';
 import { CitationChip } from './Explanations.tsx';
-import { PasteSourceForm } from './PasteSourceForm.tsx';
+import { IconExternal } from './icons.tsx';
 
 export interface Flash { key: string; n: number }
 
@@ -15,8 +17,6 @@ export interface SourcePanelProps {
   selectedId: string | null;
   onSelect: (id: string) => void;
   onReload: () => void;
-  /** A pasted source was stored: reload the list and select it. */
-  onCreated: (sourceId: string) => void;
   doc: Loadable<SourceDoc> | null;
   highlights: HighlightResult | null;
   quotes: readonly QuoteRef[];
@@ -34,8 +34,8 @@ function HighlightedText({ text, highlights, byKey, flash }: { text: string; hig
       .filter((m) => (m.dataset['keys'] ?? '').split(' ').includes(flash.key));
     const first = marks[0];
     if (first === undefined) return;
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    first.scrollIntoView({ block: 'center', behavior: reduce ? 'auto' : 'smooth' });
+    // Scroll the source text (and, when the layout is stacked, the workspace) — never the page or the window.
+    revealInPanels(first, 'center');
     for (const m of marks) {
       m.classList.remove('flash');
       void m.offsetWidth; // restart the CSS animation
@@ -45,114 +45,105 @@ function HighlightedText({ text, highlights, byKey, flash }: { text: string; hig
     return () => clearTimeout(timer);
   }, [flash]);
 
+  // The stored text keeps its markdown (its hash is pinned); markers are hidden by character range, so every quote
+  // offset still points at the exact stored characters.
+  const decorations = useMemo(() => markdownDecorations(text), [text]);
   const parts = useMemo(() => {
-    if (highlights === null || highlights.segments.length === 0) return [text];
-    return highlights.segments.map((s) => {
-      const slice = text.slice(s.start, s.end);
-      if (s.keys.length === 0) return <span key={s.start}>{slice}</span>;
-      const isEvidence = s.keys.some(isEvidenceKey);
-      const owners = [...new Set(s.keys.map((k) => byKey.get(k)?.ownerLabel ?? k))].join(', ');
+    const pieces = sourcePieces(text, highlights === null ? null : highlights.segments, decorations);
+    return pieces.map((p) => {
+      const slice = text.slice(p.start, p.end);
+      if (p.hidden) return <span key={p.start} className="md-hide" aria-hidden="true">{slice}</span>;
+      const cls = p.classes.join(' ');
+      if (p.keys.length === 0) return cls === '' ? <span key={p.start}>{slice}</span> : <span key={p.start} className={cls}>{slice}</span>;
+      const isEvidence = p.keys.some(isEvidenceKey);
+      const owners = [...new Set(p.keys.map((k) => byKey.get(k)?.ownerLabel ?? k))].join(', ');
       return (
-        <mark key={s.start} data-keys={s.keys.join(' ')} className={isEvidence ? 'ev-explanation' : 'ev-concept'} title={`Evidence for: ${owners}`}>
+        <mark key={p.start} data-keys={p.keys.join(' ')} className={`${isEvidence ? 'ev-explanation' : 'ev-concept'}${cls === '' ? '' : ` ${cls}`}`} title={`Evidence for: ${owners}`}>
           {slice}
         </mark>
       );
     });
-  }, [text, highlights, byKey]);
+  }, [text, highlights, decorations, byKey]);
 
   return <div ref={ref} className="source-text" tabIndex={0} aria-label="Source text with highlighted evidence quotes">{parts}</div>;
 }
 
-export function SourcePanel({ sources, selectedId, onSelect, onReload, onCreated, doc, highlights, quotes, flash, onCite }: SourcePanelProps) {
+export function SourcePanel({ sources, selectedId, onSelect, onReload, doc, highlights, quotes, flash, onCite }: SourcePanelProps) {
   const byKey = useMemo(() => new Map(quotes.map((q) => [q.key, q] as const)), [quotes]);
   const concepts = quotes.filter((q) => q.kind === 'concept');
   const located = highlights ? Object.keys(highlights.ranges).length : 0;
   const meta = sources.state === 'ready' ? sources.data.find((s) => s.id === selectedId) : undefined;
-  const [pasting, setPasting] = useState(false);
-  const [reuseMsg, setReuseMsg] = useState<string | null>(null);
+  const [licenceOpen, setLicenceOpen] = useState(false);
   const library = sources.state === 'ready' ? sources.data.filter((s) => s.kind !== 'user') : [];
   const teacher = sources.state === 'ready' ? sources.data.filter((s) => s.kind === 'user') : [];
 
   return (
-    <section className={`panel source-panel${pasting ? ' is-pasting' : ''}`} aria-labelledby="source-heading">
-      <div className="panel-head">
-        <h2 id="source-heading"><span className="step-num">1</span> Source</h2>
+    <section className="panel source-panel" aria-labelledby="source-heading">
+      <div className="source-head">
+        <h2 id="source-heading" className="sr-only">Source page</h2>
+        {sources.state === 'loading' && <p className="muted">Loading pages…</p>}
+        {sources.state === 'error' && (
+          <div className="callout callout-error" role="alert">
+            {sources.message} <button type="button" className="btn btn-small" onClick={onReload}>Retry</button>
+          </div>
+        )}
+        {sources.state === 'ready' && sources.data.length === 0 && <p className="muted">No licensed pages are registered.</p>}
+        {sources.state === 'ready' && sources.data.length > 0 && (
+          <>
+            <label htmlFor="source-select" className="field-label">Source page</label>
+            <select id="source-select" value={selectedId ?? ''} onChange={(e) => { onSelect(e.target.value); setLicenceOpen(false); }}>
+              {teacher.length === 0
+                ? library.map((s) => <option key={s.id} value={s.id}>{sourceOptionLabel(s)}</option>)
+                : (
+                  <>
+                    <optgroup label="Licensed library">
+                      {library.map((s) => <option key={s.id} value={s.id}>{sourceOptionLabel(s)}</option>)}
+                    </optgroup>
+                    <optgroup label={`${TEACHER_TAG}s (pasted)`}>
+                      {teacher.map((s) => <option key={s.id} value={s.id}>{sourceOptionLabel(s)}</option>)}
+                    </optgroup>
+                  </>
+                )}
+            </select>
+          </>
+        )}
+
+        {meta !== undefined && (
+          <div className="license">
+            <p className="license-row">
+              {meta.kind === 'user' && <span>{TEACHER_TAG} ·</span>}
+              <span>{sourceLicenseText(meta)}</span>
+              {isHttpUrl(meta.locator)
+                ? <a href={meta.locator} target="_blank" rel="noopener noreferrer">Original page <IconExternal /><span className="sr-only"> (opens in a new tab)</span></a>
+                : <span className="muted">{meta.locator}</span>}
+            </p>
+            <p id="licence-text" className={`attribution${licenceOpen ? '' : ' clamped'}`}>{meta.attribution}</p>
+            {licenceOpen && <p className="attribution">Text fingerprint (SHA-256): <code>{meta.sha256}</code></p>}
+            <button type="button" className="link-btn small" aria-expanded={licenceOpen} aria-controls="licence-text" onClick={() => setLicenceOpen((v) => !v)}>
+              {licenceOpen ? 'Hide licence details' : 'Licence details'}
+            </button>
+          </div>
+        )}
+
+        {highlights !== null && quotes.length > 0 && (
+          <p className="legend" aria-label="Highlight legend">
+            <span><mark className="ev-explanation">Quoted</mark> by the lesson</span>
+            <span><mark className="ev-concept">Concept</mark> Muse found</span>
+            <span className="muted">{located} of {quotes.length} quotes found on the page</span>
+          </p>
+        )}
       </div>
 
-      {sources.state === 'loading' && <p className="muted pad">Loading sources…</p>}
-      {sources.state === 'error' && (
-        <div className="callout callout-error pad-m" role="alert">
-          {sources.message} <button type="button" className="btn btn-small" onClick={onReload}>Retry</button>
-        </div>
-      )}
-      {sources.state === 'ready' && sources.data.length === 0 && <p className="muted pad">No licensed sources are registered.</p>}
-      {sources.state === 'ready' && sources.data.length > 0 && (
-        <div className="pad">
-          <label htmlFor="source-select" className="sr-only">Licensed source text</label>
-          <select id="source-select" value={selectedId ?? ''} onChange={(e) => onSelect(e.target.value)}>
-            {teacher.length === 0
-              ? library.map((s) => <option key={s.id} value={s.id}>{sourceOptionLabel(s)}</option>)
-              : (
-                <>
-                  <optgroup label="Licensed library">
-                    {library.map((s) => <option key={s.id} value={s.id}>{sourceOptionLabel(s)}</option>)}
-                  </optgroup>
-                  <optgroup label={`${TEACHER_TAG}s (pasted)`}>
-                    {teacher.map((s) => <option key={s.id} value={s.id}>{sourceOptionLabel(s)}</option>)}
-                  </optgroup>
-                </>
-              )}
-          </select>
-        </div>
-      )}
-
-      {sources.state === 'ready' && !pasting && (
-        <div className="pad paste-toggle">
-          <button type="button" className="btn btn-small" onClick={() => { setPasting(true); setReuseMsg(null); }} aria-expanded={false}>＋ Paste your own text</button>
-          {reuseMsg !== null && <p className="callout pad-s small" role="status">{reuseMsg}</p>}
-        </div>
-      )}
-      {pasting && (
-        <div className="pad">
-          <PasteSourceForm
-            onCancel={() => setPasting(false)}
-            onCreated={(id, notice) => { setPasting(false); setReuseMsg(notice); onCreated(id); }}
-          />
-        </div>
-      )}
-
-      {meta !== undefined && (
-        <div className="license">
-          <div className="license-row">
-            {meta.kind === 'user' && <span className="tag tag-teacher">{TEACHER_TAG}</span>}
-            <span className="tag">{sourceLicenseText(meta)}</span>
-            {isHttpUrl(meta.locator)
-              ? <a href={meta.locator} target="_blank" rel="noopener noreferrer">Original page ↗</a>
-              : <span className="muted">{meta.locator}</span>}
-            <span className="tag mono" title={`sha256 ${meta.sha256}`}>sha {meta.sha256.slice(0, 8)}</span>
-          </div>
-          <p className="attribution">{meta.attribution}</p>
-        </div>
-      )}
-
-      {highlights !== null && quotes.length > 0 && (
-        <div className="legend" aria-label="Highlight legend">
-          <span><mark className="ev-explanation">Evidence</mark> cited by the activity</span>
-          <span><mark className="ev-concept">Concept</mark> found by Muse</span>
-          <span className="muted">{located}/{quotes.length} quotes located</span>
-        </div>
-      )}
-
       <div className="source-scroll">
-        {doc === null && <p className="muted pad">Select a source.</p>}
-        {doc?.state === 'loading' && <p className="muted pad">Loading source text…</p>}
-        {doc?.state === 'error' && <div className="callout callout-error pad-m" role="alert">{doc.message}</div>}
+        {doc === null && <p className="muted pad">Select a page.</p>}
+        {doc?.state === 'loading' && <p className="muted pad">Loading the page…</p>}
+        {doc?.state === 'error' && <div className="callout callout-error" role="alert">{doc.message}</div>}
         {doc?.state === 'ready' && <HighlightedText text={doc.data.text} highlights={highlights} byKey={byKey} flash={flash} />}
       </div>
 
       {concepts.length > 0 && (
         <div className="concepts">
-          <h3>Concepts Muse found</h3>
+          <h3 className="section-title">Concepts Muse found</h3>
           <div className="chips">
             {[...new Map(concepts.map((c) => [c.ownerId, c] as const)).values()].map((c) => (
               <CitationChip key={c.key} label={c.ownerLabel} quote={c.quote} citeKey={c.key} enabled={highlights?.ranges[c.key] !== undefined} onCite={onCite} />

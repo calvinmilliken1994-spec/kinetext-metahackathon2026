@@ -7,6 +7,7 @@ import { Scene } from './Scene.tsx';
 import { Graph } from './Graph.tsx';
 import { Readout, Slider } from './controls.tsx';
 import type { SimControls } from './useSimulation.ts';
+import { IconPause, IconPlay, IconReplay } from './icons.tsx';
 
 const pickV = (f: Frame): number => f.v;
 const pickX = (f: Frame): number => f.x;
@@ -37,7 +38,7 @@ export function Simulation({ sim, ctl }: { sim: ActivitySpec['simulation']; ctl:
 
       <div className="transport" role="group" aria-label="Playback">
         <button type="button" className="btn btn-primary" onClick={ctl.playing ? ctl.pause : ctl.play}>
-          {ctl.playing ? '❚❚ Pause' : finished ? '↻ Replay' : '▶ Play'}
+          {ctl.playing ? <><IconPause /> Pause</> : finished ? <><IconReplay /> Replay</> : <><IconPlay /> Play</>}
         </button>
         <button type="button" className="btn" onClick={ctl.reset}>⟲ Reset</button>
         <div className="scrub">
