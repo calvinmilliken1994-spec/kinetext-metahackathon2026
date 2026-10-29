@@ -527,3 +527,26 @@ Validator unit: golden accept; one fixture per check id; repair revision-1→2 k
 | Chemistry demo source (licensed page with a printed reaction equation) | Qwen 3.8 Flash | `data/sources/**` |
 
 **Input budget (decided after S6-M, 2026-10-29):** the client's input bound counts bytes (DEBT-003), and S6-M measured the v2 analysis-repair request at 40.8k bytes on the largest current source (NRC, 14.4k chars), so the analysis call and repair would hit `INPUT_TOO_LARGE` on pages over ~5.5k chars. Decision: v2 calls use `maxInputTokensV2 = 72,000` (config, validated ≤ the provider context), enough for the 40,000-char source ceiling plus the ~15k system prompt and schema; v1 keeps 32,000. Reservation cost at the cap: 72k × USD 1.25/M ≈ USD 0.09 per call (estimate, reconciled to actual usage). Prompt shrinking is deferred.
+
+## Lesson-flow API contract (frozen 2026-10-29, for S6-W and S6-UW in parallel)
+
+**Submit.** `POST /api/jobs` body gains `flow?: 'lesson' | 'activity'`; default **`'lesson'`** (the Stage 6 flow is the product default). `'activity'` runs the unchanged v1 pipeline (kept for the pre-registered evaluation and comparisons). Unknown → `400 {"error":"FLOW_INVALID"}`. `model` (OW-2) applies to both flows.
+
+**Job summary** (`job.json`, list and detail) gains `flow`, and for lesson jobs `lesson: { overviewReady: boolean, componentsPlanned: number, componentsPublished: number, componentsFailed: number, partialPublish: boolean }`. Status semantics: `succeeded` = overview published (plus any passed components); `declined` (existing unsupported status) = `usable=false`; `failed` = overview failed or fatal error.
+
+**Detail** `GET /api/jobs/:id` for lesson jobs adds:
+- `analysisV2: SourceAnalysisV2 | null`, `analysisV2Report`, `analysisV2Revisions: [{revision, analysis, report}]`
+- `lesson: LessonSpec | null` (overview + components with `status` passed/failed/skipped, `reason` = plain sentence, incl. dropped-items note on passed cards)
+- `kitSpecs: Record<specId, KitSpec>` — passed specs only (never unverified content)
+- `componentReports: Record<specId, ValidationReport>` (latest per component) and `componentRepairs: [{componentId, attempt, revision, targeted, fixed, remaining, passed}]`
+- premium: when the plan includes a premium engine, the existing v1 detail fields (`spec`, `report`, `revisions`, `summary.repairs`) for that activity, unchanged.
+
+**Events** gain stage values `overview` (status succeeded when the overview passes — the web shows it immediately) and `component` (with `componentId`, `revision`, `status`); repair events carry `target: 'component'` + `componentId` or `target: 'analysis'`.
+
+**Storage** per job: `analysis-v2.rN.json`, `lesson.json`, `{componentId}.rN.json` (+ report), receipts as today.
+
+**Premium engines inside a lesson.** The worker builds the v1 `SourceAnalysis` the premium generator needs from the v2 analysis (`supported: true`, `activity` = premium id, concepts from key terms with their quotes, objectives from key points), validates it with the v1 `validateAnalysis`, and only then calls the unchanged v1 `generateSpec`/repair path. If the adapter analysis fails validation, the premium entry is `skipped` with a plain reason; no paid call is made.
+
+**Demo faults in lesson flow** (labelled system-made, excluded from metrics): `fabricated-quote` → the first quiz card's quote is replaced with text not on the page (must fail Q-01); `wrong-answer` → the formula explorer's expression is altered (must fail FE-08, else FE-05/FE-04).
+
+**Limits.** `maxInputTokensV2 = 72000` (config, validated), output caps 16,000 (analysis) / 12,000 (component, repair); components run in plan order, at most 2 concurrently; the existing job wall-time cap applies to the whole lesson; every charge goes through the single cost accumulator.
