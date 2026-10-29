@@ -1,0 +1,231 @@
+# Fueling Life on Earth: Chemosynthesis versus Photosynthesis
+
+## Overview
+
+TOPIC:
+
+Chemosynthesis
+
+FOCUS: Students analyze and compare the chemicals used by autotrophs to produce energy through chemosynthesis in the deep sea and through photosynthesis.
+
+GRADE LEVEL:
+
+9th-12th (Chemistry)
+
+TIME NEEDED:
+
+Two 50-minute class period
+
+DRIVING QUESTION How does the chemical process of chemosynthesis compare to the process of photosynthesis?
+
+OBJECTIVES/ LEARNING OUTCOMES: Students will:
+
+• Use models to illustrate how photosynthesis and chemosynthesis transform energy (light and chemical) into stored chemical energy.
+
+• Construct an explanation for how life in hydrothermal vent environments and other environments transforms energy into stored energy.
+
+• Use mathematical representations to support the claim that atoms, and therefore mass, are conserved during a chemical reaction.
+
+MATERIALS:
+
+• Fueling Life on Earth Slides (project for the class)
+
+Student Handout • Student Worksheet: Fueling All Life on Earth (1 per student)
+
+NEXT GENERATION SCIENCE STANDARDS (NGSS)
+
+Performance Expectations (PEs) HS-LS1-5 HS-PS1-7
+
+LS2.B: Cycles of Matter and Energy Transfer in Ecosystems PS1.B: Chemical Reactions
+
+Disciplinary Core Ideas (DCIs) LS1.C: Organization of Matter and Energy Flow in Organisms
+
+Crosscutting Concepts (CCs) Systems and System models Energy and Matter
+
+Science & Engineering Practices (SEPs)
+
+Developing and Using Models
+
+Obtaining, Evaluating, and Communicating Information
+
+COMMON CORE CONNECTIONS MP2, HSN-Q.A2
+
+OCEAN LITERACY ESSENTIAL PRINCIPLES AND FUNDAMENTAL CONCEPTS Principle 5: FC g
+
+## Overview
+
+Videos • Oases of Life (3:36) NOAA Ocean Exploration • Deep-Sea Dialogues: Hydrothermal Vents (8:28) NOAA Ocean Exploration
+
+Chemical Equation Block Activity (set-up for each group of 3-4 students) • One set of colored cubes • Cutouts of all parts of the photosynthesis and chemosynthesis equations and
+
+color keys printed on cardstock. • Bag/container to place all materials
+
+EQUIPMENT: • Computer and projector for class viewing of videos and slides • Optional: Student laptops or tablets for extensions and/or additional research
+
+SET-UP INSTRUCTIONS: • Cue up videos to show the class • Prepare all bags/containers with all materials well in advance.
+
+Preparation of Materials • Bag/container should have: • 7 cubes of one color to represent Carbon • 20 cubes of one color to represent Hydrogen • 22 cubes of one color to represent Oxygen • 4 cubes of one color to represent Sulfur • 1 filled out Color Key Card - will let students know what color
+
+represents each element • 1 set of Photosynthesis Chemical Reaction Components • 1 set of Chemosynthesis Chemical Reaction Components
+
+## Educator Guide
+
+Background
+
+The majority of life on Earth is based on a food web which revolves around the Sun, as plants use sunlight to make food via photosynthesis. However, in environments where there is no sunlight and thus no plants, organisms instead rely on primary production through a process called chemosynthesis, which runs on chemical energy. Together, photosynthesis and chemosynthesis fuel all life on Earth.
+
+All ecosystems consist of primary producers which convert carbon into organic molecules such as glucose and consumers that eat and break down those organic molecules to fuel their cellular processes. In the deep parts of the ocean, microorganisms have evolved to use chemicals as their primary form of energy – chemosynthesis. Researchers have discovered several pathways for chemosynthesis that serve as the basis of unique deep-sea food webs and oases of life at both hydrothermal vents and cold seeps.
+
+Chemosynthetic microbes, like bacteria and archaea, form the base of food webs at hydrothermal vents and cold seeps by creating sugars (food) using energy released from chemical reactions. The chemicals for these reactions come from beneath the sea floor and can vary at these sites. One common form of chemosynthesis found at hydrothermal vents uses hydrogen sulfide. This form of chemosynthesis can be summarized in an equation similar to photosynthesis allowing for parallels and comparisons between the two processes, as depicted in this lesson.
+
+Educator Note Students should have a basic understanding of photosynthesis and balancing chemical equations.
+
+Introduction
+
+Hand out the Student Worksheet (one per student).
+
+Use Slides 2-3 to review photosynthesis and guide students to start thinking about chemosynthesis and how it works as another process for producing food.
+
+Allow students time to briefly think about how life is possible in the deep sea if photosynthesis does not occur there.
+
+Have them briefly discuss and share out their thoughts on the three questions listed at the top of their worksheet. Play these two short video clips:
+
+Oases of Life
+
+• Oases of Life (:00 -1:06) NOAA Ocean Exploration
+
+Video Courtesy of NOAA Ocean Exploration
+
+• Deep-Sea Dialogues: Hydrothermal Vents (5:50-8:30 min) Discuss the questions on Slide 5. Tell students they will use their knowledge of photosynthesis and food webs to conduct a hands-on activity to help them compare the process of chemosynthesis to photosynthesis.
+
+Learning Procedure
+
+Emphasize the Driving Question: How does the chemical process of photosynthesis compare to the process of chemosynthesis in the deep sea?
+
+Hand out the bags/containers with materials for modeling (one set per group).
+
+Have student groups take out all the contents of the bags and separate out the equation pieces plus sort their cubes by color, identifying what each cube color represents. This will allow them to be able to move pieces around while working to figure out where things go and how they fit together. Explain that each bag contains cut outs of all of the components for both the photosynthesis and chemosynthesis equations plus all the cubes needed to build only the REACTANTS for photosynthesis and chemosynthesis (Slide 8).
+
+Guide students to start with photosynthesis since they should be familiar with this process. Then they can proceed to building the REACTANTS for chemosynthesis.
+
+Instruct the groups to start with images and arrows and add chemicals and words as they think through the process. They can use the diagrams on their worksheet as an additional resource (Slide 10). Once they have the reactants, then they can work together to figure out the products.
+
+Remind students that the law of conservation of matter states that matter cannot be created or destroyed. So, all the reactant components on the left must be used to create the products on the right. If there are any remaining or any missing, their equation is not correct and needs to be revised. If their equation is accurate, they will have exactly the correct number of each color of cubes to build the products on the right.
+
+Check each group’s work to make sure they have the correct equations and cube models.
+
+Instruct students to answer the questions on their worksheet and fill out the Data Table (Slide 11) to compare and contrast the two processes. You may choose to replay the video clip from the Deep-Sea Dialogues: Hydrothermal Vents (5:50-8 min) to help remind them of some key concepts.
+
+Putting the Pieces Together
+
+Have students answer the discussion questions on their Student Worksheet.
+
+TEACHER NOTE
+
+If your students are unfamiliar with chemical equations and molecular formulas, consider modeling how to make one CO2 or H2O molecule. Ask them what the number in front of the molecule means (the coefficient) and how they should show that using the blocks. For example, they should learn or know that 6CO2 means they need six copies of the CO2 molecule.
+
+Extensions
+
+• Have students consider what would happen if a vent or seep stopped flowing. • Provide students a writing prompt "Imagine what it must have been like to be a marine chemist discovering the existence of chemosynthesis." Have them write a journal entry that they imagine might have appeared in that scientist’s journal. • Have students read The Discovery of Hydrothermal Vents from Woods Hole Oceanographic Institution and
+
+discuss their thoughts. • These additional activities connect the biological communities that depend on and use chemosynthesis.
+
+• Student Investigation: Methane Ice Worms (MS) • Student Investigation: Life on a Hydrothermal Vent (HS)
+
+Scientific Terms
+
+Photosynthesis: The process used by plants to convert carbon dioxide and water into oxygen and sugars (food), using energy from the sun. Chemosynthesis: The process by which microbes create sugars (food) using energy released from chemical reactions. Autotroph: Organisms that are able to make their own food from raw materials and energy, also known as producers. Examples include plants, algae, and some types of bacteria. Heterotroph: Organisms that consume producers or other consumers, also known as consumers. Reactants: A substance that changes in a chemical reaction. These are the starting materials and are written on the lefthand side of a chemical equation. Products: Refers to the new substance(s) formed as a result of the chemical reaction and are written on the right side of a chemical equation.
+
+Assessment
+
+Opportunities for formative assessment are embedded throughout the lesson and class discussions. The models constructed with the cubes as well as the discussion questions can be used as opportunity for summative assessment.
+
+## Teacher Key: Fueling Life on Earth
+
+Photosynthesis 1. Write down what color represents each element.
+
+Carbon (C) = color will vary Oxygen (O) = color will vary Hydrogen (H) = color will vary
+
+2. Write the equation plus names of the molecules/compounds for photosynthesis in the box.
+
+6CO2 + 6H2O → C6H12O6 + 6O2
+
+Carbon dioxide
+
++
+
+Water
+
+→
+
+Sugar
+
++ Oxygen
+
+3. What is the energy that fuels this process? Solar or light energy
+
+4. Where does the energy come from? Sun
+
+Chemosynthesis 5. Write down what color represents each element.
+
+Carbon (C) = color will vary Oxygen (O) = color will vary Hydrogen (H) = color will vary Sulfur (S) = color will vary
+
+6. Write the equation plus names of the molecules/compounds for chemosynthesis in the box.
+
+CO2 + 4H2S + O2 → CH2O + 4S + 3H2O
+
+Carbon dioxide
+
++ Hydrogen Suifide
+
++
+
+Oxygen
+
+→
+
+Sugar
+
++
+
+Sulfur
+
++ Water
+
+Since you may not be as familiar with chemosynthesis, use the questions below to guide you. 7. What is coming out of the vent? Chemicals (i.e. hydrogen sulfide) 8. If there is no plant or algae life, what is at the base of the food web? Chemosynthetic organisms/microbes 9. What is the energy that fuels this process? Chemical energy 10. Where does this energy come from? Chemical reactions
+
+Data Table: Using the diagrams and the information you gathered, fill in the table below identifying the similarities and differences between the two processes?
+
+Photosynthesis
+
+Write the equation. 6CO2 + 6H2O → C6H12O6 + 6O2
+
+• Powered by sunlight. • Occurs in plants and some
+
+bacteria where sunlight is available. • All photosynthetic organisms use solar energy to turn carbon dioxide and water into sugar (food) and oxygen. • Water is a reactant. • Oxygen is a product.
+
+Common to both processes
+
+• Processes by which organisms produce food.
+
+• Carbon dioxide is a reactant. • Both use water. • Both use oxygen. • Both include a compound made
+
+of carbon, hydrogen, and oxygen as a product (1:2:1) = simple sugar = food.
+
+Chemosynthesis
+
+Write the equation. CO2 + 4H2S + O2 → CH2O + 4S + 3H2O
+
+• Powered by chemical energy. • Occurs in bacteria and other
+
+organisms • Involves the use of energy
+
+released by inorganic chemical reactions to produce food. • All chemosynthetic organisms use energy released by chemical reactions to make a sugar. • Different species use different pathways. For example, at hydrothermal vents, vent bacteria oxidize hydrogen sulfide, add carbon dioxide and oxygen, and produce sugar, sulfur, and water. • Water is a product. • Oxygen is a reactant.
+
+Discussion Questions
+
+11. In words, describe the reactions that you have modeled. Answers will vary. Photosynthesis – sunlight supplies the energy to convert carbon dioxide and water to glucose and oxygen. Chemosynthesis – hydrogen sulfide supplies the energy to convert carbon dioxide and water to glucose and hydrogen sulfide.
+
+12. What did you learn by modeling your equations? How do these processes affect your life and the life of deep sea organisms? Answers will vary. Students should say something about being able to visualize the differences between chemosynthesis and photosynthesis, autotrophic nutrition, and heterotrophic nutrition. Heterotrophs are ultimately dependent on autotrophs for nutrition. We depend on autotrophs for food and so do the organisms in the deep sea. Without food, organisms cannot live, grow, or reproduce.
+
+13. Why is chemosynthesis important to both autotrophic and heterotrophic organisms in the deep sea? Answers will vary. This is the mechanism by which autotrophs create their own energy in places where life was thought not to exist. These processes are important to heterotrophs because the heterotrophs rely upon the autotrophs for energy; in turn, providing the food needed for the development of rich, diverse communities. Also, any changes in the ocean that cause a shift in the availability of any of the compounds used may adversely affect life in the deep sea. Many of the ecosystems in the deep ocean rely on food falling from the surface ocean as dead material and waste called “marine snow”– but in the areas where chemical vents and seeps exist, the chemicals rising from the rocks and sediments provide energy.
