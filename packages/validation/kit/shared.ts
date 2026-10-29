@@ -20,7 +20,7 @@ import {
 } from '../validate.ts';
 import type { TextLookup } from '../validate.ts';
 import { KIT_LIMITS } from '../../contracts/kit.ts';
-import { normalizeChemFormula, normalizeEquationText } from '../chemistry.ts';
+import { normalizeChemFormula, normalizeEquationText, parseChemicalFormula } from '../chemistry.ts';
 
 /* ------------------------------------------------------------------ */
 /* Source index with paragraph/sentence context                        */
@@ -269,9 +269,15 @@ function canonicalNumber(sign: string | undefined, intPart: string, fracPart: st
   return `${negative ? '-' : ''}${digits}${frac === '' ? '' : `.${frac}`}`;
 }
 
-/** Every whole signed numeric token of a string, with its canonical value. */
-export function signedNumberTokens(text: string): SignedNumberToken[] {
-  const out: SignedNumberToken[] = [];
+/** A whole signed numeric token together with its offsets in the scanned string. */
+export interface SignedNumberSpan extends SignedNumberToken {
+  start: number;
+  end: number;
+}
+
+/** Every whole signed numeric token of a string, with its canonical value AND its offsets. */
+export function signedNumberTokenSpans(text: string): SignedNumberSpan[] {
+  const out: SignedNumberSpan[] = [];
   if (typeof text !== 'string' || text === '') return out;
   for (const m of text.matchAll(SIGNED_NUMBER_RE)) {
     const start = m.index ?? 0;
@@ -281,9 +287,14 @@ export function signedNumberTokens(text: string): SignedNumberToken[] {
     const sign = m[1] ?? m[5];
     const intPart = m[2] ?? m[3] ?? '';
     const fracPart = m[4] ?? m[6] ?? '';
-    out.push({ raw: m[0], value: canonicalNumber(sign, intPart, fracPart) });
+    out.push({ raw: m[0], value: canonicalNumber(sign, intPart, fracPart), start, end: start + m[0].length });
   }
   return out;
+}
+
+/** Every whole signed numeric token of a string, with its canonical value. */
+export function signedNumberTokens(text: string): SignedNumberToken[] {
+  return signedNumberTokenSpans(text).map(({ raw, value }) => ({ raw, value }));
 }
 
 /** The canonical values of every whole signed numeric token of a string. */
@@ -314,14 +325,51 @@ export function numbersCarryingToken(text: string, value: string): string[] {
 }
 
 /**
- * S6R-09: `content` occurs in `text` after normalisation AND every number in `content` occurs
- * there as the same whole signed number. `2` does not match inside `20`, `2.5`, `-2` or `1,200`;
- * `5` does match `5.0` (same value, different spelling).
+ * S6R-09: `content` occurs in `text` after normalisation AND, AT A MATCHED OCCURRENCE, every number
+ * in `content` is the same whole signed number there. The identity is checked at the occurrence
+ * itself, not anywhere in `text`, so an unrelated whole `2` later in the same quote cannot rescue
+ * `a value of 2` printed inside `a value of 20`. Values still cross spelling (`5` matches a printed
+ * `5.0`), while `2` never matches inside `20`, `2.5`, `-2` or `1,200`.
  */
 export function contentOccursWhole(text: string, content: string): { ok: boolean; contained: boolean; missingNumbers: string[] } {
-  const contained = containsNormalized(text, content);
-  const missingNumbers = contained ? missingSignedNumbers(content, text) : [];
-  return { ok: contained && missingNumbers.length === 0, contained, missingNumbers };
+  const hay = normalizeWhitespace(typeof text === 'string' ? text : '').toLowerCase();
+  const ndl = normalizeWhitespace(typeof content === 'string' ? content : '').toLowerCase();
+  if (hay === '' || ndl === '') return { ok: false, contained: false, missingNumbers: [] };
+  const first = hay.indexOf(ndl);
+  if (first === -1) return { ok: false, contained: false, missingNumbers: [] };
+  const hayNumbers = signedNumberTokenSpans(hay);
+  const contentNumbers = signedNumberTokenSpans(ndl);
+  let best: string[] | null = null;
+  for (let at = first; at !== -1; at = hay.indexOf(ndl, at + 1)) {
+    const missing: string[] = [];
+    for (const n of contentNumbers) {
+      const from = at + n.start;
+      const to = at + n.end;
+      // The whole number printed at this position may be longer than the matched slice (the `20`
+      // that a cropped `2` sits inside); its VALUE is what has to agree.
+      const whole = hayNumbers.find(h => h.start <= from && h.end >= to);
+      if (whole === undefined || whole.value !== n.value) missing.push(n.value);
+    }
+    if (missing.length === 0) return { ok: true, contained: true, missingNumbers: [] };
+    if (best === null || missing.length < best.length) best = missing;
+  }
+  return { ok: false, contained: true, missingNumbers: [...new Set(best ?? [])] };
+}
+
+/**
+ * S6R-13: the value of an option that is nothing but one number (`5`, `5.00`, `1,200`, `-5`), or
+ * null when the option carries any wording, unit, percent or currency mark. Two options with the
+ * same value are the same answer, and index-only grading cannot tell them apart.
+ */
+export function numericOptionValue(option: string): string | null {
+  if (typeof option !== 'string') return null;
+  const token = normalizeWhitespace(option).trim();
+  if (token === '') return null;
+  const spans = signedNumberTokenSpans(token);
+  if (spans.length !== 1) return null;
+  const only = spans[0] as SignedNumberSpan;
+  if (only.raw !== token) return null; // wording, units or marks around the number
+  return only.value;
 }
 
 /* ------------------------------------------------------------------ */
@@ -364,6 +412,94 @@ export function chemicallyCompleteOccurrences(haystack: string, needle: string):
     from = start + 1;
   }
   return out;
+}
+
+/* ------------------------------------------------------------------ */
+/* Maximal printed reaction span (S6R-05)                              */
+/* ------------------------------------------------------------------ */
+
+/** Characters that continue a printed reaction term (formula, coefficient, group). Subscripts are ASCII here. */
+const REACTION_TERM_CHAR = /[0-9A-Za-z()[\]{}]/;
+
+/** True when `term` is `[coefficient]formula` and the formula parses, so it is a printed species. */
+function isFormulaTerm(term: string): boolean {
+  const formula = term.replace(/^[0-9]+/, '');
+  if (formula === '') return false;
+  return parseChemicalFormula(formula).ok;
+}
+
+/**
+ * A neighbouring whitespace-delimited token counts as a continued printed species only when it is a
+ * formula WITH a subscript or a group. That keeps ordinary capitalised words out (`Carbon`, `Water`
+ * and even element-looking words such as `In` are prose, not a leg this span should absorb).
+ */
+function isPrintedSpeciesToken(token: string): boolean {
+  const cleaned = token.replace(/^[^A-Za-z0-9([]+/, '').replace(/[^A-Za-z0-9)\]}]+$/, '');
+  if (cleaned === '' || !/[0-9()[\]{}]/.test(cleaned)) return false;
+  return isFormulaTerm(cleaned);
+}
+
+export interface ReactionSpan {
+  start: number;
+  end: number;
+  /**
+   * The MAXIMAL reaction printed around the arrow, normalised (subscripts ASCII, arrows `->`), e.g.
+   * `H2 + O2 -> H2O + H2O2`. Not the generated substring: whole printed terms on both sides of the
+   * arrow belong to it.
+   */
+  text: string;
+  /**
+   * True when the printed reaction visibly runs on past this span (a further species printed after
+   * whitespace without an operator, or a dangling operator). Callers fail closed.
+   */
+  continues: boolean;
+}
+
+/**
+ * S6R-05: the maximal reaction span of `haystack` around the occurrence of `needle`. Starting from a
+ * token-boundary occurrence, both edges extend over `+`, arrow, coefficients, species and state
+ * symbols (state symbols are stripped by the equation normalisation) until a non-reaction token, so
+ * a whole printed term can never be silently dropped. `null` when `needle` does not occur as a
+ * complete chemical-token run at all (e.g. `H2O` cut out of `H2O2`).
+ */
+export function maximalReactionSpan(haystack: string, needle: string): ReactionSpan | null {
+  const hay = normalizeEquationText(typeof haystack === 'string' ? haystack : '');
+  const ndl = normalizeEquationText(typeof needle === 'string' ? needle : '');
+  if (hay === '' || ndl === '') return null;
+  const occurrence = chemicallyCompleteOccurrences(hay, ndl)[0];
+  if (occurrence === undefined) return null;
+  let start = occurrence.start;
+  let end = occurrence.end;
+  // Extend LEFT one printed term at a time across "term +" / "term ->" boundaries.
+  for (;;) {
+    const op = /(\s*(?:\+|->)\s*)$/.exec(hay.slice(0, start));
+    if (op === null) break;
+    const opStart = start - (op[0] as string).length;
+    let termStart = opStart;
+    while (termStart > 0 && REACTION_TERM_CHAR.test(hay[termStart - 1] as string)) termStart--;
+    if (termStart === opStart) break; // an operator with no printed term before it
+    start = termStart;
+  }
+  // Extend RIGHT symmetrically.
+  for (;;) {
+    const op = /^(\s*(?:\+|->)\s*)/.exec(hay.slice(end));
+    if (op === null) break;
+    const termStart = end + (op[0] as string).length;
+    let termEnd = termStart;
+    while (termEnd < hay.length && REACTION_TERM_CHAR.test(hay[termEnd] as string)) termEnd++;
+    if (termEnd === termStart) break; // an operator with no printed term after it
+    end = termEnd;
+  }
+  const before = hay.slice(0, start);
+  const after = hay.slice(end);
+  const lastBefore = /(\S+)\s*$/.exec(before)?.[1] ?? '';
+  const firstAfter = /^\s*(\S+)/.exec(after)?.[1] ?? '';
+  const continues =
+    /(\+|->)\s*$/.test(before) ||
+    /^\s*(?:\+|->)/.test(after) ||
+    (lastBefore !== '' && isPrintedSpeciesToken(lastBefore)) ||
+    (firstAfter !== '' && isPrintedSpeciesToken(firstAfter));
+  return { start, end, text: hay.slice(start, end), continues };
 }
 
 /** The source text around any occurrence of `needle` (±`pad` characters), for messages. Null when absent. */

@@ -296,3 +296,13 @@ Location: `packages/validation/kit/shared.ts:300-324`; `packages/validation/kit/
 
 **Approval gate:** close the four concrete incomplete grounding paths and S6R-13 (or explicitly decide to disable/degrade the affected output class). Preserve the accepted policy rulings, positive controls, independent sampling and cost/fault-origin fixes. Do not call all S6R-01..12 closed on the basis of the original vectors alone. This re-review stops here; it does not propose another open-ended wording-hardening loop.
 
+
+## Lead closure (2026-10-30, Claude Opus 5.5)
+
+Final narrow wave (no round 3, per the two-round cap): S6R-03/S6R-04 remaining paths (Qwen 3.8 Max: thousands-grouped numbers parsed by value; e-notation bound as a whole token, `x10^n` fails closed) and S6R-05/S6R-09/S6R-13 (DeepSeek v4.1 Flash: maximal reaction span with fail-closed continuation; numeric identity at the matched answer occurrence; value-equal quiz options rejected under Q-03).
+
+Lead verification on the combined tree: `npm run check` **1816/1816**, web build ok; the round-2 probe script (copied to scratch, results not overwritten) — **every attack vector not publishable**, every control publishable (`formula-control`, `balance-control`, binding and repeated-input controls, `analysis-control`, "according to the definition" control). Replays: 0 verdict changes on 50 stored formula explorers; 0 newly failing on 140 stored quiz gens, the balance gen and 58 analyses.
+
+Known limits kept and disclosed: a printed reaction continuation with no operator and no subscript is not absorbed; an equation printed inside parentheses fails BAL-09 (pre-existing, fails closed); the six-species NOAA chemosynthesis equation exceeds the frozen species limit; oversized analysis lists are not repaired by deletion; `-15 N` is not grounded by a page printing `15 N`.
+
+**Stage 6 review status: closed by the lead** after two independent rounds.

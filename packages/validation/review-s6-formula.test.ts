@@ -281,3 +281,113 @@ test('controls: the reviewer\'s positive formula controls stay publishable', () 
   const wrong = validateFormulaExplorer(probeFormula('z = x/y', 'x*y'), [reviewSource('formula', 'z = x/y')]);
   assert.ok(failingIds(wrong).includes('FE-08'));
 });
+
+/* ------------------------------------------------------------------ */
+/* S6R round-2 residuals — grouped numbers (S6R-03) and exponent        */
+/* notation bindings (S6R-04): a numeric token is read COMPLETE or the  */
+/* path fails closed; a prefix is never parsed or bound.                */
+/* ------------------------------------------------------------------ */
+
+test('S6R-03 formula-thousands-suffix: z = x+y+1,000 no longer parses as the prefix x+y+1', () => {
+  const gen = probeFormula('z = x+y+1,000', 'x+y+1');
+  const report = validateFormulaExplorer(gen, [reviewSource('formula', 'z = x+y+1,000')]);
+  assert.ok(failingIds(report).includes('FE-08'), `expected FE-08 failure, got [${failingIds(report).join('|')}]`);
+  assert.equal(report.publishable, false);
+  assert.match(messageOf(report, 'FE-08'), /1006/, 'the page formula must evaluate as x+y+1000 (1006 at {x:2,y:4}), never 7');
+  // The page parse reads the grouped number as ONE token with the value 1000:
+  const attempt = parsePageFormulaFromQuote('z = x+y+1,000', XY_VARS);
+  assert.equal(attempt.status, 'parsed');
+  if (attempt.ast === undefined) throw new Error('expected an AST');
+  assert.equal(evaluate(attempt.ast, { x: 2, y: 4 }), 1006);
+});
+
+test('S6R-03 control: a correct expression x+y+1000 for a grouped page formula stays publishable', () => {
+  const gen = probeFormula('z = x+y+1,000', 'x+y+1000');
+  const report = validateFormulaExplorer(gen, [reviewSource('formula', 'z = x+y+1,000')]);
+  assert.deepEqual(failingIds(report), [], report.checks.filter(c => !c.passed).map(c => c.message).join('\n'));
+  assert.equal(report.publishable, true);
+});
+
+test('S6R-03: grouped numbers are one token, prose commas still cut, and malformed groupings fail closed', () => {
+  const xv = [{ name: 'x', pageSymbol: 'x' }];
+  // Grouped decimal:
+  const dec = parsePageFormulaFromQuote('C = x + 12,500.5', xv);
+  assert.equal(dec.status, 'parsed');
+  if (dec.ast === undefined) throw new Error('expected an AST');
+  assert.equal(evaluate(dec.ast, { x: 2 }), 12502.5);
+  // Multiple groups:
+  const big = parsePageFormulaFromQuote('N = x + 1,000,000', xv);
+  assert.equal(big.status, 'parsed');
+  if (big.ast === undefined) throw new Error('expected an AST');
+  assert.equal(evaluate(big.ast, { x: 1 }), 1000001);
+  // A prose comma (not digit-comma-digit) still ends the formula line:
+  const prose = parsePageFormulaFromQuote('V = a*t, where t is time', [{ name: 'a', pageSymbol: 'a' }, { name: 't', pageSymbol: 't' }]);
+  assert.equal(prose.status, 'parsed');
+  assert.equal(prose.rhs, 'a*t');
+  // Malformed digit-comma-digit groupings are NOT prose boundaries and never parse as a prefix:
+  for (const q of ['z = x+1,0000', 'z = x+3,14', 'z = x+2100,0000']) {
+    const bad = parsePageFormulaFromQuote(q, XY_VARS);
+    assert.equal(bad.status, 'unparseable', `${q} must fail closed, not parse a prefix`);
+  }
+});
+
+test('S6R-03: the completeness edge check reads a thousands comma as a numeric continuation', () => {
+  // Cropping the grouped number off the source formula is a cut at the right edge:
+  const right = formulaCompletenessProblems('z = x+y+1', 'z = x+y+1', 'The page states z = x+y+1,000 in the offset table.');
+  assert.ok(right.problems.length > 0, 'quoting z = x+y+1 from z = x+y+1,000 cuts a numeric token');
+  // Quoting only the tail of the grouped number is a cut at the left edge:
+  const left = formulaCompletenessProblems('000', '000', 'The offset is 1,000 units.');
+  assert.ok(left.problems.length > 0);
+  // The complete formula has clean edges:
+  const full = formulaCompletenessProblems('z = x+y+1,000', 'z = x+y+1,000', 'The page states z = x+y+1,000 in the offset table.');
+  assert.deepEqual(full.problems, []);
+  // An ordinary prose comma after the formula stays a clean edge:
+  const prose = formulaCompletenessProblems('z = x+y', 'z = x+y', 'The page states z = x+y, the offset total.');
+  assert.deepEqual(prose.problems, []);
+});
+
+const EXP_BRIDGE_TEXT = 'z equals x divided by y. With x = 6e2 and y = 3 the result is 200.';
+const EXP_EXAMPLE = { quote: 'With x = 6e2 and y = 3 the result is 200.', resultNumber: 200, tolerance: 0.001 };
+
+test('S6R-04 formula-example-exponent-input: 100*x/y no longer binds the prefix 6 of 6e2', () => {
+  const gen = probeFormula('z equals x divided by y', '100*x/y', EXP_EXAMPLE);
+  const report = validateFormulaExplorer(gen, [reviewSource('formula', EXP_BRIDGE_TEXT)]);
+  assert.ok(failingIds(report).includes('FE-05'), `expected FE-05 failure, got [${failingIds(report).join('|')}]`);
+  assert.ok(failingIds(report).includes('FE-08'), 'a failed example must not bridge the unparseable page formula');
+  assert.equal(report.publishable, false);
+  assert.match(messageOf(report, 'FE-05'), /20000/, 'the recomputation must happen at x=600 (100*600/3 = 20000 ≠ 200)');
+  // The binder reads the complete exponent-notation token, never the prefix:
+  const bound = bindSourceExampleInputs(EXP_EXAMPLE.quote, XY_VARS);
+  assert.equal(bound.ok, true, bound.problems.join('; '));
+  assert.deepEqual(bound.bindings, { x: 600, y: 3 });
+});
+
+test('S6R-04 control: a correct expression x/y publishes via the exponent-notation binding', () => {
+  const gen = probeFormula('z equals x divided by y', 'x/y', EXP_EXAMPLE);
+  const report = validateFormulaExplorer(gen, [reviewSource('formula', EXP_BRIDGE_TEXT)]);
+  assert.deepEqual(failingIds(report), [], report.checks.filter(c => !c.passed).map(c => c.message).join('\n'));
+  assert.equal(report.publishable, true);
+});
+
+test('S6R-04: the binder reads complete numeric tokens — e-notation by value, unsupported notations fail closed', () => {
+  const vars = XY_VARS;
+  // e-notation parses to its value (signed exponent, "for" pattern):
+  assert.deepEqual(bindSourceExampleInputs('With x = 6E-3 and y = 3 the result is 0.002.', vars), { ok: true, bindings: { x: 0.006, y: 3 }, problems: [] });
+  assert.deepEqual(bindSourceExampleInputs('The page uses 6e2 for x and 3 for y.', vars), { ok: true, bindings: { x: 600, y: 3 }, problems: [] });
+  assert.deepEqual(bindSourceExampleInputs('With x = 6e-2 and y = 3 the result is 0.02.', vars), { ok: true, bindings: { x: 0.06, y: 3 }, problems: [] });
+  // ×10^ / x 10^ / *10^ notations: fail closed, never bind the mantissa as a prefix:
+  for (const q of ['With x = 6×10^2 and y = 3 the result is 200.', 'With x = 6 x 10^2 and y = 3 the result is 200.', 'With x = 6*10^2 and y = 3 the result is 200.', 'With x = 6×10² and y = 3 the result is 200.']) {
+    const bad = bindSourceExampleInputs(q, vars);
+    assert.equal(bad.ok, false, `${q} must fail closed`);
+    assert.ok(bad.problems.some(p => p.includes('"x"')), q);
+  }
+  // Malformed exponent markers: fail closed, never bind 6:
+  assert.equal(bindSourceExampleInputs('With x = 6e and y = 3 the result is 2.', vars).ok, false);
+  assert.equal(bindSourceExampleInputs('With x = 6e+ and y = 3 the result is 2.', vars).ok, false);
+  assert.equal(bindSourceExampleInputs('With x = 6e2e3 and y = 3 the result is 2.', vars).ok, false);
+  // Thousands-grouped bindings still fail closed (never bind 1 from 1,000):
+  assert.equal(bindSourceExampleInputs('With x = 1,000 and y = 3 the result is 2.', vars).ok, false);
+  // Sentence periods and plain decimals still bind (positive controls):
+  assert.deepEqual(bindSourceExampleInputs('Let x = 6. Then y = 3.', vars), { ok: true, bindings: { x: 6, y: 3 }, problems: [] });
+  assert.deepEqual(bindSourceExampleInputs('With x = 9.8 and y = 3 the result is 2.', vars), { ok: true, bindings: { x: 9.8, y: 3 }, problems: [] });
+});

@@ -9,12 +9,14 @@
 //   - BAL-09 (addendum defect fix) grounds each species quote verbatim in ITS OWN species.sourceId
 //     source and requires the species formula to appear in that quote (normalised), so no required
 //     field is unused and every species is tied to the page.
-//   - S6R-05 (Stage 6 review): the bridge from the page to the activity is boundary-checked. BAL-01
-//     requires equationText to occur in the cited source as a COMPLETE chemical-token span, BAL-02
-//     parses that source span and compares its (formula, side) multiset with the species, and
-//     BAL-09 requires the species formula to be a whole formula token in its own quote — so a
-//     product cropped out of a longer printed formula (H2O out of H2O2) can never publish. The
-//     exact integer solver is untouched: it balances whichever reaction it is given.
+//   - S6R-05 (Stage 6 review, round 2): the bridge from the page to the activity is the page's OWN
+//     MAXIMAL reaction span around the arrow (executed in shared.maximalReactionSpan), not the
+//     generated substring. BAL-01 requires equationText to occur as a complete chemical-token run and
+//     then compares the span's (formula, side) multiset with equationText's, so a whole printed product
+//     or reactant the equation drops (`H2 + O2 -> H2O` against a page printing `H2 + O2 -> H2O + H2O2`)
+//     fails, and an edge that runs on through whitespace fails closed. BAL-02 compares the species
+//     split with that same span and BAL-09 requires each species formula to be a whole formula token
+//     in its own quote. Coefficients remain the system's job and the exact integer solver is untouched.
 //   - Nullity != 1 fails BAL-08 ('ambiguous' for nullity >= 2); a nullity-0 (impossible) equation
 //     fails BAL-03/04/05/08 together — they all describe the same root cause: no system solution.
 //   - hint follows the ''/5-120 optional-text convention of the other components.
@@ -26,12 +28,12 @@ import { guarded } from '../validate.ts';
 import {
   buildReport,
   buildSourceIndex,
-  chemicallyCompleteOccurrences,
   chemicalFormulaTokens,
   collectQuoteFailures,
   duplicateOccurrences,
   idProblems,
   KIT_FAILURE_MESSAGES,
+  maximalReactionSpan,
   numbersCheckProblems,
   occurrenceContext,
   optionalLengthProblems,
@@ -49,14 +51,42 @@ export function deriveBalanceSolution(gen: BalanceEquationGen): BalanceResult {
 }
 
 /**
- * S6R-05: the source's OWN complete equation span for this gen, or null when the source is absent
- * or does not print the equation as a whole token run. A span that ends inside a longer formula
- * (`H2O` cut out of `H2O2`) is not a span, so the printed reaction cannot be substituted.
+ * S6R-05: the source's OWN maximal reaction span for this gen, or null when the source is absent or
+ * does not print the equation as a whole token run. The span is the printed reaction around the
+ * arrow — every printed term on both sides belongs to it, so a product or reactant the page prints
+ * next to the equation is part of the thing the gen has to match.
  */
 export function sourceEquationSpan(gen: BalanceEquationGen, idx: SourceIndex): TextSpan | null {
   const text = idx.textOf(gen.sourceId);
   if (text === undefined || typeof gen.equationText !== 'string' || gen.equationText === '') return null;
-  return chemicallyCompleteOccurrences(text, gen.equationText)[0] ?? null;
+  const span = maximalReactionSpan(text, gen.equationText);
+  return span === null ? null : { start: span.start, end: span.end, text: span.text };
+}
+
+/** `(formula, side)` multiset key of parsed equation parts, coefficients aside. */
+function partKeys(parts: { formula: string; side: string }[]): string[] {
+  return parts.map(p => `${normalizeChemFormula(p.formula)}\u0000${p.side}`).sort();
+}
+
+/** Entries of multiset `a` that multiset `b` does not cover, in order. */
+function multisetExtra(a: string[], b: string[]): string[] {
+  const counts = new Map<string, number>();
+  for (const k of b) counts.set(k, (counts.get(k) ?? 0) + 1);
+  const out: string[] = [];
+  for (const k of a) {
+    const n = counts.get(k) ?? 0;
+    if (n > 0) counts.set(k, n - 1);
+    else out.push(k);
+  }
+  return out;
+}
+
+/** Plain-language rendering of `(formula, side)` keys: "H2O2 on the right". */
+function describeParts(keys: string[]): string {
+  return keys.map(k => {
+    const [formula, side] = k.split('\u0000');
+    return `${formula} on the ${side}`;
+  }).join(', ');
 }
 
 export function balanceStructuralProblems(gen: BalanceEquationGen): { problems: string[]; affected: string[] } {
@@ -105,16 +135,42 @@ export function validateBalanceEquation(gen: BalanceEquationGen, sources: Source
         affected.push('/equationText', '/quote');
       } else {
         const sourceText = idx.textOf(gen.sourceId);
-        if (sourceText !== undefined && chemicallyCompleteOccurrences(sourceText, gen.equationText).length === 0) {
-          // S6R-05: the equation (or a species inside it) is a crop of a longer formula the page
-          // prints. Substring containment cannot see this; the source occurrence must be complete.
-          const context = occurrenceContext(sourceText, gen.equationText);
-          problems.push(`equationText "${gen.equationText}" is not a complete equation on the page: source "${gen.sourceId}" prints ${context === null ? 'no such span' : `"${context}"`} there, so the equation or a formula inside it is cut short (a species cropped out of a longer formula, such as H2O out of H2O2, is a different substance) (equation-quoted)`);
-          affected.push('/equationText', ...speciesAffected);
+        if (sourceText !== undefined) {
+          // S6R-05: the equation must be the page's OWN reaction, not a substring of it. The maximal
+          // span's (formula, side) multiset is the authority; coefficients stay the system's job.
+          const span = maximalReactionSpan(sourceText, gen.equationText);
+          const printed = span === null ? null : parseEquationParts(span.text);
+          const stated = parseEquationParts(gen.equationText);
+          if (span === null) {
+            // The equation (or a species inside it) is a crop of a longer formula the page prints.
+            // Substring containment cannot see this; the source occurrence must be complete.
+            const context = occurrenceContext(sourceText, gen.equationText);
+            problems.push(`equationText "${gen.equationText}" is not a complete equation on the page: source "${gen.sourceId}" prints ${context === null ? 'no such span' : `"${context}"`} there, so the equation or a formula inside it is cut short (a species cropped out of a longer formula, such as H2O out of H2O2, is a different substance) (equation-quoted)`);
+            affected.push('/equationText', ...speciesAffected);
+          } else if (span.continues) {
+            // The printed reaction runs on past the quoted equation through whitespace.
+            const context = occurrenceContext(sourceText, span.text, 30) ?? span.text;
+            problems.push(`equationText "${gen.equationText}" covers only part of the reaction the page prints: source "${gen.sourceId}" prints "${context}" and the reaction continues past the quoted equation, so a printed species or term is missing (a reactant or product left off the printed reaction is a different reaction) (equation-quoted)`);
+            affected.push('/equationText', '/quote', ...speciesAffected);
+          } else if (printed !== null && !printed.ok) {
+            problems.push(`the reaction the page prints around this equation ("${span.text}") does not read as one reaction: ${printed.error} (equation-quoted)`);
+            affected.push('/equationText', '/quote', ...speciesAffected);
+          } else if (printed !== null && stated.ok) {
+            const left = multisetExtra(partKeys(printed.parts), partKeys(stated.parts));
+            const added = multisetExtra(partKeys(stated.parts), partKeys(printed.parts));
+            if (left.length > 0 || added.length > 0) {
+              const detail = [
+                left.length === 0 ? '' : `the page also prints ${describeParts(left)}, which the equation leaves out`,
+                added.length === 0 ? '' : `the equation states ${describeParts(added)}, which the page does not print there`,
+              ].filter(s => s !== '').join('; ');
+              problems.push(`equationText "${gen.equationText}" is not the reaction the page prints: source "${gen.sourceId}" prints "${span.text}" and ${detail} (the equations must be the same formulas on the same sides, coefficients aside) (equation-quoted)`);
+              affected.push('/equationText', '/quote', ...speciesAffected);
+            }
+          }
         }
       }
       return problems.length === 0
-        ? { passed: true, message: `the equation quote appears verbatim in source "${gen.sourceId}" and equationText occurs inside the quote as a complete equation span with chemical-token boundaries (equation-quoted)` }
+        ? { passed: true, message: `the equation quote appears verbatim in source "${gen.sourceId}" and equationText is the page's own maximal reaction span "${sourceEquationSpan(gen, idx)?.text ?? gen.equationText}" (same formulas on the same sides, coefficients aside) (equation-quoted)` }
         : { passed: false, message: `${problems.join('; ')} — ${BAL_FAILURE_MESSAGE}`, path: affected[0], affected };
     }),
 

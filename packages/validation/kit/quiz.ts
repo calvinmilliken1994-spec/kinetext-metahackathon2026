@@ -25,6 +25,7 @@ import {
   lengthProblems,
   numbersCarryingToken,
   numbersCheckProblems,
+  numericOptionValue,
   optionalLengthProblems,
 } from './shared.ts';
 
@@ -128,9 +129,27 @@ export function validateQuizCards(gen: QuizCardsGen, sources: SourceDocument[], 
           problems.push(`cards[${i}] (${card.id}): duplicate options after normalisation: ${[...dups].map(d => `"${d}"`).join(', ')} (expected ${Q.options.min}-${Q.options.max} distinct options)`);
           card.options.forEach((o, j) => { if (dups.has(norm(o))) affected.push(`/cards/${i}/options/${j}`); });
         }
+        // S6R-13: `5` and `5.00` are the same answer. Grading keys options[0] by index, so a card
+        // with two options of the same value marks one of them wrong whatever the learner picks.
+        const byValue = new Map<string, number[]>();
+        card.options.forEach((o, j) => {
+          const value = numericOptionValue(o);
+          if (value === null) return;
+          const list = byValue.get(value) ?? [];
+          list.push(j);
+          byValue.set(value, list);
+        });
+        for (const [value, indices] of byValue) {
+          if (indices.length < 2) continue;
+          // Already reported as an exact textual duplicate above.
+          if (new Set(indices.map(j => norm(card.options[j] ?? ''))).size !== indices.length) continue;
+          const shown = indices.map(j => `options[${j}] "${card.options[j]}"`).join(', ');
+          problems.push(`cards[${i}] (${card.id}): ${shown} are the same number ${value} written differently, so a learner picking either gives the same answer but only options[0] is graded correct — expected ${Q.options.min}-${Q.options.max} options that are different values (options-distinct)`);
+          indices.forEach(j => affected.push(`/cards/${i}/options/${j}`));
+        }
       });
       return problems.length === 0
-        ? { passed: true, message: 'every card has distinct options after normalisation (options-distinct)' }
+        ? { passed: true, message: 'every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)' }
         : { passed: false, message: problems.join('; '), path: affected[0], affected };
     }),
 

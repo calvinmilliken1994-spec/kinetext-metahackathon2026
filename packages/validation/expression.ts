@@ -74,6 +74,22 @@ export function normalizeExpression(s: string): string {
   return out.replace(/\s+/g, '');
 }
 
+/**
+ * Thousands-grouped number literals ("1,000", "12,500.5", "1,000,000") rewritten to their
+ * plain-digit value form ("1000", "12500.5", "1000000") so the frozen grammar — whose number
+ * token has no comma — can compare them BY VALUE (S6R-03 round 2). Only well-formed groupings
+ * are rewritten: a 1–3-digit lead, one or more ",ddd" groups not followed by another digit,
+ * then an optional decimal tail, with no letter/digit/dot/underscore immediately before.
+ * Malformed groupings ("1,0000", "3,14", "2100,0000") are left untouched so the strict
+ * whole-string parse FAILS CLOSED on the surviving comma instead of reading a prefix.
+ * Applied to page-formula text only; a generated `expression` must be plain final form.
+ */
+const GROUPED_NUMBER_RE = /(?<![A-Za-z0-9_.])\d{1,3}(?:,\d{3})+(?!\d)(?:\.\d+)?/g;
+
+export function normalizeGroupedNumbers(s: string): string {
+  return s.replace(GROUPED_NUMBER_RE, m => m.replace(/,/g, ''));
+}
+
 /* ------------------------------------------------------------------ */
 /* Lexer                                                               */
 /* ------------------------------------------------------------------ */

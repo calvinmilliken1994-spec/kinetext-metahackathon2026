@@ -52,6 +52,7 @@ import {
   evaluate,
   independentSamplePoints,
   lexExpression,
+  normalizeGroupedNumbers,
   normalizePageFormula,
   ONE_AT_A_TIME_FRACTIONS,
   parseExpression,
@@ -143,8 +144,15 @@ const PROSE_BOUNDARY_WORDS = ['where', 'when', 'if', 'so', 'thus', 'which', 'the
 /** Cut the RHS at the first explicit prose boundary (comma/semicolon, sentence period, connective word). */
 function cutAtProseBoundary(rhs: string): string {
   let cut = rhs.length;
-  const comma = rhs.search(/[,;]/);
-  if (comma >= 0) cut = Math.min(cut, comma);
+  for (const m of rhs.matchAll(/[,;]/g)) {
+    const i = m.index ?? 0;
+    // S6R-03 round 2: a comma between two digits is part of a printed number ("1,000",
+    // "12,500.5"), NEVER a prose boundary. Well-formed groupings are later normalised to their
+    // value; malformed ones ("1,0000", "3,14") survive into the strict parse, which then fails
+    // closed — a comma-adjacent-to-digits context is never cut into a prefix parse.
+    if (rhs[i] === ',' && /[0-9]/.test(rhs[i - 1] ?? '') && /[0-9]/.test(rhs[i + 1] ?? '')) continue;
+    cut = Math.min(cut, i);
+  }
   const period = rhs.search(/\.(?!\d)/); // a period that is not a decimal point ends the sentence
   if (period >= 0) cut = Math.min(cut, period);
   const word = new RegExp(`\\s+(?:${PROSE_BOUNDARY_WORDS.join('|')})\\b`, 'i').exec(rhs);
@@ -203,7 +211,9 @@ export function parsePageFormulaFromQuote(
     return { status: 'unparseable', rhs: rhsRaw, error: 'the formula line has no parseable tokens (only prose after the "=")' };
   }
   const mapped = mapPageSymbols(rhs, variables);
-  const lexed = lexExpression(normalizePageFormula(mapped));
+  // S6R-03 round 2: thousands-grouped numbers ("1,000") are read as ONE number by value;
+  // malformed groupings survive and make the strict parse fail closed.
+  const lexed = lexExpression(normalizeGroupedNumbers(normalizePageFormula(mapped)));
   if (!lexed.ok) {
     return { status: 'unparseable', rhs, error: `the complete formula line could not be lexed (${lexed.error}); unsupported mathematical content is never truncated away` };
   }
@@ -234,6 +244,15 @@ function isMathEdgeChar(ch: string, lettersBad: boolean): boolean {
   return false;
 }
 
+/**
+ * True when s[i] is a comma grouping thousands inside a printed number ("1,000", "12,500.5"):
+ * a digit before it and EXACTLY three digits after it (S6R-03 round 2 — a grouped number is one
+ * numeric token, so a quote edge there cuts the number).
+ */
+function isThousandsGroupComma(s: string, i: number): boolean {
+  return s[i] === ',' && /[0-9]/.test(s[i - 1] ?? '') && /^,\d{3}(?!\d)/.test(s.slice(i, i + 5));
+}
+
 /** True when the character sequence starting at `end` cuts a mathematical token (right edge). */
 function rightEdgeCuts(text: string, end: number, lettersBad: boolean): boolean {
   if (end >= text.length) return false; // end of text: clean
@@ -247,6 +266,7 @@ function rightEdgeCuts(text: string, end: number, lettersBad: boolean): boolean 
     return c !== undefined && isMathEdgeChar(c, false);
   }
   if (next === '.') return /\d/.test(text[end + 1] ?? ''); // sentence end is clean; "x/y.5" is a cut
+  if (next === ',') return isThousandsGroupComma(text, end); // "x+y+1|,000" cuts a number; a prose comma is clean
   if (next === ')') return false; // closing a parenthesised formula: clean
   return isMathEdgeChar(next, lettersBad) || next === '('; // "(...)" right after is implicit multiplication
 }
@@ -257,6 +277,7 @@ function leftEdgeCuts(text: string, start: number, lettersBad: boolean): boolean
   const prev = text[start - 1] as string;
   if (/\s/.test(prev)) return false; // prose across whitespace is clean
   if (prev === '.') return /\d/.test(text[start - 2] ?? ''); // a decimal point cut ("459.7" quoted as "7")
+  if (prev === ',') return isThousandsGroupComma(text, start - 1); // "1,|000" cuts a grouped number
   if (prev === '(') return false; // "(V = a * t)": an opening parenthesis is a clean frame
   return isMathEdgeChar(prev, lettersBad) || prev === ')';
 }
@@ -332,10 +353,24 @@ export interface SourceExampleBindings {
   problems: string[];
 }
 
-/** A plain decimal number, optionally signed (unicode minus is normalised before matching). */
-const BIND_VALUE = String.raw`[+-]?\d+(?:\.\d+)?`;
-/** A bound value never swallows a following digit or thousands-comma ("1,000" is not "1"). */
-const BIND_VALUE_GUARD = String.raw`(?!\d)(?!,\d)`;
+/**
+ * A COMPLETE plain-decimal or scientific-notation number, optionally signed (unicode minus is
+ * normalised before matching): "6", "9.8", "-2", "6e2", "6E-3" (S6R-04 round 2: the binder reads
+ * the whole numeric token, so an exponent value binds as its value, never as its mantissa).
+ */
+const BIND_VALUE = String.raw`[+-]?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?`;
+/**
+ * A bound value never ends mid-token: no following digit, thousands-comma group, decimal point or
+ * attached/partial exponent marker ("6e", "6E-", "6e2e3" — the last via the e-guard after a full
+ * exponent match fails and the plain "6" backtracking is rejected by the same guard).
+ */
+const BIND_VALUE_GUARD = String.raw`(?!\d)(?!,\d)(?!\.\d)(?![eE])`;
+/**
+ * A continuation after an otherwise complete value that means the quote states the value in a
+ * notation the binder does NOT support ("6×10^2", "6 x 10^2", "6*10^2", "6×10²"): the binding
+ * FAILS CLOSED on it — the mantissa is never bound as a prefix (S6R-04 round 2).
+ */
+const UNSUPPORTED_VALUE_CONTINUATION = /^\s*(?:[×xX*·∙⋅]\s*10\s*(?:\^|[⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻]|\d)|10\s*\^)/;
 
 /**
  * S6R-04: bind every declared variable to the value the source-example quote EXPLICITLY states
@@ -344,9 +379,12 @@ const BIND_VALUE_GUARD = String.raw`(?!\d)(?!,\d)`;
  *   - "<sym> = <num>" and "<sym> equals <num>"
  *   - "<sym> is <num>"
  *   - "<num> for <sym>"
- * Repeated equal input values ("x = 3 and y = 3") are supported. A variable with no explicit
- * binding, or with conflicting bindings, fails closed: the quote's numbers are NEVER permuted
- * to make the stated result work, and the result token is never an input candidate.
+ * <num> is a COMPLETE plain-decimal or e-notation token ("6", "9.8", "-2", "6e2" → 600);
+ * a value the binder cannot read whole (attached exponent markers, ×10^n forms, thousands
+ * groupings, decimal/operator continuations) fails closed and binds nothing. Repeated equal
+ * input values ("x = 3 and y = 3") are supported. A variable with no explicit binding, or with
+ * conflicting bindings, fails closed: the quote's numbers are NEVER permuted to make the stated
+ * result work, and the result token is never an input candidate.
  */
 export function bindSourceExampleInputs(
   quote: string,
@@ -360,6 +398,7 @@ export function bindSourceExampleInputs(
     const syms = [...new Set([v.pageSymbol, v.name].filter((s): s is string => typeof s === 'string' && s !== ''))];
     const shown = syms[0] ?? v.name;
     const values: number[] = [];
+    const unsupported: string[] = [];
     for (const sym of syms) {
       const esc = escapeRegExp(sym);
       const before = String.raw`(?<![A-Za-z0-9_])`;
@@ -371,13 +410,21 @@ export function bindSourceExampleInputs(
       ];
       for (const re of patterns) {
         for (const m of text.matchAll(re)) {
+          // S6R-04 round 2: the matched value must be the COMPLETE numeric token — a following
+          // ×10^n / x 10^n continuation means unsupported notation, never a mantissa prefix.
+          if (UNSUPPORTED_VALUE_CONTINUATION.test(text.slice((m.index ?? 0) + m[0].length))) {
+            unsupported.push(m[1] as string);
+            continue;
+          }
           const n = Number(m[1]);
           if (Number.isFinite(n)) values.push(n);
         }
       }
     }
     const distinct = [...new Set(values)];
-    if (distinct.length === 0) {
+    if (unsupported.length > 0) {
+      problems.push(`the sourceExample quote states "${shown}" in a numeric notation the binder cannot read completely (after "${unsupported[0]}", e.g. a "×10^n" form); bindings must be complete plain or e-notation values — a partial token is never bound`);
+    } else if (distinct.length === 0) {
       problems.push(`the sourceExample quote does not explicitly bind "${shown}" to a value (supported patterns: "${shown} = <number>", "${shown} is <number>", "<number> for ${shown}") — unbound quote numbers are never assigned to variables`);
     } else if (distinct.length > 1) {
       problems.push(`the sourceExample quote binds "${shown}" to conflicting values (${distinct.join(', ')}); the binding must be unambiguous`);
