@@ -28,7 +28,23 @@ test('S5-06: the checked-in config parses, with maxRepairAttempts = 2', () => {
   assert.equal(limits.wallTimeMs, 420000);
   assert.equal(limits.maxOutputTokens, 32000);
   assert.equal(limits.maxInputTokens, 32000);
+  assert.equal(limits.maxInputTokensV2, 72000, 'S6-W: the lesson-flow (v2) input bound from the freeze addendum');
   assert.equal(limits.ledgerLockPort, 47853);
+});
+
+test('S6-W: maxInputTokensV2 fails closed on anything but a positive integer within the provider context', () => {
+  for (const invalid of [0, -72000, 1.5, Number.NaN, '72000', null, undefined, 1048577, Number.POSITIVE_INFINITY]) {
+    const raw = config({ maxInputTokensV2: invalid });
+    if (invalid === undefined) {
+      delete raw['maxInputTokensV2'];
+    }
+    assert.throws(
+      () => parseResourceLimits(raw),
+      (err: unknown) => err instanceof Error && err.message === 'RESOURCE_LIMITS_INVALID',
+      `maxInputTokensV2=${String(invalid)} must fail closed at startup`,
+    );
+  }
+  assert.equal(parseResourceLimits(config({ maxInputTokensV2: 1048576 })).maxInputTokensV2, 1048576, 'the provider context window itself is allowed');
 });
 
 test('S5-06: integer maxRepairAttempts 0, 1 and 2 are accepted', () => {

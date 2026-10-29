@@ -35,6 +35,8 @@ const CURRENT: AdmissionLimits = {
   analysisMaxOutputTokens: 16000,
   maxRepairAttempts: 2,
   maxRetries: 1,
+  // S6-W: the lesson-flow input bound from config/resource-limits.json (passed through).
+  maxInputTokensV2: 72000,
 };
 
 /* ------------------------------------------------------------------ */

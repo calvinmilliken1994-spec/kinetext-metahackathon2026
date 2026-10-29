@@ -31,6 +31,7 @@ import type { MetaClient } from '../../packages/meta/client.ts';
 import type { ModelChoice } from '../../packages/meta/pricing.ts';
 import type { DemoFault } from '../../packages/contracts/index.ts';
 import { startJob as startGenerationJob, recoverInterruptedJobs } from '../../workers/generation/jobs.ts';
+import type { JobFlow } from '../../workers/generation/jobs.ts';
 import { parseResourceLimits } from './resource-limits.ts';
 import { buildModalClient, modalTokenAvailable } from './model-clients.ts';
 import { createApiServer } from './server.ts';
@@ -65,35 +66,53 @@ async function startup(): Promise<void> {
         providerCapsUSD: limits.providerCapsUSD,
       });
       activeLedger = ledger;
-      const client: MetaClient = createMetaClient({
-        apiKey: process.env.MODEL_API_KEY,
-        ledger,
-        allowLive: true,
-        // R-11: the configured input budget, not the client default.
-        maxInputTokens: limits.maxInputTokens,
-      });
-      startJob = (sourceId: string, jobOpts?: { demoFault?: DemoFault; model?: ModelChoice }) => {
+      // S6-W: the client input bound is fixed per client instance (packages/meta client.ts),
+      // so a job's flow selects the bound its client is CONSTRUCTED with: lesson-flow (v2)
+      // jobs use maxInputTokensV2 (72,000 — the v2 prompt family measured 40.8k bytes on the
+      // largest source), activity-flow (v1) jobs keep maxInputTokens (32,000). The Meta-API
+      // client is cheap to construct (no I/O), so it is built per job like the Modal one.
+      const buildMetaApiClient = (maxInputTokens: number): MetaClient =>
+        createMetaClient({
+          apiKey: process.env.MODEL_API_KEY,
+          ledger,
+          allowLive: true,
+          // R-11: the configured input budget, not the client default.
+          maxInputTokens,
+        });
+      // Built once at startup so a missing key still fails startup exactly as before.
+      const client: MetaClient = buildMetaApiClient(limits.maxInputTokens);
+      const clientV2: MetaClient = buildMetaApiClient(limits.maxInputTokensV2);
+      startJob = (
+        sourceId: string,
+        jobOpts?: { demoFault?: DemoFault; model?: ModelChoice; flow?: JobFlow },
+      ) => {
         const model: ModelChoice = jobOpts?.model ?? 'muse-spark-1.3';
+        const flow: JobFlow = jobOpts?.flow ?? 'lesson';
         // OW-2: the right client PER JOB. muse-spark-1.3 keeps the Meta-API
         // client built above; muse-spark-open builds its Modal client at
         // SUBMISSION time, so MODAL_PROXY_TOKEN is read only for such a job and
         // a missing/malformed token fails that job with the fixed public
         // MODAL_PROXY_TOKEN_MISSING error before any ledger reservation. There
         // is never a silent fallback between providers.
+        // S6-W: the flow picks the input bound the client was constructed with.
         const jobClient: MetaClient =
           model === 'muse-spark-open'
             ? buildModalClient({
                 ledger,
-                maxInputTokens: limits.maxInputTokens,
+                maxInputTokens: flow === 'lesson' ? limits.maxInputTokensV2 : limits.maxInputTokens,
                 modalBaseUrl: limits.modalBaseUrl,
               })
-            : client;
+            : flow === 'lesson'
+              ? clientV2
+              : client;
         return startGenerationJob(sourceId, {
           client: jobClient,
           storageDir,
           purpose,
           // Stage 5: the optional labelled demo fault requested by POST /api/jobs.
           demoFault: jobOpts?.demoFault,
+          // S6-W: the pipeline choice from POST /api/jobs (default 'lesson').
+          flow,
           // R-11: one job-wide deadline and per-stage output caps from config;
           // maxRepairAttempts bounds the Stage 5 repair loop (S5-06: an integer
           // in [0, 2], validated at startup AND again by the worker boundary).

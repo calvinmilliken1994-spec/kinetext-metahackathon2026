@@ -5,6 +5,12 @@
 // Usage (foreground; the local live API must already be running):
 //   node scripts/evaluation-run.ts --list                # print the plan, no API calls
 //   node scripts/evaluation-run.ts                       # run everything not yet in results.jsonl
+//   node scripts/evaluation-run.ts --flow lesson           # S6-W: run the Stage 6 LESSON flow
+//       # instead of the default v1 activity flow. The DEFAULT STAYS 'activity' so the
+//       # pre-registered Stage 5b evaluation is unchanged; lesson runs record flow, component
+//       # counts and overview/interactive outcomes on every results line, and admit at the
+//       # lesson worst case. ALWAYS use a scratch EVAL_OUT_DIR for lesson runs — never
+//       # docs/evidence/stage-5b/evaluation (pre-registered, read-only).
 //   node scripts/evaluation-run.ts --model muse-spark-open  # OW-2: run the SAME manifest on the
 //       # Modal-hosted open weights instead of the default muse-spark-1.3 (Meta API). The model is
 //       # sent with EVERY job POST, admission arithmetic uses the chosen model's pricing, and each
@@ -60,13 +66,15 @@ import {
   admissionLimitsFromConfig,
   assessLiabilities,
   describeLiability,
+  evalFlowFromArgv,
   evalModelFromArgv,
   parseJournal,
   perJobAdmissionUSD,
+  perJobLessonAdmissionUSD,
   PROVIDER_FOR_MODEL,
   recoveredRecord,
 } from './evaluation-budget.ts';
-import type { AssessLiabilitiesResult, ResultPageFields } from './evaluation-budget.ts';
+import type { AssessLiabilitiesResult, EvalFlow, ResultPageFields } from './evaluation-budget.ts';
 import type { ModelChoice } from '../packages/meta/pricing.ts';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -87,13 +95,26 @@ try {
   process.exit(2);
 }
 const MODEL_PROVIDER = PROVIDER_FOR_MODEL[MODEL];
+// S6-W: which pipeline every job of THIS run is submitted with. The default stays
+// 'activity' (v1) so the PRE-REGISTERED Stage 5b evaluation and its admission arithmetic
+// are unchanged; '--flow lesson' runs the Stage 6 lesson flow (use a scratch EVAL_OUT_DIR).
+let FLOW: EvalFlow;
+try {
+  FLOW = evalFlowFromArgv(process.argv);
+} catch {
+  console.error('--flow must be one of: lesson, activity (default activity)');
+  process.exit(2);
+}
 // S5B-07: conservative per-job admission amount, derived from the configured limits
 // (never the old fixed 0.15, which bounded less than a single spec attempt).
 // OW-2: priced with the CHOSEN model's rates (identical numbers today).
-const PER_JOB_ADMISSION_USD = perJobAdmissionUSD(
-  admissionLimitsFromConfig(JSON.parse(readFileSync(join(ROOT, 'config', 'resource-limits.json'), 'utf8'))),
-  MODEL,
+// S6-W: lesson runs admit at the lesson worst case (analysis + 3 kit components + premium,
+// each with its repair loop, at the v2 input bound).
+const ADMISSION_LIMITS = admissionLimitsFromConfig(
+  JSON.parse(readFileSync(join(ROOT, 'config', 'resource-limits.json'), 'utf8')),
 );
+const PER_JOB_ADMISSION_USD =
+  FLOW === 'lesson' ? perJobLessonAdmissionUSD(ADMISSION_LIMITS, MODEL) : perJobAdmissionUSD(ADMISSION_LIMITS, MODEL);
 
 interface ManifestEntry {
   sourceId: string; candidate: number;
@@ -161,6 +182,11 @@ function recordFromDetail(page: ResultPageFields, jobId: string, detail: any, wa
   const failedChecks = (detail?.report?.checks ?? []).filter((c: any) => !c.passed).map((c: any) => c.id as string);
   const rev1 = (detail?.revisions ?? []).find((r: any) => r.revision === 1);
   const firstRevisionFailedChecks = (rev1?.report?.checks ?? []).filter((c: any) => !c.passed).map((c: any) => c.id as string);
+  const lesson = s.lesson ?? null;
+  const lessonCount = (key: string): number | null => {
+    const v = lesson?.[key];
+    return typeof v === 'number' && Number.isFinite(v) ? v : null;
+  };
   const record: Record<string, any> = {
     sourceId: page.sourceId, candidate: page.candidate, subject: page.subject, expected: page.expected,
     acceptable: page.acceptable, difficulty: page.difficulty,
@@ -170,6 +196,20 @@ function recordFromDetail(page: ResultPageFields, jobId: string, detail: any, wa
     // never null, never an invented provider.
     model: typeof s.model === 'string' && s.model !== '' ? s.model : MODEL,
     provider: typeof s.provider === 'string' && s.provider !== '' ? s.provider : MODEL_PROVIDER,
+    // S6-W: the flow the job ACTUALLY ran (summary field), falling back to this run's
+    // requested flow for summaries from a server that predates the field — plus the
+    // lesson outcome counts and whether the page got an overview / >=1 interactive
+    // component (null on activity-flow jobs; never invented).
+    flow: typeof s.flow === 'string' && s.flow !== '' ? s.flow : FLOW,
+    componentsPlanned: lessonCount('componentsPlanned'),
+    componentsPublished: lessonCount('componentsPublished'),
+    componentsFailed: lessonCount('componentsFailed'),
+    overviewPublished: lesson?.overviewReady === true,
+    interactivePublished: (lessonCount('componentsPublished') ?? 0) >= 1,
+    partialPublish: lesson?.partialPublish === true,
+    declineCode: detail?.analysisV2?.usable === false && typeof detail?.analysisV2?.declineCode === 'string'
+      ? detail.analysisV2.declineCode
+      : null,
     status: s.status as string,
     engine: s.engine ?? null,
     publishedRevision: s.publishedRevision ?? null,
@@ -297,7 +337,7 @@ if (only !== null && !pages.some(p => p.sourceId === only)) {
 }
 
 if (listMode) {
-  console.log(`Evaluation plan: ${plan.length} of ${pages.length} pages to run (model ${MODEL} via ${MODEL_PROVIDER}; already done: ${doneIds.size}; spent so far: $${spentUsd.toFixed(2)}; budget: $${maxUsd.toFixed(2)}; per-job admission: $${PER_JOB_ADMISSION_USD.toFixed(3)} worst-case reservation from config/resource-limits.json)`);
+  console.log(`Evaluation plan: ${plan.length} of ${pages.length} pages to run (model ${MODEL} via ${MODEL_PROVIDER}, flow ${FLOW}; already done: ${doneIds.size}; spent so far: $${spentUsd.toFixed(2)}; budget: $${maxUsd.toFixed(2)}; per-job admission: $${PER_JOB_ADMISSION_USD.toFixed(3)} worst-case reservation from config/resource-limits.json)`);
   for (const p of plan) {
     const acc = p.acceptable.length > 0 ? ` (also acceptable: ${p.acceptable.join(', ')})` : '';
     console.log(`[${String(p.candidate).padStart(2)}/${pages.length}] ${p.sourceId.padEnd(42)} ${p.subject.padEnd(16)} ${p.difficulty.padEnd(6)} expected ${p.expected}${acc}`);
@@ -314,7 +354,7 @@ async function waitIdle(): Promise<void> {
   throw new Error('server stayed busy');
 }
 
-console.log(`Running ${plan.length} evaluation job(s), one at a time, model ${MODEL} via ${MODEL_PROVIDER}. Budget $${maxUsd.toFixed(2)}, spent $${spentUsd.toFixed(2)} (known settled), reserved $${reservedUsd.toFixed(3)} (outstanding liabilities), per-job admission $${PER_JOB_ADMISSION_USD.toFixed(3)}.`);
+console.log(`Running ${plan.length} evaluation job(s), one at a time, model ${MODEL} via ${MODEL_PROVIDER}, flow ${FLOW}. Budget $${maxUsd.toFixed(2)}, spent $${spentUsd.toFixed(2)} (known settled), reserved $${reservedUsd.toFixed(3)} (outstanding liabilities), per-job admission $${PER_JOB_ADMISSION_USD.toFixed(3)}.`);
 
 function admissionFails(): boolean {
   return !admissionAllowed({ spentUsd, reservedUsd, perJobAdmissionUSD: PER_JOB_ADMISSION_USD, maxUsd });
@@ -355,7 +395,7 @@ for (const p of plan) {
   const started = Date.now();
   // OW-2: the model travels with EVERY submission; the server builds the right
   // client per job and rejects unknown models with 400 MODEL_INVALID.
-  const j = await api('/api/jobs', { method: 'POST', body: JSON.stringify({ sourceId: p.sourceId, model: MODEL }) });
+  const j = await api('/api/jobs', { method: 'POST', body: JSON.stringify({ sourceId: p.sourceId, model: MODEL, flow: FLOW }) });
   if (j.status !== 202) {
     console.error(
       `${tag} → JOB_POST failed (HTTP ${j.status}): ${JSON.stringify(j.body).slice(0, 200)}. Aborting run; nothing recorded. ` +
@@ -394,10 +434,12 @@ for (const p of plan) {
   const checks = s.checksTotal != null ? `${s.checksPassed ?? '?'}/${s.checksTotal}` : '—';
   const cost = record.totalCostUSD === null ? '—' : `$${(record.totalCostUSD as number).toFixed(2)}`;
   let outcome: string;
-  if (s.status === 'succeeded') outcome = `published r${record.publishedRevision}`;
-  else if (s.status === 'unsupported') outcome = 'declined';
+  if (FLOW === 'lesson' && s.status === 'succeeded') {
+    outcome = `overview${record.interactivePublished ? ' +' : ' only, no'} interactive (${record.componentsPublished ?? 0}/${record.componentsPlanned ?? 0} components${record.partialPublish ? ', partial publish' : ''})`;
+  } else if (s.status === 'succeeded') outcome = `published r${record.publishedRevision}`;
+  else if (s.status === 'unsupported') outcome = `declined${record.declineCode ? ` (${record.declineCode})` : ''}`;
   else outcome = `failed ${record.error ?? ''}`.trim();
   console.log(`${tag} → ${outcome} · ${checks} · ${cost} · ${Math.round(wallS)}s`);
 }
 
-console.log(`Done. Model ${MODEL} via ${MODEL_PROVIDER}. Spent (known settled) $${spentUsd.toFixed(2)} + reserved (outstanding liabilities) $${reservedUsd.toFixed(3)} of budget $${maxUsd.toFixed(2)} (per-job admission $${PER_JOB_ADMISSION_USD.toFixed(3)}). Results: ${RESULTS}`);
+console.log(`Done. Model ${MODEL} via ${MODEL_PROVIDER}, flow ${FLOW}. Spent (known settled) $${spentUsd.toFixed(2)} + reserved (outstanding liabilities) $${reservedUsd.toFixed(3)} of budget $${maxUsd.toFixed(2)} (per-job admission $${PER_JOB_ADMISSION_USD.toFixed(3)}). Results: ${RESULTS}`);

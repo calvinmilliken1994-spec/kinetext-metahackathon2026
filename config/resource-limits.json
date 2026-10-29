@@ -13,6 +13,8 @@
   "maxToolCalls": 12,
   "maxJobWallTimeMs": 420000,
   "maxInputTokens": 32000,
+  "maxInputTokensV2": 72000,
+  "maxInputTokensV2Note": "S6-W input bound for the Stage 6 lesson flow (analysis v2 + kit component calls). The client's input bound counts BYTES (DEBT-003); S6-M measured the v2 analysis-repair request at 40.8k bytes on the largest current source, so 72,000 covers the 40,000-char source ceiling plus the ~15k-byte system prompt and schema (lead freeze addendum, 2026-10-29). v1 activity calls keep maxInputTokens 32,000. Validated at startup: integer, positive, <= the provider context window (1,048,576 for muse-spark-1.3, docs/MODEL_ROUTING.md).",
   "maxOutputTokens": 32000,
   "analysisMaxOutputTokens": 16000,
   "generatedCodeEnabled": false,

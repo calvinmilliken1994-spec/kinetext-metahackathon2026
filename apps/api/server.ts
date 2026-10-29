@@ -13,10 +13,12 @@
 //   GET  /api/sources/:id → metadata + hash-checked text (library and user sources)
 //   GET  /api/jobs        → newest-first job summaries
 //   GET  /api/jobs/:id    → {summary, events, revisions, analysis?, spec?, report?}
-//   POST /api/jobs        → 202 {jobId}; body {sourceId, demoFault?, model?}; one live job at a time
-//                           (409 while running). model (OW-2) is optional and defaults to
-//                           'muse-spark-1.3'; anything outside the two ModelChoice values is a
-//                           400 MODEL_INVALID.
+//   POST /api/jobs        → 202 {jobId}; body {sourceId, demoFault?, model?, flow?}; one live
+//                           job at a time (409 while running). model (OW-2) is optional and
+//                           defaults to 'muse-spark-1.3'; anything outside the two ModelChoice
+//                           values is a 400 MODEL_INVALID. flow (S6-W) defaults to 'lesson'
+//                           (the Stage 6 pipeline); 'activity' runs the unchanged v1 pipeline;
+//                           anything else is a 400 FLOW_INVALID.
 //
 // Authorization (TASK-009 R-07): every request must carry an allowed Host
 // (127.0.0.1:<bound port>, localhost:<bound port>, or an allowedHosts entry —
@@ -45,7 +47,7 @@ import { isModelChoice } from '../../packages/meta/pricing.ts';
 import type { ModelChoice } from '../../packages/meta/pricing.ts';
 import { DEFAULT_MODEL, MODEL_INFO } from './model-clients.ts';
 import { listJobs, readJob } from '../../workers/generation/jobs.ts';
-import type { JobSummary } from '../../workers/generation/jobs.ts';
+import type { JobFlow, JobSummary } from '../../workers/generation/jobs.ts';
 
 export interface ApiOptions {
   storageDir: string;
@@ -56,7 +58,7 @@ export interface ApiOptions {
   startJob:
     | ((
         sourceId: string,
-        opts?: { demoFault?: DemoFault; model?: ModelChoice },
+        opts?: { demoFault?: DemoFault; model?: ModelChoice; flow?: JobFlow },
       ) => { jobId: string; done: Promise<JobSummary> })
     | null;
   /** Extra allowed Host values (and http://<value> Origins); replaces the Vite defaults. */
@@ -505,6 +507,18 @@ export function createApiServer(opts: ApiOptions): Server {
       }
       model = rawModel;
     }
+    // S6-W (frozen lesson-flow contract): the optional flow choice. 'lesson' (the Stage 6
+    // flow) is the PRODUCT DEFAULT; 'activity' runs the unchanged v1 pipeline (kept for the
+    // pre-registered evaluation and comparisons). Anything else is a 400 with the fixed
+    // FLOW_INVALID code (no reflected input).
+    let flow: JobFlow = 'lesson';
+    if ('flow' in (parsed as Record<string, unknown>)) {
+      const rawFlow: unknown = (parsed as Record<string, unknown>)['flow'];
+      if (rawFlow !== 'lesson' && rawFlow !== 'activity') {
+        return sendError(res, 400, 'FLOW_INVALID');
+      }
+      flow = rawFlow;
+    }
     let knownIds: string[] = [];
     try {
       knownIds = listSourceIds(opts.sourcesDir);
@@ -522,8 +536,13 @@ export function createApiServer(opts: ApiOptions): Server {
     let started: { jobId: string; done: Promise<JobSummary> };
     try {
       // OW-2: the model always travels with the job (defaulted above), so the
-      // server-side startJob builds the right client per job.
-      started = start(sourceId, demoFault !== undefined ? { demoFault, model } : { model });
+      // server-side startJob builds the right client per job. S6-W: the flow
+      // (defaulted to 'lesson') travels with it too.
+      started = start(sourceId, {
+        ...(demoFault !== undefined ? { demoFault } : {}),
+        model,
+        flow,
+      });
     } catch {
       return sendError(res, 500, 'JOB_START_FAILED');
     }

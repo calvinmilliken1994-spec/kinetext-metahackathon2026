@@ -42,9 +42,35 @@ export interface RuntimeLimits {
   /** Output cap for the analysis call (reasoning + JSON); must not exceed maxOutputTokens. */
   analysisMaxOutputTokens: number;
   maxInputTokens: number;
+  /**
+   * S6-W (lead freeze addendum, 2026-10-29): the client input bound for Stage 6 lesson-flow
+   * (v2) calls — the bound counts BYTES (DEBT-003) and the v2 analysis/repair prompt family
+   * needs more headroom than v1's 32,000. REQUIRED, a positive integer, and never above the
+   * provider context window (PROVIDER_CONTEXT_TOKENS); fail closed at startup like every
+   * other bound. v1 activity calls keep maxInputTokens.
+   */
+  maxInputTokensV2: number;
   /** Integer in [0, MAX_REPAIR_ATTEMPTS_BOUND]. */
   maxRepairAttempts: number;
   ledgerLockPort: number;
+}
+
+/**
+ * The provider context window the v2 input bound is validated against: muse-spark-1.3 has a
+ * 1,048,576-token context (docs/MODEL_ROUTING.md); the open-weights Spark Open endpoint is the
+ * same model family. The client's bound counts bytes as a token upper bound (DEBT-003), so this
+ * stays a conservative ceiling, not a tokenizer guarantee.
+ */
+export const PROVIDER_CONTEXT_TOKENS = 1048576;
+
+/** S6-W: the v2 input bound must be a positive integer within the provider context window. */
+export function validInputTokensV2(v: unknown): v is number {
+  return (
+    typeof v === 'number' &&
+    Number.isInteger(v) &&
+    v > 0 &&
+    v <= PROVIDER_CONTEXT_TOKENS
+  );
 }
 
 /** R-11: config budgets must be finite positive numbers — fail closed at startup. */
@@ -141,6 +167,7 @@ export function parseResourceLimits(raw: unknown): RuntimeLimits {
     maxOutputTokens?: unknown;
     analysisMaxOutputTokens?: unknown;
     maxInputTokens?: unknown;
+    maxInputTokensV2?: unknown;
     maxRepairAttempts?: unknown;
     ledgerLockPort?: unknown;
   };
@@ -150,6 +177,7 @@ export function parseResourceLimits(raw: unknown): RuntimeLimits {
   const maxOutputTokens: unknown = limits.maxOutputTokens;
   const analysisMaxOutputTokens: unknown = limits.analysisMaxOutputTokens;
   const maxInputTokens: unknown = limits.maxInputTokens;
+  const maxInputTokensV2: unknown = limits.maxInputTokensV2;
   const maxRepairAttempts: unknown = limits.maxRepairAttempts;
   const lockPort: unknown = limits.ledgerLockPort;
   if (
@@ -158,6 +186,9 @@ export function parseResourceLimits(raw: unknown): RuntimeLimits {
     !finitePositive(analysisMaxOutputTokens) ||
     (analysisMaxOutputTokens as number) > (maxOutputTokens as number) ||
     !finitePositive(maxInputTokens) ||
+    // S6-W: the lesson-flow input bound fails closed like every other bound, and must
+    // stay within the provider context window (lead freeze addendum, 2026-10-29).
+    !validInputTokensV2(maxInputTokensV2) ||
     !validRepairAttempts(maxRepairAttempts) ||
     !validLockPort(lockPort)
   ) {
@@ -174,6 +205,7 @@ export function parseResourceLimits(raw: unknown): RuntimeLimits {
     maxOutputTokens,
     analysisMaxOutputTokens: analysisMaxOutputTokens as number,
     maxInputTokens,
+    maxInputTokensV2,
     maxRepairAttempts,
     ledgerLockPort: lockPort,
   };

@@ -28,10 +28,10 @@
 // Even the last-resort catch persists a terminal failed/INTERNAL state, so a
 // settled job is never left persisted as 'running'.
 
-import { appendFileSync, mkdirSync, readdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
+import { appendFileSync, mkdirSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { randomUUID } from 'node:crypto';
-import { analyzeSource, generateSpec, repairAnalysis, repairSpec, GeneratedOutputError } from '../../packages/meta/pipeline.ts';
+import { analyzeSource, generateSpec, repairAnalysis, repairSpec } from '../../packages/meta/pipeline.ts';
 import type { TimelineSourceAnalysis } from '../../packages/meta/pipeline.ts';
 import { MetaError, META_ERROR_MESSAGES } from '../../packages/meta/client.ts';
 import type { MetaClient, MetaErrorCode } from '../../packages/meta/client.ts';
@@ -40,11 +40,10 @@ import type { MetaProvider, ModelChoice } from '../../packages/meta/pricing.ts';
 import {
   loadSource,
   loadUserSource,
-  sha256,
   userSourcesDirOf,
   USER_SOURCE_ID_PATTERN,
 } from '../../packages/sources/index.ts';
-import { repairFindings, normalizeWhitespace, validateSpec } from '../../packages/validation/validate.ts';
+import { repairFindings, validateSpec } from '../../packages/validation/validate.ts';
 import type { AnyActivitySpec } from '../../packages/validation/validate.ts';
 import { computeOutput } from '../../packages/activities/registry.ts';
 import {
@@ -53,7 +52,9 @@ import {
   DEMO_FAULTS,
   ENGINES,
   isActivityId,
+  isKitGenComponentId,
   isSequenceEngineId,
+  kitSpecId,
   maxTolerance,
 } from '../../packages/contracts/index.ts';
 import type {
@@ -65,10 +66,12 @@ import type {
   FaultRecord,
   GeneratedSpec,
   GeneratedSpecByEngine,
+  KitSpec,
   MetaReceipt,
   RepairFinding,
   RepairRecord,
   SourceAnalysis,
+  SourceAnalysisV2,
   SourceDocument,
   Stage,
   StageEvent,
@@ -77,6 +80,30 @@ import type {
   TimelineGeneratedSpec,
   ValidationReport,
 } from '../../packages/contracts/index.ts';
+import {
+  checksPassed,
+  failedCheckIds,
+  generatedOutputReceipt,
+  positiveOr,
+  readJsonFile,
+  receiptFields,
+  reservedUnknownOf,
+  roundCost,
+  writeJsonAtomic,
+} from './job-support.ts';
+import { fabricatedQuoteWithNonce } from './demo-faults.ts';
+import { isJobFlow, runLesson } from './lesson.ts';
+import type {
+  ComponentRepairRecord,
+  JobFlow,
+  LessonEventExtra,
+  LessonRepairTarget,
+  LessonStage,
+  LessonSummary,
+} from './lesson.ts';
+
+export type { JobFlow, LessonSummary, ComponentRepairRecord, LessonStage, LessonRepairTarget };
+export { isJobFlow } from './lesson.ts';
 
 export type JobStatus = 'running' | 'succeeded' | 'unsupported' | 'failed';
 
@@ -148,6 +175,30 @@ export interface JobSummary {
   /** One record per repair attempt, in order (Stage 5). */
   repairs: RepairRecord[];
   /**
+   * S6-W (frozen lesson-flow contract): which pipeline ran this job — 'lesson' (Stage 6:
+   * analysis v2 + overview + component plan) or 'activity' (the unchanged v1 pipeline).
+   * Optional in the type because job records written before Stage 6 carry no such field;
+   * every read path fills the legacy default 'activity', and every new job records it from
+   * the first job.json write on.
+   */
+  flow?: JobFlow;
+  /**
+   * S6-W: lesson progress, present on every lesson-flow job from the first job.json write
+   * (frozen contract: job summary gains `lesson` for lesson jobs). Absent on activity jobs.
+   */
+  lesson?: LessonSummary;
+  /**
+   * S6-W: one record per COMPONENT repair attempt, in order (frozen contract detail field
+   * `componentRepairs`; persisted on the summary so it survives a crash mid-lesson).
+   */
+  componentRepairs?: ComponentRepairRecord[];
+  /**
+   * S6-W: the plan component a demo fault was injected into (lead decision 2026-10-29: the
+   * inject event and the summary both name it, so a natural repair is never labelled
+   * system-made). Absent when no fault was injected.
+   */
+  demoFaultComponentId?: string;
+  /**
    * One record per ANALYSIS repair attempt, in order (TASK-024b). Empty when the
    * revision-1 analysis was publishable or maxRepairAttempts is 0. Optional: jobs
    * recorded before analysis repair existed carry no analysisRepairs field.
@@ -203,6 +254,12 @@ export interface JobDeps {
   userSourcesDir?: string;
   /** Labelled system-made fault to inject into revision 1 before validation (demo only). */
   demoFault?: DemoFault;
+  /**
+   * S6-W: which pipeline to run. 'lesson' = the Stage 6 lesson flow; 'activity' (default) =
+   * the unchanged v1 pipeline. The API server defaults to 'lesson' per the frozen contract;
+   * the worker keeps 'activity' as its own default so pre-Stage-6 callers/tests are unchanged.
+   */
+  flow?: JobFlow;
   now?: () => Date;
   newJobId?: () => string;
   limits?: JobLimits;
@@ -217,18 +274,24 @@ const DEFAULT_MAX_REPAIR_ATTEMPTS = 2; // config/resource-limits.json maxRepairA
 /** S5-06: the absolute repair bound. Startup and the worker boundary both enforce integer [0, 2]. */
 export const MAX_REPAIR_ATTEMPTS_BOUND = 2;
 
-type EventExtra = Partial<
-  Pick<StageEvent, 'model' | 'responseId' | 'usage' | 'latencyMs' | 'estCostUSD' | 'detail' | 'revision' | 'target'>
-> & { provider?: MetaProvider; providerModel?: string };
+/**
+ * S6-W: event extras are the lesson-flow superset (the contracts' StageEvent optional fields
+ * plus `componentId`); the v1 flow uses the same shape it always did.
+ */
+type EventExtra = LessonEventExtra;
 
 /**
- * OW-2: the persisted event shape — the contracts' StageEvent plus the job's
- * provider and exact provider model string. packages/contracts is frozen, so
- * the two extra keys are declared here (additive JSON fields; every consumer
- * that reads StageEvent keeps working). `model` on an event is ALWAYS the
- * display ModelChoice id of the job, never the raw returnedModel.
+ * OW-2 + S6-W: the persisted event shape — the contracts' StageEvent plus the job's
+ * provider and exact provider model string, and (frozen lesson-flow API contract) the two
+ * lesson stages 'overview'/'component', the repair target 'component' and `componentId`.
+ * packages/contracts is frozen, so the extended keys are declared here (additive JSON
+ * fields; every consumer that reads StageEvent keeps working). `model` on an event is
+ * ALWAYS the display ModelChoice id of the job, never the raw returnedModel.
  */
-export type JobStageEvent = StageEvent & {
+export type JobStageEvent = Omit<StageEvent, 'stage' | 'target'> & {
+  stage: LessonStage;
+  target?: LessonRepairTarget;
+  componentId?: string;
   provider?: MetaProvider;
   providerModel?: string;
 };
@@ -242,25 +305,6 @@ interface PipelineResult {
   spec: AnyActivitySpec;
   report: ValidationReport;
   receipt: MetaReceipt;
-}
-
-function positiveOr(value: number | undefined, fallback: number): number {
-  return typeof value === 'number' && Number.isFinite(value) && value > 0 ? value : fallback;
-}
-
-/** Money stays readable in job.json: rounded to 1e-6 USD. */
-function roundCost(usd: number): number {
-  return Math.round(usd * 1e6) / 1e6;
-}
-
-/**
- * R-10: every JSON artifact is written atomically — a temp file in the same
- * directory, then rename — so a crash can never leave a half-written job.json.
- */
-function writeJsonAtomic(path: string, data: unknown): void {
-  const tmpPath = `${path}.${process.pid}.${randomUUID().slice(0, 8)}.tmp`;
-  writeFileSync(tmpPath, JSON.stringify(data, null, 2));
-  renameSync(tmpPath, path);
 }
 
 /**
@@ -297,63 +341,6 @@ export function sanitisedCause(err: unknown): string {
   return 'unknown';
 }
 
-function receiptFields(receipt: MetaReceipt): EventExtra {
-  return {
-    model: receipt.returnedModel,
-    responseId: receipt.responseId,
-    usage: receipt.usage,
-    latencyMs: receipt.latencyMs,
-    estCostUSD: receipt.estCostUSD,
-  };
-}
-
-function checksPassed(report: ValidationReport): number {
-  return report.checks.filter(c => c.passed).length;
-}
-
-function failedCheckIds(report: ValidationReport): string[] {
-  return report.checks.filter(c => !c.passed).map(c => c.id);
-}
-
-function readJsonFile(path: string): unknown | undefined {
-  try {
-    return JSON.parse(readFileSync(path, 'utf8')) as unknown;
-  } catch {
-    return undefined;
-  }
-}
-
-/** N-04: the unknown-outcome portion is the explicit amount; a missing or invalid one counts as 0. */
-function reservedUnknownOf(value: number | undefined): number {
-  return typeof value === 'number' && Number.isFinite(value) ? value : 0;
-}
-
-/**
- * F-01: recognise the pipeline's GeneratedOutputError — via instanceof, or via
- * the duck-typed shape (code 'OUTPUT_INVALID' plus a receipt carrying a finite
- * estCostUSD) so a copy from another module instance is handled identically.
- * Returns the receipt whose cost must be accounted, or undefined.
- */
-function generatedOutputReceipt(err: unknown): MetaReceipt | undefined {
-  let receipt: unknown;
-  if (err instanceof GeneratedOutputError) {
-    receipt = err.receipt;
-  } else if (typeof err === 'object' && err !== null) {
-    const candidate = err as { code?: unknown; receipt?: unknown };
-    if (candidate.code !== 'OUTPUT_INVALID') {
-      return undefined;
-    }
-    receipt = candidate.receipt;
-  } else {
-    return undefined;
-  }
-  if (typeof receipt !== 'object' || receipt === null) {
-    return undefined;
-  }
-  const est: unknown = (receipt as { estCostUSD?: unknown }).estCostUSD;
-  return typeof est === 'number' && Number.isFinite(est) ? (receipt as MetaReceipt) : undefined;
-}
-
 /** True for the pipeline's plain ENGINE_REQUIRED/ENGINE_MISMATCH guard errors (thrown before any model call). */
 function isEngineRequired(err: unknown): boolean {
   return err instanceof Error && err.message === 'ENGINE_REQUIRED';
@@ -388,32 +375,6 @@ export function assembleForActivity(gen: AnyGeneratedSpec, activity: ActivityId,
       throw new Error(`ENGINE_REQUIRED:${String(missing)}`);
     }
   }
-}
-
-/** 8 hex chars taken from the job id (its random suffix); hashed fallback for hand-made ids. */
-function nonceFromJobId(jobId: string): string {
-  const match = /([0-9a-f]{8})$/.exec(jobId);
-  return match !== null ? match[1] : sha256(jobId).slice(0, 8);
-}
-
-function fabricatedQuoteSentence(nonce: string): string {
-  return `Muse confirmed this result in a controlled laboratory trial (ref ${nonce}).`;
-}
-
-/**
- * The fabricated sentence for a fabricated-quote demo fault, with a nonce derived from the
- * job id and re-derived until the sentence is absent from the source under the validator's
- * whitespace normalisation on BOTH sides (Muse design review decision 18).
- */
-function fabricatedQuoteWithNonce(jobId: string, sourceText: string): string {
-  const normalizedSource = normalizeWhitespace(sourceText);
-  let nonce = nonceFromJobId(jobId);
-  let sentence = fabricatedQuoteSentence(nonce);
-  while (normalizedSource.includes(normalizeWhitespace(sentence))) {
-    nonce = sha256(nonce).slice(0, 8);
-    sentence = fabricatedQuoteSentence(nonce);
-  }
-  return sentence;
 }
 
 /**
@@ -595,12 +556,17 @@ export function startJob(
       : clientModel;
 
   const createdAt: string = now().toISOString();
+  // S6-W: the flow is recorded from the FIRST job.json write (frozen contract: the summary
+  // carries `flow`; lesson jobs also carry `lesson` progress from the start). The worker's
+  // own default stays 'activity' so pre-Stage-6 callers keep the unchanged v1 pipeline.
+  const flow: JobFlow = isJobFlow(deps.flow) ? deps.flow : 'activity';
   const summary: JobSummary = {
     jobId,
     sourceId,
     status: 'running',
     purpose: deps.purpose,
     createdAt,
+    flow,
     // OW-2: recorded from the FIRST job.json write, so even a crashed job says
     // which model/provider it was running on.
     model: clientModel,
@@ -618,6 +584,17 @@ export function startJob(
     // N-05: recovery consults this owner record before interrupting a running job.
     owner: { pid: process.pid, startedAt: createdAt },
   };
+  if (flow === 'lesson') {
+    summary.lesson = {
+      overviewReady: false,
+      componentsPlanned: 0,
+      componentsPublished: 0,
+      componentsFailed: 0,
+      partialPublish: false,
+    };
+    // Frozen contract: the lesson detail always serves componentRepairs (empty is a value).
+    summary.componentRepairs = [];
+  }
   writeJsonAtomic(join(runDir, 'job.json'), summary);
 
   // R-11: one job-wide deadline plus per-stage output caps, wired from config.
@@ -628,7 +605,7 @@ export function startJob(
   };
 
   // BUG-002: the stage in progress, so the last-resort catch can say where it broke.
-  const progress: { stage: Stage } = { stage: 'ingest' };
+  const progress: { stage: LessonStage } = { stage: 'ingest' };
   const done: Promise<JobSummary> = runJob(sourceId, jobId, runDir, deps, summary, now, budget, onEvent, progress).catch(
     (err: unknown): JobSummary => {
       // Last resort (F-01): runJob already finalises on expected failures, so
@@ -697,13 +674,13 @@ async function runJob(
   now: () => Date,
   budget: { signal: AbortSignal; analysisMaxOutputTokens: number; specMaxOutputTokens: number },
   onEvent?: (e: StageEvent) => void,
-  progress: { stage: Stage } = { stage: 'ingest' },
+  progress: { stage: LessonStage } = { stage: 'ingest' },
 ): Promise<JobSummary> {
   let seq = 0;
   let totalCostUSD = 0;
   let reservedUnknownUSD = 0;
 
-  function emit(stage: Stage, status: StageStatus, extra?: EventExtra): StageEvent {
+  function emit(stage: LessonStage, status: StageStatus, extra?: EventExtra): JobStageEvent {
     const event: JobStageEvent = { jobId, seq, stage, status, at: now().toISOString(), ...extra };
     // OW-2: EVERY event records the job's model (display id), provider and the
     // provider's exact model string — normalising over any receipt-derived
@@ -718,7 +695,9 @@ async function runJob(
     appendFileSync(join(runDir, 'events.jsonl'), `${JSON.stringify(event)}\n`);
     if (onEvent !== undefined) {
       try {
-        onEvent(event);
+        // The public callback keeps the contracts' StageEvent type (v1 consumers unchanged);
+        // the persisted/carried object is the additive JobStageEvent superset.
+        onEvent(event as unknown as StageEvent);
       } catch {
         // A broken subscriber must not fail the job; the event is already persisted.
       }
@@ -763,13 +742,13 @@ async function runJob(
     return summary;
   }
 
-  function fail(stage: Stage, code: string, extra?: EventExtra): JobSummary {
+  function fail(stage: LessonStage, code: string, extra?: EventExtra): JobSummary {
     emit(stage, 'failed', extra);
     summary.error = publicError(code);
     return finish('failed');
   }
 
-  function failFromError(stage: Stage, err: unknown, failExtra?: EventExtra): JobSummary {
+  function failFromError(stage: LessonStage, err: unknown, failExtra?: EventExtra): JobSummary {
     // F-01: a GeneratedOutputError means the provider call COMPLETED and the
     // ledger already reconciled it at receipt.estCostUSD. Account the receipt
     // exactly like a successful one (it was never accounted before the throw,
@@ -843,6 +822,36 @@ async function runJob(
     return fail('ingest', 'SOURCE_UNAVAILABLE', { detail: 'SOURCE_UNAVAILABLE' });
   }
   emit('ingest', 'succeeded', { detail: `sha256 ${source.sha256.slice(0, 12)}` });
+
+  // --- S6-W: lesson flow branch (frozen lesson-flow API contract) --------------
+  // The whole lesson (analysis v2 + overview + plan, components at concurrency 2,
+  // premium via the v1 adapter, partial publish) runs in workers/generation/lesson.ts
+  // against THIS job's single cost accumulator, event writer and fixed-code failure
+  // paths, so money and failure semantics stay identical to the v1 flow.
+  if (summary.flow === 'lesson') {
+    return runLesson({
+      client: deps.client,
+      source,
+      jobId,
+      runDir,
+      purpose: deps.purpose,
+      now,
+      signal: budget.signal,
+      specMaxOutputTokens: budget.specMaxOutputTokens,
+      maxRepairAttempts: deps.limits?.maxRepairAttempts ?? DEFAULT_MAX_REPAIR_ATTEMPTS,
+      demoFault: deps.demoFault,
+      summary,
+      emit,
+      accountReceipt,
+      writeJson: (fileName: string, data: unknown): void => {
+        writeJsonAtomic(join(runDir, fileName), data);
+      },
+      writeJob,
+      fail,
+      failFromError,
+      finish,
+    });
+  }
 
   // --- analyze --------------------------------------------------------------
   emit('analyze', 'started');
@@ -1254,13 +1263,17 @@ async function runJob(
  * one with corrupt/unknown values) reads as muse-spark-1.3/meta-api, with the
  * provider model string defaulting to the display id — the only model that ever
  * ran before OW-2. Never invents a modal identity for an old record.
+ * S6-W: the same rule fills the legacy `flow` default — a record from before
+ * Stage 6 (or with a corrupt flow value) reads as 'activity', the only pipeline
+ * that ever ran before the lesson flow.
  */
 export function withModelDefaults(summary: JobSummary): JobSummary {
   const model: ModelChoice = isModelChoice(summary.model) ? summary.model : 'muse-spark-1.3';
   const provider: MetaProvider = isMetaProvider(summary.provider) ? summary.provider : 'meta-api';
   const providerModel: string =
     typeof summary.providerModel === 'string' && summary.providerModel !== '' ? summary.providerModel : model;
-  return { ...summary, model, provider, providerModel };
+  const flow: JobFlow = isJobFlow(summary.flow) ? summary.flow : 'activity';
+  return { ...summary, model, provider, providerModel, flow };
 }
 
 export function listJobs(storageDir: string): JobSummary[] {
@@ -1305,6 +1318,13 @@ export interface JobAnalysisRevisionView {
   receipt?: unknown;
 }
 
+/** One persisted analysis-v2 revision (S6-W lesson flow): {revision, analysis, report}. */
+export interface JobAnalysisV2RevisionView {
+  revision: number;
+  analysis: unknown;
+  report?: unknown;
+}
+
 export function readJob(
   storageDir: string,
   jobId: string,
@@ -1318,6 +1338,24 @@ export function readJob(
   revisions: JobRevisionView[];
   /** TASK-024b: every persisted analysis revision in order; empty without analysis repairs. */
   analysisRevisions: JobAnalysisRevisionView[];
+  /**
+   * S6-W (frozen lesson-flow API contract) — lesson jobs only; every field absent for
+   * 'activity'/legacy jobs so their detail response is byte-identical to before:
+   *   analysisV2         the analysis of record, or null when it never became publishable
+   *   analysisV2Report   the latest analysis-v2 report
+   *   analysisV2Revisions every persisted analysis-v2 revision in order
+   *   lesson             the stored LessonSpec (overview + settled components), or null
+   *   kitSpecs           PASSED kit specs only, keyed by spec id (never unverified content)
+   *   componentReports   the latest validation report per component, keyed by spec id
+   *   componentRepairs   one record per component repair attempt, in order
+   */
+  analysisV2?: SourceAnalysisV2 | null;
+  analysisV2Report?: unknown;
+  analysisV2Revisions?: JobAnalysisV2RevisionView[];
+  lesson?: unknown;
+  kitSpecs?: Record<string, KitSpec>;
+  componentReports?: Record<string, ValidationReport>;
+  componentRepairs?: ComponentRepairRecord[];
 } | null {
   if (!JOB_ID_PATTERN.test(jobId)) {
     throw new Error('JOB_ID_INVALID');
@@ -1351,6 +1389,13 @@ export function readJob(
     report?: unknown;
     revisions: JobRevisionView[];
     analysisRevisions: JobAnalysisRevisionView[];
+    analysisV2?: SourceAnalysisV2 | null;
+    analysisV2Report?: unknown;
+    analysisV2Revisions?: JobAnalysisV2RevisionView[];
+    lesson?: unknown;
+    kitSpecs?: Record<string, KitSpec>;
+    componentReports?: Record<string, ValidationReport>;
+    componentRepairs?: ComponentRepairRecord[];
   } = {
     // OW-2: legacy records without model/provider read with the defaults.
     summary: withModelDefaults(summary as JobSummary),
@@ -1388,6 +1433,85 @@ export function readJob(
       entry.receipt = rec.receipt;
     }
     result.analysisRevisions.push(entry);
+  }
+  // S6-W (frozen lesson-flow contract): the lesson detail fields, for lesson jobs only.
+  if (result.summary.flow === 'lesson') {
+    // analysis-v2.r<n>.json → analysisV2Revisions; the LATEST revision is the analysis of
+    // record, served as analysisV2 only when it is publishable (null on an unrepairable
+    // analysis, so the detail never serves an unchecked analysis as the record).
+    let analysisV2Numbers: number[] = [];
+    try {
+      analysisV2Numbers = readdirSync(runDir)
+        .map(f => /^analysis-v2\.r(\d+)\.json$/.exec(f))
+        .filter((m): m is RegExpExecArray => m !== null)
+        .map(m => Number(m[1]))
+        .sort((a, b) => a - b);
+    } catch {
+      analysisV2Numbers = [];
+    }
+    const v2Revisions: JobAnalysisV2RevisionView[] = [];
+    let latestV2: { analysis: unknown; report: unknown } | undefined;
+    for (const n of analysisV2Numbers) {
+      const file = readJsonFile(join(runDir, `analysis-v2.r${n}.json`));
+      if (file === undefined || typeof file !== 'object' || file === null) {
+        continue;
+      }
+      const rec = file as { analysis?: unknown; report?: unknown };
+      v2Revisions.push({ revision: n, analysis: rec.analysis, report: rec.report });
+      latestV2 = { analysis: rec.analysis, report: rec.report };
+    }
+    result.analysisV2Revisions = v2Revisions;
+    const latestReport = latestV2?.report as ValidationReport | undefined;
+    result.analysisV2Report = latestV2?.report;
+    result.analysisV2 =
+      latestV2 !== undefined && latestReport !== undefined && latestReport.publishable === true
+        ? (latestV2.analysis as SourceAnalysisV2)
+        : null;
+    // lesson.json — the stored LessonSpec (overview + settled components), or null.
+    result.lesson = readJsonFile(join(runDir, 'lesson.json')) ?? null;
+    // kitSpecs (PASSED specs only) + componentReports (latest revision per component).
+    const kitSpecs: Record<string, KitSpec> = {};
+    const componentReports: Record<string, ValidationReport> = {};
+    const lessonSpec = result.lesson as { components?: { componentId?: unknown; specId?: unknown; status?: unknown; revision?: unknown }[] } | null;
+    const entries = Array.isArray(lessonSpec?.components) ? (lessonSpec?.components ?? []) : [];
+    for (const entry of entries) {
+      const cid: unknown = entry?.componentId;
+      if (!isKitGenComponentId(cid)) {
+        continue;
+      }
+      // Latest persisted revision of this component → componentReports.
+      let numbers: number[] = [];
+      try {
+        numbers = readdirSync(runDir)
+          .map(f => new RegExp(`^${cid}\\.r(\\d+)\\.json$`).exec(f))
+          .filter((m): m is RegExpExecArray => m !== null)
+          .map(m => Number(m[1]))
+          .sort((a, b) => a - b);
+      } catch {
+        numbers = [];
+      }
+      const latestN = numbers[numbers.length - 1];
+      if (latestN !== undefined) {
+        const rec = readJsonFile(join(runDir, `${cid}.r${latestN}.json`)) as
+          | { gen?: unknown; spec?: unknown; report?: unknown; receipt?: unknown }
+          | undefined;
+        const specId = kitSpecId(jobId, cid, latestN);
+        if (rec !== undefined && rec.report !== undefined) {
+          componentReports[specId] = rec.report as ValidationReport;
+        }
+      }
+      // Passed kit components → kitSpecs under their entry spec id (never unverified content).
+      if (entry?.status === 'passed' && typeof entry?.specId === 'string' && typeof entry?.revision === 'number') {
+        const rec = readJsonFile(join(runDir, `${cid}.r${entry.revision}.json`)) as { spec?: unknown } | undefined;
+        const spec = rec?.spec as KitSpec | undefined;
+        if (spec !== undefined && spec.componentId === cid && spec.id === entry.specId) {
+          kitSpecs[entry.specId] = spec;
+        }
+      }
+    }
+    result.kitSpecs = kitSpecs;
+    result.componentReports = componentReports;
+    result.componentRepairs = result.summary.componentRepairs ?? [];
   }
   // Every persisted revision: spec.r<n>.json (+ report.r<n>.json when present).
   let specNumbers: number[] = [];

@@ -56,6 +56,43 @@ export function evalModelFromArgv(argv: readonly string[]): ModelChoice {
   return value;
 }
 
+/* ------------------------------------------------------------------ */
+/* S6-W: the flow the driver submits every job with                     */
+/* ------------------------------------------------------------------ */
+
+export type EvalFlow = 'lesson' | 'activity';
+
+/**
+ * The driver's default flow is 'activity' — the PRE-REGISTERED Stage 5b evaluation stays v1
+ * (its evidence and admission arithmetic must not silently change). 'lesson' runs the Stage 6
+ * lesson flow; use it with a scratch EVAL_OUT_DIR, never the pre-registered directory.
+ */
+export const DEFAULT_EVAL_FLOW: EvalFlow = 'activity';
+
+/** S6-W: parse `--flow lesson|activity` (default activity). Anything else throws EVAL_FLOW_INVALID. */
+export function evalFlowFromArgv(argv: readonly string[]): EvalFlow {
+  const i = argv.indexOf('--flow');
+  if (i < 0) {
+    return DEFAULT_EVAL_FLOW;
+  }
+  const value: string | undefined = argv[i + 1];
+  if (value !== 'lesson' && value !== 'activity') {
+    throw new Error('EVAL_FLOW_INVALID');
+  }
+  return value;
+}
+
+/**
+ * S6-W: the Stage 6 output caps, mirrored from packages/meta/pipeline-v2.ts
+ * (ANALYSIS_V2_MAX_OUTPUT_TOKENS / KIT_CALL_MAX_OUTPUT_TOKENS — Muse-frozen constants).
+ * Kept as literals so this module stays pure (no I/O); tests/evaluation-flow.test.ts
+ * asserts they equal the pipeline's exports, so drift fails the suite.
+ */
+export const LESSON_ANALYSIS_MAX_OUTPUT_TOKENS = 16000;
+export const LESSON_COMPONENT_MAX_OUTPUT_TOKENS = 12000;
+/** The design's plan ceiling: at most 3 kit component calls plus at most one premium (R-PLAN-3/5). */
+export const LESSON_MAX_KIT_COMPONENTS = 3;
+
 /** Mirrors the worker's absolute repair bound (S5-06) — admission never assumes more. */
 export const MAX_REPAIR_ATTEMPTS_BOUND = 2;
 
@@ -67,6 +104,8 @@ export interface AdmissionLimits {
   maxRepairAttempts: number;
   /** Transport retries per logical call. */
   maxRetries: number;
+  /** S6-W: the lesson-flow (v2) client input bound; required for lesson admission. */
+  maxInputTokensV2?: number;
 }
 
 function isPositiveFinite(v: unknown): v is number {
@@ -117,6 +156,11 @@ export function admissionLimitsFromConfig(config: unknown): AdmissionLimits {
     }
   }
   validateAdmissionLimits(limits);
+  // S6-W: optional here (v1 admission does not need it); perJobLessonAdmissionUSD fails
+  // closed when a lesson run's config does not carry a valid maxInputTokensV2.
+  if (typeof c['maxInputTokensV2'] === 'number') {
+    limits.maxInputTokensV2 = c['maxInputTokensV2'] as number;
+  }
   return limits;
 }
 
@@ -137,6 +181,31 @@ export function perJobAdmissionUSD(limits: AdmissionLimits, model: ModelChoice =
   const analysisAttempt = reservationUSD(model, limits.maxInputTokens, limits.analysisMaxOutputTokens);
   const specAttempt = reservationUSD(model, limits.maxInputTokens, limits.maxOutputTokens);
   return (analysisAttempt + specAttempt) * logicalCalls * transportAttempts;
+}
+
+/**
+ * S6-W: conservative worst-case reservation for ONE LESSON job (USD): the v2 analysis call
+ * plus its repair loop, up to 3 kit component calls each with its own repair loop, and one
+ * premium engine call with its v1 repair loop — every logical call at the v2 input bound
+ * (maxInputTokensV2) and its Stage 6 output cap, times every transport attempt. Fails closed
+ * (ADMISSION_LIMITS_INVALID) without a valid maxInputTokensV2.
+ */
+export function perJobLessonAdmissionUSD(limits: AdmissionLimits, model: ModelChoice = DEFAULT_EVAL_MODEL): number {
+  validateAdmissionLimits(limits);
+  const v2Input = limits.maxInputTokensV2;
+  if (typeof v2Input !== 'number' || !isPositiveFinite(v2Input)) {
+    throw new Error('ADMISSION_LIMITS_INVALID');
+  }
+  const logicalCalls = 1 + limits.maxRepairAttempts;
+  const transportAttempts = 1 + limits.maxRetries;
+  const analysisAttempt = reservationUSD(model, v2Input, LESSON_ANALYSIS_MAX_OUTPUT_TOKENS);
+  const componentAttempt = reservationUSD(model, v2Input, LESSON_COMPONENT_MAX_OUTPUT_TOKENS);
+  const premiumAttempt = reservationUSD(model, v2Input, limits.maxOutputTokens);
+  return (
+    (analysisAttempt + LESSON_MAX_KIT_COMPONENTS * componentAttempt + premiumAttempt) *
+    logicalCalls *
+    transportAttempts
+  );
 }
 
 /* ------------------------------------------------------------------ */
@@ -292,6 +361,10 @@ export interface JobSummaryLike {
   /** OW-2: recorded on jobs run since the model-choice wave; absent on older summaries. */
   model?: unknown;
   provider?: unknown;
+  /** S6-W: recorded on jobs run since the lesson-flow wave; absent on older summaries. */
+  flow?: unknown;
+  /** S6-W: lesson progress on lesson-flow summaries. */
+  lesson?: unknown;
 }
 
 export interface ReconcileArgs {
@@ -402,6 +475,16 @@ export function recoveredRecord(
     typeof error === 'object' && error !== null && typeof (error as { code?: unknown }).code === 'string'
       ? (error as { code: string }).code
       : null;
+  // S6-W: lesson summaries carry `flow` and `lesson` progress; recovered records pass them
+  // through so the lesson metrics see recovered jobs too (null when the summary predates them).
+  const lesson =
+    typeof summary.lesson === 'object' && summary.lesson !== null
+      ? (summary.lesson as Record<string, unknown>)
+      : null;
+  const lessonCount = (key: string): number | null => {
+    const v = lesson?.[key];
+    return typeof v === 'number' && Number.isFinite(v) ? v : null;
+  };
   return {
     sourceId: page.sourceId,
     candidate: page.candidate,
@@ -417,6 +500,14 @@ export function recoveredRecord(
     // invented one here).
     model: typeof summary.model === 'string' ? summary.model : null,
     provider: typeof summary.provider === 'string' ? summary.provider : null,
+    // S6-W: the flow the job actually ran; null for summaries from before the field existed.
+    flow: typeof summary.flow === 'string' ? summary.flow : null,
+    componentsPlanned: lessonCount('componentsPlanned'),
+    componentsPublished: lessonCount('componentsPublished'),
+    componentsFailed: lessonCount('componentsFailed'),
+    overviewPublished: lesson?.['overviewReady'] === true,
+    interactivePublished: (lessonCount('componentsPublished') ?? 0) >= 1,
+    partialPublish: lesson?.['partialPublish'] === true,
     publishedRevision: finiteOrNull(summary.publishedRevision),
     revisions: finiteOrNull(summary.revisions),
     repairs,

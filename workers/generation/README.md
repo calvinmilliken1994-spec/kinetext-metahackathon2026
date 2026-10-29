@@ -105,3 +105,73 @@ succeeded pipeline (files, event order, seq contiguity, cost 0.02), unsupported
 source, `MetaError` timeout, `MetaError` receipt cost accounting, corrupted
 evidence quote → `VALIDATION_FAILED` naming `grounding.quotes`, unknown source,
 invalid ids, listing/reading/skipping.
+
+## Stage 6 lesson flow (S6-W)
+
+`deps.flow: 'lesson' | 'activity'` selects the pipeline (worker default
+`'activity'`; the API server defaults to `'lesson'` per the frozen lesson-flow
+contract in `docs/specs/STAGE-6-design.md`). The lesson flow lives in
+`lesson.ts`; `job-support.ts` holds the persistence/receipt helpers shared by
+both flows and `demo-faults.ts` the labelled demo-fault helpers.
+
+One lesson job: `analyzeSourceV2` (validator injected = `validateAnalysisV2`;
+16,000-token Muse cap) → bounded analysis repair loop (revision-1 baseline,
+`compareAnalysisV2Revisions`) → decline (`usable=false` → `unsupported`,
+`lesson.json` with a null overview) or **overview publish** (`overview:succeeded`
+event + `lesson.json` written BEFORE any component call) → the planned components
+in plan order, **at most 2 concurrently** → partial publish. Per kit component:
+`generateKitComponent` (12,000-token cap) → `validateKitComponent` → the
+validator-owned prune helper (drop bad items while the minimum remains; the
+dropped-items note becomes the passed entry's `reason`; skipped on a revision
+carrying an injected demo fault so the catch is always demonstrated through
+repair) → bounded repair loop (`repairKitComponent` + `compareKitRevisions`
+against the immutable revision 1) → `assembleKitSpec` → persisted as
+`<componentId>.r<N>.json` `{gen, spec, report, receipt}`. Premium engines: the v2
+analysis is adapted to the v1 `SourceAnalysis` (concepts from key terms with
+their quotes, objectives from key points), validated with v1 `validateAnalysis`
+BEFORE any paid call (failure → entry `skipped`, plain reason, zero spend), then
+the unchanged v1 `generateSpec`/`repairSpec` loop with the v1 file names
+(`spec.r<N>.json`/`report.r<N>.json`) and summary fields (`engine`, `repairs`,
+`publishedRevision`, …).
+
+Failure policy: only the analysis/overview stage can fail the lesson
+(`ANALYSIS_INVALID`, `OUTPUT_INVALID`, `MetaError` codes). A component whose
+output fails its checks (or is schema-invalid) fails ALONE — the lesson still
+succeeds with the overview plus every passed component (`partialPublish` when
+anything failed/was skipped). A provider `MetaError` inside a component call is
+fatal for the job, exactly like v1. Every charge — analysis, components,
+repairs, premium, `GeneratedOutputError(V2)` receipts — goes through the SAME
+single cost accumulator in `jobs.ts` before any fallible write.
+
+Events extend the frozen contracts locally (contracts are not edited): stages
+`overview` and `component` (`componentId`, `revision`, `status`), repair events
+with `target: 'analysis'` or `target: 'component'` + `componentId`, and the
+demo-fault `inject` event carries the `componentId` it was planted in (absent —
+with status `failed` and a plain reason — when the fault could not be injected,
+so a natural repair is never labelled system-made). The summary carries `flow`,
+`lesson` progress (kept current for the list view), `componentRepairs`, and
+`demoFaultComponentId`.
+
+Lesson demo faults (labelled, system-made, excluded from metrics):
+`fabricated-quote` → the first quiz card's quote (must fail Q-01);
+`wrong-answer` → the formula explorer's expression `(expr) + 1` (must fail
+FE-08, else FE-05/FE-04; the inject detail names the catching check). The
+`effective` flag records whether re-validating the faulty revision actually
+failed the intended check.
+
+`readJob` serves the frozen lesson detail for `flow: 'lesson'` jobs only
+(activity/legacy details are byte-identical to before): `analysisV2` (null when
+the analysis never became publishable), `analysisV2Report`,
+`analysisV2Revisions`, `lesson` (`lesson.json`), `kitSpecs` (PASSED specs only,
+keyed by `kitSpecId`), `componentReports` (latest revision per component, keyed
+by `kitSpecId`) and `componentRepairs`.
+
+Lesson tests: `lesson.test.ts` (happy path on the drag golden, decline,
+unrepairable analysis, component repair/prune/partial publish, OUTPUT_INVALID,
+fatal MetaError, concurrency-2 ordering, v1 default unchanged),
+`lesson.premium.test.ts` (adapter pass + skip with no paid call),
+`lesson.demo-faults.test.ts` (both families effective + labelled, prune-skip,
+not-injectable honesty), `lesson.cost.test.ts` (real client + real ledger +
+fake transport: job.json totals equal the ledger's committed spend even when
+the event write fails), and `apps/api/server.lesson.test.ts` (flow parameter,
+FLOW_INVALID, detail/list shapes).

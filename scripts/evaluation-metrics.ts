@@ -54,6 +54,18 @@ export interface EvalResultLine {
   /** OW-2: the model/provider the job actually ran on; absent on pre-OW-2 records. */
   model?: string | null;
   provider?: string | null;
+  /** S6-W: the flow the job ran ('lesson' | 'activity'); absent on pre-Stage-6 records. */
+  flow?: string | null;
+  /** S6-W: lesson-flow component counts; null on activity-flow records. */
+  componentsPlanned?: number | null;
+  componentsPublished?: number | null;
+  componentsFailed?: number | null;
+  /** S6-W: whether the page got an overview / at least one interactive component; partial publish. */
+  overviewPublished?: boolean | null;
+  interactivePublished?: boolean | null;
+  partialPublish?: boolean | null;
+  /** S6-W: the v2 decline code for a declined lesson page; null otherwise. */
+  declineCode?: string | null;
   status?: string | null;
   engine?: string | null;
   publishedRevision?: number | null;
@@ -107,12 +119,73 @@ export interface PageOutcome {
   wallS?: number | null;
 }
 
+/**
+ * S6-W: lesson-flow metrics over the results lines that recorded flow 'lesson' (pure).
+ * Rates are over lesson jobs only; counts are the recorded per-job component numbers
+ * (null counts contribute 0 to totals but the job still counts in the rate denominators).
+ * Demo-fault jobs never reach an evaluation run (the driver submits no faults), so no
+ * fault exclusion is needed here; a line without the lesson fields counts as no overview.
+ */
+export interface LessonMetricsSummary {
+  lessonJobs: number;
+  declined: number;
+  failed: number;
+  overviewPublished: number;
+  /** overviewPublished / lessonJobs; null when there are no lesson jobs. */
+  overviewRate: number | null;
+  interactivePublished: number;
+  /** interactivePublished / lessonJobs; null when there are no lesson jobs. */
+  interactiveRate: number | null;
+  componentsPlanned: number;
+  componentsPublished: number;
+  componentsFailed: number;
+  partialPublishJobs: number;
+  declinesByCode: Record<string, number>;
+}
+
+export function computeLessonMetrics(results: readonly EvalResultLine[]): LessonMetricsSummary {
+  const lines = results.filter(r => r.flow === 'lesson');
+  const out: LessonMetricsSummary = {
+    lessonJobs: lines.length,
+    declined: 0,
+    failed: 0,
+    overviewPublished: 0,
+    overviewRate: null,
+    interactivePublished: 0,
+    interactiveRate: null,
+    componentsPlanned: 0,
+    componentsPublished: 0,
+    componentsFailed: 0,
+    partialPublishJobs: 0,
+    declinesByCode: {},
+  };
+  for (const r of lines) {
+    if (r.status === 'unsupported') {
+      out.declined += 1;
+      const code = typeof r.declineCode === 'string' && r.declineCode !== '' ? r.declineCode : 'unknown';
+      out.declinesByCode[code] = (out.declinesByCode[code] ?? 0) + 1;
+    }
+    if (r.status === 'failed') out.failed += 1;
+    if (r.overviewPublished === true) out.overviewPublished += 1;
+    if (r.interactivePublished === true) out.interactivePublished += 1;
+    if (r.partialPublish === true) out.partialPublishJobs += 1;
+    out.componentsPlanned += typeof r.componentsPlanned === 'number' ? r.componentsPlanned : 0;
+    out.componentsPublished += typeof r.componentsPublished === 'number' ? r.componentsPublished : 0;
+    out.componentsFailed += typeof r.componentsFailed === 'number' ? r.componentsFailed : 0;
+  }
+  out.overviewRate = rate(out.overviewPublished, out.lessonJobs);
+  out.interactiveRate = rate(out.interactivePublished, out.lessonJobs);
+  return out;
+}
+
 export interface MetricsSummary {
   total: number;
   byClass: ClassCounts;
   accuracyRate: number | null;
   bySubject: Record<string, GroupMetrics>;
   byDifficulty: Record<string, GroupMetrics>;
+  /** S6-W: lesson-flow metrics over the flow==='lesson' lines (lessonJobs 0 when none). */
+  lesson: LessonMetricsSummary;
   repairs: {
     total: number;
     jobsWithRepairs: number;
@@ -270,6 +343,7 @@ export function computeMetrics(results: EvalResultLine[], manifest: ManifestEntr
     accuracyRate: total === 0 ? null : correct / total,
     bySubject,
     byDifficulty,
+    lesson: computeLessonMetrics(results),
     repairs: { total: repairsTotal, jobsWithRepairs, analysisTotal: analysisRepairsTotal, jobsWithAnalysisRepairs, byTargetedCheck, byFirstRevisionCheck },
     cost: {
       publishedLessons,
@@ -351,6 +425,24 @@ export function renderSummaryMarkdown(m: MetricsSummary, opts: { manifestTotal: 
     L.push('| Check id | Jobs where it failed on revision 1 |');
     L.push('|---|---|');
     for (const [id, n] of first) L.push(`| \`${id}\` | ${n} |`);
+    L.push('');
+  }
+  // S6-W: lesson-flow section, only when the results file contains lesson jobs.
+  const lm = m.lesson;
+  if (lm.lessonJobs > 0) {
+    L.push('## Lesson flow (Stage 6)');
+    L.push('');
+    L.push(`Lesson-flow jobs in this results file: **${lm.lessonJobs}** (the classes above still apply to every line; this section adds the Stage 6 lesson outcomes).`);
+    L.push('');
+    L.push(`- Pages that got an overview: **${lm.overviewPublished} of ${lm.lessonJobs}** (${pct(lm.overviewRate)})`);
+    L.push(`- Pages that got an overview plus at least one interactive component: **${lm.interactivePublished} of ${lm.lessonJobs}** (${pct(lm.interactiveRate)})`);
+    L.push(`- Components: **${lm.componentsPublished} published**, **${lm.componentsFailed} failed/skipped**, of **${lm.componentsPlanned} planned**`);
+    L.push(`- Partial publishes (some components published, some not): **${lm.partialPublishJobs}**`);
+    L.push(`- Declined pages: **${lm.declined}**; failed jobs (overview never published): **${lm.failed}**`);
+    const declineCodes = Object.entries(lm.declinesByCode).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+    if (declineCodes.length > 0) {
+      L.push(`- Decline codes: ${declineCodes.map(([c, n]) => `\`${c}\` ×${n}`).join(', ')}`);
+    }
     L.push('');
   }
   L.push('## Cost and timing');
