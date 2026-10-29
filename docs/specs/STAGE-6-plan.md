@@ -1,4 +1,4 @@
-# Stage 6 — subject engines and the component kit (DRAFT, pending Calvin's confirmation of subjects)
+# Stage 6 — subject engines and the component kit (plan; detailed frozen design in `STAGE-6-design.md`)
 
 ## Why
 Calvin, 2026-10-29: the product must not become a fact checker. It should **summarise any page quickly and accurately** and turn it into **demonstrational visuals and interactive components**. The evaluation showed the gap: 9/29 real pages became a lesson; **17/29 were declined** because no hand-built activity fitted. Checks stay as the quiet trust layer underneath.
