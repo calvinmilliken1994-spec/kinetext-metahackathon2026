@@ -14,3 +14,6 @@ Lead review of the published Declaration timeline: every event date matches the 
 Natural repair: still none observed — both real history pages passed on the first try.
 
 Stage 5b live spend: USD 0.342487 (4 jobs). Ledger total after these runs: USD 1.4477 of the USD 10 cap.
+
+## Correction (2026-10-29, after the Stage 5b round-3 review fixes, commit bb56577)
+Date grounding is now fail-closed: a date counts only when the source states it in a supported exact form with no qualifier or bound beside it (`docs/specs/STAGE-5b-plan.md`, round-3 decision). A negated "until" ("was not approved until September of 1776") still counts. Replayed under the current checks, **`job-20261028153624-4dc34853`** (NARA Articles of Confederation, published r1) no longer passes `timeline.date-grounded`: e5 1789 ("in force from March 1, 1781, until 1789 when the present-day Constitution went into effect"). These dates match the page, but an un-negated "until" names a deadline or a period end, not proof the event happened on that date, so the checks now reject them. This is an accepted false rejection. The stored files, the pre-registered score and the original verdict are unchanged. A re-run under the current checks is recorded separately.
