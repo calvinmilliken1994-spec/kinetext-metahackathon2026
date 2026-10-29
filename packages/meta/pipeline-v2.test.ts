@@ -19,6 +19,7 @@ import {
 import { GeneratedOutputError, analyzeSource } from './pipeline.ts';
 import {
   ANALYSIS_V2_MAX_OUTPUT_TOKENS,
+  KIT_CALL_MAX_OUTPUT_TOKENS,
   GeneratedOutputErrorV2,
   analyzeSourceV2,
   generateKitComponent,
@@ -160,7 +161,7 @@ function payloadBetween(user: string, open: string, close: string): unknown {
 }
 
 test('analyzeSourceV2 happy path usable and declined', async () => {
-  assert.equal(ANALYSIS_V2_MAX_OUTPUT_TOKENS, 16000);
+  assert.equal(ANALYSIS_V2_MAX_OUTPUT_TOKENS, 32000);
   const usable = loadFixture('source-analysis-v2.usable.json') as SourceAnalysisV2;
   const declined = loadFixture('source-analysis-v2.declined.json') as SourceAnalysisV2;
   const source = loadSource('nasa-grc-drag-equation');
@@ -172,7 +173,7 @@ test('analyzeSourceV2 happy path usable and declined', async () => {
     assert.equal(req.schemaName, 'source_analysis_v2');
     assert.equal(req.schemaName, ANALYSIS_V2_SCHEMA_NAME);
     assert.equal(req.jsonSchema === sourceAnalysisV2GenSchema, true);
-    assert.equal(req.maxOutputTokens, 16000);
+    assert.equal(req.maxOutputTokens, 32000);
     assert.deepEqual(req.messages, buildAnalysisV2Messages(source));
     assert.equal(req.purpose, 'test-live');
     assert.equal('signal' in req, false);
@@ -216,7 +217,7 @@ test('maxOutputTokens guards', async () => {
     assert.equal((requests[0] as CompleteRequest).maxOutputTokens, 8000);
     assert.deepEqual(out.analysis, usable);
   }
-  for (const bad of [16001, 0, 1.5]) {
+  for (const bad of [32001, 0, 1.5]) {
     const requests: CompleteRequest[] = [];
     await assert.rejects(
       analyzeSourceV2(fakeClientFor(usable, requests), source, 'test-live', { maxOutputTokens: bad }),
@@ -227,7 +228,7 @@ test('maxOutputTokens guards', async () => {
   const quizGolden = loadFixture('quiz-cards.gen.json');
   const analysis = analysisFor('quiz-cards-v1', quizGolden);
   const plan = planEntryFor('quiz-cards-v1', quizGolden, analysis);
-  for (const bad of [12001, 0, 2.5]) {
+  for (const bad of [24001, 0, 2.5]) {
     const requests: CompleteRequest[] = [];
     await assert.rejects(
       generateKitComponent(fakeClientFor(quizGolden, requests), source, analysis, plan, 'test-live', { maxOutputTokens: bad }),
@@ -253,11 +254,117 @@ test('maxOutputTokens guards', async () => {
         plan,
         prev,
         'test-live',
-        { maxOutputTokens: 12001, validate: validate as never }
+        { maxOutputTokens: 24001, validate: validate as never }
       ),
       /MAX_OUTPUT_TOKENS_INVALID/
     );
     assert.equal(requests.length, 0);
+  }
+});
+
+test('raised output caps: cap accepted, cap+1 rejected before client call', async () => {
+  assert.equal(ANALYSIS_V2_MAX_OUTPUT_TOKENS, 32000);
+  assert.equal(KIT_CALL_MAX_OUTPUT_TOKENS, 24000);
+  const usable = loadFixture('source-analysis-v2.usable.json') as SourceAnalysisV2;
+  const source = loadSource('nasa-grc-drag-equation');
+  {
+    const requests: CompleteRequest[] = [];
+    const out = await analyzeSourceV2(fakeClientFor(usable, requests), source, 'test-live', { maxOutputTokens: 32000 });
+    assert.equal((requests[0] as CompleteRequest).maxOutputTokens, 32000);
+    assert.deepEqual(out.analysis, usable);
+  }
+  {
+    const requests: CompleteRequest[] = [];
+    await assert.rejects(
+      analyzeSourceV2(fakeClientFor(usable, requests), source, 'test-live', { maxOutputTokens: 32001 }),
+      /MAX_OUTPUT_TOKENS_INVALID/
+    );
+    assert.equal(requests.length, 0);
+  }
+  const quizGolden = loadFixture('quiz-cards.gen.json');
+  const analysis = analysisFor('quiz-cards-v1', quizGolden);
+  const plan = planEntryFor('quiz-cards-v1', quizGolden, analysis);
+  {
+    const requests: CompleteRequest[] = [];
+    const out = await generateKitComponent(fakeClientFor(quizGolden, requests), source, analysis, plan as never, 'test-live', { maxOutputTokens: 24000 });
+    assert.equal((requests[0] as CompleteRequest).maxOutputTokens, 24000);
+    assert.deepEqual(out.gen, quizGolden);
+  }
+  {
+    const requests: CompleteRequest[] = [];
+    await assert.rejects(
+      generateKitComponent(fakeClientFor(quizGolden, requests), source, analysis, plan as never, 'test-live', { maxOutputTokens: 24001 }),
+      /MAX_OUTPUT_TOKENS_INVALID/
+    );
+    assert.equal(requests.length, 0);
+  }
+  {
+    const failing: ValidationReport = {
+      artifactId: 'quiz-cards-v1',
+      revision: 1,
+      checks: [{ id: 'Q-01', kind: 'grounding', passed: false, message: 'bad', affected: ['/cards/0/quote'] }],
+      publishable: false
+    };
+    const validate = (_v: unknown, _s: SourceDocument[]): ValidationReport => failing;
+    const prev = { gen: quizGolden as KitGenByComponent['quiz-cards-v1'], report: failing, attempt: 1 };
+    const okRequests: CompleteRequest[] = [];
+    const out = await repairKitComponent(
+      fakeClientFor(quizGolden, okRequests),
+      source,
+      analysis,
+      plan as never,
+      prev,
+      'test-live',
+      { maxOutputTokens: 24000, validate: validate as never }
+    );
+    assert.equal((okRequests[0] as CompleteRequest).maxOutputTokens, 24000);
+    assert.equal(out.report.revision, 2);
+    const badRequests: CompleteRequest[] = [];
+    await assert.rejects(
+      repairKitComponent(
+        fakeClientFor(quizGolden, badRequests),
+        source,
+        analysis,
+        plan as never,
+        prev,
+        'test-live',
+        { maxOutputTokens: 24001, validate: validate as never }
+      ),
+      /MAX_OUTPUT_TOKENS_INVALID/
+    );
+    assert.equal(badRequests.length, 0);
+  }
+  {
+    const failingAnalysis: ValidationReport = {
+      artifactId: 'source-analysis-v2',
+      revision: 1,
+      checks: [{ id: 'A-05', kind: 'grounding', passed: false, message: 'bad', affected: ['/overview/headline'] }],
+      publishable: false
+    };
+    const validate = (_v: unknown, _s: SourceDocument[]): ValidationReport => failingAnalysis;
+    const prev = { analysis: usable, report: failingAnalysis, attempt: 1 };
+    const okRequests: CompleteRequest[] = [];
+    const out = await repairAnalysisV2(
+      fakeClientFor(usable, okRequests),
+      source,
+      prev,
+      'test-live',
+      { maxOutputTokens: 24000, validate: validate as never }
+    );
+    assert.equal((okRequests[0] as CompleteRequest).maxOutputTokens, 24000);
+    assert.equal(out.report.revision, 2);
+    const badRequests: CompleteRequest[] = [];
+    await assert.rejects(
+      repairAnalysisV2(
+        fakeClientFor(usable, badRequests),
+        source,
+        prev,
+        'test-live',
+        { maxOutputTokens: 24001, validate: validate as never }
+      ),
+      /MAX_OUTPUT_TOKENS_INVALID/
+    );
+    assert.equal(badRequests.length, 0);
   }
 });
 
@@ -383,7 +490,7 @@ test('generateKitComponent for every component', async () => {
     const req = requests[0] as CompleteRequest;
     assert.equal(req.schemaName, KIT_SCHEMA_NAMES[c]);
     assert.equal(req.jsonSchema === kitGenSchemaFor(c), true);
-    assert.equal(req.maxOutputTokens, 12000);
+    assert.equal(req.maxOutputTokens, 24000);
     assert.deepEqual(req.messages, buildKitComponentMessages(src, analysis, plan));
     assert.deepEqual(out.gen, golden);
     assert.equal('report' in out, false);
@@ -464,7 +571,7 @@ test('repairKitComponent baseline immutability and guards', async () => {
     assert.equal(requests.length, 1);
     const req = requests[0] as CompleteRequest;
     assert.equal(req.schemaName, KIT_REPAIR_SCHEMA_NAMES['quiz-cards-v1']);
-    assert.equal(req.maxOutputTokens, 12000);
+    assert.equal(req.maxOutputTokens, 24000);
     const user = req.messages[1]?.content ?? '';
     const payload = payloadBetween(user, '<untrusted-component-repair-data>', '</untrusted-component-repair-data>') as Record<string, unknown>;
     assert.deepEqual(payload['originalSpec'], rev1);
@@ -778,7 +885,7 @@ test('repairAnalysisV2 core set', async () => {
     const req = requests[0] as CompleteRequest;
     assert.equal(req.schemaName, 'source_analysis_v2_repair');
     assert.equal(req.schemaName, ANALYSIS_V2_REPAIR_SCHEMA_NAME);
-    assert.equal(req.maxOutputTokens, 12000);
+    assert.equal(req.maxOutputTokens, 24000);
     const user = req.messages[1]?.content ?? '';
     const payload = payloadBetween(user, '<untrusted-analysis-repair-data>', '</untrusted-analysis-repair-data>') as Record<string, unknown>;
     assert.deepEqual(payload['authorizedPaths'], ['/overview/keyPoints/0/point']);

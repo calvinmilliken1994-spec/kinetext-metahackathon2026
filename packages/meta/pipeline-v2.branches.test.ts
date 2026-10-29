@@ -458,7 +458,7 @@ test('repairKitComponent guard order and codes', async () => {
   {
     const requests: CompleteRequest[] = [];
     await assert.rejects(
-      repairKitComponent(fakeClientFor(pair.rev2, requests), source, setup.analysis, setup.plan, { gen: pair.rev1, report: failingQuizReport(), attempt: 1 }, 'test-live', { validate: validate as never, maxOutputTokens: 12001 }),
+      repairKitComponent(fakeClientFor(pair.rev2, requests), source, setup.analysis, setup.plan, { gen: pair.rev1, report: failingQuizReport(), attempt: 1 }, 'test-live', { validate: validate as never, maxOutputTokens: 24001 }),
       /MAX_OUTPUT_TOKENS_INVALID/
     );
     assert.equal(requests.length, 0);

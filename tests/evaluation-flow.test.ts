@@ -57,8 +57,8 @@ test('perJobLessonAdmissionUSD: the conservative lesson worst case, fail-closed 
   };
   const lesson = perJobLessonAdmissionUSD(limits, 'muse-spark-1.3');
   const expected =
-    (reservationUSD('muse-spark-1.3', 72000, 16000) +
-      3 * reservationUSD('muse-spark-1.3', 72000, 12000) +
+    (reservationUSD('muse-spark-1.3', 72000, 32000) +
+      3 * reservationUSD('muse-spark-1.3', 72000, 24000) +
       reservationUSD('muse-spark-1.3', 72000, 32000)) *
     3 *
     2;

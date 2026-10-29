@@ -27,8 +27,8 @@ import {
 import { GeneratedOutputError } from './pipeline.ts';
 import type { CompleteRequest, MetaClient } from './client.ts';
 
-export const ANALYSIS_V2_MAX_OUTPUT_TOKENS: 16000 = 16000;
-export const KIT_CALL_MAX_OUTPUT_TOKENS: 12000 = 12000;
+export const ANALYSIS_V2_MAX_OUTPUT_TOKENS: 32000 = 32000;
+export const KIT_CALL_MAX_OUTPUT_TOKENS: 24000 = 24000;
 
 export type V2Purpose = 'test-live' | 'demo';
 export type V2Validator<T> = (value: T, sources: SourceDocument[]) => ValidationReport;

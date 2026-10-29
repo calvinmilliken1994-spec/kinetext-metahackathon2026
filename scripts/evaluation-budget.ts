@@ -88,8 +88,8 @@ export function evalFlowFromArgv(argv: readonly string[]): EvalFlow {
  * Kept as literals so this module stays pure (no I/O); tests/evaluation-flow.test.ts
  * asserts they equal the pipeline's exports, so drift fails the suite.
  */
-export const LESSON_ANALYSIS_MAX_OUTPUT_TOKENS = 16000;
-export const LESSON_COMPONENT_MAX_OUTPUT_TOKENS = 12000;
+export const LESSON_ANALYSIS_MAX_OUTPUT_TOKENS = 32000;
+export const LESSON_COMPONENT_MAX_OUTPUT_TOKENS = 24000;
 /** The design's plan ceiling: at most 3 kit component calls plus at most one premium (R-PLAN-3/5). */
 export const LESSON_MAX_KIT_COMPONENTS = 3;
 
