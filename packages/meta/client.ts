@@ -79,6 +79,7 @@ export class MetaError extends Error {
   costBasis?: 'usage' | 'reservation';
   providerErrorType?: string;
   provider?: MetaProvider;
+  declare partialOutput?: string;
   /**
    * The second `message` argument is IGNORED for source compatibility only
    * (callers may pass the old message). `this.message` is always
@@ -329,6 +330,18 @@ function defaultSleep(ms: number, signal?: AbortSignal): Promise<void> {
       }
     }
   });
+}
+
+const PARTIAL_OUTPUT_MAX_CHARS = 200000;
+
+function withPartialOutput(err: MetaError, content: string): MetaError {
+  Object.defineProperty(err, 'partialOutput', {
+    value: content.slice(0, PARTIAL_OUTPUT_MAX_CHARS),
+    enumerable: false,
+    writable: false,
+    configurable: false,
+  });
+  return err;
 }
 
 export function createMetaClient(opts: MetaClientOptions): MetaClient {
@@ -693,7 +706,7 @@ export function createMetaClient(opts: MetaClientOptions): MetaClient {
             throw fail('RETURNED_MODEL_MISMATCH', { receipt });
           }
           if (finishReason !== 'stop') {
-            throw fail('OUTPUT_TRUNCATED', { receipt });
+            throw withPartialOutput(fail('OUTPUT_TRUNCATED', { receipt }), content);
           }
           if (content.length === 0) {
             throw fail('EMPTY_OUTPUT', { receipt });

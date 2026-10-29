@@ -55,7 +55,7 @@ function extractBetween(text: string, open: string, close: string): string {
 
 test('v1 unchanged pin and versions', () => {
   assert.equal(PROMPT_VERSION, 'v9');
-  assert.equal(STAGE6_PROMPT_VERSION, 's6-v1');
+  assert.equal(STAGE6_PROMPT_VERSION, 's6-v2');
   const source = loadSource('nasa-grc-drag-equation');
   const messages = buildAnalysisMessages(source);
   const digest = createHash('sha256').update(JSON.stringify(messages), 'utf8').digest('hex');
@@ -301,6 +301,64 @@ test('prompt wording', () => {
   const quizPlan: ComponentPlanEntry = { ...usable.componentPlan[0], componentId: 'quiz-cards-v1' };
   const quizSystem = buildKitComponentMessages(source, usable, quizPlan)[0].content;
   assert.ok(quizSystem.includes('the id attribute of the source tag'));
+});
+
+test('s6-v2 analysis plans two components by default', () => {
+  const source = loadSource('nasa-grc-drag-equation');
+  const system = buildAnalysisV2Messages(source)[0].content;
+  assert.ok(system.includes('TWO components by default'));
+  assert.ok(system.includes('more than about 5,000 characters'));
+  assert.ok(system.includes('clearly different part of the page'));
+});
+
+test('s6-v2 compare-table stays small with page wording', () => {
+  const source = loadSource('nasa-grc-drag-equation');
+  const usable = loadFixture('source-analysis-v2.usable.json') as SourceAnalysisV2;
+  const plan: ComponentPlanEntry = { ...usable.componentPlan[0], componentId: 'compare-table-v1' };
+  const system = buildKitComponentMessages(source, usable, plan)[0].content;
+  assert.ok(system.includes('prefer 2 or 3 entities and 2 or 3 attributes'));
+  assert.ok(system.includes('at most 9 cells'));
+  assert.ok(system.includes('short phrase copied verbatim'));
+  assert.ok(system.includes('short labels written as the page writes them'));
+  assert.ok(system.includes('Never put formulas'));
+  assert.ok(system.includes('A > B'));
+  assert.ok(system.includes('JSON field names or ids'));
+});
+
+test('s6-v2 concept-map distinct labels', () => {
+  const source = loadSource('nasa-grc-drag-equation');
+  const usable = loadFixture('source-analysis-v2.usable.json') as SourceAnalysisV2;
+  const plan: ComponentPlanEntry = { ...usable.componentPlan[0], componentId: 'concept-map-v1' };
+  const system = buildKitComponentMessages(source, usable, plan)[0].content;
+  assert.ok(system.includes('minimum allowed node and link counts'));
+  assert.ok(system.includes('Every node label is distinct'));
+  assert.ok(system.includes('joins two different nodes'));
+});
+
+test('s6-v2 formula-explorer right-hand side only', () => {
+  const source = loadSource('nasa-grc-drag-equation');
+  const usable = loadFixture('source-analysis-v2.usable.json') as SourceAnalysisV2;
+  const plan: ComponentPlanEntry = { ...usable.componentPlan[0], componentId: 'formula-explorer-v1' };
+  const system = buildKitComponentMessages(source, usable, plan)[0].content;
+  assert.ok(system.includes('right-hand side only'));
+  assert.ok(system.includes('v = a * t'));
+  assert.ok(system.includes('a * t'));
+  assert.ok(system.includes('Transcribe the page formula itself'));
+  assert.ok(system.includes('never substitute'));
+  assert.ok(system.includes('non-empty title'));
+});
+
+test('s6-v2 compact JSON in generation and repair', () => {
+  const source = loadSource('nasa-grc-drag-equation');
+  const usable = loadFixture('source-analysis-v2.usable.json') as SourceAnalysisV2;
+  const sentence = 'compact JSON with no extra whitespace or repeated content, and stop after the final closing brace';
+  for (const id of KIT_GEN_COMPONENT_IDS) {
+    const plan: ComponentPlanEntry = { ...usable.componentPlan[0], componentId: id };
+    const genSystem = buildKitComponentMessages(source, usable, plan)[0].content;
+    assert.ok(genSystem.includes(sentence), `generation ${id} is compact`);
+    const repairSystem = buildKitComponentRepairMessages(source, usable, plan, { original: {}, previous: {}, findings: [], authorizedPaths: [] })[0].content;
+    assert.ok(repairSystem.includes(sentence), `repair ${id} is compact`);
+  }
 });
 
 test('schema names', () => {
