@@ -37,8 +37,9 @@ npm test                       # includes src/lib/*.test.ts (pure logic)
   scroll to and flash the quote.
 - **Predict-then-run.** The reference answer is the engine's acceleration, computed only after "Run it"; the spec's
   `expectedAccelerationMps2` is never displayed.
-- **Disclosure** on every activity view: *AI-generated with Muse Spark 1.3 (Meta). Includes NASA source material; NASA has not
-  reviewed or endorsed this activity.*
+- **Disclosure** on every activity view: *AI-generated with Muse Spark 1.3 (Meta). Includes material from &lt;publisher&gt;;
+  &lt;publisher&gt; has not reviewed or endorsed this lesson.* The publisher (NASA Glenn Research Center, National Archives,
+  NOAA, CFPB, NRC, USGS, NIJ…) comes from the source's attribution (`sourcePublisher` in `src/lib/sources.ts`).
 
 ## Layout
 

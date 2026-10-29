@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { USER_LICENSES, USER_SOURCE_LIMITS, validateUserSourceInput } from '../../../../packages/contracts/index.ts';
 import {
   demoFaultOptions, demoFaultToSend, disclosureText, EMPTY_FORM, FREE_CREDITS_NOTE, isHttpUrl, licenseLabel, licenseOptions, problemMessage,
-  problemsByField, RIGHTS_LABEL, sourceLicenseText, sourceOptionLabel, textCount, validateSourceForm,
+  problemsByField, RIGHTS_LABEL, sourceLicenseText, sourceOptionLabel, sourcePublisher, textCount, validateSourceForm,
   reuseNotice,
 } from './sources.ts';
 import type { SourceFormValues } from './sources.ts';
@@ -124,18 +124,91 @@ test('source labels: teacher sources carry the tag and licence, library sources 
 
 test('disclosureText names the model that made the activity (OW-3): Spark Open is never credited as Spark 1.3', () => {
   const open = 'Muse Spark Open (Meta’s open weights, hosted on Modal)';
-  assert.equal(disclosureText(null, open), 'AI-generated with Muse Spark Open (Meta’s open weights, hosted on Modal). Includes NASA source material; NASA has not reviewed or endorsed this activity.');
+  assert.equal(disclosureText(null, open), `AI-generated with ${open}. The source's publisher has not reviewed or endorsed this lesson.`);
   assert.ok(disclosureText({ title: 't', license: 'cc-by', kind: 'user', licenseLabel: 'CC BY 4.0' }, open).startsWith(`AI-generated with ${open} from a teacher-provided text (`));
   assert.ok(!disclosureText(null, open).includes('1.3'));
 });
 
-test('disclosureText: NASA wording only for library sources', () => {
-  assert.equal(disclosureText(null), 'AI-generated with Muse Spark 1.3 (Meta). Includes NASA source material; NASA has not reviewed or endorsed this activity.');
-  assert.ok(disclosureText({ title: 't', license: 'x', kind: 'library' }).includes('NASA has not reviewed'));
+// ---- P0: the library disclosure names the source's real publisher (never NASA by default) ----------------------
+
+const MADE = 'Muse Spark 1.3 (Meta)';
+const publisherSentence = (publisher: string): string =>
+  `AI-generated with ${MADE}. Includes material from ${publisher}; ${publisher} has not reviewed or endorsed this lesson.`;
+const library = (attribution?: string) =>
+  ({ title: 'Library source', license: 'public domain', kind: 'library' as const, ...(attribution === undefined ? {} : { attribution }) });
+
+test('sourcePublisher reads the first comma-separated segment after "Source material:"', () => {
+  assert.equal(sourcePublisher("Source material: U.S. Geological Survey, 'Fossils, Rocks, and Time' (1997). Credit: USGS."), 'U.S. Geological Survey');
+  assert.equal(sourcePublisher('Source material:  NASA Glenn Research Center , Beginner’s Guide to Aeronautics.'), 'NASA Glenn Research Center');
+  assert.equal(sourcePublisher('Source material: U.S. Nuclear Regulatory Commission.'), 'U.S. Nuclear Regulatory Commission');
+  // no publisher to name: project-team texts, teacher texts, empty or missing attribution
+  assert.equal(sourcePublisher('Written by the Make knowledge interactive project team for testing.'), null);
+  assert.equal(sourcePublisher('Provided by a teacher (pasted text)'), null);
+  assert.equal(sourcePublisher('Source material: , unnamed work'), null);
+  assert.equal(sourcePublisher(''), null);
+  assert.equal(sourcePublisher(undefined), null);
+});
+
+test('disclosureText names each agency publisher, never NASA by default (P0)', () => {
+  const cases: { attribution: string; publisher: string }[] = [
+    {
+      attribution: "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States.",
+      publisher: 'NASA Glenn Research Center',
+    },
+    {
+      attribution: "Source material: National Archives and Records Administration, Milestone Documents, 'Bill of Rights (1791)'. Works of the U.S. Government are in the public domain.",
+      publisher: 'National Archives and Records Administration',
+    },
+    {
+      attribution: "Source material: Consumer Financial Protection Bureau, Ask CFPB, 'How does compound interest work?'. Information created by the CFPB.",
+      publisher: 'Consumer Financial Protection Bureau',
+    },
+    {
+      attribution: 'Source material: NOAA Office of Ocean Exploration and Research (NOAA Ocean Exploration), education materials, \'Fueling Life on Earth\'.',
+      publisher: 'NOAA Office of Ocean Exploration and Research (NOAA Ocean Exploration)',
+    },
+    {
+      attribution: "Source material: U.S. Nuclear Regulatory Commission, 'Backgrounder on Plutonium', Fact Sheets & Brochures.",
+      publisher: 'U.S. Nuclear Regulatory Commission',
+    },
+    {
+      attribution: "Source material: U.S. Geological Survey, 'Geologic Age: Using Radioactive Decay to Determine Geologic Age' (1997). Credit: U.S. Geological Survey.",
+      publisher: 'U.S. Geological Survey',
+    },
+    {
+      attribution: "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Hardy-Weinberg Equilibrium'.",
+      publisher: 'National Institute of Justice',
+    },
+  ];
+  for (const { attribution, publisher } of cases) {
+    assert.equal(disclosureText(library(attribution)), publisherSentence(publisher), publisher);
+    assert.equal(sourcePublisher(attribution), publisher, publisher);
+    if (!publisher.includes('NASA')) assert.ok(!disclosureText(library(attribution)).includes('NASA'), publisher);
+  }
+  // NASA keeps its full agency naming rather than the bare acronym
+  assert.ok(disclosureText(library(cases[0]!.attribution)).includes('NASA Glenn Research Center has not reviewed'));
+});
+
+test('disclosureText: project-team texts, missing attribution and teacher sources (P0)', () => {
+  assert.equal(
+    disclosureText(library('Written by the Make knowledge interactive project team for testing.')),
+    `AI-generated with ${MADE} from a text written by the project team.`,
+  );
+  assert.equal(
+    disclosureText(library('Written by the Make knowledge interactive project team as a safety test.')),
+    `AI-generated with ${MADE} from a text written by the project team.`,
+  );
+  // no attribution at all: never claim NASA
+  assert.equal(disclosureText(library()), `AI-generated with ${MADE}. The source's publisher has not reviewed or endorsed this lesson.`);
+  assert.equal(disclosureText(null), `AI-generated with ${MADE}. The source's publisher has not reviewed or endorsed this lesson.`);
+  assert.equal(disclosureText({ title: 't', license: 'x' }), `AI-generated with ${MADE}. The source's publisher has not reviewed or endorsed this lesson.`);
+  assert.ok(!disclosureText(library()).includes('NASA'));
+  // teacher sources are unchanged, even without attribution
   const t = disclosureText({ title: 't', license: 'cc-by', kind: 'user', licenseLabel: 'CC BY 4.0' });
   assert.ok(!t.includes('NASA'));
   assert.ok(t.includes('teacher-provided text (CC BY 4.0)'));
   assert.ok(t.startsWith('AI-generated with Muse Spark 1.3 (Meta)'));
+  assert.ok(!disclosureText({ title: 't', license: 'cc-by', kind: 'user', licenseLabel: 'CC BY 4.0', attribution: 'Source material: NASA, x' }).includes('NASA'));
 });
 
 test('isHttpUrl only accepts absolute http(s) links', () => {

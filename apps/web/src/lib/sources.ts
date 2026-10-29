@@ -126,6 +126,8 @@ export interface SourceMetaLike {
   license: string;
   kind?: 'library' | 'user' | undefined;
   licenseLabel?: string | undefined;
+  /** The source's own attribution text (GET /api/sources); names its publisher for library sources. */
+  attribution?: string | undefined;
 }
 
 export const TEACHER_TAG = 'Teacher source';
@@ -140,12 +142,39 @@ export function sourceOptionLabel(m: SourceMetaLike): string {
   return m.kind === 'user' ? `${m.title} — ${TEACHER_TAG} · ${sourceLicenseText(m)}` : m.title;
 }
 
-/** AI disclosure shown above an activity. NASA wording only for library (NASA) sources; teacher texts name their licence. */
+/** Project convention for licensed library sources: "Source material: <publisher>, <work>. …" (see packages/validation). */
+const SOURCE_MATERIAL = /Source material:\s*([^,]*)/i;
+
+/** Attribution of texts the project team wrote itself (they have no outside publisher to credit). */
+const PROJECT_TEAM_TEXT = /^\s*Written by the Make knowledge interactive project team\b/i;
+
+/**
+ * The publisher named in a source's attribution, or null when it names none.
+ * "Source material: U.S. Geological Survey, 'Fossils…'" → 'U.S. Geological Survey'; project-team and
+ * teacher attributions (and anything without the "Source material:" marker) → null.
+ */
+export function sourcePublisher(attribution: string | undefined): string | null {
+  if (typeof attribution !== 'string') return null;
+  const match = SOURCE_MATERIAL.exec(attribution);
+  if (match === null) return null;
+  const publisher = (match[1] as string).trim().replace(/[.;:]+$/, '').trim();
+  return publisher === '' ? null : publisher;
+}
+
+/** AI disclosure shown above an activity. Library sources name the publisher their own attribution credits. */
 export function disclosureText(m: SourceMetaLike | null | undefined, made = 'Muse Spark 1.3 (Meta)'): string {
   if (m?.kind === 'user') {
     return `AI-generated with ${made} from a teacher-provided text (${sourceLicenseText(m)}). The wording needs teacher review.`;
   }
-  return `AI-generated with ${made}. Includes NASA source material; NASA has not reviewed or endorsed this activity.`;
+  const attribution = m?.attribution;
+  if (typeof attribution === 'string' && PROJECT_TEAM_TEXT.test(attribution)) {
+    return `AI-generated with ${made} from a text written by the project team.`;
+  }
+  const publisher = sourcePublisher(attribution);
+  if (publisher !== null) {
+    return `AI-generated with ${made}. Includes material from ${publisher}; ${publisher} has not reviewed or endorsed this lesson.`;
+  }
+  return `AI-generated with ${made}. The source's publisher has not reviewed or endorsed this lesson.`;
 }
 
 // ---- demo fault choice (generate control) --------------------------------------------------------------------
