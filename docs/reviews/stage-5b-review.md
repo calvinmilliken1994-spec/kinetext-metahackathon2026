@@ -445,3 +445,132 @@ The full validator also accepts the positive left endpoint of `500 until 400 BCE
 
 No `.env` read, install, external network request, live Meta/Modal call, real-account ledger access, Git write, implementation edit, evidence rewrite, commit, push or deployment was performed. Only own scratch fake-client jobs/ledgers and loopback test listeners were used; no live product server was launched. The only intentional repository modification is this appended round-3 review. All test commands set `TEMP`/`TMP`/`TMPDIR` to review scratch. HEAD was rechecked as `50a86d4506b5c500ca5507150be54427f82dab17` before writing.
 
+## Re-review (round 4) at 9ef291b514c87a2d570bd33045522a6149b78b40
+
+**Updated verdict: CHANGES REQUIRED.** Independent reviewer: OpenAI `gpt-6-astra` via `openai-codex`. Scope: round-3 gate, `cbeba6f`, Wave A3 `bb56577`, and the additive evidence disclosure `9ef291b`; open-weights work is out of scope. Prior review text and historical evidence are preserved.
+
+**The reachable repair-authority bypass is closed. Exact-date grounding is not.** Every old round-3 date attack now fails safely, and the normalized-quote repair is rejected at both r2 and r3. However, the new “clean” context still means absence of a small blacklist in a bounded token window, not positively established exactness. Bounds outside that window, punctuation that consumes the window, misplaced negation, and partial word tokens still publish through the real worker. **Remove the generic negated-until exception in its present form.** Its nearby-negator heuristic demonstrably upgrades an ordinary duration bound to an exact occurrence date.
+
+### Executed verification
+
+| Gate | Actual result |
+|---|---|
+| `npm run check` | Exit 0; TypeScript passed; **1,089 passed, 0 failed/cancelled/skipped**. `TEMP`, `TMP`, `TMPDIR` explicitly pinned to review scratch. |
+| `node scripts/build-schemas.ts --check` | Exit 0; `schemas up to date`. |
+| `npm --prefix apps/web run build -- --outDir <review-scratch>/round4-web-dist` | Exit 0; frontend TypeScript/Vite passed; **78 modules transformed**. Expected outside-root output warning only. |
+| All prior probe drivers | Re-ran **13**: `probes`, `cost-probes`, `extra-probes`, `end-to-end`, `evidence`, `round2-adversarial`, `round2-e2e`, `round2-worker`, `round2-eval`, `round3-adversarial`, `round3-repairs`, `round3-eval`, `round3-all-evidence` (all `.mjs`). Every driver exited 0; JSON outcomes were inspected separately. |
+| Round-3 gate | All 65 prior date/source/title rows meet their recorded expectations; all four normalized-quote comparator variants reject; empty/wrong caller scopes now narrow genuine failures to no permission. The two unauthorized worker scenarios fail at r2 **and** r3; all three honest date repairs still publish r2. |
+| New adversarial probes | **60 date/source/title rows, 14 comparator rows, 37 real-worker fake-client jobs**. Every one of the **34 full-validator false-accept variants** was exercised through the worker, plus three positive controls. All 37 published r1 after two fake calls; each result was read from disk with `readJob`. This deliberately selected adversarial set is not an accuracy benchmark. |
+| Retained operational controls | **20/20** billed-stage persistence cases match scratch-ledger commitments; **16/16** two-attempt demo jobs across eight engines still publish labelled/effective r3 repairs. Both debug settings exclude private payloads. The negative-local-cost driver scenario now refuses admission rather than offsetting liability. |
+| Stored evidence | Re-enumerated **35 spec revisions in 30 directories**; **33** have source documents. Of **25 source-backed published revisions, 23 pass**; the other two have exactly the newly disclosed date-check failures. All seven timeline revisions across six jobs were replayed. Both stored natural analysis repairs and the historical CFPB r2/r3 id-rename replays remain acceptable. |
+
+Durable scratch artifacts: `round4-run.py`, `round4-execution-results.json`, `round4-rerun-*.log`, `round4-adversarial.mjs`, `round4-adversarial-results.json`, `round4-adversarial.log`, `round4-summary.mjs`, `round4-verification-summary.json`, worker job directories and `round4-web-dist`. Prior result filenames were refreshed by their original drivers; pre-Wave-A3 snapshots were not modified. Suite/build logs are `round4-rerun-check.log`, `round4-rerun-schemas.log`, `round4-rerun-web-build.log`.
+
+### Per-finding disposition: S5B-01–S5B-20
+
+| Finding | Round-4 status | Evidence / remaining boundary |
+|---|---|---|
+| **S5B-01** | **PARTIALLY CLOSED** | Mixed day/month/headcount and quote-edge attacks remain rejected. Whole-token exactness still fails for `March 3ish`, `1888ish`, and connected dates ending in word suffixes (**S5B-23**). |
+| **S5B-02** | **PARTIALLY CLOSED** | Original trimmed approximation/title probes remain rejected; source context is used. Longer bounds in the source and title still pass (**S5B-21**). |
+| **S5B-03** | **CLOSED** | Reflected ids, own-label date changes, case rename/pair rewrites and normalized-quote collateral changes all reject. New reordered-event label-only repair passes; reordered collateral date rewrite fails. See **S5B-17** and the direct-caller hardening note. |
+| **S5B-04** | **CLOSED** | Prior analysis deletion/reordering/append/decline escapes and forged-report attacks still fail; legitimate id-only, empty-list and all-policy-field repairs pass. Both archived natural analysis repairs pass. |
+| **S5B-05** | **CLOSED** | Exhaustive eight-activity/two-fault second-repair matrix remains 16/16, with labels, effective injections and receipt costs retained. |
+| **S5B-06** | **CLOSED** | Original paid-error/event-write case retains USD 0.068125; all 20 stage/outcome cases agree with scratch ledger. |
+| **S5B-07** | **CLOSED** | Conservative USD 1.704 admission and unresolved-liability/pre-submit-intent controls remain intact. Negative recorded costs now reserve unknown liability, not negative spend. |
+| **S5B-08** | **CLOSED** | Fixed vocabulary remains effective; arbitrary names/codes map to `unknown`; default/debug logs do not expose raw payloads. |
+| **S5B-09** | **CLOSED** | Original additive numerical/wording corrections remain consistent with the refreshed 42-job audit. New `9ef291b` notes disclose the two stricter timeline rejections beside their evidence; no historical scores were changed. A new live rerun is not claimed by this review. |
+| **S5B-10** | **CLOSED** | 120-order exhaustive probe retains 108 rejections and zero feedback/violated-pair mismatches; legitimate shared-precision ties remain accepted. |
+| **S5B-11** | **CLOSED** | Original day/era cuts and newline fabrication remain rejected, including worker replay. Complete source spans, not quote-created token edges, decide grounding. Word-boundary parsing inside those spans is separately **S5B-23**. |
+| **S5B-12** | **CLOSED** | Original and short suffixed BCE ranges preserve negative signs; positive claims reject. Unsupported `to`/`until` ranges reject instead of leaking positive endpoints. Mixed-era range positive control now works. Contradictory markers on one endpoint/year are **S5B-24**. |
+| **S5B-13** | **PARTIALLY CLOSED** | Abbreviations, ordinal qualifiers and early titles remain fixed. Longer qualifications evade the new window (**S5B-21**); this is not an abbreviation-segmentation regression. |
+| **S5B-14** | **CLOSED** | Prior recovery cases remain blocked; known recovered spend with enough room still permits submission; POST-failure restart retains uncertain liability. Negative-cost hardening now passes. Trusted operator resolution and single-driver durability boundaries remain unchanged. |
+| **S5B-15** | **CLOSED** | Real-source recomputation plus exact check/path intersection rejects forged, parent, empty and wrong-check/field authority. Caller findings no longer broaden date permission. Missing/mismatched source inputs are a separate non-blocking direct-caller hardening issue below. |
+| **S5B-16** | **CLOSED** | Both debug-mode probes confirm no private message/stack leakage. |
+| **S5B-17** | **CLOSED** | Quote-only fallback removed from authorization. Baseline fails only the other event's policy label; changed clean date gets `repair.no-weakening` at r2 and r3 in both old worker scenarios. Honest cut-date, BCE and approximate-date repairs still publish r2. |
+| **S5B-18** | **PARTIALLY CLOSED** | All original prefix/range/markup wrong-sign cases reject, and supported signs work. Conflicting consumed era markers are resolved by precedence rather than rejected (**S5B-24**). |
+| **S5B-19** | **PARTIALLY CLOSED** | All old comma/parenthesis/markup/newline qualifiers and short temporal bounds now reject. Two-token/160-character boundaries and the added negation exception leave new reachable false accepts (**S5B-21/S5B-22**). |
+| **S5B-20** | **CLOSED** | `18th century` and `5th century BCE` no longer produce literal years; worker rejects the old century attack. Day ordinals stay valid. Other attached word suffixes are **S5B-23**. |
+
+### New findings
+
+#### S5B-21 — High: the “clean” context window can be displaced or simply outlived
+
+**Location:** `packages/validation/timeline.ts:379-400,441-474,502-540`; reused by source indexing and title-year extraction.
+
+**Evidence:** all examples below pass full validation and publish r1 in `round4-adversarial-results.json`:
+
+- `before-start`: `The office opened before the start of March 3, 1889.` → exact **1889-03-03**. Only `start of` reaches the preceding-word check. `around the date of March 3, 1889` and `approximately on the date of March 3, 1889` similarly lose qualification.
+- `suffix-earliest` / `suffix-latest`: `The office opened on March 3, 1889 at the earliest.` / `... at the latest.` → exact **1889-03-03**, although these are bounds. The following two tokens are only `at the`.
+- `before-dash` / `circa-dashes`: `before - - March 3, 1889` and `circa - - March 3, 1889` pass. `WINDOW_TOKEN_RE` counts connector punctuation toward the two-token limit; the frozen decision said to ignore punctuation **between words**. Thus even the narrow two-word contract is not implemented faithfully.
+- `before-long-space`: `before` followed by 170 spaces and `March 3, 1889` passes. The 160-character slice ends before the only preceding bound word. Whitespace normalization in quote matching does not repair the raw-source context scan.
+- `title-three-word-bound`: title/heading `The Harbor Survey (before the start of 1889)` lends exact 1889 to `The office opened March 3.` and the worker publishes.
+- `probably-signed`: `The office was probably opened on March 3, 1889.` passes. Ordinary uncertainty is three words away, not an exotic adversarial spelling. `March 3, 1889 perhaps` also passes because following-word qualification is not symmetric.
+
+Direct `not on` / `never on` variants also pass. They underscore that a syntactically recognizable date mention is not necessarily a positive exact-date statement; they are not needed to establish this finding, whose bounds/approximation examples already violate the promised date contract independently of event-label entailment.
+
+**Concrete fix:** do not describe a fixed blacklist window as a fail-closed grammar. Parse a supported **date phrase plus its complete governing context**, including qualified/bounded/alternative forms on either side, and reject unsupported context rather than extracting a convenient inner date. At minimum, scan actual word boundaries without a character-cut fallback, do not let connector punctuation evict words, reject negated/uncertain/bound phrases throughout the governing clause, and apply the same policy to title inheritance. Merely increasing the window to three/four words moves the failure boundary. If a reliable restricted clause grammar is out of scope, narrow the supported input to explicitly delimited exact-date fields or require human confirmation instead of certifying unrestricted prose as exact. Retain the passing headcount control (`About 40 delegates ... on March 3, 1889`).
+
+#### S5B-22 — High: negated-until accepts a negator that does not negate the temporal bound
+
+**Location:** `packages/validation/timeline.ts:481-495,512-515`; `packages/validation/negated-until.test.ts:13-22` establishes the broad exception but not syntactic negation scope.
+
+**Evidence:** full validator and real-worker r1 publications:
+
+| Source | Accepted claim / defect |
+|---|---|
+| `The office (not the museum) operated until March 3, 1889.` | Exact **1889-03-03**; `not` distinguishes the subject, while `operated until` remains an un-negated duration bound. |
+| Same source, quote only `operated until March 3, 1889.` | Still publishes. The source lookup supplies the unrelated parenthetical `not` even though it is absent from the evidence excerpt. |
+| `The office was not only open until March 3, 1889.` | `not only` is treated as negating `until`; the bound is incorrectly lifted. |
+| `The office was probably not opened until March 3, 1889.` | Uncertainty survives in the sentence, but the exception upgrades the date to exact. |
+| `The office could not open until March 3, 1889, and in fact opened in 1890.` | A lower-bound condition is treated as an exact occurrence. |
+
+Both `not not opened until` and `not never opened until` also publish: the function asks whether **any** of four whitespace-separated words is negative, not whether the statement has the supported meaning. Parentheses are not clause boundaries; commas are, causing an inconsistent combination of false accepts and false rejects.
+
+**Opinion on the lead exception:** the specific unqualified past-tense `was not approved until September of 1776` is a reasonable ordinary-language reading of an approval month. That does **not** justify a general “nearby `not`/`never`/`n't` makes until exact” rule. Even `not until` can state only a lower bound under a modal or uncertainty qualifier. **Remove this generic exception now**, accepting another safe rejection in stored evidence if necessary. If retained later, require an explicitly specified narrow affirmative-event construction with correct negation scope, no modal/uncertainty/extra negation or parenthetical attachment, and unambiguous full source context. Do not infer scope by counting words. A page-specific exemption or silently trusting the model is not a sound substitute.
+
+Controls: ordinary un-negated `until`, `not until about`, and `until not ... but ...` reject; the intended plain `not opened until` construction and its quote trimmed before `not` pass. Those positives show the exception is exercised, not that it is safe.
+
+#### S5B-23 — High: allow-listed forms still match inside unsupported word tokens
+
+**Location:** `packages/validation/timeline.ts:263-281,293-311,624-632,677-686`; title-year extraction inherits the same year parser.
+
+**Evidence:** all pass every check and publish r1:
+
+- `The office opened in 1888ish.` → exact **1888** (`year-ish`). The suffix explicitly makes the year approximate.
+- `The office opened on March 3ish.` → exact **1889-03-03**, borrowing the clean title year (`day-ish`).
+- `The office record was March 3, 1889xyz.` → exact **1889-03-03** (`mdy-word-suffix`).
+- `The office record was 18thousand.` → literal year **18** (`year-ordinal-fragment`). The ordinal negative lookahead applies only when `th` is not followed by another letter.
+- Title/heading `The Harbor Survey (1889xyz)` lends exact 1889 (`title-word-suffix`).
+
+The source-span check correctly finds the parser's span; the **parser itself** stops inside a word. This is a direct violation of the frozen “year token must not carry an ordinal/word suffix” rule, not merely a semantic-entailment limitation. Bare `1889xyz` in the five-event fixture also passes date grounding but hits an unrelated shared-precision ordering failure; the examples above avoid that incidental protection and establish worker reachability.
+
+**Concrete fix:** require complete lexical boundaries around numeric year and day tokens, including after the allowed day ordinal suffix. Reject a larger alphanumeric/apostrophe token as a whole; do not retry an interior numeric prefix or permit title inheritance from it. Use the same tokenization in full dates, standalone years, ranges and titles. Add `ish`, arbitrary letters, ordinal-plus-word, quote truncation and title variants; retain genuine `3rd`, `4th of July`, abbreviations and BCE controls.
+
+#### S5B-24 — Medium: contradictory consumed era markers silently select a sign
+
+**Location:** `packages/validation/timeline.ts:638-645,655-667,677-686`.
+
+**Evidence:** `The office operated in AD 500 BCE.` grounds **−500**; `The office operated in BCE 500 AD.` grounds **+500**. Both full-validator cases and both real-worker jobs publish r1. `sufEra ?? preEra` explicitly gives the suffix precedence. Because both markers were consumed, the unconsumed-era context guard sees no conflict. Range endpoint handling likewise chooses a prefix when both markers are present rather than checking agreement.
+
+These are contradictory synthetic source forms, not an observed defect in the licensed timelines, so severity is lower than the ordinary-language cases above. They nevertheless contradict the advertised fail-closed treatment of unsupported/ambiguous date forms; this is a reachable false accept, not non-exploitable hardening.
+
+**Concrete fix:** resolve prefix and suffix independently and require agreement whenever both occur on one year/endpoint. On conflict, consume the complete expression but mark it ungroundable; never expose an inner standalone year. Preserve valid mixed-era **different** endpoints (`500 BC–400 AD`) and consistent duplicate markers if intentionally supported. Test both signs through validator and worker.
+
+### Legitimate behaviour, stored evidence and non-blocking hardening
+
+- **Real-source replay is accurately disclosed.** The newly failing stored events are exactly Lee Resolution `e4` (`deferred until July 2`) and `e7` (`delayed until November of 1777`), plus Articles `e5` (`from March 1, 1781, until 1789`). They affect **two published specs and one check per spec**, not three failed jobs. `9ef291b` places additive correction notes beside the original evidence. The other source-backed published specs pass, including the Declaration and Wright timelines and the injected timeline repair. The stricter rejection is an accepted compatibility cost, not a reason to weaken the check. No new live rerun was performed here, and none is certified from a note promising one.
+- **Unavailable sources remain unavailable.** The two archived teacher-source jobs identified in round 3 still cannot receive full source-dependent replay. They are excluded from the 25 source-backed published revisions. Historical CFPB r2/r3 acceptance remains a replay, not a retroactively successful live repair.
+- **Honest repairs still work.** The three prior worker repairs (cut day, BCE sign, approximate-date re-grounding) publish r2. Both genuine analysis id repairs and numeric prediction-id rename pass. Repeating collateral numerical/timeline rewrites still fails. Ordinary connected dates, ordinals, abbreviations, short BCE ranges and punctuation-trimmed BCE quotes pass. First-nonempty-heading discovery now rejects the old blank-line/approximate-heading case.
+- **The requested short qualification controls reject correctly:** `not long after`, `in or about`, `as early as`, `some time before`. `in the spring of 1889` legitimately grounds the **year**, not a fabricated month/day: the fixture fails only `timeline.case-order` because its year-only first event ties another 1889 event at shared precision. That row is not a date-validator false rejection.
+- **Hardening, non-blocking — direct comparator with insufficient source documents.** `canonicalKnown` at `timeline.ts:1981-1990` means only `sources.length > 0`. Supplying a nonempty list with the wrong source id, or the right id with different text/hash, makes previously passing dates fail recomputation and unlocks a rewrite. Both new direct-call probes return `guard.passed:true`; the same rewrite with the real source, or no sources, rejects. The worker supplies its loaded authoritative source and separately validates the candidate, so no model-to-worker bypass was reproduced. Require complete id/hash-matching baseline sources before granting date permission; unavailable evidence is not proof the baseline claim was wrong. Keep the actual worker fix **S5B-17 closed**, rather than conflating this caller-precondition weakness with the removed competing authority.
+- **Hardening, non-blocking — safe false rejections and documentation.** A comma before `until`, or more than four intervening words after a genuine `not`, rejects a legitimate plain past-tense construction. These are safe and do not justify widening the heuristic. `quoteGroundsDate`'s comment at `timeline.ts:769-773` still calls it a comparator fallback even though authorization no longer uses it; update the stale comment. Existing single-driver/trusted-local-journal durability limits and fail-closed missing-root-property analysis repairability remain unchanged.
+
+### Round-4 approval gate
+
+1. Close **S5B-21–S5B-23** with genuinely restricted date/context parsing, complete token boundaries, and removal or formally narrower replacement of the generic negated-until exception. Preserve positive controls, but do not trade false accepts for compatibility with historical evidence. The literal two-word decision itself needs revision: implementation fidelity alone cannot make it a sufficient exactness guarantee.
+2. Reject conflicting era markers (**S5B-24**) instead of selecting a preferred sign. Re-run all prior/new full-validator and worker probes. Preserve the now-working single-authority comparator and the legitimate r2/r3 repairs; harden its incomplete-source direct API separately.
+3. Re-run the complete suite, schema check and scratch build after fixes; replay every available-source archived revision, preserving the two missing-source qualifications. Keep additive disclosures and original evaluation scores. Record any newly stricter timeline rejection beside its evidence; a fresh live rerun remains the lead's separately authorized work.
+4. Retain teacher review, labelled system-made faults, licensed nonprivate sources, canonical ledger/port and supervised loopback-only operation. Green tests do not support general historical-event/prose correctness, unattended operation, external publication or an exact-date certification claim while the reproduced false accepts remain.
+
+No `.env` read, install, external network request, live Meta/Modal call, real-account ledger access, Git write, implementation/evidence edit, commit, push or deployment was performed. Only scratch fake-client jobs/ledgers and loopback test listeners were used; no live product server was launched. All test executions pinned temporary-directory variables to review scratch. The only repository change is this appended review; HEAD was rechecked as `9ef291b514c87a2d570bd33045522a6149b78b40` before writing.
+
