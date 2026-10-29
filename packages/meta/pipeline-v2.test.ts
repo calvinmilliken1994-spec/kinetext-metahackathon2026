@@ -107,6 +107,10 @@ function firstQuoteFor(componentId: KitGenComponentId, gen: unknown): string {
       return arr[0]?.['quote'] as string;
     }
   }
+  const rows = g['rows'] as Array<{ values?: Array<Record<string, unknown>> }> | undefined;
+  if (Array.isArray(rows) && typeof rows[0]?.values?.[0]?.['quote'] === 'string') {
+    return rows[0]?.values?.[0]?.['quote'] as string;
+  }
   throw new Error(`no quote for ${componentId}`);
 }
 

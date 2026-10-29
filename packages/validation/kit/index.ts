@@ -141,6 +141,13 @@ export function validateKitComponent(
  * structure frozen (the SYSTEM prunes via the drop helpers, never the model), ids stable except
  * an id path the authority itself names (renamed only to a valid, non-colliding id), and a
  * `tolerance` leaf never increases. Component extras below. Never throws.
+ *
+ * compare-table-v1 (Stage 6 compare-grid): cell identity is (row index, attribute index), so the
+ * positional diff already freezes rows and columns in place; a flagged id-like entity/attribute
+ * rename is allowed exactly because schema.gen names `/rows/i/entity` or `/attributes/j` in its
+ * affected paths. The one resize exception: when CT-03 names `/rows/i/values` (a row with fewer
+ * values than columns), the repair may resize THAT values list — the per-slot count the authority
+ * itself flagged; the rows and attributes lists stay frozen.
  */
 export function compareKitRevisions(
   componentId: KitComponentId | string,
@@ -175,6 +182,9 @@ export function compareKitRevisions(
     targetLabel: `${componentId}`,
     recompute: (b, sources) => validateKitComponent(componentId, b, sources),
     extraRules: extras,
+    allowListResize: componentId === 'compare-table-v1'
+      ? (pointer, allowed) => /^\/rows\/\d+\/values$/.test(pointer) && allowed.includes(pointer)
+      : undefined,
   });
 }
 
@@ -184,7 +194,7 @@ export { validateQuizCards, pruneQuizCards, quizStructuralProblems } from './qui
 export { validateSequence, pruneSequenceSteps, orderSignals, sequenceStructuralProblems } from './sequence.ts';
 export { validateSortGroups, pruneSortItems, labelInQuoteOrParagraph, sortStructuralProblems } from './sort.ts';
 export { validateConceptMap, pruneConceptMapLinks, RELATION_TRIGGERS, conceptMapStructuralProblems } from './concept-map.ts';
-export { validateCompareTable, compareStructuralProblems, COMPARE_FAILURE_MESSAGE } from './compare.ts';
+export { validateCompareTable, compareStructuralProblems, idLikeNameProblem, COMPARE_FAILURE_MESSAGE } from './compare.ts';
 export {
   validateFormulaExplorer,
   computeCaseOutputs,

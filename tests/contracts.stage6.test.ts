@@ -41,6 +41,7 @@ import {
   assembleKitSpec,
   assembleOverviewSpec,
   checkIdsFor,
+  compareGridFromRows,
   isKitComponentId,
   isKitGenComponentId,
   isPlanComponentId,
@@ -329,8 +330,21 @@ test('stage6 schema numbers come from KIT_LIMITS and enums match constants', () 
   assert.equal((quiz['properties'] as unknown as Record<string, Record<string, number>>)['cards']['maxItems'], KIT_LIMITS.quiz.cards.max);
   const explorer = kitGenSchemaFor('formula-explorer-v1') as unknown as Record<string, Record<string, Record<string, number>>>;
   assert.equal((explorer['properties'] as unknown as Record<string, Record<string, number>>)['variables']['maxItems'], KIT_LIMITS.formulaExplorer.variables.max);
-  const compare = kitGenSchemaFor('compare-table-v1') as unknown as Record<string, Record<string, Record<string, number>>>;
-  assert.equal((compare['properties'] as unknown as Record<string, Record<string, number>>)['cells']['maxItems'], KIT_LIMITS.compare.cells.max);
+  const compare = kitGenSchemaFor('compare-table-v1') as unknown as Record<string, unknown>;
+  const compareProps = compare['properties'] as Record<string, unknown>;
+  const compareAttributes = compareProps['attributes'] as Record<string, number>;
+  assert.equal(compareAttributes['minItems'], KIT_LIMITS.compare.attributes.min);
+  assert.equal(compareAttributes['maxItems'], KIT_LIMITS.compare.attributes.max);
+  const compareRows = compareProps['rows'] as Record<string, unknown>;
+  assert.equal(compareRows['minItems'], KIT_LIMITS.compare.entities.min);
+  assert.equal(compareRows['maxItems'], KIT_LIMITS.compare.entities.max);
+  const compareRowItems = compareRows['items'] as Record<string, unknown>;
+  const compareRowProps = compareRowItems['properties'] as Record<string, unknown>;
+  const compareValues = compareRowProps['values'] as Record<string, number>;
+  assert.equal(compareValues['minItems'], KIT_LIMITS.compare.attributes.min);
+  assert.equal(compareValues['maxItems'], KIT_LIMITS.compare.attributes.max);
+  assert.ok(!('cells' in compareProps), 'compare gen must not have cells');
+  assert.ok(!('entities' in compareProps), 'compare gen must not have entities');
   const v2 = sourceAnalysisV2GenSchema as unknown as Record<string, Record<string, Record<string, unknown>>>;
   assert.equal(((v2['properties'] as unknown as Record<string, Record<string, number>>)['componentPlan'] as Record<string, number>)['maxItems'], KIT_LIMITS.analysis.componentPlan.max);
   const props = (sourceAnalysisV2GenSchema as unknown as Record<string, Record<string, Record<string, unknown>>>)['properties'] as unknown as Record<string, Record<string, unknown>>;
@@ -389,6 +403,26 @@ test('stage6 goldens quote real sources exactly; ids match; quiz answers check o
   }
 });
 
+test('compare golden uses rows shape with the same content in order', () => {
+  const gen = goldenGen('compare-table-v1');
+  assert.deepEqual(gen.attributes, ['temperature', 'pressure']);
+  assert.equal(gen.rows.length, 2);
+  assert.equal(gen.rows[0]?.entity, 'troposphere');
+  assert.equal(gen.rows[1]?.entity, 'lower stratosphere');
+  assert.equal(gen.rows[0]?.values.length, 2);
+  assert.equal(gen.rows[1]?.values.length, 2);
+  assert.equal(gen.rows[0]?.values[0]?.value, 'temperature decreases linearly');
+  assert.equal(gen.rows[0]?.values[1]?.value, 'pressure decreases exponentially');
+  assert.equal(gen.rows[1]?.values[0]?.value, 'temperature is constant');
+  assert.equal(gen.rows[1]?.values[1]?.value, 'pressure decreases exponentially');
+  for (const row of gen.rows) {
+    for (const v of row.values) {
+      assert.ok(v.value.length >= 1 && v.value.length <= 80, 'value length out of range: ' + v.value);
+      assert.ok(v.quote.includes(v.value), 'value must occur in quote: ' + v.value);
+    }
+  }
+});
+
 test('assembleKitSpec sets system fields for all 7 components and enforces rules', () => {
   const sources = [dragSource()];
   const prov = provenance();
@@ -412,8 +446,12 @@ test('assembleKitSpec sets system fields for all 7 components and enforces rules
     assert.ok(!('text' in (sourcesOut[0] as object)));
     const provOut = spec['provenance'] as Provenance;
     assert.equal(provOut.repairOf, null);
-    const expectedKeys = [...['schemaVersion', 'id', 'componentId', 'title', 'sources', 'execution', 'provenance', 'seed'], ...(KIT_GEN_BODY_KEYS[c] as readonly string[])].sort();
+    const specBodyKeys: readonly string[] = c === 'compare-table-v1'
+      ? ['entities', 'attributes', 'cells']
+      : (KIT_GEN_BODY_KEYS[c] as readonly string[]);
+    const expectedKeys = [...['schemaVersion', 'id', 'componentId', 'title', 'sources', 'execution', 'provenance', 'seed'], ...specBodyKeys].sort();
     assert.deepEqual(Object.keys(spec).sort(), expectedKeys);
+    if (c === 'compare-table-v1') assert.ok(!('rows' in spec), 'compare spec must not have rows');
     const smuggled = structuredClone(gen) as unknown as Record<string, unknown>;
     smuggled['execution'] = 'x';
     smuggled['provenance'] = 'x';
@@ -488,6 +526,60 @@ test('assembleKitSpec sets system fields for all 7 components and enforces rules
   const spec2 = assembleKitSpec(quizGen, 'quiz-cards-v1', { id: 'job-1:quiz-cards-v1:r2', sources, provenance: rep2, seed: 1 }) as unknown as Record<string, unknown>;
   assert.equal((spec2['provenance'] as Provenance).revision, 2);
   assert.equal((spec2['provenance'] as Provenance).repairOf, 1);
+});
+
+test('compareGridFromRows builds ids, indexes and row-major order', () => {
+  const gen = goldenGen('compare-table-v1');
+  const grid = compareGridFromRows(gen);
+  assert.deepEqual(grid.entities, gen.rows.map((r) => r.entity));
+  assert.equal(grid.cells.length, gen.rows.length * gen.attributes.length);
+  let k = 0;
+  for (let i = 0; i < gen.rows.length; i++) {
+    for (let j = 0; j < gen.attributes.length; j++) {
+      const cell = grid.cells[k] as { id: string; entityIndex: number; attributeIndex: number; value: string; sourceId: string; quote: string };
+      assert.equal(cell.id, 'cell-' + String(i) + '-' + String(j));
+      assert.equal(cell.entityIndex, i);
+      assert.equal(cell.attributeIndex, j);
+      assert.equal(cell.value, gen.rows[i]?.values[j]?.value);
+      assert.equal(cell.sourceId, gen.rows[i]?.values[j]?.sourceId);
+      assert.equal(cell.quote, gen.rows[i]?.values[j]?.quote);
+      k++;
+    }
+  }
+});
+
+test('compareGridFromRows does not pad a short row and does not mutate input', () => {
+  const gen = goldenGen('compare-table-v1');
+  const short = structuredClone(gen);
+  short.rows[1]?.values.pop();
+  assert.equal(short.rows[1]?.values.length, short.attributes.length - 1);
+  const before = JSON.stringify(short);
+  const grid = compareGridFromRows(short);
+  assert.equal(grid.cells.length, (short.rows[0]?.values.length ?? 0) + (short.rows[1]?.values.length ?? 0));
+  assert.ok(!grid.cells.some((c) => c.entityIndex === 1 && c.attributeIndex === 1), 'short row must not be padded');
+  assert.ok(grid.cells.some((c) => c.entityIndex === 0 && c.attributeIndex === 1), 'full row keeps its cells');
+  assert.equal(JSON.stringify(short), before);
+  assert.deepEqual(grid.entities, short.rows.map((r) => r.entity));
+});
+
+test('assembleKitSpec compare-table-v1 builds entities, attributes and cells with no rows key', () => {
+  const sources = [dragSource()];
+  const prov = provenance();
+  const gen = goldenGen('compare-table-v1');
+  const genSnap = JSON.stringify(gen);
+  const spec = assembleKitSpec(gen, 'compare-table-v1', { id: 'job-1:compare-table-v1:r1', sources, provenance: prov, seed: 3 }) as unknown as Record<string, unknown>;
+  const grid = compareGridFromRows(structuredClone(gen));
+  assert.deepEqual(spec['entities'], gen.rows.map((r) => r.entity));
+  assert.deepEqual(spec['attributes'], gen.attributes);
+  assert.deepEqual(spec['cells'], grid.cells);
+  assert.ok(!('rows' in spec), 'compare spec must not have rows');
+  assert.deepEqual(Object.keys(spec).sort(), ['schemaVersion', 'id', 'componentId', 'title', 'sources', 'execution', 'provenance', 'seed', 'entities', 'attributes', 'cells'].sort());
+  assert.equal(JSON.stringify(gen), genSnap);
+  (gen.attributes as string[])[0] = 'mutated-should-not-appear';
+  const firstRow = gen.rows[0] as unknown as Record<string, unknown>;
+  firstRow['entity'] = 'mutated-should-not-appear';
+  assert.notDeepEqual(spec['attributes'], gen.attributes);
+  assert.notDeepEqual(spec['entities'], gen.rows.map((r) => r.entity));
 });
 
 test('assemble copies system objects instead of aliasing; default execution is frozen', () => {

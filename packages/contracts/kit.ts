@@ -228,9 +228,17 @@ export interface MapLinkGen {
 export interface CompareTableGen {
   schemaVersion: 'compare-table-v1';
   title: string;
-  entities: string[];
   attributes: string[];
-  cells: CompareCellGen[];
+  rows: CompareRowGen[];
+}
+export interface CompareRowGen {
+  entity: string;
+  values: CompareValueGen[];
+}
+export interface CompareValueGen {
+  value: string;
+  sourceId: string;
+  quote: string;
 }
 export interface CompareCellGen {
   id: string;
@@ -239,6 +247,28 @@ export interface CompareCellGen {
   value: string;
   sourceId: string;
   quote: string;
+}
+/** Build the spec grid from a compare-table gen: entities in row order, one cell per row x column slot that has a value. Never invents, pads or drops content; never mutates the input. */
+export function compareGridFromRows(gen: CompareTableGen): { entities: string[]; cells: CompareCellGen[] } {
+  const entities: string[] = gen.rows.map((r) => r.entity);
+  const cells: CompareCellGen[] = [];
+  for (let i = 0; i < gen.rows.length; i++) {
+    const row: CompareRowGen = gen.rows[i] as CompareRowGen;
+    const values: CompareValueGen[] = row.values;
+    for (let j = 0; j < values.length; j++) {
+      const v: CompareValueGen | undefined = values[j] as CompareValueGen | undefined;
+      if (v === undefined) continue;
+      cells.push({
+        id: 'cell-' + String(i) + '-' + String(j),
+        entityIndex: i,
+        attributeIndex: j,
+        value: v.value,
+        sourceId: v.sourceId,
+        quote: v.quote
+      });
+    }
+  }
+  return { entities, cells };
 }
 export interface FormulaExplorerGen {
   schemaVersion: 'formula-explorer-v1';
@@ -494,7 +524,7 @@ export const KIT_GEN_BODY_KEYS: Readonly<Record<KitGenComponentId, readonly stri
   'sequence-v1': ['orderBasis', 'cyclic', 'orderNote', 'steps'],
   'sort-groups-v1': ['groups', 'items'],
   'concept-map-v1': ['nodes', 'links'],
-  'compare-table-v1': ['entities', 'attributes', 'cells'],
+  'compare-table-v1': ['attributes', 'rows'],
   'formula-explorer-v1': ['formulaText', 'sourceId', 'quote', 'expression', 'variables', 'xVariable', 'cases', 'sourceExample', 'hasSourceExample'],
   'balance-equation-v1': ['equationText', 'sourceId', 'quote', 'species', 'hint']
 };
@@ -504,8 +534,16 @@ export function assembleKitSpec<C extends KitGenComponentId>(gen: KitGenByCompon
   const g = gen as unknown as Record<string, unknown>;
   if (g['schemaVersion'] !== componentId) throw new Error('KIT_COMPONENT_MISMATCH');
   const body: Record<string, unknown> = {};
-  for (const key of KIT_GEN_BODY_KEYS[componentId]) {
-    body[key] = structuredClone(g[key]);
+  if (componentId === 'compare-table-v1') {
+    const cmp = gen as unknown as CompareTableGen;
+    const grid = compareGridFromRows(cmp);
+    body['entities'] = grid.entities;
+    body['attributes'] = structuredClone(cmp.attributes);
+    body['cells'] = grid.cells;
+  } else {
+    for (const key of KIT_GEN_BODY_KEYS[componentId]) {
+      body[key] = structuredClone(g[key]);
+    }
   }
   const title = g['title'] as string;
   return {

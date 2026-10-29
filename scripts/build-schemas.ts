@@ -370,20 +370,20 @@ function conceptMapSchema(cid: KitGenComponentId): Record<string, unknown> {
 }
 
 function compareSchema(cid: KitGenComponentId): Record<string, unknown> {
-  const cell = obj({
-    id: str('Lowercase kebab cell id, 40 characters or fewer.'),
-    entityIndex: int('Zero based index into entities.'),
-    attributeIndex: int('Zero based index into attributes.'),
+  const value = obj({
     value: str('Cell value in plain text, 1 to 80 characters. It occurs in the quote.'),
     sourceId: str('Id of the source the quote was copied from.'),
     quote: str(QUOTE_DESC)
   });
+  const row = obj({
+    entity: str('Row name written with the words the page uses, never an id.'),
+    values: arr(value, KIT_LIMITS.compare.attributes.min, KIT_LIMITS.compare.attributes.max, 'One value per column, in the same order as attributes.')
+  });
   return obj({
     schemaVersion: { type: 'string', enum: [cid], description: 'Generator schema version, always the component id.' },
     title: str('Short title for students in plain text.'),
-    entities: arr(str('Entity name in plain text.'), KIT_LIMITS.compare.entities.min, KIT_LIMITS.compare.entities.max, 'Compared entities.'),
     attributes: arr(str('Attribute name in plain text.'), KIT_LIMITS.compare.attributes.min, KIT_LIMITS.compare.attributes.max, 'Shared attributes.'),
-    cells: arr(cell, KIT_LIMITS.compare.cells.min, KIT_LIMITS.compare.cells.max, 'Table cells.')
+    rows: arr(row, KIT_LIMITS.compare.entities.min, KIT_LIMITS.compare.entities.max, 'Compared rows.')
   });
 }
 

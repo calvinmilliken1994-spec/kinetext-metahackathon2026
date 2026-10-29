@@ -9,9 +9,10 @@ import assert from 'node:assert/strict';
 
 import { compareKitRevisions, validateKitComponent } from './kit/index.ts';
 import {
-  clone, dragSource, failedIds, formulaGen, quizGen, repairedOverviewGen, overviewGen,
+  atmosphereSource, clone, compareGen, dragSource, failedIds, formulaGen, quizGen,
+  repairedOverviewGen, overviewGen,
 } from './fixtures/stage6.ts';
-import type { QuizCardsGen } from '../contracts/kit.ts';
+import type { CompareTableGen, QuizCardsGen } from '../contracts/kit.ts';
 
 function brokenQuiz(): QuizCardsGen {
   const gen = clone(quizGen());
@@ -138,4 +139,60 @@ test('overview: the golden OV-06 gap is repairable within the frozen discipline'
 test('unknown component ids fail closed', () => {
   const check = compareKitRevisions('nope-v2', {}, { x: 1 }, { sources: [dragSource()] });
   assert.equal(check.passed, false);
+});
+
+/* ------------------------------------------------------------------ */
+/* compare-table-v1 (Stage 6 compare-grid: cell identity = row x column) */
+/* ------------------------------------------------------------------ */
+
+function idEntityCompare(): CompareTableGen {
+  const gen = clone(compareGen());
+  gen.rows[0]!.entity = 'this-equation'; // the real live-run failure class
+  return gen;
+}
+
+test('compare: the id-like entity baseline fails schema.gen with /rows/0/entity affected', () => {
+  const report = validateKitComponent('compare-table-v1', idEntityCompare(), [atmosphereSource()]);
+  assert.ok(failedIds(report).includes('schema.gen'));
+  const gate = report.checks.find(c => c.id === 'schema.gen');
+  assert.ok(gate?.affected?.includes('/rows/0/entity'));
+  assert.match(gate?.message ?? '', /looks like an id; use the words the page uses/);
+});
+
+test('compare repair: renaming a flagged id-like entity to the page wording is accepted', () => {
+  const check = compareKitRevisions('compare-table-v1', idEntityCompare(), compareGen(), { sources: [atmosphereSource()] });
+  assert.equal(check.passed, true, check.message);
+});
+
+test('compare repair: changing a value that passed is rejected', () => {
+  const next = clone(idEntityCompare());
+  next.rows[0]!.entity = 'troposphere'; // authorized rename ...
+  next.rows[1]!.values[0]!.value = 'temperature rises'; // ... plus an unauthorized value change
+  const check = compareKitRevisions('compare-table-v1', idEntityCompare(), next, { sources: [atmosphereSource()] });
+  assert.equal(check.passed, false);
+  assert.match(check.message, /\/rows\/1\/values\/0\/value changed .* outside the affected paths/);
+});
+
+test('compare repair: adding the missing value of a short row is authorized by CT-03 (/rows/i/values)', () => {
+  const baseline = clone(compareGen());
+  baseline.rows[1]!.values.pop();
+  const report = validateKitComponent('compare-table-v1', baseline, [atmosphereSource()]);
+  assert.deepEqual(failedIds(report), ['CT-03']);
+  assert.ok(report.checks.find(c => c.id === 'CT-03')?.affected?.includes('/rows/1/values'));
+  const check = compareKitRevisions('compare-table-v1', baseline, compareGen(), { sources: [atmosphereSource()] });
+  assert.equal(check.passed, true, check.message);
+});
+
+test('compare repair: resizing the rows list itself stays frozen', () => {
+  const baseline = clone(compareGen());
+  baseline.rows[1]!.values.pop(); // CT-03 authorizes /rows/1/values only
+  const next = clone(compareGen());
+  next.rows.pop(); // dropping a whole row is a structural violation
+  const check = compareKitRevisions('compare-table-v1', baseline, next, { sources: [atmosphereSource()] });
+  assert.equal(check.passed, false);
+  assert.match(check.message, /list length|structure/);
+});
+
+test('compare repair: without sources the comparator fails closed on any change', () => {
+  assert.equal(compareKitRevisions('compare-table-v1', idEntityCompare(), compareGen(), {}).passed, false);
 });

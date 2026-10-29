@@ -55,7 +55,7 @@ function extractBetween(text: string, open: string, close: string): string {
 
 test('v1 unchanged pin and versions', () => {
   assert.equal(PROMPT_VERSION, 'v9');
-  assert.equal(STAGE6_PROMPT_VERSION, 's6-v2');
+  assert.equal(STAGE6_PROMPT_VERSION, 's6-v3');
   const source = loadSource('nasa-grc-drag-equation');
   const messages = buildAnalysisMessages(source);
   const digest = createHash('sha256').update(JSON.stringify(messages), 'utf8').digest('hex');
@@ -311,11 +311,19 @@ test('s6-v2 analysis plans two components by default', () => {
   assert.ok(system.includes('clearly different part of the page'));
 });
 
-test('s6-v2 compare-table stays small with page wording', () => {
+test('s6-v3 compare-table code-built grid with page wording', () => {
   const source = loadSource('nasa-grc-drag-equation');
   const usable = loadFixture('source-analysis-v2.usable.json') as SourceAnalysisV2;
   const plan: ComponentPlanEntry = { ...usable.componentPlan[0], componentId: 'compare-table-v1' };
   const system = buildKitComponentMessages(source, usable, plan)[0].content;
+  const guidance = KIT_COMPONENT_GUIDANCE['compare-table-v1'];
+  assert.ok(guidance.includes('rows'));
+  assert.ok(guidance.includes('values'));
+  assert.ok(system.includes('one value per column'));
+  assert.ok(system.includes('in attribute order'));
+  assert.ok(!system.includes('entityIndex'));
+  assert.ok(!system.includes('attributeIndex'));
+  assert.ok(system.includes('the system builds the grid'));
   assert.ok(system.includes('prefer 2 or 3 entities and 2 or 3 attributes'));
   assert.ok(system.includes('at most 9 cells'));
   assert.ok(system.includes('short phrase copied verbatim'));
@@ -323,6 +331,10 @@ test('s6-v2 compare-table stays small with page wording', () => {
   assert.ok(system.includes('Never put formulas'));
   assert.ok(system.includes('A > B'));
   assert.ok(system.includes('JSON field names or ids'));
+  assert.ok(system.includes('kebab-case'));
+  assert.ok(system.includes('troposphere-zone'));
+  assert.ok(system.includes('Troposphere'));
+  assert.ok(system.includes('this-equation'));
 });
 
 test('s6-v2 concept-map distinct labels', () => {

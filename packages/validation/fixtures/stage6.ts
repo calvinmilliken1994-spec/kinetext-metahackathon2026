@@ -224,15 +224,29 @@ export function threeEntityCompareGen(): CompareTableGen {
   return {
     schemaVersion: 'compare-table-v1',
     title: 'Rock properties compare',
-    entities: ['Alpha rock', 'Beta rock', 'Gamma rock'],
     attributes: ['texture', 'age'],
-    cells: [
-      { id: 'alpha-texture', entityIndex: 0, attributeIndex: 0, value: 'hard', sourceId: src, quote: 'Alpha rock is hard and old' },
-      { id: 'alpha-age', entityIndex: 0, attributeIndex: 1, value: 'old', sourceId: src, quote: 'Alpha rock is hard and old' },
-      { id: 'beta-texture', entityIndex: 1, attributeIndex: 0, value: 'soft', sourceId: src, quote: 'Beta rock is soft and young' },
-      { id: 'beta-age', entityIndex: 1, attributeIndex: 1, value: 'young', sourceId: src, quote: 'Beta rock is soft and young' },
-      { id: 'gamma-texture', entityIndex: 2, attributeIndex: 0, value: 'porous', sourceId: src, quote: 'Gamma rock is porous and new' },
-      { id: 'gamma-age', entityIndex: 2, attributeIndex: 1, value: 'new', sourceId: src, quote: 'Gamma rock is porous and new' },
+    rows: [
+      {
+        entity: 'Alpha rock',
+        values: [
+          { value: 'hard', sourceId: src, quote: 'Alpha rock is hard and old' },
+          { value: 'old', sourceId: src, quote: 'Alpha rock is hard and old' },
+        ],
+      },
+      {
+        entity: 'Beta rock',
+        values: [
+          { value: 'soft', sourceId: src, quote: 'Beta rock is soft and young' },
+          { value: 'young', sourceId: src, quote: 'Beta rock is soft and young' },
+        ],
+      },
+      {
+        entity: 'Gamma rock',
+        values: [
+          { value: 'porous', sourceId: src, quote: 'Gamma rock is porous and new' },
+          { value: 'new', sourceId: src, quote: 'Gamma rock is porous and new' },
+        ],
+      },
     ],
   };
 }

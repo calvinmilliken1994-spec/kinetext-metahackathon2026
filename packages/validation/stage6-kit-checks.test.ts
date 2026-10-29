@@ -295,26 +295,93 @@ test('CM-06: an off-page number in the title fails alone', () => {
 });
 
 /* ------------------------------------------------------------------ */
-/* CT-01..CT-05                                                        */
+/* CT-01..CT-05 (Stage 6 compare-grid: rows of values, code-built grid) */
 /* ------------------------------------------------------------------ */
 
 test('CT-01: a fabricated cell quote fails alone', () => {
   const gen = clone(compareGen());
-  gen.cells[0]!.quote = 'In the troposphere the temperature decreases linearly, in a fabricated ending.';
+  gen.rows[0]!.values[0]!.quote = 'In the troposphere the temperature decreases linearly, in a fabricated ending.';
   expectFailures(validateKitComponent('compare-table-v1', gen, [atmosphereSource()]), ['CT-01']);
 });
 
 test('CT-02: a cell value missing from its quote fails alone', () => {
   const gen = clone(compareGen());
-  gen.cells[0]!.value = 'temperature increases linearly';
-  expectFailures(validateKitComponent('compare-table-v1', gen, [atmosphereSource()]), ['CT-02']);
+  gen.rows[0]!.values[0]!.value = 'temperature increases linearly';
+  const report = expectFailures(validateKitComponent('compare-table-v1', gen, [atmosphereSource()]), ['CT-02']);
+  assert.ok(checkOf(report, 'CT-02').affected?.includes('/rows/0/values/0/value'));
+  assert.ok(checkOf(report, 'CT-02').affected?.includes('/rows/0/values/0/quote'));
 });
 
-test('CT-03: a missing product cell fails the shape check alone', () => {
+test('CT-02: an entity absent from quote and paragraph fails alone with the row entity path', () => {
+  const gen = clone(threeEntityCompareGen());
+  gen.rows[1]!.entity = 'Basalt rock'; // not in the compare-three text at all
+  const report = expectFailures(validateKitComponent('compare-table-v1', gen, [THREE_ENTITY_SOURCE()]), ['CT-02']);
+  assert.ok(checkOf(report, 'CT-02').affected?.includes('/rows/1/entity'));
+});
+
+test('CT-03: a short row fails the shape check alone with the precise per-row message', () => {
   const gen = clone(compareGen());
-  gen.cells.pop();
+  gen.rows[1]!.values.pop();
   const report = expectFailures(validateKitComponent('compare-table-v1', gen, [atmosphereSource()]), ['CT-03']);
-  assert.match(checkOf(report, 'CT-03').message, /missing|expected exactly/);
+  assert.match(checkOf(report, 'CT-03').message, /rows\[1\] has 1 values; it needs one per column \(2\)/);
+  assert.ok(checkOf(report, 'CT-03').affected?.includes('/rows/1/values'));
+});
+
+test('CT-03: duplicate entity names are a shape problem', () => {
+  const gen = clone(threeEntityCompareGen());
+  gen.rows[1]!.entity = 'Alpha rock';
+  const report = expectFailures(validateKitComponent('compare-table-v1', gen, [THREE_ENTITY_SOURCE()]), ['CT-03']);
+  assert.match(checkOf(report, 'CT-03').message, /occurs more than once/);
+  assert.ok(checkOf(report, 'CT-03').affected?.includes('/rows/1/entity'));
+});
+
+test('CT-03: duplicate attribute names are a shape problem', () => {
+  const gen = clone(threeEntityCompareGen());
+  gen.attributes[1] = 'texture';
+  const report = expectFailures(validateKitComponent('compare-table-v1', gen, [THREE_ENTITY_SOURCE()]), ['CT-03']);
+  assert.match(checkOf(report, 'CT-03').message, /attributes\[1\] "texture" occurs more than once/);
+  assert.ok(checkOf(report, 'CT-03').affected?.includes('/attributes/1'));
+});
+
+test('CT-03: a row count outside 2-4 fails alone', () => {
+  const gen = clone(threeEntityCompareGen());
+  gen.rows.pop();
+  gen.rows.pop();
+  const report = expectFailures(validateKitComponent('compare-table-v1', gen, [THREE_ENTITY_SOURCE()]), ['CT-03']);
+  assert.match(checkOf(report, 'CT-03').message, /rows has 1 entries, expected 2-4/);
+  assert.ok(checkOf(report, 'CT-03').affected?.includes('/rows'));
+});
+
+test('schema.gen: id-like entity names from the live failures are caught (page-wording rule)', () => {
+  // The real Spark Open failures: entities written as ids that never occur on the page.
+  for (const idLike of ['this-equation', 'constant-pressure-process', 'starting-at-age-14']) {
+    const gen = clone(compareGen());
+    gen.rows[0]!.entity = idLike;
+    const report = validateKitComponent('compare-table-v1', gen, [atmosphereSource()]);
+    const gate = checkOf(report, 'schema.gen');
+    assert.equal(gate.passed, false, `"${idLike}" must fail schema.gen`);
+    assert.match(gate.message, new RegExp(`rows\\[0\\]\\.entity "${idLike}" looks like an id; use the words the page uses`));
+    assert.ok(gate.affected?.includes('/rows/0/entity'), `"${idLike}" must unlock /rows/0/entity`);
+    assert.equal(report.publishable, false);
+  }
+});
+
+test('schema.gen: kebab-case and underscore attribute names are caught too', () => {
+  const kebab = clone(compareGen());
+  kebab.attributes[1] = 'air-pressure';
+  const r1 = validateKitComponent('compare-table-v1', kebab, [atmosphereSource()]);
+  assert.equal(checkOf(r1, 'schema.gen').passed, false);
+  assert.match(checkOf(r1, 'schema.gen').message, /attributes\[1\] "air-pressure" looks like an id; use the words the page uses/);
+  assert.ok(checkOf(r1, 'schema.gen').affected?.includes('/attributes/1'));
+  const underscore = clone(compareGen());
+  underscore.attributes[0] = 'air_temperature';
+  const r2 = validateKitComponent('compare-table-v1', underscore, [atmosphereSource()]);
+  assert.equal(checkOf(r2, 'schema.gen').passed, false);
+  assert.ok(checkOf(r2, 'schema.gen').affected?.includes('/attributes/0'));
+  // Ordinary page words with hyphens or spaces are NOT ids:
+  const fine = clone(compareGen());
+  fine.attributes[0] = 'temperature trend';
+  assert.equal(checkOf(validateKitComponent('compare-table-v1', fine, [atmosphereSource()]), 'schema.gen').passed, true);
 });
 
 test('CT-04: an off-page number in the title fails alone', () => {

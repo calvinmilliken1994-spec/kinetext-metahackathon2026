@@ -48,15 +48,19 @@ function docOf(meta: DemoSourceMeta): SourceDocument {
 /** A three-zone version of the golden compare table, so the harness can show predict-a-cell (the golden has only two zones). */
 export function threeZoneCompare(base: CompareTableGen): CompareTableGen {
   const quote = 'In the upper stratosphere the temperature increases slightly, and the pressure decreases exponentially';
-  const sourceId = base.cells[0]?.sourceId ?? 'nasa-grc-earth-atmosphere-equation-english';
+  const sourceId = base.rows[0]?.values[0]?.sourceId ?? 'nasa-grc-earth-atmosphere-equation-english';
   return {
     ...base,
     title: 'Atmosphere zones compare (three zones)',
-    entities: [...base.entities, 'upper stratosphere'],
-    cells: [
-      ...base.cells,
-      { id: 'cell-upper-temp', entityIndex: 2, attributeIndex: 0, value: 'temperature increases slightly', sourceId, quote },
-      { id: 'cell-upper-pressure', entityIndex: 2, attributeIndex: 1, value: 'pressure decreases exponentially', sourceId, quote },
+    rows: [
+      ...base.rows,
+      {
+        entity: 'upper stratosphere',
+        values: [
+          { value: 'temperature increases slightly', sourceId, quote },
+          { value: 'pressure decreases exponentially', sourceId, quote },
+        ],
+      },
     ],
   };
 }

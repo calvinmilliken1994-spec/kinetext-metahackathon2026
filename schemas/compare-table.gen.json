@@ -4,9 +4,8 @@
   "required": [
     "schemaVersion",
     "title",
-    "entities",
     "attributes",
-    "cells"
+    "rows"
   ],
   "properties": {
     "schemaVersion": {
@@ -20,16 +19,6 @@
       "type": "string",
       "description": "Short title for students in plain text."
     },
-    "entities": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "description": "Entity name in plain text."
-      },
-      "minItems": 2,
-      "maxItems": 4,
-      "description": "Compared entities."
-    },
     "attributes": {
       "type": "array",
       "items": {
@@ -40,49 +29,54 @@
       "maxItems": 5,
       "description": "Shared attributes."
     },
-    "cells": {
+    "rows": {
       "type": "array",
       "items": {
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "id",
-          "entityIndex",
-          "attributeIndex",
-          "value",
-          "sourceId",
-          "quote"
+          "entity",
+          "values"
         ],
         "properties": {
-          "id": {
+          "entity": {
             "type": "string",
-            "description": "Lowercase kebab cell id, 40 characters or fewer."
+            "description": "Row name written with the words the page uses, never an id."
           },
-          "entityIndex": {
-            "type": "integer",
-            "description": "Zero based index into entities."
-          },
-          "attributeIndex": {
-            "type": "integer",
-            "description": "Zero based index into attributes."
-          },
-          "value": {
-            "type": "string",
-            "description": "Cell value in plain text, 1 to 80 characters. It occurs in the quote."
-          },
-          "sourceId": {
-            "type": "string",
-            "description": "Id of the source the quote was copied from."
-          },
-          "quote": {
-            "type": "string",
-            "description": "Exact characters copied from the source, no ellipsis, 150 characters or fewer."
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "value",
+                "sourceId",
+                "quote"
+              ],
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "Cell value in plain text, 1 to 80 characters. It occurs in the quote."
+                },
+                "sourceId": {
+                  "type": "string",
+                  "description": "Id of the source the quote was copied from."
+                },
+                "quote": {
+                  "type": "string",
+                  "description": "Exact characters copied from the source, no ellipsis, 150 characters or fewer."
+                }
+              }
+            },
+            "minItems": 2,
+            "maxItems": 5,
+            "description": "One value per column, in the same order as attributes."
           }
         }
       },
-      "minItems": 4,
-      "maxItems": 20,
-      "description": "Table cells."
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "Compared rows."
     }
   }
 }

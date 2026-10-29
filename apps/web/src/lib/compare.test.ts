@@ -25,7 +25,7 @@ test('grid puts each cell under its entity and attribute', () => {
 });
 
 test('a cell the page did not state is blank, not invented', () => {
-  const partial: CompareTableSpec = { ...three, cells: three.cells.filter((c) => c.id !== 'cell-lower-pressure') };
+  const partial: CompareTableSpec = { ...three, cells: three.cells.filter((c) => c.id !== 'cell-1-1') };
   const g = compareGrid(partial);
   assert.equal(g.rows[1]?.cells[1], null);
   assert.equal(NOT_STATED, 'Not stated on this page');
