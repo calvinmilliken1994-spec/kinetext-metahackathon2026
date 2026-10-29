@@ -186,7 +186,7 @@ Rounds 2–3 kept finding unlisted wordings (era prefixes, `to`-ranges, centurie
 4. **Titles** use the same guard: the title year is lent only if the title (and the first non-empty heading) contains exactly one plain `YYYY` in clean context.
 5. Sentence punctuation is not part of an era spelling (`500 BCE.` grounds; hardening item).
 
-## Stage 5b review round 4 — lead decision: positively anchored exact dates (2026-10-29)
+## Stage 5b review round 4 — lead decision: positively anchored exact dates (2026-10-29) — SUPERSEDED, see the next section
 
 Round 4 showed a blacklist window can be displaced or outlived (`probably opened on`, `at the earliest`, `before the start of`, `1888ish`), and the negated-until exception mis-scoped negation. Replace the "clean context" idea with a **restricted, positively anchored grammar**. Exact dates are supported only in plain declarative statements; everything else does not ground (fail closed). This supersedes round-3 decision items 2–3 where they conflict.
 
@@ -199,3 +199,13 @@ Round 4 showed a blacklist window can be displaced or outlived (`probably opened
 5. **Eras.** If both a prefix and a suffix era mark one year/endpoint they must agree; a conflict makes the whole expression ungroundable (no inner year exposed). Mixed eras on *different* range endpoints (`500 BC–400 AD`) remain supported.
 6. **Titles.** A title year is lent only if the title (and first non-empty heading) contains exactly one complete plain year token, no era token, and passes rule 3 with the extended bound list (`before`, `after`, `by`, `until`, `since`, `from`, `between`, `start`, `end`) anywhere in the title.
 7. **No negated-until exception** (removed). Accepted cost: more true dates in real sources are rejected; Muse must cite a plainer sentence or drop the event, and the stricter rejections are disclosed beside stored evidence.
+
+## Stage 5b date-check loop: closed (2026-10-29 evening) — final lead decision
+
+**The positively anchored rewrite was implemented (Qwen, Wave A4) and rejected by the lead before commit.** Replayed on the stored real timelines, it failed 5 of 6 published timelines on plainly true dates: "In 1788, James Hutton proposed…" ("proposed"), "On June 11, 1776, the Congress appointed…", "published in 1841 — Powell certainly would have known of it" ("would"), "It was 1956 when Clair Patterson…" (no anchor). That would gut the History engine, against Calvin's direction that the product summarise and visualise pages and not become a fact checker. The patch is kept at the profile scratch path `round4-anchored-rewrite.patch` for reference.
+
+**Final design = round-3 design (bb56577) plus three narrow fixes** (wrong-date class, Sonnet wave A5): negated-until exception removed (S5B-22); whole numeric tokens (S5B-23: `1888ish`, `1889xyz`, `18thousand` never ground); conflicting eras on one year rejected (S5B-24).
+
+**Claim scope (final):** each exact date shown appears in the cited source sentence as a complete date expression, not cut from a longer number, with the stated era, and without a recognised qualifier or bound beside it. The quote is always shown with the event. Not claimed: that every qualifying phrase is recognised, or that the date belongs to the labelled event.
+
+**Known limits (no further review rounds):** S5B-21 — qualifiers or bounds three or more words from the date, or phrased in ways the list does not recognise ("was probably opened on", "at the earliest", "before the start of"), are not detected. Mitigation: the quote is visible to the teacher on every event. Stored rejections still disclosed: Lee Resolution e4/e6/e7, Articles e5.
