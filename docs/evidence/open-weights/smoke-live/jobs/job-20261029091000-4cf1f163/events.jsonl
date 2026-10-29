@@ -1,0 +1,4 @@
+{"jobId":"job-20261029091000-4cf1f163","seq":0,"stage":"ingest","status":"started","at":"2026-10-29T09:10:00.728Z","model":"muse-spark-open","provider":"modal","providerModel":"meta-models/Muse-Spark-Open-816B-A42B"}
+{"jobId":"job-20261029091000-4cf1f163","seq":1,"stage":"ingest","status":"succeeded","at":"2026-10-29T09:10:00.731Z","detail":"sha256 907bae07076e","model":"muse-spark-open","provider":"modal","providerModel":"meta-models/Muse-Spark-Open-816B-A42B"}
+{"jobId":"job-20261029091000-4cf1f163","seq":2,"stage":"analyze","status":"started","at":"2026-10-29T09:10:00.732Z","model":"muse-spark-open","provider":"modal","providerModel":"meta-models/Muse-Spark-Open-816B-A42B"}
+{"jobId":"job-20261029091000-4cf1f163","seq":3,"stage":"analyze","status":"failed","at":"2026-10-29T09:10:01.271Z","detail":"AUTH_FAILED","estCostUSD":0,"model":"muse-spark-open","provider":"modal","providerModel":"meta-models/Muse-Spark-Open-816B-A42B"}

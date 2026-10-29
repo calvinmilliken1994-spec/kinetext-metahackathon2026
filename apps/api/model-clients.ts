@@ -77,7 +77,9 @@ export function splitModalProxyToken(raw: string | undefined): ModalProxyToken |
   if (proxySecret.length <= 'ws-'.length) {
     return null; // empty secret payload
   }
-  const proxyKey = trimmed.slice(0, boundary).replace(/[\s:;|,]+/g, '');
+  // Separators between the halves are whatever the user stored (':', '.', '|', spaces, ...):
+  // keep only token characters [A-Za-z0-9_-] in the key half (live AUTH_FAILED fix, 2026-10-29).
+  const proxyKey = trimmed.slice(0, boundary).replace(/[^A-Za-z0-9_-]+/g, '');
   if (!proxyKey.startsWith('wk-') || proxyKey.length <= 'wk-'.length) {
     return null;
   }

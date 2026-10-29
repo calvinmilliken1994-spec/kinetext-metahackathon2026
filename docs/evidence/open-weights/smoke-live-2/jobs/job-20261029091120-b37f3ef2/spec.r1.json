@@ -1,0 +1,160 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nasa-grc-newtons-laws-of-motion-job-20261029091120-b37f3ef2",
+  "title": "Force, Mass and Acceleration in One Dimension",
+  "learningObjectives": [
+    "Apply a = F_net/m with constant mass to determine one-dimensional acceleration from net force",
+    "Define acceleration as change in velocity divided by change in time and use it in the second law",
+    "Recognize that F = m*a requires constant mass and that force and acceleration are vector quantities acting per component direction"
+  ],
+  "sources": [
+    {
+      "id": "nasa-grc-newtons-laws-of-motion",
+      "title": "Newton's Laws of Motion — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+      "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/newtons-laws-of-motion/",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+      "sha256": "907bae07076eef20118a4e54096ad399b11994ec5e310d9bed74850f6d009014"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "exp-1",
+      "text": "For an object with constant mass, acceleration is proportional to net force and inversely proportional to mass, expressed as F = m*a so that a = F_net/m in one dimension.",
+      "evidence": [
+        {
+          "sourceId": "nasa-grc-newtons-laws-of-motion",
+          "quote": "The acceleration of an object depends on the mass of the object and the amount of force applied."
+        },
+        {
+          "sourceId": "nasa-grc-newtons-laws-of-motion",
+          "quote": "F = m * a"
+        }
+      ]
+    },
+    {
+      "id": "exp-2",
+      "text": "The form F = m*a is valid when mass stays constant during the time interval, and acceleration is defined as the change in velocity divided by the change in time.",
+      "evidence": [
+        {
+          "sourceId": "nasa-grc-newtons-laws-of-motion",
+          "quote": "Remember that this relation is only good for objects that have a constant mass."
+        },
+        {
+          "sourceId": "nasa-grc-newtons-laws-of-motion",
+          "quote": "The change in velocity divided by the change in time is the definition of the acceleration a."
+        }
+      ]
+    },
+    {
+      "id": "exp-3",
+      "text": "Force, acceleration, velocity and momentum have both magnitude and direction, so the one-dimensional equation applies to the chosen axis with sign indicating direction.",
+      "evidence": [
+        {
+          "sourceId": "nasa-grc-newtons-laws-of-motion",
+          "quote": "The velocity, force, acceleration, and momentum have both a magnitude and a direction associated with them."
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "forces-1d-v1",
+    "equation": "a=F_net/m",
+    "massKg": {
+      "unit": "kg",
+      "min": 0.5,
+      "max": 20,
+      "default": 5
+    },
+    "netForceN": {
+      "unit": "N",
+      "min": -50,
+      "max": 50,
+      "default": 10
+    },
+    "scenario": {
+      "objectLabel": "Model aircraft",
+      "surfaceLabel": "Level flight, x-direction only"
+    },
+    "durationS": 5,
+    "stepS": 0.02,
+    "observables": [
+      "position",
+      "velocity",
+      "acceleration"
+    ]
+  },
+  "behavioralTests": [
+    {
+      "name": "positive net force",
+      "massKg": 5,
+      "netForceN": 10,
+      "expectedAccelerationMps2": 2,
+      "tolerance": 0.001
+    },
+    {
+      "name": "negative net force",
+      "massKg": 4,
+      "netForceN": -20,
+      "expectedAccelerationMps2": -5,
+      "tolerance": 0.001
+    },
+    {
+      "name": "zero net force - constant velocity",
+      "massKg": 10,
+      "netForceN": 0,
+      "expectedAccelerationMps2": 0,
+      "tolerance": 0.001
+    },
+    {
+      "name": "large mass small acceleration",
+      "massKg": 20,
+      "netForceN": 10,
+      "expectedAccelerationMps2": 0.5,
+      "tolerance": 0.001
+    }
+  ],
+  "predictions": [
+    {
+      "id": "pred-1",
+      "prompt": "Predict acceleration for mass 2 kg and net force 12 N",
+      "massKg": 2,
+      "netForceN": 12,
+      "expectedAccelerationMps2": 6,
+      "tolerance": 0.001
+    },
+    {
+      "id": "pred-2",
+      "prompt": "Predict acceleration for mass 8 kg and net force -24 N",
+      "massKg": 8,
+      "netForceN": -24,
+      "expectedAccelerationMps2": -3,
+      "tolerance": 0.001
+    },
+    {
+      "id": "pred-3",
+      "prompt": "Predict acceleration for mass 5 kg and net force 0 N",
+      "massKg": 5,
+      "netForceN": 0,
+      "expectedAccelerationMps2": 0,
+      "tolerance": 0.001
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "6343d99082054cda9a89af8c5fe44006",
+    "runId": "job-20261029091120-b37f3ef2",
+    "promptVersion": "v9",
+    "generatedAt": "2026-10-29T09:12:25.813Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

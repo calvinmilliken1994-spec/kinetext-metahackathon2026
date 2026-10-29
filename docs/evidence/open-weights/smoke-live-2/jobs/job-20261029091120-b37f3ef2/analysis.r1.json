@@ -1,0 +1,105 @@
+{
+  "analysis": {
+    "supported": true,
+    "activity": "forces-1d-v1",
+    "unsupportedReason": "",
+    "concepts": [
+      {
+        "id": "newtons-second-law-force-mass-acceleration",
+        "name": "Newton's second law F=m*a for constant mass in one dimension",
+        "evidence": []
+      },
+      {
+        "id": "constant-mass",
+        "name": "constant mass condition for F=m*a",
+        "evidence": []
+      },
+      {
+        "id": "acceleration-definition",
+        "name": "acceleration as change in velocity over change in time",
+        "evidence": []
+      }
+    ],
+    "objectives": [
+      "Apply F=m*a with constant mass to find acceleration from net force in one dimension",
+      "Define acceleration as (V1-V0)/(t1-t0) and use in second law",
+      "Recognize constant-mass requirement for F=m*a form",
+      "Recognize force and acceleration as vector quantities applicable per component direction in one dimension"
+    ]
+  },
+  "report": {
+    "artifactId": "source-analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis.gen.json"
+      },
+      {
+        "id": "analysis.invariants",
+        "kind": "semantic",
+        "passed": true,
+        "message": "invariants hold for supported=true"
+      },
+      {
+        "id": "analysis.concept-ids",
+        "kind": "semantic",
+        "passed": false,
+        "message": "concept ids not matching /^[a-z0-9-]{1,40}$/: \"newtons-second-law-force-mass-acceleration\"",
+        "path": "/concepts",
+        "affected": [
+          "/concepts/0/id"
+        ]
+      },
+      {
+        "id": "refs.sources",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 0 cited sourceId(s) have matching documents"
+      },
+      {
+        "id": "grounding.quotes",
+        "kind": "grounding",
+        "passed": false,
+        "message": "concept \"newtons-second-law-force-mass-acceleration\" has no counted evidence quote (expected >= 1 when supported=true); concept \"constant-mass\" has no counted evidence quote (expected >= 1 when supported=true); concept \"acceleration-definition\" has no counted evidence quote (expected >= 1 when supported=true) (expected counted verbatim quotes that appear in the source text after whitespace normalisation)",
+        "path": "/concepts",
+        "affected": [
+          "/concepts/0/evidence",
+          "/concepts/1/evidence",
+          "/concepts/2/evidence"
+        ]
+      },
+      {
+        "id": "policy.no-publisher-attribution",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated analysis field (concept names, objectives, unsupportedReason) mentions the publisher or uses attribution/endorsement wording naming a source or authority; evidence quotes are exempt"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "c2a747b236d2422f8e342de62dc4c56f",
+    "usage": {
+      "promptTokens": 2873,
+      "completionTokens": 6601,
+      "reasoningTokens": 6412,
+      "cachedTokens": 0
+    },
+    "latencyMs": 33665,
+    "estCostUSD": 0.0316455,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

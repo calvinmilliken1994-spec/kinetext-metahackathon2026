@@ -59,7 +59,8 @@ test('OW-2: splitModalProxyToken splits at the ws- boundary and strips separator
     proxyKey: MARKER_KEY,
     proxySecret: MARKER_SECRET,
   });
-  for (const sep of [':', '|', ';', ',', ' ', '\t', '\n']) {
+  // '.' and '=' seen in real stored tokens (live AUTH_FAILED, 2026-10-29): any non-token separator.
+  for (const sep of [':', '|', ';', ',', ' ', '\t', '\n', '.', '=', '/', ' . ']) {
     assert.deepEqual(
       splitModalProxyToken(`${MARKER_KEY}${sep}${MARKER_SECRET}`),
       { proxyKey: MARKER_KEY, proxySecret: MARKER_SECRET },

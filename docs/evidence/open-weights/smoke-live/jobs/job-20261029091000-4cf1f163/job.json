@@ -1,0 +1,26 @@
+{
+  "jobId": "job-20261029091000-4cf1f163",
+  "sourceId": "nasa-grc-newtons-laws-of-motion",
+  "status": "failed",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T09:10:00.725Z",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 18660,
+    "startedAt": "2026-10-29T09:10:00.725Z"
+  },
+  "error": {
+    "code": "AUTH_FAILED",
+    "message": "authentication failed"
+  },
+  "finishedAt": "2026-10-29T09:10:01.271Z"
+}
