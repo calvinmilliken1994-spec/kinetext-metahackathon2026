@@ -1,0 +1,233 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "Linking specific heats at constant pressure and volume to the gas constant",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Order follows page from enthalpy definition to final specific heat relation",
+    "steps": [
+      {
+        "id": "define-enthalpy",
+        "label": "enthalpy",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "From the definition of enthalpy:",
+        "orderHint": "Follow the derivation as it appears on the page"
+      },
+      {
+        "id": "enthalpy-definition-equation",
+        "label": "h = e + p * v",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "h = e + p * v",
+        "orderHint": "Follow the derivation as it appears on the page"
+      },
+      {
+        "id": "constant-pressure-enthalpy",
+        "label": "Delta h = Delta e + p * Delta v",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "Delta h = Delta e + p * Delta v",
+        "orderHint": "Follow the derivation as it appears on the page"
+      },
+      {
+        "id": "constant-pressure-heat",
+        "label": "Delta h = cp * Delta T",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "Delta h = cp * Delta T",
+        "orderHint": "Follow the derivation as it appears on the page"
+      },
+      {
+        "id": "constant-pressure-gas-state",
+        "label": "p * Delta v = R * Delta T",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "p * Delta v = R * Delta T",
+        "orderHint": "Follow the derivation as it appears on the page"
+      },
+      {
+        "id": "constant-volume-energy",
+        "label": "Delta e = cv * Delta T",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "Delta e = cv * Delta T",
+        "orderHint": "Follow the derivation as it appears on the page"
+      },
+      {
+        "id": "combined-enthalpy-relation",
+        "label": "cp * Delta T = cv * Delta T + R * Delta T",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "cp * Delta T = cv * Delta T + R * Delta T",
+        "orderHint": "Follow the derivation as it appears on the page"
+      },
+      {
+        "id": "final-cp-cv-relation",
+        "label": "cp = cv + R",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "cp = cv + R",
+        "orderHint": "Follow the derivation as it appears on the page"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029201358-e6938f6f:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 8 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step label occurs in its own quote after normalisation (labels-in-quotes)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 8 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "2b371861e2214f6d8c35e3d7747303f7",
+    "usage": {
+      "promptTokens": 3202,
+      "completionTokens": 4765,
+      "reasoningTokens": 4246,
+      "cachedTokens": 0
+    },
+    "latencyMs": 20708,
+    "estCostUSD": 0.02425375,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029201358-e6938f6f:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "Linking specific heats at constant pressure and volume to the gas constant",
+    "sources": [
+      {
+        "id": "nasa-grc-specific-heat-cp-cv",
+        "title": "Specific Heat – Cp & Cv — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/specific-heat-cp-cv/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "9df5f948a44c3fd060dd74c26ccaa8247cb311d0b0d618ceaafaf6382ba4d1b8"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "2b371861e2214f6d8c35e3d7747303f7",
+      "runId": "job-20261029201358-e6938f6f",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:14:54.807Z"
+    },
+    "seed": 2343136273,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Order follows page from enthalpy definition to final specific heat relation",
+    "steps": [
+      {
+        "id": "define-enthalpy",
+        "label": "enthalpy",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "From the definition of enthalpy:",
+        "orderHint": "Follow the derivation as it appears on the page"
+      },
+      {
+        "id": "enthalpy-definition-equation",
+        "label": "h = e + p * v",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "h = e + p * v",
+        "orderHint": "Follow the derivation as it appears on the page"
+      },
+      {
+        "id": "constant-pressure-enthalpy",
+        "label": "Delta h = Delta e + p * Delta v",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "Delta h = Delta e + p * Delta v",
+        "orderHint": "Follow the derivation as it appears on the page"
+      },
+      {
+        "id": "constant-pressure-heat",
+        "label": "Delta h = cp * Delta T",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "Delta h = cp * Delta T",
+        "orderHint": "Follow the derivation as it appears on the page"
+      },
+      {
+        "id": "constant-pressure-gas-state",
+        "label": "p * Delta v = R * Delta T",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "p * Delta v = R * Delta T",
+        "orderHint": "Follow the derivation as it appears on the page"
+      },
+      {
+        "id": "constant-volume-energy",
+        "label": "Delta e = cv * Delta T",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "Delta e = cv * Delta T",
+        "orderHint": "Follow the derivation as it appears on the page"
+      },
+      {
+        "id": "combined-enthalpy-relation",
+        "label": "cp * Delta T = cv * Delta T + R * Delta T",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "cp * Delta T = cv * Delta T + R * Delta T",
+        "orderHint": "Follow the derivation as it appears on the page"
+      },
+      {
+        "id": "final-cp-cv-relation",
+        "label": "cp = cv + R",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "cp = cv + R",
+        "orderHint": "Follow the derivation as it appears on the page"
+      }
+    ]
+  }
+}

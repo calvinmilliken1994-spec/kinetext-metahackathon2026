@@ -1,0 +1,160 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nasa-grc-newtons-laws-of-motion-job-20261029201113-b3832e77",
+  "title": "Force, Mass and Acceleration in One Dimension",
+  "learningObjectives": [
+    "Describe how a constant net force changes velocity over time when mass is constant",
+    "Explain that acceleration is directly proportional to net force and inversely proportional to mass",
+    "Identify that zero net force means constant velocity and no acceleration"
+  ],
+  "sources": [
+    {
+      "id": "nasa-grc-newtons-laws-of-motion",
+      "title": "Newton's Laws of Motion — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+      "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/newtons-laws-of-motion/",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+      "sha256": "907bae07076eef20118a4e54096ad399b11994ec5e310d9bed74850f6d009014"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "inertia-constant-velocity",
+      "text": "An object keeps its state of motion when the net force is zero, so it maintains a constant velocity along a straight line until an unbalanced force acts.",
+      "evidence": [
+        {
+          "sourceId": "nasa-grc-newtons-laws-of-motion",
+          "quote": "An object at rest remains at rest, and an object in motion remains in motion at constant speed and in a straight line"
+        },
+        {
+          "sourceId": "nasa-grc-newtons-laws-of-motion",
+          "quote": "If there is no net force acting on the object, then the object will maintain a constant velocity."
+        }
+      ]
+    },
+    {
+      "id": "second-law-acceleration",
+      "text": "When mass is constant, the net force determines acceleration through the relationship force equals mass times acceleration, so larger force gives larger acceleration for the same mass.",
+      "evidence": [
+        {
+          "sourceId": "nasa-grc-newtons-laws-of-motion",
+          "quote": "The acceleration of an object depends on the mass of the object and the amount of force applied."
+        },
+        {
+          "sourceId": "nasa-grc-newtons-laws-of-motion",
+          "quote": "F = m * a"
+        }
+      ]
+    },
+    {
+      "id": "mass-inverse-effect",
+      "text": "For a given net force, a more massive object accelerates less because acceleration is inversely proportional to mass.",
+      "evidence": [
+        {
+          "sourceId": "nasa-grc-newtons-laws-of-motion",
+          "quote": "The amount of acceleration is also inversely proportional to the mass of the object"
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "forces-1d-v1",
+    "equation": "a=F_net/m",
+    "massKg": {
+      "unit": "kg",
+      "min": 0.5,
+      "max": 10,
+      "default": 2
+    },
+    "netForceN": {
+      "unit": "N",
+      "min": -50,
+      "max": 50,
+      "default": 10
+    },
+    "scenario": {
+      "objectLabel": "Model aircraft",
+      "surfaceLabel": "Level flight, x-direction only"
+    },
+    "durationS": 5,
+    "stepS": 0.02,
+    "observables": [
+      "position",
+      "velocity",
+      "acceleration"
+    ]
+  },
+  "behavioralTests": [
+    {
+      "name": "positive-force-acceleration",
+      "massKg": 2,
+      "netForceN": 10,
+      "expectedAccelerationMps2": 5,
+      "tolerance": 0.001
+    },
+    {
+      "name": "negative-force-acceleration",
+      "massKg": 4,
+      "netForceN": -20,
+      "expectedAccelerationMps2": -5,
+      "tolerance": 0.001
+    },
+    {
+      "name": "zero-net-force-constant-velocity",
+      "massKg": 5,
+      "netForceN": 0,
+      "expectedAccelerationMps2": 0,
+      "tolerance": 0.001
+    },
+    {
+      "name": "high-mass-low-acceleration",
+      "massKg": 10,
+      "netForceN": 20,
+      "expectedAccelerationMps2": 2,
+      "tolerance": 0.001
+    }
+  ],
+  "predictions": [
+    {
+      "id": "prediction-1",
+      "prompt": "What acceleration will the model aircraft have?",
+      "massKg": 2,
+      "netForceN": 10,
+      "expectedAccelerationMps2": 5,
+      "tolerance": 0.001
+    },
+    {
+      "id": "prediction-2",
+      "prompt": "What acceleration occurs with opposite-direction net force?",
+      "massKg": 4,
+      "netForceN": -20,
+      "expectedAccelerationMps2": -5,
+      "tolerance": 0.001
+    },
+    {
+      "id": "prediction-3",
+      "prompt": "What happens when net force is zero?",
+      "massKg": 5,
+      "netForceN": 0,
+      "expectedAccelerationMps2": 0,
+      "tolerance": 0.001
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "5977c72b77f748c9afce87b0a7c6faad",
+    "runId": "job-20261029201113-b3832e77",
+    "promptVersion": "v9",
+    "generatedAt": "2026-10-29T20:12:20.251Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

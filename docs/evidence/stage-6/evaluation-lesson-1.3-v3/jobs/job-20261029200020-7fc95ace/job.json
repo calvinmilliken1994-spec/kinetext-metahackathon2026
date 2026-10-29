@@ -1,0 +1,45 @@
+{
+  "jobId": "job-20261029200020-7fc95ace",
+  "sourceId": "nasa-grc-specific-heat-cp-cv",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T20:00:20.740Z",
+  "flow": "lesson",
+  "model": "muse-spark-1.3",
+  "provider": "meta-api",
+  "providerModel": "muse-spark-1.3",
+  "totalCostUSD": 0.191191,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 32036,
+    "startedAt": "2026-10-29T20:00:20.740Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 2,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [
+    {
+      "componentId": "formula-explorer-v1",
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "FE-02"
+      ],
+      "fixed": [
+        "FE-02"
+      ],
+      "remaining": [],
+      "passed": true
+    }
+  ],
+  "finishedAt": "2026-10-29T20:02:48.988Z"
+}

@@ -1,0 +1,31 @@
+{
+  "jobId": "job-20261029200539-843c880e",
+  "sourceId": "nij-heterozygosity",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T20:05:39.189Z",
+  "flow": "lesson",
+  "model": "muse-spark-1.3",
+  "provider": "meta-api",
+  "providerModel": "muse-spark-1.3",
+  "totalCostUSD": 0.083116,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 32036,
+    "startedAt": "2026-10-29T20:05:39.189Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 1,
+    "componentsPublished": 1,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "finishedAt": "2026-10-29T20:06:35.787Z"
+}

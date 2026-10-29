@@ -1,0 +1,125 @@
+{
+  "jobId": "job-20261029202146-6e51baf3",
+  "analysisRef": "job-20261029202146-6e51baf3/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029202146-6e51baf3:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Random mating requirement and assortative mating patterns in humans",
+    "sources": [
+      {
+        "id": "nij-random-mating",
+        "title": "Random Mating — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+        "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/hardy-weinberg-principle/random-mating",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Random Mating'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+        "sha256": "9f06caf792ddeb146476c0c5d2cf1851b1f5e8bd6f0fc7dfae8cb33d50725ad8"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "eee3e911435749a5964af0b4db48a461",
+      "runId": "job-20261029202146-6e51baf3",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:22:20.574Z"
+    },
+    "seed": 3377194102,
+    "headline": "Random mating requirement and assortative mating patterns in humans",
+    "keyPoints": [
+      {
+        "id": "random-condition",
+        "point": "Random mating is a condition for Hardy-Weinberg Equilibrium that does not occur in humans",
+        "sourceId": "nij-random-mating",
+        "quote": "random mating, a condition of HWE (Hardy-Weinberg Equilibrium), does not occur"
+      },
+      {
+        "id": "visible-traits",
+        "point": "Humans tend to mate with individuals similar to themselves for visible traits such as height",
+        "sourceId": "nij-random-mating",
+        "quote": "humans tend to mate with individuals that are similar to themselves, especially with respect to evident or visible traits such as height"
+      },
+      {
+        "id": "homozygote-effect",
+        "point": "Positive assortative mating increases homozygotes while negative assortative mating increases heterozygotes",
+        "sourceId": "nij-random-mating",
+        "quote": "Positive assortative mating leads to an increase in homozygotes whereas negative assortative mating leads to an increase in heterozygotes."
+      },
+      {
+        "id": "random-traits",
+        "point": "Humans still mate randomly with respect to traits such as blood type and short tandem repeat genotype",
+        "sourceId": "nij-random-mating",
+        "quote": "they mate randomly with respect to other traits such as blood type and short tandem repeat (STR) genotype."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "random-mating",
+        "term": "Random mating",
+        "gloss": "mating that is arbitrary with regard to the locus being considered",
+        "sourceId": "nij-random-mating",
+        "quote": "Random mating implies that mating should be arbitrary with regard to the locus being considered."
+      },
+      {
+        "id": "hardy-weinberg-equilibrium",
+        "term": "Hardy-Weinberg Equilibrium",
+        "gloss": "genetic equilibrium that requires random mating as a condition",
+        "sourceId": "nij-random-mating",
+        "quote": "random mating, a condition of HWE (Hardy-Weinberg Equilibrium), does not occur"
+      },
+      {
+        "id": "positive-assortative-mating",
+        "term": "positive assortative mating",
+        "gloss": "non-random mating between similar individuals that increases homozygotes",
+        "sourceId": "nij-random-mating",
+        "quote": "This constitutes non-random, positive assortative mating."
+      },
+      {
+        "id": "negative-assortative-mating",
+        "term": "negative assortative mating",
+        "gloss": "breeding between dissimilar genotypes that increases heterozygotes",
+        "sourceId": "nij-random-mating",
+        "quote": "In contrast, negative assortative mating is breeding between individuals with dissimilar genotypes, and is more rare."
+      },
+      {
+        "id": "homozygotes",
+        "term": "homozygotes",
+        "gloss": "individuals increased by positive assortative mating",
+        "sourceId": "nij-random-mating",
+        "quote": "Positive assortative mating leads to an increase in homozygotes whereas negative assortative mating leads to an increase in heterozygotes."
+      },
+      {
+        "id": "heterozygotes",
+        "term": "heterozygotes",
+        "gloss": "individuals increased by negative assortative mating",
+        "sourceId": "nij-random-mating",
+        "quote": "Positive assortative mating leads to an increase in homozygotes whereas negative assortative mating leads to an increase in heterozygotes."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sort-groups-v1",
+      "specId": "job-20261029202146-6e51baf3:sort-groups-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "concept-map-v1",
+      "specId": "job-20261029202146-6e51baf3:concept-map-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

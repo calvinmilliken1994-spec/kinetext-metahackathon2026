@@ -1,0 +1,36 @@
+{
+  "jobId": "job-20261029195910-e0c9d05a",
+  "sourceId": "nasa-grc-motion-of-free-falling-object",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T19:59:10.177Z",
+  "flow": "lesson",
+  "model": "muse-spark-1.3",
+  "provider": "meta-api",
+  "providerModel": "muse-spark-1.3",
+  "totalCostUSD": 0.117232,
+  "reservedUnknownUSD": 0,
+  "engine": "forces-1d-v1",
+  "revisions": 1,
+  "repairs": [],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 32036,
+    "startedAt": "2026-10-29T19:59:10.177Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 2,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "specId": "nasa-grc-motion-of-free-falling-object-job-20261029195910-e0c9d0",
+  "publishable": true,
+  "checksPassed": 15,
+  "checksTotal": 15,
+  "publishedRevision": 1,
+  "finishedAt": "2026-10-29T20:00:19.729Z"
+}

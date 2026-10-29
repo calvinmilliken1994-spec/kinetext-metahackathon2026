@@ -1,0 +1,97 @@
+{
+  "artifactId": "nrc-backgrounder-radioactive-waste-job-20261029201742-ead26139",
+  "revision": 2,
+  "checks": [
+    {
+      "id": "schema.full",
+      "kind": "schema",
+      "passed": true,
+      "message": "spec matches activity-spec.full.half-life-v1.json (draft-07)"
+    },
+    {
+      "id": "semantic.range.initialAmount",
+      "kind": "semantic",
+      "passed": true,
+      "message": "initialAmount min=1 < max=1000 with default=100 inside the range"
+    },
+    {
+      "id": "semantic.range.halfLife",
+      "kind": "semantic",
+      "passed": true,
+      "message": "halfLife min=1 < max=10 with default=5 inside the range"
+    },
+    {
+      "id": "semantic.range.elapsedTime",
+      "kind": "semantic",
+      "passed": true,
+      "message": "elapsedTime min=0 < max=25 with default=5 inside the range"
+    },
+    {
+      "id": "semantic.unique-ids",
+      "kind": "semantic",
+      "passed": true,
+      "message": "explanation ids, prediction ids and behavioral test names are unique"
+    },
+    {
+      "id": "refs.sources",
+      "kind": "grounding",
+      "passed": true,
+      "message": "all references resolve: 1 spec source(s), 1 cited sourceId(s)"
+    },
+    {
+      "id": "refs.sha256",
+      "kind": "grounding",
+      "passed": true,
+      "message": "sha256 verified for 1 source(s): stored hash and recomputed text hash both match the spec"
+    },
+    {
+      "id": "grounding.quotes",
+      "kind": "grounding",
+      "passed": true,
+      "message": "all 4 evidence quote(s) count as evidence (>= 8 normalised characters with >= 3 letters/digits, or a compact \"=\" equation with >= 3) and all 4 resolvable quote(s) appear in their source text after whitespace normalisation; every explanation has >= 1 counted quote"
+    },
+    {
+      "id": "behavior.tests",
+      "kind": "behavioral",
+      "passed": true,
+      "message": "all 4 behavioral test(s) match N=N0*(1/2)^(t/T) within tolerance"
+    },
+    {
+      "id": "behavior.predictions",
+      "kind": "behavioral",
+      "passed": true,
+      "message": "all 3 prediction(s) match N=N0*(1/2)^(t/T) within tolerance"
+    },
+    {
+      "id": "semantic.tolerance",
+      "kind": "semantic",
+      "passed": true,
+      "message": "every case tolerance is <= maxTolerance('half-life-v1', computed) across 4 behavioral test(s) and 3 prediction(s)"
+    },
+    {
+      "id": "semantic.predictions-in-range",
+      "kind": "semantic",
+      "passed": true,
+      "message": "all 3 prediction(s) are reproducible within the simulation slider ranges"
+    },
+    {
+      "id": "policy.no-publisher-attribution",
+      "kind": "semantic",
+      "passed": true,
+      "message": "no generated display field (title, objectives, explanations, prediction prompts, behavioral test names, scenario labels) mentions the publisher or uses attribution/endorsement wording naming a source or authority; evidence quotes are exempt"
+    },
+    {
+      "id": "scope.prose-unverified",
+      "kind": "semantic",
+      "passed": true,
+      "message": "Explanation prose is AI-generated; quotes, numbers and ranges are machine-checked, the wording needs teacher review."
+    },
+    {
+      "id": "repair.no-weakening",
+      "kind": "semantic",
+      "passed": false,
+      "message": "repair weakened the spec: simulation.initialAmount range width shrank from 1000000000000 to 999 ([0, 1000000000000] -> [1, 1000]); simulation.halfLife range width shrank from 1000000000000 to 9 ([0, 1000000000000] -> [1, 10]); simulation.elapsedTime range width shrank from 10000000000000 to 25 ([0, 10000000000000] -> [0, 25]) (a repair must fix the failing checks without changing the engine, renaming/replacing/deleting any baseline case occurrence, widening any tolerance, rewriting a case that passed on the baseline, or shrinking slider ranges; only a baseline name/id that itself violates the publisher-attribution policy, or a prediction id that is itself not a valid id, may be renamed, to a valid policy-compliant key that is not another baseline name/id, with its numbers unchanged)"
+    }
+  ],
+  "publishable": false
+}

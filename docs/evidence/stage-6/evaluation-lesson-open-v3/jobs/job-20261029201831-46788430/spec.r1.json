@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nrc-backgrounder-plutonium-job-20261029201831-46788430",
+  "title": "",
+  "learningObjectives": [
+    "Understand how the final amount is calculated with A=P*(1+r/(100*n))^(n*t) using the starting amount, annual rate, compounding frequency and time",
+    "Explain how changing the annual rate and time changes the final amount, similar to how different time scales affect change in physical systems",
+    "Apply the formula to predict amounts with yearly, quarterly and monthly compounding"
+  ],
+  "sources": [
+    {
+      "id": "nrc-backgrounder-plutonium",
+      "title": "Backgrounder on Plutonium — U.S. Nuclear Regulatory Commission",
+      "locator": "https://www.nrc.gov/regulations-legislation/fact-sheets-brochures/backgrounder-on-plutonium",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: U.S. Nuclear Regulatory Commission, 'Backgrounder on Plutonium', Fact Sheets & Brochures. NRC's website constitutes a U.S. Government Work under federal copyright law and is not subject to copyright. The U.S. Nuclear Regulatory Commission has not reviewed, approved or endorsed this activity.",
+      "sha256": "03700e48439f4a60c4b8ff3676122131acf7c23ff26eaacb5700f29a06768737"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "exp1",
+      "text": "A starting amount grows when interest is added repeatedly using A=P*(1+r/(100*n))^(n*t). P is the initial value before any growth is applied, similar to how new material builds up from a starting process over time.",
+      "evidence": [
+        {
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "Plutonium is created in a reactor when uranium atoms absorb neutrons."
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "compound-interest-v1",
+    "equation": "A=P*(1+r/(100*n))^(n*t)",
+    "principalUSD": {
+      "unit": "USD",
+      "min": 100,
+      "max": 10000,
+      "default": 1000
+    },
+    "annualRatePercent": {
+      "unit": "%",
+      "min": 1,
+      "max": 12,
+      "default": 5
+    },
+    "compoundsPerYear": {
+      "unit": "per year",
+      "min": 1,
+      "max": 12,
+      "default": 4
+    },
+    "years": {
+      "unit": "years",
+      "min": 1,
+      "max": 40,
+      "default": 10
+    },
+    "scenario": {
+      "objectLabel": "Lab savings account",
+      "settingLabel": "Interest compounded yearly for science fund"
+    }
+  },
+  "behavioralTests": [],
+  "predictions": [],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "94856c7fb6da4b23b422314241957afe",
+    "runId": "job-20261029201831-46788430",
+    "promptVersion": "v9",
+    "generatedAt": "2026-10-29T20:19:58.579Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

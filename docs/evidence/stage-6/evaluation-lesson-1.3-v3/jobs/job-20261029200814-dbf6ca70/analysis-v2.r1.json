@@ -1,0 +1,184 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "componentPlan": [
+      {
+        "componentId": "sequence-v1",
+        "focusQuote": "The Emancipation Proclamation confirmed their insistence that the war for the Union must become a war for freedom",
+        "focusSourceId": "nara-emancipation-proclamation",
+        "pedagogicalReason": "Shows cause and effect chain from preserving Union to freedom as war aim in page order"
+      },
+      {
+        "componentId": "quiz-cards-v1",
+        "focusQuote": "It also expressly exempted parts of the Confederacy that had already come under Union control",
+        "focusSourceId": "nara-emancipation-proclamation",
+        "pedagogicalReason": "Checks recall of limits exemptions and military effects stated on page"
+      }
+    ],
+    "declineCode": "",
+    "declineSummary": "",
+    "overview": {
+      "headline": "Lincoln proclamation made freedom a Union war aim",
+      "keyPoints": [
+        {
+          "id": "war-aim",
+          "point": "Northern war aim at first was to prevent secession and preserve Union",
+          "quote": "was fought by the North to prevent the secession of the Southern states and preserve the Union",
+          "sourceId": "nara-emancipation-proclamation"
+        },
+        {
+          "id": "preliminary-warning",
+          "point": "Preliminary warning stated enslaved people in states still in rebellion would be declared free",
+          "quote": "which stated that enslaved people in those states or parts of states still in rebellion as of January 1, 1863, would be declared free",
+          "sourceId": "nara-emancipation-proclamation"
+        },
+        {
+          "id": "proclamation-limits",
+          "point": "Proclamation limits left slavery untouched in loyal border states and seceded areas under Union control",
+          "quote": "It applied only to states that had seceded from the Union, leaving slavery untouched in the loyal border states",
+          "sourceId": "nara-emancipation-proclamation"
+        },
+        {
+          "id": "black-service",
+          "point": "Proclamation announced acceptance of Black men into Union Army and Navy to expand freedom",
+          "quote": "Moreover, the Proclamation announced the acceptance of Black men into the Union Army and Navy",
+          "sourceId": "nara-emancipation-proclamation"
+        }
+      ],
+      "keyTerms": [
+        {
+          "gloss": "withdrawal of Southern states from Union that North sought to prevent",
+          "id": "secession",
+          "quote": "to prevent the secession of the Southern states and preserve the Union",
+          "sourceId": "nara-emancipation-proclamation",
+          "term": "secession"
+        },
+        {
+          "gloss": "warning order stating enslaved people in rebellious areas would be declared free",
+          "id": "preliminary-proclamation",
+          "quote": "when President Lincoln issued his Preliminary Emancipation Proclamation, which stated that enslaved people",
+          "sourceId": "nara-emancipation-proclamation",
+          "term": "Preliminary Emancipation Proclamation"
+        },
+        {
+          "gloss": "loyal slaveholding areas where slavery was left untouched by measure",
+          "id": "border-states",
+          "quote": "leaving slavery untouched in the loyal border states",
+          "sourceId": "nara-emancipation-proclamation",
+          "term": "border states"
+        },
+        {
+          "gloss": "military force where Black men served enabling liberated people to become liberators",
+          "id": "union-army",
+          "quote": "the acceptance of Black men into the Union Army and Navy, enabling the liberated to become liberators",
+          "sourceId": "nara-emancipation-proclamation",
+          "term": "Union Army"
+        }
+      ]
+    },
+    "pageCoverage": "Page explains Lincoln Emancipation Proclamation purpose as military measure, its limits in seceded areas, and its effect transforming war for Union into war for freedom.",
+    "subject": "history",
+    "usable": true
+  },
+  "report": {
+    "artifactId": "job-20261029200814-dbf6ca70:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"history\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 2659 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 10 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 4, keyTerms 4, componentPlan 2; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (2 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18947-7aca-76fa-a184-f4b7f2520706",
+    "usage": {
+      "promptTokens": 4726,
+      "completionTokens": 9015,
+      "reasoningTokens": 8320,
+      "cachedTokens": 0
+    },
+    "latencyMs": 31006,
+    "estCostUSD": 0.04422125,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  }
+}

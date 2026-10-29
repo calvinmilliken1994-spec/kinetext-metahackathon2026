@@ -1,0 +1,132 @@
+{
+  "jobId": "job-20261029200410-aeeb593c",
+  "analysisRef": "job-20261029200410-aeeb593c/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029200410-aeeb593c:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Plutonium isotopes, radioactivity, decay and reactor fuel uses",
+    "sources": [
+      {
+        "id": "nrc-backgrounder-plutonium",
+        "title": "Backgrounder on Plutonium — U.S. Nuclear Regulatory Commission",
+        "locator": "https://www.nrc.gov/regulations-legislation/fact-sheets-brochures/backgrounder-on-plutonium",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Nuclear Regulatory Commission, 'Backgrounder on Plutonium', Fact Sheets & Brochures. NRC's website constitutes a U.S. Government Work under federal copyright law and is not subject to copyright. The U.S. Nuclear Regulatory Commission has not reviewed, approved or endorsed this activity.",
+        "sha256": "03700e48439f4a60c4b8ff3676122131acf7c23ff26eaacb5700f29a06768737"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18944-7660-727b-a437-b7edc5e182be",
+      "runId": "job-20261029200410-aeeb593c",
+      "promptVersion": "s6-v3",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T20:05:27.842Z"
+    },
+    "seed": 3910182895,
+    "headline": "Plutonium isotopes, radioactivity, decay and reactor fuel uses",
+    "keyPoints": [
+      {
+        "id": "plutonium-creation",
+        "point": "Plutonium is a radioactive metal created in a reactor when uranium atoms absorb neutrons.",
+        "quote": "Plutonium is created in a reactor when uranium atoms absorb neutrons.",
+        "sourceId": "nrc-backgrounder-plutonium"
+      },
+      {
+        "id": "emission-types",
+        "point": "Plutonium also emits neutrons, beta particles and gamma rays in addition to other radiation.",
+        "quote": "It also emits neutrons, beta particles and gamma rays.",
+        "sourceId": "nrc-backgrounder-plutonium"
+      },
+      {
+        "id": "half-life-behavior",
+        "point": "Substances with shorter half-lives decay more quickly and emit more energetic radioactivity.",
+        "quote": "Substances with shorter half-lives decay more quickly than those with longer half-lives, so they emit more energetic radioactivity.",
+        "sourceId": "nrc-backgrounder-plutonium"
+      },
+      {
+        "id": "spent-fuel-content",
+        "point": "Spent fuel from reactors still contains plutonium that stays in the fuel.",
+        "quote": "Spent nuclear fuel from U.S. reactors contains about 1 percent plutonium by weight.",
+        "sourceId": "nrc-backgrounder-plutonium"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "nearly all man-made metal containing plutonium",
+        "id": "plutonium",
+        "quote": "Nearly all plutonium is man-made.",
+        "sourceId": "nrc-backgrounder-plutonium",
+        "term": "plutonium"
+      },
+      {
+        "gloss": "radioactive metallic element made in reactors",
+        "id": "metallic-element",
+        "quote": "Plutonium is a radioactive metallic element with the atomic number 94.",
+        "sourceId": "nrc-backgrounder-plutonium",
+        "term": "metallic element"
+      },
+      {
+        "gloss": "particles emitted with beta particles and gamma rays",
+        "id": "neutrons",
+        "quote": "It also emits neutrons, beta particles and gamma rays.",
+        "sourceId": "nrc-backgrounder-plutonium",
+        "term": "neutrons"
+      },
+      {
+        "gloss": "time for substances to decay with energetic radioactivity",
+        "id": "half-lives",
+        "quote": "Substances with shorter half-lives decay more quickly than those with longer half-lives, so they emit more energetic radioactivity.",
+        "sourceId": "nrc-backgrounder-plutonium",
+        "term": "half-lives"
+      },
+      {
+        "gloss": "radioactive forms that transform when they decay",
+        "id": "isotopes",
+        "quote": "Like any radioactive isotopes, plutonium isotopes transform when they decay.",
+        "sourceId": "nrc-backgrounder-plutonium",
+        "term": "isotopes"
+      },
+      {
+        "gloss": "process using chemicals to separate plutonium from uranium",
+        "id": "reprocessing",
+        "quote": "This process, known as reprocessing, uses chemicals to separate plutonium from uranium and other fission products.",
+        "sourceId": "nrc-backgrounder-plutonium",
+        "term": "reprocessing"
+      },
+      {
+        "gloss": "mixed oxide produced from plutonium oxide and uranium oxide",
+        "id": "mox-fuel",
+        "quote": "Once separated, plutonium oxide can be mixed with uranium oxide to produce mixed oxide or MOX fuel.",
+        "sourceId": "nrc-backgrounder-plutonium",
+        "term": "MOX fuel"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "half-life-v1",
+      "specId": "nrc-backgrounder-plutonium-job-20261029200410-aeeb593c",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029200410-aeeb593c:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

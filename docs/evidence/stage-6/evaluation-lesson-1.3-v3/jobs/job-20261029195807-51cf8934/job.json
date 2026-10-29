@@ -1,0 +1,36 @@
+{
+  "jobId": "job-20261029195807-51cf8934",
+  "sourceId": "nasa-grc-newtons-laws-of-motion",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T19:58:07.584Z",
+  "flow": "lesson",
+  "model": "muse-spark-1.3",
+  "provider": "meta-api",
+  "providerModel": "muse-spark-1.3",
+  "totalCostUSD": 0.103103,
+  "reservedUnknownUSD": 0,
+  "engine": "forces-1d-v1",
+  "revisions": 1,
+  "repairs": [],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 32036,
+    "startedAt": "2026-10-29T19:58:07.584Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 2,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "specId": "nasa-grc-newtons-laws-of-motion-job-20261029195807-51cf8934",
+  "publishable": true,
+  "checksPassed": 15,
+  "checksTotal": 15,
+  "publishedRevision": 1,
+  "finishedAt": "2026-10-29T19:59:08.229Z"
+}

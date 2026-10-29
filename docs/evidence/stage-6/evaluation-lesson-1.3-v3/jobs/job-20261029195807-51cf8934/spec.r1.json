@@ -1,0 +1,152 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nasa-grc-newtons-laws-of-motion-job-20261029195807-51cf8934",
+  "title": "Force, Mass, and Acceleration in One Dimension",
+  "learningObjectives": [
+    "Explain that an object maintains constant velocity when net force is zero.",
+    "Use net force and mass to calculate acceleration in one dimension.",
+    "Predict that acceleration decreases as mass increases for a fixed net force."
+  ],
+  "sources": [
+    {
+      "id": "nasa-grc-newtons-laws-of-motion",
+      "title": "Newton's Laws of Motion — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+      "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/newtons-laws-of-motion/",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+      "sha256": "907bae07076eef20118a4e54096ad399b11994ec5e310d9bed74850f6d009014"
+    }
+  ],
+  "explanations": [
+    {
+      "evidence": [
+        {
+          "quote": "If there is no net force acting on the object, then the object will maintain a constant velocity.",
+          "sourceId": "nasa-grc-newtons-laws-of-motion"
+        },
+        {
+          "quote": "This tendency to resist changes in a state of motion is inertia.",
+          "sourceId": "nasa-grc-newtons-laws-of-motion"
+        }
+      ],
+      "id": "inertia-and-net-force",
+      "text": "When net force is zero, velocity stays constant because objects resist changes in motion."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "The acceleration of an object depends on the mass of the object and the amount of force applied.",
+          "sourceId": "nasa-grc-newtons-laws-of-motion"
+        },
+        {
+          "quote": "F = m * a",
+          "sourceId": "nasa-grc-newtons-laws-of-motion"
+        }
+      ],
+      "id": "force-mass-acceleration",
+      "text": "Acceleration is determined by net force and mass, so a larger applied force produces larger acceleration for the same mass."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "The amount of acceleration is also inversely proportional to the mass of the object",
+          "sourceId": "nasa-grc-newtons-laws-of-motion"
+        }
+      ],
+      "id": "heavier-objects-accelerate-less",
+      "text": "For the same net force, a heavier object accelerates less than a lighter object."
+    }
+  ],
+  "simulation": {
+    "engine": "forces-1d-v1",
+    "equation": "a=F_net/m",
+    "massKg": {
+      "unit": "kg",
+      "default": 2,
+      "max": 20,
+      "min": 0.5
+    },
+    "netForceN": {
+      "unit": "N",
+      "default": 10,
+      "max": 50,
+      "min": -50
+    },
+    "scenario": {
+      "objectLabel": "Model aircraft",
+      "surfaceLabel": "Level flight, x-direction only"
+    },
+    "durationS": 5,
+    "stepS": 0.02,
+    "observables": [
+      "position",
+      "velocity",
+      "acceleration"
+    ]
+  },
+  "behavioralTests": [
+    {
+      "expectedAccelerationMps2": 5,
+      "massKg": 2,
+      "name": "positive force produces forward acceleration",
+      "netForceN": 10,
+      "tolerance": 0.001
+    },
+    {
+      "expectedAccelerationMps2": -5,
+      "massKg": 2,
+      "name": "negative force produces backward acceleration",
+      "netForceN": -10,
+      "tolerance": 0.001
+    },
+    {
+      "expectedAccelerationMps2": 0,
+      "massKg": 5,
+      "name": "zero net force produces zero acceleration",
+      "netForceN": 0,
+      "tolerance": 0.001
+    },
+    {
+      "expectedAccelerationMps2": 2,
+      "massKg": 10,
+      "name": "larger mass with moderate force",
+      "netForceN": 20,
+      "tolerance": 0.001
+    }
+  ],
+  "predictions": [
+    {
+      "expectedAccelerationMps2": 3,
+      "id": "prediction-1",
+      "massKg": 4,
+      "netForceN": 12,
+      "prompt": "A 4 kg model aircraft experiences 12 N net forward force. What is its acceleration?",
+      "tolerance": 0.001
+    },
+    {
+      "expectedAccelerationMps2": -3,
+      "id": "prediction-2",
+      "massKg": 5,
+      "netForceN": -15,
+      "prompt": "A 5 kg model aircraft experiences -15 N net force. What is its acceleration?",
+      "tolerance": 0.001
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a1893e-7a3e-72cf-a13b-ccd39d8d55ba",
+    "runId": "job-20261029195807-51cf8934",
+    "promptVersion": "v9",
+    "generatedAt": "2026-10-29T19:58:55.753Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

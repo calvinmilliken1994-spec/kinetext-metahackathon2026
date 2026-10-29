@@ -1,0 +1,49 @@
+{
+  "jobId": "job-20261029200410-aeeb593c",
+  "sourceId": "nrc-backgrounder-plutonium",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T20:04:10.591Z",
+  "flow": "lesson",
+  "model": "muse-spark-1.3",
+  "provider": "meta-api",
+  "providerModel": "muse-spark-1.3",
+  "totalCostUSD": 0.167652,
+  "reservedUnknownUSD": 0,
+  "engine": "half-life-v1",
+  "revisions": 1,
+  "repairs": [],
+  "analysisRepairs": [
+    {
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "A-09"
+      ],
+      "fixed": [
+        "A-09"
+      ],
+      "remaining": [],
+      "passed": true
+    }
+  ],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 32036,
+    "startedAt": "2026-10-29T20:04:10.591Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 2,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "specId": "nrc-backgrounder-plutonium-job-20261029200410-aeeb593c",
+  "publishable": true,
+  "checksPassed": 14,
+  "checksTotal": 14,
+  "publishedRevision": 1,
+  "finishedAt": "2026-10-29T20:06:00.672Z"
+}

@@ -1,0 +1,17 @@
+{
+  "artifactId": "nrc-backgrounder-radioactive-waste-job-20261029201742-ead26139",
+  "revision": 1,
+  "checks": [
+    {
+      "id": "schema.full",
+      "kind": "schema",
+      "passed": false,
+      "message": "spec failed schema.full: /simulation/initialAmount/min must be > 0; /simulation/halfLife/min must be > 0",
+      "affected": [
+        "/simulation/initialAmount/min",
+        "/simulation/halfLife/min"
+      ]
+    }
+  ],
+  "publishable": false
+}

@@ -1,0 +1,169 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nrc-backgrounder-plutonium-job-20261029201831-46788430",
+  "title": "Compound Interest Growth Over Time",
+  "learningObjectives": [
+    "Understand how the final amount is calculated with A=P*(1+r/(100*n))^(n*t) using the starting amount, annual rate, compounding frequency and time",
+    "Explain how changing the annual rate and time changes the final amount, similar to how different time scales affect change in physical systems",
+    "Apply the formula to predict amounts with yearly, quarterly and monthly compounding"
+  ],
+  "sources": [
+    {
+      "id": "nrc-backgrounder-plutonium",
+      "title": "Backgrounder on Plutonium — U.S. Nuclear Regulatory Commission",
+      "locator": "https://www.nrc.gov/regulations-legislation/fact-sheets-brochures/backgrounder-on-plutonium",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: U.S. Nuclear Regulatory Commission, 'Backgrounder on Plutonium', Fact Sheets & Brochures. NRC's website constitutes a U.S. Government Work under federal copyright law and is not subject to copyright. The U.S. Nuclear Regulatory Commission has not reviewed, approved or endorsed this activity.",
+      "sha256": "03700e48439f4a60c4b8ff3676122131acf7c23ff26eaacb5700f29a06768737"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "exp1",
+      "text": "A starting amount grows when interest is added repeatedly using A=P*(1+r/(100*n))^(n*t). P is the initial value before any growth is applied, similar to how new material builds up from a starting process over time.",
+      "evidence": [
+        {
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "Plutonium is created in a reactor when uranium atoms absorb neutrons."
+        }
+      ]
+    },
+    {
+      "id": "exp2",
+      "text": "Time affects how much a quantity changes. Shorter and longer time scales produce different amounts of change, just as different half-lives describe different rates of transformation over years.",
+      "evidence": [
+        {
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "Pu-239 has a half-life of 24,100 years and Pu-241’s half-life is 14.4 years."
+        },
+        {
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "Substances with shorter half-lives decay more quickly than those with longer half-lives, so they emit more energetic radioactivity."
+        }
+      ]
+    },
+    {
+      "id": "exp3",
+      "text": "Separation and mixing steps change what a final mixture contains. In compound interest, the principal and added interest mix over each period to form a new base for the next period of growth.",
+      "evidence": [
+        {
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "This process, known as reprocessing, uses chemicals to separate plutonium from uranium and other fission products."
+        },
+        {
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "Once separated, plutonium oxide can be mixed with uranium oxide to produce mixed oxide or MOX fuel."
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "compound-interest-v1",
+    "equation": "A=P*(1+r/(100*n))^(n*t)",
+    "principalUSD": {
+      "unit": "USD",
+      "min": 100,
+      "max": 10000,
+      "default": 1000
+    },
+    "annualRatePercent": {
+      "unit": "%",
+      "min": 1,
+      "max": 12,
+      "default": 5
+    },
+    "compoundsPerYear": {
+      "unit": "per year",
+      "min": 1,
+      "max": 12,
+      "default": 4
+    },
+    "years": {
+      "unit": "years",
+      "min": 1,
+      "max": 40,
+      "default": 10
+    },
+    "scenario": {
+      "objectLabel": "Savings account",
+      "settingLabel": "Interest compounded yearly for science fund"
+    }
+  },
+  "behavioralTests": [
+    {
+      "name": "zero-interest-hold",
+      "principalUSD": 2500,
+      "annualRatePercent": 0,
+      "compoundsPerYear": 12,
+      "years": 10,
+      "expectedAmountUSD": 2500,
+      "tolerance": 0.01
+    },
+    {
+      "name": "annual-compounding-reference",
+      "principalUSD": 1000,
+      "annualRatePercent": 5,
+      "compoundsPerYear": 1,
+      "years": 10,
+      "expectedAmountUSD": 1628.89,
+      "tolerance": 0.01
+    },
+    {
+      "name": "monthly-compounding-check",
+      "principalUSD": 5000,
+      "annualRatePercent": 6,
+      "compoundsPerYear": 12,
+      "years": 5,
+      "expectedAmountUSD": 6744.25,
+      "tolerance": 0.01
+    },
+    {
+      "name": "quarterly-long-term-growth",
+      "principalUSD": 2000,
+      "annualRatePercent": 4,
+      "compoundsPerYear": 4,
+      "years": 20,
+      "expectedAmountUSD": 4433.43,
+      "tolerance": 0.01
+    }
+  ],
+  "predictions": [
+    {
+      "id": "growth-projection-a",
+      "prompt": "Predict amount for monthly compounding",
+      "principalUSD": 1000,
+      "annualRatePercent": 5,
+      "compoundsPerYear": 12,
+      "years": 10,
+      "expectedAmountUSD": 1647.01,
+      "tolerance": 0.01
+    },
+    {
+      "id": "growth-projection-b",
+      "prompt": "Predict amount for quarterly compounding",
+      "principalUSD": 1500,
+      "annualRatePercent": 8,
+      "compoundsPerYear": 4,
+      "years": 12,
+      "expectedAmountUSD": 3880.61,
+      "tolerance": 0.01
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "91fff930d03d4590a1f58520ada15ada",
+    "runId": "job-20261029201831-46788430",
+    "promptVersion": "v9",
+    "generatedAt": "2026-10-29T20:21:09.426Z",
+    "revision": 3,
+    "repairOf": 2
+  }
+}

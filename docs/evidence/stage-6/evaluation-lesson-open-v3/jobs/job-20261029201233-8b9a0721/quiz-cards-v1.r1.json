@@ -1,0 +1,217 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Level Flight Forces and Distance",
+    "cards": [
+      {
+        "id": "no-net-force-cruise",
+        "stem": "What condition lets an aircraft keep steady airspeed in level flight under the first law?",
+        "options": [
+          "no net external force",
+          "lift greater than weight",
+          "thrust greater than drag"
+        ],
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "Since there is no net external force on the aircraft, the aircraft maintains a constant airspeed as described by Newton’s First Law of Motion.",
+        "hint": "Consider when forces balance to zero"
+      },
+      {
+        "id": "lift-weight-balance",
+        "stem": "Which force equality is required for steady level cruise at constant speed?",
+        "options": [
+          "lift is equal to the weight",
+          "drag is equal to the lift",
+          "weight is equal to the thrust"
+        ],
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "an airplane can maintain a constant speed and level flight, in which the lift is equal to the weight, and the thrust is equal to the drag.",
+        "hint": "Level flight pairs vertical forces together"
+      },
+      {
+        "id": "ground-speed-wind",
+        "stem": "When does ground speed stay steady during cruise?",
+        "options": [
+          "wind speed is constant",
+          "fuel load is constant",
+          "altitude is constant"
+        ],
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "The ground speed remains constant as long as the wind speed is constant.",
+        "hint": "Ground speed depends on air motion relative to surface"
+      },
+      {
+        "id": "max-range-distance",
+        "stem": "What determines the greatest distance an aircraft can fly before refueling?",
+        "options": [
+          "ground speed times the maximum time",
+          "ground speed divided by time aloft",
+          "thrust minus drag times weight"
+        ],
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "The maximum distance that the aircraft can fly is then equal to the ground speed times the maximum time (tmax).",
+        "hint": "Maximum distance uses longest time aloft"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029201233-8b9a0721:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "7d318176e3ff4b38b231071e144a2c5c",
+    "usage": {
+      "promptTokens": 2749,
+      "completionTokens": 7047,
+      "reasoningTokens": 6659,
+      "cachedTokens": 0
+    },
+    "latencyMs": 29977,
+    "estCostUSD": 0.033386,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029201233-8b9a0721:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Level Flight Forces and Distance",
+    "sources": [
+      {
+        "id": "nasa-grc-range-constant-velocity",
+        "title": "Range – Constant Velocity — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/range-constant-velocity/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "f1f4102e23398f882264cb387f0c4115207597b855cadae074925c9e7c1a4127"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "7d318176e3ff4b38b231071e144a2c5c",
+      "runId": "job-20261029201233-8b9a0721",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:13:41.289Z"
+    },
+    "seed": 3664081639,
+    "cards": [
+      {
+        "id": "no-net-force-cruise",
+        "stem": "What condition lets an aircraft keep steady airspeed in level flight under the first law?",
+        "options": [
+          "no net external force",
+          "lift greater than weight",
+          "thrust greater than drag"
+        ],
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "Since there is no net external force on the aircraft, the aircraft maintains a constant airspeed as described by Newton’s First Law of Motion.",
+        "hint": "Consider when forces balance to zero"
+      },
+      {
+        "id": "lift-weight-balance",
+        "stem": "Which force equality is required for steady level cruise at constant speed?",
+        "options": [
+          "lift is equal to the weight",
+          "drag is equal to the lift",
+          "weight is equal to the thrust"
+        ],
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "an airplane can maintain a constant speed and level flight, in which the lift is equal to the weight, and the thrust is equal to the drag.",
+        "hint": "Level flight pairs vertical forces together"
+      },
+      {
+        "id": "ground-speed-wind",
+        "stem": "When does ground speed stay steady during cruise?",
+        "options": [
+          "wind speed is constant",
+          "fuel load is constant",
+          "altitude is constant"
+        ],
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "The ground speed remains constant as long as the wind speed is constant.",
+        "hint": "Ground speed depends on air motion relative to surface"
+      },
+      {
+        "id": "max-range-distance",
+        "stem": "What determines the greatest distance an aircraft can fly before refueling?",
+        "options": [
+          "ground speed times the maximum time",
+          "ground speed divided by time aloft",
+          "thrust minus drag times weight"
+        ],
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "The maximum distance that the aircraft can fly is then equal to the ground speed times the maximum time (tmax).",
+        "hint": "Maximum distance uses longest time aloft"
+      }
+    ]
+  }
+}

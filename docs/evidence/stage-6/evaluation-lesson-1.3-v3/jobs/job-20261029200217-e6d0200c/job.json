@@ -1,0 +1,65 @@
+{
+  "jobId": "job-20261029200217-e6d0200c",
+  "sourceId": "cfpb-teenagers-and-saving",
+  "status": "failed",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T20:02:17.646Z",
+  "flow": "lesson",
+  "model": "muse-spark-1.3",
+  "provider": "meta-api",
+  "providerModel": "muse-spark-1.3",
+  "totalCostUSD": 0.136142,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [
+    {
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "A-05",
+        "A-10"
+      ],
+      "fixed": [
+        "A-05"
+      ],
+      "remaining": [
+        "A-10"
+      ],
+      "passed": false
+    },
+    {
+      "attempt": 2,
+      "revision": 3,
+      "targeted": [
+        "A-10"
+      ],
+      "fixed": [
+        "A-10"
+      ],
+      "remaining": [
+        "A-05"
+      ],
+      "passed": false
+    }
+  ],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 32036,
+    "startedAt": "2026-10-29T20:02:17.646Z"
+  },
+  "lesson": {
+    "overviewReady": false,
+    "componentsPlanned": 0,
+    "componentsPublished": 0,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "error": {
+    "code": "ANALYSIS_INVALID",
+    "message": "analysis failed validation"
+  },
+  "finishedAt": "2026-10-29T20:04:09.345Z"
+}

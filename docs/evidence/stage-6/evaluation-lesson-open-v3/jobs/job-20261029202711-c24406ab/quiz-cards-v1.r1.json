@@ -1,0 +1,217 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Glider steady descent force balance",
+    "cards": [
+      {
+        "id": "steady-glide-balance",
+        "stem": "In steady descent what expression equals lift times sine of glide angle?",
+        "options": [
+          "drag times the cosine of the glide angle",
+          "weight alone",
+          "thrust at cruise"
+        ],
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The lift times the sine of the glide angle is equal to the drag times the cosine of the glide angle.",
+        "hint": "Recall how horizontal and vertical force parts cancel"
+      },
+      {
+        "id": "force-balance-flight-direction",
+        "stem": "Which equation form shows steady glide force balance along the flight direction?",
+        "options": [
+          "L * sin(a)",
+          "L * cos(a) + W",
+          "thrust equals weight"
+        ],
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "L * sin(a) = D * cos(a)",
+        "hint": "Think of components parallel to glide path"
+      },
+      {
+        "id": "steady-descent-definition",
+        "stem": "How does the page describe motion with no acceleration while losing height?",
+        "options": [
+          "steady (constant velocity and no acceleration) descent",
+          "accelerated climb at constant thrust",
+          "level flight with engine power"
+        ],
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "If a glider is in a steady (constant velocity and no acceleration) descent, it loses altitude as it travels.",
+        "hint": "Focus on the definition of unaccelerated sinking flight"
+      },
+      {
+        "id": "weight-equilibrium-sum",
+        "stem": "What sum balances weight in the steady glide vector equation?",
+        "options": [
+          "L * cos(a) + D * sin(a)",
+          "thrust minus weight",
+          "zero net moment"
+        ],
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "L * cos(a) + D * sin(a) = W",
+        "hint": "Consider vertical equilibrium of forces"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029202711-c24406ab:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "7a5378f7c37a44b2826716796f3694d2",
+    "usage": {
+      "promptTokens": 2581,
+      "completionTokens": 7390,
+      "reasoningTokens": 7016,
+      "cachedTokens": 0
+    },
+    "latencyMs": 25199,
+    "estCostUSD": 0.03463375,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029202711-c24406ab:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Glider steady descent force balance",
+    "sources": [
+      {
+        "id": "nasa-grc-glider-trajectory-problem",
+        "title": "Glider Trajectory Problem — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/glider-trajectory-problem/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "66e6cfc191fb83e9cfff3bc323a0394b392cbb4e0278aba87b367f3203c3c1e2"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "7a5378f7c37a44b2826716796f3694d2",
+      "runId": "job-20261029202711-c24406ab",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:28:15.620Z"
+    },
+    "seed": 2190051018,
+    "cards": [
+      {
+        "id": "steady-glide-balance",
+        "stem": "In steady descent what expression equals lift times sine of glide angle?",
+        "options": [
+          "drag times the cosine of the glide angle",
+          "weight alone",
+          "thrust at cruise"
+        ],
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The lift times the sine of the glide angle is equal to the drag times the cosine of the glide angle.",
+        "hint": "Recall how horizontal and vertical force parts cancel"
+      },
+      {
+        "id": "force-balance-flight-direction",
+        "stem": "Which equation form shows steady glide force balance along the flight direction?",
+        "options": [
+          "L * sin(a)",
+          "L * cos(a) + W",
+          "thrust equals weight"
+        ],
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "L * sin(a) = D * cos(a)",
+        "hint": "Think of components parallel to glide path"
+      },
+      {
+        "id": "steady-descent-definition",
+        "stem": "How does the page describe motion with no acceleration while losing height?",
+        "options": [
+          "steady (constant velocity and no acceleration) descent",
+          "accelerated climb at constant thrust",
+          "level flight with engine power"
+        ],
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "If a glider is in a steady (constant velocity and no acceleration) descent, it loses altitude as it travels.",
+        "hint": "Focus on the definition of unaccelerated sinking flight"
+      },
+      {
+        "id": "weight-equilibrium-sum",
+        "stem": "What sum balances weight in the steady glide vector equation?",
+        "options": [
+          "L * cos(a) + D * sin(a)",
+          "thrust minus weight",
+          "zero net moment"
+        ],
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "L * cos(a) + D * sin(a) = W",
+        "hint": "Consider vertical equilibrium of forces"
+      }
+    ]
+  }
+}

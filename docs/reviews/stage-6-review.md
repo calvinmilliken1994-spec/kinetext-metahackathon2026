@@ -194,3 +194,14 @@ All 12 findings accepted: they are wrong-answer, honesty or accounting classes w
 | B worker/web/metrics | S6R-01 (worker wiring), S6R-07, S6R-11, S6R-12 | Claude Opus 5.5 | `workers/generation/**`, `apps/web/src/lib/{lessonJob,provenance}.ts`, `scripts/evaluation-metrics.ts` (+ tests) |
 
 Re-review: GPT-6.1 Sol, one round, on the changed paths only.
+
+### Lead adjudication of A3 replay hits (2026-10-30)
+
+Replay of the new gate/policy over 90 stored jobs (131 analysis revisions, 226 kit gens) found real stored content that newly fails. Historical verdicts and scores are not rewritten; rulings for future runs:
+
+1. **OV-06 on Bernoulli `streamline` gloss** ("path that confines Bernoulli constant when restrictions apply" vs quote "…restricts this equation to be true only along a single streamline") — **real catch, rule kept.** The gloss is garbled; the repair loop will rewrite it. No stemming added.
+2. **Plain-text `>` in quiz options** ("Lift > Weight = Aircraft Rises", job `…143609-b3ac3e67`) — **real catch, rule kept.** Composed text not on the page; prompts s6-v2 already forbid `A > B`.
+3. **"according to" in kit quiz stems** ("…according to the definition", "…according to the study?") — **false positive, narrow the kit sweep:** in kit display fields, "according to" counts as a publisher claim only when followed by a publisher name/acronym. Overview A-09/OV-03 unchanged.
+4. **Single-word publisher token** (`ocean` from "NOAA Office of Ocean Exploration" rejecting "deep ocean") — **false positive, narrow the token set:** publisher matching uses acronyms (NASA, NOAA, NARA, CFPB, NRC, USGS, NIJ) and the full publisher name, never ordinary words inside the name.
+
+Rulings 3–4 are implemented after Wave A2 releases `kit/shared.ts`, with the replay re-run.

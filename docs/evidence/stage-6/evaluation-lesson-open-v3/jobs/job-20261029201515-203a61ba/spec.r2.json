@@ -1,0 +1,158 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nasa-grc-role-of-the-mach-number-job-20261029201515-203a61ba",
+  "title": "Role of the Mach Number — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+  "learningObjectives": [
+    "Explain that the speed of sound in a gas depends on the specific heat ratio, the specific gas constant, and absolute temperature and increases with temperature.",
+    "Interpret the Mach number as the ratio of flow speed to sound speed and describe how it controls compressibility effects.",
+    "Predict how changing temperature or gas properties changes the speed of sound and the relative importance of density variations."
+  ],
+  "sources": [
+    {
+      "id": "nasa-grc-role-of-the-mach-number",
+      "title": "Role of the Mach Number — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+      "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/role-of-the-mach-number/",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+      "sha256": "a7355b33f7126247cd0576ce48a0975a781814c8687022d8fdf12e11fdeaa3c8"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "exp-mach-definition",
+      "text": "The ratio of flow speed to the speed at which small isentropic disturbances propagate defines the compressibility regime. At low Mach numbers density changes are very small, while near and beyond sonic speed they become comparable to velocity changes.",
+      "evidence": [
+        {
+          "sourceId": "nasa-grc-role-of-the-mach-number",
+          "quote": "The Mach number is the ratio of the speed of the aircraft, or the speed of the gas, to the speed of sound in the gas."
+        }
+      ]
+    },
+    {
+      "id": "exp-sound-speed-equation",
+      "text": "For an ideal gas the propagation speed of small disturbances follows from the equation of state and the isentropic relation. The combination shows the sound speed depends on gamma, R, and T.",
+      "evidence": [
+        {
+          "sourceId": "nasa-grc-role-of-the-mach-number",
+          "quote": "p = rho * R * T"
+        },
+        {
+          "sourceId": "nasa-grc-role-of-the-mach-number",
+          "quote": "gamma * R * T = a^2"
+        }
+      ]
+    },
+    {
+      "id": "exp-compressibility-shocks",
+      "text": "Density variations scale with Mach number squared. Compressibility alters resulting forces because aerodynamic force depends on density, and at higher Mach numbers shock waves can form affecting lift, drag, and downstream conditions.",
+      "evidence": [
+        {
+          "sourceId": "nasa-grc-role-of-the-mach-number",
+          "quote": "This compressibility effect alters the amount of resulting force on the aircraft since the aerodynamic force depends on the air density."
+        },
+        {
+          "sourceId": "nasa-grc-role-of-the-mach-number",
+          "quote": "Sharp disturbances generate shock waves that affect both the lift and drag of the aircraft and the flow conditions downstream of the shock wave."
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "speed-of-sound-v1",
+    "equation": "a=sqrt(gamma*R*T)",
+    "gamma": {
+      "unit": "1",
+      "min": 1.2,
+      "max": 1.7,
+      "default": 1.4
+    },
+    "gasConstantJPerKgK": {
+      "unit": "J/(kg*K)",
+      "min": 100,
+      "max": 5000,
+      "default": 287
+    },
+    "temperatureK": {
+      "unit": "K",
+      "min": 50,
+      "max": 2000,
+      "default": 300
+    },
+    "scenario": {
+      "objectLabel": "Air sample",
+      "settingLabel": "Open field"
+    }
+  },
+  "behavioralTests": [
+    {
+      "name": "cold-gas",
+      "gamma": 1.4,
+      "gasConstantJPerKgK": 287,
+      "temperatureK": 250,
+      "expectedSpeedMps": 316.9385,
+      "tolerance": 0.5
+    },
+    {
+      "name": "warm-gas",
+      "gamma": 1.4,
+      "gasConstantJPerKgK": 287,
+      "temperatureK": 350,
+      "expectedSpeedMps": 375.0067,
+      "tolerance": 0.5
+    },
+    {
+      "name": "high-gas-constant",
+      "gamma": 1.2,
+      "gasConstantJPerKgK": 800,
+      "temperatureK": 300,
+      "expectedSpeedMps": 536.6563,
+      "tolerance": 0.5
+    }
+  ],
+  "predictions": [
+    {
+      "id": "pred-standard-air",
+      "prompt": "Predict speed for standard air at 300 K",
+      "gamma": 1.4,
+      "gasConstantJPerKgK": 287,
+      "temperatureK": 300,
+      "expectedSpeedMps": 347.1887,
+      "tolerance": 0.5
+    },
+    {
+      "id": "pred-cold-heavy",
+      "prompt": "Predict speed for cooler gas with higher R",
+      "gamma": 1.3,
+      "gasConstantJPerKgK": 400,
+      "temperatureK": 280,
+      "expectedSpeedMps": 381.5757,
+      "tolerance": 0.5
+    },
+    {
+      "id": "pred-warm-light",
+      "prompt": "Predict speed for warm gas with high gamma",
+      "gamma": 1.66,
+      "gasConstantJPerKgK": 500,
+      "temperatureK": 320,
+      "expectedSpeedMps": 515.3639,
+      "tolerance": 0.5
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "86ffc82956754267a40291d3faffdcba",
+    "runId": "job-20261029201515-203a61ba",
+    "promptVersion": "v9",
+    "generatedAt": "2026-10-29T20:17:35.870Z",
+    "revision": 2,
+    "repairOf": 1
+  }
+}

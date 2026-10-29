@@ -1,0 +1,111 @@
+{
+  "jobId": "job-20261029200428-f8df1fcc",
+  "analysisRef": "job-20261029200428-f8df1fcc/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029200428-f8df1fcc:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How radioactive decay adds numeric ages to geologic time",
+    "sources": [
+      {
+        "id": "usgs-fossils-numeric-time-scale",
+        "title": "Fossils, Rocks, and Time: The Numeric Time Scale — U.S. Geological Survey",
+        "locator": "https://pubs.usgs.gov/gip/fossils/numeric.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey, 'Fossils, Rocks, and Time: The Numeric Time Scale' (1997). Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "d6ba577d359485d9ea0ae92e97f294d27bb3a67e23758783067591896f570f2d"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18944-1710-70ca-8b71-00d0375c3971",
+      "runId": "job-20261029200428-f8df1fcc",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:05:03.483Z"
+    },
+    "seed": 787895688,
+    "headline": "How radioactive decay adds numeric ages to geologic time",
+    "keyPoints": [
+      {
+        "id": "earth-age-scale",
+        "point": "Earth is about 4.6 billion years old anchors inquiry into numeric age assignment",
+        "quote": "Earth is about 4.6 billion years old?",
+        "sourceId": "usgs-fossils-numeric-time-scale"
+      },
+      {
+        "id": "half-life-meaning",
+        "point": "Half-life length defines time required for parent atoms to decay to daughter atoms",
+        "quote": "The half-life of a radioactive isotope is the length of time required for exactly one-half of the parent atoms to decay to daughter atoms.",
+        "sourceId": "usgs-fossils-numeric-time-scale"
+      },
+      {
+        "id": "measurement-error-effect",
+        "point": "Age determinations using radioactive isotopes carry relatively small errors in measurement",
+        "quote": "Age determinations using radioactive isotopes are subject to relatively small errors in measurement",
+        "sourceId": "usgs-fossils-numeric-time-scale"
+      },
+      {
+        "id": "minerals-fossils-combine",
+        "point": "Isotopic techniques measure time when particular mineral within rock formed to support scale ages",
+        "quote": "Isotopic techniques are used to measure the time at which a particular mineral within a rock was formed.",
+        "sourceId": "usgs-fossils-numeric-time-scale"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "length of time required for parent atoms to decay to daughter product",
+        "id": "half-life",
+        "quote": "The half-life of a radioactive isotope is the length of time required for exactly one-half of the parent atoms to decay to daughter atoms.",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "term": "half-life"
+      },
+      {
+        "gloss": "atom form differing in neutron count that naturally converts to stable element",
+        "id": "isotope",
+        "quote": "A radioactive isotope (the parent) of one chemical element naturally converts to a stable isotope",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "term": "isotope"
+      },
+      {
+        "gloss": "radioactive isotope that naturally converts to stable daughter form",
+        "id": "parent",
+        "quote": "A radioactive isotope (the parent) of one chemical element naturally converts to a stable isotope",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "term": "parent"
+      },
+      {
+        "gloss": "stable isotope formed by changes in parent nucleus over time",
+        "id": "daughter",
+        "quote": "to a stable isotope (the daughter) of another chemical element by undergoing changes in the nucleus.",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "term": "daughter"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029200428-f8df1fcc:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "1 card was left out because they could not be verified against the page: last-ice-age-ended (Q-06).",
+      "revision": 1
+    },
+    {
+      "componentId": "half-life-v1",
+      "specId": "usgs-fossils-numeric-time-scale-job-20261029200428-f8df1fcc",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

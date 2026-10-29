@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261029202711-c24406ab",
+  "analysisRef": "job-20261029202711-c24406ab/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029202711-c24406ab:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Steady glider descent linking glide angle to lift drag and weight balance",
+    "sources": [
+      {
+        "id": "nasa-grc-glider-trajectory-problem",
+        "title": "Glider Trajectory Problem — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/glider-trajectory-problem/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "66e6cfc191fb83e9cfff3bc323a0394b392cbb4e0278aba87b367f3203c3c1e2"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "6890cb50c8e2440aa867b3402bdbf9a9",
+      "runId": "job-20261029202711-c24406ab",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:27:50.409Z"
+    },
+    "seed": 1038527244,
+    "headline": "Steady glider descent linking glide angle to lift drag and weight balance",
+    "keyPoints": [
+      {
+        "id": "glider-aircraft-no-engine",
+        "point": "Glider is an aircraft with no engine suitable for studying aerodynamics basics",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "A glider is a special kind of aircraft that has no engine."
+      },
+      {
+        "id": "steady-descent-constant-velocity",
+        "point": "Steady descent involves constant velocity with no acceleration while losing altitude",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "If a glider is in a steady (constant velocity and no acceleration) descent, it loses altitude as it travels."
+      },
+      {
+        "id": "glide-angle-tangent-ratio",
+        "point": "Glide angle tangent equals change in height divided by distance flown",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The tangent tan of the glide angle a is equal to the change in height h divided by the distance flown d:"
+      },
+      {
+        "id": "lift-sine-drag-cosine-balance",
+        "point": "Lift times sine of glide angle equals drag times cosine of glide angle",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The lift times the sine of the glide angle is equal to the drag times the cosine of the glide angle."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "glide-angle",
+        "term": "glide angle",
+        "gloss": "angle between flight path and ground that sets glide direction",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The flight path intersects the ground at an angle a called the glide angle."
+      },
+      {
+        "id": "lift-force",
+        "term": "lift",
+        "gloss": "aerodynamic force that with drag and weight balances along glide angle",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The lift L times the cosine cos of the glide angle plus the drag D times the sine sin of the glide angle is equal to the weight W:"
+      },
+      {
+        "id": "drag-force",
+        "term": "drag",
+        "gloss": "aerodynamic resistance along glide path that balances component of lift at given angle",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The lift times the sine of the glide angle is equal to the drag times the cosine of the glide angle."
+      },
+      {
+        "id": "weight-force",
+        "term": "weight",
+        "gloss": "downward force equal to combined lift and drag components in steady glide",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The lift L times the cosine cos of the glide angle plus the drag D times the sine sin of the glide angle is equal to the weight W:"
+      },
+      {
+        "id": "tangent-ratio",
+        "term": "tangent",
+        "gloss": "ratio of height change to distance flown that defines glide angle",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The tangent tan of the glide angle a is equal to the change in height h divided by the distance flown d:"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "formula-explorer-v1",
+      "specId": "job-20261029202711-c24406ab:formula-explorer-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029202711-c24406ab:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

@@ -1,0 +1,111 @@
+{
+  "jobId": "job-20261029201113-b3832e77",
+  "analysisRef": "job-20261029201113-b3832e77/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029201113-b3832e77:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "How unbalanced force, mass and motion relate in three laws",
+    "sources": [
+      {
+        "id": "nasa-grc-newtons-laws-of-motion",
+        "title": "Newton's Laws of Motion — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/newtons-laws-of-motion/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "907bae07076eef20118a4e54096ad399b11994ec5e310d9bed74850f6d009014"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "c9e1555ce7e7403cb5489205c920beba",
+      "runId": "job-20261029201113-b3832e77",
+      "promptVersion": "s6-v3",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T20:11:57.454Z"
+    },
+    "seed": 1566152486,
+    "headline": "How unbalanced force, mass and motion relate in three laws",
+    "keyPoints": [
+      {
+        "id": "first-law-inertia",
+        "point": "An object in motion remains at constant speed in a straight line unless an unbalanced force acts to change its state.",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "an object in motion remains in motion at constant speed and in a straight line unless acted on by an unbalanced force."
+      },
+      {
+        "id": "second-law-force-mass",
+        "point": "Acceleration depends on mass and amount of force applied to an object.",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "The acceleration of an object depends on the mass of the object and the amount of force applied."
+      },
+      {
+        "id": "third-law-action-reaction",
+        "point": "When one object exerts a force the second object exerts an equal and opposite force in reaction.",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Whenever one object exerts a force on another object, the second object exerts an equal and opposite on the first."
+      },
+      {
+        "id": "inertia-definition",
+        "point": "Inertia is the tendency to resist changes in state of motion.",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "This tendency to resist changes in a state of motion is inertia."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "inertia",
+        "term": "inertia",
+        "gloss": "tendency to resist changes in state of motion until an external force acts",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "This tendency to resist changes in a state of motion is inertia."
+      },
+      {
+        "id": "acceleration",
+        "term": "acceleration",
+        "gloss": "rate of change of velocity that depends on mass and applied force",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "The acceleration of an object depends on the mass of the object and the amount of force applied."
+      },
+      {
+        "id": "momentum",
+        "term": "Momentum",
+        "gloss": "mass times velocity describing amount of motion carried by an object",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Momentum is defined to be the mass m of an object times its velocity V."
+      },
+      {
+        "id": "unbalanced-force",
+        "term": "unbalanced force",
+        "gloss": "external force that changes motion from constant speed and straight line",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "an object in motion remains in motion at constant speed and in a straight line unless acted on by an unbalanced force."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "forces-1d-v1",
+      "specId": "nasa-grc-newtons-laws-of-motion-job-20261029201113-b3832e77",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261029201113-b3832e77:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

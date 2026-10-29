@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Saving and Compound Interest Facts",
+    "cards": [
+      {
+        "id": "card-compound-definition",
+        "stem": "What is compound interest?",
+        "options": [
+          "When you earn interest on both the money you save and the interest you earn",
+          "Earning interest only on the original deposit",
+          "Paying interest to a lender for borrowing",
+          "Withdrawing principal without earning interest"
+        ],
+        "sourceId": "cfpb-saving-post-secondary-education",
+        "quote": "Compound interest: When you earn interest on both the money you save and the interest you earn.",
+        "hint": "Think about earning on both principal and prior interest"
+      },
+      {
+        "id": "card-interest-rate-def",
+        "stem": "How is interest rate defined in the vocabulary list?",
+        "options": [
+          "A percentage of a sum borrowed",
+          "A fee charged for closing an account early",
+          "A reward for withdrawing money quickly",
+          "A limit on monthly transactions"
+        ],
+        "sourceId": "cfpb-saving-post-secondary-education",
+        "quote": "Interest rate: A percentage of a sum borrowed that is charged by a lender or merchant for letting you use its money.",
+        "hint": "Recall the definition that starts with a percentage term"
+      },
+      {
+        "id": "card-growth-factors",
+        "stem": "Which action can help savings grow even faster?",
+        "options": [
+          "Increasing the compounding frequency",
+          "Keeping money outside any account to avoid growth",
+          "Spending principal as soon as it is earned",
+          "Waiting longer to start saving for education"
+        ],
+        "sourceId": "cfpb-saving-post-secondary-education",
+        "quote": "Increasing the compounding frequency or your interest rate or adding to your principal can help your savings grow even faster.",
+        "hint": "Consider what increases how often interest is added"
+      },
+      {
+        "id": "card-early-saving",
+        "stem": "What does the big idea say about timing of saving?",
+        "options": [
+          "The sooner you start saving for post-secondary education",
+          "The later you start the faster money grows",
+          "Only scholarships can prepare for education costs",
+          "Saving has no effect on education expenses"
+        ],
+        "sourceId": "cfpb-saving-post-secondary-education",
+        "quote": "The sooner you start saving for post-secondary education, the faster your money can grow from compound interest.",
+        "hint": "Remember the link between starting early and growth"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029201706-c06db2c3:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "848ef0cbef2a43d6930c7feb3e5aa513",
+    "usage": {
+      "promptTokens": 4129,
+      "completionTokens": 6213,
+      "reasoningTokens": 5784,
+      "cachedTokens": 0
+    },
+    "latencyMs": 27080,
+    "estCostUSD": 0.0315665,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029201706-c06db2c3:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Saving and Compound Interest Facts",
+    "sources": [
+      {
+        "id": "cfpb-saving-post-secondary-education",
+        "title": "Saving for post-secondary education (teacher guide) — Consumer Financial Protection Bureau, Building Blocks activities",
+        "locator": "https://files.consumerfinance.gov/f/documents/cfpb_building_block_activities_saving-post-secondary-education_guide.pdf",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Consumer Financial Protection Bureau, Building Blocks activities, 'Saving for post-secondary education (teacher guide)'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+        "sha256": "243a4b56c86936ecc243da4c7fc982bc76b85ee12116c97e4f751cfb8ba6c926"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "848ef0cbef2a43d6930c7feb3e5aa513",
+      "runId": "job-20261029201706-c06db2c3",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:18:11.727Z"
+    },
+    "seed": 405850721,
+    "cards": [
+      {
+        "id": "card-compound-definition",
+        "stem": "What is compound interest?",
+        "options": [
+          "When you earn interest on both the money you save and the interest you earn",
+          "Earning interest only on the original deposit",
+          "Paying interest to a lender for borrowing",
+          "Withdrawing principal without earning interest"
+        ],
+        "sourceId": "cfpb-saving-post-secondary-education",
+        "quote": "Compound interest: When you earn interest on both the money you save and the interest you earn.",
+        "hint": "Think about earning on both principal and prior interest"
+      },
+      {
+        "id": "card-interest-rate-def",
+        "stem": "How is interest rate defined in the vocabulary list?",
+        "options": [
+          "A percentage of a sum borrowed",
+          "A fee charged for closing an account early",
+          "A reward for withdrawing money quickly",
+          "A limit on monthly transactions"
+        ],
+        "sourceId": "cfpb-saving-post-secondary-education",
+        "quote": "Interest rate: A percentage of a sum borrowed that is charged by a lender or merchant for letting you use its money.",
+        "hint": "Recall the definition that starts with a percentage term"
+      },
+      {
+        "id": "card-growth-factors",
+        "stem": "Which action can help savings grow even faster?",
+        "options": [
+          "Increasing the compounding frequency",
+          "Keeping money outside any account to avoid growth",
+          "Spending principal as soon as it is earned",
+          "Waiting longer to start saving for education"
+        ],
+        "sourceId": "cfpb-saving-post-secondary-education",
+        "quote": "Increasing the compounding frequency or your interest rate or adding to your principal can help your savings grow even faster.",
+        "hint": "Consider what increases how often interest is added"
+      },
+      {
+        "id": "card-early-saving",
+        "stem": "What does the big idea say about timing of saving?",
+        "options": [
+          "The sooner you start saving for post-secondary education",
+          "The later you start the faster money grows",
+          "Only scholarships can prepare for education costs",
+          "Saving has no effect on education expenses"
+        ],
+        "sourceId": "cfpb-saving-post-secondary-education",
+        "quote": "The sooner you start saving for post-secondary education, the faster your money can grow from compound interest.",
+        "hint": "Remember the link between starting early and growth"
+      }
+    ]
+  }
+}

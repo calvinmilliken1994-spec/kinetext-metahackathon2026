@@ -1,0 +1,111 @@
+{
+  "jobId": "job-20261029202357-44c60ccd",
+  "analysisRef": "job-20261029202357-44c60ccd/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029202357-44c60ccd:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How opposition to Constitution led to proposal and ratification of Bill of Rights",
+    "sources": [
+      {
+        "id": "nara-bill-of-rights",
+        "title": "Bill of Rights (1791) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/bill-of-rights",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Bill of Rights (1791)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "a4a36b13e4682b41a3b938737553b5a5f3e509f35af3132cd2420de67f016531"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "4ab6836e5b3c45bb8fa8292991b6c2ef",
+      "runId": "job-20261029202357-44c60ccd",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:24:35.498Z"
+    },
+    "seed": 2852397761,
+    "headline": "How opposition to Constitution led to proposal and ratification of Bill of Rights",
+    "keyPoints": [
+      {
+        "id": "proposed-ratified",
+        "point": "amendments were originally proposed and ratified became Bill of Rights",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "Although 12 amendments were originally proposed, the 10 that were ratified became the Bill of Rights in 1791."
+      },
+      {
+        "id": "opponents-tyranny",
+        "point": "opponents repeatedly charged Constitution would open way to tyranny by central government",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "its opponents repeatedly charged that the Constitution as drafted would open the way to tyranny by the central government"
+      },
+      {
+        "id": "demanded-immunities",
+        "point": "citizens demanded bill of rights to spell out immunities of individual citizens",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "They demanded a \"bill of rights\" that would spell out the immunities of individual citizens."
+      },
+      {
+        "id": "congress-proposed",
+        "point": "First Congress proposed amendments to Constitution for state legislatures to consider",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "the First Congress of the United States therefore proposed to the state legislatures 12 amendments to the Constitution"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "amendments",
+        "term": "amendments",
+        "gloss": "proposed changes to Constitution that were originally proposed as formal additions",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "Although 12 amendments were originally proposed, the 10 that were ratified became the Bill of Rights in 1791."
+      },
+      {
+        "id": "tyranny",
+        "term": "tyranny",
+        "gloss": "oppressive rule by central government feared if Constitution opened way to abuse",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "its opponents repeatedly charged that the Constitution as drafted would open the way to tyranny by the central government"
+      },
+      {
+        "id": "immunities",
+        "term": "immunities",
+        "gloss": "protections that spell out rights of individual citizens against government action",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "They demanded a \"bill of rights\" that would spell out the immunities of individual citizens."
+      },
+      {
+        "id": "ratified",
+        "term": "ratified",
+        "gloss": "formally approved by state legislatures after being proposed by Congress",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "Articles 3 to 12, ratified December 15, 1791, by three-fourths of the state legislatures"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261029202357-44c60ccd:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029202357-44c60ccd:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

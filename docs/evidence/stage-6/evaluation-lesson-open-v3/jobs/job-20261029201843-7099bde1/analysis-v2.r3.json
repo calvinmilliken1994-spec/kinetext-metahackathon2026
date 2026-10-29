@@ -1,0 +1,195 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "chemistry",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "Page defines half-life as time for half of atoms to change nuclear form, notes wide variation in measured intervals and lists alternate designations for the term",
+    "overview": {
+      "headline": "Radioactive half-life definition, time range and alternate names",
+      "keyPoints": [
+        {
+          "id": "definition-of-half-life",
+          "point": "Half-life is the time for half of the atoms of a particular radioactive substance to disintegrate into another nuclear form",
+          "sourceId": "nrc-glossary-half-life",
+          "quote": "The time in which one half of the atoms of a particular radioactive substance disintegrate into another nuclear form."
+        },
+        {
+          "id": "range-of-half-lives",
+          "point": "Measured half-lives vary from millionths of a second to billions of years",
+          "sourceId": "nrc-glossary-half-life",
+          "quote": "Measured half-lives vary from millionths of a second to billions of years."
+        },
+        {
+          "id": "alternate-name",
+          "point": "Also called physical or radiological half-life as an alternate designation",
+          "sourceId": "nrc-glossary-half-life",
+          "quote": "Also called physical or radiological half-life."
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "radioactive-substance",
+          "term": "radioactive substance",
+          "gloss": "material that is radioactive and can disintegrate into another form",
+          "sourceId": "nrc-glossary-half-life",
+          "quote": "The time in which one half of the atoms of a particular radioactive substance disintegrate into another nuclear form."
+        },
+        {
+          "id": "half-life-term",
+          "term": "half-life",
+          "gloss": "alternate designation meaning physical or radiological period",
+          "sourceId": "nrc-glossary-half-life",
+          "quote": "Also called physical or radiological half-life."
+        },
+        {
+          "id": "atoms-term",
+          "term": "atoms",
+          "gloss": "small units of matter that make up a radioactive substance",
+          "sourceId": "nrc-glossary-half-life",
+          "quote": "The time in which one half of the atoms of a particular radioactive substance disintegrate into another nuclear form."
+        },
+        {
+          "id": "millionths-second",
+          "term": "millionths of a second",
+          "gloss": "extremely short interval described as millionths",
+          "sourceId": "nrc-glossary-half-life",
+          "quote": "Measured half-lives vary from millionths of a second to billions of years."
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "concept-map-v1",
+        "pedagogicalReason": "Shows explicit relationship between half-life, time, atoms and resulting nuclear form for conceptual linking",
+        "focusQuote": "The time in which one half of the atoms of a particular radioactive substance disintegrate into another nuclear form.",
+        "focusSourceId": "nrc-glossary-half-life"
+      },
+      {
+        "componentId": "quiz-cards-v1",
+        "pedagogicalReason": "Provides checkable facts about variation and alternate names to reinforce recall through questioning",
+        "focusQuote": "Measured half-lives vary from millionths of a second to billions of years.",
+        "focusSourceId": "nrc-glossary-half-life"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029201843-7099bde1:analysis",
+    "revision": 3,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"chemistry\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": false,
+        "message": "usable=true but the provided source text is only 252 normalised characters; a stub under 300 characters must decline \"too-short\" even when an equation is guessable (R-DEC-3)",
+        "path": "/usable",
+        "affected": [
+          "/usable",
+          "/declineCode"
+        ]
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 9 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 3, keyTerms 4, componentPlan 2; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (2 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": false,
+        "message": "publisher claim found at /pageCoverage: \"Page defines half-life as time for half of atoms to change n\" (token \"nuclear\"); /overview/keyPoints/0/point: \"Half-life is the time for half of the atoms of a particular \" (token \"nuclear\"); /componentPlan/0/pedagogicalReason: \"Shows explicit relationship between half-life, time, atoms a\" (token \"nuclear\") (R-SUB-4: never name the publisher in generated strings, and never use \"according to\" / \"as stated by\" / \"official\" / \"endorsed\" wording)",
+        "path": "/pageCoverage",
+        "affected": [
+          "/pageCoverage",
+          "/overview/keyPoints/0/point",
+          "/componentPlan/0/pedagogicalReason"
+        ]
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "source-analysis-v2: no weakening — every one of the 0 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "cdf27802b50841c0a47296d8cb1c16ef",
+    "usage": {
+      "promptTokens": 5629,
+      "completionTokens": 2627,
+      "reasoningTokens": 2017,
+      "cachedTokens": 0
+    },
+    "latencyMs": 8373,
+    "estCostUSD": 0.018201,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

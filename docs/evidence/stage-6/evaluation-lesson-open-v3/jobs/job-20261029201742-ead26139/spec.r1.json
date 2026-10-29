@@ -1,0 +1,162 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nrc-backgrounder-radioactive-waste-job-20261029201742-ead26139",
+  "title": "Backgrounder on Radioactive Waste — U.S. Nuclear Regulatory Commission",
+  "learningObjectives": [
+    "Describe how half-life determines the fraction of material remaining after elapsed time",
+    "Calculate remaining amount using N=N0*(1/2)^(t/T)",
+    "Compare decay behavior of short-lived fission products and long-lived transuranic isotopes"
+  ],
+  "sources": [
+    {
+      "id": "nrc-backgrounder-radioactive-waste",
+      "title": "Backgrounder on Radioactive Waste — U.S. Nuclear Regulatory Commission",
+      "locator": "https://www.nrc.gov/regulations-legislation/fact-sheets-brochures/backgrounder-on-radioactive-waste",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: U.S. Nuclear Regulatory Commission, 'Backgrounder on Radioactive Waste', Fact Sheets & Brochures. NRC's website constitutes a U.S. Government Work under federal copyright law and is not subject to copyright. The U.S. Nuclear Regulatory Commission has not reviewed, approved or endorsed this activity.",
+      "sha256": "096bd0acfbc24540be6110113c96ed0fa4b892969980ff5bcf1d7834bc1d71b7"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "half-life-concept",
+      "text": "The remaining amount decreases by half for each half-life elapsed, following an exponential decay pattern described by N=N0*(1/2)^(t/T).",
+      "evidence": [
+        {
+          "sourceId": "nrc-backgrounder-radioactive-waste",
+          "quote": "Strontium-90 and cesium-137 have half-lives of about 30 years (half the radioactivity will decay in 30 years)."
+        }
+      ]
+    },
+    {
+      "id": "decay-rates-vary",
+      "text": "Isotopes decay at very different rates, with some disappearing in hours and others persisting for thousands of years.",
+      "evidence": [
+        {
+          "sourceId": "nrc-backgrounder-radioactive-waste",
+          "quote": "Radioactive isotopes eventually decay, or disintegrate, to harmless materials."
+        },
+        {
+          "sourceId": "nrc-backgrounder-radioactive-waste",
+          "quote": "Some isotopes decay in hours or even minutes, but others decay very slowly."
+        }
+      ]
+    },
+    {
+      "id": "long-lived-isotopes",
+      "text": "Long-lived isotopes retain hazard much longer than short-lived fission products, which lose most heat and radiation after several half-lives.",
+      "evidence": [
+        {
+          "sourceId": "nrc-backgrounder-radioactive-waste",
+          "quote": "Plutonium-239 has a half-life of 24,000 years."
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "half-life-v1",
+    "equation": "N=N0*(1/2)^(t/T)",
+    "initialAmount": {
+      "unit": "1",
+      "min": 0,
+      "max": 1000000000000,
+      "default": 100
+    },
+    "halfLife": {
+      "unit": "time",
+      "min": 0,
+      "max": 1000000000000,
+      "default": 5
+    },
+    "elapsedTime": {
+      "unit": "time",
+      "min": 0,
+      "max": 10000000000000,
+      "default": 5
+    },
+    "scenario": {
+      "objectLabel": "Cesium-137 sample (grams)",
+      "settingLabel": "Storage time in years"
+    }
+  },
+  "behavioralTests": [
+    {
+      "name": "one half-life",
+      "initialAmount": 100,
+      "halfLife": 5,
+      "elapsedTime": 5,
+      "expectedRemaining": 50,
+      "tolerance": 0.05
+    },
+    {
+      "name": "two half-lives",
+      "initialAmount": 200,
+      "halfLife": 10,
+      "elapsedTime": 20,
+      "expectedRemaining": 50,
+      "tolerance": 0.05
+    },
+    {
+      "name": "three half-lives",
+      "initialAmount": 80,
+      "halfLife": 4,
+      "elapsedTime": 12,
+      "expectedRemaining": 10,
+      "tolerance": 0.01
+    },
+    {
+      "name": "zero time",
+      "initialAmount": 100,
+      "halfLife": 5,
+      "elapsedTime": 0,
+      "expectedRemaining": 100,
+      "tolerance": 0.05
+    }
+  ],
+  "predictions": [
+    {
+      "id": "pred-1",
+      "prompt": "Predict remaining amount",
+      "initialAmount": 120,
+      "halfLife": 6,
+      "elapsedTime": 12,
+      "expectedRemaining": 30,
+      "tolerance": 0.05
+    },
+    {
+      "id": "pred-2",
+      "prompt": "Predict remaining amount",
+      "initialAmount": 250,
+      "halfLife": 5,
+      "elapsedTime": 10,
+      "expectedRemaining": 62.5,
+      "tolerance": 0.05
+    },
+    {
+      "id": "pred-3",
+      "prompt": "Predict remaining amount",
+      "initialAmount": 80,
+      "halfLife": 8,
+      "elapsedTime": 4,
+      "expectedRemaining": 56.5685,
+      "tolerance": 0.05
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "f23e32b3811341179d2b93c316cff134",
+    "runId": "job-20261029201742-ead26139",
+    "promptVersion": "v9",
+    "generatedAt": "2026-10-29T20:19:14.131Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

@@ -1,0 +1,249 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Diploid Inheritance and Genetic Variation",
+    "cards": [
+      {
+        "id": "diploid-cell-alleles",
+        "stem": "What does a diploid cell contain according to the definition of inheritance?",
+        "options": [
+          "two alleles",
+          "gene pool",
+          "genetic diversity",
+          "fitness"
+        ],
+        "sourceId": "nij-heterozygosity",
+        "quote": "Every diploid cell has two alleles, one inherited from each parent.",
+        "hint": ""
+      },
+      {
+        "id": "heterozygous-definition",
+        "stem": "How is an individual described when carrying different alleles at a locus?",
+        "options": [
+          "heterozygous",
+          "homozygous",
+          "gene pool",
+          "fitness"
+        ],
+        "sourceId": "nij-heterozygosity",
+        "quote": "If an individual has two different alleles at a specific locus, the individual is heterozygous at that locus",
+        "hint": ""
+      },
+      {
+        "id": "homozygous-definition",
+        "stem": "Which term describes an individual when both alleles at a locus are identical?",
+        "options": [
+          "homozygous",
+          "heterozygous",
+          "diploid cell",
+          "allele frequency"
+        ],
+        "sourceId": "nij-heterozygosity",
+        "quote": "if the two alleles are the same, the individual is homozygous.",
+        "hint": ""
+      },
+      {
+        "id": "heterozygosity-indicator",
+        "stem": "What general property can the amount of heterozygosity across loci indicate?",
+        "options": [
+          "genetic variability",
+          "gene pool",
+          "fitness",
+          "Punnett square"
+        ],
+        "sourceId": "nij-heterozygosity",
+        "quote": "The measure of the amount of heterozygosity across loci can be used as a general indicator of the amount of genetic variability.",
+        "hint": ""
+      },
+      {
+        "id": "diversity-within-population",
+        "stem": "What share of human genetic diversity comes from individuals of the same population?",
+        "options": [
+          "85%",
+          "15%",
+          "10%"
+        ],
+        "sourceId": "nij-heterozygosity",
+        "quote": "The study of genetics has revealed that approximately 85% of human genetic diversity comes from individuals of the same population.",
+        "hint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029202110-a684d26c:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "474f9fed06dc4215912714ebef535db7",
+    "usage": {
+      "promptTokens": 2717,
+      "completionTokens": 8808,
+      "reasoningTokens": 8404,
+      "cachedTokens": 0
+    },
+    "latencyMs": 38587,
+    "estCostUSD": 0.04083025,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029202110-a684d26c:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Diploid Inheritance and Genetic Variation",
+    "sources": [
+      {
+        "id": "nij-heterozygosity",
+        "title": "Heterozygosity — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+        "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/population-genetics/heterozygosity",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Heterozygosity'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+        "sha256": "b88d68137ace380387528e9b0d424ad162ee448ea6d48d6646cb090dbfc4e1e9"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "474f9fed06dc4215912714ebef535db7",
+      "runId": "job-20261029202110-a684d26c",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:22:55.774Z"
+    },
+    "seed": 1385289321,
+    "cards": [
+      {
+        "id": "diploid-cell-alleles",
+        "stem": "What does a diploid cell contain according to the definition of inheritance?",
+        "options": [
+          "two alleles",
+          "gene pool",
+          "genetic diversity",
+          "fitness"
+        ],
+        "sourceId": "nij-heterozygosity",
+        "quote": "Every diploid cell has two alleles, one inherited from each parent.",
+        "hint": ""
+      },
+      {
+        "id": "heterozygous-definition",
+        "stem": "How is an individual described when carrying different alleles at a locus?",
+        "options": [
+          "heterozygous",
+          "homozygous",
+          "gene pool",
+          "fitness"
+        ],
+        "sourceId": "nij-heterozygosity",
+        "quote": "If an individual has two different alleles at a specific locus, the individual is heterozygous at that locus",
+        "hint": ""
+      },
+      {
+        "id": "homozygous-definition",
+        "stem": "Which term describes an individual when both alleles at a locus are identical?",
+        "options": [
+          "homozygous",
+          "heterozygous",
+          "diploid cell",
+          "allele frequency"
+        ],
+        "sourceId": "nij-heterozygosity",
+        "quote": "if the two alleles are the same, the individual is homozygous.",
+        "hint": ""
+      },
+      {
+        "id": "heterozygosity-indicator",
+        "stem": "What general property can the amount of heterozygosity across loci indicate?",
+        "options": [
+          "genetic variability",
+          "gene pool",
+          "fitness",
+          "Punnett square"
+        ],
+        "sourceId": "nij-heterozygosity",
+        "quote": "The measure of the amount of heterozygosity across loci can be used as a general indicator of the amount of genetic variability.",
+        "hint": ""
+      },
+      {
+        "id": "diversity-within-population",
+        "stem": "What share of human genetic diversity comes from individuals of the same population?",
+        "options": [
+          "85%",
+          "15%",
+          "10%"
+        ],
+        "sourceId": "nij-heterozygosity",
+        "quote": "The study of genetics has revealed that approximately 85% of human genetic diversity comes from individuals of the same population.",
+        "hint": ""
+      }
+    ]
+  }
+}

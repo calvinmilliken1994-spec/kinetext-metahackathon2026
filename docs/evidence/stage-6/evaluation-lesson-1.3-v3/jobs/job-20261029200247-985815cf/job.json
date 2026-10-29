@@ -1,0 +1,49 @@
+{
+  "jobId": "job-20261029200247-985815cf",
+  "sourceId": "cfpb-saving-post-secondary-education",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T20:02:47.930Z",
+  "flow": "lesson",
+  "model": "muse-spark-1.3",
+  "provider": "meta-api",
+  "providerModel": "muse-spark-1.3",
+  "totalCostUSD": 0.140416,
+  "reservedUnknownUSD": 0,
+  "engine": "compound-interest-v1",
+  "revisions": 1,
+  "repairs": [],
+  "analysisRepairs": [
+    {
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "A-10"
+      ],
+      "fixed": [
+        "A-10"
+      ],
+      "remaining": [],
+      "passed": true
+    }
+  ],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 32036,
+    "startedAt": "2026-10-29T20:02:47.930Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 2,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "specId": "cfpb-saving-post-secondary-education-job-20261029200247-985815cf",
+  "publishable": true,
+  "checksPassed": 15,
+  "checksTotal": 15,
+  "publishedRevision": 1,
+  "finishedAt": "2026-10-29T20:04:11.405Z"
+}

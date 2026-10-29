@@ -1,0 +1,31 @@
+{
+  "jobId": "job-20261029195914-10d0a745",
+  "sourceId": "nasa-grc-range-constant-velocity",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T19:59:14.217Z",
+  "flow": "lesson",
+  "model": "muse-spark-1.3",
+  "provider": "meta-api",
+  "providerModel": "muse-spark-1.3",
+  "totalCostUSD": 0.091707,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 32036,
+    "startedAt": "2026-10-29T19:59:14.217Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 2,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "finishedAt": "2026-10-29T20:00:09.157Z"
+}

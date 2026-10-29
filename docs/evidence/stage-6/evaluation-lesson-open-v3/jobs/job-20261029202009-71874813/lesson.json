@@ -1,0 +1,125 @@
+{
+  "jobId": "job-20261029202009-71874813",
+  "analysisRef": "job-20261029202009-71874813/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029202009-71874813:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Deep time from Steno laws and uniformitarianism to radiometric dating with half life",
+    "sources": [
+      {
+        "id": "usgs-powell-geologic-time",
+        "title": "Powell Expedition—Geologic Time. Then and Now. — U.S. Geological Survey",
+        "locator": "https://www.usgs.gov/news/powell-expedition-geologic-time-then-and-now",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey, 'Powell Expedition—Geologic Time. Then and Now.' (2019). Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "fa7498537478e10722976127bedd9cf61ccb5dda39090e0a4f844635b5a8f71f"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "b212f279f7a84c97a8b521428f579fae",
+      "runId": "job-20261029202009-71874813",
+      "promptVersion": "s6-v3",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T20:21:35.412Z"
+    },
+    "seed": 1921092709,
+    "headline": "Deep time from Steno laws and uniformitarianism to radiometric dating with half life",
+    "keyPoints": [
+      {
+        "id": "superposition-principle",
+        "point": "law of superposition shows older rocks on bottom and younger rocks on top revealing relative time",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "The law of superposition says that older rocks are on the bottom and younger rocks are on the top."
+      },
+      {
+        "id": "hutton-uniformitarianism",
+        "point": "James Hutton proposed foundational principle of geology called uniformitarianism in 1788",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "In 1788, James Hutton proposed what would become the foundational principle of geology — uniformitarianism."
+      },
+      {
+        "id": "kelvin-age-estimate",
+        "point": "Lord Kelvin cooling magma calculations yielded age of 20 to 400 million years for Earth",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "Lord Kelvin’s cooling-magma calculations yielded an age of 20–400 million years."
+      },
+      {
+        "id": "patterson-meteorite-age",
+        "point": "Clair Cameron Patterson used lead lead dating in 1956 to determine Canyon Diablo meteorite was 4.55 billion years old",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "Clair Cameron Patterson, an American geochemist, used lead-lead dating to determine that the Canyon Diablo meteorite was 4.55 billion years old."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "superposition",
+        "term": "superposition",
+        "gloss": "rule that older rocks sit below younger rocks indicating relative age order",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "The law of superposition says that older rocks are on the bottom and younger rocks are on the top."
+      },
+      {
+        "id": "uniformitarianism",
+        "term": "uniformitarianism",
+        "gloss": "foundational principle that same geologic processes acting today shaped Earth in the past",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "In 1788, James Hutton proposed what would become the foundational principle of geology — uniformitarianism."
+      },
+      {
+        "id": "faunal-succession",
+        "term": "faunal succession",
+        "gloss": "law that species become extinct and are replaced by new species in characteristic fossil order",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "In 1815, Smith developed the law of faunal succession, which states that species become extinct and are replaced by new species"
+      },
+      {
+        "id": "unconformities",
+        "term": "unconformities",
+        "gloss": "gaps in geologic record representing missing time where strata were eroded",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "He also understood the concept of unconformities (gaps in the geologic record that represent missing time)"
+      },
+      {
+        "id": "half-life",
+        "term": "half-life",
+        "gloss": "time required for half of parent isotopes to decay to daughter isotope",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "A half-life is the length of time it takes for half of the number of original, or parent, isotopes to decay to a stable daughter isotope."
+      },
+      {
+        "id": "radiometric-dating",
+        "term": "radiometric dating",
+        "gloss": "technique using radioactive decay to assign numeric ages to rocks and meteorites",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "radiometric dating. The next forty years would be pivotal. Chemists and physicists discovered hundreds of radioactive isotopes"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261029202009-71874813:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "half-life-v1",
+      "specId": "usgs-powell-geologic-time-job-20261029202009-71874813",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

@@ -1,0 +1,125 @@
+{
+  "jobId": "job-20261029202110-a684d26c",
+  "analysisRef": "job-20261029202110-a684d26c/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029202110-a684d26c:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Heterozygosity and allele frequency shape genetic diversity in populations",
+    "sources": [
+      {
+        "id": "nij-heterozygosity",
+        "title": "Heterozygosity — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+        "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/population-genetics/heterozygosity",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Heterozygosity'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+        "sha256": "b88d68137ace380387528e9b0d424ad162ee448ea6d48d6646cb090dbfc4e1e9"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "0c8b6a8de17448999c4f551c00177bb3",
+      "runId": "job-20261029202110-a684d26c",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:22:17.183Z"
+    },
+    "seed": 985183149,
+    "headline": "Heterozygosity and allele frequency shape genetic diversity in populations",
+    "keyPoints": [
+      {
+        "id": "allele-frequency-estimate",
+        "point": "Allele frequency is used to estimate the frequency of a given genetic profile at a locus",
+        "sourceId": "nij-heterozygosity",
+        "quote": "Allele frequency, or the frequency at which alleles are found at any locus of interest, is used to estimate the frequency of a given genetic profile."
+      },
+      {
+        "id": "heterozygosity-indicator",
+        "point": "Heterozygosity across loci serves as a general indicator of genetic variability",
+        "sourceId": "nij-heterozygosity",
+        "quote": "The measure of the amount of heterozygosity across loci can be used as a general indicator of the amount of genetic variability."
+      },
+      {
+        "id": "genotype-count-formula",
+        "point": "Parameter k represents the expected number of homozygous genotypes at a locus",
+        "sourceId": "nij-heterozygosity",
+        "quote": "The parameter k also represents the expected number of homozygous genotypes"
+      },
+      {
+        "id": "diversity-within-populations",
+        "point": "Human genetic diversity comes from individuals of same population accounting for most variation",
+        "sourceId": "nij-heterozygosity",
+        "quote": "The study of genetics has revealed that approximately 85% of human genetic diversity comes from individuals of the same population."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "heterozygous",
+        "term": "heterozygous",
+        "gloss": "having two different alleles at a specific locus",
+        "sourceId": "nij-heterozygosity",
+        "quote": "If an individual has two different alleles at a specific locus, the individual is heterozygous at that locus"
+      },
+      {
+        "id": "homozygous",
+        "term": "homozygous",
+        "gloss": "having two identical alleles that are the same at a locus",
+        "sourceId": "nij-heterozygosity",
+        "quote": "if the two alleles are the same, the individual is homozygous."
+      },
+      {
+        "id": "gene-pool",
+        "term": "gene pool",
+        "gloss": "unique set of alleles found across members of a species or population",
+        "sourceId": "nij-heterozygosity",
+        "quote": "A gene pool is the unique set of alleles that could be found by analyzing the DNA from every member of a species or population."
+      },
+      {
+        "id": "fitness",
+        "term": "Fitness",
+        "gloss": "probability of transmitting genes to next generation relative to average for population",
+        "sourceId": "nij-heterozygosity",
+        "quote": "Fitness is the probability of transmitting one's genes to the next generation in relation to the average probability for that population."
+      },
+      {
+        "id": "heterozygosity",
+        "term": "heterozygosity",
+        "gloss": "measure of genetic variability indicated by heterozygosity across loci",
+        "sourceId": "nij-heterozygosity",
+        "quote": "The measure of the amount of heterozygosity across loci can be used as a general indicator of the amount of genetic variability."
+      },
+      {
+        "id": "allele-frequency",
+        "term": "Allele frequency",
+        "gloss": "frequency at which alleles are found at a locus used to estimate genetic profile frequency",
+        "sourceId": "nij-heterozygosity",
+        "quote": "Allele frequency, or the frequency at which alleles are found at any locus of interest, is used to estimate the frequency of a given genetic profile."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029202110-a684d26c:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sort-groups-v1",
+      "specId": "job-20261029202110-a684d26c:sort-groups-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

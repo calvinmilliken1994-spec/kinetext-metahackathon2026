@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261029195914-10d0a745",
+  "analysisRef": "job-20261029195914-10d0a745/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029195914-10d0a745:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Steady cruise speed sets flight distance and maximum range",
+    "sources": [
+      {
+        "id": "nasa-grc-range-constant-velocity",
+        "title": "Range – Constant Velocity — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/range-constant-velocity/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "f1f4102e23398f882264cb387f0c4115207597b855cadae074925c9e7c1a4127"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a1893f-43ac-70dc-b71a-055cb08903d0",
+      "runId": "job-20261029195914-10d0a745",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T19:59:47.216Z"
+    },
+    "seed": 2954017713,
+    "headline": "Steady cruise speed sets flight distance and maximum range",
+    "keyPoints": [
+      {
+        "id": "steady-cruise-forces",
+        "point": "Steady level flight keeps lift matched to weight and thrust matched to drag for constant speed",
+        "quote": "an airplane can maintain a constant speed and level flight, in which the lift is equal to the weight",
+        "sourceId": "nasa-grc-range-constant-velocity"
+      },
+      {
+        "id": "ground-speed-wind",
+        "point": "Steady wind keeps ground speed constant, letting distance flown increase with time aloft",
+        "quote": "The ground speed remains constant as long as the wind speed is constant.",
+        "sourceId": "nasa-grc-range-constant-velocity"
+      },
+      {
+        "id": "maximum-range-fuel",
+        "point": "Maximum range equals ground speed multiplied by maximum time limited by fuel load",
+        "quote": "The maximum distance that the aircraft can fly is then equal to the ground speed times the maximum time (tmax).",
+        "sourceId": "nasa-grc-range-constant-velocity"
+      },
+      {
+        "id": "combat-radius-meaning",
+        "point": "Military combat radius covers half the range for round trip missions needing return landing",
+        "quote": "The combat radius would be half of the range as specified here.",
+        "sourceId": "nasa-grc-range-constant-velocity"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "constant speed relative to ground with steady wind",
+        "id": "ground-speed",
+        "quote": "The ground speed remains constant as long as the wind speed is constant.",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "term": "ground speed"
+      },
+      {
+        "gloss": "forward force that balances drag in steady cruise",
+        "id": "thrust",
+        "quote": "in which the lift is equal to the weight, and the thrust is equal to the drag.",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "term": "thrust"
+      },
+      {
+        "gloss": "resisting force that slows airplane when thrust fades",
+        "id": "drag",
+        "quote": "The drag then slows the airplane, which decreases the lift and, eventually, the airplane comes back to Earth.",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "term": "drag"
+      },
+      {
+        "gloss": "upward force balancing weight in level flight",
+        "id": "lift",
+        "quote": "an airplane can maintain a constant speed and level flight, in which the lift is equal to the weight",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "term": "lift"
+      },
+      {
+        "gloss": "maximum distance aircraft can fly on fuel load",
+        "id": "range",
+        "quote": "We call this distance the maximum range (R) of the aircraft.",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "term": "range"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029195914-10d0a745:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "formula-explorer-v1",
+      "specId": "job-20261029195914-10d0a745:formula-explorer-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

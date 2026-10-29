@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261029202021-90fd77e6",
+  "analysisRef": "job-20261029202021-90fd77e6/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029202021-90fd77e6:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Numeric geologic dating using radioactive half-life and isotopic mineral ages",
+    "sources": [
+      {
+        "id": "usgs-fossils-numeric-time-scale",
+        "title": "Fossils, Rocks, and Time: The Numeric Time Scale — U.S. Geological Survey",
+        "locator": "https://pubs.usgs.gov/gip/fossils/numeric.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey, 'Fossils, Rocks, and Time: The Numeric Time Scale' (1997). Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "d6ba577d359485d9ea0ae92e97f294d27bb3a67e23758783067591896f570f2d"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "809dbf5ceade4bfd88265a7c54ec4e15",
+      "runId": "job-20261029202021-90fd77e6",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:21:06.000Z"
+    },
+    "seed": 687933126,
+    "headline": "Numeric geologic dating using radioactive half-life and isotopic mineral ages",
+    "keyPoints": [
+      {
+        "id": "point-radioactivity-ages",
+        "point": "Discovery of radioactivity made assignment of ages in thousands millions and billions of years possible",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "The assignment of ages of rocks in thousands, millions, and billions of years was made possible by the discovery of radioactivity."
+      },
+      {
+        "id": "point-half-life-definition",
+        "point": "Radioactive isotope half-life is length of time required for one half of parent atoms to decay to daughter atoms",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "The half-life of a radioactive isotope is the length of time required for exactly one-half of the parent atoms to decay to daughter atoms."
+      },
+      {
+        "id": "point-isotopic-techniques",
+        "point": "Isotopic techniques measure time at which particular mineral within rock was formed to combine with fossil relative ages",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "Isotopic techniques are used to measure the time at which a particular mineral within a rock was formed."
+      },
+      {
+        "id": "point-decay-series",
+        "point": "Four parent daughter decay series especially useful for dating geologic materials include carbon to nitrogen and potassium to argon",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "four parent/daughter decay series are especially useful: carbon to nitrogen, potassium to argon, rubidium to strontium, and uranium to lead."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "term-half-life",
+        "term": "half-life",
+        "gloss": "time required for half the parent atoms to decay at constant rate",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "The half-life of a radioactive isotope is the length of time required for exactly one-half of the parent atoms to decay to daughter atoms."
+      },
+      {
+        "id": "term-isotope",
+        "term": "isotope",
+        "gloss": "variant that differs in neutrons and naturally converts with nuclear changes",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "A radioactive isotope (the parent) of one chemical element naturally converts to a stable isotope (the daughter) of another chemical element"
+      },
+      {
+        "id": "term-radioactivity",
+        "term": "radioactivity",
+        "gloss": "discovery that enabled assigning numeric ages to rocks in millions and billions of years",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "The assignment of ages of rocks in thousands, millions, and billions of years was made possible by the discovery of radioactivity."
+      },
+      {
+        "id": "term-geologic-time-scale",
+        "term": "geologic time scale",
+        "gloss": "product of detective work to assign numeric ages to time boundaries",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "To allow us to assign numeric ages to the geologic time scale"
+      },
+      {
+        "id": "term-parent",
+        "term": "parent",
+        "gloss": "radioactive isotope that undergoes decay to daughter at constant rate",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "four parent/daughter decay series are especially useful: carbon to nitrogen, potassium to argon, rubidium to strontium, and uranium to lead."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "half-life-v1",
+      "specId": "usgs-fossils-numeric-time-scale-job-20261029202021-90fd77e6",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sort-groups-v1",
+      "specId": "job-20261029202021-90fd77e6:sort-groups-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

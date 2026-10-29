@@ -1,0 +1,161 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "usgs-fossils-numeric-time-scale-job-20261029200428-f8df1fcc",
+  "title": "Half-Life Clocks in Rocks",
+  "learningObjectives": [
+    "Define half-life as the time required for one-half of parent atoms to decay to daughter atoms.",
+    "Calculate remaining parent amount from starting amount, half-life, and elapsed time using exponential decay.",
+    "Explain how measurements of remaining parent and new daughter atoms are used to compute the numeric age of a rock."
+  ],
+  "sources": [
+    {
+      "id": "usgs-fossils-numeric-time-scale",
+      "title": "Fossils, Rocks, and Time: The Numeric Time Scale — U.S. Geological Survey",
+      "locator": "https://pubs.usgs.gov/gip/fossils/numeric.html",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: U.S. Geological Survey, 'Fossils, Rocks, and Time: The Numeric Time Scale' (1997). Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+      "sha256": "d6ba577d359485d9ea0ae92e97f294d27bb3a67e23758783067591896f570f2d"
+    }
+  ],
+  "explanations": [
+    {
+      "evidence": [
+        {
+          "quote": "The half-life of a radioactive isotope is the length of time required for exactly one-half of the parent atoms to decay to daughter atoms.",
+          "sourceId": "usgs-fossils-numeric-time-scale"
+        },
+        {
+          "quote": "The change from parent to daughter happens at a constant rate, called the half-life.",
+          "sourceId": "usgs-fossils-numeric-time-scale"
+        }
+      ],
+      "id": "what-half-life-means",
+      "text": "Half-life is the constant-rate time needed for exactly half of parent atoms to decay to daughter atoms."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "A radioactive isotope (the parent) of one chemical element naturally converts to a stable isotope",
+          "sourceId": "usgs-fossils-numeric-time-scale"
+        },
+        {
+          "quote": "are used to compute the age of the rock.",
+          "sourceId": "usgs-fossils-numeric-time-scale"
+        }
+      ],
+      "id": "parent-to-daughter-decay",
+      "text": "A parent isotope converts in the nucleus to a stable daughter isotope, and remaining and new atoms are used to compute rock age."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "Each radioactive isotope has its own unique half-life.",
+          "sourceId": "usgs-fossils-numeric-time-scale"
+        },
+        {
+          "quote": "four parent/daughter decay series are especially useful: carbon to nitrogen, potassium to argon, rubidium to strontium, and uranium to lead.",
+          "sourceId": "usgs-fossils-numeric-time-scale"
+        }
+      ],
+      "id": "unique-half-lives-for-dating",
+      "text": "Each isotope has its own half-life, and series such as carbon to nitrogen and uranium to lead are useful for dating geologic materials."
+    }
+  ],
+  "simulation": {
+    "engine": "half-life-v1",
+    "equation": "N=N0*(1/2)^(t/T)",
+    "initialAmount": {
+      "unit": "1",
+      "default": 100,
+      "max": 1000,
+      "min": 1
+    },
+    "halfLife": {
+      "unit": "time",
+      "default": 5,
+      "max": 10,
+      "min": 1
+    },
+    "elapsedTime": {
+      "unit": "time",
+      "default": 5,
+      "max": 25,
+      "min": 0
+    },
+    "scenario": {
+      "objectLabel": "Radioactive sample (grams)",
+      "settingLabel": "Half-life in years"
+    }
+  },
+  "behavioralTests": [
+    {
+      "elapsedTime": 5,
+      "expectedRemaining": 50,
+      "halfLife": 5,
+      "initialAmount": 100,
+      "name": "one half-life halves amount",
+      "tolerance": 0.1
+    },
+    {
+      "elapsedTime": 8,
+      "expectedRemaining": 50,
+      "halfLife": 4,
+      "initialAmount": 200,
+      "name": "two half-lives leave one quarter",
+      "tolerance": 0.1
+    },
+    {
+      "elapsedTime": 0,
+      "expectedRemaining": 80,
+      "halfLife": 2,
+      "initialAmount": 80,
+      "name": "no time elapsed leaves full amount",
+      "tolerance": 0.1
+    },
+    {
+      "elapsedTime": 3,
+      "expectedRemaining": 81.2252,
+      "halfLife": 10,
+      "initialAmount": 100,
+      "name": "partial half-life decay",
+      "tolerance": 0.05
+    }
+  ],
+  "predictions": [
+    {
+      "elapsedTime": 10,
+      "expectedRemaining": 25,
+      "halfLife": 5,
+      "id": "predict-one-half-life",
+      "initialAmount": 100,
+      "prompt": "Start with 100 grams with a 5-year half-life. How much remains after 10 years?",
+      "tolerance": 0.1
+    },
+    {
+      "elapsedTime": 6,
+      "expectedRemaining": 62.5,
+      "halfLife": 2,
+      "id": "predict-three-half-lives",
+      "initialAmount": 500,
+      "prompt": "Start with 500 grams with a 2-year half-life. How much remains after 6 years?",
+      "tolerance": 0.1
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18944-9495-7449-9273-e0660f59b7d1",
+    "runId": "job-20261029200428-f8df1fcc",
+    "promptVersion": "v9",
+    "generatedAt": "2026-10-29T20:05:35.663Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

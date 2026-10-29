@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "cards": [
+      {
+        "hint": "Focus on the learning goal described at the start",
+        "id": "wright-way-basics",
+        "options": [
+          "basic math and physics",
+          "engine repair steps",
+          "modern airline schedules",
+          "airport safety rules"
+        ],
+        "quote": "The Wright Way will show you the basic math and physics that led to the invention of the airplane by the Wright Brothers.",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "stem": "What will be shown about the invention of the airplane?"
+      },
+      {
+        "hint": "Think about travel beyond the sky",
+        "id": "space-access-goal",
+        "options": [
+          "access to space",
+          "faster ocean travel",
+          "deeper sea diving",
+          "longer road trips"
+        ],
+        "quote": "In the spirit of the Wright Brothers, NASA is using aeronautics technology to provide access to space.",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "stem": "What is technology being used to provide in the spirit of early flight?"
+      },
+      {
+        "hint": "Think about movable wings for control",
+        "id": "front-elevators",
+        "options": [
+          "elevators",
+          "rudders",
+          "propellers",
+          "flaps"
+        ],
+        "quote": "At the front of all of the Wright brothers’ aircraft one finds the elevators.",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "stem": "What is found at the front of all early Wright aircraft?"
+      },
+      {
+        "hint": "Compare upward force with downward force",
+        "id": "lift-weight-condition",
+        "options": [
+          "aircraft lift greater than the aircraft weight",
+          "zero drag in all cases",
+          "constant speed on ground",
+          "engine shutdown at launch"
+        ],
+        "quote": "The objective of this simulation is to find the flight conditions that produce an aircraft lift greater than the aircraft weight.",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "stem": "What flight outcome is the simulation trying to find?"
+      }
+    ],
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Flight Physics Foundations"
+  },
+  "report": {
+    "artifactId": "job-20261029201001-04f2a15a:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18949-b780-7717-8a93-6791bb5c6902",
+    "usage": {
+      "promptTokens": 3326,
+      "completionTokens": 7372,
+      "reasoningTokens": 6988,
+      "cachedTokens": 0
+    },
+    "latencyMs": 25933,
+    "estCostUSD": 0.0354885,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029201001-04f2a15a:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Flight Physics Foundations",
+    "sources": [
+      {
+        "id": "nasa-grc-re-living-the-wright-way",
+        "title": "Guide to Reliving the Wright Way — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/re-living-the-wright-way/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "c7d0a44cd306a87e59d38d81850a825080de38231c0242f7086f5336a80c94c2"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18949-b780-7717-8a93-6791bb5c6902",
+      "runId": "job-20261029201001-04f2a15a",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:11:12.212Z"
+    },
+    "seed": 2604371173,
+    "cards": [
+      {
+        "hint": "Focus on the learning goal described at the start",
+        "id": "wright-way-basics",
+        "options": [
+          "basic math and physics",
+          "engine repair steps",
+          "modern airline schedules",
+          "airport safety rules"
+        ],
+        "quote": "The Wright Way will show you the basic math and physics that led to the invention of the airplane by the Wright Brothers.",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "stem": "What will be shown about the invention of the airplane?"
+      },
+      {
+        "hint": "Think about travel beyond the sky",
+        "id": "space-access-goal",
+        "options": [
+          "access to space",
+          "faster ocean travel",
+          "deeper sea diving",
+          "longer road trips"
+        ],
+        "quote": "In the spirit of the Wright Brothers, NASA is using aeronautics technology to provide access to space.",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "stem": "What is technology being used to provide in the spirit of early flight?"
+      },
+      {
+        "hint": "Think about movable wings for control",
+        "id": "front-elevators",
+        "options": [
+          "elevators",
+          "rudders",
+          "propellers",
+          "flaps"
+        ],
+        "quote": "At the front of all of the Wright brothers’ aircraft one finds the elevators.",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "stem": "What is found at the front of all early Wright aircraft?"
+      },
+      {
+        "hint": "Compare upward force with downward force",
+        "id": "lift-weight-condition",
+        "options": [
+          "aircraft lift greater than the aircraft weight",
+          "zero drag in all cases",
+          "constant speed on ground",
+          "engine shutdown at launch"
+        ],
+        "quote": "The objective of this simulation is to find the flight conditions that produce an aircraft lift greater than the aircraft weight.",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "stem": "What flight outcome is the simulation trying to find?"
+      }
+    ]
+  }
+}

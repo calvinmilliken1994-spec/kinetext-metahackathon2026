@@ -1,0 +1,51 @@
+{
+  "jobId": "job-20261029202009-71874813",
+  "sourceId": "usgs-powell-geologic-time",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T20:20:09.865Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.168053,
+  "reservedUnknownUSD": 0,
+  "engine": "half-life-v1",
+  "revisions": 1,
+  "repairs": [],
+  "analysisRepairs": [
+    {
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "A-05",
+        "A-07"
+      ],
+      "fixed": [
+        "A-05",
+        "A-07"
+      ],
+      "remaining": [],
+      "passed": true
+    }
+  ],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 32036,
+    "startedAt": "2026-10-29T20:20:09.865Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 2,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "specId": "usgs-powell-geologic-time-job-20261029202009-71874813",
+  "publishable": true,
+  "checksPassed": 14,
+  "checksTotal": 14,
+  "publishedRevision": 1,
+  "finishedAt": "2026-10-29T20:22:16.159Z"
+}

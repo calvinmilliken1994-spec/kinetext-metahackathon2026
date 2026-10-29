@@ -1,0 +1,219 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Lift and Wing Area Effects",
+    "cards": [
+      {
+        "id": "lift-area-proportionality",
+        "stem": "What relationship between lift and wing area is highlighted as a key scaling principle",
+        "options": [
+          "directly proportional",
+          "inversely related",
+          "unrelated",
+          "exponentially linked"
+        ],
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "Like the other aerodynamic force, drag, the lift is directly proportional to the area of the object.",
+        "hint": "Think about how area scaling affects aerodynamic force"
+      },
+      {
+        "id": "total-force-pressure-relation",
+        "stem": "What product defines the total aerodynamic force acting on a body moving through air",
+        "options": [
+          "the pressure times the surface area",
+          "temperature times volume",
+          "mass times acceleration"
+        ],
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "The total aerodynamic force is equal to the pressure times the surface area around the body.",
+        "hint": "Recall what combination creates force from pressure"
+      },
+      {
+        "id": "lift-orientation-direction",
+        "stem": "How is the lift component oriented relative to the path of flight",
+        "options": [
+          "perpendicular to the flight direction",
+          "parallel to the centerline",
+          "along the thrust axis"
+        ],
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "Lift is the component of this force perpendicular to the flight direction.",
+        "hint": "Consider direction versus motion through air"
+      },
+      {
+        "id": "low-velocity-wing-increase",
+        "stem": "What design action is taken to sustain lift during takeoff and landing at lower velocity",
+        "options": [
+          "increase the wing area",
+          "decrease the wing area",
+          "retract the fuselage length"
+        ],
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "Takeoff and landing are times of relatively low velocity, so to keep the lift high (to avoid the ground!) designers try to increase the wing area.",
+        "hint": "Think about what must be enlarged to keep lift high"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029201342-1249505d:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "9c27d1a1717c4726a429891ed72a33fb",
+    "usage": {
+      "promptTokens": 2629,
+      "completionTokens": 7519,
+      "reasoningTokens": 7132,
+      "cachedTokens": 0
+    },
+    "latencyMs": 32217,
+    "estCostUSD": 0.035242,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029201342-1249505d:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Lift and Wing Area Effects",
+    "sources": [
+      {
+        "id": "nasa-grc-effect-of-size-on-lift",
+        "title": "Effect of Size on Lift — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/effect-of-size-on-lift/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "1bd1a2678b2c2cb6f162ebbeb4ec95d6aa439d14002682604d2ac9cd680d76f4"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "9c27d1a1717c4726a429891ed72a33fb",
+      "runId": "job-20261029201342-1249505d",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:15:06.935Z"
+    },
+    "seed": 3661141908,
+    "cards": [
+      {
+        "id": "lift-area-proportionality",
+        "stem": "What relationship between lift and wing area is highlighted as a key scaling principle",
+        "options": [
+          "directly proportional",
+          "inversely related",
+          "unrelated",
+          "exponentially linked"
+        ],
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "Like the other aerodynamic force, drag, the lift is directly proportional to the area of the object.",
+        "hint": "Think about how area scaling affects aerodynamic force"
+      },
+      {
+        "id": "total-force-pressure-relation",
+        "stem": "What product defines the total aerodynamic force acting on a body moving through air",
+        "options": [
+          "the pressure times the surface area",
+          "temperature times volume",
+          "mass times acceleration"
+        ],
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "The total aerodynamic force is equal to the pressure times the surface area around the body.",
+        "hint": "Recall what combination creates force from pressure"
+      },
+      {
+        "id": "lift-orientation-direction",
+        "stem": "How is the lift component oriented relative to the path of flight",
+        "options": [
+          "perpendicular to the flight direction",
+          "parallel to the centerline",
+          "along the thrust axis"
+        ],
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "Lift is the component of this force perpendicular to the flight direction.",
+        "hint": "Consider direction versus motion through air"
+      },
+      {
+        "id": "low-velocity-wing-increase",
+        "stem": "What design action is taken to sustain lift during takeoff and landing at lower velocity",
+        "options": [
+          "increase the wing area",
+          "decrease the wing area",
+          "retract the fuselage length"
+        ],
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "Takeoff and landing are times of relatively low velocity, so to keep the lift high (to avoid the ground!) designers try to increase the wing area.",
+        "hint": "Think about what must be enlarged to keep lift high"
+      }
+    ]
+  }
+}

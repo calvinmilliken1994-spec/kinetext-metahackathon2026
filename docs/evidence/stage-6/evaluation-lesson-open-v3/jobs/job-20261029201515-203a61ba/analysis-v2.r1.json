@@ -1,0 +1,191 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "physics",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "Page covers definition of Mach number and speed of sound, derivation from conservation of momentum and ideal gas relations to relation between density and velocity changes, and explanation of subsonic transonic and supersonic compressibility regimes and shock effects",
+    "overview": {
+      "headline": "Mach number links flight speed to sound speed and controls air density changes",
+      "keyPoints": [
+        {
+          "id": "low-speed-density-constant",
+          "point": "Aircraft at low speed show constant air density with little compression effect",
+          "sourceId": "nasa-grc-role-of-the-mach-number",
+          "quote": "If the aircraft passes at a low speed, typically less than 250 mph, it is observed that the density of the air remains constant."
+        },
+        {
+          "id": "mach-number-definition",
+          "point": "Mach number is defined as ratio of aircraft speed to speed of sound in gas",
+          "sourceId": "nasa-grc-role-of-the-mach-number",
+          "quote": "The Mach number is the ratio of the speed of the aircraft, or the speed of the gas, to the speed of sound in the gas."
+        },
+        {
+          "id": "supersonic-density-velocity",
+          "point": "Supersonic and hypersonic flows show density changes faster than velocity changes by square of Mach number",
+          "sourceId": "nasa-grc-role-of-the-mach-number",
+          "quote": "For supersonic and hypersonic flows, the density changes faster than the velocity changes by a factor equal to the square of the Mach number."
+        },
+        {
+          "id": "subsonic-small-mach",
+          "point": "Subsonic conditions have Mach number very small so square of Mach number is very small",
+          "sourceId": "nasa-grc-role-of-the-mach-number",
+          "quote": "For low speed, or subsonic conditions, the Mach number is less than one, M < 1, and the square of the Mach number is very small."
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "mach-number-term",
+          "term": "Mach number",
+          "gloss": "ratio of aircraft speed to speed of sound used to gauge compressibility",
+          "sourceId": "nasa-grc-role-of-the-mach-number",
+          "quote": "The Mach number is the ratio of the speed of the aircraft, or the speed of the gas, to the speed of sound in the gas."
+        },
+        {
+          "id": "speed-of-sound-term",
+          "term": "speed of sound",
+          "gloss": "speed at which small disturbances travel through gas isentropically",
+          "sourceId": "nasa-grc-role-of-the-mach-number",
+          "quote": "Near and beyond the speed of sound, about 330 m/s or 760 mph at sea level"
+        },
+        {
+          "id": "compressibility-term",
+          "term": "compressibility",
+          "gloss": "effect where air density changes as flow is compressed at higher speed",
+          "sourceId": "nasa-grc-role-of-the-mach-number",
+          "quote": "This compressibility effect alters the amount of resulting force on the aircraft since the aerodynamic force depends on the air density."
+        },
+        {
+          "id": "isentropically-term",
+          "term": "isentropically",
+          "gloss": "transmission with constant entropy and no heat exchange",
+          "sourceId": "nasa-grc-role-of-the-mach-number",
+          "quote": "small disturbances in the flow are transmitted to other locations isentropically or with constant entropy"
+        },
+        {
+          "id": "shock-waves-term",
+          "term": "shock waves",
+          "gloss": "sharp disturbances that create abrupt changes in lift and drag downstream",
+          "sourceId": "nasa-grc-role-of-the-mach-number",
+          "quote": "Sharp disturbances generate shock waves that affect both the lift and drag of the aircraft and the flow conditions downstream of the shock wave."
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "speed-of-sound-v1",
+        "pedagogicalReason": "Builds foundation for Mach number by deriving sound speed from gas properties before applying it",
+        "focusQuote": "gamma * R * T = a^2",
+        "focusSourceId": "nasa-grc-role-of-the-mach-number"
+      },
+      {
+        "componentId": "sequence-v1",
+        "pedagogicalReason": "Traces momentum and isentropic steps in page order to show how Mach squared links density and velocity changes",
+        "focusQuote": "-M^2 * (dV / V) = drho / rho",
+        "focusSourceId": "nasa-grc-role-of-the-mach-number"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029201515-203a61ba:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"physics\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 3679 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 11 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 4, keyTerms 5, componentPlan 2; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (2 entries, 1 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "162fc3a6e0004d60976df928d90703ce",
+    "usage": {
+      "promptTokens": 4281,
+      "completionTokens": 13159,
+      "reasoningTokens": 12298,
+      "cachedTokens": 0
+    },
+    "latencyMs": 55765,
+    "estCostUSD": 0.061277,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

@@ -1,0 +1,191 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "From revising the old system to debating a new frame",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Order follows the text as the meeting moves from revising to creating",
+    "steps": [
+      {
+        "id": "convene-state-house",
+        "label": "convened in the State House",
+        "sourceId": "nara-constitution",
+        "quote": "The Federal Convention convened in the State House (Independence Hall) in Philadelphia on May 14, 1787, to revise the Articles of Confederation.",
+        "orderHint": "Follow the opening of the meeting"
+      },
+      {
+        "id": "adjourn-until-quorum",
+        "label": "adjourned from day to day",
+        "sourceId": "nara-constitution",
+        "quote": "the members adjourned from day to day until a quorum of seven states was obtained on May 25",
+        "orderHint": "Notice the wait for enough states to begin"
+      },
+      {
+        "id": "draft-new-frame",
+        "label": "entirely new frame of government",
+        "sourceId": "nara-constitution",
+        "quote": "it became clear by mid-June that, rather than amend the existing Articles, the Convention would draft an entirely new frame of government",
+        "orderHint": "See why a new plan replaced a revision"
+      },
+      {
+        "id": "debate-in-closed-sessions",
+        "label": "delegates debated",
+        "sourceId": "nara-constitution",
+        "quote": "All through the summer, in closed sessions, the delegates debated, and redrafted the articles of the new Constitution.",
+        "orderHint": "Track the summer work in closed sessions"
+      },
+      {
+        "id": "central-government-power",
+        "label": "how much power to allow the central government",
+        "sourceId": "nara-constitution",
+        "quote": "how much power to allow the central government, how many representatives in Congress to allow each state",
+        "orderHint": "Look at the key issues that were debated"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029202257-4769b932:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step label occurs in its own quote after normalisation (labels-in-quotes)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 5 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "15c383b2dce34db8827be1f62c193745",
+    "usage": {
+      "promptTokens": 2327,
+      "completionTokens": 11872,
+      "reasoningTokens": 11497,
+      "cachedTokens": 0
+    },
+    "latencyMs": 49809,
+    "estCostUSD": 0.05336475,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029202257-4769b932:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "From revising the old system to debating a new frame",
+    "sources": [
+      {
+        "id": "nara-constitution",
+        "title": "Constitution of the United States (1787) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/constitution",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Constitution of the United States (1787)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "a14175b009333bebd61eaff70e3393928a8f0dbd0ae00027067c07b15d176db4"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "15c383b2dce34db8827be1f62c193745",
+      "runId": "job-20261029202257-4769b932",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:24:52.709Z"
+    },
+    "seed": 1652072881,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Order follows the text as the meeting moves from revising to creating",
+    "steps": [
+      {
+        "id": "convene-state-house",
+        "label": "convened in the State House",
+        "sourceId": "nara-constitution",
+        "quote": "The Federal Convention convened in the State House (Independence Hall) in Philadelphia on May 14, 1787, to revise the Articles of Confederation.",
+        "orderHint": "Follow the opening of the meeting"
+      },
+      {
+        "id": "adjourn-until-quorum",
+        "label": "adjourned from day to day",
+        "sourceId": "nara-constitution",
+        "quote": "the members adjourned from day to day until a quorum of seven states was obtained on May 25",
+        "orderHint": "Notice the wait for enough states to begin"
+      },
+      {
+        "id": "draft-new-frame",
+        "label": "entirely new frame of government",
+        "sourceId": "nara-constitution",
+        "quote": "it became clear by mid-June that, rather than amend the existing Articles, the Convention would draft an entirely new frame of government",
+        "orderHint": "See why a new plan replaced a revision"
+      },
+      {
+        "id": "debate-in-closed-sessions",
+        "label": "delegates debated",
+        "sourceId": "nara-constitution",
+        "quote": "All through the summer, in closed sessions, the delegates debated, and redrafted the articles of the new Constitution.",
+        "orderHint": "Track the summer work in closed sessions"
+      },
+      {
+        "id": "central-government-power",
+        "label": "how much power to allow the central government",
+        "sourceId": "nara-constitution",
+        "quote": "how much power to allow the central government, how many representatives in Congress to allow each state",
+        "orderHint": "Look at the key issues that were debated"
+      }
+    ]
+  }
+}

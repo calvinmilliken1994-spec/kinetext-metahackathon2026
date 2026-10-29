@@ -1,0 +1,111 @@
+{
+  "jobId": "job-20261029200539-843c880e",
+  "analysisRef": "job-20261029200539-843c880e/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029200539-843c880e:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Heterozygosity and genetic diversity within populations",
+    "sources": [
+      {
+        "id": "nij-heterozygosity",
+        "title": "Heterozygosity — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+        "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/population-genetics/heterozygosity",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Heterozygosity'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+        "sha256": "b88d68137ace380387528e9b0d424ad162ee448ea6d48d6646cb090dbfc4e1e9"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18945-25d5-71d2-ad34-d604a436bda0",
+      "runId": "job-20261029200539-843c880e",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:06:12.785Z"
+    },
+    "seed": 2324116493,
+    "headline": "Heterozygosity and genetic diversity within populations",
+    "keyPoints": [
+      {
+        "id": "heterozygous-definition",
+        "point": "An individual with different alleles at a specific locus is heterozygous, while same alleles mean homozygous",
+        "quote": "If an individual has two different alleles at a specific locus, the individual is heterozygous at that locus",
+        "sourceId": "nij-heterozygosity"
+      },
+      {
+        "id": "allele-frequency-diversity",
+        "point": "Allele frequency is used to characterize genetic diversity and richness of the gene pool in a population",
+        "quote": "Allele frequency is used to characterize the genetic diversity, or richness of the gene pool, in a population.",
+        "sourceId": "nij-heterozygosity"
+      },
+      {
+        "id": "genotype-count-formula",
+        "point": "Possible genotypes can be calculated using the stated formula from number of alleles at a particular locus",
+        "quote": "can be calculated using the formula k(k+1)/2, where k is the number of alleles at a particular locus.",
+        "sourceId": "nij-heterozygosity"
+      },
+      {
+        "id": "observed-expected-comparison",
+        "point": "The observed heterozygosity compared to expected heterozygosity can reveal population dynamics",
+        "quote": "The observed heterozygosity can be compared to the expected heterozygosity",
+        "sourceId": "nij-heterozygosity"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "having different alleles at a specific locus in a diploid cell",
+        "id": "heterozygous-state",
+        "quote": "If an individual has two different alleles at a specific locus, the individual is heterozygous at that locus",
+        "sourceId": "nij-heterozygosity",
+        "term": "heterozygous"
+      },
+      {
+        "gloss": "having same alleles at a locus inherited from each parent",
+        "id": "homozygous-state",
+        "quote": "if the two alleles are the same, the individual is homozygous",
+        "sourceId": "nij-heterozygosity",
+        "term": "homozygous"
+      },
+      {
+        "gloss": "frequency at which alleles are found at a locus of interest",
+        "id": "allele-frequency",
+        "quote": "Allele frequency, or the frequency at which alleles are found at any locus of interest, is used to estimate the frequency of a given genetic profile.",
+        "sourceId": "nij-heterozygosity",
+        "term": "Allele frequency"
+      },
+      {
+        "gloss": "unique set of alleles found by analyzing DNA from every member of a population",
+        "id": "gene-pool",
+        "quote": "A gene pool is the unique set of alleles that could be found by analyzing the DNA from every member of a species or population.",
+        "sourceId": "nij-heterozygosity",
+        "term": "gene pool"
+      },
+      {
+        "gloss": "grid that graphically represents expected genotypes and frequencies",
+        "id": "punnett-square",
+        "quote": "A Punnett square is simply a grid that graphically represents expected genotypes.",
+        "sourceId": "nij-heterozygosity",
+        "term": "Punnett square"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029200539-843c880e:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

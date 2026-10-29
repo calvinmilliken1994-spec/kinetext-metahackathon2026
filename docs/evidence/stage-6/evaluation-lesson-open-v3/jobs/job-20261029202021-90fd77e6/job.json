@@ -1,0 +1,36 @@
+{
+  "jobId": "job-20261029202021-90fd77e6",
+  "sourceId": "usgs-fossils-numeric-time-scale",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T20:20:21.995Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.133503,
+  "reservedUnknownUSD": 0,
+  "engine": "half-life-v1",
+  "revisions": 1,
+  "repairs": [],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 32036,
+    "startedAt": "2026-10-29T20:20:21.995Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 2,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "specId": "usgs-fossils-numeric-time-scale-job-20261029202021-90fd77e6",
+  "publishable": true,
+  "checksPassed": 14,
+  "checksTotal": 14,
+  "publishedRevision": 1,
+  "finishedAt": "2026-10-29T20:21:45.727Z"
+}

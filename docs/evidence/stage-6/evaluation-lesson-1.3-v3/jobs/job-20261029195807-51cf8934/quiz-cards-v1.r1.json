@@ -1,0 +1,217 @@
+{
+  "gen": {
+    "cards": [
+      {
+        "hint": "Think of paired pushes in opposite directions",
+        "id": "action-reaction-recall",
+        "options": [
+          "the second object exerts an equal and opposite force on the first",
+          "the second object stays still with no push back",
+          "the first object loses all its motion at once"
+        ],
+        "quote": "Whenever one object exerts a force on a second object, the second object exerts an equal and opposite force on the first.",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "stem": "What happens when one item pushes on another item?"
+      },
+      {
+        "hint": "Think about steady travel without extra pushes",
+        "id": "first-law-motion-state",
+        "options": [
+          "at constant speed",
+          "at rising speed each moment",
+          "with a curving path always"
+        ],
+        "quote": "An object at rest remains at rest, and an object in motion remains in motion at constant speed",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "stem": "How does a moving item keep going if no push acts on it?"
+      },
+      {
+        "hint": "Consider weight and strength of push together",
+        "id": "second-law-mass-link",
+        "options": [
+          "depends on the mass of the object",
+          "stays free of mass and push size",
+          "varies only with color and shape"
+        ],
+        "quote": "The acceleration of an object depends on the mass of the object and the amount of force applied.",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "stem": "What sets how fast a pushed item picks up pace?"
+      },
+      {
+        "hint": "Air goes one way, surface goes other way",
+        "id": "lift-deflection-pair",
+        "options": [
+          "the wing is pushed upward",
+          "the tail stays level in cruise",
+          "the nose drops straight downward"
+        ],
+        "quote": "The motion of lift from an airfoil, the air is deflected downward by the airfoil’s action, and in reaction, the wing is pushed upward.",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "stem": "When lift air turns downward, what happens in response?"
+      }
+    ],
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Push and Move Quiz"
+  },
+  "report": {
+    "artifactId": "job-20261029195807-51cf8934:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a1893e-ab80-72a0-a65a-84375200973c",
+    "usage": {
+      "promptTokens": 3604,
+      "completionTokens": 8684,
+      "reasoningTokens": 8270,
+      "cachedTokens": 0
+    },
+    "latencyMs": 33570,
+    "estCostUSD": 0.041412,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029195807-51cf8934:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Push and Move Quiz",
+    "sources": [
+      {
+        "id": "nasa-grc-newtons-laws-of-motion",
+        "title": "Newton's Laws of Motion — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/newtons-laws-of-motion/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "907bae07076eef20118a4e54096ad399b11994ec5e310d9bed74850f6d009014"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a1893e-ab80-72a0-a65a-84375200973c",
+      "runId": "job-20261029195807-51cf8934",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T19:59:08.224Z"
+    },
+    "seed": 2164143110,
+    "cards": [
+      {
+        "hint": "Think of paired pushes in opposite directions",
+        "id": "action-reaction-recall",
+        "options": [
+          "the second object exerts an equal and opposite force on the first",
+          "the second object stays still with no push back",
+          "the first object loses all its motion at once"
+        ],
+        "quote": "Whenever one object exerts a force on a second object, the second object exerts an equal and opposite force on the first.",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "stem": "What happens when one item pushes on another item?"
+      },
+      {
+        "hint": "Think about steady travel without extra pushes",
+        "id": "first-law-motion-state",
+        "options": [
+          "at constant speed",
+          "at rising speed each moment",
+          "with a curving path always"
+        ],
+        "quote": "An object at rest remains at rest, and an object in motion remains in motion at constant speed",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "stem": "How does a moving item keep going if no push acts on it?"
+      },
+      {
+        "hint": "Consider weight and strength of push together",
+        "id": "second-law-mass-link",
+        "options": [
+          "depends on the mass of the object",
+          "stays free of mass and push size",
+          "varies only with color and shape"
+        ],
+        "quote": "The acceleration of an object depends on the mass of the object and the amount of force applied.",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "stem": "What sets how fast a pushed item picks up pace?"
+      },
+      {
+        "hint": "Air goes one way, surface goes other way",
+        "id": "lift-deflection-pair",
+        "options": [
+          "the wing is pushed upward",
+          "the tail stays level in cruise",
+          "the nose drops straight downward"
+        ],
+        "quote": "The motion of lift from an airfoil, the air is deflected downward by the airfoil’s action, and in reaction, the wing is pushed upward.",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "stem": "When lift air turns downward, what happens in response?"
+      }
+    ]
+  }
+}

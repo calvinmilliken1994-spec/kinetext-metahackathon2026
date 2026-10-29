@@ -1,0 +1,131 @@
+{
+  "jobId": "job-20261029201508-0cb10404",
+  "analysisRef": "job-20261029201508-0cb10404/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029201508-0cb10404:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Standard atmosphere with layered temperature and pressure changes by altitude",
+    "sources": [
+      {
+        "id": "nasa-grc-earth-atmosphere-equation-english",
+        "title": "Earth Atmosphere Equation – English — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/earth-atmosphere-equation-english/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "27cabc2c092bc294e05f921ebe3f7e6c73775f3986f7aed07bf86ba89fff17f5"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "290ad6cfe10b410d8a3db5e674cb66aa",
+      "runId": "job-20261029201508-0cb10404",
+      "promptVersion": "s6-v3",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T20:16:01.362Z"
+    },
+    "seed": 1689938524,
+    "headline": "Standard atmosphere with layered temperature and pressure changes by altitude",
+    "keyPoints": [
+      {
+        "id": "thin-atmosphere-sheet",
+        "point": "Atmosphere is an extremely thin sheet extending from surface to edge of space",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "extremely thin sheet of air extending from the surface of the Earth to the edge of space"
+      },
+      {
+        "id": "temperature-altitude-variation",
+        "point": "Temperature is highest near surface and decreases with altitude while speed of sound follows temperature",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "Thus the air temperature is highest near the surface and decreases as altitude increases."
+      },
+      {
+        "id": "pressure-altitude-variation",
+        "point": "Air pressure decreases with altitude because less overlying air weight remains above",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "Therefore, air pressure decreases as we increase altitude."
+      },
+      {
+        "id": "three-zone-model",
+        "point": "Standard model divides atmosphere into three zones with separate curve fits for troposphere and stratosphere layers",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "The model has three zones with separate curve fits for the troposphere, the lower stratosphere, and the upper stratosphere."
+      },
+      {
+        "id": "density-equation-of-state",
+        "point": "In each zone density is derived from pressure and temperature through the equation of state",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "In each zone the density rho (ρ) is derived from the equation of state:"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "atmosphere",
+        "term": "atmosphere",
+        "gloss": "atmosphere thin layer of air surrounding Earth held by gravity that shows weather changes",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "Gravity holds the atmosphere to the Earth’s surface."
+      },
+      {
+        "id": "temperature",
+        "term": "temperature",
+        "gloss": "temperature measure of air heat that is highest near surface and decreases with altitude",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "Thus the air temperature is highest near the surface and decreases as altitude increases."
+      },
+      {
+        "id": "pressure",
+        "term": "pressure",
+        "gloss": "pressure force from weight of air above a location that decreases with altitude",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "Therefore, air pressure decreases as we increase altitude."
+      },
+      {
+        "id": "density",
+        "term": "density",
+        "gloss": "density mass per volume of air calculated from temperature and pressure through equation of state",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "The air density depends on both the temperature and the pressure through the equation of state and also decreases with increasing altitude."
+      },
+      {
+        "id": "troposphere",
+        "term": "troposphere",
+        "gloss": "troposphere lowest zone from surface where temperature decreases linearly",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "The troposphere runs from the surface of the Earth to 36,152 feet."
+      },
+      {
+        "id": "lapse-rate",
+        "term": "lapse rate",
+        "gloss": "lapse rate linear decrease of temperature with altitude in troposphere",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "The rate of temperature decrease is called the lapse rate."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261029201508-0cb10404:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "formula-explorer-v1",
+      "specId": "job-20261029201508-0cb10404:formula-explorer-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

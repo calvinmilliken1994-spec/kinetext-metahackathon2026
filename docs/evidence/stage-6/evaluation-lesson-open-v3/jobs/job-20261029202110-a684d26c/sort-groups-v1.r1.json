@@ -1,0 +1,219 @@
+{
+  "gen": {
+    "schemaVersion": "sort-groups-v1",
+    "title": "Distinguishing genotype counts by zygosity type",
+    "groups": [
+      {
+        "id": "homozygous",
+        "label": "homozygous"
+      },
+      {
+        "id": "heterozygous",
+        "label": "heterozygous"
+      }
+    ],
+    "items": [
+      {
+        "id": "homo-k-param",
+        "label": "k",
+        "groupId": "homozygous",
+        "sourceId": "nij-heterozygosity",
+        "quote": "The parameter k also represents the expected number of homozygous genotypes"
+      },
+      {
+        "id": "homo-expected-count",
+        "label": "expected number of homozygous genotypes",
+        "groupId": "homozygous",
+        "sourceId": "nij-heterozygosity",
+        "quote": "The parameter k also represents the expected number of homozygous genotypes"
+      },
+      {
+        "id": "homo-same-alleles",
+        "label": "the two alleles are the same",
+        "groupId": "homozygous",
+        "sourceId": "nij-heterozygosity",
+        "quote": "if the two alleles are the same, the individual is homozygous."
+      },
+      {
+        "id": "hetero-formula",
+        "label": "k[(k-1)/2]",
+        "groupId": "heterozygous",
+        "sourceId": "nij-heterozygosity",
+        "quote": "k[(k-1)/2] represents the expected number of heterozygous genotypes"
+      },
+      {
+        "id": "hetero-expected-count",
+        "label": "expected number of heterozygous genotypes",
+        "groupId": "heterozygous",
+        "sourceId": "nij-heterozygosity",
+        "quote": "k[(k-1)/2] represents the expected number of heterozygous genotypes"
+      },
+      {
+        "id": "hetero-diff-alleles",
+        "label": "two different alleles at a specific locus",
+        "groupId": "heterozygous",
+        "sourceId": "nij-heterozygosity",
+        "quote": "If an individual has two different alleles at a specific locus, the individual is heterozygous at that locus"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029202110-a684d26c:sort-groups-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sort text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SORT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 item quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SORT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every item label occurs in its quote and every group label occurs in the quote or the same source paragraph (item-and-group-in-quote; the design discloses the weak-link false accept on long paragraphs — every quote is shown to the teacher)"
+      },
+      {
+        "id": "SORT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every declared group is referenced by >= 2 items and every item groupId resolves (groups-covered)"
+      },
+      {
+        "id": "SORT-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every item has a distinct label after normalisation (distinct-items)"
+      },
+      {
+        "id": "SORT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "groups 2 (2-4) and items 6 (6-12) are within the frozen counts (counts-valid)"
+      },
+      {
+        "id": "SORT-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in group and item labels appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "e1f3664be32f4ce4bb90629bbeea55b7",
+    "usage": {
+      "promptTokens": 2698,
+      "completionTokens": 8316,
+      "reasoningTokens": 7951,
+      "cachedTokens": 0
+    },
+    "latencyMs": 36600,
+    "estCostUSD": 0.0387155,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029202110-a684d26c:sort-groups-v1:r1",
+    "componentId": "sort-groups-v1",
+    "title": "Distinguishing genotype counts by zygosity type",
+    "sources": [
+      {
+        "id": "nij-heterozygosity",
+        "title": "Heterozygosity — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+        "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/population-genetics/heterozygosity",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Heterozygosity'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+        "sha256": "b88d68137ace380387528e9b0d424ad162ee448ea6d48d6646cb090dbfc4e1e9"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "e1f3664be32f4ce4bb90629bbeea55b7",
+      "runId": "job-20261029202110-a684d26c",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:22:53.797Z"
+    },
+    "seed": 1839376953,
+    "groups": [
+      {
+        "id": "homozygous",
+        "label": "homozygous"
+      },
+      {
+        "id": "heterozygous",
+        "label": "heterozygous"
+      }
+    ],
+    "items": [
+      {
+        "id": "homo-k-param",
+        "label": "k",
+        "groupId": "homozygous",
+        "sourceId": "nij-heterozygosity",
+        "quote": "The parameter k also represents the expected number of homozygous genotypes"
+      },
+      {
+        "id": "homo-expected-count",
+        "label": "expected number of homozygous genotypes",
+        "groupId": "homozygous",
+        "sourceId": "nij-heterozygosity",
+        "quote": "The parameter k also represents the expected number of homozygous genotypes"
+      },
+      {
+        "id": "homo-same-alleles",
+        "label": "the two alleles are the same",
+        "groupId": "homozygous",
+        "sourceId": "nij-heterozygosity",
+        "quote": "if the two alleles are the same, the individual is homozygous."
+      },
+      {
+        "id": "hetero-formula",
+        "label": "k[(k-1)/2]",
+        "groupId": "heterozygous",
+        "sourceId": "nij-heterozygosity",
+        "quote": "k[(k-1)/2] represents the expected number of heterozygous genotypes"
+      },
+      {
+        "id": "hetero-expected-count",
+        "label": "expected number of heterozygous genotypes",
+        "groupId": "heterozygous",
+        "sourceId": "nij-heterozygosity",
+        "quote": "k[(k-1)/2] represents the expected number of heterozygous genotypes"
+      },
+      {
+        "id": "hetero-diff-alleles",
+        "label": "two different alleles at a specific locus",
+        "groupId": "heterozygous",
+        "sourceId": "nij-heterozygosity",
+        "quote": "If an individual has two different alleles at a specific locus, the individual is heterozygous at that locus"
+      }
+    ]
+  }
+}

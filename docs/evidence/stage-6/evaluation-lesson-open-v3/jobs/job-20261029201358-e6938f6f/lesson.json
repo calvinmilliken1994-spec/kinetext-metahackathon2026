@@ -1,0 +1,111 @@
+{
+  "jobId": "job-20261029201358-e6938f6f",
+  "analysisRef": "job-20261029201358-e6938f6f/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029201358-e6938f6f:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Specific heat relation linking Cp and Cv to gas constant via enthalpy",
+    "sources": [
+      {
+        "id": "nasa-grc-specific-heat-cp-cv",
+        "title": "Specific Heat – Cp & Cv — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/specific-heat-cp-cv/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "9df5f948a44c3fd060dd74c26ccaa8247cb311d0b0d618ceaafaf6382ba4d1b8"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "ff5d5e7659c44a8c9d1f308d4a0325df",
+      "runId": "job-20261029201358-e6938f6f",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:14:34.093Z"
+    },
+    "seed": 3766512796,
+    "headline": "Specific heat relation linking Cp and Cv to gas constant via enthalpy",
+    "keyPoints": [
+      {
+        "id": "thermodynamics-scope",
+        "point": "Thermodynamics deals with energy and work and the large scale response of a system we can observe and measure",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "Thermodynamics deals only with the large scale response of a system which we can observe and measure in experiments."
+      },
+      {
+        "id": "heat-capacity-state",
+        "point": "Heat capacity is not a state variable and its value depends on material and process",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "Heat capacity is not a state variable."
+      },
+      {
+        "id": "specific-heat-relation",
+        "point": "The specific heat constants for constant pressure and constant volume processes are related to the gas constant for a given gas",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "The specific heat constants for constant pressure and constant volume processes are related to the gas constant for a given gas."
+      },
+      {
+        "id": "gamma-air-value",
+        "point": "For air gamma equals 1.4 for standard day conditions depending on gas state",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "For air, gamma = 1.4 for standard day conditions."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "enthalpy",
+        "term": "enthalpy",
+        "gloss": "definition combining specific internal energy with pressure times specific volume",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "From the definition of enthalpy:"
+      },
+      {
+        "id": "specific-heat-capacity",
+        "term": "specific heat capacity",
+        "gloss": "constant relating heat added to temperature rise for a given process and its change",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "where delta T (ΔT) is the change of temperature of the gas during the process, and c is the specific heat capacity."
+      },
+      {
+        "id": "gas-constant",
+        "term": "gas constant",
+        "gloss": "constant relating pressure volume and temperature for a given gas in the equation of state",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "The gas constant used by aerodynamicists is derived from the universal gas constant but has a unique value for every gas."
+      },
+      {
+        "id": "specific-heat-ratio",
+        "term": "gamma",
+        "gloss": "ratio of constant pressure specific heat to constant volume specific heat denoted gamma",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "We can define an additional variable called the specific heat ratio, which is given the Greek symbol “gamma” (γ), which is equal to cp divided by cv:"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261029201358-e6938f6f:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "formula-explorer-v1",
+      "specId": "job-20261029201358-e6938f6f:formula-explorer-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

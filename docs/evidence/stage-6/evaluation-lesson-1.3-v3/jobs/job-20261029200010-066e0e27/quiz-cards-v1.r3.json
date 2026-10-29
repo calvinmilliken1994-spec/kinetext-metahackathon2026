@@ -1,0 +1,199 @@
+{
+  "gen": {
+    "cards": [
+      {
+        "hint": "Think about whether the flights met expectations",
+        "id": "flight-test-mismatch",
+        "options": [
+          "predicted by the lift equation",
+          "better than expected results",
+          "exactly matching calculations"
+        ],
+        "quote": "Neither aircraft performed as well as predicted by the lift equation.",
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "stem": "How did the early kite and glider results compare to calculations"
+      },
+      {
+        "hint": "Recall the lower value adopted after doubts about the older one",
+        "id": "smeaton-correction-value",
+        "options": [
+          "more closely approximated their data",
+          "the older high estimate",
+          "the low end of the range"
+        ],
+        "quote": "they determined that a value of .0033 more closely approximated their data.",
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "stem": "What revised pressure coefficient fit the flight measurements"
+      },
+      {
+        "hint": "Think about geometry differences between test models",
+        "id": "wing-shape-discovery",
+        "options": [
+          "wing shape",
+          "engine power",
+          "pilot skill"
+        ],
+        "quote": "the brothers discovered the importance of wing shape on the lift coefficient.",
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "stem": "What did tunnel tests show strongly affects the lift coefficient"
+      }
+    ],
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Early Lift Tests and Fixes"
+  },
+  "report": {
+    "artifactId": "job-20261029200010-066e0e27:quiz-cards-v1:r3",
+    "revision": 3,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "quiz-cards-v1: no weakening — every one of the 3 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18941-8877-7782-b537-6ca7c3d5e71c",
+    "usage": {
+      "promptTokens": 4368,
+      "completionTokens": 5486,
+      "reasoningTokens": 5215,
+      "cachedTokens": 0
+    },
+    "latencyMs": 29693,
+    "estCostUSD": 0.0287755,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029200010-066e0e27:quiz-cards-v1:r3",
+    "componentId": "quiz-cards-v1",
+    "title": "Early Lift Tests and Fixes",
+    "sources": [
+      {
+        "id": "nasa-grc-lift-equation-of-the-1900s",
+        "title": "Lift Equation of the 1900's — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/lift-equation-of-the-1900s/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "41fb1b6349509be9b9478942fed514cd8d077b15436694132ecbfb588c477402"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18941-8877-7782-b537-6ca7c3d5e71c",
+      "runId": "job-20261029200010-066e0e27",
+      "promptVersion": "s6-v3",
+      "revision": 3,
+      "repairOf": 2,
+      "generatedAt": "2026-10-29T20:02:15.886Z"
+    },
+    "seed": 3031194284,
+    "cards": [
+      {
+        "hint": "Think about whether the flights met expectations",
+        "id": "flight-test-mismatch",
+        "options": [
+          "predicted by the lift equation",
+          "better than expected results",
+          "exactly matching calculations"
+        ],
+        "quote": "Neither aircraft performed as well as predicted by the lift equation.",
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "stem": "How did the early kite and glider results compare to calculations"
+      },
+      {
+        "hint": "Recall the lower value adopted after doubts about the older one",
+        "id": "smeaton-correction-value",
+        "options": [
+          "more closely approximated their data",
+          "the older high estimate",
+          "the low end of the range"
+        ],
+        "quote": "they determined that a value of .0033 more closely approximated their data.",
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "stem": "What revised pressure coefficient fit the flight measurements"
+      },
+      {
+        "hint": "Think about geometry differences between test models",
+        "id": "wing-shape-discovery",
+        "options": [
+          "wing shape",
+          "engine power",
+          "pilot skill"
+        ],
+        "quote": "the brothers discovered the importance of wing shape on the lift coefficient.",
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "stem": "What did tunnel tests show strongly affects the lift coefficient"
+      }
+    ]
+  }
+}

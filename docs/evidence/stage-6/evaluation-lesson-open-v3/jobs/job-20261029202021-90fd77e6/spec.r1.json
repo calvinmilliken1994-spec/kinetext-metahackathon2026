@@ -1,0 +1,166 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "usgs-fossils-numeric-time-scale-job-20261029202021-90fd77e6",
+  "title": "Fossils, Rocks, and Time: The Numeric Time Scale — U.S. Geological Survey",
+  "learningObjectives": [
+    "Understand that the half-life is the time required for one-half of parent atoms to decay to daughter atoms",
+    "Understand how discovery of radioactivity allows numeric age dating of rocks in thousands to billions of years",
+    "Understand how isotopic measurements of parent-daughter series combined with relative ages assign numeric ages to geologic materials"
+  ],
+  "sources": [
+    {
+      "id": "usgs-fossils-numeric-time-scale",
+      "title": "Fossils, Rocks, and Time: The Numeric Time Scale — U.S. Geological Survey",
+      "locator": "https://pubs.usgs.gov/gip/fossils/numeric.html",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: U.S. Geological Survey, 'Fossils, Rocks, and Time: The Numeric Time Scale' (1997). Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+      "sha256": "d6ba577d359485d9ea0ae92e97f294d27bb3a67e23758783067591896f570f2d"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "exp-half-life",
+      "text": "Radioactive decay occurs at a constant rate described by half-life, the time needed for exactly half of the parent atoms to decay to stable daughter atoms.",
+      "evidence": [
+        {
+          "sourceId": "usgs-fossils-numeric-time-scale",
+          "quote": "The half-life of a radioactive isotope is the length of time required for exactly one-half of the parent atoms to decay to daughter atoms."
+        },
+        {
+          "sourceId": "usgs-fossils-numeric-time-scale",
+          "quote": "A radioactive isotope (the parent) of one chemical element naturally converts to a stable isotope (the daughter) of another chemical element"
+        }
+      ]
+    },
+    {
+      "id": "exp-radioactivity-dating",
+      "text": "Minerals containing naturally occurring radioactive elements can be used to calculate numeric ages of rocks, extending dating from thousands to billions of years.",
+      "evidence": [
+        {
+          "sourceId": "usgs-fossils-numeric-time-scale",
+          "quote": "The assignment of ages of rocks in thousands, millions, and billions of years was made possible by the discovery of radioactivity."
+        }
+      ]
+    },
+    {
+      "id": "exp-geologic-techniques",
+      "text": "Numeric ages for the geologic time scale are obtained by isotopic techniques on minerals combined with relative ages from fossils, using several parent-daughter decay series.",
+      "evidence": [
+        {
+          "sourceId": "usgs-fossils-numeric-time-scale",
+          "quote": "To allow us to assign numeric ages to the geologic time scale"
+        },
+        {
+          "sourceId": "usgs-fossils-numeric-time-scale",
+          "quote": "four parent/daughter decay series are especially useful: carbon to nitrogen, potassium to argon, rubidium to strontium, and uranium to lead."
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "half-life-v1",
+    "equation": "N=N0*(1/2)^(t/T)",
+    "initialAmount": {
+      "unit": "1",
+      "min": 1,
+      "max": 1000,
+      "default": 100
+    },
+    "halfLife": {
+      "unit": "time",
+      "min": 1,
+      "max": 10,
+      "default": 5
+    },
+    "elapsedTime": {
+      "unit": "time",
+      "min": 0,
+      "max": 25,
+      "default": 5
+    },
+    "scenario": {
+      "objectLabel": "Radioactive sample (grams)",
+      "settingLabel": "Half-life in years"
+    }
+  },
+  "behavioralTests": [
+    {
+      "name": "half-life t = T",
+      "initialAmount": 100,
+      "halfLife": 5,
+      "elapsedTime": 5,
+      "expectedRemaining": 50,
+      "tolerance": 0.05
+    },
+    {
+      "name": "half-life t = 2T",
+      "initialAmount": 200,
+      "halfLife": 4,
+      "elapsedTime": 8,
+      "expectedRemaining": 50,
+      "tolerance": 0.05
+    },
+    {
+      "name": "half-life t = 0",
+      "initialAmount": 120,
+      "halfLife": 10,
+      "elapsedTime": 0,
+      "expectedRemaining": 120,
+      "tolerance": 0.05
+    },
+    {
+      "name": "half-life t = 3T",
+      "initialAmount": 80,
+      "halfLife": 2,
+      "elapsedTime": 6,
+      "expectedRemaining": 10,
+      "tolerance": 0.02
+    }
+  ],
+  "predictions": [
+    {
+      "id": "pred-1",
+      "prompt": "Predict remaining amount after 10 years",
+      "initialAmount": 100,
+      "halfLife": 5,
+      "elapsedTime": 10,
+      "expectedRemaining": 25,
+      "tolerance": 0.05
+    },
+    {
+      "id": "pred-2",
+      "prompt": "Predict remaining amount after one half-life",
+      "initialAmount": 250,
+      "halfLife": 5,
+      "elapsedTime": 5,
+      "expectedRemaining": 125,
+      "tolerance": 0.05
+    },
+    {
+      "id": "pred-3",
+      "prompt": "Predict remaining amount after three half-lives",
+      "initialAmount": 80,
+      "halfLife": 2.5,
+      "elapsedTime": 7.5,
+      "expectedRemaining": 10,
+      "tolerance": 0.02
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "194b1c556986457e82d4e0a1c0188a8a",
+    "runId": "job-20261029202021-90fd77e6",
+    "promptVersion": "v9",
+    "generatedAt": "2026-10-29T20:21:45.721Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

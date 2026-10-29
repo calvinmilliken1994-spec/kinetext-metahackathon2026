@@ -1,0 +1,191 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "componentPlan": [
+      {
+        "componentId": "quiz-cards-v1",
+        "focusQuote": "Random mating implies that mating should be arbitrary with regard to the locus being considered.",
+        "focusSourceId": "nij-random-mating",
+        "pedagogicalReason": "Reviews checkable definitions of random mating and human examples before mapping relationships"
+      },
+      {
+        "componentId": "concept-map-v1",
+        "focusQuote": "Positive assortative mating leads to an increase in homozygotes whereas negative assortative mating leads to an increase in heterozygotes.",
+        "focusSourceId": "nij-random-mating",
+        "pedagogicalReason": "Maps stated links between assortative mating type and resulting homozygote and heterozygote change"
+      }
+    ],
+    "declineCode": "",
+    "declineSummary": "",
+    "overview": {
+      "headline": "Random mating, assortative mating and effects on Hardy-Weinberg balance",
+      "keyPoints": [
+        {
+          "id": "random-mating-condition",
+          "point": "Random mating is required as a condition for Hardy-Weinberg equilibrium but does not always occur in humans",
+          "quote": "random mating, a condition of HWE (Hardy-Weinberg Equilibrium), does not occur",
+          "sourceId": "nij-random-mating"
+        },
+        {
+          "id": "mating-arbitrary-locus",
+          "point": "Random mating means mating is arbitrary with regard to the locus under study",
+          "quote": "Random mating implies that mating should be arbitrary with regard to the locus being considered.",
+          "sourceId": "nij-random-mating"
+        },
+        {
+          "id": "assortative-effects",
+          "point": "Positive assortative mating increases homozygotes while negative assortative mating increases heterozygotes",
+          "quote": "Positive assortative mating leads to an increase in homozygotes whereas negative assortative mating leads to an increase in heterozygotes.",
+          "sourceId": "nij-random-mating"
+        },
+        {
+          "id": "human-trait-examples",
+          "point": "Humans mate randomly for blood type and STR genotype while mating similarly for physical attributes",
+          "quote": "they mate randomly with respect to other traits such as blood type and short tandem repeat (STR) genotype.",
+          "sourceId": "nij-random-mating"
+        }
+      ],
+      "keyTerms": [
+        {
+          "gloss": "mating that is arbitrary with regard to the locus",
+          "id": "random-mating",
+          "quote": "Random mating implies that mating should be arbitrary with regard to the locus being considered.",
+          "sourceId": "nij-random-mating",
+          "term": "Random mating"
+        },
+        {
+          "gloss": "non-random mating between similar individuals",
+          "id": "positive-assortative-mating",
+          "quote": "This constitutes non-random, positive assortative mating.",
+          "sourceId": "nij-random-mating",
+          "term": "positive assortative mating"
+        },
+        {
+          "gloss": "breeding between individuals with dissimilar genotypes",
+          "id": "negative-assortative-mating",
+          "quote": "In contrast, negative assortative mating is breeding between individuals with dissimilar genotypes, and is more rare.",
+          "sourceId": "nij-random-mating",
+          "term": "negative assortative mating"
+        },
+        {
+          "gloss": "individuals with increased frequency under positive assortative mating",
+          "id": "homozygotes",
+          "quote": "Positive assortative mating leads to an increase in homozygotes whereas negative assortative mating leads to an increase in heterozygotes.",
+          "sourceId": "nij-random-mating",
+          "term": "homozygotes"
+        },
+        {
+          "gloss": "individuals with increased frequency under negative assortative mating",
+          "id": "heterozygotes",
+          "quote": "Positive assortative mating leads to an increase in homozygotes whereas negative assortative mating leads to an increase in heterozygotes.",
+          "sourceId": "nij-random-mating",
+          "term": "heterozygotes"
+        }
+      ]
+    },
+    "pageCoverage": "Page explains random mating as a Hardy-Weinberg condition and describes positive and negative assortative mating in humans with effects on homozygotes and heterozygotes.",
+    "subject": "biology",
+    "usable": true
+  },
+  "report": {
+    "artifactId": "job-20261029200601-3599557e:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"biology\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 1070 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 11 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 4, keyTerms 5, componentPlan 2; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (2 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18945-6059-7096-87b6-4a12fc3abec7",
+    "usage": {
+      "promptTokens": 4403,
+      "completionTokens": 8281,
+      "reasoningTokens": 7437,
+      "cachedTokens": 0
+    },
+    "latencyMs": 26388,
+    "estCostUSD": 0.040698,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  }
+}

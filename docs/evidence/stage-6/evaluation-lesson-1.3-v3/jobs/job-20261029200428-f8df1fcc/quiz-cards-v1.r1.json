@@ -1,0 +1,204 @@
+{
+  "gen": {
+    "cards": [
+      {
+        "hint": "Recall the opening age listed for the planet itself",
+        "id": "earth-age-numeric",
+        "options": [
+          "4.6 billion years old",
+          "3.5 billion years ago",
+          "570 million years old"
+        ],
+        "quote": "Earth is about 4.6 billion years old?",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "stem": "What numeric age for Earth do geologists seek to explain with radioactivity?"
+      },
+      {
+        "hint": "Think of the age tied to deposited rocks with early fossils",
+        "id": "oldest-fossils-age",
+        "options": [
+          "about 3.5 billion years ago",
+          "about 4.6 billion years old",
+          "100 million years"
+        ],
+        "quote": "The oldest known fossils are from rocks that were deposited about 3.5 billion years ago?",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "stem": "How old are the rocks with the oldest known fossils described at the start?"
+      },
+      {
+        "hint": "Focus on the age linked to shelly fossils in rock",
+        "id": "first-shelly-fossils-age",
+        "options": [
+          "about 570 million years old",
+          "Earth is about 4.6 billion years old",
+          "deposited about 3.5 billion years ago"
+        ],
+        "quote": "The first abundant shelly fossils occur in rocks that are about 570 million years old?",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "stem": "How old are the rocks holding the first abundant shelly fossils?"
+      }
+    ],
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Remembering Landmark Ages"
+  },
+  "report": {
+    "artifactId": "job-20261029200428-f8df1fcc:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18944-9b88-7036-a99f-afa6dafe4efd",
+    "usage": {
+      "promptTokens": 2869,
+      "completionTokens": 9082,
+      "reasoningTokens": 8678,
+      "cachedTokens": 0
+    },
+    "latencyMs": 33901,
+    "estCostUSD": 0.04218475,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "pruned": true,
+  "dropped": [
+    {
+      "index": 3,
+      "id": "last-ice-age-ended",
+      "reason": "card failed Q-06",
+      "checks": [
+        "Q-06"
+      ]
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029200428-f8df1fcc:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Remembering Landmark Ages",
+    "sources": [
+      {
+        "id": "usgs-fossils-numeric-time-scale",
+        "title": "Fossils, Rocks, and Time: The Numeric Time Scale — U.S. Geological Survey",
+        "locator": "https://pubs.usgs.gov/gip/fossils/numeric.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey, 'Fossils, Rocks, and Time: The Numeric Time Scale' (1997). Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "d6ba577d359485d9ea0ae92e97f294d27bb3a67e23758783067591896f570f2d"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18944-9b88-7036-a99f-afa6dafe4efd",
+      "runId": "job-20261029200428-f8df1fcc",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:05:37.391Z"
+    },
+    "seed": 3987329776,
+    "cards": [
+      {
+        "hint": "Recall the opening age listed for the planet itself",
+        "id": "earth-age-numeric",
+        "options": [
+          "4.6 billion years old",
+          "3.5 billion years ago",
+          "570 million years old"
+        ],
+        "quote": "Earth is about 4.6 billion years old?",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "stem": "What numeric age for Earth do geologists seek to explain with radioactivity?"
+      },
+      {
+        "hint": "Think of the age tied to deposited rocks with early fossils",
+        "id": "oldest-fossils-age",
+        "options": [
+          "about 3.5 billion years ago",
+          "about 4.6 billion years old",
+          "100 million years"
+        ],
+        "quote": "The oldest known fossils are from rocks that were deposited about 3.5 billion years ago?",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "stem": "How old are the rocks with the oldest known fossils described at the start?"
+      },
+      {
+        "hint": "Focus on the age linked to shelly fossils in rock",
+        "id": "first-shelly-fossils-age",
+        "options": [
+          "about 570 million years old",
+          "Earth is about 4.6 billion years old",
+          "deposited about 3.5 billion years ago"
+        ],
+        "quote": "The first abundant shelly fossils occur in rocks that are about 570 million years old?",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "stem": "How old are the rocks holding the first abundant shelly fossils?"
+      }
+    ]
+  }
+}

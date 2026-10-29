@@ -1,0 +1,22 @@
+{
+  "artifactId": "nasa-grc-role-of-the-mach-number-job-20261029201515-203a61ba",
+  "revision": 1,
+  "checks": [
+    {
+      "id": "schema.full",
+      "kind": "schema",
+      "passed": false,
+      "message": "spec failed schema.full: /simulation/scenario/settingLabel must NOT have more than 60 characters",
+      "affected": [
+        "/simulation/scenario/settingLabel"
+      ]
+    },
+    {
+      "id": "repair.no-weakening",
+      "kind": "semantic",
+      "passed": false,
+      "message": "repair weakened the spec: simulation.gamma range width shrank from 0.7 to 0.69 ([1, 1.7] -> [1.01, 1.7]) (a repair must fix the failing checks without changing the engine, renaming/replacing/deleting any baseline case occurrence, widening any tolerance, rewriting a case that passed on the baseline, or shrinking slider ranges; only a baseline name/id that itself violates the publisher-attribution policy, or a prediction id that is itself not a valid id, may be renamed, to a valid policy-compliant key that is not another baseline name/id, with its numbers unchanged)"
+    }
+  ],
+  "publishable": false
+}

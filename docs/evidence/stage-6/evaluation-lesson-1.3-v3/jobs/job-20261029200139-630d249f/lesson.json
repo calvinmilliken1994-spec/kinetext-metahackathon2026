@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261029200139-630d249f",
+  "analysisRef": "job-20261029200139-630d249f/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029200139-630d249f:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Mach number controls air compressibility and density change",
+    "sources": [
+      {
+        "id": "nasa-grc-role-of-the-mach-number",
+        "title": "Role of the Mach Number — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/role-of-the-mach-number/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "a7355b33f7126247cd0576ce48a0975a781814c8687022d8fdf12e11fdeaa3c8"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18941-b19b-7225-98e1-db20b7d64907",
+      "runId": "job-20261029200139-630d249f",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:02:26.469Z"
+    },
+    "seed": 2850140253,
+    "headline": "Mach number controls air compressibility and density change",
+    "keyPoints": [
+      {
+        "id": "low-speed-density",
+        "point": "Low speed flight keeps air density constant without compression",
+        "quote": "If the aircraft passes at a low speed, typically less than 250 mph, it is observed that the density of the air remains constant.",
+        "sourceId": "nasa-grc-role-of-the-mach-number"
+      },
+      {
+        "id": "mach-ratio-def",
+        "point": "Mach number expresses aircraft speed relative to sound speed in gas",
+        "quote": "The Mach number is the ratio of the speed of the aircraft, or the speed of the gas, to the speed of sound in the gas.",
+        "sourceId": "nasa-grc-role-of-the-mach-number"
+      },
+      {
+        "id": "transonic-density",
+        "point": "Transonic flows show density change nearly equal to velocity change",
+        "quote": "For transonic flows, the change in density is nearly equal to the change in velocity, and compressibility effects cannot be ignored.",
+        "sourceId": "nasa-grc-role-of-the-mach-number"
+      },
+      {
+        "id": "supersonic-density",
+        "point": "Supersonic density changes faster than velocity by factor equal to square of Mach number",
+        "quote": "For supersonic and hypersonic flows, the density changes faster than the velocity changes by a factor equal to the square of the Mach number.",
+        "sourceId": "nasa-grc-role-of-the-mach-number"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "ratio of gas speed to sound speed for aircraft flow",
+        "id": "mach-number",
+        "quote": "The Mach number is the ratio of the speed of the aircraft, or the speed of the gas, to the speed of sound in the gas.",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "term": "Mach number"
+      },
+      {
+        "gloss": "equal speed of small disturbance travel in flow",
+        "id": "speed-of-sound",
+        "quote": "where a is equal to the speed of sound. So,",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "term": "speed of sound"
+      },
+      {
+        "gloss": "ignored density effect under low subsonic conditions",
+        "id": "compressibility",
+        "quote": "For the low subsonic conditions, compressibility can be ignored.",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "term": "compressibility"
+      },
+      {
+        "gloss": "sharp disturbances affecting lift and drag downstream",
+        "id": "shock-waves",
+        "quote": "Sharp disturbances generate shock waves that affect both the lift and drag of the aircraft and the flow conditions downstream of the shock wave.",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "term": "shock waves"
+      },
+      {
+        "gloss": "specific heat value used in isentropic density relation",
+        "id": "gamma-ratio",
+        "quote": "where gamma (γ) is the specific heat ratio.",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "term": "gamma"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "speed-of-sound-v1",
+      "specId": "nasa-grc-role-of-the-mach-number-job-20261029200139-630d249f",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261029200139-630d249f:compare-table-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

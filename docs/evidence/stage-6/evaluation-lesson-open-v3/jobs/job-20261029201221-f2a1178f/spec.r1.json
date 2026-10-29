@@ -1,0 +1,155 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nasa-grc-motion-of-free-falling-object-job-20261029201221-f2a117",
+  "title": "Free Fall and Newton's Second Law",
+  "learningObjectives": [
+    "Describe free-falling motion as motion under only the gravitational force and apply a=F_net/m to predict the acceleration.",
+    "Interpret how constant acceleration produces linear growth in velocity and quadratic growth in displacement, and recognize that drag adds an extra force in air."
+  ],
+  "sources": [
+    {
+      "id": "nasa-grc-motion-of-free-falling-object",
+      "title": "Motion of Free Falling Object — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+      "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/motion-of-free-falling-object/",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+      "sha256": "f94199ea21e14dad578baee19694e534fff3dba5dc88f9bc2ea6ec082445c317"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "exp1",
+      "text": "An object falling through a vacuum experiences only the gravitational force as the net force, and its free-fall motion is governed by Newton's second law which links net force and mass to acceleration.",
+      "evidence": [
+        {
+          "sourceId": "nasa-grc-motion-of-free-falling-object",
+          "quote": "An object that falls through a vacuum is subjected to only one external force, the gravitational force, expressed as the weight of the object."
+        },
+        {
+          "sourceId": "nasa-grc-motion-of-free-falling-object",
+          "quote": "is said to be free falling and its motion is described by Newton’s second law of motion."
+        }
+      ]
+    },
+    {
+      "id": "exp2",
+      "text": "In ideal free-fall the acceleration is constant at the value g, so objects of different size and mass accelerate equally when drag is absent.",
+      "evidence": [
+        {
+          "sourceId": "nasa-grc-motion-of-free-falling-object",
+          "quote": "The acceleration is constant and equal to the gravitational acceleration g which is 9.8 meters per square second at sea level on the Earth."
+        },
+        {
+          "sourceId": "nasa-grc-motion-of-free-falling-object",
+          "quote": "In a vacuum, a beach ball falls with the same acceleration as an airliner."
+        }
+      ]
+    },
+    {
+      "id": "exp3",
+      "text": "Constant acceleration causes velocity to increase linearly with time and position to increase quadratically, while motion through the atmosphere involves an additional drag force that makes the description more complex.",
+      "evidence": [
+        {
+          "sourceId": "nasa-grc-motion-of-free-falling-object",
+          "quote": "Notice that the acceleration is a constant, the velocity increases linearly, and the location increases quadratically."
+        },
+        {
+          "sourceId": "nasa-grc-motion-of-free-falling-object",
+          "quote": "If the object falls through the atmosphere, there is an additional drag force acting on the object"
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "forces-1d-v1",
+    "equation": "a=F_net/m",
+    "massKg": {
+      "unit": "kg",
+      "min": 0.5,
+      "max": 20,
+      "default": 5
+    },
+    "netForceN": {
+      "unit": "N",
+      "min": -50,
+      "max": 50,
+      "default": 10
+    },
+    "scenario": {
+      "objectLabel": "Test mass in free fall",
+      "surfaceLabel": "Vacuum tube - vertical 1D motion"
+    },
+    "durationS": 5,
+    "stepS": 0.02,
+    "observables": [
+      "position",
+      "velocity",
+      "acceleration"
+    ]
+  },
+  "behavioralTests": [
+    {
+      "name": "positive force",
+      "massKg": 2,
+      "netForceN": 19.6,
+      "expectedAccelerationMps2": 9.8,
+      "tolerance": 0.001
+    },
+    {
+      "name": "negative force",
+      "massKg": 5,
+      "netForceN": -25,
+      "expectedAccelerationMps2": -5,
+      "tolerance": 0.001
+    },
+    {
+      "name": "zero net force",
+      "massKg": 10,
+      "netForceN": 0,
+      "expectedAccelerationMps2": 0,
+      "tolerance": 0.001
+    },
+    {
+      "name": "small force",
+      "massKg": 4,
+      "netForceN": 10,
+      "expectedAccelerationMps2": 2.5,
+      "tolerance": 0.001
+    }
+  ],
+  "predictions": [
+    {
+      "id": "pred1",
+      "prompt": "Predict the acceleration for the given mass and net force",
+      "massKg": 5,
+      "netForceN": 9.8,
+      "expectedAccelerationMps2": 1.96,
+      "tolerance": 0.001
+    },
+    {
+      "id": "pred2",
+      "prompt": "Predict the acceleration for the given mass and net force",
+      "massKg": 1.5,
+      "netForceN": -15,
+      "expectedAccelerationMps2": -10,
+      "tolerance": 0.001
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "03ae9c94dfcc48109dff001b95f5b226",
+    "runId": "job-20261029201221-f2a1178f",
+    "promptVersion": "v9",
+    "generatedAt": "2026-10-29T20:13:40.900Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

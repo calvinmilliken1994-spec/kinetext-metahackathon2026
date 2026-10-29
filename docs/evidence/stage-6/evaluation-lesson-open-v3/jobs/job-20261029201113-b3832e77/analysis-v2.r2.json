@@ -1,0 +1,190 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "physics",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "Page covers three laws of motion with inertia, the relation between force mass and acceleration, and action and reaction, including momentum definition, change in momentum over time for constant mass, and examples involving airplanes, thrust, lift and falling motion.",
+    "overview": {
+      "headline": "How unbalanced force, mass and motion relate in three laws",
+      "keyPoints": [
+        {
+          "id": "first-law-inertia",
+          "point": "An object in motion remains at constant speed in a straight line unless an unbalanced force acts to change its state.",
+          "sourceId": "nasa-grc-newtons-laws-of-motion",
+          "quote": "an object in motion remains in motion at constant speed and in a straight line unless acted on by an unbalanced force."
+        },
+        {
+          "id": "second-law-force-mass",
+          "point": "Acceleration depends on mass and amount of force applied to an object.",
+          "sourceId": "nasa-grc-newtons-laws-of-motion",
+          "quote": "The acceleration of an object depends on the mass of the object and the amount of force applied."
+        },
+        {
+          "id": "third-law-action-reaction",
+          "point": "When one object exerts a force the second object exerts an equal and opposite force in reaction.",
+          "sourceId": "nasa-grc-newtons-laws-of-motion",
+          "quote": "Whenever one object exerts a force on another object, the second object exerts an equal and opposite on the first."
+        },
+        {
+          "id": "inertia-definition",
+          "point": "Inertia is the tendency to resist changes in state of motion.",
+          "sourceId": "nasa-grc-newtons-laws-of-motion",
+          "quote": "This tendency to resist changes in a state of motion is inertia."
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "inertia",
+          "term": "inertia",
+          "gloss": "tendency to resist changes in state of motion until an external force acts",
+          "sourceId": "nasa-grc-newtons-laws-of-motion",
+          "quote": "This tendency to resist changes in a state of motion is inertia."
+        },
+        {
+          "id": "acceleration",
+          "term": "acceleration",
+          "gloss": "rate of change of velocity that depends on mass and applied force",
+          "sourceId": "nasa-grc-newtons-laws-of-motion",
+          "quote": "The acceleration of an object depends on the mass of the object and the amount of force applied."
+        },
+        {
+          "id": "momentum",
+          "term": "Momentum",
+          "gloss": "mass times velocity describing amount of motion carried by an object",
+          "sourceId": "nasa-grc-newtons-laws-of-motion",
+          "quote": "Momentum is defined to be the mass m of an object times its velocity V."
+        },
+        {
+          "id": "unbalanced-force",
+          "term": "unbalanced force",
+          "gloss": "external force that changes motion from constant speed and straight line",
+          "sourceId": "nasa-grc-newtons-laws-of-motion",
+          "quote": "an object in motion remains in motion at constant speed and in a straight line unless acted on by an unbalanced force."
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "forces-1d-v1",
+        "pedagogicalReason": "Hands on exploration shows how applied force and object mass determine acceleration in one dimension for constant mass.",
+        "focusQuote": "F = m * a",
+        "focusSourceId": "nasa-grc-newtons-laws-of-motion"
+      },
+      {
+        "componentId": "sequence-v1",
+        "pedagogicalReason": "Stepwise derivation follows the page order from change in momentum over time to the familiar mass times acceleration form.",
+        "focusQuote": "F = (m1 * V1 – m0 * V0) / (t1 – t0)",
+        "focusSourceId": "nasa-grc-newtons-laws-of-motion"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029201113-b3832e77:analysis",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"physics\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 6644 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 10 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 4, keyTerms 4, componentPlan 2; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (2 entries, 1 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "source-analysis-v2: no weakening — every one of the 2 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "c9e1555ce7e7403cb5489205c920beba",
+    "usage": {
+      "promptTokens": 7333,
+      "completionTokens": 3305,
+      "reasoningTokens": 2580,
+      "cachedTokens": 0
+    },
+    "latencyMs": 12125,
+    "estCostUSD": 0.0232125,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

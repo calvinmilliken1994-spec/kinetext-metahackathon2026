@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261029201233-8b9a0721",
+  "analysisRef": "job-20261029201233-8b9a0721/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029201233-8b9a0721:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Constant velocity flight and range from ground speed times time",
+    "sources": [
+      {
+        "id": "nasa-grc-range-constant-velocity",
+        "title": "Range – Constant Velocity — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/range-constant-velocity/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "f1f4102e23398f882264cb387f0c4115207597b855cadae074925c9e7c1a4127"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "19e54fd4c9c14d0cbf4c966910b5495d",
+      "runId": "job-20261029201233-8b9a0721",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:13:11.297Z"
+    },
+    "seed": 4220312110,
+    "headline": "Constant velocity flight and range from ground speed times time",
+    "keyPoints": [
+      {
+        "id": "constant-speed-flight",
+        "point": "An airplane maintains constant speed level flight when lift equals weight and thrust equals drag",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "an airplane can maintain a constant speed and level flight, in which the lift is equal to the weight, and the thrust is equal to the drag."
+      },
+      {
+        "id": "ground-speed-constant",
+        "point": "Ground speed remains constant while wind speed stays constant enabling distance calculation",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "The ground speed remains constant as long as the wind speed is constant."
+      },
+      {
+        "id": "distance-equation",
+        "point": "Distance flown equals ground speed multiplied by time aloft expressed as d equals V times t",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "the distance flown is equal to the ground speed times the time aloft."
+      },
+      {
+        "id": "maximum-range-concept",
+        "point": "Maximum distance aircraft can fly equals ground speed times maximum time known as maximum range",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "The maximum distance that the aircraft can fly is then equal to the ground speed times the maximum time (tmax)."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "ground-speed",
+        "term": "ground speed",
+        "gloss": "aircraft speed relative to ground that remains constant when wind speed is steady",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "The ground speed remains constant as long as the wind speed is constant."
+      },
+      {
+        "id": "maximum-range",
+        "term": "maximum range",
+        "gloss": "greatest distance aircraft can fly limited by maximum time and fuel load",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "We call this distance the maximum range (R) of the aircraft."
+      },
+      {
+        "id": "constant-speed",
+        "term": "constant speed",
+        "gloss": "steady velocity maintained when lift equals weight and thrust equals drag",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "an airplane can maintain a constant speed and level flight, in which the lift is equal to the weight, and the thrust is equal to the drag."
+      },
+      {
+        "id": "combat-radius",
+        "term": "combat radius",
+        "gloss": "half of total range used for round trip military missions",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "The combat radius would be half of the range as specified here."
+      },
+      {
+        "id": "tmax",
+        "term": "tmax",
+        "gloss": "maximum time aloft determined by fuel load before engine stops",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "The maximum distance that the aircraft can fly is then equal to the ground speed times the maximum time (tmax)."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "formula-explorer-v1",
+      "specId": "job-20261029201233-8b9a0721:formula-explorer-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029201233-8b9a0721:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

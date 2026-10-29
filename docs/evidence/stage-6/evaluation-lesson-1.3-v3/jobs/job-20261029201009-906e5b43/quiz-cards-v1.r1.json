@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "cards": [
+      {
+        "hint": "Focus on what steady descent does to height.",
+        "id": "steady-descent-loss",
+        "options": [
+          "it loses altitude as it travels",
+          "it gains altitude while climbing",
+          "it holds altitude without moving",
+          "it accelerates with no resistance"
+        ],
+        "quote": "If a glider is in a steady (constant velocity and no acceleration) descent, it loses altitude as it travels.",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "stem": "What happens during steady descent with constant velocity?"
+      },
+      {
+        "hint": "Think about which force steady flight must balance.",
+        "id": "force-balance-weight",
+        "options": [
+          "weight W",
+          "thrust T",
+          "engine power",
+          "ground speed"
+        ],
+        "quote": "The lift L times the cosine cos of the glide angle plus the drag D times the sine sin of the glide angle is equal to the weight W",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "stem": "In steady flight, what do the lift and drag parts combine to balance?"
+      },
+      {
+        "hint": "Recall how lift and drag terms are paired.",
+        "id": "lift-drag-equality",
+        "options": [
+          "drag times the cosine of the glide angle",
+          "weight plus engine thrust",
+          "height divided by distance",
+          "velocity with no force"
+        ],
+        "quote": "The lift times the sine of the glide angle is equal to the drag times the cosine of the glide angle.",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "stem": "What does lift times sine balance in the other force relation?"
+      },
+      {
+        "hint": "Recall what makes this aircraft special.",
+        "id": "glider-definition",
+        "options": [
+          "has no engine",
+          "has a jet engine",
+          "has spinning propellers",
+          "has rocket boosters"
+        ],
+        "quote": "A glider is a special kind of aircraft that has no engine.",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "stem": "What defines this special kind of aircraft?"
+      }
+    ],
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Steady Descent and Force Balance"
+  },
+  "report": {
+    "artifactId": "job-20261029201009-906e5b43:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18949-8eae-7275-8e89-680065c04e2e",
+    "usage": {
+      "promptTokens": 2615,
+      "completionTokens": 6342,
+      "reasoningTokens": 5952,
+      "cachedTokens": 0
+    },
+    "latencyMs": 23254,
+    "estCostUSD": 0.03022225,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029201009-906e5b43:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Steady Descent and Force Balance",
+    "sources": [
+      {
+        "id": "nasa-grc-glider-trajectory-problem",
+        "title": "Glider Trajectory Problem — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/glider-trajectory-problem/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "66e6cfc191fb83e9cfff3bc323a0394b392cbb4e0278aba87b367f3203c3c1e2"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18949-8eae-7275-8e89-680065c04e2e",
+      "runId": "job-20261029201009-906e5b43",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:11:01.788Z"
+    },
+    "seed": 2970293528,
+    "cards": [
+      {
+        "hint": "Focus on what steady descent does to height.",
+        "id": "steady-descent-loss",
+        "options": [
+          "it loses altitude as it travels",
+          "it gains altitude while climbing",
+          "it holds altitude without moving",
+          "it accelerates with no resistance"
+        ],
+        "quote": "If a glider is in a steady (constant velocity and no acceleration) descent, it loses altitude as it travels.",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "stem": "What happens during steady descent with constant velocity?"
+      },
+      {
+        "hint": "Think about which force steady flight must balance.",
+        "id": "force-balance-weight",
+        "options": [
+          "weight W",
+          "thrust T",
+          "engine power",
+          "ground speed"
+        ],
+        "quote": "The lift L times the cosine cos of the glide angle plus the drag D times the sine sin of the glide angle is equal to the weight W",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "stem": "In steady flight, what do the lift and drag parts combine to balance?"
+      },
+      {
+        "hint": "Recall how lift and drag terms are paired.",
+        "id": "lift-drag-equality",
+        "options": [
+          "drag times the cosine of the glide angle",
+          "weight plus engine thrust",
+          "height divided by distance",
+          "velocity with no force"
+        ],
+        "quote": "The lift times the sine of the glide angle is equal to the drag times the cosine of the glide angle.",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "stem": "What does lift times sine balance in the other force relation?"
+      },
+      {
+        "hint": "Recall what makes this aircraft special.",
+        "id": "glider-definition",
+        "options": [
+          "has no engine",
+          "has a jet engine",
+          "has spinning propellers",
+          "has rocket boosters"
+        ],
+        "quote": "A glider is a special kind of aircraft that has no engine.",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "stem": "What defines this special kind of aircraft?"
+      }
+    ]
+  }
+}

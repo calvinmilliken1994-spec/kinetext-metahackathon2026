@@ -1,0 +1,124 @@
+{
+  "jobId": "job-20261029202530-8b112c8b",
+  "analysisRef": "job-20261029202530-8b112c8b/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029202530-8b112c8b:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Drag force expressed through coefficient density speed and reference area",
+    "sources": [
+      {
+        "id": "nasa-grc-drag-equation",
+        "title": "Drag Equation — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/drag-equation/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "9462a6186d8b00e0dbf2618e4a6701edc9448614e144af1f4bc0b53b59f6ceed"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "d1523a4279014d60923b9c4cae70a641",
+      "runId": "job-20261029202530-8b112c8b",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:26:19.154Z"
+    },
+    "seed": 924568382,
+    "headline": "Drag force expressed through coefficient density speed and reference area",
+    "keyPoints": [
+      {
+        "id": "drag-dependence",
+        "point": "Drag depends on density and square of velocity along with viscosity and shape effects",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "Drag depends on the density of the air, the square of the velocity"
+      },
+      {
+        "id": "drag-equation-statement",
+        "point": "Drag equation states that drag equals drag coefficient times density times half velocity squared times reference area",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "The drag equation states that drag D is equal to the drag coefficient Cd times the density rho (ρ) times half of the velocity V squared"
+      },
+      {
+        "id": "wind-tunnel-determination",
+        "point": "Drag coefficients are almost always determined experimentally using a wind tunnel for measurement",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "Drag coefficients are almost always determined experimentally using a wind tunnel."
+      },
+      {
+        "id": "reference-area-choice",
+        "point": "Reference area in drag equation is chosen as a measurable area and must be specified when reporting coefficients",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "Notice that the area (A) given in the drag equation is given as a reference area."
+      },
+      {
+        "id": "dynamic-pressure-definition",
+        "point": "Combination of density times square of velocity divided by two is called dynamic pressure in pressure relation",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "The combination of terms “density times the square of the velocity divided by two” is called the dynamic pressure"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "drag-coefficient-term",
+        "term": "drag coefficient",
+        "gloss": "variable that collects complex dependence into single drag value",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "For drag, this variable is called the drag coefficient, designated “Cd.”"
+      },
+      {
+        "id": "dynamic-pressure-term",
+        "term": "dynamic pressure",
+        "gloss": "combination term of density and velocity that contributes to pressure description",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "The combination of terms “density times the square of the velocity divided by two” is called the dynamic pressure"
+      },
+      {
+        "id": "reference-area-term",
+        "term": "reference area",
+        "gloss": "chosen area that characterizes size dependence for aerodynamic force",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "Notice that the area (A) given in the drag equation is given as a reference area."
+      },
+      {
+        "id": "wind-tunnel-term",
+        "term": "wind tunnel",
+        "gloss": "facility where drag is measured experimentally using controlled airflow",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "Drag coefficients are almost always determined experimentally using a wind tunnel."
+      },
+      {
+        "id": "density-term",
+        "term": "density",
+        "gloss": "property of air designated by rho that appears in dynamic pressure term",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "In the equation given above, the density is designated by the letter rho (ρ)."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029202530-8b112c8b:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261029202530-8b112c8b:compare-table-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

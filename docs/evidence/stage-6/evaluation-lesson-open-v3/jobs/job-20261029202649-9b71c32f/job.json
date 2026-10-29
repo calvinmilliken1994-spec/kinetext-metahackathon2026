@@ -1,0 +1,44 @@
+{
+  "jobId": "job-20261029202649-9b71c32f",
+  "sourceId": "nasa-grc-re-living-the-wright-way",
+  "status": "unsupported",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T20:26:49.577Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.040166,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [
+    {
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "A-04"
+      ],
+      "fixed": [
+        "A-04"
+      ],
+      "remaining": [],
+      "passed": true
+    }
+  ],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 32036,
+    "startedAt": "2026-10-29T20:26:49.577Z"
+  },
+  "lesson": {
+    "overviewReady": false,
+    "componentsPlanned": 0,
+    "componentsPublished": 0,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "finishedAt": "2026-10-29T20:27:16.464Z"
+}

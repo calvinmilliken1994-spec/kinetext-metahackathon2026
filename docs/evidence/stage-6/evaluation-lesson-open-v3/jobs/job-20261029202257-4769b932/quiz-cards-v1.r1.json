@@ -1,0 +1,204 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Key Facts from the Summer Meetings",
+    "cards": [
+      {
+        "id": "central-government-power",
+        "stem": "What was debated as a chief point regarding national authority",
+        "options": [
+          "how much power to allow the central government",
+          "how to create a national postal road system",
+          "how to design the national seal"
+        ],
+        "sourceId": "nara-constitution",
+        "quote": "Among the chief points at issue were how much power to allow the central government, how many representatives in Congress to allow each state",
+        "hint": "Think about the balance between national and state control"
+      },
+      {
+        "id": "convention-location",
+        "stem": "Where did the Federal Convention first meet",
+        "options": [
+          "Philadelphia",
+          "Boston",
+          "New York"
+        ],
+        "sourceId": "nara-constitution",
+        "quote": "The Federal Convention convened in the State House (Independence Hall) in Philadelphia on May 14, 1787, to revise the Articles of Confederation.",
+        "hint": "Recall the city with the State House gathering"
+      },
+      {
+        "id": "quorum-requirement",
+        "stem": "What was required before the Convention could conduct business",
+        "options": [
+          "quorum of seven states",
+          "personal approval by the king",
+          "direct payment of war debts"
+        ],
+        "sourceId": "nara-constitution",
+        "quote": "the members adjourned from day to day until a quorum of seven states was obtained on May 25",
+        "hint": "Consider how many states had to be present"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029202257-4769b932:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "c366a2dee06d434dba957ec338d11dd1",
+    "usage": {
+      "promptTokens": 2290,
+      "completionTokens": 10541,
+      "reasoningTokens": 10180,
+      "cachedTokens": 0
+    },
+    "latencyMs": 43579,
+    "estCostUSD": 0.04766175,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "pruned": true,
+  "dropped": [
+    {
+      "index": 3,
+      "id": "signing-date",
+      "reason": "card failed Q-06",
+      "checks": [
+        "Q-06"
+      ]
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029202257-4769b932:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Key Facts from the Summer Meetings",
+    "sources": [
+      {
+        "id": "nara-constitution",
+        "title": "Constitution of the United States (1787) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/constitution",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Constitution of the United States (1787)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "a14175b009333bebd61eaff70e3393928a8f0dbd0ae00027067c07b15d176db4"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "c366a2dee06d434dba957ec338d11dd1",
+      "runId": "job-20261029202257-4769b932",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:24:46.491Z"
+    },
+    "seed": 3227737102,
+    "cards": [
+      {
+        "id": "central-government-power",
+        "stem": "What was debated as a chief point regarding national authority",
+        "options": [
+          "how much power to allow the central government",
+          "how to create a national postal road system",
+          "how to design the national seal"
+        ],
+        "sourceId": "nara-constitution",
+        "quote": "Among the chief points at issue were how much power to allow the central government, how many representatives in Congress to allow each state",
+        "hint": "Think about the balance between national and state control"
+      },
+      {
+        "id": "convention-location",
+        "stem": "Where did the Federal Convention first meet",
+        "options": [
+          "Philadelphia",
+          "Boston",
+          "New York"
+        ],
+        "sourceId": "nara-constitution",
+        "quote": "The Federal Convention convened in the State House (Independence Hall) in Philadelphia on May 14, 1787, to revise the Articles of Confederation.",
+        "hint": "Recall the city with the State House gathering"
+      },
+      {
+        "id": "quorum-requirement",
+        "stem": "What was required before the Convention could conduct business",
+        "options": [
+          "quorum of seven states",
+          "personal approval by the king",
+          "direct payment of war debts"
+        ],
+        "sourceId": "nara-constitution",
+        "quote": "the members adjourned from day to day until a quorum of seven states was obtained on May 25",
+        "hint": "Consider how many states had to be present"
+      }
+    ]
+  }
+}

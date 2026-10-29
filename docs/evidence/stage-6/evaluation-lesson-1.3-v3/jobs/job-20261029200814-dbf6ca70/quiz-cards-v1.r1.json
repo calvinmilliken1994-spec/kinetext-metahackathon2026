@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "cards": [
+      {
+        "hint": "Think about areas already held by federal forces",
+        "id": "exempted-union-control-areas",
+        "options": [
+          "parts of the Confederacy that had already come under Union control",
+          "England and France",
+          "states that had seceded from the Union",
+          "the war for freedom"
+        ],
+        "quote": "It also expressly exempted parts of the Confederacy that had already come under Union control.",
+        "sourceId": "nara-emancipation-proclamation",
+        "stem": "Which areas were singled out as exceptions to the freedom measure"
+      },
+      {
+        "hint": "Recall which slaveholding areas stayed loyal",
+        "id": "border-states-left-untouched",
+        "options": [
+          "the loyal border states",
+          "states still in rebellion",
+          "the Union Army and Navy",
+          "the domain of freedom"
+        ],
+        "quote": "It applied only to states that had seceded from the Union, leaving slavery untouched in the loyal border states.",
+        "sourceId": "nara-emancipation-proclamation",
+        "stem": "Where did the measure leave the old labor system still in place"
+      },
+      {
+        "hint": "Freedom still needed battlefield success",
+        "id": "freedom-needed-victory",
+        "options": [
+          "depended upon Union military victory",
+          "ended slavery in the nation",
+          "kept foreign powers from giving aid",
+          "came after a major battlefield win"
+        ],
+        "quote": "Most important, the freedom it promised depended upon Union military victory.",
+        "sourceId": "nara-emancipation-proclamation",
+        "stem": "What did the promised freedom still need to succeed"
+      },
+      {
+        "hint": "The order opened military service to the freed",
+        "id": "black-service-opened",
+        "options": [
+          "the acceptance of Black men into the Union Army and Navy",
+          "leaving slavery untouched in loyal areas",
+          "political recognition and military aid",
+          "to preserve the Union"
+        ],
+        "quote": "Moreover, the Proclamation announced the acceptance of Black men into the Union Army and Navy, enabling the liberated to become liberators.",
+        "sourceId": "nara-emancipation-proclamation",
+        "stem": "What new service path did the order open for the freed"
+      }
+    ],
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Limits of a Wartime Freedom Order"
+  },
+  "report": {
+    "artifactId": "job-20261029200814-dbf6ca70:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18948-1188-77fe-8edb-cb9f0b4adc52",
+    "usage": {
+      "promptTokens": 2730,
+      "completionTokens": 10113,
+      "reasoningTokens": 9696,
+      "cachedTokens": 0
+    },
+    "latencyMs": 38569,
+    "estCostUSD": 0.04639275,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029200814-dbf6ca70:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Limits of a Wartime Freedom Order",
+    "sources": [
+      {
+        "id": "nara-emancipation-proclamation",
+        "title": "Emancipation Proclamation (1863) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/emancipation-proclamation",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Emancipation Proclamation (1863)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "0d11585e47f04bd0a12b0ded4d23595943f21a5af522811db76a93ef0486f646"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18948-1188-77fe-8edb-cb9f0b4adc52",
+      "runId": "job-20261029200814-dbf6ca70",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:09:24.189Z"
+    },
+    "seed": 2528645877,
+    "cards": [
+      {
+        "hint": "Think about areas already held by federal forces",
+        "id": "exempted-union-control-areas",
+        "options": [
+          "parts of the Confederacy that had already come under Union control",
+          "England and France",
+          "states that had seceded from the Union",
+          "the war for freedom"
+        ],
+        "quote": "It also expressly exempted parts of the Confederacy that had already come under Union control.",
+        "sourceId": "nara-emancipation-proclamation",
+        "stem": "Which areas were singled out as exceptions to the freedom measure"
+      },
+      {
+        "hint": "Recall which slaveholding areas stayed loyal",
+        "id": "border-states-left-untouched",
+        "options": [
+          "the loyal border states",
+          "states still in rebellion",
+          "the Union Army and Navy",
+          "the domain of freedom"
+        ],
+        "quote": "It applied only to states that had seceded from the Union, leaving slavery untouched in the loyal border states.",
+        "sourceId": "nara-emancipation-proclamation",
+        "stem": "Where did the measure leave the old labor system still in place"
+      },
+      {
+        "hint": "Freedom still needed battlefield success",
+        "id": "freedom-needed-victory",
+        "options": [
+          "depended upon Union military victory",
+          "ended slavery in the nation",
+          "kept foreign powers from giving aid",
+          "came after a major battlefield win"
+        ],
+        "quote": "Most important, the freedom it promised depended upon Union military victory.",
+        "sourceId": "nara-emancipation-proclamation",
+        "stem": "What did the promised freedom still need to succeed"
+      },
+      {
+        "hint": "The order opened military service to the freed",
+        "id": "black-service-opened",
+        "options": [
+          "the acceptance of Black men into the Union Army and Navy",
+          "leaving slavery untouched in loyal areas",
+          "political recognition and military aid",
+          "to preserve the Union"
+        ],
+        "quote": "Moreover, the Proclamation announced the acceptance of Black men into the Union Army and Navy, enabling the liberated to become liberators.",
+        "sourceId": "nara-emancipation-proclamation",
+        "stem": "What new service path did the order open for the freed"
+      }
+    ]
+  }
+}

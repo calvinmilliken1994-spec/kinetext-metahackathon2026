@@ -1,0 +1,204 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Free Fall Vacuum and Drag",
+    "cards": [
+      {
+        "id": "vacuum-single-force",
+        "stem": "What single external force acts on an object falling through a vacuum environment?",
+        "options": [
+          "gravitational force",
+          "propulsive thrust",
+          "static friction"
+        ],
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "An object that falls through a vacuum is subjected to only one external force, the gravitational force, expressed as the weight of the object.",
+        "hint": "Think about the force named in the weight description"
+      },
+      {
+        "id": "atmosphere-extra-force",
+        "stem": "What extra force acts on an object falling through the atmosphere?",
+        "options": [
+          "drag force",
+          "magnetic attraction",
+          "inertial buoyancy"
+        ],
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "there is an additional drag force acting on the object",
+        "hint": "Consider the extra resistance present in air"
+      },
+      {
+        "id": "constant-acceleration-value",
+        "stem": "How is free fall acceleration described at sea level on Earth?",
+        "options": [
+          "9.8 meters per square second",
+          "variable air density",
+          "increasing mass effect"
+        ],
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "The acceleration is constant and equal to the gravitational acceleration g which is 9.8 meters per square second at sea level on the Earth.",
+        "hint": "Look for the constant value given for sea level"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029201221-f2a1178f:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "ceaad7bdeec140eabbdded1eef3d627b",
+    "usage": {
+      "promptTokens": 2819,
+      "completionTokens": 7276,
+      "reasoningTokens": 6886,
+      "cachedTokens": 0
+    },
+    "latencyMs": 32330,
+    "estCostUSD": 0.03444675,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "pruned": true,
+  "dropped": [
+    {
+      "index": 1,
+      "id": "motion-description-law",
+      "reason": "card failed Q-01",
+      "checks": [
+        "Q-01"
+      ]
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029201221-f2a1178f:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Free Fall Vacuum and Drag",
+    "sources": [
+      {
+        "id": "nasa-grc-motion-of-free-falling-object",
+        "title": "Motion of Free Falling Object — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/motion-of-free-falling-object/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "f94199ea21e14dad578baee19694e534fff3dba5dc88f9bc2ea6ec082445c317"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "ceaad7bdeec140eabbdded1eef3d627b",
+      "runId": "job-20261029201221-f2a1178f",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:13:39.443Z"
+    },
+    "seed": 3453661206,
+    "cards": [
+      {
+        "id": "vacuum-single-force",
+        "stem": "What single external force acts on an object falling through a vacuum environment?",
+        "options": [
+          "gravitational force",
+          "propulsive thrust",
+          "static friction"
+        ],
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "An object that falls through a vacuum is subjected to only one external force, the gravitational force, expressed as the weight of the object.",
+        "hint": "Think about the force named in the weight description"
+      },
+      {
+        "id": "atmosphere-extra-force",
+        "stem": "What extra force acts on an object falling through the atmosphere?",
+        "options": [
+          "drag force",
+          "magnetic attraction",
+          "inertial buoyancy"
+        ],
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "there is an additional drag force acting on the object",
+        "hint": "Consider the extra resistance present in air"
+      },
+      {
+        "id": "constant-acceleration-value",
+        "stem": "How is free fall acceleration described at sea level on Earth?",
+        "options": [
+          "9.8 meters per square second",
+          "variable air density",
+          "increasing mass effect"
+        ],
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "The acceleration is constant and equal to the gravitational acceleration g which is 9.8 meters per square second at sea level on the Earth.",
+        "hint": "Look for the constant value given for sea level"
+      }
+    ]
+  }
+}

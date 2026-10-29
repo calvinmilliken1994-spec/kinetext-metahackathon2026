@@ -1,0 +1,18 @@
+{
+  "artifactId": "nrc-backgrounder-plutonium-job-20261029201831-46788430",
+  "revision": 1,
+  "checks": [
+    {
+      "id": "schema.full",
+      "kind": "schema",
+      "passed": false,
+      "message": "spec failed schema.full: /title must NOT have fewer than 1 characters; /behavioralTests must NOT have fewer than 1 items; /predictions must NOT have fewer than 1 items",
+      "affected": [
+        "/title",
+        "/behavioralTests",
+        "/predictions"
+      ]
+    }
+  ],
+  "publishable": false
+}

@@ -1,0 +1,184 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "history",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "Page covers debates over Constitution adoption, demand for a bill of rights, proposal of amendments by First Congress and ratification of Bill of Rights",
+    "overview": {
+      "headline": "How opposition to Constitution led to proposal and ratification of Bill of Rights",
+      "keyPoints": [
+        {
+          "id": "proposed-ratified",
+          "point": "amendments were originally proposed and ratified became Bill of Rights",
+          "sourceId": "nara-bill-of-rights",
+          "quote": "Although 12 amendments were originally proposed, the 10 that were ratified became the Bill of Rights in 1791."
+        },
+        {
+          "id": "opponents-tyranny",
+          "point": "opponents repeatedly charged Constitution would open way to tyranny by central government",
+          "sourceId": "nara-bill-of-rights",
+          "quote": "its opponents repeatedly charged that the Constitution as drafted would open the way to tyranny by the central government"
+        },
+        {
+          "id": "demanded-immunities",
+          "point": "citizens demanded bill of rights to spell out immunities of individual citizens",
+          "sourceId": "nara-bill-of-rights",
+          "quote": "They demanded a \"bill of rights\" that would spell out the immunities of individual citizens."
+        },
+        {
+          "id": "congress-proposed",
+          "point": "First Congress proposed amendments to Constitution for state legislatures to consider",
+          "sourceId": "nara-bill-of-rights",
+          "quote": "the First Congress of the United States therefore proposed to the state legislatures 12 amendments to the Constitution"
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "amendments",
+          "term": "amendments",
+          "gloss": "proposed changes to Constitution that were originally proposed as formal additions",
+          "sourceId": "nara-bill-of-rights",
+          "quote": "Although 12 amendments were originally proposed, the 10 that were ratified became the Bill of Rights in 1791."
+        },
+        {
+          "id": "tyranny",
+          "term": "tyranny",
+          "gloss": "oppressive rule by central government feared if Constitution opened way to abuse",
+          "sourceId": "nara-bill-of-rights",
+          "quote": "its opponents repeatedly charged that the Constitution as drafted would open the way to tyranny by the central government"
+        },
+        {
+          "id": "immunities",
+          "term": "immunities",
+          "gloss": "protections that spell out rights of individual citizens against government action",
+          "sourceId": "nara-bill-of-rights",
+          "quote": "They demanded a \"bill of rights\" that would spell out the immunities of individual citizens."
+        },
+        {
+          "id": "ratified",
+          "term": "ratified",
+          "gloss": "formally approved by state legislatures after being proposed by Congress",
+          "sourceId": "nara-bill-of-rights",
+          "quote": "Articles 3 to 12, ratified December 15, 1791, by three-fourths of the state legislatures"
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "sequence-v1",
+        "pedagogicalReason": "Traces cause and effect from constitutional debates through demand to proposal and ratification in page order",
+        "focusQuote": "On September 25, 1789, the First Congress of the United States therefore proposed to the state legislatures 12 amendments to the Constitution",
+        "focusSourceId": "nara-bill-of-rights"
+      },
+      {
+        "componentId": "quiz-cards-v1",
+        "pedagogicalReason": "Reinforces checkable facts about proposal, ratification and purpose of Bill of Rights",
+        "focusQuote": "They defined citizens' rights in relation to the newly established government under the Constitution.",
+        "focusSourceId": "nara-bill-of-rights"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029202357-44c60ccd:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"history\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 1476 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 10 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 4, keyTerms 4, componentPlan 2; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (2 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "4ab6836e5b3c45bb8fa8292991b6c2ef",
+    "usage": {
+      "promptTokens": 3753,
+      "completionTokens": 8775,
+      "reasoningTokens": 8055,
+      "cachedTokens": 0
+    },
+    "latencyMs": 37660,
+    "estCostUSD": 0.041985,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

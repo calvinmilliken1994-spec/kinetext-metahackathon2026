@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261029202321-a8b6bdbf",
+  "analysisRef": "job-20261029202321-a8b6bdbf/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029202321-a8b6bdbf:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Lee Resolution Proposes Independence and Leads to Declaration",
+    "sources": [
+      {
+        "id": "nara-lee-resolution",
+        "title": "Lee Resolution (1776) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/lee-resolution",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Lee Resolution (1776)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "a18b4131b1c5223c9b0685aed8fa77a746537b2af6e2084d892549e8808ce9e3"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "1e2b571e8904437a9a0ad74efe10ae16",
+      "runId": "job-20261029202321-a8b6bdbf",
+      "promptVersion": "s6-v3",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T20:24:41.070Z"
+    },
+    "seed": 3052151256,
+    "headline": "Lee Resolution Proposes Independence and Leads to Declaration",
+    "keyPoints": [
+      {
+        "id": "lee-introduces-resolution",
+        "point": "Richard Henry Lee introduced resolution proposing independence on June 7 1776",
+        "sourceId": "nara-lee-resolution",
+        "quote": "On June 7, 1776, Richard Henry Lee introduced a resolution"
+      },
+      {
+        "id": "three-parts-resolution",
+        "point": "Lee Resolution contained three parts including declaration of independence and foreign alliances",
+        "sourceId": "nara-lee-resolution",
+        "quote": "The Lee Resolution contained three parts: a declaration of independence, a call to form foreign alliances, and \"a plan for confederation.\""
+      },
+      {
+        "id": "congress-committees-june",
+        "point": "Congress appointed three concurrent committees on June 11 1776 in response to resolution",
+        "sourceId": "nara-lee-resolution",
+        "quote": "On June 11, 1776, the Congress appointed three concurrent committees in response to the Lee Resolution"
+      },
+      {
+        "id": "approval-deferred-july",
+        "point": "Approval deferred until July when Congress adopted first part of declaration",
+        "sourceId": "nara-lee-resolution",
+        "quote": "approval was deferred until July 2. On that date, Congress adopted the first part (the declaration)."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "lee-resolution",
+        "term": "Lee Resolution",
+        "gloss": "proposal containing three parts including declaration of independence and plan for confederation",
+        "sourceId": "nara-lee-resolution",
+        "quote": "The Lee Resolution contained three parts: a declaration of independence, a call to form foreign alliances, and \"a plan for confederation.\""
+      },
+      {
+        "id": "continental-congress",
+        "term": "Continental Congress",
+        "gloss": "gathering of delegates that became governing body during Revolution",
+        "sourceId": "nara-lee-resolution",
+        "quote": "The colonists elected delegates to attend a Continental Congress that eventually became the governing body of the union during the Revolution."
+      },
+      {
+        "id": "reconciliation",
+        "term": "reconciliation",
+        "gloss": "effort to restore friendly relations with Britain after abandoning hope",
+        "sourceId": "nara-lee-resolution",
+        "quote": "In less than a year, most of the delegates abandoned hope of reconciliation with Britain."
+      },
+      {
+        "id": "confederation",
+        "term": "confederation",
+        "gloss": "form of union planned for independent states to prepare cooperation",
+        "sourceId": "nara-lee-resolution",
+        "quote": "a third to \"prepare and digest the form of a confederation.\""
+      },
+      {
+        "id": "foreign-alliances",
+        "term": "foreign alliances",
+        "gloss": "planned partnerships with other nations reflected in alliances proposal",
+        "sourceId": "nara-lee-resolution",
+        "quote": "a second to draw up a plan \"for forming foreign alliances,\""
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "timeline-v1",
+      "specId": "nara-lee-resolution-job-20261029202321-a8b6bdbf",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029202321-a8b6bdbf:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

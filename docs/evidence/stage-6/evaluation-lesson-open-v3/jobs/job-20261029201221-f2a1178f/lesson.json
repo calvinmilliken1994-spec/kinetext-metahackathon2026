@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261029201221-f2a1178f",
+  "analysisRef": "job-20261029201221-f2a1178f/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029201221-f2a1178f:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Free fall under gravity with constant acceleration and motion equations",
+    "sources": [
+      {
+        "id": "nasa-grc-motion-of-free-falling-object",
+        "title": "Motion of Free Falling Object — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/motion-of-free-falling-object/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "f94199ea21e14dad578baee19694e534fff3dba5dc88f9bc2ea6ec082445c317"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "3efe937146fd495fa827594afee85f43",
+      "runId": "job-20261029201221-f2a1178f",
+      "promptVersion": "s6-v3",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T20:13:07.094Z"
+    },
+    "seed": 3857488054,
+    "headline": "Free fall under gravity with constant acceleration and motion equations",
+    "keyPoints": [
+      {
+        "id": "vacuum-gravity-force",
+        "point": "Object falling through vacuum is subjected to only gravitational force expressed as weight",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "An object that falls through a vacuum is subjected to only one external force, the gravitational force, expressed as the weight of the object."
+      },
+      {
+        "id": "constant-acceleration-g",
+        "point": "Acceleration is constant and equal to gravitational acceleration of 9.8 meters per square second at sea level",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "The acceleration is constant and equal to the gravitational acceleration g which is 9.8 meters per square second at sea level on the Earth."
+      },
+      {
+        "id": "velocity-location-trends",
+        "point": "Velocity increases linearly and location increases quadratically under constant acceleration",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Notice that the acceleration is a constant, the velocity increases linearly, and the location increases quadratically."
+      },
+      {
+        "id": "galileo-same-rate",
+        "point": "Galileo proposed that all free falling objects fall at same rate nearly 400 years ago",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "The remarkable observation that all free falling objects fall at the same rate was first proposed by Galileo, nearly 400 years ago."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "free-falling",
+        "term": "free falling",
+        "gloss": "motion caused only by gravity with no other forces acting on the object",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "is said to be free falling and its motion is described by Newton’s second law of motion."
+      },
+      {
+        "id": "gravitational-acceleration",
+        "term": "gravitational acceleration",
+        "gloss": "acceleration that remains constant at sea level due to gravity",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "The acceleration is constant and equal to the gravitational acceleration g which is 9.8 meters per square second at sea level on the Earth."
+      },
+      {
+        "id": "velocity",
+        "term": "velocity",
+        "gloss": "velocity measures rate of motion from initial location over time",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "where a is the acceleration, V is the velocity, and X is the displacement from an initial location."
+      },
+      {
+        "id": "displacement",
+        "term": "displacement",
+        "gloss": "displacement is distance from initial location along motion path",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "where a is the acceleration, V is the velocity, and X is the displacement from an initial location."
+      },
+      {
+        "id": "drag-force",
+        "term": "drag force",
+        "gloss": "drag force is resistance from atmosphere acting on moving object",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "If the object falls through the atmosphere, there is an additional drag force acting on the object"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "forces-1d-v1",
+      "specId": "nasa-grc-motion-of-free-falling-object-job-20261029201221-f2a117",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029201221-f2a1178f:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "1 card was left out because they could not be verified against the page: motion-description-law (Q-01).",
+      "revision": 1
+    }
+  ]
+}

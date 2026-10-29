@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261029195807-aeb016de",
+  "analysisRef": "job-20261029195807-aeb016de/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029195807-aeb016de:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How balanced and unbalanced forces control aircraft motion",
+    "sources": [
+      {
+        "id": "nasa-grc-simplified-aircraft-motion",
+        "title": "Simplified Aircraft Motion — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/simplified-aircraft-motion/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "21d6273d590cd157b690fe9491c4c0d202f5b35c5e5a31a8c072b37bbe89edd5"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a1893e-55de-74ad-bfa5-cb5b122e6600",
+      "runId": "job-20261029195807-aeb016de",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T19:58:46.328Z"
+    },
+    "seed": 3745436994,
+    "headline": "How balanced and unbalanced forces control aircraft motion",
+    "keyPoints": [
+      {
+        "id": "simplified-motion-study",
+        "point": "Simplified motion studies balanced aircraft forces one direction at a time",
+        "quote": "some of the four forces acting on the aircraft are balanced by other forces and that we are looking at only one force and one direction at a time",
+        "sourceId": "nasa-grc-simplified-aircraft-motion"
+      },
+      {
+        "id": "level-cruise-balance",
+        "point": "Cruising airplane sustains constant speed in level flight",
+        "quote": "an airplane could sustain a constant speed and level flight",
+        "sourceId": "nasa-grc-simplified-aircraft-motion"
+      },
+      {
+        "id": "unbalanced-force-motion",
+        "point": "Unbalanced forces move aircraft toward direction of greater force",
+        "quote": "If the forces become unbalanced, the aircraft will move in the direction of the greater force.",
+        "sourceId": "nasa-grc-simplified-aircraft-motion"
+      },
+      {
+        "id": "mass-acceleration-force",
+        "point": "Aircraft acceleration follows mass and net force acting on aircraft",
+        "quote": "Where a is the acceleration, m is the mass of the aircraft, and F is the net force acting on the aircraft.",
+        "sourceId": "nasa-grc-simplified-aircraft-motion"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "upward force balanced against weight in steady flight",
+        "id": "lift",
+        "quote": "the weight would be balanced by the lift and the drag would be balanced by the thrust.",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "term": "lift"
+      },
+      {
+        "gloss": "downward pull that decreases as fuel burns during cruise",
+        "id": "weight",
+        "quote": "While the weight decreases due to fuel burned, the change is very small relative to the total aircraft weight.",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "term": "weight"
+      },
+      {
+        "gloss": "forward push forming an opposing pair with drag",
+        "id": "thrust",
+        "quote": "The net force is the difference between the opposing forces; lift minus weight, or thrust minus drag.",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "term": "thrust"
+      },
+      {
+        "gloss": "resistance that will cause slowing when thrust remains constant",
+        "id": "drag",
+        "quote": "And increasing the drag at a constant thrust will cause the plane to slow down:",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "term": "drag"
+      },
+      {
+        "gloss": "acting difference that produces acceleration in aircraft motion",
+        "id": "net-force",
+        "quote": "Where a is the acceleration, m is the mass of the aircraft, and F is the net force acting on the aircraft.",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "term": "net force"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "forces-1d-v1",
+      "specId": "nasa-grc-simplified-aircraft-motion-job-20261029195807-aeb016de",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029195807-aeb016de:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

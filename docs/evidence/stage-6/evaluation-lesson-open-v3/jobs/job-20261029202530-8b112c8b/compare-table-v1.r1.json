@@ -1,0 +1,215 @@
+{
+  "gen": {
+    "schemaVersion": "compare-table-v1",
+    "title": "Reference area choices for drag coefficient",
+    "attributes": [
+      "friction-based area",
+      "resistance-based area"
+    ],
+    "rows": [
+      {
+        "entity": "total surface area of the body",
+        "values": [
+          {
+            "value": "being caused by friction between the air and the body",
+            "sourceId": "nasa-grc-drag-equation",
+            "quote": "being caused by friction between the air and the body, a logical choice would be the total surface area of the body"
+          },
+          {
+            "value": "we are free to use any area that can be easily measured",
+            "sourceId": "nasa-grc-drag-equation",
+            "quote": "we are free to use any area that can be easily measured"
+          }
+        ]
+      },
+      {
+        "entity": "frontal area of the body",
+        "values": [
+          {
+            "value": "being a resistance to the flow",
+            "sourceId": "nasa-grc-drag-equation",
+            "quote": "being a resistance to the flow, a more logical choice would be the frontal area of the body"
+          },
+          {
+            "value": "the coefficients are related by the ratio of the areas",
+            "sourceId": "nasa-grc-drag-equation",
+            "quote": "But the drag is the same, and the coefficients are related by the ratio of the areas"
+          }
+        ]
+      },
+      {
+        "entity": "wing area",
+        "values": [
+          {
+            "value": "compare with the lift coefficient",
+            "sourceId": "nasa-grc-drag-equation",
+            "quote": "if we want to compare with the lift coefficient, we should use the same wing area used to derive the lift coefficient"
+          },
+          {
+            "value": "the aerodynamicist must specify the area used",
+            "sourceId": "nasa-grc-drag-equation",
+            "quote": "the aerodynamicist must specify the area used"
+          }
+        ]
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029202530-8b112c8b:compare-table-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every compare-table text length is within the frozen limits and every row and column name uses page words, never an id"
+      },
+      {
+        "id": "CT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 cell quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "CT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cell value occurs in its quote and every row entity occurs in the quote or the same source paragraph (cell-in-quote; paragraph-level entity attribution is the design-disclosed false accept — quotes are visible)"
+      },
+      {
+        "id": "CT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the table shape is valid: 3 rows x 2 attributes with exactly one value per row-column slot (shape-valid)"
+      },
+      {
+        "id": "CT-04",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in entity names, attributes and cell values appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "CT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "predict mode is available: attribute \"friction-based area\" offers >= 3 distinct seeded same-column options (predict-cell-valid)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "d99067b8df6a419a8517adbc2dddedae",
+    "usage": {
+      "promptTokens": 2867,
+      "completionTokens": 7391,
+      "reasoningTokens": 7062,
+      "cachedTokens": 0
+    },
+    "latencyMs": 29965,
+    "estCostUSD": 0.0349955,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029202530-8b112c8b:compare-table-v1:r1",
+    "componentId": "compare-table-v1",
+    "title": "Reference area choices for drag coefficient",
+    "sources": [
+      {
+        "id": "nasa-grc-drag-equation",
+        "title": "Drag Equation — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/drag-equation/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "9462a6186d8b00e0dbf2618e4a6701edc9448614e144af1f4bc0b53b59f6ceed"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "d99067b8df6a419a8517adbc2dddedae",
+      "runId": "job-20261029202530-8b112c8b",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:26:49.133Z"
+    },
+    "seed": 3766679649,
+    "entities": [
+      "total surface area of the body",
+      "frontal area of the body",
+      "wing area"
+    ],
+    "attributes": [
+      "friction-based area",
+      "resistance-based area"
+    ],
+    "cells": [
+      {
+        "id": "cell-0-0",
+        "entityIndex": 0,
+        "attributeIndex": 0,
+        "value": "being caused by friction between the air and the body",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "being caused by friction between the air and the body, a logical choice would be the total surface area of the body"
+      },
+      {
+        "id": "cell-0-1",
+        "entityIndex": 0,
+        "attributeIndex": 1,
+        "value": "we are free to use any area that can be easily measured",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "we are free to use any area that can be easily measured"
+      },
+      {
+        "id": "cell-1-0",
+        "entityIndex": 1,
+        "attributeIndex": 0,
+        "value": "being a resistance to the flow",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "being a resistance to the flow, a more logical choice would be the frontal area of the body"
+      },
+      {
+        "id": "cell-1-1",
+        "entityIndex": 1,
+        "attributeIndex": 1,
+        "value": "the coefficients are related by the ratio of the areas",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "But the drag is the same, and the coefficients are related by the ratio of the areas"
+      },
+      {
+        "id": "cell-2-0",
+        "entityIndex": 2,
+        "attributeIndex": 0,
+        "value": "compare with the lift coefficient",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "if we want to compare with the lift coefficient, we should use the same wing area used to derive the lift coefficient"
+      },
+      {
+        "id": "cell-2-1",
+        "entityIndex": 2,
+        "attributeIndex": 1,
+        "value": "the aerodynamicist must specify the area used",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "the aerodynamicist must specify the area used"
+      }
+    ]
+  }
+}

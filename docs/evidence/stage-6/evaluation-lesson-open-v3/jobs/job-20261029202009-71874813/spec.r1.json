@@ -1,0 +1,165 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "usgs-powell-geologic-time-job-20261029202009-71874813",
+  "title": "Radioactive Decay Half-Life Explorer",
+  "learningObjectives": [
+    "Define half-life as the time for half of the parent isotopes to decay and describe how remaining amount halves each interval",
+    "Apply the equation N=N0*(1/2)^(t/T) to calculate the amount remaining after a given elapsed time"
+  ],
+  "sources": [
+    {
+      "id": "usgs-powell-geologic-time",
+      "title": "Powell Expedition—Geologic Time. Then and Now. — U.S. Geological Survey",
+      "locator": "https://www.usgs.gov/news/powell-expedition-geologic-time-then-and-now",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: U.S. Geological Survey, 'Powell Expedition—Geologic Time. Then and Now.' (2019). Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+      "sha256": "fa7498537478e10722976127bedd9cf61ccb5dda39090e0a4f844635b5a8f71f"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "exp-1",
+      "text": "Half-life describes how long it takes for half of the original parent isotopes to decay to a daughter product, leaving half the starting amount after one half-life.",
+      "evidence": [
+        {
+          "sourceId": "usgs-powell-geologic-time",
+          "quote": "A half-life is the length of time it takes for half of the number of original, or parent, isotopes to decay to a stable daughter isotope."
+        }
+      ]
+    },
+    {
+      "id": "exp-2",
+      "text": "Each isotope has its own fundamental half-life value. For example, the decay of uranium-235 to lead-207 has a characteristic timescale measured in hundreds of millions of years.",
+      "evidence": [
+        {
+          "sourceId": "usgs-powell-geologic-time",
+          "quote": "For example, uranium-235 is an unstable parent isotope that decays to lead-207, with a half-life of 710 million years."
+        },
+        {
+          "sourceId": "usgs-powell-geologic-time",
+          "quote": "It is a fundamental characteristic of a particular isotope."
+        }
+      ]
+    },
+    {
+      "id": "exp-3",
+      "text": "The cake analogy illustrates exponential halving: after each half-life the remaining portion is halved again, so the amount left can be used to estimate age in number of half-lives.",
+      "evidence": [
+        {
+          "sourceId": "usgs-powell-geologic-time",
+          "quote": "In this example, the half-life is one day."
+        },
+        {
+          "sourceId": "usgs-powell-geologic-time",
+          "quote": "On day one, you would eat half the cake and have half left (and probably go to bed with a bellyache)."
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "half-life-v1",
+    "equation": "N=N0*(1/2)^(t/T)",
+    "initialAmount": {
+      "unit": "1",
+      "min": 1,
+      "max": 1000,
+      "default": 100
+    },
+    "halfLife": {
+      "unit": "time",
+      "min": 1,
+      "max": 10,
+      "default": 5
+    },
+    "elapsedTime": {
+      "unit": "time",
+      "min": 0,
+      "max": 25,
+      "default": 5
+    },
+    "scenario": {
+      "objectLabel": "Uranium-235 sample (grams)",
+      "settingLabel": "Half-life and age in million years"
+    }
+  },
+  "behavioralTests": [
+    {
+      "name": "One half-life elapsed",
+      "initialAmount": 100,
+      "halfLife": 5,
+      "elapsedTime": 5,
+      "expectedRemaining": 50,
+      "tolerance": 0.05
+    },
+    {
+      "name": "Two half-lives elapsed",
+      "initialAmount": 100,
+      "halfLife": 5,
+      "elapsedTime": 10,
+      "expectedRemaining": 25,
+      "tolerance": 0.02
+    },
+    {
+      "name": "Non-integer half-lives",
+      "initialAmount": 80,
+      "halfLife": 4,
+      "elapsedTime": 6,
+      "expectedRemaining": 28.2843,
+      "tolerance": 0.02
+    },
+    {
+      "name": "Zero time no decay",
+      "initialAmount": 10,
+      "halfLife": 2,
+      "elapsedTime": 0,
+      "expectedRemaining": 10,
+      "tolerance": 0.005
+    }
+  ],
+  "predictions": [
+    {
+      "id": "pred-1",
+      "prompt": "What amount remains after one half-life?",
+      "initialAmount": 100,
+      "halfLife": 5,
+      "elapsedTime": 5,
+      "expectedRemaining": 50,
+      "tolerance": 0.05
+    },
+    {
+      "id": "pred-2",
+      "prompt": "What amount remains after two half-lives?",
+      "initialAmount": 250,
+      "halfLife": 4,
+      "elapsedTime": 8,
+      "expectedRemaining": 62.5,
+      "tolerance": 0.05
+    },
+    {
+      "id": "pred-3",
+      "prompt": "What amount remains after two half-lives with different start?",
+      "initialAmount": 120,
+      "halfLife": 6,
+      "elapsedTime": 12,
+      "expectedRemaining": 30,
+      "tolerance": 0.03
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "1af6532d0ca34f7e9a9ff7dd5b446614",
+    "runId": "job-20261029202009-71874813",
+    "promptVersion": "v9",
+    "generatedAt": "2026-10-29T20:22:16.152Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

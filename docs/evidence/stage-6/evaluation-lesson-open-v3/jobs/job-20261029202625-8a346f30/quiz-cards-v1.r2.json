@@ -1,0 +1,231 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Ideal flow pressure concepts",
+    "cards": [
+      {
+        "id": "flow-restrictions-inviscid",
+        "stem": "Which flow condition is listed as required for the simplest form of the relation?",
+        "options": [
+          "inviscid",
+          "turbulent",
+          "rotational",
+          "supersonic"
+        ],
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "the flow is inviscid, incompressible, steady, without heat addition, and with negligible change in height.",
+        "hint": "Think about the list of ideal flow assumptions."
+      },
+      {
+        "id": "dynamic-pressure-term",
+        "stem": "What name is given to the pressure linked to ordered motion of the gas?",
+        "options": [
+          "dynamic pressure",
+          "buoyancy term",
+          "total enthalpy",
+          "specific volume"
+        ],
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "The form of the dynamic pressure is the density times the square of the velocity divided by two.",
+        "hint": "Ordered motion versus random motion gives two pressure names."
+      },
+      {
+        "id": "static-pressure-term",
+        "stem": "Which pressure term comes from the remaining random motion of molecules?",
+        "options": [
+          "static pressure",
+          "dynamic pressure",
+          "total pressure",
+          "kinetic energy"
+        ],
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "The remaining random motion of the molecules still produces a pressure called the static pressure.",
+        "hint": "Random motion at the molecular level still exerts a pressure."
+      },
+      {
+        "id": "pitot-total-pressure",
+        "stem": "In a pitot-static tube what is measured along with static pressure to find speed?",
+        "options": [
+          "total pressure",
+          "viscous dissipation",
+          "heat addition",
+          "buoyancy term"
+        ],
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "In a pitot-static tube, we measure the static and total pressure and can then use Bernoulli’s equation to compute the velocity.",
+        "hint": "A speedometer uses two pressure readings in the flow."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029202625-8a346f30:quiz-cards-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "quiz-cards-v1: no weakening — every one of the 1 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "6ce432ef7bb247fbbfb97a4ac4bb0c18",
+    "usage": {
+      "promptTokens": 5275,
+      "completionTokens": 1604,
+      "reasoningTokens": 1218,
+      "cachedTokens": 0
+    },
+    "latencyMs": 5606,
+    "estCostUSD": 0.01341075,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029202625-8a346f30:quiz-cards-v1:r2",
+    "componentId": "quiz-cards-v1",
+    "title": "Ideal flow pressure concepts",
+    "sources": [
+      {
+        "id": "nasa-grc-bernoullis-equation",
+        "title": "Bernoulli's Equation — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/bernoullis-equation/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "ce3917d5b0b1392825d9f0c16d2d9b78898e119122bec3a1dd940e1d45437799"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "6ce432ef7bb247fbbfb97a4ac4bb0c18",
+      "runId": "job-20261029202625-8a346f30",
+      "promptVersion": "s6-v3",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T20:27:55.618Z"
+    },
+    "seed": 334530049,
+    "cards": [
+      {
+        "id": "flow-restrictions-inviscid",
+        "stem": "Which flow condition is listed as required for the simplest form of the relation?",
+        "options": [
+          "inviscid",
+          "turbulent",
+          "rotational",
+          "supersonic"
+        ],
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "the flow is inviscid, incompressible, steady, without heat addition, and with negligible change in height.",
+        "hint": "Think about the list of ideal flow assumptions."
+      },
+      {
+        "id": "dynamic-pressure-term",
+        "stem": "What name is given to the pressure linked to ordered motion of the gas?",
+        "options": [
+          "dynamic pressure",
+          "buoyancy term",
+          "total enthalpy",
+          "specific volume"
+        ],
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "The form of the dynamic pressure is the density times the square of the velocity divided by two.",
+        "hint": "Ordered motion versus random motion gives two pressure names."
+      },
+      {
+        "id": "static-pressure-term",
+        "stem": "Which pressure term comes from the remaining random motion of molecules?",
+        "options": [
+          "static pressure",
+          "dynamic pressure",
+          "total pressure",
+          "kinetic energy"
+        ],
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "The remaining random motion of the molecules still produces a pressure called the static pressure.",
+        "hint": "Random motion at the molecular level still exerts a pressure."
+      },
+      {
+        "id": "pitot-total-pressure",
+        "stem": "In a pitot-static tube what is measured along with static pressure to find speed?",
+        "options": [
+          "total pressure",
+          "viscous dissipation",
+          "heat addition",
+          "buoyancy term"
+        ],
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "In a pitot-static tube, we measure the static and total pressure and can then use Bernoulli’s equation to compute the velocity.",
+        "hint": "A speedometer uses two pressure readings in the flow."
+      }
+    ]
+  }
+}

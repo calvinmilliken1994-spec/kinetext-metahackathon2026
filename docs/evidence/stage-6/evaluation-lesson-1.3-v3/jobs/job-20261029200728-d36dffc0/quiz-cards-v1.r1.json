@@ -1,0 +1,204 @@
+{
+  "gen": {
+    "cards": [
+      {
+        "hint": "Think about breaking away and starting fresh",
+        "id": "three-parts-check",
+        "options": [
+          "a declaration of independence",
+          "a permanent truce with Parliament",
+          "a new tax plan for trade"
+        ],
+        "quote": "The Lee Resolution contained three parts: a declaration of independence, a call to form foreign alliances,",
+        "sourceId": "nara-lee-resolution",
+        "stem": "Which element was included as one of three parts of the June proposal"
+      },
+      {
+        "hint": "Think about seeking help from other countries",
+        "id": "second-committee-task",
+        "options": [
+          "for forming foreign alliances",
+          "to collect new taxes from towns",
+          "to enforce secrecy rules in Congress"
+        ],
+        "quote": "a second to draw up a plan \"for forming foreign alliances,\"",
+        "sourceId": "nara-lee-resolution",
+        "stem": "What job was assigned to the second committee formed after the proposal"
+      },
+      {
+        "hint": "Focus on how many groups voted yes",
+        "id": "vote-record-check",
+        "options": [
+          "the affirmative votes of 12 colonies",
+          "unanimous approval by all delegations",
+          "rejection by a large majority"
+        ],
+        "quote": "the affirmative votes of 12 colonies are listed at the right.",
+        "sourceId": "nara-lee-resolution",
+        "stem": "What does the surviving document show listed at the right"
+      }
+    ],
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Path Toward Independence Quiz"
+  },
+  "report": {
+    "artifactId": "job-20261029200728-d36dffc0:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18947-2092-7569-a8ed-b500705d2471",
+    "usage": {
+      "promptTokens": 2554,
+      "completionTokens": 6210,
+      "reasoningTokens": 5852,
+      "cachedTokens": 0
+    },
+    "latencyMs": 22664,
+    "estCostUSD": 0.029585,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "pruned": true,
+  "dropped": [
+    {
+      "index": 3,
+      "id": "july-2-outcome",
+      "reason": "card failed Q-06",
+      "checks": [
+        "Q-06"
+      ]
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029200728-d36dffc0:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Path Toward Independence Quiz",
+    "sources": [
+      {
+        "id": "nara-lee-resolution",
+        "title": "Lee Resolution (1776) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/lee-resolution",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Lee Resolution (1776)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "a18b4131b1c5223c9b0685aed8fa77a746537b2af6e2084d892549e8808ce9e3"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18947-2092-7569-a8ed-b500705d2471",
+      "runId": "job-20261029200728-d36dffc0",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:08:22.507Z"
+    },
+    "seed": 3181250143,
+    "cards": [
+      {
+        "hint": "Think about breaking away and starting fresh",
+        "id": "three-parts-check",
+        "options": [
+          "a declaration of independence",
+          "a permanent truce with Parliament",
+          "a new tax plan for trade"
+        ],
+        "quote": "The Lee Resolution contained three parts: a declaration of independence, a call to form foreign alliances,",
+        "sourceId": "nara-lee-resolution",
+        "stem": "Which element was included as one of three parts of the June proposal"
+      },
+      {
+        "hint": "Think about seeking help from other countries",
+        "id": "second-committee-task",
+        "options": [
+          "for forming foreign alliances",
+          "to collect new taxes from towns",
+          "to enforce secrecy rules in Congress"
+        ],
+        "quote": "a second to draw up a plan \"for forming foreign alliances,\"",
+        "sourceId": "nara-lee-resolution",
+        "stem": "What job was assigned to the second committee formed after the proposal"
+      },
+      {
+        "hint": "Focus on how many groups voted yes",
+        "id": "vote-record-check",
+        "options": [
+          "the affirmative votes of 12 colonies",
+          "unanimous approval by all delegations",
+          "rejection by a large majority"
+        ],
+        "quote": "the affirmative votes of 12 colonies are listed at the right.",
+        "sourceId": "nara-lee-resolution",
+        "stem": "What does the surviving document show listed at the right"
+      }
+    ]
+  }
+}

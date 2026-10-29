@@ -1,0 +1,198 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "finance",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "Page covers age appropriate conversations about teen saving, building emergency funds, choosing safe places to save, workplace retirement options, and an early investing example showing how compound interest grows savings over time.",
+    "overview": {
+      "headline": "Saving habits for teens: emergency funds and early compound growth",
+      "keyPoints": [
+        {
+          "id": "save-ten-percent",
+          "point": "Help teens set up a savings program where at least 10 percent of earnings goes directly into savings account",
+          "sourceId": "cfpb-teenagers-and-saving",
+          "quote": "Once your teen has a steady job, help them set up a savings program so that at least 10 percent of earnings goes directly into their savings account."
+        },
+        {
+          "id": "emergency-three-months",
+          "point": "Keep at least three months worth of living expenses saved for emergency needs to avoid high interest credit options",
+          "sourceId": "cfpb-teenagers-and-saving",
+          "quote": "“A good rule to live by is to save 10 percent of what you earn, and have at least three months’ worth of living expenses saved up in case of an emergency.”"
+        },
+        {
+          "id": "compound-interest-definition",
+          "point": "Compound interest means earning interest on both saved money and previously earned interest to accelerate growth",
+          "sourceId": "cfpb-teenagers-and-saving",
+          "quote": "Compound interest is when your child earns interest on both the money they save and the interest they earn."
+        },
+        {
+          "id": "early-saving-advantage",
+          "point": "Setting aside $100 every year starting at age 14 at 5 percent every year can grow to about $23,000 by age 65 compared to about $7,000 starting at age 35",
+          "sourceId": "cfpb-teenagers-and-saving",
+          "quote": "Show your child the following: If they set aside $100 every year starting at age 14, they'd have about $23,000 at age 65."
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "emergency-savings",
+          "term": "emergency savings",
+          "gloss": "money set aside to cover living expenses when an emergency occurs without using credit",
+          "sourceId": "cfpb-teenagers-and-saving",
+          "quote": "Explain to your child that they sometimes may need to choose between adding money to a 401(k) or to their emergency savings."
+        },
+        {
+          "id": "compound-interest-term",
+          "term": "Compound interest",
+          "gloss": "interest earned on both saved money and previously earned interest",
+          "sourceId": "cfpb-teenagers-and-saving",
+          "quote": "Compound interest is when your child earns interest on both the money they save and the interest they earn."
+        },
+        {
+          "id": "interest-rate-term",
+          "term": "interest rate",
+          "gloss": "percentage charged or paid for using money, relevant when choosing a savings account",
+          "sourceId": "cfpb-teenagers-and-saving",
+          "quote": "When choosing to open a savings account at a bank or credit union, explain that the interest rate may not be as relevant since the goal is to save enough money to cover emergency expenses."
+        },
+        {
+          "id": "retirement-401k",
+          "term": "401(k)",
+          "gloss": "workplace retirement account where employers may provide matching contributions as an incentive to save",
+          "sourceId": "cfpb-teenagers-and-saving",
+          "quote": "Explain to your child that once they start a job, they may be offered a retirement account at work called a 401(k)."
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "quiz-cards-v1",
+        "pedagogicalReason": "Checks core definitions and rules before teens calculate tradeoffs between emergency savings and retirement options",
+        "focusQuote": "Compound interest is when your child earns interest on both the money they save and the interest they earn.",
+        "focusSourceId": "cfpb-teenagers-and-saving"
+      },
+      {
+        "componentId": "compare-table-v1",
+        "pedagogicalReason": "Contrasting early versus later start makes the cost of waiting visible side by side without merging recurring and lump sums",
+        "focusQuote": "Show your child the following: If they set aside $100 every year starting at age 14, they'd have about $23,000 at age 65.",
+        "focusSourceId": "cfpb-teenagers-and-saving"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029201605-d500402f:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"finance\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 3011 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": false,
+        "message": "keyPoints[1] (emergency-three-months): quote \"“A good rule to live by is to save 10 percent of what you ea\" is 155 characters, expected <= 150; keyTerms[2] (interest-rate-term): quote \"When choosing to open a savings account at a bank or credit \" is 188 characters, expected <= 150 (expected verbatim quotes of 1-150 characters that appear in the cited source)",
+        "path": "/overview/keyPoints/1/quote",
+        "affected": [
+          "/overview/keyPoints/1/quote",
+          "/overview/keyTerms/2/quote"
+        ]
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": false,
+        "message": "keyPoints[1].quote is 155 characters, expected 1-150; keyTerms[2].quote is 188 characters, expected 1-150",
+        "path": "/overview/keyPoints/1/quote",
+        "affected": [
+          "/overview/keyPoints/1/quote",
+          "/overview/keyTerms/2/quote"
+        ]
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (2 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": false,
+        "message": "keyPoints[3].point states the number 23000, which does not appear on the page or in the same quote (N-01); keyPoints[3].point states the number 65, which does not appear on the page or in the same quote (N-01); keyPoints[3].point states the number 7000, which does not appear on the page or in the same quote (N-01)",
+        "path": "/overview/keyPoints/3/point",
+        "affected": [
+          "/overview/keyPoints/3/point"
+        ]
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "25eb0f02bf524e8694d25621aa013a99",
+    "usage": {
+      "promptTokens": 4056,
+      "completionTokens": 12468,
+      "reasoningTokens": 11630,
+      "cachedTokens": 0
+    },
+    "latencyMs": 52987,
+    "estCostUSD": 0.058059,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

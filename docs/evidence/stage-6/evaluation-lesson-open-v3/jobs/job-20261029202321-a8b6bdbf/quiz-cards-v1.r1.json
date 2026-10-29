@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Lee Resolution votes and actions",
+    "cards": [
+      {
+        "id": "card-vote-outcome",
+        "stem": "How many colonies are shown casting affirmative votes in the document view described?",
+        "options": [
+          "12 colonies",
+          "11 colonies",
+          "9 colonies",
+          "7 colonies"
+        ],
+        "sourceId": "nara-lee-resolution",
+        "quote": "The document seen here shows the vote on the Lee Resolution — the affirmative votes of 12 colonies are listed at the right.",
+        "hint": "Count the affirmative votes listed at the right."
+      },
+      {
+        "id": "card-introduced-by",
+        "stem": "Who introduced the resolution proposing independence for the American colonies?",
+        "options": [
+          "Richard Henry Lee",
+          "Thomas Jefferson",
+          "John Adams",
+          "Samuel Adams"
+        ],
+        "sourceId": "nara-lee-resolution",
+        "quote": "On June 7, 1776, Richard Henry Lee introduced a resolution",
+        "hint": "Look for the Virginia delegate backed by his colony convention."
+      },
+      {
+        "id": "card-three-parts",
+        "stem": "Which was listed as one of the three parts of the Lee Resolution?",
+        "options": [
+          "a declaration of independence",
+          "a treaty with France",
+          "a new tax system",
+          "a royal pardon request"
+        ],
+        "sourceId": "nara-lee-resolution",
+        "quote": "The Lee Resolution contained three parts: a declaration of independence, a call to form foreign alliances, and \"a plan for confederation.\"",
+        "hint": "Check the list that includes foreign alliances and confederation."
+      },
+      {
+        "id": "card-committees-response",
+        "stem": "What did Congress create on June 11, 1776 in response to the Lee Resolution?",
+        "options": [
+          "three concurrent committees",
+          "a single drafting council",
+          "two negotiation teams",
+          "four advisory boards"
+        ],
+        "sourceId": "nara-lee-resolution",
+        "quote": "On June 11, 1776, the Congress appointed three concurrent committees in response to the Lee Resolution",
+        "hint": "Note the groups appointed to handle declaration and alliances."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029202321-a8b6bdbf:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "3dfba5fc640144489090ca5358a8432d",
+    "usage": {
+      "promptTokens": 2566,
+      "completionTokens": 8010,
+      "reasoningTokens": 7625,
+      "cachedTokens": 0
+    },
+    "latencyMs": 35547,
+    "estCostUSD": 0.03725,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029202321-a8b6bdbf:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Lee Resolution votes and actions",
+    "sources": [
+      {
+        "id": "nara-lee-resolution",
+        "title": "Lee Resolution (1776) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/lee-resolution",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Lee Resolution (1776)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "a18b4131b1c5223c9b0685aed8fa77a746537b2af6e2084d892549e8808ce9e3"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "3dfba5fc640144489090ca5358a8432d",
+      "runId": "job-20261029202321-a8b6bdbf",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:25:16.631Z"
+    },
+    "seed": 3035567961,
+    "cards": [
+      {
+        "id": "card-vote-outcome",
+        "stem": "How many colonies are shown casting affirmative votes in the document view described?",
+        "options": [
+          "12 colonies",
+          "11 colonies",
+          "9 colonies",
+          "7 colonies"
+        ],
+        "sourceId": "nara-lee-resolution",
+        "quote": "The document seen here shows the vote on the Lee Resolution — the affirmative votes of 12 colonies are listed at the right.",
+        "hint": "Count the affirmative votes listed at the right."
+      },
+      {
+        "id": "card-introduced-by",
+        "stem": "Who introduced the resolution proposing independence for the American colonies?",
+        "options": [
+          "Richard Henry Lee",
+          "Thomas Jefferson",
+          "John Adams",
+          "Samuel Adams"
+        ],
+        "sourceId": "nara-lee-resolution",
+        "quote": "On June 7, 1776, Richard Henry Lee introduced a resolution",
+        "hint": "Look for the Virginia delegate backed by his colony convention."
+      },
+      {
+        "id": "card-three-parts",
+        "stem": "Which was listed as one of the three parts of the Lee Resolution?",
+        "options": [
+          "a declaration of independence",
+          "a treaty with France",
+          "a new tax system",
+          "a royal pardon request"
+        ],
+        "sourceId": "nara-lee-resolution",
+        "quote": "The Lee Resolution contained three parts: a declaration of independence, a call to form foreign alliances, and \"a plan for confederation.\"",
+        "hint": "Check the list that includes foreign alliances and confederation."
+      },
+      {
+        "id": "card-committees-response",
+        "stem": "What did Congress create on June 11, 1776 in response to the Lee Resolution?",
+        "options": [
+          "three concurrent committees",
+          "a single drafting council",
+          "two negotiation teams",
+          "four advisory boards"
+        ],
+        "sourceId": "nara-lee-resolution",
+        "quote": "On June 11, 1776, the Congress appointed three concurrent committees in response to the Lee Resolution",
+        "hint": "Note the groups appointed to handle declaration and alliances."
+      }
+    ]
+  }
+}

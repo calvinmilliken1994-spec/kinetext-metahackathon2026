@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261029195910-e0c9d05a",
+  "analysisRef": "job-20261029195910-e0c9d05a/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029195910-e0c9d05a:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Free fall in a vacuum accelerates constantly due to gravity",
+    "sources": [
+      {
+        "id": "nasa-grc-motion-of-free-falling-object",
+        "title": "Motion of Free Falling Object — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/motion-of-free-falling-object/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "f94199ea21e14dad578baee19694e534fff3dba5dc88f9bc2ea6ec082445c317"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a1893f-3f60-745b-aa43-3abda09d7021",
+      "runId": "job-20261029195910-e0c9d05a",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T19:59:46.320Z"
+    },
+    "seed": 287299395,
+    "headline": "Free fall in a vacuum accelerates constantly due to gravity",
+    "keyPoints": [
+      {
+        "id": "free-fall-definition",
+        "point": "Free falling means moving only because of gravity with weight as the only external force in a vacuum",
+        "quote": "An object that falls through a vacuum is subjected to only one external force, the gravitational force, expressed as the weight of the object.",
+        "sourceId": "nasa-grc-motion-of-free-falling-object"
+      },
+      {
+        "id": "constant-acceleration",
+        "point": "Free fall acceleration stays constant at gravitational acceleration at sea level on Earth",
+        "quote": "The acceleration is constant and equal to the gravitational acceleration g which is 9.8 meters per square second at sea level on the Earth.",
+        "sourceId": "nasa-grc-motion-of-free-falling-object"
+      },
+      {
+        "id": "velocity-displacement-pattern",
+        "point": "Acceleration remains constant while velocity grows linearly and location grows quadratically over time",
+        "quote": "Notice that the acceleration is a constant, the velocity increases linearly, and the location increases quadratically.",
+        "sourceId": "nasa-grc-motion-of-free-falling-object"
+      },
+      {
+        "id": "galileo-observation",
+        "point": "Galileo proposed that all free falling objects fall at the same rate regardless of mass",
+        "quote": "The remarkable observation that all free falling objects fall at the same rate was first proposed by Galileo, nearly 400 years ago.",
+        "sourceId": "nasa-grc-motion-of-free-falling-object"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "moving only because of gravity action",
+        "id": "free-falling",
+        "quote": "An object that is moving only because of the action of gravity is said to be free falling",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "term": "free falling"
+      },
+      {
+        "gloss": "constant acceleration due to gravity at sea level",
+        "id": "gravitational-acceleration",
+        "quote": "The acceleration is constant and equal to the gravitational acceleration g which is 9.8 meters per square second at sea level on the Earth.",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "term": "gravitational acceleration"
+      },
+      {
+        "gloss": "gravitational force expressed as weight of object",
+        "id": "weight",
+        "quote": "The weight, size, and shape of the object are not a factor in describing a free fall.",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "term": "weight"
+      },
+      {
+        "gloss": "additional force acting on object in atmosphere",
+        "id": "drag-force",
+        "quote": "there is an additional drag force acting on the object",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "term": "drag force"
+      },
+      {
+        "gloss": "different fall speeds when air resistance balances motion",
+        "id": "terminal-velocities",
+        "quote": "they are subject to air resistance and would fall at different terminal velocities",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "term": "terminal velocities"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "forces-1d-v1",
+      "specId": "nasa-grc-motion-of-free-falling-object-job-20261029195910-e0c9d0",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029195910-e0c9d05a:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

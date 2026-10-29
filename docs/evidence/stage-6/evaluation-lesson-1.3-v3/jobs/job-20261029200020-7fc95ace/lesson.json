@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261029200020-7fc95ace",
+  "analysisRef": "job-20261029200020-7fc95ace/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029200020-7fc95ace:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How heat capacity changes with pressure, volume and temperature in gases",
+    "sources": [
+      {
+        "id": "nasa-grc-specific-heat-cp-cv",
+        "title": "Specific Heat – Cp & Cv — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/specific-heat-cp-cv/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "9df5f948a44c3fd060dd74c26ccaa8247cb311d0b0d618ceaafaf6382ba4d1b8"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18940-a463-74f5-964f-18eaf72184a1",
+      "runId": "job-20261029200020-7fc95ace",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:01:17.534Z"
+    },
+    "seed": 828671760,
+    "headline": "How heat capacity changes with pressure, volume and temperature in gases",
+    "keyPoints": [
+      {
+        "id": "heat-capacity-state",
+        "point": "Heat capacity shows heat needed for temperature rise and is not treated as a state variable",
+        "quote": "Heat capacity is not a state variable.",
+        "sourceId": "nasa-grc-specific-heat-cp-cv"
+      },
+      {
+        "id": "constant-volume-work",
+        "point": "Constant volume processes do no work so added heat raises internal energy directly",
+        "quote": "For a constant volume process, the work is equal to zero.",
+        "sourceId": "nasa-grc-specific-heat-cp-cv"
+      },
+      {
+        "id": "pressure-volume-link",
+        "point": "Specific heat constants for constant pressure and constant volume link to the gas constant",
+        "quote": "The specific heat constants for constant pressure and constant volume processes are related to the gas constant for a given gas.",
+        "sourceId": "nasa-grc-specific-heat-cp-cv"
+      },
+      {
+        "id": "air-gamma-standard",
+        "point": "Gamma for air under standard day conditions sets behavior for compression and sound",
+        "quote": "For air, gamma = 1.4 for standard day conditions.",
+        "sourceId": "nasa-grc-specific-heat-cp-cv"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "Heat added per temperature rise at constant pressure",
+        "id": "specific-heat-capacity",
+        "quote": "We have added a subscript “p” to the specific heat capacity to remind us that this value only applies to a constant pressure process.",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "term": "specific heat capacity"
+      },
+      {
+        "gloss": "Total specific energy combining internal energy with pressure and volume work",
+        "id": "enthalpy",
+        "quote": "where h in the specific enthalpy, p is the pressure, v is the specific volume, and e is the specific internal energy.",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "term": "enthalpy"
+      },
+      {
+        "gloss": "Constant linking pressure volume and temperature for a given gas",
+        "id": "gas-constant",
+        "quote": "The gas constant used by aerodynamicists is derived from the universal gas constant but has a unique value for every gas.",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "term": "gas constant"
+      },
+      {
+        "gloss": "Standard ratio of pressure heat capacity to volume heat capacity",
+        "id": "gamma",
+        "quote": "For air, gamma = 1.4 for standard day conditions.",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "term": "gamma"
+      },
+      {
+        "gloss": "Energy stored in gas changed during heating with pressure work",
+        "id": "internal-energy",
+        "quote": "The enthalpy, internal energy, and volume are all changed, but the pressure remains the same.",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "term": "internal energy"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261029200020-7fc95ace:compare-table-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "formula-explorer-v1",
+      "specId": "job-20261029200020-7fc95ace:formula-explorer-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    }
+  ]
+}

@@ -1,0 +1,124 @@
+{
+  "jobId": "job-20261029200422-919343d9",
+  "analysisRef": "job-20261029200422-919343d9/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029200422-919343d9:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Deep time from early rock laws to modern radiometric dating",
+    "sources": [
+      {
+        "id": "usgs-powell-geologic-time",
+        "title": "Powell Expedition—Geologic Time. Then and Now. — U.S. Geological Survey",
+        "locator": "https://www.usgs.gov/news/powell-expedition-geologic-time-then-and-now",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey, 'Powell Expedition—Geologic Time. Then and Now.' (2019). Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "fa7498537478e10722976127bedd9cf61ccb5dda39090e0a4f844635b5a8f71f"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18944-5892-75a1-b827-81dd8e379c07",
+      "runId": "job-20261029200422-919343d9",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:05:20.291Z"
+    },
+    "seed": 1918634336,
+    "headline": "Deep time from early rock laws to modern radiometric dating",
+    "keyPoints": [
+      {
+        "id": "earth-age-today",
+        "point": "Earth has an ancient age spanning billions of years of deep time.",
+        "quote": "Earth is 4.54 billion years old, a span of time that is hard for many people to grasp.",
+        "sourceId": "usgs-powell-geologic-time"
+      },
+      {
+        "id": "stratigraphy-relative-time",
+        "point": "Basic stratigraphy principles allow observers to order geologic events as relative time without absolute age.",
+        "quote": "allow observers to put geologic events in order to tell the story of relative time, but they don’t provide an absolute age.",
+        "sourceId": "usgs-powell-geologic-time"
+      },
+      {
+        "id": "hutton-uniformitarianism",
+        "point": "Uniformitarianism states that processes happening on Earth today shaped Earth in the past.",
+        "quote": "states that the processes that we see happening on Earth today are the same processes that shaped Earth in the past",
+        "sourceId": "usgs-powell-geologic-time"
+      },
+      {
+        "id": "smith-faunal-succession",
+        "point": "Faunal succession states that characteristic fossils of a certain age mark that age everywhere.",
+        "quote": "which states that species become extinct and are replaced by new species, and that characteristic fossils of a certain age are that age everywhere.",
+        "sourceId": "usgs-powell-geologic-time"
+      },
+      {
+        "id": "patterson-meteorite-age",
+        "point": "Patterson used lead-lead dating to determine the age of Canyon Diablo meteorite.",
+        "quote": "used lead-lead dating to determine that the Canyon Diablo meteorite was 4.55 billion years old.",
+        "sourceId": "usgs-powell-geologic-time"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "concept of vast geologic history over long spans",
+        "id": "deep-time",
+        "quote": "is the concept of deep time.",
+        "sourceId": "usgs-powell-geologic-time",
+        "term": "deep time"
+      },
+      {
+        "gloss": "law that older rocks lie below younger rocks",
+        "id": "superposition",
+        "quote": "The law of superposition says that older rocks are on the bottom and younger rocks are on the top.",
+        "sourceId": "usgs-powell-geologic-time",
+        "term": "superposition"
+      },
+      {
+        "gloss": "principle that present processes shaped past geology",
+        "id": "uniformitarianism",
+        "quote": "proposed what would become the foundational principle of geology — uniformitarianism.",
+        "sourceId": "usgs-powell-geologic-time",
+        "term": "uniformitarianism"
+      },
+      {
+        "gloss": "law that species assemblages appear in the same order",
+        "id": "faunal-succession",
+        "quote": "In 1815, Smith developed the law of faunal succession, which states that species become extinct",
+        "sourceId": "usgs-powell-geologic-time",
+        "term": "faunal succession"
+      },
+      {
+        "gloss": "span of million years for half of parent atoms to decay",
+        "id": "half-life",
+        "quote": "with a half-life of 710 million years.",
+        "sourceId": "usgs-powell-geologic-time",
+        "term": "half-life"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "timeline-v1",
+      "specId": "usgs-powell-geologic-time-job-20261029200422-919343d9",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029200422-919343d9:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

@@ -1,0 +1,174 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nara-lee-resolution-job-20261029202321-a8b6bdbf",
+  "title": "The Lee Resolution and the Move Toward Independence",
+  "learningObjectives": [
+    "Identify the sequence of decisions following the proposal of independence in 1776",
+    "Explain how the Lee Resolution led to separate plans for treaties and confederation"
+  ],
+  "sources": [
+    {
+      "id": "nara-lee-resolution",
+      "title": "Lee Resolution (1776) — National Archives, Milestone Documents (agency-written introduction)",
+      "locator": "https://www.archives.gov/milestone-documents/lee-resolution",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Lee Resolution (1776)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+      "sha256": "a18b4131b1c5223c9b0685aed8fa77a746537b2af6e2084d892549e8808ce9e3"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "exp1",
+      "text": "The Lee Resolution proposed three distinct actions that shaped the work of the Second Continental Congress.",
+      "evidence": [
+        {
+          "sourceId": "nara-lee-resolution",
+          "quote": "The Lee Resolution contained three parts: a declaration of independence, a call to form foreign alliances, and \"a plan for confederation.\""
+        }
+      ]
+    },
+    {
+      "id": "exp2",
+      "text": "Approval of the resolution's parts occurred gradually over more than a year.",
+      "evidence": [
+        {
+          "sourceId": "nara-lee-resolution",
+          "quote": "The plan for making treaties was not approved until September of 1776; the plan of confederation was delayed until November of 1777."
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "timeline-v1",
+    "events": [
+      {
+        "id": "e1",
+        "label": "Second Continental Congress meets in Philadelphia",
+        "year": 1775,
+        "month": 0,
+        "day": 0,
+        "evidence": [
+          {
+            "sourceId": "nara-lee-resolution",
+            "quote": "Its second meeting convened in Philadelphia in 1775."
+          }
+        ]
+      },
+      {
+        "id": "e2",
+        "label": "New York Convention upholds Declaration",
+        "year": 1776,
+        "month": 7,
+        "day": 9,
+        "evidence": [
+          {
+            "sourceId": "nara-lee-resolution",
+            "quote": "New York cast no vote until the newly elected New York Convention upheld the Declaration of Independence on July 9, 1776."
+          }
+        ]
+      },
+      {
+        "id": "e3",
+        "label": "Richard Henry Lee introduces independence resolution",
+        "year": 1776,
+        "month": 6,
+        "day": 7,
+        "evidence": [
+          {
+            "sourceId": "nara-lee-resolution",
+            "quote": "On June 7, 1776, Richard Henry Lee of Virginia, introduced this resolution in the Second Continental Congress proposing independence for the American colonies."
+          }
+        ]
+      },
+      {
+        "id": "e4",
+        "label": "Congress appoints three concurrent committees",
+        "year": 1776,
+        "month": 6,
+        "day": 11,
+        "evidence": [
+          {
+            "sourceId": "nara-lee-resolution",
+            "quote": "On June 11, 1776, the Congress appointed three concurrent committees in response to the Lee Resolution:"
+          }
+        ]
+      },
+      {
+        "id": "e5",
+        "label": "Lee Resolution proposed",
+        "year": 1776,
+        "month": 0,
+        "day": 0,
+        "evidence": [
+          {
+            "sourceId": "nara-lee-resolution",
+            "quote": "# Lee Resolution (1776)"
+          }
+        ]
+      }
+    ],
+    "scenario": {
+      "subjectLabel": "Lee Resolution",
+      "settingLabel": "Second Continental Congress, 1775-1777"
+    }
+  },
+  "behavioralTests": [
+    {
+      "name": "Congress meets before New York upholds",
+      "earlierEventId": "e1",
+      "laterEventId": "e2"
+    },
+    {
+      "name": "New York upholds before treaty plan delayed",
+      "earlierEventId": "e3",
+      "laterEventId": "e2"
+    },
+    {
+      "name": "Treaty plan before confederation plan",
+      "earlierEventId": "e3",
+      "laterEventId": "e4"
+    },
+    {
+      "name": "Lee Resolution year before confederation plan",
+      "earlierEventId": "e1",
+      "laterEventId": "e5"
+    }
+  ],
+  "predictions": [
+    {
+      "id": "p1",
+      "prompt": "Which happened first: the Second Continental Congress met in Philadelphia or the New York Convention upheld the Declaration?",
+      "earlierEventId": "e1",
+      "laterEventId": "e2"
+    },
+    {
+      "id": "p2",
+      "prompt": "Which happened first: Richard Henry Lee introduced the resolution or the New York Convention upheld the Declaration?",
+      "earlierEventId": "e3",
+      "laterEventId": "e2"
+    },
+    {
+      "id": "p3",
+      "prompt": "Which happened first: Richard Henry Lee introduced the resolution or the Congress appointed three committees?",
+      "earlierEventId": "e3",
+      "laterEventId": "e4"
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "dd35a261d30a41b3b4407bd1974ebb7a",
+    "runId": "job-20261029202321-a8b6bdbf",
+    "promptVersion": "v9",
+    "generatedAt": "2026-10-29T20:27:09.942Z",
+    "revision": 2,
+    "repairOf": 1
+  }
+}

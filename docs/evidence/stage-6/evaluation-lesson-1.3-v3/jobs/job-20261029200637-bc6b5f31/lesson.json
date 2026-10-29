@@ -1,0 +1,111 @@
+{
+  "jobId": "job-20261029200637-bc6b5f31",
+  "analysisRef": "job-20261029200637-bc6b5f31/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029200637-bc6b5f31:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Louisiana Purchase doubled United States size westward",
+    "sources": [
+      {
+        "id": "nara-louisiana-purchase-treaty",
+        "title": "Louisiana Purchase Treaty (1803) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/louisiana-purchase-treaty",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Louisiana Purchase Treaty (1803)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "6da19e2b0134ca81169b3c5b0a0461ae48243446219561e760b32cb2ed7cce4b"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18945-faa3-7107-89cc-4fa02f557e4c",
+      "runId": "job-20261029200637-bc6b5f31",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:07:07.228Z"
+    },
+    "seed": 2027151112,
+    "headline": "Louisiana Purchase doubled United States size westward",
+    "keyPoints": [
+      {
+        "id": "purchase-size-cost",
+        "point": "The United States bought vast land west of the Mississippi River for a low price per acre",
+        "quote": "the United States purchased 828,000 square miles of land west of the Mississippi River for $15 million",
+        "sourceId": "nara-louisiana-purchase-treaty"
+      },
+      {
+        "id": "negotiators-mission",
+        "point": "Livingston and Monroe first sought New Orleans and the Floridas then accepted the larger Louisiana offer",
+        "quote": "negotiators Robert Livingston and James Monroe were authorized to pay France up to $10 million",
+        "sourceId": "nara-louisiana-purchase-treaty"
+      },
+      {
+        "id": "jefferson-doubts",
+        "point": "Jefferson held strict views of the Constitution yet moved ahead to occupy rich western lands",
+        "quote": "President Thomas Jefferson was generally a strict interpreter of the Constitution",
+        "sourceId": "nara-louisiana-purchase-treaty"
+      },
+      {
+        "id": "expansion-slavery-tensions",
+        "point": "New western expansion exposed North South divisions over slavery and forced fragile compromises",
+        "quote": "also exposed the sectional weaknesses between the North and South",
+        "sourceId": "nara-louisiana-purchase-treaty"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "first major cession of western land that began a series of expansions",
+        "id": "louisiana-purchase",
+        "quote": "The Louisiana Purchase was the first major cession of land in a long series of expansions that span the 19th century.",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "term": "Louisiana Purchase"
+      },
+      {
+        "gloss": "agreement covering cession plus financial conventions for the transaction",
+        "id": "treaty-of-cession",
+        "quote": "The Louisiana Purchase Agreement is made up of the Treaty of Cession and the two conventions regarding the financial aspects of the transaction.",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "term": "Treaty of Cession"
+      },
+      {
+        "gloss": "states where slavery was not allowed, balanced against slave states",
+        "id": "free-states",
+        "quote": "the desire to maintain a balance between \"free states\" and \"slave states\" required a series of fragile compromises",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "term": "free states"
+      },
+      {
+        "gloss": "peoples facing potential impact from purchase and loss of tribal lands",
+        "id": "native-americans",
+        "quote": "In addition, the Louisiana Purchase ignored the potential impact on Native Americans.",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "term": "Native Americans"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261029200637-bc6b5f31:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029200637-bc6b5f31:quiz-cards-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    }
+  ]
+}

@@ -1,0 +1,205 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "Deriving force from momentum change",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Steps follow the page order of the derivation",
+    "steps": [
+      {
+        "id": "define-change-in-momentum",
+        "label": "change in momentum",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "His second law defines a force to be equal to change in momentum (mass times velocity) per change in time.",
+        "orderHint": "follow the derivation as it appears on the page"
+      },
+      {
+        "id": "general-momentum-form",
+        "label": "F = (m1 * V1 – m0 * V0) / (t1 – t0)",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "F = (m1 * V1 – m0 * V0) / (t1 – t0)",
+        "orderHint": "follow the derivation as it appears on the page"
+      },
+      {
+        "id": "assume-constant-mass",
+        "label": "mass stays at a constant value equal to m",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Let us assume that the mass stays at a constant value equal to m.",
+        "orderHint": "follow the derivation as it appears on the page"
+      },
+      {
+        "id": "constant-mass-form",
+        "label": "F = (m * (V1 – V0)) / (t1 – t0)",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "F = (m * (V1 – V0)) / (t1 – t0)",
+        "orderHint": "follow the derivation as it appears on the page"
+      },
+      {
+        "id": "define-acceleration",
+        "label": "definition of the acceleration a",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "The change in velocity divided by the change in time is the definition of the acceleration a.",
+        "orderHint": "follow the derivation as it appears on the page"
+      },
+      {
+        "id": "final-force-form",
+        "label": "F = m * a",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "F = m * a",
+        "orderHint": "follow the derivation as it appears on the page"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029201113-b3832e77:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step label occurs in its own quote after normalisation (labels-in-quotes)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 6 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "69598cd4e3f847aa845a7a83e061da95",
+    "usage": {
+      "promptTokens": 3476,
+      "completionTokens": 4803,
+      "reasoningTokens": 4355,
+      "cachedTokens": 0
+    },
+    "latencyMs": 23042,
+    "estCostUSD": 0.02475775,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029201113-b3832e77:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "Deriving force from momentum change",
+    "sources": [
+      {
+        "id": "nasa-grc-newtons-laws-of-motion",
+        "title": "Newton's Laws of Motion — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/newtons-laws-of-motion/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "907bae07076eef20118a4e54096ad399b11994ec5e310d9bed74850f6d009014"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "69598cd4e3f847aa845a7a83e061da95",
+      "runId": "job-20261029201113-b3832e77",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:12:20.510Z"
+    },
+    "seed": 2902079501,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Steps follow the page order of the derivation",
+    "steps": [
+      {
+        "id": "define-change-in-momentum",
+        "label": "change in momentum",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "His second law defines a force to be equal to change in momentum (mass times velocity) per change in time.",
+        "orderHint": "follow the derivation as it appears on the page"
+      },
+      {
+        "id": "general-momentum-form",
+        "label": "F = (m1 * V1 – m0 * V0) / (t1 – t0)",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "F = (m1 * V1 – m0 * V0) / (t1 – t0)",
+        "orderHint": "follow the derivation as it appears on the page"
+      },
+      {
+        "id": "assume-constant-mass",
+        "label": "mass stays at a constant value equal to m",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Let us assume that the mass stays at a constant value equal to m.",
+        "orderHint": "follow the derivation as it appears on the page"
+      },
+      {
+        "id": "constant-mass-form",
+        "label": "F = (m * (V1 – V0)) / (t1 – t0)",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "F = (m * (V1 – V0)) / (t1 – t0)",
+        "orderHint": "follow the derivation as it appears on the page"
+      },
+      {
+        "id": "define-acceleration",
+        "label": "definition of the acceleration a",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "The change in velocity divided by the change in time is the definition of the acceleration a.",
+        "orderHint": "follow the derivation as it appears on the page"
+      },
+      {
+        "id": "final-force-form",
+        "label": "F = m * a",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "F = m * a",
+        "orderHint": "follow the derivation as it appears on the page"
+      }
+    ]
+  }
+}

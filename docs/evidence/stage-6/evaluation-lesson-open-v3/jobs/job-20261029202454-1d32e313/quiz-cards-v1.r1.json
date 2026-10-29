@@ -1,0 +1,204 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Limits and Impact of the Emancipation Proclamation",
+    "cards": [
+      {
+        "id": "limits-in-border-states",
+        "stem": "Which limit describes how the measure affected slavery in loyal areas?",
+        "options": [
+          "leaving slavery untouched in the loyal border states",
+          "freeing every enslaved person in every state immediately",
+          "granting land to all formerly enslaved people"
+        ],
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "It applied only to states that had seceded from the Union, leaving slavery untouched in the loyal border states.",
+        "hint": "Consider which states were left untouched by the measure."
+      },
+      {
+        "id": "acceptance-into-army-navy",
+        "stem": "What new military opportunity was announced in the Proclamation?",
+        "options": [
+          "the acceptance of Black men into the Union Army and Navy",
+          "the immediate grant of voting rights to all Black men",
+          "the end of all military aid from England and France"
+        ],
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "Moreover, the Proclamation announced the acceptance of Black men into the Union Army and Navy, enabling the liberated to become liberators.",
+        "hint": "Look for the new branch of service opened to Black men."
+      },
+      {
+        "id": "initial-war-aims",
+        "stem": "What was true about Northern war aims at the start of the conflict?",
+        "options": [
+          "ending slavery was not a goal of the war",
+          "preserving the Union and preventing secession",
+          "declaring freedom for all enslaved people at once"
+        ],
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "ending slavery was not a goal of the war.",
+        "hint": "Recall the initial Northern purpose before the shift in goals."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029202454-1d32e313:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "7dc9fa3dde1a4b22a312c7cd149eba64",
+    "usage": {
+      "promptTokens": 2657,
+      "completionTokens": 8864,
+      "reasoningTokens": 8417,
+      "cachedTokens": 0
+    },
+    "latencyMs": 35962,
+    "estCostUSD": 0.04099325,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "pruned": true,
+  "dropped": [
+    {
+      "index": 0,
+      "id": "black-service-by-war-end",
+      "reason": "card failed Q-06",
+      "checks": [
+        "Q-06"
+      ]
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029202454-1d32e313:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Limits and Impact of the Emancipation Proclamation",
+    "sources": [
+      {
+        "id": "nara-emancipation-proclamation",
+        "title": "Emancipation Proclamation (1863) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/emancipation-proclamation",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Emancipation Proclamation (1863)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "0d11585e47f04bd0a12b0ded4d23595943f21a5af522811db76a93ef0486f646"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "7dc9fa3dde1a4b22a312c7cd149eba64",
+      "runId": "job-20261029202454-1d32e313",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:26:25.023Z"
+    },
+    "seed": 2616370967,
+    "cards": [
+      {
+        "id": "limits-in-border-states",
+        "stem": "Which limit describes how the measure affected slavery in loyal areas?",
+        "options": [
+          "leaving slavery untouched in the loyal border states",
+          "freeing every enslaved person in every state immediately",
+          "granting land to all formerly enslaved people"
+        ],
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "It applied only to states that had seceded from the Union, leaving slavery untouched in the loyal border states.",
+        "hint": "Consider which states were left untouched by the measure."
+      },
+      {
+        "id": "acceptance-into-army-navy",
+        "stem": "What new military opportunity was announced in the Proclamation?",
+        "options": [
+          "the acceptance of Black men into the Union Army and Navy",
+          "the immediate grant of voting rights to all Black men",
+          "the end of all military aid from England and France"
+        ],
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "Moreover, the Proclamation announced the acceptance of Black men into the Union Army and Navy, enabling the liberated to become liberators.",
+        "hint": "Look for the new branch of service opened to Black men."
+      },
+      {
+        "id": "initial-war-aims",
+        "stem": "What was true about Northern war aims at the start of the conflict?",
+        "options": [
+          "ending slavery was not a goal of the war",
+          "preserving the Union and preventing secession",
+          "declaring freedom for all enslaved people at once"
+        ],
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "ending slavery was not a goal of the war.",
+        "hint": "Recall the initial Northern purpose before the shift in goals."
+      }
+    ]
+  }
+}
