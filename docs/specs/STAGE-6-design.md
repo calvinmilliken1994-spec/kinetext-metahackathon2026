@@ -525,3 +525,5 @@ Validator unit: golden accept; one fixture per check id; repair revision-1→2 k
 | S6-U views (`LessonView`, Overview, Quiz, Sequence, Sort, ConceptMap, Compare, FormulaExplorer + graph, Balance, Disclosure) | Sonnet 5.5 | `apps/web/**` |
 | S6-W job runner v2 branch, storage, receipts, API, demo faults, rerun | Qwen 3.8 Max (after OW-2 lands) | `workers/**`, `apps/api/**`, `scripts/**` |
 | Chemistry demo source (licensed page with a printed reaction equation) | Qwen 3.8 Flash | `data/sources/**` |
+
+**Input budget (decided after S6-M, 2026-10-29):** the client's input bound counts bytes (DEBT-003), and S6-M measured the v2 analysis-repair request at 40.8k bytes on the largest current source (NRC, 14.4k chars), so the analysis call and repair would hit `INPUT_TOO_LARGE` on pages over ~5.5k chars. Decision: v2 calls use `maxInputTokensV2 = 72,000` (config, validated ≤ the provider context), enough for the 40,000-char source ceiling plus the ~15k system prompt and schema; v1 keeps 32,000. Reservation cost at the cap: 72k × USD 1.25/M ≈ USD 0.09 per call (estimate, reconciled to actual usage). Prompt shrinking is deferred.
