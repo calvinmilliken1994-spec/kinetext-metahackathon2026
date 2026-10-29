@@ -362,7 +362,7 @@ test('timeline.unique-ids: a case pairing an event with itself fails (and case-o
 /* timeline.approximate-date                                           */
 /* ------------------------------------------------------------------ */
 
-test('mutation: re-dating an event to "circa 1895" fails exactly timeline.approximate-date', () => {
+test('mutation: re-dating an event to "circa 1895" fails approximate-date (and date-grounded: a qualified expression grounds nothing, S5B-13)', () => {
   const spec = makeHarborTimelineSpec();
   const source = harborSourceDoc();
   const e5 = spec.simulation.events[4]!;
@@ -370,7 +370,9 @@ test('mutation: re-dating an event to "circa 1895" fails exactly timeline.approx
   e5.month = 0;
   e5.day = 0;
   e5.evidence = [{ sourceId: source.id, quote: 'A later hand dated the margin notes circa 1895.' }];
-  const report = expectFailures(validateSpec(spec, [source]), ['timeline.approximate-date']);
+  // Wave A2 (S5B-13): the "circa" qualifier now ATTACHES to the parsed expression "1895", so the
+  // exact-year claim additionally loses its grounding — both date-class checks fire for one event.
+  const report = expectFailures(validateSpec(spec, [source]), ['timeline.approximate-date', 'timeline.date-grounded']);
   const msg = checkOf(report, 'timeline.approximate-date').message;
   assert.match(msg, /approximate date — remove this event/);
   assert.match(msg, /"s5"/);

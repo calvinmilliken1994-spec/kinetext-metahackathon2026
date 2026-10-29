@@ -281,8 +281,10 @@ test('fail-closed: without sources or findings a textually grounded event whose 
   ];
   // Without sources AND without findings the comparison cannot prove e3 failed, so it fails closed ...
   assert.equal(compareRevisions(spec, next, failedIds(report)).passed, false);
-  // ... with the findings (which name "e3") the honest repair passes ...
-  assert.equal(compareRevisions(spec, next, failedIds(report), { findings: repairFindings(report, spec) }).passed, true);
+  // S5B-15: without source context, caller-supplied findings can NEVER unlock date/evidence/pair
+  // scopes either — even honest repairFindings fail closed here (the baseline cannot be recomputed,
+  // and reflected finding metadata is caller-supplied). The honest repair needs the sources ...
+  assert.equal(compareRevisions(spec, next, failedIds(report), { findings: repairFindings(report, spec) }).passed, false);
   // ... and with sources the exact recomputation allows it without any findings.
   assert.equal(compareRevisions(spec, next, failedIds(report), { sources: [source] }).passed, true);
 });
