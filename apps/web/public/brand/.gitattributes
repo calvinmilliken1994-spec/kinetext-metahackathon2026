@@ -1,0 +1,2 @@
+# The Meta logos are kept byte-for-byte as downloaded from dev.meta.ai/logo/ (unmodified), so no line-ending rewrite.
+*.svg -text

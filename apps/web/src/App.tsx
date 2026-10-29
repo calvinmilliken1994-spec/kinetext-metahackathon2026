@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { api, describeError } from './api.ts';
 import { useHealth, useJobDetail, useJobs, useModels, useSourceDoc, useSources } from './hooks.ts';
 import { buildHighlights } from './lib/highlight.ts';
@@ -16,7 +16,9 @@ import { defaultRevision, overallRepairBadge, revisionInputs, validationHeading 
 import { timelineEventLabels } from './lib/timeline.ts';
 import { demoFaultToSend, disclosureText } from './lib/sources.ts';
 import type { DemoChoice } from './lib/sources.ts';
-import { Header } from './components/Header.tsx';
+import { ApiStatus } from './components/ApiStatus.tsx';
+import { AppWindow } from './components/AppWindow.tsx';
+import { IconRail } from './components/IconRail.tsx';
 import { ModelNote } from './components/ModelNote.tsx';
 import { SourcePanel } from './components/SourcePanel.tsx';
 import type { Flash } from './components/SourcePanel.tsx';
@@ -32,6 +34,21 @@ import { LessonChecksPanel } from './components/LessonChecksPanel.tsx';
 import type { SourceRef } from '../../../packages/contracts/index.ts';
 
 const NO_JOBS: never[] = [];
+
+function prefersReducedMotion(): boolean {
+  return typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+/** Scroll an element into view and give its heading focus, after React has shown a panel that may have been hidden. */
+function revealAfterRender(find: () => HTMLElement | null): void {
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    const el = find();
+    if (el === null) return;
+    el.scrollIntoView({ block: 'start', behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+    const heading = el.querySelector<HTMLElement>('h2, h3');
+    if (heading !== null) { heading.tabIndex = -1; heading.focus({ preventScroll: true }); }
+  }));
+}
 
 /** The model choice lasts for the browser session (a reload keeps it); blocked storage just means it lasts for the page. */
 function sessionStore(): Storage | null {
@@ -91,7 +108,28 @@ export function App() {
   );
   const located = useMemo(() => new Set(Object.keys(highlights?.ranges ?? {})), [highlights]);
 
-  const onCite = useCallback((key: string) => setFlash((f) => ({ key, n: (f?.n ?? 0) + 1 })), []);
+  // Window layout (rail): the source and side panels can be hidden to give the lesson the whole width.
+  const [showSource, setShowSource] = useState(true);
+  const [showSide, setShowSide] = useState(true);
+  const mainRef = useRef<HTMLElement>(null);
+  // A citation highlights its quote in the source text, so it brings the source panel back if it was hidden.
+  const onCite = useCallback((key: string) => { setShowSource(true); setFlash((f) => ({ key, n: (f?.n ?? 0) + 1 })); }, []);
+  const onPickSource = useCallback(() => {
+    setShowSource(true);
+    requestAnimationFrame(() => requestAnimationFrame(() => document.getElementById('source-select')?.focus()));
+  }, []);
+  const onLesson = useCallback(() => {
+    const main = mainRef.current;
+    if (main === null) return;
+    main.scrollTo({ top: 0, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+    // In the stacked (narrow) layout the workspace scrolls, not the lesson column.
+    main.scrollIntoView({ block: 'start', behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+    main.focus({ preventScroll: true });
+  }, []);
+  const onChecks = useCallback(() => {
+    setShowSide(true);
+    revealAfterRender(() => document.querySelector<HTMLElement>('.side .lesson-checks, .side .validation'));
+  }, []);
 
   const onGenerate = useCallback(() => {
     if (selectedSourceId === null) return;
@@ -160,10 +198,22 @@ export function App() {
     attribution: selectedSource.attribution, sha256: selectedSource.sha256,
   }]), [selectedSource]);
 
+  const hasChecks = ready !== null && (report !== null || analysisReport !== null || (ready.lessonData !== undefined && checkSections.length > 0));
+
   return (
-    <div className="app">
-      <Header health={health} down={down} />
-      <div className="workspace">
+    <AppWindow title="Make knowledge interactive" titleIsHeading titlebarExtra={<ApiStatus health={health} down={down} />}>
+      <div className="window-body">
+        <IconRail
+          showSource={showSource}
+          showSide={showSide}
+          onPickSource={onPickSource}
+          onLesson={onLesson}
+          onChecks={onChecks}
+          hasChecks={hasChecks}
+          onToggleSource={() => setShowSource((v) => !v)}
+          onToggleSide={() => setShowSide((v) => !v)}
+        />
+        <div className={`workspace${showSource ? '' : ' hide-source'}${showSide ? '' : ' hide-side'}`}>
         <SourcePanel
           sources={sources}
           selectedId={selectedSourceId}
@@ -177,7 +227,8 @@ export function App() {
           onCite={onCite}
         />
 
-        <main className="panel activity-panel" aria-label="Interactive activity">
+        <main className="panel activity-panel" aria-label="Interactive activity" ref={mainRef} tabIndex={-1}>
+          <div className="main-inner">
           {jobs.state === 'error' && <div className="callout callout-error pad-m" role="alert">{jobs.message}</div>}
           {selectedJobId === null && jobs.state === 'ready' && (
             <div className="empty">
@@ -238,6 +289,7 @@ export function App() {
           {ready !== null && ((lessonMode === 'v1' && (spec === undefined || ready.summary.status !== 'succeeded')) || lessonMode === 'working' || lessonMode === 'outcome') && (
             <JobOutcome detail={ready} serverBusy={health === null ? null : generate.busy} />
           )}
+          </div>
         </main>
 
         <aside className="side" aria-label="Pipeline and validation">
@@ -296,7 +348,8 @@ export function App() {
             />
           )}
         </aside>
+        </div>
       </div>
-    </div>
+    </AppWindow>
   );
 }

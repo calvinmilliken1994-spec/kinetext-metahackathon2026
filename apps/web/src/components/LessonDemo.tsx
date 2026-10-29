@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { collectLessonQuotes } from '../lib/lesson.ts';
 import { demoLessons } from '../demo/lessonFixtures.ts';
 import { LessonView } from './LessonView.tsx';
+import { AppWindow } from './AppWindow.tsx';
 import type { CiteProps } from './Explanations.tsx';
 
 const DEMO_DISCLOSURE = 'AI-written lesson text (demo fixture). Real lessons are written by Muse Spark 1.3 and checked against the page; this one is hand-written test data.';
@@ -39,6 +40,8 @@ export function LessonDemo() {
   };
 
   return (
+    <AppWindow title="Make knowledge interactive · lesson views demo">
+    <div className="window-body window-body-plain">
     <div className="demo-page">
       <h1 className="sr-only">Lesson views demo (fixture data)</h1>
       <div className="demo-banner" role="note" data-testid="demo-banner">
@@ -65,5 +68,7 @@ export function LessonDemo() {
       </main>
       <p className="demo-toast small" role="status" aria-live="polite">{toast}</p>
     </div>
+    </div>
+    </AppWindow>
   );
 }
