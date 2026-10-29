@@ -1,0 +1,105 @@
+{
+  "schemaVersion": "formula-explorer-v1",
+  "title": "Drag equation explorer",
+  "formulaText": "D = Cd * (rho * V^2 * A) / 2",
+  "sourceId": "nasa-grc-drag-equation",
+  "quote": "D = Cd * (rho * V^2 * A) / 2",
+  "expression": "cd * (rho * v^2 * a) / 2",
+  "variables": [
+    {
+      "name": "cd",
+      "pageSymbol": "Cd",
+      "meaning": "drag coefficient",
+      "meaningQuoted": true,
+      "quote": "this variable is called the drag coefficient, designated",
+      "unit": "1",
+      "min": 0.1,
+      "max": 1,
+      "default": 0.5
+    },
+    {
+      "name": "rho",
+      "pageSymbol": "rho",
+      "meaning": "air density",
+      "meaningQuoted": false,
+      "quote": "density is designated by the letter rho",
+      "unit": "kg/m3",
+      "min": 0.5,
+      "max": 1.5,
+      "default": 1.2
+    },
+    {
+      "name": "v",
+      "pageSymbol": "V",
+      "meaning": "velocity",
+      "meaningQuoted": false,
+      "quote": "half of the velocity V squared times the reference area A",
+      "unit": "m/s",
+      "min": 1,
+      "max": 100,
+      "default": 10
+    },
+    {
+      "name": "a",
+      "pageSymbol": "A",
+      "meaning": "reference area",
+      "meaningQuoted": false,
+      "quote": "the area (A) given in the drag equation is given as a reference area",
+      "unit": "m2",
+      "min": 0.1,
+      "max": 10,
+      "default": 1
+    }
+  ],
+  "xVariable": "v",
+  "cases": [
+    {
+      "id": "case-one",
+      "inputs": [
+        {
+          "name": "cd",
+          "value": 0.5
+        },
+        {
+          "name": "rho",
+          "value": 1.2
+        },
+        {
+          "name": "v",
+          "value": 10
+        },
+        {
+          "name": "a",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "case-two",
+      "inputs": [
+        {
+          "name": "cd",
+          "value": 0.8
+        },
+        {
+          "name": "rho",
+          "value": 1
+        },
+        {
+          "name": "v",
+          "value": 20
+        },
+        {
+          "name": "a",
+          "value": 2
+        }
+      ]
+    }
+  ],
+  "sourceExample": {
+    "quote": "",
+    "resultNumber": 0,
+    "tolerance": 0
+  },
+  "hasSourceExample": false
+}

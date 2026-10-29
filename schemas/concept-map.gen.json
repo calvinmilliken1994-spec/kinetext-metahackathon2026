@@ -1,0 +1,99 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "title",
+    "nodes",
+    "links"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "enum": [
+        "concept-map-v1"
+      ],
+      "description": "Generator schema version, always the component id."
+    },
+    "title": {
+      "type": "string",
+      "description": "Short title for students in plain text."
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "label"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Lowercase kebab node id, 40 characters or fewer."
+          },
+          "label": {
+            "type": "string",
+            "description": "Node label in plain text. It occurs in a link quote."
+          }
+        }
+      },
+      "minItems": 4,
+      "maxItems": 8,
+      "description": "Concept nodes."
+    },
+    "links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "fromId",
+          "toId",
+          "relation",
+          "sourceId",
+          "quote"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Lowercase kebab link id, 40 characters or fewer."
+          },
+          "fromId": {
+            "type": "string",
+            "description": "Id of the source node."
+          },
+          "toId": {
+            "type": "string",
+            "description": "Id of the target node."
+          },
+          "relation": {
+            "type": "string",
+            "enum": [
+              "causes",
+              "needs",
+              "is part of",
+              "uses",
+              "follows",
+              "contrasts with"
+            ],
+            "description": "Relationship stated on the page."
+          },
+          "sourceId": {
+            "type": "string",
+            "description": "Id of the source the quote was copied from."
+          },
+          "quote": {
+            "type": "string",
+            "description": "Exact characters copied from the source, no ellipsis, 150 characters or fewer."
+          }
+        }
+      },
+      "minItems": 3,
+      "maxItems": 10,
+      "description": "Concept links."
+    }
+  }
+}

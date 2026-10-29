@@ -1,0 +1,72 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "title",
+    "cards"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "enum": [
+        "quiz-cards-v1"
+      ],
+      "description": "Generator schema version, always the component id."
+    },
+    "title": {
+      "type": "string",
+      "description": "Short title for students in plain text."
+    },
+    "cards": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "stem",
+          "options",
+          "sourceId",
+          "quote",
+          "hint"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Lowercase kebab card id, 40 characters or fewer."
+          },
+          "stem": {
+            "type": "string",
+            "description": "Question stem in plain text, 10 to 160 characters. Must not reveal the answer."
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "description": "One answer option in plain text, 1 to 80 characters. The first option is the correct answer."
+            },
+            "minItems": 3,
+            "maxItems": 4,
+            "description": "Answer options, first is correct."
+          },
+          "sourceId": {
+            "type": "string",
+            "description": "Id of the source the quote was copied from."
+          },
+          "quote": {
+            "type": "string",
+            "description": "Exact characters copied from the source, no ellipsis, 150 characters or fewer. The first option occurs in this quote."
+          },
+          "hint": {
+            "type": "string",
+            "description": "Hint in plain text, empty string or 5 to 120 characters."
+          }
+        }
+      },
+      "minItems": 3,
+      "maxItems": 5,
+      "description": "Quiz cards."
+    }
+  }
+}

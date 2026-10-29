@@ -1,0 +1,68 @@
+{
+  "analysisVersion": 2,
+  "subject": "physics",
+  "usable": true,
+  "declineCode": "",
+  "declineSummary": "",
+  "pageCoverage": "The page teaches the drag equation and which factors change drag.",
+  "overview": {
+    "headline": "Drag rises with speed squared, density, area and coefficient.",
+    "keyPoints": [
+      {
+        "id": "drag-equation",
+        "point": "The drag equation collects density, speed, area and coefficient in one relation.",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "drag D is equal to the drag coefficient Cd times the density rho"
+      },
+      {
+        "id": "drag-coefficient",
+        "point": "One coefficient packs the complex shape and flow effects together.",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "this variable is called the drag coefficient, designated"
+      },
+      {
+        "id": "reference-area",
+        "point": "The area in the equation is a stated reference area for the body.",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "the area (A) given in the drag equation is given as a reference area"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "drag-coefficient",
+        "term": "drag coefficient",
+        "gloss": "Single number collecting shape and flow effects.",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "this variable is called the drag coefficient, designated"
+      },
+      {
+        "id": "density",
+        "term": "density",
+        "gloss": "Air mass per volume, written rho in the equation.",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "density is designated by the letter rho"
+      },
+      {
+        "id": "dynamic-pressure",
+        "term": "dynamic pressure",
+        "gloss": "Density and velocity combination from the equation.",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "density times the square of the velocity divided by two"
+      }
+    ]
+  },
+  "componentPlan": [
+    {
+      "componentId": "formula-explorer-v1",
+      "pedagogicalReason": "Students predict speed squared scaling before moving sliders.",
+      "focusQuote": "D = Cd * (rho * V^2 * A) / 2",
+      "focusSourceId": "nasa-grc-drag-equation"
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "pedagogicalReason": "Checks which factors raise or lower drag on the page.",
+      "focusQuote": "Drag depends on the density of the air",
+      "focusSourceId": "nasa-grc-drag-equation"
+    }
+  ]
+}

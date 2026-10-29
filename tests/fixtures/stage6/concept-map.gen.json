@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "concept-map-v1",
+  "title": "Drag factors map",
+  "nodes": [
+    {
+      "id": "drag",
+      "label": "drag"
+    },
+    {
+      "id": "density",
+      "label": "density"
+    },
+    {
+      "id": "velocity",
+      "label": "velocity"
+    },
+    {
+      "id": "reference-area",
+      "label": "reference area"
+    }
+  ],
+  "links": [
+    {
+      "id": "link-drag-density",
+      "fromId": "drag",
+      "toId": "density",
+      "relation": "uses",
+      "sourceId": "nasa-grc-drag-equation",
+      "quote": "drag D is equal to the drag coefficient Cd times the density rho"
+    },
+    {
+      "id": "link-drag-velocity",
+      "fromId": "drag",
+      "toId": "velocity",
+      "relation": "needs",
+      "sourceId": "nasa-grc-drag-equation",
+      "quote": "half of the velocity V squared times the reference area A"
+    },
+    {
+      "id": "link-drag-area",
+      "fromId": "drag",
+      "toId": "reference-area",
+      "relation": "uses",
+      "sourceId": "nasa-grc-drag-equation",
+      "quote": "half of the velocity V squared times the reference area A"
+    }
+  ]
+}

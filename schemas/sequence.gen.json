@@ -1,0 +1,80 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "title",
+    "orderBasis",
+    "cyclic",
+    "orderNote",
+    "steps"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "enum": [
+        "sequence-v1"
+      ],
+      "description": "Generator schema version, always the component id."
+    },
+    "title": {
+      "type": "string",
+      "description": "Short title for students in plain text."
+    },
+    "orderBasis": {
+      "type": "string",
+      "enum": [
+        "numbered",
+        "page-order"
+      ],
+      "description": "How the order was determined on the page."
+    },
+    "cyclic": {
+      "type": "boolean",
+      "description": "True only when the page states a cycle."
+    },
+    "orderNote": {
+      "type": "string",
+      "description": "Note about the order in plain text, empty string or 5 to 120 characters."
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "label",
+          "sourceId",
+          "quote",
+          "orderHint"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Lowercase kebab step id, 40 characters or fewer."
+          },
+          "label": {
+            "type": "string",
+            "description": "Step label in plain text, 1 to 80 characters. It occurs in the quote."
+          },
+          "sourceId": {
+            "type": "string",
+            "description": "Id of the source the quote was copied from."
+          },
+          "quote": {
+            "type": "string",
+            "description": "Exact characters copied from the source, no ellipsis, 150 characters or fewer."
+          },
+          "orderHint": {
+            "type": "string",
+            "description": "Short ordering hint in plain text."
+          }
+        }
+      },
+      "minItems": 4,
+      "maxItems": 8,
+      "description": "Steps in taught order."
+    }
+  }
+}

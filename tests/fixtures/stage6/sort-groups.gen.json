@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "sort-groups-v1",
+  "title": "Genotype vocabulary sort",
+  "groups": [
+    {
+      "id": "heterozygous",
+      "label": "heterozygous"
+    },
+    {
+      "id": "homozygous",
+      "label": "homozygous"
+    }
+  ],
+  "items": [
+    {
+      "id": "item-different-alleles",
+      "label": "two different alleles",
+      "groupId": "heterozygous",
+      "sourceId": "nij-heterozygosity",
+      "quote": "If an individual has two different alleles at a specific locus, the individual is heterozygous at that locus"
+    },
+    {
+      "id": "item-hetero-genotypes",
+      "label": "heterozygous genotypes",
+      "groupId": "heterozygous",
+      "sourceId": "nij-heterozygosity",
+      "quote": "k[(k-1)/2] represents the expected number of heterozygous genotypes"
+    },
+    {
+      "id": "item-specific-locus",
+      "label": "specific locus",
+      "groupId": "heterozygous",
+      "sourceId": "nij-heterozygosity",
+      "quote": "If an individual has two different alleles at a specific locus, the individual is heterozygous at that locus"
+    },
+    {
+      "id": "item-same-alleles",
+      "label": "two alleles are the same",
+      "groupId": "homozygous",
+      "sourceId": "nij-heterozygosity",
+      "quote": "if the two alleles are the same, the individual is homozygous"
+    },
+    {
+      "id": "item-homo-genotypes",
+      "label": "homozygous genotypes",
+      "groupId": "homozygous",
+      "sourceId": "nij-heterozygosity",
+      "quote": "The parameter k also represents the expected number of homozygous genotypes"
+    },
+    {
+      "id": "item-individual-homo",
+      "label": "individual is homozygous",
+      "groupId": "homozygous",
+      "sourceId": "nij-heterozygosity",
+      "quote": "if the two alleles are the same, the individual is homozygous"
+    }
+  ]
+}

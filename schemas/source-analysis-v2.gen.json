@@ -1,0 +1,200 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "analysisVersion",
+    "subject",
+    "usable",
+    "declineCode",
+    "declineSummary",
+    "pageCoverage",
+    "overview",
+    "componentPlan"
+  ],
+  "properties": {
+    "analysisVersion": {
+      "type": "integer",
+      "enum": [
+        2
+      ],
+      "description": "Analysis schema version, always 2."
+    },
+    "subject": {
+      "type": "string",
+      "enum": [
+        "physics",
+        "maths",
+        "history",
+        "finance",
+        "chemistry",
+        "biology",
+        "earth-science",
+        "civics",
+        "language-reading",
+        "other"
+      ],
+      "description": "Primary teaching subject of the page."
+    },
+    "usable": {
+      "type": "boolean",
+      "description": "True when the page can produce a lesson, false when declined."
+    },
+    "declineCode": {
+      "type": "string",
+      "enum": [
+        "",
+        "too-short",
+        "not-prose",
+        "boilerplate-only",
+        "no-teachable-content",
+        "unreadable",
+        "prompt-injection-only"
+      ],
+      "description": "Empty string when usable, otherwise the decline reason code."
+    },
+    "declineSummary": {
+      "type": "string",
+      "description": "Empty string when usable, otherwise 10 to 280 characters of plain text saying why the page cannot be used."
+    },
+    "pageCoverage": {
+      "type": "string",
+      "description": "What the page covers, 10 to 300 characters of plain text, always present."
+    },
+    "overview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "headline",
+        "keyPoints",
+        "keyTerms"
+      ],
+      "properties": {
+        "headline": {
+          "type": "string",
+          "description": "AI-written headline in plain text, 10 to 120 characters. Empty string only when the analysis declined."
+        },
+        "keyPoints": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "point",
+              "sourceId",
+              "quote"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Lowercase kebab id for this key point, 40 characters or fewer."
+              },
+              "point": {
+                "type": "string",
+                "description": "AI-written point in plain text, 10 to 200 characters."
+              },
+              "sourceId": {
+                "type": "string",
+                "description": "Id of the source the quote was copied from."
+              },
+              "quote": {
+                "type": "string",
+                "description": "Exact characters copied from the source, no ellipsis, 150 characters or fewer."
+              }
+            }
+          },
+          "maxItems": 6,
+          "description": "Key points, empty only when declined."
+        },
+        "keyTerms": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "term",
+              "gloss",
+              "sourceId",
+              "quote"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Lowercase kebab id for this key term, 40 characters or fewer."
+              },
+              "term": {
+                "type": "string",
+                "description": "Term as named on the page, 1 to 40 characters."
+              },
+              "gloss": {
+                "type": "string",
+                "description": "AI-written gloss in plain text, 5 to 120 characters."
+              },
+              "sourceId": {
+                "type": "string",
+                "description": "Id of the source the quote was copied from."
+              },
+              "quote": {
+                "type": "string",
+                "description": "Exact characters copied from the source, no ellipsis, 150 characters or fewer."
+              }
+            }
+          },
+          "maxItems": 8,
+          "description": "Key terms, empty only when declined."
+        }
+      }
+    },
+    "componentPlan": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "componentId",
+          "pedagogicalReason",
+          "focusQuote",
+          "focusSourceId"
+        ],
+        "properties": {
+          "componentId": {
+            "type": "string",
+            "enum": [
+              "quiz-cards-v1",
+              "sequence-v1",
+              "sort-groups-v1",
+              "concept-map-v1",
+              "compare-table-v1",
+              "formula-explorer-v1",
+              "balance-equation-v1",
+              "forces-1d-v1",
+              "projectile-v1",
+              "lift-equation-v1",
+              "speed-of-sound-v1",
+              "compound-interest-v1",
+              "hardy-weinberg-v1",
+              "half-life-v1",
+              "timeline-v1"
+            ],
+            "description": "Planned component or activity id in teaching order."
+          },
+          "pedagogicalReason": {
+            "type": "string",
+            "description": "Why this component fits now, 10 to 160 characters of plain text."
+          },
+          "focusQuote": {
+            "type": "string",
+            "description": "Verbatim focus passage from the source, 1 to 150 characters. Exact characters copied from the source, no ellipsis."
+          },
+          "focusSourceId": {
+            "type": "string",
+            "description": "Id of the source the focus quote was copied from."
+          }
+        }
+      },
+      "maxItems": 3,
+      "description": "Teaching plan in order, empty only when declined."
+    }
+  }
+}

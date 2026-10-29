@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "compare-table-v1",
+  "title": "Atmosphere zones compare",
+  "entities": [
+    "troposphere",
+    "lower stratosphere"
+  ],
+  "attributes": [
+    "temperature",
+    "pressure"
+  ],
+  "cells": [
+    {
+      "id": "cell-tropo-temp",
+      "entityIndex": 0,
+      "attributeIndex": 0,
+      "value": "temperature decreases linearly",
+      "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+      "quote": "In the troposphere, the temperature decreases linearly and the pressure decreases exponentially"
+    },
+    {
+      "id": "cell-tropo-pressure",
+      "entityIndex": 0,
+      "attributeIndex": 1,
+      "value": "pressure decreases exponentially",
+      "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+      "quote": "In the troposphere, the temperature decreases linearly and the pressure decreases exponentially"
+    },
+    {
+      "id": "cell-lower-temp",
+      "entityIndex": 1,
+      "attributeIndex": 0,
+      "value": "temperature is constant",
+      "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+      "quote": "In the lower stratosphere the temperature is constant and the pressure decreases exponentially"
+    },
+    {
+      "id": "cell-lower-pressure",
+      "entityIndex": 1,
+      "attributeIndex": 1,
+      "value": "pressure decreases exponentially",
+      "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+      "quote": "In the lower stratosphere the temperature is constant and the pressure decreases exponentially"
+    }
+  ]
+}

@@ -442,3 +442,4 @@ export function assembleTimelineSpec(gen: TimelineGeneratedSpec, opts: AssembleO
     provenance: opts.provenance,
   };
 }
+export * from './kit.ts';

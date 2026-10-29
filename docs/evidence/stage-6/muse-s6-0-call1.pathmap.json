@@ -1,0 +1,21 @@
+{
+  "receipt": "docs/evidence/stage-6/muse-s6-0-call1.json",
+  "reason": "Muse copied the header prefix `packages/meta/` from the common_rules output-format example; its NOTES state the intended paths. The lead remapped headers to the instructed paths (mechanical edit); file bodies are applied byte-for-byte.",
+  "map": {
+    "packages/meta/kit.ts": "packages/contracts/kit.ts",
+    "packages/meta/schemas.ts": "packages/contracts/schemas.ts",
+    "packages/meta/build-schemas.ts": "scripts/build-schemas.ts",
+    "packages/meta/contracts.stage6.test.ts": "tests/contracts.stage6.test.ts",
+    "packages/meta/source-analysis-v2.usable.json": "tests/fixtures/stage6/source-analysis-v2.usable.json",
+    "packages/meta/source-analysis-v2.declined.json": "tests/fixtures/stage6/source-analysis-v2.declined.json",
+    "packages/meta/quiz-cards.gen.json": "tests/fixtures/stage6/quiz-cards.gen.json",
+    "packages/meta/sequence.gen.json": "tests/fixtures/stage6/sequence.gen.json",
+    "packages/meta/sort-groups.gen.json": "tests/fixtures/stage6/sort-groups.gen.json",
+    "packages/meta/concept-map.gen.json": "tests/fixtures/stage6/concept-map.gen.json",
+    "packages/meta/compare-table.gen.json": "tests/fixtures/stage6/compare-table.gen.json",
+    "packages/meta/formula-explorer.gen.json": "tests/fixtures/stage6/formula-explorer.gen.json",
+    "packages/meta/balance-equation.gen.json": "tests/fixtures/stage6/balance-equation.gen.json",
+    "packages/meta/balance.synthetic-source.txt": "tests/fixtures/stage6/balance.synthetic-source.txt",
+    "packages/meta/README.md": "tests/fixtures/stage6/README.md"
+  }
+}

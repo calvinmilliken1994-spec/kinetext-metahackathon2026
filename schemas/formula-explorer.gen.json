@@ -1,0 +1,180 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "title",
+    "formulaText",
+    "sourceId",
+    "quote",
+    "expression",
+    "variables",
+    "xVariable",
+    "cases",
+    "sourceExample",
+    "hasSourceExample"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "enum": [
+        "formula-explorer-v1"
+      ],
+      "description": "Generator schema version, always the component id."
+    },
+    "title": {
+      "type": "string",
+      "description": "Short title for students in plain text."
+    },
+    "formulaText": {
+      "type": "string",
+      "description": "Formula as printed on the page, 120 characters or fewer."
+    },
+    "sourceId": {
+      "type": "string",
+      "description": "Id of the source the quote was copied from."
+    },
+    "quote": {
+      "type": "string",
+      "description": "Exact characters copied from the source, no ellipsis, 150 characters or fewer."
+    },
+    "expression": {
+      "type": "string",
+      "description": "Expression in the calculator grammar using variable names, 120 characters or fewer."
+    },
+    "variables": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "pageSymbol",
+          "meaning",
+          "meaningQuoted",
+          "quote",
+          "unit",
+          "min",
+          "max",
+          "default"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Variable name in code form, starts with a lowercase letter, letters digits underscore, up to 12 characters. Must not be a reserved function or constant name."
+          },
+          "pageSymbol": {
+            "type": "string",
+            "description": "Exact page token for this variable, for example Cd or rho."
+          },
+          "meaning": {
+            "type": "string",
+            "description": "What the variable means in plain text."
+          },
+          "meaningQuoted": {
+            "type": "boolean",
+            "description": "True when the meaning is quoted from the page."
+          },
+          "quote": {
+            "type": "string",
+            "description": "Exact characters copied from the source, no ellipsis, 150 characters or fewer. Copied from the same source as the formula quote (the explorer sourceId source)."
+          },
+          "unit": {
+            "type": "string",
+            "description": "Unit label in plain text."
+          },
+          "min": {
+            "type": "number",
+            "description": "Slider minimum, finite number."
+          },
+          "max": {
+            "type": "number",
+            "description": "Slider maximum, finite number."
+          },
+          "default": {
+            "type": "number",
+            "description": "Slider default, finite number between min and max."
+          }
+        }
+      },
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "Declared variables."
+    },
+    "xVariable": {
+      "type": "string",
+      "description": "Name of the variable used for the graph axis."
+    },
+    "cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "inputs"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Lowercase kebab case id, 40 characters or fewer."
+          },
+          "inputs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "name",
+                "value"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Variable name, must equal one declared variable name."
+                },
+                "value": {
+                  "type": "number",
+                  "description": "Input value, finite number within the variable range."
+                }
+              }
+            },
+            "minItems": 2,
+            "maxItems": 4,
+            "description": "One entry per variable."
+          }
+        }
+      },
+      "minItems": 1,
+      "maxItems": 4,
+      "description": "Input cases."
+    },
+    "sourceExample": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "quote",
+        "resultNumber",
+        "tolerance"
+      ],
+      "properties": {
+        "quote": {
+          "type": "string",
+          "description": "Quoted passage stating inputs and result, or empty string when there is no source example. Copied from the same source as the formula quote (the explorer sourceId source). Exact characters copied from the source, no ellipsis, 150 characters or fewer."
+        },
+        "resultNumber": {
+          "type": "number",
+          "description": "Result stated in the quote, or 0 when there is no source example."
+        },
+        "tolerance": {
+          "type": "number",
+          "description": "Allowed difference, between 1e-9 and 0.25. Use 0 when there is no source example."
+        }
+      }
+    },
+    "hasSourceExample": {
+      "type": "boolean",
+      "description": "True when sourceExample states a quotable worked result."
+    }
+  }
+}

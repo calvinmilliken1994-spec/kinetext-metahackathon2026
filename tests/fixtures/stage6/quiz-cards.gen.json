@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "quiz-cards-v1",
+  "title": "Drag factors quiz",
+  "cards": [
+    {
+      "id": "drag-coefficient-card",
+      "stem": "What is the single variable that collects the complex drag effects?",
+      "options": [
+        "drag coefficient",
+        "lift coefficient",
+        "dynamic pressure"
+      ],
+      "sourceId": "nasa-grc-drag-equation",
+      "quote": "this variable is called the drag coefficient, designated",
+      "hint": "It starts with drag."
+    },
+    {
+      "id": "density-letter-card",
+      "stem": "Which letter designates density in the drag equation?",
+      "options": [
+        "rho",
+        "Cd",
+        "area"
+      ],
+      "sourceId": "nasa-grc-drag-equation",
+      "quote": "density is designated by the letter rho",
+      "hint": "A Greek letter name."
+    },
+    {
+      "id": "reference-area-card",
+      "stem": "Which area is used in the drag equation as stated here?",
+      "options": [
+        "reference area",
+        "frontal area",
+        "wing area"
+      ],
+      "sourceId": "nasa-grc-drag-equation",
+      "quote": "the area (A) given in the drag equation is given as a reference area",
+      "hint": "See the reference description."
+    }
+  ]
+}

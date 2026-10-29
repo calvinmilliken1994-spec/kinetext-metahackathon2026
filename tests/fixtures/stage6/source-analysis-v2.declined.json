@@ -1,0 +1,14 @@
+{
+  "analysisVersion": 2,
+  "subject": "physics",
+  "usable": false,
+  "declineCode": "too-short",
+  "declineSummary": "The page is a short stub without enough prose to teach from.",
+  "pageCoverage": "A brief stub mentioning an equation without explanation.",
+  "overview": {
+    "headline": "",
+    "keyPoints": [],
+    "keyTerms": []
+  },
+  "componentPlan": []
+}

@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "balance-equation-v1",
+  "title": "Methane burning balance",
+  "equationText": "CH4 + 2O2 → CO2 + 2H2O",
+  "sourceId": "synthetic-balance",
+  "quote": "The balanced form is CH4 + 2O2 → CO2 + 2H2O",
+  "species": [
+    {
+      "id": "methane",
+      "formula": "CH4",
+      "side": "left",
+      "sourceId": "synthetic-balance",
+      "quote": "When methane CH4 burns in oxygen O2"
+    },
+    {
+      "id": "oxygen",
+      "formula": "O2",
+      "side": "left",
+      "sourceId": "synthetic-balance",
+      "quote": "When methane CH4 burns in oxygen O2"
+    },
+    {
+      "id": "carbon-dioxide",
+      "formula": "CO2",
+      "side": "right",
+      "sourceId": "synthetic-balance",
+      "quote": "it produces carbon dioxide CO2 and water H2O"
+    },
+    {
+      "id": "water",
+      "formula": "H2O",
+      "side": "right",
+      "sourceId": "synthetic-balance",
+      "quote": "it produces carbon dioxide CO2 and water H2O"
+    }
+  ],
+  "hint": "Count atoms on each side."
+}

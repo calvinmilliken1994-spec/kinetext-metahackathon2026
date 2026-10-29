@@ -1,0 +1,86 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "title",
+    "groups",
+    "items"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "enum": [
+        "sort-groups-v1"
+      ],
+      "description": "Generator schema version, always the component id."
+    },
+    "title": {
+      "type": "string",
+      "description": "Short title for students in plain text."
+    },
+    "groups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "label"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Lowercase kebab group id, 40 characters or fewer."
+          },
+          "label": {
+            "type": "string",
+            "description": "Group label in plain text, 1 to 40 characters."
+          }
+        }
+      },
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "Sort groups."
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "label",
+          "groupId",
+          "sourceId",
+          "quote"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Lowercase kebab item id, 40 characters or fewer."
+          },
+          "label": {
+            "type": "string",
+            "description": "Item label in plain text, 1 to 60 characters. It occurs in the quote."
+          },
+          "groupId": {
+            "type": "string",
+            "description": "Id of the group this item belongs to."
+          },
+          "sourceId": {
+            "type": "string",
+            "description": "Id of the source the quote was copied from."
+          },
+          "quote": {
+            "type": "string",
+            "description": "Exact characters copied from the source, no ellipsis, 150 characters or fewer."
+          }
+        }
+      },
+      "minItems": 6,
+      "maxItems": 12,
+      "description": "Sortable items."
+    }
+  }
+}

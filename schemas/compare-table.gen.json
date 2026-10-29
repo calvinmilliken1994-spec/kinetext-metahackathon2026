@@ -1,0 +1,88 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "title",
+    "entities",
+    "attributes",
+    "cells"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "enum": [
+        "compare-table-v1"
+      ],
+      "description": "Generator schema version, always the component id."
+    },
+    "title": {
+      "type": "string",
+      "description": "Short title for students in plain text."
+    },
+    "entities": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "description": "Entity name in plain text."
+      },
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "Compared entities."
+    },
+    "attributes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "description": "Attribute name in plain text."
+      },
+      "minItems": 2,
+      "maxItems": 5,
+      "description": "Shared attributes."
+    },
+    "cells": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "entityIndex",
+          "attributeIndex",
+          "value",
+          "sourceId",
+          "quote"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Lowercase kebab cell id, 40 characters or fewer."
+          },
+          "entityIndex": {
+            "type": "integer",
+            "description": "Zero based index into entities."
+          },
+          "attributeIndex": {
+            "type": "integer",
+            "description": "Zero based index into attributes."
+          },
+          "value": {
+            "type": "string",
+            "description": "Cell value in plain text, 1 to 80 characters. It occurs in the quote."
+          },
+          "sourceId": {
+            "type": "string",
+            "description": "Id of the source the quote was copied from."
+          },
+          "quote": {
+            "type": "string",
+            "description": "Exact characters copied from the source, no ellipsis, 150 characters or fewer."
+          }
+        }
+      },
+      "minItems": 4,
+      "maxItems": 20,
+      "description": "Table cells."
+    }
+  }
+}

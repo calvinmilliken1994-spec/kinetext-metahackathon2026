@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "sequence-v1",
+  "title": "Framing the Constitution",
+  "orderBasis": "page-order",
+  "cyclic": false,
+  "orderNote": "",
+  "steps": [
+    {
+      "id": "drafted-secret",
+      "label": "Drafted in secret",
+      "sourceId": "nara-constitution",
+      "quote": "Drafted in secret by delegates to the Constitutional Convention",
+      "orderHint": "First"
+    },
+    {
+      "id": "convention-convened",
+      "label": "Federal Convention convened",
+      "sourceId": "nara-constitution",
+      "quote": "The Federal Convention convened in the State House (Independence Hall) in Philadelphia on May 14, 1787",
+      "orderHint": "Second"
+    },
+    {
+      "id": "quorum-obtained",
+      "label": "quorum of seven states was obtained",
+      "sourceId": "nara-constitution",
+      "quote": "a quorum of seven states was obtained on May 25",
+      "orderHint": "Third"
+    },
+    {
+      "id": "new-frame",
+      "label": "entirely new frame of government",
+      "sourceId": "nara-constitution",
+      "quote": "the Convention would draft an entirely new frame of government",
+      "orderHint": "Fourth"
+    }
+  ]
+}
