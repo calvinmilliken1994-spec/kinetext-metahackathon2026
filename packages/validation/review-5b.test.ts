@@ -224,7 +224,7 @@ test('S5B-02: a quote occurring twice with different qualifier contexts fails cl
     `The record confirms ${dup} in the customs house. ` +
     'Field crews began mapping the north shore on April 14. ' +
     'The first beacon was lit on July 1, 1889 after the tower was completed. ' +
-    'A storm delayed the seawall, which was not finished until November 30. ' +
+    'A storm delayed the seawall, which was finished on November 30. ' +
     'The final report was signed on February 9, 1890 and mailed to the capital.\n';
   source.sha256 = sha256(source.text);
   const spec = makeHarborTimelineSpec();

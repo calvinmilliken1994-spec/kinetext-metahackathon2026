@@ -204,12 +204,18 @@ test('S5B-12: an ambiguous era range ("500 BCE–400") fails closed and suppress
 });
 
 test('S5B-12: mixed eras "100 BC–AD 50" ground exactly −100 and +50 (correctly implemented, not fail-open)', () => {
-  const quote = 'The road was built between 100 BC\u2013AD 50 by traders.';
+  // Round-3 change: the OLD wording 'built between 100 BC–AD 50' is now (correctly) rejected by
+  // the clean-context guard — 'between' is a frozen preceding bound — so the era-resolution
+  // coverage uses a clean context and the bounded wording is asserted rejected below.
+  const quote = 'The road was built in 100 BC\u2013AD 50 by traders.';
   assert.deepEqual(standaloneYears(quote), [-100, 50]);
   assert.equal(quoteGroundsDate(quote, D(-100), null), true);
   assert.equal(quoteGroundsDate(quote, D(50), null), true);
   assert.equal(quoteGroundsDate(quote, D(100), null), false);
   assert.equal(quoteGroundsDate(quote, D(-50), null), false);
+  const bounded = 'The road was built between 100 BC\u2013AD 50 by traders.';
+  assert.deepEqual(standaloneYears(bounded), [], "'between' in the preceding two words fails closed");
+  assert.equal(quoteGroundsDate(bounded, D(-100), null), false);
 });
 
 test('S5B-12 controls: AD ranges keep grounding endpoints only; an abbreviated right endpoint grounds nothing new', () => {
@@ -467,7 +473,7 @@ test('S5B-15: a wrong-check-id finding intersected against the recomputed report
   assert.equal(compareRevisions(baseline, honest, failedIds(report), { sources: [source], findings: forged }).passed, true);
 });
 
-test('S5B-15: a stale finding pointing at another event never unlocks it; the recomputed failure still authorizes its own event', () => {
+test('S5B-15: a stale finding pointing at another event never unlocks it — and consistently narrows the genuine failure away (S5B-17)', () => {
   const { spec, source } = declarationSpecAndSource();
   spec.simulation.events[5]!.year = 1777; // e6 fails timeline.date-grounded (recomputed)
   const report = validateSpec(spec, [source]);
@@ -475,11 +481,17 @@ test('S5B-15: a stale finding pointing at another event never unlocks it; the re
   const stale: RepairFinding[] = [
     { id: 'timeline.date-grounded', kind: 'grounding', message: 'stale', affected: ['/simulation/events/0/year', '/simulation/events/0/month', '/simulation/events/0/day', '/simulation/events/0/evidence'] },
   ];
-  // The honest fix of e6 passes: its unlock comes from the RECOMPUTED baseline failure, not the stale finding.
   const honest = structuredClone(spec);
   honest.simulation.events[5]!.year = 1776;
-  assert.equal(compareRevisions(spec, honest, failedIds(report), { sources: [source], findings: stale }).passed, true);
-  // ... but the stale finding does not unlock clean event e1 (index 0).
+  // ROUND-3 FLIP (S5B-17, consistent narrowing): caller findings are the narrowing layer over the
+  // recomputed revision-1 map. A stale finding list that does not intersect the genuine failure
+  // narrows the authority to NOTHING — even the honest fix of e6 is rejected (fail closed). The
+  // old behavior OR'ed a separate textual grounding result back in, which the round-3 review
+  // showed lets a second authority disagree with the source-span validator.
+  assert.equal(compareRevisions(spec, honest, failedIds(report), { sources: [source], findings: stale }).passed, false);
+  // Without caller findings the recomputed map alone authorizes the honest fix.
+  assert.equal(compareRevisions(spec, honest, failedIds(report), { sources: [source] }).passed, true);
+  // ... and the stale finding does not unlock clean event e1 (index 0) either.
   const sneaky = structuredClone(honest);
   sneaky.simulation.events[0]!.day = 11;
   const guard = compareRevisions(spec, sneaky, failedIds(report), { sources: [source], findings: stale });
@@ -495,10 +507,11 @@ test('S5B-15: findings may narrow — an exact-path subset of the recomputed fai
   const next = structuredClone(spec);
   next.simulation.events[5]!.year = 1776;
   assert.equal(compareRevisions(spec, next, failedIds(report), { sources: [source], findings: narrow }).passed, true);
-  // A finding whose paths do NOT intersect the recomputed failure authorizes nothing (but the
-  // recomputed grounding failure itself still lets the failing event be re-grounded).
+  // ROUND-3 FLIP (S5B-17, consistent narrowing): a finding whose paths do NOT intersect the
+  // recomputed failure authorizes nothing at all — the genuine failure stays frozen (fail closed)
+  // instead of being re-unlocked by a separate textual grounding result.
   const disjoint: RepairFinding[] = [{ id: 'timeline.date-grounded', kind: 'grounding', message: 'disjoint', affected: ['/simulation/events/1/year'] }];
-  assert.equal(compareRevisions(spec, next, failedIds(report), { sources: [source], findings: disjoint }).passed, true);
+  assert.equal(compareRevisions(spec, next, failedIds(report), { sources: [source], findings: disjoint }).passed, false);
   const sneaky = structuredClone(next);
   sneaky.simulation.events[1]!.day = 3; // e2 (July 2) is clean on the baseline
   assert.equal(compareRevisions(spec, sneaky, failedIds(report), { sources: [source], findings: disjoint }).passed, false);

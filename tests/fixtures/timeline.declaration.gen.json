@@ -24,7 +24,7 @@
   "simulation": {
     "events": [
       { "id": "e1", "label": "Committee of five appointed to draft a statement", "year": 1776, "month": 6, "day": 10, "evidence": [ { "sourceId": "nara-declaration-of-independence", "quote": "Congress appointed on June 10 a committee of five to draft a statement of independence for the colonies" } ] },
-      { "id": "e2", "label": "Independence section of the Lee Resolution adopted", "year": 1776, "month": 7, "day": 2, "evidence": [ { "sourceId": "nara-declaration-of-independence", "quote": "the section of the Lee Resolution dealing with independence was not adopted until July 2" } ] },
+      { "id": "e2", "label": "Independence section of the Lee Resolution adopted", "year": 1776, "month": 7, "day": 2, "evidence": [ { "sourceId": "nara-declaration-of-independence", "quote": "following the July 2nd adoption of the independence section of the Lee Resolution." } ] },
       { "id": "e3", "label": "Congress adopts the Declaration", "year": 1776, "month": 7, "day": 4, "evidence": [ { "sourceId": "nara-declaration-of-independence", "quote": "The Continental Congress adopted the Declaration of Independence on July 4, 1776." } ] },
       { "id": "e4", "label": "The approved Declaration is printed", "year": 1776, "month": 7, "day": 5, "evidence": [ { "sourceId": "nara-declaration-of-independence", "quote": "the approved Declaration was printed on July 5th" } ] },
       { "id": "e5", "label": "Congress orders an engrossed parchment copy", "year": 1776, "month": 7, "day": 19, "evidence": [ { "sourceId": "nara-declaration-of-independence", "quote": "On July 19th, Congress ordered that the Declaration be engrossed on parchment" } ] },

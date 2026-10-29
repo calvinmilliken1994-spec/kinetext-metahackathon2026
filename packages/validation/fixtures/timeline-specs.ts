@@ -63,7 +63,7 @@ export const HARBOR_TEXT =
   'The survey office opened on March 3, 1889 in the old customs house. Field crews began mapping the ' +
   'north shore on April 14. The first beacon was lit on July 1, 1889 after the tower was completed. ' +
   'The customs office reopened on July 1, 1889 after repairs. A storm delayed the seawall, which was ' +
-  'not finished until November 30. The final report was signed on February 9, 1890 and mailed to the ' +
+  'finished on November 30. The final report was signed on February 9, 1890 and mailed to the ' +
   'capital. A later hand dated the margin notes circa 1895. The clerk\'s diary also mentions funding ' +
   'bills from the 1880s, and the crew debated about taxation without recording new dates.\n';
 
@@ -103,7 +103,7 @@ function harborGen(): TimelineGeneratedSpec {
         ev('s1', 'Survey office opens', 1889, 3, 3, 'The survey office opened on March 3, 1889 in the old customs house.'),
         ev('s2', 'Shore mapping begins', 1889, 4, 14, 'Field crews began mapping the north shore on April 14.'),
         ev('s3', 'First beacon lit', 1889, 7, 1, 'The first beacon was lit on July 1, 1889 after the tower was completed.'),
-        ev('s4', 'Seawall finished', 1889, 11, 30, 'A storm delayed the seawall, which was not finished until November 30.'),
+        ev('s4', 'Seawall finished', 1889, 11, 30, 'A storm delayed the seawall, which was finished on November 30.'),
         ev('s5', 'Final report signed', 1890, 2, 9, 'The final report was signed on February 9, 1890 and mailed to the capital.'),
       ],
       scenario: { subjectLabel: 'Harbor survey', settingLabel: 'North shore' },

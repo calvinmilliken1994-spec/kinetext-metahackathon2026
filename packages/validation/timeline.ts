@@ -1,24 +1,42 @@
 // TASK-020 — timeline-v1 deterministic validation (Stage 5b plan 'Revised checks' + Muse design
 // review dispositions #1–#10 and the lead's title-year decision of 2026-10-28), hardened by the
-// Stage 5b review round 1 (S5B-01..S5B-04, frozen design decisions 1–4 in docs/specs/STAGE-5b-plan.md)
-// and round 2 (S5B-11 source-span grounding: a date grounds only via a COMPLETE source expression
+// Stage 5b review round 1 (S5B-01..S5B-04, frozen design decisions 1–4 in docs/specs/STAGE-5b-plan.md),
+// round 2 (S5B-11 source-span grounding: a date grounds only via a COMPLETE source expression
 // inside the quote's located source span; S5B-12 era-aware range grammar: '500–400 BCE' grounds
 // −500/−400 and ambiguous eras fail closed; S5B-13 approximation qualifiers attach to the parsed
 // expression and the title-year rule shares that policy; S5B-15 repair authorization comes
-// exclusively from the recomputed immutable-r1 report, caller findings may only narrow).
+// exclusively from the recomputed immutable-r1 report, caller findings may only narrow) and
+// round 3 (the FROZEN lead decision 'fail-closed date grounding' at the end of the Stage 5b plan):
+//   S5B-17 ONE AUTHORITY: with sources, the only per-event grounding result is the source-span
+//     validator's; every event/pair unlock comes exclusively from the recomputed revision-1
+//     check/path map, the quote-only quoteGroundsDate fallback is GONE from authorization, and
+//     caller findings may only narrow (exact check id + exact affected path), CONSISTENTLY — an
+//     empty or wrong-scope list narrows a genuine failure to nothing. Without sources,
+//     date/evidence/pair mutation fails closed (only a policy finding's label survives, plus the
+//     source-free ordering oracle for a provably wrong pair).
+//   S5B-18/19/20 ALLOW-LIST + CLEAN CONTEXT: a date grounds ONLY if it is a supported exact form
+//     (Month D[, ]YYYY; [the ]D[th] [of ]Month[, ]YYYY; Month [of ]YYYY; Month D / [the ]D[th]
+//     [of ]Month + title year; plain YYYY; YYYY BC/BCE/B.C./B.C.E.; AD/A.D./CE/C.E. YYYY and
+//     BCE/BC YYYY prefixes; YYYY AD/CE; YYYY–YYYY ranges with the explicit-era rule) AND its
+//     context is clean — no qualifier/bound within the preceding two words, no unconsumed era
+//     token / 'century' / 'or' / 'so' / '?' / range-connector+number within the following two,
+//     no ordinal/decade suffix or apostrophes on the year token, no markup touching or splitting
+//     the expression. Anything unrecognised FAILS CLOSED (false rejections are the accepted safe
+//     cost); titles use the same guard and lend only exactly one plain YYYY, taken from the title
+//     field and the FIRST NON-EMPTY '#' heading line. A sentence-final period is never part of an
+//     era spelling (a quote ending at 'BCE' of 'March 3, 500 BCE.' grounds).
 //
 // A timeline has no formula, so the SOURCE TEXT is the deterministic oracle:
 //   date-grounded   every event's full stated date (year, and month/day where stated) must be
-//                 stated by ONE CONNECTED DATE EXPRESSION (S5B-01, decision 3) inside one sentence
-//                 unit of a counted, verbatim evidence quote: 'Month D[, ]YYYY', 'D Month YYYY',
-//                 'Month [of] YYYY', 'Month D', 'YYYY', BCE forms and year-range endpoints. A day
+//                 stated by ONE CONNECTED DATE EXPRESSION (S5B-01, decision 3) in a CLEAN CONTEXT
+//                 (round 3) inside one sentence unit of a counted, verbatim evidence quote. A day
 //                 counts ONLY inside a month-day expression ('4 delegates' is never day 4) and a
 //                 claimed component never combines across expressions ('March 3 ... July 4' never
 //                 states March 4). The year may instead come from the source title, but only when
 //                 the title is clean (S5B-02, decision 4: no approximation/range/ambiguity marker),
-//                 states exactly one standalone year, the event's year equals it, ONE expression
-//                 states the month (and day if claimed) without a year of its own, and the unit
-//                 contains no year-like token. No other cross-sentence inheritance.
+//                 states exactly one plain standalone year, the event's year equals it, ONE
+//                 expression states the month (and day if claimed) without a year of its own, and
+//                 the unit contains no year-like token. No other cross-sentence inheritance.
 //   approximate     decade forms ("1770s") and "circa/c./ca./around/about/early/mid/late" before a
 //                 year or month fire FIRST with "approximate date — remove this event"; a decade
 //                 form never counts as a standalone year. S5B-02 (decision 4): the detector also
@@ -31,10 +49,11 @@
 //                 ambiguous, never graded by array position (#5).
 // Year matching (Muse #1, #4): grouped numbers ("1,000") are masked first; a standalone year is a
 // 1–4 digit number ((^|[^0-9])YEAR($|[^0-9]) semantics via lookarounds), so ranges ground only
-// their endpoints; a BCE marker ("BCE", "BC", "B.C.", "B.C.E.") directly after the number makes it
-// negative and forbids the positive reading. Month names come from a fixed case-insensitive list
-// incl. "Sep(t)?(ember)?" with an optional period (#9); a day is \b0?DAY(st|nd|rd|th)?\b and is
-// ONLY parsed as part of a month-day expression (#2, #3, S5B-01).
+// their explicitly resolvable endpoints; an era marker ("BCE", "BC", "B.C.", "B.C.E." after or
+// "BCE/BC/AD/CE" before the number) fixes the sign and forbids the opposite reading. Month names
+// come from a fixed case-insensitive list incl. "Sep(t)?(ember)?" with an optional period (#9); a
+// day is \b0?DAY(st|nd|rd|th)?\b and is ONLY parsed as part of a month-day expression (#2, #3,
+// S5B-01).
 //
 // S5B-03 (decision 1/2): every failing timeline check (and the shared policy/grounding checks)
 // emits validator-owned `affected` JSON-pointer field paths, one per offending field occurrence,
@@ -165,10 +184,41 @@ export function sentenceUnits(quote: string): string[] {
 
 const GROUPED_NUMBER = /\d{1,3}(?:,\d{3})+(?![,\d])/g;
 const NUMBER_MASK = '\u0002';
-/** A BCE marker directly after a number (Muse #4): "500 BCE", "500 BC", "500 B.C.", "500 B.C.E.". */
-const BCE_MARKER = /^\s*(?:b\.?\s?c\.?\s?e?\.?|bce)(?![a-z])/i;
-/** The BCE suffix as an inline pattern fragment (must directly follow the digits, whitespace allowed). */
-const BCE_PAT = '(?:\\s*(?:b\\.?\\s?c\\.?\\s?e?\\.?|bce)(?![a-z]))';
+
+/* ------------------------------------------------------------------ */
+/* Era spellings (round-3 allow-list + hardening)                      */
+/* ------------------------------------------------------------------ */
+/**
+ * HARDENING (round 3): a sentence-final period is never part of an era SUFFIX spelling — the
+ * suffix patterns stop before a trailing '.' (they still match the dotted spellings internally),
+ * so a quote ending at 'BCE' of 'March 3, 500 BCE.' contains the COMPLETE expression. A PREFIX
+ * may keep its final period because digits always follow it ('A.D. 79').
+ */
+/** Negative-era suffix core: BCE / BC / B.C. / B.C.E. (final period excluded from the span). */
+const ERA_NEG_SUF = 'b\\.?\\s?c\\.?\\s?e?';
+/** Positive-era suffix core: AD / A.D. / CE / C.E. (final period excluded from the span). */
+const ERA_POS_SUF = 'a\\.?\\s?d|c\\.?\\s?e';
+/** Either era suffix directly after the digits (whitespace allowed), never inside a word. The
+ * trailing period of a dotted spelling is NEVER consumed (hardening): '(?<!\.)' forces the match
+ * to backtrack off it, so a quote ending at 'B.C' of '500 B.C.' contains the complete expression. */
+const ERA_SUF = `(?:\\s*(?:${ERA_NEG_SUF}|${ERA_POS_SUF})(?![a-z])(?<!\\.))`;
+/** An era prefix before the digits: BCE/BC/B.C./B.C.E. (negative) or AD/A.D./CE/C.E. (positive). */
+const ERA_PRE = `(?<![a-z0-9])(?:b\\.?\\s?c\\.?\\s?e?\\.?|a\\.?\\s?d\\.?|c\\.?\\s?e\\.?)(?![a-z0-9])\\s*`;
+/** The negative-era marker at the start of a year slot's trailing text (Muse #4 + round 3). */
+const ERA_NEG_MARKER = new RegExp(`^\\s*(?:${ERA_NEG_SUF})(?![a-z])`, 'i');
+/** The positive-era marker (AD/CE) at the start of a year slot's trailing text. */
+const ERA_POS_MARKER = new RegExp(`^\\s*(?:${ERA_POS_SUF})(?![a-z])`, 'i');
+
+/** 'neg' when the trailing text states a BCE-family era, 'pos' for AD/CE, null when era-free. */
+function eraOfText(rest: string): 'neg' | 'pos' | null {
+  if (ERA_NEG_MARKER.test(rest)) return 'neg';
+  if (ERA_POS_MARKER.test(rest)) return 'pos';
+  return null;
+}
+/** True when an era-prefix token is a BCE-family spelling. */
+function prefixIsNegative(prefix: string): boolean {
+  return /^b/i.test(prefix.trim());
+}
 
 /* ------------------------------------------------------------------ */
 /* Approximation qualifiers attached to expressions (S5B-13)           */
@@ -213,45 +263,52 @@ const MONTH_PAT = `\\b${MONTH_ALT}\\b\\.?`;
 /** A day number with an optional ordinal suffix and digit boundaries ("4", "04", "19th"). */
 const DAY_PAT = '(?<![0-9])(?:0?[1-9]|[12][0-9]|3[01])(?:st|nd|rd|th)?(?![0-9])';
 /**
- * A standalone 1–4 digit year core: digit boundaries on both sides and never a decade form
- * ("1770s" — an 's' directly after the digits that is not itself followed by a letter).
+ * A standalone 1–4 digit year core (round-3 allow-list): digit boundaries on both sides, never a
+ * decade form ("1770s" — S5B-13), never an ordinal ("18th" — S5B-20: a century ordinal is never a
+ * literal year) and never apostrophe-clipped ("'76", "1776'" — round-3 decision 3).
  */
-const YEAR_CORE = '(?<![0-9])[0-9]{1,4}(?![0-9])(?!s(?![a-z]))';
+const YEAR_CORE =
+  "(?<![0-9'\u2019])[0-9]{1,4}(?![0-9])(?!s(?![a-z]))(?!(?:st|nd|rd|th)(?![a-z]))(?!['\u2019])";
 /** A 3–4 digit year core (never a day number) — used where no day precedes/follows. */
-const YEAR34_CORE = '(?<![0-9])[0-9]{3,4}(?![0-9])(?!s(?![a-z]))';
-/** The year slot of a Month-Day[-Year] / Day-Month[-Year] expression: any standalone year, BCE allowed. */
-const YEAR_MDY = `(?:${YEAR_CORE}${BCE_PAT}?)`;
+const YEAR34_CORE =
+  "(?<![0-9'\u2019])[0-9]{3,4}(?![0-9])(?!s(?![a-z]))(?!(?:st|nd|rd|th)(?![a-z]))(?!['\u2019])";
+/** The year slot of a Month-Day[-Year] / Day-Month[-Year] expression: any standalone year, era-suffixed allowed. */
+const YEAR_MDY = `(?:${YEAR_CORE}${ERA_SUF}?)`;
 /**
- * The year slot of a Month[-of] Year expression: 3–4 digits, or any digits WITH a BCE marker.
+ * The year slot of a Month[-of] Year expression: 3–4 digits, or any digits WITH an era suffix.
  * A bare 1–2 digit number after a month name is a DAY ("April 14"), never a year.
  */
-const YEAR_MY = `(?:(?<![0-9])[0-9]{1,4}(?![0-9])${BCE_PAT}|${YEAR34_CORE})`;
+const YEAR_MY = `(?:(?<![0-9'\u2019])[0-9]{1,4}(?![0-9])${ERA_SUF}|${YEAR34_CORE})`;
 
 /**
- * S5B-01 (frozen decision 3): ONE connected date expression. Alternation order matters — the
- * longest forms are listed first and the global scan consumes each match, so "March 3, 1889" is
- * ONE expression (never month-day + standalone year) and "April 14" is a month-day, not a
- * month-year with year 14.
- * S5B-12: era markers are part of the RANGE grammar — a range match consumes era suffixes on both
- * endpoints, so "500–400 BCE" is resolved as ONE era-bearing range (both endpoints negative) and
- * the standalone-year branch never sees a positive "400".
+ * S5B-01 (frozen decision 3) + the round-3 lead decision (allow-list of supported EXACT forms):
+ * ONE connected date expression. Alternation order matters — the longest forms are listed first
+ * and the global scan consumes each match, so "March 3, 1889" is ONE expression (never month-day
+ * + standalone year) and "April 14" is a month-day, not a month-year with year 14.
+ * S5B-12/S5B-18: era markers are part of the RANGE grammar — a range match consumes era prefixes
+ * and suffixes on both endpoints; the code-side resolution below grounds the endpoints only for
+ * EXPLICITLY resolvable eras and fails closed on anything else (a range never re-exposes its
+ * interior to the standalone-year branch).
  */
 const DATE_EXPRESSION_RE = new RegExp(
   [
-    // Month D[ay-suffix][, ]YYYY[ BCE]  — "March 3, 1889", "Sept. 4, 1776", "July 19th 1776"
+    // Month D[ay-suffix][, ]YYYY[ era]  — "March 3, 1889", "Sept. 4, 1776", "March 3, 500 BCE"
     `(?<mdyM>${MONTH_PAT})\\s+(?<mdyD>${DAY_PAT})(?:(?:,?\\s+|,\\s*)(?<mdyY>${YEAR_MDY}))?`,
-    // D[ay-suffix] [of ]Month[, ]YYYY[ BCE] — "25 December 1776", "4th of July 1776"
-    `(?<dmyD>${DAY_PAT})\\s+(?:of\\s+)?(?<dmyM>${MONTH_PAT})(?:(?:,?\\s+|,\\s*)(?<dmyY>${YEAR_MDY}))?`,
-    // Month[,] [of ]YYYY[ BCE] — "July 1776", "September of 1776", "November of 1777"
+    // [the ]D[ay-suffix] [of ]Month[, ]YYYY[ era] — "25 December 1776", "the 4th of July 1776"
+    `(?:(?<dmyThe>the)\\s+)?(?<dmyD>${DAY_PAT})\\s+(?:of\\s+)?(?<dmyM>${MONTH_PAT})(?:(?:,?\\s+|,\\s*)(?<dmyY>${YEAR_MDY}))?`,
+    // Month[,] [of ]YYYY[ era] — "July 1776", "September of 1776", "November of 1777"
     `(?<myM>${MONTH_PAT})\\s*(?:,\\s*|\\s+)(?:of\\s+)?(?<myY>${YEAR_MY})`,
-    // YYYY[ BCE][-–—/]YYYY[ BCE] — a year range grounds exactly its two endpoints, era-aware (S5B-12)
-    `(?<rngA>${YEAR34_CORE})(?<rngAB>${BCE_PAT})?\\s*[-\u2013\u2014/]\\s*(?<rngB>${YEAR34_CORE})(?<rngBB>${BCE_PAT})?`,
+    // [era ]YYYY[ era] SEP [era ]YYYY[ era] — era-explicit year ranges (S5B-12/S5B-18): the
+    // code-side resolution grounds only explicitly resolvable endpoints, short endpoints only
+    // with an explicit era, and never expands an abbreviated endpoint ('1775–83' grounds 1775).
+    // The separator may follow a dotted era spelling's final period ('500 B.C. – 400 B.C.').
+    `(?<rngAPre>${ERA_PRE})?(?<rngA>${YEAR_CORE})(?<rngASuf>${ERA_SUF})?\\.?\\s*[-\u2013\u2014/]\\s*(?<rngBPre>${ERA_PRE})?(?<rngB>${YEAR_CORE})(?<rngBSuf>${ERA_SUF})?`,
     // Month D[ay-suffix] (no year) — "June 10", "on July 19th", "April 14"
     `(?<mdM>${MONTH_PAT})\\s+(?<mdD>${DAY_PAT})`,
-    // D[ay-suffix] [of ]Month (no year) — "25 December", "the 10th of June"
-    `(?<dmD>${DAY_PAT})\\s+(?:of\\s+)?(?<dmM>${MONTH_PAT})`,
-    // YYYY[ BCE] — a standalone year ("in 1855", "500 B.C.", "A.D. 79")
-    `(?<yY>${YEAR_CORE})(?<yBCE>${BCE_PAT})?`,
+    // [the ]D[ay-suffix] [of ]Month (no year) — "25 December", "the 10th of June"
+    `(?:(?<dmThe>the)\\s+)?(?<dmD>${DAY_PAT})\\s+(?:of\\s+)?(?<dmM>${MONTH_PAT})`,
+    // [era ]YYYY[ era] — a standalone year ("in 1855", "500 B.C.", "A.D. 79", "BCE 500")
+    `(?<yPre>${ERA_PRE})?(?<yY>${YEAR_CORE})(?<ySuf>${ERA_SUF})?`,
     // Month (bare month name) — "in June of the signing year"
     `(?<mM>${MONTH_PAT})`,
   ].join('|'),
@@ -259,17 +316,18 @@ const DATE_EXPRESSION_RE = new RegExp(
 );
 
 /**
- * One CONNECTED date expression parsed out of a sentence unit (S5B-01, frozen decision 3).
- * A claimed date is grounded only when ONE expression states every claimed component; components
- * never combine across expressions, and a day exists only inside a month-day expression.
- * S5B-11: every expression carries its exact [start, end) span in the parsed string so grounding
- * can require the COMPLETE source expression to lie inside a located quote's source span — a quote
- * edge cutting a token never manufactures an expression end.
+ * One CONNECTED date expression parsed out of a sentence unit (S5B-01, frozen decision 3), under
+ * the round-3 lead decision: an expression grounds a date ONLY if it is one of the supported
+ * exact forms AND its context is clean (the fail-closed clean-context guard below). A claimed
+ * date's components never combine across expressions, and a day exists only inside a month-day
+ * expression. S5B-11: every expression carries its exact [start, end) span in the parsed string
+ * so grounding can require the COMPLETE source expression to lie inside a located quote's source
+ * span — a quote edge cutting a token never manufactures an expression end.
  */
 export interface DateExpression {
-  /** Signed year as stated (negative exactly under a BCE marker); null when the expression states no year. */
+  /** Signed year as stated (negative exactly under a BCE-family era); null when the expression states no year. */
   year: number | null;
-  /** Digit length of the year as written (0 when absent); a year is year-LIKE at >= 3 digits or under BCE. */
+  /** Digit length of the year as written (0 when absent); a year is year-LIKE at >= 3 digits or under a BCE era. */
   digits: number;
   bce: boolean;
   /** 1–12, null when the expression states no month. */
@@ -292,6 +350,194 @@ export interface DateExpression {
    * nothing (fail closed) but still counts as year-LIKE, suppressing title-year inheritance.
    */
   eraAmbiguous: boolean;
+  /** The supported exact form this expression matched (round-3 allow-list). */
+  form: 'mdy' | 'dmy' | 'my' | 'range' | 'md' | 'dm' | 'year' | 'month';
+  /** True when an era prefix/suffix is part of the expression (a title may lend only a BARE year). */
+  eraMarked: boolean;
+  /**
+   * Round-3 clean-context guard: the reason this expression's surrounding context is NOT clean —
+   * a qualifier/temporal bound or unconsumed era token in the preceding two words, "the"+ordinal
+   * or number+range-connector before it, an unconsumed era token / "century" wording / "or" /
+   * "so" / "?" / a range connector followed by a number in the following two words, or markup
+   * touching or splitting the expression — or null when the context is clean. A context-rejected
+   * expression GROUNDS NOTHING (fail closed) but still counts as year-LIKE for the title-year rule.
+   */
+  contextRejected: string | null;
+}
+
+/* ------------------------------------------------------------------ */
+/* The round-3 clean-context guard (lead decision: fail closed)        */
+/* ------------------------------------------------------------------ */
+
+/** Markup characters that may never touch or split a supported date expression. */
+const MARKUP_CHARS = new Set(['*', '_', '`', '[', ']', '<', '>']);
+/**
+ * Words in the TWO PRECEDING window tokens that disqualify an expression: approximation
+ * qualifiers and temporal bounds (the round-3 frozen lexicon), plus an era token the expression
+ * did not consume. Punctuation/markup/whitespace between words is ignored.
+ */
+const PRECEDING_DISQUALIFIERS = new Set([
+  'circa', 'c', 'ca', 'approx', 'approximate', 'approximately', 'about', 'around', 'roughly',
+  'nearly', 'almost', 'some', 'sometime', 'sometimes', 'probably', 'possibly', 'perhaps',
+  'likely', 'estimated', 'est', 'before', 'after', 'by', 'until', 'till', 'than', 'since',
+  'prior', 'early', 'mid', 'middle', 'late', 'between', 'from',
+  'bc', 'bce', 'ad', 'ce',
+]);
+/** Following-window tokens that disqualify on their own (unconsumed eras, century wording, doubt). */
+const FOLLOWING_DISQUALIFIERS = new Set(['bc', 'bce', 'ad', 'ce', 'century', 'centuries', 'millennium', 'or', 'so', '?']);
+/** Range connectors: connector + number after (or number + connector before) is a range continuation. */
+const RANGE_CONNECTORS = new Set(['to', 'until', 'till', 'through', 'and', 'or', '-', '\u2013', '\u2014', '/']);
+/** Era tokens (for the number/era + connector continuation rule). */
+const ERA_TOKENS = new Set(['bc', 'bce', 'ad', 'ce']);
+/**
+ * Window tokens: words (dotted abbreviations glued: "B.C.E" -> one token), numbers with an
+ * optional ordinal suffix, connector characters and '?'. Every other character is word-internal
+ * punctuation and is skipped ("ignoring punctuation/markup/whitespace between words").
+ */
+const WINDOW_TOKEN_RE = /[A-Za-z]+(?:\.[A-Za-z]+)*\.?|[0-9]{1,4}(?:st|nd|rd|th)?|[-\u2013\u2014/]|\?/g;
+const ORDINAL_TOKEN_RE = /^[0-9]{1,4}(?:st|nd|rd|th)$/;
+/** How far the guard looks on each side while collecting its two window tokens. */
+const CONTEXT_WINDOW_CHARS = 160;
+/**
+ * Abbreviation words whose final period never acts as a sentence stop inside the guard window
+ * ("c. March 3, 1889" — the qualifier can never hide behind its own period).
+ */
+const ABBREV_STOP_WORDS = new Set([
+  'c', 'ca', 'approx', 'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'sept',
+  'oct', 'nov', 'dec', 'ad', 'bc', 'bce', 'ce',
+]);
+
+/** True when the '.' at `dotIndex` of `text` belongs to an abbreviation rather than ending a sentence. */
+function isAbbrevPeriod(text: string, dotIndex: number): boolean {
+  if (text[dotIndex] !== '.') return false;
+  const before = text.slice(Math.max(0, dotIndex - 12), dotIndex);
+  const word = /[A-Za-z]+$/.exec(before)?.[0] ?? '';
+  if (word.length === 0) return false;
+  // A dotted single-letter chain ("B.C.E.") or a single letter at a token boundary ("c."): the
+  // period belongs to the abbreviation, not to a sentence end.
+  if (word.length === 1) {
+    const chain = before.slice(0, before.length - 1);
+    return chain === '' || /(?:^|[^A-Za-z])$/.test(chain) || /(?:[A-Za-z]\.)+$/.test(chain);
+  }
+  // A known abbreviation word ("Sept.", "approx.", "c." handled above): the word must start at a
+  // token boundary. Plain words ("house.", "left.") end sentences.
+  return ABBREV_STOP_WORDS.has(word.toLowerCase()) && /(?:^|[^A-Za-z])$/.test(before.slice(0, before.length - word.length));
+}
+
+/** Tokenise a window slice into guard tokens (words glued across dots, lower-cased). */
+function tokenizeWindow(slice: string): string[] {
+  const tokens: string[] = [];
+  for (const m of slice.matchAll(WINDOW_TOKEN_RE)) tokens.push(m[0].replaceAll('.', '').toLowerCase());
+  return tokens;
+}
+
+/**
+ * The (up to) two tokens preceding `pos`, scanning over punctuation/markup/whitespace and
+ * stopping at a sentence-terminal [.!?;] that is not an abbreviation period — so a qualifier can
+ * never be segmented away (S5B-19: "circa,", "around (", "circa\n" all still disqualify), while a
+ * genuine sentence boundary delimits the window ("...controlled by the ...\n\n1900 Aircraft"
+ * stays clean).
+ */
+function tokensBefore(text: string, pos: number): string[] {
+  const slice = text.slice(Math.max(0, pos - CONTEXT_WINDOW_CHARS), pos);
+  let cut = -1;
+  for (let i = slice.length - 1; i >= 0; i--) {
+    const ch = slice[i] as string;
+    if (ch === '.' || ch === '!' || ch === '?' || ch === ';') {
+      if (ch === '.' && isAbbrevPeriod(slice, i)) continue;
+      cut = i;
+      break;
+    }
+  }
+  return tokenizeWindow(cut === -1 ? slice : slice.slice(cut + 1)).slice(-2);
+}
+
+/**
+ * The (up to) two tokens following `pos`; a '?' is collected as a token (it disqualifies) and
+ * every sentence-terminal stops the scan.
+ */
+function tokensAfter(text: string, pos: number): string[] {
+  const slice = text.slice(pos, pos + CONTEXT_WINDOW_CHARS);
+  let end = slice.length;
+  for (let i = 0; i < slice.length; i++) {
+    const ch = slice[i] as string;
+    if (ch === '?') {
+      end = i + 1; // include the '?' token, then stop
+      break;
+    }
+    if (ch === '.' || ch === '!' || ch === ';') {
+      if (ch === '.' && isAbbrevPeriod(slice, i)) continue;
+      end = i;
+      break;
+    }
+  }
+  return tokenizeWindow(slice.slice(0, end)).slice(0, 2);
+}
+
+function isNumberToken(token: string): boolean {
+  return /^[0-9]/.test(token);
+}
+
+/**
+ * True when the "until"/"till" directly before `pos` is negated within its own clause: one of the
+ * (up to) four words before it is "not"/"never" or ends in "n't". Only the clause containing
+ * "until" counts (the scan stops at , ; : . ! ?), so a distant or earlier-sentence "not" never
+ * applies. Un-negated "until" (deferred/delayed until, from X until Y) stays a temporal bound.
+ */
+function negatedUntil(text: string, pos: number): boolean {
+  const slice = text.slice(Math.max(0, pos - CONTEXT_WINDOW_CHARS), pos);
+  const m = /\b(?:until|till)\W*$/i.exec(slice);
+  if (m === null) return false;
+  const head = slice.slice(0, m.index);
+  const clauseStart = Math.max(...[',', ';', ':', '.', '!', '?'].map((c) => head.lastIndexOf(c)));
+  const words = head.slice(clauseStart + 1).split(/\s+/).filter((w) => w !== '').slice(-4);
+  return words.some((w) => /^(?:not|never)$/i.test(w.replace(/[^A-Za-z']/g, '')) || /n['\u2019]t$/i.test(w));
+}
+
+/**
+ * The round-3 clean-context guard: why this expression's context is NOT clean, or null. Anything
+ * not recognised as a supported exact form in clean context does not ground (fail closed); false
+ * rejections of legitimate dates are the accepted safe cost.
+ */
+function contextRejection(text: string, start: number, end: number): string | null {
+  // Markup splitting the expression or directly touching it.
+  for (let i = start; i < end; i++) {
+    if (MARKUP_CHARS.has(text[i] as string)) return `markup splits the expression (${text[i]})`;
+  }
+  if (start > 0 && MARKUP_CHARS.has(text[start - 1] as string)) return `markup touches the expression (${text[start - 1]})`;
+  if (end < text.length && MARKUP_CHARS.has(text[end] as string)) return `markup touches the expression (${text[end]})`;
+  const before = tokensBefore(text, start);
+  for (let k = 0; k < before.length; k++) {
+    const t = before[k] as string;
+    // Lead decision (round-3 STOP items): a NEGATED "until" directly before the date states when
+    // the event happened ("was not approved until September of 1776"), so it is not a bound.
+    if ((t === 'until' || t === 'till') && k === before.length - 1 && negatedUntil(text, start)) continue;
+    if (PRECEDING_DISQUALIFIERS.has(t)) return `the preceding word "${t}" is an approximation qualifier or temporal bound`;
+  }
+  if (before.length === 2 && before[0] === 'the' && ORDINAL_TOKEN_RE.test(before[1] as string)) {
+    return `the preceding words "the ${before[1]}" are an article + ordinal (an ordinal is never a year)`;
+  }
+  if (
+    before.length === 2 &&
+    RANGE_CONNECTORS.has(before[1] as string) &&
+    (isNumberToken(before[0] as string) || ERA_TOKENS.has(before[0] as string))
+  ) {
+    return `the preceding words "${before[0]} ${before[1]}" continue an unsupported range expression`;
+  }
+  const after = tokensAfter(text, end);
+  for (const t of after) {
+    if (FOLLOWING_DISQUALIFIERS.has(t)) {
+      return t === '?'
+        ? 'the expression ends a question (an uncertain claim, never an exact date)'
+        : ERA_TOKENS.has(t)
+          ? `the following word "${t}" is an era token the expression did not consume (the stated era is part of the date)`
+          : `the following word "${t}" makes the expression inexact (century wording, alternatives or doubt)`;
+    }
+  }
+  if (after.length === 2 && RANGE_CONNECTORS.has(after[0] as string) && isNumberToken(after[1] as string)) {
+    return `the following words "${after[0]} ${after[1]}" are a range connector followed by a number (an unsupported range form)`;
+  }
+  return null;
 }
 
 function monthNumberOf(monthText: string): number | null {
@@ -302,21 +548,26 @@ function monthNumberOf(monthText: string): number | null {
   return null;
 }
 
-function yearOf(yearText: string | undefined): { year: number; digits: number; bce: boolean } | null {
+function yearOf(
+  yearText: string | undefined,
+): { year: number; digits: number; bce: boolean; eraMarked: boolean } | null {
   if (yearText === undefined) return null;
   const digits = /[0-9]{1,4}/.exec(yearText)?.[0];
   if (digits === undefined) return null;
-  const bce = BCE_MARKER.test(yearText.slice(digits.length));
+  const era = eraOfText(yearText.slice(digits.length));
   const value = Number(digits);
-  return { year: bce ? -value : value, digits: digits.length, bce };
+  return { year: era === 'neg' ? -value : value, digits: digits.length, bce: era === 'neg', eraMarked: era !== null };
 }
 
 /**
- * Every connected date expression in a unit, left to right, non-overlapping (S5B-01). Grouped
- * numbers ("1,000") are masked first with a length-preserving mask so spans stay aligned. Each
- * expression carries its exact [start, end) span (S5B-11), any approximation qualifier stated
- * immediately before it (S5B-13), and era-aware range resolution that fails closed on ambiguity
- * (S5B-12).
+ * Every connected date expression in a unit, left to right, non-overlapping (S5B-01), under the
+ * round-3 allow-list: grouped numbers ("1,000") are masked first with a length-preserving mask so
+ * spans stay aligned. Each expression carries its exact [start, end) span (S5B-11), any
+ * approximation qualifier stated immediately before it (S5B-13), era-aware range resolution that
+ * fails closed on ambiguity (S5B-12/S5B-18), and the clean-context guard verdict computed against
+ * `unit` as the available context — buildSourceUnitIndex RECOMPUTES the verdict against the full
+ * raw source, so a qualifier detached by a newline can never be left behind. A context-rejected
+ * expression grounds nothing but stays year-LIKE for the title-year rule.
  */
 export function parseDateExpressions(unit: string): DateExpression[] {
   if (typeof unit !== 'string') return [];
@@ -336,12 +587,24 @@ export function parseDateExpressions(unit: string): DateExpression[] {
     // qualifier ("circa", "c.", "ca.", "approx.") attaches to any parsed expression.
     const qual = qualifierBefore(unit.slice(Math.max(lastEnd, start - QUALIFIER_LOOKBACK_WINDOW), start));
     lastEnd = end;
+    // Round-3 clean-context guard, computed against the parsed string (unit-local here; the raw
+    // source layer overrides it in buildSourceUnitIndex).
+    const contextRejected = contextRejection(masked, start, end);
     const approxFor = (year: number | null, digits: number, bce: boolean, month: number | null, day: number | null): string | null => {
       if (qual === null) return null;
       const dateLike = month !== null || day !== null || (year !== null && (digits >= 3 || bce));
       return qual.strong || dateLike ? normalizeWhitespace(qual.text + fullText) : null;
     };
-    const pushOne = (year: number | null, digits: number, bce: boolean, month: number | null, day: number | null): void => {
+    const pushOne = (
+      form: DateExpression['form'],
+      year: number | null,
+      digits: number,
+      bce: boolean,
+      eraMarked: boolean,
+      month: number | null,
+      day: number | null,
+      eraAmbiguous = false,
+    ): void => {
       exprs.push({
         year,
         digits,
@@ -352,58 +615,77 @@ export function parseDateExpressions(unit: string): DateExpression[] {
         start,
         end,
         approx: approxFor(year, digits, bce, month, day),
-        eraAmbiguous: false,
+        eraAmbiguous,
+        form,
+        eraMarked,
+        contextRejected,
       });
     };
     if (g.mdyM !== undefined) {
       const y = yearOf(g.mdyY);
-      pushOne(y?.year ?? null, y?.digits ?? 0, y?.bce ?? false, monthNumberOf(g.mdyM), dayNumberOf(g.mdyD));
+      pushOne('mdy', y?.year ?? null, y?.digits ?? 0, y?.bce ?? false, y?.eraMarked ?? false, monthNumberOf(g.mdyM), dayNumberOf(g.mdyD));
     } else if (g.dmyD !== undefined) {
       const y = yearOf(g.dmyY);
-      pushOne(y?.year ?? null, y?.digits ?? 0, y?.bce ?? false, monthNumberOf(g.dmyM), dayNumberOf(g.dmyD));
+      pushOne('dmy', y?.year ?? null, y?.digits ?? 0, y?.bce ?? false, y?.eraMarked ?? false, monthNumberOf(g.dmyM), dayNumberOf(g.dmyD));
     } else if (g.myM !== undefined) {
       const y = yearOf(g.myY);
-      pushOne(y?.year ?? null, y?.digits ?? 0, y?.bce ?? false, monthNumberOf(g.myM), null);
+      pushOne('my', y?.year ?? null, y?.digits ?? 0, y?.bce ?? false, y?.eraMarked ?? false, monthNumberOf(g.myM), null);
     } else if (g.rngA !== undefined && g.rngB !== undefined) {
-      // A range grounds exactly its two endpoints, era markers included (S5B-12). Both endpoints
-      // carry the WHOLE range's span: a quote that cuts any part of it (including the era suffix)
-      // grounds neither endpoint (S5B-11).
-      const aBce = g.rngAB !== undefined;
-      const bBce = g.rngBB !== undefined;
-      if (aBce && !bBce) {
-        // "500 BCE–400": is the unmarked right endpoint inherited BCE or CE? Fail closed — the
-        // range grounds NO endpoint, but stays year-LIKE for the title-year rule.
-        exprs.push({
-          year: null,
-          digits: 0,
-          bce: false,
-          month: null,
-          day: null,
-          text: fullText,
-          start,
-          end,
-          approx: approxFor(null, 0, false, null, null),
-          eraAmbiguous: true,
-        });
+      // A range grounds ONLY its explicitly resolvable endpoints (S5B-12/S5B-18). Both endpoints
+      // carry the WHOLE range's span: a quote that cuts any part of it (including an era suffix)
+      // grounds neither endpoint (S5B-11). Unsupported combinations fail closed, and the consumed
+      // span keeps their interior out of the standalone-year branch.
+      const aPre = g.rngAPre;
+      const aSuf = g.rngASuf;
+      const bPre = g.rngBPre;
+      const bSuf = g.rngBSuf;
+      const aMarked = aPre !== undefined || aSuf !== undefined;
+      const bMarked = bPre !== undefined || bSuf !== undefined;
+      const aNeg = aPre !== undefined ? prefixIsNegative(aPre) : aSuf !== undefined && eraOfText(aSuf) === 'neg';
+      const bNeg = bPre !== undefined ? prefixIsNegative(bPre) : bSuf !== undefined && eraOfText(bSuf) === 'neg';
+      const pushEndpoint = (part: string, neg: boolean, eraMarked: boolean): void => {
+        const value = Number(part);
+        pushOne('range', neg ? -value : value, part.length, neg, eraMarked, null, null);
+      };
+      if (!aMarked && !bMarked) {
+        // No era anywhere: only 3–4 digit endpoints are years ('1775–1783'). An abbreviated right
+        // endpoint ('1775–83') is NEVER expanded; a short left endpoint grounds nothing.
+        if (g.rngA.length >= 3) pushEndpoint(g.rngA, false, false);
+        if (g.rngB.length >= 3) pushEndpoint(g.rngB, false, false);
+      } else if (aMarked && bMarked) {
+        // Both endpoints carry an explicit era: each takes its own sign ('500 BC–400 AD').
+        pushEndpoint(g.rngA, aNeg, true);
+        pushEndpoint(g.rngB, bNeg, true);
+      } else if (bSuf !== undefined) {
+        // A right-endpoint era SUFFIX inherits to the unmarked left endpoint ('500–400 BCE',
+        // '50–40 BCE'): an era-suffixed range NEVER emits a positive year.
+        pushEndpoint(g.rngA, bNeg, true);
+        pushEndpoint(g.rngB, bNeg, true);
+      } else if (aPre !== undefined) {
+        // A left-endpoint era PREFIX inherits to the unmarked right endpoint ('BCE 500–400').
+        pushEndpoint(g.rngA, aNeg, true);
+        pushEndpoint(g.rngB, aNeg, true);
       } else {
-        // A right-endpoint era suffix applies to an unmarked left endpoint only in this
-        // unambiguous direction ("500–400 BCE" = −500 to −400); both-marked and neither-marked
-        // are unambiguous as written. An era-suffixed range NEVER emits a positive year.
-        const bce = aBce || bBce;
-        for (const part of [g.rngA, g.rngB]) {
-          const value = Number(part);
-          pushOne(bce ? -value : value, part.length, bce, null, null);
-        }
+        // '500 BCE–400' (left suffix only) or '500–BCE 400' (right prefix only): the unmarked
+        // endpoint's era is ambiguous — fail closed, but stay year-LIKE for the title-year rule.
+        pushOne('range', null, 0, false, true, null, null, true);
       }
     } else if (g.mdM !== undefined) {
-      pushOne(null, 0, false, monthNumberOf(g.mdM), dayNumberOf(g.mdD));
+      pushOne('md', null, 0, false, false, monthNumberOf(g.mdM), dayNumberOf(g.mdD));
     } else if (g.dmD !== undefined) {
-      pushOne(null, 0, false, monthNumberOf(g.dmM), dayNumberOf(g.dmD));
+      pushOne('dm', null, 0, false, false, monthNumberOf(g.dmM), dayNumberOf(g.dmD));
     } else if (g.yY !== undefined) {
-      const y = yearOf(fullText);
-      pushOne(y?.year ?? null, y?.digits ?? 0, y?.bce ?? false, null, null);
+      // A standalone year with the round-3 era prefix/suffix support: 'in 1855', '500 B.C.',
+      // 'A.D. 79', 'BCE 500' (grounds −500, never +500). A suffix wins over a prefix.
+      const digitsText = /[0-9]{1,4}/.exec(g.yY)?.[0] ?? '';
+      const value = Number(digitsText);
+      const sufEra = g.ySuf !== undefined ? eraOfText(g.ySuf) : null;
+      const preEra = g.yPre !== undefined ? (prefixIsNegative(g.yPre) ? 'neg' : 'pos') : null;
+      const era = sufEra ?? preEra;
+      const neg = era === 'neg';
+      pushOne('year', neg ? -value : value, digitsText.length, neg, era !== null, null, null);
     } else if (g.mM !== undefined) {
-      pushOne(null, 0, false, monthNumberOf(g.mM), null);
+      pushOne('month', null, 0, false, false, monthNumberOf(g.mM), null);
     }
   }
   return exprs;
@@ -417,10 +699,11 @@ export interface YearToken {
   bce: boolean;
 }
 
-/** Every standalone year a unit states, as expression-derived tokens (S5B-01: never a token bag). */
+/** Every standalone year a unit GROUNDS, as expression-derived tokens (S5B-01: never a token bag;
+ * round 3: a context-rejected expression grounds nothing, so it contributes no token). */
 function yearTokens(unit: string): YearToken[] {
   return parseDateExpressions(unit)
-    .filter(e => e.year !== null)
+    .filter(e => e.year !== null && e.contextRejected === null)
     .map(e => ({ signed: e.year as number, digits: e.digits, bce: e.bce }));
 }
 
@@ -446,7 +729,9 @@ export interface TimelineDateTuple { year: number; month: number; day: number }
  * the year — or, via the title-year rule, the title's single year when ONE year-less expression
  * states the month (and day if claimed) and the scope contains no year-like token of its own.
  * Components from different expressions never combine. S5B-13: an approximation-qualified
- * expression grounds nothing; S5B-12: an era-ambiguous range grounds nothing.
+ * expression grounds nothing; S5B-12: an era-ambiguous range grounds nothing; round 3: an
+ * expression whose context is NOT clean (qualifier/bound/era/century/connector/markup within its
+ * two-word windows) grounds nothing — fail closed.
  */
 function expressionsGroundDate(
   exprs: readonly DateExpression[],
@@ -455,7 +740,7 @@ function expressionsGroundDate(
   yearLike: boolean,
 ): boolean {
   for (const e of exprs) {
-    if (e.approx !== null || e.eraAmbiguous) continue;
+    if (e.approx !== null || e.eraAmbiguous || e.contextRejected !== null) continue;
     if (date.month !== 0) {
       if (e.month !== date.month) continue;
       if (date.day !== 0 && e.day !== date.day) continue;
@@ -512,25 +797,41 @@ function titleCandidateRejected(candidate: string): boolean {
 }
 
 /**
- * The lead's title-year rule: the source's title field (and its first text line when that is a '#'
- * heading) may lend its year to a date unit. Returns the year when EVERY available title candidate
- * is free of approximation/range/ambiguity markers (S5B-02), states exactly one standalone
- * year-like number and all candidates agree; otherwise null (a title with two years, a range, a
- * decade, a '?' or any 'circa/c./ca./around/about' wording grants nothing).
+ * The lead's title-year rule (round-3 decision 4): the source's title field, and the FIRST
+ * NON-EMPTY line when that is a '#' heading (hardening: a leading blank line can no longer hide an
+ * '(around 1889)' heading), may lend a year to a date unit — but ONLY when EVERY candidate is free
+ * of approximation/range/ambiguity markers (S5B-02) AND contains EXACTLY ONE plain (era-free)
+ * standalone YYYY whose context passes the SAME clean-context guard as body dates. '(before 1889)',
+ * '(by 1889)', '(BCE 1889)' and '(1889 BCE)' lend nothing; candidates that disagree lend nothing.
  */
 export function titleYearOf(doc: { title?: unknown; text?: unknown } | null | undefined): number | null {
   const candidates: string[] = [];
   if (typeof doc?.title === 'string' && doc.title.trim() !== '') candidates.push(doc.title);
   if (typeof doc?.text === 'string') {
-    const firstLine = doc.text.split(/\r?\n/, 1)[0]?.trim() ?? '';
+    const firstLine =
+      doc.text
+        .split(/\r?\n/)
+        .map(l => l.trim())
+        .find(l => l !== '') ?? '';
     if (firstLine.startsWith('#')) candidates.push(firstLine.replace(/^#+\s*/, ''));
   }
   if (candidates.length === 0) return null;
   let shared: number | null | undefined;
   for (const candidate of candidates) {
     if (titleCandidateRejected(candidate)) return null; // S5B-02: an approximate/ambiguous title lends nothing
-    const years = yearTokens(candidate).filter(t => t.digits >= 3 || t.bce);
-    const value = years.length === 1 ? (years[0]?.signed ?? null) : null;
+    // Round-3 decision 4: exactly one PLAIN YYYY in clean context — an era-marked year, a range
+    // endpoint, a qualified year or a context-rejected year is not a lendable title year.
+    const plain = parseDateExpressions(candidate).filter(
+      e =>
+        e.form === 'year' &&
+        e.year !== null &&
+        e.digits >= 3 &&
+        !e.bce &&
+        !e.eraMarked &&
+        e.approx === null &&
+        e.contextRejected === null,
+    );
+    const value = plain.length === 1 ? (plain[0]?.year ?? null) : null;
     if (shared === undefined) shared = value;
     else if (shared !== value) return null;
   }
@@ -658,7 +959,14 @@ export function buildSourceUnitIndex(raw: string): SourceUnitIndex {
       // S5B-11: the date expressions are parsed out of the RAW source unit, so their spans are raw
       // offsets — a located quote can only ground a date through a COMPLETE source expression, and
       // an expression can never cross a source-unit (newline/sentence) boundary.
-      exprs: parseDateExpressions(slice).map(e => ({ ...e, rawStart: s.start + e.start, rawEnd: s.start + e.end })),
+      // Round 3: the clean-context guard is RECOMPUTED against the FULL raw document, so a
+      // qualifier detached by a newline ('circa\nMarch 3, 1889') still disqualifies the expression
+      // while a genuine sentence-terminal period delimits the window (S5B-19 fail-closed).
+      exprs: parseDateExpressions(slice).map(e => {
+        const rawStart = s.start + e.start;
+        const rawEnd = s.start + e.end;
+        return { ...e, rawStart, rawEnd, contextRejected: contextRejection(raw, rawStart, rawEnd) };
+      }),
     };
   });
   return { norm: text, toRaw, units };
@@ -735,6 +1043,12 @@ export interface SourceQuoteGrounding {
   cutExpressions: string[];
   /** The complete source expressions lying wholly inside the quote span (diagnosis). */
   statedExpressions: string[];
+  /**
+   * Round 3: contained expressions whose source context is NOT clean (qualifier/bound/era/
+   * century/connector/markup within the two-word windows) — they ground nothing (fail closed).
+   * Each entry is '"<expression>" (<reason>)' for the repair-prompt diagnosis.
+   */
+  contextRejectedExpressions: string[];
 }
 
 /**
@@ -745,8 +1059,9 @@ export interface SourceQuoteGrounding {
  * cutting a token ('March 3' from 'March 30', '1889' from '1889 BCE') manufactures nothing, and a
  * normalised quote crossing a source-unit boundary never joins expressions across it. Sign,
  * precision and title-year inheritance are read from the complete source expression and its unit;
- * approximation-qualified expressions ground nothing (S5B-13). Occurrences that disagree on
- * grounding fail closed, exactly like the S5B-02 mixed-context rule.
+ * approximation-qualified expressions ground nothing (S5B-13), and — round-3 lead decision — an
+ * expression whose surrounding source context is not clean grounds nothing either (fail closed).
+ * Occurrences that disagree on grounding fail closed, exactly like the S5B-02 mixed-context rule.
  */
 export function sourceQuoteGrounding(
   index: SourceUnitIndex,
@@ -760,11 +1075,13 @@ export function sourceQuoteGrounding(
     groundingOccurrences: 0,
     cutExpressions: [],
     statedExpressions: [],
+    contextRejectedExpressions: [],
   };
   const needle = normalizeWhitespace(quote);
   if (needle === '') return result;
   const cut = new Set<string>();
   const stated = new Set<string>();
+  const rejected = new Set<string>();
   let from = index.norm.indexOf(needle);
   while (from !== -1) {
     result.occurrences++;
@@ -779,9 +1096,16 @@ export function sourceQuoteGrounding(
         const overlaps = e.rawStart < rawEnd && e.rawEnd > rawStart;
         if (overlaps && !(e.rawStart >= rawStart && e.rawEnd <= rawEnd)) cut.add(normalizeWhitespace(e.text));
       }
-      for (const e of contained) stated.add(normalizeWhitespace(e.text));
-      // The title-year rule reads year-likeness from the FULL source unit, not the quoted fragment.
-      if (expressionsGroundDate(contained, date, titleYear, hasYearLike(u.exprs))) occurrenceGrounded = true;
+      const clean = contained.filter(e => e.contextRejected === null);
+      for (const e of clean) stated.add(normalizeWhitespace(e.text));
+      for (const e of contained) {
+        if (e.contextRejected !== null) {
+          rejected.add(`"${normalizeWhitespace(e.text)}" (${e.contextRejected})`);
+        }
+      }
+      // The title-year rule reads year-likeness from the FULL source unit, not the quoted fragment
+      // (a context-rejected year still counts as year-LIKE and suppresses title-year inheritance).
+      if (expressionsGroundDate(clean, date, titleYear, hasYearLike(u.exprs))) occurrenceGrounded = true;
     }
     if (occurrenceGrounded) result.groundingOccurrences++;
     from = index.norm.indexOf(needle, from + 1);
@@ -789,6 +1113,7 @@ export function sourceQuoteGrounding(
   if (result.occurrences === 0) return result;
   result.cutExpressions = [...cut];
   result.statedExpressions = [...stated];
+  result.contextRejectedExpressions = [...rejected];
   result.status =
     result.groundingOccurrences === result.occurrences
       ? 'grounded'
@@ -896,12 +1221,16 @@ function eventGroundingFailure(
       g.cutExpressions.length > 0
         ? ` — the source states ${g.cutExpressions.map(t => `"${truncate(t, QUOTE_MESSAGE_LIMIT)}"`).join(', ')} but the quote CUTS that expression at its edge (a quote edge inside a token never completes a date expression; quote the expression exactly as the source states it)`
         : '';
+    const rejectedNote =
+      g.contextRejectedExpressions.length > 0
+        ? ` — the quote contains ${g.contextRejectedExpressions.map(t => truncate(t, QUOTE_MESSAGE_LIMIT)).join(', ')} but that expression's source context is NOT clean (an approximation qualifier, temporal bound, unconsumed era token, century wording, alternative, range connector + number, '?' or markup within two words of it grounds nothing — fail closed)`
+        : '';
     const statedNote =
       g.statedExpressions.length > 0
-        ? ` (the complete source expressions inside the quote state: ${g.statedExpressions.map(t => `"${truncate(t, QUOTE_MESSAGE_LIMIT)}"`).join(', ')})`
-        : ' (the quote contains no complete source date expression at all)';
+        ? ` (the complete, clean-context source expressions inside the quote state: ${g.statedExpressions.map(t => `"${truncate(t, QUOTE_MESSAGE_LIMIT)}"`).join(', ')})`
+        : ` (the quote contains no complete clean-context source date expression at all)`;
     quoteNotes.push(
-      `quote "${truncate(quote, QUOTE_MESSAGE_LIMIT)}" contains no COMPLETE source date expression stating ${formatTimelineDate(date)} as ONE connected expression${cutNote}${statedNote}` +
+      `quote "${truncate(quote, QUOTE_MESSAGE_LIMIT)}" contains no COMPLETE source date expression stating ${formatTimelineDate(date)} as ONE connected expression in a CLEAN context${cutNote}${rejectedNote}${statedNote}` +
         (titleYear !== null
           ? ` (the source title states year ${titleYear}, borrowable only into a COMPLETE year-less source expression stating the month and day in ONE expression, in a source unit with no other year)`
           : ''),
@@ -1123,11 +1452,11 @@ export function validateTimelineSpec(spec: unknown, sources: SourceDocument[]): 
       return problems.length === 0
         ? {
             passed: true,
-            message: `all ${grounded} event date(s) are stated by ONE COMPLETE connected date expression of the SOURCE lying inside ONE sentence unit of a counted verbatim quote's located source span: the year (directly, or from a clean source title stating exactly one year when one expression states the month and day), plus the month and day where stated`,
+            message: `all ${grounded} event date(s) are stated by ONE COMPLETE connected date expression of the SOURCE in a CLEAN context (round-3 allow-list: no qualifier, temporal bound, unconsumed era token, century wording, alternative, range connector + number, '?' or markup within two words) lying inside ONE sentence unit of a counted verbatim quote's located source span: the year (directly, or from a clean source title stating exactly one plain year when one expression states the month and day), plus the month and day where stated`,
           }
         : {
             passed: false,
-            message: `${problems.join('; ')} (expected each event's full stated date in ONE COMPLETE connected source date expression inside ONE sentence unit of the quote's located source span — a quote edge cutting a source token grounds nothing; the year may come from the source title only under the title-year rule)`,
+            message: `${problems.join('; ')} (expected each event's full stated date in ONE COMPLETE connected source date expression IN A CLEAN CONTEXT inside ONE sentence unit of the quote's located source span — a quote edge cutting a source token grounds nothing, an unrecognised or unclean form fails closed, and the year may come from the source title only under the title-year rule)`,
             path: firstPath,
             affected,
           };
@@ -1399,14 +1728,16 @@ export function validateTimelineSpec(spec: unknown, sources: SourceDocument[]): 
 /* ------------------------------------------------------------------ */
 
 export interface TimelineCompareContext {
-  /** The source documents, for an EXACT recomputation of the baseline grounding (preferred). */
+  /** The source documents, for an EXACT recomputation of the baseline grounding (the ONLY
+   * authoritative path — without them date/evidence/pair mutation fails closed, S5B-17). */
   sources?: SourceDocument[];
   /**
    * repairFindings() of the BASELINE report. S5B-03 (frozen decisions 1+2): authorization is read
-   * ONLY from validator-owned `affected` field paths — never from finding messages. S5B-15: when
-   * `sources` are present these findings may only NARROW the recomputed immutable-r1 authority
-   * (intersection by check id AND exact affected path); without sources they unlock at most the
-   * label string of a policy finding.
+   * ONLY from validator-owned `affected` field paths — never from finding messages. S5B-15/S5B-17:
+   * when `sources` are present these findings may only NARROW the recomputed immutable-r1
+   * authority (intersection by exact check id AND exact affected path), CONSISTENTLY — an empty
+   * or wrong-scope list narrows a genuine failure to nothing; without sources they unlock at most
+   * the label string of a policy finding.
    */
   findings?: RepairFinding[];
 }
@@ -1554,35 +1885,34 @@ function sameDate(a: TimelineEvent, b: TimelineEvent): boolean {
 
 /**
  * Timeline no-weakening against the IMMUTABLE revision-1 baseline (Muse disposition #6, simplified;
- * plan line 'No-weakening for repair'; field-scoped per S5B-03, frozen decisions 1+2):
+ * plan line 'No-weakening for repair'; field-scoped per S5B-03, frozen decisions 1+2; ONE
+ * AUTHORITY per S5B-17 and the round-3 lead decision):
  * - the engine must be timeline-v1 on both revisions;
  * - no new event ids; the event count never exceeds the baseline and never drops below 5;
- * - an event whose date grounding passed on the baseline keeps its id, label, year, month, day and
- *   evidence unchanged unless a baseline failure's AFFECTED FIELD PATHS unlock them; an event that
- *   FAILED (date-grounded or approximate-date, recomputed here from the baseline itself, or named by
- *   a date-class finding's affected paths) may be re-grounded or removed;
+ * - WITH SOURCES (the only authoritative path): the ONLY per-event grounding result is the
+ *   source-span validator's, read from an EXACT revalidation of the immutable baseline
+ *   (validateTimelineSpec). Every event/pair unlock is derived EXCLUSIVELY from that recomputed
+ *   revision-1 check/path map — the quote-only quoteGroundsDate fallback is GONE from
+ *   authorization (S5B-17: it disagreed with the source-span validator and let a worker rewrite a
+ *   PASSING event's date while repairing an unrelated label). Caller-supplied findings may only
+ *   NARROW the recomputed authority (intersection by exact check id AND exact affected path),
+ *   CONSISTENTLY: an empty findings array, a wrong-check-id finding or a wrong-field finding
+ *   narrows a genuine date failure to nothing (fail closed);
+ * - WITHOUT SOURCES the baseline cannot be recomputed: date/evidence/pair mutation fails closed —
+ *   every event stays frozen, caller findings unlock at most the label string of a policy finding,
+ *   and the only pair exception is a pair that is provably wrong/ambiguous from the baseline
+ *   spec's OWN event dates (the ordering oracle needs no source text);
  * - field scoping (decision 2): a label/name/id/policy finding unlocks that STRING only — dates,
  *   other quotes and ordering pairs stay frozen; a grounding.quotes finding on an event's evidence
- *   unlocks that evidence only; only a date-class finding (timeline.date-grounded /
- *   timeline.approximate-date / timeline.distinct-dates) or the recomputed grounding failure
- *   unlocks date+evidence (or removal); only timeline.case-order (or a recomputed wrong/ambiguous
- *   pair, or a unique-ids/schema pair-field violation) unlocks that case's pair — a renamed case
- *   keeps its pair;
+ *   unlocks that evidence only; only a date-class path (timeline.date-grounded /
+ *   timeline.approximate-date / timeline.distinct-dates) of the recomputed map unlocks
+ *   date+evidence (or removal); only timeline.case-order (or a unique-ids/schema pair-field
+ *   violation, or an event removed/re-grounded under its own unlock) unlocks that case's pair — a
+ *   renamed case keeps its pair;
  * - authorization NEVER comes from substring searches over rendered finding messages: a
  *   model-controlled label quoting another item's id unlocks nothing (S5B-03);
- * - tests/predictions keep (name/id, occurrence) identity with the numeric engines' rules, incl. the
- *   single publisher-policy rename exception; a matched case may change its pair only when the pair
- *   failed timeline.case-order on the baseline, a finding's affected paths unlock the pair, its
- *   event was removed after failing, or its event was legitimately re-grounded to a different date.
- * S5B-15: when context.sources is provided, grounding AND unlock authorization are recomputed
- * EXACTLY from the immutable baseline (validateTimelineSpec); caller-supplied findings may only
- * narrow the recomputed failing checks' affected paths (intersection by check id AND exact path),
- * never broaden them. Without sources the quotes are matched textually (title years come from the
- * baseline spec's own SourceRef titles) and caller findings fail closed: they can never unlock an
- * event's date/evidence (or removal) or a case pair — only a policy finding's label string. When
- * the baseline's grounding.quotes also failed and nothing recomputed unlocks the event, a
- * textually grounded event fails CLOSED (stays frozen) because its verbatim status cannot be
- * proven here.
+ * - tests/predictions keep (name/id, occurrence) identity with the numeric engines' rules, incl.
+ *   the single publisher-policy rename exception.
  * Repeating a rejected revision against the baseline never changes its obligations: every unlock is
  * derived from the baseline and the findings, never from the candidate.
  * Never throws; junk input fails closed.
@@ -1595,8 +1925,12 @@ export function compareTimelineRevisions(
 ): ValidationCheck {
   const id = 'repair.no-weakening';
   const kind: CheckKind = 'semantic';
+  // S5B-17: `failedOnBaseline` is caller-supplied display metadata; with sources the recomputed
+  // baseline report is the only authority, and without sources nothing is recomputable — so the
+  // list no longer authorizes anything on either path (the without-sources pair exception below
+  // recomputes the ordering from the baseline spec itself).
+  void failedOnBaseline;
   try {
-    const failed = new Set(Array.isArray(failedOnBaseline) ? failedOnBaseline : []);
     const problems: string[] = [];
     const p = baseline as LooseTimelineSpec | null | undefined;
     const n = next as LooseTimelineSpec | null | undefined;
@@ -1631,25 +1965,40 @@ export function compareTimelineRevisions(
     const pEvents = looseEvents(p);
     const nEvents = looseEvents(n);
     const findings = Array.isArray(context?.findings) ? context?.findings : undefined;
-    const { docById, textOf } = indexSources(Array.isArray(context?.sources) ? (context?.sources as SourceDocument[]) : []);
 
-    // S5B-03 (frozen decisions 1+2) + S5B-15: the repair unlock scopes. When the source documents
-    // are present, authorization is derived EXCLUSIVELY from the failing checks of an EXACT
-    // revalidation of the immutable baseline; caller-supplied findings may only NARROW that
-    // authority (intersection by check id AND exact affected path), never broaden it — a finding
-    // for a check that passed on recomputation, or naming a path the recomputed failure does not
-    // name, unlocks nothing. Without sufficient source context the comparator fails closed:
-    // caller-supplied findings can never unlock an event's date/evidence (or removal) or a case
-    // pair; only the label-string unlock of a policy finding survives. Finding messages and the
-    // display `path` are never searched for ids or names.
+    // S5B-03 (frozen decisions 1+2) + S5B-15 + S5B-17 (round-3 lead decision, ONE AUTHORITY): the
+    // repair unlock scopes. When the source documents are present, authorization is derived
+    // EXCLUSIVELY from the failing checks of an EXACT revalidation of the immutable baseline;
+    // caller-supplied findings may only NARROW that authority (intersection by check id AND exact
+    // affected path), never broaden it — CONSISTENTLY, so a finding list that is empty, names a
+    // check that passed on recomputation, or names a path the recomputed failure does not name,
+    // unlocks NOTHING (a genuine date failure then stays frozen: fail closed rather than letting a
+    // second authority disagree with the source-span validator). Without sufficient source context
+    // the comparator fails closed: caller-supplied findings can never unlock an event's
+    // date/evidence (or removal) or a case pair; only the label-string unlock of a policy finding
+    // survives. Finding messages and the display `path` are never searched for ids or names.
     const scopes = emptyScopes();
     const sourceDocs = Array.isArray(context?.sources) ? (context?.sources as SourceDocument[]) : [];
-    if (sourceDocs.length > 0) {
+    /**
+     * S5B-17: the CANONICAL per-event grounding result — the event indices whose date checks
+     * FAILED on the recomputed revision-1 report (the source-span validator is the single
+     * authority). Empty without sources, where every event is treated as frozen (fail closed).
+     */
+    const canonicalFailedEvents = new Set<number>();
+    const canonicalKnown = sourceDocs.length > 0;
+    if (canonicalKnown) {
       const baselineReport = validateTimelineSpec(baseline, sourceDocs);
       const failingPaths = new Map<string, Set<string>>();
       for (const c of baselineReport.checks) {
         if (!c.passed) {
           failingPaths.set(c.id, new Set(Array.isArray(c.affected) ? c.affected.filter((x): x is string => typeof x === 'string') : []));
+        }
+      }
+      for (const [checkId, paths] of failingPaths) {
+        if (!DATE_CLASS_IDS.has(checkId)) continue;
+        for (const path of paths) {
+          const m = EVENT_AFFECTED_RE.exec(path);
+          if (m !== null) canonicalFailedEvents.add(Number(m[1]));
         }
       }
       if (findings === undefined) {
@@ -1666,8 +2015,8 @@ export function compareTimelineRevisions(
         }
       }
     } else if (findings !== undefined) {
-      // S5B-15 fail closed: without the source documents the baseline cannot be recomputed, so
-      // caller-supplied findings unlock ONLY the label string of a policy finding — never an
+      // S5B-15/S5B-17 fail closed: without the source documents the baseline cannot be recomputed,
+      // so caller-supplied findings unlock ONLY the label string of a policy finding — never an
       // event's date/evidence (or removal) and never a case pair.
       for (const f of findings) {
         if (typeof f !== 'object' || f === null) continue;
@@ -1677,48 +2026,14 @@ export function compareTimelineRevisions(
       }
     }
 
-    const titleYearFor = (sourceId: string): number | null => {
-      const doc = docById.get(sourceId);
-      if (doc !== undefined) return titleYearOf(doc);
-      const ref = (Array.isArray(p?.sources) ? p.sources : []).find(r => typeof r?.id === 'string' && r.id === sourceId);
-      return ref === undefined ? null : titleYearOf({ title: ref.title });
-    };
-    const verbatimOf = (sourceId: string, quote: string): boolean | undefined => {
-      const text = textOf(sourceId);
-      if (text === undefined) return undefined; // unknown without the source documents
-      return text.includes(normalizeWhitespace(quote));
-    };
-
-    const eventHasApproximate = (ev: TimelineEvent): boolean =>
-      (Array.isArray(ev?.evidence) ? ev.evidence : []).some(
-        q => typeof q?.quote === 'string' && sentenceUnits(q.quote).some(unit => hasApproximateDate(unit) !== null),
-      );
-
-    /** Did this BASELINE event pass its date checks? Recomputed from the baseline itself. */
-    const eventPassedGrounding = (ev: TimelineEvent, index: number): boolean => {
-      if (typeof ev?.id !== 'string' || eventHasApproximate(ev)) return false;
-      let textuallyGroundedVerbatimUnknown = false;
-      for (const q of Array.isArray(ev.evidence) ? ev.evidence : []) {
-        if (typeof q?.quote !== 'string' || !quoteCountsAsEvidence(q.quote)) continue;
-        if (!quoteGroundsDate(q.quote, ev, titleYearFor(q.sourceId))) continue;
-        const verbatim = verbatimOf(q.sourceId, q.quote);
-        if (verbatim === true) return true;
-        if (verbatim === false) continue;
-        textuallyGroundedVerbatimUnknown = true;
-      }
-      if (!textuallyGroundedVerbatimUnknown) return false;
-      // Without the source documents the verbatim side is unknown: trust the textual grounding only
-      // while the baseline's grounding.quotes passed; otherwise fail closed unless a finding's
-      // affected paths unlock this event (S5B-03: structured paths, never message substrings).
-      if (!failed.has('grounding.quotes')) return true;
-      return !(scopes.eventDate.has(index) || scopes.eventEvidence.has(index) || scopes.eventRemove.has(index));
-    };
-
-    /** Decision 2: a date-class unlock (or a recomputed grounding failure) frees date+evidence+label. */
-    const eventMayReground = (ev: TimelineEvent, index: number): boolean =>
-      scopes.eventDate.has(index) || !eventPassedGrounding(ev, index);
-    const eventMayBeRemoved = (ev: TimelineEvent, index: number): boolean =>
-      eventMayReground(ev, index) || scopes.eventRemove.has(index);
+    /**
+     * S5B-17: unlocks come ONLY from `scopes` — the recomputed revision-1 check/path map, narrowed
+     * by the caller findings when present. There is NO textual fallback: with sources the canonical
+     * source-span result is already encoded in the map, and without sources nothing may re-ground.
+     */
+    const eventMayReground = (_ev: TimelineEvent, index: number): boolean => scopes.eventDate.has(index);
+    const eventMayBeRemoved = (_ev: TimelineEvent, index: number): boolean =>
+      scopes.eventDate.has(index) || scopes.eventRemove.has(index);
 
     // Event identity: (id, occurrence). New ids and occurrence inflation are violations.
     const pIndicesById = new Map<string, number[]>();
@@ -1758,11 +2073,20 @@ export function compareTimelineRevisions(
       const mayReground = eventMayReground(ev, i); // date-class unlock: date+evidence+label free
       const labelUnlocked = scopes.eventLabel.has(i); // policy/name finding: the label STRING only
       const evidenceUnlocked = scopes.eventEvidence.has(i); // grounding.quotes finding: the evidence only
+      // S5B-17: with sources the canonical per-event result says whether this event's date checks
+      // FAILED on the recomputed baseline; without sources every event is frozen (fail closed) and
+      // the wording stays the conservative 'passed' phrasing.
+      const canonicallyFailed = canonicalKnown && canonicalFailedEvents.has(i);
+      const lockedFailureNote = canonicallyFailed
+        ? ' without authorization: its baseline date-check failure is NOT unlocked (caller findings may only narrow the recomputed revision-1 affected paths by exact check id and path, and nothing named this event)'
+        : ' even though its date check passed on the baseline';
       if (match === undefined) {
         if (mayReground || scopes.eventRemove.has(i)) removedModifiableIds.add(k);
         else {
           problems.push(
-            `event "${k}" (${formatTimelineDate(ev)}) was removed even though its date check passed on the baseline (only an event that failed its date checks, or one a date-class finding's affected paths name, may be re-grounded or removed)`,
+            canonicallyFailed
+              ? `event "${k}" (${formatTimelineDate(ev)}) was removed${lockedFailureNote}`
+              : `event "${k}" (${formatTimelineDate(ev)}) was removed even though its date check passed on the baseline (only an event that failed its date checks, or one a date-class finding's affected paths name, may be re-grounded or removed)`,
           );
         }
         return;
@@ -1778,14 +2102,12 @@ export function compareTimelineRevisions(
         if (changes.evidence.length > 0 && !evidenceUnlocked) violations.push(...changes.evidence);
       }
       if (violations.length > 0) {
-        const scopeNote = mayReground
+        const scopeNote = mayReground || canonicallyFailed
           ? ''
           : labelUnlocked || evidenceUnlocked
             ? ` (a finding unlocks only its ${[labelUnlocked ? 'label' : null, evidenceUnlocked ? 'evidence quotes' : null].filter(Boolean).join(' and ')}; dates stay frozen without a date-class finding)`
             : ' (an event that passed keeps its id, label, date and quotes unless a date-class finding names it)';
-        problems.push(
-          `event "${k}" changed (${violations.join(', ')}) even though its date check passed on the baseline${scopeNote}`,
-        );
+        problems.push(`event "${k}" changed (${violations.join(', ')})${lockedFailureNote}${scopeNote}`);
       }
     });
 
@@ -1845,8 +2167,13 @@ export function compareTimelineRevisions(
         baselineCountByKey.set(k, (baselineCountByKey.get(k) ?? 0) + 1);
       }
       const caseMayChange = (bc: Record<string, unknown>, baselineIndex: number): boolean =>
-        caseWasWrong(bc) ||
+        // S5B-17: with sources the recomputed revision-1 map is the ONLY pair authority (a wrong or
+        // ambiguous pair fails timeline.case-order there and lands in scopes.casePair; an unknown
+        // reference lands there via timeline.unique-ids). Without sources nothing is recomputable
+        // from text, but the ordering oracle itself needs no source: a pair that is provably
+        // wrong/ambiguous from the baseline spec's OWN event dates may still be fixed.
         scopes.casePair.has(`${list}/${baselineIndex}`) ||
+        (!canonicalKnown && caseWasWrong(bc)) ||
         caseEventRemovedAfterFailing(bc) ||
         caseEventRegroundedToAnotherDate(bc);
 

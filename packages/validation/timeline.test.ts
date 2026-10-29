@@ -224,10 +224,16 @@ test('probe: title-year rule negative — a date unit containing another year ca
     quoteGroundsDate('After 1775 tensions rose, on June 10 a committee was appointed.', D(1775, 6, 10), null),
     false,
   );
-  // ... while the connected form states the full date in one expression and grounds it.
-  assert.equal(quoteGroundsDate('After June 10, 1775 tensions rose.', D(1775, 6, 10), null), true);
-  // The year alone is still stated by its own expression.
-  assert.equal(quoteGroundsDate('After 1775 tensions rose, on June 10 a committee was appointed.', D(1775), null), true);
+  // ROUND-3 FLIP (S5B-19, frozen lead decision): 'After' is a temporal bound in the two words
+  // before the expression — the reviewer's after-year row demands exactly this rejection, so the
+  // connected form no longer grounds an exact date either. The clean wording still does.
+  assert.equal(quoteGroundsDate('After June 10, 1775 tensions rose.', D(1775, 6, 10), null), false);
+  assert.equal(quoteGroundsDate('Tensions rose, and on June 10, 1775 a committee was appointed.', D(1775, 6, 10), null), true);
+  // ROUND-3 FLIP (S5B-19): 'After 1775' is a bounded context — 1775 no longer grounds as an exact
+  // year. The rejected year STILL counts as year-like, so it suppresses title-year borrowing
+  // above; the clean wording grounds the year.
+  assert.equal(quoteGroundsDate('After 1775 tensions rose, on June 10 a committee was appointed.', D(1775), null), false);
+  assert.equal(quoteGroundsDate('In 1775 tensions rose across the colonies.', D(1775), null), true);
 });
 
 /* ------------------------------------------------------------------ */

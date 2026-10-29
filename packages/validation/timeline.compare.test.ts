@@ -16,6 +16,7 @@ import {
   treatySourceDoc,
 } from './fixtures/timeline-specs.ts';
 import { makeProjectileSpec, projectileSourceDoc } from './fixtures/engine-specs.ts';
+import { sha256 } from '../sources/index.ts';
 import type {
   RepairFinding,
   SourceDocument,
@@ -159,35 +160,52 @@ test('attack: swapping a test\'s pair when no finding names it is weakening', ()
 /* Legitimate repairs                                                  */
 /* ------------------------------------------------------------------ */
 
-test('repair: re-grounding the failing event passes — with sources, with findings only, and with failed ids only', () => {
+test('repair: re-grounding the failing event passes with sources; WITHOUT sources it fails closed (S5B-17)', () => {
   const bad = declWithBadE6();
   const next = structuredClone(bad.spec);
   eventsOf(next)[5]!.year = 1776; // the quote "on August 2, 1776" grounds it again
   const failed = failedIds(bad.report);
   assert.equal(compareRevisions(bad.spec, next, failed, { sources: [bad.source], findings: bad.findings }).passed, true);
-  assert.equal(compareRevisions(bad.spec, next, failed, { findings: bad.findings }).passed, true);
-  assert.equal(compareRevisions(bad.spec, next, failed).passed, true);
+  assert.equal(compareRevisions(bad.spec, next, failed, { sources: [bad.source] }).passed, true);
+  // ROUND-3 FLIP (S5B-17): without the source documents the baseline cannot be recomputed, so
+  // date/evidence mutation fails closed — even honest findings or a failed-id list no longer
+  // authorize the re-ground (the old textual quoteGroundsDate fallback was a second authority
+  // that disagreed with the source-span validator and unlocked PASSING events in the worker).
+  assert.equal(compareRevisions(bad.spec, next, failed, { findings: bad.findings }).passed, false);
+  assert.equal(compareRevisions(bad.spec, next, failed).passed, false);
   // The repaired revision is publishable on its own.
   assert.equal(validateSpec(next, [bad.source]).publishable, true);
 });
 
 test('repair: re-grounding the failing event to a DIFFERENT grounded date passes (its cases may follow the new date)', () => {
-  const bad = declWithBadE6();
-  const next = structuredClone(bad.spec);
-  const e6 = eventsOf(next)[5]!;
-  e6.year = 1776;
-  e6.month = 6;
-  e6.day = 11;
-  e6.label = 'Jefferson begins drafting';
-  e6.evidence = [{ sourceId: bad.source.id, quote: 'Jefferson drafted the statement between June 11 and 28' }];
-  // t4/p1 compared (e3, e6); with e6 re-grounded to June 11 the pairs flip to (e6, e3).
-  next.behavioralTests[3]!.earlierEventId = 'e6';
-  next.behavioralTests[3]!.laterEventId = 'e3';
-  next.predictions[0]!.earlierEventId = 'e6';
-  next.predictions[0]!.laterEventId = 'e3';
-  const check = compareRevisions(bad.spec, next, failedIds(bad.report), { sources: [bad.source], findings: bad.findings });
+  // ROUND-3 CHANGE: the old declaration quote 'Jefferson drafted the statement between June 11
+  // and 28' is now (correctly) rejected by the clean-context guard ('between' bound + 'and 28'
+  // connector), so the different-date re-grounding uses the harbor fixture's separately stated
+  // 'An earlier office opened January 1, 1888.' sentence instead.
+  const source = harborSourceDoc();
+  source.text += '\nAn earlier office opened January 1, 1888.';
+  source.sha256 = sha256(source.text);
+  const spec = makeHarborTimelineSpec();
+  spec.sources[0]!.sha256 = source.sha256;
+  eventsOf(spec)[4]!.year = 1891; // s5 (February 9, 1890) fails timeline.date-grounded only
+  const report = validateSpec(spec, [source]);
+  assert.deepEqual(failedIds(report), ['timeline.date-grounded']);
+
+  const next = structuredClone(spec);
+  const s5 = eventsOf(next)[4]!;
+  s5.year = 1888;
+  s5.month = 1;
+  s5.day = 1;
+  s5.label = 'Earlier office opens';
+  s5.evidence = [{ sourceId: source.id, quote: 'An earlier office opened January 1, 1888.' }];
+  // The two predictions comparing s5 flip because s5 was legitimately re-grounded EARLIER.
+  next.predictions[0]!.earlierEventId = 's5';
+  next.predictions[0]!.laterEventId = 's1';
+  next.predictions[1]!.earlierEventId = 's5';
+  next.predictions[1]!.laterEventId = 's4';
+  const check = compareRevisions(spec, next, failedIds(report), { sources: [source], findings: repairFindings(report, spec) });
   assert.equal(check.passed, true, check.message);
-  assert.equal(validateSpec(next, [bad.source]).publishable, true);
+  assert.equal(validateSpec(next, [source]).publishable, true, failedIds(validateSpec(next, [source])).join(','));
 });
 
 test('repair: removing the failing event and re-pointing its cases at a passing event passes', () => {
@@ -342,7 +360,7 @@ test('harbor: a legitimate duplicate-date repair (re-grounding the named event t
   const nextS4 = eventsOf(next)[3]!;
   nextS4.month = 11;
   nextS4.day = 30;
-  nextS4.evidence = [{ sourceId: source.id, quote: 'A storm delayed the seawall, which was not finished until November 30.' }];
+  nextS4.evidence = [{ sourceId: source.id, quote: 'A storm delayed the seawall, which was finished on November 30.' }];
   const check = compareRevisions(spec, next, failedIds(report), { sources: [source], findings: repairFindings(report, spec) });
   assert.equal(check.passed, true, check.message);
   assert.equal(validateSpec(next, [source]).publishable, true);
