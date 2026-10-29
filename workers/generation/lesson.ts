@@ -23,6 +23,8 @@
 // Storage per job (frozen contract): analysis-v2.rN.json, lesson.json, {componentId}.rN.json
 // (+ report inside), premium keeps the v1 spec.rN.json/report.rN.json names.
 import type { MetaClient } from '../../packages/meta/client.ts';
+import { writeFileSync } from 'node:fs';
+import { join } from 'node:path';
 import {
   analyzeSourceV2,
   generateKitComponent,
@@ -82,12 +84,14 @@ import type {
 } from '../../packages/contracts/index.ts';
 import type {
   ComponentPlanEntry,
+  FormulaExplorerGen,
   KitGenByComponent,
   KitGenComponentId,
   PlanComponentId,
 } from '../../packages/contracts/kit.ts';
 import { sha256 } from '../../packages/sources/index.ts';
 import { applyLessonDemoFault, lessonFaultTarget, lessonIntendedChecks } from './demo-faults.ts';
+import { formulaNormalisedNote, normaliseFormulaExplorerGen } from './formula-normalise.ts';
 import {
   checksPassed,
   failedCheckIds,
@@ -398,6 +402,70 @@ export function truncatedOutputFailure(err: unknown): TruncatedOutputFailure | u
   };
 }
 
+/* ------------------------------------------------------------------ */
+/* S6-W fixes: private truncated-output storage + formula normalisation */
+/* ------------------------------------------------------------------ */
+
+/** Hard cap for the privately stored cut-off text (frozen by the task brief). */
+const TRUNCATED_TEXT_MAX_CHARS = 200_000;
+
+/**
+ * The cut-off text of an OUTPUT_TRUNCATED error, when the client attached it: a string
+ * property `partialOutput` (frozen name, added in packages/meta in parallel). Read
+ * duck-typed — like the fixed code itself — so a copy from another module instance works
+ * identically. undefined for everything else.
+ */
+function partialOutputOf(err: unknown): string | undefined {
+  if (typeof err !== 'object' || err === null) {
+    return undefined;
+  }
+  const e = err as { code?: unknown; partialOutput?: unknown };
+  if (e.code !== 'OUTPUT_TRUNCATED') {
+    return undefined;
+  }
+  return typeof e.partialOutput === 'string' && e.partialOutput !== '' ? e.partialOutput : undefined;
+}
+
+/**
+ * Write the cut-off text AS-IS (UTF-8, max 200,000 chars) into the job's private file
+ * (`<componentId>.r<N>.truncated.txt` / `analysis-v2.r<N>.truncated.txt`). The text NEVER
+ * reaches events, job.json, API responses, logs or error messages: readJob/listJobs only
+ * ever read the *.json artifacts, and this file is the only place the text is kept. A
+ * failing write is swallowed — the artifact is private and optional.
+ */
+function saveTruncatedOutput(ctx: LessonContext, fileName: string, err: unknown): void {
+  const partial = partialOutputOf(err);
+  if (partial === undefined) {
+    return;
+  }
+  try {
+    writeFileSync(join(ctx.runDir, fileName), partial.slice(0, TRUNCATED_TEXT_MAX_CHARS), 'utf8');
+  } catch {
+    // best effort: a private debug artifact must never fail the job
+  }
+}
+
+/**
+ * The deterministic pre-validation formula-expression tidy (our code, never AI), applied
+ * to every formula-explorer-v1 revision BEFORE validation: strips a leading `<name> =`
+ * so the frozen grammar sees only the rhs. Every other component passes through as-is.
+ */
+function normaliseGenFor(
+  cid: KitGenComponentId,
+  gen: AnyKitGen,
+): { gen: AnyKitGen; normalisedFrom: string | null; strippedName: string | null } {
+  if (cid !== 'formula-explorer-v1') {
+    return { gen, normalisedFrom: null, strippedName: null };
+  }
+  const n = normaliseFormulaExplorerGen(gen as FormulaExplorerGen);
+  return { gen: n.gen as AnyKitGen, normalisedFrom: n.normalisedFrom, strippedName: n.strippedName };
+}
+
+/** The plain-words detail suffix for a tidied revision ('' when nothing was stripped). */
+function tidyNote(strippedName: string | null): string {
+  return strippedName !== null ? `; ${formulaNormalisedNote(strippedName)}` : '';
+}
+
 /**
  * BUG-006: account a component-level output failure through the ONE accumulator and build
  * the failed-event extras (receipt fields + fixed-code detail, R-01). The summary is
@@ -450,6 +518,11 @@ function repairOutputFailure(
   }
   const truncated = truncatedOutputFailure(err);
   if (truncated !== undefined) {
+    // S6-W fix: keep the cut-off text of the truncated REPAIR call privately, named for
+    // the component/revision the call was making (never in events, job.json or the API).
+    if (typeof base.componentId === 'string' && typeof base.revision === 'number') {
+      saveTruncatedOutput(ctx, `${base.componentId}.r${base.revision}.truncated.txt`, err);
+    }
     return { reason: OUTPUT_TRUNCATED_REASON, extra: accountComponentOutputFailure(ctx, truncated, base) };
   }
   return undefined;
@@ -502,6 +575,9 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
   } catch (err: unknown) {
     // MetaError / GeneratedOutputErrorV2 at the analysis stage are lesson-level failures
     // (the overview is the minimum publishable unit).
+    // S6-W fix: keep the cut-off text of a truncated analysis call privately, beside the
+    // job's other analysis artifacts (never in events/job.json/API responses).
+    saveTruncatedOutput(ctx, 'analysis-v2.r1.truncated.txt', err);
     return ctx.failFromError('analyze', err);
   }
   ctx.accountReceipt(call1.receipt);
@@ -549,6 +625,8 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
         { signal: ctx.signal, validate: analysisValidator, compare: analysisComparator },
       );
     } catch (err: unknown) {
+      // S6-W fix: keep the cut-off text of a truncated analysis REPAIR call privately.
+      saveTruncatedOutput(ctx, `analysis-v2.r${nextRevision}.truncated.txt`, err);
       return ctx.failFromError('repair', err, { revision: nextRevision, target: 'analysis' });
     }
     ctx.accountReceipt(repaired.receipt);
@@ -737,6 +815,8 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
       // BUG-006: the provider call COMPLETED and settled (the client bills before throwing).
       // Account it, then fail ONLY this component with the plain truncated reason.
       const failExtra = accountComponentOutputFailure(ctx, truncated, extra);
+      // S6-W fix: keep the cut-off text of the truncated GENERATION call privately.
+      saveTruncatedOutput(ctx, `${componentId}.r${revision}.truncated.txt`, err);
       ctx.emit(stage, 'failed', failExtra);
       failOutcome(index, componentId, specId, revision, OUTPUT_TRUNCATED_REASON);
       return;
@@ -775,7 +855,11 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
 
   async function runKitComponent(index: number, planEntry: ComponentPlanEntry, cid: KitGenComponentId): Promise<void> {
     const specIdFor = (rev: number): string => kitSpecId(jobId, cid, rev);
-    const kitValidate = (g: AnyKitGen, s: SourceDocument[]): ValidationReport => validateKitComponent(cid, g, s);
+    // S6-W fix: EVERY validation of a formula-explorer gen — ours below and the one the
+    // pipeline injects — runs on the deterministically tidied expression (a leading
+    // `<name> =` stripped). The tidy never validates: FE-02/FE-08 still run on the result.
+    const kitValidate = (g: AnyKitGen, s: SourceDocument[]): ValidationReport =>
+      validateKitComponent(cid, normaliseGenFor(cid, g).gen, s);
     ctx.emit('component', 'started', { componentId: cid, revision: 1 });
     let genRes: { gen: AnyKitGen; report?: ValidationReport; receipt: MetaReceipt };
     try {
@@ -793,7 +877,14 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
     }
     ctx.accountReceipt(genRes.receipt);
     let revision = 1;
-    let gen: AnyKitGen = genRes.gen;
+    // S6-W fix: the gen this worker persists, publishes and compares is the TIDIED one;
+    // the pipeline's report was computed on the tidied clone (kitValidate normalises), so
+    // gen and report stay consistent. `normalisedFrom` records the original expression.
+    const r1Norm = normaliseGenFor(cid, genRes.gen);
+    let gen: AnyKitGen = r1Norm.gen;
+    const r1Extra: Record<string, unknown> =
+      r1Norm.normalisedFrom !== null ? { normalisedFrom: r1Norm.normalisedFrom } : {};
+    const r1Note = tidyNote(r1Norm.strippedName);
     let report: ValidationReport = fixReport(
       genRes.report ?? kitValidate(gen, sources),
       specIdFor(1),
@@ -824,7 +915,7 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
         summary.demoFault = fault;
         summary.demoFaultComponentId = cid;
         faultInjectedHere = true;
-        persistKitRevision(cid, 1, gen, report, lastReceipt, { fault });
+        persistKitRevision(cid, 1, gen, report, lastReceipt, { fault, ...r1Extra });
         ctx.emit('inject', 'succeeded', {
           componentId: cid,
           revision: 1,
@@ -835,7 +926,7 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
         ctx.writeJob();
       } else {
         summary.demoFault = { kind, path: '', original: '', injected: '', revision: 1, effective: false };
-        persistKitRevision(cid, 1, gen, report, lastReceipt);
+        persistKitRevision(cid, 1, gen, report, lastReceipt, r1Extra);
         ctx.emit('inject', 'failed', {
           revision: 1,
           detail: `demo fault requested by the system but NOT injected: the generated ${cid} component does not carry the field the fault alters`,
@@ -843,7 +934,7 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
         ctx.writeJob();
       }
     } else {
-      persistKitRevision(cid, 1, gen, report, lastReceipt);
+      persistKitRevision(cid, 1, gen, report, lastReceipt, r1Extra);
     }
 
     // --- prune BEFORE repair (system-owned drops while the minimum remains) ---
@@ -858,7 +949,7 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
         gen = pruned.gen as AnyKitGen;
         report = fixReport(kitValidate(gen, sources), specIdFor(1), 1);
         droppedNote = droppedItemsNote(cid, pruned.dropped);
-        persistKitRevision(cid, 1, gen, report, lastReceipt, { pruned: true, dropped: pruned.dropped });
+        persistKitRevision(cid, 1, gen, report, lastReceipt, { pruned: true, dropped: pruned.dropped, ...r1Extra });
       }
     }
 
@@ -867,8 +958,8 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
       revision: 1,
       ...receiptFields(genRes.receipt),
       detail: report.publishable
-        ? `${checksPassed(report)}/${report.checks.length} checks passed${droppedNote === '' ? '' : '; items left out by the system prune'}`
-        : `failed checks: ${failedCheckIds(report).join(', ')}`,
+        ? `${checksPassed(report)}/${report.checks.length} checks passed${droppedNote === '' ? '' : '; items left out by the system prune'}${r1Note}`
+        : `failed checks: ${failedCheckIds(report).join(', ')}${r1Note}`,
     });
 
     // --- bounded repair loop (immutable revision-1 baseline, compareKitRevisions) ---
@@ -900,7 +991,14 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
           {
             signal: ctx.signal,
             validate: kitValidate,
-            compare: (b, n, s) => compareKitRevisions(cid, b, n, { sources: s, findings: baselineFindingsK }),
+            // S6-W fix: the comparator sees baseline AND candidate in their tidied form
+            // (normalisation is idempotent, so an already-tidied side passes through),
+            // keeping the repair comparison consistent with the persisted revisions.
+            compare: (b, n, s) =>
+              compareKitRevisions(cid, normaliseGenFor(cid, b).gen, normaliseGenFor(cid, n).gen, {
+                sources: s,
+                findings: baselineFindingsK,
+              }),
           },
         );
       } catch (err: unknown) {
@@ -929,10 +1027,20 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
       ctx.accountReceipt(rep.receipt);
       repairsDone += 1;
       revision = nextRevision;
-      gen = rep.gen;
+      // S6-W fix: the repair revision is tidied before it is persisted/published; the
+      // pipeline's report already reflects the tidied gen (kitValidate/compare normalise).
+      const repNorm = normaliseGenFor(cid, rep.gen);
+      gen = repNorm.gen;
       lastReceipt = rep.receipt;
       report = fixReport(rep.report, specIdFor(revision), revision);
-      persistKitRevision(cid, revision, gen, report, lastReceipt);
+      persistKitRevision(
+        cid,
+        revision,
+        gen,
+        report,
+        lastReceipt,
+        repNorm.normalisedFrom !== null ? { normalisedFrom: repNorm.normalisedFrom } : undefined,
+      );
       const passingIds = new Set(report.checks.filter(c => c.passed).map(c => c.id));
       const remaining = failedCheckIds(report);
       (summary.componentRepairs ??= []).push({
@@ -949,7 +1057,7 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
         componentId: cid,
         revision,
         ...receiptFields(lastReceipt),
-        detail: `repaired revision ${revision - 1}`,
+        detail: `repaired revision ${revision - 1}${tidyNote(repNorm.strippedName)}`,
       });
       ctx.emit('component', report.publishable ? 'succeeded' : 'failed', {
         componentId: cid,

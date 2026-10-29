@@ -13,6 +13,7 @@ import { listJobs, readJob, startJob } from './jobs.ts';
 import type { JobStageEvent, JobSummary } from './jobs.ts';
 import { MetaError } from '../../packages/meta/client.ts';
 import type { CompleteRequest, MetaClient } from '../../packages/meta/client.ts';
+import { STAGE6_PROMPT_VERSION } from '../../packages/meta/prompts-v2.ts';
 import type { MetaReceipt, StageEvent, ValidationReport } from '../../packages/contracts/index.ts';
 import type { LessonSpec, SourceAnalysisV2 } from '../../packages/contracts/kit.ts';
 
@@ -194,7 +195,9 @@ test('lesson: the drag golden publishes overview + both planned components (conc
   assert.equal(lesson.overview?.provenance.revision, 1);
   assert.equal(lesson.overview?.provenance.repairOf, null);
   assert.equal(lesson.overview?.provenance.runId, jobId);
-  assert.equal(lesson.overview?.provenance.promptVersion, 's6-v1');
+  // Unpinned (S6-W fix): compare against the imported constant — packages/meta bumps
+  // STAGE6_PROMPT_VERSION in parallel and this assertion must not pin the literal.
+  assert.equal(lesson.overview?.provenance.promptVersion, STAGE6_PROMPT_VERSION);
   assert.ok(Number.isSafeInteger(lesson.overview?.seed));
   assert.equal(lesson.overview?.sources[0]?.id, DRAG);
   assert.ok(!('text' in (lesson.overview?.sources[0] ?? {})), 'source text never lands in the spec');
