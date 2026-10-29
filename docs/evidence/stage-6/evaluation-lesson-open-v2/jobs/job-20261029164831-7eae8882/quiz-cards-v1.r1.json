@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Lift and Wright Aircraft Fundamentals",
+    "cards": [
+      {
+        "id": "card-1-lift-weight",
+        "stem": "What flight condition is the goal of the modern lift simulation",
+        "options": [
+          "aircraft lift greater than the aircraft weight",
+          "drag exceeding lift constantly",
+          "weight balancing thrust evenly",
+          "thrust matching drag alone"
+        ],
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "The objective of this simulation is to find the flight conditions that produce an aircraft lift greater than the aircraft weight.",
+        "hint": "Consider what must exceed weight for flight"
+      },
+      {
+        "id": "card-2-elevator-location",
+        "stem": "Which control surfaces are located at the very front of every early Wright aircraft",
+        "options": [
+          "elevators",
+          "rudders",
+          "ailerons",
+          "flaps"
+        ],
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "At the front of all of the Wright brothers’ aircraft one finds the elevators.",
+        "hint": "These movable surfaces at the nose controlled pitch"
+      },
+      {
+        "id": "card-3-fundamentals-purpose",
+        "stem": "What will the fundamentals and lessons help you understand",
+        "options": [
+          "journey of flight",
+          "history of rockets",
+          "building of engines",
+          "design of satellites"
+        ],
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "These fundamentals and lessons will help you understand their journey of flight.",
+        "hint": "Focus on the overall purpose described for the lessons"
+      },
+      {
+        "id": "card-4-wright-way-subjects",
+        "stem": "What subjects does the Wright Way use to explain the invention of the airplane",
+        "options": [
+          "basic math and physics",
+          "advanced chemistry",
+          "modern electronics",
+          "abstract art"
+        ],
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "The Wright Way will show you the basic math and physics that led to the invention of the airplane by the Wright Brothers.",
+        "hint": "Recall the core school subjects linked to flight invention"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029164831-7eae8882:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "db6489bc5f9642e2be1b226880f65c96",
+    "usage": {
+      "promptTokens": 3235,
+      "completionTokens": 3939,
+      "reasoningTokens": 3547,
+      "cachedTokens": 0
+    },
+    "latencyMs": 11984,
+    "estCostUSD": 0.0207845,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029164831-7eae8882:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Lift and Wright Aircraft Fundamentals",
+    "sources": [
+      {
+        "id": "nasa-grc-re-living-the-wright-way",
+        "title": "Guide to Reliving the Wright Way — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/re-living-the-wright-way/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "c7d0a44cd306a87e59d38d81850a825080de38231c0242f7086f5336a80c94c2"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "db6489bc5f9642e2be1b226880f65c96",
+      "runId": "job-20261029164831-7eae8882",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:49:28.064Z"
+    },
+    "seed": 3574668641,
+    "cards": [
+      {
+        "id": "card-1-lift-weight",
+        "stem": "What flight condition is the goal of the modern lift simulation",
+        "options": [
+          "aircraft lift greater than the aircraft weight",
+          "drag exceeding lift constantly",
+          "weight balancing thrust evenly",
+          "thrust matching drag alone"
+        ],
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "The objective of this simulation is to find the flight conditions that produce an aircraft lift greater than the aircraft weight.",
+        "hint": "Consider what must exceed weight for flight"
+      },
+      {
+        "id": "card-2-elevator-location",
+        "stem": "Which control surfaces are located at the very front of every early Wright aircraft",
+        "options": [
+          "elevators",
+          "rudders",
+          "ailerons",
+          "flaps"
+        ],
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "At the front of all of the Wright brothers’ aircraft one finds the elevators.",
+        "hint": "These movable surfaces at the nose controlled pitch"
+      },
+      {
+        "id": "card-3-fundamentals-purpose",
+        "stem": "What will the fundamentals and lessons help you understand",
+        "options": [
+          "journey of flight",
+          "history of rockets",
+          "building of engines",
+          "design of satellites"
+        ],
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "These fundamentals and lessons will help you understand their journey of flight.",
+        "hint": "Focus on the overall purpose described for the lessons"
+      },
+      {
+        "id": "card-4-wright-way-subjects",
+        "stem": "What subjects does the Wright Way use to explain the invention of the airplane",
+        "options": [
+          "basic math and physics",
+          "advanced chemistry",
+          "modern electronics",
+          "abstract art"
+        ],
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "quote": "The Wright Way will show you the basic math and physics that led to the invention of the airplane by the Wright Brothers.",
+        "hint": "Recall the core school subjects linked to flight invention"
+      }
+    ]
+  }
+}

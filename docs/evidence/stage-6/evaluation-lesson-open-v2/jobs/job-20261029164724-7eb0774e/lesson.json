@@ -1,0 +1,124 @@
+{
+  "jobId": "job-20261029164724-7eb0774e",
+  "analysisRef": "job-20261029164724-7eb0774e/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029164724-7eb0774e:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How drag dependence is simplified into a coefficient and equation",
+    "sources": [
+      {
+        "id": "nasa-grc-drag-equation",
+        "title": "Drag Equation — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/drag-equation/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "9462a6186d8b00e0dbf2618e4a6701edc9448614e144af1f4bc0b53b59f6ceed"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "4a9817a02f7147c5baaf4892f7df516b",
+      "runId": "job-20261029164724-7eb0774e",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:48:04.269Z"
+    },
+    "seed": 1010629118,
+    "headline": "How drag dependence is simplified into a coefficient and equation",
+    "keyPoints": [
+      {
+        "id": "drag-dependence",
+        "point": "Drag depends on density and velocity squared plus viscosity and compressibility and body size and inclination",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "Drag depends on the density of the air, the square of the velocity, the air’s viscosity and compressibility"
+      },
+      {
+        "id": "complex-variable",
+        "point": "Complex dependencies are handled by collecting effects to characterize dependence by a single variable",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "One way to deal with complex dependencies is to characterize the dependence by a single variable."
+      },
+      {
+        "id": "drag-equation-statement",
+        "point": "Drag equation states drag equals coefficient times density times half velocity squared times reference area",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "The drag equation states that drag D is equal to the drag coefficient Cd times the density rho"
+      },
+      {
+        "id": "drag-components-included",
+        "point": "Drag coefficient includes form drag, skin friction drag, wave drag and induced drag components",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "The drag coefficient given above includes form drag, skin friction drag, wave drag, and induced drag components."
+      },
+      {
+        "id": "dynamic-pressure-point",
+        "point": "Dynamic pressure is density times square of velocity divided by two",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "The combination of terms “density times the square of the velocity divided by two” is called the dynamic pressure"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "drag-coefficient",
+        "term": "drag coefficient",
+        "gloss": "variable that groups complex dependencies for calculating drag",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "For drag, this variable is called the drag coefficient, designated “Cd.”"
+      },
+      {
+        "id": "reference-area",
+        "term": "reference area",
+        "gloss": "area used to characterize drag dependence on body size",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "Notice that the area (A) given in the drag equation is given as a reference area."
+      },
+      {
+        "id": "dynamic-pressure-term",
+        "term": "dynamic pressure",
+        "gloss": "combination of density times velocity squared divided by two",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "The combination of terms “density times the square of the velocity divided by two” is called the dynamic pressure"
+      },
+      {
+        "id": "rho-symbol",
+        "term": "rho",
+        "gloss": "letter designating density in the drag equation",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "In the equation given above, the density is designated by the letter rho (ρ)."
+      },
+      {
+        "id": "form-drag",
+        "term": "form drag",
+        "gloss": "drag component from body shape included in the coefficient",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "The drag coefficient given above includes form drag, skin friction drag, wave drag, and induced drag components."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029164724-7eb0774e:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261029164724-7eb0774e:compare-table-v1:r3",
+      "status": "failed",
+      "reason": "CT-03: cells has 6 entries, expected exactly entities x attributes = 8 (every pair exactly once); cells[2] (cell-1-0): the pair (entityIndex 1, attributeIndex 0) occurs more than once; cells[3] (cell-1-1): the pair (entityIndex 1, attributeIndex 1) occurs more than once; the cell pair (entity cross-section",
+      "revision": 3
+    }
+  ]
+}

@@ -1,0 +1,202 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "How a Land Cession Led to Expansion and Conflict",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follow the text order showing cause leading to effect",
+    "steps": [
+      {
+        "id": "first-cession",
+        "label": "first major cession of land",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "The Louisiana Purchase was the first major cession of land in a long series of expansions that span the 19th century.",
+        "orderHint": "Trace how each expansion created new challenges"
+      },
+      {
+        "id": "fragile-compromises",
+        "label": "fragile compromises",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "the desire to maintain a balance between \"free states\" and \"slave states\" required a series of fragile compromises",
+        "orderHint": "Trace how each expansion created new challenges"
+      },
+      {
+        "id": "civil-war",
+        "label": "civil war became inevitable",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "Eventually, as agreements became more difficult to achieve, civil war became inevitable.",
+        "orderHint": "Trace how each expansion created new challenges"
+      },
+      {
+        "id": "native-populated",
+        "label": "populated with thousands of American Indians",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "The land ceded in this agreement (and later expansions) was populated with thousands of American Indians across dozens of tribes.",
+        "orderHint": "Trace how each expansion created new challenges"
+      },
+      {
+        "id": "western-conflict",
+        "label": "conflict with Native Americans",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "As territories and states were established, more and more Americans from the East traveled west, leading to conflict with Native Americans.",
+        "orderHint": "Trace how each expansion created new challenges"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029164430-26a8ce82:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step label occurs in its own quote after normalisation (labels-in-quotes)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 5 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "99b43508b4fd48cfb49aff9117eecbff",
+    "usage": {
+      "promptTokens": 2825,
+      "completionTokens": 6782,
+      "reasoningTokens": 6329,
+      "cachedTokens": 0
+    },
+    "latencyMs": 20152,
+    "estCostUSD": 0.03235475,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "pruned": true,
+  "dropped": [
+    {
+      "index": 1,
+      "id": "growing-size",
+      "reason": "step failed SEQ-01",
+      "checks": [
+        "SEQ-01"
+      ]
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029164430-26a8ce82:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "How a Land Cession Led to Expansion and Conflict",
+    "sources": [
+      {
+        "id": "nara-louisiana-purchase-treaty",
+        "title": "Louisiana Purchase Treaty (1803) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/louisiana-purchase-treaty",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Louisiana Purchase Treaty (1803)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "6da19e2b0134ca81169b3c5b0a0461ae48243446219561e760b32cb2ed7cce4b"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "99b43508b4fd48cfb49aff9117eecbff",
+      "runId": "job-20261029164430-26a8ce82",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:46:03.549Z"
+    },
+    "seed": 2177732877,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follow the text order showing cause leading to effect",
+    "steps": [
+      {
+        "id": "first-cession",
+        "label": "first major cession of land",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "The Louisiana Purchase was the first major cession of land in a long series of expansions that span the 19th century.",
+        "orderHint": "Trace how each expansion created new challenges"
+      },
+      {
+        "id": "fragile-compromises",
+        "label": "fragile compromises",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "the desire to maintain a balance between \"free states\" and \"slave states\" required a series of fragile compromises",
+        "orderHint": "Trace how each expansion created new challenges"
+      },
+      {
+        "id": "civil-war",
+        "label": "civil war became inevitable",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "Eventually, as agreements became more difficult to achieve, civil war became inevitable.",
+        "orderHint": "Trace how each expansion created new challenges"
+      },
+      {
+        "id": "native-populated",
+        "label": "populated with thousands of American Indians",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "The land ceded in this agreement (and later expansions) was populated with thousands of American Indians across dozens of tribes.",
+        "orderHint": "Trace how each expansion created new challenges"
+      },
+      {
+        "id": "western-conflict",
+        "label": "conflict with Native Americans",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "As territories and states were established, more and more Americans from the East traveled west, leading to conflict with Native Americans.",
+        "orderHint": "Trace how each expansion created new challenges"
+      }
+    ]
+  }
+}

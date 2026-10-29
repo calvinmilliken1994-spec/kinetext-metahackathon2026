@@ -1,0 +1,233 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "How density change links to Mach number",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Derivation follows page order from momentum to Mach relation",
+    "steps": [
+      {
+        "id": "momentum-equation",
+        "label": "rho * V * dV = -dp",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "rho * V * dV = -dp",
+        "orderHint": "Start from the momentum balance"
+      },
+      {
+        "id": "isentropic-ratio",
+        "label": "dp / p = gamma * (drho / rho)",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "dp / p = gamma * (drho / rho)",
+        "orderHint": "Relate pressure and density changes"
+      },
+      {
+        "id": "ideal-gas-law",
+        "label": "p = rho * R * T",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "p = rho * R * T",
+        "orderHint": "Introduce the gas state"
+      },
+      {
+        "id": "sound-speed-relation",
+        "label": "gamma * R * T = a^2",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "gamma * R * T = a^2",
+        "orderHint": "Define speed of sound"
+      },
+      {
+        "id": "pressure-density-link",
+        "label": "dp = a^2 * drho",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "dp = a^2 * drho",
+        "orderHint": "Simplify the pressure change"
+      },
+      {
+        "id": "substituted-momentum",
+        "label": "rho * V * dV = -a^2 * drho",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "rho * V * dV = -a^2 * drho",
+        "orderHint": "Combine into momentum"
+      },
+      {
+        "id": "velocity-mach-ratio",
+        "label": "-(V^2 / a^2) * (dV / V) = drho / rho",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "-(V^2 / a^2) * (dV / V) = drho / rho",
+        "orderHint": "Group into Mach form"
+      },
+      {
+        "id": "mach-density-relation",
+        "label": "-M^2 * (dV / V) = drho / rho",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "-M^2 * (dV / V) = drho / rho",
+        "orderHint": "Arrive at Mach density expression"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029163721-015f9ea9:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 8 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step label occurs in its own quote after normalisation (labels-in-quotes)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 8 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "edb41ee50c8840b388d5e9a71774f545",
+    "usage": {
+      "promptTokens": 3042,
+      "completionTokens": 4999,
+      "reasoningTokens": 4478,
+      "cachedTokens": 0
+    },
+    "latencyMs": 21456,
+    "estCostUSD": 0.02504825,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029163721-015f9ea9:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "How density change links to Mach number",
+    "sources": [
+      {
+        "id": "nasa-grc-role-of-the-mach-number",
+        "title": "Role of the Mach Number — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/role-of-the-mach-number/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "a7355b33f7126247cd0576ce48a0975a781814c8687022d8fdf12e11fdeaa3c8"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "edb41ee50c8840b388d5e9a71774f545",
+      "runId": "job-20261029163721-015f9ea9",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:38:38.306Z"
+    },
+    "seed": 1627730168,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Derivation follows page order from momentum to Mach relation",
+    "steps": [
+      {
+        "id": "momentum-equation",
+        "label": "rho * V * dV = -dp",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "rho * V * dV = -dp",
+        "orderHint": "Start from the momentum balance"
+      },
+      {
+        "id": "isentropic-ratio",
+        "label": "dp / p = gamma * (drho / rho)",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "dp / p = gamma * (drho / rho)",
+        "orderHint": "Relate pressure and density changes"
+      },
+      {
+        "id": "ideal-gas-law",
+        "label": "p = rho * R * T",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "p = rho * R * T",
+        "orderHint": "Introduce the gas state"
+      },
+      {
+        "id": "sound-speed-relation",
+        "label": "gamma * R * T = a^2",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "gamma * R * T = a^2",
+        "orderHint": "Define speed of sound"
+      },
+      {
+        "id": "pressure-density-link",
+        "label": "dp = a^2 * drho",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "dp = a^2 * drho",
+        "orderHint": "Simplify the pressure change"
+      },
+      {
+        "id": "substituted-momentum",
+        "label": "rho * V * dV = -a^2 * drho",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "rho * V * dV = -a^2 * drho",
+        "orderHint": "Combine into momentum"
+      },
+      {
+        "id": "velocity-mach-ratio",
+        "label": "-(V^2 / a^2) * (dV / V) = drho / rho",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "-(V^2 / a^2) * (dV / V) = drho / rho",
+        "orderHint": "Group into Mach form"
+      },
+      {
+        "id": "mach-density-relation",
+        "label": "-M^2 * (dV / V) = drho / rho",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "-M^2 * (dV / V) = drho / rho",
+        "orderHint": "Arrive at Mach density expression"
+      }
+    ]
+  }
+}

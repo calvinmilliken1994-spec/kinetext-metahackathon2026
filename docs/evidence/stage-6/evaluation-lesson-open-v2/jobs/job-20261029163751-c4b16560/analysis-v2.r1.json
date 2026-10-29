@@ -1,0 +1,196 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "finance",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "Page covers teen saving conversations, emergency fund targets, tracking spending, insured bank or credit union choices, employer matching for retirement accounts, compound interest benefits, and researching financial services",
+    "overview": {
+      "headline": "Teen saving for emergencies and early compound interest growth",
+      "keyPoints": [
+        {
+          "id": "saving-ten-percent",
+          "point": "Save 10 percent of earnings to build at least three months worth of living expenses for emergency needs",
+          "sourceId": "cfpb-teenagers-and-saving",
+          "quote": "save 10 percent of what you earn, and have at least three months’ worth of living expenses saved up in case of an emergency"
+        },
+        {
+          "id": "six-nine-months",
+          "point": "Having six to nine months worth of living expenses offers more protection than only three months",
+          "sourceId": "cfpb-teenagers-and-saving",
+          "quote": "Explain that, if possible, it’s better to have more savings—like six to nine months’ worth of living expenses, instead of only three"
+        },
+        {
+          "id": "compound-definition",
+          "point": "Compound interest means earning interest on both the money you save and the interest already earned",
+          "sourceId": "cfpb-teenagers-and-saving",
+          "quote": "Compound interest is when your child earns interest on both the money they save and the interest they earn"
+        },
+        {
+          "id": "early-start-advantage",
+          "point": "Starting to save $100 each year at age 14 yields about $23,000 at age 65 versus about $7,000 if starting at age 35 at 5 percent",
+          "sourceId": "cfpb-teenagers-and-saving",
+          "quote": "If they set aside $100 every year starting at age 14, they'd have about $23,000 at age 65"
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "compound-interest",
+          "term": "Compound interest",
+          "gloss": "interest earned on principal and on previously earned interest",
+          "sourceId": "cfpb-teenagers-and-saving",
+          "quote": "Compound interest is when your child earns interest on both the money they save and the interest they earn"
+        },
+        {
+          "id": "living-expenses",
+          "term": "living expenses",
+          "gloss": "costs needed to cover living needs each month for emergency planning",
+          "sourceId": "cfpb-teenagers-and-saving",
+          "quote": "save 10 percent of what you earn, and have at least three months’ worth of living expenses saved up in case of an emergency"
+        },
+        {
+          "id": "savings-account",
+          "term": "savings account",
+          "gloss": "insured place to hold emergency savings for ready access",
+          "sourceId": "cfpb-teenagers-and-saving",
+          "quote": "Having money in a savings account can help your child avoid having to rely on credit cards or loan options that charge a high interest rate in case of emergency"
+        },
+        {
+          "id": "retirement-account",
+          "term": "401(k)",
+          "gloss": "workplace retirement account that may include employer matching contributions",
+          "sourceId": "cfpb-teenagers-and-saving",
+          "quote": "Explain to your child that once they start a job, they may be offered a retirement account at work called a 401(k)"
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "quiz-cards-v1",
+        "pedagogicalReason": "Reinforces checkable facts about emergency savings rules and safe storage using direct recall",
+        "focusQuote": "save 10 percent of what you earn, and have at least three months’ worth of living expenses saved up in case of an emergency",
+        "focusSourceId": "cfpb-teenagers-and-saving"
+      },
+      {
+        "componentId": "compare-table-v1",
+        "pedagogicalReason": "Highlights timing impact of compound interest by contrasting early versus later saving outcomes side by side",
+        "focusQuote": "If they set aside $100 every year starting at age 14, they'd have about $23,000 at age 65",
+        "focusSourceId": "cfpb-teenagers-and-saving"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029163751-c4b16560:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"finance\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 3011 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": false,
+        "message": "keyTerms[2] (savings-account): quote \"Having money in a savings account can help your child avoid \" is 160 characters, expected <= 150 (expected verbatim quotes of 1-150 characters that appear in the cited source)",
+        "path": "/overview/keyTerms/2/quote",
+        "affected": [
+          "/overview/keyTerms/2/quote"
+        ]
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": false,
+        "message": "keyTerms[2].quote is 160 characters, expected 1-150",
+        "path": "/overview/keyTerms/2/quote",
+        "affected": [
+          "/overview/keyTerms/2/quote"
+        ]
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (2 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": false,
+        "message": "keyPoints[3].point states the number 23000, which does not appear on the page or in the same quote (N-01); keyPoints[3].point states the number 65, which does not appear on the page or in the same quote (N-01); keyPoints[3].point states the number 7000, which does not appear on the page or in the same quote (N-01)",
+        "path": "/overview/keyPoints/3/point",
+        "affected": [
+          "/overview/keyPoints/3/point"
+        ]
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "ae0f16a64b9c4b78b51a11fc60d0470d",
+    "usage": {
+      "promptTokens": 4056,
+      "completionTokens": 12506,
+      "reasoningTokens": 11730,
+      "cachedTokens": 0
+    },
+    "latencyMs": 52486,
+    "estCostUSD": 0.0582205,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

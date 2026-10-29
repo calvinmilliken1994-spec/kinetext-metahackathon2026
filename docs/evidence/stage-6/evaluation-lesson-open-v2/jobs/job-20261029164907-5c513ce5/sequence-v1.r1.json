@@ -1,0 +1,216 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "From descent measurements to lift and drag",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Steps follow the measurement to calculation order shown on the page.",
+    "steps": [
+      {
+        "id": "steady-descent-condition",
+        "label": "steady (constant velocity and no acceleration) descent",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "If a glider is in a steady (constant velocity and no acceleration) descent, it loses altitude as it travels.",
+        "orderHint": "Follow the flight data to the force solution."
+      },
+      {
+        "id": "tangent-definition",
+        "label": "tangent tan of the glide angle a",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The tangent tan of the glide angle a is equal to the change in height h divided by the distance flown d:",
+        "orderHint": "Follow the flight data to the force solution."
+      },
+      {
+        "id": "tangent-equation",
+        "label": "tan(a) = h / d",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "tan(a) = h / d",
+        "orderHint": "Follow the flight data to the force solution."
+      },
+      {
+        "id": "vertical-balance",
+        "label": "lift L times the cosine cos of the glide angle",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The lift L times the cosine cos of the glide angle plus the drag D times the sine sin of the glide angle is equal to the weight W:",
+        "orderHint": "Follow the flight data to the force solution."
+      },
+      {
+        "id": "horizontal-balance",
+        "label": "lift times the sine of the glide angle",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The lift times the sine of the glide angle is equal to the drag times the cosine of the glide angle.",
+        "orderHint": "Follow the flight data to the force solution."
+      },
+      {
+        "id": "determine-lift-drag",
+        "label": "experimentally determine the lift and drag",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "With these three equations we can experimentally determine the lift and drag of a glider.",
+        "orderHint": "Follow the flight data to the force solution."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029164907-5c513ce5:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step label occurs in its own quote after normalisation (labels-in-quotes)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 6 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "cf11d034bcb44918aff3850575d3d975",
+    "usage": {
+      "promptTokens": 2767,
+      "completionTokens": 10926,
+      "reasoningTokens": 10401,
+      "cachedTokens": 0
+    },
+    "latencyMs": 27523,
+    "estCostUSD": 0.04989425,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "pruned": true,
+  "dropped": [
+    {
+      "index": 6,
+      "id": "solve-remaining-equations",
+      "reason": "step failed SEQ-01",
+      "checks": [
+        "SEQ-01"
+      ]
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029164907-5c513ce5:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "From descent measurements to lift and drag",
+    "sources": [
+      {
+        "id": "nasa-grc-glider-trajectory-problem",
+        "title": "Glider Trajectory Problem — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/glider-trajectory-problem/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "66e6cfc191fb83e9cfff3bc323a0394b392cbb4e0278aba87b367f3203c3c1e2"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "cf11d034bcb44918aff3850575d3d975",
+      "runId": "job-20261029164907-5c513ce5",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:50:03.175Z"
+    },
+    "seed": 2579858892,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Steps follow the measurement to calculation order shown on the page.",
+    "steps": [
+      {
+        "id": "steady-descent-condition",
+        "label": "steady (constant velocity and no acceleration) descent",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "If a glider is in a steady (constant velocity and no acceleration) descent, it loses altitude as it travels.",
+        "orderHint": "Follow the flight data to the force solution."
+      },
+      {
+        "id": "tangent-definition",
+        "label": "tangent tan of the glide angle a",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The tangent tan of the glide angle a is equal to the change in height h divided by the distance flown d:",
+        "orderHint": "Follow the flight data to the force solution."
+      },
+      {
+        "id": "tangent-equation",
+        "label": "tan(a) = h / d",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "tan(a) = h / d",
+        "orderHint": "Follow the flight data to the force solution."
+      },
+      {
+        "id": "vertical-balance",
+        "label": "lift L times the cosine cos of the glide angle",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The lift L times the cosine cos of the glide angle plus the drag D times the sine sin of the glide angle is equal to the weight W:",
+        "orderHint": "Follow the flight data to the force solution."
+      },
+      {
+        "id": "horizontal-balance",
+        "label": "lift times the sine of the glide angle",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The lift times the sine of the glide angle is equal to the drag times the cosine of the glide angle.",
+        "orderHint": "Follow the flight data to the force solution."
+      },
+      {
+        "id": "determine-lift-drag",
+        "label": "experimentally determine the lift and drag",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "With these three equations we can experimentally determine the lift and drag of a glider.",
+        "orderHint": "Follow the flight data to the force solution."
+      }
+    ]
+  }
+}

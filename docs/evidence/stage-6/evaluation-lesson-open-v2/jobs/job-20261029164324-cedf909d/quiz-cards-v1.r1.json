@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Mating patterns and equilibrium conditions",
+    "cards": [
+      {
+        "id": "def-arbitrary-locus",
+        "stem": "How is mating described when it is random for a given locus?",
+        "options": [
+          "arbitrary with regard to the locus being considered",
+          "similar to themselves for visible traits",
+          "breeding between dissimilar genotypes",
+          "an increase in homozygotes"
+        ],
+        "sourceId": "nij-random-mating",
+        "quote": "Random mating implies that mating should be arbitrary with regard to the locus being considered.",
+        "hint": ""
+      },
+      {
+        "id": "hwe-condition-role",
+        "stem": "What does the passage state about random mating in relation to Hardy Weinberg Equilibrium?",
+        "options": [
+          "a condition of HWE (Hardy-Weinberg Equilibrium)",
+          "mating between similar individuals",
+          "breeding between dissimilar genotypes",
+          "arbitrary with regard to the locus being considered"
+        ],
+        "sourceId": "nij-random-mating",
+        "quote": "random mating, a condition of HWE (Hardy-Weinberg Equilibrium), does not occur",
+        "hint": ""
+      },
+      {
+        "id": "positive-homozygote-effect",
+        "stem": "Which effect is linked to positive assortative mating?",
+        "options": [
+          "an increase in homozygotes",
+          "mating should be arbitrary",
+          "similar to themselves",
+          "breeding between dissimilar genotypes"
+        ],
+        "sourceId": "nij-random-mating",
+        "quote": "Positive assortative mating leads to an increase in homozygotes",
+        "hint": ""
+      },
+      {
+        "id": "negative-heterozygote-effect",
+        "stem": "Which effect is linked to negative assortative mating?",
+        "options": [
+          "an increase in heterozygotes",
+          "an increase in homozygotes",
+          "arbitrary with regard to the locus",
+          "similar to themselves"
+        ],
+        "sourceId": "nij-random-mating",
+        "quote": "negative assortative mating leads to an increase in heterozygotes",
+        "hint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029164324-cedf909d:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "3c0abf6c5a7e4dd68fd4eac22812fadf",
+    "usage": {
+      "promptTokens": 2392,
+      "completionTokens": 7597,
+      "reasoningTokens": 7240,
+      "cachedTokens": 0
+    },
+    "latencyMs": 34637,
+    "estCostUSD": 0.03527725,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029164324-cedf909d:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Mating patterns and equilibrium conditions",
+    "sources": [
+      {
+        "id": "nij-random-mating",
+        "title": "Random Mating — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+        "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/hardy-weinberg-principle/random-mating",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Random Mating'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+        "sha256": "9f06caf792ddeb146476c0c5d2cf1851b1f5e8bd6f0fc7dfae8cb33d50725ad8"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "3c0abf6c5a7e4dd68fd4eac22812fadf",
+      "runId": "job-20261029164324-cedf909d",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:44:54.338Z"
+    },
+    "seed": 1502722755,
+    "cards": [
+      {
+        "id": "def-arbitrary-locus",
+        "stem": "How is mating described when it is random for a given locus?",
+        "options": [
+          "arbitrary with regard to the locus being considered",
+          "similar to themselves for visible traits",
+          "breeding between dissimilar genotypes",
+          "an increase in homozygotes"
+        ],
+        "sourceId": "nij-random-mating",
+        "quote": "Random mating implies that mating should be arbitrary with regard to the locus being considered.",
+        "hint": ""
+      },
+      {
+        "id": "hwe-condition-role",
+        "stem": "What does the passage state about random mating in relation to Hardy Weinberg Equilibrium?",
+        "options": [
+          "a condition of HWE (Hardy-Weinberg Equilibrium)",
+          "mating between similar individuals",
+          "breeding between dissimilar genotypes",
+          "arbitrary with regard to the locus being considered"
+        ],
+        "sourceId": "nij-random-mating",
+        "quote": "random mating, a condition of HWE (Hardy-Weinberg Equilibrium), does not occur",
+        "hint": ""
+      },
+      {
+        "id": "positive-homozygote-effect",
+        "stem": "Which effect is linked to positive assortative mating?",
+        "options": [
+          "an increase in homozygotes",
+          "mating should be arbitrary",
+          "similar to themselves",
+          "breeding between dissimilar genotypes"
+        ],
+        "sourceId": "nij-random-mating",
+        "quote": "Positive assortative mating leads to an increase in homozygotes",
+        "hint": ""
+      },
+      {
+        "id": "negative-heterozygote-effect",
+        "stem": "Which effect is linked to negative assortative mating?",
+        "options": [
+          "an increase in heterozygotes",
+          "an increase in homozygotes",
+          "arbitrary with regard to the locus",
+          "similar to themselves"
+        ],
+        "sourceId": "nij-random-mating",
+        "quote": "negative assortative mating leads to an increase in heterozygotes",
+        "hint": ""
+      }
+    ]
+  }
+}

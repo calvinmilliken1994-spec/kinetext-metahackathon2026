@@ -1,0 +1,130 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nrc-backgrounder-plutonium-job-20261029163902-86065c08",
+  "title": "Backgrounder on Plutonium: Half-life Activity",
+  "learningObjectives": [
+    "Explain that half-life is the time required for half of the radioactivity to be lost and that different plutonium isotopes have different half-life values",
+    "Compare decay rates by recognizing that isotopes with shorter half-lives decay more quickly and emit more energetic radioactivity",
+    "Describe plutonium as a radioactive metallic element created in reactors that can emit alpha particles with short range"
+  ],
+  "sources": [
+    {
+      "id": "nrc-backgrounder-plutonium",
+      "title": "Backgrounder on Plutonium — U.S. Nuclear Regulatory Commission",
+      "locator": "https://www.nrc.gov/regulations-legislation/fact-sheets-brochures/backgrounder-on-plutonium",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: U.S. Nuclear Regulatory Commission, 'Backgrounder on Plutonium', Fact Sheets & Brochures. NRC's website constitutes a U.S. Government Work under federal copyright law and is not subject to copyright. The U.S. Nuclear Regulatory Commission has not reviewed, approved or endorsed this activity.",
+      "sha256": "03700e48439f4a60c4b8ff3676122131acf7c23ff26eaacb5700f29a06768737"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "exp-half-life-definition",
+      "text": "The half-life is a characteristic time for each radioactive isotope. It is defined as the time it takes to lose half of its radioactivity, so after each half-life only half of the remaining material persists.",
+      "evidence": [
+        {
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "The different isotopes have different “half-lives” – the time it takes to lose half of its radioactivity."
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "half-life-v1",
+    "equation": "N=N0*(1/2)^(t/T)",
+    "initialAmount": {
+      "unit": "1",
+      "min": 1,
+      "max": 1000,
+      "default": 100
+    },
+    "halfLife": {
+      "unit": "time",
+      "min": 1,
+      "max": 10,
+      "default": 5
+    },
+    "elapsedTime": {
+      "unit": "time",
+      "min": 0,
+      "max": 25,
+      "default": 5
+    },
+    "scenario": {
+      "objectLabel": "Plutonium sample (grams)",
+      "settingLabel": "Half-life in years"
+    }
+  },
+  "behavioralTests": [
+    {
+      "name": "half-life-one-half-life",
+      "initialAmount": 100,
+      "halfLife": 5,
+      "elapsedTime": 5,
+      "expectedRemaining": 50,
+      "tolerance": 0.05
+    },
+    {
+      "name": "two-half-lives-quarter",
+      "initialAmount": 200,
+      "halfLife": 7,
+      "elapsedTime": 14,
+      "expectedRemaining": 50,
+      "tolerance": 0.05
+    },
+    {
+      "name": "zero-time-no-decay",
+      "initialAmount": 80,
+      "halfLife": 4,
+      "elapsedTime": 0,
+      "expectedRemaining": 80,
+      "tolerance": 0.05
+    }
+  ],
+  "predictions": [
+    {
+      "id": "pred-1",
+      "prompt": "Predict remaining after 2 half-lives",
+      "initialAmount": 120,
+      "halfLife": 6,
+      "elapsedTime": 12,
+      "expectedRemaining": 30,
+      "tolerance": 0.05
+    },
+    {
+      "id": "pred-2",
+      "prompt": "Predict remaining after 2.5 half-lives",
+      "initialAmount": 80,
+      "halfLife": 4,
+      "elapsedTime": 10,
+      "expectedRemaining": 14.1421,
+      "tolerance": 0.05
+    },
+    {
+      "id": "pred-3",
+      "prompt": "Predict remaining after 1 half-life",
+      "initialAmount": 250,
+      "halfLife": 8,
+      "elapsedTime": 8,
+      "expectedRemaining": 125,
+      "tolerance": 0.05
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "71ef0e5530f740f48cc36b757eee9fce",
+    "runId": "job-20261029163902-86065c08",
+    "promptVersion": "v9",
+    "generatedAt": "2026-10-29T16:40:35.927Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

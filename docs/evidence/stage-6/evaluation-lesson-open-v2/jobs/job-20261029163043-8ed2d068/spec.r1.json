@@ -1,0 +1,164 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nasa-grc-simplified-aircraft-motion-job-20261029163043-8ed2d068",
+  "title": "Simplified Aircraft Motion Test",
+  "learningObjectives": [
+    "Apply a=F_net/m to relate net force and mass to acceleration in one dimension",
+    "Predict the sign and magnitude of acceleration from unbalanced thrust and drag",
+    "Identify zero net force with zero acceleration for balanced flight"
+  ],
+  "sources": [
+    {
+      "id": "nasa-grc-simplified-aircraft-motion",
+      "title": "Simplified Aircraft Motion — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+      "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/simplified-aircraft-motion/",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+      "sha256": "21d6273d590cd157b690fe9491c4c0d202f5b35c5e5a31a8c072b37bbe89edd5"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "exp1",
+      "text": "Thrust greater than drag gives a positive net forward force, and the resulting acceleration is calculated from Newton’s second law as net force divided by mass.",
+      "evidence": [
+        {
+          "sourceId": "nasa-grc-simplified-aircraft-motion",
+          "quote": "Similarly, increasing the thrust while the drag is constant will cause the plane to accelerate:"
+        },
+        {
+          "sourceId": "nasa-grc-simplified-aircraft-motion",
+          "quote": "Where a is the acceleration, m is the mass of the aircraft, and F is the net force acting on the aircraft."
+        }
+      ]
+    },
+    {
+      "id": "exp2",
+      "text": "Drag greater than thrust gives a negative net force, causing a negative acceleration that slows the aircraft, where net force is thrust minus drag.",
+      "evidence": [
+        {
+          "sourceId": "nasa-grc-simplified-aircraft-motion",
+          "quote": "And increasing the drag at a constant thrust will cause the plane to slow down:"
+        },
+        {
+          "sourceId": "nasa-grc-simplified-aircraft-motion",
+          "quote": "The net force is the difference between the opposing forces; lift minus weight, or thrust minus drag."
+        }
+      ]
+    },
+    {
+      "id": "exp3",
+      "text": "When opposing forces are balanced the net force is zero, so acceleration is zero and velocity remains constant; unbalanced forces cause motion in the direction of the greater force.",
+      "evidence": [
+        {
+          "sourceId": "nasa-grc-simplified-aircraft-motion",
+          "quote": "If the forces become unbalanced, the aircraft will move in the direction of the greater force."
+        },
+        {
+          "sourceId": "nasa-grc-simplified-aircraft-motion",
+          "quote": "We can compute the acceleration which the aircraft will experience from Newton’s second law of motion:"
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "forces-1d-v1",
+    "equation": "a=F_net/m",
+    "massKg": {
+      "unit": "kg",
+      "min": 0.5,
+      "max": 20,
+      "default": 5
+    },
+    "netForceN": {
+      "unit": "N",
+      "min": -50,
+      "max": 50,
+      "default": 10
+    },
+    "scenario": {
+      "objectLabel": "Model aircraft",
+      "surfaceLabel": "Level flight, x-direction only"
+    },
+    "durationS": 5,
+    "stepS": 0.02,
+    "observables": [
+      "position",
+      "velocity",
+      "acceleration"
+    ]
+  },
+  "behavioralTests": [
+    {
+      "name": "positive net force accelerates forward",
+      "massKg": 2,
+      "netForceN": 20,
+      "expectedAccelerationMps2": 10,
+      "tolerance": 0.001
+    },
+    {
+      "name": "negative net force produces negative acceleration",
+      "massKg": 4,
+      "netForceN": -20,
+      "expectedAccelerationMps2": -5,
+      "tolerance": 0.001
+    },
+    {
+      "name": "zero net force gives zero acceleration",
+      "massKg": 10,
+      "netForceN": 0,
+      "expectedAccelerationMps2": 0,
+      "tolerance": 0.001
+    },
+    {
+      "name": "small mass large positive force",
+      "massKg": 1,
+      "netForceN": 15,
+      "expectedAccelerationMps2": 15,
+      "tolerance": 0.001
+    }
+  ],
+  "predictions": [
+    {
+      "id": "pred1",
+      "prompt": "Predict acceleration for model aircraft with mass 2 kg and net force 10 N",
+      "massKg": 2,
+      "netForceN": 10,
+      "expectedAccelerationMps2": 5,
+      "tolerance": 0.001
+    },
+    {
+      "id": "pred2",
+      "prompt": "Predict acceleration for mass 8 kg with net force -24 N",
+      "massKg": 8,
+      "netForceN": -24,
+      "expectedAccelerationMps2": -3,
+      "tolerance": 0.001
+    },
+    {
+      "id": "pred3",
+      "prompt": "Predict acceleration for mass 5 kg with zero net force",
+      "massKg": 5,
+      "netForceN": 0,
+      "expectedAccelerationMps2": 0,
+      "tolerance": 0.001
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "0428230c63b543fb9b624b499a5f8d13",
+    "runId": "job-20261029163043-8ed2d068",
+    "promptVersion": "v9",
+    "generatedAt": "2026-10-29T16:32:23.873Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

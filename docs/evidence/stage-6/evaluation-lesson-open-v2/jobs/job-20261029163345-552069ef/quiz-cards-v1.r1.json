@@ -1,0 +1,238 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "",
+    "cards": [
+      {
+        "id": "coefficient-range",
+        "stem": "What range of quoted values was reported for the coefficient due to measuring inaccuracies?",
+        "options": [
+          ".0027 to .005",
+          ".0033 to .00326",
+          "1901 aircraft",
+          "1902 aircraft"
+        ],
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "quote": "Because of measuring inaccuracies at the time, there were many quoted values for the coefficient ranging from .0027 to .005.",
+        "hint": "Recall the range mentioned for early measurements."
+      },
+      {
+        "id": "design-weight-1901",
+        "stem": "What weight was the aircraft itself expected to lift in the design case for the early kite test?",
+        "options": [
+          "100 pounds",
+          "150 pounds",
+          "15 mile per hour",
+          "5 degrees"
+        ],
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "quote": "The 1901 aircraft had been designed to lift itself (100 pounds) plus a pilot",
+        "hint": "Think about the design weight for the aircraft alone."
+      },
+      {
+        "id": "revised-smeaton-value",
+        "stem": "What value did the brothers find more closely approximated their data for the Smeaton coefficient?",
+        "options": [
+          ".0033",
+          ".005",
+          ".00326",
+          ".0027"
+        ],
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "quote": "they determined that a value of .0033 more closely approximated their data.",
+        "hint": "Consider the revised value found from flight data."
+      },
+      {
+        "id": "wing-shape-importance",
+        "stem": "What factor did wind tunnel tests reveal as important for the lift coefficient?",
+        "options": [
+          "wing shape",
+          "Smeaton coefficient",
+          "angle of attack",
+          "surface area"
+        ],
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "quote": "the brothers discovered the importance of wing shape on the lift coefficient",
+        "hint": "Focus on what wind tunnel testing showed about geometry."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029163345-552069ef:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": false,
+        "message": "quiz gen failed the structural limits: title must be a non-empty string",
+        "path": "/title",
+        "affected": [
+          "/title"
+        ]
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": false,
+        "message": "cards[0].options[0] states the number 0027, which does not appear on the page or in the same quote (N-01); cards[0].options[0] states the number 005, which does not appear on the page or in the same quote (N-01); cards[0].options[1] states the number 0033, which does not appear on the page or in the same quote (N-01); cards[0].options[1] states the number 00326, which does not appear on the page or in the same quote (N-01); cards[2].options[0] states the number 0033, which does not appear on the page or in the same quote (N-01); cards[2].options[1] states the number 005, which does not appear on the page or in the same quote (N-01); cards[2].options[2] states the number 00326, which does not appear on the page or in the same quote (N-01); cards[2].options[3] states the number 0027, which does not appear on the page or in the same quote (N-01)",
+        "path": "/cards/0/options/0",
+        "affected": [
+          "/cards/0/options/0",
+          "/cards/0/options/1",
+          "/cards/2/options/0",
+          "/cards/2/options/1",
+          "/cards/2/options/2",
+          "/cards/2/options/3"
+        ]
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "aea9c6078667437687d959672f9c28ee",
+    "usage": {
+      "promptTokens": 3267,
+      "completionTokens": 8479,
+      "reasoningTokens": 8074,
+      "cachedTokens": 0
+    },
+    "latencyMs": 47612,
+    "estCostUSD": 0.0401195,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029163345-552069ef:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "",
+    "sources": [
+      {
+        "id": "nasa-grc-lift-equation-of-the-1900s",
+        "title": "Lift Equation of the 1900's — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/lift-equation-of-the-1900s/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "41fb1b6349509be9b9478942fed514cd8d077b15436694132ecbfb588c477402"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "aea9c6078667437687d959672f9c28ee",
+      "runId": "job-20261029163345-552069ef",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:35:47.748Z"
+    },
+    "seed": 1245297098,
+    "cards": [
+      {
+        "id": "coefficient-range",
+        "stem": "What range of quoted values was reported for the coefficient due to measuring inaccuracies?",
+        "options": [
+          ".0027 to .005",
+          ".0033 to .00326",
+          "1901 aircraft",
+          "1902 aircraft"
+        ],
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "quote": "Because of measuring inaccuracies at the time, there were many quoted values for the coefficient ranging from .0027 to .005.",
+        "hint": "Recall the range mentioned for early measurements."
+      },
+      {
+        "id": "design-weight-1901",
+        "stem": "What weight was the aircraft itself expected to lift in the design case for the early kite test?",
+        "options": [
+          "100 pounds",
+          "150 pounds",
+          "15 mile per hour",
+          "5 degrees"
+        ],
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "quote": "The 1901 aircraft had been designed to lift itself (100 pounds) plus a pilot",
+        "hint": "Think about the design weight for the aircraft alone."
+      },
+      {
+        "id": "revised-smeaton-value",
+        "stem": "What value did the brothers find more closely approximated their data for the Smeaton coefficient?",
+        "options": [
+          ".0033",
+          ".005",
+          ".00326",
+          ".0027"
+        ],
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "quote": "they determined that a value of .0033 more closely approximated their data.",
+        "hint": "Consider the revised value found from flight data."
+      },
+      {
+        "id": "wing-shape-importance",
+        "stem": "What factor did wind tunnel tests reveal as important for the lift coefficient?",
+        "options": [
+          "wing shape",
+          "Smeaton coefficient",
+          "angle of attack",
+          "surface area"
+        ],
+        "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+        "quote": "the brothers discovered the importance of wing shape on the lift coefficient",
+        "hint": "Focus on what wind tunnel testing showed about geometry."
+      }
+    ]
+  }
+}

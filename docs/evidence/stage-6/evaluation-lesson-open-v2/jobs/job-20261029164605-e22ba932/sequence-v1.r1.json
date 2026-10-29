@@ -1,0 +1,191 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "How amendments became the Bill of Rights",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Steps follow the order ideas appear in the text from debate to adoption",
+    "steps": [
+      {
+        "id": "opponents-charge",
+        "label": "tyranny by the central government",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "its opponents repeatedly charged that the Constitution as drafted would open the way to tyranny by the central government",
+        "orderHint": "Arrange in the order the document presents them"
+      },
+      {
+        "id": "demand-bill-of-rights",
+        "label": "bill of rights",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "They demanded a \"bill of rights\" that would spell out the immunities of individual citizens.",
+        "orderHint": "Arrange in the order the document presents them"
+      },
+      {
+        "id": "state-conventions-ask",
+        "label": "asked for such amendments",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "Several state conventions in their formal ratification of the Constitution asked for such amendments",
+        "orderHint": "Arrange in the order the document presents them"
+      },
+      {
+        "id": "first-congress-proposal",
+        "label": "proposed to the state legislatures",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "On September 25, 1789, the First Congress of the United States therefore proposed to the state legislatures 12 amendments to the Constitution",
+        "orderHint": "Arrange in the order the document presents them"
+      },
+      {
+        "id": "articles-ratified",
+        "label": "Articles 3 to 12",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "Articles 3 to 12, ratified December 15, 1791, by three-fourths of the state legislatures, constitute the first 10 amendments",
+        "orderHint": "Arrange in the order the document presents them"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029164605-e22ba932:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step label occurs in its own quote after normalisation (labels-in-quotes)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 5 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "f06984c2853e4b0b8189b8cd499a40b5",
+    "usage": {
+      "promptTokens": 2614,
+      "completionTokens": 7208,
+      "reasoningTokens": 6828,
+      "cachedTokens": 0
+    },
+    "latencyMs": 23059,
+    "estCostUSD": 0.0339015,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029164605-e22ba932:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "How amendments became the Bill of Rights",
+    "sources": [
+      {
+        "id": "nara-bill-of-rights",
+        "title": "Bill of Rights (1791) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/bill-of-rights",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Bill of Rights (1791)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "a4a36b13e4682b41a3b938737553b5a5f3e509f35af3132cd2420de67f016531"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "f06984c2853e4b0b8189b8cd499a40b5",
+      "runId": "job-20261029164605-e22ba932",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:47:12.664Z"
+    },
+    "seed": 3541815961,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Steps follow the order ideas appear in the text from debate to adoption",
+    "steps": [
+      {
+        "id": "opponents-charge",
+        "label": "tyranny by the central government",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "its opponents repeatedly charged that the Constitution as drafted would open the way to tyranny by the central government",
+        "orderHint": "Arrange in the order the document presents them"
+      },
+      {
+        "id": "demand-bill-of-rights",
+        "label": "bill of rights",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "They demanded a \"bill of rights\" that would spell out the immunities of individual citizens.",
+        "orderHint": "Arrange in the order the document presents them"
+      },
+      {
+        "id": "state-conventions-ask",
+        "label": "asked for such amendments",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "Several state conventions in their formal ratification of the Constitution asked for such amendments",
+        "orderHint": "Arrange in the order the document presents them"
+      },
+      {
+        "id": "first-congress-proposal",
+        "label": "proposed to the state legislatures",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "On September 25, 1789, the First Congress of the United States therefore proposed to the state legislatures 12 amendments to the Constitution",
+        "orderHint": "Arrange in the order the document presents them"
+      },
+      {
+        "id": "articles-ratified",
+        "label": "Articles 3 to 12",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "Articles 3 to 12, ratified December 15, 1791, by three-fourths of the state legislatures, constitute the first 10 amendments",
+        "orderHint": "Arrange in the order the document presents them"
+      }
+    ]
+  }
+}

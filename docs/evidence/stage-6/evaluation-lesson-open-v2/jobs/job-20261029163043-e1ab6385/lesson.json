@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261029163043-e1ab6385",
+  "analysisRef": "job-20261029163043-e1ab6385/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029163043-e1ab6385:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Newton laws linking forces, mass and motion in straight line flight examples",
+    "sources": [
+      {
+        "id": "nasa-grc-newtons-laws-of-motion",
+        "title": "Newton's Laws of Motion — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/newtons-laws-of-motion/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "907bae07076eef20118a4e54096ad399b11994ec5e310d9bed74850f6d009014"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "2012854464294db9aebd7d746ee94eb4",
+      "runId": "job-20261029163043-e1ab6385",
+      "promptVersion": "s6-v2",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T16:31:41.127Z"
+    },
+    "seed": 3199294471,
+    "headline": "Newton laws linking forces, mass and motion in straight line flight examples",
+    "keyPoints": [
+      {
+        "id": "inertia-law",
+        "point": "Inertia keeps an object at rest or in motion at constant speed until an unbalanced force acts",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "An object at rest remains at rest, and an object in motion remains in motion at constant speed and in a straight line"
+      },
+      {
+        "id": "second-law-dependence",
+        "point": "Acceleration from a force is proportional to force size and inversely proportional to object mass",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "The acceleration of an object depends on the mass of the object and the amount of force applied."
+      },
+      {
+        "id": "momentum-definition",
+        "point": "Second law defines force as change in momentum which is mass times velocity per change in time",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "His second law defines a force to be equal to change in momentum (mass times velocity) per change in time."
+      },
+      {
+        "id": "action-reaction",
+        "point": "Every action has equal opposite reaction with forces resulting from interactions between objects",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "His third law states that for every action (force) in nature there is an equal and opposite reaction."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "inertia-term",
+        "term": "inertia",
+        "gloss": "tendency to resist changes in motion and remain at rest or uniform motion",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "This tendency to resist changes in a state of motion is inertia."
+      },
+      {
+        "id": "momentum-term",
+        "term": "Momentum",
+        "gloss": "mass times velocity used to define momentum and track motion change",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Momentum is defined to be the mass m of an object times its velocity V."
+      },
+      {
+        "id": "acceleration-term",
+        "term": "acceleration",
+        "gloss": "change in velocity divided by time that defines acceleration",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "The change in velocity divided by the change in time is the definition of the acceleration a."
+      },
+      {
+        "id": "force-term",
+        "term": "force",
+        "gloss": "equal change in momentum caused over time by a push or pull",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "His second law defines a force to be equal to change in momentum (mass times velocity) per change in time."
+      },
+      {
+        "id": "vector-term",
+        "term": "vector",
+        "gloss": "quantity with magnitude and direction associated with motion",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Scientists and mathematicians call this a vector quantity."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "forces-1d-v1",
+      "specId": "nasa-grc-newtons-laws-of-motion-job-20261029163043-e1ab6385",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261029163043-e1ab6385:sequence-v1:r1",
+      "status": "passed",
+      "reason": "1 step was left out because they could not be verified against the page: define-acceleration (schema.gen).",
+      "revision": 1
+    }
+  ]
+}

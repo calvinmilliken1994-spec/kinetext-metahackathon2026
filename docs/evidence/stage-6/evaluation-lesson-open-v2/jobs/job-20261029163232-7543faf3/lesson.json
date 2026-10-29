@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261029163232-7543faf3",
+  "analysisRef": "job-20261029163232-7543faf3/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029163232-7543faf3:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How wing size and reference area determine lift and why flaps extend for landing",
+    "sources": [
+      {
+        "id": "nasa-grc-effect-of-size-on-lift",
+        "title": "Effect of Size on Lift — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/effect-of-size-on-lift/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "1bd1a2678b2c2cb6f162ebbeb4ec95d6aa439d14002682604d2ac9cd680d76f4"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "79b809eb50b544699546d84aff236eff",
+      "runId": "job-20261029163232-7543faf3",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:33:10.667Z"
+    },
+    "seed": 426312597,
+    "headline": "How wing size and reference area determine lift and why flaps extend for landing",
+    "keyPoints": [
+      {
+        "id": "lift-proportional-area",
+        "point": "Lift is directly proportional to area so doubling area doubles lift",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "Like the other aerodynamic force, drag, the lift is directly proportional to the area of the object."
+      },
+      {
+        "id": "aerodynamic-force-pressure",
+        "point": "Total aerodynamic force equals pressure times surface area around body",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "The total aerodynamic force is equal to the pressure times the surface area around the body."
+      },
+      {
+        "id": "wing-planform-reference",
+        "point": "Wing planform area viewed from above is logical reference area for lift",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "the logical choice is the wing planform area."
+      },
+      {
+        "id": "flaps-increase-area",
+        "point": "Designers increase wing area with flaps and slats during takeoff and landing",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "This is done by sliding the flaps backwards along metal tracks and shifting the slats forward to increase the wing area."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "lift-term",
+        "term": "Lift",
+        "gloss": "aerodynamic force perpendicular to flight direction that varies with pressure",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "Lift is the component of this force perpendicular to the flight direction."
+      },
+      {
+        "id": "drag-term",
+        "term": "drag",
+        "gloss": "other aerodynamic force that also varies directly with area",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "Like the other aerodynamic force, drag, the lift is directly proportional to the area of the object."
+      },
+      {
+        "id": "planform-area-term",
+        "term": "planform area",
+        "gloss": "area of wing seen from above used as reference area for lift calculations",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "The planform area is the area of the wing as viewed from above the wing, looking along the “lift” direction."
+      },
+      {
+        "id": "lift-coefficient-term",
+        "term": "lift coefficient",
+        "gloss": "value experimentally determined by measuring lift and area that adjusts with reference area",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "the lift coefficient is determined experimentally"
+      },
+      {
+        "id": "flaps-term",
+        "term": "flaps",
+        "gloss": "movable wing parts slid backwards to increase area for low velocity takeoff and landing",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "This is done by sliding the flaps backwards along metal tracks and shifting the slats forward to increase the wing area."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029163232-7543faf3:quiz-cards-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    },
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261029163232-7543faf3:compare-table-v1:r3",
+      "status": "failed",
+      "reason": "CT-03: cells has 4 entries, expected exactly entities x attributes = 16 (every pair exactly once); the cell pair (entity cruise-condition, attribute airplane) is missing (cells must be the exact product); the cell pair (entity cruise-condition, attribute airplane) is missing (cells must be the exact produc",
+      "revision": 3
+    }
+  ]
+}

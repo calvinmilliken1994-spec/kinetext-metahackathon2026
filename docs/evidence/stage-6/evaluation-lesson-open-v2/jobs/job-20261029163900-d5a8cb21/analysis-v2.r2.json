@@ -1,0 +1,197 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "chemistry",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "Page covers origins of radioactive waste, two broad classifications with high-level and low-level examples, fission products and half-lives, hazard and storage in pools and casks, and agency roles for regulation and disposal.",
+    "overview": {
+      "headline": "Waste classes decay hazards storage and disposal overview",
+      "keyPoints": [
+        {
+          "id": "waste-byproduct-origin",
+          "point": "Radioactive waste is a byproduct from reactors at plants and hospitals and research facilities",
+          "sourceId": "nrc-backgrounder-radioactive-waste",
+          "quote": "Radioactive (or nuclear) waste is a byproduct from nuclear reactors, fuel processing plants, hospitals and research facilities."
+        },
+        {
+          "id": "waste-classifications",
+          "point": "Two broad classifications divide waste into high-level and low-level types",
+          "sourceId": "nrc-backgrounder-radioactive-waste",
+          "quote": "There are two broad classifications: high-level or low-level waste."
+        },
+        {
+          "id": "half-life-decay",
+          "point": "Strontium and cesium isotopes have half-lives of about 30 years when radioactivity will decay by half",
+          "sourceId": "nrc-backgrounder-radioactive-waste",
+          "quote": "Strontium-90 and cesium-137 have half-lives of about 30 years (half the radioactivity will decay in 30 years)."
+        },
+        {
+          "id": "temporary-storage",
+          "point": "Spent fuel storage at plant sites is considered temporary before permanent disposal",
+          "sourceId": "nrc-backgrounder-radioactive-waste",
+          "quote": "Spent fuel storage at power plant sites is considered temporary, with the ultimate goal being permanent disposal."
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "nuclear-reactors",
+          "term": "fuel processing plants",
+          "gloss": "facilities that use fission to produce energy and generate waste",
+          "sourceId": "nrc-backgrounder-radioactive-waste",
+          "quote": "Radioactive (or nuclear) waste is a byproduct from nuclear reactors, fuel processing plants, hospitals and research facilities."
+        },
+        {
+          "id": "low-level-waste",
+          "term": "low-level waste",
+          "gloss": "waste defined as other than high-level and from medical and industrial sites for disposal",
+          "sourceId": "nrc-backgrounder-radioactive-waste",
+          "quote": "There are two broad classifications: high-level or low-level waste."
+        },
+        {
+          "id": "half-lives",
+          "term": "half-lives",
+          "gloss": "time of about years for half the radioactivity to decay",
+          "sourceId": "nrc-backgrounder-radioactive-waste",
+          "quote": "Strontium-90 and cesium-137 have half-lives of about 30 years (half the radioactivity will decay in 30 years)."
+        },
+        {
+          "id": "fission-products",
+          "term": "fission products",
+          "gloss": "isotopes created when uranium splits that contribute heat and radiation",
+          "sourceId": "nrc-backgrounder-radioactive-waste",
+          "quote": "These isotopes, called \"fission products,\" account for most of the heat and penetrating radiation in high-level waste."
+        },
+        {
+          "id": "spent-fuel-pools",
+          "term": "spent fuel pools",
+          "gloss": "pools of water several feet deep that shield radiation and cool rods",
+          "sourceId": "nrc-backgrounder-radioactive-waste",
+          "quote": "All U.S. nuclear power plants store spent nuclear fuel in \"spent fuel pools.\""
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "half-life-v1",
+        "pedagogicalReason": "Interactive decay model makes abstract half-life concrete by showing remaining material after each interval",
+        "focusQuote": "Strontium-90 and cesium-137 have half-lives of about 30 years (half the radioactivity will decay in 30 years).",
+        "focusSourceId": "nrc-backgrounder-radioactive-waste"
+      },
+      {
+        "componentId": "sort-groups-v1",
+        "pedagogicalReason": "Grouping waste types and examples builds classification skill and clarifies disposal pathways",
+        "focusQuote": "There are two broad classifications: high-level or low-level waste.",
+        "focusSourceId": "nrc-backgrounder-radioactive-waste"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029163900-d5a8cb21:analysis",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"chemistry\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 11852 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 11 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 4, keyTerms 5, componentPlan 2; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (2 entries, 1 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "source-analysis-v2: no weakening — every one of the 2 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "ece5c4cb3df74bcfa40194624ba1e4e0",
+    "usage": {
+      "promptTokens": 8273,
+      "completionTokens": 3005,
+      "reasoningTokens": 2180,
+      "cachedTokens": 0
+    },
+    "latencyMs": 14071,
+    "estCostUSD": 0.0231125,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Vacuum Free Fall and Galileo Observation",
+    "cards": [
+      {
+        "id": "vacuum-same-acceleration",
+        "stem": "What does the page say about how a beach ball and an airliner fall in a vacuum?",
+        "options": [
+          "same acceleration",
+          "different terminal velocities",
+          "increased drag influence",
+          "mass-dependent falling"
+        ],
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "In a vacuum, a beach ball falls with the same acceleration as an airliner.",
+        "hint": "Think about vacuum versus air conditions"
+      },
+      {
+        "id": "vacuum-only-weight-force",
+        "stem": "Which sole external force acts on an object falling through a vacuum?",
+        "options": [
+          "weight of the object",
+          "drag force",
+          "air resistance push",
+          "terminal velocity force"
+        ],
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "An object that falls through a vacuum is subjected to only one external force, the gravitational force, expressed as the weight of the object.",
+        "hint": "Recall what is absent in a vacuum"
+      },
+      {
+        "id": "weight-size-shape-irrelevant",
+        "stem": "Which object properties are described as not affecting free fall description?",
+        "options": [
+          "weight, size, and shape",
+          "air density and drag",
+          "terminal velocity value",
+          "inclined plane angle"
+        ],
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "The weight, size, and shape of the object are not a factor in describing a free fall.",
+        "hint": "Focus on properties said to be irrelevant"
+      },
+      {
+        "id": "galileo-same-rate-proposal",
+        "stem": "Who was first credited with the observation that free falling objects fall at equal rate?",
+        "options": [
+          "Galileo",
+          "Aristotle",
+          "Newton",
+          "Pisa legend teller"
+        ],
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "The remarkable observation that all free falling objects fall at the same rate was first proposed by Galileo, nearly 400 years ago.",
+        "hint": "Recall the early investigator of inclined planes"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029163214-267b2d84:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "4de43bacd39546f58e868043e1669a58",
+    "usage": {
+      "promptTokens": 2887,
+      "completionTokens": 6837,
+      "reasoningTokens": 6432,
+      "cachedTokens": 0
+    },
+    "latencyMs": 31673,
+    "estCostUSD": 0.032666,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029163214-267b2d84:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Vacuum Free Fall and Galileo Observation",
+    "sources": [
+      {
+        "id": "nasa-grc-motion-of-free-falling-object",
+        "title": "Motion of Free Falling Object — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/motion-of-free-falling-object/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "f94199ea21e14dad578baee19694e534fff3dba5dc88f9bc2ea6ec082445c317"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "4de43bacd39546f58e868043e1669a58",
+      "runId": "job-20261029163214-267b2d84",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:33:44.715Z"
+    },
+    "seed": 2067021350,
+    "cards": [
+      {
+        "id": "vacuum-same-acceleration",
+        "stem": "What does the page say about how a beach ball and an airliner fall in a vacuum?",
+        "options": [
+          "same acceleration",
+          "different terminal velocities",
+          "increased drag influence",
+          "mass-dependent falling"
+        ],
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "In a vacuum, a beach ball falls with the same acceleration as an airliner.",
+        "hint": "Think about vacuum versus air conditions"
+      },
+      {
+        "id": "vacuum-only-weight-force",
+        "stem": "Which sole external force acts on an object falling through a vacuum?",
+        "options": [
+          "weight of the object",
+          "drag force",
+          "air resistance push",
+          "terminal velocity force"
+        ],
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "An object that falls through a vacuum is subjected to only one external force, the gravitational force, expressed as the weight of the object.",
+        "hint": "Recall what is absent in a vacuum"
+      },
+      {
+        "id": "weight-size-shape-irrelevant",
+        "stem": "Which object properties are described as not affecting free fall description?",
+        "options": [
+          "weight, size, and shape",
+          "air density and drag",
+          "terminal velocity value",
+          "inclined plane angle"
+        ],
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "The weight, size, and shape of the object are not a factor in describing a free fall.",
+        "hint": "Focus on properties said to be irrelevant"
+      },
+      {
+        "id": "galileo-same-rate-proposal",
+        "stem": "Who was first credited with the observation that free falling objects fall at equal rate?",
+        "options": [
+          "Galileo",
+          "Aristotle",
+          "Newton",
+          "Pisa legend teller"
+        ],
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "The remarkable observation that all free falling objects fall at the same rate was first proposed by Galileo, nearly 400 years ago.",
+        "hint": "Recall the early investigator of inclined planes"
+      }
+    ]
+  }
+}

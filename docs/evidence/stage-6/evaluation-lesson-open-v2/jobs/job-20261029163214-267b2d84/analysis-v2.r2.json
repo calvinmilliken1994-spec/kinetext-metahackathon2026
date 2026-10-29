@@ -1,0 +1,203 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "physics",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "Page covers vacuum free fall under gravity, constant acceleration of 9.8 meters per square second, velocity and displacement equations, table showing acceleration velocity and distance over time, and Galileo inclined plane findings versus air resistance effects",
+    "overview": {
+      "headline": "Free fall motion under gravity with constant acceleration in a vacuum",
+      "keyPoints": [
+        {
+          "id": "vacuum-gravitational-force",
+          "point": "A vacuum free falling object is subjected to only the gravitational force expressed as its weight",
+          "sourceId": "nasa-grc-motion-of-free-falling-object",
+          "quote": "An object that falls through a vacuum is subjected to only one external force, the gravitational force, expressed as the weight of the object."
+        },
+        {
+          "id": "constant-acceleration-value",
+          "point": "The gravitational acceleration is constant and equal to 9.8 meters per square second at sea level",
+          "sourceId": "nasa-grc-motion-of-free-falling-object",
+          "quote": "The acceleration is constant and equal to the gravitational acceleration g which is 9.8 meters per square second at sea level on the Earth."
+        },
+        {
+          "id": "velocity-location-equations",
+          "point": "Knowing acceleration we can determine velocity and location of a free falling object at any time",
+          "sourceId": "nasa-grc-motion-of-free-falling-object",
+          "quote": "Knowing the acceleration, we can determine the velocity and location of any free falling object at any time using the following equations."
+        },
+        {
+          "id": "acceleration-velocity-location-trends",
+          "point": "Acceleration remains constant while velocity increases linearly and location increases quadratically over time",
+          "sourceId": "nasa-grc-motion-of-free-falling-object",
+          "quote": "Notice that the acceleration is a constant, the velocity increases linearly, and the location increases quadratically."
+        },
+        {
+          "id": "galileo-same-rate-observation",
+          "point": "Galileo first proposed the remarkable observation that all free falling objects fall at the same rate",
+          "sourceId": "nasa-grc-motion-of-free-falling-object",
+          "quote": "The remarkable observation that all free falling objects fall at the same rate was first proposed by Galileo, nearly 400 years ago."
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "free-falling",
+          "term": "free falling",
+          "gloss": "motion caused only by gravity with no other forces like drag acting on the object",
+          "sourceId": "nasa-grc-motion-of-free-falling-object",
+          "quote": "An object that is moving only because of the action of gravity is said to be free falling"
+        },
+        {
+          "id": "gravitational-acceleration",
+          "term": "gravitational acceleration",
+          "gloss": "constant acceleration due to gravity near Earth equal to 9.8 meters per square second",
+          "sourceId": "nasa-grc-motion-of-free-falling-object",
+          "quote": "The acceleration is constant and equal to the gravitational acceleration g which is 9.8 meters per square second at sea level on the Earth."
+        },
+        {
+          "id": "weight",
+          "term": "weight",
+          "gloss": "force of gravity acting on an object expressed as its weight",
+          "sourceId": "nasa-grc-motion-of-free-falling-object",
+          "quote": "An object that falls through a vacuum is subjected to only one external force, the gravitational force, expressed as the weight of the object."
+        },
+        {
+          "id": "drag-force",
+          "term": "drag force",
+          "gloss": "additional force from air resistance that makes atmospheric motion more complex",
+          "sourceId": "nasa-grc-motion-of-free-falling-object",
+          "quote": "there is an additional drag force acting on the object"
+        },
+        {
+          "id": "displacement",
+          "term": "displacement",
+          "gloss": "distance from an initial location described as X in the motion equations",
+          "sourceId": "nasa-grc-motion-of-free-falling-object",
+          "quote": "where a is the acceleration, V is the velocity, and X is the displacement from an initial location."
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "formula-explorer-v1",
+        "pedagogicalReason": "Lets learners explore how constant acceleration determines velocity and displacement over time in vacuum free fall",
+        "focusQuote": "V = a * t",
+        "focusSourceId": "nasa-grc-motion-of-free-falling-object"
+      },
+      {
+        "componentId": "quiz-cards-v1",
+        "pedagogicalReason": "Reinforces core facts about weight independence and Galileo observation for recall in vacuum conditions",
+        "focusQuote": "In a vacuum, a beach ball falls with the same acceleration as an airliner.",
+        "focusSourceId": "nasa-grc-motion-of-free-falling-object"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029163214-267b2d84:analysis",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"physics\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 2615 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 12 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 5, keyTerms 5, componentPlan 2; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (2 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "source-analysis-v2: no weakening — every one of the 2 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "4fad03462700413d9a695baec2d669f1",
+    "usage": {
+      "promptTokens": 7015,
+      "completionTokens": 2824,
+      "reasoningTokens": 1926,
+      "cachedTokens": 0
+    },
+    "latencyMs": 11325,
+    "estCostUSD": 0.02077075,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

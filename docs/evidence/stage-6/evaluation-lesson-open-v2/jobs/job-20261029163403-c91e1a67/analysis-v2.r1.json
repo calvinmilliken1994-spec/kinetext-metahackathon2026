@@ -1,0 +1,205 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "physics",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "Page covers thermodynamics definitions, enthalpy and specific volume, heat capacity at constant pressure and volume, derivation linking cp cv and gas constant, and gamma ratio for air",
+    "overview": {
+      "headline": "Specific heat at constant pressure and volume linked through gas constant and gamma",
+      "keyPoints": [
+        {
+          "id": "thermodynamics-branch",
+          "point": "Thermodynamics is described as a branch of physics dealing with energy and work of a system",
+          "sourceId": "nasa-grc-specific-heat-cp-cv",
+          "quote": "Thermodynamics is a branch of physics which deals with the energy and work of a system."
+        },
+        {
+          "id": "specific-variable",
+          "point": "A specific state variable is defined as value of variable divided by mass of substance",
+          "sourceId": "nasa-grc-specific-heat-cp-cv",
+          "quote": "For a scientist, a “specific” state variable means the value of the variable divided by the mass of the substance."
+        },
+        {
+          "id": "heat-capacity-state",
+          "point": "Heat capacity is not considered a state variable and varies with material and process",
+          "sourceId": "nasa-grc-specific-heat-cp-cv",
+          "quote": "Heat capacity is not a state variable."
+        },
+        {
+          "id": "cp-cv-relation",
+          "point": "Specific heat constants for constant pressure and constant volume processes are related to gas constant for a given gas",
+          "sourceId": "nasa-grc-specific-heat-cp-cv",
+          "quote": "The specific heat constants for constant pressure and constant volume processes are related to the gas constant for a given gas."
+        },
+        {
+          "id": "gamma-definition",
+          "point": "Specific heat ratio gamma is defined as cp divided by cv and depends on state of gas",
+          "sourceId": "nasa-grc-specific-heat-cp-cv",
+          "quote": "We can define an additional variable called the specific heat ratio, which is given the Greek symbol “gamma” (γ), which is equal to cp divided by cv:"
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "enthalpy",
+          "term": "enthalpy",
+          "gloss": "specific enthalpy combines internal energy with pressure times volume for a gas",
+          "sourceId": "nasa-grc-specific-heat-cp-cv",
+          "quote": "where h in the specific enthalpy, p is the pressure, v is the specific volume, and e is the specific internal energy."
+        },
+        {
+          "id": "specific-heat-capacity",
+          "term": "specific heat capacity",
+          "gloss": "constant added per unit temperature rise for a material at a given process",
+          "sourceId": "nasa-grc-specific-heat-cp-cv",
+          "quote": "where delta T (ΔT) is the change of temperature of the gas during the process, and c is the specific heat capacity."
+        },
+        {
+          "id": "gas-constant",
+          "term": "gas constant",
+          "gloss": "unique value for every gas relating pressure volume and temperature in equation of state",
+          "sourceId": "nasa-grc-specific-heat-cp-cv",
+          "quote": "The gas constant used by aerodynamicists is derived from the universal gas constant but has a unique value for every gas."
+        },
+        {
+          "id": "gamma-ratio",
+          "term": "gamma",
+          "gloss": "specific heat ratio equal to cp divided by cv depending on state of gas",
+          "sourceId": "nasa-grc-specific-heat-cp-cv",
+          "quote": "We can define an additional variable called the specific heat ratio, which is given the Greek symbol “gamma” (γ), which is equal to cp divided by cv:"
+        },
+        {
+          "id": "internal-energy",
+          "term": "internal energy",
+          "gloss": "specific internal energy component of enthalpy for a gas",
+          "sourceId": "nasa-grc-specific-heat-cp-cv",
+          "quote": "where h in the specific enthalpy, p is the pressure, v is the specific volume, and e is the specific internal energy."
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "compare-table-v1",
+        "pedagogicalReason": "Contrast constant pressure and constant volume specific heats to clarify why their values differ before relating them",
+        "focusQuote": "Even though the temperature change is the same for this process and the constant pressure process, the value of the specific heat capacity is different.",
+        "focusSourceId": "nasa-grc-specific-heat-cp-cv"
+      },
+      {
+        "componentId": "formula-explorer-v1",
+        "pedagogicalReason": "Explore relation among cp, cv and gas constant derived from enthalpy and equation of state to show energy conservation",
+        "focusQuote": "cp = cv + R",
+        "focusSourceId": "nasa-grc-specific-heat-cp-cv"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029163403-c91e1a67:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"physics\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 5377 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": false,
+        "message": "componentPlan[0] (compare-table-v1): quote \"Even though the temperature change is the same for this proc\" is 152 characters, expected <= 150 (expected verbatim quotes of 1-150 characters that appear in the cited source)",
+        "path": "/componentPlan/0/focusQuote",
+        "affected": [
+          "/componentPlan/0/focusQuote"
+        ]
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": false,
+        "message": "componentPlan[0].focusQuote is 152 characters, expected 1-150",
+        "path": "/componentPlan/0/focusQuote",
+        "affected": [
+          "/componentPlan/0/focusQuote"
+        ]
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (2 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "b990dba2843d413d9c5c474419186da9",
+    "usage": {
+      "promptTokens": 4566,
+      "completionTokens": 12251,
+      "reasoningTokens": 11338,
+      "cachedTokens": 0
+    },
+    "latencyMs": 71913,
+    "estCostUSD": 0.05777425,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

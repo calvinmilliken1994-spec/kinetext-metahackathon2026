@@ -1,0 +1,205 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "physics",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "Page explains the 1900s lift equation L = k V squared A cl, factors affecting lift, Smeaton coefficient uncertainty from .0027 to .005, Wright brothers 1900 and 1901 tests, and wind tunnel work shaping the 1902 aircraft.",
+    "overview": {
+      "headline": "Wright brothers tested historic lift equation to size wings and refine wing design",
+      "keyPoints": [
+        {
+          "id": "lift-depends-velocity-area",
+          "point": "Lift was determined to depend on the square of the velocity and vary linearly with the surface area of the object",
+          "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+          "quote": "it had been determined that lift depends on the square of the velocity and varies linearly with the surface area of the object."
+        },
+        {
+          "id": "smeaton-coefficient-pressure",
+          "point": "Early aerodynamicists used Smeaton coefficient to represent pressure force on a flat plate moving through air",
+          "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+          "quote": "Smeaton’s coefficient which represented the pressure force (drag) on a one foot square flat plate moving at one mile per hour through the air."
+        },
+        {
+          "id": "wright-doubt-smeaton-value",
+          "point": "Brothers began to doubt the .005 Smeaton value and found .0033 more closely approximated their data",
+          "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+          "quote": "So the brothers began to doubt the .005 value for the Smeaton coefficient and they determined that a value of .0033 more closely approximated their data."
+        },
+        {
+          "id": "wing-shape-lift-coefficient",
+          "point": "Wind tunnel testing showed the importance of wing shape and planform on the lift coefficient",
+          "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+          "quote": "they discovered the importance of wing shape on the lift coefficient."
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "lift-coefficient",
+          "term": "lift coefficient",
+          "gloss": "fraction of flat plate pressure converted to lift as described in the lift coefficient relation",
+          "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+          "quote": "where L is the lift, k is the Smeaton coefficient, V is the velocity, A is the wing area, and cl is the lift coefficient."
+        },
+        {
+          "id": "smeaton-coefficient",
+          "term": "Smeaton coefficient",
+          "gloss": "pressure coefficient representing drag on a one foot square flat plate at one mile per hour",
+          "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+          "quote": "k is the Smeaton coefficient, V is the velocity, A is the wing area, and cl is the lift coefficient."
+        },
+        {
+          "id": "angle-of-attack",
+          "term": "angle of attack",
+          "gloss": "inclination of body to flow also called angle of attack that influences lift",
+          "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+          "quote": "the body’s inclination to the flow, also called the angle of attack."
+        },
+        {
+          "id": "velocity",
+          "term": "velocity",
+          "gloss": "speed between object and air whose square factor appears in the lift dependence",
+          "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+          "quote": "it had been determined that lift depends on the square of the velocity and varies linearly with the surface area of the object."
+        },
+        {
+          "id": "wing-area",
+          "term": "wing area",
+          "gloss": "surface area over which air flows and appears as wing area in the equation",
+          "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+          "quote": "where L is the lift, k is the Smeaton coefficient, V is the velocity, A is the wing area, and cl is the lift coefficient."
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "compare-table-v1",
+        "pedagogicalReason": "Contrasting historic and modern formulations clarifies how pressure dependence and coefficient definitions evolved",
+        "focusQuote": "The modern equation uses the dynamic pressure of the moving air for the pressure dependence, while this equation uses the Smeaton coefficient.",
+        "focusSourceId": "nasa-grc-lift-equation-of-the-1900s"
+      },
+      {
+        "componentId": "quiz-cards-v1",
+        "pedagogicalReason": "Checking recalled values for coefficient range and design performance reinforces factual retention of historic flight data",
+        "focusQuote": "Because of measuring inaccuracies at the time, there were many quoted values for the coefficient ranging from .0027 to .005.",
+        "focusSourceId": "nasa-grc-lift-equation-of-the-1900s"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029163345-552069ef:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"physics\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 4810 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": false,
+        "message": "keyPoints[2] (wright-doubt-smeaton-value): quote \"So the brothers began to doubt the .005 value for the Smeato\" is 153 characters, expected <= 150; keyPoints[3] (wing-shape-lift-coefficient): quote \"they discovered the importance of wing shape on the lift coe\" was not found verbatim in source \"nasa-grc-lift-equation-of-the-1900s\" after whitespace normalisation (expected verbatim quotes of 1-150 characters that appear in the cited source)",
+        "path": "/overview/keyPoints/2/quote",
+        "affected": [
+          "/overview/keyPoints/2/quote",
+          "/overview/keyPoints/3/quote"
+        ]
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": false,
+        "message": "keyPoints[2].quote is 153 characters, expected 1-150",
+        "path": "/overview/keyPoints/2/quote",
+        "affected": [
+          "/overview/keyPoints/2/quote"
+        ]
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (2 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": false,
+        "message": "pageCoverage states the number 0027, which does not appear on the page or in the same quote (N-01); pageCoverage states the number 005, which does not appear on the page or in the same quote (N-01); keyPoints[2].point states the number 005, which does not appear on the page or in the same quote (N-01); keyPoints[2].point states the number 0033, which does not appear on the page or in the same quote (N-01)",
+        "path": "/pageCoverage",
+        "affected": [
+          "/pageCoverage",
+          "/overview/keyPoints/2/point"
+        ]
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "5418ae37ee414d02a0e7d3fc1b634f76",
+    "usage": {
+      "promptTokens": 4442,
+      "completionTokens": 9218,
+      "reasoningTokens": 8137,
+      "cachedTokens": 0
+    },
+    "latencyMs": 41554,
+    "estCostUSD": 0.044729,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

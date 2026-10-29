@@ -1,0 +1,221 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Limits and Military Context of the Proclamation",
+    "cards": [
+      {
+        "id": "scope-seceded-states",
+        "stem": "Which area did the Emancipation Proclamation directly cover as a wartime measure?",
+        "options": [
+          "states that had seceded from the Union",
+          "loyal states that never left the Union",
+          "areas of the Confederacy already occupied",
+          "British and French colonies abroad"
+        ],
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "It applied only to states that had seceded from the Union, leaving slavery untouched in the loyal border states.",
+        "hint": "Think about which states the wartime order could legally reach."
+      },
+      {
+        "id": "nature-military-measure",
+        "stem": "How was the Proclamation described that explains its limited reach?",
+        "options": [
+          "a military measure",
+          "a constitutional amendment",
+          "a peace treaty with Europe",
+          "a Supreme Court ruling"
+        ],
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "Because it was a military measure, however, the Emancipation Proclamation was limited in many ways.",
+        "hint": "Consider the legal basis Lincoln claimed during the war."
+      },
+      {
+        "id": "service-union-army-navy",
+        "stem": "What service did the Proclamation open to Black men after that date?",
+        "options": [
+          "the Union Army and Navy",
+          "the Confederate diplomatic corps",
+          "exempted border state militias"
+        ],
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "Moreover, the Proclamation announced the acceptance of Black men into the Union Army and Navy, enabling the liberated to become liberators.",
+        "hint": "Recall the new opportunity announced for formerly enslaved people."
+      },
+      {
+        "id": "condition-union-victory",
+        "stem": "What did the promised freedom depend upon for effect?",
+        "options": [
+          "Union military victory",
+          "a ruling by England and France",
+          "approval by seceded legislatures"
+        ],
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "Most important, the freedom it promised depended upon Union military victory.",
+        "hint": "Remember what was needed to make the promise real."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029164619-2d4282d7:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "10eb9cf40f1849b5adbd2ea18f3ce5df",
+    "usage": {
+      "promptTokens": 2784,
+      "completionTokens": 5524,
+      "reasoningTokens": 5107,
+      "cachedTokens": 0
+    },
+    "latencyMs": 19091,
+    "estCostUSD": 0.026957,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029164619-2d4282d7:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Limits and Military Context of the Proclamation",
+    "sources": [
+      {
+        "id": "nara-emancipation-proclamation",
+        "title": "Emancipation Proclamation (1863) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/emancipation-proclamation",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Emancipation Proclamation (1863)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "0d11585e47f04bd0a12b0ded4d23595943f21a5af522811db76a93ef0486f646"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "10eb9cf40f1849b5adbd2ea18f3ce5df",
+      "runId": "job-20261029164619-2d4282d7",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:47:23.041Z"
+    },
+    "seed": 1219259342,
+    "cards": [
+      {
+        "id": "scope-seceded-states",
+        "stem": "Which area did the Emancipation Proclamation directly cover as a wartime measure?",
+        "options": [
+          "states that had seceded from the Union",
+          "loyal states that never left the Union",
+          "areas of the Confederacy already occupied",
+          "British and French colonies abroad"
+        ],
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "It applied only to states that had seceded from the Union, leaving slavery untouched in the loyal border states.",
+        "hint": "Think about which states the wartime order could legally reach."
+      },
+      {
+        "id": "nature-military-measure",
+        "stem": "How was the Proclamation described that explains its limited reach?",
+        "options": [
+          "a military measure",
+          "a constitutional amendment",
+          "a peace treaty with Europe",
+          "a Supreme Court ruling"
+        ],
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "Because it was a military measure, however, the Emancipation Proclamation was limited in many ways.",
+        "hint": "Consider the legal basis Lincoln claimed during the war."
+      },
+      {
+        "id": "service-union-army-navy",
+        "stem": "What service did the Proclamation open to Black men after that date?",
+        "options": [
+          "the Union Army and Navy",
+          "the Confederate diplomatic corps",
+          "exempted border state militias"
+        ],
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "Moreover, the Proclamation announced the acceptance of Black men into the Union Army and Navy, enabling the liberated to become liberators.",
+        "hint": "Recall the new opportunity announced for formerly enslaved people."
+      },
+      {
+        "id": "condition-union-victory",
+        "stem": "What did the promised freedom depend upon for effect?",
+        "options": [
+          "Union military victory",
+          "a ruling by England and France",
+          "approval by seceded legislatures"
+        ],
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "Most important, the freedom it promised depended upon Union military victory.",
+        "hint": "Remember what was needed to make the promise real."
+      }
+    ]
+  }
+}

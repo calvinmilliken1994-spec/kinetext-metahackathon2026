@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261029163224-2a532c04",
+  "analysisRef": "job-20261029163224-2a532c04/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029163224-2a532c04:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Constant speed flight and how distance relates to ground speed and time",
+    "sources": [
+      {
+        "id": "nasa-grc-range-constant-velocity",
+        "title": "Range – Constant Velocity — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/range-constant-velocity/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "f1f4102e23398f882264cb387f0c4115207597b855cadae074925c9e7c1a4127"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "b4c875fd035449e1b5908660b61e1c47",
+      "runId": "job-20261029163224-2a532c04",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:33:38.405Z"
+    },
+    "seed": 1048656880,
+    "headline": "Constant speed flight and how distance relates to ground speed and time",
+    "keyPoints": [
+      {
+        "id": "level-flight-forces",
+        "point": "Aircraft in level flight with lift equal to weight and thrust equal to drag can hold constant speed",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "an airplane can maintain a constant speed and level flight, in which the lift is equal to the weight, and the thrust is equal to the drag."
+      },
+      {
+        "id": "no-net-force",
+        "point": "With no net external force aircraft keeps constant airspeed described by Newton’s First Law of Motion",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "Since there is no net external force on the aircraft, the aircraft maintains a constant airspeed as described by Newton’s First Law of Motion."
+      },
+      {
+        "id": "ground-speed-constant",
+        "point": "Ground speed stays constant while wind speed stays steady for a cruising aircraft",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "The ground speed remains constant as long as the wind speed is constant."
+      },
+      {
+        "id": "maximum-distance",
+        "point": "Maximum distance aircraft can fly equals ground speed times maximum time",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "The maximum distance that the aircraft can fly is then equal to the ground speed times the maximum time (tmax)."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "ground-speed",
+        "term": "ground speed",
+        "gloss": "speed of aircraft relative to ground influenced by wind and constant in example",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "The ground speed remains constant as long as the wind speed is constant."
+      },
+      {
+        "id": "maximum-range",
+        "term": "maximum range",
+        "gloss": "farthest distance aircraft can fly given maximum time at constant ground speed",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "We call this distance the maximum range (R) of the aircraft."
+      },
+      {
+        "id": "lift-term",
+        "term": "lift",
+        "gloss": "upward force that balances weight to keep flight level in example",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "an airplane can maintain a constant speed and level flight, in which the lift is equal to the weight, and the thrust is equal to the drag."
+      },
+      {
+        "id": "drag-term",
+        "term": "drag",
+        "gloss": "backward force that balances thrust when speed stays steady",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "an airplane can maintain a constant speed and level flight, in which the lift is equal to the weight, and the thrust is equal to the drag."
+      },
+      {
+        "id": "thrust-term",
+        "term": "thrust",
+        "gloss": "forward force that balances drag to keep aircraft moving",
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "an airplane can maintain a constant speed and level flight, in which the lift is equal to the weight, and the thrust is equal to the drag."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029163224-2a532c04:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "formula-explorer-v1",
+      "specId": "job-20261029163224-2a532c04:formula-explorer-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

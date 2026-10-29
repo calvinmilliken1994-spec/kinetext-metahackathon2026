@@ -1,0 +1,44 @@
+{
+  "jobId": "job-20261029163602-c475e586",
+  "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T16:36:02.527Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.167435,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [
+    {
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "A-10"
+      ],
+      "fixed": [
+        "A-10"
+      ],
+      "remaining": [],
+      "passed": true
+    }
+  ],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 34632,
+    "startedAt": "2026-10-29T16:36:02.527Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 2,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "finishedAt": "2026-10-29T16:37:50.379Z"
+}

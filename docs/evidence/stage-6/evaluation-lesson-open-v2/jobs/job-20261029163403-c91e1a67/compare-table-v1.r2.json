@@ -1,0 +1,304 @@
+{
+  "gen": {
+    "schemaVersion": "compare-table-v1",
+    "title": "Specific heat at constant pressure versus constant volume",
+    "entities": [
+      "constant-pressure-process",
+      "name    - constant pressure process",
+      "id 1- constant-volume-process-    - constant volume process"
+    ],
+    "attributes": [
+      "specific-heat-label",
+      "name- specific heat label",
+      "id 1- process-characteristic-    - process characteristic"
+    ],
+    "cells": [
+      {
+        "id": "cell-0-0",
+        "entityIndex": 0,
+        "attributeIndex": 0,
+        "value": "subscript “p”",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "We have added a subscript “p” to the specific heat capacity to remind us that this value only applies to a constant pressure process."
+      },
+      {
+        "id": "cell-0-1",
+        "entityIndex": 0,
+        "attributeIndex": 1,
+        "value": "specific heat capacity",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "where delta T (ΔT) is the change of temperature of the gas during the process, and c is the specific heat capacity."
+      },
+      {
+        "id": "cell-0-2",
+        "entityIndex": 0,
+        "attributeIndex": 2,
+        "value": "the pressure remains the same",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "The enthalpy, internal energy, and volume are all changed, but the pressure remains the same."
+      },
+      {
+        "id": "cell-1-0",
+        "entityIndex": 1,
+        "attributeIndex": 0,
+        "value": "the change of specific enthalpy is equal to the heat transfer",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "the change of specific enthalpy is equal to the heat transfer for a constant pressure process:"
+      },
+      {
+        "id": "cell-1-1",
+        "entityIndex": 1,
+        "attributeIndex": 1,
+        "value": "c is the specific heat capacity",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "where delta T (ΔT) is the change of temperature of the gas during the process, and c is the specific heat capacity."
+      },
+      {
+        "id": "cell-1-2",
+        "entityIndex": 1,
+        "attributeIndex": 2,
+        "value": "the temperature change is the same",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "Even though the temperature change is the same for this process and the constant pressure process, the value of the specific heat capacity is different."
+      },
+      {
+        "id": "cell-2-0",
+        "entityIndex": 2,
+        "attributeIndex": 0,
+        "value": "subscript “v”",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "We have added a subscript “v” to the specific heat capacity to remind us that this value only applies to a constant volume process."
+      },
+      {
+        "id": "cell-2-1",
+        "entityIndex": 2,
+        "attributeIndex": 1,
+        "value": "the heat transfer as a constant times the change in temperature",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "And we can express the heat transfer as a constant times the change in temperature."
+      },
+      {
+        "id": "cell-2-2",
+        "entityIndex": 2,
+        "attributeIndex": 2,
+        "value": "the work is equal to zero",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "For a constant volume process, the work is equal to zero."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029163403-c91e1a67:compare-table-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every compare-table text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "CT-01",
+        "kind": "grounding",
+        "passed": false,
+        "message": "cells[5] (cell-1-2): quote \"Even though the temperature change is the same for this proc\" is 152 characters, expected <= 150 (expected verbatim quotes of 1-150 characters from the cited source)",
+        "path": "/cells/5/quote",
+        "affected": [
+          "/cells/5/quote"
+        ]
+      },
+      {
+        "id": "CT-02",
+        "kind": "grounding",
+        "passed": false,
+        "message": "cells[0] (cell-0-0): the entity \"constant-pressure-process\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[1] (cell-0-1): the entity \"constant-pressure-process\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[2] (cell-0-2): the entity \"constant-pressure-process\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[3] (cell-1-0): the entity \"name    - constant pressure process\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[4] (cell-1-1): the entity \"name    - constant pressure process\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[5] (cell-1-2): the entity \"name    - constant pressure process\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[6] (cell-2-0): the entity \"id 1- constant-volume-process-    - constant volume process\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[7] (cell-2-1): the entity \"id 1- constant-volume-process-    - constant volume process\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[8] (cell-2-2): the entity \"id 1- constant-volume-process-    - constant volume process\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote)",
+        "path": "/cells/0/entityIndex",
+        "affected": [
+          "/cells/0/entityIndex",
+          "/cells/0/quote",
+          "/cells/1/entityIndex",
+          "/cells/1/quote",
+          "/cells/2/entityIndex",
+          "/cells/2/quote",
+          "/cells/3/entityIndex",
+          "/cells/3/quote",
+          "/cells/4/entityIndex",
+          "/cells/4/quote",
+          "/cells/5/entityIndex",
+          "/cells/5/quote",
+          "/cells/6/entityIndex",
+          "/cells/6/quote",
+          "/cells/7/entityIndex",
+          "/cells/7/quote",
+          "/cells/8/entityIndex",
+          "/cells/8/quote"
+        ]
+      },
+      {
+        "id": "CT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the table shape is valid: 3 entities x 3 attributes with all 9 cells present exactly once (shape-valid)"
+      },
+      {
+        "id": "CT-04",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in entity names, attributes and cell values appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "CT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "predict mode is available: attribute \"specific-heat-label\" offers >= 3 distinct seeded same-column options (predict-cell-valid)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": false,
+        "message": "repair weakened the spec: /cells changed shape or list length (item counts and structure are frozen in a repair; the system prunes bad items via the drop helpers, the model never adds, removes or reorders items) (a compare-table-v1 repair must fix the failing checks by changing ONLY fields under the affected paths recomputed from revision 1, must keep every item and id stable — the system prunes bad items, never the model — and must never increase a tolerance or otherwise weaken the spec)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "285ec2c8532d4fefb389143cccc169ea",
+    "usage": {
+      "promptTokens": 5486,
+      "completionTokens": 16494,
+      "reasoningTokens": 15804,
+      "cachedTokens": 0
+    },
+    "latencyMs": 69739,
+    "estCostUSD": 0.076957,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029163403-c91e1a67:compare-table-v1:r2",
+    "componentId": "compare-table-v1",
+    "title": "Specific heat at constant pressure versus constant volume",
+    "sources": [
+      {
+        "id": "nasa-grc-specific-heat-cp-cv",
+        "title": "Specific Heat – Cp & Cv — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/specific-heat-cp-cv/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "9df5f948a44c3fd060dd74c26ccaa8247cb311d0b0d618ceaafaf6382ba4d1b8"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "285ec2c8532d4fefb389143cccc169ea",
+      "runId": "job-20261029163403-c91e1a67",
+      "promptVersion": "s6-v2",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T16:37:14.707Z"
+    },
+    "seed": 3738726266,
+    "entities": [
+      "constant-pressure-process",
+      "name    - constant pressure process",
+      "id 1- constant-volume-process-    - constant volume process"
+    ],
+    "attributes": [
+      "specific-heat-label",
+      "name- specific heat label",
+      "id 1- process-characteristic-    - process characteristic"
+    ],
+    "cells": [
+      {
+        "id": "cell-0-0",
+        "entityIndex": 0,
+        "attributeIndex": 0,
+        "value": "subscript “p”",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "We have added a subscript “p” to the specific heat capacity to remind us that this value only applies to a constant pressure process."
+      },
+      {
+        "id": "cell-0-1",
+        "entityIndex": 0,
+        "attributeIndex": 1,
+        "value": "specific heat capacity",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "where delta T (ΔT) is the change of temperature of the gas during the process, and c is the specific heat capacity."
+      },
+      {
+        "id": "cell-0-2",
+        "entityIndex": 0,
+        "attributeIndex": 2,
+        "value": "the pressure remains the same",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "The enthalpy, internal energy, and volume are all changed, but the pressure remains the same."
+      },
+      {
+        "id": "cell-1-0",
+        "entityIndex": 1,
+        "attributeIndex": 0,
+        "value": "the change of specific enthalpy is equal to the heat transfer",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "the change of specific enthalpy is equal to the heat transfer for a constant pressure process:"
+      },
+      {
+        "id": "cell-1-1",
+        "entityIndex": 1,
+        "attributeIndex": 1,
+        "value": "c is the specific heat capacity",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "where delta T (ΔT) is the change of temperature of the gas during the process, and c is the specific heat capacity."
+      },
+      {
+        "id": "cell-1-2",
+        "entityIndex": 1,
+        "attributeIndex": 2,
+        "value": "the temperature change is the same",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "Even though the temperature change is the same for this process and the constant pressure process, the value of the specific heat capacity is different."
+      },
+      {
+        "id": "cell-2-0",
+        "entityIndex": 2,
+        "attributeIndex": 0,
+        "value": "subscript “v”",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "We have added a subscript “v” to the specific heat capacity to remind us that this value only applies to a constant volume process."
+      },
+      {
+        "id": "cell-2-1",
+        "entityIndex": 2,
+        "attributeIndex": 1,
+        "value": "the heat transfer as a constant times the change in temperature",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "And we can express the heat transfer as a constant times the change in temperature."
+      },
+      {
+        "id": "cell-2-2",
+        "entityIndex": 2,
+        "attributeIndex": 2,
+        "value": "the work is equal to zero",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "For a constant volume process, the work is equal to zero."
+      }
+    ]
+  }
+}

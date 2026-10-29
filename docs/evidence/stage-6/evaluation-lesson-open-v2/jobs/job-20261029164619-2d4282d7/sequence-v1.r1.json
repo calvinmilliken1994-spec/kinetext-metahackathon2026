@@ -1,0 +1,205 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "How changing war aims transformed the war",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follow how changing war aims led to a limited military action that transformed the war",
+    "steps": [
+      {
+        "id": "initial-war-aim",
+        "label": "preserve the Union",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "Initially, the Civil War between North and South was fought by the North to prevent the secession of the Southern states and preserve the Union.",
+        "orderHint": "Start with the initial cause before change"
+      },
+      {
+        "id": "preliminary-proclamation-step",
+        "label": "Preliminary Emancipation Proclamation",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "That changed on September 22, 1862, when President Lincoln issued his Preliminary Emancipation Proclamation",
+        "orderHint": "This warning comes next in the source"
+      },
+      {
+        "id": "military-measure-step",
+        "label": "military measure",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "Because it was a military measure, however, the Emancipation Proclamation was limited in many ways.",
+        "orderHint": "This explains why the next limit followed"
+      },
+      {
+        "id": "limited-scope-step",
+        "label": "loyal border states",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "It applied only to states that had seceded from the Union, leaving slavery untouched in the loyal border states.",
+        "orderHint": "This shows the limited scope"
+      },
+      {
+        "id": "transformation-step",
+        "label": "transform the character of the war",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "Although the Emancipation Proclamation did not end slavery in the nation, it did fundamentally transform the character of the war.",
+        "orderHint": "This effect follows the limited action"
+      },
+      {
+        "id": "acceptance-step",
+        "label": "acceptance of Black men into the Union Army and Navy",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "Moreover, the Proclamation announced the acceptance of Black men into the Union Army and Navy, enabling the liberated to become liberators.",
+        "orderHint": "This final result expands the domain of freedom"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029164619-2d4282d7:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step label occurs in its own quote after normalisation (labels-in-quotes)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 6 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "0cbea9b1178b41ad88d0788d8485ae52",
+    "usage": {
+      "promptTokens": 2810,
+      "completionTokens": 7416,
+      "reasoningTokens": 6974,
+      "cachedTokens": 0
+    },
+    "latencyMs": 25788,
+    "estCostUSD": 0.0350305,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029164619-2d4282d7:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "How changing war aims transformed the war",
+    "sources": [
+      {
+        "id": "nara-emancipation-proclamation",
+        "title": "Emancipation Proclamation (1863) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/emancipation-proclamation",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Emancipation Proclamation (1863)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "0d11585e47f04bd0a12b0ded4d23595943f21a5af522811db76a93ef0486f646"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "0cbea9b1178b41ad88d0788d8485ae52",
+      "runId": "job-20261029164619-2d4282d7",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:47:29.731Z"
+    },
+    "seed": 4016995786,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follow how changing war aims led to a limited military action that transformed the war",
+    "steps": [
+      {
+        "id": "initial-war-aim",
+        "label": "preserve the Union",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "Initially, the Civil War between North and South was fought by the North to prevent the secession of the Southern states and preserve the Union.",
+        "orderHint": "Start with the initial cause before change"
+      },
+      {
+        "id": "preliminary-proclamation-step",
+        "label": "Preliminary Emancipation Proclamation",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "That changed on September 22, 1862, when President Lincoln issued his Preliminary Emancipation Proclamation",
+        "orderHint": "This warning comes next in the source"
+      },
+      {
+        "id": "military-measure-step",
+        "label": "military measure",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "Because it was a military measure, however, the Emancipation Proclamation was limited in many ways.",
+        "orderHint": "This explains why the next limit followed"
+      },
+      {
+        "id": "limited-scope-step",
+        "label": "loyal border states",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "It applied only to states that had seceded from the Union, leaving slavery untouched in the loyal border states.",
+        "orderHint": "This shows the limited scope"
+      },
+      {
+        "id": "transformation-step",
+        "label": "transform the character of the war",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "Although the Emancipation Proclamation did not end slavery in the nation, it did fundamentally transform the character of the war.",
+        "orderHint": "This effect follows the limited action"
+      },
+      {
+        "id": "acceptance-step",
+        "label": "acceptance of Black men into the Union Army and Navy",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "Moreover, the Proclamation announced the acceptance of Black men into the Union Army and Navy, enabling the liberated to become liberators.",
+        "orderHint": "This final result expands the domain of freedom"
+      }
+    ]
+  }
+}

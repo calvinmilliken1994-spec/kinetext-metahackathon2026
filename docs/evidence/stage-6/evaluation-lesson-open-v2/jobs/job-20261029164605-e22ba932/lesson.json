@@ -1,0 +1,124 @@
+{
+  "jobId": "job-20261029164605-e22ba932",
+  "analysisRef": "job-20261029164605-e22ba932/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029164605-e22ba932:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "From 12 proposed amendments to Bill of Rights ratified December 15, 1791",
+    "sources": [
+      {
+        "id": "nara-bill-of-rights",
+        "title": "Bill of Rights (1791) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/bill-of-rights",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Bill of Rights (1791)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "a4a36b13e4682b41a3b938737553b5a5f3e509f35af3132cd2420de67f016531"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "c1ba497f7b4849ba8121a633aacb0979",
+      "runId": "job-20261029164605-e22ba932",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:46:49.601Z"
+    },
+    "seed": 3912081499,
+    "headline": "From 12 proposed amendments to Bill of Rights ratified December 15, 1791",
+    "keyPoints": [
+      {
+        "id": "proposed-ratified-1791",
+        "point": "12 amendments originally proposed and 10 ratified became Bill of Rights in 1791",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "Although 12 amendments were originally proposed, the 10 that were ratified became the Bill of Rights in 1791."
+      },
+      {
+        "id": "opponents-tyranny",
+        "point": "opponents charged Constitution would open way to tyranny by central government",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "its opponents repeatedly charged that the Constitution as drafted would open the way to tyranny by the central government"
+      },
+      {
+        "id": "demanded-immunities",
+        "point": "They demanded bill of rights to spell out immunities of individual citizens",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "They demanded a \"bill of rights\" that would spell out the immunities of individual citizens."
+      },
+      {
+        "id": "first-congress-proposal",
+        "point": "First Congress proposed 12 amendments to Constitution on September 25, 1789 to state legislatures",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "On September 25, 1789, the First Congress of the United States therefore proposed to the state legislatures 12 amendments to the Constitution"
+      },
+      {
+        "id": "articles-ratified-1791",
+        "point": "Articles 3 to 12 ratified December 15, 1791 by three fourths of state legislatures constitute first 10 amendments",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "Articles 3 to 12, ratified December 15, 1791, by three-fourths of the state legislatures, constitute the first 10 amendments"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "bill-of-rights",
+        "term": "Bill of Rights",
+        "gloss": "first 10 ratified amendments that define citizens rights in relation to government",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "Although 12 amendments were originally proposed, the 10 that were ratified became the Bill of Rights in 1791."
+      },
+      {
+        "id": "central-government",
+        "term": "central government",
+        "gloss": "national authority under Constitution feared to impose tyranny if unchecked",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "its opponents repeatedly charged that the Constitution as drafted would open the way to tyranny by the central government"
+      },
+      {
+        "id": "immunities-term",
+        "term": "immunities",
+        "gloss": "protections for individual citizens spelled out as demanded rights",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "They demanded a \"bill of rights\" that would spell out the immunities of individual citizens."
+      },
+      {
+        "id": "first-congress-term",
+        "term": "First Congress",
+        "gloss": "legislative body that proposed amendments for state legislatures to consider",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "On September 25, 1789, the First Congress of the United States therefore proposed to the state legislatures 12 amendments to the Constitution"
+      },
+      {
+        "id": "state-legislatures-term",
+        "term": "state legislatures",
+        "gloss": "elected bodies whose ratification by three fourths made amendments part of Constitution",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "Articles 3 to 12, ratified December 15, 1791, by three-fourths of the state legislatures, constitute the first 10 amendments"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261029164605-e22ba932:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029164605-e22ba932:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

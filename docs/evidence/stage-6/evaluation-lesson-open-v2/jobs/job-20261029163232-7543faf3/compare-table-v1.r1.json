@@ -1,0 +1,224 @@
+{
+  "gen": {
+    "schemaVersion": "compare-table-v1",
+    "title": "",
+    "entities": [
+      "cruise-condition",
+      "cruise condition",
+      "takeoff-landing-condition",
+      "takeoff or landing condition"
+    ],
+    "attributes": [
+      "airplane",
+      "airplane",
+      "wing-area",
+      "wing area"
+    ],
+    "cells": [
+      {
+        "id": "0-0",
+        "entityIndex": 0,
+        "attributeIndex": 0,
+        "value": "airplane on the left",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "The airplane on the left is shown in a cruise condition while the airplane on the right is shown in a takeoff or landing condition."
+      },
+      {
+        "id": "0-1",
+        "entityIndex": 0,
+        "attributeIndex": 1,
+        "value": "projected surface area",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "This slide shows the projected surface area for two different aircraft."
+      },
+      {
+        "id": "1-0",
+        "entityIndex": 1,
+        "attributeIndex": 0,
+        "value": "airplane on the right",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "The airplane on the left is shown in a cruise condition while the airplane on the right is shown in a takeoff or landing condition."
+      },
+      {
+        "id": "1-1",
+        "entityIndex": 1,
+        "attributeIndex": 1,
+        "value": "increase the wing area",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "Takeoff and landing are times of relatively low velocity, so to keep the lift high (to avoid the ground!) designers try to increase the wing area."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029163232-7543faf3:compare-table-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": false,
+        "message": "compare-table gen failed the structural limits: title must be a non-empty string",
+        "path": "/title",
+        "affected": [
+          "/title"
+        ]
+      },
+      {
+        "id": "CT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 cell quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "CT-02",
+        "kind": "grounding",
+        "passed": false,
+        "message": "cells[0] (0-0): the entity \"cruise-condition\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[1] (0-1): the entity \"cruise-condition\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote)",
+        "path": "/cells/0/entityIndex",
+        "affected": [
+          "/cells/0/entityIndex",
+          "/cells/0/quote",
+          "/cells/1/entityIndex",
+          "/cells/1/quote"
+        ]
+      },
+      {
+        "id": "CT-03",
+        "kind": "semantic",
+        "passed": false,
+        "message": "cells has 4 entries, expected exactly entities x attributes = 16 (every pair exactly once); the cell pair (entity cruise-condition, attribute wing-area) is missing (cells must be the exact product); the cell pair (entity cruise-condition, attribute wing area) is missing (cells must be the exact product); the cell pair (entity cruise condition, attribute wing-area) is missing (cells must be the exact product); the cell pair (entity cruise condition, attribute wing area) is missing (cells must be the exact product); the cell pair (entity takeoff-landing-condition, attribute airplane) is missing (cells must be the exact product); the cell pair (entity takeoff-landing-condition, attribute airplane) is missing (cells must be the exact product); the cell pair (entity takeoff-landing-condition, attribute wing-area) is missing (cells must be the exact product); the cell pair (entity takeoff-landing-condition, attribute wing area) is missing (cells must be the exact product); the cell pair (entity takeoff or landing condition, attribute airplane) is missing (cells must be the exact product); the cell pair (entity takeoff or landing condition, attribute airplane) is missing (cells must be the exact product); the cell pair (entity takeoff or landing condition, attribute wing-area) is missing (cells must be the exact product); the cell pair (entity takeoff or landing condition, attribute wing area) is missing (cells must be the exact product)",
+        "path": "/cells",
+        "affected": [
+          "/cells",
+          "/cells",
+          "/cells",
+          "/cells",
+          "/cells",
+          "/cells",
+          "/cells",
+          "/cells",
+          "/cells",
+          "/cells",
+          "/cells",
+          "/cells",
+          "/cells"
+        ]
+      },
+      {
+        "id": "CT-04",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in entity names, attributes and cell values appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "CT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no attribute column offers 3 distinct cell values, so the UI falls back to reveal-only with unverified cells blanked as \"Not stated on this page\" — by design this is not a component failure (predict-cell-valid)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "ed64fb1f9d414be2809a9a84661de6a2",
+    "usage": {
+      "promptTokens": 2689,
+      "completionTokens": 7943,
+      "reasoningTokens": 7581,
+      "cachedTokens": 0
+    },
+    "latencyMs": 35489,
+    "estCostUSD": 0.037119,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029163232-7543faf3:compare-table-v1:r1",
+    "componentId": "compare-table-v1",
+    "title": "",
+    "sources": [
+      {
+        "id": "nasa-grc-effect-of-size-on-lift",
+        "title": "Effect of Size on Lift — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/effect-of-size-on-lift/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "1bd1a2678b2c2cb6f162ebbeb4ec95d6aa439d14002682604d2ac9cd680d76f4"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "ed64fb1f9d414be2809a9a84661de6a2",
+      "runId": "job-20261029163232-7543faf3",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:33:46.186Z"
+    },
+    "seed": 2525651018,
+    "entities": [
+      "cruise-condition",
+      "cruise condition",
+      "takeoff-landing-condition",
+      "takeoff or landing condition"
+    ],
+    "attributes": [
+      "airplane",
+      "airplane",
+      "wing-area",
+      "wing area"
+    ],
+    "cells": [
+      {
+        "id": "0-0",
+        "entityIndex": 0,
+        "attributeIndex": 0,
+        "value": "airplane on the left",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "The airplane on the left is shown in a cruise condition while the airplane on the right is shown in a takeoff or landing condition."
+      },
+      {
+        "id": "0-1",
+        "entityIndex": 0,
+        "attributeIndex": 1,
+        "value": "projected surface area",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "This slide shows the projected surface area for two different aircraft."
+      },
+      {
+        "id": "1-0",
+        "entityIndex": 1,
+        "attributeIndex": 0,
+        "value": "airplane on the right",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "The airplane on the left is shown in a cruise condition while the airplane on the right is shown in a takeoff or landing condition."
+      },
+      {
+        "id": "1-1",
+        "entityIndex": 1,
+        "attributeIndex": 1,
+        "value": "increase the wing area",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "Takeoff and landing are times of relatively low velocity, so to keep the lift high (to avoid the ground!) designers try to increase the wing area."
+      }
+    ]
+  }
+}

@@ -1,0 +1,131 @@
+{
+  "jobId": "job-20261029164123-b93c8c9f",
+  "analysisRef": "job-20261029164123-b93c8c9f/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029164123-b93c8c9f:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "From relative rock layers to absolute radiometric dates revealing deep time",
+    "sources": [
+      {
+        "id": "usgs-powell-geologic-time",
+        "title": "Powell Expedition—Geologic Time. Then and Now. — U.S. Geological Survey",
+        "locator": "https://www.usgs.gov/news/powell-expedition-geologic-time-then-and-now",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey, 'Powell Expedition—Geologic Time. Then and Now.' (2019). Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "fa7498537478e10722976127bedd9cf61ccb5dda39090e0a4f844635b5a8f71f"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "34e743d2dd1744dcbef576643acf3430",
+      "runId": "job-20261029164123-b93c8c9f",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:42:32.188Z"
+    },
+    "seed": 1198912591,
+    "headline": "From relative rock layers to absolute radiometric dates revealing deep time",
+    "keyPoints": [
+      {
+        "id": "deep-time-age",
+        "point": "Earth is 4.54 billion years old and deep time remains hard to grasp",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "Earth is 4.54 billion years old, a span of time that is hard for many people to grasp."
+      },
+      {
+        "id": "steno-superposition",
+        "point": "Steno superposition principle places older rocks at bottom and younger rocks on top",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "The law of superposition says that older rocks are on the bottom and younger rocks are on the top."
+      },
+      {
+        "id": "hutton-uniformitarianism",
+        "point": "Hutton proposed uniformitarianism as foundational principle of geology in 1788",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "In 1788, James Hutton proposed what would become the foundational principle of geology — uniformitarianism."
+      },
+      {
+        "id": "smith-faunal-succession",
+        "point": "Smith faunal succession law states species become extinct and replaced by new species",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "Smith developed the law of faunal succession, which states that species become extinct and are replaced by new species"
+      },
+      {
+        "id": "half-life-definition",
+        "point": "half-life is length of time for parent isotopes to decay to stable daughter isotope",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "A half-life is the length of time it takes for half of the number of original, or parent, isotopes to decay to a stable daughter isotope."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "stratigraphy",
+        "term": "stratigraphy",
+        "gloss": "branch of geology that studies rock layers to order geologic events",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "principles of stratigraphy — or the branch of geology concerned with the study of rock layers"
+      },
+      {
+        "id": "uniformitarianism",
+        "term": "uniformitarianism",
+        "gloss": "principle that processes shaping Earth today also shaped Earth in the past",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "In 1788, James Hutton proposed what would become the foundational principle of geology — uniformitarianism."
+      },
+      {
+        "id": "superposition",
+        "term": "superposition",
+        "gloss": "law that older rocks lie below younger rocks indicating relative age",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "The law of superposition says that older rocks are on the bottom and younger rocks are on the top."
+      },
+      {
+        "id": "faunal-succession",
+        "term": "faunal succession",
+        "gloss": "law that species assemblages appear in same order everywhere and mark age",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "Smith developed the law of faunal succession, which states that species become extinct and are replaced by new species"
+      },
+      {
+        "id": "half-life",
+        "term": "half-life",
+        "gloss": "time for half of parent isotopes to decay to stable daughter isotope",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "A half-life is the length of time it takes for half of the number of original, or parent, isotopes to decay to a stable daughter isotope."
+      },
+      {
+        "id": "unconformities",
+        "term": "unconformities",
+        "gloss": "gaps in geologic record that represent missing time between rock layers",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "He also understood the concept of unconformities (gaps in the geologic record that represent missing time)"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sort-groups-v1",
+      "specId": "job-20261029164123-b93c8c9f:sort-groups-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "timeline-v1",
+      "specId": "usgs-powell-geologic-time-job-20261029164123-b93c8c9f",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

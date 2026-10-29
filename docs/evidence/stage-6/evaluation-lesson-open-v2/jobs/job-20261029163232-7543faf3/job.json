@@ -1,0 +1,81 @@
+{
+  "jobId": "job-20261029163232-7543faf3",
+  "sourceId": "nasa-grc-effect-of-size-on-lift",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T16:32:32.788Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.23894,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 34632,
+    "startedAt": "2026-10-29T16:32:32.788Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 1,
+    "componentsFailed": 1,
+    "partialPublish": true
+  },
+  "componentRepairs": [
+    {
+      "componentId": "quiz-cards-v1",
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "schema.gen"
+      ],
+      "fixed": [
+        "schema.gen"
+      ],
+      "remaining": [],
+      "passed": true
+    },
+    {
+      "componentId": "compare-table-v1",
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "schema.gen",
+        "CT-02",
+        "CT-03"
+      ],
+      "fixed": [
+        "schema.gen",
+        "CT-03"
+      ],
+      "remaining": [
+        "CT-02",
+        "repair.no-weakening"
+      ],
+      "passed": false
+    },
+    {
+      "componentId": "compare-table-v1",
+      "attempt": 2,
+      "revision": 3,
+      "targeted": [
+        "CT-02",
+        "repair.no-weakening"
+      ],
+      "fixed": [
+        "CT-02",
+        "repair.no-weakening"
+      ],
+      "remaining": [
+        "CT-03"
+      ],
+      "passed": false
+    }
+  ],
+  "finishedAt": "2026-10-29T16:36:01.771Z"
+}

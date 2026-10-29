@@ -1,0 +1,231 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Wing Area and Flight Forces",
+    "cards": [
+      {
+        "id": "doubling-lift-area",
+        "stem": "What happens to lift when wing area is doubled at same conditions?",
+        "options": [
+          "Doubling the area doubles the lift",
+          "Halving the area doubles the lift",
+          "Doubling the area halves the lift",
+          "Doubling the area has no effect"
+        ],
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "Doubling the area doubles the lift.",
+        "hint": "Recall how lift scales with area"
+      },
+      {
+        "id": "total-force-pressure-area",
+        "stem": "How is total aerodynamic force related to pressure and area?",
+        "options": [
+          "pressure times the surface area",
+          "density times the volume",
+          "velocity times the mass",
+          "temperature times the density"
+        ],
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "The total aerodynamic force is equal to the pressure times the surface area around the body.",
+        "hint": "Look at how force links to pressure and surface size"
+      },
+      {
+        "id": "logical-reference-area",
+        "stem": "Which area is used as logical reference for lift calculations?",
+        "options": [
+          "wing planform area",
+          "fuselage cross section",
+          "engine inlet area",
+          "tail fin area"
+        ],
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "the logical choice is the wing planform area.",
+        "hint": "Consider the view from above the wing"
+      },
+      {
+        "id": "flaps-increase-area-method",
+        "stem": "How do designers increase wing area for low velocity operations?",
+        "options": [
+          "sliding the flaps backwards",
+          "folding the wings upward",
+          "retracting the landing gear",
+          "reducing engine thrust"
+        ],
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "This is done by sliding the flaps backwards along metal tracks and shifting the slats forward to increase the wing area.",
+        "hint": "Think about movable parts along the wing"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029163232-7543faf3:quiz-cards-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "quiz-cards-v1: no weakening — every one of the 1 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "5dcf69ad2b274b658c4f8b2b1d11ef9b",
+    "usage": {
+      "promptTokens": 4021,
+      "completionTokens": 3319,
+      "reasoningTokens": 2935,
+      "cachedTokens": 0
+    },
+    "latencyMs": 16065,
+    "estCostUSD": 0.019132,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029163232-7543faf3:quiz-cards-v1:r2",
+    "componentId": "quiz-cards-v1",
+    "title": "Wing Area and Flight Forces",
+    "sources": [
+      {
+        "id": "nasa-grc-effect-of-size-on-lift",
+        "title": "Effect of Size on Lift — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/effect-of-size-on-lift/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "1bd1a2678b2c2cb6f162ebbeb4ec95d6aa439d14002682604d2ac9cd680d76f4"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "5dcf69ad2b274b658c4f8b2b1d11ef9b",
+      "runId": "job-20261029163232-7543faf3",
+      "promptVersion": "s6-v2",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T16:33:45.037Z"
+    },
+    "seed": 3073278730,
+    "cards": [
+      {
+        "id": "doubling-lift-area",
+        "stem": "What happens to lift when wing area is doubled at same conditions?",
+        "options": [
+          "Doubling the area doubles the lift",
+          "Halving the area doubles the lift",
+          "Doubling the area halves the lift",
+          "Doubling the area has no effect"
+        ],
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "Doubling the area doubles the lift.",
+        "hint": "Recall how lift scales with area"
+      },
+      {
+        "id": "total-force-pressure-area",
+        "stem": "How is total aerodynamic force related to pressure and area?",
+        "options": [
+          "pressure times the surface area",
+          "density times the volume",
+          "velocity times the mass",
+          "temperature times the density"
+        ],
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "The total aerodynamic force is equal to the pressure times the surface area around the body.",
+        "hint": "Look at how force links to pressure and surface size"
+      },
+      {
+        "id": "logical-reference-area",
+        "stem": "Which area is used as logical reference for lift calculations?",
+        "options": [
+          "wing planform area",
+          "fuselage cross section",
+          "engine inlet area",
+          "tail fin area"
+        ],
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "the logical choice is the wing planform area.",
+        "hint": "Consider the view from above the wing"
+      },
+      {
+        "id": "flaps-increase-area-method",
+        "stem": "How do designers increase wing area for low velocity operations?",
+        "options": [
+          "sliding the flaps backwards",
+          "folding the wings upward",
+          "retracting the landing gear",
+          "reducing engine thrust"
+        ],
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "This is done by sliding the flaps backwards along metal tracks and shifting the slats forward to increase the wing area.",
+        "hint": "Think about movable parts along the wing"
+      }
+    ]
+  }
+}

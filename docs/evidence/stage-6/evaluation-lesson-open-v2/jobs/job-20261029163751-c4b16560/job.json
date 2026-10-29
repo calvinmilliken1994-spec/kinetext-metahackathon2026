@@ -1,0 +1,96 @@
+{
+  "jobId": "job-20261029163751-c4b16560",
+  "sourceId": "cfpb-teenagers-and-saving",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T16:37:51.491Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.328262,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [
+    {
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "A-05",
+        "A-07",
+        "A-10"
+      ],
+      "fixed": [
+        "A-05",
+        "A-07"
+      ],
+      "remaining": [
+        "A-10"
+      ],
+      "passed": false
+    },
+    {
+      "attempt": 2,
+      "revision": 3,
+      "targeted": [
+        "A-10"
+      ],
+      "fixed": [
+        "A-10"
+      ],
+      "remaining": [],
+      "passed": true
+    }
+  ],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 34632,
+    "startedAt": "2026-10-29T16:37:51.491Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 1,
+    "componentsFailed": 1,
+    "partialPublish": true
+  },
+  "componentRepairs": [
+    {
+      "componentId": "compare-table-v1",
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "CT-02",
+        "CT-04"
+      ],
+      "fixed": [],
+      "remaining": [
+        "CT-01",
+        "CT-02",
+        "CT-04"
+      ],
+      "passed": false
+    },
+    {
+      "componentId": "compare-table-v1",
+      "attempt": 2,
+      "revision": 3,
+      "targeted": [
+        "CT-01",
+        "CT-02",
+        "CT-04"
+      ],
+      "fixed": [
+        "CT-01"
+      ],
+      "remaining": [
+        "CT-02",
+        "CT-04"
+      ],
+      "passed": false
+    }
+  ],
+  "finishedAt": "2026-10-29T16:42:00.525Z"
+}

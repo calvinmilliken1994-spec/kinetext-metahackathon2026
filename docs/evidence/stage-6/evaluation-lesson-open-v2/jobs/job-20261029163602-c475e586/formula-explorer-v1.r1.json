@@ -1,0 +1,249 @@
+{
+  "gen": {
+    "schemaVersion": "formula-explorer-v1",
+    "title": "Atmosphere Density Explorer",
+    "formulaText": "rho = p / (1718 * (T + 459.7))",
+    "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+    "quote": "rho = p / (1718 * (T + 459.7))",
+    "expression": "p / (1718 * (t + 459.7))",
+    "variables": [
+      {
+        "name": "p",
+        "pageSymbol": "p",
+        "meaning": "pressure in pounds per square foot",
+        "meaningQuoted": false,
+        "quote": "where the temperature is given in Fahrenheit degrees, the pressure in pounds/square feet, and h is the altitude in feet.",
+        "unit": "lb per sq ft",
+        "min": 51.97,
+        "max": 2116,
+        "default": 473.1
+      },
+      {
+        "name": "t",
+        "pageSymbol": "T",
+        "meaning": "temperature in Fahrenheit degrees",
+        "meaningQuoted": false,
+        "quote": "For the temperature T and the pressure p, the English units curve fits for the troposphere are:",
+        "unit": "F",
+        "min": -205.05,
+        "max": 60,
+        "default": 59
+      }
+    ],
+    "xVariable": "p",
+    "cases": [
+      {
+        "id": "low-stratosphere-cold",
+        "inputs": [
+          {
+            "name": "p",
+            "value": 473.1
+          },
+          {
+            "name": "t",
+            "value": -70
+          }
+        ]
+      },
+      {
+        "id": "troposphere-mild",
+        "inputs": [
+          {
+            "name": "p",
+            "value": 518.6
+          },
+          {
+            "name": "t",
+            "value": 59
+          }
+        ]
+      }
+    ],
+    "sourceExample": {
+      "quote": "",
+      "resultNumber": 0,
+      "tolerance": 0
+    },
+    "hasSourceExample": false
+  },
+  "report": {
+    "artifactId": "job-20261029163602-c475e586:formula-explorer-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every formula-explorer case id and title shape is within the frozen limits"
+      },
+      {
+        "id": "FE-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "the formula quote (1 quote) appears verbatim in source \"nasa-grc-earth-atmosphere-equation-english\" and formulaText occurs inside the quote after normalisation (formula-quoted)"
+      },
+      {
+        "id": "FE-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "expression parses in the frozen grammar (<= 120 chars, AST <= 50 nodes, no \"**\", no implicit multiplication) and its variable set equals the declared set (expression-parses)"
+      },
+      {
+        "id": "FE-03",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 2 variables are declared with valid unique non-reserved names, exact page symbols, grounded quotes (top-level sourceId) and xVariable \"p\" is one of them (variables-declared)"
+      },
+      {
+        "id": "FE-04",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "all 2 case(s) carry exactly the declared variables with finite in-range inputs and every recomputed output is finite (the system sets the outputs) (cases-recomputed)"
+      },
+      {
+        "id": "FE-05",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "hasSourceExample=false with the empty sourceExample shape (sourceExample-check)"
+      },
+      {
+        "id": "FE-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every slider range is sane (finite, min < max, default inside, positive-range ratio <= 1000000) and no literal exponent exceeds 100 (ranges-sane)"
+      },
+      {
+        "id": "FE-07",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title and variable meanings appears on the page or in the same quote (N-01); units and formula fields are notation and exempt (numbers-checkable)"
+      },
+      {
+        "id": "FE-08",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the expression matches the page formula \"p / (1718 * (T + 459.7))\" parsed from the quote with the same grammar: 5/5 finite slider-range sample points agree within relative 1e-9 (expression-matches-page-formula)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "a940e4c282c14ae6af3d65f3b09418ae",
+    "usage": {
+      "promptTokens": 3384,
+      "completionTokens": 8167,
+      "reasoningTokens": 7843,
+      "cachedTokens": 0
+    },
+    "latencyMs": 37129,
+    "estCostUSD": 0.03893975,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029163602-c475e586:formula-explorer-v1:r1",
+    "componentId": "formula-explorer-v1",
+    "title": "Atmosphere Density Explorer",
+    "sources": [
+      {
+        "id": "nasa-grc-earth-atmosphere-equation-english",
+        "title": "Earth Atmosphere Equation – English — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/earth-atmosphere-equation-english/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "27cabc2c092bc294e05f921ebe3f7e6c73775f3986f7aed07bf86ba89fff17f5"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "a940e4c282c14ae6af3d65f3b09418ae",
+      "runId": "job-20261029163602-c475e586",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:37:49.255Z"
+    },
+    "seed": 3917941180,
+    "formulaText": "rho = p / (1718 * (T + 459.7))",
+    "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+    "quote": "rho = p / (1718 * (T + 459.7))",
+    "expression": "p / (1718 * (t + 459.7))",
+    "variables": [
+      {
+        "name": "p",
+        "pageSymbol": "p",
+        "meaning": "pressure in pounds per square foot",
+        "meaningQuoted": false,
+        "quote": "where the temperature is given in Fahrenheit degrees, the pressure in pounds/square feet, and h is the altitude in feet.",
+        "unit": "lb per sq ft",
+        "min": 51.97,
+        "max": 2116,
+        "default": 473.1
+      },
+      {
+        "name": "t",
+        "pageSymbol": "T",
+        "meaning": "temperature in Fahrenheit degrees",
+        "meaningQuoted": false,
+        "quote": "For the temperature T and the pressure p, the English units curve fits for the troposphere are:",
+        "unit": "F",
+        "min": -205.05,
+        "max": 60,
+        "default": 59
+      }
+    ],
+    "xVariable": "p",
+    "cases": [
+      {
+        "id": "low-stratosphere-cold",
+        "inputs": [
+          {
+            "name": "p",
+            "value": 473.1
+          },
+          {
+            "name": "t",
+            "value": -70
+          }
+        ]
+      },
+      {
+        "id": "troposphere-mild",
+        "inputs": [
+          {
+            "name": "p",
+            "value": 518.6
+          },
+          {
+            "name": "t",
+            "value": 59
+          }
+        ]
+      }
+    ],
+    "sourceExample": {
+      "quote": "",
+      "resultNumber": 0,
+      "tolerance": 0
+    },
+    "hasSourceExample": false
+  }
+}

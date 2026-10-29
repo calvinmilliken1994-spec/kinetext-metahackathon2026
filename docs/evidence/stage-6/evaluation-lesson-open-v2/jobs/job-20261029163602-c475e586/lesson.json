@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261029163602-c475e586",
+  "analysisRef": "job-20261029163602-c475e586/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029163602-c475e586:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Layered standard atmosphere model linking temperature pressure and density to altitude",
+    "sources": [
+      {
+        "id": "nasa-grc-earth-atmosphere-equation-english",
+        "title": "Earth Atmosphere Equation – English — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/earth-atmosphere-equation-english/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "27cabc2c092bc294e05f921ebe3f7e6c73775f3986f7aed07bf86ba89fff17f5"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "02cee8eae3854446b8fe77be826f4c28",
+      "runId": "job-20261029163602-c475e586",
+      "promptVersion": "s6-v2",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T16:37:12.115Z"
+    },
+    "seed": 534839757,
+    "headline": "Layered standard atmosphere model linking temperature pressure and density to altitude",
+    "keyPoints": [
+      {
+        "id": "thin-atmosphere-sheet",
+        "point": "Atmosphere is extremely thin sheet extending from surface to edge of space about 60 miles",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "an extremely thin sheet of air extending from the surface of the Earth to the edge of space, about 60 miles above the surface of the Earth."
+      },
+      {
+        "id": "temperature-altitude-variation",
+        "point": "Temperature highest near surface and decreases as altitude increases while pressure also decreases with altitude",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "Thus the air temperature is highest near the surface and decreases as altitude increases."
+      },
+      {
+        "id": "troposphere-zone-altitude",
+        "point": "Troposphere runs from surface with temperature decreasing linearly and pressure decreasing exponentially",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "The troposphere runs from the surface of the Earth to 36,152 feet."
+      },
+      {
+        "id": "density-equation-state",
+        "point": "Density in each zone derived from equation of state using pressure and temperature",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "In each zone the density rho (ρ) is derived from the equation of state:"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "troposphere",
+        "term": "troposphere",
+        "gloss": "lowest zone from surface where temperature decreases",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "The troposphere runs from the surface of the Earth to 36,152 feet."
+      },
+      {
+        "id": "lapse-rate",
+        "term": "lapse rate",
+        "gloss": "rate of temperature decrease with altitude in troposphere",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "The rate of temperature decrease is called the lapse rate."
+      },
+      {
+        "id": "density",
+        "term": "density",
+        "gloss": "density depends on temperature and pressure through equation of state",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "The air density depends on both the temperature and the pressure through the equation of state and also decreases with increasing altitude."
+      },
+      {
+        "id": "lower-stratosphere",
+        "term": "lower stratosphere",
+        "gloss": "stratosphere zone with constant temperature where pressure decreases",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "The lower stratosphere runs from 36,152 feet to 82,345 feet."
+      },
+      {
+        "id": "equation-of-state",
+        "term": "equation of state",
+        "gloss": "equation of state relates density pressure and temperature within each zone",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "In each zone the density rho (ρ) is derived from the equation of state:"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261029163602-c475e586:sequence-v1:r1",
+      "status": "passed",
+      "reason": "1 step was left out because they could not be verified against the page: upper-stratosphere-range (SEQ-06).",
+      "revision": 1
+    },
+    {
+      "componentId": "formula-explorer-v1",
+      "specId": "job-20261029163602-c475e586:formula-explorer-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

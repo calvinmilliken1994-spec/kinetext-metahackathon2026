@@ -1,0 +1,244 @@
+{
+  "gen": {
+    "schemaVersion": "sort-groups-v1",
+    "title": "Heterozygous and homozygous classification",
+    "groups": [
+      {
+        "id": "heterozygous",
+        "label": "heterozygous"
+      },
+      {
+        "id": "homozygous",
+        "label": "homozygous"
+      }
+    ],
+    "items": [
+      {
+        "id": "two-different-alleles",
+        "label": "two different alleles",
+        "groupId": "heterozygous",
+        "sourceId": "nij-heterozygosity",
+        "quote": "If an individual has two different alleles at a specific locus, the individual is heterozygous at that locus"
+      },
+      {
+        "id": "heterozygous-at-locus",
+        "label": "heterozygous at that locus",
+        "groupId": "heterozygous",
+        "sourceId": "nij-heterozygosity",
+        "quote": "If an individual has two different alleles at a specific locus, the individual is heterozygous at that locus; if the two alleles are the same"
+      },
+      {
+        "id": "heterozygosity-across-loci",
+        "label": "heterozygosity across loci",
+        "groupId": "heterozygous",
+        "sourceId": "nij-heterozygosity",
+        "quote": "The measure of the amount of heterozygosity across loci can be used as a general indicator of the amount of genetic variability."
+      },
+      {
+        "id": "expected-het-genotypes",
+        "label": "expected number of heterozygous genotypes",
+        "groupId": "heterozygous",
+        "sourceId": "nij-heterozygosity",
+        "quote": "k[(k-1)/2] represents the expected number of heterozygous genotypes."
+      },
+      {
+        "id": "two-alleles-same",
+        "label": "two alleles are the same",
+        "groupId": "homozygous",
+        "sourceId": "nij-heterozygosity",
+        "quote": "if the two alleles are the same, the individual is homozygous."
+      },
+      {
+        "id": "expected-hom-genotypes",
+        "label": "expected number of homozygous genotypes",
+        "groupId": "homozygous",
+        "sourceId": "nij-heterozygosity",
+        "quote": "The parameter k also represents the expected number of homozygous genotypes"
+      },
+      {
+        "id": "homozygous-genotypes",
+        "label": "homozygous genotypes",
+        "groupId": "homozygous",
+        "sourceId": "nij-heterozygosity",
+        "quote": "The parameter k also represents the expected number of homozygous genotypes, and k[(k-1)/2] represents the expected number of heterozygous genotypes."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029164201-69cd8147:sort-groups-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sort text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SORT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 7 item quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SORT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every item label occurs in its quote and every group label occurs in the quote or the same source paragraph (item-and-group-in-quote; the design discloses the weak-link false accept on long paragraphs — every quote is shown to the teacher)"
+      },
+      {
+        "id": "SORT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every declared group is referenced by >= 2 items and every item groupId resolves (groups-covered)"
+      },
+      {
+        "id": "SORT-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every item has a distinct label after normalisation (distinct-items)"
+      },
+      {
+        "id": "SORT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "groups 2 (2-4) and items 7 (6-12) are within the frozen counts (counts-valid)"
+      },
+      {
+        "id": "SORT-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in group and item labels appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "37843c4cc1284ac2898b4f0f07a4ecb0",
+    "usage": {
+      "promptTokens": 2624,
+      "completionTokens": 8329,
+      "reasoningTokens": 7800,
+      "cachedTokens": 0
+    },
+    "latencyMs": 35718,
+    "estCostUSD": 0.03867825,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "pruned": true,
+  "dropped": [
+    {
+      "index": 5,
+      "id": "individual-is-homozygous",
+      "reason": "item failed SORT-01",
+      "checks": [
+        "SORT-01"
+      ]
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029164201-69cd8147:sort-groups-v1:r1",
+    "componentId": "sort-groups-v1",
+    "title": "Heterozygous and homozygous classification",
+    "sources": [
+      {
+        "id": "nij-heterozygosity",
+        "title": "Heterozygosity — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+        "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/population-genetics/heterozygosity",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Heterozygosity'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+        "sha256": "b88d68137ace380387528e9b0d424ad162ee448ea6d48d6646cb090dbfc4e1e9"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "37843c4cc1284ac2898b4f0f07a4ecb0",
+      "runId": "job-20261029164201-69cd8147",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:43:23.379Z"
+    },
+    "seed": 107830619,
+    "groups": [
+      {
+        "id": "heterozygous",
+        "label": "heterozygous"
+      },
+      {
+        "id": "homozygous",
+        "label": "homozygous"
+      }
+    ],
+    "items": [
+      {
+        "id": "two-different-alleles",
+        "label": "two different alleles",
+        "groupId": "heterozygous",
+        "sourceId": "nij-heterozygosity",
+        "quote": "If an individual has two different alleles at a specific locus, the individual is heterozygous at that locus"
+      },
+      {
+        "id": "heterozygous-at-locus",
+        "label": "heterozygous at that locus",
+        "groupId": "heterozygous",
+        "sourceId": "nij-heterozygosity",
+        "quote": "If an individual has two different alleles at a specific locus, the individual is heterozygous at that locus; if the two alleles are the same"
+      },
+      {
+        "id": "heterozygosity-across-loci",
+        "label": "heterozygosity across loci",
+        "groupId": "heterozygous",
+        "sourceId": "nij-heterozygosity",
+        "quote": "The measure of the amount of heterozygosity across loci can be used as a general indicator of the amount of genetic variability."
+      },
+      {
+        "id": "expected-het-genotypes",
+        "label": "expected number of heterozygous genotypes",
+        "groupId": "heterozygous",
+        "sourceId": "nij-heterozygosity",
+        "quote": "k[(k-1)/2] represents the expected number of heterozygous genotypes."
+      },
+      {
+        "id": "two-alleles-same",
+        "label": "two alleles are the same",
+        "groupId": "homozygous",
+        "sourceId": "nij-heterozygosity",
+        "quote": "if the two alleles are the same, the individual is homozygous."
+      },
+      {
+        "id": "expected-hom-genotypes",
+        "label": "expected number of homozygous genotypes",
+        "groupId": "homozygous",
+        "sourceId": "nij-heterozygosity",
+        "quote": "The parameter k also represents the expected number of homozygous genotypes"
+      },
+      {
+        "id": "homozygous-genotypes",
+        "label": "homozygous genotypes",
+        "groupId": "homozygous",
+        "sourceId": "nij-heterozygosity",
+        "quote": "The parameter k also represents the expected number of homozygous genotypes, and k[(k-1)/2] represents the expected number of heterozygous genotypes."
+      }
+    ]
+  }
+}

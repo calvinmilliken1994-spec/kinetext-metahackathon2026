@@ -1,0 +1,93 @@
+{
+  "jobId": "job-20261029163345-552069ef",
+  "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T16:33:45.362Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.30464,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [
+    {
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "A-05",
+        "A-07",
+        "A-10"
+      ],
+      "fixed": [
+        "A-05",
+        "A-07",
+        "A-10"
+      ],
+      "remaining": [],
+      "passed": true
+    }
+  ],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 34632,
+    "startedAt": "2026-10-29T16:33:45.362Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 1,
+    "componentsFailed": 1,
+    "partialPublish": true
+  },
+  "componentRepairs": [
+    {
+      "componentId": "quiz-cards-v1",
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "schema.gen",
+        "Q-06"
+      ],
+      "fixed": [
+        "schema.gen",
+        "Q-06"
+      ],
+      "remaining": [],
+      "passed": true
+    },
+    {
+      "componentId": "compare-table-v1",
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "schema.gen",
+        "CT-02"
+      ],
+      "fixed": [
+        "schema.gen"
+      ],
+      "remaining": [
+        "CT-02"
+      ],
+      "passed": false
+    },
+    {
+      "componentId": "compare-table-v1",
+      "attempt": 2,
+      "revision": 3,
+      "targeted": [
+        "CT-02"
+      ],
+      "fixed": [],
+      "remaining": [
+        "CT-02"
+      ],
+      "passed": false
+    }
+  ],
+  "finishedAt": "2026-10-29T16:37:19.843Z"
+}

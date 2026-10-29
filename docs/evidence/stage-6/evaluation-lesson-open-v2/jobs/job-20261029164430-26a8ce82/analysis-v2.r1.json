@@ -1,0 +1,201 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "history",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "Page covers Louisiana Purchase of 1803 with land size cost and authorization limit, Jefferson constitutional doubts, 19th century expansion series, slavery related sectional compromises including Compromise of 1850, Native displacement, and treaty structure with two conventions",
+    "overview": {
+      "headline": "Louisiana Purchase doubled nation size and deepened slavery and Native conflicts",
+      "keyPoints": [
+        {
+          "id": "purchase-size-price",
+          "point": "The United States purchased 828,000 square miles west of the Mississippi River for $15 million doubling national size",
+          "sourceId": "nara-louisiana-purchase-treaty",
+          "quote": "the United States purchased 828,000 square miles of land west of the Mississippi River for $15 million"
+        },
+        {
+          "id": "negotiators-authorization",
+          "point": "Negotiators Robert Livingston and James Monroe were authorized to pay up to $10 million for New Orleans and the Floridas before accepting larger offer",
+          "sourceId": "nara-louisiana-purchase-treaty",
+          "quote": "negotiators Robert Livingston and James Monroe were authorized to pay France up to $10 million solely for the port of New Orleans and the Floridas"
+        },
+        {
+          "id": "jefferson-constitutional-doubt",
+          "point": "President Jefferson as strict interpreter wondered if Government was authorized to acquire new territory despite expansion desire",
+          "sourceId": "nara-louisiana-purchase-treaty",
+          "quote": "was generally a strict interpreter of the Constitution who wondered if the U.S. Government"
+        },
+        {
+          "id": "expansion-sectional-slavery",
+          "point": "Expansions exposed sectional weaknesses between North and South related to slavery requiring fragile compromises",
+          "sourceId": "nara-louisiana-purchase-treaty",
+          "quote": "also exposed the sectional weaknesses between the North and South, especially related to the issue of slavery"
+        },
+        {
+          "id": "native-impact-displacement",
+          "point": "Land ceded was populated with thousands of American Indians across dozens of tribes later forcibly moved to reservations",
+          "sourceId": "nara-louisiana-purchase-treaty",
+          "quote": "The land ceded in this agreement (and later expansions) was populated with thousands of American Indians across dozens of tribes."
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "term-cession",
+          "term": "cession",
+          "gloss": "transfer of land where territory is ceded as part of expansion series",
+          "sourceId": "nara-louisiana-purchase-treaty",
+          "quote": "The Louisiana Purchase was the first major cession of land in a long series of expansions that span the 19th century."
+        },
+        {
+          "id": "term-sectional-weaknesses",
+          "term": "sectional weaknesses",
+          "gloss": "sectional divisions between North and South related to slavery that made compromises fragile",
+          "sourceId": "nara-louisiana-purchase-treaty",
+          "quote": "also exposed the sectional weaknesses between the North and South, especially related to the issue of slavery"
+        },
+        {
+          "id": "term-missouri-compromise",
+          "term": "Missouri Compromise",
+          "gloss": "fragile compromise to maintain balance between free states and slave states",
+          "sourceId": "nara-louisiana-purchase-treaty",
+          "quote": "notably the Missouri Compromise and the Compromise of 1850"
+        },
+        {
+          "id": "term-native-americans",
+          "term": "Native Americans",
+          "gloss": "people whose potential impact was ignored when land was ceded",
+          "sourceId": "nara-louisiana-purchase-treaty",
+          "quote": "In addition, the Louisiana Purchase ignored the potential impact on Native Americans."
+        },
+        {
+          "id": "term-treaty-of-cession",
+          "term": "Treaty of Cession",
+          "gloss": "Treaty that ceded Louisiana territory and included two financial conventions",
+          "sourceId": "nara-louisiana-purchase-treaty",
+          "quote": "The Louisiana Purchase Agreement is made up of the Treaty of Cession and the two conventions regarding the financial aspects of the transaction."
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "sequence-v1",
+        "pedagogicalReason": "Builds cause effect chain from first cession through expansions to compromises and conflict in page order",
+        "focusQuote": "The Louisiana Purchase was the first major cession of land in a long series of expansions that span the 19th century.",
+        "focusSourceId": "nara-louisiana-purchase-treaty"
+      },
+      {
+        "componentId": "quiz-cards-v1",
+        "pedagogicalReason": "Reinforces retrieval of purchase size price authorization and treaty structure facts without calculation",
+        "focusQuote": "the United States purchased 828,000 square miles of land west of the Mississippi River for $15 million",
+        "focusSourceId": "nara-louisiana-purchase-treaty"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029164430-26a8ce82:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"history\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 2589 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 12 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 5, keyTerms 5, componentPlan 2; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (2 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": false,
+        "message": "keyPoints[0].point states the number 828000, which does not appear on the page or in the same quote (N-01)",
+        "path": "/overview/keyPoints/0/point",
+        "affected": [
+          "/overview/keyPoints/0/point"
+        ]
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "5b6d863e23654fa88be52614831290d4",
+    "usage": {
+      "promptTokens": 3966,
+      "completionTokens": 12735,
+      "reasoningTokens": 11793,
+      "cachedTokens": 0
+    },
+    "latencyMs": 52879,
+    "estCostUSD": 0.05908125,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Drag dependence and coefficient recall",
+    "cards": [
+      {
+        "id": "drag-equation-symbol",
+        "stem": "Which symbol represents the coefficient term in this relation",
+        "options": [
+          "Cd",
+          "Cl",
+          "Re",
+          "Ma"
+        ],
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "D = Cd * (rho * V^2 * A) / 2",
+        "hint": "Look for the symbol on the right side of the relation"
+      },
+      {
+        "id": "drag-dependence-density",
+        "stem": "Which property of the air contributes to drag in the dependence description",
+        "options": [
+          "density",
+          "temperature",
+          "gravity",
+          "magnetism"
+        ],
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "Drag depends on the density of the air, the square of the velocity, the air’s viscosity and compressibility",
+        "hint": "It is listed together with velocity squared"
+      },
+      {
+        "id": "reference-area-term",
+        "stem": "How is the area term in this relation described",
+        "options": [
+          "reference area",
+          "control volume",
+          "wetted perimeter",
+          "center of mass"
+        ],
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "Notice that the area (A) given in the drag equation is given as a reference area.",
+        "hint": "The phrase indicates a chosen representative size"
+      },
+      {
+        "id": "dynamic-pressure-name",
+        "stem": "What name is given to the quantity formed by density times square of velocity divided by two",
+        "options": [
+          "dynamic pressure",
+          "static temperature",
+          "total enthalpy",
+          "critical Mach"
+        ],
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "The combination of terms “density times the square of the velocity divided by two” is called the dynamic pressure",
+        "hint": "This term appears in Bernoulli pressure relations"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029164724-7eb0774e:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "fd8b3d0bd41b46f1b3dcf4da19f9e2a5",
+    "usage": {
+      "promptTokens": 2760,
+      "completionTokens": 5365,
+      "reasoningTokens": 5024,
+      "cachedTokens": 0
+    },
+    "latencyMs": 18805,
+    "estCostUSD": 0.02625125,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029164724-7eb0774e:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Drag dependence and coefficient recall",
+    "sources": [
+      {
+        "id": "nasa-grc-drag-equation",
+        "title": "Drag Equation — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/drag-equation/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "9462a6186d8b00e0dbf2618e4a6701edc9448614e144af1f4bc0b53b59f6ceed"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "fd8b3d0bd41b46f1b3dcf4da19f9e2a5",
+      "runId": "job-20261029164724-7eb0774e",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:48:23.079Z"
+    },
+    "seed": 1239279739,
+    "cards": [
+      {
+        "id": "drag-equation-symbol",
+        "stem": "Which symbol represents the coefficient term in this relation",
+        "options": [
+          "Cd",
+          "Cl",
+          "Re",
+          "Ma"
+        ],
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "D = Cd * (rho * V^2 * A) / 2",
+        "hint": "Look for the symbol on the right side of the relation"
+      },
+      {
+        "id": "drag-dependence-density",
+        "stem": "Which property of the air contributes to drag in the dependence description",
+        "options": [
+          "density",
+          "temperature",
+          "gravity",
+          "magnetism"
+        ],
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "Drag depends on the density of the air, the square of the velocity, the air’s viscosity and compressibility",
+        "hint": "It is listed together with velocity squared"
+      },
+      {
+        "id": "reference-area-term",
+        "stem": "How is the area term in this relation described",
+        "options": [
+          "reference area",
+          "control volume",
+          "wetted perimeter",
+          "center of mass"
+        ],
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "Notice that the area (A) given in the drag equation is given as a reference area.",
+        "hint": "The phrase indicates a chosen representative size"
+      },
+      {
+        "id": "dynamic-pressure-name",
+        "stem": "What name is given to the quantity formed by density times square of velocity divided by two",
+        "options": [
+          "dynamic pressure",
+          "static temperature",
+          "total enthalpy",
+          "critical Mach"
+        ],
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "The combination of terms “density times the square of the velocity divided by two” is called the dynamic pressure",
+        "hint": "This term appears in Bernoulli pressure relations"
+      }
+    ]
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "artifactId": "nara-lee-resolution-job-20261029164529-45034b22",
+  "revision": 1,
+  "checks": [
+    {
+      "id": "schema.full",
+      "kind": "schema",
+      "passed": true,
+      "message": "spec matches activity-spec.full.timeline-v1.json (draft-07)"
+    },
+    {
+      "id": "timeline.unique-ids",
+      "kind": "semantic",
+      "passed": true,
+      "message": "event ids, explanation ids, prediction ids and behavioral test names are unique, and all 3 behavioral test(s) and 3 prediction(s) reference two different existing events"
+    },
+    {
+      "id": "timeline.approximate-date",
+      "kind": "grounding",
+      "passed": true,
+      "message": "no approximate dates: none of the 8 event quote(s) across 5 event(s) — nor any FULL source sentence/heading unit containing one — states a decade form (\"1770s\") or attaches an approximation qualifier (\"circa\", \"c.\", \"ca.\", \"approx.\", \"around\", \"about\", \"roughly\", \"sometime in\", \"early/mid/late\" — including article and day-first forms like \"around the 4th of July 1776\") to a date expression"
+    },
+    {
+      "id": "timeline.date-grounded",
+      "kind": "grounding",
+      "passed": false,
+      "message": "event \"e4\" (1776-09): date not grounded — quote \"The plan for making treaties was not approved until Septembe\" contains no COMPLETE source date expression stating 1776-09 as ONE connected expression in a CLEAN context — the quote contains \"September of 1776\" (the preceding word \"until\" is an approx, \"November of 1777\" (the preceding word \"until\" is an approxi but that expression's source context is NOT clean (an approximation qualifier, temporal bound, unconsumed era token, century wording, alternative, range connector + number, '?' or markup within two words of it grounds nothing — fail closed) (the quote contains no complete clean-context source date expression at all) (the source title states year 1776, borrowable only into a COMPLETE year-less source expression stating the month and day in ONE expression, in a source unit with no other year); event \"e5\" (1777-11): date not grounded — quote \"The plan for making treaties was not approved until Septembe\" contains no COMPLETE source date expression stating 1777-11 as ONE connected expression in a CLEAN context — the quote contains \"September of 1776\" (the preceding word \"until\" is an approx, \"November of 1777\" (the preceding word \"until\" is an approxi but that expression's source context is NOT clean (an approximation qualifier, temporal bound, unconsumed era token, century wording, alternative, range connector + number, '?' or markup within two words of it grounds nothing — fail closed) (the quote contains no complete clean-context source date expression at all) (the source title states year 1776, borrowable only into a COMPLETE year-less source expression stating the month and day in ONE expression, in a source unit with no other year) (expected each event's full stated date in ONE COMPLETE connected source date expression IN A CLEAN CONTEXT inside ONE sentence unit of the quote's located source span — a quote edge cutting a source token grounds nothing, an unrecognised or unclean form fails closed, and the year may come from the source title only under the title-year rule)",
+      "path": "/simulation/events/3",
+      "affected": [
+        "/simulation/events/3/year",
+        "/simulation/events/3/month",
+        "/simulation/events/3/day",
+        "/simulation/events/3/evidence",
+        "/simulation/events/4/year",
+        "/simulation/events/4/month",
+        "/simulation/events/4/day",
+        "/simulation/events/4/evidence"
+      ]
+    },
+    {
+      "id": "timeline.distinct-dates",
+      "kind": "semantic",
+      "passed": true,
+      "message": "all 5 event (year, month, day) tuples are distinct"
+    },
+    {
+      "id": "timeline.case-order",
+      "kind": "behavioral",
+      "passed": true,
+      "message": "all 3 behavioral test(s) and 3 prediction(s) recomputed from the event dates: earlierEventId is strictly earlier than laterEventId at the precision both events state"
+    },
+    {
+      "id": "refs.sources",
+      "kind": "grounding",
+      "passed": true,
+      "message": "all references resolve: 1 spec source(s), 1 cited sourceId(s)"
+    },
+    {
+      "id": "refs.sha256",
+      "kind": "grounding",
+      "passed": true,
+      "message": "sha256 verified for 1 source(s): stored hash and recomputed text hash both match the spec"
+    },
+    {
+      "id": "grounding.quotes",
+      "kind": "grounding",
+      "passed": true,
+      "message": "all 13 evidence quote(s) count as evidence (>= 8 normalised characters with >= 3 letters/digits, or a compact \"=\" equation with >= 3) and all 13 resolvable quote(s) appear in their source text after whitespace normalisation; every explanation and every event has >= 1 counted quote"
+    },
+    {
+      "id": "policy.no-publisher-attribution",
+      "kind": "semantic",
+      "passed": true,
+      "message": "no generated display field (title, objectives, explanations, prediction prompts, behavioral test names, event labels, scenario labels) mentions the publisher or uses attribution/endorsement wording naming a source or authority; evidence quotes are exempt"
+    },
+    {
+      "id": "scope.prose-unverified",
+      "kind": "semantic",
+      "passed": true,
+      "message": "Explanation prose is AI-generated; quotes, numbers and ranges are machine-checked, the wording needs teacher review."
+    }
+  ],
+  "publishable": false
+}

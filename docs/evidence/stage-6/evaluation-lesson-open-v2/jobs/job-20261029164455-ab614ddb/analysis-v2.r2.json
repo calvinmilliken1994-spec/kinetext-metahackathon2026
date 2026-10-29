@@ -1,0 +1,203 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "history",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "Page covers the secret drafting of the Constitution in Philadelphia, the Federal Convention convening and quorum delay, the mid-June decision to create a new frame of government, and debates over central power and representation",
+    "overview": {
+      "headline": "Secret Philadelphia convention that drafted new frame of government",
+      "keyPoints": [
+        {
+          "id": "constitution-signing",
+          "point": "The signed document established the government of the United States on September 17, 1787",
+          "sourceId": "nara-constitution",
+          "quote": "signed on September 17, 1787, established the government of the United States."
+        },
+        {
+          "id": "convention-convened",
+          "point": "The Federal Convention convened in Philadelphia on May 14, 1787 to revise the Articles of Confederation",
+          "sourceId": "nara-constitution",
+          "quote": "The Federal Convention convened in the State House (Independence Hall) in Philadelphia on May 14, 1787, to revise the Articles of Confederation."
+        },
+        {
+          "id": "quorum-delay",
+          "point": "Members adjourned from day to day until a quorum of seven states was obtained",
+          "sourceId": "nara-constitution",
+          "quote": "the members adjourned from day to day until a quorum of seven states was obtained on May 25."
+        },
+        {
+          "id": "new-frame-decision",
+          "point": "Delegates chose to draft an entirely new frame of government rather than amend existing Articles",
+          "sourceId": "nara-constitution",
+          "quote": "rather than amend the existing Articles, the Convention would draft an entirely new frame of government."
+        },
+        {
+          "id": "central-power-debate",
+          "point": "Chief points at issue included power of central government and representation in Congress",
+          "sourceId": "nara-constitution",
+          "quote": "Among the chief points at issue were how much power to allow the central government, how many representatives in Congress to allow each state"
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "constitutional-convention",
+          "term": "Constitutional Convention",
+          "gloss": "secret gathering of delegates who drafted the Constitution during summer",
+          "sourceId": "nara-constitution",
+          "quote": "Drafted in secret by delegates to the Constitutional Convention during the summer of 1787"
+        },
+        {
+          "id": "articles-of-confederation",
+          "term": "Articles of Confederation",
+          "gloss": "earlier framework that the Convention met to revise in Philadelphia",
+          "sourceId": "nara-constitution",
+          "quote": "The Federal Convention convened in the State House (Independence Hall) in Philadelphia on May 14, 1787, to revise the Articles of Confederation."
+        },
+        {
+          "id": "quorum",
+          "term": "quorum",
+          "gloss": "minimum number of states required for members to conduct business",
+          "sourceId": "nara-constitution",
+          "quote": "the members adjourned from day to day until a quorum of seven states was obtained on May 25."
+        },
+        {
+          "id": "central-government",
+          "term": "central government",
+          "gloss": "national authority whose power was debated among chief points at issue",
+          "sourceId": "nara-constitution",
+          "quote": "Among the chief points at issue were how much power to allow the central government, how many representatives in Congress to allow each state"
+        },
+        {
+          "id": "representatives",
+          "term": "representatives",
+          "gloss": "individuals elected to serve voters or chosen by state legislators",
+          "sourceId": "nara-constitution",
+          "quote": "how these representatives should be elected—directly by the people or by the state legislators."
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "sequence-v1",
+        "pedagogicalReason": "Shows chronological order of convention from convening to new draft decision using page order",
+        "focusQuote": "The Federal Convention convened in the State House (Independence Hall) in Philadelphia on May 14, 1787, to revise the Articles of Confederation.",
+        "focusSourceId": "nara-constitution"
+      },
+      {
+        "componentId": "quiz-cards-v1",
+        "pedagogicalReason": "Checks recall of key facts about convention purpose, attendance and debates stated directly in text",
+        "focusQuote": "Among the chief points at issue were how much power to allow the central government, how many representatives in Congress to allow each state",
+        "focusSourceId": "nara-constitution"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029164455-ab614ddb:analysis",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"history\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 1189 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 12 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 5, keyTerms 5, componentPlan 2; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (2 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "source-analysis-v2: no weakening — every one of the 1 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "67d95c7e2a5146f6826c8c798bfd7c62",
+    "usage": {
+      "promptTokens": 6273,
+      "completionTokens": 2545,
+      "reasoningTokens": 1701,
+      "cachedTokens": 0
+    },
+    "latencyMs": 9434,
+    "estCostUSD": 0.0186575,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

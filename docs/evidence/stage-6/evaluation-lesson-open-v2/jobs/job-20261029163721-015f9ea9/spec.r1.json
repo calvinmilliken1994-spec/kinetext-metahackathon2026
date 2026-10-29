@@ -1,0 +1,170 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nasa-grc-role-of-the-mach-number-job-20261029163721-015f9ea9",
+  "title": "Speed of sound",
+  "learningObjectives": [
+    "Relate the speed of sound in a gas to its properties through a=sqrt(gamma*R*T) and explain temperature dependence.",
+    "Describe Mach number as the ratio of flow speed to the local speed of sound and its role in compressibility.",
+    "Distinguish flow regimes where density changes are negligible from those where density changes scale with Mach number and compressibility must be included."
+  ],
+  "sources": [
+    {
+      "id": "nasa-grc-role-of-the-mach-number",
+      "title": "Role of the Mach Number — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+      "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/role-of-the-mach-number/",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+      "sha256": "a7355b33f7126247cd0576ce48a0975a781814c8687022d8fdf12e11fdeaa3c8"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "exp-mach",
+      "text": "The Mach number compares the flow or aircraft speed to the local speed of sound, which is the speed at which small isentropic disturbances are transmitted through the gas.",
+      "evidence": [
+        {
+          "sourceId": "nasa-grc-role-of-the-mach-number",
+          "quote": "The Mach number is the ratio of the speed of the aircraft, or the speed of the gas, to the speed of sound in the gas."
+        },
+        {
+          "sourceId": "nasa-grc-role-of-the-mach-number",
+          "quote": "The speed of sound is equal to the speed of transmission of small, isentropic disturbances in the flow."
+        }
+      ]
+    },
+    {
+      "id": "exp-compressibility",
+      "text": "At low speeds density remains essentially constant, but at higher speeds energy goes into compressing the gas and changing local density, which alters the resulting aerodynamic forces.",
+      "evidence": [
+        {
+          "sourceId": "nasa-grc-role-of-the-mach-number",
+          "quote": "If the aircraft passes at a low speed, typically less than 250 mph, it is observed that the density of the air remains constant."
+        },
+        {
+          "sourceId": "nasa-grc-role-of-the-mach-number",
+          "quote": "This compressibility effect alters the amount of resulting force on the aircraft since the aerodynamic force depends on the air density."
+        }
+      ]
+    },
+    {
+      "id": "exp-formula",
+      "text": "For an ideal gas the pressure-density relation leads to the speed of sound being determined by the specific heat ratio, gas constant and absolute temperature, giving a squared proportional to gamma R T.",
+      "evidence": [
+        {
+          "sourceId": "nasa-grc-role-of-the-mach-number",
+          "quote": "p = rho * R * T"
+        },
+        {
+          "sourceId": "nasa-grc-role-of-the-mach-number",
+          "quote": "gamma * R * T = a^2"
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "speed-of-sound-v1",
+    "equation": "a=sqrt(gamma*R*T)",
+    "gamma": {
+      "unit": "1",
+      "min": 1.2,
+      "max": 1.67,
+      "default": 1.4
+    },
+    "gasConstantJPerKgK": {
+      "unit": "J/(kg*K)",
+      "min": 200,
+      "max": 1000,
+      "default": 287
+    },
+    "temperatureK": {
+      "unit": "K",
+      "min": 250,
+      "max": 350,
+      "default": 300
+    },
+    "scenario": {
+      "objectLabel": "Air sample",
+      "settingLabel": "Open field"
+    }
+  },
+  "behavioralTests": [
+    {
+      "name": "cold-gas case",
+      "gamma": 1.4,
+      "gasConstantJPerKgK": 287,
+      "temperatureK": 150,
+      "expectedSpeedMps": 245.4995,
+      "tolerance": 0.5
+    },
+    {
+      "name": "warm-gas case",
+      "gamma": 1.3,
+      "gasConstantJPerKgK": 400,
+      "temperatureK": 1200,
+      "expectedSpeedMps": 789.9367,
+      "tolerance": 1.2
+    },
+    {
+      "name": "standard sea-level air",
+      "gamma": 1.4,
+      "gasConstantJPerKgK": 287,
+      "temperatureK": 300,
+      "expectedSpeedMps": 347.1887,
+      "tolerance": 0.8
+    },
+    {
+      "name": "high gamma light gas",
+      "gamma": 1.66,
+      "gasConstantJPerKgK": 200,
+      "temperatureK": 250,
+      "expectedSpeedMps": 288.0972,
+      "tolerance": 0.6
+    }
+  ],
+  "predictions": [
+    {
+      "id": "pred-1",
+      "prompt": "Predict speed of sound for air-like gas at room temperature.",
+      "gamma": 1.4,
+      "gasConstantJPerKgK": 287,
+      "temperatureK": 300,
+      "expectedSpeedMps": 347.1887,
+      "tolerance": 0.8
+    },
+    {
+      "id": "pred-2",
+      "prompt": "Predict speed for moderate gamma and gas constant at 280 K.",
+      "gamma": 1.3,
+      "gasConstantJPerKgK": 300,
+      "temperatureK": 280,
+      "expectedSpeedMps": 330.4542,
+      "tolerance": 0.6
+    },
+    {
+      "id": "pred-3",
+      "prompt": "Predict speed for high gas constant warm case yielding an integer result.",
+      "gamma": 1.6,
+      "gasConstantJPerKgK": 800,
+      "temperatureK": 320,
+      "expectedSpeedMps": 640,
+      "tolerance": 1
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "b183b15ca2154efa8d62a4c24d3fb9db",
+    "runId": "job-20261029163721-015f9ea9",
+    "promptVersion": "v9",
+    "generatedAt": "2026-10-29T16:39:00.781Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

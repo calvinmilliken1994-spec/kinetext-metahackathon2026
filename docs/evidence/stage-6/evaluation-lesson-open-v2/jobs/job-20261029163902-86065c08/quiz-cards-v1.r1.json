@@ -1,0 +1,231 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Plutonium properties and fuel cycle",
+    "cards": [
+      {
+        "id": "spent-fuel-plutonium-share",
+        "stem": "About how much plutonium by weight is in spent fuel from U.S. reactors",
+        "options": [
+          "1 percent",
+          "about one quarter",
+          "about one half",
+          "about three quarters"
+        ],
+        "sourceId": "nrc-backgrounder-plutonium",
+        "quote": "Spent nuclear fuel from U.S. reactors contains about 1 percent plutonium by weight.",
+        "hint": "Recall the share stated for spent fuel"
+      },
+      {
+        "id": "atomic-number-94",
+        "stem": "What atomic number is given for this metallic element",
+        "options": [
+          "94",
+          "239",
+          "238",
+          "242"
+        ],
+        "sourceId": "nrc-backgrounder-plutonium",
+        "quote": "Plutonium is a radioactive metallic element with the atomic number 94.",
+        "hint": "Check the element description sentence"
+      },
+      {
+        "id": "predominant-radiation-type",
+        "stem": "Which radiation is described as predominantly emitted",
+        "options": [
+          "alpha particles",
+          "beta particles",
+          "gamma rays",
+          "neutrons"
+        ],
+        "sourceId": "nrc-backgrounder-plutonium",
+        "quote": "Plutonium predominantly emits alpha particles – a type of radiation that is easily stopped and has a short range.",
+        "hint": "Look for predominantly emits wording"
+      },
+      {
+        "id": "pu239-half-life",
+        "stem": "What half-life is listed for Pu-239",
+        "options": [
+          "24,100 years",
+          "a few days",
+          "a few months",
+          "a few hours"
+        ],
+        "sourceId": "nrc-backgrounder-plutonium",
+        "quote": "Pu-239 has a half-life of 24,100 years",
+        "hint": "Find the half-life sentence for this isotope"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029163902-86065c08:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": false,
+        "message": "cards[1].options[0] states the number 94, which does not appear on the page or in the same quote (N-01); cards[1].options[3] states the number 242, which does not appear on the page or in the same quote (N-01); cards[3].options[0] states the number 24100, which does not appear on the page or in the same quote (N-01)",
+        "path": "/cards/1/options/0",
+        "affected": [
+          "/cards/1/options/0",
+          "/cards/1/options/3",
+          "/cards/3/options/0"
+        ]
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "ad7cc820909e46e191d6a6b12fbd2c6a",
+    "usage": {
+      "promptTokens": 2874,
+      "completionTokens": 6548,
+      "reasoningTokens": 6213,
+      "cachedTokens": 0
+    },
+    "latencyMs": 30714,
+    "estCostUSD": 0.0314215,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029163902-86065c08:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Plutonium properties and fuel cycle",
+    "sources": [
+      {
+        "id": "nrc-backgrounder-plutonium",
+        "title": "Backgrounder on Plutonium — U.S. Nuclear Regulatory Commission",
+        "locator": "https://www.nrc.gov/regulations-legislation/fact-sheets-brochures/backgrounder-on-plutonium",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Nuclear Regulatory Commission, 'Backgrounder on Plutonium', Fact Sheets & Brochures. NRC's website constitutes a U.S. Government Work under federal copyright law and is not subject to copyright. The U.S. Nuclear Regulatory Commission has not reviewed, approved or endorsed this activity.",
+        "sha256": "03700e48439f4a60c4b8ff3676122131acf7c23ff26eaacb5700f29a06768737"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "ad7cc820909e46e191d6a6b12fbd2c6a",
+      "runId": "job-20261029163902-86065c08",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:40:39.153Z"
+    },
+    "seed": 3852912484,
+    "cards": [
+      {
+        "id": "spent-fuel-plutonium-share",
+        "stem": "About how much plutonium by weight is in spent fuel from U.S. reactors",
+        "options": [
+          "1 percent",
+          "about one quarter",
+          "about one half",
+          "about three quarters"
+        ],
+        "sourceId": "nrc-backgrounder-plutonium",
+        "quote": "Spent nuclear fuel from U.S. reactors contains about 1 percent plutonium by weight.",
+        "hint": "Recall the share stated for spent fuel"
+      },
+      {
+        "id": "atomic-number-94",
+        "stem": "What atomic number is given for this metallic element",
+        "options": [
+          "94",
+          "239",
+          "238",
+          "242"
+        ],
+        "sourceId": "nrc-backgrounder-plutonium",
+        "quote": "Plutonium is a radioactive metallic element with the atomic number 94.",
+        "hint": "Check the element description sentence"
+      },
+      {
+        "id": "predominant-radiation-type",
+        "stem": "Which radiation is described as predominantly emitted",
+        "options": [
+          "alpha particles",
+          "beta particles",
+          "gamma rays",
+          "neutrons"
+        ],
+        "sourceId": "nrc-backgrounder-plutonium",
+        "quote": "Plutonium predominantly emits alpha particles – a type of radiation that is easily stopped and has a short range.",
+        "hint": "Look for predominantly emits wording"
+      },
+      {
+        "id": "pu239-half-life",
+        "stem": "What half-life is listed for Pu-239",
+        "options": [
+          "24,100 years",
+          "a few days",
+          "a few months",
+          "a few hours"
+        ],
+        "sourceId": "nrc-backgrounder-plutonium",
+        "quote": "Pu-239 has a half-life of 24,100 years",
+        "hint": "Find the half-life sentence for this isotope"
+      }
+    ]
+  }
+}

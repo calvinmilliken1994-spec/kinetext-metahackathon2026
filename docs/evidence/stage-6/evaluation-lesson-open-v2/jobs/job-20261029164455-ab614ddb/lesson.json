@@ -1,0 +1,124 @@
+{
+  "jobId": "job-20261029164455-ab614ddb",
+  "analysisRef": "job-20261029164455-ab614ddb/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029164455-ab614ddb:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Secret Philadelphia convention that drafted new frame of government",
+    "sources": [
+      {
+        "id": "nara-constitution",
+        "title": "Constitution of the United States (1787) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/constitution",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Constitution of the United States (1787)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "a14175b009333bebd61eaff70e3393928a8f0dbd0ae00027067c07b15d176db4"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "67d95c7e2a5146f6826c8c798bfd7c62",
+      "runId": "job-20261029164455-ab614ddb",
+      "promptVersion": "s6-v2",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T16:45:43.709Z"
+    },
+    "seed": 766043437,
+    "headline": "Secret Philadelphia convention that drafted new frame of government",
+    "keyPoints": [
+      {
+        "id": "constitution-signing",
+        "point": "The signed document established the government of the United States on September 17, 1787",
+        "sourceId": "nara-constitution",
+        "quote": "signed on September 17, 1787, established the government of the United States."
+      },
+      {
+        "id": "convention-convened",
+        "point": "The Federal Convention convened in Philadelphia on May 14, 1787 to revise the Articles of Confederation",
+        "sourceId": "nara-constitution",
+        "quote": "The Federal Convention convened in the State House (Independence Hall) in Philadelphia on May 14, 1787, to revise the Articles of Confederation."
+      },
+      {
+        "id": "quorum-delay",
+        "point": "Members adjourned from day to day until a quorum of seven states was obtained",
+        "sourceId": "nara-constitution",
+        "quote": "the members adjourned from day to day until a quorum of seven states was obtained on May 25."
+      },
+      {
+        "id": "new-frame-decision",
+        "point": "Delegates chose to draft an entirely new frame of government rather than amend existing Articles",
+        "sourceId": "nara-constitution",
+        "quote": "rather than amend the existing Articles, the Convention would draft an entirely new frame of government."
+      },
+      {
+        "id": "central-power-debate",
+        "point": "Chief points at issue included power of central government and representation in Congress",
+        "sourceId": "nara-constitution",
+        "quote": "Among the chief points at issue were how much power to allow the central government, how many representatives in Congress to allow each state"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "constitutional-convention",
+        "term": "Constitutional Convention",
+        "gloss": "secret gathering of delegates who drafted the Constitution during summer",
+        "sourceId": "nara-constitution",
+        "quote": "Drafted in secret by delegates to the Constitutional Convention during the summer of 1787"
+      },
+      {
+        "id": "articles-of-confederation",
+        "term": "Articles of Confederation",
+        "gloss": "earlier framework that the Convention met to revise in Philadelphia",
+        "sourceId": "nara-constitution",
+        "quote": "The Federal Convention convened in the State House (Independence Hall) in Philadelphia on May 14, 1787, to revise the Articles of Confederation."
+      },
+      {
+        "id": "quorum",
+        "term": "quorum",
+        "gloss": "minimum number of states required for members to conduct business",
+        "sourceId": "nara-constitution",
+        "quote": "the members adjourned from day to day until a quorum of seven states was obtained on May 25."
+      },
+      {
+        "id": "central-government",
+        "term": "central government",
+        "gloss": "national authority whose power was debated among chief points at issue",
+        "sourceId": "nara-constitution",
+        "quote": "Among the chief points at issue were how much power to allow the central government, how many representatives in Congress to allow each state"
+      },
+      {
+        "id": "representatives",
+        "term": "representatives",
+        "gloss": "individuals elected to serve voters or chosen by state legislators",
+        "sourceId": "nara-constitution",
+        "quote": "how these representatives should be elected—directly by the people or by the state legislators."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261029164455-ab614ddb:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029164455-ab614ddb:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "1 card was left out because they could not be verified against the page: quorum-delay (Q-06).",
+      "revision": 1
+    }
+  ]
+}

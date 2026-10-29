@@ -1,0 +1,125 @@
+{
+  "jobId": "job-20261029164324-cedf909d",
+  "analysisRef": "job-20261029164324-cedf909d/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029164324-cedf909d:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Random mating as a Hardy Weinberg condition and assortative patterns in humans",
+    "sources": [
+      {
+        "id": "nij-random-mating",
+        "title": "Random Mating — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+        "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/hardy-weinberg-principle/random-mating",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Random Mating'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+        "sha256": "9f06caf792ddeb146476c0c5d2cf1851b1f5e8bd6f0fc7dfae8cb33d50725ad8"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "d4ab8905507542ccb8f2180c1c485c1d",
+      "runId": "job-20261029164324-cedf909d",
+      "promptVersion": "s6-v2",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T16:44:19.696Z"
+    },
+    "seed": 4085936485,
+    "headline": "Random mating as a Hardy Weinberg condition and assortative patterns in humans",
+    "keyPoints": [
+      {
+        "id": "hwe-condition-failure",
+        "point": "Random mating is described as a condition of Hardy Weinberg Equilibrium that does not occur in humans",
+        "sourceId": "nij-random-mating",
+        "quote": "random mating, a condition of HWE (Hardy-Weinberg Equilibrium), does not occur"
+      },
+      {
+        "id": "random-mating-definition",
+        "point": "Random mating implies mating is arbitrary with regard to the locus being considered",
+        "sourceId": "nij-random-mating",
+        "quote": "Random mating implies that mating should be arbitrary with regard to the locus being considered."
+      },
+      {
+        "id": "visible-trait-assortative",
+        "point": "Humans tend to mate with similar individuals for visible traits such as height and ethnicity showing positive assortative mating",
+        "sourceId": "nij-random-mating",
+        "quote": "humans tend to mate with individuals that are similar to themselves"
+      },
+      {
+        "id": "genetic-effects-assortative",
+        "point": "Positive assortative mating increases homozygotes while negative assortative mating increases heterozygotes",
+        "sourceId": "nij-random-mating",
+        "quote": "Positive assortative mating leads to an increase in homozygotes whereas negative assortative mating leads to an increase in heterozygotes."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "hardy-weinberg-equilibrium",
+        "term": "Hardy-Weinberg Equilibrium",
+        "gloss": "genetic equilibrium condition that assumes random mating to remain constant",
+        "sourceId": "nij-random-mating",
+        "quote": "random mating, a condition of HWE (Hardy-Weinberg Equilibrium), does not occur."
+      },
+      {
+        "id": "locus",
+        "term": "locus",
+        "gloss": "specific genomic position considered when assessing whether mating is arbitrary",
+        "sourceId": "nij-random-mating",
+        "quote": "Random mating implies that mating should be arbitrary with regard to the locus being considered."
+      },
+      {
+        "id": "positive-assortative-mating",
+        "term": "positive assortative mating",
+        "gloss": "positive mating pattern where similar individuals mate non randomly and increase homozygotes",
+        "sourceId": "nij-random-mating",
+        "quote": "This constitutes non-random, positive assortative mating."
+      },
+      {
+        "id": "negative-assortative-mating",
+        "term": "negative assortative mating",
+        "gloss": "mating between dissimilar genotypes that is described as more rare",
+        "sourceId": "nij-random-mating",
+        "quote": "negative assortative mating is breeding between individuals with dissimilar genotypes, and is more rare."
+      },
+      {
+        "id": "homozygotes",
+        "term": "homozygotes",
+        "gloss": "individuals with identical alleles whose frequency shows an increase under positive assortative mating",
+        "sourceId": "nij-random-mating",
+        "quote": "Positive assortative mating leads to an increase in homozygotes whereas negative assortative mating leads to an increase in heterozygotes."
+      },
+      {
+        "id": "heterozygotes",
+        "term": "heterozygotes",
+        "gloss": "individuals with different alleles whose frequency shows an increase under negative assortative mating",
+        "sourceId": "nij-random-mating",
+        "quote": "Positive assortative mating leads to an increase in homozygotes whereas negative assortative mating leads to an increase in heterozygotes."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029164324-cedf909d:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sort-groups-v1",
+      "specId": "job-20261029164324-cedf909d:sort-groups-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

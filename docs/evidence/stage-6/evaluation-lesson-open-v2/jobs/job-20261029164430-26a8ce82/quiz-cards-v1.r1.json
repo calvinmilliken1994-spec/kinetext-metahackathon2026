@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Westward Land Deal Review",
+    "cards": [
+      {
+        "id": "price-and-size-card",
+        "stem": "What amount did the United States pay for the land west of the Mississippi River in the 1803 transaction",
+        "options": [
+          "$15 million",
+          "$10 million",
+          "Treaty of Cession",
+          "Gadsden Purchase"
+        ],
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "the United States purchased 828,000 square miles of land west of the Mississippi River for $15 million",
+        "hint": "Recall the price named in the opening description of the transaction"
+      },
+      {
+        "id": "authorization-limit-card",
+        "stem": "How much were the negotiators first authorized to pay solely for the port of New Orleans and the Floridas",
+        "options": [
+          "$10 million",
+          "$15 million",
+          "doubled its size",
+          "Treaty of Cession"
+        ],
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "negotiators Robert Livingston and James Monroe were authorized to pay France up to $10 million solely for the port of New Orleans and the Floridas",
+        "hint": "Think about the original limit before the larger offer was made"
+      },
+      {
+        "id": "treaty-structure-card",
+        "stem": "What treaty makes up the Agreement together with two financial conventions",
+        "options": [
+          "Treaty of Cession",
+          "Missouri Compromise",
+          "Compromise of 1850",
+          "Gadsden Purchase"
+        ],
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "The Louisiana Purchase Agreement is made up of the Treaty of Cession and the two conventions regarding the financial aspects of the transaction.",
+        "hint": "Look for the name of the formal agreement that transferred the territory"
+      },
+      {
+        "id": "expansion-effect-card",
+        "stem": "How did the transaction change the overall size of the nation",
+        "options": [
+          "doubled its size",
+          "exposed the sectional weaknesses",
+          "ignored the potential impact on Native Americans",
+          "first major cession of land"
+        ],
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "For roughly 4 cents an acre, the United States doubled its size, expanding the nation westward.",
+        "hint": "Consider the phrase describing the scale of growth after the deal"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029164430-26a8ce82:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "55b54696cc7743b7ba71d2b80ce85994",
+    "usage": {
+      "promptTokens": 2792,
+      "completionTokens": 6050,
+      "reasoningTokens": 5608,
+      "cachedTokens": 0
+    },
+    "latencyMs": 21718,
+    "estCostUSD": 0.0292025,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029164430-26a8ce82:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Westward Land Deal Review",
+    "sources": [
+      {
+        "id": "nara-louisiana-purchase-treaty",
+        "title": "Louisiana Purchase Treaty (1803) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/louisiana-purchase-treaty",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Louisiana Purchase Treaty (1803)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "6da19e2b0134ca81169b3c5b0a0461ae48243446219561e760b32cb2ed7cce4b"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "55b54696cc7743b7ba71d2b80ce85994",
+      "runId": "job-20261029164430-26a8ce82",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:46:05.121Z"
+    },
+    "seed": 979875117,
+    "cards": [
+      {
+        "id": "price-and-size-card",
+        "stem": "What amount did the United States pay for the land west of the Mississippi River in the 1803 transaction",
+        "options": [
+          "$15 million",
+          "$10 million",
+          "Treaty of Cession",
+          "Gadsden Purchase"
+        ],
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "the United States purchased 828,000 square miles of land west of the Mississippi River for $15 million",
+        "hint": "Recall the price named in the opening description of the transaction"
+      },
+      {
+        "id": "authorization-limit-card",
+        "stem": "How much were the negotiators first authorized to pay solely for the port of New Orleans and the Floridas",
+        "options": [
+          "$10 million",
+          "$15 million",
+          "doubled its size",
+          "Treaty of Cession"
+        ],
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "negotiators Robert Livingston and James Monroe were authorized to pay France up to $10 million solely for the port of New Orleans and the Floridas",
+        "hint": "Think about the original limit before the larger offer was made"
+      },
+      {
+        "id": "treaty-structure-card",
+        "stem": "What treaty makes up the Agreement together with two financial conventions",
+        "options": [
+          "Treaty of Cession",
+          "Missouri Compromise",
+          "Compromise of 1850",
+          "Gadsden Purchase"
+        ],
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "The Louisiana Purchase Agreement is made up of the Treaty of Cession and the two conventions regarding the financial aspects of the transaction.",
+        "hint": "Look for the name of the formal agreement that transferred the territory"
+      },
+      {
+        "id": "expansion-effect-card",
+        "stem": "How did the transaction change the overall size of the nation",
+        "options": [
+          "doubled its size",
+          "exposed the sectional weaknesses",
+          "ignored the potential impact on Native Americans",
+          "first major cession of land"
+        ],
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "For roughly 4 cents an acre, the United States doubled its size, expanding the nation westward.",
+        "hint": "Consider the phrase describing the scale of growth after the deal"
+      }
+    ]
+  }
+}

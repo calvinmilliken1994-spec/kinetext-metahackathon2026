@@ -1,0 +1,414 @@
+{
+  "gen": {
+    "schemaVersion": "compare-table-v1",
+    "title": "Cruise and takeoff wing configurations",
+    "entities": [
+      "cruise-condition",
+      "cruise condition",
+      "takeoff-landing-condition",
+      "takeoff or landing condition"
+    ],
+    "attributes": [
+      "airplane",
+      "airplane",
+      "wing-area",
+      "wing area"
+    ],
+    "cells": [
+      {
+        "id": "c-0-0",
+        "entityIndex": 0,
+        "attributeIndex": 0,
+        "value": "airplane on the left",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "The airplane on the left is shown in a cruise condition while the airplane on the right is shown in a takeoff or landing condition."
+      },
+      {
+        "id": "c-0-1",
+        "entityIndex": 0,
+        "attributeIndex": 1,
+        "value": "projected surface area",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "This slide shows the projected surface area for two different aircraft."
+      },
+      {
+        "id": "c-0-2",
+        "entityIndex": 0,
+        "attributeIndex": 2,
+        "value": "increase the wing area",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "Takeoff and landing are times of relatively low velocity, so to keep the lift high (to avoid the ground!) designers try to increase the wing area."
+      },
+      {
+        "id": "c-0-3",
+        "entityIndex": 0,
+        "attributeIndex": 3,
+        "value": "sliding the flaps backwards",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "This is done by sliding the flaps backwards along metal tracks and shifting the slats forward to increase the wing area."
+      },
+      {
+        "id": "c-1-0",
+        "entityIndex": 1,
+        "attributeIndex": 0,
+        "value": "airplane on the left",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "The airplane on the left is shown in a cruise condition while the airplane on the right is shown in a takeoff or landing condition."
+      },
+      {
+        "id": "c-1-1",
+        "entityIndex": 1,
+        "attributeIndex": 1,
+        "value": "projected surface area",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "This slide shows the projected surface area for two different aircraft."
+      },
+      {
+        "id": "c-1-2",
+        "entityIndex": 1,
+        "attributeIndex": 2,
+        "value": "increase the wing area",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "Takeoff and landing are times of relatively low velocity, so to keep the lift high (to avoid the ground!) designers try to increase the wing area."
+      },
+      {
+        "id": "c-1-3",
+        "entityIndex": 1,
+        "attributeIndex": 3,
+        "value": "sliding the flaps backwards",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "This is done by sliding the flaps backwards along metal tracks and shifting the slats forward to increase the wing area."
+      },
+      {
+        "id": "c-2-0",
+        "entityIndex": 2,
+        "attributeIndex": 0,
+        "value": "airplane on the right",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "The airplane on the left is shown in a cruise condition while the airplane on the right is shown in a takeoff or landing condition."
+      },
+      {
+        "id": "c-2-1",
+        "entityIndex": 2,
+        "attributeIndex": 1,
+        "value": "projected surface area",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "This slide shows the projected surface area for two different aircraft."
+      },
+      {
+        "id": "c-2-2",
+        "entityIndex": 2,
+        "attributeIndex": 2,
+        "value": "increase the wing area",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "Takeoff and landing are times of relatively low velocity, so to keep the lift high (to avoid the ground!) designers try to increase the wing area."
+      },
+      {
+        "id": "c-2-3",
+        "entityIndex": 2,
+        "attributeIndex": 3,
+        "value": "sliding the flaps backwards",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "This is done by sliding the flaps backwards along metal tracks and shifting the slats forward to increase the wing area."
+      },
+      {
+        "id": "c-3-0",
+        "entityIndex": 3,
+        "attributeIndex": 0,
+        "value": "airplane on the right",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "The airplane on the left is shown in a cruise condition while the airplane on the right is shown in a takeoff or landing condition."
+      },
+      {
+        "id": "c-3-1",
+        "entityIndex": 3,
+        "attributeIndex": 1,
+        "value": "projected surface area",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "This slide shows the projected surface area for two different aircraft."
+      },
+      {
+        "id": "c-3-2",
+        "entityIndex": 3,
+        "attributeIndex": 2,
+        "value": "increase the wing area",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "Takeoff and landing are times of relatively low velocity, so to keep the lift high (to avoid the ground!) designers try to increase the wing area."
+      },
+      {
+        "id": "c-3-3",
+        "entityIndex": 3,
+        "attributeIndex": 3,
+        "value": "sliding the flaps backwards",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "This is done by sliding the flaps backwards along metal tracks and shifting the slats forward to increase the wing area."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029163232-7543faf3:compare-table-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every compare-table text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "CT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 16 cell quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "CT-02",
+        "kind": "grounding",
+        "passed": false,
+        "message": "cells[0] (c-0-0): the entity \"cruise-condition\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[1] (c-0-1): the entity \"cruise-condition\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[2] (c-0-2): the entity \"cruise-condition\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[3] (c-0-3): the entity \"cruise-condition\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[8] (c-2-0): the entity \"takeoff-landing-condition\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[9] (c-2-1): the entity \"takeoff-landing-condition\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[10] (c-2-2): the entity \"takeoff-landing-condition\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[11] (c-2-3): the entity \"takeoff-landing-condition\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote)",
+        "path": "/cells/0/entityIndex",
+        "affected": [
+          "/cells/0/entityIndex",
+          "/cells/0/quote",
+          "/cells/1/entityIndex",
+          "/cells/1/quote",
+          "/cells/2/entityIndex",
+          "/cells/2/quote",
+          "/cells/3/entityIndex",
+          "/cells/3/quote",
+          "/cells/8/entityIndex",
+          "/cells/8/quote",
+          "/cells/9/entityIndex",
+          "/cells/9/quote",
+          "/cells/10/entityIndex",
+          "/cells/10/quote",
+          "/cells/11/entityIndex",
+          "/cells/11/quote"
+        ]
+      },
+      {
+        "id": "CT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the table shape is valid: 4 entities x 4 attributes with all 16 cells present exactly once (shape-valid)"
+      },
+      {
+        "id": "CT-04",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in entity names, attributes and cell values appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "CT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no attribute column offers 3 distinct cell values, so the UI falls back to reveal-only with unverified cells blanked as \"Not stated on this page\" — by design this is not a component failure (predict-cell-valid)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": false,
+        "message": "repair weakened the spec: /cells changed shape or list length (item counts and structure are frozen in a repair; the system prunes bad items via the drop helpers, the model never adds, removes or reorders items) (a compare-table-v1 repair must fix the failing checks by changing ONLY fields under the affected paths recomputed from revision 1, must keep every item and id stable — the system prunes bad items, never the model — and must never increase a tolerance or otherwise weaken the spec)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "e155c094026d4afca8ae8949664572ec",
+    "usage": {
+      "promptTokens": 4510,
+      "completionTokens": 12062,
+      "reasoningTokens": 10944,
+      "cachedTokens": 0
+    },
+    "latencyMs": 51424,
+    "estCostUSD": 0.056901,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029163232-7543faf3:compare-table-v1:r2",
+    "componentId": "compare-table-v1",
+    "title": "Cruise and takeoff wing configurations",
+    "sources": [
+      {
+        "id": "nasa-grc-effect-of-size-on-lift",
+        "title": "Effect of Size on Lift — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/effect-of-size-on-lift/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "1bd1a2678b2c2cb6f162ebbeb4ec95d6aa439d14002682604d2ac9cd680d76f4"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "e155c094026d4afca8ae8949664572ec",
+      "runId": "job-20261029163232-7543faf3",
+      "promptVersion": "s6-v2",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T16:34:37.616Z"
+    },
+    "seed": 2525651018,
+    "entities": [
+      "cruise-condition",
+      "cruise condition",
+      "takeoff-landing-condition",
+      "takeoff or landing condition"
+    ],
+    "attributes": [
+      "airplane",
+      "airplane",
+      "wing-area",
+      "wing area"
+    ],
+    "cells": [
+      {
+        "id": "c-0-0",
+        "entityIndex": 0,
+        "attributeIndex": 0,
+        "value": "airplane on the left",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "The airplane on the left is shown in a cruise condition while the airplane on the right is shown in a takeoff or landing condition."
+      },
+      {
+        "id": "c-0-1",
+        "entityIndex": 0,
+        "attributeIndex": 1,
+        "value": "projected surface area",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "This slide shows the projected surface area for two different aircraft."
+      },
+      {
+        "id": "c-0-2",
+        "entityIndex": 0,
+        "attributeIndex": 2,
+        "value": "increase the wing area",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "Takeoff and landing are times of relatively low velocity, so to keep the lift high (to avoid the ground!) designers try to increase the wing area."
+      },
+      {
+        "id": "c-0-3",
+        "entityIndex": 0,
+        "attributeIndex": 3,
+        "value": "sliding the flaps backwards",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "This is done by sliding the flaps backwards along metal tracks and shifting the slats forward to increase the wing area."
+      },
+      {
+        "id": "c-1-0",
+        "entityIndex": 1,
+        "attributeIndex": 0,
+        "value": "airplane on the left",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "The airplane on the left is shown in a cruise condition while the airplane on the right is shown in a takeoff or landing condition."
+      },
+      {
+        "id": "c-1-1",
+        "entityIndex": 1,
+        "attributeIndex": 1,
+        "value": "projected surface area",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "This slide shows the projected surface area for two different aircraft."
+      },
+      {
+        "id": "c-1-2",
+        "entityIndex": 1,
+        "attributeIndex": 2,
+        "value": "increase the wing area",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "Takeoff and landing are times of relatively low velocity, so to keep the lift high (to avoid the ground!) designers try to increase the wing area."
+      },
+      {
+        "id": "c-1-3",
+        "entityIndex": 1,
+        "attributeIndex": 3,
+        "value": "sliding the flaps backwards",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "This is done by sliding the flaps backwards along metal tracks and shifting the slats forward to increase the wing area."
+      },
+      {
+        "id": "c-2-0",
+        "entityIndex": 2,
+        "attributeIndex": 0,
+        "value": "airplane on the right",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "The airplane on the left is shown in a cruise condition while the airplane on the right is shown in a takeoff or landing condition."
+      },
+      {
+        "id": "c-2-1",
+        "entityIndex": 2,
+        "attributeIndex": 1,
+        "value": "projected surface area",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "This slide shows the projected surface area for two different aircraft."
+      },
+      {
+        "id": "c-2-2",
+        "entityIndex": 2,
+        "attributeIndex": 2,
+        "value": "increase the wing area",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "Takeoff and landing are times of relatively low velocity, so to keep the lift high (to avoid the ground!) designers try to increase the wing area."
+      },
+      {
+        "id": "c-2-3",
+        "entityIndex": 2,
+        "attributeIndex": 3,
+        "value": "sliding the flaps backwards",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "This is done by sliding the flaps backwards along metal tracks and shifting the slats forward to increase the wing area."
+      },
+      {
+        "id": "c-3-0",
+        "entityIndex": 3,
+        "attributeIndex": 0,
+        "value": "airplane on the right",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "The airplane on the left is shown in a cruise condition while the airplane on the right is shown in a takeoff or landing condition."
+      },
+      {
+        "id": "c-3-1",
+        "entityIndex": 3,
+        "attributeIndex": 1,
+        "value": "projected surface area",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "This slide shows the projected surface area for two different aircraft."
+      },
+      {
+        "id": "c-3-2",
+        "entityIndex": 3,
+        "attributeIndex": 2,
+        "value": "increase the wing area",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "Takeoff and landing are times of relatively low velocity, so to keep the lift high (to avoid the ground!) designers try to increase the wing area."
+      },
+      {
+        "id": "c-3-3",
+        "entityIndex": 3,
+        "attributeIndex": 3,
+        "value": "sliding the flaps backwards",
+        "sourceId": "nasa-grc-effect-of-size-on-lift",
+        "quote": "This is done by sliding the flaps backwards along metal tracks and shifting the slats forward to increase the wing area."
+      }
+    ]
+  }
+}

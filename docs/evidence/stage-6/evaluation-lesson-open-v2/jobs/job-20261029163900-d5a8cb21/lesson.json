@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261029163900-d5a8cb21",
+  "analysisRef": "job-20261029163900-d5a8cb21/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029163900-d5a8cb21:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Waste classes decay hazards storage and disposal overview",
+    "sources": [
+      {
+        "id": "nrc-backgrounder-radioactive-waste",
+        "title": "Backgrounder on Radioactive Waste — U.S. Nuclear Regulatory Commission",
+        "locator": "https://www.nrc.gov/regulations-legislation/fact-sheets-brochures/backgrounder-on-radioactive-waste",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Nuclear Regulatory Commission, 'Backgrounder on Radioactive Waste', Fact Sheets & Brochures. NRC's website constitutes a U.S. Government Work under federal copyright law and is not subject to copyright. The U.S. Nuclear Regulatory Commission has not reviewed, approved or endorsed this activity.",
+        "sha256": "096bd0acfbc24540be6110113c96ed0fa4b892969980ff5bcf1d7834bc1d71b7"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "ece5c4cb3df74bcfa40194624ba1e4e0",
+      "runId": "job-20261029163900-d5a8cb21",
+      "promptVersion": "s6-v2",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T16:40:19.653Z"
+    },
+    "seed": 4258324502,
+    "headline": "Waste classes decay hazards storage and disposal overview",
+    "keyPoints": [
+      {
+        "id": "waste-byproduct-origin",
+        "point": "Radioactive waste is a byproduct from reactors at plants and hospitals and research facilities",
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "quote": "Radioactive (or nuclear) waste is a byproduct from nuclear reactors, fuel processing plants, hospitals and research facilities."
+      },
+      {
+        "id": "waste-classifications",
+        "point": "Two broad classifications divide waste into high-level and low-level types",
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "quote": "There are two broad classifications: high-level or low-level waste."
+      },
+      {
+        "id": "half-life-decay",
+        "point": "Strontium and cesium isotopes have half-lives of about 30 years when radioactivity will decay by half",
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "quote": "Strontium-90 and cesium-137 have half-lives of about 30 years (half the radioactivity will decay in 30 years)."
+      },
+      {
+        "id": "temporary-storage",
+        "point": "Spent fuel storage at plant sites is considered temporary before permanent disposal",
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "quote": "Spent fuel storage at power plant sites is considered temporary, with the ultimate goal being permanent disposal."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "nuclear-reactors",
+        "term": "fuel processing plants",
+        "gloss": "facilities that use fission to produce energy and generate waste",
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "quote": "Radioactive (or nuclear) waste is a byproduct from nuclear reactors, fuel processing plants, hospitals and research facilities."
+      },
+      {
+        "id": "low-level-waste",
+        "term": "low-level waste",
+        "gloss": "waste defined as other than high-level and from medical and industrial sites for disposal",
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "quote": "There are two broad classifications: high-level or low-level waste."
+      },
+      {
+        "id": "half-lives",
+        "term": "half-lives",
+        "gloss": "time of about years for half the radioactivity to decay",
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "quote": "Strontium-90 and cesium-137 have half-lives of about 30 years (half the radioactivity will decay in 30 years)."
+      },
+      {
+        "id": "fission-products",
+        "term": "fission products",
+        "gloss": "isotopes created when uranium splits that contribute heat and radiation",
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "quote": "These isotopes, called \"fission products,\" account for most of the heat and penetrating radiation in high-level waste."
+      },
+      {
+        "id": "spent-fuel-pools",
+        "term": "spent fuel pools",
+        "gloss": "pools of water several feet deep that shield radiation and cool rods",
+        "sourceId": "nrc-backgrounder-radioactive-waste",
+        "quote": "All U.S. nuclear power plants store spent nuclear fuel in \"spent fuel pools.\""
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "half-life-v1",
+      "specId": "nrc-backgrounder-radioactive-waste-job-20261029163900-d5a8cb21",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sort-groups-v1",
+      "specId": "job-20261029163900-d5a8cb21:sort-groups-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

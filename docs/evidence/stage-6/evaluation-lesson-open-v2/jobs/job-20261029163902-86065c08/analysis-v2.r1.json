@@ -1,0 +1,207 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "chemistry",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "Explains plutonium origins and creation in reactors radioactive emissions and isotopes half-lives decay and daughter products uses in power and space and spent fuel reprocessing into mixed oxide fuel",
+    "overview": {
+      "headline": "Radioactive plutonium isotopes half-lives decay and reactor fuel cycle",
+      "keyPoints": [
+        {
+          "id": "plutonium-element",
+          "point": "Plutonium is a radioactive metallic element with atomic number 94 created when uranium atoms absorb neutrons in a reactor",
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "Plutonium is a radioactive metallic element with the atomic number 94."
+        },
+        {
+          "id": "alpha-radiation-toxicity",
+          "point": "Plutonium predominantly emits alpha particles with short range easily stopped but can cause lung damage if inhaled",
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "Plutonium predominantly emits alpha particles – a type of radiation that is easily stopped and has a short range."
+        },
+        {
+          "id": "isotopes-half-lives",
+          "point": "Different plutonium isotopes have different half-lives such as Pu-239 with a half-life of 24,100 years and Pu-241 with half-life of 14.4 years and shorter half-lives decay more quickly",
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "Pu-239 has a half-life of 24,100 years and Pu-241’s half-life is 14.4 years."
+        },
+        {
+          "id": "reprocessing-mox",
+          "point": "Spent nuclear fuel contains about 1 percent plutonium by weight and reprocessing uses chemicals to separate plutonium for mixed oxide fuel",
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "Spent nuclear fuel from U.S. reactors contains about 1 percent plutonium by weight."
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "plutonium",
+          "term": "plutonium",
+          "gloss": "radioactive metallic element with atomic number created when uranium absorbs neutrons in reactors",
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "Plutonium is a radioactive metallic element with the atomic number 94."
+        },
+        {
+          "id": "alpha-particles",
+          "term": "alpha particles",
+          "gloss": "type of radiation with short range that is easily stopped and emitted by plutonium",
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "Plutonium predominantly emits alpha particles – a type of radiation that is easily stopped and has a short range."
+        },
+        {
+          "id": "isotopes",
+          "term": "isotopes",
+          "gloss": "common forms of plutonium including Pu-239 and Pu-240 that share chemistry but differ in nucleus",
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "There are five “common” isotopes of plutonium, Pu-238, Pu-239, Pu-240, Pu-241, and Pu-242."
+        },
+        {
+          "id": "half-life",
+          "term": "half-life",
+          "gloss": "time in years for half of a sample to lose radioactivity with shorter values meaning more energetic decay",
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "Pu-239 has a half-life of 24,100 years and Pu-241’s half-life is 14.4 years."
+        },
+        {
+          "id": "reprocessing",
+          "term": "reprocessing",
+          "gloss": "process that uses chemicals to separate plutonium from uranium and fission products for reuse",
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "This process, known as reprocessing, uses chemicals to separate plutonium from uranium and other fission products."
+        },
+        {
+          "id": "mox-fuel",
+          "term": "MOX fuel",
+          "gloss": "fuel made from mixed plutonium oxide and uranium oxide used to power reactors",
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "Once separated, plutonium oxide can be mixed with uranium oxide to produce mixed oxide or MOX fuel."
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "half-life-v1",
+        "pedagogicalReason": "Introduces half-life definition and compares isotopes to build foundation for decay and energy concepts before fact recall",
+        "focusQuote": "The different isotopes have different “half-lives” – the time it takes to lose half of its radioactivity.",
+        "focusSourceId": "nrc-backgrounder-plutonium"
+      },
+      {
+        "componentId": "quiz-cards-v1",
+        "pedagogicalReason": "Reinforces checkable facts about plutonium properties origins uses and reactor fuel through active recall of quoted statements",
+        "focusQuote": "Spent nuclear fuel from U.S. reactors contains about 1 percent plutonium by weight.",
+        "focusSourceId": "nrc-backgrounder-plutonium"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029163902-86065c08:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"chemistry\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 2853 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 12 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 4, keyTerms 6, componentPlan 2; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (2 entries, 1 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": false,
+        "message": "publisher claim found at /overview/keyPoints/3/point: \"Spent nuclear fuel contains about 1 percent plutonium by wei\" (token \"nuclear\") (R-SUB-4: never name the publisher in generated strings, and never use \"according to\" / \"as stated by\" / \"official\" / \"endorsed\" wording)",
+        "path": "/overview/keyPoints/3/point",
+        "affected": [
+          "/overview/keyPoints/3/point"
+        ]
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": false,
+        "message": "keyPoints[0].point states the number 94, which does not appear on the page or in the same quote (N-01); keyPoints[2].point states the number 24100, which does not appear on the page or in the same quote (N-01)",
+        "path": "/overview/keyPoints/0/point",
+        "affected": [
+          "/overview/keyPoints/0/point",
+          "/overview/keyPoints/2/point"
+        ]
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "baed4aab7e0049828802bff234a458e7",
+    "usage": {
+      "promptTokens": 4062,
+      "completionTokens": 10449,
+      "reasoningTokens": 9500,
+      "cachedTokens": 0
+    },
+    "latencyMs": 44182,
+    "estCostUSD": 0.04948575,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

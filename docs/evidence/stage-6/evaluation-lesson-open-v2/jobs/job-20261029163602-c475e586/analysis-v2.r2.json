@@ -1,0 +1,197 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "earth-science",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "Page covers how temperature pressure and density vary with altitude and defines English units atmosphere model with three zones troposphere lower stratosphere upper stratosphere plus density equation and simulation note",
+    "overview": {
+      "headline": "Layered standard atmosphere model linking temperature pressure and density to altitude",
+      "keyPoints": [
+        {
+          "id": "thin-atmosphere-sheet",
+          "point": "Atmosphere is extremely thin sheet extending from surface to edge of space about 60 miles",
+          "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+          "quote": "an extremely thin sheet of air extending from the surface of the Earth to the edge of space, about 60 miles above the surface of the Earth."
+        },
+        {
+          "id": "temperature-altitude-variation",
+          "point": "Temperature highest near surface and decreases as altitude increases while pressure also decreases with altitude",
+          "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+          "quote": "Thus the air temperature is highest near the surface and decreases as altitude increases."
+        },
+        {
+          "id": "troposphere-zone-altitude",
+          "point": "Troposphere runs from surface with temperature decreasing linearly and pressure decreasing exponentially",
+          "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+          "quote": "The troposphere runs from the surface of the Earth to 36,152 feet."
+        },
+        {
+          "id": "density-equation-state",
+          "point": "Density in each zone derived from equation of state using pressure and temperature",
+          "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+          "quote": "In each zone the density rho (ρ) is derived from the equation of state:"
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "troposphere",
+          "term": "troposphere",
+          "gloss": "lowest zone from surface where temperature decreases",
+          "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+          "quote": "The troposphere runs from the surface of the Earth to 36,152 feet."
+        },
+        {
+          "id": "lapse-rate",
+          "term": "lapse rate",
+          "gloss": "rate of temperature decrease with altitude in troposphere",
+          "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+          "quote": "The rate of temperature decrease is called the lapse rate."
+        },
+        {
+          "id": "density",
+          "term": "density",
+          "gloss": "density depends on temperature and pressure through equation of state",
+          "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+          "quote": "The air density depends on both the temperature and the pressure through the equation of state and also decreases with increasing altitude."
+        },
+        {
+          "id": "lower-stratosphere",
+          "term": "lower stratosphere",
+          "gloss": "stratosphere zone with constant temperature where pressure decreases",
+          "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+          "quote": "The lower stratosphere runs from 36,152 feet to 82,345 feet."
+        },
+        {
+          "id": "equation-of-state",
+          "term": "equation of state",
+          "gloss": "equation of state relates density pressure and temperature within each zone",
+          "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+          "quote": "In each zone the density rho (ρ) is derived from the equation of state:"
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "sequence-v1",
+        "pedagogicalReason": "Layered zones build in altitude order so sequence helps learners see where each temperature and pressure curve applies",
+        "focusQuote": "The model has three zones with separate curve fits for the troposphere, the lower stratosphere, and the upper stratosphere.",
+        "focusSourceId": "nasa-grc-earth-atmosphere-equation-english"
+      },
+      {
+        "componentId": "formula-explorer-v1",
+        "pedagogicalReason": "Exploring density equation shows how pressure and temperature values generate density for any altitude zone",
+        "focusQuote": "rho = p / (1718 * (T + 459.7))",
+        "focusSourceId": "nasa-grc-earth-atmosphere-equation-english"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029163602-c475e586:analysis",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"earth-science\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 3855 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 11 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 4, keyTerms 5, componentPlan 2; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (2 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "source-analysis-v2: no weakening — every one of the 3 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "02cee8eae3854446b8fe77be826f4c28",
+    "usage": {
+      "promptTokens": 6894,
+      "completionTokens": 7137,
+      "reasoningTokens": 6335,
+      "cachedTokens": 0
+    },
+    "latencyMs": 26167,
+    "estCostUSD": 0.03894975,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "jobId": "job-20261029164133-8e06fad4",
+  "sourceId": "usgs-fossils-numeric-time-scale",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-29T16:41:33.518Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.244504,
+  "reservedUnknownUSD": 0,
+  "engine": "half-life-v1",
+  "revisions": 1,
+  "repairs": [],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 34632,
+    "startedAt": "2026-10-29T16:41:33.518Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 1,
+    "componentsFailed": 1,
+    "partialPublish": true
+  },
+  "componentRepairs": [
+    {
+      "componentId": "quiz-cards-v1",
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "Q-06"
+      ],
+      "fixed": [],
+      "remaining": [
+        "Q-06"
+      ],
+      "passed": false
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "attempt": 2,
+      "revision": 3,
+      "targeted": [
+        "Q-06"
+      ],
+      "fixed": [],
+      "remaining": [
+        "Q-06"
+      ],
+      "passed": false
+    }
+  ],
+  "specId": "usgs-fossils-numeric-time-scale-job-20261029164133-8e06fad4",
+  "publishable": true,
+  "checksPassed": 14,
+  "checksTotal": 14,
+  "publishedRevision": 1,
+  "finishedAt": "2026-10-29T16:44:29.921Z"
+}

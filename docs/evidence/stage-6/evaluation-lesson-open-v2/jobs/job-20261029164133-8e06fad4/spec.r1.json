@@ -1,0 +1,166 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "usgs-fossils-numeric-time-scale-job-20261029164133-8e06fad4",
+  "title": "Radioactive Decay and Geologic Time",
+  "learningObjectives": [
+    "Define half-life as the time required for exactly one-half of parent atoms to decay to daughter atoms at a constant rate",
+    "Use the equation N=N0*(1/2)^(t/T) to calculate the amount of a radioactive substance remaining after a given time",
+    "Explain how measuring parent and daughter isotopes helps assign numeric ages to boundaries on the geologic time scale using many samples"
+  ],
+  "sources": [
+    {
+      "id": "usgs-fossils-numeric-time-scale",
+      "title": "Fossils, Rocks, and Time: The Numeric Time Scale — U.S. Geological Survey",
+      "locator": "https://pubs.usgs.gov/gip/fossils/numeric.html",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: U.S. Geological Survey, 'Fossils, Rocks, and Time: The Numeric Time Scale' (1997). Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+      "sha256": "d6ba577d359485d9ea0ae92e97f294d27bb3a67e23758783067591896f570f2d"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "exp-half-life",
+      "text": "Radioactive decay from parent to daughter happens at a constant rate defined by half-life, which is the time needed for one-half of the parent atoms to decay.",
+      "evidence": [
+        {
+          "sourceId": "usgs-fossils-numeric-time-scale",
+          "quote": "The change from parent to daughter happens at a constant rate, called the half-life."
+        },
+        {
+          "sourceId": "usgs-fossils-numeric-time-scale",
+          "quote": "The half-life of a radioactive isotope is the length of time required for exactly one-half of the parent atoms to decay to daughter atoms."
+        }
+      ]
+    },
+    {
+      "id": "exp-isotopes",
+      "text": "Isotopes are atoms of the same element with different numbers of neutrons, and each radioactive isotope has its own unique half-life as it converts to a daughter isotope.",
+      "evidence": [
+        {
+          "sourceId": "usgs-fossils-numeric-time-scale",
+          "quote": "Isotopes of an element are atoms that differ from one another only in the number of neutrons in the nucleus."
+        },
+        {
+          "sourceId": "usgs-fossils-numeric-time-scale",
+          "quote": "Each radioactive isotope has its own unique half-life."
+        }
+      ]
+    },
+    {
+      "id": "exp-geologic-dating",
+      "text": "Measuring remaining parent atoms and new daughter atoms can be used to compute the age of a rock, but assigning a numeric age to a boundary on the geologic time scale requires many samples from different places.",
+      "evidence": [
+        {
+          "sourceId": "usgs-fossils-numeric-time-scale",
+          "quote": "Many samples, usually from several different places, must be studied before assigning a numeric age to a boundary on the geologic time scale."
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "half-life-v1",
+    "equation": "N=N0*(1/2)^(t/T)",
+    "initialAmount": {
+      "unit": "1",
+      "min": 1,
+      "max": 1000,
+      "default": 100
+    },
+    "halfLife": {
+      "unit": "time",
+      "min": 1,
+      "max": 10,
+      "default": 5
+    },
+    "elapsedTime": {
+      "unit": "time",
+      "min": 0,
+      "max": 25,
+      "default": 5
+    },
+    "scenario": {
+      "objectLabel": "Radioactive sample (grams)",
+      "settingLabel": "Half-life in years"
+    }
+  },
+  "behavioralTests": [
+    {
+      "name": "one half-life t equals T",
+      "initialAmount": 100,
+      "halfLife": 5,
+      "elapsedTime": 5,
+      "expectedRemaining": 50,
+      "tolerance": 0.001
+    },
+    {
+      "name": "two half-lives t equals 2T",
+      "initialAmount": 100,
+      "halfLife": 5,
+      "elapsedTime": 10,
+      "expectedRemaining": 25,
+      "tolerance": 0.001
+    },
+    {
+      "name": "zero elapsed time no decay",
+      "initialAmount": 200,
+      "halfLife": 4,
+      "elapsedTime": 0,
+      "expectedRemaining": 200,
+      "tolerance": 0.001
+    },
+    {
+      "name": "three half-lives",
+      "initialAmount": 80,
+      "halfLife": 2,
+      "elapsedTime": 6,
+      "expectedRemaining": 10,
+      "tolerance": 0.001
+    }
+  ],
+  "predictions": [
+    {
+      "id": "pred-1",
+      "prompt": "Predict how much remains after one half-life",
+      "initialAmount": 100,
+      "halfLife": 5,
+      "elapsedTime": 5,
+      "expectedRemaining": 50,
+      "tolerance": 0.001
+    },
+    {
+      "id": "pred-2",
+      "prompt": "Predict remaining amount after two half-lives for a larger sample",
+      "initialAmount": 800,
+      "halfLife": 4,
+      "elapsedTime": 8,
+      "expectedRemaining": 200,
+      "tolerance": 0.001
+    },
+    {
+      "id": "pred-3",
+      "prompt": "Predict remaining amount after four half-lives",
+      "initialAmount": 640,
+      "halfLife": 3,
+      "elapsedTime": 12,
+      "expectedRemaining": 40,
+      "tolerance": 0.001
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "b997ea36d37443478abbf16ab85e9c95",
+    "runId": "job-20261029164133-8e06fad4",
+    "promptVersion": "v9",
+    "generatedAt": "2026-10-29T16:43:36.549Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

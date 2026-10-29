@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261029163759-48086d2a",
+  "analysisRef": "job-20261029163759-48086d2a/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029163759-48086d2a:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Earlier saving lets compound interest grow money for education costs over time",
+    "sources": [
+      {
+        "id": "cfpb-saving-post-secondary-education",
+        "title": "Saving for post-secondary education (teacher guide) — Consumer Financial Protection Bureau, Building Blocks activities",
+        "locator": "https://files.consumerfinance.gov/f/documents/cfpb_building_block_activities_saving-post-secondary-education_guide.pdf",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Consumer Financial Protection Bureau, Building Blocks activities, 'Saving for post-secondary education (teacher guide)'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+        "sha256": "243a4b56c86936ecc243da4c7fc982bc76b85ee12116c97e4f751cfb8ba6c926"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "946c89126ad24bb694a1a2b980f78a5e",
+      "runId": "job-20261029163759-48086d2a",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:38:31.075Z"
+    },
+    "seed": 2145414399,
+    "headline": "Earlier saving lets compound interest grow money for education costs over time",
+    "keyPoints": [
+      {
+        "id": "compound-interest-definition",
+        "point": "Compound interest earns interest on both saved money and earned interest",
+        "sourceId": "cfpb-saving-post-secondary-education",
+        "quote": "Compound interest: When you earn interest on both the money you save and the interest you earn."
+      },
+      {
+        "id": "early-saving-growth",
+        "point": "Saving early in an account that pays interest helps money grow faster",
+        "sourceId": "cfpb-saving-post-secondary-education",
+        "quote": "The sooner you start saving in an account that pays interest, the faster your money can grow."
+      },
+      {
+        "id": "calculator-exploration",
+        "point": "Students explore growth over time using an online compound interest calculator",
+        "sourceId": "cfpb-saving-post-secondary-education",
+        "quote": "Students use an online compound interest calculator to explore the value of saving money over time for future education goals."
+      },
+      {
+        "id": "postsecondary-scope",
+        "point": "Post-secondary schooling after high school includes forms beyond just college",
+        "sourceId": "cfpb-saving-post-secondary-education",
+        "quote": "Post-secondary education: Includes all forms of schooling after high school, not just college."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "compound-interest",
+        "term": "Compound interest",
+        "gloss": "interest earned on saved money plus previously earned interest",
+        "sourceId": "cfpb-saving-post-secondary-education",
+        "quote": "Compound interest: When you earn interest on both the money you save and the interest you earn."
+      },
+      {
+        "id": "interest-rate",
+        "term": "Interest rate",
+        "gloss": "percentage charged for borrowed money or paid for deposited money",
+        "sourceId": "cfpb-saving-post-secondary-education",
+        "quote": "Interest rate: A percentage of a sum borrowed that is charged by a lender or merchant for letting you use its money."
+      },
+      {
+        "id": "principal",
+        "term": "principal",
+        "gloss": "initial amount you invest that earns interest over time",
+        "sourceId": "cfpb-saving-post-secondary-education",
+        "quote": "So let's say you invest $1,000 (your principal) and it earns 5 percent (interest rate) once a year (the compounding frequency)."
+      },
+      {
+        "id": "post-secondary-education",
+        "term": "Post-secondary education",
+        "gloss": "all forms of schooling after high school beyond just college",
+        "sourceId": "cfpb-saving-post-secondary-education",
+        "quote": "Post-secondary education: Includes all forms of schooling after high school, not just college."
+      },
+      {
+        "id": "investment",
+        "term": "Investment",
+        "gloss": "something you spend money on that you expect will earn a financial return",
+        "sourceId": "cfpb-saving-post-secondary-education",
+        "quote": "Investment: Something you spend your money on that you expect will earn a financial return."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "compound-interest-v1",
+      "specId": "cfpb-saving-post-secondary-education-job-20261029163759-48086d2a",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029163759-48086d2a:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

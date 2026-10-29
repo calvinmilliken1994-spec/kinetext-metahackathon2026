@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261029163043-8ed2d068",
+  "analysisRef": "job-20261029163043-8ed2d068/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029163043-8ed2d068:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Balanced and unbalanced forces govern aircraft rise fall and acceleration",
+    "sources": [
+      {
+        "id": "nasa-grc-simplified-aircraft-motion",
+        "title": "Simplified Aircraft Motion — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/simplified-aircraft-motion/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "21d6273d590cd157b690fe9491c4c0d202f5b35c5e5a31a8c072b37bbe89edd5"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "e3464117aa254073b88a1942e1363a6f",
+      "runId": "job-20261029163043-8ed2d068",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:31:51.708Z"
+    },
+    "seed": 3885964021,
+    "headline": "Balanced and unbalanced forces govern aircraft rise fall and acceleration",
+    "keyPoints": [
+      {
+        "id": "simplified-rules",
+        "point": "rules for simplified motion of an aircraft are shown with one force balanced at a time",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "This page shows some rules for the simplified motion of an aircraft."
+      },
+      {
+        "id": "steady-flight",
+        "point": "aircraft will maintain constant cruise velocity when weight balanced by lift and drag balanced by thrust",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "In this situation, the aircraft will maintain at a constant cruise velocity as described by Newton’s first law of motion."
+      },
+      {
+        "id": "unbalanced-motion",
+        "point": "unbalanced forces cause aircraft to move in direction of greater force",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "If the forces become unbalanced, the aircraft will move in the direction of the greater force."
+      },
+      {
+        "id": "net-force-difference",
+        "point": "net force is difference between opposing forces lift minus weight or thrust minus drag",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "The net force is the difference between the opposing forces; lift minus weight, or thrust minus drag."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "acceleration-term",
+        "term": "acceleration",
+        "gloss": "rate of change of velocity driven by net force acting on aircraft",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Where a is the acceleration, m is the mass of the aircraft, and F is the net force acting on the aircraft."
+      },
+      {
+        "id": "mass-term",
+        "term": "mass",
+        "gloss": "quantity of matter in aircraft that determines acceleration from net force",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Where a is the acceleration, m is the mass of the aircraft, and F is the net force acting on the aircraft."
+      },
+      {
+        "id": "lift-term",
+        "term": "lift",
+        "gloss": "upward force that when greater than weight makes airplane rise",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "If the weight is decreased while the lift is held constant, the airplane will rise:"
+      },
+      {
+        "id": "thrust-term",
+        "term": "thrust",
+        "gloss": "forward force that when greater than drag causes plane to accelerate",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Similarly, increasing the thrust while the drag is constant will cause the plane to accelerate:"
+      },
+      {
+        "id": "drag-term",
+        "term": "drag",
+        "gloss": "rearward force that when greater than thrust causes plane to slow down",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "And increasing the drag at a constant thrust will cause the plane to slow down:"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "forces-1d-v1",
+      "specId": "nasa-grc-simplified-aircraft-motion-job-20261029163043-8ed2d068",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029163043-8ed2d068:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

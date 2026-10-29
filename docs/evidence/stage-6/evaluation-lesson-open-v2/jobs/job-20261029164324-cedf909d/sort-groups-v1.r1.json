@@ -1,0 +1,255 @@
+{
+  "gen": {
+    "schemaVersion": "sort-groups-v1",
+    "title": "Sorting human traits by mating pattern",
+    "groups": [
+      {
+        "id": "positive-assortative-mating",
+        "label": "positive assortative mating"
+      },
+      {
+        "id": "negative-assortative-mating",
+        "label": "negative assortative mating"
+      },
+      {
+        "id": "random-mating",
+        "label": "random mating"
+      }
+    ],
+    "items": [
+      {
+        "id": "height",
+        "label": "height",
+        "groupId": "positive-assortative-mating",
+        "sourceId": "nij-random-mating",
+        "quote": "especially with respect to evident or visible traits such as height, I.Q., and ethnicity."
+      },
+      {
+        "id": "iq",
+        "label": "I.Q.",
+        "groupId": "positive-assortative-mating",
+        "sourceId": "nij-random-mating",
+        "quote": "visible traits such as height, I.Q., and ethnicity."
+      },
+      {
+        "id": "ethnicity",
+        "label": "ethnicity",
+        "groupId": "positive-assortative-mating",
+        "sourceId": "nij-random-mating",
+        "quote": "such as height, I.Q., and ethnicity."
+      },
+      {
+        "id": "physical-attributes",
+        "label": "physical attributes",
+        "groupId": "positive-assortative-mating",
+        "sourceId": "nij-random-mating",
+        "quote": "While humans often mate with individuals alike in characteristics such as physical attributes,"
+      },
+      {
+        "id": "dissimilar-genotypes",
+        "label": "dissimilar genotypes",
+        "groupId": "negative-assortative-mating",
+        "sourceId": "nij-random-mating",
+        "quote": "negative assortative mating is breeding between individuals with dissimilar genotypes, and is more rare."
+      },
+      {
+        "id": "heterozygotes",
+        "label": "heterozygotes",
+        "groupId": "negative-assortative-mating",
+        "sourceId": "nij-random-mating",
+        "quote": "Positive assortative mating leads to an increase in homozygotes whereas negative assortative mating leads to an increase in heterozygotes."
+      },
+      {
+        "id": "blood-type",
+        "label": "blood type",
+        "groupId": "random-mating",
+        "sourceId": "nij-random-mating",
+        "quote": "they mate randomly with respect to other traits such as blood type and short tandem repeat (STR) genotype."
+      },
+      {
+        "id": "str-genotype",
+        "label": "short tandem repeat (STR) genotype",
+        "groupId": "random-mating",
+        "sourceId": "nij-random-mating",
+        "quote": "short tandem repeat (STR) genotype"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029164324-cedf909d:sort-groups-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sort text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SORT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 8 item quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SORT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every item label occurs in its quote and every group label occurs in the quote or the same source paragraph (item-and-group-in-quote; the design discloses the weak-link false accept on long paragraphs — every quote is shown to the teacher)"
+      },
+      {
+        "id": "SORT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every declared group is referenced by >= 2 items and every item groupId resolves (groups-covered)"
+      },
+      {
+        "id": "SORT-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every item has a distinct label after normalisation (distinct-items)"
+      },
+      {
+        "id": "SORT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "groups 3 (2-4) and items 8 (6-12) are within the frozen counts (counts-valid)"
+      },
+      {
+        "id": "SORT-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in group and item labels appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "f840d24c27b24f749bebb47b5c098fd7",
+    "usage": {
+      "promptTokens": 2360,
+      "completionTokens": 8273,
+      "reasoningTokens": 7823,
+      "cachedTokens": 0
+    },
+    "latencyMs": 35425,
+    "estCostUSD": 0.03811025,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029164324-cedf909d:sort-groups-v1:r1",
+    "componentId": "sort-groups-v1",
+    "title": "Sorting human traits by mating pattern",
+    "sources": [
+      {
+        "id": "nij-random-mating",
+        "title": "Random Mating — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+        "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/hardy-weinberg-principle/random-mating",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Random Mating'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+        "sha256": "9f06caf792ddeb146476c0c5d2cf1851b1f5e8bd6f0fc7dfae8cb33d50725ad8"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "f840d24c27b24f749bebb47b5c098fd7",
+      "runId": "job-20261029164324-cedf909d",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:44:55.132Z"
+    },
+    "seed": 471443702,
+    "groups": [
+      {
+        "id": "positive-assortative-mating",
+        "label": "positive assortative mating"
+      },
+      {
+        "id": "negative-assortative-mating",
+        "label": "negative assortative mating"
+      },
+      {
+        "id": "random-mating",
+        "label": "random mating"
+      }
+    ],
+    "items": [
+      {
+        "id": "height",
+        "label": "height",
+        "groupId": "positive-assortative-mating",
+        "sourceId": "nij-random-mating",
+        "quote": "especially with respect to evident or visible traits such as height, I.Q., and ethnicity."
+      },
+      {
+        "id": "iq",
+        "label": "I.Q.",
+        "groupId": "positive-assortative-mating",
+        "sourceId": "nij-random-mating",
+        "quote": "visible traits such as height, I.Q., and ethnicity."
+      },
+      {
+        "id": "ethnicity",
+        "label": "ethnicity",
+        "groupId": "positive-assortative-mating",
+        "sourceId": "nij-random-mating",
+        "quote": "such as height, I.Q., and ethnicity."
+      },
+      {
+        "id": "physical-attributes",
+        "label": "physical attributes",
+        "groupId": "positive-assortative-mating",
+        "sourceId": "nij-random-mating",
+        "quote": "While humans often mate with individuals alike in characteristics such as physical attributes,"
+      },
+      {
+        "id": "dissimilar-genotypes",
+        "label": "dissimilar genotypes",
+        "groupId": "negative-assortative-mating",
+        "sourceId": "nij-random-mating",
+        "quote": "negative assortative mating is breeding between individuals with dissimilar genotypes, and is more rare."
+      },
+      {
+        "id": "heterozygotes",
+        "label": "heterozygotes",
+        "groupId": "negative-assortative-mating",
+        "sourceId": "nij-random-mating",
+        "quote": "Positive assortative mating leads to an increase in homozygotes whereas negative assortative mating leads to an increase in heterozygotes."
+      },
+      {
+        "id": "blood-type",
+        "label": "blood type",
+        "groupId": "random-mating",
+        "sourceId": "nij-random-mating",
+        "quote": "they mate randomly with respect to other traits such as blood type and short tandem repeat (STR) genotype."
+      },
+      {
+        "id": "str-genotype",
+        "label": "short tandem repeat (STR) genotype",
+        "groupId": "random-mating",
+        "sourceId": "nij-random-mating",
+        "quote": "short tandem repeat (STR) genotype"
+      }
+    ]
+  }
+}

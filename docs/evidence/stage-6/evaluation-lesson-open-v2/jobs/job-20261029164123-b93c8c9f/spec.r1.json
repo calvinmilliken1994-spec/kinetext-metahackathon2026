@@ -1,0 +1,202 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "usgs-powell-geologic-time-job-20261029164123-b93c8c9f",
+  "title": "Deep Time: From Steno to Radiometric Dating",
+  "learningObjectives": [
+    "Explain how Steno's laws of superposition establish relative geologic time",
+    "Describe Hutton's uniformitarianism and its implication of vast time",
+    "Understand how radioactivity discovery enabled absolute radiometric dating"
+  ],
+  "sources": [
+    {
+      "id": "usgs-powell-geologic-time",
+      "title": "Powell Expedition—Geologic Time. Then and Now. — U.S. Geological Survey",
+      "locator": "https://www.usgs.gov/news/powell-expedition-geologic-time-then-and-now",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: U.S. Geological Survey, 'Powell Expedition—Geologic Time. Then and Now.' (2019). Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+      "sha256": "fa7498537478e10722976127bedd9cf61ccb5dda39090e0a4f844635b5a8f71f"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "exp1",
+      "text": "Early stratigraphy showed rock layers record relative time with older layers below younger ones.",
+      "evidence": [
+        {
+          "sourceId": "usgs-powell-geologic-time",
+          "quote": "The law of superposition says that older rocks are on the bottom and younger rocks are on the top."
+        }
+      ]
+    },
+    {
+      "id": "exp2",
+      "text": "Uniformitarianism proposed that present-day processes explain past geologic change over immense timescales.",
+      "evidence": [
+        {
+          "sourceId": "usgs-powell-geologic-time",
+          "quote": "In 1788, James Hutton proposed what would become the foundational principle of geology — uniformitarianism."
+        }
+      ]
+    },
+    {
+      "id": "exp3",
+      "text": "The discovery of radioactivity provided a heat source and a clock for measuring absolute ages via half-lives.",
+      "evidence": [
+        {
+          "sourceId": "usgs-powell-geologic-time",
+          "quote": "It was the discovery of radioactivity in 1896 that changed the heat-flow picture dramatically."
+        },
+        {
+          "sourceId": "usgs-powell-geologic-time",
+          "quote": "A half-life is the length of time it takes for half of the number of original, or parent, isotopes to decay to a stable daughter isotope."
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "timeline-v1",
+    "events": [
+      {
+        "id": "e1",
+        "label": "Steno formulates laws of stratigraphy",
+        "year": 1669,
+        "month": 0,
+        "day": 0,
+        "evidence": [
+          {
+            "sourceId": "usgs-powell-geologic-time",
+            "quote": "Nicholas Steno, 1669, gets credit for first writing down basic geological principles as laws."
+          }
+        ]
+      },
+      {
+        "id": "e2",
+        "label": "Hutton proposes uniformitarianism",
+        "year": 1788,
+        "month": 0,
+        "day": 0,
+        "evidence": [
+          {
+            "sourceId": "usgs-powell-geologic-time",
+            "quote": "In 1788, James Hutton proposed what would become the foundational principle of geology — uniformitarianism."
+          }
+        ]
+      },
+      {
+        "id": "e3",
+        "label": "First geologic time scale published",
+        "year": 1841,
+        "month": 0,
+        "day": 0,
+        "evidence": [
+          {
+            "sourceId": "usgs-powell-geologic-time",
+            "quote": "The first geologic time scale was published in 1841 — Powell certainly would have known of it and used it in his geologic trips to the West."
+          }
+        ]
+      },
+      {
+        "id": "e4",
+        "label": "Huxley challenges Kelvin's cooling age",
+        "year": 1869,
+        "month": 0,
+        "day": 0,
+        "evidence": [
+          {
+            "sourceId": "usgs-powell-geologic-time",
+            "quote": "In 1869, the same year Powell launched his expedition, English scientist Thomas Huxley challenged Lord Kelvin’s calculation,"
+          }
+        ]
+      },
+      {
+        "id": "e5",
+        "label": "Discovery of radioactivity changes time scale",
+        "year": 1896,
+        "month": 0,
+        "day": 0,
+        "evidence": [
+          {
+            "sourceId": "usgs-powell-geologic-time",
+            "quote": "It was the discovery of radioactivity in 1896 that changed the heat-flow picture dramatically."
+          }
+        ]
+      },
+      {
+        "id": "e6",
+        "label": "Patterson dates Canyon Diablo meteorite",
+        "year": 1956,
+        "month": 0,
+        "day": 0,
+        "evidence": [
+          {
+            "sourceId": "usgs-powell-geologic-time",
+            "quote": "It was 1956 when Clair Cameron Patterson, an American geochemist, used lead-lead dating to determine that the Canyon Diablo meteorite was 4.55 billion"
+          }
+        ]
+      }
+    ],
+    "scenario": {
+      "subjectLabel": "History of Geologic Time",
+      "settingLabel": "Earth Science, 1669-1956"
+    }
+  },
+  "behavioralTests": [
+    {
+      "name": "Steno before Hutton",
+      "earlierEventId": "e1",
+      "laterEventId": "e2"
+    },
+    {
+      "name": "Hutton before time scale",
+      "earlierEventId": "e2",
+      "laterEventId": "e3"
+    },
+    {
+      "name": "Huxley before radioactivity",
+      "earlierEventId": "e4",
+      "laterEventId": "e5"
+    },
+    {
+      "name": "Radioactivity before Patterson dating",
+      "earlierEventId": "e5",
+      "laterEventId": "e6"
+    }
+  ],
+  "predictions": [
+    {
+      "id": "p1",
+      "prompt": "Which happened first: Steno's laws or Huxley's challenge to Kelvin?",
+      "earlierEventId": "e1",
+      "laterEventId": "e4"
+    },
+    {
+      "id": "p2",
+      "prompt": "Which happened first: First geologic time scale or Patterson's meteorite dating?",
+      "earlierEventId": "e3",
+      "laterEventId": "e6"
+    },
+    {
+      "id": "p3",
+      "prompt": "Which happened first: Hutton's uniformitarianism or radioactivity discovery?",
+      "earlierEventId": "e2",
+      "laterEventId": "e5"
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "4296cf69741d43babdaec9a459968d45",
+    "runId": "job-20261029164123-b93c8c9f",
+    "promptVersion": "v9",
+    "generatedAt": "2026-10-29T16:44:03.927Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

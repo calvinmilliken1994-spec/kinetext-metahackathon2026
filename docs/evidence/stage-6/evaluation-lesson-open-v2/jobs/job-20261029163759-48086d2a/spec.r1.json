@@ -1,0 +1,179 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "cfpb-saving-post-secondary-education-job-20261029163759-48086d2a",
+  "title": "Saving for post-secondary education (teacher guide) — Consumer Financial Protection Bureau, Building Blocks activities",
+  "learningObjectives": [
+    "Explain that compound interest is interest earned on both the original principal and the accumulated interest",
+    "Use A=P*(1+r/(100*n))^(n*t) to calculate how savings grow with different rates, compounding frequencies, and time",
+    "Describe how starting early and increasing principal, rate, or compounding frequency helps savings for education grow faster"
+  ],
+  "sources": [
+    {
+      "id": "cfpb-saving-post-secondary-education",
+      "title": "Saving for post-secondary education (teacher guide) — Consumer Financial Protection Bureau, Building Blocks activities",
+      "locator": "https://files.consumerfinance.gov/f/documents/cfpb_building_block_activities_saving-post-secondary-education_guide.pdf",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: Consumer Financial Protection Bureau, Building Blocks activities, 'Saving for post-secondary education (teacher guide)'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+      "sha256": "243a4b56c86936ecc243da4c7fc982bc76b85ee12116c97e4f751cfb8ba6c926"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "exp-definition",
+      "text": "Compound interest means you earn interest not only on the money you first save but also on the interest that has already been added.",
+      "evidence": [
+        {
+          "sourceId": "cfpb-saving-post-secondary-education",
+          "quote": "Compound interest: When you earn interest on both the money you save and the interest you earn."
+        }
+      ]
+    },
+    {
+      "id": "exp-worked-example",
+      "text": "For example, $1,000 at 5 percent compounded once a year grows to $1,050 after one year and to $1,102.50 after two years, because the second year interest is calculated on $1,050.",
+      "evidence": [
+        {
+          "sourceId": "cfpb-saving-post-secondary-education",
+          "quote": "So let's say you invest $1,000 (your principal) and it earns 5 percent (interest rate) once a year (the compounding frequency)."
+        },
+        {
+          "sourceId": "cfpb-saving-post-secondary-education",
+          "quote": "After the first year, you would have $1,050—your original principal, plus 5 percent, or $50."
+        }
+      ]
+    },
+    {
+      "id": "exp-time-benefit",
+      "text": "Starting to save early in an account that pays interest allows money to grow faster through the effect of compound interest.",
+      "evidence": [
+        {
+          "sourceId": "cfpb-saving-post-secondary-education",
+          "quote": "The sooner you start saving in an account that pays interest, the faster your money can grow."
+        },
+        {
+          "sourceId": "cfpb-saving-post-secondary-education",
+          "quote": "The sooner you start saving for post-secondary education, the faster your money can grow from compound interest."
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "compound-interest-v1",
+    "equation": "A=P*(1+r/(100*n))^(n*t)",
+    "principalUSD": {
+      "unit": "USD",
+      "min": 100,
+      "max": 10000,
+      "default": 1000
+    },
+    "annualRatePercent": {
+      "unit": "%",
+      "min": 1,
+      "max": 12,
+      "default": 5
+    },
+    "compoundsPerYear": {
+      "unit": "per year",
+      "min": 1,
+      "max": 12,
+      "default": 4
+    },
+    "years": {
+      "unit": "years",
+      "min": 1,
+      "max": 40,
+      "default": 10
+    },
+    "scenario": {
+      "objectLabel": "Savings account",
+      "settingLabel": "Interest compounded yearly"
+    }
+  },
+  "behavioralTests": [
+    {
+      "name": "Edge case 0% interest - amount equals principal",
+      "principalUSD": 1000,
+      "annualRatePercent": 0,
+      "compoundsPerYear": 1,
+      "years": 10,
+      "expectedAmountUSD": 1000,
+      "tolerance": 0.01
+    },
+    {
+      "name": "Edge case 0 years - amount equals principal",
+      "principalUSD": 2500,
+      "annualRatePercent": 7,
+      "compoundsPerYear": 4,
+      "years": 0,
+      "expectedAmountUSD": 2500,
+      "tolerance": 0.01
+    },
+    {
+      "name": "Source example year 2 - $1,000 at 5% once a year",
+      "principalUSD": 1000,
+      "annualRatePercent": 5,
+      "compoundsPerYear": 1,
+      "years": 2,
+      "expectedAmountUSD": 1102.5,
+      "tolerance": 0.01
+    },
+    {
+      "name": "Monthly compounding for 5 years",
+      "principalUSD": 1500,
+      "annualRatePercent": 6,
+      "compoundsPerYear": 12,
+      "years": 5,
+      "expectedAmountUSD": 2023.27,
+      "tolerance": 0.01
+    }
+  ],
+  "predictions": [
+    {
+      "id": "pred-year10-annual",
+      "prompt": "Predict final amount for $1,000 at 5% compounded yearly for 10 years",
+      "principalUSD": 1000,
+      "annualRatePercent": 5,
+      "compoundsPerYear": 1,
+      "years": 10,
+      "expectedAmountUSD": 1628.89,
+      "tolerance": 0.01
+    },
+    {
+      "id": "pred-quarterly-15yr",
+      "prompt": "Predict final amount for $2,500 at 4% compounded quarterly for 15 years",
+      "principalUSD": 2500,
+      "annualRatePercent": 4,
+      "compoundsPerYear": 4,
+      "years": 15,
+      "expectedAmountUSD": 4541.74,
+      "tolerance": 0.01
+    },
+    {
+      "id": "pred-monthly-20yr",
+      "prompt": "Predict final amount for $5,000 at 6% compounded monthly for 20 years",
+      "principalUSD": 5000,
+      "annualRatePercent": 6,
+      "compoundsPerYear": 12,
+      "years": 20,
+      "expectedAmountUSD": 16551.02,
+      "tolerance": 0.01
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "6fc76d67cb8b4e059e58e00b9f48f233",
+    "runId": "job-20261029163759-48086d2a",
+    "promptVersion": "v9",
+    "generatedAt": "2026-10-29T16:38:58.499Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

@@ -1,0 +1,191 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "Steps from meeting to drafting a new framework",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follow the order the text presents cause and effect",
+    "steps": [
+      {
+        "id": "convened-to-revise",
+        "label": "Federal Convention convened",
+        "sourceId": "nara-constitution",
+        "quote": "The Federal Convention convened in the State House (Independence Hall) in Philadelphia on May 14, 1787, to revise the Articles of Confederation.",
+        "orderHint": "Track what led to the next decision"
+      },
+      {
+        "id": "only-two-states-present",
+        "label": "only two states were at first present",
+        "sourceId": "nara-constitution",
+        "quote": "Because the delegations from only two states were at first present, the members adjourned from day to day",
+        "orderHint": "Track what led to the next decision"
+      },
+      {
+        "id": "clear-new-frame-needed",
+        "label": "it became clear by mid-June",
+        "sourceId": "nara-constitution",
+        "quote": "it became clear by mid-June that, rather than amend the existing Articles, the Convention would draft an entirely new frame of government.",
+        "orderHint": "Track what led to the next decision"
+      },
+      {
+        "id": "closed-sessions-debate",
+        "label": "in closed sessions, the delegates debated",
+        "sourceId": "nara-constitution",
+        "quote": "All through the summer, in closed sessions, the delegates debated, and redrafted the articles of the new Constitution.",
+        "orderHint": "Track what led to the next decision"
+      },
+      {
+        "id": "chief-points-at-issue",
+        "label": "chief points at issue were how much power",
+        "sourceId": "nara-constitution",
+        "quote": "Among the chief points at issue were how much power to allow the central government, how many representatives in Congress to allow each state",
+        "orderHint": "Track what led to the next decision"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029164455-ab614ddb:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step label occurs in its own quote after normalisation (labels-in-quotes)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 5 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "db2256c90c124e6b93c1c0e9e1650a29",
+    "usage": {
+      "promptTokens": 2457,
+      "completionTokens": 8926,
+      "reasoningTokens": 8547,
+      "cachedTokens": 0
+    },
+    "latencyMs": 26012,
+    "estCostUSD": 0.04100675,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029164455-ab614ddb:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "Steps from meeting to drafting a new framework",
+    "sources": [
+      {
+        "id": "nara-constitution",
+        "title": "Constitution of the United States (1787) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/constitution",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Constitution of the United States (1787)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "a14175b009333bebd61eaff70e3393928a8f0dbd0ae00027067c07b15d176db4"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "db2256c90c124e6b93c1c0e9e1650a29",
+      "runId": "job-20261029164455-ab614ddb",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:46:09.725Z"
+    },
+    "seed": 1942223534,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follow the order the text presents cause and effect",
+    "steps": [
+      {
+        "id": "convened-to-revise",
+        "label": "Federal Convention convened",
+        "sourceId": "nara-constitution",
+        "quote": "The Federal Convention convened in the State House (Independence Hall) in Philadelphia on May 14, 1787, to revise the Articles of Confederation.",
+        "orderHint": "Track what led to the next decision"
+      },
+      {
+        "id": "only-two-states-present",
+        "label": "only two states were at first present",
+        "sourceId": "nara-constitution",
+        "quote": "Because the delegations from only two states were at first present, the members adjourned from day to day",
+        "orderHint": "Track what led to the next decision"
+      },
+      {
+        "id": "clear-new-frame-needed",
+        "label": "it became clear by mid-June",
+        "sourceId": "nara-constitution",
+        "quote": "it became clear by mid-June that, rather than amend the existing Articles, the Convention would draft an entirely new frame of government.",
+        "orderHint": "Track what led to the next decision"
+      },
+      {
+        "id": "closed-sessions-debate",
+        "label": "in closed sessions, the delegates debated",
+        "sourceId": "nara-constitution",
+        "quote": "All through the summer, in closed sessions, the delegates debated, and redrafted the articles of the new Constitution.",
+        "orderHint": "Track what led to the next decision"
+      },
+      {
+        "id": "chief-points-at-issue",
+        "label": "chief points at issue were how much power",
+        "sourceId": "nara-constitution",
+        "quote": "Among the chief points at issue were how much power to allow the central government, how many representatives in Congress to allow each state",
+        "orderHint": "Track what led to the next decision"
+      }
+    ]
+  }
+}

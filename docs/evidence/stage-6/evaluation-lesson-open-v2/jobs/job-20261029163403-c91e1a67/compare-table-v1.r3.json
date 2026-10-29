@@ -1,0 +1,206 @@
+{
+  "gen": {
+    "schemaVersion": "compare-table-v1",
+    "title": "Specific heat at constant pressure versus constant volume",
+    "entities": [
+      "constant-pressure-process",
+      "constant-volume-process"
+    ],
+    "attributes": [
+      "specific-heat-label",
+      "process-characteristic"
+    ],
+    "cells": [
+      {
+        "id": "cp-label",
+        "entityIndex": 0,
+        "attributeIndex": 0,
+        "value": "subscript “p”",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "We have added a subscript “p” to the specific heat capacity to remind us that this value only applies to a constant pressure process."
+      },
+      {
+        "id": "cp-characteristic",
+        "entityIndex": 0,
+        "attributeIndex": 1,
+        "value": "the change of specific enthalpy is equal to the heat transfer",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "the change of specific enthalpy is equal to the heat transfer for a constant pressure process:"
+      },
+      {
+        "id": "cv-label",
+        "entityIndex": 1,
+        "attributeIndex": 0,
+        "value": "subscript “v”",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "We have added a subscript “v” to the specific heat capacity to remind us that this value only applies to a constant volume process."
+      },
+      {
+        "id": "cv-characteristic",
+        "entityIndex": 1,
+        "attributeIndex": 1,
+        "value": "the work is equal to zero",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "For a constant volume process, the work is equal to zero."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029163403-c91e1a67:compare-table-v1:r3",
+    "revision": 3,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every compare-table text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "CT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 cell quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "CT-02",
+        "kind": "grounding",
+        "passed": false,
+        "message": "cells[0] (cp-label): the entity \"constant-pressure-process\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[1] (cp-characteristic): the entity \"constant-pressure-process\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[2] (cv-label): the entity \"constant-volume-process\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[3] (cv-characteristic): the entity \"constant-volume-process\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote)",
+        "path": "/cells/0/entityIndex",
+        "affected": [
+          "/cells/0/entityIndex",
+          "/cells/0/quote",
+          "/cells/1/entityIndex",
+          "/cells/1/quote",
+          "/cells/2/entityIndex",
+          "/cells/2/quote",
+          "/cells/3/entityIndex",
+          "/cells/3/quote"
+        ]
+      },
+      {
+        "id": "CT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the table shape is valid: 2 entities x 2 attributes with all 4 cells present exactly once (shape-valid)"
+      },
+      {
+        "id": "CT-04",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in entity names, attributes and cell values appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "CT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no attribute column offers 3 distinct cell values, so the UI falls back to reveal-only with unverified cells blanked as \"Not stated on this page\" — by design this is not a component failure (predict-cell-valid)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": false,
+        "message": "repair weakened the spec: /attributes changed shape or list length (item counts and structure are frozen in a repair; the system prunes bad items via the drop helpers, the model never adds, removes or reorders items); /entities changed shape or list length (item counts and structure are frozen in a repair; the system prunes bad items via the drop helpers, the model never adds, removes or reorders items) (a compare-table-v1 repair must fix the failing checks by changing ONLY fields under the affected paths recomputed from revision 1, must keep every item and id stable — the system prunes bad items, never the model — and must never increase a tolerance or otherwise weaken the spec)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "547d024f65a44c58b69690c20157f3ba",
+    "usage": {
+      "promptTokens": 6045,
+      "completionTokens": 10171,
+      "reasoningTokens": 9865,
+      "cachedTokens": 0
+    },
+    "latencyMs": 42944,
+    "estCostUSD": 0.050783,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029163403-c91e1a67:compare-table-v1:r3",
+    "componentId": "compare-table-v1",
+    "title": "Specific heat at constant pressure versus constant volume",
+    "sources": [
+      {
+        "id": "nasa-grc-specific-heat-cp-cv",
+        "title": "Specific Heat – Cp & Cv — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/specific-heat-cp-cv/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "9df5f948a44c3fd060dd74c26ccaa8247cb311d0b0d618ceaafaf6382ba4d1b8"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "547d024f65a44c58b69690c20157f3ba",
+      "runId": "job-20261029163403-c91e1a67",
+      "promptVersion": "s6-v2",
+      "revision": 3,
+      "repairOf": 2,
+      "generatedAt": "2026-10-29T16:37:57.659Z"
+    },
+    "seed": 3738726266,
+    "entities": [
+      "constant-pressure-process",
+      "constant-volume-process"
+    ],
+    "attributes": [
+      "specific-heat-label",
+      "process-characteristic"
+    ],
+    "cells": [
+      {
+        "id": "cp-label",
+        "entityIndex": 0,
+        "attributeIndex": 0,
+        "value": "subscript “p”",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "We have added a subscript “p” to the specific heat capacity to remind us that this value only applies to a constant pressure process."
+      },
+      {
+        "id": "cp-characteristic",
+        "entityIndex": 0,
+        "attributeIndex": 1,
+        "value": "the change of specific enthalpy is equal to the heat transfer",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "the change of specific enthalpy is equal to the heat transfer for a constant pressure process:"
+      },
+      {
+        "id": "cv-label",
+        "entityIndex": 1,
+        "attributeIndex": 0,
+        "value": "subscript “v”",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "We have added a subscript “v” to the specific heat capacity to remind us that this value only applies to a constant volume process."
+      },
+      {
+        "id": "cv-characteristic",
+        "entityIndex": 1,
+        "attributeIndex": 1,
+        "value": "the work is equal to zero",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "For a constant volume process, the work is equal to zero."
+      }
+    ]
+  }
+}

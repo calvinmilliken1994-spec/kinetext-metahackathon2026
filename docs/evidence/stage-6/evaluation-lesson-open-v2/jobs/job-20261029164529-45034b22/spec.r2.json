@@ -1,0 +1,200 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nara-lee-resolution-job-20261029164529-45034b22",
+  "title": "The Lee Resolution: From Proposal to Confederation",
+  "learningObjectives": [
+    "Explain the three parts of the Lee Resolution and how they shaped the push for independence",
+    "Sequence the key steps from the 1775 Continental Congress meeting through the 1776 resolution and its aftermath",
+    "Describe how colonial voting and later treaty and confederation plans unfolded after the resolution"
+  ],
+  "sources": [
+    {
+      "id": "nara-lee-resolution",
+      "title": "Lee Resolution (1776) — National Archives, Milestone Documents (agency-written introduction)",
+      "locator": "https://www.archives.gov/milestone-documents/lee-resolution",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Lee Resolution (1776)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+      "sha256": "a18b4131b1c5223c9b0685aed8fa77a746537b2af6e2084d892549e8808ce9e3"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "ex1",
+      "text": "The resolution introduced in June 1776 proposed independence, foreign alliances, and a plan for union.",
+      "evidence": [
+        {
+          "sourceId": "nara-lee-resolution",
+          "quote": "The Lee Resolution contained three parts: a declaration of independence, a call to form foreign alliances, and \"a plan for confederation.\""
+        }
+      ]
+    },
+    {
+      "id": "ex2",
+      "text": "The Continental Congress served as the governing body handling these proposals, and its voting record shows initial support from 12 colonies.",
+      "evidence": [
+        {
+          "sourceId": "nara-lee-resolution",
+          "quote": "The colonists elected delegates to attend a Continental Congress that eventually became the governing body of the union during the Revolution."
+        },
+        {
+          "sourceId": "nara-lee-resolution",
+          "quote": "The document seen here shows the vote on the Lee Resolution — the affirmative votes of 12 colonies are listed at the right."
+        }
+      ]
+    },
+    {
+      "id": "ex3",
+      "text": "Ideas from the Lee Resolution carried into the Declaration of Independence, while treaty and confederation plans took longer to be approved.",
+      "evidence": [
+        {
+          "sourceId": "nara-lee-resolution",
+          "quote": "The words of the Lee Resolution are echoed in the Declaration of Independence."
+        },
+        {
+          "sourceId": "nara-lee-resolution",
+          "quote": "The plan for making treaties was not approved until September of 1776; the plan of confederation was delayed until November of 1777."
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "timeline-v1",
+    "events": [
+      {
+        "id": "e1",
+        "label": "Second Continental Congress convenes in Philadelphia",
+        "year": 1775,
+        "month": 0,
+        "day": 0,
+        "evidence": [
+          {
+            "sourceId": "nara-lee-resolution",
+            "quote": "Its second meeting convened in Philadelphia in 1775."
+          },
+          {
+            "sourceId": "nara-lee-resolution",
+            "quote": "The colonists elected delegates to attend a Continental Congress that eventually became the governing body of the union during the Revolution."
+          }
+        ]
+      },
+      {
+        "id": "e2",
+        "label": "Richard Henry Lee introduces independence resolution",
+        "year": 1776,
+        "month": 6,
+        "day": 7,
+        "evidence": [
+          {
+            "sourceId": "nara-lee-resolution",
+            "quote": "On June 7, 1776, Richard Henry Lee of Virginia, introduced this resolution in the Second Continental Congress proposing independence for the American colonies."
+          },
+          {
+            "sourceId": "nara-lee-resolution",
+            "quote": "The Lee Resolution contained three parts: a declaration of independence, a call to form foreign alliances, and \"a plan for confederation.\""
+          }
+        ]
+      },
+      {
+        "id": "e3",
+        "label": "New York Convention upholds Declaration of Independence",
+        "year": 1776,
+        "month": 7,
+        "day": 9,
+        "evidence": [
+          {
+            "sourceId": "nara-lee-resolution",
+            "quote": "New York cast no vote until the newly elected New York Convention upheld the Declaration of Independence on July 9, 1776."
+          },
+          {
+            "sourceId": "nara-lee-resolution",
+            "quote": "The document seen here shows the vote on the Lee Resolution — the affirmative votes of 12 colonies are listed at the right."
+          }
+        ]
+      },
+      {
+        "id": "e4",
+        "label": "Plan for making treaties approved",
+        "year": 1776,
+        "month": 0,
+        "day": 0,
+        "evidence": [
+          {
+            "sourceId": "nara-lee-resolution",
+            "quote": "The plan for making treaties was not approved until September of 1776; the plan of confederation was delayed until November of 1777."
+          }
+        ]
+      },
+      {
+        "id": "e5",
+        "label": "Plan of confederation delayed",
+        "year": 1777,
+        "month": 0,
+        "day": 0,
+        "evidence": [
+          {
+            "sourceId": "nara-lee-resolution",
+            "quote": "The plan for making treaties was not approved until September of 1776; the plan of confederation was delayed until November of 1777."
+          }
+        ]
+      }
+    ],
+    "scenario": {
+      "subjectLabel": "Lee Resolution",
+      "settingLabel": "Second Continental Congress, 1775-1777"
+    }
+  },
+  "behavioralTests": [
+    {
+      "name": "Congress convenes before Lee resolution",
+      "earlierEventId": "e1",
+      "laterEventId": "e2"
+    },
+    {
+      "name": "Lee resolution before New York vote",
+      "earlierEventId": "e2",
+      "laterEventId": "e3"
+    },
+    {
+      "name": "Treaties approved before confederation",
+      "earlierEventId": "e4",
+      "laterEventId": "e5"
+    }
+  ],
+  "predictions": [
+    {
+      "id": "p1",
+      "prompt": "Which happened first: Richard Henry Lee introduces independence resolution or New York Convention upholds Declaration of Independence?",
+      "earlierEventId": "e2",
+      "laterEventId": "e3"
+    },
+    {
+      "id": "p2",
+      "prompt": "Which happened first: Second Continental Congress convenes in Philadelphia or plan for making treaties approved?",
+      "earlierEventId": "e1",
+      "laterEventId": "e4"
+    },
+    {
+      "id": "p3",
+      "prompt": "Which happened first: plan for making treaties approved or plan of confederation delayed?",
+      "earlierEventId": "e4",
+      "laterEventId": "e5"
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "f9820426807449cbbaf1368f9f57c816",
+    "runId": "job-20261029164529-45034b22",
+    "promptVersion": "v9",
+    "generatedAt": "2026-10-29T16:47:55.656Z",
+    "revision": 2,
+    "repairOf": 1
+  }
+}

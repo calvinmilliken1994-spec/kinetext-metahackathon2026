@@ -1,0 +1,212 @@
+{
+  "gen": {
+    "schemaVersion": "compare-table-v1",
+    "title": "Early versus later compound interest",
+    "entities": [
+      "starting-at-age-14",
+      "begin-saving-at-age-35"
+    ],
+    "attributes": [
+      "set-aside",
+      "at age 65"
+    ],
+    "cells": [
+      {
+        "id": "starting-at-age-14",
+        "entityIndex": 0,
+        "attributeIndex": 0,
+        "value": "$100 every year",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "If they set aside $100 every year starting at age 14, they'd have about $23,000 at age 65."
+      },
+      {
+        "id": "starting-at-age-35",
+        "entityIndex": 1,
+        "attributeIndex": 0,
+        "value": "$100 every year",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "$100 every year starting at age 14, they'd have about $23,000 at age 65. However, if they begin saving at age 35,"
+      },
+      {
+        "id": "set-aside",
+        "entityIndex": 1,
+        "attributeIndex": 1,
+        "value": "about $7,000",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "However, if they begin saving at age 35, they'd have about $7,000 at age 65."
+      },
+      {
+        "id": "at-age-65",
+        "entityIndex": 0,
+        "attributeIndex": 1,
+        "value": "about $23,000",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "If they set aside $100 every year starting at age 14, they'd have about $23,000 at age 65."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029163751-c4b16560:compare-table-v1:r3",
+    "revision": 3,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every compare-table text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "CT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 cell quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "CT-02",
+        "kind": "grounding",
+        "passed": false,
+        "message": "cells[0] (starting-at-age-14): the entity \"starting-at-age-14\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[1] (starting-at-age-35): the entity \"begin-saving-at-age-35\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[2] (set-aside): the entity \"begin-saving-at-age-35\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[3] (at-age-65): the entity \"starting-at-age-14\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote)",
+        "path": "/cells/0/entityIndex",
+        "affected": [
+          "/cells/0/entityIndex",
+          "/cells/0/quote",
+          "/cells/1/entityIndex",
+          "/cells/1/quote",
+          "/cells/2/entityIndex",
+          "/cells/2/quote",
+          "/cells/3/entityIndex",
+          "/cells/3/quote"
+        ]
+      },
+      {
+        "id": "CT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the table shape is valid: 2 entities x 2 attributes with all 4 cells present exactly once (shape-valid)"
+      },
+      {
+        "id": "CT-04",
+        "kind": "grounding",
+        "passed": false,
+        "message": "attributes[1] states the number 65, which does not appear on the page or in the same quote (N-01); cells[2].value states the number 7000, which does not appear on the page or in the same quote (N-01); cells[3].value states the number 23000, which does not appear on the page or in the same quote (N-01)",
+        "path": "/attributes/1",
+        "affected": [
+          "/attributes/1",
+          "/cells/2/value",
+          "/cells/3/value"
+        ]
+      },
+      {
+        "id": "CT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no attribute column offers 3 distinct cell values, so the UI falls back to reveal-only with unverified cells blanked as \"Not stated on this page\" — by design this is not a component failure (predict-cell-valid)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "compare-table-v1: no weakening — every one of the 9 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "a38f9995e0e04e3e97578e38f5d1531a",
+    "usage": {
+      "promptTokens": 4691,
+      "completionTokens": 9703,
+      "reasoningTokens": 9389,
+      "cachedTokens": 0
+    },
+    "latencyMs": 38574,
+    "estCostUSD": 0.0471015,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029163751-c4b16560:compare-table-v1:r3",
+    "componentId": "compare-table-v1",
+    "title": "Early versus later compound interest",
+    "sources": [
+      {
+        "id": "cfpb-teenagers-and-saving",
+        "title": "Teenagers and saving — Consumer Financial Protection Bureau, Money as You Grow",
+        "locator": "https://www.consumerfinance.gov/consumer-tools/money-as-you-grow/teen-young-adult/explore-saving/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Consumer Financial Protection Bureau, Money as You Grow, 'Teenagers and saving'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+        "sha256": "a438468abdb47ce3f3afb4ed9e5c4bafa5ebf39e76f40973647383ef8df00b58"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "a38f9995e0e04e3e97578e38f5d1531a",
+      "runId": "job-20261029163751-c4b16560",
+      "promptVersion": "s6-v2",
+      "revision": 3,
+      "repairOf": 2,
+      "generatedAt": "2026-10-29T16:42:00.517Z"
+    },
+    "seed": 3662071962,
+    "entities": [
+      "starting-at-age-14",
+      "begin-saving-at-age-35"
+    ],
+    "attributes": [
+      "set-aside",
+      "at age 65"
+    ],
+    "cells": [
+      {
+        "id": "starting-at-age-14",
+        "entityIndex": 0,
+        "attributeIndex": 0,
+        "value": "$100 every year",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "If they set aside $100 every year starting at age 14, they'd have about $23,000 at age 65."
+      },
+      {
+        "id": "starting-at-age-35",
+        "entityIndex": 1,
+        "attributeIndex": 0,
+        "value": "$100 every year",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "$100 every year starting at age 14, they'd have about $23,000 at age 65. However, if they begin saving at age 35,"
+      },
+      {
+        "id": "set-aside",
+        "entityIndex": 1,
+        "attributeIndex": 1,
+        "value": "about $7,000",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "However, if they begin saving at age 35, they'd have about $7,000 at age 65."
+      },
+      {
+        "id": "at-age-65",
+        "entityIndex": 0,
+        "attributeIndex": 1,
+        "value": "about $23,000",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "If they set aside $100 every year starting at age 14, they'd have about $23,000 at age 65."
+      }
+    ]
+  }
+}

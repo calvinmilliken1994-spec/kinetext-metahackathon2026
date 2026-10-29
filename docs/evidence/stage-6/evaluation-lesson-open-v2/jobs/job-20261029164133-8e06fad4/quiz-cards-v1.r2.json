@@ -1,0 +1,227 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Numeric ages of the geologic time scale",
+    "cards": [
+      {
+        "id": "earth-age-card",
+        "stem": "When numbers are added to the time scale, what age is listed for Earth itself?",
+        "options": [
+          "4.6 billion years old",
+          "3.5 billion years ago",
+          "570 million years old"
+        ],
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "Earth is about 4.6 billion years old?",
+        "hint": "Recall the first benchmark age given for the planet."
+      },
+      {
+        "id": "oldest-fossils-card",
+        "stem": "What age is given for the rocks that contain the oldest known fossils?",
+        "options": [
+          "3.5 billion years ago",
+          "4.6 billion years old",
+          "uranium to lead"
+        ],
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "The oldest known fossils are from rocks that were deposited about 3.5 billion years ago?",
+        "hint": "Think of the age assigned to the earliest fossil deposits."
+      },
+      {
+        "id": "shelly-fossils-card",
+        "stem": "What age is listed for rocks with the first abundant shelly fossils?",
+        "options": [
+          "570 million years old",
+          "4.6 billion years old",
+          "3.5 billion years ago"
+        ],
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "The first abundant shelly fossils occur in rocks that are about 570 million years old?",
+        "hint": "Focus on the age for the first abundant shelly record."
+      },
+      {
+        "id": "ice-age-card",
+        "stem": "What timing is given for the end of the last ice age?",
+        "options": [
+          "10,000 ago",
+          "570 million years old",
+          "4.6 billion years old"
+        ],
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "The last ice age ended about 10,000 ago?",
+        "hint": "Recall the most recent age given among the four benchmarks."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029164133-8e06fad4:quiz-cards-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": false,
+        "message": "cards[3].options[0] states the number 10000, which does not appear on the page or in the same quote (N-01)",
+        "path": "/cards/3/options/0",
+        "affected": [
+          "/cards/3/options/0"
+        ]
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "quiz-cards-v1: no weakening — every one of the 1 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "b87e71977d4f4278a7bf878c9486aca2",
+    "usage": {
+      "promptTokens": 4405,
+      "completionTokens": 7194,
+      "reasoningTokens": 6804,
+      "cachedTokens": 0
+    },
+    "latencyMs": 30548,
+    "estCostUSD": 0.03608075,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029164133-8e06fad4:quiz-cards-v1:r2",
+    "componentId": "quiz-cards-v1",
+    "title": "Numeric ages of the geologic time scale",
+    "sources": [
+      {
+        "id": "usgs-fossils-numeric-time-scale",
+        "title": "Fossils, Rocks, and Time: The Numeric Time Scale — U.S. Geological Survey",
+        "locator": "https://pubs.usgs.gov/gip/fossils/numeric.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey, 'Fossils, Rocks, and Time: The Numeric Time Scale' (1997). Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "d6ba577d359485d9ea0ae92e97f294d27bb3a67e23758783067591896f570f2d"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "b87e71977d4f4278a7bf878c9486aca2",
+      "runId": "job-20261029164133-8e06fad4",
+      "promptVersion": "s6-v2",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T16:43:52.659Z"
+    },
+    "seed": 2629198542,
+    "cards": [
+      {
+        "id": "earth-age-card",
+        "stem": "When numbers are added to the time scale, what age is listed for Earth itself?",
+        "options": [
+          "4.6 billion years old",
+          "3.5 billion years ago",
+          "570 million years old"
+        ],
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "Earth is about 4.6 billion years old?",
+        "hint": "Recall the first benchmark age given for the planet."
+      },
+      {
+        "id": "oldest-fossils-card",
+        "stem": "What age is given for the rocks that contain the oldest known fossils?",
+        "options": [
+          "3.5 billion years ago",
+          "4.6 billion years old",
+          "uranium to lead"
+        ],
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "The oldest known fossils are from rocks that were deposited about 3.5 billion years ago?",
+        "hint": "Think of the age assigned to the earliest fossil deposits."
+      },
+      {
+        "id": "shelly-fossils-card",
+        "stem": "What age is listed for rocks with the first abundant shelly fossils?",
+        "options": [
+          "570 million years old",
+          "4.6 billion years old",
+          "3.5 billion years ago"
+        ],
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "The first abundant shelly fossils occur in rocks that are about 570 million years old?",
+        "hint": "Focus on the age for the first abundant shelly record."
+      },
+      {
+        "id": "ice-age-card",
+        "stem": "What timing is given for the end of the last ice age?",
+        "options": [
+          "10,000 ago",
+          "570 million years old",
+          "4.6 billion years old"
+        ],
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "The last ice age ended about 10,000 ago?",
+        "hint": "Recall the most recent age given among the four benchmarks."
+      }
+    ]
+  }
+}

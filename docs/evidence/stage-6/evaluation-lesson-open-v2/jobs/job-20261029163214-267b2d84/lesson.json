@@ -1,0 +1,124 @@
+{
+  "jobId": "job-20261029163214-267b2d84",
+  "analysisRef": "job-20261029163214-267b2d84/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029163214-267b2d84:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Free fall motion under gravity with constant acceleration in a vacuum",
+    "sources": [
+      {
+        "id": "nasa-grc-motion-of-free-falling-object",
+        "title": "Motion of Free Falling Object — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/motion-of-free-falling-object/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "f94199ea21e14dad578baee19694e534fff3dba5dc88f9bc2ea6ec082445c317"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "4fad03462700413d9a695baec2d669f1",
+      "runId": "job-20261029163214-267b2d84",
+      "promptVersion": "s6-v2",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T16:33:13.029Z"
+    },
+    "seed": 2217427290,
+    "headline": "Free fall motion under gravity with constant acceleration in a vacuum",
+    "keyPoints": [
+      {
+        "id": "vacuum-gravitational-force",
+        "point": "A vacuum free falling object is subjected to only the gravitational force expressed as its weight",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "An object that falls through a vacuum is subjected to only one external force, the gravitational force, expressed as the weight of the object."
+      },
+      {
+        "id": "constant-acceleration-value",
+        "point": "The gravitational acceleration is constant and equal to 9.8 meters per square second at sea level",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "The acceleration is constant and equal to the gravitational acceleration g which is 9.8 meters per square second at sea level on the Earth."
+      },
+      {
+        "id": "velocity-location-equations",
+        "point": "Knowing acceleration we can determine velocity and location of a free falling object at any time",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Knowing the acceleration, we can determine the velocity and location of any free falling object at any time using the following equations."
+      },
+      {
+        "id": "acceleration-velocity-location-trends",
+        "point": "Acceleration remains constant while velocity increases linearly and location increases quadratically over time",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Notice that the acceleration is a constant, the velocity increases linearly, and the location increases quadratically."
+      },
+      {
+        "id": "galileo-same-rate-observation",
+        "point": "Galileo first proposed the remarkable observation that all free falling objects fall at the same rate",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "The remarkable observation that all free falling objects fall at the same rate was first proposed by Galileo, nearly 400 years ago."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "free-falling",
+        "term": "free falling",
+        "gloss": "motion caused only by gravity with no other forces like drag acting on the object",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "An object that is moving only because of the action of gravity is said to be free falling"
+      },
+      {
+        "id": "gravitational-acceleration",
+        "term": "gravitational acceleration",
+        "gloss": "constant acceleration due to gravity near Earth equal to 9.8 meters per square second",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "The acceleration is constant and equal to the gravitational acceleration g which is 9.8 meters per square second at sea level on the Earth."
+      },
+      {
+        "id": "weight",
+        "term": "weight",
+        "gloss": "force of gravity acting on an object expressed as its weight",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "An object that falls through a vacuum is subjected to only one external force, the gravitational force, expressed as the weight of the object."
+      },
+      {
+        "id": "drag-force",
+        "term": "drag force",
+        "gloss": "additional force from air resistance that makes atmospheric motion more complex",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "there is an additional drag force acting on the object"
+      },
+      {
+        "id": "displacement",
+        "term": "displacement",
+        "gloss": "distance from an initial location described as X in the motion equations",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "where a is the acceleration, V is the velocity, and X is the displacement from an initial location."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "formula-explorer-v1",
+      "specId": "job-20261029163214-267b2d84:formula-explorer-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029163214-267b2d84:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

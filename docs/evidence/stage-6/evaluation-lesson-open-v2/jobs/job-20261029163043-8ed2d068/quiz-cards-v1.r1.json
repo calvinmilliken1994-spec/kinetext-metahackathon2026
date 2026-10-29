@@ -1,0 +1,217 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Simplified Motion Outcomes",
+    "cards": [
+      {
+        "id": "rise-with-reduced-weight",
+        "stem": "In simplified level motion, what happens when weight drops but lift stays steady?",
+        "options": [
+          "airplane will rise",
+          "airplane will fall",
+          "aircraft will slow"
+        ],
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "If the weight is decreased while the lift is held constant, the airplane will rise:",
+        "hint": "Focus on which vertical force is greater."
+      },
+      {
+        "id": "fall-with-reduced-lift",
+        "stem": "In simplified vertical motion, what follows when lift becomes less than weight?",
+        "options": [
+          "Aircraft Falls",
+          "Aircraft Rises",
+          "Aircraft Accelerates"
+        ],
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Weight > Lift = Aircraft Falls",
+        "hint": "Compare lift and weight to find direction."
+      },
+      {
+        "id": "accelerate-with-thrust",
+        "stem": "In simplified forward motion, what follows when thrust exceeds drag?",
+        "options": [
+          "Aircraft Accelerates",
+          "Aircraft Slows",
+          "Aircraft Falls"
+        ],
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Thrust > Drag = Aircraft Accelerates",
+        "hint": "Compare thrust and drag to find outcome."
+      },
+      {
+        "id": "slow-with-drag",
+        "stem": "In simplified forward motion, what follows when drag exceeds thrust?",
+        "options": [
+          "Aircraft Slows",
+          "Aircraft Accelerates",
+          "Aircraft Rises"
+        ],
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Drag > Thrust = Aircraft Slows",
+        "hint": "Think which horizontal force is larger."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029163043-8ed2d068:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "47ee60eb288d447380658477765ceaf7",
+    "usage": {
+      "promptTokens": 2520,
+      "completionTokens": 6674,
+      "reasoningTokens": 6338,
+      "cachedTokens": 0
+    },
+    "latencyMs": 29332,
+    "estCostUSD": 0.0315145,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029163043-8ed2d068:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Simplified Motion Outcomes",
+    "sources": [
+      {
+        "id": "nasa-grc-simplified-aircraft-motion",
+        "title": "Simplified Aircraft Motion — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/simplified-aircraft-motion/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "21d6273d590cd157b690fe9491c4c0d202f5b35c5e5a31a8c072b37bbe89edd5"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "47ee60eb288d447380658477765ceaf7",
+      "runId": "job-20261029163043-8ed2d068",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:32:21.062Z"
+    },
+    "seed": 1370393892,
+    "cards": [
+      {
+        "id": "rise-with-reduced-weight",
+        "stem": "In simplified level motion, what happens when weight drops but lift stays steady?",
+        "options": [
+          "airplane will rise",
+          "airplane will fall",
+          "aircraft will slow"
+        ],
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "If the weight is decreased while the lift is held constant, the airplane will rise:",
+        "hint": "Focus on which vertical force is greater."
+      },
+      {
+        "id": "fall-with-reduced-lift",
+        "stem": "In simplified vertical motion, what follows when lift becomes less than weight?",
+        "options": [
+          "Aircraft Falls",
+          "Aircraft Rises",
+          "Aircraft Accelerates"
+        ],
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Weight > Lift = Aircraft Falls",
+        "hint": "Compare lift and weight to find direction."
+      },
+      {
+        "id": "accelerate-with-thrust",
+        "stem": "In simplified forward motion, what follows when thrust exceeds drag?",
+        "options": [
+          "Aircraft Accelerates",
+          "Aircraft Slows",
+          "Aircraft Falls"
+        ],
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Thrust > Drag = Aircraft Accelerates",
+        "hint": "Compare thrust and drag to find outcome."
+      },
+      {
+        "id": "slow-with-drag",
+        "stem": "In simplified forward motion, what follows when drag exceeds thrust?",
+        "options": [
+          "Aircraft Slows",
+          "Aircraft Accelerates",
+          "Aircraft Rises"
+        ],
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "Drag > Thrust = Aircraft Slows",
+        "hint": "Think which horizontal force is larger."
+      }
+    ]
+  }
+}

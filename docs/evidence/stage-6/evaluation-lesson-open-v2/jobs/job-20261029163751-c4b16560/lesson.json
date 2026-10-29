@@ -1,0 +1,111 @@
+{
+  "jobId": "job-20261029163751-c4b16560",
+  "analysisRef": "job-20261029163751-c4b16560/analysis-v2.r3.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029163751-c4b16560:overview-v1:r3",
+    "componentId": "overview-v1",
+    "title": "Teen saving for emergencies and early compound interest growth",
+    "sources": [
+      {
+        "id": "cfpb-teenagers-and-saving",
+        "title": "Teenagers and saving — Consumer Financial Protection Bureau, Money as You Grow",
+        "locator": "https://www.consumerfinance.gov/consumer-tools/money-as-you-grow/teen-young-adult/explore-saving/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Consumer Financial Protection Bureau, Money as You Grow, 'Teenagers and saving'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+        "sha256": "a438468abdb47ce3f3afb4ed9e5c4bafa5ebf39e76f40973647383ef8df00b58"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "0eff89a5d64c42d8ab24948004af9636",
+      "runId": "job-20261029163751-c4b16560",
+      "promptVersion": "s6-v2",
+      "revision": 3,
+      "repairOf": 2,
+      "generatedAt": "2026-10-29T16:39:33.521Z"
+    },
+    "seed": 2074712905,
+    "headline": "Teen saving for emergencies and early compound interest growth",
+    "keyPoints": [
+      {
+        "id": "saving-ten-percent",
+        "point": "Save 10 percent of earnings to build at least three months worth of living expenses for emergency needs",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "save 10 percent of what you earn, and have at least three months’ worth of living expenses saved up in case of an emergency"
+      },
+      {
+        "id": "six-nine-months",
+        "point": "Having six to nine months worth of living expenses offers more protection than only three months",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "Explain that, if possible, it’s better to have more savings—like six to nine months’ worth of living expenses, instead of only three"
+      },
+      {
+        "id": "compound-definition",
+        "point": "Compound interest means earning interest on both the money you save and the interest already earned",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "Compound interest is when your child earns interest on both the money they save and the interest they earn"
+      },
+      {
+        "id": "early-start-advantage",
+        "point": "Setting aside $100 every year starting at age 14 builds savings that grow with interest over time",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "If they set aside $100 every year starting at age 14, they'd have about $23,000 at age 65"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "compound-interest",
+        "term": "Compound interest",
+        "gloss": "interest earned on principal and on previously earned interest",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "Compound interest is when your child earns interest on both the money they save and the interest they earn"
+      },
+      {
+        "id": "living-expenses",
+        "term": "living expenses",
+        "gloss": "costs needed to cover living needs each month for emergency planning",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "save 10 percent of what you earn, and have at least three months’ worth of living expenses saved up in case of an emergency"
+      },
+      {
+        "id": "savings-account",
+        "term": "savings account",
+        "gloss": "insured place to hold emergency savings for ready access",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "Having money in a savings account can help your child avoid having to rely on credit cards or loan options"
+      },
+      {
+        "id": "retirement-account",
+        "term": "401(k)",
+        "gloss": "workplace retirement account that may include employer matching contributions",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "Explain to your child that once they start a job, they may be offered a retirement account at work called a 401(k)"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029163751-c4b16560:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "1 card was left out because they could not be verified against the page: saving-share-rule (Q-01).",
+      "revision": 1
+    },
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261029163751-c4b16560:compare-table-v1:r3",
+      "status": "failed",
+      "reason": "CT-02, CT-04: cells[0] (starting-at-age-14): the entity \"starting-at-age-14\" occurs neither in the quote nor in the same paragraph as the located quote span (cell-in-quote); cells[1] (starting-at-age-35): the entity \"begin-saving-at-age-35\" occurs neither in the quote nor in the same paragraph as the located quot",
+      "revision": 3
+    }
+  ]
+}

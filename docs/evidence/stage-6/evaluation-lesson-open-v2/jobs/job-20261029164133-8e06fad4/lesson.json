@@ -1,0 +1,125 @@
+{
+  "jobId": "job-20261029164133-8e06fad4",
+  "analysisRef": "job-20261029164133-8e06fad4/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029164133-8e06fad4:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How radioactivity adds numeric ages to the geologic time scale",
+    "sources": [
+      {
+        "id": "usgs-fossils-numeric-time-scale",
+        "title": "Fossils, Rocks, and Time: The Numeric Time Scale — U.S. Geological Survey",
+        "locator": "https://pubs.usgs.gov/gip/fossils/numeric.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey, 'Fossils, Rocks, and Time: The Numeric Time Scale' (1997). Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "d6ba577d359485d9ea0ae92e97f294d27bb3a67e23758783067591896f570f2d"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "6ac493ccd4d24dfc9317a55c9de2f64f",
+      "runId": "job-20261029164133-8e06fad4",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:42:57.253Z"
+    },
+    "seed": 1246928484,
+    "headline": "How radioactivity adds numeric ages to the geologic time scale",
+    "keyPoints": [
+      {
+        "id": "earth-age-billions",
+        "point": "Earth is about 4.6 billion years old as a key benchmark for the numeric time scale",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "Earth is about 4.6 billion years old?"
+      },
+      {
+        "id": "oldest-fossils",
+        "point": "Oldest known fossils come from rocks deposited about 3.5 billion years ago",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "The oldest known fossils are from rocks that were deposited about 3.5 billion years ago?"
+      },
+      {
+        "id": "half-life-constant-rate",
+        "point": "Half-life is the constant rate time required for half the parent atoms to decay to daughter atoms",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "The half-life of a radioactive isotope is the length of time required for exactly one-half of the parent atoms to decay to daughter atoms."
+      },
+      {
+        "id": "isotopic-boundary-dating",
+        "point": "Many samples from several different places must be studied before assigning a numeric age to a geologic time scale boundary",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "Many samples, usually from several different places, must be studied before assigning a numeric age to a boundary on the geologic time scale."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "half-life-term",
+        "term": "half-life",
+        "gloss": "constant time for half the parent atoms to decay to daughter atoms",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "The change from parent to daughter happens at a constant rate, called the half-life."
+      },
+      {
+        "id": "isotopes-term",
+        "term": "Isotopes",
+        "gloss": "atoms of an element that differ only in number of neutrons in nucleus",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "Isotopes of an element are atoms that differ from one another only in the number of neutrons in the nucleus."
+      },
+      {
+        "id": "parent-term",
+        "term": "parent",
+        "gloss": "radioactive isotope that converts to daughter at constant rate",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "The change from parent to daughter happens at a constant rate, called the half-life."
+      },
+      {
+        "id": "daughter-term",
+        "term": "daughter",
+        "gloss": "stable isotope produced when parent changes at constant rate",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "The change from parent to daughter happens at a constant rate, called the half-life."
+      },
+      {
+        "id": "geologic-time-scale-term",
+        "term": "geologic time scale",
+        "gloss": "scale that uses numeric ages from isotopic and fossil dating to order Earth history",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "Many samples, usually from several different places, must be studied before assigning a numeric age to a boundary on the geologic time scale."
+      },
+      {
+        "id": "radioactive-term",
+        "term": "radioactive",
+        "gloss": "unstable isotope that has unique half life and decays to daughter",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "Each radioactive isotope has its own unique half-life."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029164133-8e06fad4:quiz-cards-v1:r3",
+      "status": "failed",
+      "reason": "Q-06: cards[3].options[0] states the number 10000, which does not appear on the page or in the same quote (N-01)",
+      "revision": 3
+    },
+    {
+      "componentId": "half-life-v1",
+      "specId": "usgs-fossils-numeric-time-scale-job-20261029164133-8e06fad4",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

@@ -1,0 +1,210 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Secrecy, Structure and Votes",
+    "cards": [
+      {
+        "id": "secrecy-rules",
+        "stem": "What measure did delegates adopt to protect liberty and lives during meetings?",
+        "options": [
+          "strict rules of secrecy",
+          "allowance of public spectators",
+          "daily published journals",
+          "rotation to open venues"
+        ],
+        "sourceId": "nara-lee-resolution",
+        "quote": "The delegates to Congress adopted strict rules of secrecy to protect the cause of American liberty and their own lives.",
+        "hint": "Think about why meetings were kept private."
+      },
+      {
+        "id": "three-parts-structure",
+        "stem": "Which element was included among the three parts of the Lee proposal?",
+        "options": [
+          "a call to form foreign alliances",
+          "an immediate surrender to Britain",
+          "a permanent tax agreement with Parliament",
+          "a joint military parade in London"
+        ],
+        "sourceId": "nara-lee-resolution",
+        "quote": "The Lee Resolution contained three parts: a declaration of independence, a call to form foreign alliances, and \"a plan for confederation.\"",
+        "hint": "Recall the three distinct aims listed together."
+      },
+      {
+        "id": "committees-june11",
+        "stem": "What did Congress create on June 11, 1776 to handle the resolution?",
+        "options": [
+          "three concurrent committees",
+          "a single royal commission",
+          "an emergency military tribunal",
+          "a delegation to negotiate surrender"
+        ],
+        "sourceId": "nara-lee-resolution",
+        "quote": "On June 11, 1776, the Congress appointed three concurrent committees in response to the Lee Resolution: one to draft a declaration of independence,",
+        "hint": "Remember how tasks were divided that day."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029164529-45034b22:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "000209101dab4f97a030e2f26854728a",
+    "usage": {
+      "promptTokens": 2746,
+      "completionTokens": 4478,
+      "reasoningTokens": 4053,
+      "cachedTokens": 0
+    },
+    "latencyMs": 17089,
+    "estCostUSD": 0.022464,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "pruned": true,
+  "dropped": [
+    {
+      "index": 2,
+      "id": "vote-tally-12",
+      "reason": "card failed Q-06",
+      "checks": [
+        "Q-06"
+      ]
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029164529-45034b22:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Secrecy, Structure and Votes",
+    "sources": [
+      {
+        "id": "nara-lee-resolution",
+        "title": "Lee Resolution (1776) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/lee-resolution",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Lee Resolution (1776)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "a18b4131b1c5223c9b0685aed8fa77a746537b2af6e2084d892549e8808ce9e3"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "000209101dab4f97a030e2f26854728a",
+      "runId": "job-20261029164529-45034b22",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:46:53.474Z"
+    },
+    "seed": 1960557028,
+    "cards": [
+      {
+        "id": "secrecy-rules",
+        "stem": "What measure did delegates adopt to protect liberty and lives during meetings?",
+        "options": [
+          "strict rules of secrecy",
+          "allowance of public spectators",
+          "daily published journals",
+          "rotation to open venues"
+        ],
+        "sourceId": "nara-lee-resolution",
+        "quote": "The delegates to Congress adopted strict rules of secrecy to protect the cause of American liberty and their own lives.",
+        "hint": "Think about why meetings were kept private."
+      },
+      {
+        "id": "three-parts-structure",
+        "stem": "Which element was included among the three parts of the Lee proposal?",
+        "options": [
+          "a call to form foreign alliances",
+          "an immediate surrender to Britain",
+          "a permanent tax agreement with Parliament",
+          "a joint military parade in London"
+        ],
+        "sourceId": "nara-lee-resolution",
+        "quote": "The Lee Resolution contained three parts: a declaration of independence, a call to form foreign alliances, and \"a plan for confederation.\"",
+        "hint": "Recall the three distinct aims listed together."
+      },
+      {
+        "id": "committees-june11",
+        "stem": "What did Congress create on June 11, 1776 to handle the resolution?",
+        "options": [
+          "three concurrent committees",
+          "a single royal commission",
+          "an emergency military tribunal",
+          "a delegation to negotiate surrender"
+        ],
+        "sourceId": "nara-lee-resolution",
+        "quote": "On June 11, 1776, the Congress appointed three concurrent committees in response to the Lee Resolution: one to draft a declaration of independence,",
+        "hint": "Remember how tasks were divided that day."
+      }
+    ]
+  }
+}

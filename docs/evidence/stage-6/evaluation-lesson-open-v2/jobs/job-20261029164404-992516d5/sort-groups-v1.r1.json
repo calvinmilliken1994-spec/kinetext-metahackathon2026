@@ -1,0 +1,219 @@
+{
+  "gen": {
+    "schemaVersion": "sort-groups-v1",
+    "title": "Sorting evolutionary forces linked to allele frequencies",
+    "groups": [
+      {
+        "id": "evolutionary-forces",
+        "label": "evolutionary forces"
+      },
+      {
+        "id": "allele-frequencies",
+        "label": "allele frequencies"
+      }
+    ],
+    "items": [
+      {
+        "id": "natural-selection",
+        "label": "natural selection",
+        "groupId": "evolutionary-forces",
+        "sourceId": "nij-population-genetics",
+        "quote": "the four evolutionary forces: natural selection, genetic drift, mutation, and migration."
+      },
+      {
+        "id": "genetic-drift",
+        "label": "genetic drift",
+        "groupId": "evolutionary-forces",
+        "sourceId": "nij-population-genetics",
+        "quote": "evolutionary forces: natural selection, genetic drift, mutation, and migration."
+      },
+      {
+        "id": "mutation",
+        "label": "mutation",
+        "groupId": "evolutionary-forces",
+        "sourceId": "nij-population-genetics",
+        "quote": "the four evolutionary forces: natural selection, genetic drift, mutation"
+      },
+      {
+        "id": "migration",
+        "label": "migration",
+        "groupId": "evolutionary-forces",
+        "sourceId": "nij-population-genetics",
+        "quote": "four evolutionary forces: natural selection, genetic drift, mutation, and migration."
+      },
+      {
+        "id": "distribution",
+        "label": "distribution",
+        "groupId": "allele-frequencies",
+        "sourceId": "nij-population-genetics",
+        "quote": "the distribution of and change in allele frequencies"
+      },
+      {
+        "id": "change",
+        "label": "change",
+        "groupId": "allele-frequencies",
+        "sourceId": "nij-population-genetics",
+        "quote": "distribution of and change in allele frequencies under the influence"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029164404-992516d5:sort-groups-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sort text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SORT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 item quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SORT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every item label occurs in its quote and every group label occurs in the quote or the same source paragraph (item-and-group-in-quote; the design discloses the weak-link false accept on long paragraphs — every quote is shown to the teacher)"
+      },
+      {
+        "id": "SORT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every declared group is referenced by >= 2 items and every item groupId resolves (groups-covered)"
+      },
+      {
+        "id": "SORT-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every item has a distinct label after normalisation (distinct-items)"
+      },
+      {
+        "id": "SORT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "groups 2 (2-4) and items 6 (6-12) are within the frozen counts (counts-valid)"
+      },
+      {
+        "id": "SORT-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in group and item labels appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "2ff0402a52fb476984e5d3fa9a85ad03",
+    "usage": {
+      "promptTokens": 2331,
+      "completionTokens": 12285,
+      "reasoningTokens": 11967,
+      "cachedTokens": 0
+    },
+    "latencyMs": 51671,
+    "estCostUSD": 0.055125,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029164404-992516d5:sort-groups-v1:r1",
+    "componentId": "sort-groups-v1",
+    "title": "Sorting evolutionary forces linked to allele frequencies",
+    "sources": [
+      {
+        "id": "nij-population-genetics",
+        "title": "Population Genetics — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+        "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/population-genetics",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Population Genetics'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+        "sha256": "3b67b8bbab70fa3f03067b217df5601f05ff044f0f6c0c6cad7b44b5191a29db"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "2ff0402a52fb476984e5d3fa9a85ad03",
+      "runId": "job-20261029164404-992516d5",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:45:29.041Z"
+    },
+    "seed": 2309012476,
+    "groups": [
+      {
+        "id": "evolutionary-forces",
+        "label": "evolutionary forces"
+      },
+      {
+        "id": "allele-frequencies",
+        "label": "allele frequencies"
+      }
+    ],
+    "items": [
+      {
+        "id": "natural-selection",
+        "label": "natural selection",
+        "groupId": "evolutionary-forces",
+        "sourceId": "nij-population-genetics",
+        "quote": "the four evolutionary forces: natural selection, genetic drift, mutation, and migration."
+      },
+      {
+        "id": "genetic-drift",
+        "label": "genetic drift",
+        "groupId": "evolutionary-forces",
+        "sourceId": "nij-population-genetics",
+        "quote": "evolutionary forces: natural selection, genetic drift, mutation, and migration."
+      },
+      {
+        "id": "mutation",
+        "label": "mutation",
+        "groupId": "evolutionary-forces",
+        "sourceId": "nij-population-genetics",
+        "quote": "the four evolutionary forces: natural selection, genetic drift, mutation"
+      },
+      {
+        "id": "migration",
+        "label": "migration",
+        "groupId": "evolutionary-forces",
+        "sourceId": "nij-population-genetics",
+        "quote": "four evolutionary forces: natural selection, genetic drift, mutation, and migration."
+      },
+      {
+        "id": "distribution",
+        "label": "distribution",
+        "groupId": "allele-frequencies",
+        "sourceId": "nij-population-genetics",
+        "quote": "the distribution of and change in allele frequencies"
+      },
+      {
+        "id": "change",
+        "label": "change",
+        "groupId": "allele-frequencies",
+        "sourceId": "nij-population-genetics",
+        "quote": "distribution of and change in allele frequencies under the influence"
+      }
+    ]
+  }
+}

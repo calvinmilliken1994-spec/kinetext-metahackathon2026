@@ -1,0 +1,204 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "physics",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "Page covers gliders as engine-free aircraft, steady descent along a straight inclined flight path, definition of glide angle via height and distance, and two force-balance relations used to determine lift and drag from measured height, distance and weight.",
+    "overview": {
+      "headline": "Steady glider descent links glide angle to lift and drag balance",
+      "keyPoints": [
+        {
+          "id": "glider-without-engine",
+          "point": "A glider is an aircraft with no engine that descends while traveling forward",
+          "sourceId": "nasa-grc-glider-trajectory-problem",
+          "quote": "A glider is a special kind of aircraft that has no engine."
+        },
+        {
+          "id": "steady-straight-path",
+          "point": "Steady descent follows a straight flight path inclined to the ground at the glide angle",
+          "sourceId": "nasa-grc-glider-trajectory-problem",
+          "quote": "The glider’s flight path is a simple straight line, shown as the inclined red line in the figure."
+        },
+        {
+          "id": "tangent-glide-angle",
+          "point": "Tangent of the glide angle equals change in height divided by distance flown",
+          "sourceId": "nasa-grc-glider-trajectory-problem",
+          "quote": "The tangent tan of the glide angle a is equal to the change in height h divided by the distance flown d:"
+        },
+        {
+          "id": "vertical-force-balance",
+          "point": "Lift times cosine of glide angle plus drag times sine of glide angle equals weight",
+          "sourceId": "nasa-grc-glider-trajectory-problem",
+          "quote": "The lift L times the cosine cos of the glide angle plus the drag D times the sine sin of the glide angle is equal to the weight W:"
+        },
+        {
+          "id": "horizontal-force-balance",
+          "point": "Lift times sine of glide angle equals drag times cosine of glide angle",
+          "sourceId": "nasa-grc-glider-trajectory-problem",
+          "quote": "The lift times the sine of the glide angle is equal to the drag times the cosine of the glide angle."
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "term-glider",
+          "term": "glider",
+          "gloss": "an aircraft with no engine that loses altitude as it travels in steady descent",
+          "sourceId": "nasa-grc-glider-trajectory-problem",
+          "quote": "A glider is a special kind of aircraft that has no engine."
+        },
+        {
+          "id": "term-glide-angle",
+          "term": "glide angle",
+          "gloss": "inclined angle between the straight flight path and the ground during steady descent",
+          "sourceId": "nasa-grc-glider-trajectory-problem",
+          "quote": "The flight path intersects the ground at an angle a called the glide angle."
+        },
+        {
+          "id": "term-tangent",
+          "term": "tangent",
+          "gloss": "trigonometry ratio equal to change in height divided by distance flown",
+          "sourceId": "nasa-grc-glider-trajectory-problem",
+          "quote": "The tangent tan of the glide angle a is equal to the change in height h divided by the distance flown d:"
+        },
+        {
+          "id": "term-lift",
+          "term": "lift",
+          "gloss": "aerodynamic force component that together with drag balances weight in the force equations",
+          "sourceId": "nasa-grc-glider-trajectory-problem",
+          "quote": "The lift L times the cosine cos of the glide angle plus the drag D times the sine sin of the glide angle is equal to the weight W:"
+        },
+        {
+          "id": "term-drag",
+          "term": "drag",
+          "gloss": "aerodynamic force that balances a component of lift along the glide path",
+          "sourceId": "nasa-grc-glider-trajectory-problem",
+          "quote": "The lift times the sine of the glide angle is equal to the drag times the cosine of the glide angle."
+        },
+        {
+          "id": "term-weight",
+          "term": "weight",
+          "gloss": "force due to gravity that balances lift and drag components in steady flight",
+          "sourceId": "nasa-grc-glider-trajectory-problem",
+          "quote": "The lift L times the cosine cos of the glide angle plus the drag D times the sine sin of the glide angle is equal to the weight W:"
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "formula-explorer-v1",
+        "pedagogicalReason": "Explore how height and distance determine the glide angle via the tangent relation",
+        "focusQuote": "tan(a) = h / d",
+        "focusSourceId": "nasa-grc-glider-trajectory-problem"
+      },
+      {
+        "componentId": "sequence-v1",
+        "pedagogicalReason": "Trace the experimental steps from measuring flight data to solving for lift and drag",
+        "focusQuote": "With these three equations we can experimentally determine the lift and drag of a glider.",
+        "focusSourceId": "nasa-grc-glider-trajectory-problem"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029164907-5c513ce5:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"physics\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 2065 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 13 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 5, keyTerms 6, componentPlan 2; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (2 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "f40eff353ad841eb8ad677d5053443f2",
+    "usage": {
+      "promptTokens": 3903,
+      "completionTokens": 8358,
+      "reasoningTokens": 7429,
+      "cachedTokens": 0
+    },
+    "latencyMs": 27853,
+    "estCostUSD": 0.04040025,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

@@ -1,0 +1,191 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "How increased distance from Earth center reduces weight",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Steps follow the page order from surface distance to altitude weight result",
+    "steps": [
+      {
+        "id": "surface-distance",
+        "label": "distance is about 4000 miles",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "On the surface of the earth the distance is about 4000 miles.",
+        "orderHint": "Track how growing distance lowers the weight value"
+      },
+      {
+        "id": "expect-decrease",
+        "label": "decrease with altitude",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "we would expect that the weight of an object would decrease with altitude.",
+        "orderHint": ""
+      },
+      {
+        "id": "airplane-distance",
+        "label": "distance to the center of the earth is about 4007 miles",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "If an airplane is flying at 35000 feet (about 7 miles) the distance to the center of the earth is about 4007 miles.",
+        "orderHint": ""
+      },
+      {
+        "id": "change-factor",
+        "label": "square of (4000/4007) which equals .9965",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "We can calculate the change in the gravitational constant as the square of (4000/4007) which equals .9965.",
+        "orderHint": ""
+      },
+      {
+        "id": "final-weight",
+        "label": "weighs 9965 pounds at 35000 feet",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "If the airplane weighs 10000 pounds on the surface of the earth, it weighs 9965 pounds at 35000 feet; it has lost 35 pounds",
+        "orderHint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029163043-7c0a4f7a:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step label occurs in its own quote after normalisation (labels-in-quotes)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 5 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "2dc81491e48e47c2ba5e8d019690135e",
+    "usage": {
+      "promptTokens": 2706,
+      "completionTokens": 8470,
+      "reasoningTokens": 8110,
+      "cachedTokens": 0
+    },
+    "latencyMs": 38181,
+    "estCostUSD": 0.03938,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029163043-7c0a4f7a:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "How increased distance from Earth center reduces weight",
+    "sources": [
+      {
+        "id": "nasa-grc-weight-equation",
+        "title": "Weight Equation — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/weight-equation/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "3bce4bd7de875c5dc08f1b682c3179be302140b673e9a7ea4ee516e778de172c"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "2dc81491e48e47c2ba5e8d019690135e",
+      "runId": "job-20261029163043-7c0a4f7a",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:32:12.866Z"
+    },
+    "seed": 301990658,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Steps follow the page order from surface distance to altitude weight result",
+    "steps": [
+      {
+        "id": "surface-distance",
+        "label": "distance is about 4000 miles",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "On the surface of the earth the distance is about 4000 miles.",
+        "orderHint": "Track how growing distance lowers the weight value"
+      },
+      {
+        "id": "expect-decrease",
+        "label": "decrease with altitude",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "we would expect that the weight of an object would decrease with altitude.",
+        "orderHint": ""
+      },
+      {
+        "id": "airplane-distance",
+        "label": "distance to the center of the earth is about 4007 miles",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "If an airplane is flying at 35000 feet (about 7 miles) the distance to the center of the earth is about 4007 miles.",
+        "orderHint": ""
+      },
+      {
+        "id": "change-factor",
+        "label": "square of (4000/4007) which equals .9965",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "We can calculate the change in the gravitational constant as the square of (4000/4007) which equals .9965.",
+        "orderHint": ""
+      },
+      {
+        "id": "final-weight",
+        "label": "weighs 9965 pounds at 35000 feet",
+        "sourceId": "nasa-grc-weight-equation",
+        "quote": "If the airplane weighs 10000 pounds on the surface of the earth, it weighs 9965 pounds at 35000 feet; it has lost 35 pounds",
+        "orderHint": ""
+      }
+    ]
+  }
+}

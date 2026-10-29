@@ -1,0 +1,131 @@
+{
+  "jobId": "job-20261029164907-5c513ce5",
+  "analysisRef": "job-20261029164907-5c513ce5/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029164907-5c513ce5:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Steady glider descent links glide angle to lift and drag balance",
+    "sources": [
+      {
+        "id": "nasa-grc-glider-trajectory-problem",
+        "title": "Glider Trajectory Problem — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/glider-trajectory-problem/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "66e6cfc191fb83e9cfff3bc323a0394b392cbb4e0278aba87b367f3203c3c1e2"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "f40eff353ad841eb8ad677d5053443f2",
+      "runId": "job-20261029164907-5c513ce5",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:49:35.637Z"
+    },
+    "seed": 2287489332,
+    "headline": "Steady glider descent links glide angle to lift and drag balance",
+    "keyPoints": [
+      {
+        "id": "glider-without-engine",
+        "point": "A glider is an aircraft with no engine that descends while traveling forward",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "A glider is a special kind of aircraft that has no engine."
+      },
+      {
+        "id": "steady-straight-path",
+        "point": "Steady descent follows a straight flight path inclined to the ground at the glide angle",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The glider’s flight path is a simple straight line, shown as the inclined red line in the figure."
+      },
+      {
+        "id": "tangent-glide-angle",
+        "point": "Tangent of the glide angle equals change in height divided by distance flown",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The tangent tan of the glide angle a is equal to the change in height h divided by the distance flown d:"
+      },
+      {
+        "id": "vertical-force-balance",
+        "point": "Lift times cosine of glide angle plus drag times sine of glide angle equals weight",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The lift L times the cosine cos of the glide angle plus the drag D times the sine sin of the glide angle is equal to the weight W:"
+      },
+      {
+        "id": "horizontal-force-balance",
+        "point": "Lift times sine of glide angle equals drag times cosine of glide angle",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The lift times the sine of the glide angle is equal to the drag times the cosine of the glide angle."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "term-glider",
+        "term": "glider",
+        "gloss": "an aircraft with no engine that loses altitude as it travels in steady descent",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "A glider is a special kind of aircraft that has no engine."
+      },
+      {
+        "id": "term-glide-angle",
+        "term": "glide angle",
+        "gloss": "inclined angle between the straight flight path and the ground during steady descent",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The flight path intersects the ground at an angle a called the glide angle."
+      },
+      {
+        "id": "term-tangent",
+        "term": "tangent",
+        "gloss": "trigonometry ratio equal to change in height divided by distance flown",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The tangent tan of the glide angle a is equal to the change in height h divided by the distance flown d:"
+      },
+      {
+        "id": "term-lift",
+        "term": "lift",
+        "gloss": "aerodynamic force component that together with drag balances weight in the force equations",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The lift L times the cosine cos of the glide angle plus the drag D times the sine sin of the glide angle is equal to the weight W:"
+      },
+      {
+        "id": "term-drag",
+        "term": "drag",
+        "gloss": "aerodynamic force that balances a component of lift along the glide path",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The lift times the sine of the glide angle is equal to the drag times the cosine of the glide angle."
+      },
+      {
+        "id": "term-weight",
+        "term": "weight",
+        "gloss": "force due to gravity that balances lift and drag components in steady flight",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The lift L times the cosine cos of the glide angle plus the drag D times the sine sin of the glide angle is equal to the weight W:"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "formula-explorer-v1",
+      "specId": "job-20261029164907-5c513ce5:formula-explorer-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261029164907-5c513ce5:sequence-v1:r1",
+      "status": "passed",
+      "reason": "1 step was left out because they could not be verified against the page: solve-remaining-equations (SEQ-01).",
+      "revision": 1
+    }
+  ]
+}

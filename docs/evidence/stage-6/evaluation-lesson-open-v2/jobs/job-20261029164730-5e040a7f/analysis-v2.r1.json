@@ -1,0 +1,191 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "physics",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "This page explains Bernoulli equation relating static, dynamic and total pressure, its derivation from energy conservation and molecular viewpoint, required idealizations and streamline limits, and uses for tube flow, airfoils and pitot tubes.",
+    "overview": {
+      "headline": "Bernoulli equation links total, static and dynamic pressure in steady ideal flow",
+      "keyPoints": [
+        {
+          "id": "total-pressure-constant",
+          "point": "The constant in the equation is identified as the total pressure of the flow",
+          "sourceId": "nasa-grc-bernoullis-equation",
+          "quote": "We call this constant the total pressure pt of the flow."
+        },
+        {
+          "id": "bernoulli-restrictions",
+          "point": "This form requires inviscid incompressible steady flow with negligible height change and no heat addition",
+          "sourceId": "nasa-grc-bernoullis-equation",
+          "quote": "the restrictions for this form are that the flow is inviscid, incompressible, steady, without heat addition, and with negligible change in height"
+        },
+        {
+          "id": "dynamic-pressure-definition",
+          "point": "Dynamic pressure is defined as density times velocity squared divided by two",
+          "sourceId": "nasa-grc-bernoullis-equation",
+          "quote": "The form of the dynamic pressure is the density times the square of the velocity divided by two."
+        },
+        {
+          "id": "pitot-static-application",
+          "point": "A pitot-static tube can measure static and total pressure to compute velocity using Bernoulli equation",
+          "sourceId": "nasa-grc-bernoullis-equation",
+          "quote": "In a pitot-static tube, we measure the static and total pressure and can then use Bernoulli’s equation to compute the velocity."
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "static-pressure",
+          "term": "static pressure",
+          "gloss": "pressure from random molecular motion that persists in moving flow",
+          "sourceId": "nasa-grc-bernoullis-equation",
+          "quote": "The remaining random motion of the molecules still produces a pressure called the static pressure."
+        },
+        {
+          "id": "dynamic-pressure",
+          "term": "dynamic pressure",
+          "gloss": "pressure linked to ordered motion of the gas in directed flow",
+          "sourceId": "nasa-grc-bernoullis-equation",
+          "quote": "We call this pressure the dynamic pressure."
+        },
+        {
+          "id": "total-pressure",
+          "term": "total pressure",
+          "gloss": "constant sum of static and dynamic pressure throughout the flow",
+          "sourceId": "nasa-grc-bernoullis-equation",
+          "quote": "We call this constant the total pressure pt of the flow."
+        },
+        {
+          "id": "inviscid",
+          "term": "inviscid",
+          "gloss": "flow condition neglecting viscous dissipation of energy",
+          "sourceId": "nasa-grc-bernoullis-equation",
+          "quote": "the restrictions for this form are that the flow is inviscid, incompressible, steady, without heat addition, and with negligible change in height"
+        },
+        {
+          "id": "incompressible",
+          "term": "incompressible",
+          "gloss": "flow condition where density is taken as constant for the analysis",
+          "sourceId": "nasa-grc-bernoullis-equation",
+          "quote": "the restrictions for this form are that the flow is inviscid, incompressible, steady, without heat addition, and with negligible change in height"
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "formula-explorer-v1",
+        "pedagogicalReason": "Learners can explore how total pressure stays constant while static pressure and dynamic pressure trade with velocity changes",
+        "focusQuote": "pt = ps + (rho * V^2) / 2",
+        "focusSourceId": "nasa-grc-bernoullis-equation"
+      },
+      {
+        "componentId": "sequence-v1",
+        "pedagogicalReason": "Derivation builds stepwise from energy conservation to Bernoulli form so sequencing makes the simplifying assumptions visible",
+        "focusQuote": "We shall derive Bernoulli’s equation by starting with the conservation of energy equation.",
+        "focusSourceId": "nasa-grc-bernoullis-equation"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029164730-5e040a7f:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"physics\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 8352 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 11 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 4, keyTerms 5, componentPlan 2; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (2 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "55458dd1b28e442a9c43a509886831f6",
+    "usage": {
+      "promptTokens": 5190,
+      "completionTokens": 7923,
+      "reasoningTokens": 7135,
+      "cachedTokens": 0
+    },
+    "latencyMs": 26043,
+    "estCostUSD": 0.04016025,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

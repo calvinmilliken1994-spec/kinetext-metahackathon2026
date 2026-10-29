@@ -1,0 +1,199 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Gene Pools and Genetic Diversity",
+    "cards": [
+      {
+        "id": "gene-pool-definition",
+        "stem": "What does a gene pool represent for a species or population?",
+        "options": [
+          "the unique set of alleles",
+          "a single individual's genotype",
+          "the amount of heterozygosity",
+          "a grid for expected genotypes"
+        ],
+        "sourceId": "nij-heterozygosity",
+        "quote": "A gene pool is the unique set of alleles that could be found by analyzing the DNA from every member of a species or population.",
+        "hint": ""
+      },
+      {
+        "id": "small-pool-fitness-effect",
+        "stem": "What outcome is linked to a small gene pool with poor diversity?",
+        "options": [
+          "decreased fitness",
+          "increased genetic diversity",
+          "a large gene pool",
+          "greater adaptability"
+        ],
+        "sourceId": "nij-heterozygosity",
+        "quote": "a small gene pool is associated with poor genetic diversity and can lead to decreased fitness and an increased chance of extinction.",
+        "hint": ""
+      },
+      {
+        "id": "diversity-distribution-pattern",
+        "stem": "Where is human genetic diversity greatest according to the study?",
+        "options": [
+          "within populations",
+          "between continents",
+          "between populations",
+          "among identical twins"
+        ],
+        "sourceId": "nij-heterozygosity",
+        "quote": "Genetic diversity is greater within populations than between them.",
+        "hint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029164201-69cd8147:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "c447e1e448c747c49e22d6d606c641d3",
+    "usage": {
+      "promptTokens": 2656,
+      "completionTokens": 4318,
+      "reasoningTokens": 4060,
+      "cachedTokens": 0
+    },
+    "latencyMs": 18930,
+    "estCostUSD": 0.0216715,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029164201-69cd8147:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Gene Pools and Genetic Diversity",
+    "sources": [
+      {
+        "id": "nij-heterozygosity",
+        "title": "Heterozygosity — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+        "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/population-genetics/heterozygosity",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Heterozygosity'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+        "sha256": "b88d68137ace380387528e9b0d424ad162ee448ea6d48d6646cb090dbfc4e1e9"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "c447e1e448c747c49e22d6d606c641d3",
+      "runId": "job-20261029164201-69cd8147",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:43:06.593Z"
+    },
+    "seed": 181779345,
+    "cards": [
+      {
+        "id": "gene-pool-definition",
+        "stem": "What does a gene pool represent for a species or population?",
+        "options": [
+          "the unique set of alleles",
+          "a single individual's genotype",
+          "the amount of heterozygosity",
+          "a grid for expected genotypes"
+        ],
+        "sourceId": "nij-heterozygosity",
+        "quote": "A gene pool is the unique set of alleles that could be found by analyzing the DNA from every member of a species or population.",
+        "hint": ""
+      },
+      {
+        "id": "small-pool-fitness-effect",
+        "stem": "What outcome is linked to a small gene pool with poor diversity?",
+        "options": [
+          "decreased fitness",
+          "increased genetic diversity",
+          "a large gene pool",
+          "greater adaptability"
+        ],
+        "sourceId": "nij-heterozygosity",
+        "quote": "a small gene pool is associated with poor genetic diversity and can lead to decreased fitness and an increased chance of extinction.",
+        "hint": ""
+      },
+      {
+        "id": "diversity-distribution-pattern",
+        "stem": "Where is human genetic diversity greatest according to the study?",
+        "options": [
+          "within populations",
+          "between continents",
+          "between populations",
+          "among identical twins"
+        ],
+        "sourceId": "nij-heterozygosity",
+        "quote": "Genetic diversity is greater within populations than between them.",
+        "hint": ""
+      }
+    ]
+  }
+}

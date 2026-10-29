@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Flight forces and distance basics",
+    "cards": [
+      {
+        "id": "no-net-force-law",
+        "stem": "Which motion law keeps airspeed steady when net force is zero?",
+        "options": [
+          "Newton’s First Law of Motion",
+          "Newton’s Second Law",
+          "Newton’s Third Law",
+          "Conservation of Energy Principle"
+        ],
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "Since there is no net external force on the aircraft, the aircraft maintains a constant airspeed as described by Newton’s First Law of Motion.",
+        "hint": "Think about what happens with balanced forces."
+      },
+      {
+        "id": "level-flight-balance",
+        "stem": "In steady level flight, which forces are described as balanced?",
+        "options": [
+          "the lift is equal to the weight",
+          "the lift is equal to the drag",
+          "the weight is equal to the thrust",
+          "the drag is equal to the weight"
+        ],
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "an airplane can maintain a constant speed and level flight, in which the lift is equal to the weight, and the thrust is equal to the drag.",
+        "hint": "Consider vertical and horizontal pairs separately."
+      },
+      {
+        "id": "ground-speed-wind",
+        "stem": "What condition keeps ground speed steady during cruise?",
+        "options": [
+          "as long as the wind speed is constant",
+          "as long as altitude stays constant",
+          "as long as fuel burn stays constant",
+          "as long as lift stays constant"
+        ],
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "The ground speed remains constant as long as the wind speed is constant.",
+        "hint": "Focus on wind influence on ground speed."
+      },
+      {
+        "id": "max-range-time",
+        "stem": "Maximum distance is ground speed multiplied by which time factor?",
+        "options": [
+          "maximum time (tmax)",
+          "average cruise altitude",
+          "remaining fuel reserve",
+          "initial takeoff speed"
+        ],
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "The maximum distance that the aircraft can fly is then equal to the ground speed times the maximum time (tmax).",
+        "hint": "Range depends on how long flight can last."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029163224-2a532c04:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "c8e35b205ec54a0a81c4a5546794a040",
+    "usage": {
+      "promptTokens": 2789,
+      "completionTokens": 3096,
+      "reasoningTokens": 2683,
+      "cachedTokens": 0
+    },
+    "latencyMs": 14346,
+    "estCostUSD": 0.01664425,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029163224-2a532c04:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Flight forces and distance basics",
+    "sources": [
+      {
+        "id": "nasa-grc-range-constant-velocity",
+        "title": "Range – Constant Velocity — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/range-constant-velocity/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "f1f4102e23398f882264cb387f0c4115207597b855cadae074925c9e7c1a4127"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "c8e35b205ec54a0a81c4a5546794a040",
+      "runId": "job-20261029163224-2a532c04",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:33:52.755Z"
+    },
+    "seed": 919645422,
+    "cards": [
+      {
+        "id": "no-net-force-law",
+        "stem": "Which motion law keeps airspeed steady when net force is zero?",
+        "options": [
+          "Newton’s First Law of Motion",
+          "Newton’s Second Law",
+          "Newton’s Third Law",
+          "Conservation of Energy Principle"
+        ],
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "Since there is no net external force on the aircraft, the aircraft maintains a constant airspeed as described by Newton’s First Law of Motion.",
+        "hint": "Think about what happens with balanced forces."
+      },
+      {
+        "id": "level-flight-balance",
+        "stem": "In steady level flight, which forces are described as balanced?",
+        "options": [
+          "the lift is equal to the weight",
+          "the lift is equal to the drag",
+          "the weight is equal to the thrust",
+          "the drag is equal to the weight"
+        ],
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "an airplane can maintain a constant speed and level flight, in which the lift is equal to the weight, and the thrust is equal to the drag.",
+        "hint": "Consider vertical and horizontal pairs separately."
+      },
+      {
+        "id": "ground-speed-wind",
+        "stem": "What condition keeps ground speed steady during cruise?",
+        "options": [
+          "as long as the wind speed is constant",
+          "as long as altitude stays constant",
+          "as long as fuel burn stays constant",
+          "as long as lift stays constant"
+        ],
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "The ground speed remains constant as long as the wind speed is constant.",
+        "hint": "Focus on wind influence on ground speed."
+      },
+      {
+        "id": "max-range-time",
+        "stem": "Maximum distance is ground speed multiplied by which time factor?",
+        "options": [
+          "maximum time (tmax)",
+          "average cruise altitude",
+          "remaining fuel reserve",
+          "initial takeoff speed"
+        ],
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "The maximum distance that the aircraft can fly is then equal to the ground speed times the maximum time (tmax).",
+        "hint": "Range depends on how long flight can last."
+      }
+    ]
+  }
+}

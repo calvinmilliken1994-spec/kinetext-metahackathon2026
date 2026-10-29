@@ -1,0 +1,157 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nasa-grc-newtons-laws-of-motion-job-20261029163043-e1ab6385",
+  "title": "Force, Mass and Acceleration with Model Aircraft",
+  "learningObjectives": [
+    "Explain that an object maintains constant velocity when net force is zero because of inertia.",
+    "Relate acceleration to net force and mass with a = F_net / m for constant mass.",
+    "Describe force, velocity and acceleration as vector quantities that have magnitude and direction in one dimension."
+  ],
+  "sources": [
+    {
+      "id": "nasa-grc-newtons-laws-of-motion",
+      "title": "Newton's Laws of Motion — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+      "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/newtons-laws-of-motion/",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+      "sha256": "907bae07076eef20118a4e54096ad399b11994ec5e310d9bed74850f6d009014"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "inertia-constant-velocity",
+      "text": "An object resists changes in its state of motion. When the net force is zero the object keeps moving with constant velocity.",
+      "evidence": [
+        {
+          "sourceId": "nasa-grc-newtons-laws-of-motion",
+          "quote": "This tendency to resist changes in a state of motion is inertia."
+        },
+        {
+          "sourceId": "nasa-grc-newtons-laws-of-motion",
+          "quote": "If there is no net force acting on the object, then the object will maintain a constant velocity."
+        }
+      ]
+    },
+    {
+      "id": "second-law-mass-force",
+      "text": "For constant mass, acceleration is determined by net force divided by mass. Larger force gives larger acceleration and larger mass gives smaller acceleration for the same force.",
+      "evidence": [
+        {
+          "sourceId": "nasa-grc-newtons-laws-of-motion",
+          "quote": "The acceleration of an object depends on the mass of the object and the amount of force applied."
+        },
+        {
+          "sourceId": "nasa-grc-newtons-laws-of-motion",
+          "quote": "F = m * a"
+        }
+      ]
+    },
+    {
+      "id": "acceleration-vector",
+      "text": "Acceleration is defined as change in velocity divided by change in time, and force, velocity, acceleration and momentum are vector quantities with magnitude and direction.",
+      "evidence": [
+        {
+          "sourceId": "nasa-grc-newtons-laws-of-motion",
+          "quote": "The change in velocity divided by the change in time is the definition of the acceleration a."
+        },
+        {
+          "sourceId": "nasa-grc-newtons-laws-of-motion",
+          "quote": "Scientists and mathematicians call this a vector quantity."
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "forces-1d-v1",
+    "equation": "a=F_net/m",
+    "massKg": {
+      "unit": "kg",
+      "min": 0.5,
+      "max": 20,
+      "default": 5
+    },
+    "netForceN": {
+      "unit": "N",
+      "min": -50,
+      "max": 50,
+      "default": 10
+    },
+    "scenario": {
+      "objectLabel": "Model aircraft",
+      "surfaceLabel": "Level flight, x-direction only"
+    },
+    "durationS": 5,
+    "stepS": 0.02,
+    "observables": [
+      "position",
+      "velocity",
+      "acceleration"
+    ]
+  },
+  "behavioralTests": [
+    {
+      "name": "zero net force maintains velocity",
+      "massKg": 2,
+      "netForceN": 0,
+      "expectedAccelerationMps2": 0,
+      "tolerance": 0.001
+    },
+    {
+      "name": "negative net force produces negative acceleration",
+      "massKg": 4,
+      "netForceN": -40,
+      "expectedAccelerationMps2": -10,
+      "tolerance": 0.001
+    },
+    {
+      "name": "positive net force produces positive acceleration",
+      "massKg": 5,
+      "netForceN": 25,
+      "expectedAccelerationMps2": 5,
+      "tolerance": 0.001
+    }
+  ],
+  "predictions": [
+    {
+      "id": "pred-1",
+      "prompt": "Predict the acceleration for a 3 kg model aircraft with 12 N forward net force.",
+      "massKg": 3,
+      "netForceN": 12,
+      "expectedAccelerationMps2": 4,
+      "tolerance": 0.001
+    },
+    {
+      "id": "pred-2",
+      "prompt": "Predict the acceleration for a 6 kg model aircraft with -18 N net force.",
+      "massKg": 6,
+      "netForceN": -18,
+      "expectedAccelerationMps2": -3,
+      "tolerance": 0.001
+    },
+    {
+      "id": "pred-3",
+      "prompt": "Predict the acceleration for a 10 kg model aircraft with 20 N net force.",
+      "massKg": 10,
+      "netForceN": 20,
+      "expectedAccelerationMps2": 2,
+      "tolerance": 0.001
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "8454f5689e8d4d9e9dd095cfc51a57fd",
+    "runId": "job-20261029163043-e1ab6385",
+    "promptVersion": "v9",
+    "generatedAt": "2026-10-29T16:32:31.274Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261029164619-2d4282d7",
+  "analysisRef": "job-20261029164619-2d4282d7/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029164619-2d4282d7:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Lincoln turned the Civil War into a war for freedom with the 1863 Proclamation",
+    "sources": [
+      {
+        "id": "nara-emancipation-proclamation",
+        "title": "Emancipation Proclamation (1863) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/emancipation-proclamation",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Emancipation Proclamation (1863)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "0d11585e47f04bd0a12b0ded4d23595943f21a5af522811db76a93ef0486f646"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "f9bb0a3223ce44c6aa1c2fd48366374a",
+      "runId": "job-20261029164619-2d4282d7",
+      "promptVersion": "s6-v2",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-29T16:47:03.940Z"
+    },
+    "seed": 2893624132,
+    "headline": "Lincoln turned the Civil War into a war for freedom with the 1863 Proclamation",
+    "keyPoints": [
+      {
+        "id": "initial-war-aim",
+        "point": "Initially the Civil War was fought to prevent secession and preserve the Union rather than end slavery",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "Initially, the Civil War between North and South was fought by the North to prevent the secession of the Southern states and preserve the Union."
+      },
+      {
+        "id": "preliminary-warning",
+        "point": "Preliminary Proclamation on September 22 1862 warned that enslaved people in rebelling states would be declared free on January 1 1863",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "That changed on September 22, 1862, when President Lincoln issued his Preliminary Emancipation Proclamation"
+      },
+      {
+        "id": "limited-application",
+        "point": "As a military measure the Proclamation applied only to seceded states leaving slavery untouched in loyal border states",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "It applied only to states that had seceded from the Union, leaving slavery untouched in the loyal border states."
+      },
+      {
+        "id": "transformation-service",
+        "point": "Proclamation transformed the war and announced acceptance of Black men into the Union Army and Navy",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "Moreover, the Proclamation announced the acceptance of Black men into the Union Army and Navy, enabling the liberated to become liberators."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "emancipation-proclamation",
+        "term": "Emancipation Proclamation",
+        "gloss": "Presidential Proclamation that declared freedom for enslaved people in rebellious areas during the Civil War",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "President Abraham Lincoln issued the Emancipation Proclamation on January 1, 1863, announcing,"
+      },
+      {
+        "id": "secession",
+        "term": "secession",
+        "gloss": "Formal withdrawal of Southern states from the Union that helped cause the Civil War",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "Initially, the Civil War between North and South was fought by the North to prevent the secession of the Southern states and preserve the Union."
+      },
+      {
+        "id": "military-measure",
+        "term": "military measure",
+        "gloss": "Description of the Proclamation as a wartime military measure that limited its immediate legal reach",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "Because it was a military measure, however, the Emancipation Proclamation was limited in many ways."
+      },
+      {
+        "id": "border-states",
+        "term": "border states",
+        "gloss": "Loyal slaveholding border states left untouched by the Proclamation because they had not seceded",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "It applied only to states that had seceded from the Union, leaving slavery untouched in the loyal border states."
+      },
+      {
+        "id": "union-army",
+        "term": "Union Army",
+        "gloss": "Federal Union Army that accepted Black men after January 1 1863 to expand freedom with every advance",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "Moreover, the Proclamation announced the acceptance of Black men into the Union Army and Navy, enabling the liberated to become liberators."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261029164619-2d4282d7:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029164619-2d4282d7:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

@@ -1,0 +1,206 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Debates and Decisions in Philadelphia",
+    "cards": [
+      {
+        "id": "power-debate",
+        "stem": "What was a chief point of debate concerning national authority?",
+        "options": [
+          "how much power to allow the central government",
+          "whether to abolish state courts entirely",
+          "how to fund a permanent navy",
+          "when to hold national elections"
+        ],
+        "sourceId": "nara-constitution",
+        "quote": "Among the chief points at issue were how much power to allow the central government, how many representatives in Congress to allow each state",
+        "hint": "Focus on powers discussed for the central authority."
+      },
+      {
+        "id": "election-method",
+        "stem": "How did delegates debate choosing members of Congress?",
+        "options": [
+          "directly by the people or by the state legislators",
+          "by appointment of the chief executive",
+          "by lottery among property owners"
+        ],
+        "sourceId": "nara-constitution",
+        "quote": "how these representatives should be elected—directly by the people or by the state legislators.",
+        "hint": "Recall the election methods mentioned for representatives."
+      },
+      {
+        "id": "convention-purpose",
+        "stem": "What was the stated original reason for gathering in Philadelphia?",
+        "options": [
+          "to revise the Articles of Confederation",
+          "to declare independence from Britain",
+          "to negotiate a peace treaty with France"
+        ],
+        "sourceId": "nara-constitution",
+        "quote": "The Federal Convention convened in the State House (Independence Hall) in Philadelphia on May 14, 1787, to revise the Articles of Confederation.",
+        "hint": "Remember the initial purpose stated for convening."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261029164455-ab614ddb:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "53ad1a8f72754e82b6fba05ec453c952",
+    "usage": {
+      "promptTokens": 2426,
+      "completionTokens": 9803,
+      "reasoningTokens": 9407,
+      "cachedTokens": 0
+    },
+    "latencyMs": 35229,
+    "estCostUSD": 0.04469525,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "pruned": true,
+  "dropped": [
+    {
+      "index": 3,
+      "id": "quorum-delay",
+      "reason": "card failed Q-06",
+      "checks": [
+        "Q-06"
+      ]
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029164455-ab614ddb:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Debates and Decisions in Philadelphia",
+    "sources": [
+      {
+        "id": "nara-constitution",
+        "title": "Constitution of the United States (1787) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/constitution",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Constitution of the United States (1787)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "a14175b009333bebd61eaff70e3393928a8f0dbd0ae00027067c07b15d176db4"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "53ad1a8f72754e82b6fba05ec453c952",
+      "runId": "job-20261029164455-ab614ddb",
+      "promptVersion": "s6-v2",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T16:46:18.954Z"
+    },
+    "seed": 1378682633,
+    "cards": [
+      {
+        "id": "power-debate",
+        "stem": "What was a chief point of debate concerning national authority?",
+        "options": [
+          "how much power to allow the central government",
+          "whether to abolish state courts entirely",
+          "how to fund a permanent navy",
+          "when to hold national elections"
+        ],
+        "sourceId": "nara-constitution",
+        "quote": "Among the chief points at issue were how much power to allow the central government, how many representatives in Congress to allow each state",
+        "hint": "Focus on powers discussed for the central authority."
+      },
+      {
+        "id": "election-method",
+        "stem": "How did delegates debate choosing members of Congress?",
+        "options": [
+          "directly by the people or by the state legislators",
+          "by appointment of the chief executive",
+          "by lottery among property owners"
+        ],
+        "sourceId": "nara-constitution",
+        "quote": "how these representatives should be elected—directly by the people or by the state legislators.",
+        "hint": "Recall the election methods mentioned for representatives."
+      },
+      {
+        "id": "convention-purpose",
+        "stem": "What was the stated original reason for gathering in Philadelphia?",
+        "options": [
+          "to revise the Articles of Confederation",
+          "to declare independence from Britain",
+          "to negotiate a peace treaty with France"
+        ],
+        "sourceId": "nara-constitution",
+        "quote": "The Federal Convention convened in the State House (Independence Hall) in Philadelphia on May 14, 1787, to revise the Articles of Confederation.",
+        "hint": "Remember the initial purpose stated for convening."
+      }
+    ]
+  }
+}
