@@ -1,26 +1,206 @@
 # Make knowledge interactive.
 
-Product name provisional. Meta-first educational source → validated interactive learning artifact.
+Product name provisional. Solo entry (Indie Developer) to the Meta Global AI Developer Hackathon 2026
+(Cerebral Valley), track **Build for Your World**.
 
-## Status
-Setup scaffold only. No web application, runtime agent pipeline, sandbox, or publishing service is implemented yet. Local contracts and a direct Meta API smoke probe are prepared. Meta credentials and its authenticated catalog are now verified; metered inference still requires spending approval. See `docs/PROFILE_ACTIVATION.md`.
+## What it is
 
-## Workspace and profile
-- Workspace: `C:/projects/meta-hackathon` (existing user folder).
-- Profile: `meta-hackathon-2026`.
-- Run from this directory: `hermes -p meta-hackathon-2026 chat`.
-- Main engineering orchestrator: `anthropic / claude-opus-5-5`; runtime intelligence: direct Meta `muse-spark-1.3`, not OpenAI.
+A teacher picks a licensed public page (or pastes one they have rights to). Muse Spark, Meta's model,
+reads it and builds a page overview whose every claim is quote-linked to the source, plus interactive
+parts: quiz cards (predict, then reveal), sequence, sort, concept map, compare table, a formula
+explorer with sliders and a live graph, and balance-the-equation — along with tested premium
+simulations (forces, projectile, lift, speed of sound, compound interest, half-life, Hardy-Weinberg)
+and dated timelines. Deterministic code then checks every quote against the stored page text, every
+number against the engine that computes it, and every formula with a safe parser and exact evaluator.
+Whatever fails goes back to Muse for a bounded repair; only parts that pass are published, and a part
+that cannot be fixed is left out instead of shipping wrong. This is not a chatbot: the output is an
+interactive artifact with a visible verify-and-repair loop, not a conversation.
 
-## Verify setup
-Node >=22; checked with Node 24.14.1.
-```
+## Results
+
+Two evaluation series on the same 29 licensed public pages. The pre-registered v1 evaluation scored
+the first product shape (one premium activity per page, or an honest decline). The lesson flow is a
+later, broader shape (overview plus two to three checked interactive parts). The lesson-flow runs are
+**follow-up runs, not a new pre-registered benchmark**; the pre-registered v1 scores are unchanged.
+
+| Run | Pages with a lesson | Failed pages | Interactive parts kept | Median time | Cost | Evidence |
+|---|---|---|---|---|---|---|
+| v1, pre-registered (one premium activity, Spark 1.3) | 9 / 29 | 3 | — | — | USD 0.93 total | `docs/evidence/stage-5b/evaluation/` |
+| Lesson flow, Spark 1.3 via Meta API | **28 / 29** | 1 (BUG-006, since fixed) | 63 / 67 (94%) | 74 s | **USD 4.53** (~0.14/page) | `docs/evidence/stage-6/evaluation-lesson-1.3/` |
+| Lesson flow, Spark Open on Modal (first run) | 27 / 29 | 2 | 61 / 77 (79%) | 139 s | USD 6.86 (Modal credits) | `docs/evidence/stage-6/evaluation-lesson-open/` |
+| Lesson flow, Spark Open after the s6-v2 prompt fixes | **28 / 29** | **0** | 48 / 56 (86%) | 100 s | USD 4.95 (Modal credits) | `docs/evidence/stage-6/evaluation-lesson-open-v2/` |
+
+What the runs show, beyond the counts:
+
+- The v1 run's 9/29 was a coverage problem, not a quality problem: requiring exactly one premium
+  activity per page leaves most pages declined (17 of 29 in v1, including 8 later judged declined in
+  error). The lesson flow turns nearly every page into something interactive (28/29) on both the
+  hosted and the open-weights model.
+- The 254-character glossary stub is correctly declined (`too-short`, 8 s) instead of padded into a lesson.
+- Five **natural** analysis repairs (no injected faults) all passed on the Spark 1.3 run; on Spark Open
+  the checks keep weak parts out rather than failing the page.
+- One truncation inside a single component used to fail the whole lesson (BUG-006); since `a53c1f0` only
+  that part is left out.
+- The two Spark Open runs bracket a real engineering loop: its first run lost 16 planned parts (6 ran
+  out of room, formula and table shape misses). Muse then rewrote its own generation instructions
+  (s6-v2, commits `a6d98bb`/`ef2dee2`); the re-run had 0 failed pages, 0 truncations, and was faster
+  and cheaper. Compare tables remain the weak part on Spark Open (see Limits).
+- The open-weights runs used 3 pages at once (whole 29-page run: 19 minutes).
+
+## How Meta AI is used
+
+- **Runtime, hosted:** Muse Spark 1.3 (`muse-spark-1.3`) via the Meta Model API. Every live call uses
+  constrained decoding (`response_format: json_schema`) and reasoning effort high. Muse decides the
+  subject, writes the overview and the component plan, generates each component, and performs every
+  repair. Without Muse there is no lesson — this is the core intelligence layer, not decoration.
+- **Runtime, open weights:** Muse Spark Open (`meta-models/Muse-Spark-Open-816B-A42B`) served on the
+  Modal Shared Endpoint, selectable per job in the UI, the API and the evaluation driver. Same
+  pipeline, prompts, checks and repair loop — the product's guarantees come from the deterministic
+  checks, not from one hosted API, so a school district or publisher could run it on infrastructure
+  it controls.
+- **Engineering:** Muse Spark 1.3, through the Muse Code subscription bridge, authored `packages/meta`
+  (client, spend ledger, prompts, pipeline), the Stage 6 contracts, prompts and pipeline, the
+  provider-aware open-weights client, and the s6-v2 prompt tuning. Each contribution is applied
+  byte-for-byte after verification and recorded with usage, latency and receipts in
+  `docs/META_CONTRIBUTIONS.md`. Meta Model API participant credits (USD 150) are spent only on product
+  runtime; building runs on subscriptions.
+
+## Architecture
+
+Pipeline: source → Muse analysis v2 (subject, overview, component plan) → per-component generation →
+deterministic checks (64 Stage 6 check ids) → bounded Muse repair → prune → partial publish.
+Live events, artifacts and costs are stored per job under `storage/runs/` (gitignored).
+
+| Path | Responsibility |
+|---|---|
+| `packages/contracts` | Frozen types and JSON schemas: the strict `full` schemas Ajv validates against, and the flat `gen` schemas Muse receives for constrained decoding; engine catalogue; kit component contracts |
+| `packages/meta` | Provider-aware model client (Meta API / Modal), spend ledger with reserve-then-reconcile and per-provider caps, prompts, generation and repair pipeline |
+| `packages/validation` | Deterministic checks: verbatim-quote grounding, source sha256, range checks, safe formula parser/evaluator, exact chemical balancer, date grounding, repair no-weakening comparison |
+| `packages/activities` | Pure, tested engines (forces, projectile, lift, speed of sound, compound interest, half-life, Hardy-Weinberg) shared by the validator and the browser — the same code computes the check and the animation |
+| `workers/generation` | Job machine: stage events, per-component checks/prune/repair, partial publish |
+| `apps/api` | Localhost-only `node:http` JSON API (loopback, Host/Origin allowlist; live generation opt-in) |
+| `apps/web` | Vite + React teacher workspace: lesson view with all component types, repair cards, cost and scope honesty |
+| `data/sources`, `data/evaluation` | 41 licensed source texts with per-source license/locator/sha256 records; the 29-page evaluation manifest |
+
+## Trust and honesty
+
+- **Deterministic checks, not vibes.** Every evidence quote must appear verbatim (whitespace-normalised)
+  in the stored page text; every expected number is recomputed by the tested engine; every formula
+  expression is parsed and evaluated by our own safe parser (no `eval`, no `Function`); every chemical
+  equation is balanced exactly. Schema validity alone never passes the gate.
+- **Repair integrity.** Repairs are compared against the immutable revision-1 baseline, never against
+  the previous revision. Tolerances are never raised; cases cannot be deleted, renamed or replaced
+  (a name that violates the publisher policy may be renamed positionally, numbers frozen); a repair may
+  change only the fields a failing check names (`authorizedPaths`). Maximum two repair attempts.
+- **Labelled faults vs natural repairs.** Demo faults are injected only through an explicit, labelled
+  system-made toggle, are recorded with whether the intended check actually caught them, and are
+  excluded from natural-repair metrics. Natural repairs (model mistakes found in honest runs) are shown
+  with before/after diffs.
+- **Honest declines.** A page that cannot support a lesson ends in a decline card with a reason — no
+  forced activity.
+- **AI-written labels.** Generated text is labelled; every activity carries "AI-written" plus the
+  disclosure that the material comes from the source's real publisher and that the publisher has not
+  reviewed or endorsed the lesson. Publisher-attribution policy is enforced by a validator check, not
+  only a prompt.
+- **Licensed sources.** Library sources are US-Gov-Work public pages, stored with locator, license,
+  attribution and sha256; the loader rejects changed bytes. Teacher-pasted sources require a rights
+  confirmation and an allowlisted license. Because free API credits may let the provider retain content,
+  only licensed public, project-authored or synthetic text is ever sent.
+- **No generated-code execution.** Activities are data rendered by tested components; `generatedCodeAllowed: false`.
+- **Money honesty.** Every call is reserved against a cap before sending and reconciled after; unknown
+  cost renders as *unknown*, never as $0.
+
+## Run it locally
+
+Prerequisites: Node.js **>= 22** (`package.json` engines; developed and verified on Node 24, which runs
+the TypeScript directly via type stripping — no build step for server or packages).
+
+```bash
 npm ci --ignore-scripts
-npm test
-npm run smoke:meta
+npm run check          # typecheck + the offline test suite (fake transports; no network, no spend)
 ```
-The smoke exits **2** with `MODEL_API_KEY_MISSING` before network when no key exists. This is a blocker, not a successful API integration. Put a genuine direct Meta key in ignored `.env.local` and obtain an explicit spending limit before enabling the probe. The probe uses native Node fetch against the officially documented OpenAI-compatible endpoint; the production SDK adapter remains a Muse-authored implementation task. It checks `/models`, sends one bounded request, and emits a sanitized receipt only after actual success. Zero automatic retries; 30-second shared deadline; no fallback.
 
-The contract test fixture is human-authored setup data, **not Meta-generated output**. A schema pass establishes structural validity only, not source faithfulness, physical correctness, sandbox safety, or publishability.
+Offline demo — no API key needed:
 
-## Mandatory context
-Read `AGENTS.md`, `docs/PROFILE_ADDENDUM.md`, and `docs/HACKATHON_RULES.md` before work. Existing master instructions and participant FAQ have not been recovered; their absence must not be replaced with invented rules. Do not start product implementation until Calvin confirms readiness.
+```bash
+npm run api            # localhost API on 127.0.0.1:8787, live generation off (POSTing a job answers 503)
+npm run web            # Vite dev server on 127.0.0.1:5173, proxies /api to the API
+```
+
+Open `http://127.0.0.1:5173/?lesson-demo=1` for the development-only lesson harness: it renders
+committed fixtures of a full lesson (overview, components, partial publish, decline) with no API and no
+keys; the harness is compiled out of production builds.
+
+Live generation (spends Meta participant credits; needs explicit approval):
+
+1. Copy `.env.example` to `.env.local` (gitignored) and fill in the variable names it lists —
+   `MODEL_API_KEY` and a positive `META_APPROVED_JOB_BUDGET_USD`. Never commit or paste values.
+2. Start the API with those variables in its environment and live mode on, e.g.
+   `META_LIVE=1 MODEL_API_KEY=… node apps/api/main.ts` (optional: `META_PURPOSE=demo`, `PORT`, `STORAGE_DIR`).
+   For Muse Spark Open jobs the server additionally reads `MODAL_PROXY_TOKEN`, only at submission time.
+3. Batch evaluation (same 29 pages): with the live API running,
+   `node scripts/evaluation-run.ts --flow lesson [--model muse-spark-open] [--concurrency 3]`.
+
+## Built during the hackathon
+
+The official building window opened 2026-10-27 (kickoff Oct 26 12:00 ET). Two setup-scaffold commits
+(`23ae633`, `b5f25da`, 2026-10-27 05:44–05:47 KST ≈ Oct 26 16:45 ET) contain setup documentation, a
+draft schema, contract tests and a connectivity smoke probe — **no product functionality**. They are
+excluded from everything the demo shows. **All product features were built from 2026-10-27 onward.**
+
+| When | Commits | What landed (all event-built) |
+|---|---|---|
+| Setup scaffold — not demoed | `23ae633`, `b5f25da` | Setup docs, draft schema, tests, smoke probe. No product functionality. |
+| 2026-10-27 | `f39bcab` … `1ea0c7c` | Contracts frozen; licensed NASA sources with sha256 loader; deterministic forces engine; validator; Muse-authored Meta client/ledger/prompts/pipeline; job worker + localhost API; teacher web workspace; three rounds of independent review with fix waves. |
+| 2026-10-28 | `02df071` … `04520a8` | Stage 5: engine catalogue (projectile, lift, speed of sound), agentic repair loop with no-weakening integrity, teacher-pasted sources with injection tests, labelled demo faults; 11 live jobs (USD 0.53) incl. an honest decline. |
+| 2026-10-28/29 | `1aa1df2` … `ca2b576` | Stage 5b: subjects beyond physics (compound interest, Hardy-Weinberg, half-life, timeline); analysis check-then-repair; 29-page pre-registered evaluation; four independent review rounds and fix waves. |
+| 2026-10-29 | `6c93ce1`, `630a522`, `0fbeac0`, `c0bf205` | Open-weights mode: provider-aware client, per-job model choice, Modal token handling, model picker with labels on every step and repair. |
+| 2026-10-29 | `cc1a9b5` … `d4f94af` | Stage 6 lesson flow: design and contracts (Muse), prompts/pipeline (Muse), 64 kit validators, worker/API, full lesson UI wired to live streaming. |
+| 2026-10-29/30 | `00a0a07`, `a53c1f0`, `5992739`, `a6d98bb`, `ef2dee2`, `a2e1d07` | The four evaluation runs above; BUG-006 fix (a truncated part fails only itself); bounded concurrency (3 pages at once); s6-v2 prompt fixes and the Spark Open re-run. |
+| 2026-10-30 | `e286b7e`, `4acace9`, `de83727` | App reskin with the official Meta logo footer naming the hackathon; publisher-correct AI disclosure; final UI pass (teacher view by default). |
+
+Solo human developer. Parts of the implementation were written by AI agents (Muse Spark 1.3, Claude,
+Qwen, GPT reviewers) under the developer's direction; every commit's authoring route is recorded in
+`docs/REPOSITORY_LOG.md` and Meta contributions in `docs/META_CONTRIBUTIONS.md`.
+
+## Limits and known issues
+
+- **Compare tables were the weak part.** On the Spark Open re-run they published 0/5: the model wrote
+  kebab-case ids as entity names and wrong cell counts. The fix — Muse only names rows/columns and
+  supplies one value per column while our code builds the grid, and id-like names are rejected — is
+  specified in `docs/specs/STAGE-6-compare-grid.md`; its effect on live runs is measured in the
+  follow-up evaluation runs under `docs/evidence/stage-6/`.
+- **Timeline date grounding fails closed on purpose.** The accepted date rule rejects some legitimate
+  phrasings (disclosed false rejections, e.g. "not approved until…" events in the Lee Resolution
+  timeline). The limits are documented in the Stage 5b close-out.
+- **Teaching quality is not independently rated.** The checks verify quotes, numbers, formulas and
+  structure — "this is what the cited sentence says" — not how well a component teaches. No human
+  quality rating has been run.
+- Sequence step labels are sometimes copied phrases (a pre-existing quality note).
+- The `componentRepairs` field is empty in the 1.3 run's result rows (reporting gap fixed after that
+  run in `a53c1f0`); repairs did start.
+- Teacher-pasted source texts live in gitignored runtime storage, so their grounding cannot be
+  re-verified from the repository alone.
+- Costs and latencies come from the local ledger and provider receipts; anything not measured is
+  recorded as unknown, never zero.
+- There is no external publishing path: publication is disabled; everything here runs and stays local.
+
+## Sources and attribution
+
+- The 41 library sources (`data/sources/`) are US-Gov-Work public-domain pages from NASA Glenn Research
+  Center, the National Archives, NOAA, the CFPB, the NRC, the USGS and the NIJ. Each source record keeps
+  its locator, license, attribution text and sha256. Per NASA's media-usage conditions, generated output
+  is attributed to this product, never to NASA, and the validator enforces that.
+- The test fixture source text (`tests/fixtures/source.txt`) is original and CC0-1.0.
+- The Meta logo in the app footer is Meta's trademark, used unmodified and only to name the hackathon
+  this project was built for. No endorsement by Meta is implied.
+- A blanket repository license has not been chosen yet (developer decision pending; see
+  `docs/PROVENANCE.md`).
+
+## Where to read more
+
+- `docs/HACKATHON_RULES.md` — the verified contest rules this README's provenance section follows.
+- `docs/ARCHITECTURE.md` — full architecture, contracts, and the review history behind them.
+- `docs/specs/STAGE-6-design.md` — the lesson-flow design (Muse-authored, lead-frozen).
+- `docs/evidence/` — receipts, live runs and the four evaluation folders cited above.
+- `docs/RESOURCE_POLICY.md` — spend, privacy and execution policy.
