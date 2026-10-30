@@ -19,6 +19,8 @@ interface Props {
   onDetails?: (() => void) | undefined;
   /** The trust receipt and the checks it opens; absent while a run is still working or has no checks. */
   receipt?: ProvenanceReceipt | null | undefined;
+  /** Stage 7b: the page's subject as a quiet label (subjectNote); teacher pages say it was detected by Muse. */
+  subject?: { text: string; detected: boolean } | null | undefined;
 }
 
 /**
@@ -27,12 +29,13 @@ interface Props {
  * (never implying endorsement), what code checked, and what was repaired — natural mistakes and system-made faults
  * kept apart. The receipt opens the checks in place; "Run details" opens the runs drawer.
  */
-export function Provenance({ disclosure, phrases, onDetails, receipt = null }: Props) {
+export function Provenance({ disclosure, phrases, onDetails, receipt = null, subject = null }: Props) {
   const [open, setOpen] = useState(false);
   const panelId = useId();
   return (
     <div className="provenance" data-testid="provenance">
       <p className="prov-status">
+        {subject !== null && <span className="prov-subject" data-testid="lesson-subject">{subject.text}</span>}
         <span className="review-status" data-testid="review-status">{REVIEW_STATUS}</span>
         {receipt !== null && <TrustReceipt input={receipt.input} open={open} onToggle={() => setOpen((v) => !v)} panelId={panelId} />}
         {onDetails !== undefined && <button type="button" className="link-btn" onClick={onDetails}>Run details</button>}

@@ -11,7 +11,9 @@
 //                           in-process live-job count and busy stays running >= limit (R-10
 //                           compatibility)
 //   GET  /api/models      → [{id, label, provider, available}] for the web model picker (OW-2)
-//   GET  /api/sources     → metadata list (no text), library + teacher ('user') sources with kind
+//   GET  /api/sources     → metadata list (no text), library + teacher ('user') sources with kind;
+//                           Stage 7b: subject + subjectSource ('curated' for library pages, 'muse' for
+//                           teacher pages = the latest lesson analysis' subject; absent when unknown)
 //   POST /api/sources     → store a teacher-pasted source (JSON ≤ 64 KB); 201 created / 200 existing
 //   GET  /api/sources/:id → metadata + hash-checked text (library and user sources)
 //   GET  /api/jobs        → newest-first job summaries
@@ -43,6 +45,7 @@ import {
   loadUserSourceMeta,
   MAX_USER_SOURCES,
   saveUserSource,
+  sourceSubject,
   userSourceId,
   userSourcesDirOf,
   USER_SOURCE_ID_PATTERN,
@@ -54,6 +57,8 @@ import type { ModelChoice } from '../../packages/meta/pricing.ts';
 import { DEFAULT_MODEL, MODEL_INFO } from './model-clients.ts';
 import { MAX_CONCURRENT_JOBS_BOUND } from './resource-limits.ts';
 import { listJobs, readJob } from '../../workers/generation/jobs.ts';
+import { museSubjectsBySource } from './source-subjects.ts';
+import type { Subject } from '../../packages/contracts/kit.ts';
 import type { JobFlow, JobSummary } from '../../workers/generation/jobs.ts';
 
 export interface ApiOptions {
@@ -107,6 +112,14 @@ interface SourceRefResponse {
   kind: 'library' | 'user';
   licenseLabel?: string;
   createdAt?: string;
+  /** Stage 7b: library pages carry their curated subject; teacher pages the latest Muse-detected one (when any). */
+  subject?: Subject;
+  subjectSource?: 'curated' | 'muse';
+}
+
+/** The subject fields for a response: present only when a subject is known. */
+function subjectFields(subject: Subject | undefined, from: 'curated' | 'muse'): Pick<SourceRefResponse, 'subject' | 'subjectSource'> {
+  return subject === undefined ? {} : { subject, subjectSource: from };
 }
 
 function sendJson(res: ServerResponse, status: number, body: unknown): void {
@@ -303,13 +316,17 @@ export function createApiServer(opts: ApiOptions): Server {
               sha256: meta.sha256,
               purpose: meta.purpose,
               kind: 'library',
+              ...subjectFields(sourceSubject(meta), 'curated'),
             });
           } catch {
             // skip an unreadable registry entry rather than failing the whole list
           }
         }
         // Stage 5: teacher-pasted sources join the list (never their text).
-        for (const id of listUserSourceIds(userSourcesDir())) {
+        const userIds = listUserSourceIds(userSourcesDir());
+        // Stage 7b: their subject is the one Muse detected in the latest lesson analysis of that page (if any).
+        const museSubjects = museSubjectsBySource(opts.storageDir, new Set(userIds));
+        for (const id of userIds) {
           try {
             const meta = loadUserSourceMeta(id, userSourcesDir());
             out.push({
@@ -323,6 +340,7 @@ export function createApiServer(opts: ApiOptions): Server {
               kind: 'user',
               licenseLabel: meta.licenseLabel,
               createdAt: meta.createdAt,
+              ...subjectFields(museSubjects.get(id), 'muse'),
             });
           } catch {
             // skip an unreadable user entry rather than failing the whole list
@@ -360,6 +378,7 @@ export function createApiServer(opts: ApiOptions): Server {
             kind: 'user',
             licenseLabel: meta.licenseLabel,
             createdAt: meta.createdAt,
+            ...subjectFields(museSubjectsBySource(opts.storageDir, new Set([id])).get(id), 'muse'),
             text: doc.text,
           };
           return sendJson(res, 200, userBody);
@@ -382,6 +401,7 @@ export function createApiServer(opts: ApiOptions): Server {
           sha256: doc.sha256,
           purpose: meta.purpose,
           kind: 'library',
+          ...subjectFields(sourceSubject(meta), 'curated'),
           text: doc.text,
         };
         if (doc.page !== undefined) {

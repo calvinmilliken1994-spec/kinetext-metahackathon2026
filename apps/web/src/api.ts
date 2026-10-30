@@ -25,6 +25,9 @@ export interface SourceMeta {
   /** Readable licence of a teacher source ('CC BY 4.0'). */
   licenseLabel?: string;
   createdAt?: string;
+  /** Stage 7b: the page's subject — curated for library pages, the latest Muse-detected one for teacher pages. Absent when unknown or on older servers. */
+  subject?: string;
+  subjectSource?: 'curated' | 'muse';
 }
 export interface SourceDoc extends SourceMeta { text: string; page?: number }
 

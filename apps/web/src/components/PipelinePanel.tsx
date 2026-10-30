@@ -8,12 +8,16 @@ import type { FlowId } from '../lib/lessonJob.ts';
 import { resolveJobModel } from '../lib/models.ts';
 import type { ModelId, ModelOption } from '../lib/models.ts';
 import { runLine } from '../lib/runs.ts';
-import { DEMO_FAULT_HELP, DEMO_FAULT_LABEL, demoFaultOptions, FREE_CREDITS_NOTE, sourceOptionLabel, TEACHER_TAG } from '../lib/sources.ts';
+import { DEMO_FAULT_HELP, DEMO_FAULT_LABEL, demoFaultOptions, FREE_CREDITS_NOTE } from '../lib/sources.ts';
+import { filterRuns, subjectCounts, subjectLabel, subjectOf, subjectOfSource } from '../lib/subjects.ts';
+import type { Subject } from '../../../../packages/contracts/kit.ts';
 import type { DemoChoice } from '../lib/sources.ts';
 import { IconPlus } from './icons.tsx';
 import { LessonSteps } from './LessonSteps.tsx';
 import { ModelPicker } from './ModelPicker.tsx';
 import { PasteSourceForm } from './PasteSourceForm.tsx';
+import { SourcePicker } from './SourcePicker.tsx';
+import { SubjectChips } from './SubjectChips.tsx';
 import { Timeline } from './Timeline.tsx';
 
 // ---- New lesson: page, model, Generate, run options -------------------------------------------------------------
@@ -41,6 +45,9 @@ export interface NewLessonSectionProps {
   /** Stage 6: build a lesson (default) or the classic single activity. */
   flow: FlowId;
   onFlow: (flow: FlowId) => void;
+  /** Stage 7b: the subject filter shared with the source panel and the runs list. */
+  subjectFilter: Subject | null;
+  onSubjectFilter: (subject: Subject | null) => void;
 }
 
 export function NewLessonSection(p: NewLessonSectionProps) {
@@ -48,29 +55,21 @@ export function NewLessonSection(p: NewLessonSectionProps) {
   const [pasting, setPasting] = useState(false);
   const [reuseMsg, setReuseMsg] = useState<string | null>(null);
   const list = p.sources.state === 'ready' ? p.sources.data : [];
-  const library = list.filter((s) => s.kind !== 'user');
-  const teacher = list.filter((s) => s.kind === 'user');
   const disabled = generate.disabled || p.selectedId === null;
   const why = generate.reason;
 
   return (
     <section className="drawer-section" aria-label="New lesson">
       <div className="field">
-        <label htmlFor="new-lesson-source" className="field-label">Page</label>
-        <select id="new-lesson-source" value={p.selectedId ?? ''} onChange={(e) => p.onSelect(e.target.value)} disabled={list.length === 0}>
-          {teacher.length === 0
-            ? library.map((s) => <option key={s.id} value={s.id}>{sourceOptionLabel(s)}</option>)
-            : (
-              <>
-                <optgroup label="Licensed library">
-                  {library.map((s) => <option key={s.id} value={s.id}>{sourceOptionLabel(s)}</option>)}
-                </optgroup>
-                <optgroup label={`${TEACHER_TAG}s (pasted)`}>
-                  {teacher.map((s) => <option key={s.id} value={s.id}>{sourceOptionLabel(s)}</option>)}
-                </optgroup>
-              </>
-            )}
-        </select>
+        <SourcePicker
+          id="new-lesson-source"
+          label="Page"
+          sources={list}
+          selectedId={p.selectedId}
+          onSelect={p.onSelect}
+          filter={p.subjectFilter}
+          onFilter={p.onSubjectFilter}
+        />
         {!pasting && (
           <button type="button" className="btn btn-quiet btn-small paste-open" onClick={() => { setPasting(true); setReuseMsg(null); }}>
             <IconPlus /> Paste your own text
@@ -129,44 +128,93 @@ export function NewLessonSection(p: NewLessonSectionProps) {
 
 // ---- Runs for this page: one line each, details under the selected one -------------------------------------------
 
+export type RunScope = 'page' | 'all';
+
 export interface RunsSectionProps {
   jobs: Loadable<JobSummary[]>;
   jobsForSource: readonly JobSummary[];
+  /** Stage 7b: every run, newest first (the "All pages" view). */
+  allJobs: readonly JobSummary[];
+  /** Page metadata by id: titles and subjects for the "All pages" view. */
+  sourcesById: ReadonlyMap<string, SourceMeta>;
+  scope: RunScope;
+  onScope: (scope: RunScope) => void;
+  /** The subject filter shared with the page pickers. */
+  subjectFilter: Subject | null;
+  onSubjectFilter: (subject: Subject | null) => void;
   /** /api/health busy (incl. a POST in flight); null until health has loaded. */
   serverBusy: boolean | null;
   selectedJobId: string | null;
-  onSelectJob: (id: string) => void;
+  /** Select a run (and, from the "All pages" view, its page). */
+  onSelectJob: (jobId: string, sourceId: string) => void;
   liveJobIds: ReadonlySet<string>;
   canGenerate: boolean;
   onNewLesson: () => void;
 }
 
 export function RunsSection(p: RunsSectionProps) {
+  const all = p.scope === 'all';
+  const subjectOfRun = (j: JobSummary): Subject => subjectOfSource(p.sourcesById, j.sourceId);
+  const shown = all ? filterRuns(p.allJobs, p.sourcesById, p.subjectFilter) : p.jobsForSource;
+  const pageMeta = p.jobsForSource[0] !== undefined ? p.sourcesById.get(p.jobsForSource[0].sourceId) : undefined;
   return (
     <section className="drawer-section" aria-labelledby="runs-heading">
-      <h3 id="runs-heading" className="section-title">Runs for this page</h3>
+      <div className="runs-head">
+        <h3 id="runs-heading" className="section-title">{all ? 'All runs' : 'Runs for this page'}</h3>
+        <div className="runs-scope" role="group" aria-label="Which runs to list">
+          <button type="button" className="subject-chip" aria-pressed={!all} onClick={() => p.onScope('page')}>This page</button>
+          <button type="button" className="subject-chip" aria-pressed={all} onClick={() => p.onScope('all')}>All pages</button>
+        </div>
+      </div>
+      {all && p.jobs.state === 'ready' && (
+        <SubjectChips
+          counts={subjectCounts(p.allJobs, subjectOfRun)}
+          total={p.allJobs.length}
+          active={p.subjectFilter}
+          onChange={p.onSubjectFilter}
+          label="Filter runs by subject"
+          unit="run"
+        />
+      )}
       {p.jobs.state === 'loading' && <p className="muted small">Loading runs…</p>}
       {p.jobs.state === 'error' && <p className="field-error" role="alert">{p.jobs.message}</p>}
-      {p.jobs.state === 'ready' && p.jobsForSource.length === 0 && (
+      {!all && p.jobs.state === 'ready' && p.jobsForSource.length === 0 && (
         <p className="muted small">
           No runs for this page yet.{' '}
           {p.canGenerate && <button type="button" className="link-btn" onClick={p.onNewLesson}>Start a new lesson</button>}
         </p>
       )}
-      {p.jobsForSource.length > 0 && <p className="muted small">Stored results unless marked Live.</p>}
+      {all && p.jobs.state === 'ready' && shown.length === 0 && (
+        <p className="muted small">{p.subjectFilter !== null ? `No ${subjectLabel(p.subjectFilter)} runs yet.` : 'No runs yet.'}</p>
+      )}
+      {shown.length > 0 && (
+        <p className="muted small">
+          {!all && pageMeta?.subject !== undefined && <span className="runs-subject">{subjectLabel(subjectOf(pageMeta))} · </span>}
+          {all && <span className="runs-subject">{shown.length} {shown.length === 1 ? 'run' : 'runs'} · </span>}
+          Stored results unless marked Live.
+        </p>
+      )}
       <ul className="run-list">
-        {p.jobsForSource.map((j) => {
+        {shown.map((j) => {
           const r = runLine(j, { liveJobIds: p.liveJobIds, serverBusy: p.serverBusy });
           const selected = j.jobId === p.selectedJobId;
           const tags = r.tags.filter((t) => t.text !== r.status.text);
+          const page = all ? p.sourcesById.get(j.sourceId) : undefined;
           return (
             <li key={j.jobId} className={`run${selected ? ' selected' : ''}`}>
-              <button type="button" className="run-line" aria-pressed={selected} onClick={() => p.onSelectJob(j.jobId)}>
+              <button type="button" className="run-line" aria-pressed={selected} onClick={() => p.onSelectJob(j.jobId, j.sourceId)}>
                 <span className="run-when">{r.when}</span>
                 <span className="run-model"><span className="run-sep" aria-hidden="true">·</span>{r.model}</span>
                 <span className={`run-status tone-${r.status.tone}`}><span className="run-sep" aria-hidden="true">·</span>{r.status.text}</span>
                 {r.live && <span className="status-chip">Live</span>}
                 {r.systemFault && <span className="run-fault tone-fault">Demo fault</span>}
+                {all && (
+                  <span className="run-page">
+                    <span className="run-subject">{subjectLabel(subjectOfRun(j))}</span>
+                    <span className="run-sep" aria-hidden="true">·</span>
+                    <span className="run-page-title">{page?.title ?? 'A page no longer listed'}</span>
+                  </span>
+                )}
               </button>
               {selected && (
                 <div className="run-details" data-testid="run-details">

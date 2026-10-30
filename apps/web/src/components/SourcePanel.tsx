@@ -8,9 +8,11 @@ import type { QuoteRef } from '../lib/evidence.ts';
 import { linkStore, markLinks, segmentIsTabStop } from '../lib/linking.ts';
 import { revealInPanels, scrollContainersOf, scrollTopToReveal } from '../lib/scroll.ts';
 import { markdownDecorations, sourcePieces } from '../lib/sourceText.ts';
-import { isHttpUrl, sourceLicenseText, sourceOptionLabel, TEACHER_TAG } from '../lib/sources.ts';
+import { isHttpUrl, sourceLicenseText, TEACHER_TAG } from '../lib/sources.ts';
+import type { Subject } from '../../../../packages/contracts/kit.ts';
 import { CitationChip } from './Explanations.tsx';
 import { IconExternal } from './icons.tsx';
+import { SourcePicker } from './SourcePicker.tsx';
 
 export interface Flash { key: string; n: number }
 
@@ -24,6 +26,9 @@ export interface SourcePanelProps {
   quotes: readonly QuoteRef[];
   flash: Flash | null;
   onCite: (key: string) => void;
+  /** Stage 7b: the subject filter shared with the New lesson picker and the runs list. */
+  subjectFilter: Subject | null;
+  onSubjectFilter: (subject: Subject | null) => void;
 }
 
 const reducedMotion = (): boolean => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -145,14 +150,12 @@ function HighlightedText({ text, highlights, byKey, flash, sourceId }: { text: s
   );
 }
 
-export function SourcePanel({ sources, selectedId, onSelect, onReload, doc, highlights, quotes, flash, onCite }: SourcePanelProps) {
+export function SourcePanel({ sources, selectedId, onSelect, onReload, doc, highlights, quotes, flash, onCite, subjectFilter, onSubjectFilter }: SourcePanelProps) {
   const byKey = useMemo(() => new Map(quotes.map((q) => [q.key, q] as const)), [quotes]);
   const concepts = quotes.filter((q) => q.kind === 'concept');
   const located = highlights ? Object.keys(highlights.ranges).length : 0;
   const meta = sources.state === 'ready' ? sources.data.find((s) => s.id === selectedId) : undefined;
   const [licenceOpen, setLicenceOpen] = useState(false);
-  const library = sources.state === 'ready' ? sources.data.filter((s) => s.kind !== 'user') : [];
-  const teacher = sources.state === 'ready' ? sources.data.filter((s) => s.kind === 'user') : [];
 
   return (
     <section className="panel source-panel" aria-labelledby="source-heading">
@@ -166,23 +169,15 @@ export function SourcePanel({ sources, selectedId, onSelect, onReload, doc, high
         )}
         {sources.state === 'ready' && sources.data.length === 0 && <p className="muted">No licensed pages are registered.</p>}
         {sources.state === 'ready' && sources.data.length > 0 && (
-          <>
-            <label htmlFor="source-select" className="field-label">Source page</label>
-            <select id="source-select" value={selectedId ?? ''} onChange={(e) => { onSelect(e.target.value); setLicenceOpen(false); }}>
-              {teacher.length === 0
-                ? library.map((s) => <option key={s.id} value={s.id}>{sourceOptionLabel(s)}</option>)
-                : (
-                  <>
-                    <optgroup label="Licensed library">
-                      {library.map((s) => <option key={s.id} value={s.id}>{sourceOptionLabel(s)}</option>)}
-                    </optgroup>
-                    <optgroup label={`${TEACHER_TAG}s (pasted)`}>
-                      {teacher.map((s) => <option key={s.id} value={s.id}>{sourceOptionLabel(s)}</option>)}
-                    </optgroup>
-                  </>
-                )}
-            </select>
-          </>
+          <SourcePicker
+            id="source-select"
+            label="Source page"
+            sources={sources.data}
+            selectedId={selectedId}
+            onSelect={(id) => { onSelect(id); setLicenceOpen(false); }}
+            filter={subjectFilter}
+            onFilter={onSubjectFilter}
+          />
         )}
 
         {meta !== undefined && (

@@ -32,3 +32,27 @@
 .drawer-title { margin: 0; font-size: var(--fs-16); font-weight: var(--fw-bold); color: var(--ink); }
 .drawer-title:focus { outline: none; }
 
+
+/* ---- Subjects (Stage 7b): filter chips with counts, the grouped page picker, quiet subject labels ------------------- */
+.source-picker { display: grid; gap: 8px; }
+.subject-chips, .runs-scope { display: flex; flex-wrap: wrap; gap: 4px; }
+.subject-chip {
+  display: inline-flex; align-items: baseline; gap: 5px; padding: 2px 8px;
+  border: 1px solid var(--line-2); border-radius: var(--r-s); background: transparent;
+  color: var(--ink-2); font-size: var(--fs-12); font-weight: var(--fw-medium); line-height: 1.5; cursor: pointer;
+}
+.subject-chip:hover { background: var(--panel-2); color: var(--ink); border-color: var(--line-3); }
+.subject-chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent-text); }
+.subject-count { color: var(--ink-3); font-weight: var(--fw-regular); font-variant-numeric: tabular-nums; }
+.subject-chip[aria-pressed="true"] .subject-count { color: var(--accent-text); }
+
+.prov-subject { font-size: var(--fs-14); color: var(--ink-3); }
+
+.runs-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px; }
+.runs-head .section-title { margin: 0; }
+.run-page { display: flex; flex-basis: 100%; min-width: 0; font-size: var(--fs-12); color: var(--ink-3); }
+.run-page .run-sep { margin: 0 6px; }
+.run-subject { flex: none; color: var(--ink-2); }
+.run-page-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* The page titles must not widen the drawer's grid column (they ellipsize instead). */
+.drawer-section > .run-list { min-width: 0; grid-template-columns: minmax(0, 1fr); }

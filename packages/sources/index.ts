@@ -6,11 +6,22 @@ import { createHash, randomUUID } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, readdirSync, renameSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { normalizeUserText } from '../contracts/index.ts';
+import { isSubject } from '../contracts/kit.ts';
+import type { Subject } from '../contracts/kit.ts';
 import type { SourceDocument, UserLicense, UserSourceInput } from '../contracts/index.ts';
 
 export const SOURCES_DIR = new URL('../../data/sources/', import.meta.url);
 
-interface SourceMeta extends Omit<SourceDocument, 'text'> { textFile: string; retrievedAt: string; transcription: string; purpose: string }
+export interface SourceMeta extends Omit<SourceDocument, 'text'> {
+  textFile: string; retrievedAt: string; transcription: string; purpose: string;
+  /** Stage 7b: the curated subject (one per page, set by us, stable). Optional so a page without one still loads. */
+  subject?: Subject;
+}
+
+/** The curated subject of a library source, or undefined when it is missing or not one of SUBJECTS. */
+export function sourceSubject(meta: { subject?: unknown }): Subject | undefined {
+  return isSubject(meta.subject) ? meta.subject : undefined;
+}
 
 export function sha256(text: string): string {
   return createHash('sha256').update(text, 'utf8').digest('hex');

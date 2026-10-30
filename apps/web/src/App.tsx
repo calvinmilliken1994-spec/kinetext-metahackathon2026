@@ -16,6 +16,8 @@ import { checkName } from './lib/checks.ts';
 import { defaultRevision, overallRepairBadge, revisionInputs, validationHeading } from './lib/repairs.ts';
 import { timelineEventLabels } from './lib/timeline.ts';
 import { demoFaultToSend, disclosureText } from './lib/sources.ts';
+import { subjectNote } from './lib/subjects.ts';
+import type { Subject } from '../../../packages/contracts/kit.ts';
 import type { DemoChoice } from './lib/sources.ts';
 import { activityRepairCounts, checkTally, lessonRepairCounts, quoteTally, repairPhrases, sectionTally } from './lib/provenance.ts';
 import { readStoredTech, writeStoredTech } from './lib/techDetails.ts';
@@ -28,6 +30,7 @@ import type { Flash } from './components/SourcePanel.tsx';
 import { NewLessonSection, RunsSection, StepsSection } from './components/PipelinePanel.tsx';
 import { RunsDrawer } from './components/RunsDrawer.tsx';
 import type { DrawerMode } from './components/RunsDrawer.tsx';
+import type { RunScope } from './components/PipelinePanel.tsx';
 import { ActivityPanel } from './components/ActivityPanel.tsx';
 import { JobOutcome } from './components/JobOutcome.tsx';
 import { AnalysisRepairTimeline } from './components/AnalysisRepairTimeline.tsx';
@@ -70,6 +73,9 @@ export function App() {
   const [demoChoice, setDemoChoice] = useState<DemoChoice>('none');
   const [flash, setFlash] = useState<Flash | null>(null);
   const [flow, setFlow] = useState<FlowId>('lesson');
+  // Stage 7b: one subject filter for the page pickers and the runs list; the runs list shows this page or all pages.
+  const [subjectFilter, setSubjectFilter] = useState<Subject | null>(null);
+  const [runScope, setRunScope] = useState<RunScope>('page');
   const models = useModels(health);
   const [wantedModel, setWantedModel] = useState<ModelId | null>(() => readStoredModel(sessionStore()));
   const modelChoice = pickModel(models, wantedModel);
@@ -96,6 +102,8 @@ export function App() {
   const selectedSource = sourceList?.find((s) => s.id === selectedSourceId) ?? null;
 
   const allJobs = jobs.state === 'ready' ? jobs.data : NO_JOBS;
+  const allJobsNewest = useMemo(() => newestFirst(allJobs), [allJobs]);
+  const sourcesById = useMemo(() => new Map((sourceList ?? []).map((s) => [s.id, s] as const)), [sourceList]);
   const jobsForSource = useMemo(
     () => newestFirst(allJobs.filter((j) => j.sourceId === selectedSourceId)),
     [allJobs, selectedSourceId],
@@ -164,8 +172,10 @@ export function App() {
 
   const onSelectSource = useCallback((id: string) => { setPickedSource(id); setFlash(null); }, []);
   const onSourceCreated = useCallback((id: string) => { reloadSources(); setPickedSource(id); setFlash(null); }, [reloadSources]);
-  const onSelectJob = useCallback((jobId: string) => {
-    if (selectedSourceId !== null) setPickedJob({ jobId, sourceId: selectedSourceId });
+  // A run picked from the "All pages" list opens its own page too.
+  const onSelectJob = useCallback((jobId: string, sourceId: string) => {
+    if (sourceId !== selectedSourceId) { setPickedSource(sourceId); setFlash(null); }
+    setPickedJob({ jobId, sourceId });
   }, [selectedSourceId]);
 
   const spec = ready?.spec;
@@ -244,6 +254,7 @@ export function App() {
       phrases={repairCounts === null ? [] : repairPhrases(repairCounts)}
       onDetails={ready === null ? undefined : () => openDrawer('runs')}
       receipt={receipt}
+      subject={subjectNote(selectedSource)}
     />
   );
 
@@ -270,6 +281,8 @@ export function App() {
             quotes={quotes}
             flash={flash}
             onCite={onCite}
+            subjectFilter={subjectFilter}
+            onSubjectFilter={setSubjectFilter}
           />
 
           <main className="panel activity-panel" aria-label="Lesson" ref={mainRef} tabIndex={-1}>
@@ -345,6 +358,8 @@ export function App() {
                 live={health === null ? null : health.live}
                 flow={flow}
                 onFlow={setFlow}
+                subjectFilter={subjectFilter}
+                onSubjectFilter={setSubjectFilter}
               />
             )}
             {drawer === 'runs' && (
@@ -352,6 +367,12 @@ export function App() {
                 <RunsSection
                   jobs={jobs}
                   jobsForSource={jobsForSource}
+                  allJobs={allJobsNewest}
+                  sourcesById={sourcesById}
+                  scope={runScope}
+                  onScope={setRunScope}
+                  subjectFilter={subjectFilter}
+                  onSubjectFilter={setSubjectFilter}
                   serverBusy={health === null ? null : generate.busy}
                   selectedJobId={selectedJobId}
                   onSelectJob={onSelectJob}
