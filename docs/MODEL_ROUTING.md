@@ -15,7 +15,7 @@ Engineering orchestration uses `openai-codex / gpt-6.1-sol`; profile config veri
 | Routine testing/docs | Alibaba `qwen3.8-flash` | OpenAI | Default-profile credential lists exact ID; dedicated profile reports logged out; inference untested |
 | Meta SDK/tools/schemas/source/repair/integration tests | Direct Meta `muse-spark-1.3` / Muse Code | Anthropic independent review | Blocked: direct Meta key and budget |
 | Document understanding/activity generation | Direct Meta `muse-spark-1.3` | Muse Spark Open explicit experiment | No invisible fallback |
-| Segmentation | Direct Meta `sam-3.1` | Labeled manual annotation | Docs verified, account not verified |
+| Segmentation | Direct Meta `sam-3.1` | Labeled manual annotation | Account verified 2026-10-31 (`docs/evidence/sam-3.1-check/`); not built |
 | Illustration | Direct Meta `muse-image-1.0` | Licensed curated assets | Docs verified, account not verified |
 | Runtime repair | Direct Meta `muse-spark-1.3` | Deterministic stop/human review | Planned |
 | Final independent review | Anthropic | OpenAI | Exact Anthropic model/account validation pending |

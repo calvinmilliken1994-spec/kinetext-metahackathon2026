@@ -1,0 +1,194 @@
+{
+  "model": "sam-3.1",
+  "endpoint": "POST /v1/responses (stream, metadata.include_confidence='true')",
+  "lookup": {
+    "status": 200,
+    "body": "{\"id\":\"sam-3.1\",\"object\":\"model\",\"created\":0,\"owned_by\":\"meta\"}"
+  },
+  "image": "page-photo.jpg \u2014 project-authored synthetic textbook page, rotated -3\u00b0 on a desk background, 1119x1483 JPEG",
+  "calls": [
+    {
+      "concept": "page",
+      "status": 200,
+      "ms": 4532,
+      "boxes": [
+        {
+          "id": 0,
+          "x1": 63,
+          "y1": 64,
+          "x2": 1055,
+          "y2": 1419,
+          "w": 1119,
+          "h": 1483,
+          "c": 0.921951174736023
+        }
+      ],
+      "usage": {
+        "images_processed": 1,
+        "input_tokens": 0,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 0,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 0
+      }
+    },
+    {
+      "concept": "diagram",
+      "status": 200,
+      "ms": 1425,
+      "boxes": [
+        {
+          "id": 0,
+          "x1": 224,
+          "y1": 445,
+          "x2": 608,
+          "y2": 787,
+          "w": 1119,
+          "h": 1483,
+          "c": 0.8128654956817627
+        }
+      ],
+      "usage": {
+        "images_processed": 1,
+        "input_tokens": 0,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 0,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 0
+      }
+    },
+    {
+      "concept": "table",
+      "status": 200,
+      "ms": 2519,
+      "boxes": [
+        {
+          "id": 0,
+          "x1": 144,
+          "y1": 897,
+          "x2": 946,
+          "y2": 1145,
+          "w": 1119,
+          "h": 1483,
+          "c": 0.8160918951034546
+        }
+      ],
+      "usage": {
+        "images_processed": 1,
+        "input_tokens": 0,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 0,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 0
+      }
+    },
+    {
+      "concept": "paragraph",
+      "status": 200,
+      "ms": 791,
+      "boxes": [],
+      "usage": {
+        "images_processed": 1,
+        "input_tokens": 0,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 0,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 0
+      }
+    },
+    {
+      "concept": "chloroplast",
+      "status": 200,
+      "ms": 2416,
+      "boxes": [
+        {
+          "id": 0,
+          "x1": 451,
+          "y1": 648,
+          "x2": 496,
+          "y2": 673,
+          "w": 1119,
+          "h": 1483,
+          "c": 0.7500000596046448
+        },
+        {
+          "id": 1,
+          "x1": 315,
+          "y1": 521,
+          "x2": 360,
+          "y2": 546,
+          "w": 1119,
+          "h": 1483,
+          "c": 0.7460317611694336
+        },
+        {
+          "id": 2,
+          "x1": 485,
+          "y1": 725,
+          "x2": 529,
+          "y2": 751,
+          "w": 1119,
+          "h": 1483,
+          "c": 0.7500000596046448
+        },
+        {
+          "id": 3,
+          "x1": 517,
+          "y1": 682,
+          "x2": 562,
+          "y2": 707,
+          "w": 1119,
+          "h": 1483,
+          "c": 0.7419355511665344
+        }
+      ],
+      "usage": {
+        "images_processed": 1,
+        "input_tokens": 0,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 0,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 0
+      }
+    },
+    {
+      "concept": "nucleus",
+      "status": 200,
+      "ms": 1838,
+      "boxes": [],
+      "usage": {
+        "images_processed": 1,
+        "input_tokens": 0,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 0,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 0
+      }
+    }
+  ],
+  "note": "mask payloads not stored; 4 earlier requests rejected with HTTP 400 (include_confidence must go in metadata) \u2014 no images processed"
+}
