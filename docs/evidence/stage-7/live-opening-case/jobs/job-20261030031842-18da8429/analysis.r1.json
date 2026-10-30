@@ -1,0 +1,101 @@
+{
+  "analysis": {
+    "supported": true,
+    "activity": "projectile-v1",
+    "unsupportedReason": "",
+    "concepts": [
+      {
+        "id": "projectile-v1",
+        "name": "projectile-v1",
+        "evidence": [
+          {
+            "sourceId": "user-accf5f60ebed",
+            "quote": "On the Moon there is no air, so a thrown ball feels no drag at all. Its flight is purely ballistic."
+          },
+          {
+            "sourceId": "user-accf5f60ebed",
+            "quote": "the ball moves x = U0 * t across the ground."
+          },
+          {
+            "sourceId": "user-accf5f60ebed",
+            "quote": "The vertical speed is V = V0 - g * t, and the height is y = V0 * t - g * t^2 / 2."
+          },
+          {
+            "sourceId": "user-accf5f60ebed",
+            "quote": "Putting that time into the height equation gives the highest point: ymax = V0^2 / (2 * g)."
+          }
+        ]
+      }
+    ],
+    "objectives": []
+  },
+  "report": {
+    "artifactId": "source-analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis.gen.json"
+      },
+      {
+        "id": "analysis.invariants",
+        "kind": "semantic",
+        "passed": false,
+        "message": "supported=true but objectives.length is 0, expected >= 1",
+        "path": "/objectives",
+        "affected": [
+          "/objectives"
+        ]
+      },
+      {
+        "id": "analysis.concept-ids",
+        "kind": "semantic",
+        "passed": true,
+        "message": "all 1 concept id(s) are unique lowercase-kebab"
+      },
+      {
+        "id": "refs.sources",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 1 cited sourceId(s) have matching documents"
+      },
+      {
+        "id": "grounding.quotes",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 concept quote(s) count as evidence (>= 8 normalised characters with >= 3 letters/digits, or a compact \"=\" equation with >= 3) and all 4 resolvable quote(s) appear in their source text after whitespace normalisation; every supported concept has >= 1 counted quote"
+      },
+      {
+        "id": "policy.no-publisher-attribution",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated analysis field (concept names, objectives, unsupportedReason) mentions the publisher or uses attribution/endorsement wording naming a source or authority; evidence quotes are exempt"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "c0e99ead293f4bec89e076391873b9b1",
+    "usage": {
+      "promptTokens": 1689,
+      "completionTokens": 3135,
+      "reasoningTokens": 2906,
+      "cachedTokens": 0
+    },
+    "latencyMs": 22065,
+    "estCostUSD": 0.015435,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

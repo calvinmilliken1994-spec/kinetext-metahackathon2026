@@ -1,0 +1,166 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "user-accf5f60ebed-job-20261030031842-18da8429",
+  "title": "Throwing a ball on the Moon: ballistic flight without drag",
+  "learningObjectives": [
+    "Calculate the maximum height using ymax = V0^2 / (2 * g) from vertical speed and gravity",
+    "Describe drag-free flight as uniform horizontal motion x = U0 * t and vertical motion with V = V0 - g * t and y = V0 * t - g * t^2 / 2",
+    "Explain why a given throw rises higher when gravity is weaker"
+  ],
+  "sources": [
+    {
+      "id": "user-accf5f60ebed",
+      "title": "Throwing a ball on the Moon (project-authored test text)",
+      "locator": "Provided by a teacher (pasted text)",
+      "license": "own-work",
+      "attribution": "Written by the Make knowledge interactive project team for testing.",
+      "sha256": "accf5f60ebedb3b3ab1f553ec33a9f500ad353e682cdf88b8e45c99a57ca6ac1"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "exp1",
+      "text": "In a vacuum there is no air drag, so weight is the only force after release and the trajectory is purely ballistic.",
+      "evidence": [
+        {
+          "sourceId": "user-accf5f60ebed",
+          "quote": "On the Moon there is no air, so a thrown ball feels no drag at all. Its flight is purely ballistic."
+        }
+      ]
+    },
+    {
+      "id": "exp2",
+      "text": "Horizontal speed stays constant while vertical speed decreases steadily under gravity, defining the time-dependent position.",
+      "evidence": [
+        {
+          "sourceId": "user-accf5f60ebed",
+          "quote": "Nothing pushes the ball sideways, so the horizontal speed stays U0 for the whole flight and the ball moves x = U0 * t across the ground."
+        },
+        {
+          "sourceId": "user-accf5f60ebed",
+          "quote": "The vertical speed is V = V0 - g * t, and the height is y = V0 * t - g * t^2 / 2."
+        }
+      ]
+    },
+    {
+      "id": "exp3",
+      "text": "The top of the flight occurs when vertical speed reaches zero, giving ymax = V0^2/(2*g); weaker gravity yields proportionally greater height.",
+      "evidence": [
+        {
+          "sourceId": "user-accf5f60ebed",
+          "quote": "The ball stops rising when V = 0, which happens at t = V0 / g."
+        },
+        {
+          "sourceId": "user-accf5f60ebed",
+          "quote": "Putting that time into the height equation gives the highest point: ymax = V0^2 / (2 * g)."
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "projectile-v1",
+    "equation": "y_max=V0^2/(2*g)",
+    "horizontalSpeedMps": {
+      "unit": "m/s",
+      "min": 1,
+      "max": 50,
+      "default": 10
+    },
+    "verticalSpeedMps": {
+      "unit": "m/s",
+      "min": 5,
+      "max": 30,
+      "default": 8
+    },
+    "gravityMps2": {
+      "unit": "m/s^2",
+      "min": 1.6,
+      "max": 24.8,
+      "default": 1.62
+    },
+    "scenario": {
+      "objectLabel": "Thrown ball",
+      "settingLabel": "Airless surface of the Moon"
+    }
+  },
+  "behavioralTests": [
+    {
+      "name": "low-arc on Earth",
+      "horizontalSpeedMps": 10,
+      "verticalSpeedMps": 3,
+      "gravityMps2": 9.8,
+      "expectedMaxHeightM": 0.4592,
+      "tolerance": 0.0022
+    },
+    {
+      "name": "standard lunar throw",
+      "horizontalSpeedMps": 10,
+      "verticalSpeedMps": 8,
+      "gravityMps2": 1.62,
+      "expectedMaxHeightM": 19.7531,
+      "tolerance": 0.01
+    },
+    {
+      "name": "same throw on Earth",
+      "horizontalSpeedMps": 10,
+      "verticalSpeedMps": 8,
+      "gravityMps2": 9.8,
+      "expectedMaxHeightM": 3.2653,
+      "tolerance": 0.01
+    },
+    {
+      "name": "high-arc lunar throw",
+      "horizontalSpeedMps": 20,
+      "verticalSpeedMps": 40,
+      "gravityMps2": 1.62,
+      "expectedMaxHeightM": 493.8272,
+      "tolerance": 0.02
+    }
+  ],
+  "predictions": [
+    {
+      "id": "pred-opening",
+      "prompt": "Predict the maximum height for a ball thrown on the airless lunar surface",
+      "horizontalSpeedMps": 10,
+      "verticalSpeedMps": 8,
+      "gravityMps2": 1.62,
+      "expectedMaxHeightM": 19.7531,
+      "tolerance": 0.01
+    },
+    {
+      "id": "pred-earth-comparison",
+      "prompt": "Predict for the same throw under stronger gravity",
+      "horizontalSpeedMps": 15,
+      "verticalSpeedMps": 12,
+      "gravityMps2": 9.8,
+      "expectedMaxHeightM": 7.3469,
+      "tolerance": 0.01
+    },
+    {
+      "id": "pred-high-lunar",
+      "prompt": "Predict for a stronger vertical throw on the Moon",
+      "horizontalSpeedMps": 20,
+      "verticalSpeedMps": 20,
+      "gravityMps2": 1.62,
+      "expectedMaxHeightM": 123.4568,
+      "tolerance": 0.01
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "447c5adcd4db4887a14795d19b19ef56",
+    "runId": "job-20261030031842-18da8429",
+    "promptVersion": "v10",
+    "generatedAt": "2026-10-30T03:19:56.881Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

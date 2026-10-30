@@ -1,0 +1,106 @@
+{
+  "analysis": {
+    "supported": true,
+    "activity": "projectile-v1",
+    "unsupportedReason": "",
+    "concepts": [
+      {
+        "id": "projectile-v1",
+        "name": "projectile-v1",
+        "evidence": [
+          {
+            "sourceId": "user-accf5f60ebed",
+            "quote": "On the Moon there is no air, so a thrown ball feels no drag at all. Its flight is purely ballistic."
+          },
+          {
+            "sourceId": "user-accf5f60ebed",
+            "quote": "the ball moves x = U0 * t across the ground."
+          },
+          {
+            "sourceId": "user-accf5f60ebed",
+            "quote": "The vertical speed is V = V0 - g * t, and the height is y = V0 * t - g * t^2 / 2."
+          },
+          {
+            "sourceId": "user-accf5f60ebed",
+            "quote": "Putting that time into the height equation gives the highest point: ymax = V0^2 / (2 * g)."
+          }
+        ]
+      }
+    ],
+    "objectives": [
+      "Calculate the maximum height of a projectile using ymax = V0^2 / (2 * g) from initial vertical speed V0 and gravity g",
+      "Describe drag-free ballistic flight as uniform horizontal motion x = U0 * t and vertical motion y = V0 * t - g * t^2 / 2 with vertical speed V = V0 - g * t"
+    ]
+  },
+  "report": {
+    "artifactId": "source-analysis",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.analysis",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis.gen.json"
+      },
+      {
+        "id": "analysis.invariants",
+        "kind": "semantic",
+        "passed": true,
+        "message": "invariants hold for supported=true"
+      },
+      {
+        "id": "analysis.concept-ids",
+        "kind": "semantic",
+        "passed": true,
+        "message": "all 1 concept id(s) are unique lowercase-kebab"
+      },
+      {
+        "id": "refs.sources",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 1 cited sourceId(s) have matching documents"
+      },
+      {
+        "id": "grounding.quotes",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 concept quote(s) count as evidence (>= 8 normalised characters with >= 3 letters/digits, or a compact \"=\" equation with >= 3) and all 4 resolvable quote(s) appear in their source text after whitespace normalisation; every supported concept has >= 1 counted quote"
+      },
+      {
+        "id": "policy.no-publisher-attribution",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated analysis field (concept names, objectives, unsupportedReason) mentions the publisher or uses attribution/endorsement wording naming a source or authority; evidence quotes are exempt"
+      },
+      {
+        "id": "repair.analysis-unchanged",
+        "kind": "semantic",
+        "passed": true,
+        "message": "changed only authorized fields: /objectives, /objectives/0, /objectives/1 (authorized by baseline findings analysis.invariants)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "2c676089ba224fada576a0c5c5e2ada9",
+    "usage": {
+      "promptTokens": 2649,
+      "completionTokens": 1504,
+      "reasoningTokens": 1230,
+      "cachedTokens": 0
+    },
+    "latencyMs": 9038,
+    "estCostUSD": 0.00970325,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

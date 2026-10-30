@@ -1,0 +1,131 @@
+{
+  "analysis": {
+    "activity": "projectile-v1",
+    "concepts": [
+      {
+        "evidence": [
+          {
+            "quote": "On the Moon there is no air, so a thrown ball feels no drag at all.",
+            "sourceId": "user-accf5f60ebed"
+          },
+          {
+            "quote": "Its flight is purely ballistic.",
+            "sourceId": "user-accf5f60ebed"
+          }
+        ],
+        "id": "ballistic-flight-without-drag",
+        "name": "Ballistic flight without drag"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "Nothing pushes the ball sideways, so the horizontal speed stays U0 for the whole flight",
+            "sourceId": "user-accf5f60ebed"
+          },
+          {
+            "quote": "and the ball moves x = U0 * t across the ground.",
+            "sourceId": "user-accf5f60ebed"
+          }
+        ],
+        "id": "horizontal-uniform-motion",
+        "name": "Uniform horizontal motion"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "The vertical speed is V = V0 - g * t, and the height is y = V0 * t - g * t^2 / 2.",
+            "sourceId": "user-accf5f60ebed"
+          }
+        ],
+        "id": "vertical-motion-under-gravity",
+        "name": "Vertical motion under constant gravity"
+      },
+      {
+        "evidence": [
+          {
+            "quote": "The ball stops rising when V = 0, which happens at t = V0 / g.",
+            "sourceId": "user-accf5f60ebed"
+          },
+          {
+            "quote": "Putting that time into the height equation gives the highest point: ymax = V0^2 / (2 * g).",
+            "sourceId": "user-accf5f60ebed"
+          }
+        ],
+        "id": "maximum-height",
+        "name": "Maximum height of projectile"
+      }
+    ],
+    "objectives": [
+      "Describe drag-free ballistic flight with uniform horizontal motion and vertically accelerated motion",
+      "Calculate horizontal position as x = U0 * t and vertical position as y = V0 * t - g * t^2 / 2",
+      "Calculate maximum height as ymax = V0^2 / (2 * g)"
+    ],
+    "supported": true,
+    "unsupportedReason": ""
+  },
+  "report": {
+    "artifactId": "source-analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis.gen.json"
+      },
+      {
+        "id": "analysis.invariants",
+        "kind": "semantic",
+        "passed": true,
+        "message": "invariants hold for supported=true"
+      },
+      {
+        "id": "analysis.concept-ids",
+        "kind": "semantic",
+        "passed": true,
+        "message": "all 4 concept id(s) are unique lowercase-kebab"
+      },
+      {
+        "id": "refs.sources",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 1 cited sourceId(s) have matching documents"
+      },
+      {
+        "id": "grounding.quotes",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 7 concept quote(s) count as evidence (>= 8 normalised characters with >= 3 letters/digits, or a compact \"=\" equation with >= 3) and all 7 resolvable quote(s) appear in their source text after whitespace normalisation; every supported concept has >= 1 counted quote"
+      },
+      {
+        "id": "policy.no-publisher-attribution",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated analysis field (concept names, objectives, unsupportedReason) mentions the publisher or uses attribution/endorsement wording naming a source or authority; evidence quotes are exempt"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18ad1-4e6b-7020-b1bf-8f866f8e9e94",
+    "usage": {
+      "promptTokens": 1834,
+      "completionTokens": 3460,
+      "reasoningTokens": 3071,
+      "cachedTokens": 0
+    },
+    "latencyMs": 13196,
+    "estCostUSD": 0.0169975,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  }
+}
