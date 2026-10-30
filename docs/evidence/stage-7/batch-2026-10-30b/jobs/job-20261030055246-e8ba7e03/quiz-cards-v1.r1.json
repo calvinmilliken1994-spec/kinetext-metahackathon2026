@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "cards": [
+      {
+        "hint": "Think about the size of starting material",
+        "id": "pcr-copy-target",
+        "options": [
+          "small segments of DNA",
+          "whole living cells",
+          "protein building blocks",
+          "energy storage molecules"
+        ],
+        "quote": "Polymerase chain reaction (PCR) is a technique used to \"amplify\" small segments of DNA.",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "stem": "What does PCR amplify for further study"
+      },
+      {
+        "hint": "Think of an identification method using copied material",
+        "id": "pcr-lab-use-fingerprint",
+        "options": [
+          "DNA fingerprinting",
+          "tooth enamel polishing",
+          "joint replacement surgery",
+          "blood pressure screening"
+        ],
+        "quote": "including DNA fingerprinting, detection of bacteria or viruses (particularly AIDS), and diagnosis of genetic disorders",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "stem": "Which procedure can use material produced by PCR"
+      },
+      {
+        "hint": "Consider the value of extra copies for labs",
+        "id": "pcr-amplified-use",
+        "options": [
+          "many different laboratory procedures",
+          "it breaks down immediately",
+          "it stops all lab work",
+          "it prevents further testing"
+        ],
+        "quote": "Once amplified, the DNA produced by PCR can be used in many different laboratory procedures.",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "stem": "What happens to DNA after it is amplified by PCR"
+      },
+      {
+        "hint": "Think about making maps of genetic material",
+        "id": "pcr-mapping-support",
+        "options": [
+          "mapping techniques",
+          "rocket propulsion testing",
+          "bridge load analysis",
+          "weather satellite calibration"
+        ],
+        "quote": "For example, most mapping techniques in the Human Genome Project (HGP) relied on PCR.",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "stem": "What type of project work relied on PCR"
+      }
+    ],
+    "schemaVersion": "quiz-cards-v1",
+    "title": "DNA Amplification Basics"
+  },
+  "report": {
+    "artifactId": "job-20261030055246-e8ba7e03:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18b5f-3320-76d9-bb6d-1b41876fe3c3",
+    "usage": {
+      "promptTokens": 2749,
+      "completionTokens": 6811,
+      "reasoningTokens": 6453,
+      "cachedTokens": 0
+    },
+    "latencyMs": 27628,
+    "estCostUSD": 0.032383,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030055246-e8ba7e03:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "DNA Amplification Basics",
+    "sources": [
+      {
+        "id": "nhgri-pcr-fact-sheet",
+        "title": "Polymerase Chain Reaction (PCR) Fact Sheet — National Human Genome Research Institute, genome.gov",
+        "locator": "https://www.genome.gov/about-genomics/fact-sheets/Polymerase-Chain-Reaction-Fact-Sheet",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Human Genome Research Institute (NHGRI), genome.gov, 'Polymerase Chain Reaction (PCR) Fact Sheet'. Per the NHGRI Copyright Policy, 'Text, graphics, videos, illustrations and other information on National Human Genome Research Institute (NHGRI) websites are in the public domain, unless otherwise indicated'. Courtesy: National Human Genome Research Institute. The National Human Genome Research Institute has not reviewed, approved or endorsed this activity.",
+        "sha256": "d4a11c85387eeb3080dfdf528b93202d09a5e14654d7b3cb2d92ac557369748b"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18b5f-3320-76d9-bb6d-1b41876fe3c3",
+      "runId": "job-20261030055246-e8ba7e03",
+      "promptVersion": "s6-v4",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-30T05:53:54.545Z"
+    },
+    "seed": 2347793373,
+    "cards": [
+      {
+        "hint": "Think about the size of starting material",
+        "id": "pcr-copy-target",
+        "options": [
+          "small segments of DNA",
+          "whole living cells",
+          "protein building blocks",
+          "energy storage molecules"
+        ],
+        "quote": "Polymerase chain reaction (PCR) is a technique used to \"amplify\" small segments of DNA.",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "stem": "What does PCR amplify for further study"
+      },
+      {
+        "hint": "Think of an identification method using copied material",
+        "id": "pcr-lab-use-fingerprint",
+        "options": [
+          "DNA fingerprinting",
+          "tooth enamel polishing",
+          "joint replacement surgery",
+          "blood pressure screening"
+        ],
+        "quote": "including DNA fingerprinting, detection of bacteria or viruses (particularly AIDS), and diagnosis of genetic disorders",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "stem": "Which procedure can use material produced by PCR"
+      },
+      {
+        "hint": "Consider the value of extra copies for labs",
+        "id": "pcr-amplified-use",
+        "options": [
+          "many different laboratory procedures",
+          "it breaks down immediately",
+          "it stops all lab work",
+          "it prevents further testing"
+        ],
+        "quote": "Once amplified, the DNA produced by PCR can be used in many different laboratory procedures.",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "stem": "What happens to DNA after it is amplified by PCR"
+      },
+      {
+        "hint": "Think about making maps of genetic material",
+        "id": "pcr-mapping-support",
+        "options": [
+          "mapping techniques",
+          "rocket propulsion testing",
+          "bridge load analysis",
+          "weather satellite calibration"
+        ],
+        "quote": "For example, most mapping techniques in the Human Genome Project (HGP) relied on PCR.",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "stem": "What type of project work relied on PCR"
+      }
+    ]
+  }
+}

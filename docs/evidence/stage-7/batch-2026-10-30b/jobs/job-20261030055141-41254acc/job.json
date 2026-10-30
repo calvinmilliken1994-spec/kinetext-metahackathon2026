@@ -1,0 +1,31 @@
+{
+  "jobId": "job-20261030055141-41254acc",
+  "sourceId": "nasa-grc-drag-equation",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-30T05:51:41.396Z",
+  "flow": "lesson",
+  "model": "muse-spark-1.3",
+  "provider": "meta-api",
+  "providerModel": "muse-spark-1.3",
+  "totalCostUSD": 0.088886,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 31264,
+    "startedAt": "2026-10-30T05:51:41.396Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 2,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "finishedAt": "2026-10-30T05:52:45.136Z"
+}

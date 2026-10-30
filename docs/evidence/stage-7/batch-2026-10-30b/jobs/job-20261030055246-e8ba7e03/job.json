@@ -1,0 +1,31 @@
+{
+  "jobId": "job-20261030055246-e8ba7e03",
+  "sourceId": "nhgri-pcr-fact-sheet",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-30T05:52:46.600Z",
+  "flow": "lesson",
+  "model": "muse-spark-1.3",
+  "provider": "meta-api",
+  "providerModel": "muse-spark-1.3",
+  "totalCostUSD": 0.115537,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 31264,
+    "startedAt": "2026-10-30T05:52:46.600Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 2,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "finishedAt": "2026-10-30T05:53:54.551Z"
+}
