@@ -22,6 +22,8 @@ import type { DemoChoice } from './lib/sources.ts';
 import { activityRepairCounts, checkTally, lessonRepairCounts, quoteTally, repairPhrases, sectionTally } from './lib/provenance.ts';
 import { readStoredTech, writeStoredTech } from './lib/techDetails.ts';
 import { revealInPanels, scrollPanelToTop } from './lib/scroll.ts';
+import { deckFromActivity, deckFromLesson, exitSearch, presentRequest } from './lib/presentation.ts';
+import type { Deck } from './lib/presentation.ts';
 import { ApiStatus } from './components/ApiStatus.tsx';
 import { AppWindow } from './components/AppWindow.tsx';
 import { IconRail } from './components/IconRail.tsx';
@@ -41,6 +43,8 @@ import { ComponentRepairTimeline } from './components/ComponentRepairTimeline.ts
 import { LessonChecksPanel } from './components/LessonChecksPanel.tsx';
 import { Provenance } from './components/Provenance.tsx';
 import type { ProvenanceReceipt } from './components/Provenance.tsx';
+import { PresentationMode } from './components/presentation/PresentationMode.tsx';
+import { IconPresent } from './components/presentation/icons.tsx';
 import type { SourceRef } from '../../../packages/contracts/index.ts';
 
 const NO_JOBS: never[] = [];
@@ -55,8 +59,10 @@ function localStore(): Storage | null {
   try { return typeof window === 'undefined' ? null : window.localStorage; } catch { return null; }
 }
 
+/** `?present=<id>[&beat=N]` opens that stored run straight into presentation mode (Stage 7c). */
+const PRESENT_REQUEST = typeof window === 'undefined' ? null : presentRequest(window.location.search);
 /** `?job=<id>` opens that stored run instead of the most recent lesson. */
-const LINKED_JOB = typeof window === 'undefined' ? null : requestedJobId(window.location.search);
+const LINKED_JOB = typeof window === 'undefined' ? null : requestedJobId(window.location.search) ?? PRESENT_REQUEST?.jobId ?? null;
 
 export function App() {
   const { health, down, refresh: refreshHealth } = useHealth();
@@ -84,6 +90,8 @@ export function App() {
   const [showSource, setShowSource] = useState(true);
   const [drawer, setDrawer] = useState<DrawerMode | null>(null);
   const [tech, setTech] = useState(() => readStoredTech(localStore()));
+  // Stage 7c: presentation mode for the open lesson (entered from the lesson header, the rail, or a ?present= link).
+  const [presenting, setPresenting] = useState<{ jobId: string; beat: number } | null>(PRESENT_REQUEST);
   const onTech = useCallback((on: boolean) => { setTech(on); writeStoredTech(localStore(), on); }, []);
 
   // Stage 7: the app opens on a chosen lesson — a ?job= link, else the most recent succeeded lesson-flow run — and
@@ -248,7 +256,45 @@ export function App() {
         : publishedReport !== null && <ValidationPanel report={publishedReport} heading={validationHeading(defaultRev, revisions.length, ready.summary.publishedRevision)} showPublish={false} compact />,
     };
   }, [ready, checkSections, publishedReport, quotes, highlights, located, defaultRev, revisions.length]);
-  const provenance = (
+  // Presentation mode: a finished lesson (or classic activity) as a deck of beats. Never a running, failed or declined run.
+  const deck = useMemo((): Deck | null => {
+    if (ready === null || ready.summary.status !== 'succeeded') return null;
+    const common = {
+      jobId: ready.summary.jobId, source: selectedSource, disclosure,
+      checks: receipt?.input.checks ?? null, quotes: receipt?.input.quotes ?? null,
+    };
+    if (lessonMode === 'lesson' && stream !== null && ready.lessonData !== undefined) {
+      if (ready.lessonData.analysis !== null && !ready.lessonData.analysis.usable) return null;
+      if (stream.pending.length > 0) return null;
+      const d = deckFromLesson({
+        ...common, lesson: stream.lesson, specs: ready.lessonData.kitSpecs, premium: spec ?? null,
+        analysis: ready.lessonData.analysis, fallbackTitle: selectedSource?.title ?? 'Lesson',
+      });
+      return d.overview === null && d.parts.length === 0 ? null : d;
+    }
+    if (lessonMode === 'v1' && spec !== undefined) return deckFromActivity({ ...common, spec });
+    return null;
+  }, [ready, selectedSource, disclosure, receipt, lessonMode, stream, spec]);
+  // A ?present= link to a run that cannot be presented (or another lesson opened meanwhile) just shows the workspace.
+  if (presenting !== null && ready !== null && (ready.summary.jobId !== presenting.jobId || (deck === null && ready.summary.status !== 'running'))) {
+    setPresenting(null);
+  }
+  const onPresent = useCallback(() => {
+    if (deck !== null) setPresenting({ jobId: deck.jobId, beat: 0 });
+  }, [deck]);
+  const onExitPresent = useCallback(() => {
+    setPresenting((p) => {
+      if (p !== null) window.history.replaceState(window.history.state, '', `${window.location.pathname}${exitSearch(window.location.search, p.jobId)}${window.location.hash}`);
+      return null;
+    });
+  }, []);
+  const presentButton = deck === null ? null : (
+    <button type="button" className="btn present-launch" onClick={onPresent} title="Present this lesson full screen, one step at a time">
+      <IconPresent size={18} />Present
+    </button>
+  );
+
+  const provenanceLine = (
     <Provenance
       disclosure={disclosure}
       phrases={repairCounts === null ? [] : repairPhrases(repairCounts)}
@@ -257,6 +303,7 @@ export function App() {
       subject={subjectNote(selectedSource)}
     />
   );
+  const provenance = presentButton === null ? provenanceLine : <>{presentButton}{provenanceLine}</>;
 
   return (
     <AppWindow title="Make knowledge interactive" titleIsHeading titlebarExtra={<ApiStatus health={health} down={down} />}>
@@ -269,6 +316,8 @@ export function App() {
           onToggleSource={() => setShowSource((v) => !v)}
           onRuns={() => (drawer === 'runs' ? closeDrawer() : openDrawer('runs'))}
           busy={generate.busy}
+          onPresent={onPresent}
+          canPresent={deck !== null}
         />
         <div className={`workspace${showSource ? '' : ' hide-source'}`}>
           <SourcePanel
@@ -420,6 +469,17 @@ export function App() {
           </RunsDrawer>
         )}
       </div>
+      {presenting !== null && deck !== null && deck.jobId === presenting.jobId && (
+        <PresentationMode
+          key={deck.jobId}
+          deck={deck}
+          quotes={quotes}
+          sourceId={ready?.summary.sourceId ?? ''}
+          repairBadge={repairBadge}
+          startBeat={presenting.beat}
+          onExit={onExitPresent}
+        />
+      )}
     </AppWindow>
   );
 }

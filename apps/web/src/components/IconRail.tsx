@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import type { DrawerMode } from './RunsDrawer.tsx';
 import { IconLesson, IconNewLesson, IconRuns, IconSourcePanel } from './icons.tsx';
+import { IconPresent } from './presentation/icons.tsx';
 
 interface RailButtonProps {
   /** Visible label under the icon. */
@@ -50,6 +51,10 @@ export interface IconRailProps {
   onRuns: () => void;
   /** A run is being generated. */
   busy: boolean;
+  /** Open the lesson in presentation mode (Stage 7c). */
+  onPresent: () => void;
+  /** The open lesson can be presented (a finished, checked lesson or activity). */
+  canPresent: boolean;
 }
 
 /**
@@ -64,6 +69,7 @@ export function IconRail(p: IconRailProps) {
         <RailButton label="New lesson" name="New lesson panel" icon={<IconNewLesson />} onClick={p.onNewLesson} pressed={p.drawer === 'new'} />
         <RailButton label="Lesson" name="Go to the lesson" icon={<IconLesson />} onClick={p.onLesson} />
         <RailButton label="Source" name="Source page" icon={<IconSourcePanel />} onClick={p.onToggleSource} pressed={p.showSource} hint={p.showSource ? 'Hide the source page' : 'Show the source page'} />
+        <RailButton label="Present" name="Present this lesson" icon={<IconPresent />} onClick={p.onPresent} disabled={!p.canPresent} hint={p.canPresent ? 'Full screen, one step at a time' : 'Open a finished lesson to present it'} />
       </ul>
       <span className="rail-sep" aria-hidden="true" />
       <ul className="rail-group">

@@ -9,6 +9,8 @@ import type { Ast } from './formula.ts';
 import { gradePrediction, studentTolerance } from './predictions.ts';
 import { compareAtPoints, independentSamplePoints, parseExpression, parsePageFormula } from '../../../../packages/validation/expression.ts';
 import type { Grade } from './predictions.ts';
+import { densify, placeLabels } from './geometry.ts';
+import type { LabelBox, PlacedLabel, Px } from './geometry.ts';
 
 export const CALCULATOR_FAILURE = 'The formula could not be checked with our calculator.';
 
@@ -131,11 +133,46 @@ export function sig6(n: number): string {
   return s === '-0' ? '0' : s;
 }
 
+/** sig6 with thousands separators, so 100000 reads '100,000' on a projector. Exponent forms are left as they are. */
+export function groupedSig6(n: number): string {
+  const s = sig6(n);
+  if (s === 'not defined' || /e/i.test(s)) return s;
+  const neg = s.startsWith('-');
+  const [int = '', frac] = (neg ? s.slice(1) : s).split('.');
+  if (int.length <= 3) return s;
+  return `${neg ? '-' : ''}${int.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}${frac === undefined ? '' : `.${frac}`}`;
+}
+
+/** Unit words as a page or Muse writes them, mapped to the usual symbols (exact phrases only; case-insensitive). */
+const UNIT_WORDS: Record<string, string> = {
+  'dimensionless': '', 'unitless': '', 'no unit': '', 'no units': '', 'none': '', '1': '',
+  'meters per second': 'm/s', 'metres per second': 'm/s', 'meter per second': 'm/s', 'metre per second': 'm/s',
+  'meters per second squared': 'm/s²', 'metres per second squared': 'm/s²',
+  'kilograms per cubic meter': 'kg/m³', 'kilograms per cubic metre': 'kg/m³', 'kilogram per cubic meter': 'kg/m³', 'kilogram per cubic metre': 'kg/m³',
+  'square meters': 'm²', 'square metres': 'm²', 'square meter': 'm²', 'square metre': 'm²',
+  'cubic meters': 'm³', 'cubic metres': 'm³',
+  'meters': 'm', 'metres': 'm', 'meter': 'm', 'metre': 'm',
+  'seconds': 's', 'second': 's', 'kilograms': 'kg', 'kilogram': 'kg',
+  'newtons': 'N', 'newton': 'N', 'pascals': 'Pa', 'pascal': 'Pa', 'joules': 'J', 'joule': 'J', 'watts': 'W', 'watt': 'W',
+  'kelvin': 'K', 'kelvins': 'K',
+};
+
+/** A compact display unit for a slider, axis or prompt: 'meters per second' → 'm/s', 'm/s^2' → 'm/s²', 'dimensionless' → ''. */
+export function displayUnit(unit: string): string {
+  const key = unit.trim().toLowerCase().replace(/\s+/g, ' ');
+  if (key === '') return '';
+  const word = UNIT_WORDS[key];
+  if (word !== undefined) return word;
+  const sup: Record<string, string> = { '2': '²', '3': '³' };
+  return unit.trim().replace(/\^(\d)/g, (_m, d: string) => sup[d] ?? `^${d}`).replace(/\*/g, '·');
+}
+
 // ---- graph geometry -----------------------------------------------------------------------------------------
 
 export interface GraphSize { width: number; height: number }
 export const GRAPH_SIZE: GraphSize = { width: 520, height: 300 };
-const MARGIN = { l: 62, r: 18, t: 18, b: 46 };
+/** Room above the plot for the axis name and the 'Now:' value (14 px type), below it for ticks and the axis title. */
+const MARGIN = { l: 62, r: 18, t: 28, b: 46 };
 
 export interface GraphTick { value: number; px: number; label: string }
 export interface YTick { value: number; py: number; label: string }
@@ -158,11 +195,13 @@ export interface GraphGeometry {
 }
 
 export function graphGeometry(samples: readonly Sample[], current: { x: number; y: number }, size: GraphSize = GRAPH_SIZE): GraphGeometry {
-  const plot = { l: MARGIN.l, t: MARGIN.t, r: size.width - MARGIN.r, b: size.height - MARGIN.b };
   const xMin = samples[0]?.x ?? 0;
   const xMax = samples[samples.length - 1]?.x ?? 1;
   const ys = samples.map((s) => s.y).filter(Number.isFinite);
   const range = ys.length === 0 ? niceRange(0, 1) : niceRange(Math.min(...ys), Math.max(...ys));
+  // The y axis grows to fit its longest tick label (13 px tabular figures, under 8 px each, plus a gap to the axis).
+  const longest = Math.max(0, ...range.ticks.map((v) => groupedSig6(v).length));
+  const plot = { l: Math.max(MARGIN.l, longest * 8 + 14), t: MARGIN.t, r: size.width - MARGIN.r, b: size.height - MARGIN.b };
   const sx = linearScale(xMin, xMax, plot.l, plot.r);
   const sy = linearScale(range.min, range.max, plot.b, plot.t);
 
@@ -187,12 +226,97 @@ export function graphGeometry(samples: readonly Sample[], current: { x: number; 
     xMax,
     yMin: range.min,
     yMax: range.max,
-    xTicks: tickValues(xMin, xMax).map((value) => ({ value, px: sx(value), label: sig6(value) })),
-    yTicks: range.ticks.map((value) => ({ value, py: sy(value), label: sig6(value) })),
+    xTicks: tickValues(xMin, xMax).map((value) => ({ value, px: sx(value), label: groupedSig6(value) })),
+    yTicks: range.ticks.map((value) => ({ value, py: sy(value), label: groupedSig6(value) })),
     segments,
     hasGap: samples.some((s) => !Number.isFinite(s.y)),
     current: { x: current.x, y: current.y, px: sx(current.x), py: defined ? clamp(sy(current.y), plot.t, plot.b) : null, defined },
   };
+}
+
+export interface GraphReveal {
+  /** y of the guess line; pinned to the plot edge when the guess is off the plotted range. */
+  guessPy: number;
+  offScale: 'above' | 'below' | null;
+  /** py of value + margin (top) and value − margin (bottom), inside the plot, at least 4 px apart. */
+  band: { top: number; bottom: number };
+  /** How far (px, + = down) the current point starts from its true place: it travels from the guess to the value. */
+  fromDy: number;
+  within: boolean;
+  /** '1,250 too low' or 'inside the ±125 margin' (the output has no unit in the spec). */
+  text: string;
+  /** x of the bracket from the guess line to the point. */
+  bracketX: number;
+  /** 'your guess 5,000' (plus 'above/below the graph' when pinned), placed off the curve. */
+  guessLabel: PlacedLabel;
+  /** The gap in words, placed off the curve near the bracket. */
+  deltaLabel: PlacedLabel;
+}
+
+/** The plotted curve as points (from the polyline strings), for keeping labels off it. */
+function curvePoints(g: GraphGeometry): Px[] {
+  return g.segments.flatMap((seg) => densify(seg.split(' ').map((pair) => {
+    const [x, y] = pair.split(',').map(Number);
+    return { px: x ?? 0, py: y ?? 0 };
+  }), 3));
+}
+
+/** The graph's reveal overlay for a graded guess (the point must be the graded case: the view checks the sliders). */
+export function graphReveal(g: GraphGeometry, grade: Grade): GraphReveal {
+  const { plot } = g;
+  const span = g.yMax - g.yMin;
+  const sy = (y: number): number => plot.b - ((y - g.yMin) / (span === 0 ? 1 : span)) * (plot.b - plot.t);
+  const raw = sy(grade.guess);
+  const offScale = raw < plot.t ? 'above' as const : raw > plot.b ? 'below' as const : null;
+  const guessPy = clamp(raw, plot.t, plot.b);
+  const mid = clamp(sy(grade.actual), plot.t, plot.b);
+  let top = clamp(sy(grade.actual + grade.tolerance), plot.t, plot.b);
+  let bottom = clamp(sy(grade.actual - grade.tolerance), plot.t, plot.b);
+  if (bottom - top < 4) { top = Math.max(plot.t, mid - 2); bottom = Math.min(plot.b, mid + 2); }
+  const at = g.current.py ?? mid;
+  const text = grade.withinTolerance
+    ? `inside the ±${groupedSig6(grade.tolerance)} margin`
+    : `${groupedSig6(Math.abs(grade.error))} too ${grade.direction === 'high' ? 'high' : 'low'}`;
+
+  // Labels: the same collision-free placer as the projectile scene, inside the plot, off the curve, the dot and the bracket.
+  const px = g.current.px;
+  const right = px < (plot.l + plot.r) / 2 + 60;
+  const bracketX = px + (right ? 18 : -18);
+  const obstacles = curvePoints(g);
+  obstacles.push(...densify([{ px: plot.l, py: guessPy }, { px: plot.r, py: guessPy }], 3));
+  obstacles.push(...densify([{ px: bracketX, py: guessPy }, { px: bracketX, py: at }], 3));
+  const dot: LabelBox = { x: px - 9, y: at - 9, w: 18, h: 18 };
+  const bounds: LabelBox = { x: plot.l, y: plot.t, w: plot.r - plot.l, h: plot.b - plot.t };
+  const off = offScale === 'above' ? ', above the graph' : offScale === 'below' ? ', below the graph' : '';
+  const lo = Math.min(guessPy, at);
+  const hi = Math.max(guessPy, at);
+  const side = right ? 'start' as const : 'end' as const;
+  const dx = right ? 8 : -8;
+  const [guessLabel, deltaLabel] = placeLabels([
+    {
+      text: `your guess ${groupedSig6(grade.guess)}${off}`, fontPx: 14, bold: true,
+      candidates: [
+        ...(px < (plot.l + plot.r) / 2 ? [plot.r - 6, plot.l + 6] : [plot.l + 6, plot.r - 6]).flatMap((x) => [-8, 19, -26, 37].map((dy) => ({
+          x, y: guessPy + dy, anchor: x > (plot.l + plot.r) / 2 ? 'end' as const : 'start' as const,
+        }))),
+      ],
+    },
+    {
+      text, fontPx: 14, bold: true, near: { px: bracketX, py: (lo + hi) / 2 }, maxY: plot.b,
+      candidates: [
+        { x: bracketX + dx, y: (lo + hi) / 2 + 5, anchor: side },
+        { x: bracketX + dx, y: lo - 8, anchor: side },
+        { x: bracketX + dx, y: hi + 19, anchor: side },
+        { x: px, y: lo - 14, anchor: 'middle' },
+        { x: px, y: lo - 26, anchor: 'middle' },
+        ...[-26, -44, -62, -80].flatMap((dy) => [
+          { x: bracketX + dx, y: lo + dy, anchor: side },
+          { x: px - dx, y: lo + dy, anchor: right ? 'end' as const : 'start' as const },
+        ]),
+      ],
+    },
+  ], [dot], obstacles, bounds, 2) as [PlacedLabel, PlacedLabel];
+  return { guessPy, offScale, band: { top, bottom }, fromDy: guessPy - at, within: grade.withinTolerance, text, bracketX, guessLabel, deltaLabel };
 }
 
 /** Evenly spaced rows from the samples (both ends included) for the value table. */
@@ -269,7 +393,7 @@ export function pageFormulaStatus(spec: FormulaExplorerSpec): PageFormulaStatus 
 
 export function casePrompt(spec: FormulaExplorerSpec, c: FormulaCaseGen): string {
   const inputs = inputsOfCase(c);
-  const parts = spec.variables.map((v) => `${v.meaning} = ${sig6(inputs[v.name] ?? v.default)}${unitSuffix(v.unit)}`);
+  const parts = spec.variables.map((v) => `${v.meaning} = ${groupedSig6(inputs[v.name] ?? v.default)}${unitSuffix(displayUnit(v.unit))}`);
   return `With ${parts.join(', ')}. What is ${outputName(spec)}?`;
 }
 

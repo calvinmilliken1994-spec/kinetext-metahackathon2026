@@ -6,8 +6,8 @@ import { ActivityHeader } from './ActivityHeader.tsx';
 import { Explanations } from './Explanations.tsx';
 import type { CiteProps } from './Explanations.tsx';
 import { OrderActivity } from './OrderActivity.tsx';
-import { TimelinePredictionCards } from './PredictionCards.tsx';
 import { TimelineView } from './TimelineView.tsx';
+import { WhichCameFirst } from './WhichCameFirst.tsx';
 
 export interface TimelineActivityProps {
   spec: TimelineActivitySpec;
@@ -37,7 +37,7 @@ export function TimelineActivity({ spec, cite, repairBadge, provenance }: Timeli
             <button type="button" className="btn" onClick={() => setRevealed(true)}>Reveal the timeline now</button>
           </section>
         )}
-      <TimelinePredictionCards events={events} predictions={spec.predictions} seed={spec.id} cite={cite} />
+      <WhichCameFirst events={events} predictions={spec.predictions} seed={spec.id} cite={cite} />
       <Explanations explanations={spec.explanations} cite={cite} />
     </article>
   );

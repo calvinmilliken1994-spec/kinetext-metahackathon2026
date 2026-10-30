@@ -27,13 +27,15 @@ interface Props<T extends BoardItem> {
   grade: (order: string[]) => BoardResult;
   onCheck: () => void;
   checkLabel?: string;
+  /** 'track': the list is drawn as numbered stations on one vertical line (sequence and timeline boards). */
+  variant?: 'cards' | 'track';
 }
 
 /**
  * “Put these in order”: drag cards, or use each card's Up and Down buttons (keyboard and screen-reader friendly), then check.
  * Shared by the timeline activity (graded against dates) and the sequence component (graded against the page's order).
  */
-export function OrderBoard<T extends BoardItem>({ items, startOrder, heading, hint, resultNote, revealed, renderReveal, grade: gradeFn, onCheck, checkLabel = 'Check order' }: Props<T>) {
+export function OrderBoard<T extends BoardItem>({ items, startOrder, heading, hint, resultNote, revealed, renderReveal, grade: gradeFn, onCheck, checkLabel = 'Check order', variant = 'cards' }: Props<T>) {
   const headingId = useId();
   const hintId = useId();
   const byId = new Map(items.map((e) => [e.id, e] as const));
@@ -109,7 +111,7 @@ export function OrderBoard<T extends BoardItem>({ items, startOrder, heading, hi
   };
 
   return (
-    <section className="card order-activity" aria-labelledby={headingId} data-testid="order-activity">
+    <section className={`card order-activity${variant === 'track' ? ' order-track' : ''}`} aria-labelledby={headingId} data-testid="order-activity">
       <h3 id={headingId}>{heading}</h3>
       <p className="muted small" id={hintId}>{hint}</p>
       <ol className="order-list" ref={listRef} aria-describedby={hintId}>
@@ -128,7 +130,7 @@ export function OrderBoard<T extends BoardItem>({ items, startOrder, heading, hi
               onDrop={(ev) => onDrop(ev, i)}
               onDragEnd={endDrag}
             >
-              <span className="order-pos" aria-hidden="true">{i + 1}.</span>
+              <span className="order-pos" aria-hidden="true">{variant === 'track' ? i + 1 : `${i + 1}.`}</span>
               <div className="order-body">
                 <p className="order-label">
                   <span className="order-grip" title="Drag to move"><IconGrip /></span>

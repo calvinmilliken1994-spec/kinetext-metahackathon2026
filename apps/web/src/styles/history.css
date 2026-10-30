@@ -1,1 +1,177 @@
 /* Stage 7c slice 'history' styles (docs/specs/STAGE-7c-demo-visuals.md). Uses the tokens in ../styles.css. */
+
+/* Slice tokens: the axis ink and the emphasis colour stay legible on the panel in both themes (and on a projector). */
+:root, [data-theme="dark"] {
+  --ta-axis: var(--line-3);
+  --ta-tick: var(--ink-2);
+  --ta-mark: var(--accent-text);
+  --ta-band: color-mix(in srgb, var(--accent-text) 38%, transparent);
+  --ta-leader: var(--line-2);
+}
+[data-theme="light"] {
+  --ta-axis: var(--line-3);
+  --ta-tick: var(--ink-2);
+  --ta-mark: var(--accent);
+  --ta-band: color-mix(in srgb, var(--accent) 28%, transparent);
+  --ta-leader: var(--line-3);
+}
+
+/* ================================================================================================================
+ * Time axis (TimeAxisChart): SVG axis + absolutely placed HTML label buttons in one coordinate system.
+ * ============================================================================================================== */
+.ta { width: 100%; min-width: 0; }
+.ta-plot { position: relative; }
+.ta-svg { position: absolute; inset: 0 auto auto 0; overflow: visible; display: block; }
+.ta-axis { stroke: var(--ta-axis); stroke-width: 2; stroke-linecap: round; }
+.ta-tick line { stroke: var(--ta-axis); stroke-width: 1.5; }
+.ta-tick text, .ta-break-label { fill: var(--ta-tick); font-size: var(--fs-12); font-variant-numeric: tabular-nums; }
+/* a halo in the panel colour keeps tick text legible where a leader line passes behind it */
+.ta-tick text, .ta-break-label { paint-order: stroke; stroke: var(--panel); stroke-width: 4px; stroke-linejoin: round; }
+.ta-break line { stroke: var(--ta-axis); stroke-width: 2; stroke-linecap: round; }
+.ta-break .ta-break-gap { stroke: var(--ta-axis); stroke-width: 2; stroke-dasharray: 2 5; opacity: 0.7; }
+.ta-break-label { font-style: italic; }
+.ta-leader { fill: none; stroke: var(--ta-leader); stroke-width: 1.25; transition: stroke 120ms ease-out; }
+.ta-leader.is-active { stroke: var(--ta-mark); stroke-width: 1.75; }
+
+.ta-mark { cursor: default; }
+.ta-hit { fill: transparent; }
+.ta-dot { fill: var(--ta-mark); stroke: var(--panel); stroke-width: 2.5; transition: r 150ms cubic-bezier(0.16, 1, 0.3, 1); }
+.ta-band { fill: var(--ta-band); stroke: var(--ta-mark); stroke-width: 1.25; }
+.ta-band-mid { stroke: var(--ta-mark); stroke-width: 2; }
+.ta-mark.is-active .ta-band, .ta-mark.is-emph .ta-band { fill: color-mix(in srgb, var(--ta-mark) 60%, transparent); }
+.ta-mark.is-lit .ta-dot, .ta-mark.is-lit .ta-band { stroke: var(--link-line); stroke-width: 3; }
+
+/* labels */
+.ta-labels { list-style: none; margin: 0; padding: 0; }
+.ta-item { position: absolute; margin: 0; border-radius: var(--r); }
+.ta-item.ta-above { transform: translateY(-100%); }
+.ta-label {
+  display: grid; gap: 2px; width: 100%; text-align: left; padding: 6px 9px; margin: 0;
+  font: inherit; color: var(--ink); background: var(--panel); border: 1px solid var(--line-2); border-radius: var(--r);
+  cursor: pointer; transition: border-color 120ms ease-out, background-color 120ms ease-out;
+}
+.ta-label:hover { border-color: var(--line-3); }
+.ta-item.is-active .ta-label { border-color: var(--ta-mark); background: var(--accent-soft); }
+.ta-item.is-emph .ta-label { border-color: var(--ta-mark); }
+.ta-date { font-size: var(--fs-14); font-weight: var(--fw-bold); color: var(--accent-text); font-variant-numeric: tabular-nums; line-height: 1.3; }
+.ta-text {
+  font-size: var(--fs-14); line-height: 1.35; color: var(--ink);
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+/* a lit label: the shared linking ring sits outside the box */
+.ta-item.linkable { outline-offset: 3px; }
+.ta-item.linkable.is-linked { box-shadow: none; background: none; }
+
+/* too narrow for labels on the axis: the axis keeps its marks and the labels become a list under it */
+.ta-narrow .ta-svg { position: static; }
+.ta-labels-list { display: grid; gap: 6px; margin-top: 6px; }
+.ta-labels-list .ta-item { position: static; transform: none; }
+
+.ta-legend { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: var(--fs-12); color: var(--ink-2); }
+.ta-legend li { display: inline-flex; align-items: center; gap: 6px; }
+.ta-legend svg { display: block; overflow: visible; }
+
+.ta-detail { display: grid; gap: 6px; padding-top: 12px; border-top: 1px solid var(--line); min-height: 92px; align-content: start; }
+.ta-detail-head { margin: 0; display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; }
+.ta-detail-date { font-size: var(--fs-16); font-weight: var(--fw-bold); color: var(--accent-text); font-variant-numeric: tabular-nums; }
+.ta-detail-label { font-size: var(--fs-16); font-weight: var(--fw-medium); }
+.timeline-view .ta { margin-top: 4px; }
+
+/* ================================================================================================================
+ * Which came first? The pair's own axis; the arrow is drawn from the earlier event to the later one.
+ * ============================================================================================================== */
+.wcf { display: grid; gap: 8px; }
+.wcf + .wcf { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--line); }
+.wcf-options .pair-option { display: grid; gap: 2px; justify-items: start; }
+.wcf-option-label { font-weight: var(--fw-medium); }
+.wcf-option-date { font-size: var(--fs-14); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.pair-option.wcf-first { border-color: var(--ok-line); }
+.pair-option.wcf-first .wcf-option-date { color: var(--ok-ink); font-weight: var(--fw-bold); }
+.wcf .ta { margin-top: 6px; }
+.ta-arrow-line {
+  fill: none; stroke: var(--ta-mark); stroke-width: 3.5; stroke-linecap: round;
+  stroke-dasharray: 1; stroke-dashoffset: 1;
+  animation: ta-draw 720ms cubic-bezier(0.16, 1, 0.3, 1) 180ms forwards;
+}
+.ta-arrow-head { fill: var(--ta-mark); opacity: 0; animation: ta-fade 140ms ease-out 760ms forwards; }
+.ta-arrow-text {
+  fill: var(--ink); font-size: var(--fs-14); font-weight: var(--fw-bold); font-variant-numeric: tabular-nums;
+  paint-order: stroke; stroke: var(--panel); stroke-width: 5px; stroke-linejoin: round;
+  opacity: 0; animation: ta-fade 240ms ease-out 760ms forwards;
+}
+.ta-has-arrow .ta-axis { stroke: var(--line-2); }
+@keyframes ta-draw { to { stroke-dashoffset: 0; } }
+@keyframes ta-fade { to { opacity: 1; } }
+
+/* ================================================================================================================
+ * Order boards as a track: numbered stations on one vertical line (sequence and timeline "put in order").
+ * ============================================================================================================== */
+.order-track .order-list { position: relative; gap: 10px; }
+.order-track .order-list::before {
+  content: ""; position: absolute; left: 15px; top: 22px; bottom: 22px; width: 2px; background: var(--line-2); border-radius: 1px;
+}
+.order-track .order-item { position: relative; margin-left: 46px; grid-template-columns: minmax(0, 1fr) auto; }
+.order-track .order-pos {
+  position: absolute; left: -47px; top: 11px; z-index: 1;
+  width: 32px; height: 28px; display: grid; place-items: center; min-width: 0;
+  border: 1.5px solid var(--line-3); border-radius: var(--r-s); background: var(--panel); color: var(--ink);
+  font-size: var(--fs-14); font-weight: var(--fw-bold); line-height: 1;
+}
+.order-track .order-item.order-ok .order-pos { border-color: var(--ok); color: var(--ok-ink); background: var(--ok-soft); }
+.order-track .order-item.order-miss .order-pos { border-color: var(--bad); }
+@media (max-width: 560px) { .order-track .order-item { grid-template-columns: minmax(0, 1fr); } }
+
+/* ================================================================================================================
+ * The page's order as a horizontal step track (StepTrack), shown after the check. The one authored moment: the line
+ * draws left to right in step order and each station, leader and label arrives behind it.
+ * ============================================================================================================== */
+.sequence-view { display: grid; gap: 18px; }
+.st-section { display: grid; gap: 10px; padding-top: 14px; border-top: 1px solid var(--line); }
+.st-heading { margin: 0; font-size: var(--fs-16); }
+.st { width: 100%; min-width: 0; }
+.st-plot { position: relative; }
+.st-svg { position: absolute; inset: 0 auto auto 0; overflow: visible; display: block; }
+.st-line {
+  stroke: var(--ta-axis); stroke-width: 3; stroke-linecap: round;
+  stroke-dasharray: 1; stroke-dashoffset: 0; animation: st-draw 640ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.st-loop { fill: none; stroke: var(--ta-axis); stroke-width: 1.5; stroke-dasharray: 5 5; animation: st-in 300ms ease-out 520ms both; }
+.st-head { fill: var(--ta-axis); }
+.st-leader { fill: none; stroke: var(--ta-leader); stroke-width: 1.25; animation: st-in 260ms ease-out both; }
+.st-station { animation: st-in 260ms ease-out both; }
+.st-station rect { fill: var(--panel); stroke: var(--ta-mark); stroke-width: 2; }
+.st-station text { fill: var(--ink); font-size: var(--fs-14); font-weight: var(--fw-bold); font-variant-numeric: tabular-nums; }
+.st-station.is-ok rect { stroke: var(--ok); fill: var(--ok-soft); }
+.st-station.is-ok text { fill: var(--ok-ink); }
+.st-station.is-miss rect { stroke: var(--bad); }
+.st-labels { list-style: none; margin: 0; padding: 0; }
+.st-item {
+  position: absolute; margin: 0; display: grid; gap: 3px; padding: 8px 10px; align-content: start;
+  border: 1px solid var(--line-2); border-radius: var(--r); background: var(--panel);
+  animation: st-rise 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.st-item.st-above { transform: translateY(-100%); animation-name: st-in; }
+/* the station carries the number on the track; the list fallback shows it as text */
+.st-plot:not(:has(.st-labels-list)) .st-num { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.st-num { font-size: var(--fs-12); color: var(--ink-2); font-weight: var(--fw-medium); font-variant-numeric: tabular-nums; }
+.st-date { font-size: var(--fs-14); font-weight: var(--fw-bold); color: var(--accent-text); font-variant-numeric: tabular-nums; line-height: 1.3; }
+.st-title { font-size: var(--fs-14); font-weight: var(--fw-medium); line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.st-hint { font-size: var(--fs-12); color: var(--ink-2); }
+.st-result { font-size: var(--fs-12); display: inline-flex; align-items: center; gap: 2px; margin-top: 2px; }
+.st-result.ok { color: var(--ok-ink); }
+.st-result.bad { color: var(--ink-2); }
+.st-item.linkable { outline-offset: 3px; }
+.st-item.linkable.is-linked { box-shadow: none; }
+.st-narrow .st-svg { position: static; }
+.st-labels-list { display: grid; gap: 6px; margin-top: 8px; }
+.st-labels-list .st-item { position: static; transform: none; }
+@keyframes st-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes st-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes st-rise { from { opacity: 0; translate: 0 6px; } to { opacity: 1; translate: 0 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .ta-arrow-line { animation: none; stroke-dashoffset: 0; }
+  .ta-arrow-text, .ta-arrow-head { animation: none; opacity: 1; }
+  .ta-dot, .ta-leader, .ta-label { transition: none; }
+  .st-line, .st-loop, .st-leader, .st-station, .st-item { animation: none; }
+}

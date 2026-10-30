@@ -1,4 +1,4 @@
-/* Stage 7 slice 'sim' styles (docs/specs/STAGE-7-teacher-polish.md). Uses the tokens in ../styles.css. */
+/* Stage 7 slice 'sim' styles (docs/specs/STAGE-7-teacher-polish.md, STAGE-7c-demo-visuals.md P1). Uses the tokens in ../styles.css. */
 
 /* Case 1's predict card sits inside the simulation, between the scene and the sliders: a ruled section, not a box in a box. */
 .predict-first { border-top: 1px solid var(--line); padding-top: 12px; }
@@ -6,17 +6,26 @@
 .predict-first .predictions { margin-top: 4px; }
 .predict-first .prediction { border-top: 0; padding: 8px 0 0; }
 
-/* Page-stated values under a slider: one click sets the value, the slider stays free. */
-.slider-presets { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 6px; }
+/* Page-stated values under a slider: one click sets the value, the slider stays free. Sized to read when projected. */
+.slider-presets { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 8px; }
 .slider-presets-label { font-size: var(--fs-12); color: var(--ink-3); margin-right: 2px; }
 .preset-chip {
-  padding: 2px 8px; border: 1px solid var(--line-2); border-radius: var(--r-s); background: transparent;
-  color: var(--ink-2); font: inherit; font-size: var(--fs-12); font-weight: var(--fw-medium);
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 4px 10px; border: 1px solid var(--line-2); border-radius: var(--r-s); background: transparent;
+  color: var(--ink-2); font: inherit; font-size: var(--fs-14); font-weight: var(--fw-medium);
   font-variant-numeric: tabular-nums; cursor: pointer;
+  transition: border-color 150ms ease-out, background-color 150ms ease-out, color 150ms ease-out;
 }
 .preset-chip:hover { border-color: var(--line-3); color: var(--ink); background: var(--panel-2); }
 .preset-chip:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .preset-chip[aria-pressed='true'] { border-color: var(--accent-line); background: var(--accent-soft); color: var(--accent-text); }
+
+/* With a comparison drawn, each chip carries the stroke of its arc: solid = the live throw, dotted = a comparison arc. */
+.simulation[data-compare='on'] .preset-chip::before {
+  content: ""; flex: none; width: 18px; height: 2px;
+  background: repeating-linear-gradient(90deg, var(--ink-3) 0 2px, transparent 2px 6px);
+}
+.simulation[data-compare='on'] .preset-chip[aria-pressed='true']::before { height: 3px; background: var(--c-force); }
 
 .reset-sliders { justify-self: start; align-self: flex-start; margin-top: 4px; }
 
@@ -25,3 +34,55 @@
 .compare-label { fill: var(--ink-2); paint-order: stroke; stroke: var(--halo); stroke-width: 3px; }
 .label-leader { stroke: var(--line-3); stroke-width: 1; }
 .compare-note { margin: 0; }
+/* The projectile scene fills the lesson column's width (the shared cap of 300 px left it narrower than its panel). */
+.simulation[data-engine='projectile-v1'] .scene { max-height: 360px; }
+
+/* The live arc's own g, in the trail's colour, so "which arc is which" needs no legend. */
+.arc-label { font-size: 13px; font-weight: var(--fw-bold); fill: var(--c-force); paint-order: stroke; stroke: var(--halo); stroke-width: 4px; }
+
+/* ---- the reveal moment (Stage 7c) ---------------------------------------------------------------------------------
+ * The guess is a level line from the moment the class commits. When the ball reaches the top, the peak marker settles,
+ * the teaching-margin band opens around it and a bracket names the gap. One authored moment; reduced motion makes it a cut. */
+.reveal-guess-line { stroke: var(--ink); stroke-width: 1.5; stroke-dasharray: 8 5; opacity: 0.85; }
+.reveal-guess-off .reveal-guess-line { stroke-dasharray: 2 5; }
+.reveal-guess-label { font-size: 14px; font-weight: var(--fw-bold); fill: var(--ink); paint-order: stroke; stroke: var(--halo); stroke-width: 4px; }
+.reveal-band { fill: var(--c-acc); opacity: 0.22; transform-box: fill-box; transform-origin: center; animation: reveal-band-open 560ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+.reveal-bracket { stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 1; animation: reveal-draw 420ms cubic-bezier(0.16, 1, 0.3, 1) 80ms both; }
+.reveal-bracket-end { stroke-width: 2.5; stroke-linecap: round; }
+.reveal-ok .reveal-bracket, .reveal-ok .reveal-bracket-end { stroke: var(--ok); }
+.reveal-miss .reveal-bracket, .reveal-miss .reveal-bracket-end { stroke: var(--bad); }
+.reveal-delta { font-size: 14px; font-weight: var(--fw-bold); paint-order: stroke; stroke: var(--halo); stroke-width: 4px; }
+.reveal-ok .reveal-delta { fill: var(--ok); }
+.reveal-miss .reveal-delta { fill: var(--bad); }
+.reveal-gap { animation: reveal-fade 320ms ease-out 140ms both; }
+.peak-settle .apex-dot { transform-box: fill-box; transform-origin: center; animation: peak-pop 520ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+.peak-settle .apex-label { animation: peak-label 480ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+@keyframes reveal-band-open { from { transform: scaleY(0); opacity: 0; } to { transform: none; opacity: 0.22; } }
+@keyframes reveal-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes reveal-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes peak-pop { from { transform: scale(2.4); opacity: 0.25; } to { transform: none; opacity: 1; } }
+@keyframes peak-label { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-band, .reveal-bracket, .reveal-gap, .peak-settle .apex-dot, .peak-settle .apex-label { animation: none; }
+}
+
+/* ---- formula explorer graph (Stage 7c): projector-sized type, withheld y scale until case 1 is answered, the reveal ---- */
+.explorer-svg .graph-tick { font-size: 13px; }
+.explorer-svg .graph-axis { font-size: 14px; }
+.explorer-svg .explorer-now { font-size: 14px; }
+.explorer-svg .graph-tick-y { transition: opacity 300ms ease-out; }
+.explorer-graph[data-concealed='true'] .graph-tick-y { opacity: 0; }
+.explorer-svg .graph-tick-hidden { font-size: 16px; font-weight: var(--fw-bold); fill: var(--ink-2); }
+.explorer-dot-settle { animation: dot-settle 720ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+@keyframes dot-settle { from { transform: translateY(var(--from-dy, 0)); } to { transform: none; } }
+
+.explorer-verdict { display: flex; align-items: baseline; gap: 8px; margin: 0; font-size: var(--fs-16); color: var(--ink); font-variant-numeric: tabular-nums; }
+.explorer-verdict b { font-weight: var(--fw-bold); }
+.explorer-verdict.reveal-ok .explorer-verdict-gap { color: var(--ok); font-weight: var(--fw-bold); }
+.explorer-verdict.reveal-miss .explorer-verdict-gap { color: var(--bad); font-weight: var(--fw-bold); }
+
+@media (prefers-reduced-motion: reduce) {
+  .explorer-dot-settle, .explorer-svg .graph-tick-y { animation: none; transition: none; }
+}

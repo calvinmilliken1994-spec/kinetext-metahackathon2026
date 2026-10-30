@@ -241,6 +241,75 @@ export function formatEquation(species: readonly SpeciesLike[], coefficients: re
   return `${side('left')} → ${side('right')}`;
 }
 
+// ---- the live typeset equation and the atom tally bars (Stage 7c) -------------------------------------------------
+// Pure views of atomTotals: the bars never count atoms a second way. A substance's share of a bar is atomTotals with
+// every other coefficient set to 0, and the bar totals are atomTotals itself.
+
+export interface EquationTerm { index: number; id: string; side: 'left' | 'right'; formula: string; coefficient: number; written: string; parts: FormulaPart[] }
+
+/** The equation as a chemist writes it: a coefficient of 1 is not written, formulas split into subscript runs. */
+export function equationTerms(species: readonly (SpeciesLike & { id: string })[], coefficients: readonly number[]): { left: EquationTerm[]; right: EquationTerm[] } {
+  const terms = species.map((s, index): EquationTerm => {
+    const coefficient = coefficients[index] ?? 1;
+    return { index, id: s.id, side: s.side, formula: cleanFormula(s.formula), coefficient, written: coefficient === 1 ? '' : String(coefficient), parts: formulaParts(s.formula) };
+  });
+  return { left: terms.filter((t) => t.side === 'left'), right: terms.filter((t) => t.side === 'right') };
+}
+
+/** One substance's share of a side's bar, in atom positions [start, end). */
+export interface BarSegment { index: number; formula: string; coefficient: number; atoms: number; start: number; end: number }
+export interface BarRow {
+  element: string;
+  left: number;
+  right: number;
+  balanced: boolean;
+  segments: { left: BarSegment[]; right: BarSegment[] };
+  /** The longer bar's part past the shorter bar's end; null when level. */
+  excess: { side: 'left' | 'right'; from: number; to: number; atoms: number } | null;
+  status: string;
+}
+
+/** Atoms of each element on each side for the given coefficients, split by substance; null when a formula cannot be parsed. */
+export function atomBars(species: readonly SpeciesLike[], coefficients: readonly number[]): BarRow[] | null {
+  const totals = atomTotals(species, coefficients);
+  if (totals === null) return null;
+  const shares = species.map((_, i) => atomTotals(species, coefficients.map((c, k) => (k === i ? c : 0))));
+  return totals.rows.map((row) => {
+    const segments: BarRow['segments'] = { left: [], right: [] };
+    const pos = { left: 0, right: 0 };
+    species.forEach((s, i) => {
+      const share = shares[i]?.rows.find((r) => r.element === row.element);
+      const atoms = share === undefined ? 0 : share.left + share.right;
+      if (atoms === 0) return;
+      const start = pos[s.side];
+      segments[s.side].push({ index: i, formula: cleanFormula(s.formula), coefficient: coefficients[i] ?? 0, atoms, start, end: start + atoms });
+      pos[s.side] = start + atoms;
+    });
+    const diff = row.left - row.right;
+    const excess = diff === 0 ? null : diff > 0
+      ? { side: 'left' as const, from: row.right, to: row.left, atoms: diff }
+      : { side: 'right' as const, from: row.left, to: row.right, atoms: -diff };
+    const status = excess === null ? 'level' : `${excess.atoms} more in the ${excess.side === 'left' ? 'reactants' : 'products'}`;
+    return { ...row, segments, excess, status };
+  });
+}
+
+/** A readable bar scale at or above n atoms: 4, 6, 8, 12, 16, 24, 32, 48, ... */
+export function barScale(n: number): number {
+  let base = 4;
+  for (;;) {
+    if (n <= base) return base;
+    if (n <= base * 1.5) return base * 1.5;
+    base *= 2;
+  }
+}
+
+/** The scale for the current totals, never smaller than the previous one, so a bar only moves when its own count moves. */
+export function nextBarScale(previous: number | null, totals: AtomTotals): number {
+  const most = totals.rows.reduce((m, r) => Math.max(m, r.left, r.right), 0);
+  return Math.max(previous ?? 0, barScale(most));
+}
+
 export interface FormulaPart { text: string; sub: boolean }
 
 /** Split a formula into plain and subscript runs, for rendering H₂O style text with <sub>. */

@@ -8,6 +8,7 @@ import { niceStep } from './track.ts';
 import { simulate } from '../../../../packages/activities/projectile-v1/engine.ts';
 import { projectileSummary } from './engines.ts';
 import { fixed, trimmed } from './format.ts';
+import { gradePrediction } from './predictions.ts';
 
 export interface PlotBox { left: number; right: number; top: number; bottom: number }
 
@@ -167,6 +168,30 @@ export interface GhostArc {
   label: PlacedLabel;
 }
 
+/** The class's committed guess for the peak height and the teaching margin it was graded with (Stage 7c reveal). */
+export interface GuessInput { guessM: number; toleranceM: number }
+
+/**
+ * The reveal overlay after a prediction is run: the guess as a level line on the scene's own scale, the engine's peak with
+ * the teaching margin as a band around it, and a bracket from the guess to the peak with the gap in words.
+ */
+export interface GuessReveal {
+  guessM: number;
+  toleranceM: number;
+  /** y of the guess line; at the top edge when the guess is far above the drawing, on the ground when it is negative. */
+  guessPy: number;
+  offScale: 'above' | 'below' | null;
+  /** py of peak + margin (top) and peak − margin (bottom); at least 4 px apart so the band is always visible. */
+  band: { top: number; bottom: number };
+  bracket: { x: number; y1: number; y2: number };
+  within: boolean;
+  direction: 'high' | 'low' | 'exact';
+  /** 'your guess 15 m' */
+  label: PlacedLabel;
+  /** '4.75 m too low' or 'inside the ±0.395 m margin' */
+  delta: PlacedLabel;
+}
+
 export interface ProjectileScene {
   layout: ProjectileLayout;
   maxHeightM: number;
@@ -180,11 +205,57 @@ export interface ProjectileScene {
   land: Px;
   ghosts: GhostArc[];
   labels: { apex: PlacedLabel; landing: PlacedLabel };
+  /** 'g = 1.62 m/s²' on the live arc, only when comparison arcs are drawn (so the two arcs read apart at a glance). */
+  arcLabel: PlacedLabel | null;
+  /** Where the live arc's own label points to (on its falling side). */
+  arcLabelAnchor: Px | null;
+  /** The guess overlay, when a guess was given. */
+  reveal: GuessReveal | null;
   /** Title, axis tick labels and the ground band: what labels must never cover. */
   fixedBoxes: LabelBox[];
 }
 
+/** A guess up to this many times the drawn peak widens the drawing; a larger one is drawn at the top edge instead. */
+export const GUESS_FIT_FACTOR = 2.5;
+/** The margin band is drawn at least this tall (px), so a 2 % margin on a tall arc is still visible. */
+const MIN_BAND_PX = 4;
+
+/** Three significant figures, no trailing zeros: 4.753 → '4.75', 0.39506 → '0.395', 20.247 → '20.2'. */
+export function sig3(n: number): string {
+  if (!Number.isFinite(n)) return String(n);
+  const s = Number(n.toPrecision(3)).toString();
+  return s === '-0' ? '0' : s.includes('e') ? trimmed(n, 6) : s;
+}
+
+/** Words for the gap between the guess and the engine value, the way the grade card counts it (teaching margin). */
+export function gapText(guess: number, actual: number, tolerance: number, unit: string): { text: string; within: boolean; direction: 'high' | 'low' | 'exact' } {
+  const g = gradePrediction(guess, actual, tolerance);
+  const u = unit === '' ? '' : ` ${unit}`;
+  if (g.withinTolerance) return { text: `inside the ±${sig3(tolerance)}${u} margin`, within: true, direction: g.direction };
+  return { text: `${sig3(Math.abs(g.error))}${u} too ${g.direction === 'high' ? 'high' : 'low'}`, within: false, direction: g.direction };
+}
+
 const ARC_SAMPLES = 160;
+
+/**
+ * The guess to draw, or null: only while every slider still sits on the graded case (moving a slider or running another
+ * case makes the old guess meaningless for the arc on screen).
+ */
+export function sceneGuess(
+  caseInput: Readonly<Record<string, number>> | null,
+  inputs: Readonly<Record<string, number>>,
+  grade: { guess: number; tolerance: number } | null,
+): GuessInput | null {
+  if (caseInput === null || grade === null) return null;
+  const keys = Object.keys(caseInput);
+  if (keys.length === 0) return null;
+  for (const k of keys) {
+    const a = caseInput[k];
+    const b = inputs[k];
+    if (a === undefined || b === undefined || Math.abs(a - b) > 1e-9 * Math.max(1, Math.abs(a))) return null;
+  }
+  return { guessM: grade.guess, toleranceM: grade.tolerance };
+}
 
 function arcOf(input: ProjectileInput): { summary: NonNullable<ReturnType<typeof projectileSummary>>; frames: { t: number; x: number; y: number }[] } | null {
   const summary = projectileSummary({ ...input });
@@ -203,7 +274,7 @@ function arcOf(input: ProjectileInput): { summary: NonNullable<ReturnType<typeof
  * times higher" is visible), and the peak, landing and ghost labels placed where they cover no curve and no other text.
  * Null when the engine rejects the current inputs; a ghost the engine rejects is left out.
  */
-export function projectileScene(input: ProjectileInput, ghostGravities: readonly number[], title = ''): ProjectileScene | null {
+export function projectileScene(input: ProjectileInput, ghostGravities: readonly number[], title = '', guess?: GuessInput): ProjectileScene | null {
   const main = arcOf(input);
   if (main === null) return null;
   const ghostArcs = ghostGravities
@@ -211,9 +282,13 @@ export function projectileScene(input: ProjectileInput, ghostGravities: readonly
     .filter((x): x is { g: number; arc: NonNullable<ReturnType<typeof arcOf>> } => x.arc !== null);
 
   const { W, H, box, titleY, tickLabelDy } = PROJECTILE_FRAME;
+  const arcsMaxH = Math.max(main.summary.maxHeightM, ...ghostArcs.map((x) => x.arc.summary.maxHeightM));
+  const g = guess !== undefined && Number.isFinite(guess.guessM) && Number.isFinite(guess.toleranceM) ? guess : null;
+  // A guess within reach widens the drawing so its line is on the same scale; a wild one must not crush the arc.
+  const fitGuess = g !== null && g.guessM > arcsMaxH && g.guessM <= GUESS_FIT_FACTOR * arcsMaxH ? g.guessM : 0;
   const layout = projectileLayout(
     Math.max(main.summary.rangeM, ...ghostArcs.map((x) => x.arc.summary.rangeM)),
-    Math.max(main.summary.maxHeightM, ...ghostArcs.map((x) => x.arc.summary.maxHeightM)),
+    Math.max(arcsMaxH, fitGuess),
     box,
   );
   const toPts = (frames: { x: number; y: number }[]): Px[] => frames.map((f) => layout.toPx(f.x, f.y));
@@ -230,8 +305,8 @@ export function projectileScene(input: ProjectileInput, ghostGravities: readonly
   }
   fixedBoxes.push(textBox('m', 14, box.right + 28, box.bottom + tickLabelDy, 'end'));
 
-  const ghostData = ghostArcs.map(({ g, arc }) => ({
-    g,
+  const ghostData = ghostArcs.map(({ g: gv, arc }) => ({
+    g: gv,
     arc,
     points: toPts(arc.frames),
     apex: layout.toPx(arc.summary.rangeM / 2, arc.summary.maxHeightM),
@@ -248,6 +323,27 @@ export function projectileScene(input: ProjectileInput, ghostGravities: readonly
   ];
   const bounds: LabelBox = { x: 2, y: 2, w: W - 4, h: H - 4 };
   const below = box.bottom + tickLabelDy + 22;
+
+  // The guess overlay: a level line across the plot, a band around the peak, a bracket beside the peak.
+  let overlay: Omit<GuessReveal, 'label' | 'delta'> | null = null;
+  let gap: ReturnType<typeof gapText> | null = null;
+  if (g !== null) {
+    const rawPy = layout.toPx(0, g.guessM).py;
+    const offScale = g.guessM < 0 ? 'below' as const : rawPy < box.top - 1e-9 ? 'above' as const : null;
+    const guessPy = offScale === 'below' ? box.bottom : offScale === 'above' ? box.top - 18 : rawPy;
+    const mid = layout.toPx(0, main.summary.maxHeightM).py;
+    const half = Math.max(MIN_BAND_PX / 2, g.toleranceM * layout.scale);
+    const bracketX = apex.px + 30 <= box.right ? apex.px + 30 : apex.px - 30;
+    gap = gapText(g.guessM, main.summary.maxHeightM, g.toleranceM, 'm');
+    overlay = {
+      guessM: g.guessM, toleranceM: g.toleranceM, guessPy, offScale,
+      band: { top: mid - half, bottom: mid + half },
+      bracket: { x: bracketX, y1: guessPy, y2: apex.py },
+      within: gap.within, direction: gap.direction,
+    };
+    curvePts.push(...densify([{ px: box.left - 10, py: guessPy }, { px: box.right + 10, py: guessPy }], 3));
+    curvePts.push(...densify([{ px: bracketX, py: guessPy }, { px: bracketX, py: apex.py }], 3));
+  }
 
   const apexText = `max height ${fixed(main.summary.maxHeightM, 2)} m`;
   const landText = `lands at t = ${fixed(main.summary.flightTimeS, 2)} s`;
@@ -272,41 +368,97 @@ export function projectileScene(input: ProjectileInput, ghostGravities: readonly
         ]),
       ],
     },
-    ...ghostData.map((gd): LabelRequest => ({
-      text: `g = ${trimmed(gd.g, 4)} m/s²`, fontPx: 12, near: gd.apex, maxY: box.bottom - 8,
+  ];
+  if (overlay !== null && gap !== null) {
+    const o = overlay;
+    const offText = o.offScale === 'above' ? ', above the drawing' : o.offScale === 'below' ? ', below the ground' : '';
+    requests.push({
+      text: `your guess ${trimmed(o.guessM, 4)} m${offText}`, fontPx: 14, bold: true,
       candidates: [
-        { x: gd.apex.px, y: gd.apex.py - 10, anchor: 'middle' },
-        { x: gd.apex.px + 10, y: gd.apex.py - 6, anchor: 'start' },
-        { x: gd.apex.px - 10, y: gd.apex.py - 6, anchor: 'end' },
-        { x: gd.apex.px, y: gd.apex.py + 18, anchor: 'middle' },
-        { x: gd.apex.px + 12, y: gd.apex.py + 16, anchor: 'start' },
-        { x: gd.apex.px - 12, y: gd.apex.py + 16, anchor: 'end' },
-        { x: gd.land.px + 8, y: box.bottom - 10, anchor: 'start' },
-        { x: gd.land.px - 8, y: box.bottom - 10, anchor: 'end' },
-        ...[-22, -40, -60].flatMap((dy) => [
-          { x: gd.apex.px + 12, y: gd.apex.py + dy, anchor: 'start' as const },
-          { x: gd.apex.px - 12, y: gd.apex.py + dy, anchor: 'end' as const },
+        { x: box.left + 4, y: o.guessPy - 8, anchor: 'start' },
+        { x: box.right, y: o.guessPy - 8, anchor: 'end' },
+        { x: box.left + 4, y: o.guessPy + 19, anchor: 'start' },
+        { x: box.right, y: o.guessPy + 19, anchor: 'end' },
+        ...[-26, 36, -44, 54].flatMap((dy) => [
+          { x: box.left + 4, y: o.guessPy + dy, anchor: 'start' as const },
+          { x: box.right, y: o.guessPy + dy, anchor: 'end' as const },
         ]),
       ],
-    })),
-    {
-      text: landText, fontPx: 12, near: land,
+    });
+    const midY = (o.bracket.y1 + o.bracket.y2) / 2 + 5;
+    const right = o.bracket.x > apex.px;
+    const side = right ? 'start' as const : 'end' as const;
+    const dx = right ? 8 : -8;
+    const near = { px: o.bracket.x, py: midY - 5 };
+    requests.push({
+      text: gap.text, fontPx: 14, bold: true, near, maxY: box.bottom - 8,
       candidates: [
-        { x: land.px + 10, y: box.bottom - 10, anchor: 'start' },
-        { x: land.px - 10, y: box.bottom - 10, anchor: 'end' },
-        { x: land.px, y: below, anchor: 'end' },
-        { x: land.px, y: below, anchor: 'start' },
-        { x: land.px, y: below, anchor: 'middle' },
-        { x: W - 8, y: below, anchor: 'end' },
+        { x: o.bracket.x + dx, y: midY, anchor: side },
+        { x: o.bracket.x + dx, y: Math.min(o.bracket.y1, o.bracket.y2) + 4, anchor: side },
+        { x: o.bracket.x + dx, y: Math.max(o.bracket.y1, o.bracket.y2) + 14, anchor: side },
+        { x: o.bracket.x + dx, y: Math.min(o.bracket.y1, o.bracket.y2) - 8, anchor: side },
+        { x: o.bracket.x - dx, y: midY, anchor: right ? 'end' : 'start' },
       ],
-    },
-  ];
+    });
+  }
+  const ghostStart = requests.length;
+  requests.push(...ghostData.map((gd): LabelRequest => ({
+    text: `g = ${trimmed(gd.g, 4)} m/s²`, fontPx: 12, near: gd.apex, maxY: box.bottom - 8,
+    candidates: [
+      { x: gd.apex.px, y: gd.apex.py - 10, anchor: 'middle' },
+      { x: gd.apex.px + 10, y: gd.apex.py - 6, anchor: 'start' },
+      { x: gd.apex.px - 10, y: gd.apex.py - 6, anchor: 'end' },
+      { x: gd.apex.px, y: gd.apex.py + 18, anchor: 'middle' },
+      { x: gd.apex.px + 12, y: gd.apex.py + 16, anchor: 'start' },
+      { x: gd.apex.px - 12, y: gd.apex.py + 16, anchor: 'end' },
+      { x: gd.land.px + 8, y: box.bottom - 10, anchor: 'start' },
+      { x: gd.land.px - 8, y: box.bottom - 10, anchor: 'end' },
+      ...[-22, -40, -60].flatMap((dy) => [
+        { x: gd.apex.px + 12, y: gd.apex.py + dy, anchor: 'start' as const },
+        { x: gd.apex.px - 12, y: gd.apex.py + dy, anchor: 'end' as const },
+      ]),
+    ],
+  })));
+  // The live arc's own g, on its falling side, only when there is a comparison arc to tell it apart from.
+  let arcAnchor: Px | null = null;
+  if (ghostData.length > 0) {
+    const i = Math.min(points.length - 1, Math.round(points.length * 0.78));
+    arcAnchor = points[i] as Px;
+    const a = arcAnchor;
+    requests.push({
+      text: `g = ${trimmed(input.gravityMps2, 4)} m/s²`, fontPx: 13, bold: true, maxY: box.bottom - 8,
+      candidates: [
+        { x: a.px + 10, y: a.py - 6, anchor: 'start' },
+        { x: a.px + 12, y: a.py + 14, anchor: 'start' },
+        { x: a.px - 10, y: a.py - 8, anchor: 'end' },
+        { x: a.px + 14, y: a.py - 24, anchor: 'start' },
+        { x: a.px - 12, y: a.py + 18, anchor: 'end' },
+      ],
+    });
+  }
+  requests.push({
+    text: landText, fontPx: 12, near: land,
+    candidates: [
+      { x: land.px + 10, y: box.bottom - 10, anchor: 'start' },
+      { x: land.px - 10, y: box.bottom - 10, anchor: 'end' },
+      { x: land.px, y: below, anchor: 'end' },
+      { x: land.px, y: below, anchor: 'start' },
+      { x: land.px, y: below, anchor: 'middle' },
+      { x: W - 8, y: below, anchor: 'end' },
+    ],
+  });
   const placed = placeLabels(requests, [...fixedBoxes, ...dots], curvePts, bounds);
   const apexLabel = placed[0] as PlacedLabel;
   const landLabel = placed[placed.length - 1] as PlacedLabel;
   const ghosts: GhostArc[] = ghostData.map((gd, i) => ({
-    gravityMps2: gd.g, maxHeightM: gd.arc.summary.maxHeightM, points: gd.points, apex: gd.apex, land: gd.land, label: placed[1 + i] as PlacedLabel,
+    gravityMps2: gd.g, maxHeightM: gd.arc.summary.maxHeightM, points: gd.points, apex: gd.apex, land: gd.land, label: placed[ghostStart + i] as PlacedLabel,
   }));
+  // The live arc's label only where it sits cleanly beside its own arc (a tiny arc under big ghosts gets none: its colour
+  // and the peak label already say which arc it is).
+  const arcPlaced = arcAnchor === null ? null : placed[placed.length - 2] as PlacedLabel;
+  const arcLead = arcPlaced === null || arcAnchor === null ? null : leaderLine(arcPlaced, arcAnchor);
+  const arcLabel = arcPlaced !== null && arcPlaced.clean && (arcLead === null || Math.hypot(arcLead.x2 - arcLead.x1, arcLead.y2 - arcLead.y1) <= 60) ? arcPlaced : null;
+  const reveal: GuessReveal | null = overlay === null ? null : { ...overlay, label: placed[1] as PlacedLabel, delta: placed[2] as PlacedLabel };
   return {
     layout,
     maxHeightM: main.summary.maxHeightM,
@@ -319,6 +471,9 @@ export function projectileScene(input: ProjectileInput, ghostGravities: readonly
     land,
     ghosts,
     labels: { apex: apexLabel, landing: landLabel },
+    arcLabel,
+    arcLabelAnchor: arcLabel === null ? null : arcAnchor,
+    reveal,
     fixedBoxes,
   };
 }

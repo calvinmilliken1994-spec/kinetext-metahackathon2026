@@ -57,6 +57,7 @@ export function OrderActivity({ events, seed, revealed, onCheck, cite }: Props) 
       )}
       grade={grade}
       onCheck={onCheck}
+      variant="track"
     />
   );
 }

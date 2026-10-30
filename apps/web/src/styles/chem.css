@@ -1,1 +1,159 @@
-/* Stage 7c slice 'chem' styles (docs/specs/STAGE-7c-demo-visuals.md). Uses the tokens in ../styles.css. */
+/* Stage 7c slice 'chem' styles (docs/specs/STAGE-7c-demo-visuals.md). Uses the tokens in ../styles.css.
+ * Balance the equation: a typeset equation with a stepper under each substance, then per element a pair of atom tally
+ * bars (reactants above, products below). Sized to read on a projector: the equation and element symbols are the
+ * largest text in the card. */
+
+/* ---- slice tokens (both themes) ------------------------------------------------------------------------------- */
+:root, [data-theme="dark"] {
+  --chem-react: #4da3ff;
+  --chem-prod: #3cc6dc;
+  --chem-on-bar: #0a1317;
+  --chem-tick: rgba(10, 19, 23, 0.42);
+  --chem-track: #222326;
+  --chem-guide: #c5cad0;
+  --chem-excess: rgba(255, 143, 134, 0.7);
+}
+[data-theme="light"] {
+  --chem-react: #0064e0;
+  --chem-prod: #0b7285;
+  --chem-on-bar: #ffffff;
+  --chem-tick: rgba(255, 255, 255, 0.5);
+  --chem-track: #eceef1;
+  --chem-guide: #33434f;
+  --chem-excess: rgba(179, 38, 30, 0.55);
+}
+
+.chem-balance {
+  --chem-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --eq-size: 34px;
+  --ab-side-w: 92px;
+  --ab-gap: 12px;
+  --ab-count-w: 56px;
+  --ab-bar-h: 30px;
+  display: grid;
+  gap: 16px;
+}
+
+/* ---- the typeset equation -------------------------------------------------------------------------------------- */
+.chem-eq {
+  display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: center;
+  gap: 10px 8px; padding: 6px 0 18px; border-bottom: 1px solid var(--line);
+}
+.chem-term-wrap { display: inline-flex; align-items: flex-start; gap: 8px; }
+.chem-term { display: inline-flex; flex-direction: column; align-items: center; gap: 10px; }
+.chem-term-text {
+  font-size: var(--eq-size); font-weight: var(--fw-bold); line-height: 1.25; white-space: nowrap;
+  font-variant-numeric: tabular-nums; color: var(--ink);
+}
+.chem-coef { color: var(--accent-text); margin-right: 0.08em; transition: color 300ms ease-out; }
+.chem-op {
+  display: inline-flex; align-items: center; height: calc(var(--eq-size) * 1.25); padding: 0 4px;
+  font-size: var(--eq-size); font-weight: var(--fw-regular); color: var(--ink-3);
+}
+.chem-yields { padding: 0 10px; color: var(--ink-2); }
+.chem-stepper { gap: 2px; }
+.chem-stepper .btn { min-width: 34px; min-height: 34px; }
+.chem-stepper .stepper-value { min-width: 30px; font-size: var(--fs-16); color: var(--ink-2); }
+.chem-balance[data-phase="balanced"] .chem-coef { color: var(--ok-ink); }
+
+/* ---- atom tally bars ------------------------------------------------------------------------------------------- */
+.atom-bars { display: grid; gap: 0; margin: 0; }
+.ab-legend {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px 22px; padding-bottom: 10px;
+  font-size: var(--fs-14); color: var(--ink-2);
+}
+.ab-key { display: inline-flex; align-items: center; gap: 8px; }
+.ab-key::before { content: ""; width: 14px; height: 14px; border-radius: 3px; background: var(--chem-react); }
+.ab-key-right::before { background: var(--chem-prod); }
+.ab-key-note { margin-left: auto; color: var(--ink-3); }
+
+.ab-row { display: grid; gap: 8px; padding: 12px 0 14px; border-top: 1px solid var(--line); }
+.ab-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.ab-el { font-size: var(--fs-26); font-weight: var(--fw-bold); line-height: 1.1; color: var(--ink); min-width: 2ch; }
+.ab-status { font-size: var(--fs-16); font-weight: var(--fw-medium); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.ab-row[data-level="true"] .ab-status { color: var(--ok-ink); }
+
+.ab-pair { position: relative; display: grid; gap: 6px; }
+.ab-line { display: grid; grid-template-columns: var(--ab-side-w) minmax(0, 1fr); align-items: center; column-gap: var(--ab-gap); }
+.ab-side { font-size: var(--fs-14); color: var(--ink-3); }
+.ab-track { position: relative; height: var(--ab-bar-h); }
+.ab-scale { position: absolute; top: 0; bottom: 0; left: 0; right: var(--ab-count-w); }
+.ab-track > .ab-scale { border-radius: var(--r-s); background: var(--chem-track); }
+
+.ab-seg {
+  position: absolute; top: 0; bottom: 0; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  background-color: var(--chem-react);
+  clip-path: inset(0 2px 0 0 round 4px);
+  transition: left 420ms var(--chem-ease), width 420ms var(--chem-ease);
+}
+.ab-right .ab-seg { background-color: var(--chem-prod); }
+.with-ticks .ab-seg {
+  background-image: linear-gradient(to right, transparent calc(100% - 1px), var(--chem-tick) calc(100% - 1px));
+  background-size: calc(100% / var(--n)) 100%;
+  background-repeat: repeat-x;
+}
+.ab-seg-label {
+  position: absolute; z-index: 2; top: 0; bottom: 0; display: flex; align-items: center; justify-content: center;
+  pointer-events: none; transition: left 420ms var(--chem-ease), width 420ms var(--chem-ease);
+}
+.ab-seg-label > span {
+  padding: 3px 6px; border-radius: 3px;
+  font-size: var(--fs-16); font-weight: var(--fw-bold); line-height: 1;
+  color: var(--chem-on-bar); background: var(--chem-react); white-space: nowrap;
+}
+.ab-right .ab-seg-label > span { background: var(--chem-prod); }
+
+/* The longer bar's surplus past the shorter bar's end: outlined and lightly hatched, under the substance labels. */
+.ab-excess {
+  position: absolute; z-index: 1; top: -3px; bottom: -3px; border-radius: 4px; pointer-events: none;
+  background: repeating-linear-gradient(-45deg, var(--chem-excess) 0 2px, transparent 2px 9px);
+  box-shadow: inset 0 0 0 2px var(--bad);
+  transition: left 420ms var(--chem-ease), width 420ms var(--chem-ease);
+}
+
+.ab-count {
+  position: absolute; top: 50%; transform: translate(10px, -50%);
+  font-size: var(--fs-20); font-weight: var(--fw-bold); line-height: 1; color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  transition: left 420ms var(--chem-ease);
+}
+
+/* The level line: dashed at the shorter bar's end while the pair differs, solid green once both ends meet. */
+.ab-guide-layer { position: absolute; top: -6px; bottom: -6px; left: calc(var(--ab-side-w) + var(--ab-gap)); right: 0; pointer-events: none; }
+.ab-guide {
+  position: absolute; top: 0; bottom: 0; width: 2px; margin-left: -1px; opacity: 0.85;
+  background: repeating-linear-gradient(to bottom, var(--chem-guide) 0 5px, transparent 5px 9px);
+  transition: left 420ms var(--chem-ease);
+}
+.ab-row[data-level="true"] .ab-guide { width: 3px; margin-left: -2px; opacity: 1; background: var(--ok); }
+
+/* Balanced in the smallest whole numbers: the level lines settle once, row by row. */
+.chem-balance[data-phase="balanced"] .ab-guide { animation: ab-settle 560ms var(--chem-ease) both; animation-delay: calc(var(--row, 0) * 70ms); transform-origin: 50% 50%; }
+@keyframes ab-settle {
+  from { transform: scaleY(0.25); opacity: 0.2; }
+  to { transform: scaleY(1); opacity: 1; }
+}
+
+/* ---- verdict + table ------------------------------------------------------------------------------------------- */
+.chem-verdict { margin-top: 0; font-size: var(--fs-16); padding: 12px 14px; }
+.chem-balance[data-phase="balanced"] .chem-verdict { animation: chem-verdict-in 360ms var(--chem-ease) both; }
+@keyframes chem-verdict-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+.ab-table-wrap { display: grid; justify-items: start; gap: 8px; }
+.ab-table-toggle { font-size: var(--fs-14); }
+
+/* ---- narrow cards ---------------------------------------------------------------------------------------------- */
+@container (max-width: 600px) {
+  .chem-balance { --eq-size: 26px; --ab-side-w: 0px; --ab-gap: 0px; --ab-count-w: 44px; --ab-bar-h: 26px; }
+  .ab-side { display: none; }
+  .ab-line { grid-template-columns: minmax(0, 1fr); }
+  .ab-key-note { margin-left: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ab-seg, .ab-excess, .ab-count, .ab-guide, .chem-coef { transition: none; }
+  .chem-balance[data-phase="balanced"] .ab-guide, .chem-balance[data-phase="balanced"] .chem-verdict { animation: none; }
+}

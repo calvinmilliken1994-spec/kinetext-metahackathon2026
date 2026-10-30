@@ -1,0 +1,489 @@
+// Presentation mode (Stage 7c slice P4), pure parts: the deck of beats a lesson becomes, the navigation state and its
+// reducer, the keyboard map, the deep link, and the plain-language lines of the title and closing beats.
+//
+// A BEAT is one screenful the teacher projects. Some beats build in STEPS (the overview adds one key point per step);
+// a predict-then-reveal beat has two steps, the question and its answer. Next walks the steps, then the beats; R jumps to
+// the beat's last step (everything revealed) and never moves on. Only parts that passed their checks are ever presented.
+
+import type { ActivitySpec, AnyPrediction, EngineId, TimelineActivitySpec, TimelineEvent } from '../../../../packages/contracts/index.ts';
+import type {
+  CompareTableSpec, FormulaExplorerSpec, KeyPointGen, KeyTermGen, KitSpec, LessonSpec, QuizCardsSpec, SourceAnalysisV2,
+} from '../../../../packages/contracts/kit.ts';
+import { engineOutput, formatOutputValue, outputInfo } from './engines.ts';
+import { buildExplorer, casePrompt, evalAt, inputsOfCase, outputName, sig6 } from './explorer.ts';
+import { lessonCards } from './lesson.ts';
+import { linkKey } from './linking.ts';
+import type { QuoteLike } from './linking.ts';
+import { planPredict } from './compare.ts';
+import type { PredictPlan } from './compare.ts';
+import type { CheckTally, QuoteTally } from './provenance.ts';
+import { isTimelineSpec, pairOptions } from './timeline.ts';
+import type { AnyActivitySpec } from './timeline.ts';
+
+// ---- the deck -----------------------------------------------------------------------------------------------------
+
+export interface DeckSource {
+  id: string; title: string; locator: string; license: string; attribution: string;
+  kind?: 'library' | 'user' | undefined; licenseLabel?: string | undefined;
+}
+
+/** One presented part: a checked kit component, or the premium/classic activity (simulation or timeline). */
+export type DeckPart = { kind: 'kit'; spec: KitSpec } | { kind: 'activity'; spec: AnyActivitySpec };
+
+export interface Deck {
+  jobId: string;
+  /** The lesson's headline (overview headline, else the activity title, else the page title). */
+  headline: string;
+  source: DeckSource | null;
+  /** The AI disclosure for this source kind (sources.ts disclosureText). */
+  disclosure: string;
+  overview: { keyPoints: readonly KeyPointGen[]; keyTerms: readonly KeyTermGen[]; coverage: string } | null;
+  /** A classic activity's learning objectives (lesson runs have an overview instead). */
+  objectives: readonly string[];
+  parts: DeckPart[];
+  /** Parts that were planned but did not pass their checks (never shown). */
+  leftOut: number;
+  checks: CheckTally | null;
+  quotes: QuoteTally | null;
+}
+
+interface DeckCommon { jobId: string; source: DeckSource | null; disclosure: string; checks: CheckTally | null; quotes: QuoteTally | null }
+
+/** A lesson-flow run as a deck: the overview, then every passed part in plan order. */
+export function deckFromLesson(input: DeckCommon & {
+  lesson: LessonSpec; specs: Readonly<Record<string, KitSpec>>; premium: AnyActivitySpec | null; analysis: SourceAnalysisV2 | null; fallbackTitle: string;
+}): Deck {
+  const cards = lessonCards(input.lesson, input.specs, input.premium !== null);
+  const parts: DeckPart[] = [];
+  for (const c of cards) {
+    if (c.status !== 'passed') continue;
+    if (c.premium) { if (input.premium !== null) parts.push({ kind: 'activity', spec: input.premium }); continue; }
+    if (c.spec !== null) parts.push({ kind: 'kit', spec: c.spec });
+  }
+  const ov = input.lesson.overview;
+  return {
+    jobId: input.jobId, source: input.source, disclosure: input.disclosure, checks: input.checks, quotes: input.quotes,
+    headline: ov?.headline ?? input.fallbackTitle,
+    overview: ov === null ? null : { keyPoints: ov.keyPoints, keyTerms: ov.keyTerms, coverage: input.analysis?.pageCoverage ?? '' },
+    objectives: [],
+    parts,
+    leftOut: cards.filter((c) => c.status === 'failed').length,
+  };
+}
+
+/** An older single-activity run as a deck: its objectives, then the activity. */
+export function deckFromActivity(input: DeckCommon & { spec: AnyActivitySpec }): Deck {
+  return {
+    jobId: input.jobId, source: input.source, disclosure: input.disclosure, checks: input.checks, quotes: input.quotes,
+    headline: input.spec.title, overview: null, objectives: input.spec.learningObjectives,
+    parts: [{ kind: 'activity', spec: input.spec }], leftOut: 0,
+  };
+}
+
+// ---- beats --------------------------------------------------------------------------------------------------------
+
+export type PredictTarget =
+  | { kind: 'engine'; spec: ActivitySpec; engine: EngineId; prediction: AnyPrediction }
+  | { kind: 'formula'; spec: FormulaExplorerSpec; prompt: string }
+  | { kind: 'timeline'; spec: TimelineActivitySpec; prompt: string; options: [TimelineEvent, TimelineEvent]; predictionId: string };
+
+interface BeatBase {
+  id: string;
+  /** Short label for the progress bar (≤ 16 characters). */
+  label: string;
+  /** Full title (notes, tooltips, the screen-reader announcement). */
+  title: string;
+  /** Build steps; 1 = static. A predict-then-reveal beat has 2: the question, then the answer. */
+  steps: number;
+  /** The page's words behind this beat, for the presenter notes. */
+  quotes: QuoteLike[];
+  /** One line telling the teacher what to do here (presenter notes). */
+  cue: string;
+}
+
+export type Beat =
+  | BeatBase & { kind: 'title' }
+  | BeatBase & { kind: 'overview' }
+  | BeatBase & { kind: 'terms' }
+  | BeatBase & { kind: 'objectives' }
+  | BeatBase & { kind: 'quiz'; spec: QuizCardsSpec; cardId: string; number: number; of: number }
+  | BeatBase & { kind: 'compare'; spec: CompareTableSpec; plan: PredictPlan | null }
+  | BeatBase & { kind: 'predict'; target: PredictTarget }
+  | BeatBase & { kind: 'stage'; part: DeckPart }
+  | BeatBase & { kind: 'closing' };
+
+export type BeatKind = Beat['kind'];
+
+const STAGE_LABELS: Readonly<Record<string, string>> = {
+  'sequence-v1': 'Sequence', 'sort-groups-v1': 'Sort', 'concept-map-v1': 'Concept map', 'compare-table-v1': 'Compare',
+  'formula-explorer-v1': 'Formula', 'balance-equation-v1': 'Balance', 'quiz-cards-v1': 'Quiz', 'timeline-v1': 'Timeline',
+};
+
+const CUE = {
+  title: 'Introduce the page and where it comes from. The lesson is a draft you have reviewed.',
+  overview: 'Press → to bring in each key point. Hover a point to show the sentence it comes from.',
+  terms: 'Ask what each term means before you press → to show the page’s meaning.',
+  objectives: 'Say what the class will find out. Press → for each objective.',
+  quiz: 'Read the question aloud and let the class vote (hands or cards). Click the option most chose, then press R.',
+  compare: 'One cell is hidden. Let the class choose its value, click their choice, then press R.',
+  predict: 'Collect a few estimates, agree on one class prediction and type it in, then press R for the engine’s value.',
+  pair: 'Let the class vote on which came first, click the event most chose, then press R for the dates.',
+  stage: 'Run it with the class. The controls work as in the lesson.',
+  closing: 'Close with where the material came from and what was checked.',
+} as const;
+
+/** The quotes a part cites, in the order it shows them. */
+export function partQuotes(part: DeckPart): QuoteLike[] {
+  if (part.kind === 'activity') {
+    const spec = part.spec;
+    const fromEvents = isTimelineSpec(spec) ? spec.simulation.events.flatMap((e) => e.evidence) : [];
+    return [...fromEvents, ...spec.explanations.flatMap((e) => e.evidence)];
+  }
+  const spec = part.spec;
+  switch (spec.componentId) {
+    case 'quiz-cards-v1': return spec.cards.map((c) => ({ sourceId: c.sourceId, quote: c.quote }));
+    case 'sequence-v1': return spec.steps.map((s) => ({ sourceId: s.sourceId, quote: s.quote }));
+    case 'sort-groups-v1': return spec.items.map((i) => ({ sourceId: i.sourceId, quote: i.quote }));
+    case 'concept-map-v1': return spec.links.map((l) => ({ sourceId: l.sourceId, quote: l.quote }));
+    case 'compare-table-v1': return spec.cells.map((c) => ({ sourceId: c.sourceId, quote: c.quote }));
+    case 'formula-explorer-v1': return [
+      { sourceId: spec.sourceId, quote: spec.quote },
+      ...(spec.hasSourceExample ? [{ sourceId: spec.sourceId, quote: spec.sourceExample.quote }] : []),
+    ];
+    case 'balance-equation-v1': return [{ sourceId: spec.sourceId, quote: spec.quote }, ...spec.species.map((s) => ({ sourceId: s.sourceId, quote: s.quote }))];
+    default: return [];
+  }
+}
+
+function uniqueQuotes(quotes: readonly QuoteLike[]): QuoteLike[] {
+  const seen = new Set<string>();
+  const out: QuoteLike[] = [];
+  for (const q of quotes) {
+    const k = linkKey(q.sourceId, q.quote);
+    if (k === '' || seen.has(k)) continue;
+    seen.add(k);
+    out.push(q);
+  }
+  return out;
+}
+
+function stageLabel(part: DeckPart): string {
+  if (part.kind === 'kit') return STAGE_LABELS[part.spec.componentId] ?? 'Activity';
+  return isTimelineSpec(part.spec) ? 'Timeline' : 'Simulation';
+}
+
+function partBeats(part: DeckPart, n: number): Beat[] {
+  const quotes = uniqueQuotes(partQuotes(part));
+  const id = `${n}:${part.spec.id}`;
+  const stage: Beat = { kind: 'stage', id: `${id}:stage`, label: stageLabel(part), title: part.spec.title, steps: 1, quotes, cue: CUE.stage, part };
+
+  if (part.kind === 'activity') {
+    const spec = part.spec;
+    if (isTimelineSpec(spec)) {
+      const p = spec.predictions[0];
+      const options = p === undefined ? null : pairOptions(spec.simulation.events, p, spec.id);
+      if (p === undefined || options === null) return [stage];
+      const predict: Beat = {
+        kind: 'predict', id: `${id}:predict`, label: 'Which first?', title: p.prompt, steps: 2, cue: CUE.pair,
+        quotes: uniqueQuotes(options.flatMap((e) => e.evidence)),
+        target: { kind: 'timeline', spec, prompt: p.prompt, options, predictionId: p.id },
+      };
+      return [predict, stage];
+    }
+    const engine = spec.simulation.engine;
+    const p = spec.predictions[0] as AnyPrediction | undefined;
+    if (p === undefined || engineOutput(engine, p) === null) return [stage];
+    const predict: Beat = {
+      kind: 'predict', id: `${id}:predict`, label: 'Predict', title: p.prompt, steps: 2, cue: CUE.predict,
+      quotes: uniqueQuotes(spec.explanations.flatMap((e) => e.evidence)).slice(0, 3),
+      target: { kind: 'engine', spec, engine, prediction: p },
+    };
+    return [predict, stage];
+  }
+
+  const spec = part.spec;
+  switch (spec.componentId) {
+    case 'quiz-cards-v1':
+      return spec.cards.map((c, i): Beat => ({
+        kind: 'quiz', id: `${id}:card:${c.id}`, label: `Question ${i + 1}`, title: c.stem, steps: 2, cue: CUE.quiz,
+        quotes: [{ sourceId: c.sourceId, quote: c.quote }], spec, cardId: c.id, number: i + 1, of: spec.cards.length,
+      }));
+    case 'compare-table-v1': {
+      const plan = planPredict(spec);
+      const hidden = plan === null ? undefined : spec.cells.find((c) => c.id === plan.cellId);
+      return [{
+        kind: 'compare', id: `${id}:compare`, label: 'Compare', title: spec.title, steps: plan === null ? 1 : 2,
+        cue: plan === null ? CUE.stage : CUE.compare,
+        quotes: hidden === undefined ? quotes : uniqueQuotes([hidden, ...quotes]), spec, plan,
+      }];
+    }
+    case 'formula-explorer-v1': {
+      const model = buildExplorer(spec);
+      const first = spec.cases[0];
+      if (!model.ok || first === undefined || !Number.isFinite(evalAt(model, inputsOfCase(first)))) return [stage];
+      const prompt = casePrompt(spec, first);
+      const predict: Beat = { kind: 'predict', id: `${id}:predict`, label: 'Predict', title: prompt, steps: 2, cue: CUE.predict, quotes, target: { kind: 'formula', spec, prompt } };
+      return [predict, stage];
+    }
+    default:
+      return [stage];
+  }
+}
+
+/** The beats of a deck, in order: title, overview or objectives, key terms, each part's beats, closing. */
+export function planBeats(deck: Deck): Beat[] {
+  const beats: Beat[] = [{ kind: 'title', id: 'title', label: 'Title', title: deck.headline, steps: 1, quotes: [], cue: CUE.title }];
+  const ov = deck.overview;
+  if (ov !== null && ov.keyPoints.length > 0) {
+    beats.push({ kind: 'overview', id: 'overview', label: 'Overview', title: 'What the page says', steps: ov.keyPoints.length, quotes: uniqueQuotes(ov.keyPoints), cue: CUE.overview });
+  }
+  if (ov !== null && ov.keyTerms.length > 0) {
+    beats.push({ kind: 'terms', id: 'terms', label: 'Key terms', title: 'Key terms', steps: ov.keyTerms.length + 1, quotes: uniqueQuotes(ov.keyTerms), cue: CUE.terms });
+  }
+  if (deck.objectives.length > 0) {
+    beats.push({ kind: 'objectives', id: 'objectives', label: 'Goals', title: 'What we will find out', steps: deck.objectives.length, quotes: [], cue: CUE.objectives });
+  }
+  deck.parts.forEach((part, i) => { beats.push(...partBeats(part, i + 1)); });
+  beats.push({ kind: 'closing', id: 'closing', label: 'Sources', title: 'Where this came from', steps: 1, quotes: [], cue: CUE.closing });
+  return beats;
+}
+
+/** How many items of a building beat are shown at `step`: overview points / objectives (first one on arrival), term meanings (none on arrival). */
+export function visibleCount(beat: Pick<Beat, 'kind' | 'steps'>, step: number): number {
+  const s = Math.max(0, Math.min(step, beat.steps - 1));
+  return beat.kind === 'terms' ? s : s + 1;
+}
+
+export function canReveal(beat: Pick<Beat, 'steps'>, step: number): boolean { return step < beat.steps - 1; }
+
+/** A predict-then-reveal (or building) beat at its last step. */
+export function isRevealed(beat: Pick<Beat, 'steps'>, step: number): boolean { return beat.steps > 1 && step >= beat.steps - 1; }
+
+/** Every quote the deck uses, once each, in beat order. */
+export function deckQuotes(beats: readonly Beat[]): QuoteLike[] {
+  return uniqueQuotes(beats.flatMap((b) => b.quotes));
+}
+
+// ---- the reveal of a numeric predict beat -------------------------------------------------------------------------
+
+export interface NumericAnswer { value: number; display: string; unit: string; label: string }
+
+/** The checked value a numeric predict beat reveals: the engine's (or calculator's) output for the first case. */
+export function numericAnswer(target: PredictTarget): NumericAnswer | null {
+  if (target.kind === 'engine') {
+    const value = engineOutput(target.engine, target.prediction);
+    if (value === null) return null;
+    const out = outputInfo(target.engine);
+    return { value, display: formatOutputValue(target.engine, value), unit: out.unit, label: out.label };
+  }
+  if (target.kind === 'formula') {
+    const model = buildExplorer(target.spec);
+    const first = target.spec.cases[0];
+    if (!model.ok || first === undefined) return null;
+    const value = evalAt(model, inputsOfCase(first));
+    if (!Number.isFinite(value)) return null;
+    return { value, display: sig6(value), unit: '', label: outputName(target.spec) };
+  }
+  return null;
+}
+
+
+// ---- navigation ---------------------------------------------------------------------------------------------------
+
+export interface PresentState {
+  beat: number;
+  step: number;
+  blank: boolean;
+  notes: boolean;
+  help: boolean;
+  /** Per beat id: the class's choice or estimate, kept while moving around the deck. */
+  answers: Readonly<Record<string, string>>;
+}
+
+export type PresentAction =
+  | { type: 'next' } | { type: 'prev' } | { type: 'reveal' } | { type: 'jump'; beat: number } | { type: 'first' } | { type: 'last' }
+  | { type: 'blank' } | { type: 'notes' } | { type: 'help' } | { type: 'answer'; beatId: string; value: string };
+
+const clampBeat = (beats: readonly Beat[], n: number): number => (Number.isFinite(n) ? Math.max(0, Math.min(beats.length - 1, Math.trunc(n))) : 0);
+
+export function initialPresent(beats: readonly Beat[], beat = 0): PresentState {
+  return { beat: clampBeat(beats, beat), step: 0, blank: false, notes: false, help: false, answers: {} };
+}
+
+/** The navigation reducer for one deck. */
+export function presentReducer(beats: readonly Beat[]) {
+  const stepsOf = (i: number): number => beats[i]?.steps ?? 1;
+  return (s: PresentState, a: PresentAction): PresentState => {
+    const moving = a.type === 'next' || a.type === 'prev' || a.type === 'jump' || a.type === 'first' || a.type === 'last' || a.type === 'reveal';
+    // A blanked screen comes back on the next key press without moving (as in slide software).
+    if (s.blank && (a.type === 'next' || a.type === 'prev' || a.type === 'reveal')) return { ...s, blank: false };
+    const base = moving ? { ...s, help: false, blank: false } : s;
+    switch (a.type) {
+      case 'next':
+        if (s.step < stepsOf(s.beat) - 1) return { ...base, step: s.step + 1 };
+        if (s.beat < beats.length - 1) return { ...base, beat: s.beat + 1, step: 0 };
+        return base;
+      case 'prev':
+        if (s.step > 0) return { ...base, step: s.step - 1 };
+        if (s.beat > 0) return { ...base, beat: s.beat - 1, step: stepsOf(s.beat - 1) - 1 };
+        return base;
+      case 'reveal': return { ...base, step: stepsOf(s.beat) - 1 };
+      case 'jump': return { ...base, beat: clampBeat(beats, a.beat), step: 0 };
+      case 'first': return { ...base, beat: 0, step: 0 };
+      case 'last': return { ...base, beat: beats.length - 1, step: 0 };
+      case 'blank': return { ...s, blank: !s.blank, help: false };
+      case 'notes': return { ...s, notes: !s.notes };
+      case 'help': return { ...s, help: !s.help };
+      case 'answer': return { ...s, answers: { ...s.answers, [a.beatId]: a.value } };
+    }
+  };
+}
+
+// ---- keys ---------------------------------------------------------------------------------------------------------
+
+/** Where a key press lands: a field or slider that uses the keys itself, a button (Space/Enter activate it), or neither. */
+export type KeyContext = 'none' | 'button' | 'text';
+
+const TEXT_ROLES = new Set(['slider', 'spinbutton', 'textbox', 'combobox', 'listbox', 'option', 'radio', 'radiogroup', 'searchbox', 'menuitem']);
+const BUTTON_INPUTS = new Set(['button', 'submit', 'reset']);
+
+export function keyContext(el: { tagName: string; type?: string; isContentEditable?: boolean; role?: string | null } | null): KeyContext {
+  if (el === null) return 'none';
+  const tag = el.tagName.toUpperCase();
+  if (el.isContentEditable === true) return 'text';
+  if (tag === 'INPUT') return BUTTON_INPUTS.has((el.type ?? 'text').toLowerCase()) ? 'button' : 'text';
+  if (tag === 'TEXTAREA' || tag === 'SELECT') return 'text';
+  if (el.role !== undefined && el.role !== null && TEXT_ROLES.has(el.role)) return 'text';
+  if (tag === 'BUTTON' || tag === 'A' || tag === 'SUMMARY') return 'button';
+  return 'none';
+}
+
+export interface KeyLike { key: string; ctrlKey: boolean; metaKey: boolean; altKey: boolean; shiftKey: boolean }
+
+/**
+ * The keyboard map. 'exit' leaves presentation mode, 'fullscreen' toggles full screen, 'release' lets go of a focused
+ * field (Esc inside it), null = not ours. Browser shortcuts (Ctrl/Cmd/Alt) are never taken.
+ */
+export function keyAction(e: KeyLike, context: KeyContext): PresentAction | 'exit' | 'fullscreen' | 'release' | null {
+  if (e.ctrlKey || e.metaKey || e.altKey) return null;
+  if (context === 'text') return e.key === 'Escape' ? 'release' : null;
+  if (context === 'button' && (e.key === ' ' || e.key === 'Enter')) return null;
+  switch (e.key) {
+    case 'ArrowRight': case 'ArrowDown': case 'PageDown': case ' ': return { type: 'next' };
+    case 'ArrowLeft': case 'ArrowUp': case 'PageUp': return { type: 'prev' };
+    case 'Home': return { type: 'first' };
+    case 'End': return { type: 'last' };
+    case 'Escape': return 'exit';
+    default: break;
+  }
+  const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+  if (/^[0-9]$/.test(key)) return { type: 'jump', beat: key === '0' ? 9 : Number(key) - 1 };
+  switch (key) {
+    case 'r': return { type: 'reveal' };
+    case 'b': case '.': return { type: 'blank' };
+    case 'p': return { type: 'notes' };
+    case '?': case 'h': return { type: 'help' };
+    case 'f': return 'fullscreen';
+    default: return null;
+  }
+}
+
+/** The keyboard map as shown in the help overlay. */
+export const KEY_MAP: readonly { keys: string; does: string }[] = [
+  { keys: '→  Space  PgDn', does: 'Next step or beat' },
+  { keys: '←  PgUp', does: 'Back' },
+  { keys: 'R', does: 'Reveal the answer' },
+  { keys: '1–9  0', does: 'Jump to beat (0 = 10)' },
+  { keys: 'Home  End', does: 'First or last beat' },
+  { keys: 'B', does: 'Black screen' },
+  { keys: 'P', does: 'Presenter notes' },
+  { keys: 'F', does: 'Full screen' },
+  { keys: '?', does: 'This list' },
+  { keys: 'Esc', does: 'Leave presentation' },
+];
+
+// ---- deep link ----------------------------------------------------------------------------------------------------
+
+/** `?present=<jobId>[&beat=N]` (N is 1-based on the address bar, 0-based here). */
+export function presentRequest(search: string): { jobId: string; beat: number } | null {
+  const q = new URLSearchParams(search);
+  const jobId = q.get('present');
+  if (jobId === null || jobId === '') return null;
+  const n = Number(q.get('beat'));
+  return { jobId, beat: Number.isInteger(n) && n >= 1 ? n - 1 : 0 };
+}
+
+/** The address while presenting: other parameters kept, `job` replaced by `present` and the 1-based beat. */
+export function presentSearch(search: string, jobId: string, beat: number): string {
+  const q = new URLSearchParams(search);
+  q.delete('job'); q.delete('present'); q.delete('beat');
+  q.set('present', jobId);
+  q.set('beat', String(beat + 1));
+  return `?${q.toString()}`;
+}
+
+/** The address after leaving: the same lesson stays open (`?job=`). */
+export function exitSearch(search: string, jobId: string): string {
+  const q = new URLSearchParams(search);
+  q.delete('present'); q.delete('beat'); q.delete('job');
+  q.set('job', jobId);
+  return `?${q.toString()}`;
+}
+
+// ---- title and closing lines --------------------------------------------------------------------------------------
+
+const LICENCE_TEXT: Readonly<Record<string, string>> = {
+  'US-Gov-Work': 'U.S. Government work',
+  'CC0-1.0': 'CC0 1.0',
+  'CC-BY-4.0': 'CC BY 4.0',
+};
+
+export function licenceText(license: string): string { return LICENCE_TEXT[license] ?? license; }
+
+const PROJECT_TEAM = /^\s*Written by the Make knowledge interactive project team\b/i;
+
+/** The title beat's source lines: the page's own name, who it is from, its licence in plain words. */
+export function titleCard(source: DeckSource | null): { name: string; from: string | null; licence: string } | null {
+  if (source === null) return null;
+  const at = source.title.indexOf(' — ');
+  const name = at > 0 ? source.title.slice(0, at).trim() : source.title.trim();
+  let from: string | null = at > 0 ? source.title.slice(at + 3).trim() : null;
+  if (PROJECT_TEAM.test(source.attribution)) from = 'Written by the project team';
+  else if (source.kind === 'user' && from === null) from = 'A teacher’s own text';
+  const licence = source.kind === 'user' ? (source.licenseLabel ?? licenceText(source.license)) : licenceText(source.license);
+  return { name, from, licence };
+}
+
+const plural = (n: number, one: string, many: string): string => (n === 1 ? one : many);
+
+/** One calm line: what code checked. Counts come from the stored run; a missing count is left out, never guessed. */
+export function checksLine(checks: CheckTally | null, quotes: QuoteTally | null): string | null {
+  const parts: string[] = [];
+  if (checks !== null) {
+    parts.push(checks.passed === checks.total
+      ? (checks.total === 1 ? 'The 1 check passed' : `All ${checks.total} checks passed`)
+      : `${checks.passed} of ${checks.total} ${plural(checks.total, 'check', 'checks')} passed`);
+  }
+  if (quotes !== null) {
+    const all = quotes.found === quotes.total;
+    const text = all
+      ? `${quotes.total === 1 ? 'the 1 quote' : `all ${quotes.total} quotes`} found on the page`
+      : `${quotes.found} of ${quotes.total} ${plural(quotes.total, 'quote', 'quotes')} found on the page`;
+    parts.push(parts.length === 0 ? text.charAt(0).toUpperCase() + text.slice(1) : text);
+  }
+  return parts.length === 0 ? null : parts.join(' · ');
+}
+
+export function leftOutLine(n: number): string | null {
+  if (n <= 0) return null;
+  return n === 1
+    ? '1 part was left out because it could not be verified against the page.'
+    : `${n} parts were left out because they could not be verified against the page.`;
+}
+
+/** The page sentence behind the hovered element's link keys (lib/linking.ts), or null. */
+export function quoteForLinks(keys: readonly string[], quotes: readonly QuoteLike[]): string | null {
+  if (keys.length === 0) return null;
+  for (const q of quotes) if (keys.includes(linkKey(q.sourceId, q.quote))) return q.quote;
+  return null;
+}
