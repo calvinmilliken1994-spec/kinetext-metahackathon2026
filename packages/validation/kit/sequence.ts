@@ -1,5 +1,12 @@
-// S6-V — sequence-v1 validation (SEQ-01..SEQ-06, design §2.3 frozen) + the per-item drop helper
-// ("drop single bad steps only while >= 4 remain"). Array order is the taught order.
+// S6-V — sequence-v1 validation (SEQ-01, SEQ-03..SEQ-06, design §2.3 frozen) + the per-item drop
+// helper ("drop single bad steps only while >= 4 remain"). Array order is the taught order.
+//
+// SEQ-02 `labels-in-quotes` is RETIRED and its id REMOVED (Stage 7e, frozen spec
+// docs/specs/STAGE-7e-library-and-wording.md option (a)): a step label is the model's own short
+// event name (the ≤ 8-word shape is prompt guidance, never a validator rule), and the step's
+// verbatim quote (SEQ-01) stays the grounded evidence. Labels remain bound by the length limits
+// (structural gate), the publisher/plain-text sweep (structural gate), distinctness (SEQ-04) and
+// the shared numbers rule (SEQ-06 / N-01). The retired id is never reused.
 //
 // SEQ-03 order-basis-holds (verified by our code, no model judgement):
 //   - orderBasis 'page-order': the start offset of each step's quote in its source's normalised
@@ -20,7 +27,6 @@ import {
   buildReport,
   buildSourceIndex,
   collectQuoteFailures,
-  containsNormalized,
   duplicateOccurrences,
   idProblems,
   itemIndicesWithFailures,
@@ -89,20 +95,6 @@ export function validateSequence(gen: SequenceGen, sources: SourceDocument[], op
       return problems.length === 0
         ? { passed: true, message: `all ${grounded} step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)` }
         : { passed: false, message: `${problems.join('; ')} (expected verbatim quotes of 1-${KIT_LIMITS.common.quote.max} characters from the cited source)`, path: affected[0], affected };
-    }),
-
-    guarded('SEQ-02', 'semantic', () => {
-      const problems: string[] = [];
-      const affected: string[] = [];
-      gen.steps.forEach((step, i) => {
-        if (!containsNormalized(step.quote ?? '', step.label ?? '')) {
-          problems.push(`steps[${i}] (${step.id}): the label "${step.label}" does not occur in its quote (labels-in-quotes)`);
-          affected.push(`/steps/${i}/label`, `/steps/${i}/quote`);
-        }
-      });
-      return problems.length === 0
-        ? { passed: true, message: 'every step label occurs in its own quote after normalisation (labels-in-quotes)' }
-        : { passed: false, message: problems.join('; '), path: affected[0], affected };
     }),
 
     guarded('SEQ-03', 'behavioral', () => {

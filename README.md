@@ -68,7 +68,9 @@ What the runs show, beyond the counts:
 ## Architecture
 
 Pipeline: source → Muse analysis v2 (subject, overview, component plan) → per-component generation →
-deterministic checks (64 Stage 6 check ids) → bounded Muse repair → prune → partial publish.
+deterministic checks (63 Stage 6 check ids; `SEQ-02 labels-in-quotes` was retired in Stage 7e —
+sequence step labels are AI-written short event names, each still grounded by its verbatim quote)
+→ bounded Muse repair → prune → partial publish.
 Live events, artifacts and costs are stored per job under `storage/runs/` (gitignored).
 
 | Path | Responsibility |
@@ -176,7 +178,9 @@ Qwen, GPT reviewers) under the developer's direction; every commit's authoring r
 - **Teaching quality is not independently rated.** The checks verify quotes, numbers, formulas and
   structure — "this is what the cited sentence says" — not how well a component teaches. No human
   quality rating has been run.
-- Sequence step labels are sometimes copied phrases (a pre-existing quality note).
+- Sequence step labels in stored runs from before Stage 7e are copied quote fragments (the retired
+  `labels-in-quotes` validator rule required each label to occur in its own quote); labels are now
+  AI-written short event names, with each step's verbatim quote kept as the grounded evidence.
 - The `componentRepairs` field is empty in the 1.3 run's result rows (reporting gap fixed after that
   run in `a53c1f0`); repairs did start.
 - Teacher-pasted source texts live in gitignored runtime storage, so their grounding cannot be

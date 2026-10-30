@@ -56,7 +56,7 @@
           },
           "label": {
             "type": "string",
-            "description": "Step label in plain text, 1 to 80 characters. It occurs in the quote."
+            "description": "Short event name for the step in plain text, 1 to 80 characters (about 8 words); the quote is the verbatim evidence for it."
           },
           "sourceId": {
             "type": "string",

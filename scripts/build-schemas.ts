@@ -313,7 +313,7 @@ function quizSchema(cid: KitGenComponentId): Record<string, unknown> {
 function sequenceSchema(cid: KitGenComponentId): Record<string, unknown> {
   const step = obj({
     id: str('Lowercase kebab step id, 40 characters or fewer.'),
-    label: str('Step label in plain text, 1 to 80 characters. It occurs in the quote.'),
+    label: str('Short event name for the step in plain text, 1 to 80 characters (about 8 words); the quote is the verbatim evidence for it.'),
     sourceId: str('Id of the source the quote was copied from.'),
     quote: str(QUOTE_DESC),
     orderHint: str('Short ordering hint in plain text.')

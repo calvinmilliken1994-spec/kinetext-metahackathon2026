@@ -625,17 +625,20 @@ test('stage6 constants are consistent and check ids are complete', () => {
   assert.equal(PLAN_COMPONENT_IDS.length, 15);
   assert.ok(!(PLAN_COMPONENT_IDS as readonly string[]).includes('overview-v1'));
   for (const id of KIT_COMPONENT_IDS) assert.ok(!(ACTIVITY_IDS as readonly string[]).includes(id as string));
-  assert.equal(STAGE6_CHECK_IDS.length, 64);
+  assert.equal(STAGE6_CHECK_IDS.length, 63); // SEQ-02 retired in Stage 7e (removed, never reused)
   const counts: Record<string, number> = {};
   for (const id of STAGE6_CHECK_IDS) {
     assert.ok(/^(A|OV|Q|SEQ|SORT|CM|CT|FE|BAL)-\d{2}$/.test(id), 'bad id ' + id);
     const prefix = id.slice(0, id.lastIndexOf('-'));
     counts[prefix] = (counts[prefix] ?? 0) + 1;
   }
-  assert.deepEqual(counts, { A: 11, OV: 6, Q: 7, SEQ: 6, SORT: 6, CM: 6, CT: 5, FE: 8, BAL: 9 });
+  assert.deepEqual(counts, { A: 11, OV: 6, Q: 7, SEQ: 5, SORT: 6, CM: 6, CT: 5, FE: 8, BAL: 9 });
   for (const prefix of Object.keys(counts)) {
     const nums = STAGE6_CHECK_IDS.filter((id) => id.slice(0, id.lastIndexOf('-')) === prefix).map((id) => Number(id.slice(id.lastIndexOf('-') + 1)));
-    assert.deepEqual(nums, nums.map((_, i) => i + 1));
+    // Ids are numbered 1..n except removed ids, which leave a permanent gap.
+    const removed: Record<string, number[]> = { SEQ: [2] };
+    const expected = Array.from({ length: nums.length + (removed[prefix]?.length ?? 0) }, (_, i) => i + 1).filter((n) => !(removed[prefix] ?? []).includes(n));
+    assert.deepEqual(nums, expected);
   }
   assert.ok((STAGE6_CHECK_IDS as readonly string[]).includes('BAL-09'));
   for (const id of RETIRED_STAGE6_CHECK_IDS) assert.ok((STAGE6_CHECK_IDS as readonly string[]).includes(id as string));
@@ -654,7 +657,8 @@ test('stage6 constants are consistent and check ids are complete', () => {
   assert.equal(new Set(files).size, files.length);
   const v1Files = ['activity-spec.gen.json', 'activity-spec.full.json', 'source-analysis.gen.json', 'activity-spec.gen.timeline-v1.json', 'activity-spec.full.timeline-v1.json'];
   for (const f of files) assert.ok(!v1Files.includes(f) && !f.startsWith('activity-spec.'), 'kit file collides with v1: ' + f);
-  assert.equal(Object.keys(STAGE6_CHECKS).length, 64);
+  assert.equal(Object.keys(STAGE6_CHECKS).length, 63);
+  assert.ok(!(STAGE6_CHECK_IDS as readonly string[]).includes('SEQ-02'));
 });
 
 test('v1 contracts are unchanged and kit re-exports are visible', () => {

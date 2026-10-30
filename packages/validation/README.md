@@ -148,6 +148,14 @@ import {
   (OV-05, SEQ-05, SORT-05, CM-05, CT-03, BAL-02, and the quiz/FE structural
   `schema.gen` pass) own count violations with per-field `affected` paths.
   Any other schema error short-circuits like v1's `schema.full`.
+- Sequence checks (Stage 7e): `SEQ-02 labels-in-quotes` is retired and its id
+  REMOVED from the published list (`docs/specs/STAGE-7e-library-and-wording.md`
+  option (a)) — a step label is the model's own short event name (≤ 8 words is
+  prompt guidance, not a check), grounded by the step's verbatim quote. A
+  sequence report carries `schema.gen` + SEQ-01, SEQ-03..SEQ-06; the retired id
+  is never reused and is not emitted as an always-pass stub. Labels stay bound
+  by the length limits and the publisher/plain-text sweep (both `schema.gen`),
+  distinctness (SEQ-04) and the shared numbers rule (SEQ-06 / N-01).
 - Reports: `publishable` requires every check to pass; failing checks carry
   validator-owned `affected` JSON-pointers into the GEN object (the artifact a
   repair revises). Nothing throws; every check is `guarded()`.

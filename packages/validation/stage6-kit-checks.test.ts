@@ -125,7 +125,7 @@ test('Q-07: a distractor occurring in the quote fails (with Q-05, see above)', (
 });
 
 /* ------------------------------------------------------------------ */
-/* SEQ-01..SEQ-06                                                      */
+/* SEQ-01..SEQ-06 (SEQ-02 labels-in-quotes retired, Stage 7e)          */
 /* ------------------------------------------------------------------ */
 
 test('SEQ-01: a fabricated step quote fails alone', () => {
@@ -134,10 +134,13 @@ test('SEQ-01: a fabricated step quote fails alone', () => {
   expectFailures(validateKitComponent('sequence-v1', gen, [constitutionSource()]), ['SEQ-01']);
 });
 
-test('SEQ-02: a label missing from its quote fails alone', () => {
+test('SEQ-02 retired (Stage 7e): a label that does not occur in its quote is no longer flagged', () => {
   const gen = clone(sequenceGen());
   gen.steps[0]!.label = 'Written behind closed doors';
-  expectFailures(validateKitComponent('sequence-v1', gen, [constitutionSource()]), ['SEQ-02']);
+  const report = validateKitComponent('sequence-v1', gen, [constitutionSource()]);
+  assert.ok(!report.checks.some(c => c.id === 'SEQ-02'), 'the retired id must not be emitted, not even as a stub');
+  assert.deepEqual(failedIds(report), [], report.checks.filter(c => !c.passed).map(c => c.message).join('\n'));
+  assert.equal(report.publishable, true);
 });
 
 test('SEQ-03: page-order offsets must strictly ascend in array order', () => {

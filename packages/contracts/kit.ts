@@ -7,7 +7,7 @@ import { ACTIVITY_IDS } from './engines.ts';
 export const KIT_SCHEMA_VERSION = '0.6.0';
 export type KitSchemaVersion = typeof KIT_SCHEMA_VERSION;
 
-export const SUBJECTS = ['physics', 'maths', 'history', 'finance', 'chemistry', 'biology', 'earth-science', 'civics', 'language-reading', 'other'] as const;
+export const SUBJECTS = ['physics', 'maths', 'computing', 'history', 'finance', 'chemistry', 'biology', 'earth-science', 'civics', 'language-reading', 'other'] as const;
 export type Subject = typeof SUBJECTS[number];
 export function isSubject(v: unknown): v is Subject {
   return typeof v === 'string' && (SUBJECTS as readonly string[]).includes(v);
@@ -421,7 +421,12 @@ export interface LessonSpec {
   components: LessonComponentEntry[];
 }
 
-/** Stage 6 check names by id; A-02 and BAL-06 retired: reserved, never reused, always pass. */
+/** Stage 6 check names by id; A-02 and BAL-06 retired: reserved, never reused, always pass.
+ * SEQ-02 `labels-in-quotes` was retired and REMOVED from the published list (Stage 7e,
+ * docs/specs/STAGE-7e-library-and-wording.md option (a): step labels are AI-written short event
+ * names, grounded by their step's verbatim quote); unlike A-02/BAL-06 it is NOT emitted as an
+ * always-pass stub, and the id is never reused. Sequence ids keep their numbers (SEQ-01,
+ * SEQ-03..SEQ-06) so stored evidence stays readable. */
 export const STAGE6_CHECKS = {
   'A-01': 'version-is-2',
   'A-02': 'mirrors-agree',
@@ -448,7 +453,6 @@ export const STAGE6_CHECKS = {
   'Q-06': 'numbers-checkable',
   'Q-07': 'distractors-not-in-quote',
   'SEQ-01': 'quotes-verbatim',
-  'SEQ-02': 'labels-in-quotes',
   'SEQ-03': 'order-basis-holds',
   'SEQ-04': 'distinct-steps',
   'SEQ-05': 'count-valid',

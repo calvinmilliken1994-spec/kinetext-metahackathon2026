@@ -55,7 +55,7 @@ function extractBetween(text: string, open: string, close: string): string {
 
 test('v1 unchanged pin and versions', () => {
   assert.equal(PROMPT_VERSION, 'v10');
-  assert.equal(STAGE6_PROMPT_VERSION, 's6-v5');
+  assert.equal(STAGE6_PROMPT_VERSION, 's6-v6');
   const source = loadSource('nasa-grc-drag-equation');
   const messages = buildAnalysisMessages(source);
   const digest = createHash('sha256').update(JSON.stringify(messages), 'utf8').digest('hex');
@@ -482,4 +482,55 @@ test('s6-v5 component-specific teacher wording', () => {
   assert.ok(KIT_COMPONENT_GUIDANCE['sequence-v1'].includes('at most 8 words'));
   assert.ok(KIT_COMPONENT_GUIDANCE['compare-table-v1'].includes('consistent across columns'));
   assert.ok(KIT_COMPONENT_GUIDANCE['quiz-cards-v1'].includes('ends with a question mark'));
+});
+
+test('s6-v6 computing subject rows', () => {
+  const computingRow = (SUBJECT_GUIDANCE as Record<string, string>)['computing'];
+  assert.ok(computingRow !== undefined && computingRow.length > 0, 'computing row non-empty');
+  assert.ok(!computingRow.includes('`'), 'computing has no backtick');
+  assert.ok(!computingRow.includes('Section'), 'computing has no Section');
+  assert.ok(!computingRow.includes('NASA'), 'computing has no NASA');
+  assert.ok(Object.keys(SUBJECT_GUIDANCE).includes('computing'), 'guidance has computing key');
+  assert.ok(computingRow.includes('sequence-v1 for algorithm steps in page order'), 'computing prefers sequence for algorithms');
+  assert.ok(computingRow.includes('formula-explorer-v1'), 'computing prefers explorer');
+  assert.ok(computingRow.includes('accuracy'), 'computing mentions accuracy');
+  assert.ok(computingRow.includes('compare-table-v1 for model or method types'), 'computing prefers compare for models');
+  assert.ok(computingRow.includes('sort-groups-v1'), 'computing prefers sort-groups');
+  assert.ok(computingRow.includes('quiz-cards-v1'), 'computing prefers quiz');
+  assert.ok(computingRow.includes('Quote algorithms and formulas exactly'), 'computing quotes algorithms');
+  assert.ok(computingRow.includes('Keep worked examples inside quotes'), 'computing keeps examples in quotes');
+  assert.ok(computingRow.includes('Never invent code'), 'computing never invents code');
+  assert.ok(computingRow.includes('Never claim model performance numbers'), 'computing never claims performance');
+  assert.ok(computingRow.includes('Pitfalls to avoid:'), 'computing has pitfalls');
+  assert.ok(computingRow.includes('mixing training and test results'), 'computing pitfalls mix results');
+  const source = loadSource('nasa-grc-drag-equation');
+  const system = buildAnalysisV2Messages(source)[0].content;
+  assert.ok(system.includes('- computing:'), 'analysis subject list includes computing');
+  assert.ok(system.includes('algorithms, programming concepts, data'), 'system contains computing when-phrase');
+  assert.ok(system.includes(computingRow), 'system contains computing guidance');
+  const usable = loadFixture('source-analysis-v2.usable.json') as SourceAnalysisV2;
+  const computingAnalysis: SourceAnalysisV2 = { ...usable, subject: 'computing' as unknown as SourceAnalysisV2['subject'] };
+  const plan: ComponentPlanEntry = { ...usable.componentPlan[0], componentId: 'quiz-cards-v1' };
+  const computingSystem = buildKitComponentMessages(source, computingAnalysis, plan)[0].content;
+  assert.ok(computingSystem.includes(computingRow), 'component prompt uses computing row');
+});
+
+test('s6-v6 sequence step labels are short event names', () => {
+  const guidance = KIT_COMPONENT_GUIDANCE['sequence-v1'];
+  assert.ok(guidance.includes('short event name'), 'labels are short event names');
+  assert.ok(guidance.includes('at most 8 words'), 'label length');
+  assert.ok(guidance.includes('Delegates meet in Philadelphia'), 'example kept');
+  assert.ok(guidance.includes('written by you'), 'labels written by model');
+  assert.ok(guidance.includes('verbatim evidence'), 'quote is verbatim evidence');
+  assert.ok(guidance.includes('must contain what the label names'), 'quote must contain what label names');
+  assert.ok(guidance.includes('need not appear verbatim'), 'labels need not appear verbatim');
+  assert.ok(guidance.includes('No numbers in a label'), 'numbers rule for labels');
+  assert.ok(!guidance.includes('appears in its quote'), 'no longer requires label in quote');
+  const source = loadSource('nasa-grc-drag-equation');
+  const usable = loadFixture('source-analysis-v2.usable.json') as SourceAnalysisV2;
+  const plan: ComponentPlanEntry = { ...usable.componentPlan[0], componentId: 'sequence-v1' };
+  const system = buildKitComponentMessages(source, usable, plan)[0].content;
+  assert.ok(system.includes('need not appear verbatim'), 'system states labels need not appear verbatim');
+  assert.ok(system.includes('must contain what the label names'), 'system states quote must contain label');
+  assert.ok(system.includes('No numbers in a label'), 'system states numbers rule');
 });
