@@ -55,7 +55,7 @@ export function CompareView({ spec, cite }: Props) {
                   const blocked = leaks(cell.quote);
                   return (
                     <Linked as="td" key={ai} className={reveal ? (correct ? 'cell-right' : 'cell-miss') : ''} links={[linkKey(cell.sourceId, cell.quote)]}>
-                      <button type="button" className={`cell-btn${isOpen ? ' cell-open' : ''}`} aria-expanded={isOpen} disabled={blocked} title={blocked ? 'Opens after you lock in your prediction' : undefined} onClick={() => setOpen(isOpen ? null : cell.id)}>{cell.value}</button>
+                      <button type="button" className={`cell-btn${isOpen ? ' cell-open' : ''}`} aria-expanded={isOpen} disabled={blocked} title={blocked ? 'Opens after you lock in your prediction' : undefined} onClick={() => setOpen(isOpen ? null : cell.id)}>{capitalFirst(cell.value)}</button>
                     </Linked>
                   );
                 })}

@@ -3,8 +3,13 @@ import { createPortal } from 'react-dom';
 import type { QuoteRef } from '../../lib/evidence.ts';
 import type { Badge } from '../../lib/repairs.ts';
 import type { Deck, PresentAction } from '../../lib/presentation.ts';
-import { acceptsNumber, canReveal, initialPresent, isRevealed, KEY_MAP, keyAction, keyContext, planBeats, presentReducer, presentSearch, quoteForLinks } from '../../lib/presentation.ts';
-import { linkStore } from '../../lib/linking.ts';
+import {
+  acceptsNumber, canReveal, deckQuotes, initialPresent, isRevealed, KEY_MAP, keyAction, keyContext, planBeats, presentReducer, presentSearch,
+  quoteRefForLinks, revealQuote, visibleQuotes, zoneQuote, zoneQuoteSize,
+} from '../../lib/presentation.ts';
+import type { QuoteLike } from '../../lib/linking.ts';
+import { linkKey, linkStore } from '../../lib/linking.ts';
+import { Linked } from '../Linked.tsx';
 import type { CiteProps } from '../Explanations.tsx';
 import { BeatView } from './Beats.tsx';
 import { IconBlank, IconExit, IconFullscreen, IconKeys, IconNext, IconNotes, IconPrev } from './icons.tsx';
@@ -37,13 +42,12 @@ export function PresentationMode({ deck, quotes, sourceId, repairBadge, startBea
   const beat = beats[state.beat] ?? beats[0];
   const rootRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
+  const beatRef = useRef<HTMLDivElement>(null);
   const [isFull, setIsFull] = useState(false);
   const [fullRefused, setFullRefused] = useState(false);
   const [idle, setIdle] = useState(false);
   const [barHeld, setBarHeld] = useState(false);
-  const [pinned, setPinned] = useState<string | null>(null);
-  // The quote strip sits at the edge away from the pointer, so it never covers what is being pointed at.
-  const [stripAtTop, setStripAtTop] = useState(false);
+  const [pinned, setPinned] = useState<QuoteLike | null>(null);
   const togglingOff = useRef(false);
   // A one-line key reminder on arrival; it goes after the first key press or a few seconds.
   const [keyHint, setKeyHint] = useState(true);
@@ -94,6 +98,33 @@ export function PresentationMode({ deck, quotes, sourceId, repairBadge, startBea
     }
   }, []);
 
+  // ---- a slide taller than its area is set smaller as a whole (once per beat, so a reveal never rescales it) -----------
+  const beatId = beats[state.beat]?.id;
+  useLayoutEffect(() => {
+    const el = beatRef.current;
+    if (el === null) return undefined;
+    // The largest scale (0.6–1) at which the slide's content fits; text re-wraps as it shrinks, so search rather than divide.
+    const fits = (f: number): boolean => {
+      el.style.setProperty('--pz-fit', String(f));
+      const body = el.firstElementChild;
+      return !(body instanceof HTMLElement) || el.clientHeight <= 0 || body.scrollHeight <= el.clientHeight + 1;
+    };
+    const fit = (): void => {
+      if (fits(1)) return;
+      let lo = 0.6;
+      let hi = 1;
+      for (let i = 0; i < 7; i++) {
+        const mid = (lo + hi) / 2;
+        if (fits(mid)) lo = mid; else hi = mid;
+      }
+      fits(lo);
+    };
+    fit();
+    const ro = new ResizeObserver(fit);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [beatId]);
+
   // ---- the address follows the beat, so a reload or a shared link lands here -----------------------------------------
   useEffect(() => {
     const next = presentSearch(window.location.search, deck.jobId, state.beat);
@@ -138,20 +169,20 @@ export function PresentationMode({ deck, quotes, sourceId, repairBadge, startBea
     const t = window.setTimeout(() => setIdle(true), IDLE_MS);
     return () => window.clearTimeout(t);
   }, [idle]);
-  const wake = useCallback((e: { clientY: number }) => {
-    setIdle(false);
-    setStripAtTop(e.clientY > window.innerHeight * 0.55);
-  }, []);
+  const wake = useCallback(() => { setIdle(false); }, []);
   const barShown = !idle || barHeld || state.help;
 
-  // ---- hovering a quoted value shows its sentence -------------------------------------------------------------------
+  // ---- the quote zone: hovering a quoted value, "Show in source" and R all put the page's sentence in one place ---------
   const active = useSyncExternalStore(linkStore.subscribe, linkStore.get);
-  const hovered = useMemo(() => (active === null ? null : quoteForLinks(active.keys, quotes.map((q) => ({ sourceId, quote: q.quote })))), [active, quotes, sourceId]);
-  const shownQuote = hovered ?? pinned;
+  const known = useMemo((): QuoteLike[] => [...quotes.map((q) => ({ sourceId, quote: q.quote })), ...deckQuotes(beats)], [quotes, sourceId, beats]);
+  const hovered = useMemo(() => (active === null ? null : quoteRefForLinks(active.keys, known)), [active, known]);
   const cite = useMemo((): CiteProps => ({
     sourceId,
     located: new Set(quotes.map((q) => q.key)),
-    onCite: (key: string) => setPinned(quotes.find((q) => q.key === key)?.quote ?? null),
+    onCite: (key: string) => {
+      const q = quotes.find((r) => r.key === key);
+      setPinned(q === undefined ? null : { sourceId, quote: q.quote });
+    },
   }), [quotes, sourceId]);
 
   // A mouse click on a bar button or an answer option hands the keys back to the deck, so the next Space advances instead
@@ -166,6 +197,7 @@ export function PresentationMode({ deck, quotes, sourceId, repairBadge, startBea
   const revealable = canReveal(beat, state.step);
   const revealed = isRevealed(beat, state.step);
   const next = beats[state.beat + 1];
+  const zone = zoneQuote({ hovered, pinned, revealed: revealQuote(beat, state.step), visible: visibleQuotes(beat, state.step, beats) });
 
   const view = (
     <div
@@ -183,7 +215,7 @@ export function PresentationMode({ deck, quotes, sourceId, repairBadge, startBea
       <div className="pz-live sr-only" aria-live="polite">{`Beat ${state.beat + 1} of ${n}: ${beat.title}${revealed ? '. Revealed.' : ''}`}</div>
 
       <div ref={stageRef} className={`pz-stage-frame${state.notes ? ' pz-with-notes' : ''}`} tabIndex={-1} aria-label={beat.title}>
-        <div key={beat.id} className="pz-beat" data-kind={beat.kind} data-revealed={revealed ? 'true' : 'false'}>
+        <div key={beat.id} ref={beatRef} className="pz-beat" data-kind={beat.kind} data-revealed={revealed ? 'true' : 'false'}>
           <BeatView
             beat={beat}
             step={state.step}
@@ -195,14 +227,20 @@ export function PresentationMode({ deck, quotes, sourceId, repairBadge, startBea
             repairBadge={repairBadge}
           />
         </div>
+        {/* One anchored band, centred under every slide and reserved in the layout: showing or hiding a quote never moves
+            or covers the slide. Hover, "Show in source" and the reveal all put the page's sentence here. */}
+        <Linked
+          as="figure" className="pz-zone" links={zone === null ? [] : [linkKey(zone.sourceId, zone.quote)]}
+          data-size={zone === null ? undefined : zoneQuoteSize(zone.quote)} data-filled={zone === null ? 'false' : 'true'} aria-live="polite"
+        >
+          {zone !== null && (
+            <>
+              <figcaption>The page says</figcaption>
+              <blockquote key={zone.quote}>“{zone.quote}”</blockquote>
+            </>
+          )}
+        </Linked>
       </div>
-
-      {shownQuote !== null && !state.blank && (
-        <figure className="pz-quote-strip" data-at={stripAtTop ? 'top' : 'bottom'} aria-live="polite">
-          <figcaption>From the page</figcaption>
-          <blockquote>“{shownQuote}”</blockquote>
-        </figure>
-      )}
 
       {state.notes && (
         <aside className="pz-notes" aria-label="Presenter notes">

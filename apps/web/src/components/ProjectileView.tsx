@@ -145,7 +145,7 @@ export function ProjectileView({ spec, inputs, onInput, pb, predict, equation, c
 
   const scenePlain = variant === 'scene';
   if (scenePlain && ask !== null && concealed) {
-    return <ProjectileAsk label={label} input={input} guess={ask.guess} titleId={titleId} />;
+    return <ProjectileAsk label={label} input={input} guess={ask.guess} titleId={titleId} equation={equation} />;
   }
 
   const { layout } = scene;
@@ -323,7 +323,7 @@ function GuessLine({ py, off, label, x, dy, anchor }: { py: number; off: boolean
  * Presentation mode before the reveal: the launch only (the ball, its launch speeds as an arrow, gravity), a height scale
  * from the class's guess alone and the guess line. No arc, no peak, no range: nothing here depends on the answer.
  */
-function ProjectileAsk({ label, input, guess, titleId }: { label: string; input: { horizontalSpeedMps: number; verticalSpeedMps: number; gravityMps2: number }; guess: number | null; titleId: string }) {
+function ProjectileAsk({ label, input, guess, titleId, equation }: { label: string; input: { horizontalSpeedMps: number; verticalSpeedMps: number; gravityMps2: number }; guess: number | null; titleId: string; equation?: ReactNode }) {
   const B = BOX;
   const frame = askFrame(guess);
   const ux = input.horizontalSpeedMps;
@@ -371,6 +371,9 @@ function ProjectileAsk({ label, input, guess, titleId }: { label: string; input:
           <text x={(B.left + B.right) / 2} y={B.bottom + 30} textAnchor="middle" className="scene-label-small ask-note">The flight is hidden until the reveal</text>
         </svg>
       </div>
+      {/* The equation line the revealed scene shows under it, laid out (concealed and invisible) from the start, so R
+          never changes the scene's height and the presentation stage never rescales it. */}
+      {equation != null && <div className="ask-reserve" aria-hidden="true">{withConcealed(equation, true)}</div>}
     </div>
   );
 }

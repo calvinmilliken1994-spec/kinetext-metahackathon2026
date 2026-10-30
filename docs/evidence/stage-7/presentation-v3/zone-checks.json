@@ -1,0 +1,77 @@
+{
+ "quiz: hovering the revealed quote": {
+  "zoneQuotes": 1,
+  "otherCopies": 0,
+  "oldStrip": false
+ },
+ "pair: hovering a printed event quote": {
+  "zoneFilled": "false",
+  "linked": true
+ },
+ "zone rect per beat kind @1920x1080": {
+  "title": [
+   [
+    125,
+    846,
+    1670,
+    150
+   ]
+  ],
+  "overview": [
+   [
+    125,
+    846,
+    1670,
+    150
+   ]
+  ],
+  "terms": [
+   [
+    125,
+    846,
+    1670,
+    150
+   ]
+  ],
+  "predict": [
+   [
+    125,
+    846,
+    1670,
+    150
+   ]
+  ],
+  "stage": [
+   [
+    125,
+    846,
+    1670,
+    150
+   ]
+  ],
+  "quiz": [
+   [
+    125,
+    846,
+    1670,
+    150
+   ]
+  ],
+  "closing": [
+   [
+    125,
+    846,
+    1670,
+    150
+   ]
+  ],
+  "compare": [
+   [
+    125,
+    846,
+    1670,
+    150
+   ]
+  ]
+ }
+}

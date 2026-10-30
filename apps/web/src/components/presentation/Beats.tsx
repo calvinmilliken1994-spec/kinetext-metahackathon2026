@@ -3,8 +3,8 @@ import type { FormEvent, ReactNode } from 'react';
 import type { KitSpec } from '../../../../../packages/contracts/kit.ts';
 import type { Badge } from '../../lib/repairs.ts';
 import type { Beat, Deck, DeckPart, NumericAnswer } from '../../lib/presentation.ts';
-import { checksLine, deckQuotes, isRevealed, leftOutLine, numericAnswer, predictVerdict, predictVisual, revealDelayMs, titleCard, visibleCount } from '../../lib/presentation.ts';
-import { aiText, capitalFirst, prettyExponents } from '../../lib/displayText.ts';
+import { checksLine, CLOSING_QUOTES, deckQuotes, isRevealed, leftOutLine, numericAnswer, predictVerdict, predictVisual, revealDelayMs, shownPoints, shownTerms, titleCard, visibleCount } from '../../lib/presentation.ts';
+import { aiLabel, prettyExponents } from '../../lib/displayText.ts';
 import { REVIEW_STATUS, withoutReviewNote } from '../../lib/provenance.ts';
 import { quizCards } from '../../lib/quiz.ts';
 import { compareGrid, NOT_STATED } from '../../lib/compare.ts';
@@ -40,7 +40,10 @@ const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F'];
 type KindOf<K extends Beat['kind']> = Extract<Beat, { kind: K }>;
 interface AskProps<K extends Beat['kind']> { beat: KindOf<K>; step: number; answer: string; onAnswer: (value: string) => void }
 
-/** The page's own words, shown with a reveal: one quote, linked so hovering it lights the same words elsewhere. */
+/**
+ * The page's own words printed in a beat's body (only the which-came-first pair, one quote under each event). Every other
+ * page quote — hovered, pinned or revealed — appears in the one quote zone under the slide (PresentationMode).
+ */
 function PageWords({ sourceId, quote, caption = 'The page says' }: { sourceId: string; quote: string; caption?: string }) {
   return (
     <Linked as="figure" className="pz-words" links={[linkKey(sourceId, quote)]}>
@@ -56,7 +59,7 @@ function TitleBeat({ deck }: Pick<BeatProps, 'deck'>) {
   const card = titleCard(deck.source);
   return (
     <div className="pz-title">
-      <h1 className="pz-display">{aiText(deck.headline)}</h1>
+      <h1 className="pz-display">{aiLabel(deck.headline)}</h1>
       {card !== null && (
         <dl className="pz-facts">
           <div><dt>Page</dt><dd>{card.name}</dd></div>
@@ -72,19 +75,19 @@ function TitleBeat({ deck }: Pick<BeatProps, 'deck'>) {
 // ---- overview, terms, objectives --------------------------------------------------------------------------------------
 
 function OverviewBeat({ beat, step, deck }: Pick<BeatProps, 'beat' | 'step' | 'deck'>) {
-  const points = deck.overview?.keyPoints ?? [];
+  const points = useMemo(() => shownPoints(deck), [deck]);
   const shown = visibleCount(beat, step);
   return (
     <div className="pz-split">
       <header className="pz-split-head">
         <h2 className="pz-heading">What the page says</h2>
         {/* The lesson's own headline leads the key points (never Muse's internal page-coverage note). */}
-        <p className="pz-lead">{aiText(deck.headline)}</p>
+        <p className="pz-lead">{aiLabel(deck.headline)}</p>
       </header>
       <ul className={`pz-points${points.length > 4 ? ' pz-dense' : ''}`}>
         {points.map((p, i) => (
           <Linked as="li" key={p.id} links={linkKeysOf([p])} data-shown={i < shown ? 'true' : 'false'} aria-hidden={i < shown ? undefined : true}>
-            {prettyExponents(p.point)}
+            {p.point}
           </Linked>
         ))}
       </ul>
@@ -93,7 +96,7 @@ function OverviewBeat({ beat, step, deck }: Pick<BeatProps, 'beat' | 'step' | 'd
 }
 
 function TermsBeat({ beat, step, deck }: Pick<BeatProps, 'beat' | 'step' | 'deck'>) {
-  const terms = deck.overview?.keyTerms ?? [];
+  const terms = useMemo(() => shownTerms(deck), [deck]);
   const shown = visibleCount(beat, step);
   return (
     <div className="pz-list-beat">
@@ -101,9 +104,11 @@ function TermsBeat({ beat, step, deck }: Pick<BeatProps, 'beat' | 'step' | 'deck
       <dl className={`pz-terms${terms.length > 4 ? ' pz-dense' : ''}`}>
         {terms.map((t, i) => (
           <Linked key={t.id} className="pz-term" links={linkKeysOf([t])}>
-            <dt>{prettyExponents(t.term)}</dt>
+            <dt>{t.term}</dt>
+            {/* The meaning is laid out from the start (hidden), so showing it never moves the terms below. */}
             <dd data-shown={i < shown ? 'true' : 'false'}>
-              {i < shown ? prettyExponents(t.gloss) : <span className="pz-pending" aria-label="Meaning not shown yet">What does it mean?</span>}
+              <span className="pz-gloss" aria-hidden={i < shown ? undefined : true}>{t.gloss}</span>
+              {i >= shown && <span className="pz-pending" aria-label="Meaning not shown yet">What does it mean?</span>}
             </dd>
           </Linked>
         ))}
@@ -121,7 +126,7 @@ function ObjectivesBeat({ beat, step, deck }: Pick<BeatProps, 'beat' | 'step' | 
       </header>
       <ul className={`pz-points${deck.objectives.length > 4 ? ' pz-dense' : ''}`}>
         {deck.objectives.map((o, i) => (
-          <li key={o} data-shown={i < shown ? 'true' : 'false'} aria-hidden={i < shown ? undefined : true}>{aiText(o)}</li>
+          <li key={o} data-shown={i < shown ? 'true' : 'false'} aria-hidden={i < shown ? undefined : true}>{aiLabel(o)}</li>
         ))}
       </ul>
     </div>
@@ -132,9 +137,12 @@ function ObjectivesBeat({ beat, step, deck }: Pick<BeatProps, 'beat' | 'step' | 
 
 interface ChoiceItem { value: string; text: ReactNode; right: boolean; detail?: ReactNode }
 
+type MarkOn = 'none' | 'picked' | 'right' | 'wrong';
+
 /**
  * Large answer options. Before the reveal a click marks the class's choice (a toggle); after it the page's answer is
- * marked, and the class's choice when it differs.
+ * marked, and the class's choice when it differs. Every mark is laid out from the start in one stacked cell (only the
+ * current one visible) and every detail is laid out hidden, so R never moves or re-wraps an option.
  */
 function Choices({ items, answer, onAnswer, revealed, label, pair = false }: { items: readonly ChoiceItem[]; answer: string; onAnswer: (v: string) => void; revealed: boolean; label: string; pair?: boolean }) {
   return (
@@ -142,16 +150,19 @@ function Choices({ items, answer, onAnswer, revealed, label, pair = false }: { i
       {items.map((it, i) => {
         const mine = answer === it.value;
         const state = !revealed ? (mine ? 'picked' : 'open') : it.right ? 'right' : mine ? 'wrong' : 'other';
+        const on: MarkOn = revealed ? (it.right ? 'right' : mine ? 'wrong' : 'none') : mine ? 'picked' : 'none';
         return (
           <li key={it.value} data-state={state}>
             <button type="button" className="pz-choice" aria-pressed={mine} disabled={revealed} onClick={() => onAnswer(mine ? '' : it.value)}>
               <span className="pz-letter" aria-hidden="true">{LETTERS[i] ?? ''}</span>
               <span className="pz-choice-text">{it.text}</span>
-              {revealed && it.right && <span className="pz-choice-mark"><Mark kind="ok" />{pair ? 'First' : 'The page’s answer'}</span>}
-              {revealed && !it.right && mine && <span className="pz-choice-mark"><Mark kind="bad" />Class choice</span>}
-              {!revealed && mine && <span className="pz-choice-mark">Class choice</span>}
+              <span className="pz-choice-mark" data-on={on}>
+                <span data-mark="right" aria-hidden={on === 'right' ? undefined : true}><Mark kind="ok" />{pair ? 'First' : 'The page’s answer'}</span>
+                <span data-mark="wrong" aria-hidden={on === 'wrong' ? undefined : true}><Mark kind="bad" />Class choice</span>
+                <span data-mark="picked" aria-hidden={on === 'picked' ? undefined : true}>Class choice</span>
+              </span>
             </button>
-            {revealed && it.detail !== undefined && <div className="pz-choice-detail">{it.detail}</div>}
+            {it.detail !== undefined && <div className="pz-choice-detail" data-shown={revealed ? 'true' : 'false'} aria-hidden={revealed ? undefined : true}>{it.detail}</div>}
           </li>
         );
       })}
@@ -159,16 +170,30 @@ function Choices({ items, answer, onAnswer, revealed, label, pair = false }: { i
   );
 }
 
+/**
+ * The line under an ask beat's options: the vote hint before R, the grade after it. Both are laid out in one stacked cell
+ * from the start, so the reveal swaps the words without moving anything above.
+ */
+function AskFoot({ revealed, before, after = null }: { revealed: boolean; before: ReactNode; after?: ReactNode }) {
+  return (
+    <div className="pz-foot">
+      <div data-on={revealed ? 'false' : 'true'} aria-hidden={revealed ? true : undefined}>{before}</div>
+      <div data-on={revealed ? 'true' : 'false'} aria-hidden={revealed ? undefined : true}>{after}</div>
+    </div>
+  );
+}
+
 function QuizBeat({ beat, step, answer, onAnswer }: AskProps<'quiz'>) {
   const card = useMemo(() => quizCards(beat.spec).find((c) => c.id === beat.cardId), [beat]);
   if (card === undefined) return null;
   const revealed = isRevealed(beat, step);
-  const items = card.options.map((o): ChoiceItem => ({ value: String(o.index), text: capitalFirst(aiText(o.text)), right: o.index === 0 }));
+  const items = card.options.map((o): ChoiceItem => ({ value: String(o.index), text: aiLabel(o.text), right: o.index === 0 }));
+  // The page's sentence appears in the quote zone under the slide on R (PresentationMode), never inserted here.
   return (
     <div className="pz-ask">
-      <h2 className="pz-question">{aiText(card.stem)}</h2>
+      <h2 className="pz-question">{aiLabel(card.stem)}</h2>
       <Choices items={items} answer={answer} onAnswer={onAnswer} revealed={revealed} label="Answer options" />
-      {revealed ? <PageWords sourceId={card.sourceId} quote={card.quote} /> : <p className="pz-hint">Vote: {items.map((_, i) => LETTERS[i]).join(', ').replace(/, ([^,]*)$/, ' or $1')}?</p>}
+      <AskFoot revealed={revealed} before={<p className="pz-hint">Vote: {items.map((_, i) => LETTERS[i]).join(', ').replace(/, ([^,]*)$/, ' or $1')}?</p>} />
     </div>
   );
 }
@@ -177,28 +202,30 @@ function CompareBeat({ beat, step, answer, onAnswer }: AskProps<'compare'>) {
   const grid = useMemo(() => compareGrid(beat.spec), [beat]);
   const plan = beat.plan;
   const revealed = plan === null || isRevealed(beat, step);
-  const hidden = plan === null ? null : beat.spec.cells.find((c) => c.id === plan.cellId) ?? null;
   const right = plan !== null && answer !== '' && answer.trim().toLowerCase() === plan.correct.trim().toLowerCase();
   return (
     <div className="pz-ask pz-compare">
-      <h2 className="pz-heading">{beat.spec.title}</h2>
+      <h2 className="pz-heading">{beat.title}</h2>
       <div className="pz-table-wrap">
         <table className="pz-table">
           <caption className="sr-only">{beat.spec.title}</caption>
           <thead>
-            <tr><td /> {grid.attributes.map((a) => <th key={a} scope="col">{capitalFirst(a)}</th>)}</tr>
+            <tr><td /> {grid.attributes.map((a) => <th key={a} scope="col">{aiLabel(a)}</th>)}</tr>
           </thead>
           <tbody>
             {grid.rows.map((row) => (
               <tr key={row.entity}>
-                <th scope="row">{capitalFirst(row.entity)}</th>
+                <th scope="row">{aiLabel(row.entity)}</th>
                 {row.cells.map((cell, ai) => {
                   if (cell === null) return <td key={ai} className="pz-cell-blank">{NOT_STATED}</td>;
-                  if (plan !== null && cell.id === plan.cellId && !revealed) return <td key={ai} className="pz-cell-hidden"><span aria-label="Hidden until the reveal">?</span></td>;
+                  // The hidden cell keeps its value's size (laid out invisibly under the '?'), so R never moves a column.
+                  if (plan !== null && cell.id === plan.cellId && !revealed) {
+                    return <td key={ai} className="pz-cell-hidden"><span className="pz-cell-reserve" aria-hidden="true">{aiLabel(cell.value)}</span><span className="pz-cell-q" aria-label="Hidden until the reveal">?</span></td>;
+                  }
                   const isTarget = plan !== null && cell.id === plan.cellId;
                   return (
                     <Linked as="td" key={ai} className={isTarget ? (answer === '' ? 'pz-cell-revealed' : right ? 'pz-cell-right' : 'pz-cell-miss') : undefined} links={[linkKey(cell.sourceId, cell.quote)]}>
-                      {cell.value}
+                      {aiLabel(cell.value)}
                     </Linked>
                   );
                 })}
@@ -209,12 +236,11 @@ function CompareBeat({ beat, step, answer, onAnswer }: AskProps<'compare'>) {
       </div>
       {plan !== null && (
         <>
-          <p className="pz-prompt">What does the page say for <strong>{capitalFirst(beat.spec.entities[plan.entityIndex] ?? '')}</strong> · <strong>{capitalFirst(beat.spec.attributes[plan.attributeIndex] ?? '')}</strong>?</p>
-          <Choices items={plan.options.map((o) => ({ value: o, text: capitalFirst(o), right: o === plan.correct }))} answer={answer} onAnswer={onAnswer} revealed={revealed} label="Options for the hidden cell" />
+          <p className="pz-prompt">What does the page say for <strong>{aiLabel(beat.spec.entities[plan.entityIndex] ?? '')}</strong> · <strong>{aiLabel(beat.spec.attributes[plan.attributeIndex] ?? '')}</strong>?</p>
+          <Choices items={plan.options.map((o) => ({ value: o, text: aiLabel(o), right: o === plan.correct }))} answer={answer} onAnswer={onAnswer} revealed={revealed} label="Options for the hidden cell" />
+          <AskFoot revealed={revealed} before={<p className="pz-hint">Which value is hidden?</p>} />
         </>
       )}
-      {plan !== null && revealed && hidden !== null && <PageWords sourceId={hidden.sourceId} quote={hidden.quote} />}
-      {plan !== null && !revealed && <p className="pz-hint">Which value is hidden?</p>}
     </div>
   );
 }
@@ -266,26 +292,30 @@ function PredictBeat({ beat, step, answer, onAnswer, cite, deck }: AskProps<'pre
     const items = t.options.map((e): ChoiceItem => {
       const q = e.evidence[0];
       return {
-        value: e.id, text: prettyExponents(e.label), right: e.id === earlierId,
+        value: e.id, text: aiLabel(e.label), right: e.id === earlierId,
         detail: <><p className="pz-date">{formatEventDate(e)}</p>{q !== undefined && <PageWords sourceId={q.sourceId} quote={q.quote} />}</>,
       };
     });
     return (
       <div className="pz-ask">
-        <h2 className="pz-question">{prettyExponents(t.prompt)}</h2>
+        <h2 className="pz-question">{aiLabel(t.prompt)}</h2>
         <Choices items={items} answer={answer} onAnswer={onAnswer} revealed={revealed} label="Which came first" pair />
-        {!revealed && <p className="pz-hint">Vote: A or B?</p>}
-        {revealed && earlierId === null && <p className="pz-grade">The page gives the same date for both, so neither came first.</p>}
-        {revealed && grade !== null && grade.status === 'graded' && (
-          <p className={`pz-grade ${grade.correct ? 'pz-grade-ok' : ''}`}><Mark kind={grade.correct ? 'ok' : 'bad'} />{grade.correct ? 'The class had it right.' : 'Not this time — the dates decide.'}</p>
-        )}
+        <AskFoot
+          revealed={revealed}
+          before={<p className="pz-hint">Vote: A or B?</p>}
+          after={earlierId === null
+            ? <p className="pz-grade">The page gives the same date for both, so neither came first.</p>
+            : grade !== null && grade.status === 'graded'
+              ? <p className={`pz-grade ${grade.correct ? 'pz-grade-ok' : ''}`}><Mark kind={grade.correct ? 'ok' : 'bad'} />{grade.correct ? 'The class had it right.' : 'Not this time — the dates decide.'}</p>
+              : null}
+        />
       </div>
     );
   }
 
   const value = numericAnswer(t);
   const tolerance = t.kind === 'engine' ? (t.prediction as { tolerance?: number }).tolerance ?? 0 : null;
-  const prompt = prettyExponents(t.kind === 'engine' ? t.prediction.prompt : t.prompt);
+  const prompt = aiLabel(t.kind === 'engine' ? t.prediction.prompt : t.prompt);
   const unit = value?.unit ?? '';
   const verdict = landed && value !== null ? predictVerdict(value, answer, tolerance) : null;
   const release = (e: FormEvent<HTMLFormElement>): void => {
@@ -338,16 +368,28 @@ function PredictBeat({ beat, step, answer, onAnswer, cite, deck }: AskProps<'pre
  * sliders, scenes and drag targets stay the real, tested components (hit testing follows zoom). `hero` names the part
  * that must fit on screen (e.g. a simulation's scene down to its equation); anything below it scrolls.
  */
+/** The smallest scale a stage part is set at before it scrolls instead. */
+const MIN_STAGE_ZOOM = 0.85;
+
 function StageFit({ children, width = 980, hero, follow, contain = false }: { children: ReactNode; width?: number; hero?: string; follow?: string; contain?: boolean }) {
   const outer = useRef<HTMLDivElement>(null);
   const inner = useRef<HTMLDivElement>(null);
   const [zoom, setZoom] = useState(1);
   const followed = useRef(false);
+  // Once the class has used the part (a click or key inside it), its own growth — a sequence's answers after "Check
+  // order" — no longer rescales it: the part keeps its size and the new content extends below (the stage scrolls). Only a
+  // new stage size, or a part that names an answer to follow, refits.
+  const touched = useRef(false);
+  const lastOuter = useRef('');
   useLayoutEffect(() => {
     const o = outer.current;
     const i = inner.current;
     if (o === null || i === null) return undefined;
     const fit = (): void => {
+      // offset size: a scrollbar appearing when the part grows is not a new stage size.
+      const size = `${o.offsetWidth}x${o.offsetHeight}`;
+      if (touched.current && follow === undefined && size === lastOuter.current) return;
+      lastOuter.current = size;
       const natural = i.offsetHeight;
       if (natural <= 0) return;
       const box = i.getBoundingClientRect();
@@ -358,9 +400,10 @@ function StageFit({ children, width = 980, hero, follow, contain = false }: { ch
       const needed = target !== null ? target.offsetHeight + 16 : marker === null ? natural : (marker.getBoundingClientRect().bottom - box.top) / current;
       const byWidth = o.clientWidth / width;
       const byHeight = o.clientHeight / Math.max(1, needed);
-      // Fill the stage; a part taller than the stage shrinks to fit, but never below its own size (it scrolls instead).
+      // Fill the stage; a part taller than the stage shrinks to fit, but not below 85% of its own size (past that it
+      // scrolls: the quote zone under every slide takes some height, and a little smaller beats a cut-off graph).
       // `contain` (a predict beat's scene): always the whole part on screen, shrinking below its own size if it must.
-      setZoom(contain ? Math.min(byWidth, byHeight, 1.9) : Math.max(Math.min(byWidth, 1), Math.min(byWidth, byHeight, 1.9)));
+      setZoom(contain ? Math.min(byWidth, byHeight, 1.9) : Math.max(Math.min(byWidth, MIN_STAGE_ZOOM), Math.min(byWidth, byHeight, 1.9)));
       if (target !== null && !followed.current) {
         followed.current = true;
         // Bring the revealed answer up on the stage once the new zoom has applied. The stage scrolls by itself only,
@@ -378,8 +421,9 @@ function StageFit({ children, width = 980, hero, follow, contain = false }: { ch
     ro.observe(i);
     return () => ro.disconnect();
   }, [width, hero, follow, contain]);
+  const touch = (): void => { touched.current = true; };
   return (
-    <div ref={outer} className="pz-fit">
+    <div ref={outer} className="pz-fit" onPointerDownCapture={touch} onKeyDownCapture={touch}>
       <div className="pz-fit-zoom" style={{ zoom }}>
         <div ref={inner} className="pz-fit-inner" style={{ width }}>{children}</div>
       </div>
@@ -404,7 +448,7 @@ function StageBeat({ beat, cite, deck, repairBadge }: { beat: KindOf<'stage'>; c
   const part: DeckPart = beat.part;
   return (
     <div className="pz-stage" data-part={part.kind === 'kit' ? part.spec.componentId : 'activity'}>
-      <h2 className="pz-heading">{prettyExponents(beat.title)}</h2>
+      <h2 className="pz-heading">{beat.title}</h2>
       <StageFit
         hero={part.kind === 'activity' ? '.eq-line' : part.spec.componentId === 'formula-explorer-v1' ? '.explorer-main' : undefined}
         follow={part.kind === 'activity' ? '[data-pz-follow]' : undefined}
@@ -424,7 +468,7 @@ function ClosingBeat({ deck, beats }: Pick<BeatProps, 'deck' | 'beats'>) {
   const quotes = useMemo(() => deckQuotes(beats), [beats]);
   const checks = checksLine(deck.checks, deck.quotes);
   const leftOut = leftOutLine(deck.leftOut);
-  const shown = quotes.slice(0, 3);
+  const shown = quotes.slice(0, CLOSING_QUOTES);
   return (
     <div className="pz-closing">
       <h2 className="pz-display pz-display-2">Where this came from</h2>

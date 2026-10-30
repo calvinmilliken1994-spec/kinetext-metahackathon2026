@@ -5,15 +5,20 @@
  * Type roles (five): display · heading/question · body · meta · chrome (the bar). Weights 400 / 500 / 600, as in the app.
  * Colours are the app's theme tokens; page quotes are set in the source's serif, Muse's words in the sans. */
 
-.pz {
-  --pz-u: min(1vw, 1.7778vh);
+.pz, .pz-beat {
   --pz-display: calc(var(--pz-u) * 3.6);
   --pz-h: calc(var(--pz-u) * 2.45);
   --pz-body: calc(var(--pz-u) * 1.75);
   --pz-meta: max(15px, calc(var(--pz-u) * 1.05));
-  --pz-chrome: 13px;
   --pz-radius: calc(var(--pz-u) * 0.75);
   --pz-gap: calc(var(--pz-u) * 1.6);
+}
+.pz {
+  --pz-u0: min(1vw, 1.7778vh);
+  --pz-u: var(--pz-u0);
+  --pz-chrome: 13px;
+  /* The quote zone's reserved height: its caption plus three lines of the page's words at the normal size. */
+  --pz-zone-h: max(104px, calc(var(--pz-u) * 7.8));
   --pz-black: #000;
   --pz-white: #fff;
   --pz-ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -29,18 +34,23 @@
   background: var(--key-bg); font-family: var(--mono); font-size: 0.8em; line-height: 1.45; text-align: center; color: var(--ink);
 }
 
-/* ---- the stage: title-safe margins (6% / 7%), room under the content for the bar ---------------------------------- */
+/* ---- the stage: title-safe margins, the slide, then the quote zone, then room for the bar ---------------------------- */
 .pz-stage-frame {
   position: absolute; inset: 0;
-  display: flex; justify-content: center;
-  padding: calc(var(--pz-u) * 5) calc(var(--pz-u) * 6.5) calc(var(--pz-u) * 6.5);
+  display: flex; flex-direction: column; align-items: center;
+  padding: calc(var(--pz-u) * 4.6) calc(var(--pz-u) * 6.5) max(76px, calc(var(--pz-u) * 4.4));
   outline: none;
   transition: padding-inline-end 0.3s var(--pz-ease);
 }
 .pz-stage-frame.pz-with-notes { padding-inline-end: calc(26vw + var(--pz-u) * 3); }
+/* A slide whose content is taller than its area (a long compare table with its options) is set a little smaller as a
+ * whole: PresentationMode measures it once per beat and sets --pz-fit, which scales the slide's unit. Never per step, so
+ * building and revealing never rescale it. */
 .pz-beat {
-  inline-size: min(100%, calc(var(--pz-u) * 150)); block-size: 100%; min-block-size: 0;
+  --pz-u: calc(var(--pz-u0) * var(--pz-fit, 1));
+  inline-size: min(100%, calc(var(--pz-u0) * 150)); flex: 1 1 0; min-block-size: 0;
   display: flex; flex-direction: column;
+  font-size: var(--pz-body);
   animation: pz-enter 0.42s var(--pz-ease) both;
 }
 @keyframes pz-enter { from { opacity: 0; transform: translateY(calc(var(--pz-u) * 0.6)); } to { opacity: 1; transform: none; } }
@@ -56,11 +66,10 @@
 .pz-prompt { font-size: var(--pz-body); color: var(--ink-2); }
 .pz-prompt strong { color: var(--ink); }
 
-/* the page's own words (shown with a reveal and in notes): the source's serif */
+/* the page's own words printed in a slide's body (the which-came-first pair): the source's serif */
 .pz-words { display: grid; gap: calc(var(--pz-u) * 0.35); max-inline-size: 62ch; }
 .pz-words figcaption { font-size: var(--pz-meta); color: var(--ink-3); font-weight: var(--fw-medium); }
 .pz-words blockquote { font-family: var(--serif); font-size: calc(var(--pz-body) * 0.82); line-height: 1.45; color: var(--ink-2); }
-.pz-beat[data-revealed="true"] .pz-words { animation: pz-words-in 0.5s var(--pz-ease) 0.16s both; }
 @keyframes pz-words-in { from { opacity: 0; } to { opacity: 1; } }
 
 /* ---- title -------------------------------------------------------------------------------------------------------- */
@@ -93,16 +102,24 @@
 .pz-terms { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: calc(var(--pz-u) * 3.2) calc(var(--pz-u) * 6); margin-block: auto; padding-block-end: calc(var(--pz-u) * 3); }
 .pz-term { display: grid; gap: calc(var(--pz-u) * 0.5); align-content: start; }
 .pz-term dt { font-size: var(--pz-h); line-height: 1.15; letter-spacing: -0.01em; }
-.pz-term dd { margin: 0; color: var(--ink-2); line-height: 1.35; }
-.pz-term dd[data-shown="true"] { animation: pz-words-in 0.45s var(--pz-ease) both; }
+/* The meaning and the 'What does it mean?' prompt share one cell, and the meaning is laid out (hidden) from the start, so
+ * each → shows a meaning without moving the terms below it. */
+.pz-term dd { margin: 0; display: grid; color: var(--ink-2); line-height: 1.35; }
+.pz-term dd > * { grid-area: 1 / 1; }
+.pz-term dd[data-shown="false"] .pz-gloss { visibility: hidden; }
+.pz-term dd[data-shown="true"] .pz-gloss { animation: pz-words-in 0.45s var(--pz-ease) both; }
 .pz-pending { color: var(--ink-3); font-style: italic; }
 .pz-terms.pz-dense { font-size: calc(var(--pz-body) * 0.84); gap: calc(var(--pz-u) * 1.6) calc(var(--pz-u) * 3.5); }
 
 /* ---- ask beats: quiz, compare, predict -------------------------------------------------------------------------------- */
 .pz-ask { flex: 1; display: flex; flex-direction: column; gap: calc(var(--pz-u) * 1.8); min-block-size: 0; }
 /* A question and its answers sit as one block at the optical centre of the screen, not pinned to the top edge. */
-.pz-ask:not(.pz-predict) { justify-content: center; padding-block-end: calc(var(--pz-u) * 3); }
-.pz-ask:not(.pz-predict) > .pz-hint { margin-block-start: 0; }
+.pz-ask:not(.pz-predict) { justify-content: safe center; padding-block-end: calc(var(--pz-u) * 1.5); }
+/* The line under the options: the vote hint before R and the grade after it share one cell, so R moves nothing. */
+.pz-foot { display: grid; }
+.pz-foot > * { grid-area: 1 / 1; }
+.pz-foot > [data-on="false"] { visibility: hidden; }
+.pz-foot .pz-hint { margin-block-start: 0; }
 .pz-ask:not(.pz-predict) > .pz-question { margin-block-end: calc(var(--pz-u) * 0.6); }
 .pz-choices { display: grid; gap: calc(var(--pz-u) * 1); max-inline-size: calc(var(--pz-u) * 118); }
 .pz-choices > li { display: grid; gap: calc(var(--pz-u) * 0.5); }
@@ -118,7 +135,11 @@
 .pz-choice:disabled { cursor: default; }
 .pz-choice:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 .pz-letter { font-weight: var(--fw-bold); color: var(--accent-text); }
-.pz-choice-mark { display: inline-flex; align-items: center; gap: 0.35em; font-size: calc(var(--pz-meta) * 1.12); font-weight: var(--fw-medium); white-space: nowrap; color: var(--ink-2); }
+.pz-choice-mark { display: inline-grid; justify-items: end; font-size: calc(var(--pz-meta) * 1.12); font-weight: var(--fw-medium); white-space: nowrap; color: var(--ink-2); }
+/* Every mark an option can carry is laid out in the same cell from the start (only the current one shows), so the text
+ * column keeps its width and no option re-wraps when R marks the answer. */
+.pz-choice-mark > span { grid-area: 1 / 1; display: inline-flex; align-items: center; gap: 0.35em; visibility: hidden; }
+.pz-choice-mark[data-on="right"] > [data-mark="right"], .pz-choice-mark[data-on="wrong"] > [data-mark="wrong"], .pz-choice-mark[data-on="picked"] > [data-mark="picked"] { visibility: visible; }
 [data-state="picked"] > .pz-choice { border-color: var(--accent-line); background: var(--accent-soft); }
 [data-state="picked"] .pz-choice-mark { color: var(--accent-text); }
 /* The reveal (the one authored moment): the page's answer fills in from the left, the rest steps back. */
@@ -132,7 +153,9 @@
 [data-state="wrong"] .pz-choice-mark { color: var(--bad); }
 [data-state="other"] > .pz-choice { opacity: 0.5; }
 @keyframes pz-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-.pz-choice-detail { display: grid; gap: calc(var(--pz-u) * 0.4); padding-inline-start: calc(0.8em + 2px); animation: pz-words-in 0.45s var(--pz-ease) 0.12s both; }
+.pz-choice-detail { display: grid; gap: calc(var(--pz-u) * 0.4); padding-inline-start: calc(0.8em + 2px); }
+.pz-choice-detail[data-shown="false"] { visibility: hidden; }
+.pz-choice-detail[data-shown="true"] { animation: pz-words-in 0.45s var(--pz-ease) 0.12s both; }
 .pz-date { font-size: calc(var(--pz-body) * 0.9); font-weight: var(--fw-bold); font-variant-numeric: tabular-nums; }
 /* which came first: the two events side by side, each with its date and the page's words under it after the reveal */
 .pz-choices.pz-pair { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: auto auto; gap: calc(var(--pz-u) * 1) calc(var(--pz-u) * 2.4); max-inline-size: none; }
@@ -153,10 +176,15 @@
 .pz-table tbody th { font-weight: var(--fw-bold); }
 .pz-table thead td { border-block-start-color: transparent; border-inline-start-color: transparent; }
 .pz-cell-blank { color: var(--ink-3); font-style: italic; }
-.pz-cell-hidden { color: var(--accent-text); font-weight: var(--fw-bold); text-align: center !important; outline: 2px dashed var(--accent-line); outline-offset: -5px; }
+.pz-cell-hidden { position: relative; outline: 2px dashed var(--accent-line); outline-offset: -5px; }
+.pz-cell-reserve { visibility: hidden; }
+.pz-cell-q { position: absolute; inset: 0; display: grid; place-items: center; color: var(--accent-text); font-weight: var(--fw-bold); }
 .pz-cell-right { background: var(--ok-soft); color: var(--ok-ink); }
 .pz-cell-miss, .pz-cell-revealed { background: var(--accent-soft); }
 .pz-compare .pz-choices { grid-template-columns: repeat(auto-fit, minmax(calc(var(--pz-u) * 30), 1fr)); max-inline-size: none; }
+/* Side-by-side options are narrow: their mark gets its own (reserved) line under the text instead of a column beside it. */
+.pz-compare .pz-choice { grid-template-columns: 1.5em minmax(0, 1fr); align-content: start; }
+.pz-compare .pz-choice-mark { grid-column: 2; justify-items: start; }
 
 /* predict: the question over the live scene (left) and the two numbers (right): the class's, and the engine's, which stays a
  * dashed "?" until R. The scene answers in place: the ball flies, the peak settles onto or away from the guess line. */
@@ -206,8 +234,8 @@
 .pz-grade .mark, .pz-choice-mark .mark { display: inline-flex; }
 
 /* ---- an interactive part at projector scale ---------------------------------------------------------------------------- */
-.pz-stage { flex: 1; display: flex; flex-direction: column; gap: calc(var(--pz-u) * 1.2); min-block-size: 0; margin-block-end: calc(var(--pz-u) * -2.5); }
-.pz-stage .pz-heading { font-size: calc(var(--pz-h) * 0.8); }
+.pz-stage { flex: 1; display: flex; flex-direction: column; gap: calc(var(--pz-u) * 1.2); min-block-size: 0; }
+.pz-stage .pz-heading { font-size: calc(var(--pz-h) * 0.8); max-inline-size: 60ch; }
 .pz-fit { flex: 1; min-block-size: 0; overflow: auto; overscroll-behavior: contain; }
 .pz-fit-zoom { inline-size: fit-content; margin-inline: 0; font-size: var(--fs-16); line-height: 1.5; }
 .pz-fit-inner { padding-block-end: 8px; container-type: inline-size; }
@@ -232,18 +260,35 @@
 .pz-calm .mark { display: inline-flex; color: var(--ok); }
 .pz-calm.pz-muted { padding: 0; border: 0; color: var(--ink-3); }
 
-/* ---- the quote strip (hover a value, or "Show in source" inside a part) ---------------------------------------------------- */
-.pz-quote-strip {
-  position: absolute; inset-inline-start: calc(var(--pz-u) * 6.5); inset-block-end: 76px; z-index: 3;
-  max-inline-size: min(68ch, 62vw); display: grid; gap: 4px;
-  padding: calc(var(--pz-u) * 0.8) calc(var(--pz-u) * 1.2);
-  border: 1px solid var(--link-line); border-radius: var(--pz-radius);
-  background: var(--panel); box-shadow: var(--shadow-pop);
-  animation: pz-words-in 0.2s ease-out both;
+/* ---- the quote zone: one anchored band under every slide for what the page says --------------------------------------
+ * Hovering a quoted value, "Show in source" inside a part, and R on a quiz or compare beat all put the page's sentence
+ * here. The band's height is reserved on every beat, so a quote appearing or going never moves or covers the slide; long
+ * quotes step their size down (zoneQuoteSize) to fit the same band. */
+.pz-zone {
+  flex: none; inline-size: min(100%, calc(var(--pz-u) * 150)); block-size: var(--pz-zone-h);
+  margin: calc(var(--pz-u) * 1.2) 0 0; padding-block-start: calc(var(--pz-u) * 0.9);
+  display: flex; flex-direction: column; align-items: center; gap: calc(var(--pz-u) * 0.35);
+  overflow: hidden; text-align: center;
+  border-block-start: 1px solid transparent;
+  transition: border-color 0.2s ease-out;
 }
-.pz-quote-strip[data-at="top"] { inset-block-end: auto; inset-block-start: calc(var(--pz-u) * 1.2); }
-.pz-quote-strip figcaption { font-size: var(--pz-chrome); font-weight: var(--fw-medium); color: var(--ink-3); }
-.pz-quote-strip blockquote { font-family: var(--serif); font-size: calc(var(--pz-body) * 0.66); line-height: 1.45; color: var(--ink); }
+.pz-zone[data-filled="true"] { border-block-start-color: var(--line-2); }
+.pz-zone figcaption { font-size: var(--pz-meta); font-weight: var(--fw-medium); line-height: 1.3; color: var(--ink-3); }
+.pz-zone blockquote {
+  --zq: 0.74;
+  max-inline-size: min(100%, calc(var(--pz-u) * 66));
+  font-family: var(--serif); font-size: calc(var(--pz-body) * var(--zq)); line-height: 1.4; color: var(--ink);
+  text-wrap: balance;
+  animation: pz-words-in 0.22s ease-out both;
+}
+.pz-zone[data-size="long"] blockquote { --zq: 0.6; }
+.pz-zone[data-size="longer"] blockquote { --zq: 0.5; max-inline-size: min(100%, calc(var(--pz-u) * 80)); }
+.pz-zone[data-size="longest"] blockquote {
+  --zq: 0.44; max-inline-size: min(100%, calc(var(--pz-u) * 96));
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 5; line-clamp: 5; overflow: hidden;
+}
+/* The band never lights up as a box; when its words are linked (hovering the value that cites them) the quote underlines. */
+.pz-zone.linkable, .pz-zone.linkable.is-linked { outline-color: transparent; background-color: transparent; box-shadow: none; border-radius: 0; }
 
 /* ---- presenter notes ------------------------------------------------------------------------------------------------- */
 .pz-notes {
@@ -306,7 +351,7 @@
 .pz-track [data-state="current"] button::before { background: var(--accent); }
 
 .pz-keyhint {
-  position: absolute; inset-inline: 0; inset-block-end: 70px; z-index: 5; margin-inline: auto; inline-size: fit-content;
+  position: absolute; inset-inline: 0; inset-block-end: 64px; z-index: 5; margin-inline: auto; inline-size: fit-content;
   display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 18px; padding: 6px 14px; border-radius: var(--r);
   background: color-mix(in srgb, var(--chrome) 94%, transparent); color: var(--ink-2); font-size: var(--pz-chrome);
   animation: pz-words-in 0.3s ease-out 0.4s both;
@@ -343,7 +388,8 @@
   .pz-points > li[data-shown="true"] { transition: opacity 0.14s ease-out; }
   [data-state="right"] > .pz-choice::before { animation: pz-words-in 0.14s ease-out both; }
   .pz-answer-value { animation: pz-words-in 0.14s ease-out both; }
-  .pz-beat[data-revealed="true"] .pz-words, .pz-choice-detail, .pz-term dd[data-shown="true"], .pz-quote-strip { animation-duration: 0.14s; animation-delay: 0s; }
+  .pz-choice-detail[data-shown="true"], .pz-term dd[data-shown="true"] .pz-gloss, .pz-zone blockquote { animation-duration: 0.14s; animation-delay: 0s; }
+  .pz-zone { transition: none; }
   .pz-notes { animation: pz-words-in 0.14s ease-out both; }
   .pz-stage-frame, .pz-bar, .pz-progress span { transition: none; }
   .pz-bar[data-shown="false"] { transform: none; }

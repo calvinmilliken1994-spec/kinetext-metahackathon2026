@@ -15,7 +15,7 @@ import { lessonCards } from './lesson.ts';
 import { linkKey } from './linking.ts';
 import type { QuoteLike } from './linking.ts';
 import { planPredict } from './compare.ts';
-import { amountText, groupThousands } from './displayText.ts';
+import { aiLabel, amountText, groupThousands } from './displayText.ts';
 import { gradeCaseGuess } from './explorer.ts';
 import { trimmed } from './format.ts';
 import { gradePrediction, parseGuess, studentTolerance } from './predictions.ts';
@@ -180,7 +180,7 @@ function stageLabel(part: DeckPart): string {
 function partBeats(part: DeckPart, n: number): Beat[] {
   const quotes = uniqueQuotes(partQuotes(part));
   const id = `${n}:${part.spec.id}`;
-  const stage: Beat = { kind: 'stage', id: `${id}:stage`, label: stageLabel(part), title: part.spec.title, steps: 1, quotes, cue: CUE.stage, part };
+  const stage: Beat = { kind: 'stage', id: `${id}:stage`, label: stageLabel(part), title: aiLabel(part.spec.title), steps: 1, quotes, cue: CUE.stage, part };
 
   if (part.kind === 'activity') {
     const spec = part.spec;
@@ -189,7 +189,7 @@ function partBeats(part: DeckPart, n: number): Beat[] {
       const options = p === undefined ? null : pairOptions(spec.simulation.events, p, spec.id);
       if (p === undefined || options === null) return [stage];
       const predict: Beat = {
-        kind: 'predict', id: `${id}:predict`, label: 'Which first?', title: p.prompt, steps: 2, cue: CUE.pair,
+        kind: 'predict', id: `${id}:predict`, label: 'Which first?', title: aiLabel(p.prompt), steps: 2, cue: CUE.pair,
         quotes: uniqueQuotes(options.flatMap((e) => e.evidence)),
         target: { kind: 'timeline', spec, prompt: p.prompt, options, predictionId: p.id },
       };
@@ -199,7 +199,7 @@ function partBeats(part: DeckPart, n: number): Beat[] {
     const p = spec.predictions[0] as AnyPrediction | undefined;
     if (p === undefined || engineOutput(engine, p) === null) return [stage];
     const predict: Beat = {
-      kind: 'predict', id: `${id}:predict`, label: 'Predict', title: p.prompt, steps: 2, cue: CUE.predict,
+      kind: 'predict', id: `${id}:predict`, label: 'Predict', title: aiLabel(p.prompt), steps: 2, cue: CUE.predict,
       quotes: uniqueQuotes(spec.explanations.flatMap((e) => e.evidence)).slice(0, 3),
       target: { kind: 'engine', spec, engine, prediction: p },
     };
@@ -210,14 +210,14 @@ function partBeats(part: DeckPart, n: number): Beat[] {
   switch (spec.componentId) {
     case 'quiz-cards-v1':
       return spec.cards.map((c, i): Beat => ({
-        kind: 'quiz', id: `${id}:card:${c.id}`, label: `Question ${i + 1}`, title: c.stem, steps: 2, cue: CUE.quiz,
+        kind: 'quiz', id: `${id}:card:${c.id}`, label: `Question ${i + 1}`, title: aiLabel(c.stem), steps: 2, cue: CUE.quiz,
         quotes: [{ sourceId: c.sourceId, quote: c.quote }], spec, cardId: c.id, number: i + 1, of: spec.cards.length,
       }));
     case 'compare-table-v1': {
       const plan = planPredict(spec);
       const hidden = plan === null ? undefined : spec.cells.find((c) => c.id === plan.cellId);
       return [{
-        kind: 'compare', id: `${id}:compare`, label: 'Compare', title: spec.title, steps: plan === null ? 1 : 2,
+        kind: 'compare', id: `${id}:compare`, label: 'Compare', title: aiLabel(spec.title), steps: plan === null ? 1 : 2,
         cue: plan === null ? CUE.stage : CUE.compare,
         quotes: hidden === undefined ? quotes : uniqueQuotes([hidden, ...quotes]), spec, plan,
       }];
@@ -227,7 +227,7 @@ function partBeats(part: DeckPart, n: number): Beat[] {
       const first = spec.cases[0];
       if (!model.ok || first === undefined || !Number.isFinite(evalAt(model, inputsOfCase(first)))) return [stage];
       const prompt = casePrompt(spec, first);
-      const predict: Beat = { kind: 'predict', id: `${id}:predict`, label: 'Predict', title: prompt, steps: 2, cue: CUE.predict, quotes, target: { kind: 'formula', spec, prompt } };
+      const predict: Beat = { kind: 'predict', id: `${id}:predict`, label: 'Predict', title: aiLabel(prompt), steps: 2, cue: CUE.predict, quotes, target: { kind: 'formula', spec, prompt } };
       return [predict, stage];
     }
     default:
@@ -237,7 +237,7 @@ function partBeats(part: DeckPart, n: number): Beat[] {
 
 /** The beats of a deck, in order: title, overview or objectives, key terms, each part's beats, closing. */
 export function planBeats(deck: Deck): Beat[] {
-  const beats: Beat[] = [{ kind: 'title', id: 'title', label: 'Title', title: deck.headline, steps: 1, quotes: [], cue: CUE.title }];
+  const beats: Beat[] = [{ kind: 'title', id: 'title', label: 'Title', title: aiLabel(deck.headline), steps: 1, quotes: [], cue: CUE.title }];
   const ov = deck.overview;
   if (ov !== null && ov.keyPoints.length > 0) {
     beats.push({ kind: 'overview', id: 'overview', label: 'Overview', title: 'What the page says', steps: ov.keyPoints.length, quotes: uniqueQuotes(ov.keyPoints), cue: CUE.overview });
@@ -570,7 +570,79 @@ export function leftOutLine(n: number): string | null {
 
 /** The page sentence behind the hovered element's link keys (lib/linking.ts), or null. */
 export function quoteForLinks(keys: readonly string[], quotes: readonly QuoteLike[]): string | null {
+  return quoteRefForLinks(keys, quotes)?.quote ?? null;
+}
+
+/** The quote (with its source) behind the hovered element's link keys, or null. */
+export function quoteRefForLinks(keys: readonly string[], quotes: readonly QuoteLike[]): QuoteLike | null {
   if (keys.length === 0) return null;
-  for (const q of quotes) if (keys.includes(linkKey(q.sourceId, q.quote))) return q.quote;
+  for (const q of quotes) if (keys.includes(linkKey(q.sourceId, q.quote))) return { sourceId: q.sourceId, quote: q.quote };
   return null;
+}
+
+// ---- display text of the overview beats (pass 3: sentence case everywhere) ----------------------------------------
+
+/** The key terms as a slide shows them: term and meaning in sentence case (symbols and units kept); quotes verbatim. */
+export function shownTerms(deck: Pick<Deck, 'overview'>): KeyTermGen[] {
+  return (deck.overview?.keyTerms ?? []).map((t) => ({ ...t, term: aiLabel(t.term), gloss: aiLabel(t.gloss) }));
+}
+
+/** The key points as a slide shows them: sentence case with display maths; quotes verbatim. */
+export function shownPoints(deck: Pick<Deck, 'overview'>): KeyPointGen[] {
+  return (deck.overview?.keyPoints ?? []).map((p) => ({ ...p, point: aiLabel(p.point) }));
+}
+
+// ---- the quote zone: one anchored place per slide for what the page says ------------------------------------------
+
+/** The page quote a beat reveals with R (a quiz card's quote, the hidden compare cell's quote), or null. */
+export function revealQuote(beat: Beat, step: number): QuoteLike | null {
+  if (!isRevealed(beat, step)) return null;
+  if (beat.kind === 'quiz') {
+    const card = beat.spec.cards.find((c) => c.id === beat.cardId);
+    return card === undefined ? null : { sourceId: card.sourceId, quote: card.quote };
+  }
+  if (beat.kind === 'compare' && beat.plan !== null) {
+    const cellId = beat.plan.cellId;
+    const cell = beat.spec.cells.find((c) => c.id === cellId);
+    return cell === undefined ? null : { sourceId: cell.sourceId, quote: cell.quote };
+  }
+  return null;
+}
+
+/** Quotes a beat prints in its own body (never repeated in the zone): a revealed pair's two events, the closing list. */
+export function visibleQuotes(beat: Beat, step: number, beats: readonly Beat[]): QuoteLike[] {
+  if (beat.kind === 'predict' && beat.target.kind === 'timeline') {
+    if (!isRevealed(beat, step)) return [];
+    return beat.target.options.flatMap((e) => (e.evidence[0] === undefined ? [] : [{ sourceId: e.evidence[0].sourceId, quote: e.evidence[0].quote }]));
+  }
+  if (beat.kind === 'closing') return deckQuotes(beats).slice(0, CLOSING_QUOTES);
+  return [];
+}
+
+/** How many of the deck's quotes the closing beat prints. */
+export const CLOSING_QUOTES = 3;
+
+/**
+ * What the quote zone shows: the hovered element's quote, else a quote pinned with "Show in source", else the quote the
+ * beat revealed, else nothing. A quote already printed in the slide's body is never echoed: hovering it leaves the zone
+ * as it was.
+ */
+export function zoneQuote(input: { hovered: QuoteLike | null; pinned: QuoteLike | null; revealed: QuoteLike | null; visible: readonly QuoteLike[] }): QuoteLike | null {
+  const printed = new Set(input.visible.map((q) => linkKey(q.sourceId, q.quote)));
+  const fresh = (q: QuoteLike | null): q is QuoteLike => q !== null && linkKey(q.sourceId, q.quote) !== '' && !printed.has(linkKey(q.sourceId, q.quote));
+  if (fresh(input.hovered)) return input.hovered;
+  if (fresh(input.pinned)) return input.pinned;
+  if (fresh(input.revealed)) return input.revealed;
+  return null;
+}
+
+export type ZoneQuoteSize = 'normal' | 'long' | 'longer' | 'longest';
+
+/** The zone's text size for a quote of this length, so three to five lines always fit its reserved band. */
+export function zoneQuoteSize(quote: string): ZoneQuoteSize {
+  const n = quote.replace(/\s+/g, ' ').trim().length;
+  if (n <= 230) return 'normal';
+  if (n <= 360) return 'long';
+  if (n <= 560) return 'longer';
+  return 'longest';
 }

@@ -6,6 +6,7 @@ import type { Assignments } from '../lib/sort.ts';
 import type { CiteProps } from './Explanations.tsx';
 import { QuoteBlock } from './QuoteBlock.tsx';
 import { Mark } from './icons.tsx';
+import { capitalFirst } from '../lib/displayText.ts';
 
 interface Props { spec: SortGroupsSpec; cite: CiteProps }
 
@@ -13,7 +14,13 @@ interface Props { spec: SortGroupsSpec; cite: CiteProps }
  * Sort items into groups. Click a group button, or focus an item and press 1-4 (0 clears). Nothing is graded until the
  * learner commits; then every item shows its right group and the page’s words. No drag-only interaction.
  */
-export function SortView({ spec, cite }: Props) {
+export function SortView({ spec: raw, cite }: Props) {
+  // Group and item labels are AI-written: shown in sentence case (symbols and units kept), ids and grading unchanged.
+  const spec = useMemo((): SortGroupsSpec => ({
+    ...raw,
+    groups: raw.groups.map((g) => ({ ...g, label: capitalFirst(g.label) })),
+    items: raw.items.map((i) => ({ ...i, label: capitalFirst(i.label) })),
+  }), [raw]);
   const helpId = useId();
   const pile = useMemo(() => sortPile(spec), [spec]);
   const items = useMemo(() => new Map(spec.items.map((i) => [i.id, i] as const)), [spec]);

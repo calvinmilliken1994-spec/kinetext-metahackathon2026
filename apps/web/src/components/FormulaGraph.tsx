@@ -4,6 +4,7 @@ import type { GraphGeometry, GraphReveal } from '../lib/explorer.ts';
 import { groupedSig6 } from '../lib/explorer.ts';
 import { leaderLine } from '../lib/geometry.ts';
 import { HiddenValueText } from './SceneHidden.tsx';
+import { capitalFirst } from '../lib/displayText.ts';
 
 /** The graded guess drawn on the graph: the overlay geometry plus the two numbers and a run number (replays the settle). */
 export interface GraphRevealView extends GraphReveal { guess: number; actual: number; tolerance: number; seq: number }
@@ -104,7 +105,7 @@ export function FormulaGraph({ geometry: g, yName, xName, concealed = false, rev
         {concealed
           ? <HiddenValueText x={plot.r - 6} y={plot.t - 11} anchor="end" lead={`Now: ${yName} =`} className="explorer-now" />
           : <text x={plot.r} y={plot.t - 8} textAnchor="end" className="explorer-now">Now: {nowText}</text>}
-        <text x={(plot.l + plot.r) / 2} y={g.height - 6} textAnchor="middle" className="graph-axis">{xName}</text>
+        <text x={(plot.l + plot.r) / 2} y={g.height - 6} textAnchor="middle" className="graph-axis">{capitalFirst(xName)}</text>
         <text x={plot.l} y={plot.t - 8} className="graph-axis">{yName}</text>
       </svg>
       {g.hasGap && <figcaption className="muted small">The line stops where the formula has no value for these inputs.</figcaption>}

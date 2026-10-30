@@ -1,0 +1,40 @@
+{
+ "moon#3:terms": [
+  "dt. :: drag",
+  "dt. :: ballistic",
+  "dt. :: horizontal speed",
+  "dt. :: gravity",
+  "dd. :: highest position reached when upward motion stops"
+ ],
+ "drag#3:terms": [
+  "dt. :: drag coefficient",
+  "dt. :: reference area",
+  "dt. :: density",
+  "dt. :: dynamic pressure"
+ ],
+ "drag#4:predict": [
+  "text. :: flow velocity (m/s)"
+ ],
+ "drag#5:stage": [
+  "text. :: flow velocity (m/s)"
+ ],
+ "drag#9:closing": [
+  "p.pz-url :: https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/drag-equation"
+ ],
+ "noaa#5:compare": [
+  "td.linkable :: energy from the sun",
+  "td.linkable :: glucose and oxygen",
+  "td.linkable :: energy released from chemical reactions",
+  "td.linkable :: glucose and hydrogen sulfide"
+ ],
+ "noaa#6:closing": [
+  "p.pz-url :: https://oceanexplorer.noaa.gov/wp-content/uploads/2025/04/educator-gui"
+ ],
+ "nara#3:terms": [
+  "dt. :: quorum",
+  "dt. :: central government"
+ ],
+ "nara#8:closing": [
+  "p.pz-url :: https://www.archives.gov/milestone-documents/constitution"
+ ]
+}

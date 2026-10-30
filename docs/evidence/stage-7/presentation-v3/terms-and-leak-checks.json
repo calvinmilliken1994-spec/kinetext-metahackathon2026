@@ -1,0 +1,21 @@
+{
+ "terms \u0394": {
+  "n": 5,
+  "dy": 0.0,
+  "dx": 0.0,
+  "dh": 0.0,
+  "dw": 0.0
+ },
+ "compare hidden value in innerText/aria before R": 0,
+ "compare page-answer mark visible before R": false,
+ "pair dates/quotes in innerText before R": [
+  false,
+  false,
+  false,
+  false
+ ],
+ "quiz answer mark / quote before R": [
+  false,
+  false
+ ]
+}

@@ -107,6 +107,8 @@
 .gravity-arrow { stroke: var(--ink-3); stroke-width: 3; stroke-linecap: round; }
 .gravity-head { fill: var(--ink-3); }
 .ask-note { fill: var(--ink-3); }
+/* The ask frame lays out the revealed scene's equation line invisibly, so the reveal keeps the scene's height. */
+.ask-reserve { visibility: hidden; }
 .reveal-guess-empty .reveal-guess-line { opacity: 0.4; }
 .reveal-guess-empty .reveal-guess-label { fill: var(--ink-3); }
 /* On R the drawing re-scales from the guess's own scale to the engine's: the line glides to the same height there. */

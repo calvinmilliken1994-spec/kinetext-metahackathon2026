@@ -36,17 +36,20 @@ function sig3Plain(n: number): string {
 // ---- sentences and labels written by the model ------------------------------------------------------------------------
 
 /** Unit symbols and short tokens that must keep their case at the start of a label. */
-const KEEP_CASE = new Set(['kg', 'km', 'cm', 'mm', 'nm', 'ml', 'mg', 'mol', 'min', 'hr', 'ms', 'ns', 'ft', 'lb', 'lbs', 'mph', 'kph', 'rad', 'cd', 'kj', 'kw', 'kwh']);
+const KEEP_CASE = new Set(['kg', 'km', 'cm', 'mm', 'nm', 'ml', 'mg', 'mol', 'min', 'hr', 'ms', 'ns', 'ft', 'lb', 'lbs', 'mph', 'kph', 'rad', 'cd', 'kj', 'kw', 'kwh', 'rpm']);
+
+/** A one-letter symbol with a written-out subscript ('ymax', 'vmin', 'xref'): a symbol, not a word. */
+const SUBSCRIPTED_SYMBOL = /^[a-z](?:max|min|avg|net|ref|eq|tot)$/;
 
 /**
  * Sentence case for a label the model wrote ('quorum of seven states was obtained' → 'Quorum …'). Only a first word of two
- * or more lowercase letters is changed, so symbols ('x', 'pH', 'mRNA'), unit symbols ('kg', 'm/s') and numbers stay.
+ * or more lowercase letters is changed, so symbols ('x', 'pH', 'mRNA', 'ymax'), unit symbols ('kg', 'm/s') and numbers stay.
  */
 export function capitalFirst(text: string): string {
   const m = /^([a-z]{2,})(?=$|[\s,.;:!?)'’-])/.exec(text);
   if (m === null) return text;
   const word = m[1] as string;
-  if (KEEP_CASE.has(word)) return text;
+  if (KEEP_CASE.has(word) || SUBSCRIPTED_SYMBOL.test(word)) return text;
   return word.charAt(0).toUpperCase() + text.slice(1);
 }
 
@@ -130,6 +133,15 @@ export function aiText(text: string): string {
   )
     .replace(/(?<=[\w)\]²³¹⁰⁴-⁹])(\s?)\*(\s?)(?=[\w(])/gu, (_m, a: string, b: string) => `${a}·${b}`)
     .replace(/(?<![\p{L}\d_])([A-Za-z])0(?![\p{L}\d_.])/gu, '$1₀');
+}
+
+/**
+ * The one display form of a short AI-written line a teacher sees (a key term or its meaning, a heading, an answer option,
+ * a table cell, a step label): aiText's clean-up and display maths, then sentence case (capitalFirst keeps symbols and
+ * units). Never used on page quotes.
+ */
+export function aiLabel(text: string): string {
+  return capitalFirst(aiText(text));
 }
 
 /** Unit symbols that must stay on the line of their number. */

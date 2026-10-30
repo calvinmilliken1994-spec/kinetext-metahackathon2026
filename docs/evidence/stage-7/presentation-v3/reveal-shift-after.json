@@ -1,0 +1,1750 @@
+{
+ "1920x1080/dark/moon#4:predict-projectile": {
+  "loaded": true,
+  "options": 0,
+  "max_dy": 0.0,
+  "max_dh": 0.0,
+  "count_changes": {
+   ".pz-hint": [
+    1,
+    0
+   ]
+  },
+  "detail": {
+   ".pz-question": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-predict-scene": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-slot": {
+    "n": 2,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-fit": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-fit-zoom": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-hint": {
+    "count": [
+     1,
+     0
+    ]
+   },
+   ".pz-zone": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   }
+  }
+ },
+ "1920x1080/dark/moon#6:quiz": {
+  "loaded": true,
+  "options": 3,
+  "max_dy": 0.0,
+  "max_dh": 0.0,
+  "count_changes": {},
+  "detail": {
+   ".pz-question": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-choice": {
+    "n": 3,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-choice-text": {
+    "n": 3,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-hint": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-foot": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-zone": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   }
+  }
+ },
+ "1920x1080/dark/drag#4:predict-formula": {
+  "loaded": true,
+  "options": 0,
+  "max_dy": 0.0,
+  "max_dh": 0.0,
+  "count_changes": {
+   ".pz-hint": [
+    1,
+    0
+   ]
+  },
+  "detail": {
+   ".pz-question": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-predict-scene": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-slot": {
+    "n": 2,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-fit": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-fit-zoom": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-hint": {
+    "count": [
+     1,
+     0
+    ]
+   },
+   ".pz-zone": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   }
+  }
+ },
+ "1920x1080/dark/drag#6:quiz": {
+  "loaded": true,
+  "options": 3,
+  "max_dy": 0.0,
+  "max_dh": 0.0,
+  "count_changes": {},
+  "detail": {
+   ".pz-question": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-choice": {
+    "n": 3,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-choice-text": {
+    "n": 3,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-hint": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-foot": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-zone": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   }
+  }
+ },
+ "1920x1080/dark/nara#5:quiz": {
+  "loaded": true,
+  "options": 4,
+  "max_dy": 0.0,
+  "max_dh": 0.0,
+  "count_changes": {},
+  "detail": {
+   ".pz-question": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-choice": {
+    "n": 4,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-choice-text": {
+    "n": 4,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-hint": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-foot": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-zone": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   }
+  }
+ },
+ "1920x1080/dark/noaa#5:compare-no-plan": {
+  "loaded": true,
+  "options": 0,
+  "max_dy": 0,
+  "max_dh": 0.0,
+  "count_changes": {},
+  "detail": {
+   ".pz-beat .pz-heading": {
+    "n": 1,
+    "dy": 0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-table": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0
+   },
+   ".pz-table td": {
+    "n": 5,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-zone": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   }
+  }
+ },
+ "1920x1080/dark/job-2026103005#8:compare": {
+  "loaded": true,
+  "options": 3,
+  "max_dy": 0.0,
+  "max_dh": 0.0,
+  "count_changes": {},
+  "detail": {
+   ".pz-beat .pz-heading": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0
+   },
+   ".pz-choice": {
+    "n": 3,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0
+   },
+   ".pz-choice-text": {
+    "n": 3,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-table": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-table td": {
+    "n": 7,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-prompt": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-hint": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-foot": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-zone": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   }
+  }
+ },
+ "1920x1080/dark/job-2026102920#4:pair": {
+  "loaded": true,
+  "options": 2,
+  "max_dy": 0.0,
+  "max_dh": 0.0,
+  "count_changes": {},
+  "detail": {
+   ".pz-question": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-choice": {
+    "n": 2,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-choice-text": {
+    "n": 2,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-hint": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-foot": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-zone": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   }
+  }
+ },
+ "1920x1080/light/moon#4:predict-projectile": {
+  "loaded": true,
+  "options": 0,
+  "max_dy": 0.0,
+  "max_dh": 0.0,
+  "count_changes": {
+   ".pz-hint": [
+    1,
+    0
+   ]
+  },
+  "detail": {
+   ".pz-question": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-predict-scene": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-slot": {
+    "n": 2,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-fit": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-fit-zoom": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-hint": {
+    "count": [
+     1,
+     0
+    ]
+   },
+   ".pz-zone": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   }
+  }
+ },
+ "1920x1080/light/moon#6:quiz": {
+  "loaded": true,
+  "options": 3,
+  "max_dy": 0.0,
+  "max_dh": 0.0,
+  "count_changes": {},
+  "detail": {
+   ".pz-question": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-choice": {
+    "n": 3,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-choice-text": {
+    "n": 3,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-hint": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-foot": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-zone": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   }
+  }
+ },
+ "1920x1080/light/drag#4:predict-formula": {
+  "loaded": true,
+  "options": 0,
+  "max_dy": 0.0,
+  "max_dh": 0.0,
+  "count_changes": {
+   ".pz-hint": [
+    1,
+    0
+   ]
+  },
+  "detail": {
+   ".pz-question": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-predict-scene": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-slot": {
+    "n": 2,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-fit": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-fit-zoom": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-hint": {
+    "count": [
+     1,
+     0
+    ]
+   },
+   ".pz-zone": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   }
+  }
+ },
+ "1920x1080/light/drag#6:quiz": {
+  "loaded": true,
+  "options": 3,
+  "max_dy": 0.0,
+  "max_dh": 0.0,
+  "count_changes": {},
+  "detail": {
+   ".pz-question": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-choice": {
+    "n": 3,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-choice-text": {
+    "n": 3,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-hint": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-foot": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-zone": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   }
+  }
+ },
+ "1920x1080/light/nara#5:quiz": {
+  "loaded": true,
+  "options": 4,
+  "max_dy": 0.0,
+  "max_dh": 0.0,
+  "count_changes": {},
+  "detail": {
+   ".pz-question": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-choice": {
+    "n": 4,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-choice-text": {
+    "n": 4,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-hint": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-foot": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-zone": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   }
+  }
+ },
+ "1920x1080/light/noaa#5:compare-no-plan": {
+  "loaded": true,
+  "options": 0,
+  "max_dy": 0,
+  "max_dh": 0.0,
+  "count_changes": {},
+  "detail": {
+   ".pz-beat .pz-heading": {
+    "n": 1,
+    "dy": 0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-table": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0
+   },
+   ".pz-table td": {
+    "n": 5,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-zone": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   }
+  }
+ },
+ "1920x1080/light/job-2026103005#8:compare": {
+  "loaded": true,
+  "options": 3,
+  "max_dy": 0.0,
+  "max_dh": 0.0,
+  "count_changes": {},
+  "detail": {
+   ".pz-beat .pz-heading": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0
+   },
+   ".pz-choice": {
+    "n": 3,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0
+   },
+   ".pz-choice-text": {
+    "n": 3,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-table": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-table td": {
+    "n": 7,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-prompt": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-hint": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-foot": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-zone": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   }
+  }
+ },
+ "1920x1080/light/job-2026102920#4:pair": {
+  "loaded": true,
+  "options": 2,
+  "max_dy": 0.0,
+  "max_dh": 0.0,
+  "count_changes": {},
+  "detail": {
+   ".pz-question": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-choice": {
+    "n": 2,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-choice-text": {
+    "n": 2,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-hint": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-foot": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-zone": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   }
+  }
+ },
+ "1366x768/dark/moon#4:predict-projectile": {
+  "loaded": true,
+  "options": 0,
+  "max_dy": 0.0,
+  "max_dh": 0.0,
+  "count_changes": {
+   ".pz-hint": [
+    1,
+    0
+   ]
+  },
+  "detail": {
+   ".pz-question": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-predict-scene": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-slot": {
+    "n": 2,
+    "dy": 0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-fit": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-fit-zoom": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-hint": {
+    "count": [
+     1,
+     0
+    ]
+   },
+   ".pz-zone": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   }
+  }
+ },
+ "1366x768/dark/moon#6:quiz": {
+  "loaded": true,
+  "options": 3,
+  "max_dy": 0.0,
+  "max_dh": 0.0,
+  "count_changes": {},
+  "detail": {
+   ".pz-question": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-choice": {
+    "n": 3,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-choice-text": {
+    "n": 3,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-hint": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-foot": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-zone": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   }
+  }
+ },
+ "1366x768/dark/drag#4:predict-formula": {
+  "loaded": true,
+  "options": 0,
+  "max_dy": 0.0,
+  "max_dh": 0.0,
+  "count_changes": {
+   ".pz-hint": [
+    1,
+    0
+   ]
+  },
+  "detail": {
+   ".pz-question": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-predict-scene": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-slot": {
+    "n": 2,
+    "dy": 0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-fit": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-fit-zoom": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-hint": {
+    "count": [
+     1,
+     0
+    ]
+   },
+   ".pz-zone": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   }
+  }
+ },
+ "1366x768/dark/drag#6:quiz": {
+  "loaded": true,
+  "options": 3,
+  "max_dy": 0.0,
+  "max_dh": 0.0,
+  "count_changes": {},
+  "detail": {
+   ".pz-question": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-choice": {
+    "n": 3,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-choice-text": {
+    "n": 3,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-hint": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-foot": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-zone": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   }
+  }
+ },
+ "1366x768/dark/nara#5:quiz": {
+  "loaded": true,
+  "options": 4,
+  "max_dy": 0.0,
+  "max_dh": 0.0,
+  "count_changes": {},
+  "detail": {
+   ".pz-question": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-choice": {
+    "n": 4,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-choice-text": {
+    "n": 4,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-hint": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-foot": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-zone": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   }
+  }
+ },
+ "1366x768/dark/noaa#5:compare-no-plan": {
+  "loaded": true,
+  "options": 0,
+  "max_dy": 0.0,
+  "max_dh": 0.0,
+  "count_changes": {},
+  "detail": {
+   ".pz-beat .pz-heading": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-table": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-table td": {
+    "n": 5,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-zone": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   }
+  }
+ },
+ "1366x768/dark/job-2026103005#8:compare": {
+  "loaded": true,
+  "options": 3,
+  "max_dy": 0.0,
+  "max_dh": 0.0,
+  "count_changes": {},
+  "detail": {
+   ".pz-beat .pz-heading": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0
+   },
+   ".pz-choice": {
+    "n": 3,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-choice-text": {
+    "n": 3,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-table": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-table td": {
+    "n": 7,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-prompt": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-hint": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-foot": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-zone": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   }
+  }
+ },
+ "1366x768/dark/job-2026102920#4:pair": {
+  "loaded": true,
+  "options": 2,
+  "max_dy": 0.0,
+  "max_dh": 0,
+  "count_changes": {},
+  "detail": {
+   ".pz-question": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-choice": {
+    "n": 2,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-choice-text": {
+    "n": 2,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-hint": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-foot": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-zone": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   }
+  }
+ },
+ "1366x768/light/moon#4:predict-projectile": {
+  "loaded": true,
+  "options": 0,
+  "max_dy": 0.0,
+  "max_dh": 0.0,
+  "count_changes": {
+   ".pz-hint": [
+    1,
+    0
+   ]
+  },
+  "detail": {
+   ".pz-question": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-predict-scene": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-slot": {
+    "n": 2,
+    "dy": 0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-fit": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-fit-zoom": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-hint": {
+    "count": [
+     1,
+     0
+    ]
+   },
+   ".pz-zone": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   }
+  }
+ },
+ "1366x768/light/moon#6:quiz": {
+  "loaded": true,
+  "options": 3,
+  "max_dy": 0.0,
+  "max_dh": 0.0,
+  "count_changes": {},
+  "detail": {
+   ".pz-question": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-choice": {
+    "n": 3,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-choice-text": {
+    "n": 3,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-hint": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-foot": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-zone": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   }
+  }
+ },
+ "1366x768/light/drag#4:predict-formula": {
+  "loaded": true,
+  "options": 0,
+  "max_dy": 0.0,
+  "max_dh": 0.0,
+  "count_changes": {
+   ".pz-hint": [
+    1,
+    0
+   ]
+  },
+  "detail": {
+   ".pz-question": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-predict-scene": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-slot": {
+    "n": 2,
+    "dy": 0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-fit": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-fit-zoom": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-hint": {
+    "count": [
+     1,
+     0
+    ]
+   },
+   ".pz-zone": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   }
+  }
+ },
+ "1366x768/light/drag#6:quiz": {
+  "loaded": true,
+  "options": 3,
+  "max_dy": 0.0,
+  "max_dh": 0.0,
+  "count_changes": {},
+  "detail": {
+   ".pz-question": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-choice": {
+    "n": 3,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-choice-text": {
+    "n": 3,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-hint": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-foot": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-zone": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   }
+  }
+ },
+ "1366x768/light/nara#5:quiz": {
+  "loaded": true,
+  "options": 4,
+  "max_dy": 0.0,
+  "max_dh": 0.0,
+  "count_changes": {},
+  "detail": {
+   ".pz-question": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-choice": {
+    "n": 4,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-choice-text": {
+    "n": 4,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-hint": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-foot": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-zone": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   }
+  }
+ },
+ "1366x768/light/noaa#5:compare-no-plan": {
+  "loaded": true,
+  "options": 0,
+  "max_dy": 0.0,
+  "max_dh": 0.0,
+  "count_changes": {},
+  "detail": {
+   ".pz-beat .pz-heading": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-table": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-table td": {
+    "n": 5,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-zone": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   }
+  }
+ },
+ "1366x768/light/job-2026103005#8:compare": {
+  "loaded": true,
+  "options": 3,
+  "max_dy": 0.0,
+  "max_dh": 0.0,
+  "count_changes": {},
+  "detail": {
+   ".pz-beat .pz-heading": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0
+   },
+   ".pz-choice": {
+    "n": 3,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-choice-text": {
+    "n": 3,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-table": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-table td": {
+    "n": 7,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-prompt": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-hint": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-foot": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-zone": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   }
+  }
+ },
+ "1366x768/light/job-2026102920#4:pair": {
+  "loaded": true,
+  "options": 2,
+  "max_dy": 0.0,
+  "max_dh": 0,
+  "count_changes": {},
+  "detail": {
+   ".pz-question": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-choice": {
+    "n": 2,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-choice-text": {
+    "n": 2,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-hint": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0,
+    "dw": 0.0
+   },
+   ".pz-foot": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   },
+   ".pz-zone": {
+    "n": 1,
+    "dy": 0.0,
+    "dx": 0.0,
+    "dh": 0.0,
+    "dw": 0.0
+   }
+  }
+ }
+}
