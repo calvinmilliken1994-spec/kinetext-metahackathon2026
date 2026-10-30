@@ -84,8 +84,8 @@ function makeEvilSource(): SourceDocument {
 const META_OPEN = '<untrusted-source-metadata>';
 const META_CLOSE = '</untrusted-source-metadata>';
 
-test('prompt version bumped to v6 for the three new engines', () => {
-  assert.equal(PROMPT_VERSION, 'v9');
+test('prompt version is v10 for the opening-case rule', () => {
+  assert.equal(PROMPT_VERSION, 'v10');
 });
 
 test('analysis user message wraps the source text in the boundary source block', () => {
@@ -193,9 +193,11 @@ test('every ENGINE_ID has a non-empty SPEC_TAILS entry; new engines name their o
 
 test('compound-interest spec tail states realistic ranges, exact formula, edge case and faithful conversion', () => {
   const tail: string = SPEC_TAILS['compound-interest-v1'];
-  assert.ok(tail.includes('100') && tail.includes('10000') && tail.includes('1000'));
-  assert.ok(tail.includes('1 to 12') && tail.includes('default 5'));
-  assert.ok(tail.includes('1 to 40') && tail.includes('default 10'));
+  assert.ok(tail.includes('100') && tail.includes('10000'));
+  assert.ok(tail.includes('1 to 12'));
+  assert.ok(tail.includes('1 to 40'));
+  assert.ok(!tail.includes('(default '));
+  assert.ok(!tail.includes('default 9.8'));
   assert.ok(tail.includes('1, 2, 4, 12') && tail.includes('365'));
   assert.ok(tail.includes('0% rate') && tail.includes('0 years') && tail.includes('equals the principal'));
   assert.ok(tail.includes('P * (1 + r/(100*n))^(n*t)'));
@@ -557,3 +559,53 @@ test('adversarial teacher metadata stays inside the untrusted block (repair)', (
   assert.equal(parsed.attribution, evil.attribution);
 });
 
+test('slider spec prompts contain the opening-case rule and tails carry ranges without fixed defaults', () => {
+  for (const id of ENGINE_IDS) {
+    const sys = buildSpecMessages(source, makeAnalysis(id))[0];
+    assert.ok(sys !== undefined, `missing system prompt for ${id}`);
+    const content: string = sys.content;
+    assert.ok(content.includes('predictions[0]'), `missing first-prediction marker for ${id}`);
+    assert.ok(content.includes('opening scenario'), `missing opening-scenario rule for ${id}`);
+    assert.ok(content.includes('must equal exactly'), `missing exact-default rule for ${id}`);
+    assert.ok(content.includes('same opening situation'), `missing scenario-label rule for ${id}`);
+    assert.ok(content.toLowerCase().includes('page'), `missing page-values rule for ${id}`);
+  }
+  for (const id of ENGINE_IDS) {
+    const tail: string = SPEC_TAILS[id];
+    assert.ok(!tail.includes('default 9.8'), `fixed default 9.8 in ${id}`);
+    assert.ok(!tail.includes('(default '), `fixed default example in ${id}`);
+  }
+  assert.ok(SPEC_TAILS['projectile-v1'].includes('1.6 to 24.8'));
+  assert.ok(SPEC_TAILS['projectile-v1'].includes('5 to 50'));
+  assert.ok(SPEC_TAILS['projectile-v1'].includes('must stay above 0'));
+  assert.ok(SPEC_TAILS['speed-of-sound-v1'].includes('1.2 to 1.67'));
+  assert.ok(SPEC_TAILS['speed-of-sound-v1'].includes('must stay above 1'));
+});
+
+test('slider repair prompt mentions semantic.opening-case with a default-only fix', () => {
+  const prev = { title: 'prev' } as unknown as GeneratedSpec;
+  const sys = buildRepairMessages(source, analysis, 'forces-1d-v1', prev, [])[0];
+  assert.ok(sys !== undefined);
+  assert.ok(sys.content.includes('semantic.opening-case'));
+  assert.ok(sys.content.includes('/simulation/<input>/default'));
+  assert.ok(sys.content.includes('only that default'));
+  assert.ok(sys.content.includes('first prediction'));
+  assert.ok(sys.content.toLowerCase().includes('never by changing predictions'));
+});
+
+test('timeline spec and repair prompts do not contain the opening-case rule', () => {
+  const timelineAnalysis: SourceAnalysis = {
+    ...makeAnalysis('forces-1d-v1'),
+    activity: 'timeline-v1' as SourceAnalysis['activity'],
+  };
+  const specSys = buildSpecMessages(source, timelineAnalysis)[0];
+  assert.ok(specSys !== undefined);
+  assert.ok(!specSys.content.includes('opening scenario'));
+  assert.ok(!specSys.content.includes('predictions[0] is the'));
+  assert.ok(!specSys.content.includes('semantic.opening-case'));
+  const prev = { title: 'prev' } as unknown as GeneratedSpec;
+  const repairSys = buildRepairMessages(source, timelineAnalysis, 'timeline-v1', prev, [])[0];
+  assert.ok(repairSys !== undefined);
+  assert.ok(!repairSys.content.includes('opening scenario'));
+  assert.ok(!repairSys.content.includes('semantic.opening-case'));
+});

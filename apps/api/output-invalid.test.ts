@@ -41,7 +41,9 @@ const USAGE_COST_PER_CALL = 0.0000975;
 // Reservations follow the input bound (UTF-8 bytes of prompt + schema), so they change with prompts/schemas.
 // Stage 5 analysis prompt (v4): four engines with appliesWhen texts, metadata in an untrusted JSON block.
 const ANALYSIS_RESERVATION = 0.03759;
-const BOTH_RESERVATIONS = 0.08471125;
+// Stage 7 slider prompts (v10): the opening-case rule lengthens the spec/repair prompts, so the
+// spec reservation is 0.04771125 and both reservations total 0.08530125 (measured from the live ledger).
+const BOTH_RESERVATIONS = 0.08530125;
 const round6 = (x: number): number => Math.round(x * 1e6) / 1e6;
 const OUTPUT_INVALID_MESSAGE = 'The model returned output that does not match the required structure.';
 

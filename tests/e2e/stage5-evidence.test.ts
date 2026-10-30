@@ -137,6 +137,21 @@ function assertReportShape(report: ValidationReport, label: string): void {
  * checks added since recording must pass. Ids recorded with the same validator
  * keep their relative order, so a new check is an insertion, never a rename.
  */
+/**
+ * Checks added after these runs were recorded that stored evidence is NOT required to pass
+ * (lead decision, Stage 7, 2026-10-30). semantic.opening-case (slider defaults equal the first
+ * prediction) arrived with prompt v10; runs recorded under v9 were told fixed example defaults, so
+ * many open on a different scenario than their first case (e.g. the Moon lesson at g = 9.8). The
+ * stored verdicts stay as recorded; the web app opens every activity on its first case regardless.
+ * Every other check added since recording must still pass.
+ */
+const CHECKS_NOT_RETROACTIVE: ReadonlySet<string> = new Set<string>(['semantic.opening-case']);
+
+/** Publishable when every check passes apart from the non-retroactive ones above. */
+function publishableIgnoringLaterChecks(report: ValidationReport): boolean {
+  return report.checks.every(c => c.passed || CHECKS_NOT_RETROACTIVE.has(c.id));
+}
+
 function assertStoredChecksStillHold(
   current: ValidationReport,
   stored: ValidationReport,
@@ -159,7 +174,7 @@ function assertStoredChecksStillHold(
     assert.equal(now.get(c.id), c.passed, `${label}: stored check ${c.id} gives the same result today`);
   }
   const storedIds = new Set(stored.checks.map(c => c.id));
-  const addedSince = current.checks.filter(c => !storedIds.has(c.id));
+  const addedSince = current.checks.filter(c => !storedIds.has(c.id) && !CHECKS_NOT_RETROACTIVE.has(c.id));
   for (const c of addedSince) {
     assert.equal(
       c.passed,
@@ -479,12 +494,12 @@ test('stage-5 evidence: every live job still verifies today', async t => {
         assert.equal(report.artifactId, spec.id, `revision ${n}: re-validation is about this spec`);
         if (!isUser) {
           assert.equal(
-            report.publishable,
+            publishableIgnoringLaterChecks(report),
             storedReport.publishable,
             `revision ${n}: re-validation agrees on publishability (failing today: ${failedIds(report).join(', ') || 'none'})`,
           );
         } else {
-          for (const id of failedIds(report)) {
+          for (const id of failedIds(report).filter(id => !CHECKS_NOT_RETROACTIVE.has(id))) {
             assert.ok(SOURCE_DEPENDENT_CHECKS.has(id), `revision ${n}: spec check ${id} may only differ because the source text is missing`);
           }
         }
@@ -496,7 +511,7 @@ test('stage-5 evidence: every live job still verifies today', async t => {
         assertCaseTolerancesWithinEngineRule(spec, `spec ${name} r${n}`);
 
         if (!isUser && storedReport.publishable) {
-          assert.deepEqual(failedIds(report), [], `revision ${n}: a publishable revision still passes every check today`);
+          assert.deepEqual(failedIds(report).filter(id => !CHECKS_NOT_RETROACTIVE.has(id)), [], `revision ${n}: a publishable revision still passes every check today`);
         }
 
         // Stage 5 repair guard: recompute 'repair.no-weakening' for repairs.
@@ -594,7 +609,7 @@ test('stage-5 evidence: every live job still verifies today', async t => {
         assert.equal(job.checksTotal, published.checks.length, 'summary checksTotal matches the published report');
         if (!isUser) {
           const revalidated = validateSpec(publishedSpec, docs);
-          assert.deepEqual(failedIds(revalidated), [], 'the published revision still passes every check today');
+          assert.deepEqual(failedIds(revalidated).filter(id => !CHECKS_NOT_RETROACTIVE.has(id)), [], 'the published revision still passes every check today');
         }
       }
     });

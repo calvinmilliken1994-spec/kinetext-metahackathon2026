@@ -61,7 +61,7 @@ const REPAIR_PHRASES: string[] = [
 ];
 
 test("PROMPT_VERSION === 'v9'", () => {
-  assert.equal(PROMPT_VERSION, 'v9');
+  assert.equal(PROMPT_VERSION, 'v10');
 });
 
 test('system starts with the unchanged analysis prompt and contains the repair block', () => {

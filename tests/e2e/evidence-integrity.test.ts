@@ -28,7 +28,7 @@ const EVIDENCE_ROOT = fileURLToPath(new URL('../../docs/evidence/task-008/', imp
 const MODEL = 'muse-spark-1.3';
 // The evidence was recorded with the 13-check spec validator; TASK-009 and Stage 5 added checks (15 today).
 const STORED_SPEC_CHECK_COUNT = 13;
-const CURRENT_SPEC_CHECK_COUNT = 15;
+const CURRENT_SPEC_CHECK_COUNT = 16; // forces: 15 + semantic.opening-case (Stage 7)
 
 interface AnalysisRecord {
   analysis: SourceAnalysis;
@@ -64,6 +64,21 @@ function readEvents(dir: string): StageEvent[] {
   });
 }
 
+/**
+ * Checks added after these runs were recorded that stored evidence is NOT required to pass
+ * (lead decision, Stage 7, 2026-10-30). semantic.opening-case (slider defaults equal the first
+ * prediction) arrived with prompt v10; runs recorded under v9 were told fixed example defaults, so
+ * many open on a different scenario than their first case (e.g. the Moon lesson at g = 9.8). The
+ * stored verdicts stay as recorded; the web app opens every activity on its first case regardless.
+ * Every other check added since recording must still pass.
+ */
+const CHECKS_NOT_RETROACTIVE: ReadonlySet<string> = new Set<string>(['semantic.opening-case']);
+
+/** Publishable when every check passes apart from the non-retroactive ones above. */
+function publishableIgnoringLaterChecks(report: ValidationReport): boolean {
+  return report.checks.every(c => c.passed || CHECKS_NOT_RETROACTIVE.has(c.id));
+}
+
 /** The (id, passed) shape of a report — the part that must be reproducible. */
 /** Every check recorded in the stored report must give the same result today; checks added since must pass. */
 function assertStoredChecksStillHold(current: ValidationReport, stored: ValidationReport, label: string): void {
@@ -72,7 +87,7 @@ function assertStoredChecksStillHold(current: ValidationReport, stored: Validati
     assert.equal(now.get(c.id), c.passed, `${label}: stored check ${c.id} gives the same result today`);
   }
   const storedIds = new Set(stored.checks.map(c => c.id));
-  for (const c of current.checks.filter(c => !storedIds.has(c.id))) {
+  for (const c of current.checks.filter(c => !storedIds.has(c.id) && !CHECKS_NOT_RETROACTIVE.has(c.id))) {
     assert.equal(c.passed, true, `${label}: check added since recording (${c.id}) passes: ${c.message}`);
   }
 }
@@ -205,9 +220,9 @@ test('evidence: every run is internally consistent and still verifies today', as
 
       const report = validateSpec(spec, [source]);
       assert.equal(
-        report.publishable,
+        publishableIgnoringLaterChecks(report),
         true,
-        `re-validated spec is publishable: ${report.checks.filter(c => !c.passed).map(c => `${c.id}: ${c.message}`).join('; ')}`,
+        `re-validated spec is publishable (apart from checks added after recording): ${report.checks.filter(c => !c.passed && !CHECKS_NOT_RETROACTIVE.has(c.id)).map(c => `${c.id}: ${c.message}`).join('; ')}`,
       );
       assert.equal(report.checks.length, CURRENT_SPEC_CHECK_COUNT, `re-validated spec runs all ${CURRENT_SPEC_CHECK_COUNT} current checks`);
       assertStoredChecksStillHold(report, storedReport, 'spec');

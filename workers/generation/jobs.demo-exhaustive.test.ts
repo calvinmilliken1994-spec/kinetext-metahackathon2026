@@ -47,8 +47,27 @@ function evidenceJob(relDir: string): { analysis: Record<string, unknown>; spec:
   const dir = new URL(`../../docs/evidence/${relDir}/`, import.meta.url);
   return {
     analysis: readJsonAt(new URL('analysis.json', dir)).analysis,
-    spec: readJsonAt(new URL('spec.r1.json', dir)),
+    spec: openOnFirstCase(readJsonAt(new URL('spec.r1.json', dir))),
   };
+}
+
+/**
+ * Recorded runs predate prompt v10 and semantic.opening-case (Stage 7): some open their sliders on
+ * a different scenario than their first prediction. This matrix needs a CLEAN baseline to prove the
+ * injected fault is what fails, so it applies only the v10 requirement — each slider default set to
+ * predictions[0]'s value (inside the range, which semantic.predictions-in-range already guarantees).
+ * Nothing else in the recorded output changes; the evidence files on disk are untouched.
+ */
+function openOnFirstCase(spec: Record<string, any>): Record<string, any> {
+  const first = Array.isArray(spec.predictions) ? spec.predictions[0] : undefined;
+  if (first === undefined || typeof spec.simulation !== 'object' || spec.simulation === null) return spec;
+  const simulation: Record<string, any> = { ...spec.simulation };
+  for (const [key, range] of Object.entries(simulation)) {
+    if (typeof range === 'object' && range !== null && typeof range.default === 'number' && typeof first[key] === 'number') {
+      simulation[key] = { ...range, default: first[key] };
+    }
+  }
+  return { ...spec, simulation };
 }
 
 function genOf(activity: ActivityId, spec: Record<string, unknown>): Record<string, unknown> {

@@ -61,6 +61,7 @@ const GENERIC_TAIL = [
   'behavior.predictions',
   'semantic.tolerance',
   'semantic.predictions-in-range',
+  'semantic.opening-case',
 ];
 const POLICY_SCOPE = ['policy.no-publisher-attribution', 'scope.prose-unverified'];
 
@@ -100,6 +101,7 @@ const KINDS: Record<string, string> = {
   'behavior.predictions': 'behavioral',
   'semantic.tolerance': 'semantic',
   'semantic.predictions-in-range': 'semantic',
+  'semantic.opening-case': 'semantic',
   'policy.no-publisher-attribution': 'semantic',
   'scope.prose-unverified': 'semantic',
 };
@@ -108,7 +110,7 @@ const KINDS: Record<string, string> = {
 /* Happy paths — one valid hand-written spec per engine                */
 /* ------------------------------------------------------------------ */
 
-test('validateSpec: valid projectile spec passes all 14 checks and is publishable', () => {
+test('validateSpec: valid projectile spec passes all 15 checks and is publishable', () => {
   const report = validateSpec(makeProjectileSpec(), [projectileSourceDoc()]);
   assert.deepEqual(report.checks.map(c => c.id), PROJECTILE_CHECK_IDS, failureDetail(report));
   for (const c of report.checks) {
@@ -120,7 +122,7 @@ test('validateSpec: valid projectile spec passes all 14 checks and is publishabl
   assert.equal(report.revision, 1);
 });
 
-test('validateSpec: valid lift spec passes all 15 checks and is publishable', () => {
+test('validateSpec: valid lift spec passes all 16 checks and is publishable', () => {
   const report = validateSpec(makeLiftSpec(), [liftSourceDoc()]);
   assert.deepEqual(report.checks.map(c => c.id), LIFT_CHECK_IDS, failureDetail(report));
   for (const c of report.checks) assert.equal(c.passed, true, `${c.id}: ${c.message}`);
@@ -128,7 +130,7 @@ test('validateSpec: valid lift spec passes all 15 checks and is publishable', ()
   assert.equal(report.artifactId, 'lift-contract-fixture');
 });
 
-test('validateSpec: valid sound spec passes all 14 checks and is publishable', () => {
+test('validateSpec: valid sound spec passes all 15 checks and is publishable', () => {
   const report = validateSpec(makeSoundSpec(), [soundSourceDoc()]);
   assert.deepEqual(report.checks.map(c => c.id), SOUND_CHECK_IDS, failureDetail(report));
   for (const c of report.checks) assert.equal(c.passed, true, `${c.id}: ${c.message}`);
@@ -190,10 +192,10 @@ test('validateSpec: right engine id, wrong engine shape fails schema.full alone'
   assert.equal(report.checks.length, 1);
 });
 
-test('validateSpec: forces specs keep validating through the same dispatch (0.2.0 fixture, 15 checks)', () => {
+test('validateSpec: forces specs keep validating through the same dispatch (0.2.0 fixture, 16 checks)', () => {
   const report = validateSpec(loadForcesSpec(), [loadSourceDoc()]);
   assert.deepEqual(failedIds(report), [], failureDetail(report));
-  assert.equal(report.checks.length, 15);
+  assert.equal(report.checks.length, 16);
   assert.equal(checkOf(report, 'semantic.tolerance').passed, true, 'stored-evidence tolerances satisfy the tolerance rule');
   assert.equal(report.publishable, true);
 });
@@ -220,21 +222,22 @@ test('projectile: tolerance 0.5 on a small output (44.44 m) fails semantic.toler
   assert.match(msg, /0\.2222222222222222/, 'the per-case maxTolerance is named');
 });
 
-test('projectile: inverted verticalSpeedMps range fails the range check and predictions-in-range', () => {
+test('projectile: inverted verticalSpeedMps range fails the range check, predictions-in-range and the opening case', () => {
   const spec = makeProjectileSpec();
   spec.simulation.verticalSpeedMps = { unit: 'm/s', min: 40, max: 5, default: 20 };
   const report = expectFailures(validateSpec(spec, [projectileSourceDoc()]), [
     'semantic.range.verticalSpeedMps',
     'semantic.predictions-in-range',
+    'semantic.opening-case',
   ]);
   assert.match(checkOf(report, 'semantic.range.verticalSpeedMps').message, /min/);
 });
 
-test('projectile: prediction gravity outside the slider range fails predictions-in-range only', () => {
+test('projectile: prediction gravity outside the slider range fails predictions-in-range and the opening case', () => {
   const spec = makeProjectileSpec();
   spec.predictions[0].gravityMps2 = 25; // schema hard bounds allow [0.1, 30]; slider range is [1, 20]
   spec.predictions[0].expectedMaxHeightM = 18; // 30^2/(2*25): physics stays consistent
-  const report = expectFailures(validateSpec(spec, [projectileSourceDoc()]), ['semantic.predictions-in-range']);
+  const report = expectFailures(validateSpec(spec, [projectileSourceDoc()]), ['semantic.predictions-in-range', 'semantic.opening-case']);
   assert.match(checkOf(report, 'semantic.predictions-in-range').message, /gravityMps2 25/);
 });
 
@@ -307,12 +310,13 @@ test('sound: tolerance 2 > maxTolerance(283.478) = 1.417 fails semantic.toleranc
   assert.match(checkOf(report, 'semantic.tolerance').message, /cold air/);
 });
 
-test('sound: inverted temperatureK range fails range + predictions-in-range', () => {
+test('sound: inverted temperatureK range fails range + predictions-in-range + the opening case', () => {
   const spec = makeSoundSpec();
   spec.simulation.temperatureK = { unit: 'K', min: 400, max: 150, default: 288.15 };
   expectFailures(validateSpec(spec, [soundSourceDoc()]), [
     'semantic.range.temperatureK',
     'semantic.predictions-in-range',
+    'semantic.opening-case',
   ]);
 });
 

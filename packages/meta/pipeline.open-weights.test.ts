@@ -74,7 +74,7 @@ function capturingFetch(calls: Array<{ url: unknown; init: unknown }>): typeof f
 }
 
 test('pipeline open-weights: same report on both providers, bodies equal except model', async (): Promise<void> => {
-  assert.strictEqual(PROMPT_VERSION, 'v9');
+  assert.strictEqual(PROMPT_VERSION, 'v10');
   const metaCalls: Array<{ url: unknown; init: unknown }> = [];
   const modalCalls: Array<{ url: unknown; init: unknown }> = [];
   const metaClient = createMetaClient({

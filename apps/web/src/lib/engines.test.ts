@@ -48,7 +48,7 @@ test('sliderModels: one slider per engine input with the spec range, default and
   assert.ok(v0 !== undefined);
   assert.equal(v0.min, 5);
   assert.equal(v0.max, 40);
-  assert.equal(v0.value, 20);
+  assert.equal(v0.value, 30); // fixture default = its first prediction (semantic.opening-case)
   assert.equal(v0.unit, 'm/s');
   assert.equal(v0.label, ENGINES['projectile-v1'].inputs[1]?.label);
   assert.equal(models[2]?.unit, 'm/s²');

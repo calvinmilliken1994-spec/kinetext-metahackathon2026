@@ -63,7 +63,7 @@ function timelineSys(): string {
 }
 
 test("PROMPT_VERSION === 'v9'", () => {
-  assert.equal(PROMPT_VERSION, 'v9');
+  assert.equal(PROMPT_VERSION, 'v10');
 });
 
 test('numeric repair prompts name both rename exceptions', () => {

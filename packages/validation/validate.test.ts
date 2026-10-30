@@ -39,6 +39,7 @@ const SPEC_CHECK_IDS: string[] = [
   'behavior.predictions',
   'semantic.tolerance',
   'semantic.predictions-in-range',
+  'semantic.opening-case',
   'behavior.trajectory',
   'policy.no-publisher-attribution',
   'scope.prose-unverified',
@@ -57,6 +58,7 @@ const SPEC_CHECK_KINDS: Record<string, string> = {
   'behavior.predictions': 'behavioral',
   'semantic.tolerance': 'semantic',
   'semantic.predictions-in-range': 'semantic',
+  'semantic.opening-case': 'semantic',
   'behavior.trajectory': 'behavioral',
   'policy.no-publisher-attribution': 'semantic',
   'scope.prose-unverified': 'semantic',
@@ -117,7 +119,7 @@ test('normalizeWhitespace collapses whitespace runs and trims, case-sensitively'
 /* validateSpec — happy path                                           */
 /* ------------------------------------------------------------------ */
 
-test('validateSpec: valid fixture passes all 15 checks and is publishable', () => {
+test('validateSpec: valid fixture passes all 16 checks and is publishable', () => {
   const report = validateSpec(loadSpec(), [loadSourceDoc()]);
   assert.deepEqual(report.checks.map(c => c.id), SPEC_CHECK_IDS);
   for (const c of report.checks) {
@@ -135,15 +137,15 @@ test('validateSpec: valid fixture passes all 15 checks and is publishable', () =
 /* validateSpec — one failing mutation per check (2–13)                */
 /* ------------------------------------------------------------------ */
 
-test('validateSpec: default mass above slider max fails semantic.mass-range only', () => {
-  const report = expectSpecFailures(s => { s.simulation.massKg.default = 20; }, ['semantic.mass-range']);
+test('validateSpec: default mass above slider max fails semantic.mass-range and the opening case', () => {
+  const report = expectSpecFailures(s => { s.simulation.massKg.default = 20; }, ['semantic.mass-range', 'semantic.opening-case']);
   const msg = checkOf(report, 'semantic.mass-range').message;
   assert.match(msg, /20/);
   assert.match(msg, /10/); // names the expected bound (max)
 });
 
-test('validateSpec: default force above slider max fails semantic.force-range only', () => {
-  const report = expectSpecFailures(s => { s.simulation.netForceN.default = 50; }, ['semantic.force-range']);
+test('validateSpec: default force above slider max fails semantic.force-range and the opening case', () => {
+  const report = expectSpecFailures(s => { s.simulation.netForceN.default = 50; }, ['semantic.force-range', 'semantic.opening-case']);
   assert.match(checkOf(report, 'semantic.force-range').message, /50/);
 });
 
@@ -216,12 +218,12 @@ test('validateSpec: wrong expected acceleration in predictions fails behavior.pr
   assert.match(checkOf(report, 'behavior.predictions').message, /double-force/);
 });
 
-test('validateSpec: prediction mass outside slider range fails semantic.predictions-in-range only', () => {
+test('validateSpec: prediction mass outside slider range fails semantic.predictions-in-range and the opening case', () => {
   // Keep the physics consistent (a = 10/20 = 0.5) so behavior.predictions still passes.
   const report = expectSpecFailures(s => {
     s.predictions[0].massKg = 20;
     s.predictions[0].expectedAccelerationMps2 = 0.5;
-  }, ['semantic.predictions-in-range']);
+  }, ['semantic.predictions-in-range', 'semantic.opening-case']);
   assert.match(checkOf(report, 'semantic.predictions-in-range').message, /20/);
 });
 

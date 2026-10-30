@@ -54,8 +54,8 @@ function extractBetween(text: string, open: string, close: string): string {
 }
 
 test('v1 unchanged pin and versions', () => {
-  assert.equal(PROMPT_VERSION, 'v9');
-  assert.equal(STAGE6_PROMPT_VERSION, 's6-v3');
+  assert.equal(PROMPT_VERSION, 'v10');
+  assert.equal(STAGE6_PROMPT_VERSION, 's6-v4');
   const source = loadSource('nasa-grc-drag-equation');
   const messages = buildAnalysisMessages(source);
   const digest = createHash('sha256').update(JSON.stringify(messages), 'utf8').digest('hex');
@@ -403,4 +403,27 @@ test('size bounds', () => {
   }
   const analysisRepairSystem = buildAnalysisV2RepairMessages(source, { original: {}, previous: {}, findings: [], authorizedPaths: [] })[0].content;
   assert.ok(analysisRepairSystem.length <= 24000, `analysis repair ${analysisRepairSystem.length}`);
+});
+
+test('s6-v4 formula-explorer opens on first case', () => {
+  const guidance = KIT_COMPONENT_GUIDANCE['formula-explorer-v1'];
+  assert.ok(guidance.includes('opening scenario'), 'guidance names the opening scenario');
+  assert.ok(guidance.includes('first case uses those page values'), 'first case uses page values');
+  assert.ok(guidance.includes('worked example'), 'guidance mentions worked example');
+  assert.ok(guidance.includes('stated typical value'), 'guidance mentions stated typical value');
+  assert.ok(guidance.includes('slider default equals the first case'), 'slider default equals first case input');
+  assert.ok(guidance.includes('min below default below max'), 'slider default stays within range');
+  assert.ok(guidance.includes('pageSymbol'), 'guidance mentions pageSymbol');
+  assert.ok(guidance.includes('never a number'), 'pageSymbol is never a number');
+  assert.ok(guidance.includes('terms that cancel'), 'expression has no cancelling terms');
+  assert.ok(guidance.includes('sentence case'), 'title is sentence case');
+  const source = loadSource('nasa-grc-drag-equation');
+  const usable = loadFixture('source-analysis-v2.usable.json') as SourceAnalysisV2;
+  const plan: ComponentPlanEntry = { ...usable.componentPlan[0], componentId: 'formula-explorer-v1' };
+  const system = buildKitComponentMessages(source, usable, plan)[0].content;
+  assert.ok(system.includes('opening scenario'));
+  assert.ok(system.includes('slider default equals the first case'));
+  assert.ok(system.includes('never a number'));
+  assert.ok(system.includes('terms that cancel'));
+  assert.ok(system.includes('sentence case'));
 });

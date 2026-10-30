@@ -93,6 +93,8 @@ const CONCEPT_ID_PATTERN = /^[a-z0-9-]{1,40}$/;
 export const QUOTE_MESSAGE_LIMIT = 60;
 const SCHEMA_ERROR_LIMIT = 5;
 const TRAJECTORY_TOLERANCE = 1e-9; // absolute + relative
+/** Stage 7 item 1: slider defaults must equal predictions[0]'s inputs within 1e-9 relative (absolute when the target is 0). */
+export const OPENING_CASE_TOLERANCE = 1e-9;
 /** R-05: a quote only counts as evidence when it is long and substantive enough to locate. */
 export const QUOTE_MIN_NORMALIZED_CHARS = 8;
 /** N-07: a compact equation ('F=ma') counts from this normalised length when it contains '='. */
@@ -600,6 +602,34 @@ export function validateSpec(spec: unknown, sources: SourceDocument[]): Validati
       return problems.length === 0
         ? { passed: true, message: `all ${s.predictions.length} prediction(s) are reproducible within the simulation slider ranges` }
         : { passed: false, message: `${problems.join('; ')} (expected every prediction to be reachable with the sliders)`, path: '/predictions', affected };
+    }),
+
+    // Stage 7 item 1 (frozen): predictions[0] is the lesson's opening scenario, so every
+    // slider default must equal the first prediction's value for that input (1e-9 relative,
+    // absolute 1e-9 when the prediction value is 0). A default-only finding unlocks ONLY the
+    // /simulation/<input>/default pointers — range min/max and every case stay frozen under
+    // the usual repair.no-weakening rules.
+    guarded('semantic.opening-case', 'semantic', () => {
+      const first = s.predictions[0] as Record<string, unknown> | undefined;
+      if (typeof first !== 'object' || first === null) {
+        return { passed: true, message: 'no predictions to open on, so the slider defaults stand' };
+      }
+      const firstRec = first as Record<string, number>;
+      const firstId = typeof first.id === 'string' ? first.id : 'predictions[0]';
+      const problems: string[] = [];
+      const affected: string[] = [];
+      for (const input of d.inputs) {
+        const def = rangeOf(input.key)?.default;
+        const val = firstRec[input.key];
+        if (!isFiniteNumber(def) || !isFiniteNumber(val)) continue; // the schema gate owns malformed shapes
+        if (!withinOpeningCaseTolerance(def, val)) {
+          problems.push(`slider default ${input.key} = ${fmtValue(def)} but the first prediction ("${firstId}") uses ${fmtValue(val)}`);
+          affected.push(`/simulation/${input.key}/default`);
+        }
+      }
+      return problems.length === 0
+        ? { passed: true, message: `every slider default equals the first prediction ("${firstId}")'s input within ${OPENING_CASE_TOLERANCE} relative, so the activity opens on its first case` }
+        : { passed: false, message: `${problems.join('; ')}; the activity must open on its first case`, path: '/simulation', affected };
     }),
 
     // Forces-only: the animated trajectory must satisfy the closed-form
@@ -1335,6 +1365,12 @@ function rangeProblems(label: string, r: { min: number; max: number; default: nu
 
 function withinTrajectoryTolerance(actual: number, expected: number): boolean {
   return Math.abs(actual - expected) <= TRAJECTORY_TOLERANCE + TRAJECTORY_TOLERANCE * Math.abs(expected);
+}
+
+/** Stage 7 item 1: default == predictions[0] value within 1e-9 relative; absolute 1e-9 when the target is 0. */
+function withinOpeningCaseTolerance(actual: number, target: number): boolean {
+  const tolerance = target === 0 ? OPENING_CASE_TOLERANCE : OPENING_CASE_TOLERANCE * Math.abs(target);
+  return Math.abs(actual - target) <= tolerance;
 }
 
 export function duplicates(values: string[]): string[] {

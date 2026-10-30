@@ -22,7 +22,8 @@ import { validateSpec, validateAnalysis, repairFindings, compareRevisions, norma
   trims. Case-sensitive; no quote/ellipsis folding. Quotes are compared
   against source text after this normalisation on both sides.
 - `validateSpec(spec, sources) -> ValidationReport` — engine-generic checks
-  (below). Check counts: forces 15, lift 15, projectile 14, speed-of-sound 14.
+  (below). Check counts: forces 16, lift 16, projectile 15, speed-of-sound 15,
+  compound-interest 16, hardy-weinberg 13, half-life 15.
 - `validateAnalysis(analysis, sources) -> ValidationReport` — 6 checks (below).
 - `checkTrajectory(frames)` — the frame-invariant core of
   `behavior.trajectory`, exported for direct unit testing.
@@ -63,6 +64,7 @@ checks pass.
 | `behavior.predictions` | behavioral | Same rule for every `predictions` item. |
 | `semantic.tolerance` | semantic | Stage 5 (Muse review finding 5): every case (tests and predictions) also satisfies `tolerance <= maxTolerance(engine, computed) = max(absMax, relMax*\|computed\|)` — the schema's flat tolerance maximum is only a coarse guard. For forces this can never fail a schema-valid spec (Stage 2 cap 0.01 = absMax), which keeps recorded evidence valid. |
 | `semantic.predictions-in-range` | semantic | Every prediction's input values lie inside the simulation slider ranges (inclusive), so students can reproduce them. |
+| `semantic.opening-case` | semantic | Stage 7 item 1 (slider engines only, not timeline-v1): `predictions[0]` is the lesson's opening scenario, so every `simulation.<input>.default` must equal `predictions[0].<input>` within 1e-9 relative (absolute 1e-9 when the prediction value is 0). The failure message names every mismatched input with both values; `affected` is ONLY the `/simulation/<input>/default` pointers, so a default-only finding unlocks those defaults and nothing else (range min/max stay under the existing `semantic.range.<key>` width rule of `compareRevisions`, and prediction/test content stays frozen). |
 | `behavior.trajectory` | behavioral | Forces only: `simulate()` at defaults: >= 2 frames; every `t/x/v/a` finite; per frame `v === a*t` and `x === 0.5*a*t^2` within 1e-9 absolute + 1e-9 relative. The other engines carry no duration/step budget in their specs. |
 | `policy.no-publisher-attribution` | semantic | No generated display field (`title`, `learningObjectives`, `explanations[].text`, `predictions[].prompt`, `behavioralTests[].name`, and this engine's `scenario` labels from the descriptor) mentions the publisher (NASA / "National Aeronautics and Space Administration") or uses attribution/endorsement wording naming a source or authority (N-06: trigger phrase + capitalised word or "the source/publisher/agency/author/text" within 40 chars). Evidence quotes are exempt. |
 | `scope.prose-unverified` | semantic | Always passes (R-08 honest scope): explanation prose is AI-generated; the wording needs teacher review. |
