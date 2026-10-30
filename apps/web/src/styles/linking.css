@@ -1,15 +1,36 @@
 /* Stage 7 slice 'linking' styles (docs/specs/STAGE-7-teacher-polish.md). Uses the tokens in ../styles.css. */
 
-/* One "quoted" colour for both sides of a link: the evidence amber of the source highlights. The light theme's highlight
- * line (#e2c25a) is too faint for an outline on white, so its link line is a darker amber (3:1+ against the panel). */
+/* One "quoted" colour for both sides of a link: a warm amber. Slice L: the source text is an audit view, so its quotes
+ * are LIGHT by default (a faint tint and a thin underline) and only turn strong while a link is active (hover/focus on
+ * either side). The dark theme's amber is mixed with transparency rather than darkened, which is what made the old
+ * highlight read as muddy olive. */
 :root, [data-theme="dark"] {
-  --link-line: var(--hl-ev-line);
-  --link-tint: color-mix(in srgb, var(--hl-ev) 45%, transparent);
+  --link-line: #e0ac3e;
+  --link-tint: rgba(240, 176, 64, 0.16);
+  --src-mark-tint: rgba(240, 180, 70, 0.08);
+  --src-mark-line: rgba(230, 176, 70, 0.62);
+  --src-mark-strong: rgba(240, 172, 56, 0.32);
+  --src-concept-tint: rgba(110, 168, 250, 0.08);
+  --src-concept-line: rgba(120, 175, 250, 0.6);
 }
 [data-theme="light"] {
   --link-line: #a87b00;
   --link-tint: color-mix(in srgb, var(--hl-ev) 70%, transparent);
+  --src-mark-tint: rgba(255, 214, 102, 0.2);
+  --src-mark-line: #c9961a;
+  --src-mark-strong: #ffe08a;
+  --src-concept-tint: rgba(0, 100, 224, 0.05);
+  --src-concept-line: #6d9bf1;
 }
+
+/* ---- source quotes at rest: light ---- */
+mark.ev-explanation, mark.ev-concept {
+  background: var(--src-mark-tint); box-shadow: none; border-radius: 2px;
+  text-decoration-line: underline; text-decoration-thickness: 1.5px; text-underline-offset: 4px; text-decoration-skip-ink: none;
+  text-decoration-color: var(--src-mark-line);
+  transition: background-color 120ms ease-out, box-shadow 120ms ease-out;
+}
+mark.ev-concept { background: var(--src-concept-tint); text-decoration-style: dotted; text-decoration-color: var(--src-concept-line); }
 
 /* ---- hover linking: lesson side ---- */
 /* The lit area reaches 6px past the element (a solid spread, no blur) so text never touches the ring, and the layout never
@@ -32,9 +53,10 @@ td.linkable.is-linked { box-shadow: none; }
 mark[data-links] { cursor: default; }
 /* Overlapping quotes split one quote into several marks, so a ring per mark would read as boxes; a stronger fill with an
  * underline in the link colour runs continuously across the pieces instead. */
-mark.is-linked {
-  background: var(--flash-bg);
-  box-shadow: 0 0 0 1px var(--flash-bg), inset 0 -2px 0 var(--link-line);
+mark.is-linked, mark.ev-explanation.is-linked, mark.ev-concept.is-linked {
+  background: var(--src-mark-strong);
+  box-shadow: 0 0 0 2px var(--src-mark-strong);
+  text-decoration-style: solid; text-decoration-color: var(--link-line); text-decoration-thickness: 2px;
   -webkit-box-decoration-break: clone; box-decoration-break: clone;
 }
 mark[data-links]:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }

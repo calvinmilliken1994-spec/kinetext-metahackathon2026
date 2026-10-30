@@ -3,6 +3,7 @@ import type { CSSProperties } from 'react';
 import type { GraphGeometry, GraphReveal } from '../lib/explorer.ts';
 import { groupedSig6 } from '../lib/explorer.ts';
 import { leaderLine } from '../lib/geometry.ts';
+import { HiddenValueText } from './SceneHidden.tsx';
 
 /** The graded guess drawn on the graph: the overlay geometry plus the two numbers and a run number (replays the settle). */
 export interface GraphRevealView extends GraphReveal { guess: number; actual: number; tolerance: number; seq: number }
@@ -49,7 +50,7 @@ export function FormulaGraph({ geometry: g, yName, xName, concealed = false, rev
             <text x={plot.l - 8} y={t.py} textAnchor="end" dominantBaseline="central" className="graph-tick graph-tick-y">{t.label}</text>
           </g>
         ))}
-        {concealed && <text x={plot.l - 8} y={(plot.t + plot.b) / 2} textAnchor="end" dominantBaseline="central" className="graph-tick graph-tick-hidden">?</text>}
+        {concealed && <HiddenValueText x={plot.l - 14} y={(plot.t + plot.b) / 2 + 5} anchor="end" lead="" className="graph-tick graph-tick-hidden" />}
         {g.xTicks.map((t) => (
           <g key={`x${t.value}`}>
             <line x1={t.px} y1={plot.b} x2={t.px} y2={plot.b + 5} className="chart-axis" />
@@ -100,7 +101,9 @@ export function FormulaGraph({ geometry: g, yName, xName, concealed = false, rev
         )}
 
         {/* The current value sits above the plot, clear of the line and the axes. */}
-        <text x={plot.r} y={plot.t - 8} textAnchor="end" className="explorer-now">Now: {nowText}</text>
+        {concealed
+          ? <HiddenValueText x={plot.r - 6} y={plot.t - 11} anchor="end" lead={`Now: ${yName} =`} className="explorer-now" />
+          : <text x={plot.r} y={plot.t - 8} textAnchor="end" className="explorer-now">Now: {nowText}</text>}
         <text x={(plot.l + plot.r) / 2} y={g.height - 6} textAnchor="middle" className="graph-axis">{xName}</text>
         <text x={plot.l} y={plot.t - 8} className="graph-axis">{yName}</text>
       </svg>

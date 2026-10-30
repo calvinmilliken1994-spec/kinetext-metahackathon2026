@@ -4,7 +4,7 @@
 .provenance { display: grid; gap: 6px; max-width: none; }
 .prov-status { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; }
 .review-status { font-size: var(--fs-14); font-weight: var(--fw-medium); color: var(--ink); }
-.prov-line { max-width: 75ch; }
+.prov-line { max-width: 110ch; color: var(--ink-3); }
 
 /* The receipt is a quiet button: counts in tabular figures, colour only when something did not pass. */
 .receipt-btn {
@@ -56,3 +56,113 @@
 .run-page-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 /* The page titles must not widen the drawer's grid column (they ellipsize instead). */
 .drawer-section > .run-list { min-width: 0; grid-template-columns: minmax(0, 1fr); }
+
+
+/* ==================================================================================================================
+ * Lesson-first layout (slice L): the lesson leads, the source page is a narrower audit view that collapses to a tab.
+ * ================================================================================================================ */
+.workspace { grid-template-columns: minmax(300px, 29%) minmax(0, 1fr); }
+.workspace.hide-source { grid-template-columns: 44px minmax(0, 1fr); }
+.main-inner { max-width: 1040px; }
+
+/* ---- lesson head: title, one status line, one quiet provenance line ---- */
+.lesson { gap: 24px; }
+.lesson-head { gap: 6px; padding: 8px 0 0; }
+.lesson-head .provenance { gap: 4px; }
+
+/* ---- the overview: a few short key points, then a fold-out for the key terms ---- */
+.overview-compact { display: grid; gap: 6px; }
+.overview-compact .key-points { display: grid; gap: 2px; max-width: 78ch; }
+.overview-compact .key-points li {
+  position: relative; display: block; padding: 3px 4px 3px 20px; border: 0;
+  font-size: var(--fs-16); line-height: 1.5; color: var(--ink);
+}
+.overview-compact .key-points li::before {
+  content: ""; position: absolute; left: 6px; top: calc(3px + 0.75em - 2.5px);
+  width: 5px; height: 5px; border-radius: 50%; background: var(--ink-3);
+}
+.overview-compact .key-points li:focus-visible { outline-offset: 2px; }
+.overview-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 18px; padding-left: 20px; }
+.fold-btn {
+  display: inline-flex; align-items: center; gap: 4px; padding: 2px 6px; margin-left: -6px;
+  border: 0; border-radius: var(--r-s); background: transparent; color: var(--accent-text);
+  font-size: var(--fs-14); font-weight: var(--fw-medium); cursor: pointer;
+}
+.fold-btn:hover { background: var(--panel-2); }
+.overview-more { display: grid; gap: 8px; max-width: 78ch; padding-left: 20px; }
+.overview-more .key-terms { margin: 0; }
+.overview-more .key-term { padding: 8px 4px; gap: 2px 16px; }
+.overview-more .key-term dt { font-size: var(--fs-14); }
+.overview-more .key-term dd { font-size: var(--fs-14); color: var(--ink-2); }
+
+/* ---- a lesson part's learning objectives fold away under its title ---- */
+.objectives-fold > summary { width: fit-content; font-size: var(--fs-14); font-weight: var(--fw-medium); color: var(--ink-2); }
+.objectives-fold > summary:hover { color: var(--ink); }
+.objectives-fold > .objectives { margin-top: 6px; }
+.lesson-premium .activity-head { gap: 6px; }
+
+/* ---- source page: compact two-line header ---- */
+.source-panel .source-head { gap: 4px; padding: 8px 8px 8px 8px; }
+.source-head-row { display: flex; align-items: center; gap: 4px; min-width: 0; }
+.source-head-row > .source-picker { flex: 1 1 auto; min-width: 0; }
+.source-head-row > p { flex: 1 1 auto; padding: 0 8px; }
+.source-picker-compact { display: block; }
+.picker-face {
+  position: relative; display: flex; align-items: center; gap: 6px; min-width: 0; padding: 5px 8px;
+  border-radius: var(--r); color: var(--ink);
+}
+.picker-face:hover { background: var(--panel-2); }
+.picker-face:focus-within { outline: 2px solid var(--focus); outline-offset: -2px; }
+.picker-title {
+  flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-size: var(--fs-16); font-weight: var(--fw-bold); line-height: 1.4;
+}
+.picker-face > .icon { color: var(--ink-3); }
+/* The native select sits invisibly over the face: it keeps the keyboard, the screen-reader name and the OS list. */
+.picker-face > .picker-native {
+  position: absolute; inset: 0; width: 100%; height: 100%; padding: 0; border: 0; opacity: 0; cursor: pointer;
+}
+.picker-face > .picker-native:focus-visible { outline: none; }
+.icon-btn {
+  display: inline-grid; place-items: center; flex: none; width: 32px; height: 32px; padding: 0;
+  border: 0; border-radius: var(--r); background: transparent; color: var(--ink-3); cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+.icon-btn:hover { background: var(--panel-2); color: var(--ink); }
+.icon-left { transform: rotate(90deg); }
+.source-meta {
+  display: flex; flex-wrap: nowrap; align-items: baseline; min-width: 0; padding: 0 8px;
+  font-size: var(--fs-12); line-height: 1.6; color: var(--ink-3); font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+/* One line: the licence and count give way (ellipsis) before the links do. */
+.source-meta-main { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.source-meta-sep { flex: none; margin: 0 7px; color: var(--ink-3); }
+.source-meta a { flex: none; display: inline-flex; align-items: center; gap: 3px; }
+.source-meta .link-btn { flex: none; font-size: var(--fs-12); }
+.source-details {
+  display: grid; gap: 8px; margin: 4px 8px 2px; padding: 10px 12px; max-height: 38vh; overflow-y: auto;
+  border-radius: var(--r); background: var(--panel-2); font-size: var(--fs-12); color: var(--ink-2);
+}
+.source-details .attribution { color: var(--ink-2); }
+.source-details .concepts { border: 0; padding: 0; }
+
+/* form-like page text: a label and its short value on one line (lib/sourceText.ts layoutDecorations) */
+.md-label { font-family: var(--font); font-size: var(--fs-14); font-weight: var(--fw-bold); letter-spacing: 0.02em; color: var(--ink); }
+.md-join { white-space: normal; }
+
+/* ---- the collapsed source page: a slim tab ---- */
+.source-tab-wrap { display: flex; align-items: flex-start; min-height: 0; }
+.source-tab {
+  display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; padding: 12px 0 14px;
+  border: 1px solid var(--line); border-radius: var(--r-l); background: var(--panel); color: var(--ink-2); cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+.source-tab:hover { background: var(--panel-2); color: var(--ink); }
+.source-tab-label, .source-tab-count { writing-mode: vertical-rl; transform: rotate(180deg); }
+.source-tab-label { font-size: var(--fs-14); font-weight: var(--fw-medium); }
+.source-tab-count { font-size: var(--fs-12); color: var(--ink-3); font-variant-numeric: tabular-nums; }
+
+@media (max-width: 1100px) {
+  .source-tab { flex-direction: row; justify-content: flex-start; padding: 8px 14px; }
+  .source-tab-label, .source-tab-count { writing-mode: horizontal-tb; transform: none; }
+}

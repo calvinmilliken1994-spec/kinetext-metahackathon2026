@@ -43,7 +43,7 @@ export function OrderActivity({ events, seed, revealed, onCheck, cite }: Props) 
       heading="Put these events in order"
       hint={
         <>
-          Earliest first. Drag a card, or use its Up and Down buttons. The dates stay hidden until you check.
+          Earliest first. Drag a card, or use its up and down arrows. The dates stay hidden until you check.
           {ties && ' Some dates are less exact than others (for example “1776” and “July 4, 1776”), so either order is accepted between those events.'}
         </>
       }

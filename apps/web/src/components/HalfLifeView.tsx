@@ -6,6 +6,7 @@ import { linearScale, niceAxis, pointString } from '../lib/charts.ts';
 import { decayPoints, formatAmount, fractionLabel, halfLifeMarkers, halfLivesElapsed, markerLabelStride } from '../lib/decay.ts';
 import type { StaticViewProps } from './ProjectileView.tsx';
 import { Readout, ResetSliders, SchematicTag, Slider } from './controls.tsx';
+import { HiddenValueText } from './SceneHidden.tsx';
 
 export const HALF_LIFE_LABEL = 'Schematic — the smooth average curve; a real sample decays atom by atom at random';
 
@@ -83,9 +84,13 @@ export function HalfLifeView({ spec, inputs, onInput, onReset, predict, equation
 
             <line x1={sx(t)} y1={PLOT.t} x2={sx(t)} y2={PLOT.b} className="chart-now" />
             <circle cx={sx(t)} cy={sy(remaining)} r={7} className="chart-dot" />
-            <text x={sx(t) > PLOT.r - 120 ? sx(t) - 12 : sx(t) + 12} y={sy(remaining) + (sy(remaining) < PLOT.t + 24 ? 22 : -12)} textAnchor={sx(t) > PLOT.r - 120 ? 'end' : 'start'} className="scene-label">
-              N = {concealed ? '?' : formatAmount(remaining)}
-            </text>
+            {concealed
+              ? <HiddenValueText x={sx(t) > PLOT.r - 120 ? sx(t) - 12 : sx(t) + 12} y={sy(remaining) + (sy(remaining) < PLOT.t + 24 ? 22 : -12)} anchor={sx(t) > PLOT.r - 120 ? 'end' : 'start'} lead="N =" />
+              : (
+                <text x={sx(t) > PLOT.r - 120 ? sx(t) - 12 : sx(t) + 12} y={sy(remaining) + (sy(remaining) < PLOT.t + 24 ? 22 : -12)} textAnchor={sx(t) > PLOT.r - 120 ? 'end' : 'start'} className="scene-label">
+                  N = {formatAmount(remaining)}
+                </text>
+              )}
           </g>
         </svg>
       </div>

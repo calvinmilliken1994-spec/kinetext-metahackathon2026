@@ -6,6 +6,7 @@ import { ringPx, soundScaleMaxM, wavefronts } from '../lib/geometry.ts';
 import { Readout, SchematicTag, Slider } from './controls.tsx';
 import type { ClosedFormViewProps } from './ProjectileView.tsx';
 import { IconPause, IconPlay, IconReset } from './icons.tsx';
+import { HiddenValueText } from './SceneHidden.tsx';
 
 export const SOUND_LABEL = 'Schematic';
 
@@ -68,7 +69,9 @@ export function SoundView({ spec, inputs, onInput, pb, predict, equation, concea
             <circle cx={CX} cy={CY} r={7} className="sound-source" />
             <text x={CX} y={CY + 26} textAnchor="middle" className="scene-label-small">source</text>
           </g>
-          <text x={W - 56} y={H - 14} textAnchor="end" className="scene-label">a = {concealed ? '?' : formatQuantity(a)} m/s</text>
+          {concealed
+            ? <HiddenValueText x={W - 56} y={H - 14} anchor="end" lead="a =" />
+            : <text x={W - 56} y={H - 14} textAnchor="end" className="scene-label">a = {formatQuantity(a)} m/s</text>}
         </svg>
       </div>
 

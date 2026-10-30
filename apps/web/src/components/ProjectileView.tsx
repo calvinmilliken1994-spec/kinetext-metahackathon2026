@@ -9,7 +9,8 @@ import type { HeightTick } from '../lib/geometry.ts';
 import type { Grade } from '../lib/predictions.ts';
 import type { Px } from '../lib/geometry.ts';
 import { activePreset, comparisonValues, pagePresets } from '../lib/presets.ts';
-import { concealNumbers } from '../lib/reveal.ts';
+import { hiddenAnswerLead } from '../lib/displayText.ts';
+import { HiddenValueText } from './SceneHidden.tsx';
 import { Readout, SchematicTag, Slider } from './controls.tsx';
 import type { PlaybackCtl } from './usePlayback.ts';
 import type { RunPrediction } from './PredictionCards.tsx';
@@ -85,7 +86,7 @@ function HeightRuler({ ticks }: { ticks: readonly HeightTick[] }) {
           {t.m !== 0 && <text x={B.left - 18} y={t.py + 4} textAnchor="end" className="tick-label">{t.label}</text>}
         </g>
       ))}
-      <text x={B.left - 8} y={B.top - 10} textAnchor="middle" className="tick-label tick-unit">{ticks.length > 0 ? 'm' : 'm ?'}</text>
+      <text x={B.left - 8} y={B.top - 10} textAnchor="middle" className="tick-label tick-unit">m</text>
     </g>
   );
 }
@@ -225,7 +226,9 @@ export function ProjectileView({ spec, inputs, onInput, pb, predict, equation, c
             <g key={settled ? `peak-${seq}` : 'peak'} className={settled ? 'peak-settle' : undefined}>
               <circle cx={scene.apex.px} cy={scene.apex.py} r={settled ? 6.5 : 5.5} className="apex-dot" />
               {apexLead !== null && <line {...apexLead} className="label-leader" />}
-              <text x={scene.labels.apex.x} y={scene.labels.apex.y} textAnchor={scene.labels.apex.anchor} className="scene-label apex-label">{peakHidden ? concealNumbers(scene.labels.apex.text) : scene.labels.apex.text}</text>
+              {peakHidden
+                ? <HiddenValueText x={scene.labels.apex.x} y={scene.labels.apex.y} anchor={scene.labels.apex.anchor} lead={hiddenAnswerLead(scene.labels.apex.text)} className="scene-label apex-label" />
+                : <text x={scene.labels.apex.x} y={scene.labels.apex.y} textAnchor={scene.labels.apex.anchor} className="scene-label apex-label">{scene.labels.apex.text}</text>}
             </g>
             <circle cx={scene.land.px} cy={scene.land.py} r={4} className="landing-dot" />
             <text x={scene.labels.landing.x} y={scene.labels.landing.y} textAnchor={scene.labels.landing.anchor} className="scene-label-small">{scene.labels.landing.text}</text>
@@ -357,7 +360,7 @@ function ProjectileAsk({ label, input, guess, titleId }: { label: string; input:
             : (
               <g className="reveal-guess reveal-guess-empty" aria-hidden="true">
                 <line x1={B.left - 10} y1={placeholderPy} x2={B.right + 10} y2={placeholderPy} className="reveal-guess-line" />
-                <text x={B.left + 4} y={placeholderPy - 8} className="reveal-guess-label">class guess: ? m</text>
+                <HiddenValueText x={B.left + 4} y={placeholderPy - 8} lead="class guess" className="reveal-guess-label" />
               </g>
             )}
           <circle cx={x0} cy={y0} r={9} className="ball" />

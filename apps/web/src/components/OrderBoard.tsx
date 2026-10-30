@@ -32,7 +32,7 @@ interface Props<T extends BoardItem> {
 }
 
 /**
- * “Put these in order”: drag cards, or use each card's Up and Down buttons (keyboard and screen-reader friendly), then check.
+ * “Put these in order”: drag cards, or use each card's move-up and move-down arrows (keyboard and screen-reader friendly), then check.
  * Shared by the timeline activity (graded against dates) and the sequence component (graded against the page's order).
  */
 export function OrderBoard<T extends BoardItem>({ items, startOrder, heading, hint, resultNote, revealed, renderReveal, grade: gradeFn, onCheck, checkLabel = 'Check order', variant = 'cards' }: Props<T>) {
@@ -140,12 +140,12 @@ export function OrderBoard<T extends BoardItem>({ items, startOrder, heading, hi
                 {mark !== null && <p className={`order-mark ${mark.ok ? 'ok' : 'bad'}`}><Mark kind={mark.ok ? 'ok' : 'bad'} />{splitMark(mark.text).text}</p>}
                 {revealed && <div className="order-reveal">{renderReveal(e)}</div>}
               </div>
-              <div className="order-buttons">
-                <button type="button" className="btn btn-small" data-dir="up" disabled={i === 0} onClick={() => move(id, -1)} aria-label={`Move “${e.label}” up`}>
-                  <IconChevronUp /> Up
+              <div className="order-buttons" role="group" aria-label={`Move “${e.label}”`}>
+                <button type="button" className="order-move" data-dir="up" disabled={i === 0} onClick={() => move(id, -1)} aria-label={`Move “${e.label}” up`} title="Move up">
+                  <IconChevronUp />
                 </button>
-                <button type="button" className="btn btn-small" data-dir="down" disabled={i === n - 1} onClick={() => move(id, 1)} aria-label={`Move “${e.label}” down`}>
-                  <IconChevronDown /> Down
+                <button type="button" className="order-move" data-dir="down" disabled={i === n - 1} onClick={() => move(id, 1)} aria-label={`Move “${e.label}” down`} title="Move down">
+                  <IconChevronDown />
                 </button>
               </div>
             </li>

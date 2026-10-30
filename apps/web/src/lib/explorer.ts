@@ -338,6 +338,62 @@ export function niceValueRows(model: ExplorerModel, spec: FormulaExplorerSpec, i
   return xs.map((x) => ({ x, y: evaluate(model.ast, { ...inputs, [model.xVariable]: x }) }));
 }
 
+export interface ValueRow extends Sample { now: boolean }
+
+/**
+ * The value table with the current slider position in its place: the row at x is marked 'now', or, when x falls between
+ * rows, a 'now' row is put in order (not at the top, where '50' above '10, 20, 40' reads as a sorting error). Rows ascend.
+ */
+export function valueRowsWithNow(rows: readonly Sample[], xNow: number, yNow: number): ValueRow[] {
+  const near = (a: number): boolean => Math.abs(a - xNow) <= 1e-9 * Math.max(1, Math.abs(xNow));
+  if (rows.some((r) => near(r.x))) return rows.map((r) => ({ ...r, now: near(r.x) }));
+  const out: ValueRow[] = rows.map((r) => ({ ...r, now: false }));
+  const at = out.findIndex((r) => r.x > xNow);
+  out.splice(at < 0 ? out.length : at, 0, { x: xNow, y: yNow, now: true });
+  return out;
+}
+
+// ---- short slider labels ----------------------------------------------------------------------------------------------
+
+/** A meaning this short is shown whole. */
+const SHORT_MEANING = 24;
+/** Longest short label when no natural break is found. */
+const SHORT_MAX = 28;
+/** Words that start a clause describing the quantity ('… that collects', '… relative to', '… for the body'): cut before. */
+const CLAUSE_WORDS = new Set(['that', 'which', 'who', 'whose', 'where', 'when', 'relative', 'for', 'used', 'measured', 'given', 'is', 'are', 'was', 'were', 'being']);
+/** Small words a short label must not end on. */
+const DANGLING = new Set(['of', 'the', 'a', 'an', 'and', 'or', 'to', 'in', 'on', 'at', 'by', 'for', 'that', 'with', 'from', 'as']);
+
+const trimDangling = (words: string[]): string[] => {
+  const out = [...words];
+  while (out.length > 1 && DANGLING.has((out[out.length - 1] as string).toLowerCase())) out.pop();
+  return out;
+};
+
+/**
+ * A slider label from a variable's meaning (Muse writes whole descriptions: 'drag coefficient that collects shape and flow
+ * effects'). Short meanings stay whole; a long one is cut at its first comma or describing clause ('drag coefficient'),
+ * else after a few words. The view keeps the full meaning as the slider's description and tooltip.
+ */
+export function shortMeaning(meaning: string): string {
+  const s = meaning.replace(/\s+/g, ' ').trim();
+  if (s.length <= SHORT_MEANING) return s;
+  const head = s.split(/\s*[,;(—–]\s*|\s+-\s+/)[0]?.trim() ?? '';
+  if (head !== '' && head.length < s.length && head.length <= SHORT_MAX) return trimDangling(head.split(' ')).join(' ');
+  const words = s.split(' ');
+  const cut = words.findIndex((w, i) => i > 0 && CLAUSE_WORDS.has(w.toLowerCase()));
+  if (cut > 0) {
+    const before = trimDangling(words.slice(0, cut)).join(' ');
+    if (before.length <= SHORT_MAX + 4) return before;
+  }
+  const taken: string[] = [];
+  for (const w of words) {
+    if (taken.length > 0 && [...taken, w].join(' ').length > SHORT_MAX) break;
+    taken.push(w);
+  }
+  return trimDangling(taken).join(' ');
+}
+
 // ---- naming and the page formula --------------------------------------------------------------------------------
 
 /** The page's name for the output: the single word before '=' in the formula text, else 'result'. */
@@ -393,7 +449,7 @@ export function pageFormulaStatus(spec: FormulaExplorerSpec): PageFormulaStatus 
 
 export function casePrompt(spec: FormulaExplorerSpec, c: FormulaCaseGen): string {
   const inputs = inputsOfCase(c);
-  const parts = spec.variables.map((v) => `${v.meaning} = ${groupedSig6(inputs[v.name] ?? v.default)}${unitSuffix(displayUnit(v.unit))}`);
+  const parts = spec.variables.map((v) => `${shortMeaning(v.meaning)} = ${groupedSig6(inputs[v.name] ?? v.default)}${unitSuffix(displayUnit(v.unit))}`);
   return `With ${parts.join(', ')}. What is ${outputName(spec)}?`;
 }
 

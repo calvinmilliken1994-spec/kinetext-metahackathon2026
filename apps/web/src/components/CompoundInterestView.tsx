@@ -8,6 +8,7 @@ import {
 } from '../lib/compound.ts';
 import type { StaticViewProps } from './ProjectileView.tsx';
 import { Readout, ResetSliders, SchematicTag, Slider, StopSlider } from './controls.tsx';
+import { HiddenValueText } from './SceneHidden.tsx';
 
 export const COMPOUND_LABEL = 'Schematic — idealised account: fixed rate, no fees, no taxes, no withdrawals';
 
@@ -73,7 +74,9 @@ export function CompoundInterestView({ spec, inputs, onInput, onReset, predict, 
             <polyline points={compoundLine} fill="none" className="line-compound" />
             <circle cx={sx(0)} cy={sy(input.principalUSD)} r={5} className="chart-dot chart-dot-start" />
             <circle cx={end.x} cy={end.y} r={7} className="chart-dot" />
-            <text x={Math.min(end.x, PLOT.r)} y={end.y - 14} textAnchor="end" className="scene-label">{concealed ? '?' : formatUSD(amount)}</text>
+            {concealed
+              ? <HiddenValueText x={Math.min(end.x, PLOT.r) - 6} y={end.y - 14} anchor="end" lead="" />
+              : <text x={Math.min(end.x, PLOT.r)} y={end.y - 14} textAnchor="end" className="scene-label">{formatUSD(amount)}</text>}
 
           </g>
         </svg>

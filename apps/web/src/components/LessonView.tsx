@@ -24,7 +24,7 @@ export interface LessonViewProps {
   lesson: LessonSpec;
   /** Stored kit specs by spec id (`jobId:componentId:rN`). */
   specs: Readonly<Record<string, KitSpec>>;
-  /** The v2 analysis: its decline fields drive the decline card, its page coverage the overview line. Null when not loaded. */
+  /** The v2 analysis: its decline fields drive the decline card (its page-coverage note only under technical details). Null when not loaded. */
   analysis: SourceAnalysisV2 | null;
   /** The lesson’s sources, for the decline card’s attribution. */
   sources: readonly SourceRef[];
@@ -83,7 +83,6 @@ export function DeclineCard({ analysis, sources, disclosure }: { analysis: Sourc
         </figure>
       )}
       <dl className="decline-facts">
-        <div><dt>What the page covers</dt><dd>{analysis.pageCoverage}</dd></div>
         <div>
           <dt>Source</dt>
           <dd>
@@ -99,6 +98,13 @@ export function DeclineCard({ analysis, sources, disclosure }: { analysis: Sourc
         </div>
       </dl>
       <p className="muted">Nothing was generated from this page, so there is nothing to review. A longer page with running text usually works.</p>
+      {analysis.pageCoverage !== '' && (
+        // Muse's internal note on what the page covers: kept for the technical record, not shown as lesson content.
+        <details className="small tech-details">
+          <summary>Technical details</summary>
+          <p><span className="muted">Muse’s page-coverage note:</span> {analysis.pageCoverage}</p>
+        </details>
+      )}
     </section>
   );
 }
@@ -128,7 +134,7 @@ export function LessonView({ lesson, specs, analysis, sources, cite, disclosure,
         <h2 className="lesson-title">{lesson.overview?.headline ?? fallbackTitle}</h2>
         {provenance}
       </header>
-      {lesson.overview !== null && <CardBoundary><OverviewView overview={lesson.overview} pageCoverage={analysis?.pageCoverage} cite={cite} /></CardBoundary>}
+      {lesson.overview !== null && <CardBoundary><OverviewView overview={lesson.overview} /></CardBoundary>}
       {empty && (
         <div className="empty" role="status">
           <h2>This lesson has nothing to show yet</h2>

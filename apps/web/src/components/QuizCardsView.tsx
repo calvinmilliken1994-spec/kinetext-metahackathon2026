@@ -7,7 +7,7 @@ import { QuoteBlock } from './QuoteBlock.tsx';
 import { Linked } from './Linked.tsx';
 import { linkKey } from '../lib/linking.ts';
 import { Mark } from './icons.tsx';
-import { prettyExponents } from '../lib/displayText.ts';
+import { capitalFirst, prettyExponents } from '../lib/displayText.ts';
 
 interface Props { spec: QuizCardsSpec; cite: CiteProps }
 
@@ -57,7 +57,7 @@ export function QuizCardsView({ spec, cite }: Props) {
                         disabled={grade !== null}
                         onChange={() => setPicked((prev) => ({ ...prev, [c.id]: o.index }))}
                       />
-                      <span className="choice-text">{prettyExponents(o.text)}</span>
+                      <span className="choice-text">{capitalFirst(prettyExponents(o.text))}</span>
                       {mark !== null && <span className="choice-mark"><Mark kind={right ? 'ok' : 'bad'} />{mark}</span>}
                     </label>
                   );

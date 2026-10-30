@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { FocusEvent as ReactFocusEvent, MouseEvent as ReactMouseEvent } from 'react';
 import type { Loadable } from '../hooks.ts';
 import type { SourceDoc, SourceMeta } from '../api.ts';
@@ -7,11 +7,11 @@ import { isEvidenceKey } from '../lib/evidence.ts';
 import type { QuoteRef } from '../lib/evidence.ts';
 import { linkStore, markLinks, segmentIsTabStop } from '../lib/linking.ts';
 import { revealInPanels, scrollContainersOf, scrollTopToReveal } from '../lib/scroll.ts';
-import { markdownDecorations, sourcePieces } from '../lib/sourceText.ts';
+import { sourceDecorations, sourcePieces } from '../lib/sourceText.ts';
 import { isHttpUrl, sourceLicenseText, TEACHER_TAG } from '../lib/sources.ts';
-import type { Subject } from '../../../../packages/contracts/kit.ts';
+import { sourceMetaLine } from '../lib/lessonLayout.ts';
 import { CitationChip } from './Explanations.tsx';
-import { IconExternal } from './icons.tsx';
+import { IconChevronDown, IconExternal, IconSourcePanel } from './icons.tsx';
 import { SourcePicker } from './SourcePicker.tsx';
 
 export interface Flash { key: string; n: number }
@@ -26,9 +26,8 @@ export interface SourcePanelProps {
   quotes: readonly QuoteRef[];
   flash: Flash | null;
   onCite: (key: string) => void;
-  /** Stage 7b: the subject filter shared with the New lesson picker and the runs list. */
-  subjectFilter: Subject | null;
-  onSubjectFilter: (subject: Subject | null) => void;
+  /** Collapse the panel to its slim tab (slice L; App keeps the choice across visits). */
+  onCollapse: () => void;
 }
 
 const reducedMotion = (): boolean => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -70,9 +69,9 @@ function HighlightedText({ text, highlights, byKey, flash, sourceId }: { text: s
     return () => clearTimeout(timer);
   }, [flash]);
 
-  // The stored text keeps its markdown (its hash is pinned); markers are hidden by character range, so every quote
-  // offset still points at the exact stored characters.
-  const decorations = useMemo(() => markdownDecorations(text), [text]);
+  // The stored text keeps its markdown (its hash is pinned); markers are hidden and form-like label lines joined by
+  // character range (lib/sourceText.ts), so every quote offset still points at the exact stored characters.
+  const decorations = useMemo(() => sourceDecorations(text), [text]);
   const parts = useMemo(() => {
     const pieces = sourcePieces(text, highlights === null ? null : highlights.segments, decorations);
     return pieces.map((p) => {
@@ -150,59 +149,86 @@ function HighlightedText({ text, highlights, byKey, flash, sourceId }: { text: s
   );
 }
 
-export function SourcePanel({ sources, selectedId, onSelect, onReload, doc, highlights, quotes, flash, onCite, subjectFilter, onSubjectFilter }: SourcePanelProps) {
+export function SourcePanel({ sources, selectedId, onSelect, onReload, doc, highlights, quotes, flash, onCite, onCollapse }: SourcePanelProps) {
   const byKey = useMemo(() => new Map(quotes.map((q) => [q.key, q] as const)), [quotes]);
   const concepts = quotes.filter((q) => q.kind === 'concept');
   const located = highlights ? Object.keys(highlights.ranges).length : 0;
   const meta = sources.state === 'ready' ? sources.data.find((s) => s.id === selectedId) : undefined;
-  const [licenceOpen, setLicenceOpen] = useState(false);
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const detailsId = useId();
+  const foundCount = highlights === null || quotes.length === 0 ? null : quotes.filter((q) => highlights.ranges[q.key] !== undefined).length;
 
   return (
     <section className="panel source-panel" aria-labelledby="source-heading">
       <div className="source-head">
         <h2 id="source-heading" className="sr-only">Source page</h2>
-        {sources.state === 'loading' && <p className="muted">Loading pages…</p>}
-        {sources.state === 'error' && (
-          <div className="callout callout-error" role="alert">
-            {sources.message} <button type="button" className="btn btn-small" onClick={onReload}>Retry</button>
-          </div>
-        )}
-        {sources.state === 'ready' && sources.data.length === 0 && <p className="muted">No licensed pages are registered.</p>}
-        {sources.state === 'ready' && sources.data.length > 0 && (
-          <SourcePicker
-            id="source-select"
-            label="Source page"
-            sources={sources.data}
-            selectedId={selectedId}
-            onSelect={(id) => { onSelect(id); setLicenceOpen(false); }}
-            filter={subjectFilter}
-            onFilter={onSubjectFilter}
-          />
-        )}
+        <div className="source-head-row">
+          {sources.state === 'loading' && <p className="muted">Loading pages…</p>}
+          {sources.state === 'error' && (
+            <div className="callout callout-error" role="alert">
+              {sources.message} <button type="button" className="btn btn-small" onClick={onReload}>Retry</button>
+            </div>
+          )}
+          {sources.state === 'ready' && sources.data.length === 0 && <p className="muted">No licensed pages are registered.</p>}
+          {sources.state === 'ready' && sources.data.length > 0 && (
+            <SourcePicker
+              id="source-select"
+              label="Source page"
+              sources={sources.data}
+              selectedId={selectedId}
+              onSelect={(id) => { onSelect(id); setDetailsOpen(false); }}
+              filter={null}
+              onFilter={() => undefined}
+              compact
+            />
+          )}
+          <button type="button" className="icon-btn source-collapse" onClick={onCollapse} aria-label="Collapse the source page" title="Collapse the source page">
+            <IconChevronDown size={18} className="icon-left" />
+          </button>
+        </div>
 
         {meta !== undefined && (
-          <div className="license">
-            <p className="license-row">
-              {meta.kind === 'user' && <span>{TEACHER_TAG} ·</span>}
-              <span>{sourceLicenseText(meta)}</span>
-              {isHttpUrl(meta.locator)
-                ? <a href={meta.locator} target="_blank" rel="noopener noreferrer">Original page <IconExternal /><span className="sr-only"> (opens in a new tab)</span></a>
-                : <span className="muted">{meta.locator}</span>}
-            </p>
-            <p id="licence-text" className={`attribution${licenceOpen ? '' : ' clamped'}`}>{meta.attribution}</p>
-            {licenceOpen && <p className="attribution">Text fingerprint (SHA-256): <code>{meta.sha256}</code></p>}
-            <button type="button" className="link-btn small" aria-expanded={licenceOpen} aria-controls="licence-text" onClick={() => setLicenceOpen((v) => !v)}>
-              {licenceOpen ? 'Hide licence details' : 'Licence details'}
+          <p className="source-meta">
+            <span className="source-meta-main">
+              {meta.kind === 'user' ? `${TEACHER_TAG} · ` : ''}
+              {sourceMetaLine({ licence: sourceLicenseText(meta), found: foundCount, total: quotes.length })}
+            </span>
+            {isHttpUrl(meta.locator) && (
+              <>
+                <span className="source-meta-sep" aria-hidden="true">·</span>
+                <a href={meta.locator} target="_blank" rel="noopener noreferrer">Original <IconExternal size={14} /><span className="sr-only"> page (opens in a new tab)</span></a>
+              </>
+            )}
+            <span className="source-meta-sep" aria-hidden="true">·</span>
+            <button type="button" className="link-btn" aria-expanded={detailsOpen} aria-controls={detailsId} onClick={() => setDetailsOpen((v) => !v)}>
+              {detailsOpen ? 'Hide details' : 'Credit & key'}
             </button>
-          </div>
+          </p>
         )}
 
-        {highlights !== null && quotes.length > 0 && (
-          <p className="legend" aria-label="Highlight legend">
-            <span><mark className="ev-explanation">Quoted</mark> by the lesson</span>
-            <span><mark className="ev-concept">Concept</mark> Muse found</span>
-            <span className="muted">{located} of {quotes.length} quotes found on the page · point at one to see where the lesson uses it</span>
-          </p>
+        {meta !== undefined && detailsOpen && (
+          <div id={detailsId} className="source-details">
+            <p className="attribution">{meta.attribution}</p>
+            {!isHttpUrl(meta.locator) && <p className="attribution">{meta.locator}</p>}
+            <p className="attribution">Text fingerprint (SHA-256): <code>{meta.sha256}</code></p>
+            {highlights !== null && quotes.length > 0 && (
+              <p className="legend" aria-label="Highlight key">
+                <span><mark className="ev-explanation">Quoted</mark> by the lesson</span>
+                <span><mark className="ev-concept">Concept</mark> Muse found</span>
+                <span className="muted">{located} of {quotes.length} quotes found on the page · point at one to see where the lesson uses it</span>
+              </p>
+            )}
+            {concepts.length > 0 && (
+              <div className="concepts">
+                <h3 className="section-title">Concepts Muse found</h3>
+                <div className="chips">
+                  {[...new Map(concepts.map((c) => [c.ownerId, c] as const)).values()].map((c) => (
+                    <CitationChip key={c.key} label={c.ownerLabel} quote={c.quote} citeKey={c.key} enabled={highlights?.ranges[c.key] !== undefined} onCite={onCite} />
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         )}
       </div>
 
@@ -212,17 +238,30 @@ export function SourcePanel({ sources, selectedId, onSelect, onReload, doc, high
         {doc?.state === 'error' && <div className="callout callout-error" role="alert">{doc.message}</div>}
         {doc?.state === 'ready' && <HighlightedText text={doc.data.text} highlights={highlights} byKey={byKey} flash={flash} sourceId={selectedId ?? ''} />}
       </div>
-
-      {concepts.length > 0 && (
-        <div className="concepts">
-          <h3 className="section-title">Concepts Muse found</h3>
-          <div className="chips">
-            {[...new Map(concepts.map((c) => [c.ownerId, c] as const)).values()].map((c) => (
-              <CitationChip key={c.key} label={c.ownerLabel} quote={c.quote} citeKey={c.key} enabled={highlights?.ranges[c.key] !== undefined} onCite={onCite} />
-            ))}
-          </div>
-        </div>
-      )}
     </section>
+  );
+}
+
+/**
+ * The collapsed source page: a slim tab at the window's left edge. Pressing it brings the page back (the choice is kept
+ * across visits by App). It names what it opens and how many of the lesson's quotes the page shows.
+ */
+export function SourceTab({ onExpand, found, total }: { onExpand: () => void; found: number | null; total: number }) {
+  const count = found === null || total === 0 ? null : `${found}/${total}`;
+  return (
+    <div className="source-tab-wrap">
+      <button
+        type="button"
+        className="source-tab"
+        onClick={onExpand}
+        aria-label={`Show the source page${count === null ? '' : `, ${found} of ${total} quotes found`}`}
+        title="Show the source page"
+        data-testid="source-tab"
+      >
+        <IconSourcePanel size={18} />
+        <span className="source-tab-label" aria-hidden="true">Source page</span>
+        {count !== null && <span className="source-tab-count" aria-hidden="true">{count}</span>}
+      </button>
+    </div>
   );
 }

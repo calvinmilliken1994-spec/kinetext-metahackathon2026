@@ -6,6 +6,7 @@ import { QuoteBlock } from './QuoteBlock.tsx';
 import { Linked } from './Linked.tsx';
 import { linkKey } from '../lib/linking.ts';
 import { Mark } from './icons.tsx';
+import { capitalFirst } from '../lib/displayText.ts';
 
 interface Props { spec: CompareTableSpec; cite: CiteProps }
 
@@ -39,13 +40,13 @@ export function CompareView({ spec, cite }: Props) {
           <thead>
             <tr>
               <td className="sr-only">Item</td>
-              {grid.attributes.map((a) => <th key={a} scope="col">{a}</th>)}
+              {grid.attributes.map((a) => <th key={a} scope="col">{capitalFirst(a)}</th>)}
             </tr>
           </thead>
           <tbody>
             {grid.rows.map((row) => (
               <tr key={row.entity}>
-                <th scope="row">{row.entity}</th>
+                <th scope="row">{capitalFirst(row.entity)}</th>
                 {row.cells.map((cell, ai) => {
                   if (cell === null) return <td key={ai} className="cell-blank"><span>{NOT_STATED}</span></td>;
                   if (cell.id === hiddenId) return <td key={ai} className="cell-hidden"><span aria-label="Hidden until you lock in a prediction">? hidden</span></td>;

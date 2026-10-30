@@ -7,6 +7,7 @@ import { linkKey } from '../lib/linking.ts';
 import { Mark } from './icons.tsx';
 import { Linked } from './Linked.tsx';
 import { useWidth } from './TimeAxisChart.tsx';
+import { capitalFirst } from '../lib/displayText.ts';
 
 /** Vertical geometry in px. Label boxes hang off their leader ends (above: bottom edge, below: top edge). */
 const LABEL_ROOM = 118;
@@ -118,7 +119,7 @@ export function StepTrack({ spec, results }: Props) {
                 <Linked as="li" key={s.id} links={[linkKey(s.sourceId, s.quote)]} className={`st-item${p?.side === 'above' ? ' st-above' : ' st-below'}`} style={style} tabIndex={0}>
                   <span className="st-num">Step {i + 1}</span>
                   {date !== null && <span className="st-date" title="As written in this step’s quote from the page">{date}</span>}
-                  <span className="st-title">{s.label}</span>
+                  <span className="st-title">{capitalFirst(s.label)}</span>
                   {s.orderHint !== '' && <span className="st-hint">{s.orderHint}</span>}
                   {ok !== undefined && (
                     <span className={`st-result ${ok ? 'ok' : 'bad'}`}><Mark kind={ok ? 'ok' : 'bad'} />{ok ? 'You had it here' : 'You had it elsewhere'}</span>

@@ -6,6 +6,7 @@ import { trimmed } from '../lib/format.ts';
 import { flowCycleS, flowLineCount, liftArrowPx, liftScaleMax, wingTiltDeg } from '../lib/geometry.ts';
 import { Readout, ResetSliders, SchematicTag, Slider } from './controls.tsx';
 import type { StaticViewProps } from './ProjectileView.tsx';
+import { HiddenValueText } from './SceneHidden.tsx';
 
 export const LIFT_LABEL = 'Schematic';
 
@@ -76,10 +77,14 @@ export function LiftView({ spec, inputs, onInput, onReset, predict, equation, co
             <g className="arrow arrow-lift" aria-hidden="true">
               <line x1={CX} y1={CY - 14} x2={CX} y2={tipY + (up ? 11 * 0.6 : -11 * 0.6)} className="arrow-line" />
               <polygon points={up ? `${CX},${tipY} ${CX - 7},${tipY + 12} ${CX + 7},${tipY + 12}` : `${CX},${tipY} ${CX - 7},${tipY - 12} ${CX + 7},${tipY - 12}`} className="arrow-head" />
-              <text x={CX + 16} y={up ? tipY + 14 : tipY - 8} className="scene-label">L = {liftText}</text>
+              {concealed
+                ? <HiddenValueText x={CX + 16} y={up ? tipY + 14 : tipY - 8} lead="L =" />
+                : <text x={CX + 16} y={up ? tipY + 14 : tipY - 8} className="scene-label">L = {liftText}</text>}
             </g>
           )}
-          {arrow === 0 && <text x={CX} y={CY - 34} textAnchor="middle" className="scene-label arrow-lift-zero">{concealed ? 'L = ? N' : 'L = 0 N (no lift arrow)'}</text>}
+          {arrow === 0 && (concealed
+            ? <HiddenValueText x={CX} y={CY - 34} anchor="middle" lead="L =" className="scene-label arrow-lift-zero" />
+            : <text x={CX} y={CY - 34} textAnchor="middle" className="scene-label arrow-lift-zero">L = 0 N (no lift arrow)</text>)}
           <text x={W - 56} y={H - 12} textAnchor="end" className="scene-label-small">Lift arrow: logarithmic length, not proportional</text>
         </svg>
       </div>

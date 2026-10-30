@@ -16,8 +16,17 @@ interface Props {
   provenance?: ReactNode;
 }
 
-/** Title block shared by every activity: title, a meta line (activity type · AI-written · repair), provenance, objectives. */
+/**
+ * Title block shared by every activity: title, a meta line (activity type · AI-written · repair), provenance, objectives.
+ * When the activity is the whole lesson (classic flow, `provenance` given) the objectives are listed; inside a lesson
+ * they fold away, so the activity's scene sits right under its title on the first screen.
+ */
 export function ActivityHeader({ title, learningObjectives, engine, repairBadge, provenance = null }: Props) {
+  const list = (
+    <ul className="objectives" aria-label="Learning objectives">
+      {learningObjectives.map((o) => <li key={o}>{prettyExponents(o)}</li>)}
+    </ul>
+  );
   return (
     <header className="activity-head">
       <h2 id="activity-title" className={provenance !== null ? 'lesson-title' : undefined}>{prettyExponents(title)}</h2>
@@ -31,9 +40,12 @@ export function ActivityHeader({ title, learningObjectives, engine, repairBadge,
           </span>
         )}
       </p>
-      <ul className="objectives" aria-label="Learning objectives">
-        {learningObjectives.map((o) => <li key={o}>{prettyExponents(o)}</li>)}
-      </ul>
+      {learningObjectives.length > 0 && (provenance !== null ? list : (
+        <details className="objectives-fold">
+          <summary>Learning objectives ({learningObjectives.length})</summary>
+          {list}
+        </details>
+      ))}
     </header>
   );
 }

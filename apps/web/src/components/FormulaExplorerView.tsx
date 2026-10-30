@@ -3,7 +3,7 @@ import type { FormEvent } from 'react';
 import type { FormulaExplorerSpec } from '../../../../packages/contracts/kit.ts';
 import {
   CALCULATOR_FAILURE, buildExplorer, caseOutputs, casePrompt, curveSamples, defaultInputs, displayUnit, evalAt, graphGeometry, graphReveal, gradeCaseGuess,
-  groupedSig6, inputsOfCase, outputName, niceValueRows, pageFormulaStatus, predictSpec, sliderStep,
+  groupedSig6, inputsOfCase, outputName, niceValueRows, pageFormulaStatus, predictSpec, shortMeaning, sliderStep, valueRowsWithNow,
 } from '../lib/explorer.ts';
 import type { Inputs } from '../lib/explorer.ts';
 import type { Grade } from '../lib/predictions.ts';
@@ -21,6 +21,8 @@ import { explorerEquation } from '../lib/equation.ts';
 import { linkKey } from '../lib/linking.ts';
 import { CONCEALED, CONCEALED_HINT, initialConcealed, nextConcealed } from '../lib/reveal.ts';
 import { caseFriendlyStep } from '../lib/sliderSteps.ts';
+import { formulaLhs, symbolPieces, typesetFormula } from '../lib/typeset.ts';
+import { SymbolMark, TypesetFormula } from './TypesetFormula.tsx';
 
 /** How presentation mode shows the explorer (default: the full lesson view). */
 export type ExplorerPresentation =
@@ -101,9 +103,13 @@ export function FormulaExplorerView({ spec, cite, presentation }: Props) {
     setConcealed((c) => nextConcealed(c, 'slider'));
     setInputs((prev) => ({ ...prev, [name]: value }));
   }, []);
+  // The page's symbols, typeset (Cd → C with subscript d, rho → ρ), for the formula, the live equation and the sliders.
+  const symbols = useMemo(() => symbolPieces(spec.variables), [spec.variables]);
+  const typeset = useMemo(() => typesetFormula(spec), [spec]);
+  const lhs = useMemo(() => formulaLhs(spec.formulaText) ?? yName, [spec.formulaText, yName]);
   const equation = useMemo(
-    () => (model.ok ? explorerEquation(spec.expression, model.names, yName, inputs, output) : null),
-    [model, spec.expression, yName, inputs, output],
+    () => (model.ok ? explorerEquation(spec.expression, model.names, lhs, inputs, output, symbols) : null),
+    [model, spec.expression, lhs, inputs, output, symbols],
   );
   const formulaLinks = useMemo(() => [linkKey(spec.sourceId, spec.quote)], [spec.sourceId, spec.quote]);
   // Slider steps that land on the case values (case 1 first).
@@ -135,7 +141,8 @@ export function FormulaExplorerView({ spec, cite, presentation }: Props) {
   };
 
   const xUnit = xVar === undefined ? '' : displayUnit(xVar.unit);
-  const xName = xVar === undefined ? spec.xVariable : `${xVar.meaning}${xUnit === '' ? '' : ` (${xUnit})`}`;
+  const xShort = xVar === undefined ? spec.xVariable : shortMeaning(xVar.meaning);
+  const xName = `${xShort}${xUnit === '' ? '' : ` (${xUnit})`}`;
 
   if (predictBeat) {
     return (
@@ -147,15 +154,16 @@ export function FormulaExplorerView({ spec, cite, presentation }: Props) {
       </div>
     );
   }
-  const xNow = inputs[spec.xVariable] ?? 0;
-  const nowInTable = table.some((row) => Math.abs(row.x - xNow) <= 1e-9 * Math.max(1, Math.abs(xNow)));
+  const rows = valueRowsWithNow(table, inputs[spec.xVariable] ?? 0, output);
 
   return (
     <div className="explorer" data-testid="formula-explorer">
       <div className="explorer-formula">
-        <p className="field-label">Formula on the page</p>
-        <Linked as="p" className="explorer-formula-text" links={formulaLinks}><code>{spec.formulaText}</code></Linked>
-        <QuoteBlock componentId="formula-explorer-v1" part="equation" id="equation" sourceId={spec.sourceId} quote={spec.quote} cite={cite} caption="The page’s words" />
+        <p className="field-label">The formula</p>
+        {typeset !== null
+          ? <Linked as="p" className="explorer-typeset" links={formulaLinks}><TypesetFormula formula={typeset} /></Linked>
+          : <Linked as="p" className="explorer-formula-text" links={formulaLinks}><code>{spec.formulaText}</code></Linked>}
+        <QuoteBlock componentId="formula-explorer-v1" part="equation" id="equation" sourceId={spec.sourceId} quote={spec.quote} cite={cite} caption="As the page writes it" />
         {formulaStatus !== 'matches' && <p className="note small" role="note" data-testid="ai-formula-notice">{AI_FORMULA_NOTICE}</p>}
       </div>
 
@@ -166,8 +174,9 @@ export function FormulaExplorerView({ spec, cite, presentation }: Props) {
             {spec.variables.map((v) => (
               <Slider
                 key={v.name}
-                label={v.meaning}
-                symbol={v.pageSymbol}
+                label={shortMeaning(v.meaning)}
+                description={v.meaning}
+                symbol={symbols[v.name] === undefined ? v.pageSymbol : <SymbolMark piece={symbols[v.name]!} />}
                 unit={displayUnit(v.unit)}
                 min={v.min}
                 max={v.max}
@@ -195,24 +204,15 @@ export function FormulaExplorerView({ spec, cite, presentation }: Props) {
           )}
           {presentation === undefined && (
             <table className="value-table">
-              <caption>{yName} as {xVar?.meaning ?? spec.xVariable} changes (other sliders as set)</caption>
+              <caption>{yName} as the {xShort} changes (other sliders as set)</caption>
               <thead><tr><th scope="col">{xName}</th><th scope="col">{yName}</th></tr></thead>
               <tbody>
-                {!nowInTable && (
-                  <tr className="value-now">
-                    <th scope="row">Now: {groupedSig6(xNow)}</th>
-                    <td>{concealed ? <span className="concealed" title={CONCEALED_HINT}>{CONCEALED}</span> : groupedSig6(output)}</td>
+                {rows.map((row, i) => (
+                  <tr key={i} className={row.now ? 'value-now' : undefined}>
+                    <th scope="row">{row.now && <span className="value-now-tag">Now</span>}{groupedSig6(row.x)}</th>
+                    <td>{concealed ? <span className="concealed" title={CONCEALED_HINT}>{CONCEALED}</span> : groupedSig6(row.y)}</td>
                   </tr>
-                )}
-                {table.map((row, i) => {
-                  const now = nowInTable && Math.abs(row.x - xNow) <= 1e-9 * Math.max(1, Math.abs(xNow));
-                  return (
-                    <tr key={i} className={now ? 'value-now' : undefined}>
-                      <th scope="row">{now ? `Now: ${groupedSig6(row.x)}` : groupedSig6(row.x)}</th>
-                      <td>{concealed ? <span className="concealed" title={CONCEALED_HINT}>{CONCEALED}</span> : groupedSig6(row.y)}</td>
-                    </tr>
-                  );
-                })}
+                ))}
               </tbody>
             </table>
           )}

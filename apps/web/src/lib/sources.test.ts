@@ -5,7 +5,7 @@ import { USER_LICENSES, USER_SOURCE_LIMITS, validateUserSourceInput } from '../.
 import {
   demoFaultOptions, demoFaultToSend, disclosureText, EMPTY_FORM, FREE_CREDITS_NOTE, isHttpUrl, licenseLabel, licenseOptions, problemMessage,
   problemsByField, RIGHTS_LABEL, sourceLicenseText, sourceOptionLabel, sourcePublisher, textCount, validateSourceForm,
-  reuseNotice,
+  reuseNotice, shortTitle,
 } from './sources.ts';
 import type { SourceFormValues } from './sources.ts';
 
@@ -133,7 +133,21 @@ test('disclosureText names the model that made the activity (OW-3): Spark Open i
 
 const MADE = 'Muse Spark 1.3 (Meta)';
 const publisherSentence = (publisher: string): string =>
-  `AI-generated with ${MADE}. Includes material from ${publisher}; ${publisher} has not reviewed or endorsed this lesson.`;
+  `AI-generated with ${MADE}. Includes material from ${publisher}, which has not reviewed or endorsed this lesson.`;
+
+test('the publisher disclosure names the publisher once (slice L: no repeated long agency names)', () => {
+  const noaa = 'NOAA Office of Ocean Exploration and Research (NOAA Ocean Exploration)';
+  const text = disclosureText(library(`Source material: ${noaa}, education materials, 'Fueling Life on Earth'.`));
+  assert.equal(text.split(noaa).length - 1, 1);
+  assert.match(text, /has not reviewed or endorsed this lesson\.$/);
+});
+
+test('shortTitle drops the " — publisher" suffix of a library title and keeps everything else', () => {
+  assert.equal(shortTitle('Fueling Life on Earth: Chemosynthesis versus Photosynthesis — NOAA Office of Ocean Exploration'), 'Fueling Life on Earth: Chemosynthesis versus Photosynthesis');
+  assert.equal(shortTitle('Throwing a ball on the Moon (project-authored test text)'), 'Throwing a ball on the Moon (project-authored test text)');
+  assert.equal(shortTitle('A — B — C'), 'A');
+  assert.equal(shortTitle(' — only a suffix'), ' — only a suffix');
+});
 const library = (attribution?: string) =>
   ({ title: 'Library source', license: 'public domain', kind: 'library' as const, ...(attribution === undefined ? {} : { attribution }) });
 
@@ -186,7 +200,7 @@ test('disclosureText names each agency publisher, never NASA by default (P0)', (
     if (!publisher.includes('NASA')) assert.ok(!disclosureText(library(attribution)).includes('NASA'), publisher);
   }
   // NASA keeps its full agency naming rather than the bare acronym
-  assert.ok(disclosureText(library(cases[0]!.attribution)).includes('NASA Glenn Research Center has not reviewed'));
+  assert.ok(disclosureText(library(cases[0]!.attribution)).includes('NASA Glenn Research Center, which has not reviewed'));
 });
 
 test('disclosureText: project-team texts, missing attribution and teacher sources (P0)', () => {

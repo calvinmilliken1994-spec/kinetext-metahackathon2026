@@ -183,13 +183,13 @@ function precOf(node: AstNode, values: Readonly<Record<string, number>> | null):
 const wrap = (pieces: EqPiece[], yes: boolean): EqPiece[] => (yes ? [t('('), ...pieces, t(')')] : pieces);
 
 /** Render an AST: symbols when `values` is null, else every variable replaced by its value. Brackets only where needed. */
-function renderAst(node: AstNode, values: Readonly<Record<string, number>> | null, symbols: Readonly<Record<string, string>>): EqPiece[] {
+function renderAst(node: AstNode, values: Readonly<Record<string, number>> | null, symbols: Readonly<Record<string, EqPiece>>): EqPiece[] {
   const r = (n: AstNode): EqPiece[] => renderAst(n, values, symbols);
   switch (node.kind) {
     case 'num': return [{ k: 'num', v: sig6(node.value).replace(/^-/, MINUS) }];
     case 'const': return [sym(node.name === 'pi' ? 'π' : 'e')];
     case 'var': {
-      if (values === null) return [sym(symbols[node.name] ?? node.name)];
+      if (values === null) return [symbols[node.name] ?? sym(node.name)];
       const v = values[node.name];
       return [num(typeof v === 'number' ? v : Number.NaN, sig6)];
     }
@@ -217,20 +217,21 @@ function renderAst(node: AstNode, values: Readonly<Record<string, number>> | nul
 /**
  * The explorer's formula: `lhs = <expression> = <expression with the current values> = output` (sig6, 'not defined'
  * when the calculator has no value). `output` comes from the explorer's own evaluator. Null when the stored expression
- * does not parse with the validator's parser.
+ * does not parse with the validator's parser. `lhs` is the result's name (text, or typeset pieces from lib/typeset.ts);
+ * `symbols` are the typeset page symbols per variable (lib/typeset.ts symbolPieces), else the variable names are shown.
  */
 export function explorerEquation(
   expression: string,
   variables: readonly string[],
-  lhs: string,
+  lhs: string | readonly EqPiece[],
   inputs: Readonly<Record<string, number>>,
   output: number,
-  symbols: Readonly<Record<string, string>> = {},
+  symbols: Readonly<Record<string, EqPiece>> = {},
 ): Equation | null {
   const parsed = parseExpression(expression, { knownVariables: variables });
   if (!parsed.ok) return null;
   return {
-    lhs: [sym(lhs)],
+    lhs: typeof lhs === 'string' ? [sym(lhs)] : [...lhs],
     symbolic: renderAst(parsed.ast, null, symbols),
     substituted: renderAst(parsed.ast, inputs, symbols),
     result: groupedSig6(output).replace(/^-/, MINUS),

@@ -6,6 +6,7 @@ import { linearScale, pointString } from '../lib/charts.ts';
 import { alleleQ, formatFrequency, frequenciesSumToOne, genotypeBars, heterozygoteCurve } from '../lib/genetics.ts';
 import type { StaticViewProps } from './ProjectileView.tsx';
 import { Readout, ResetSliders, SchematicTag, Slider } from './controls.tsx';
+import { HiddenValueText } from './SceneHidden.tsx';
 
 export const HARDY_WEINBERG_LABEL = 'Schematic — an ideal population: random mating, no selection, migration or drift';
 
@@ -62,7 +63,9 @@ export function HardyWeinbergView({ spec, inputs, onInput, onReset, predict, equ
                   <rect x={BAR.l} y={y} width={Math.max(0, w)} height={BAR.h} className={b.checked ? 'bar-fill bar-checked' : 'bar-fill'} />
                   <text x={BAR.l - 8} y={y + BAR.h / 2 + 5} textAnchor="end" className="scene-label">{b.label}</text>
                   <text x={BAR.l + 8} y={y - 5} className="scene-label-small">{b.formula}</text>
-                  <text x={Math.max(BAR.l + w + 8, BAR.l + 8)} y={y + BAR.h / 2 + 5} className="scene-label">{concealed && b.checked ? '?' : formatFrequency(b.frequency)}</text>
+                  {concealed && b.checked
+                    ? <HiddenValueText x={Math.max(BAR.l + w + 14, BAR.l + 14)} y={y + BAR.h / 2 + 5} lead="" />
+                    : <text x={Math.max(BAR.l + w + 8, BAR.l + 8)} y={y + BAR.h / 2 + 5} className="scene-label">{formatFrequency(b.frequency)}</text>}
                 </g>
               );
             })}

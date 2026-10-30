@@ -1,55 +1,73 @@
-import { useId } from 'react';
+import { useId, useState } from 'react';
 import type { OverviewSpec } from '../../../../packages/contracts/kit.ts';
-import { AiWritten } from './Disclosure.tsx';
-import type { CiteProps } from './Explanations.tsx';
-import { QuoteBlock } from './QuoteBlock.tsx';
 import { Linked } from './Linked.tsx';
+import { IconChevronDown, IconChevronUp } from './icons.tsx';
 import { linkKeysOf } from '../lib/linking.ts';
 import { prettyExponents } from '../lib/displayText.ts';
+import { overviewParts } from '../lib/lessonLayout.ts';
 
 interface Props {
   overview: OverviewSpec;
-  /** What the page covers (from the analysis); shown first when present. */
-  pageCoverage?: string;
-  cite: CiteProps;
 }
 
-/** The page overview, shown first under the lesson title: what the page covers, key points with the page's own words, key terms. */
-export function OverviewView({ overview, pageCoverage, cite }: Props) {
-  const headId = useId();
-  return (
-    <section className="card overview" aria-labelledby={headId} data-testid="overview">
-      <header className="kit-head">
-        <h2 id={headId}>Page overview</h2>
-        <p className="card-meta"><AiWritten /></p>
-      </header>
-      {pageCoverage !== undefined && pageCoverage !== '' && <p className="overview-coverage">{pageCoverage}</p>}
+const points = (n: number): string => `${n} more ${n === 1 ? 'point' : 'points'}`;
 
-      <h3>Key points</h3>
-      <ul className="key-points">
-        {overview.keyPoints.map((p) => (
-          <Linked as="li" key={p.id} links={linkKeysOf([p])}>
-            <p>{prettyExponents(p.point)}</p>
-            <QuoteBlock componentId="overview-v1" part="point" id={p.id} sourceId={p.sourceId} quote={p.quote} cite={cite} />
+/**
+ * The page overview, under the lesson title: a few short key points (the lesson's summary), then the key terms in a
+ * collapsed fold-out. No quote lines and no "Show in source" buttons here: pointing at (or focusing) a point lights its
+ * sentence in the source page, which is how a teacher sees where it comes from. Every quote is still checked and still
+ * highlighted in the source text.
+ */
+export function OverviewView({ overview }: Props) {
+  const headId = useId();
+  const moreId = useId();
+  const [open, setOpen] = useState(false);
+  const { lead, more } = overviewParts(overview.keyPoints);
+  const terms = overview.keyTerms;
+  const hasMore = terms.length > 0 || more.length > 0;
+  const foldLabel = terms.length > 0
+    ? `Key terms (${terms.length})${more.length > 0 ? ` and ${points(more.length)}` : ''}`
+    : points(more.length);
+  return (
+    <section className="overview overview-compact" aria-labelledby={headId} data-testid="overview">
+      <h2 id={headId} className="sr-only">Page overview</h2>
+      <ul className="key-points" aria-label="Key points">
+        {lead.map((p) => (
+          <Linked as="li" key={p.id} links={linkKeysOf([p])} tabIndex={0}>
+            {prettyExponents(p.point)}
           </Linked>
         ))}
       </ul>
-
-      {overview.keyTerms.length > 0 && (
-        <>
-          <h3>Key terms</h3>
-          <dl className="key-terms">
-            {overview.keyTerms.map((t) => (
-              <Linked key={t.id} className="key-term" links={linkKeysOf([t])}>
-                <dt>{prettyExponents(t.term)}</dt>
-                <dd>
-                  <p>{prettyExponents(t.gloss)}</p>
-                  <QuoteBlock componentId="overview-v1" part="term" id={t.id} sourceId={t.sourceId} quote={t.quote} cite={cite} />
-                </dd>
-              </Linked>
-            ))}
-          </dl>
-        </>
+      <p className="overview-foot">
+        <span className="ai-written">AI-written summary · point at a line to see it on the page</span>
+        {hasMore && (
+          <button type="button" className="fold-btn" aria-expanded={open} aria-controls={moreId} onClick={() => setOpen((v) => !v)}>
+            {foldLabel}{open ? <IconChevronUp size={16} /> : <IconChevronDown size={16} />}
+          </button>
+        )}
+      </p>
+      {hasMore && open && (
+        <div id={moreId} className="overview-more">
+          {more.length > 0 && (
+            <ul className="key-points" aria-label="More key points">
+              {more.map((p) => (
+                <Linked as="li" key={p.id} links={linkKeysOf([p])} tabIndex={0}>
+                  {prettyExponents(p.point)}
+                </Linked>
+              ))}
+            </ul>
+          )}
+          {terms.length > 0 && (
+            <dl className="key-terms" aria-label="Key terms">
+              {terms.map((t) => (
+                <Linked key={t.id} className="key-term" links={linkKeysOf([t])} tabIndex={0}>
+                  <dt>{prettyExponents(t.term)}</dt>
+                  <dd>{prettyExponents(t.gloss)}</dd>
+                </Linked>
+              ))}
+            </dl>
+          )}
+        </div>
       )}
     </section>
   );

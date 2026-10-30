@@ -172,9 +172,20 @@ export function disclosureText(m: SourceMetaLike | null | undefined, made = 'Mus
   }
   const publisher = sourcePublisher(attribution);
   if (publisher !== null) {
-    return `AI-generated with ${made}. Includes material from ${publisher}; ${publisher} has not reviewed or endorsed this lesson.`;
+    // The publisher is named once: long agency names ("NOAA Office of Ocean Exploration and Research (NOAA Ocean
+    // Exploration)") read as a stutter when repeated in the same sentence.
+    return `AI-generated with ${made}. Includes material from ${publisher}, which has not reviewed or endorsed this lesson.`;
   }
   return `AI-generated with ${made}. The source's publisher has not reviewed or endorsed this lesson.`;
+}
+
+/**
+ * A page title without its " — publisher" suffix ("Fueling Life on Earth … — NOAA Office of …" → "Fueling Life on Earth …"),
+ * for the compact source header, which names the publisher on its own line. A title that is only a suffix stays whole.
+ */
+export function shortTitle(title: string): string {
+  const cut = title.indexOf(' — ');
+  return cut > 0 ? title.slice(0, cut) : title;
 }
 
 // ---- demo fault choice (generate control) --------------------------------------------------------------------

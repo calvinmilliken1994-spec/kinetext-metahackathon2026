@@ -100,3 +100,42 @@
 /* On R the drawing re-scales from the guess's own scale to the engine's: the line glides to the same height there. */
 .pz-guess { transition: transform 900ms cubic-bezier(0.16, 1, 0.3, 1); }
 @media (prefers-reduced-motion: reduce) { .pz-guess { transition: none; } }
+
+/* ---- typeset formula (Stage 7 view fixes): the explorer's formula set as maths from the parsed expression ----------------
+ * Symbols in an italic serif (as in a textbook), operators and numbers upright, a division stacked over a rule. The page's
+ * own line stays underneath as a quiet quote. */
+.explorer-typeset { margin: 2px 0 4px; justify-self: start; border-radius: var(--r-s); }
+.ts-formula { display: inline-block; }
+/* Inline formatting (not flex) inside the formula, so sub/sup keep their vertical-align. */
+.ts-body {
+  display: inline-block; white-space: nowrap;
+  font-size: var(--fs-26); line-height: 1.2; color: var(--ink); font-variant-numeric: lining-nums;
+}
+.ts-body var, .ts-symbol var { font-family: var(--serif); font-style: italic; letter-spacing: 0.01em; }
+.ts-body sub, .ts-symbol sub { font-size: 0.62em; font-style: normal; line-height: 0; vertical-align: -0.32em; margin-left: 0.04em; }
+.ts-body sup { font-size: 0.62em; line-height: 0; vertical-align: 0.62em; margin-left: 0.04em; }
+.ts-op { white-space: pre; color: var(--ink-2); }
+.ts-num { font-variant-numeric: lining-nums; }
+.ts-eq { margin: 0 0.36em; color: var(--ink-2); }
+/* A stacked fraction: the bar spans the wider of numerator and denominator; centred on the maths axis of the line. */
+.ts-frac { display: inline-flex; flex-direction: column; align-items: stretch; vertical-align: middle; margin: 0 0.14em; }
+.ts-frac-num, .ts-frac-den { display: block; text-align: center; padding: 0 0.2em; white-space: nowrap; }
+.ts-frac-num { padding-bottom: 0.12em; }
+.ts-frac-den { border-top: 1.5px solid currentColor; padding-top: 0.06em; }
+.ts-symbol { color: var(--ink-3); }
+.ts-symbol var { font-size: 1.06em; }
+/* A power on a subscripted symbol (V₀²) sits over the subscript, as in print, not after it. */
+.ts-body var:has(> sub) + sup, .eq-line var:has(> sub) + sup { margin-left: -0.42em; }
+
+/* The value table's current row: a quiet tag before the number, the row tinted. */
+.value-now-tag { margin-right: 8px; font-size: var(--fs-12); font-weight: var(--fw-medium); color: var(--accent-text); }
+
+/* ---- hidden answers in a scene: the words stay, a dashed '?' chip stands in for the number (lib/displayText hiddenAnswerLead) ---- */
+.scene-hidden-chip { fill: var(--panel); stroke: var(--line-3); stroke-width: 1.25; stroke-dasharray: 3 3; }
+.scene-hidden-q { font-weight: var(--fw-bold); fill: var(--ink-2); paint-order: normal; stroke: none; }
+/* The same chip for a hidden number in text (readouts, the live equation, the value table): one treatment everywhere. */
+span.concealed {
+  display: inline-block; min-width: 1.6em; padding: 0 0.35em; line-height: 1.25; text-align: center;
+  color: var(--ink-2); font-weight: var(--fw-bold);
+  border: 1.25px dashed var(--line-3); border-radius: 5px; background: transparent;
+}

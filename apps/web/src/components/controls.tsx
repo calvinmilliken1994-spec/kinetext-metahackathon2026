@@ -1,5 +1,5 @@
 import { useId } from 'react';
-import type { ChangeEvent } from 'react';
+import type { ChangeEvent, ReactNode } from 'react';
 import { readableNumber, sliderEndLabel } from '../lib/format.ts';
 import { stopIndex } from '../lib/compound.ts';
 import { unitForValue } from '../lib/engines.ts';
@@ -8,8 +8,10 @@ import { CONCEALED, CONCEALED_HINT } from '../lib/reveal.ts';
 
 export interface SliderProps {
   label: string;
-  /** Optional math symbol shown after the label, e.g. 'F_net'. */
-  symbol?: string;
+  /** Optional math symbol shown after the label, e.g. 'F_net' or a typeset symbol. */
+  symbol?: ReactNode;
+  /** The quantity's full description when `label` is a short form of it: the label's tooltip and the slider's description. */
+  description?: string;
   unit: string;
   min: number;
   max: number;
@@ -23,16 +25,19 @@ export interface SliderProps {
 
 export interface SliderPreset { value: number; label: string; title: string; active: boolean }
 
-export function Slider({ label, symbol, unit, min, max, step, value, onChange, presets }: SliderProps) {
+export function Slider({ label, symbol, description, unit, min, max, step, value, onChange, presets }: SliderProps) {
   const id = useId();
+  const descId = `${id}-desc`;
   const shown = readableNumber(value);
   const shownUnit = unitForValue(unit, Number(shown));
+  const described = description !== undefined && description !== label;
   return (
     <div className="slider">
       <div className="slider-head">
-        <label htmlFor={id}>{label}{symbol !== undefined && <> <span className="sym">({symbol})</span></>}</label>
+        <label htmlFor={id} title={described ? description : undefined}>{label}{symbol !== undefined && <> <span className="sym">({symbol})</span></>}</label>
         <output htmlFor={id} className="slider-value">{shown}{shownUnit !== '' && <> <span className="unit">{shownUnit}</span></>}</output>
       </div>
+      {described && <span id={descId} className="sr-only">{description}</span>}
       <input
         id={id}
         type="range"
@@ -41,6 +46,7 @@ export function Slider({ label, symbol, unit, min, max, step, value, onChange, p
         step={step}
         value={value}
         aria-valuetext={`${shown} ${shownUnit}`.trim()}
+        aria-describedby={described ? descId : undefined}
         onChange={(e: ChangeEvent<HTMLInputElement>) => onChange(Number(e.target.value))}
       />
       <div className="slider-ends" aria-hidden="true"><span>{sliderEndLabel(min, unit)}</span><span>{sliderEndLabel(max, unit)}</span></div>

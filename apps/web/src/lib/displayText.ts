@@ -33,6 +33,50 @@ function sig3Plain(n: number): string {
   return s === '-0' ? '0' : s;
 }
 
+// ---- sentences and labels written by the model ------------------------------------------------------------------------
+
+/** Unit symbols and short tokens that must keep their case at the start of a label. */
+const KEEP_CASE = new Set(['kg', 'km', 'cm', 'mm', 'nm', 'ml', 'mg', 'mol', 'min', 'hr', 'ms', 'ns', 'ft', 'lb', 'lbs', 'mph', 'kph', 'rad', 'cd', 'kj', 'kw', 'kwh']);
+
+/**
+ * Sentence case for a label the model wrote ('quorum of seven states was obtained' → 'Quorum …'). Only a first word of two
+ * or more lowercase letters is changed, so symbols ('x', 'pH', 'mRNA'), unit symbols ('kg', 'm/s') and numbers stay.
+ */
+export function capitalFirst(text: string): string {
+  const m = /^([a-z]{2,})(?=$|[\s,.;:!?)'’-])/.exec(text);
+  if (m === null) return text;
+  const word = m[1] as string;
+  if (KEEP_CASE.has(word)) return text;
+  return word.charAt(0).toUpperCase() + text.slice(1);
+}
+
+/** One sentence: tidy spaces, capital first letter, closing punctuation (a dangling ',', ':' or ';' becomes '.'). */
+function asSentence(part: string): string {
+  const s = part.replace(/\s+/g, ' ').trim();
+  if (s === '') return '';
+  const cap = capitalFirst(s);
+  if (/[.!?]["”’)]*$/.test(cap)) return cap;
+  return `${cap.replace(/[\s,;:–—-]+$/, '')}.`;
+}
+
+/**
+ * Join fixed UI sentences and AI-written notes into one paragraph. A note the model wrote without a full stop ('Follows the
+ * page from convening through debate to compromise') would otherwise run into the next sentence.
+ */
+export function joinSentences(...parts: readonly string[]): string {
+  return parts.map(asSentence).filter((s) => s !== '').join(' ');
+}
+
+/**
+ * The words of a scene label before its number ('max height 12.34 m' → 'max height', 'a = 343 m/s' → 'a ='), for the
+ * hidden-answer treatment: the words stay and a '?' chip stands in for the number and its unit. '' when the label is only
+ * a value.
+ */
+export function hiddenAnswerLead(text: string): string {
+  const m = /(?<![\p{L}_\d.])[-−]?\$?\d/u.exec(text);
+  return (m === null ? text : text.slice(0, m.index)).trim();
+}
+
 /** A gap or margin as a person reads it: three significant figures, grouped, with its unit ('4.75 m', '2,750', '±' added by the caller). */
 export function amountText(n: number, unit: string): string {
   if (!Number.isFinite(n)) return 'not defined';

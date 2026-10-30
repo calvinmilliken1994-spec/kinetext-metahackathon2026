@@ -121,6 +121,20 @@
 .order-track .order-item.order-miss .order-pos { border-color: var(--bad); }
 @media (max-width: 560px) { .order-track .order-item { grid-template-columns: minmax(0, 1fr); } }
 
+/* Move up / move down: quiet icon buttons (named for screen readers), so the cards' labels stay the subject. */
+.order-buttons { gap: 2px; align-self: center; flex-wrap: nowrap; }
+.order-move {
+  display: inline-grid; place-items: center; width: 32px; height: 32px; padding: 0;
+  border: 1px solid transparent; border-radius: var(--r-s); background: transparent; color: var(--ink-3); cursor: pointer;
+  transition: background-color 120ms ease-out, color 120ms ease-out, border-color 120ms ease-out;
+}
+.order-move svg { width: 18px; height: 18px; }
+.order-move:hover:not(:disabled) { background: var(--panel-2); border-color: var(--line-2); color: var(--ink); }
+.order-move:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; color: var(--ink); }
+.order-move:active:not(:disabled) { background: var(--panel-3); }
+.order-move:disabled { opacity: 0.3; cursor: default; }
+.order-item .order-label { align-items: center; }
+
 /* ================================================================================================================
  * The page's order as a horizontal step track (StepTrack), shown after the check. The one authored moment: the line
  * draws left to right in step order and each station, leader and label arrives behind it.

@@ -26,7 +26,7 @@ test('withoutReviewNote keeps publisher disclosures (NASA: AI-generated, not end
     attribution: "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
   }, 'Muse Spark 1.3 (Meta)');
   assert.equal(withoutReviewNote(nasa), nasa);
-  assert.match(nasa, /^AI-generated with Muse Spark 1\.3 \(Meta\)\. Includes material from NASA Glenn Research Center; NASA Glenn Research Center has not reviewed or endorsed this lesson\.$/);
+  assert.match(nasa, /^AI-generated with Muse Spark 1\.3 \(Meta\)\. Includes material from NASA Glenn Research Center, which has not reviewed or endorsed this lesson\.$/);
 });
 
 // ---- Stage 7 item 2b: the trust receipt counts come only from recorded data ------------------------------------------

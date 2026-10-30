@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { api, describeError } from './api.ts';
 import { useHealth, useJobDetail, useJobs, useModels, useSourceDoc, useSources } from './hooks.ts';
 import { buildHighlights } from './lib/highlight.ts';
@@ -21,13 +21,14 @@ import type { Subject } from '../../../packages/contracts/kit.ts';
 import type { DemoChoice } from './lib/sources.ts';
 import { activityRepairCounts, checkTally, lessonRepairCounts, quoteTally, repairPhrases, sectionTally } from './lib/provenance.ts';
 import { readStoredTech, writeStoredTech } from './lib/techDetails.ts';
+import { readSourceOpen, writeSourceOpen } from './lib/lessonLayout.ts';
 import { revealInPanels, scrollPanelToTop } from './lib/scroll.ts';
 import { deckFromActivity, deckFromLesson, exitSearch, presentRequest } from './lib/presentation.ts';
 import type { Deck } from './lib/presentation.ts';
 import { ApiStatus } from './components/ApiStatus.tsx';
 import { AppWindow } from './components/AppWindow.tsx';
 import { IconRail } from './components/IconRail.tsx';
-import { SourcePanel } from './components/SourcePanel.tsx';
+import { SourcePanel, SourceTab } from './components/SourcePanel.tsx';
 import type { Flash } from './components/SourcePanel.tsx';
 import { NewLessonSection, RunsSection, StepsSection } from './components/PipelinePanel.tsx';
 import { RunsDrawer } from './components/RunsDrawer.tsx';
@@ -87,7 +88,9 @@ export function App() {
   const modelChoice = pickModel(models, wantedModel);
 
   // Window layout: the lesson and its source page fill the window; runs, steps and checks open in a drawer from the rail.
-  const [showSource, setShowSource] = useState(true);
+  // The source page collapses to a slim tab; the choice is kept across visits (lib/lessonLayout.ts).
+  const [showSource, setShowSource] = useState(() => readSourceOpen(localStore()));
+  useEffect(() => { writeSourceOpen(localStore(), showSource); }, [showSource]);
   const [drawer, setDrawer] = useState<DrawerMode | null>(null);
   const [tech, setTech] = useState(() => readStoredTech(localStore()));
   // Stage 7c: presentation mode for the open lesson (entered from the lesson header, the rail, or a ?present= link).
@@ -320,19 +323,26 @@ export function App() {
           canPresent={deck !== null}
         />
         <div className={`workspace${showSource ? '' : ' hide-source'}`}>
-          <SourcePanel
-            sources={sources}
-            selectedId={selectedSourceId}
-            onSelect={onSelectSource}
-            onReload={reloadSources}
-            doc={doc}
-            highlights={highlights}
-            quotes={quotes}
-            flash={flash}
-            onCite={onCite}
-            subjectFilter={subjectFilter}
-            onSubjectFilter={setSubjectFilter}
-          />
+          {showSource ? (
+            <SourcePanel
+              sources={sources}
+              selectedId={selectedSourceId}
+              onSelect={onSelectSource}
+              onReload={reloadSources}
+              doc={doc}
+              highlights={highlights}
+              quotes={quotes}
+              flash={flash}
+              onCite={onCite}
+              onCollapse={() => setShowSource(false)}
+            />
+          ) : (
+            <SourceTab
+              onExpand={() => setShowSource(true)}
+              found={receipt?.input.quotes?.found ?? null}
+              total={receipt?.input.quotes?.total ?? 0}
+            />
+          )}
 
           <main className="panel activity-panel" aria-label="Lesson" ref={mainRef} tabIndex={-1}>
             <div className="main-inner">
