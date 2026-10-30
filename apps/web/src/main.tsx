@@ -6,6 +6,9 @@ import './styles.css';
 import './styles/shell.css';
 import './styles/sim.css';
 import './styles/linking.css';
+import './styles/chem.css';
+import './styles/history.css';
+import './styles/present.css';
 
 interface BoundaryState { failed: boolean }
 
