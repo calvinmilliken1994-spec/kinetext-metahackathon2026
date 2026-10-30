@@ -1,0 +1,13 @@
+{
+  "id": "census-computing-apportionment",
+  "title": "Computing Apportionment — U.S. Census Bureau, Congressional Apportionment",
+  "subject": "maths",
+  "locator": "https://www.census.gov/topics/public-sector/congressional-apportionment/about/computing.html",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: U.S. Census Bureau, Congressional Apportionment, 'Computing Apportionment'. Credit: U.S. Census Bureau. Per Census Bureau policy DS027 (Research Transparency and Public Access), 'Data/works created by Census Bureau employees generally are not subject to copyright protection within the United States'; the embedded quotation of Article 1, Section 2 of the U.S. Constitution is in the public domain by age. The U.S. Census Bureau has not reviewed, approved or endorsed this activity.",
+  "sha256": "aebb6d0187c5e1990d7aded30e76276837744417fba607704f46e82a7db34bf0",
+  "textFile": "census-computing-apportionment.txt",
+  "retrievedAt": "2026-10-30T03:54:00Z",
+  "transcription": "Main article text only (site header, 'Skip Navigation' line, topic sidebar, the hidden 'Page Last Revised - November 22, 2021' line, the other-topics-in-series block and footer removed). The page's equations are GIF formula images; each is replaced by its own alt text verbatim ('1 divided by the square root of n(n-1)' etc.), and the line breaks inside those paragraphs are kept as line breaks. The embedded quotation of Article 1, Section 2 of the U.S. Constitution kept as part of the agency text. Straight quotation marks around 'priority' and 'multiplier' kept as printed. Whitespace normalised.",
+  "purpose": "library: congressional apportionment by the Method of Equal Proportions — a stated multiplier formula (1 divided by the square root of n(n-1), from the formula images' alt text) with worked multipliers for seats two, three and four (0.70710678, 0.40824829, 0.288675134) and a step-by-step seat-assignment procedure for the 435 House seats. Fits step ordering (the apportionment procedure), quiz cards with predict-then-reveal on the worked multipliers, and the formula explorer for the multiplier/priority value."
+}

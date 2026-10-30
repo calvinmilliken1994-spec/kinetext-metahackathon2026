@@ -1,0 +1,45 @@
+# Computing Apportionment
+
+Article 1, Section 2, of the United States Constitution states:
+
+"Representatives and direct Taxes shall be apportioned among the several States which may be included within this Union, according to their respective Numbers...The actual Enumeration shall be made within three Years after the first Meeting of the Congress of the United States, and within every subsequent Term of ten Years, in such Manner as they shall by Law direct."
+
+Therein lies the primary mandate of the U.S. census, apportionment of the House of Representatives. Since that first census in 1790, five methods of apportionment have been used. The current method used, the Method of Equal Proportions, was adopted by congress in 1941 following the census of 1940. This method assigns seats in the House of Representatives according to a "priority" value. The priority value is determined by multiplying the population of a state by a "multiplier."
+
+Each of the 50 states is given one seat out of the current total of 435. The next, or 51st seat, goes to the state with the highest priority value and becomes that state's second seat. This continues until all 435 seats have been assigned to a state. This is how it is done.
+
+Equal Proportions Method
+
+P - represents a state's total population
+
+n - represents the number of seats a state would have if it gained a seat (because all states automatically received one seat the next seat gained is "seat two," and the next "seat three," and the next "seat four," and so on.)
+
+The multiplier equals:
+
+1 divided by the square root of n(n-1)
+
+[which is called the reciprocal of the geometric mean]. Computing these values is quite easy using a computer with spreadsheet software (such as Excel).
+
+Thus the formula for calculating the multiplier for the second seat is:
+
+1 divided by the square root of 2(2-1)
+
+or 1/1.414213562 or 0.70710678
+
+the multiplier for the third seat is:
+
+1 divided by the square root of 3(3-1)
+
+1/2.449489743 or 0.40824829
+
+the multiplier for the fourth seat is:
+
+1 divided by the square root of 4(4-1)
+
+1/3.464101615 or 0.288675134
+
+Continue until an appropriate number of multipliers have been calculated.
+
+Once the "multipliers" have been calculated, the next step is to multiply this figure by the population total for each of the 50 states (the District of Columbia is not included in these calculations). The resulting numbers are the priority values. Make sure you compute enough multipliers and priority values to cover the largest number of seats in the U.S. House of Representatives that any one state stands to gain. For example, if the largest number of seats currently assigned to a state is 60, multipliers and priority values must be calculated for at least the 60th seat. If you are using a computer, you should compute multipliers for seats 2 through 70. This will assure you have enough multipliers and priority values for apportionment.
+
+Once you've calculated priority values for the total number of potential seats for each state, the next step is to rank and assign seat numbers to the resulting priority values starting with seat 51, until all 435 seats have been assigned (remember, each state automatically received one seat). Next, tally the number of seats for each state to arrive at the total number of seats in the House of Representatives apportioned to each state.

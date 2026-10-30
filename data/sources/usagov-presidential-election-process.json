@@ -1,0 +1,13 @@
+{
+  "id": "usagov-presidential-election-process",
+  "title": "Overview of the presidential election process — USA.gov (U.S. General Services Administration)",
+  "subject": "civics",
+  "locator": "https://www.usa.gov/presidential-election-process",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: USA.gov, 'Overview of the presidential election process'. USA.gov is an official website of the U.S. General Services Administration; per the GSA website policies, 'Most material on our site is free of copyright and may be copied and distributed without permission. Works produced by federal government employees in the course of their employment are generally not protected by copyright and are in the public domain in the U.S.' The U.S. General Services Administration has not reviewed, approved or endorsed this activity.",
+  "sha256": "dab5e0bb2bd4fbb8ad6e9d4e8554cef8d4d363028ced8cd2650173905c0efc2a",
+  "textFile": "usagov-presidential-election-process.txt",
+  "retrievedAt": "2026-10-30T04:00:00Z",
+  "transcription": "Main article text only (site header, breadcrumb, sidenav, 'LAST UPDATED: February 25, 2026' block, share widgets and footer removed). The election-cycle table transcribed as plain-text pipe-separated lines including its caption ('Presidential Election Cycle Table') and header row; link text inside table cells flattened into the cell text. Section questions kept as heading lines. Whitespace normalised.",
+  "purpose": "library: the presidential election cycle as an ordered, season-dated sequence (candidate registration and announcements the spring before, primary/caucus debates, primaries and caucuses January to June, conventions July to early September, debates September and October, Election Day the first Tuesday after the first Monday, Electoral College vote in December, Congress counts in early January, inauguration January 20), with the next election stated as November 7, 2028. Fits step ordering/timeline, a compare table of cycle stages, and quiz cards on the dates."
+}

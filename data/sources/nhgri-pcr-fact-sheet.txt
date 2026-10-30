@@ -1,0 +1,15 @@
+# Polymerase Chain Reaction (PCR) Fact Sheet
+
+Polymerase chain reaction (PCR) is a technique used to "amplify" small segments of DNA.
+
+What is PCR?
+
+Sometimes called "molecular photocopying," the polymerase chain reaction (PCR) is a fast and inexpensive technique used to "amplify" - copy - small segments of DNA. Because significant amounts of a sample of DNA are necessary for molecular and genetic analyses, studies of isolated pieces of DNA are nearly impossible without PCR amplification. Often heralded as one of the most important scientific advances in molecular biology, PCR revolutionized the study of DNA to such an extent that its creator, Kary B. Mullis, was awarded the Nobel Prize for Chemistry in 1993.
+
+What is PCR used for?
+
+Once amplified, the DNA produced by PCR can be used in many different laboratory procedures. For example, most mapping techniques in the Human Genome Project (HGP) relied on PCR. PCR is also valuable in a number of laboratory and clinical techniques, including DNA fingerprinting, detection of bacteria or viruses (particularly AIDS), and diagnosis of genetic disorders.
+
+How does PCR work?
+
+To amplify a segment of DNA using PCR, the sample is first heated so the DNA denatures, or separates into two pieces of single-stranded DNA. Next, an enzyme called "Taq polymerase" synthesizes - builds - two new strands of DNA, using the original strands as templates. This process results in the duplication of the original DNA, with each of the new molecules containing one old and one new strand of DNA. Then each of these strands can be used to create two new copies, and so on, and so on. The cycle of denaturing and synthesizing new DNA is repeated as many as 30 or 40 times, leading to more than one billion exact copies of the original DNA segment. The entire cycling process of PCR is automated and can be completed in just a few hours. It is directed by a machine called a thermocycler, which is programmed to alter the temperature of the reaction every few minutes to allow DNA denaturing and synthesis.

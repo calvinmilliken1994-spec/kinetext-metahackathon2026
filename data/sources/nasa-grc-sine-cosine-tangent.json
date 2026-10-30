@@ -1,0 +1,13 @@
+{
+  "id": "nasa-grc-sine-cosine-tangent",
+  "title": "Sine-Cosine-Tangent — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+  "subject": "maths",
+  "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/sine-cosine-tangent/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+  "sha256": "3f90979d8b1710fa0dbffead40968b37333b0e8dbb45f50696a604f272e181b9",
+  "textFile": "nasa-grc-sine-cosine-tangent.txt",
+  "retrievedAt": "2026-10-30T03:44:00Z",
+  "transcription": "Main article text only (site banner, menu, breadcrumbs, the 'On this page' sidenav, the ladder and similar-triangle figure images, feedback widget and footer removed). The page typesets its display equations in MathJax LaTeX; each is rendered as a plain-text line with the LaTeX wrappers removed and fractions flattened (e.g. sin(c) = o/h, h^2 = a^2 + o^2), with no other change to any equation. Bold emphasis on defined terms and inline links flattened to plain text. The three trigonometric tables at the bottom are images: their section headings ('Table of sin(a)', 'Table of cos(a)', 'Table of tan(a)') are kept, the image tables themselves are not. The page's own duplication '75.5 degrees degrees' and the en dashes inside equations kept as printed. Whitespace normalised.",
+  "purpose": "library: right-triangle trigonometry — sine, cosine and tangent defined as side ratios, the angle sum 90 + c + d = 180, and a full worked ladder example (8-foot ladder with its base at 2/4/6 feet gives cos = 2/8 = .25, 4/8 = .5, 6/8 = .75; Pythagorean check o = 7.745; the complementary-angle identity sin(c) = cos(90 - c)). Fits the formula explorer (the three ratio formulas), quiz cards with predict-then-reveal on the ladder cases, and a compare table of the three ratios."
+}

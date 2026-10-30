@@ -1,0 +1,13 @@
+{
+  "id": "nhgri-pcr-fact-sheet",
+  "title": "Polymerase Chain Reaction (PCR) Fact Sheet — National Human Genome Research Institute, genome.gov",
+  "subject": "biology",
+  "locator": "https://www.genome.gov/about-genomics/fact-sheets/Polymerase-Chain-Reaction-Fact-Sheet",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: National Human Genome Research Institute (NHGRI), genome.gov, 'Polymerase Chain Reaction (PCR) Fact Sheet'. Per the NHGRI Copyright Policy, 'Text, graphics, videos, illustrations and other information on National Human Genome Research Institute (NHGRI) websites are in the public domain, unless otherwise indicated'. Courtesy: National Human Genome Research Institute. The National Human Genome Research Institute has not reviewed, approved or endorsed this activity.",
+  "sha256": "d4a11c85387eeb3080dfdf528b93202d09a5e14654d7b3cb2d92ac557369748b",
+  "textFile": "nhgri-pcr-fact-sheet.txt",
+  "retrievedAt": "2026-10-30T03:52:00Z",
+  "transcription": "Main article text only (site header and menu, the mobile-accordion duplicate of each expandable section removed, language-switch widget, 'Last updated: August 17, 2020' block and footer removed). The hero title is the H1 line and the hero lead paragraph the opening line; the three sections appear in page order (What is PCR? / What is PCR used for? / How does PCR work?). Straight quotation marks and the page's spaced hyphen style (' - copy - ') kept as printed. Whitespace normalised.",
+  "purpose": "library: PCR as an ordered amplification cycle — heat denatures the DNA into single strands, Taq polymerase synthesizes two new strands from the templates, and repeating the cycle 30 or 40 times yields more than one billion exact copies, automated by a thermocycler. Fits step ordering (the PCR cycle), quiz cards with predict-then-reveal on the exponential copying, and a concept map of PCR uses (DNA fingerprinting, detection of bacteria or viruses, diagnosis of genetic disorders)."
+}

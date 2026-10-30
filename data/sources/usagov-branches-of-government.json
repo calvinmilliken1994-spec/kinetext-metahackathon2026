@@ -1,0 +1,13 @@
+{
+  "id": "usagov-branches-of-government",
+  "title": "Branches of the U.S. government — USA.gov (U.S. General Services Administration)",
+  "subject": "civics",
+  "locator": "https://www.usa.gov/branches-of-government",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: USA.gov, 'Branches of the U.S. government'. USA.gov is an official website of the U.S. General Services Administration; per the GSA website policies, 'Most material on our site is free of copyright and may be copied and distributed without permission. Works produced by federal government employees in the course of their employment are generally not protected by copyright and are in the public domain in the U.S.' The U.S. General Services Administration has not reviewed, approved or endorsed this activity.",
+  "sha256": "ae307d5c1f332d7d6c2b5d22721b7a7e2d4334785f551008b702cf03e1a9fd41",
+  "textFile": "usagov-branches-of-government.txt",
+  "retrievedAt": "2026-10-30T03:45:00Z",
+  "transcription": "Main article text only (site header, breadcrumb, topic sidenav, 'LAST UPDATED: March 2, 2026' block, share/contact widgets and footer removed). Section and accordion headings kept as plain lines; bullet lists flattened to one line per item with a • marker; inline links flattened to their text; the page's mix of curly and straight apostrophes kept as printed. A hidden HTML-comment placeholder in the page source ('Use the accurate heading level to maintain the document outline') is not visible content and was excluded. Whitespace normalised.",
+  "purpose": "library: the three branches of the U.S. government — what each is made of, its key roles, and how the checks-and-balances system lets each branch change acts of the others. Fits the compare table (branch x composition/roles/checks), quiz cards with predict-then-reveal, and claim-evidence components quoting each branch's powers."
+}

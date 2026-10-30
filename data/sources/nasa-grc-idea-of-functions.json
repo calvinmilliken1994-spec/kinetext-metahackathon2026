@@ -1,0 +1,13 @@
+{
+  "id": "nasa-grc-idea-of-functions",
+  "title": "Idea of Functions — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+  "subject": "maths",
+  "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/idea-of-functions/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+  "sha256": "6fce3423e0f40551beee636574cc686090a85588891583ee35762c32af992108",
+  "textFile": "nasa-grc-idea-of-functions.txt",
+  "retrievedAt": "2026-10-30T03:44:00Z",
+  "transcription": "Main article text only (site banner, menu, breadcrumbs, sidenav, the nested similar-triangles figure image, feedback widget and footer removed). The text describing the coloured triangles ('the large yellow triangle on the figure', black/red/blue) is the page's own and kept. Bold emphasis and inline links flattened to plain text. Whitespace normalised.",
+  "purpose": "library: the idea of a function through exponential, logarithmic and trigonometric examples, with a worked similar-triangles demonstration that cos(b) = x/y = 2x/2y = 3x/3y depends only on the angle and not on the side lengths. Fits quiz cards (predict the ratio when the sides double or triple), a compare table (black/red/blue triangles), and the formula explorer for cos(b) = a/h."
+}

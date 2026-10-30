@@ -1,0 +1,13 @@
+{
+  "id": "usagov-how-laws-are-made",
+  "title": "How laws are made — USA.gov (U.S. General Services Administration)",
+  "subject": "civics",
+  "locator": "https://www.usa.gov/how-laws-are-made",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: USA.gov, 'How laws are made'. USA.gov is an official website of the U.S. General Services Administration; per the GSA website policies, 'Most material on our site is free of copyright and may be copied and distributed without permission. Works produced by federal government employees in the course of their employment are generally not protected by copyright and are in the public domain in the U.S.' The U.S. General Services Administration has not reviewed, approved or endorsed this activity.",
+  "sha256": "a0fa06d928204b895fc85a6e90675ea52362ca38af3e3c44b154b827b81b5f87",
+  "textFile": "usagov-how-laws-are-made.txt",
+  "retrievedAt": "2026-10-30T03:45:00Z",
+  "transcription": "Main article text only (site header, breadcrumb, sidenav, 'LAST UPDATED: November 17, 2025' block, share widgets and footer removed). The bill-to-law steps are an ordered process list on the page and keep their 1.-7. numbering; the nested 'idea for a bill can come from a' list flattened to • items at the same level; inline links flattened to their text ('Learn more about the U.S. Congress.', the closing Congress.gov video line kept as printed). Whitespace normalised.",
+  "purpose": "library: how a bill becomes a law as an ordered 7-step process (introduction, committee, chamber vote, other body, reconciling versions, presentment, signature/veto and override/pocket veto) plus the procedural differences between the House and the Senate. Fits step ordering (sequence), a compare table (House vs Senate), and quiz cards."
+}

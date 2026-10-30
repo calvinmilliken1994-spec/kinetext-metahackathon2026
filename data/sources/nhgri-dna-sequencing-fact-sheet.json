@@ -1,0 +1,13 @@
+{
+  "id": "nhgri-dna-sequencing-fact-sheet",
+  "title": "DNA Sequencing Fact Sheet — National Human Genome Research Institute, genome.gov",
+  "subject": "biology",
+  "locator": "https://www.genome.gov/about-genomics/fact-sheets/DNA-Sequencing-Fact-Sheet",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: National Human Genome Research Institute (NHGRI), genome.gov, 'DNA Sequencing Fact Sheet'. Per the NHGRI Copyright Policy, 'Text, graphics, videos, illustrations and other information on National Human Genome Research Institute (NHGRI) websites are in the public domain, unless otherwise indicated'. Courtesy: National Human Genome Research Institute. The National Human Genome Research Institute has not reviewed, approved or endorsed this activity.",
+  "sha256": "3555c872ba407e81cd9059ac95d10207f341baaee7a4cb05c878f68df181052e",
+  "textFile": "nhgri-dna-sequencing-fact-sheet.txt",
+  "retrievedAt": "2026-10-30T03:52:00Z",
+  "transcription": "Main article text only (site header and menu, the mobile-accordion duplicates of the five expandable sections removed, language-switch widget, 'Last updated: June 27, 2023' block and footer removed). The hero title is the H1 line and the hero lead paragraph the opening line; sections in page order. Inline links flattened to their text. The served desktop copy of the 'What new sequencing methods have been developed?' section runs two paragraphs together with no space ('...few thousand dollars.Many of these new technologies...'); kept exactly as served. Whitespace normalised.",
+  "purpose": "library: DNA sequencing — the base-pairing rules (A always with T, C always with G), the human genome's about 3 billion base pairs, and how sequencing changed since the Human Genome Project (some labs sequence well over 100,000 billion bases per year, whole genomes for a few thousand dollars, NHGRI's under-$1,000 goal). Fits a compare table (then vs now, sequencing methods and technologies), quiz cards with predict-then-reveal on the numbers, and a concept map of sequencing applications in health research."
+}
