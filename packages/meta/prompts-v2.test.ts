@@ -4,7 +4,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { loadSource } from '../sources/index.ts';
 import { PROMPT_VERSION, buildAnalysisMessages, sourceBoundary, wrapSource } from './prompts.ts';
-import { ANALYSIS_V2_REPAIR_SCHEMA_NAME, ANALYSIS_V2_SCHEMA_NAME, KIT_COMPONENT_GUIDANCE, KIT_REPAIR_SCHEMA_NAMES, KIT_SCHEMA_NAMES, STAGE6_PROMPT_VERSION, SUBJECT_GUIDANCE, buildAnalysisV2Messages, buildAnalysisV2RepairMessages, buildKitComponentMessages, buildKitComponentRepairMessages } from './prompts-v2.ts';
+import { ANALYSIS_V2_REPAIR_SCHEMA_NAME, ANALYSIS_V2_SCHEMA_NAME, KIT_COMPONENT_GUIDANCE, KIT_REPAIR_SCHEMA_NAMES, KIT_SCHEMA_NAMES, STAGE6_PROMPT_VERSION, SUBJECT_GUIDANCE, TEACHER_WORDING_RULE, buildAnalysisV2Messages, buildAnalysisV2RepairMessages, buildKitComponentMessages, buildKitComponentRepairMessages } from './prompts-v2.ts';
 import type { V2RepairData } from './prompts-v2.ts';
 import { CONCEPT_MAP_RELATIONS, DECLINE_CODES, FORMULA_FUNCTIONS, KIT_GEN_COMPONENT_IDS, KIT_LIMITS, SUBJECTS } from '../contracts/kit.ts';
 import type { ComponentPlanEntry, SourceAnalysisV2 } from '../contracts/kit.ts';
@@ -55,7 +55,7 @@ function extractBetween(text: string, open: string, close: string): string {
 
 test('v1 unchanged pin and versions', () => {
   assert.equal(PROMPT_VERSION, 'v10');
-  assert.equal(STAGE6_PROMPT_VERSION, 's6-v4');
+  assert.equal(STAGE6_PROMPT_VERSION, 's6-v5');
   const source = loadSource('nasa-grc-drag-equation');
   const messages = buildAnalysisMessages(source);
   const digest = createHash('sha256').update(JSON.stringify(messages), 'utf8').digest('hex');
@@ -426,4 +426,60 @@ test('s6-v4 formula-explorer opens on first case', () => {
   assert.ok(system.includes('never a number'));
   assert.ok(system.includes('terms that cancel'));
   assert.ok(system.includes('sentence case'));
+});
+
+test('s6-v5 shared teacher wording in analysis and every kit component', () => {
+  const source = loadSource('nasa-grc-drag-equation');
+  const usable = loadFixture('source-analysis-v2.usable.json') as SourceAnalysisV2;
+  assert.ok(TEACHER_WORDING_RULE.includes('sentence case'));
+  assert.ok(TEACHER_WORDING_RULE.includes('normal punctuation'));
+  assert.ok(TEACHER_WORDING_RULE.includes('Page covers'));
+  assert.ok(TEACHER_WORDING_RULE.includes('m/s²'));
+  assert.ok(TEACHER_WORDING_RULE.includes('V²'));
+  const analysisSystem = buildAnalysisV2Messages(source)[0].content;
+  assert.ok(analysisSystem.includes(TEACHER_WORDING_RULE), 'analysis contains shared rule');
+  assert.ok(analysisSystem.includes('sentence case'));
+  assert.ok(analysisSystem.includes('normal punctuation'));
+  assert.ok(analysisSystem.includes('commas between list items'));
+  assert.ok(analysisSystem.includes('Page covers'));
+  assert.ok(analysisSystem.includes('m/s²'));
+  for (const id of KIT_GEN_COMPONENT_IDS) {
+    const plan: ComponentPlanEntry = { ...usable.componentPlan[0], componentId: id };
+    const system = buildKitComponentMessages(source, usable, plan)[0].content;
+    assert.ok(system.includes(TEACHER_WORDING_RULE), `${id} contains shared rule`);
+    assert.ok(system.includes('sentence case'), `${id} sentence case`);
+    assert.ok(system.includes('normal punctuation'), `${id} normal punctuation`);
+    assert.ok(system.includes('Page covers'), `${id} forbids Page covers`);
+    assert.ok(system.includes('commas between list items'), `${id} commas`);
+  }
+  const analysisRepairSystem = buildAnalysisV2RepairMessages(source, { original: {}, previous: {}, findings: [], authorizedPaths: [] })[0].content;
+  assert.ok(analysisRepairSystem.includes(TEACHER_WORDING_RULE), 'analysis repair contains shared rule');
+});
+
+test('s6-v5 component-specific teacher wording', () => {
+  const source = loadSource('nasa-grc-drag-equation');
+  const usable = loadFixture('source-analysis-v2.usable.json') as SourceAnalysisV2;
+  const explorerPlan: ComponentPlanEntry = { ...usable.componentPlan[0], componentId: 'formula-explorer-v1' };
+  const explorerSystem = buildKitComponentMessages(source, usable, explorerPlan)[0].content;
+  assert.ok(explorerSystem.includes('at most 5 words'), 'explorer meaning length');
+  assert.ok(explorerSystem.includes('drag coefficient'), 'explorer example meaning');
+  assert.ok(explorerSystem.includes('air density'), 'explorer example meaning');
+  assert.ok(explorerSystem.includes('longer explanations belong in quotes'), 'explorer quotes');
+  const sequencePlan: ComponentPlanEntry = { ...usable.componentPlan[0], componentId: 'sequence-v1' };
+  const sequenceSystem = buildKitComponentMessages(source, usable, sequencePlan)[0].content;
+  assert.ok(sequenceSystem.includes('at most 8 words'), 'sequence label length');
+  assert.ok(sequenceSystem.includes('Delegates meet in Philadelphia'), 'sequence example label');
+  assert.ok(sequenceSystem.includes('never a copied fragment'), 'sequence no fragment copy');
+  const comparePlan: ComponentPlanEntry = { ...usable.componentPlan[0], componentId: 'compare-table-v1' };
+  const compareSystem = buildKitComponentMessages(source, usable, comparePlan)[0].content;
+  assert.ok(compareSystem.includes('short noun phrases'), 'compare noun phrases');
+  assert.ok(compareSystem.includes('sentence case'), 'compare sentence case');
+  assert.ok(compareSystem.includes('consistent across columns'), 'compare consistency');
+  const quizPlan: ComponentPlanEntry = { ...usable.componentPlan[0], componentId: 'quiz-cards-v1' };
+  const quizSystem = buildKitComponentMessages(source, usable, quizPlan)[0].content;
+  assert.ok(quizSystem.includes('ends with a question mark'), 'quiz stem question mark');
+  assert.ok(KIT_COMPONENT_GUIDANCE['formula-explorer-v1'].includes('at most 5 words'));
+  assert.ok(KIT_COMPONENT_GUIDANCE['sequence-v1'].includes('at most 8 words'));
+  assert.ok(KIT_COMPONENT_GUIDANCE['compare-table-v1'].includes('consistent across columns'));
+  assert.ok(KIT_COMPONENT_GUIDANCE['quiz-cards-v1'].includes('ends with a question mark'));
 });
