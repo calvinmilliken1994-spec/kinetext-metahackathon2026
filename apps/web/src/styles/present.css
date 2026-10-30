@@ -145,6 +145,8 @@
 /* compare */
 .pz-compare { gap: calc(var(--pz-u) * 1.4); }
 .pz-table-wrap { overflow: auto; max-inline-size: 100%; }
+/* Stage 7e: the table keeps every row on screen (the flex column used to squash it to a scroll box mid-row). */
+.pz-compare > .pz-table-wrap { flex: none; }
 .pz-table { border-collapse: collapse; font-size: calc(var(--pz-body) * 0.96); line-height: 1.3; }
 .pz-table th, .pz-table td { padding: 0.55em 0.9em; border: 1px solid var(--line-2); text-align: start; vertical-align: top; }
 .pz-table thead th { font-weight: var(--fw-bold); color: var(--ink-2); background: var(--panel-2); }

@@ -83,3 +83,59 @@ export function amountText(n: number, unit: string): string {
   const u = unit.trim() === '' ? '' : ` ${prettyExponents(unit.trim())}`;
   return `${groupThousands(sig3Plain(n))}${u}`;
 }
+
+// ---- hidden characters in model text --------------------------------------------------------------------------------
+
+/**
+ * C0/C1 control characters (except tab and newline), zero-width characters, word joiners, bidi embeddings/overrides/
+ * isolates and the byte-order mark. Soft hyphens (U+00AD) are kept: real pages use them and they never draw a glyph.
+ */
+const HIDDEN_CHARS = /[\u0000-\u0008\u000b\u000c\u000d\u000e-\u001f\u007f-\u009f\u200b-\u200f\u202a-\u202e\u2060-\u2064\u2066-\u2069\ufeff\ufff9-\ufffb]/gu;
+
+/** Model text as it may be shown: no control, zero-width or direction-override characters (line separators read as spaces). */
+export function cleanDisplayText(text: string): string {
+  return text.replace(/[\u2028\u2029]/g, ' ').replace(HIDDEN_CHARS, '');
+}
+
+/** Keys whose strings are the page's own words: kept verbatim so they still match the page text they quote. */
+const VERBATIM_KEYS: ReadonlySet<string> = new Set(['quote', 'focusQuote']);
+
+/**
+ * A copy of a JSON value (a job detail from the API) with every string cleaned by cleanDisplayText, except page quotes.
+ * The one place model text is sanitised for display: everything the lesson views show comes through here.
+ */
+export function cleanModelStrings(value: unknown, key = ''): unknown {
+  if (typeof value === 'string') return VERBATIM_KEYS.has(key) ? value : cleanDisplayText(value);
+  if (Array.isArray(value)) return value.map((v) => cleanModelStrings(v, key));
+  if (typeof value === 'object' && value !== null) {
+    const out: Record<string, unknown> = {};
+    for (const [k, v] of Object.entries(value)) out[k] = cleanModelStrings(v, k);
+    return out;
+  }
+  return value;
+}
+
+// ---- AI-written sentences as a teacher reads them ---------------------------------------------------------------------
+
+/**
+ * An AI-written sentence (a learning objective, a heading) without raw code: hidden characters dropped, markdown code
+ * ticks and bold stars removed, caret powers as superscripts, a multiplication star as '·', and an initial-value zero
+ * after a one-letter symbol as a subscript (V0 → V₀, as the typeset equation shows it). Never used on page quotes.
+ */
+export function aiText(text: string): string {
+  return prettyExponents(
+    cleanDisplayText(text)
+      .replace(/`([^`]*)`/g, '$1')
+      .replace(/\*\*([^*]+)\*\*/g, '$1'),
+  )
+    .replace(/(?<=[\w)\]²³¹⁰⁴-⁹])(\s?)\*(\s?)(?=[\w(])/gu, (_m, a: string, b: string) => `${a}·${b}`)
+    .replace(/(?<![\p{L}\d_])([A-Za-z])0(?![\p{L}\d_.])/gu, '$1₀');
+}
+
+/** Unit symbols that must stay on the line of their number. */
+const UNIT_AFTER_NUMBER = /(\d) (?=(?:m\/s[²³]?|km\/h|kg\/m[²³]|m[²³]?|s|km|cm|mm|kg|g|N|J|K|W|Pa|kPa|Hz|%|mph|ft|lbs?|min|h|mol|mL|L|°C|°F|USD|years?)(?![\p{L}\d_]))/gu;
+
+/** A number and its unit joined by a no-break space ('8 m/s' never breaks as '8 / m/s' at the end of a line). */
+export function bindUnits(text: string): string {
+  return text.replace(UNIT_AFTER_NUMBER, '$1\u00a0');
+}

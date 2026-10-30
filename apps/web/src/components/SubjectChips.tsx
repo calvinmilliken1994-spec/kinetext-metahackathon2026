@@ -1,14 +1,13 @@
-import type { Subject } from '../../../../packages/contracts/kit.ts';
 import { chipList } from '../lib/subjects.ts';
-import type { SubjectCount } from '../lib/subjects.ts';
+import type { SubjectCount, SubjectKey } from '../lib/subjects.ts';
 
 interface Props {
   /** Non-empty subjects with their counts (subjectCounts). */
   counts: readonly SubjectCount[];
   /** Everything, unfiltered (the "All" chip). */
   total: number;
-  active: Subject | null;
-  onChange: (subject: Subject | null) => void;
+  active: SubjectKey | null;
+  onChange: (subject: SubjectKey | null) => void;
   /** Accessible name of the group, e.g. "Filter pages by subject". */
   label: string;
   /** What is counted, for screen readers: 'page' or 'run'. */

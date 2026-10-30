@@ -1,5 +1,6 @@
 import { useId } from 'react';
 import type { ReactNode } from 'react';
+import { technicalMessage } from '../lib/failures.ts';
 import { droppedNoteForTeacher } from '../lib/lesson.ts';
 import type { LessonCard } from '../lib/lesson.ts';
 import { AiWritten } from './Disclosure.tsx';
@@ -35,7 +36,8 @@ export function KitCard({ card, children }: Props) {
       <header className="kit-head">
         <h2 id={headId}>{card.title}</h2>
         <p className="card-meta">
-          <span>{card.label}</span>
+          {/* A part that failed is titled by its kind already: the kind is not said twice. */}
+          {card.label !== card.title && <span>{card.label}</span>}
           {shown && <AiWritten />}
           <StatusText card={card} />
         </p>
@@ -46,10 +48,18 @@ export function KitCard({ card, children }: Props) {
         <div className="kit-message" role="note">
           <p><strong>{card.message}</strong></p>
           <p className="muted small">Nothing from this part is shown, because it was not confirmed by the page.</p>
-          {card.detail !== '' && (
-            <details className="small">
+          {card.explain !== null && (
+            <details className="small kit-why">
               <summary>Details for the teacher</summary>
-              <p className="muted">{card.detail}</p>
+              <p>{card.explain.sentence}</p>
+              {card.explain.technical !== '' && (
+                // The check ids and the validator's own words, for whoever maintains the checks; closed by default.
+                <details className="tech-details">
+                  <summary>Technical details</summary>
+                  <p>Checks: {card.explain.ids.map((id, i) => <span key={id}>{i > 0 && ', '}<code>{id}</code></span>)}</p>
+                  <p>{technicalMessage(card.explain)}</p>
+                </details>
+              )}
             </details>
           )}
         </div>

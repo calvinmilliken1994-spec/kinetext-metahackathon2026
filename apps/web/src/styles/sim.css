@@ -6,6 +6,18 @@
 .predict-first .predictions { margin-top: 4px; }
 .predict-first .prediction { border-top: 0; padding: 8px 0 0; }
 
+/* Stage 7e: the projectile scene and case 1's predict card share the first screen. In a wide lesson column the card
+   stands beside the scene (a ruled column, not a box); narrower, it stays under the scene as before. */
+.simulation[data-engine='projectile-v1'] { container: projsim / inline-size; }
+.sim-stage { display: grid; gap: 12px; min-width: 0; }
+@container projsim (min-width: 880px) {
+  .sim-stage.has-side { grid-template-columns: minmax(0, 1fr) minmax(280px, 31%); gap: 0 24px; align-items: start; }
+  .sim-stage.has-side .predict-first { border-top: 0; padding-top: 0; }
+  .sim-stage.has-side .sim-side { border-left: 1px solid var(--line); padding-left: 20px; min-height: 100%; }
+  .sim-stage.has-side .scene-label-small { font-size: 13.5px; }
+  .sim-stage.has-side .tick-label { font-size: 15px; }
+}
+
 /* Page-stated values under a slider: one click sets the value, the slider stays free. Sized to read when projected. */
 .slider-presets { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 8px; }
 .slider-presets-label { font-size: var(--fs-12); color: var(--ink-3); margin-right: 2px; }

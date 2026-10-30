@@ -7,7 +7,7 @@ import { QuoteBlock } from './QuoteBlock.tsx';
 import { Linked } from './Linked.tsx';
 import { linkKey } from '../lib/linking.ts';
 import { Mark } from './icons.tsx';
-import { capitalFirst, prettyExponents } from '../lib/displayText.ts';
+import { aiText, capitalFirst } from '../lib/displayText.ts';
 
 interface Props { spec: QuizCardsSpec; cite: CiteProps }
 
@@ -42,7 +42,7 @@ export function QuizCardsView({ spec, cite }: Props) {
             <Linked as="li" key={c.id} className="prediction quiz-card" links={[linkKey(c.sourceId, c.quote)]}>
               <fieldset className="choice-set" aria-labelledby={legendId}>
                 <legend id={legendId} className="prediction-head">
-                  <span className="case-label">Card {i + 1}</span> <span className="quiz-stem">{prettyExponents(c.stem)}</span>
+                  <span className="case-label">Card {i + 1}</span> <span className="quiz-stem">{aiText(c.stem)}</span>
                 </legend>
                 {c.options.map((o) => {
                   const mine = grade !== null && grade.pickedIndex === o.index;
@@ -57,7 +57,7 @@ export function QuizCardsView({ spec, cite }: Props) {
                         disabled={grade !== null}
                         onChange={() => setPicked((prev) => ({ ...prev, [c.id]: o.index }))}
                       />
-                      <span className="choice-text">{capitalFirst(prettyExponents(o.text))}</span>
+                      <span className="choice-text">{capitalFirst(aiText(o.text))}</span>
                       {mark !== null && <span className="choice-mark"><Mark kind={right ? 'ok' : 'bad'} />{mark}</span>}
                     </label>
                   );

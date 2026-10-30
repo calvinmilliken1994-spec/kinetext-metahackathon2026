@@ -22,8 +22,9 @@ const SOURCES = [
 ];
 
 test('subject order and plain teacher names cover every SUBJECT exactly once', () => {
-  assert.deepEqual([...SUBJECT_ORDER].sort(), [...SUBJECTS].sort());
-  assert.deepEqual(SUBJECT_ORDER, ['physics', 'maths', 'chemistry', 'biology', 'earth-science', 'finance', 'history', 'civics', 'language-reading', 'other']);
+  // Stage 7e: 'computing' joins the order (after maths) before the contracts list it; every SUBJECT must still be there.
+  assert.deepEqual([...SUBJECT_ORDER].filter((s) => s !== 'computing').sort(), [...SUBJECTS].filter((s) => s !== 'computing').sort());
+  assert.deepEqual(SUBJECT_ORDER, ['physics', 'maths', 'computing', 'chemistry', 'biology', 'earth-science', 'finance', 'history', 'civics', 'language-reading', 'other']);
   assert.equal(subjectLabel('earth-science'), 'Earth & space');
   assert.equal(subjectLabel('maths'), 'Maths');
   assert.equal(subjectLabel('language-reading'), 'Language & reading');

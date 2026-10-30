@@ -16,6 +16,7 @@ import type { AnalysisChange, AnalysisRepairOverall, AnalysisRepairStep, CheckRe
 import { FAILURE_MESSAGES, PREMIUM_FAILURE_MESSAGE, SKIPPED_MESSAGE, componentLabel, declineText } from './lesson.ts';
 import type { PendingSlot } from './lesson.ts';
 import { previewQuote } from './evidence.ts';
+import { cleanModelStrings } from './displayText.ts';
 import type { ModelId } from './models.ts';
 
 // ---- types ------------------------------------------------------------------------------------------------------
@@ -160,8 +161,13 @@ export function parseLessonData(raw: unknown): LessonData | null {
   };
 }
 
-/** The API's job detail with the lesson fields parsed into `lessonData` (absent for legacy and 'activity' jobs). */
-export function normaliseJobDetail(raw: unknown): JobDetail {
+/**
+ * The API's job detail with the lesson fields parsed into `lessonData` (absent for legacy and 'activity' jobs). Stage 7e:
+ * every string except the page quotes first goes through cleanModelStrings, so no control or zero-width character from
+ * model text reaches the screen.
+ */
+export function normaliseJobDetail(input: unknown): JobDetail {
+  const raw = cleanModelStrings(input);
   if (!isRecord(raw)) return raw as JobDetail;
   const out: Record<string, unknown> = { ...raw, summary: parseJobSummary(raw.summary), events: Array.isArray(raw.events) ? raw.events.filter(isRecord) : [] };
   delete out.lessonData;
@@ -333,7 +339,6 @@ export const STAGE6_CHECK_NAMES: Readonly<Record<keyof typeof STAGE6_CHECKS, str
   'Q-06': 'Numbers in the cards can be found on the page',
   'Q-07': 'Wrong options are not stated as true in the quote',
   'SEQ-01': 'Each step’s quote appears word for word on the page',
-  'SEQ-02': 'Each step label comes from its quote',
   'SEQ-03': 'The step order matches the page',
   'SEQ-04': 'No two steps are the same',
   'SEQ-05': 'The number of steps is in range',

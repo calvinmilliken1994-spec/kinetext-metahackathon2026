@@ -16,11 +16,25 @@ export interface SourceMeta extends Omit<SourceDocument, 'text'> {
   textFile: string; retrievedAt: string; transcription: string; purpose: string;
   /** Stage 7b: the curated subject (one per page, set by us, stable). Optional so a page without one still loads. */
   subject?: Subject;
+  /** Stage 7e: shown first in the picker for its subject. */
+  featured?: boolean;
+  /** Stage 7e: hidden from the library list (GET /api/sources) but still loadable by id for stored runs and evidence. */
+  retired?: boolean;
 }
 
 /** The curated subject of a library source, or undefined when it is missing or not one of SUBJECTS. */
 export function sourceSubject(meta: { subject?: unknown }): Subject | undefined {
   return isSubject(meta.subject) ? meta.subject : undefined;
+}
+
+/** Stage 7e: a featured library page (only a literal `true` counts). */
+export function isFeatured(meta: { featured?: unknown }): boolean {
+  return meta.featured === true;
+}
+
+/** Stage 7e: a retired library page (only a literal `true` counts). */
+export function isRetired(meta: { retired?: unknown }): boolean {
+  return meta.retired === true;
 }
 
 export function sha256(text: string): string {
@@ -29,6 +43,17 @@ export function sha256(text: string): string {
 
 export function listSourceIds(dir: URL = SOURCES_DIR): string[] {
   return readdirSync(dir).filter(f => f.endsWith('.json')).map(f => f.slice(0, -5)).sort();
+}
+
+/** Library ids without the retired pages (what the picker lists). An unreadable entry is left out too. */
+export function listActiveSourceIds(dir: URL = SOURCES_DIR): string[] {
+  return listSourceIds(dir).filter(id => {
+    try {
+      return !isRetired(loadSourceMeta(id, dir));
+    } catch {
+      return false;
+    }
+  });
 }
 
 export function loadSourceMeta(id: string, dir: URL = SOURCES_DIR): SourceMeta {

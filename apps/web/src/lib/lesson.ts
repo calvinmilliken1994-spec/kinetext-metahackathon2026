@@ -6,6 +6,8 @@ import type { DeclineCode, KitGenComponentId, KitSpec, LessonComponentEntry, Les
 import { isKitGenComponentId } from '../../../../packages/contracts/kit.ts';
 import { engineTitle } from './engines.ts';
 import { quoteKey } from './evidence.ts';
+import { teacherFailure } from './failures.ts';
+import type { ReportLike, TeacherFailure } from './failures.ts';
 import type { QuoteRef } from './evidence.ts';
 
 /** Exact failure strings from the frozen design (§2.2–§2.7, §3). */
@@ -66,32 +68,39 @@ export interface LessonCard {
   message: string;
   /** For a failed or skipped card: the backend's reason, for a "details" fold-out. */
   detail: string;
+  /** Stage 7e: for a failed card with a reason, the reason in plain words (ids only for the technical details). */
+  explain: TeacherFailure | null;
   revision: number;
 }
 
-function failedCard(entry: LessonComponentEntry, status: CardStatus, message: string): LessonCard {
+function failedCard(entry: LessonComponentEntry, status: CardStatus, message: string, report?: ReportLike): LessonCard {
   const label = componentLabel(entry.componentId);
+  const detail = entry.reason.trim();
   return {
     key: `${entry.componentId}:${entry.specId}`, componentId: entry.componentId, label, title: label, status, spec: null,
-    premium: !isKitGenComponentId(entry.componentId), note: '', message, detail: entry.reason.trim(), revision: entry.revision,
+    premium: !isKitGenComponentId(entry.componentId), note: '', message, detail,
+    explain: detail === '' ? null : teacherFailure(detail, report ?? null), revision: entry.revision,
   };
 }
 
-/** Cards in plan order. `hasPremium` says whether the lesson came with the premium activity spec the plan names. */
-export function lessonCards(lesson: LessonSpec, specs: Readonly<Record<string, KitSpec>>, hasPremium: boolean): LessonCard[] {
+/**
+ * Cards in plan order. `hasPremium` says whether the lesson came with the premium activity spec the plan names; `reports`
+ * (by spec id, lib/failures.ts partReports) lets a failed part say what its repair tried.
+ */
+export function lessonCards(lesson: LessonSpec, specs: Readonly<Record<string, KitSpec>>, hasPremium: boolean, reports: Readonly<Record<string, ReportLike>> = {}): LessonCard[] {
   return lesson.components.map((entry): LessonCard => {
     const kit = isKitGenComponentId(entry.componentId);
     const failure = kit ? FAILURE_MESSAGES[entry.componentId as KitGenComponentId] : PREMIUM_FAILURE_MESSAGE;
-    if (entry.status === 'skipped') return failedCard(entry, 'skipped', SKIPPED_MESSAGE);
-    if (entry.status !== 'passed') return failedCard(entry, 'failed', failure);
+    if (entry.status === 'skipped') return failedCard(entry, 'skipped', SKIPPED_MESSAGE, reports[entry.specId]);
+    if (entry.status !== 'passed') return failedCard(entry, 'failed', failure, reports[entry.specId]);
     const label = componentLabel(entry.componentId);
     if (!kit) {
       if (!hasPremium) return failedCard(entry, 'failed', failure);
-      return { key: `${entry.componentId}:${entry.specId}`, componentId: entry.componentId, label, title: label, status: 'passed', spec: null, premium: true, note: entry.reason.trim(), message: '', detail: '', revision: entry.revision };
+      return { key: `${entry.componentId}:${entry.specId}`, componentId: entry.componentId, label, title: label, status: 'passed', spec: null, premium: true, note: entry.reason.trim(), message: '', detail: '', explain: null, revision: entry.revision };
     }
     const spec = specs[entry.specId];
     if (spec === undefined || spec.componentId !== entry.componentId) return failedCard(entry, 'failed', failure);
-    return { key: `${entry.componentId}:${entry.specId}`, componentId: entry.componentId, label, title: spec.title, status: 'passed', spec, premium: false, note: entry.reason.trim(), message: '', detail: '', revision: entry.revision };
+    return { key: `${entry.componentId}:${entry.specId}`, componentId: entry.componentId, label, title: spec.title, status: 'passed', spec, premium: false, note: entry.reason.trim(), message: '', detail: '', explain: null, revision: entry.revision };
   });
 }
 

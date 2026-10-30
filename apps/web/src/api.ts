@@ -28,6 +28,10 @@ export interface SourceMeta {
   /** Stage 7b: the page's subject — curated for library pages, the latest Muse-detected one for teacher pages. Absent when unknown or on older servers. */
   subject?: string;
   subjectSource?: 'curated' | 'muse';
+  /** Stage 7e: a featured library page (shown first in its subject). Absent on older servers. */
+  featured?: boolean;
+  /** Stage 7e: a retired library page — listed only for old runs' titles, never offered in the picker. */
+  retired?: boolean;
 }
 export interface SourceDoc extends SourceMeta { text: string; page?: number }
 
@@ -120,7 +124,8 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 
 export const api = {
   health: (signal?: AbortSignal) => request<Health>('/api/health', { signal }),
-  sources: (signal?: AbortSignal) => request<SourceMeta[]>('/api/sources', { signal }),
+  // Stage 7e: retired pages come too (flagged), so runs of them keep their titles; the picker leaves them out.
+  sources: (signal?: AbortSignal) => request<SourceMeta[]>('/api/sources?include=retired', { signal }),
   source: (id: string, signal?: AbortSignal) => request<SourceDoc>(`/api/sources/${encodeURIComponent(id)}`, { signal }),
   /** The picker list. Parsed defensively: anything unexpected becomes an empty list (picker hidden). */
   models: async (signal?: AbortSignal): Promise<ModelOption[]> => parseModels(await request<unknown>('/api/models', { signal })),

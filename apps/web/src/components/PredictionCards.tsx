@@ -10,7 +10,7 @@ import type { PairGrade, PairPrediction } from '../lib/timeline.ts';
 import { EventEvidence } from './EventEvidence.tsx';
 import type { CiteProps } from './Explanations.tsx';
 import { Mark } from './icons.tsx';
-import { amountText, prettyExponents } from '../lib/displayText.ts';
+import { amountText, bindUnits, prettyExponents } from '../lib/displayText.ts';
 
 export type RunPrediction = (prediction: AnyPrediction, index: number, grade: Grade) => void;
 
@@ -51,7 +51,7 @@ function PredictionCard({ engine, prediction: p, index, onRun }: CardProps) {
   return (
     <li className="prediction">
       <form onSubmit={submit} noValidate>
-        <p className="prediction-head" id={`${inputId}-prompt`}><span className="case-label">Case {index + 1}</span> {prettyExponents(p.prompt)}</p>
+        <p className="prediction-head" id={`${inputId}-prompt`}><span className="case-label">Case {index + 1}</span> {bindUnits(prettyExponents(p.prompt))}</p>
         <div className="prediction-row">
           <label htmlFor={inputId}>Your prediction: {out.label.toLowerCase()}</label>
           <div className="guess">

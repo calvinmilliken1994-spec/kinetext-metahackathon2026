@@ -67,14 +67,14 @@ export function CompareView({ spec, cite }: Props) {
       {plan !== null && target !== null && (
         <section className="prediction compare-predict" aria-label="Predict the hidden cell">
           <fieldset className="choice-set" disabled={locked}>
-            <legend><strong>Predict first.</strong> What does the page say about <strong>{target.entity}</strong> and <strong>{target.attribute}</strong>? That cell is hidden in the table.</legend>
+            <legend><strong>Predict first.</strong> What does the page say about <strong>{capitalFirst(target.entity)}</strong> and <strong>{capitalFirst(target.attribute)}</strong>? That cell is hidden in the table.</legend>
             {plan.options.map((o) => {
               const right = locked && o === plan.correct;
               const mine = locked && pick === o;
               return (
                 <label key={o} className={`choice${pick === o ? ' choice-picked' : ''}${right ? ' choice-right' : ''}${mine && !right ? ' choice-wrong' : ''}`}>
                   <input type="radio" name={`${uid}-predict`} checked={pick === o} onChange={() => setPick(o)} />
-                  <span className="choice-text">{o}</span>
+                  <span className="choice-text">{capitalFirst(o)}</span>
                   {right && <span className="choice-mark"><Mark kind="ok" />{mine ? 'Your answer — correct' : 'The page’s answer'}</span>}
                   {mine && !right && <span className="choice-mark"><Mark kind="bad" />Your answer</span>}
                 </label>
@@ -100,7 +100,7 @@ export function CompareView({ spec, cite }: Props) {
             sourceId={openCell.sourceId}
             quote={openCell.quote}
             cite={cite}
-            caption={`${spec.entities[openCell.entityIndex] ?? ''} · ${spec.attributes[openCell.attributeIndex] ?? ''}`}
+            caption={`${capitalFirst(spec.entities[openCell.entityIndex] ?? '')} · ${capitalFirst(spec.attributes[openCell.attributeIndex] ?? '')}`}
           />
         )}
     </div>

@@ -92,7 +92,7 @@ export function sliderModels(spec: ActivitySpec): SliderModel[] {
     // Stage 7: the step must land on the case values (g = 1.62 on a 0.2-step slider sat at 1.6); case 1 comes first.
     const values = cases.map((c) => c[input.key]).filter((v): v is number => typeof v === 'number' && Number.isFinite(v));
     out.push({
-      key: input.key, label: input.label, unit: prettyUnit(input.unit),
+      key: input.key, label: teacherInputLabel(input.label), unit: prettyUnit(input.unit),
       min: r.min, max: r.max, step: caseFriendlyStep(r.min, r.max, sliderStep(r.min, r.max), values), value: r.default,
     });
   }
@@ -163,6 +163,17 @@ export function formatQuantity(n: number): string {
   return a >= 100 ? trimmed(n, 2) : trimmed(n, 3);
 }
 
+/**
+ * An engine input's name as a teacher writes it (Stage 7e): the catalogue's code-like symbols typeset — an initial value
+ * 'U0' → 'U₀' (as the typeset equation shows it), 'rho' → 'ρ', 'gamma' → 'γ'. Words are left alone.
+ */
+export function teacherInputLabel(label: string): string {
+  return label
+    .replace(/(?<![\p{L}\d_])([A-Za-z])0(?![\p{L}\d_.])/gu, '$1₀')
+    .replace(/\brho\b/g, 'ρ')
+    .replace(/\bgamma\b/g, 'γ');
+}
+
 /** An input label without its trailing explanatory parenthesis: 'Half-life T (same time unit as t)' → 'Half-life T'. */
 export function shortInputLabel(label: string): string {
   const short = label.replace(/\s*\([^()]*\)\s*$/, '');
@@ -189,9 +200,10 @@ export function predictionExplanation(engine: EngineId, c: ActivityCase, actual:
   }
   const i = caseInputs(engine, c);
   const given = ENGINES[engine].inputs
-    .map((inp) => `${shortInputLabel(inp.label)} = ${formatWithUnit(i[inp.key] ?? Number.NaN, prettyUnit(inp.unit), (n) => trimmed(n, 4))}`)
+    .map((inp) => `${shortInputLabel(teacherInputLabel(inp.label))} = ${formatWithUnit(i[inp.key] ?? Number.NaN, prettyUnit(inp.unit), (n) => trimmed(n, 4))}`)
     .join(', ');
-  return `${given} → ${out.label.toLowerCase()} = ${value}`;
+  // Only the first letter is lowered: symbols in the label keep their case ('amount remaining N', not 'n').
+  return `${given} → ${out.label.charAt(0).toLowerCase()}${out.label.slice(1)} = ${value}`;
 }
 
 // ---- projectile ----------------------------------------------------------------------------------------

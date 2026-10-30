@@ -9,8 +9,8 @@ import { resolveJobModel } from '../lib/models.ts';
 import type { ModelId, ModelOption } from '../lib/models.ts';
 import { runLine } from '../lib/runs.ts';
 import { DEMO_FAULT_HELP, DEMO_FAULT_LABEL, demoFaultOptions, FREE_CREDITS_NOTE } from '../lib/sources.ts';
-import { filterRuns, subjectCounts, subjectLabel, subjectOf, subjectOfSource } from '../lib/subjects.ts';
-import type { Subject } from '../../../../packages/contracts/kit.ts';
+import { filterRuns, retiredRunNote, subjectCounts, subjectLabel, subjectOf, subjectOfSource } from '../lib/subjects.ts';
+import type { SubjectKey } from '../lib/subjects.ts';
 import type { DemoChoice } from '../lib/sources.ts';
 import { IconPlus } from './icons.tsx';
 import { LessonSteps } from './LessonSteps.tsx';
@@ -46,8 +46,8 @@ export interface NewLessonSectionProps {
   flow: FlowId;
   onFlow: (flow: FlowId) => void;
   /** Stage 7b: the subject filter shared with the source panel and the runs list. */
-  subjectFilter: Subject | null;
-  onSubjectFilter: (subject: Subject | null) => void;
+  subjectFilter: SubjectKey | null;
+  onSubjectFilter: (subject: SubjectKey | null) => void;
 }
 
 export function NewLessonSection(p: NewLessonSectionProps) {
@@ -140,8 +140,8 @@ export interface RunsSectionProps {
   scope: RunScope;
   onScope: (scope: RunScope) => void;
   /** The subject filter shared with the page pickers. */
-  subjectFilter: Subject | null;
-  onSubjectFilter: (subject: Subject | null) => void;
+  subjectFilter: SubjectKey | null;
+  onSubjectFilter: (subject: SubjectKey | null) => void;
   /** /api/health busy (incl. a POST in flight); null until health has loaded. */
   serverBusy: boolean | null;
   selectedJobId: string | null;
@@ -154,7 +154,7 @@ export interface RunsSectionProps {
 
 export function RunsSection(p: RunsSectionProps) {
   const all = p.scope === 'all';
-  const subjectOfRun = (j: JobSummary): Subject => subjectOfSource(p.sourcesById, j.sourceId);
+  const subjectOfRun = (j: JobSummary): SubjectKey => subjectOfSource(p.sourcesById, j.sourceId);
   const shown = all ? filterRuns(p.allJobs, p.sourcesById, p.subjectFilter) : p.jobsForSource;
   const pageMeta = p.jobsForSource[0] !== undefined ? p.sourcesById.get(p.jobsForSource[0].sourceId) : undefined;
   return (
@@ -190,6 +190,7 @@ export function RunsSection(p: RunsSectionProps) {
       {shown.length > 0 && (
         <p className="muted small">
           {!all && pageMeta?.subject !== undefined && <span className="runs-subject">{subjectLabel(subjectOf(pageMeta))} · </span>}
+          {!all && pageMeta !== undefined && retiredRunNote(p.sourcesById, pageMeta.id) !== null && <span className="runs-subject">Retired page · </span>}
           {all && <span className="runs-subject">{shown.length} {shown.length === 1 ? 'run' : 'runs'} · </span>}
           Stored results unless marked Live.
         </p>
@@ -213,6 +214,9 @@ export function RunsSection(p: RunsSectionProps) {
                     <span className="run-subject">{subjectLabel(subjectOfRun(j))}</span>
                     <span className="run-sep" aria-hidden="true">·</span>
                     <span className="run-page-title">{page?.title ?? 'A page no longer listed'}</span>
+                    {retiredRunNote(p.sourcesById, j.sourceId) !== null && (
+                      <><span className="run-sep" aria-hidden="true">·</span><span className="run-retired">{retiredRunNote(p.sourcesById, j.sourceId)}</span></>
+                    )}
                   </span>
                 )}
               </button>

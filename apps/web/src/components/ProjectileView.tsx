@@ -169,6 +169,9 @@ export function ProjectileView({ spec, inputs, onInput, pb, predict, equation, c
   return (
     <div className="simulation" data-engine="projectile-v1" data-compare={scene.ghosts.length > 0 ? 'on' : undefined}>
       <SchematicTag text={PROJECTILE_LABEL} />
+      {/* Stage 7e: in a wide lesson column case 1's predict card stands beside the scene, so the question and the scene
+          share the first screen (sim.css, container 'projsim'); narrower, it stays under the scene. */}
+      <div className={`sim-stage${predictCard != null ? ' has-side' : ''}`}>
       <div className="scene-wrap">
         <svg className="scene" viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby={titleId} preserveAspectRatio="xMidYMid meet">
           <title id={titleId}>{alt}</title>
@@ -247,6 +250,8 @@ export function ProjectileView({ spec, inputs, onInput, pb, predict, equation, c
           <circle cx={pos.px} cy={pos.py} r={9} className="ball" />
         </svg>
       </div>
+      {predictCard != null && <div className="sim-side">{predictCard}</div>}
+      </div>
       {scene.ghosts.length > 0 && !scenePlain && (
         <p className="muted small compare-note">
           Faint dotted arc: the same launch at {scene.ghosts.map((g) => `g = ${trimmed(g.gravityMps2, 4)} m/s²`).join(' and ')}, {scene.ghosts.length === 1 ? 'the other value the page states' : 'the other values the page states'}, drawn on the same scale.
@@ -277,7 +282,6 @@ export function ProjectileView({ spec, inputs, onInput, pb, predict, equation, c
       )}
 
       {withConcealed(equation, pending)}
-      {predictCard}
 
       {variant !== 'scene' && (
       <div className="controls-row">

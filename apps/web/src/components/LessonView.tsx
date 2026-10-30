@@ -5,6 +5,8 @@ import type { SourceRef } from '../../../../packages/contracts/index.ts';
 import type { Badge } from '../lib/repairs.ts';
 import type { AnyActivitySpec } from '../lib/timeline.ts';
 import { declineText, lessonCards, lessonItems } from '../lib/lesson.ts';
+import { sourceLicenseText } from '../lib/sources.ts';
+import type { ReportLike } from '../lib/failures.ts';
 import type { LessonCard, PendingSlot } from '../lib/lesson.ts';
 import { ActivityPanel } from './ActivityPanel.tsx';
 import { BalanceView } from './BalanceView.tsx';
@@ -19,6 +21,8 @@ import { PendingCard } from './PendingCard.tsx';
 import { QuizCardsView } from './QuizCardsView.tsx';
 import { SequenceView } from './SequenceView.tsx';
 import { SortView } from './SortView.tsx';
+
+const NO_REPORTS: Readonly<Record<string, ReportLike>> = {};
 
 export interface LessonViewProps {
   lesson: LessonSpec;
@@ -42,6 +46,8 @@ export interface LessonViewProps {
   pending?: readonly PendingSlot[];
   /** Plan order of the components, so each placeholder and each finished card sits in its place. */
   order?: readonly PlanComponentId[];
+  /** Stage 7e: each part's last validation report by spec id (lib/failures.ts partReports), so a failed part can say what its repair tried. */
+  reports?: Readonly<Record<string, ReportLike>>;
 }
 
 // ---- a render error in one component must not take the lesson down -------------------------------------------------
@@ -90,7 +96,7 @@ export function DeclineCard({ analysis, sources, disclosure }: { analysis: Sourc
             {sources.map((s) => (
               <span key={s.id} className="decline-source">
                 <strong>{s.title}</strong>
-                <span className="muted small">Licence: {s.license}</span>
+                <span className="muted small">Licence: {sourceLicenseText(s)}</span>
                 <span className="small decline-attribution">{s.attribution}</span>
               </span>
             ))}
@@ -121,11 +127,11 @@ function PremiumCard({ card, premium, cite, disclosure, repairBadge }: { card: L
  * One lesson: its title and the provenance line, the overview, then the parts in plan order as a vertical stack. A declined
  * page shows the decline card instead. A part that did not pass shows only its message, never its content.
  */
-export function LessonView({ lesson, specs, analysis, sources, cite, disclosure, provenance = null, fallbackTitle = 'Lesson', premium = null, repairBadge = null, pending = [], order = [] }: LessonViewProps) {
+export function LessonView({ lesson, specs, analysis, sources, cite, disclosure, provenance = null, fallbackTitle = 'Lesson', premium = null, repairBadge = null, pending = [], order = [], reports = NO_REPORTS }: LessonViewProps) {
   const declined = analysis !== null && !analysis.usable;
   if (declined) return <div className="lesson" data-testid="lesson"><DeclineCard analysis={analysis} sources={sources} disclosure={disclosure} /></div>;
 
-  const cards = lessonCards(lesson, specs, premium !== null);
+  const cards = lessonCards(lesson, specs, premium !== null, reports);
   const items = lessonItems(cards, pending, order);
   const empty = lesson.overview === null && items.length === 0;
   return (

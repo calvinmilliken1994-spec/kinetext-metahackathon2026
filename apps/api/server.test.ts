@@ -210,7 +210,8 @@ test('GET /api/sources lists metadata without text; detail route adds hash-check
     const sources = list.body as Record<string, unknown>[];
     assert.ok(Array.isArray(sources));
     const ids = sources.map(s => s['id']);
-    assert.ok(ids.includes('nasa-grc-equations-of-motion'));
+    // Stage 7e: equations-of-motion is a retired library page — left out of the list, still served by id below.
+    assert.ok(!ids.includes('nasa-grc-equations-of-motion'));
     assert.ok(ids.includes('nasa-grc-speed-of-sound'));
     for (const s of sources) {
       for (const field of ['id', 'title', 'locator', 'license', 'attribution', 'sha256', 'purpose']) {

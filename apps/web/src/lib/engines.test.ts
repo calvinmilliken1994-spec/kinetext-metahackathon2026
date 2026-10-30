@@ -14,7 +14,7 @@ import { remainingAfter } from '../../../../packages/activities/half-life-v1/eng
 import {
   activityTitles, caseInputs, clampToSlider, defaultInputs, engineOutput, engineTitle, formatOutputValue, formatQuantity, isEngineSpec, outputInfo,
   playbackPlan, playbackSpeed, predictionExplanation, prettyUnit, projectileSummary, rangeMaxima, scenarioLabels, shortInputLabel,
-  sliderModels, SOUND_INITIAL_T,
+  sliderModels, SOUND_INITIAL_T, teacherInputLabel,
 } from './engines.ts';
 
 test('engineTitle: catalogue titles for the four engines, null otherwise', () => {
@@ -50,7 +50,8 @@ test('sliderModels: one slider per engine input with the spec range, default and
   assert.equal(v0.max, 40);
   assert.equal(v0.value, 30); // fixture default = its first prediction (semantic.opening-case)
   assert.equal(v0.unit, 'm/s');
-  assert.equal(v0.label, ENGINES['projectile-v1'].inputs[1]?.label);
+  // Stage 7e: the catalogue's 'V0' is shown typeset (engines.labels.test.ts).
+  assert.equal(v0.label, teacherInputLabel(ENGINES['projectile-v1'].inputs[1]?.label ?? ''));
   assert.equal(models[2]?.unit, 'm/s²');
   for (const m of models) assert.ok(m.step > 0 && m.step <= (m.max - m.min));
 
@@ -285,7 +286,7 @@ test('predictionExplanation for the new engines: short input labels, engine outp
   const h = predictionExplanation('hardy-weinberg-v1', makeHardyWeinbergSpec().predictions[0]!, 0.17999999999999997);
   assert.equal(h, 'Frequency p of the first allele = 0.9 → heterozygote frequency 2pq = 0.18');
   const l = predictionExplanation('half-life-v1', makeHalfLifeSpec().predictions[0]!, 25);
-  assert.equal(l, 'Starting amount N0 = 200, Half-life T = 10 time units, Elapsed time t = 30 time units → amount remaining n = 25');
+  assert.equal(l, 'Starting amount N₀ = 200, Half-life T = 10 time units, Elapsed time t = 30 time units → amount remaining N = 25');
 });
 
 // ---- TASK-022b: timeline-v1 metadata -----------------------------------------------------------------------

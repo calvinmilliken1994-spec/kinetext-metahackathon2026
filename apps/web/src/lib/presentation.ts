@@ -41,7 +41,8 @@ export interface Deck {
   source: DeckSource | null;
   /** The AI disclosure for this source kind (sources.ts disclosureText). */
   disclosure: string;
-  overview: { keyPoints: readonly KeyPointGen[]; keyTerms: readonly KeyTermGen[]; coverage: string } | null;
+  /** Key points and terms only: Muse's internal page-coverage note never reaches the deck (Stage 7e). */
+  overview: { keyPoints: readonly KeyPointGen[]; keyTerms: readonly KeyTermGen[] } | null;
   /** A classic activity's learning objectives (lesson runs have an overview instead). */
   objectives: readonly string[];
   parts: DeckPart[];
@@ -68,7 +69,7 @@ export function deckFromLesson(input: DeckCommon & {
   return {
     jobId: input.jobId, source: input.source, disclosure: input.disclosure, checks: input.checks, quotes: input.quotes,
     headline: ov?.headline ?? input.fallbackTitle,
-    overview: ov === null ? null : { keyPoints: ov.keyPoints, keyTerms: ov.keyTerms, coverage: input.analysis?.pageCoverage ?? '' },
+    overview: ov === null ? null : { keyPoints: ov.keyPoints, keyTerms: ov.keyTerms },
     objectives: [],
     parts,
     leftOut: cards.filter((c) => c.status === 'failed').length,

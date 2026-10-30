@@ -11,7 +11,7 @@
 //                           in-process live-job count and busy stays running >= limit (R-10
 //                           compatibility)
 //   GET  /api/models      → [{id, label, provider, available}] for the web model picker (OW-2)
-//   GET  /api/sources     → metadata list (no text), library + teacher ('user') sources with kind;
+//   GET  /api/sources     → metadata list (no text), library + teacher ('user') sources with kind (retired library pages left out unless ?include=retired);
 //                           Stage 7b: subject + subjectSource ('curated' for library pages, 'muse' for
 //                           teacher pages = the latest lesson analysis' subject; absent when unknown)
 //   POST /api/sources     → store a teacher-pasted source (JSON ≤ 64 KB); 201 created / 200 existing
@@ -37,6 +37,8 @@
 import { createServer } from 'node:http';
 import type { IncomingMessage, Server, ServerResponse } from 'node:http';
 import {
+  isFeatured,
+  isRetired,
   listSourceIds,
   listUserSourceIds,
   loadSource,
@@ -115,6 +117,15 @@ interface SourceRefResponse {
   /** Stage 7b: library pages carry their curated subject; teacher pages the latest Muse-detected one (when any). */
   subject?: Subject;
   subjectSource?: 'curated' | 'muse';
+  /** Stage 7e: library pages shown first in the picker for their subject. */
+  featured?: true;
+  /** Stage 7e: on GET /api/sources/:id and GET /api/sources?include=retired — a retired page leaves the default list. */
+  retired?: true;
+}
+
+/** Stage 7e: the featured/retired flags of a library page, present only when set. */
+function libraryFlags(meta: { featured?: unknown; retired?: unknown }): Pick<SourceRefResponse, 'featured' | 'retired'> {
+  return { ...(isFeatured(meta) ? { featured: true as const } : {}), ...(isRetired(meta) ? { retired: true as const } : {}) };
 }
 
 /** The subject fields for a response: present only when a subject is known. */
@@ -252,7 +263,8 @@ export function createApiServer(opts: ApiOptions): Server {
 
   async function handle(req: IncomingMessage, res: ServerResponse): Promise<void> {
     const method = req.method ?? 'GET';
-    const pathname = new URL(req.url ?? '/', 'http://127.0.0.1').pathname;
+    const requestUrl = new URL(req.url ?? '/', 'http://127.0.0.1');
+    const pathname = requestUrl.pathname;
 
     // R-07: Host allowlist on EVERY request, before any routing.
     if (!hostAllowed(req.headers.host ?? '')) {
@@ -298,6 +310,8 @@ export function createApiServer(opts: ApiOptions): Server {
     if (pathname === '/api/sources') {
       if (method === 'GET') {
         const out: SourceRefResponse[] = [];
+        // Stage 7e: `?include=retired` also lists retired library pages (flagged), so old runs keep their page titles.
+        const includeRetired = requestUrl.searchParams.get('include') === 'retired';
         let ids: string[] = [];
         try {
           ids = listSourceIds(opts.sourcesDir);
@@ -307,6 +321,8 @@ export function createApiServer(opts: ApiOptions): Server {
         for (const id of ids) {
           try {
             const meta = loadSourceMeta(id, opts.sourcesDir);
+            // Stage 7e: retired library pages leave the list (still served by id for stored runs and evidence).
+            if (isRetired(meta) && !includeRetired) continue;
             out.push({
               id: meta.id,
               title: meta.title,
@@ -317,6 +333,7 @@ export function createApiServer(opts: ApiOptions): Server {
               purpose: meta.purpose,
               kind: 'library',
               ...subjectFields(sourceSubject(meta), 'curated'),
+              ...libraryFlags(meta),
             });
           } catch {
             // skip an unreadable registry entry rather than failing the whole list
@@ -402,6 +419,7 @@ export function createApiServer(opts: ApiOptions): Server {
           purpose: meta.purpose,
           kind: 'library',
           ...subjectFields(sourceSubject(meta), 'curated'),
+          ...libraryFlags(meta),
           text: doc.text,
         };
         if (doc.page !== undefined) {

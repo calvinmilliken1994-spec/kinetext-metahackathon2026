@@ -132,9 +132,16 @@ export interface SourceMetaLike {
 
 export const TEACHER_TAG = 'Teacher source';
 
-/** License text for a source: teacher sources carry a readable label; library sources keep their own license string. */
+/** Plain words for the library registry's licence ids (free-text licences are shown as written). */
+const LIBRARY_LICENCE_TEXT: Readonly<Record<string, string>> = {
+  'US-Gov-Work': 'U.S. Government work',
+  'CC0-1.0': 'CC0 1.0',
+  'CC-BY-4.0': 'CC BY 4.0',
+};
+
+/** License text for a source: teacher sources carry a readable label; library sources their licence in plain words. */
 export function sourceLicenseText(m: SourceMetaLike): string {
-  return m.kind === 'user' ? (m.licenseLabel ?? licenseLabel(m.license)) : m.license;
+  return m.kind === 'user' ? (m.licenseLabel ?? licenseLabel(m.license)) : (LIBRARY_LICENCE_TEXT[m.license] ?? licenseLabel(m.license));
 }
 
 /** Option text in the source select: teacher sources are tagged with their licence; library sources stay as they were. */

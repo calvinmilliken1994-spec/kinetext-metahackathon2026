@@ -4,7 +4,7 @@ import type { KitSpec } from '../../../../../packages/contracts/kit.ts';
 import type { Badge } from '../../lib/repairs.ts';
 import type { Beat, Deck, DeckPart, NumericAnswer } from '../../lib/presentation.ts';
 import { checksLine, deckQuotes, isRevealed, leftOutLine, numericAnswer, predictVerdict, predictVisual, revealDelayMs, titleCard, visibleCount } from '../../lib/presentation.ts';
-import { prettyExponents } from '../../lib/displayText.ts';
+import { aiText, capitalFirst, prettyExponents } from '../../lib/displayText.ts';
 import { REVIEW_STATUS, withoutReviewNote } from '../../lib/provenance.ts';
 import { quizCards } from '../../lib/quiz.ts';
 import { compareGrid, NOT_STATED } from '../../lib/compare.ts';
@@ -56,7 +56,7 @@ function TitleBeat({ deck }: Pick<BeatProps, 'deck'>) {
   const card = titleCard(deck.source);
   return (
     <div className="pz-title">
-      <h1 className="pz-display">{prettyExponents(deck.headline)}</h1>
+      <h1 className="pz-display">{aiText(deck.headline)}</h1>
       {card !== null && (
         <dl className="pz-facts">
           <div><dt>Page</dt><dd>{card.name}</dd></div>
@@ -78,7 +78,8 @@ function OverviewBeat({ beat, step, deck }: Pick<BeatProps, 'beat' | 'step' | 'd
     <div className="pz-split">
       <header className="pz-split-head">
         <h2 className="pz-heading">What the page says</h2>
-        {deck.overview !== null && deck.overview.coverage !== '' && <p className="pz-lead">{deck.overview.coverage}</p>}
+        {/* The lesson's own headline leads the key points (never Muse's internal page-coverage note). */}
+        <p className="pz-lead">{aiText(deck.headline)}</p>
       </header>
       <ul className={`pz-points${points.length > 4 ? ' pz-dense' : ''}`}>
         {points.map((p, i) => (
@@ -120,7 +121,7 @@ function ObjectivesBeat({ beat, step, deck }: Pick<BeatProps, 'beat' | 'step' | 
       </header>
       <ul className={`pz-points${deck.objectives.length > 4 ? ' pz-dense' : ''}`}>
         {deck.objectives.map((o, i) => (
-          <li key={o} data-shown={i < shown ? 'true' : 'false'} aria-hidden={i < shown ? undefined : true}>{prettyExponents(o)}</li>
+          <li key={o} data-shown={i < shown ? 'true' : 'false'} aria-hidden={i < shown ? undefined : true}>{aiText(o)}</li>
         ))}
       </ul>
     </div>
@@ -162,10 +163,10 @@ function QuizBeat({ beat, step, answer, onAnswer }: AskProps<'quiz'>) {
   const card = useMemo(() => quizCards(beat.spec).find((c) => c.id === beat.cardId), [beat]);
   if (card === undefined) return null;
   const revealed = isRevealed(beat, step);
-  const items = card.options.map((o): ChoiceItem => ({ value: String(o.index), text: prettyExponents(o.text), right: o.index === 0 }));
+  const items = card.options.map((o): ChoiceItem => ({ value: String(o.index), text: capitalFirst(aiText(o.text)), right: o.index === 0 }));
   return (
     <div className="pz-ask">
-      <h2 className="pz-question">{prettyExponents(card.stem)}</h2>
+      <h2 className="pz-question">{aiText(card.stem)}</h2>
       <Choices items={items} answer={answer} onAnswer={onAnswer} revealed={revealed} label="Answer options" />
       {revealed ? <PageWords sourceId={card.sourceId} quote={card.quote} /> : <p className="pz-hint">Vote: {items.map((_, i) => LETTERS[i]).join(', ').replace(/, ([^,]*)$/, ' or $1')}?</p>}
     </div>
@@ -185,12 +186,12 @@ function CompareBeat({ beat, step, answer, onAnswer }: AskProps<'compare'>) {
         <table className="pz-table">
           <caption className="sr-only">{beat.spec.title}</caption>
           <thead>
-            <tr><td /> {grid.attributes.map((a) => <th key={a} scope="col">{a}</th>)}</tr>
+            <tr><td /> {grid.attributes.map((a) => <th key={a} scope="col">{capitalFirst(a)}</th>)}</tr>
           </thead>
           <tbody>
             {grid.rows.map((row) => (
               <tr key={row.entity}>
-                <th scope="row">{row.entity}</th>
+                <th scope="row">{capitalFirst(row.entity)}</th>
                 {row.cells.map((cell, ai) => {
                   if (cell === null) return <td key={ai} className="pz-cell-blank">{NOT_STATED}</td>;
                   if (plan !== null && cell.id === plan.cellId && !revealed) return <td key={ai} className="pz-cell-hidden"><span aria-label="Hidden until the reveal">?</span></td>;
@@ -208,8 +209,8 @@ function CompareBeat({ beat, step, answer, onAnswer }: AskProps<'compare'>) {
       </div>
       {plan !== null && (
         <>
-          <p className="pz-prompt">What does the page say for <strong>{beat.spec.entities[plan.entityIndex]}</strong> · <strong>{beat.spec.attributes[plan.attributeIndex]}</strong>?</p>
-          <Choices items={plan.options.map((o) => ({ value: o, text: o, right: o === plan.correct }))} answer={answer} onAnswer={onAnswer} revealed={revealed} label="Options for the hidden cell" />
+          <p className="pz-prompt">What does the page say for <strong>{capitalFirst(beat.spec.entities[plan.entityIndex] ?? '')}</strong> · <strong>{capitalFirst(beat.spec.attributes[plan.attributeIndex] ?? '')}</strong>?</p>
+          <Choices items={plan.options.map((o) => ({ value: o, text: capitalFirst(o), right: o === plan.correct }))} answer={answer} onAnswer={onAnswer} revealed={revealed} label="Options for the hidden cell" />
         </>
       )}
       {plan !== null && revealed && hidden !== null && <PageWords sourceId={hidden.sourceId} quote={hidden.quote} />}

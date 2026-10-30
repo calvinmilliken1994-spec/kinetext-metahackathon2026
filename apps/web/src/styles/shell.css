@@ -54,6 +54,9 @@
 .run-page .run-sep { margin: 0 6px; }
 .run-subject { flex: none; color: var(--ink-2); }
 .run-page-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* Stage 7e: runs of retired pages keep their title and say the page is retired; the New lesson picker's "Show all" toggle. */
+.run-retired { flex: none; color: var(--ink-3); }
+.picker-more { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0; }
 /* The page titles must not widen the drawer's grid column (they ellipsize instead). */
 .drawer-section > .run-list { min-width: 0; grid-template-columns: minmax(0, 1fr); }
 

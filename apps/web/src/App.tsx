@@ -12,12 +12,13 @@ import { analysisCheckName, analysisRepairOverall, buildAnalysisRepairSteps } fr
 import { buildLessonRepairs, buildLessonStream, lessonAnalysisOverall, lessonAnalysisSteps, lessonCheckSections, lessonRenderMode } from './lib/lessonJob.ts';
 import type { FlowId } from './lib/lessonJob.ts';
 import { collectLessonQuotes } from './lib/lesson.ts';
+import { partReports } from './lib/failures.ts';
 import { checkName } from './lib/checks.ts';
 import { defaultRevision, overallRepairBadge, revisionInputs, validationHeading } from './lib/repairs.ts';
 import { timelineEventLabels } from './lib/timeline.ts';
 import { demoFaultToSend, disclosureText } from './lib/sources.ts';
-import { subjectNote } from './lib/subjects.ts';
-import type { Subject } from '../../../packages/contracts/kit.ts';
+import { isRetiredPage, subjectNote } from './lib/subjects.ts';
+import type { SubjectKey } from './lib/subjects.ts';
 import type { DemoChoice } from './lib/sources.ts';
 import { activityRepairCounts, checkTally, lessonRepairCounts, quoteTally, repairPhrases, sectionTally } from './lib/provenance.ts';
 import { readStoredTech, writeStoredTech } from './lib/techDetails.ts';
@@ -81,7 +82,7 @@ export function App() {
   const [flash, setFlash] = useState<Flash | null>(null);
   const [flow, setFlow] = useState<FlowId>('lesson');
   // Stage 7b: one subject filter for the page pickers and the runs list; the runs list shows this page or all pages.
-  const [subjectFilter, setSubjectFilter] = useState<Subject | null>(null);
+  const [subjectFilter, setSubjectFilter] = useState<SubjectKey | null>(null);
   const [runScope, setRunScope] = useState<RunScope>('page');
   const models = useModels(health);
   const [wantedModel, setWantedModel] = useState<ModelId | null>(() => readStoredModel(sessionStore()));
@@ -109,7 +110,7 @@ export function App() {
 
   const sourceList = sources.state === 'ready' ? sources.data : null;
   const openingSourceId = opening !== null && opening !== undefined && sourceList?.some((s) => s.id === opening.sourceId) === true ? opening.sourceId : null;
-  const selectedSourceId = pickedSource ?? openingSourceId ?? (opening === undefined ? null : sourceList?.[0]?.id ?? null);
+  const selectedSourceId = pickedSource ?? openingSourceId ?? (opening === undefined ? null : sourceList?.find((s) => !isRetiredPage(s))?.id ?? null);
   const selectedSource = sourceList?.find((s) => s.id === selectedSourceId) ?? null;
 
   const allJobs = jobs.state === 'ready' ? jobs.data : NO_JOBS;
@@ -222,6 +223,7 @@ export function App() {
   // Lesson jobs: component repairs (natural vs system-made) and the quiet checks list.
   const componentRepairs = useMemo(() => (ready === null ? [] : buildLessonRepairs(ready)), [ready]);
   const checkSections = useMemo(() => (ready === null || ready.lessonData === undefined ? [] : lessonCheckSections(ready)), [ready]);
+  const reports = useMemo(() => (ready === null ? {} : partReports(ready)), [ready]);
   const lessonSources = useMemo((): SourceRef[] => (selectedSource === null ? [] : [{
     id: selectedSource.id, title: selectedSource.title, locator: selectedSource.locator, license: selectedSource.license,
     attribution: selectedSource.attribution, sha256: selectedSource.sha256,
@@ -388,6 +390,7 @@ export function App() {
                   repairBadge={repairBadge}
                   pending={stream.pending}
                   order={stream.order}
+                  reports={reports}
                 />
               )}
               {ready !== null && ((lessonMode === 'v1' && (spec === undefined || ready.summary.status !== 'succeeded')) || lessonMode === 'working' || lessonMode === 'outcome') && (

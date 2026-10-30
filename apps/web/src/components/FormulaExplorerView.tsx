@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
+import { capitalFirst } from '../lib/displayText.ts';
 import type { FormEvent } from 'react';
 import type { FormulaExplorerSpec } from '../../../../packages/contracts/kit.ts';
 import {
@@ -174,7 +175,7 @@ export function FormulaExplorerView({ spec, cite, presentation }: Props) {
             {spec.variables.map((v) => (
               <Slider
                 key={v.name}
-                label={shortMeaning(v.meaning)}
+                label={capitalFirst(shortMeaning(v.meaning))}
                 description={v.meaning}
                 symbol={symbols[v.name] === undefined ? v.pageSymbol : <SymbolMark piece={symbols[v.name]!} />}
                 unit={displayUnit(v.unit)}
