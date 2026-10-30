@@ -15,6 +15,7 @@
   --pz-radius: calc(var(--pz-u) * 0.75);
   --pz-gap: calc(var(--pz-u) * 1.6);
   --pz-black: #000;
+  --pz-white: #fff;
   --pz-ease: cubic-bezier(0.16, 1, 0.3, 1);
   position: fixed; inset: 0; z-index: 1000;
   background: var(--window-bg); color: var(--ink);
@@ -99,14 +100,18 @@
 
 /* ---- ask beats: quiz, compare, predict -------------------------------------------------------------------------------- */
 .pz-ask { flex: 1; display: flex; flex-direction: column; gap: calc(var(--pz-u) * 1.8); min-block-size: 0; }
-.pz-choices { display: grid; gap: calc(var(--pz-u) * 0.8); max-inline-size: calc(var(--pz-u) * 110); }
+/* A question and its answers sit as one block at the optical centre of the screen, not pinned to the top edge. */
+.pz-ask:not(.pz-predict) { justify-content: center; padding-block-end: calc(var(--pz-u) * 3); }
+.pz-ask:not(.pz-predict) > .pz-hint { margin-block-start: 0; }
+.pz-ask:not(.pz-predict) > .pz-question { margin-block-end: calc(var(--pz-u) * 0.6); }
+.pz-choices { display: grid; gap: calc(var(--pz-u) * 1); max-inline-size: calc(var(--pz-u) * 118); }
 .pz-choices > li { display: grid; gap: calc(var(--pz-u) * 0.5); }
 .pz-choice {
   position: relative; isolation: isolate; overflow: hidden;
   display: grid; grid-template-columns: 1.5em minmax(0, 1fr) auto; align-items: baseline; gap: 0.5em;
-  inline-size: 100%; padding: 0.5em 0.8em; text-align: start;
+  inline-size: 100%; padding: 0.6em 0.9em; text-align: start;
   border: 2px solid var(--line-2); border-radius: var(--pz-radius); background: transparent; color: var(--ink);
-  font-size: calc(var(--pz-body) * 0.94); line-height: 1.3; cursor: pointer;
+  font-size: calc(var(--pz-body) * 1.06); line-height: 1.3; cursor: pointer;
   transition: border-color 0.18s ease-out, background-color 0.18s ease-out, opacity 0.3s ease-out;
 }
 .pz-choice:hover:not(:disabled) { border-color: var(--line-3); background: var(--panel-2); }
@@ -140,8 +145,8 @@
 /* compare */
 .pz-compare { gap: calc(var(--pz-u) * 1.4); }
 .pz-table-wrap { overflow: auto; max-inline-size: 100%; }
-.pz-table { border-collapse: collapse; font-size: calc(var(--pz-body) * 0.78); line-height: 1.3; }
-.pz-table th, .pz-table td { padding: 0.45em 0.8em; border: 1px solid var(--line-2); text-align: start; vertical-align: top; }
+.pz-table { border-collapse: collapse; font-size: calc(var(--pz-body) * 0.96); line-height: 1.3; }
+.pz-table th, .pz-table td { padding: 0.55em 0.9em; border: 1px solid var(--line-2); text-align: start; vertical-align: top; }
 .pz-table thead th { font-weight: var(--fw-bold); color: var(--ink-2); background: var(--panel-2); }
 .pz-table tbody th { font-weight: var(--fw-bold); }
 .pz-table thead td { border-block-start-color: transparent; border-inline-start-color: transparent; }
@@ -151,9 +156,27 @@
 .pz-cell-miss, .pz-cell-revealed { background: var(--accent-soft); }
 .pz-compare .pz-choices { grid-template-columns: repeat(auto-fit, minmax(calc(var(--pz-u) * 30), 1fr)); max-inline-size: none; }
 
-/* predict: the class's number and the engine's number side by side; the engine's stays a dashed "?" until R */
-.pz-question-lg { font-size: calc(var(--pz-h) * 1.12); max-inline-size: 38ch; }
-.pz-duel { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: calc(var(--pz-u) * 2.4); margin-block-start: calc(var(--pz-u) * 1); max-inline-size: calc(var(--pz-u) * 120); }
+/* predict: the question over the live scene (left) and the two numbers (right): the class's, and the engine's, which stays a
+ * dashed "?" until R. The scene answers in place: the ball flies, the peak settles onto or away from the guess line. */
+.pz-predict { gap: calc(var(--pz-u) * 1.6); }
+.pz-question-predict { font-size: calc(var(--pz-h) * 0.86); line-height: 1.22; max-inline-size: 58ch; }
+.pz-predict-body {
+  flex: 1; min-block-size: 0;
+  display: grid; grid-template-columns: minmax(0, 1fr) calc(var(--pz-u) * 19); gap: calc(var(--pz-u) * 2.6);
+  align-items: stretch;
+}
+.pz-predict-scene { display: flex; min-block-size: 0; min-inline-size: 0; }
+.pz-predict-scene > .pz-fit { flex: 1; }
+.pz-predict-scene .pz-fit-zoom { margin-block: 0; }
+.pz-predict-side { display: flex; flex-direction: column; gap: calc(var(--pz-u) * 1.2); min-block-size: 0; padding-block-start: calc(var(--pz-u) * 0.6); }
+.pz-predict-side .pz-slot { padding: calc(var(--pz-u) * 1.1) calc(var(--pz-u) * 1.4); }
+.pz-predict-side .pz-slot-value { font-size: calc(var(--pz-display) * 0.86); }
+.pz-predict-side .pz-hint { margin-block-start: 0; }
+.pz-predict-side .pz-fine { margin-block-start: auto; }
+.pz-grade.pz-verdict { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: start; gap: 0.1em 0.45em; font-size: calc(var(--pz-body) * 0.8); line-height: 1.3; }
+.pz-verdict .mark { margin-block-start: 0.25em; }
+.pz-verdict strong { font-size: 1.25em; font-weight: var(--fw-bold); letter-spacing: -0.01em; }
+.pz-verdict-detail { grid-column: 2; color: var(--ink-2); }
 .pz-slot {
   display: grid; gap: calc(var(--pz-u) * 0.8); align-content: start;
   padding: calc(var(--pz-u) * 1.6) calc(var(--pz-u) * 2); border: 2px solid var(--line-2); border-radius: var(--pz-radius);
@@ -184,14 +207,10 @@
 .pz-stage { flex: 1; display: flex; flex-direction: column; gap: calc(var(--pz-u) * 1.2); min-block-size: 0; margin-block-end: calc(var(--pz-u) * -2.5); }
 .pz-stage .pz-heading { font-size: calc(var(--pz-h) * 0.8); }
 .pz-fit { flex: 1; min-block-size: 0; overflow: auto; overscroll-behavior: contain; }
-.pz-fit-zoom { inline-size: fit-content; margin-inline: auto; font-size: var(--fs-16); line-height: 1.5; }
+.pz-fit-zoom { inline-size: fit-content; margin-inline: 0; font-size: var(--fs-16); line-height: 1.5; }
 .pz-fit-inner { padding-block-end: 8px; container-type: inline-size; }
-/* The stage beat already says the part's title; the part's own title block, its later cases and the explanation list
- * are teacher reading, not projector content, so they stay in the lesson view. */
-.pz-fit .activity-head > h2, .pz-fit .activity-head .objectives { display: none; }
-.pz-fit .activity > section.card:has(> .predictions), .pz-fit .activity > section.card[aria-labelledby="expl-heading"] { display: none; }
-/* The class has just predicted case 1 on the beat before; here the scene answers it (Play reveals the hidden value). */
-.pz-fit .simulation > .predict-first, .pz-fit .explorer > section:has(.predictions) { display: none; }
+/* What a part shows on a beat is chosen by its `presentation` prop (title, later cases, explanations and the predict card
+ * stay in the lesson view); no class names of other views are hidden from here. */
 
 /* ---- closing: where this came from ---------------------------------------------------------------------------------- */
 .pz-closing { flex: 1; display: flex; flex-direction: column; gap: calc(var(--pz-u) * 2); min-block-size: 0; }
@@ -203,7 +222,7 @@
 .pz-closing-source > p:not(.pz-closing-label):not(.pz-closing-name):not(.pz-url) { font-size: calc(var(--pz-body) * 0.78); color: var(--ink-2); }
 .pz-closing-source .pz-url { font-size: var(--pz-meta); color: var(--link); overflow-wrap: anywhere; }
 .pz-closing-quotes ul { display: grid; gap: calc(var(--pz-u) * 1.2); }
-.pz-closing-quotes blockquote { font-family: var(--serif); font-size: calc(var(--pz-body) * 0.74); line-height: 1.45; color: var(--ink-2); }
+.pz-closing-quotes blockquote { font-family: var(--serif); font-size: calc(var(--pz-body) * 0.84); line-height: 1.45; color: var(--ink-2); }
 .pz-calm {
   display: flex; align-items: center; gap: 0.45em; padding-block-start: calc(var(--pz-u) * 1.4); border-block-start: 1px solid var(--line-2);
   font-size: calc(var(--pz-body) * 0.72); color: var(--ink);
@@ -306,6 +325,7 @@
 .pz-help dd { margin: 0; color: var(--ink-2); }
 .pz-help .pz-fine { font-size: 14px; }
 .pz-blank { position: absolute; inset: 0; z-index: 10; border: 0; padding: 0; background: var(--pz-black); cursor: none; }
+.pz-blank[data-tone="white"] { background: var(--pz-white); }
 .pz-blank:focus-visible { outline: none; }
 
 /* ---- entry points in the workspace ---------------------------------------------------------------------------------- */
@@ -325,4 +345,5 @@
   .pz-notes { animation: pz-words-in 0.14s ease-out both; }
   .pz-stage-frame, .pz-bar, .pz-progress span { transition: none; }
   .pz-bar[data-shown="false"] { transform: none; }
+  .pz-guess { transition: none; }
 }

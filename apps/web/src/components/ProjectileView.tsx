@@ -4,7 +4,8 @@ import { stateAt } from '../../../../packages/activities/projectile-v1/engine.ts
 import type { ProjectileActivitySpec } from '../../../../packages/contracts/index.ts';
 import { caseInputs, scenarioLabels, sliderModels } from '../lib/engines.ts';
 import { fixed, trimmed } from '../lib/format.ts';
-import { leaderLine, PROJECTILE_FRAME, projectileScene, sceneGuess } from '../lib/geometry.ts';
+import { askFrame, ASK_GUESS_FRACTION, heightTicks, leaderLine, PROJECTILE_FRAME, projectileScene, sceneGuess } from '../lib/geometry.ts';
+import type { HeightTick } from '../lib/geometry.ts';
 import type { Grade } from '../lib/predictions.ts';
 import type { Px } from '../lib/geometry.ts';
 import { activePreset, comparisonValues, pagePresets } from '../lib/presets.ts';
@@ -31,6 +32,11 @@ export interface ClosedFormViewProps<S> {
   equation?: ReactNode;
   /** Case 1's answer is not shown yet: every printed value of the engine's output reads '?'. */
   concealed?: boolean;
+  /**
+   * 'scene' = presentation mode: the scene and its equation only, at projector scale (no playback bar, sliders, readouts
+   * or predict card; the deck drives the reveal). Default 'lesson'.
+   */
+  variant?: 'lesson' | 'scene';
 }
 
 /** The views without a playback clock (lift, compound interest, Hardy-Weinberg, half-life). */
@@ -67,8 +73,30 @@ function useRunSeq(grade: Grade | null): number {
   return ref.current.seq;
 }
 
-export function ProjectileView({ spec, inputs, onInput, pb, predict, equation, concealed = false, sourceText, outcome }: ClosedFormViewProps<ProjectileActivitySpec> & {
+/** The height scale beside the scene (presentation mode): tick marks and numbers left of the plot. */
+function HeightRuler({ ticks }: { ticks: readonly HeightTick[] }) {
+  const B = BOX;
+  return (
+    <g className="height-ruler" aria-hidden="true">
+      <line x1={B.left - 8} y1={B.top} x2={B.left - 8} y2={B.bottom} className="ruler-line" />
+      {ticks.map((t) => (
+        <g key={t.m}>
+          <line x1={B.left - 14} y1={t.py} x2={B.left - 8} y2={t.py} className="tick" />
+          {t.m !== 0 && <text x={B.left - 18} y={t.py + 4} textAnchor="end" className="tick-label">{t.label}</text>}
+        </g>
+      ))}
+      <text x={B.left - 8} y={B.top - 10} textAnchor="middle" className="tick-label tick-unit">{ticks.length > 0 ? 'm' : 'm ?'}</text>
+    </g>
+  );
+}
+
+export function ProjectileView({ spec, inputs, onInput, pb, predict, equation, concealed = false, sourceText, outcome, variant = 'lesson', ask = null }: ClosedFormViewProps<ProjectileActivitySpec> & {
   sourceText?: string | null;
+  /**
+   * Presentation mode, before the reveal: the class's guess (null = not given yet). The scene then shows only the launch
+   * and a height scale chosen from the guess alone, never the arc or its peak.
+   */
+  ask?: { guess: number | null } | null;
   /**
    * The last graded prediction of ANY case (the activity shell's result). When omitted, the view still catches case 1's
    * runs from its own predict card; cases 2…n then show no guess in the scene.
@@ -93,10 +121,10 @@ export function ProjectileView({ spec, inputs, onInput, pb, predict, equation, c
   const gPresets = useMemo(() => pagePresets(spec, 'gravityMps2', sourceText), [spec, sourceText]);
   const ghostGs = useMemo(() => comparisonValues(gPresets, input.gravityMps2), [gPresets, input.gravityMps2]);
   // The class's guess, drawn only while the sliders still show the graded case.
-  const guess = useMemo(
-    () => sceneGuess(graded === undefined ? null : caseInputs('projectile-v1', graded), inputs, last?.grade ?? null),
-    [graded, inputs, last],
-  );
+  const guess = useMemo(() => {
+    const g = sceneGuess(graded === undefined ? null : caseInputs('projectile-v1', graded), inputs, last?.grade ?? null);
+    return g === null || variant !== 'scene' ? g : { ...g, who: 'class' };
+  }, [graded, inputs, last, variant]);
   const scene = useMemo(() => projectileScene(input, ghostGs, label, guess ?? undefined), [input, ghostGs, label, guess]);
 
   // The reveal moment: after a run, the peak's number stays '?' until the ball reaches the top, then the peak marker, the
@@ -112,6 +140,11 @@ export function ProjectileView({ spec, inputs, onInput, pb, predict, equation, c
 
   if (scene === null) {
     return <div className="callout callout-error" role="alert">The engine rejected these inputs. Adjust the sliders.</div>;
+  }
+
+  const scenePlain = variant === 'scene';
+  if (scenePlain && ask !== null && concealed) {
+    return <ProjectileAsk label={label} input={input} guess={ask.guess} titleId={titleId} />;
   }
 
   const { layout } = scene;
@@ -176,12 +209,16 @@ export function ProjectileView({ spec, inputs, onInput, pb, predict, equation, c
             </g>
           )}
 
-          {reveal !== null && (
+          {reveal !== null && !scenePlain && (
             <g className={`reveal-guess${reveal.offScale !== null ? ' reveal-guess-off' : ''}`} aria-hidden="true">
               <line x1={B.left - 10} y1={reveal.guessPy} x2={B.right + 10} y2={reveal.guessPy} className="reveal-guess-line" />
               <text x={reveal.label.x} y={reveal.label.y} textAnchor={reveal.label.anchor} className="reveal-guess-label">{reveal.label.text}</text>
             </g>
           )}
+          {reveal !== null && scenePlain && (
+            <GuessLine py={reveal.guessPy} off={reveal.offScale !== null} label={reveal.label.text} x={reveal.label.x} dy={reveal.label.y - reveal.guessPy} anchor={reveal.label.anchor} />
+          )}
+          {scenePlain && <HeightRuler ticks={heightTicks(layout.scale)} />}
 
           <g aria-hidden="true">
             <line x1={scene.apex.px} y1={scene.apex.py} x2={scene.apex.px} y2={BOX.bottom} className="guide" />
@@ -207,12 +244,13 @@ export function ProjectileView({ spec, inputs, onInput, pb, predict, equation, c
           <circle cx={pos.px} cy={pos.py} r={9} className="ball" />
         </svg>
       </div>
-      {scene.ghosts.length > 0 && (
+      {scene.ghosts.length > 0 && !scenePlain && (
         <p className="muted small compare-note">
           Faint dotted arc: the same launch at {scene.ghosts.map((g) => `g = ${trimmed(g.gravityMps2, 4)} m/s²`).join(' and ')}, {scene.ghosts.length === 1 ? 'the other value the page states' : 'the other values the page states'}, drawn on the same scale.
         </p>
       )}
 
+      {variant !== 'scene' && (
       <div className="transport" role="group" aria-label="Playback">
         <button type="button" className="btn btn-primary" onClick={pb.playing ? pb.pause : pb.play}>
           {pb.playing ? <><IconPause /> Pause</> : finished ? <><IconReplay /> Replay</> : <><IconPlay /> Play</>}
@@ -233,10 +271,12 @@ export function ProjectileView({ spec, inputs, onInput, pb, predict, equation, c
           <output htmlFor={scrubId} className="scrub-value">{fixed(Math.min(pb.t, scene.flightTimeS), 2)} / {fixed(scene.flightTimeS, 2)} s</output>
         </div>
       </div>
+      )}
 
       {withConcealed(equation, pending)}
       {predictCard}
 
+      {variant !== 'scene' && (
       <div className="controls-row">
         <div className="sliders">
           {models.map((m) => (
@@ -252,6 +292,77 @@ export function ProjectileView({ spec, inputs, onInput, pb, predict, equation, c
           <Readout name="Range" value={fixed(scene.rangeM, 2)} unit="m" accent="x" />
           <Readout name="Now: x, height" value={`${fixed(now.x, 1)}, ${fixed(now.y, 1)}`} unit="m" />
         </dl>
+      </div>
+      )}
+    </div>
+  );
+}
+
+/**
+ * The class's guess as a level line. Positioned with a CSS transform, so when the reveal re-scales the drawing the line
+ * glides from where it sat on the guess's own scale to the same height on the engine's scale.
+ */
+function GuessLine({ py, off, label, x, dy, anchor }: { py: number; off: boolean; label: string; x: number; dy: number; anchor: 'start' | 'middle' | 'end' }) {
+  const B = BOX;
+  return (
+    <g className={`reveal-guess pz-guess${off ? ' reveal-guess-off' : ''}`} style={{ transform: `translateY(${py}px)` }} aria-hidden="true">
+      <line x1={B.left - 10} y1={0} x2={B.right + 10} y2={0} className="reveal-guess-line" />
+      <text x={x} y={dy} textAnchor={anchor} className="reveal-guess-label">{label}</text>
+    </g>
+  );
+}
+
+/**
+ * Presentation mode before the reveal: the launch only (the ball, its launch speeds as an arrow, gravity), a height scale
+ * from the class's guess alone and the guess line. No arc, no peak, no range: nothing here depends on the answer.
+ */
+function ProjectileAsk({ label, input, guess, titleId }: { label: string; input: { horizontalSpeedMps: number; verticalSpeedMps: number; gravityMps2: number }; guess: number | null; titleId: string }) {
+  const B = BOX;
+  const frame = askFrame(guess);
+  const ux = input.horizontalSpeedMps;
+  const uy = input.verticalSpeedMps;
+  const len = Math.hypot(ux, uy);
+  const ARROW = 92;
+  const ax = len > 0 ? (ux / len) * ARROW : 0;
+  const ay = len > 0 ? (uy / len) * ARROW : 0;
+  const x0 = B.left;
+  const y0 = B.bottom;
+  const tip = { x: x0 + ax, y: y0 - ay };
+  const ang = Math.atan2(-ay, ax);
+  const head = (d: number): string => `${tip.x + 12 * Math.cos(ang + Math.PI + d)},${tip.y + 12 * Math.sin(ang + Math.PI + d)}`;
+  const placeholderPy = B.bottom - ASK_GUESS_FRACTION * (B.bottom - B.top);
+  const gx = B.right - 60;
+  const alt = `${label}. Launched at ${trimmed(ux, 3)} metres per second sideways and ${trimmed(uy, 3)} upward under ${trimmed(input.gravityMps2, 3)} metres per second squared. The flight is hidden until the reveal.${guess === null ? '' : ` Class guess for the maximum height: ${trimmed(guess, 4)} metres.`}`;
+  return (
+    <div className="simulation" data-engine="projectile-v1" data-phase="ask">
+      <SchematicTag text={PROJECTILE_LABEL} />
+      <div className="scene-wrap">
+        <svg className="scene" viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby={titleId} preserveAspectRatio="xMidYMid meet">
+          <title id={titleId}>{alt}</title>
+          <text x={B.left} y={titleY} className="object-label">{label}</text>
+          <rect x={B.left - 14} y={B.bottom - 3} width={B.right - B.left + 28} height={8} rx={4} className="track-band" />
+          <HeightRuler ticks={frame.ticks} />
+          <g className="launch" aria-hidden="true">
+            <line x1={x0} y1={y0} x2={tip.x} y2={tip.y} className="launch-arrow" />
+            <polygon points={`${tip.x},${tip.y} ${head(0.42)} ${head(-0.42)}`} className="launch-head" />
+            <text x={tip.x + 12} y={tip.y - 6} className="scene-label-small">{trimmed(ux, 3)} m/s across · {trimmed(uy, 3)} m/s up</text>
+          </g>
+          <g className="gravity" aria-hidden="true">
+            <line x1={gx} y1={B.top + 8} x2={gx} y2={B.top + 56} className="gravity-arrow" />
+            <polygon points={`${gx},${B.top + 66} ${gx - 6},${B.top + 54} ${gx + 6},${B.top + 54}`} className="gravity-head" />
+            <text x={gx - 12} y={B.top + 40} textAnchor="end" className="scene-label-small">g = {trimmed(input.gravityMps2, 4)} m/s²</text>
+          </g>
+          {frame.guessPy !== null && guess !== null
+            ? <GuessLine py={frame.guessPy} off={false} label={`class guess ${trimmed(guess, 4)} m`} x={B.left + 4} dy={-8} anchor="start" />
+            : (
+              <g className="reveal-guess reveal-guess-empty" aria-hidden="true">
+                <line x1={B.left - 10} y1={placeholderPy} x2={B.right + 10} y2={placeholderPy} className="reveal-guess-line" />
+                <text x={B.left + 4} y={placeholderPy - 8} className="reveal-guess-label">class guess: ? m</text>
+              </g>
+            )}
+          <circle cx={x0} cy={y0} r={9} className="ball" />
+          <text x={(B.left + B.right) / 2} y={B.bottom + 30} textAnchor="middle" className="scene-label-small ask-note">The flight is hidden until the reveal</text>
+        </svg>
       </div>
     </div>
   );

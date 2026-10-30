@@ -16,7 +16,7 @@ const CURVE = { l: 540, r: 760, t: 84, b: 244 };
 const H_MAX = 0.5;
 const CURVE_STEPS = 50;
 
-export function HardyWeinbergView({ spec, inputs, onInput, onReset, predict, equation, concealed = false }: StaticViewProps<HardyWeinbergActivitySpec>) {
+export function HardyWeinbergView({ spec, inputs, onInput, onReset, predict, equation, concealed = false, variant = 'lesson' }: StaticViewProps<HardyWeinbergActivitySpec>) {
   const titleId = useId();
   const models = sliderModels(spec);
   const sc = scenarioLabels(spec);
@@ -90,6 +90,7 @@ export function HardyWeinbergView({ spec, inputs, onInput, onReset, predict, equ
       {equation}
       {predict}
 
+      {variant !== 'scene' && (
       <div className="controls-row">
         <div className="sliders">
           {models.map((m) => (
@@ -103,6 +104,7 @@ export function HardyWeinbergView({ spec, inputs, onInput, onReset, predict, equ
           <Readout name="Aa share of population" value={`${trimmed(het * 100, 2)}%`} unit="" concealed={concealed} />
         </dl>
       </div>
+      )}
     </div>
   );
 }

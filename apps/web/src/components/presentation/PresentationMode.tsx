@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import type { QuoteRef } from '../../lib/evidence.ts';
 import type { Badge } from '../../lib/repairs.ts';
 import type { Deck, PresentAction } from '../../lib/presentation.ts';
-import { canReveal, initialPresent, isRevealed, KEY_MAP, keyAction, keyContext, planBeats, presentReducer, presentSearch, quoteForLinks } from '../../lib/presentation.ts';
+import { acceptsNumber, canReveal, initialPresent, isRevealed, KEY_MAP, keyAction, keyContext, planBeats, presentReducer, presentSearch, quoteForLinks } from '../../lib/presentation.ts';
 import { linkStore } from '../../lib/linking.ts';
 import type { CiteProps } from '../Explanations.tsx';
 import { BeatView } from './Beats.tsx';
@@ -108,11 +108,14 @@ export function PresentationMode({ deck, quotes, sourceId, repairBadge, startBea
 
   // ---- keyboard -----------------------------------------------------------------------------------------------------
   const act = useCallback((a: PresentAction) => dispatch(a), []);
+  // On an open number question the digit keys type the class prediction (no field to click into first).
+  const numeric = beat !== undefined && acceptsNumber(beat, state.step);
   useEffect(() => {
     const onKey = (e: KeyboardEvent): void => {
       if (e.defaultPrevented || e.isComposing) return;
       const t = e.target instanceof HTMLElement ? e.target : null;
-      const ctx = keyContext(t === null ? null : { tagName: t.tagName, type: (t as HTMLInputElement).type, isContentEditable: t.isContentEditable, role: t.getAttribute('role') });
+      const own = keyContext(t === null ? null : { tagName: t.tagName, type: (t as HTMLInputElement).type, isContentEditable: t.isContentEditable, role: t.getAttribute('role') });
+      const ctx = own === 'none' && numeric ? 'numeric' : own;
       const a = keyAction(e, ctx);
       if (a === null) return;
       e.preventDefault();
@@ -127,7 +130,7 @@ export function PresentationMode({ deck, quotes, sourceId, repairBadge, startBea
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [onExit, toggleFullscreen, state.help]);
+  }, [onExit, toggleFullscreen, state.help, numeric]);
 
   // ---- the bar hides itself (and the pointer) when the mouse rests -----------------------------------------------------
   useEffect(() => {
@@ -218,7 +221,7 @@ export function PresentationMode({ deck, quotes, sourceId, repairBadge, startBea
 
       {keyHint && !state.blank && (
         <p className="pz-keyhint" aria-hidden="true">
-          <span><kbd>→</kbd> next</span><span><kbd>R</kbd> reveal</span><span><kbd>B</kbd> black screen</span>
+          <span><kbd>→</kbd> next</span><span><kbd>R</kbd> reveal</span><span><kbd>B</kbd> / <kbd>W</kbd> black or white screen</span>
           {!isFull && <span><kbd>F</kbd> full screen</span>}<span><kbd>?</kbd> all keys</span>
         </p>
       )}
@@ -268,7 +271,13 @@ export function PresentationMode({ deck, quotes, sourceId, repairBadge, startBea
         </section>
       )}
 
-      {state.blank && <button type="button" className="pz-blank" onClick={() => act({ type: 'blank' })} aria-label="Black screen. Press B or click to return." />}
+      {state.blank && (
+        <button
+          type="button" className="pz-blank" data-tone={state.blankTone}
+          onClick={() => act(state.blankTone === 'white' ? { type: 'blank', tone: 'white' } : { type: 'blank' })}
+          aria-label={state.blankTone === 'white' ? 'White screen. Press W or click to return.' : 'Black screen. Press B or click to return.'}
+        />
+      )}
     </div>
   );
   return createPortal(view, document.body);

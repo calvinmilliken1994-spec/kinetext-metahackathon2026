@@ -262,7 +262,7 @@ function curvePoints(g: GraphGeometry): Px[] {
 }
 
 /** The graph's reveal overlay for a graded guess (the point must be the graded case: the view checks the sliders). */
-export function graphReveal(g: GraphGeometry, grade: Grade): GraphReveal {
+export function graphReveal(g: GraphGeometry, grade: Grade, who = 'your'): GraphReveal {
   const { plot } = g;
   const span = g.yMax - g.yMin;
   const sy = (y: number): number => plot.b - ((y - g.yMin) / (span === 0 ? 1 : span)) * (plot.b - plot.t);
@@ -294,7 +294,7 @@ export function graphReveal(g: GraphGeometry, grade: Grade): GraphReveal {
   const dx = right ? 8 : -8;
   const [guessLabel, deltaLabel] = placeLabels([
     {
-      text: `your guess ${groupedSig6(grade.guess)}${off}`, fontPx: 14, bold: true,
+      text: `${who} guess ${groupedSig6(grade.guess)}${off}`, fontPx: 14, bold: true,
       candidates: [
         ...(px < (plot.l + plot.r) / 2 ? [plot.r - 6, plot.l + 6] : [plot.l + 6, plot.r - 6]).flatMap((x) => [-8, 19, -26, 37].map((dy) => ({
           x, y: guessPy + dy, anchor: x > (plot.l + plot.r) / 2 ? 'end' as const : 'start' as const,
@@ -400,4 +400,28 @@ export function casePrompt(spec: FormulaExplorerSpec, c: FormulaCaseGen): string
 /** Students are graded with the teaching margin: 2% of the calculator's value (cases carry no tolerance of their own). */
 export function gradeCaseGuess(guess: number, actual: number): Grade {
   return gradePrediction(guess, actual, studentTolerance(actual, 0));
+}
+
+/** Where case 1 should sit along the x axis of a predict beat's graph (fraction of the range). */
+const PREDICT_X_AT = 0.45;
+
+/**
+ * Presentation mode's predict beat: the same explorer with the x variable's range narrowed (from its minimum) so case 1
+ * sits near the middle of the graph. On the full slider range a case near the low end is squeezed into the bottom corner,
+ * where the guess line, the margin band and the value cannot be told apart from across a room. Only the drawn range
+ * changes; the formula, the cases and every other variable stay as they are. A case already past the PREDICT_X_AT point
+ * keeps the full range.
+ */
+export function predictSpec(spec: FormulaExplorerSpec): FormulaExplorerSpec {
+  const first = spec.cases[0];
+  const xv = spec.variables.find((v) => v.name === spec.xVariable);
+  if (first === undefined || xv === undefined) return spec;
+  const x0 = inputsOfCase(first)[spec.xVariable];
+  if (x0 === undefined || !Number.isFinite(x0) || !(xv.max > xv.min) || x0 <= xv.min) return spec;
+  const want = xv.min + (x0 - xv.min) / PREDICT_X_AT;
+  if (want >= xv.max) return spec;
+  const step = niceStep(want - xv.min, 5);
+  const max = Math.min(xv.max, tidy(xv.min + Math.ceil((want - xv.min) / step - 1e-9) * step));
+  if (!(max > x0)) return spec;
+  return { ...spec, variables: spec.variables.map((v) => (v.name === spec.xVariable ? { ...v, max } : v)) };
 }

@@ -4,6 +4,7 @@ import { AiWritten } from './Disclosure.tsx';
 import { IconLocate } from './icons.tsx';
 import { Linked } from './Linked.tsx';
 import { linkKeysOf } from '../lib/linking.ts';
+import { prettyExponents } from '../lib/displayText.ts';
 
 export interface CiteProps {
   /** Source currently shown in the Source panel. */
@@ -40,7 +41,7 @@ export function Explanations({ explanations, cite }: { explanations: ActivitySpe
       <ul className="explanations">
         {explanations.map((ex) => (
           <Linked as="li" key={ex.id} links={linkKeysOf(ex.evidence)}>
-            <p>{ex.text}</p>
+            <p>{prettyExponents(ex.text)}</p>
             <div className="chips" role="group" aria-label={`Evidence for ${ex.id}`}>
               {ex.evidence.map((ev, i) => {
                 const key = quoteKey('explanation', ex.id, i);

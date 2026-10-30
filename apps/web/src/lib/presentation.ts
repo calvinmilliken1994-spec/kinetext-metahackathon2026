@@ -9,12 +9,16 @@ import type { ActivitySpec, AnyPrediction, EngineId, TimelineActivitySpec, Timel
 import type {
   CompareTableSpec, FormulaExplorerSpec, KeyPointGen, KeyTermGen, KitSpec, LessonSpec, QuizCardsSpec, SourceAnalysisV2,
 } from '../../../../packages/contracts/kit.ts';
-import { engineOutput, formatOutputValue, outputInfo } from './engines.ts';
-import { buildExplorer, casePrompt, evalAt, inputsOfCase, outputName, sig6 } from './explorer.ts';
+import { caseInputs, engineOutput, formatOutputValue, outputInfo, playbackPlan, projectileSummary } from './engines.ts';
+import { buildExplorer, casePrompt, evalAt, groupedSig6, inputsOfCase, outputName } from './explorer.ts';
 import { lessonCards } from './lesson.ts';
 import { linkKey } from './linking.ts';
 import type { QuoteLike } from './linking.ts';
 import { planPredict } from './compare.ts';
+import { amountText, groupThousands } from './displayText.ts';
+import { gradeCaseGuess } from './explorer.ts';
+import { trimmed } from './format.ts';
+import { gradePrediction, parseGuess, studentTolerance } from './predictions.ts';
 import type { PredictPlan } from './compare.ts';
 import type { CheckTally, QuoteTally } from './provenance.ts';
 import { isTimelineSpec, pairOptions } from './timeline.ts';
@@ -282,11 +286,55 @@ export function numericAnswer(target: PredictTarget): NumericAnswer | null {
     if (!model.ok || first === undefined) return null;
     const value = evalAt(model, inputsOfCase(first));
     if (!Number.isFinite(value)) return null;
-    return { value, display: sig6(value), unit: '', label: outputName(target.spec) };
+    return { value, display: groupedSig6(value), unit: '', label: outputName(target.spec) };
   }
   return null;
 }
 
+/** What a predict beat draws: the projectile scene with the guess line, the formula's graph, another engine's own scene, or the which-came-first pair. */
+export type PredictVisual = 'projectile' | 'graph' | 'scene' | 'pair';
+
+export function predictVisual(target: PredictTarget): PredictVisual {
+  if (target.kind === 'timeline') return 'pair';
+  if (target.kind === 'formula') return 'graph';
+  return target.engine === 'projectile-v1' ? 'projectile' : 'scene';
+}
+
+/** How long the numbers wait after R for a graph's point to settle (its CSS settle runs 720 ms). */
+export const GRAPH_SETTLE_MS = 720;
+
+/**
+ * How long after R the class number, the checked value and the verdict wait, so the scene answers first: a projectile's
+ * until the ball reaches the top (the playback plan's wall-clock time to the apex), a graph's until its point settles,
+ * other scenes not at all.
+ */
+export function revealDelayMs(target: PredictTarget): number {
+  if (target.kind === 'formula') return GRAPH_SETTLE_MS;
+  if (target.kind !== 'engine' || target.engine !== 'projectile-v1') return 0;
+  const inputs = caseInputs('projectile-v1', target.prediction);
+  const plan = playbackPlan('projectile-v1', inputs);
+  const sum = projectileSummary(inputs);
+  if (plan === null || sum === null || !(plan.speed > 0)) return 0;
+  return Math.round((sum.apexTimeS / plan.speed) * 1000);
+}
+
+/**
+ * The verdict line under a revealed numeric predict beat: the class number against the checked value, graded with the
+ * teaching margin (engine cases: max(case tolerance, 2 %); formula cases: 2 %). Null when no class number was entered.
+ */
+export function predictVerdict(answer: NumericAnswer, guessRaw: string, caseTolerance: number | null): { within: boolean; text: string; headline: string; detail: string } | null {
+  const guess = parseGuess(guessRaw);
+  if (guess === null) return null;
+  const g = caseTolerance === null ? gradeCaseGuess(guess, answer.value) : gradePrediction(guess, answer.value, studentTolerance(answer.value, caseTolerance));
+  const unit = answer.unit === '' ? '' : ` ${answer.unit}`;
+  const said = `Class prediction ${groupThousands(trimmed(guess, 4))}${unit}`;
+  const margin = `±${amountText(g.tolerance, answer.unit)}`;
+  const gap = amountText(Math.abs(g.error), answer.unit);
+  const way = g.direction === 'high' ? 'high' : 'low';
+  return g.withinTolerance
+    ? { within: true, text: `${said} · inside the ${margin} margin`, headline: 'Close enough', detail: `Inside the ${margin} margin` }
+    : { within: false, text: `${said} · off by ${gap}, too ${way}`, headline: `Off by ${gap}`, detail: `Too ${way}` };
+}
 
 // ---- navigation ---------------------------------------------------------------------------------------------------
 
@@ -294,6 +342,8 @@ export interface PresentState {
   beat: number;
   step: number;
   blank: boolean;
+  /** B blanks to black, W to white (as in slide software). */
+  blankTone: 'black' | 'white';
   notes: boolean;
   help: boolean;
   /** Per beat id: the class's choice or estimate, kept while moving around the deck. */
@@ -302,12 +352,30 @@ export interface PresentState {
 
 export type PresentAction =
   | { type: 'next' } | { type: 'prev' } | { type: 'reveal' } | { type: 'jump'; beat: number } | { type: 'first' } | { type: 'last' }
-  | { type: 'blank' } | { type: 'notes' } | { type: 'help' } | { type: 'answer'; beatId: string; value: string };
+  | { type: 'blank'; tone?: 'white' } | { type: 'notes' } | { type: 'help' } | { type: 'answer'; beatId: string; value: string }
+  /** A key typed into the class prediction of the open number question (digits, '.', '-', Backspace). */
+  | { type: 'type'; key: string };
+
+/** The open number question: an unrevealed engine or formula predict beat, where the keys type the class prediction. */
+export function acceptsNumber(beat: Beat, step: number): boolean {
+  return beat.kind === 'predict' && beat.target.kind !== 'timeline' && !isRevealed(beat, step);
+}
+
+/** Longest class prediction typed from the keyboard. */
+const MAX_TYPED = 12;
+
+function typeInto(prev: string, key: string): string {
+  if (key === 'Backspace') return prev.slice(0, -1);
+  if (key === '-') return prev === '' ? '-' : prev;
+  if (key === '.') return prev.includes('.') ? prev : `${prev === '' || prev === '-' ? `${prev}0` : prev}.`;
+  if (/^[0-9]$/.test(key)) return prev.length >= MAX_TYPED ? prev : `${prev}${key}`;
+  return prev;
+}
 
 const clampBeat = (beats: readonly Beat[], n: number): number => (Number.isFinite(n) ? Math.max(0, Math.min(beats.length - 1, Math.trunc(n))) : 0);
 
 export function initialPresent(beats: readonly Beat[], beat = 0): PresentState {
-  return { beat: clampBeat(beats, beat), step: 0, blank: false, notes: false, help: false, answers: {} };
+  return { beat: clampBeat(beats, beat), step: 0, blank: false, blankTone: 'black', notes: false, help: false, answers: {} };
 }
 
 /** The navigation reducer for one deck. */
@@ -331,18 +399,30 @@ export function presentReducer(beats: readonly Beat[]) {
       case 'jump': return { ...base, beat: clampBeat(beats, a.beat), step: 0 };
       case 'first': return { ...base, beat: 0, step: 0 };
       case 'last': return { ...base, beat: beats.length - 1, step: 0 };
-      case 'blank': return { ...s, blank: !s.blank, help: false };
+      case 'blank': {
+        const tone = a.tone ?? 'black';
+        // The same key again brings the picture back; the other one swaps the colour.
+        return s.blank && s.blankTone === tone ? { ...s, blank: false, help: false } : { ...s, blank: true, blankTone: tone, help: false };
+      }
       case 'notes': return { ...s, notes: !s.notes };
       case 'help': return { ...s, help: !s.help };
       case 'answer': return { ...s, answers: { ...s.answers, [a.beatId]: a.value } };
+      case 'type': {
+        const b = beats[s.beat];
+        if (b === undefined || !acceptsNumber(b, s.step)) return s;
+        return { ...s, answers: { ...s.answers, [b.id]: typeInto(s.answers[b.id] ?? '', a.key) } };
+      }
     }
   };
 }
 
 // ---- keys ---------------------------------------------------------------------------------------------------------
 
-/** Where a key press lands: a field or slider that uses the keys itself, a button (Space/Enter activate it), or neither. */
-export type KeyContext = 'none' | 'button' | 'text';
+/**
+ * Where a key press lands: a field or slider that uses the keys itself, a button (Space/Enter activate it), the open number
+ * question of a predict beat (digits type the class prediction), or none of these.
+ */
+export type KeyContext = 'none' | 'button' | 'text' | 'numeric';
 
 const TEXT_ROLES = new Set(['slider', 'spinbutton', 'textbox', 'combobox', 'listbox', 'option', 'radio', 'radiogroup', 'searchbox', 'menuitem']);
 const BUTTON_INPUTS = new Set(['button', 'submit', 'reset']);
@@ -377,10 +457,15 @@ export function keyAction(e: KeyLike, context: KeyContext): PresentAction | 'exi
     default: break;
   }
   const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+  if (context === 'numeric') {
+    if (/^[0-9]$/.test(key) || key === '.' || key === '-' || key === 'Backspace') return { type: 'type', key };
+    if (key === ',') return { type: 'type', key: '.' };
+  }
   if (/^[0-9]$/.test(key)) return { type: 'jump', beat: key === '0' ? 9 : Number(key) - 1 };
   switch (key) {
     case 'r': return { type: 'reveal' };
     case 'b': case '.': return { type: 'blank' };
+    case 'w': case ',': return { type: 'blank', tone: 'white' };
     case 'p': return { type: 'notes' };
     case '?': case 'h': return { type: 'help' };
     case 'f': return 'fullscreen';
@@ -393,9 +478,10 @@ export const KEY_MAP: readonly { keys: string; does: string }[] = [
   { keys: '→  Space  PgDn', does: 'Next step or beat' },
   { keys: '←  PgUp', does: 'Back' },
   { keys: 'R', does: 'Reveal the answer' },
-  { keys: '1–9  0', does: 'Jump to beat (0 = 10)' },
+  { keys: '1–9  0', does: 'Jump to beat (0 = 10); on a number question, type the class prediction' },
   { keys: 'Home  End', does: 'First or last beat' },
   { keys: 'B', does: 'Black screen' },
+  { keys: 'W', does: 'White screen' },
   { keys: 'P', does: 'Presenter notes' },
   { keys: 'F', does: 'Full screen' },
   { keys: '?', does: 'This list' },

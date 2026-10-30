@@ -1,9 +1,11 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ReactNode, RefObject } from 'react';
 import type { ActivitySpec, AnyPrediction, EngineId, ForcesActivitySpec, Prediction } from '../../../../packages/contracts/index.ts';
 import type { Badge } from '../lib/repairs.ts';
-import { caseInputs, defaultInputs, formatOutputValue, isEngineSpec, outputInfo, playbackPlan } from '../lib/engines.ts';
+import { caseInputs, defaultInputs, engineOutput, formatOutputValue, isEngineSpec, outputInfo, playbackPlan } from '../lib/engines.ts';
+import { gradePrediction, studentTolerance } from '../lib/predictions.ts';
 import type { Grade } from '../lib/predictions.ts';
+import { amountText } from '../lib/displayText.ts';
 import { trimmed } from '../lib/format.ts';
 import { revealInPanels } from '../lib/scroll.ts';
 import { engineEquation } from '../lib/equation.ts';
@@ -42,6 +44,49 @@ export interface ActivityPanelProps {
   repairBadge: Badge | null;
   /** The lesson's provenance line, when this activity is the whole lesson (classic flow). */
   provenance?: ReactNode;
+  /** Presentation mode: how the deck shows this activity (default: the full lesson view). */
+  presentation?: PanelPresentation;
+}
+
+/** How presentation mode shows an activity. */
+export type PanelPresentation =
+  /** Its own beat: the interactive part without its title, later cases or explanations (the deck shows those elsewhere). */
+  | { mode: 'stage' }
+  /**
+   * A predict beat: case 1's scene and equation only, the answer hidden until `revealed`; then the class's guess (if any)
+   * is graded like a run of case 1 and the scene plays.
+   */
+  | { mode: 'predict'; revealed: boolean; guess: number | null };
+
+/** Case 1 graded against the class's guess, as the predict card would grade it. */
+function gradeFirstCase(engine: EngineId, spec: ActivitySpec, guess: number | null): LastResult | null {
+  const p = spec.predictions[0] as AnyPrediction | undefined;
+  if (p === undefined || guess === null) return null;
+  const actual = engineOutput(engine, p);
+  return actual === null ? null : { index: 0, grade: gradePrediction(guess, actual, studentTolerance(actual, p.tolerance)) };
+}
+
+/**
+ * The predict beat drives the reveal from outside: on R the class's guess is graded and `play` runs case 1; going back
+ * hides it again. Returns whether case 1's answer is still hidden.
+ */
+function usePresentedReveal(presentation: PanelPresentation | undefined, engine: EngineId, spec: ActivitySpec, setLast: (r: LastResult | null) => void, play: () => void, hide: () => void): boolean | null {
+  const predict = presentation?.mode === 'predict';
+  const revealed = presentation?.mode === 'predict' && presentation.revealed;
+  const guess = presentation?.mode === 'predict' ? presentation.guess : null;
+  const calls = useRef({ play, hide, setLast });
+  calls.current = { play, hide, setLast };
+  useEffect(() => {
+    if (!predict) return;
+    if (revealed) {
+      calls.current.setLast(gradeFirstCase(engine, spec, guess));
+      calls.current.play();
+    } else {
+      calls.current.setLast(null);
+      calls.current.hide();
+    }
+  }, [predict, revealed, guess, engine, spec]);
+  return predict ? !revealed : null;
 }
 
 /** Props of the numeric-engine activities (everything except a timeline). */
@@ -59,9 +104,17 @@ interface ShellProps extends NumericProps {
  * Header with the provenance line, the last prediction result, the engine view (which shows case 1's predict card right under
  * its scene, above the sliders), the remaining cases, explanations.
  */
-function Shell({ spec, cite, repairBadge, provenance, engine, last, simRef, onRun, children }: ShellProps) {
+function Shell({ spec, cite, repairBadge, provenance, engine, last, simRef, onRun, children, presentation }: ShellProps) {
   const out = outputInfo(engine);
   const unit = out.unit === '' ? '' : ` ${out.unit}`;
+  if (presentation !== undefined) {
+    // The deck shows the title, the cases and the page's words on beats of their own.
+    return (
+      <article className="activity" aria-label={spec.title} data-engine={engine} data-presentation={presentation.mode}>
+        <div ref={simRef} className="sim-anchor">{children}</div>
+      </article>
+    );
+  }
   return (
     <article className="activity" aria-labelledby="activity-title" data-engine={engine}>
       <ActivityHeader title={spec.title} learningObjectives={spec.learningObjectives} engine={engine} repairBadge={repairBadge} provenance={provenance} />
@@ -70,7 +123,7 @@ function Shell({ spec, cite, repairBadge, provenance, engine, last, simRef, onRu
           <div className={`last-result ${last.grade.withinTolerance ? 'grade-ok' : 'grade-miss'}`} role="status">
             <strong><Mark kind={last.grade.withinTolerance ? 'ok' : 'bad'} />Prediction {last.index + 1}: {last.grade.withinTolerance ? 'close enough' : 'not close enough'}</strong>
             <span>
-              you guessed {trimmed(last.grade.guess, 4)}{unit}, the engine gives {formatOutputValue(engine, last.grade.actual)}{unit} (±{trimmed(last.grade.tolerance, 4)} allowed)
+              you guessed {trimmed(last.grade.guess, 4)}{unit}, the engine gives {formatOutputValue(engine, last.grade.actual)}{unit}{last.grade.withinTolerance ? '' : `, off by ${amountText(Math.abs(last.grade.error), out.unit)}`} (±{amountText(last.grade.tolerance, out.unit)} allowed)
             </span>
           </div>
         )}
@@ -99,8 +152,14 @@ function ForcesActivity(props: NumericProps & { spec: ForcesActivitySpec }) {
   const raw = useSimulation(spec);
   const simRef = useRef<HTMLDivElement>(null);
   const [last, setLast] = useState<LastResult | null>(null);
-  const [concealed, reveal] = useReveal(spec.predictions.length);
+  const [ownConcealed, reveal] = useReveal(spec.predictions.length);
   const { runWith } = raw;
+  const first = spec.predictions[0];
+  const presented = usePresentedReveal(props.presentation, 'forces-1d-v1', spec, setLast,
+    () => { if (first !== undefined) runWith(first.massKg, first.netForceN); }, raw.reset);
+  const concealed = presented ?? ownConcealed;
+  const scene = props.presentation?.mode === 'predict';
+  const presenting = props.presentation !== undefined;
   // Any slider move, Play or scrub reveals case 1's answer (predict-then-reveal).
   const ctl = useMemo(() => ({
     ...raw,
@@ -126,7 +185,7 @@ function ForcesActivity(props: NumericProps & { spec: ForcesActivitySpec }) {
   const equation = <EquationLine equation={engineEquation('forces-1d-v1', { massKg: ctl.massKg, netForceN: ctl.netForceN })} concealed={concealed} links={equationQuoteLinks(spec)} />;
   return (
     <Shell {...props} engine="forces-1d-v1" last={last} simRef={simRef} onRun={onRun}>
-      <Simulation sim={spec.simulation} ctl={ctl} predict={predict} equation={equation} concealed={concealed} caseValues={caseValues} />
+      <Simulation sim={spec.simulation} ctl={ctl} predict={presenting ? undefined : predict} equation={equation} concealed={concealed} caseValues={caseValues} variant={scene ? 'scene' : 'lesson'} />
     </Shell>
   );
 }
@@ -141,8 +200,12 @@ function ClosedFormActivity(props: NumericProps & { engine: Exclude<EngineId, 'f
   const pb = usePlayback(plan?.durationS ?? 0, plan?.speed ?? 1, plan?.initialT ?? 0);
   const simRef = useRef<HTMLDivElement>(null);
   const [last, setLast] = useState<LastResult | null>(null);
-  const [concealed, reveal] = useReveal(spec.predictions.length);
+  const [ownConcealed, reveal] = useReveal(spec.predictions.length);
   const { rewind, restart, reset } = pb;
+  const presented = usePresentedReveal(props.presentation, engine, spec, setLast, () => { setInputs(opening); restart(); }, () => { setInputs(opening); reset(); });
+  const concealed = presented ?? ownConcealed;
+  const scene = props.presentation?.mode === 'predict';
+  const presenting = props.presentation !== undefined;
   // Page-stated preset values need the page text (projectile only for now; GET of the already-shown source).
   const doc = useSourceDoc(engine === 'projectile-v1' ? cite.sourceId : null);
   const sourceText = doc?.state === 'ready' ? doc.data.text : null;
@@ -176,10 +239,10 @@ function ClosedFormActivity(props: NumericProps & { engine: Exclude<EngineId, 'f
   const predict = <PredictionCards engine={engine} predictions={spec.predictions as AnyPrediction[]} onRun={onRun} part="first" answerHidden={concealed} />;
   const eqLinks = useMemo(() => equationQuoteLinks(spec), [spec]);
   const equation = <EquationLine equation={engineEquation(engine, inputs)} concealed={concealed} links={eqLinks} />;
-  const view = { inputs, onInput, onReset, predict, equation, concealed };
+  const view = { inputs, onInput, onReset, predict: presenting ? undefined : predict, equation, concealed, variant: scene ? 'scene' as const : 'lesson' as const };
   return (
     <Shell {...props} engine={engine} last={last} simRef={simRef} onRun={onRun}>
-      {isEngineSpec(spec, 'projectile-v1') && <ProjectileView spec={spec} {...view} pb={resetPb} sourceText={sourceText} />}
+      {isEngineSpec(spec, 'projectile-v1') && <ProjectileView spec={spec} {...view} pb={resetPb} sourceText={sourceText} outcome={last} ask={presented === null ? null : { guess: props.presentation?.mode === 'predict' ? props.presentation.guess : null }} />}
       {isEngineSpec(spec, 'lift-equation-v1') && <LiftView spec={spec} {...view} />}
       {isEngineSpec(spec, 'speed-of-sound-v1') && <SoundView spec={spec} {...view} pb={resetPb} />}
       {isEngineSpec(spec, 'compound-interest-v1') && <CompoundInterestView spec={spec} {...view} />}
@@ -192,7 +255,7 @@ function ClosedFormActivity(props: NumericProps & { engine: Exclude<EngineId, 'f
 /** The interactive activity for one validated spec; dispatches on spec.simulation.engine. Mount with key={spec.id}. */
 export function ActivityPanel(props: ActivityPanelProps) {
   const { spec } = props;
-  if (isTimelineSpec(spec)) return <TimelineActivity spec={spec} cite={props.cite} repairBadge={props.repairBadge} provenance={props.provenance} />;
+  if (isTimelineSpec(spec)) return <TimelineActivity spec={spec} cite={props.cite} repairBadge={props.repairBadge} provenance={props.provenance} presentation={props.presentation !== undefined} />;
   const numeric = { ...props, spec };
   if (isEngineSpec(spec, 'forces-1d-v1')) return <ForcesActivity {...numeric} spec={spec} />;
   if (isEngineSpec(spec, 'projectile-v1')) return <ClosedFormActivity {...numeric} engine="projectile-v1" />;

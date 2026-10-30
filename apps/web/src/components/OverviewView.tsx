@@ -5,6 +5,7 @@ import type { CiteProps } from './Explanations.tsx';
 import { QuoteBlock } from './QuoteBlock.tsx';
 import { Linked } from './Linked.tsx';
 import { linkKeysOf } from '../lib/linking.ts';
+import { prettyExponents } from '../lib/displayText.ts';
 
 interface Props {
   overview: OverviewSpec;
@@ -28,7 +29,7 @@ export function OverviewView({ overview, pageCoverage, cite }: Props) {
       <ul className="key-points">
         {overview.keyPoints.map((p) => (
           <Linked as="li" key={p.id} links={linkKeysOf([p])}>
-            <p>{p.point}</p>
+            <p>{prettyExponents(p.point)}</p>
             <QuoteBlock componentId="overview-v1" part="point" id={p.id} sourceId={p.sourceId} quote={p.quote} cite={cite} />
           </Linked>
         ))}
@@ -40,9 +41,9 @@ export function OverviewView({ overview, pageCoverage, cite }: Props) {
           <dl className="key-terms">
             {overview.keyTerms.map((t) => (
               <Linked key={t.id} className="key-term" links={linkKeysOf([t])}>
-                <dt>{t.term}</dt>
+                <dt>{prettyExponents(t.term)}</dt>
                 <dd>
-                  <p>{t.gloss}</p>
+                  <p>{prettyExponents(t.gloss)}</p>
                   <QuoteBlock componentId="overview-v1" part="term" id={t.id} sourceId={t.sourceId} quote={t.quote} cite={cite} />
                 </dd>
               </Linked>

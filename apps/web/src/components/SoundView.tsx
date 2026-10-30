@@ -15,7 +15,7 @@ const CX = 400;
 const CY = 195;
 const R_MAX = 150;
 
-export function SoundView({ spec, inputs, onInput, pb, predict, equation, concealed = false }: ClosedFormViewProps<SoundActivitySpec>) {
+export function SoundView({ spec, inputs, onInput, pb, predict, equation, concealed = false, variant = 'lesson' }: ClosedFormViewProps<SoundActivitySpec>) {
   const titleId = useId();
   const models = sliderModels(spec);
   const sc = scenarioLabels(spec);
@@ -72,6 +72,7 @@ export function SoundView({ spec, inputs, onInput, pb, predict, equation, concea
         </svg>
       </div>
 
+      {variant !== 'scene' && (
       <div className="transport" role="group" aria-label="Playback">
         <button type="button" className="btn btn-primary" onClick={pb.playing ? pb.pause : pb.play}>
           {pb.playing ? <><IconPause /> Pause</> : <><IconPlay /> Play</>}
@@ -79,10 +80,12 @@ export function SoundView({ spec, inputs, onInput, pb, predict, equation, concea
         <button type="button" className="btn" onClick={pb.reset}><IconReset /> Reset</button>
         <span className="muted small" aria-live="off">Simulated time {fixed(pb.t, 2)} s · one new wavefront every {SOUND_EMIT_EVERY_S} s</span>
       </div>
+      )}
 
       {equation}
       {predict}
 
+      {variant !== 'scene' && (
       <div className="controls-row">
         <div className="sliders">
           {models.map((m) => (
@@ -93,6 +96,7 @@ export function SoundView({ spec, inputs, onInput, pb, predict, equation, concea
           <Readout name="Speed of sound a (engine)" value={fixed(a, 2)} unit="m/s" accent="v" concealed={concealed} />
         </dl>
       </div>
+      )}
     </div>
   );
 }

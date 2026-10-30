@@ -16,7 +16,7 @@ const H = 335;
 const PLOT = { l: 100, r: 760, t: 68, b: 272 };
 const CURVE_STEPS = 80;
 
-export function CompoundInterestView({ spec, inputs, onInput, onReset, predict, equation, concealed = false }: StaticViewProps<CompoundInterestActivitySpec>) {
+export function CompoundInterestView({ spec, inputs, onInput, onReset, predict, equation, concealed = false, variant = 'lesson' }: StaticViewProps<CompoundInterestActivitySpec>) {
   const titleId = useId();
   const models = sliderModels(spec);
   const sc = scenarioLabels(spec);
@@ -86,6 +86,7 @@ export function CompoundInterestView({ spec, inputs, onInput, onReset, predict, 
         <p className="muted small">A = balance, P = starting amount, r = yearly rate in percent, n = times the interest is added per year, t = years. The curve draws the formula at every moment; a real account adds interest only on its compounding dates.</p>
       </div>
 
+      {variant !== 'scene' && (
       <div className="controls-row">
         <div className="sliders">
           {models.map((m) => {
@@ -113,6 +114,7 @@ export function CompoundInterestView({ spec, inputs, onInput, onReset, predict, 
           <Readout name="Interest earned" value={formatUSD(interest)} unit="" accent="force" concealed={concealed} />
         </dl>
       </div>
+      )}
     </div>
   );
 }

@@ -1,9 +1,9 @@
-import { useCallback, useId, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 import type { FormulaExplorerSpec } from '../../../../packages/contracts/kit.ts';
 import {
   CALCULATOR_FAILURE, buildExplorer, caseOutputs, casePrompt, curveSamples, defaultInputs, displayUnit, evalAt, graphGeometry, graphReveal, gradeCaseGuess,
-  groupedSig6, inputsOfCase, outputName, niceValueRows, pageFormulaStatus, sliderStep,
+  groupedSig6, inputsOfCase, outputName, niceValueRows, pageFormulaStatus, predictSpec, sliderStep,
 } from '../lib/explorer.ts';
 import type { Inputs } from '../lib/explorer.ts';
 import type { Grade } from '../lib/predictions.ts';
@@ -22,7 +22,14 @@ import { linkKey } from '../lib/linking.ts';
 import { CONCEALED, CONCEALED_HINT, initialConcealed, nextConcealed } from '../lib/reveal.ts';
 import { caseFriendlyStep } from '../lib/sliderSteps.ts';
 
-interface Props { spec: FormulaExplorerSpec; cite: CiteProps }
+/** How presentation mode shows the explorer (default: the full lesson view). */
+export type ExplorerPresentation =
+  /** Its own beat: sliders, graph and table, without the cases list (case 1 was asked on the beat before). */
+  | { mode: 'stage' }
+  /** A predict beat: case 1's graph and equation only, the answer hidden until `revealed`; then the class's guess is drawn and graded. */
+  | { mode: 'predict'; revealed: boolean; guess: number | null };
+
+interface Props { spec: FormulaExplorerSpec; cite: CiteProps; presentation?: ExplorerPresentation }
 
 export const AI_FORMULA_NOTICE = 'Formula entered by AI from the quoted line - compare with the quote.';
 
@@ -33,7 +40,7 @@ interface CaseResult { raw: string; grade: Grade | null; error: string | null }
  * variable with the current point marked, a value table, and predict-then-reveal on the page’s cases. Every number is
  * computed here by the safe evaluator from the stored expression; nothing is read from a stored answer.
  */
-export function FormulaExplorerView({ spec, cite }: Props) {
+export function FormulaExplorerView({ spec, cite, presentation }: Props) {
   const uid = useId();
   const model = useMemo(() => buildExplorer(spec), [spec]);
   const [inputs, setInputs] = useState<Inputs>(() => defaultInputs(spec));
@@ -42,7 +49,9 @@ export function FormulaExplorerView({ spec, cite }: Props) {
   const yName = outputName(spec);
   const xVar = spec.variables.find((v) => v.name === spec.xVariable);
 
-  const samples = useMemo(() => (model.ok ? curveSamples(model, spec, inputs) : []), [model, spec, inputs]);
+  // A predict beat draws case 1 near the middle of the graph (lib/explorer.ts predictSpec); everything else uses the slider range.
+  const drawn = useMemo(() => (presentation?.mode === 'predict' ? predictSpec(spec) : spec), [presentation?.mode, spec]);
+  const samples = useMemo(() => (model.ok ? curveSamples(model, drawn, inputs) : []), [model, drawn, inputs]);
   const output = model.ok ? evalAt(model, inputs) : Number.NaN;
   const geometry = useMemo(
     () => graphGeometry(samples, { x: inputs[spec.xVariable] ?? xVar?.default ?? 0, y: output }),
@@ -65,12 +74,29 @@ export function FormulaExplorerView({ spec, cite }: Props) {
     });
     if (!same) return null;
     const g = lastCheck.grade;
-    return { ...graphReveal(geometry, g), guess: g.guess, actual: g.actual, tolerance: g.tolerance, seq: lastCheck.seq };
-  }, [lastCheck, spec, inputs, geometry]);
+    return { ...graphReveal(geometry, g, presentation === undefined ? 'your' : 'class'), guess: g.guess, actual: g.actual, tolerance: g.tolerance, seq: lastCheck.seq };
+  }, [lastCheck, spec, inputs, geometry, presentation]);
 
   // Predict-then-reveal: case 1's answer (the output, the value table, the graph's current value) is '?' until a case is
   // checked or a slider moves.
-  const [concealed, setConcealed] = useState(() => initialConcealed(spec.cases.length));
+  const [ownConcealed, setConcealed] = useState(() => initialConcealed(spec.cases.length));
+  // A predict beat drives the reveal from outside: R puts case 1 on the graph with the class's guess; going back hides it.
+  const predictBeat = presentation?.mode === 'predict';
+  const presentedRevealed = presentation?.mode === 'predict' && presentation.revealed;
+  const presentedGuess = presentation?.mode === 'predict' ? presentation.guess : null;
+  const concealed = predictBeat ? !presentedRevealed : ownConcealed;
+  useEffect(() => {
+    if (!predictBeat) return;
+    const first = spec.cases[0];
+    if (!presentedRevealed || first === undefined) {
+      setLastCheck(null);
+      setInputs(defaultInputs(spec));
+      return;
+    }
+    setInputs(inputsOfCase(first));
+    const out = model.ok ? evalAt(model, inputsOfCase(first)) : Number.NaN;
+    setLastCheck((prev) => (presentedGuess === null || !Number.isFinite(out) ? null : { caseId: first.id, grade: gradeCaseGuess(presentedGuess, out), seq: (prev?.seq ?? 0) + 1 }));
+  }, [predictBeat, presentedRevealed, presentedGuess, spec, model]);
   const onSlider = useCallback((name: string, value: number) => {
     setConcealed((c) => nextConcealed(c, 'slider'));
     setInputs((prev) => ({ ...prev, [name]: value }));
@@ -110,6 +136,17 @@ export function FormulaExplorerView({ spec, cite }: Props) {
 
   const xUnit = xVar === undefined ? '' : displayUnit(xVar.unit);
   const xName = xVar === undefined ? spec.xVariable : `${xVar.meaning}${xUnit === '' ? '' : ` (${xUnit})`}`;
+
+  if (predictBeat) {
+    return (
+      <div className="explorer explorer-presented" data-testid="formula-explorer" data-presentation="predict">
+        <div className="explorer-visual" ref={visualRef}>
+          <FormulaGraph geometry={geometry} yName={yName} xName={xName} concealed={concealed} reveal={reveal} />
+        </div>
+        <EquationLine equation={equation} concealed={concealed} links={formulaLinks} />
+      </div>
+    );
+  }
   const xNow = inputs[spec.xVariable] ?? 0;
   const nowInTable = table.some((row) => Math.abs(row.x - xNow) <= 1e-9 * Math.max(1, Math.abs(xNow)));
 
@@ -156,27 +193,29 @@ export function FormulaExplorerView({ spec, cite }: Props) {
               <span>Your guess <b>{groupedSig6(reveal.guess)}</b> · the calculator <b>{yName} = {groupedSig6(reveal.actual)}</b> · <span className="explorer-verdict-gap">{reveal.text}</span>{!reveal.within && <> (margin ±{groupedSig6(reveal.tolerance)})</>}</span>
             </p>
           )}
-          <table className="value-table">
-            <caption>{yName} as {xVar?.meaning ?? spec.xVariable} changes (other sliders as set)</caption>
-            <thead><tr><th scope="col">{xName}</th><th scope="col">{yName}</th></tr></thead>
-            <tbody>
-              {!nowInTable && (
-                <tr className="value-now">
-                  <th scope="row">Now: {groupedSig6(xNow)}</th>
-                  <td>{concealed ? <span className="concealed" title={CONCEALED_HINT}>{CONCEALED}</span> : groupedSig6(output)}</td>
-                </tr>
-              )}
-              {table.map((row, i) => {
-                const now = nowInTable && Math.abs(row.x - xNow) <= 1e-9 * Math.max(1, Math.abs(xNow));
-                return (
-                  <tr key={i} className={now ? 'value-now' : undefined}>
-                    <th scope="row">{now ? `Now: ${groupedSig6(row.x)}` : groupedSig6(row.x)}</th>
-                    <td>{concealed ? <span className="concealed" title={CONCEALED_HINT}>{CONCEALED}</span> : groupedSig6(row.y)}</td>
+          {presentation === undefined && (
+            <table className="value-table">
+              <caption>{yName} as {xVar?.meaning ?? spec.xVariable} changes (other sliders as set)</caption>
+              <thead><tr><th scope="col">{xName}</th><th scope="col">{yName}</th></tr></thead>
+              <tbody>
+                {!nowInTable && (
+                  <tr className="value-now">
+                    <th scope="row">Now: {groupedSig6(xNow)}</th>
+                    <td>{concealed ? <span className="concealed" title={CONCEALED_HINT}>{CONCEALED}</span> : groupedSig6(output)}</td>
                   </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                )}
+                {table.map((row, i) => {
+                  const now = nowInTable && Math.abs(row.x - xNow) <= 1e-9 * Math.max(1, Math.abs(xNow));
+                  return (
+                    <tr key={i} className={now ? 'value-now' : undefined}>
+                      <th scope="row">{now ? `Now: ${groupedSig6(row.x)}` : groupedSig6(row.x)}</th>
+                      <td>{concealed ? <span className="concealed" title={CONCEALED_HINT}>{CONCEALED}</span> : groupedSig6(row.y)}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
 
@@ -187,7 +226,7 @@ export function FormulaExplorerView({ spec, cite }: Props) {
         </div>
       )}
 
-      {spec.cases.length > 0 && (
+      {spec.cases.length > 0 && presentation === undefined && (
         <section aria-labelledby={`${uid}-predict`}>
           <h3 id={`${uid}-predict`}>Predict, then reveal</h3>
           <p className="muted small">Commit to a number first; checking moves the sliders and the graph to that case.{concealed ? ' Until then the result shows as ?.' : ''}</p>

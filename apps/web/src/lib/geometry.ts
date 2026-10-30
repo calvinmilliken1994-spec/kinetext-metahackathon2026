@@ -9,6 +9,7 @@ import { simulate } from '../../../../packages/activities/projectile-v1/engine.t
 import { projectileSummary } from './engines.ts';
 import { fixed, trimmed } from './format.ts';
 import { gradePrediction } from './predictions.ts';
+import { groupThousands } from './displayText.ts';
 
 export interface PlotBox { left: number; right: number; top: number; bottom: number }
 
@@ -169,7 +170,54 @@ export interface GhostArc {
 }
 
 /** The class's committed guess for the peak height and the teaching margin it was graded with (Stage 7c reveal). */
-export interface GuessInput { guessM: number; toleranceM: number }
+export interface GuessInput {
+  guessM: number;
+  toleranceM: number;
+  /** Whose guess the label names: 'your' in the lesson (default), 'class' in presentation mode. */
+  who?: string;
+}
+
+// ---- presentation mode: the height scale beside the scene ----------------------------------------------------------
+
+export interface HeightTick { m: number; py: number; label: string }
+
+/** Nice height ticks from the ground up to the top of the plot, on a metres-per-pixel scale. */
+function ticksUpTo(topM: number, scale: number): HeightTick[] {
+  const { box } = PROJECTILE_FRAME;
+  if (!(topM > 0) || !(scale > 0)) return [];
+  const step = niceStep(topM / 5);
+  const out: HeightTick[] = [];
+  for (let k = 0; k * step <= topM + 1e-9 && k <= 12; k++) {
+    const m = Number((k * step).toFixed(10));
+    out.push({ m, py: box.bottom - m * scale, label: groupThousands(trimmed(m, 3)) });
+  }
+  return out;
+}
+
+/** The height scale of a drawn scene (same pixels per metre as its arc). */
+export function heightTicks(scale: number): HeightTick[] {
+  const { box } = PROJECTILE_FRAME;
+  return ticksUpTo((box.bottom - box.top) / scale, scale);
+}
+
+/** Where the class's guess sits up the plot before the reveal: high enough to read, low enough that either outcome surprises. */
+export const ASK_GUESS_FRACTION = 0.62;
+
+/**
+ * Before the reveal (presentation mode): a height scale chosen from the class's guess ALONE, with the guess line on it.
+ * Nothing here depends on the launch, so the drawing cannot give the answer away. No guess yet: no numbers at all.
+ */
+export function askFrame(guessM: number | null): { guessPy: number | null; ticks: HeightTick[]; scale: number | null } {
+  const { box } = PROJECTILE_FRAME;
+  if (guessM === null || !Number.isFinite(guessM)) return { guessPy: null, ticks: [], scale: null };
+  if (guessM <= 0) {
+    const scale = (box.bottom - box.top) / 10;
+    return { guessPy: box.bottom, ticks: ticksUpTo(10, scale), scale };
+  }
+  const topM = guessM / ASK_GUESS_FRACTION;
+  const scale = (box.bottom - box.top) / topM;
+  return { guessPy: box.bottom - guessM * scale, ticks: ticksUpTo(topM, scale), scale };
+}
 
 /**
  * The reveal overlay after a prediction is run: the guess as a level line on the scene's own scale, the engine's peak with
@@ -373,7 +421,7 @@ export function projectileScene(input: ProjectileInput, ghostGravities: readonly
     const o = overlay;
     const offText = o.offScale === 'above' ? ', above the drawing' : o.offScale === 'below' ? ', below the ground' : '';
     requests.push({
-      text: `your guess ${trimmed(o.guessM, 4)} m${offText}`, fontPx: 14, bold: true,
+      text: `${g?.who ?? 'your'} guess ${trimmed(o.guessM, 4)} m${offText}`, fontPx: 14, bold: true,
       candidates: [
         { x: box.left + 4, y: o.guessPy - 8, anchor: 'start' },
         { x: box.right, y: o.guessPy - 8, anchor: 'end' },

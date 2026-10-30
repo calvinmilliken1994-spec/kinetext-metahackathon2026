@@ -15,7 +15,7 @@ const PLOT = { l: 100, r: 760, t: 68, b: 276 };
 const CURVE_STEPS = 120;
 const MIN_LABEL_GAP_PX = 64;
 
-export function HalfLifeView({ spec, inputs, onInput, onReset, predict, equation, concealed = false }: StaticViewProps<HalfLifeActivitySpec>) {
+export function HalfLifeView({ spec, inputs, onInput, onReset, predict, equation, concealed = false, variant = 'lesson' }: StaticViewProps<HalfLifeActivitySpec>) {
   const titleId = useId();
   const models = sliderModels(spec);
   const sc = scenarioLabels(spec);
@@ -98,6 +98,7 @@ export function HalfLifeView({ spec, inputs, onInput, onReset, predict, equation
       {equation}
       {predict}
 
+      {variant !== 'scene' && (
       <div className="controls-row">
         <div className="sliders">
           {models.map((m) => (
@@ -112,6 +113,7 @@ export function HalfLifeView({ spec, inputs, onInput, onReset, predict, equation
           {lives !== null && Number.isInteger(lives) && lives <= 10 && <Readout name="As a fraction" value={fractionLabel(lives)} unit="" concealed={concealed} />}
         </dl>
       </div>
+      )}
     </div>
   );
 }

@@ -10,7 +10,8 @@ import { parseExpression } from '../../../../packages/validation/expression.ts';
 import type { AstNode } from '../../../../packages/validation/expression.ts';
 import { formatUSD } from './compound.ts';
 import { engineOutput, formatOutputValue, formatWithUnit, outputInfo } from './engines.ts';
-import { sig6 } from './explorer.ts';
+import { groupedSig6, sig6 } from './explorer.ts';
+import { groupThousands } from './displayText.ts';
 import { readableNumber } from './format.ts';
 import { CONCEALED } from './reveal.ts';
 
@@ -42,7 +43,7 @@ const dot = t(' · ');
 
 /** A number as the sliders show it; a negative one is bracketed so '½ · (−0.2)' and '(−3)²' read right. */
 function num(n: number, format: (n: number) => string = readableNumber): EqPiece {
-  const s = format(n).replace(/^-/, MINUS);
+  const s = groupThousands(format(n)).replace(/^-/, MINUS);
   return { k: 'num', v: s.startsWith(MINUS) ? `(${s})` : s };
 }
 
@@ -232,7 +233,7 @@ export function explorerEquation(
     lhs: [sym(lhs)],
     symbolic: renderAst(parsed.ast, null, symbols),
     substituted: renderAst(parsed.ast, inputs, symbols),
-    result: sig6(output).replace(/^-/, MINUS),
+    result: groupedSig6(output).replace(/^-/, MINUS),
     value: output,
   };
 }

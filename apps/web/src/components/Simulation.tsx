@@ -19,7 +19,7 @@ const pickA = (f: Frame): number => f.a;
 const NO_CASES = { massKg: [] as number[], netForceN: [] as number[] };
 
 /** `caseValues`: the lesson's case inputs (case 1 first), so each slider step lands on them (Stage 7). */
-export function Simulation({ sim, ctl, predict, equation, concealed = false, caseValues = NO_CASES }: { sim: ActivitySpec['simulation']; ctl: SimControls; predict?: ReactNode; equation?: ReactNode; concealed?: boolean; caseValues?: { massKg: readonly number[]; netForceN: readonly number[] } }) {
+export function Simulation({ sim, ctl, predict, equation, concealed = false, caseValues = NO_CASES, variant = 'lesson' }: { sim: ActivitySpec['simulation']; ctl: SimControls; predict?: ReactNode; equation?: ReactNode; concealed?: boolean; caseValues?: { massKg: readonly number[]; netForceN: readonly number[] }; variant?: 'lesson' | 'scene' }) {
   const scrubId = useId();
   const obs = new Set(sim.observables);
   const forceMaxAbs = Math.max(Math.abs(sim.netForceN.min), Math.abs(sim.netForceN.max));
@@ -42,6 +42,7 @@ export function Simulation({ sim, ctl, predict, equation, concealed = false, cas
         />
       </div>
 
+      {variant !== 'scene' && (
       <div className="transport" role="group" aria-label="Playback">
         <button type="button" className="btn btn-primary" onClick={ctl.playing ? ctl.pause : ctl.play}>
           {ctl.playing ? <><IconPause /> Pause</> : finished ? <><IconReplay /> Replay</> : <><IconPlay /> Play</>}
@@ -62,10 +63,12 @@ export function Simulation({ sim, ctl, predict, equation, concealed = false, cas
           <output htmlFor={scrubId} className="scrub-value">{fixed(ctl.t, 2)} / {fixed(ctl.durationS, 1)} s</output>
         </div>
       </div>
+      )}
 
       {equation}
       {predict}
 
+      {variant !== 'scene' && (
       <div className="controls-row">
         <div className="sliders">
           <Slider
@@ -84,7 +87,9 @@ export function Simulation({ sim, ctl, predict, equation, concealed = false, cas
           <Readout name="t" value={fixed(ctl.now.t, 2)} unit="s" />
         </dl>
       </div>
+      )}
 
+      {variant !== 'scene' && (
       <div className="graphs">
         {obs.has('velocity') && (
           <Graph title="v–t · velocity" yUnit="m/s" color="var(--c-vel)" frames={ctl.frames} pick={pickV} now={ctl.now} durationS={ctl.durationS} onScrub={ctl.scrub} />
@@ -96,6 +101,7 @@ export function Simulation({ sim, ctl, predict, equation, concealed = false, cas
           <Graph title="a–t · acceleration" yUnit="m/s²" color="var(--c-acc)" frames={ctl.frames} pick={pickA} now={ctl.now} durationS={ctl.durationS} onScrub={ctl.scrub} />
         )}
       </div>
+      )}
     </div>
   );
 }

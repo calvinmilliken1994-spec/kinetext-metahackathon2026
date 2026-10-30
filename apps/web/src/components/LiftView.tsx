@@ -15,7 +15,7 @@ const CX = 400;
 const CY = 215;
 const ARROW_MAX = 150;
 
-export function LiftView({ spec, inputs, onInput, onReset, predict, equation, concealed = false }: StaticViewProps<LiftActivitySpec>) {
+export function LiftView({ spec, inputs, onInput, onReset, predict, equation, concealed = false, variant = 'lesson' }: StaticViewProps<LiftActivitySpec>) {
   const titleId = useId();
   const models = sliderModels(spec);
   const sc = scenarioLabels(spec);
@@ -87,6 +87,7 @@ export function LiftView({ spec, inputs, onInput, onReset, predict, equation, co
       {equation}
       {predict}
 
+      {variant !== 'scene' && (
       <div className="controls-row">
         <div className="sliders">
           {models.map((m) => (
@@ -98,6 +99,7 @@ export function LiftView({ spec, inputs, onInput, onReset, predict, equation, co
           <Readout name="Lift L (engine)" value={formatQuantity(liftN)} unit="N" accent="force" concealed={concealed} />
         </dl>
       </div>
+      )}
     </div>
   );
 }

@@ -1,16 +1,15 @@
-import { useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import type { ReactNode } from 'react';
+import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import type { FormEvent, ReactNode } from 'react';
 import type { KitSpec } from '../../../../../packages/contracts/kit.ts';
 import type { Badge } from '../../lib/repairs.ts';
 import type { Beat, Deck, DeckPart, NumericAnswer } from '../../lib/presentation.ts';
-import { checksLine, deckQuotes, isRevealed, leftOutLine, numericAnswer, titleCard, visibleCount } from '../../lib/presentation.ts';
+import { checksLine, deckQuotes, isRevealed, leftOutLine, numericAnswer, predictVerdict, predictVisual, revealDelayMs, titleCard, visibleCount } from '../../lib/presentation.ts';
+import { prettyExponents } from '../../lib/displayText.ts';
 import { REVIEW_STATUS, withoutReviewNote } from '../../lib/provenance.ts';
 import { quizCards } from '../../lib/quiz.ts';
 import { compareGrid, NOT_STATED } from '../../lib/compare.ts';
-import { gradePrediction, parseGuess, studentTolerance } from '../../lib/predictions.ts';
-import { gradeCaseGuess } from '../../lib/explorer.ts';
+import { parseGuess } from '../../lib/predictions.ts';
 import { compareEvents, formatEventDate, gradePair } from '../../lib/timeline.ts';
-import { trimmed } from '../../lib/format.ts';
 import { linkKey, linkKeysOf } from '../../lib/linking.ts';
 import { ActivityPanel } from '../ActivityPanel.tsx';
 import { BalanceView } from '../BalanceView.tsx';
@@ -57,7 +56,7 @@ function TitleBeat({ deck }: Pick<BeatProps, 'deck'>) {
   const card = titleCard(deck.source);
   return (
     <div className="pz-title">
-      <h1 className="pz-display">{deck.headline}</h1>
+      <h1 className="pz-display">{prettyExponents(deck.headline)}</h1>
       {card !== null && (
         <dl className="pz-facts">
           <div><dt>Page</dt><dd>{card.name}</dd></div>
@@ -84,7 +83,7 @@ function OverviewBeat({ beat, step, deck }: Pick<BeatProps, 'beat' | 'step' | 'd
       <ul className={`pz-points${points.length > 4 ? ' pz-dense' : ''}`}>
         {points.map((p, i) => (
           <Linked as="li" key={p.id} links={linkKeysOf([p])} data-shown={i < shown ? 'true' : 'false'} aria-hidden={i < shown ? undefined : true}>
-            {p.point}
+            {prettyExponents(p.point)}
           </Linked>
         ))}
       </ul>
@@ -101,9 +100,9 @@ function TermsBeat({ beat, step, deck }: Pick<BeatProps, 'beat' | 'step' | 'deck
       <dl className={`pz-terms${terms.length > 4 ? ' pz-dense' : ''}`}>
         {terms.map((t, i) => (
           <Linked key={t.id} className="pz-term" links={linkKeysOf([t])}>
-            <dt>{t.term}</dt>
+            <dt>{prettyExponents(t.term)}</dt>
             <dd data-shown={i < shown ? 'true' : 'false'}>
-              {i < shown ? t.gloss : <span className="pz-pending" aria-label="Meaning not shown yet">What does it mean?</span>}
+              {i < shown ? prettyExponents(t.gloss) : <span className="pz-pending" aria-label="Meaning not shown yet">What does it mean?</span>}
             </dd>
           </Linked>
         ))}
@@ -121,7 +120,7 @@ function ObjectivesBeat({ beat, step, deck }: Pick<BeatProps, 'beat' | 'step' | 
       </header>
       <ul className={`pz-points${deck.objectives.length > 4 ? ' pz-dense' : ''}`}>
         {deck.objectives.map((o, i) => (
-          <li key={o} data-shown={i < shown ? 'true' : 'false'} aria-hidden={i < shown ? undefined : true}>{o}</li>
+          <li key={o} data-shown={i < shown ? 'true' : 'false'} aria-hidden={i < shown ? undefined : true}>{prettyExponents(o)}</li>
         ))}
       </ul>
     </div>
@@ -163,10 +162,10 @@ function QuizBeat({ beat, step, answer, onAnswer }: AskProps<'quiz'>) {
   const card = useMemo(() => quizCards(beat.spec).find((c) => c.id === beat.cardId), [beat]);
   if (card === undefined) return null;
   const revealed = isRevealed(beat, step);
-  const items = card.options.map((o): ChoiceItem => ({ value: String(o.index), text: o.text, right: o.index === 0 }));
+  const items = card.options.map((o): ChoiceItem => ({ value: String(o.index), text: prettyExponents(o.text), right: o.index === 0 }));
   return (
     <div className="pz-ask">
-      <h2 className="pz-question">{card.stem}</h2>
+      <h2 className="pz-question">{prettyExponents(card.stem)}</h2>
       <Choices items={items} answer={answer} onAnswer={onAnswer} revealed={revealed} label="Answer options" />
       {revealed ? <PageWords sourceId={card.sourceId} quote={card.quote} /> : <p className="pz-hint">Vote: {items.map((_, i) => LETTERS[i]).join(', ').replace(/, ([^,]*)$/, ' or $1')}?</p>}
     </div>
@@ -221,25 +220,42 @@ function CompareBeat({ beat, step, answer, onAnswer }: AskProps<'compare'>) {
 
 // ---- predict (engine, formula, which-came-first) --------------------------------------------------------------------
 
-function gradeLine(answer: NumericAnswer, guessRaw: string, tolerance: number | null): ReactNode {
-  const guess = parseGuess(guessRaw);
-  if (guess === null) return <p className="pz-grade">No class prediction was entered.</p>;
-  const unit = answer.unit === '' ? '' : ` ${answer.unit}`;
-  const g = tolerance === null ? gradeCaseGuess(guess, answer.value) : gradePrediction(guess, answer.value, studentTolerance(answer.value, tolerance));
+/**
+ * The scene a numeric predict beat stands on, at projector scale: the lesson's own view in its presentation variant.
+ * Before R it shows nothing that depends on the answer; R reveals it in the scene itself.
+ */
+function PredictScene({ beat, revealed, guess, cite, deck }: { beat: KindOf<'predict'>; revealed: boolean; guess: number | null; cite: CiteProps; deck: Deck }) {
+  const t = beat.target;
+  if (t.kind === 'timeline') return null;
+  const visual = predictVisual(t);
   return (
-    <p className={`pz-grade ${g.withinTolerance ? 'pz-grade-ok' : ''}`}>
-      <Mark kind={g.withinTolerance ? 'ok' : 'bad'} />
-      {g.withinTolerance
-        ? `Class prediction ${trimmed(g.guess, 4)}${unit}: close enough.`
-        : `Class prediction ${trimmed(g.guess, 4)}${unit}: too ${g.direction === 'high' ? 'high' : 'low'} by ${trimmed(Math.abs(g.error), 3)}${unit}.`}
-    </p>
+    <StageFit width={visual === 'graph' ? 760 : 940} contain>
+      {t.kind === 'formula'
+        ? <FormulaExplorerView spec={t.spec} cite={cite} presentation={{ mode: 'predict', revealed, guess }} />
+        : <ActivityPanel spec={t.spec} cite={cite} disclosure={deck.disclosure} repairBadge={null} presentation={{ mode: 'predict', revealed, guess }} />}
+    </StageFit>
   );
 }
 
-function PredictBeat({ beat, step, answer, onAnswer }: AskProps<'predict'>) {
+/** True once `on` has held for `ms` (false again as soon as it turns off). */
+function useAfter(on: boolean, ms: number): boolean {
+  const [done, setDone] = useState(false);
+  useEffect(() => {
+    if (!on) { setDone(false); return undefined; }
+    if (ms <= 0) { setDone(true); return undefined; }
+    const id = window.setTimeout(() => setDone(true), ms);
+    return () => window.clearTimeout(id);
+  }, [on, ms]);
+  return on && done;
+}
+
+function PredictBeat({ beat, step, answer, onAnswer, cite, deck }: AskProps<'predict'> & { cite: CiteProps; deck: Deck }) {
   const inputId = useId();
   const t = beat.target;
   const revealed = isRevealed(beat, step);
+  // The scene answers first (the ball reaches the top, the point settles); then the numbers land beside it.
+  const delay = useMemo(() => revealDelayMs(t), [t]);
+  const landed = useAfter(revealed, delay);
 
   if (t.kind === 'timeline') {
     const [a, b] = t.options;
@@ -249,13 +265,13 @@ function PredictBeat({ beat, step, answer, onAnswer }: AskProps<'predict'>) {
     const items = t.options.map((e): ChoiceItem => {
       const q = e.evidence[0];
       return {
-        value: e.id, text: e.label, right: e.id === earlierId,
+        value: e.id, text: prettyExponents(e.label), right: e.id === earlierId,
         detail: <><p className="pz-date">{formatEventDate(e)}</p>{q !== undefined && <PageWords sourceId={q.sourceId} quote={q.quote} />}</>,
       };
     });
     return (
       <div className="pz-ask">
-        <h2 className="pz-question">{t.prompt}</h2>
+        <h2 className="pz-question">{prettyExponents(t.prompt)}</h2>
         <Choices items={items} answer={answer} onAnswer={onAnswer} revealed={revealed} label="Which came first" pair />
         {!revealed && <p className="pz-hint">Vote: A or B?</p>}
         {revealed && earlierId === null && <p className="pz-grade">The page gives the same date for both, so neither came first.</p>}
@@ -268,30 +284,48 @@ function PredictBeat({ beat, step, answer, onAnswer }: AskProps<'predict'>) {
 
   const value = numericAnswer(t);
   const tolerance = t.kind === 'engine' ? (t.prediction as { tolerance?: number }).tolerance ?? 0 : null;
-  const prompt = t.kind === 'engine' ? t.prediction.prompt : t.prompt;
+  const prompt = prettyExponents(t.kind === 'engine' ? t.prediction.prompt : t.prompt);
   const unit = value?.unit ?? '';
+  const verdict = landed && value !== null ? predictVerdict(value, answer, tolerance) : null;
+  const release = (e: FormEvent<HTMLFormElement>): void => {
+    // Enter hands the keys back to the deck, so the next R reveals.
+    e.preventDefault();
+    e.currentTarget.querySelector('input')?.blur();
+    e.currentTarget.closest<HTMLElement>('.pz-stage-frame')?.focus({ preventScroll: true });
+  };
   return (
-    <div className="pz-ask pz-predict">
-      <h2 className="pz-question pz-question-lg">{prompt}</h2>
-      <div className="pz-duel">
-        <form className="pz-slot" onSubmit={(e) => e.preventDefault()}>
-          <label htmlFor={inputId} className="pz-slot-label">Class prediction</label>
-          <span className="pz-slot-value">
-            <input id={inputId} inputMode="decimal" autoComplete="off" placeholder="?" size={Math.max(2, answer.length + 1)} value={answer} disabled={revealed} onChange={(e) => onAnswer(e.target.value)} />
-            {unit !== '' && <span className="pz-unit">{unit}</span>}
-          </span>
-        </form>
-        <div className="pz-slot pz-slot-answer" data-revealed={revealed && value !== null ? 'true' : 'false'} role="status">
-          <p className="pz-slot-label">{value === null ? 'Answer' : t.kind === 'engine' ? `Engine: ${value.label.toLowerCase()}` : `Calculator: ${value.label}`}</p>
-          {revealed && value !== null
-            ? <p className="pz-slot-value pz-answer-value"><span className="num">{value.display}</span>{unit !== '' && <span className="pz-unit">{unit}</span>}</p>
-            : <p className="pz-slot-value pz-slot-hidden" aria-label="Hidden until the reveal">?</p>}
+    <div className="pz-ask pz-predict" data-visual={predictVisual(t)}>
+      <h2 className="pz-question pz-question-predict">{prompt}</h2>
+      <div className="pz-predict-body">
+        <div className="pz-predict-scene">
+          <PredictScene beat={beat} revealed={revealed} guess={parseGuess(answer)} cite={cite} deck={deck} />
+        </div>
+        <div className="pz-predict-side">
+          <form className="pz-slot" onSubmit={release}>
+            <label htmlFor={inputId} className="pz-slot-label">Class prediction</label>
+            <span className="pz-slot-value">
+              <input id={inputId} inputMode="decimal" autoComplete="off" placeholder="?" size={Math.max(2, answer.length + 1)} value={answer} disabled={revealed} onChange={(e) => onAnswer(e.target.value)} />
+              {unit !== '' && <span className="pz-unit">{prettyExponents(unit)}</span>}
+            </span>
+          </form>
+          <div className="pz-slot pz-slot-answer" data-revealed={landed && value !== null ? 'true' : 'false'} role="status">
+            <p className="pz-slot-label">{value === null ? 'Answer' : t.kind === 'engine' ? `Engine · ${value.label.toLowerCase()}` : `Calculator · ${value.label}`}</p>
+            {landed && value !== null
+              ? <p className="pz-slot-value pz-answer-value"><span className="num">{value.display}</span>{unit !== '' && <span className="pz-unit">{prettyExponents(unit)}</span>}</p>
+              : <p className="pz-slot-value pz-slot-hidden" aria-label="Hidden until the reveal">?</p>}
+          </div>
+          {verdict !== null && (
+            <p className={`pz-grade pz-verdict ${verdict.within ? 'pz-grade-ok' : ''}`} aria-label={verdict.text}>
+              <Mark kind={verdict.within ? 'ok' : 'bad'} /><strong>{verdict.headline}</strong>
+              <span className="pz-verdict-detail">{verdict.detail}</span>
+            </p>
+          )}
+          {landed && value !== null && verdict === null && <p className="pz-grade pz-verdict">No class prediction was entered.</p>}
+          {landed && value !== null
+            ? <p className="pz-fine">Computed by code from this case’s inputs. Close means within 2% of this value.</p>
+            : !revealed && <p className="pz-hint">Write your estimate down first. Type the class number, then <kbd>R</kbd>.</p>}
         </div>
       </div>
-      {revealed && value !== null && gradeLine(value, answer, tolerance)}
-      {revealed && value !== null
-        ? <p className="pz-fine">Computed by code from this case’s inputs. A prediction counts as close within 2% of this value.</p>
-        : <p className="pz-hint">Everyone: write down your estimate first.</p>}
     </div>
   );
 }
@@ -303,7 +337,7 @@ function PredictBeat({ beat, step, answer, onAnswer }: AskProps<'predict'>) {
  * sliders, scenes and drag targets stay the real, tested components (hit testing follows zoom). `hero` names the part
  * that must fit on screen (e.g. a simulation's scene down to its equation); anything below it scrolls.
  */
-function StageFit({ children, width = 980, hero, follow }: { children: ReactNode; width?: number; hero?: string; follow?: string }) {
+function StageFit({ children, width = 980, hero, follow, contain = false }: { children: ReactNode; width?: number; hero?: string; follow?: string; contain?: boolean }) {
   const outer = useRef<HTMLDivElement>(null);
   const inner = useRef<HTMLDivElement>(null);
   const [zoom, setZoom] = useState(1);
@@ -324,7 +358,8 @@ function StageFit({ children, width = 980, hero, follow }: { children: ReactNode
       const byWidth = o.clientWidth / width;
       const byHeight = o.clientHeight / Math.max(1, needed);
       // Fill the stage; a part taller than the stage shrinks to fit, but never below its own size (it scrolls instead).
-      setZoom(Math.max(Math.min(byWidth, 1), Math.min(byWidth, byHeight, 1.9)));
+      // `contain` (a predict beat's scene): always the whole part on screen, shrinking below its own size if it must.
+      setZoom(contain ? Math.min(byWidth, byHeight, 1.9) : Math.max(Math.min(byWidth, 1), Math.min(byWidth, byHeight, 1.9)));
       if (target !== null && !followed.current) {
         followed.current = true;
         // Bring the revealed answer up on the stage once the new zoom has applied. The stage scrolls by itself only,
@@ -341,7 +376,7 @@ function StageFit({ children, width = 980, hero, follow }: { children: ReactNode
     ro.observe(o);
     ro.observe(i);
     return () => ro.disconnect();
-  }, [width, hero, follow]);
+  }, [width, hero, follow, contain]);
   return (
     <div ref={outer} className="pz-fit">
       <div className="pz-fit-zoom" style={{ zoom }}>
@@ -356,7 +391,7 @@ function KitPart({ spec, cite }: { spec: KitSpec; cite: CiteProps }) {
     case 'sequence-v1': return <SequenceView spec={spec} cite={cite} />;
     case 'sort-groups-v1': return <SortView spec={spec} cite={cite} />;
     case 'concept-map-v1': return <ConceptMapView spec={spec} cite={cite} />;
-    case 'formula-explorer-v1': return <FormulaExplorerView spec={spec} cite={cite} />;
+    case 'formula-explorer-v1': return <FormulaExplorerView spec={spec} cite={cite} presentation={{ mode: 'stage' }} />;
     case 'balance-equation-v1': return <BalanceView spec={spec} cite={cite} />;
     case 'compare-table-v1': return <CompareView spec={spec} cite={cite} />;
     case 'quiz-cards-v1': return <QuizCardsView spec={spec} cite={cite} />;
@@ -368,13 +403,13 @@ function StageBeat({ beat, cite, deck, repairBadge }: { beat: KindOf<'stage'>; c
   const part: DeckPart = beat.part;
   return (
     <div className="pz-stage" data-part={part.kind === 'kit' ? part.spec.componentId : 'activity'}>
-      <h2 className="pz-heading">{beat.title}</h2>
+      <h2 className="pz-heading">{prettyExponents(beat.title)}</h2>
       <StageFit
         hero={part.kind === 'activity' ? '.eq-line' : part.spec.componentId === 'formula-explorer-v1' ? '.explorer-main' : undefined}
-        follow={part.kind === 'activity' ? '.timeline-view' : undefined}
+        follow={part.kind === 'activity' ? '[data-pz-follow]' : undefined}
       >
         {part.kind === 'activity'
-          ? <ActivityPanel key={part.spec.id} spec={part.spec} cite={cite} disclosure={deck.disclosure} repairBadge={repairBadge} />
+          ? <ActivityPanel key={part.spec.id} spec={part.spec} cite={cite} disclosure={deck.disclosure} repairBadge={repairBadge} presentation={{ mode: 'stage' }} />
           : <KitPart key={part.spec.id} spec={part.spec} cite={cite} />}
       </StageFit>
     </div>
@@ -427,7 +462,7 @@ export function BeatView(p: BeatProps) {
     case 'objectives': return <ObjectivesBeat beat={p.beat} step={p.step} deck={p.deck} />;
     case 'quiz': return <QuizBeat beat={p.beat} step={p.step} answer={p.answer} onAnswer={p.onAnswer} />;
     case 'compare': return <CompareBeat beat={p.beat} step={p.step} answer={p.answer} onAnswer={p.onAnswer} />;
-    case 'predict': return <PredictBeat beat={p.beat} step={p.step} answer={p.answer} onAnswer={p.onAnswer} />;
+    case 'predict': return <PredictBeat beat={p.beat} step={p.step} answer={p.answer} onAnswer={p.onAnswer} cite={p.cite} deck={p.deck} />;
     case 'stage': return <StageBeat beat={p.beat} cite={p.cite} deck={p.deck} repairBadge={p.repairBadge} />;
     case 'closing': return <ClosingBeat deck={p.deck} beats={p.beats} />;
   }

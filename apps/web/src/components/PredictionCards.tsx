@@ -10,6 +10,7 @@ import type { PairGrade, PairPrediction } from '../lib/timeline.ts';
 import { EventEvidence } from './EventEvidence.tsx';
 import type { CiteProps } from './Explanations.tsx';
 import { Mark } from './icons.tsx';
+import { amountText, prettyExponents } from '../lib/displayText.ts';
 
 export type RunPrediction = (prediction: AnyPrediction, index: number, grade: Grade) => void;
 
@@ -50,7 +51,7 @@ function PredictionCard({ engine, prediction: p, index, onRun }: CardProps) {
   return (
     <li className="prediction">
       <form onSubmit={submit} noValidate>
-        <p className="prediction-head" id={`${inputId}-prompt`}><span className="case-label">Case {index + 1}</span> {p.prompt}</p>
+        <p className="prediction-head" id={`${inputId}-prompt`}><span className="case-label">Case {index + 1}</span> {prettyExponents(p.prompt)}</p>
         <div className="prediction-row">
           <label htmlFor={inputId}>Your prediction: {out.label.toLowerCase()}</label>
           <div className="guess">
@@ -67,14 +68,14 @@ function PredictionCard({ engine, prediction: p, index, onRun }: CardProps) {
           </div>
           <button type="submit" className="btn btn-primary" disabled={guess === null} aria-describedby={guess === null ? `${inputId}-first` : undefined}>Run it</button>
         </div>
-        <p className="muted small" id={`${inputId}-tol`}>{guess === null && <span id={`${inputId}-first`}>Make a prediction first. </span>}Counts as correct within 2% of the engine's value (or ±{trimmed(p.tolerance, 6)}{unit}, whichever is larger).</p>
+        <p className="muted small" id={`${inputId}-tol`}>{guess === null && <span id={`${inputId}-first`}>Make a prediction first. </span>}Counts as correct within 2% of the engine's value (or ±{trimmed(p.tolerance, 6)}{prettyExponents(unit)}, whichever is larger).</p>
         {error !== null && <p className="field-error" role="alert">{error}</p>}
         {grade !== null && (
           <div className={`grade ${grade.withinTolerance ? 'grade-ok' : 'grade-miss'}`} role="status">
             <strong><Mark kind={grade.withinTolerance ? 'ok' : 'bad'} />{grade.withinTolerance ? 'Close enough' : `Not close enough — your guess was too ${grade.direction === 'high' ? 'high' : 'low'}`}</strong>
             <span>
               You guessed {trimmed(grade.guess, 4)}{unit} · engine says <b>{predictionExplanation(engine, p, grade.actual)}</b>
-              {' '}· off by {formatOutputValue(engine, Math.abs(grade.error))} (allowed ±{trimmed(grade.tolerance, 4)})
+              {' '}· off by {amountText(Math.abs(grade.error), out.unit)} (allowed ±{amountText(grade.tolerance, out.unit)})
             </span>
           </div>
         )}
@@ -134,7 +135,7 @@ function TimelinePredictionCard({ prediction: p, index, events, seed, cite }: Ti
   if (options === null) {
     return (
       <li className="prediction">
-        <p className="prediction-head" id={promptId}><span className="case-label">Question {index + 1}</span> {p.prompt}</p>
+        <p className="prediction-head" id={promptId}><span className="case-label">Question {index + 1}</span> {prettyExponents(p.prompt)}</p>
         <p className="field-error" role="alert">This question names an event that is not on the timeline, so it cannot be graded.</p>
       </li>
     );
