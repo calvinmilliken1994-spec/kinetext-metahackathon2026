@@ -3,6 +3,9 @@ import type { ErrorInfo, ReactNode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App.tsx';
 import './styles.css';
+import './styles/shell.css';
+import './styles/sim.css';
+import './styles/linking.css';
 
 interface BoundaryState { failed: boolean }
 
