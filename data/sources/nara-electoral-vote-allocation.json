@@ -1,0 +1,13 @@
+{
+  "id": "nara-electoral-vote-allocation",
+  "title": "Distribution of Electoral Votes — National Archives, U.S. Electoral College",
+  "subject": "civics",
+  "locator": "https://www.archives.gov/electoral-college/allocation",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: National Archives and Records Administration, U.S. Electoral College, 'Distribution of Electoral Votes'. Per NARA's Privacy and Use Policies, 'Works of the U.S. Government that have been produced by the National Archives and Records Administration are in the public domain and may be copied and distributed without permission. These works are available for worldwide use and reuse under the terms of the Creative Commons CC0 1.0 Universal license.' The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+  "sha256": "272defde44ff3d32da7dd3f454071e01b7e006aae3e8e661794bad905e992589",
+  "textFile": "nara-electoral-vote-allocation.txt",
+  "retrievedAt": "2026-10-30T11:26:00Z",
+  "transcription": "Main article text only (site header and menus and the sidebar '…a Process, not a Place' OFR snippet removed). The per-state allocation table (3 columns × 17 rows, alphabetical down each column) is transcribed as pipe-separated lines, one line per table row. The 'Total Electoral Votes: 538*; Majority Needed to Elect: 270*' line kept as printed, including its asterisks (the page prints no footnote text for them). Inline links flattened to their text (the years 2008, 2016, 2020 and 'political party chooses the individuals who are appointed'). Whitespace normalised.",
+  "purpose": "library: how electoral votes are distributed — the allocation rule (Senators plus Representatives, three electors for the District of Columbia under the 23rd Amendment), winner-take-all versus the Maine and Nebraska district systems, split-vote history (Nebraska 2008, Maine 2016, both in 2020), the totals 538 and the 270 majority needed to elect, and the full 2020-Census per-state allocation table effective for the 2024 and 2028 presidential elections. Fits quiz cards with predict-then-reveal on state vote counts, a compare table of allocation rules, and the formula explorer for Senators + Representatives = electoral votes."
+}

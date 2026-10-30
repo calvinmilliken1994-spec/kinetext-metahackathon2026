@@ -1,0 +1,13 @@
+{
+  "id": "cfpb-mortgage-total-monthly-payment",
+  "title": "On a mortgage, what’s the difference between my principal and interest payment and my total monthly payment? — Consumer Financial Protection Bureau, Ask CFPB",
+  "subject": "finance",
+  "locator": "https://www.consumerfinance.gov/ask-cfpb/on-a-mortgage-whats-the-difference-between-my-principal-and-interest-payment-and-my-total-monthly-payment-en-1941/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: Consumer Financial Protection Bureau, Ask CFPB, 'On a mortgage, what’s the difference between my principal and interest payment and my total monthly payment?'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+  "sha256": "54e2133fc95a619dc83b68fb7b37f0db5f648e72b4ecb95056ce80de11963d02",
+  "textFile": "cfpb-mortgage-total-monthly-payment.txt",
+  "retrievedAt": "2026-10-30T11:26:00Z",
+  "transcription": "Main answer text only (the 'Mortgages' breadcrumb, 'last reviewed: AUG 28, 2023' line, 'Don't see what you're looking for?' related-questions block, search widget, 'Page last modified' stamp, About us block and Legal disclaimer footer removed). The additive payment formula is a standalone paragraph on the page and is kept on its own line: 'Principal + interest + mortgage insurance (if applicable) + escrow (homeowners insurance and tax) = total monthly payment'. The 'What goes into my total monthly mortgage payment?' heading kept as a plain line. Inline links flattened to their text. Curly apostrophes and quotation marks kept as printed. Whitespace normalised.",
+  "purpose": "library: mortgage payments — principal and interest versus the total monthly payment, a stated additive formula (principal + interest + mortgage insurance + escrow = total monthly payment), how escrow accounts hold and pay taxes and insurance, why the escrow part can change while principal and interest generally stay the same, and where the total appears on the Loan Estimate. Fits a compare table of payment components, quiz cards with predict-then-reveal, and the formula explorer for the total monthly payment."
+}

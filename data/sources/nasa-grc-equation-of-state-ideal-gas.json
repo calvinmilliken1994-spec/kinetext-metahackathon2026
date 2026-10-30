@@ -1,0 +1,13 @@
+{
+  "id": "nasa-grc-equation-of-state-ideal-gas",
+  "title": "Equation Of State (Ideal Gas) — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+  "subject": "chemistry",
+  "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/equation-of-state-ideal-gas-2/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+  "sha256": "1647515d09cd96cf0c68fd8c09acf13b06e089610e1a415924e53f438062e1a4",
+  "textFile": "nasa-grc-equation-of-state-ideal-gas.txt",
+  "retrievedAt": "2026-10-30T11:26:00Z",
+  "transcription": "Main article text only (site banner, menus, breadcrumbs, the 'On this page' sidenav and the slide figure images removed). The page typesets its display equations in MathJax LaTeX; each is rendered as a plain-text line with the LaTeX wrappers removed and the fraction flattened (pV/T=nR, pV=nRT, pv=RT, p=rho RT), with no other change to any equation; \\rho inside equations is rendered as ASCII 'rho' consistent with the other stored NASA pages. The inline bold rho symbol is rendered as the character the page displays, giving 'the gas density rho (ρ)'. The page's own heading label 'Gasses and its Properties' and the curly apostrophes in 'Boyle’s Law' and 'Charles and Gay-Lussac’s Law' kept as printed. Whitespace normalised.",
+  "purpose": "library: the ideal gas law — the state variables (pressure p, temperature T, mass m, volume V), Boyle’s Law (product of pressure and volume constant at fixed mass and temperature, observed 1660) and Charles and Gay-Lussac’s Law (volume proportional to temperature at fixed mass and pressure) combined into the equation of state pV/T=nR and pV=nRT (universal constant R, moles n), the engineer's per-mass forms pv=RT and p=rho RT with the gas constant for air given as .286 kilo Joule per kilogram per degree Kelvin, and the absolute-temperature requirement (Kelvin, not Celsius; Rankine, not Fahrenheit). Fits the formula explorer for pV=nRT, quiz cards with predict-then-reveal, and a compare table of the gas laws and equation forms."
+}

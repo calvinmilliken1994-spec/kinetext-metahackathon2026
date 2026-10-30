@@ -1,0 +1,61 @@
+# How to Use the Consumer Price Index for Escalation
+
+The Consumer Price Index (CPI) measures the average change in the prices paid for a market basket of goods and services. These items are purchased for consumption by the two groups covered by the index: All Urban Consumers (CPI-U) and Urban Wage Earners and Clerical Workers, (CPI-W).
+
+Escalation agreements often use the CPI—the most widely used measure of price change—to adjust payments for changes in prices. The most frequently used escalation applications are in private sector collective bargaining agreements, rental contracts, insurance policies with automatic inflation protection, and alimony and child support payments.
+
+The following are general guidelines to consider when developing an escalation agreement using the CPI:
+
+Define the base payment
+
+Define clearly the base payment (rent, wage rate, alimony, child support, or other value) that is subject to escalation.
+
+Identify which CPI series will be used
+
+Identify precisely which CPI index series will be used to escalate the base payment. This should include the population coverage (CPI-U or CPI-W), area coverage (U.S. City Average, West Region, Chicago, etc.), series title (all items, rent of primary residence, etc.), and index base period (1982-84=100).
+
+Specify reference period
+
+Specify a reference period from which changes in the CPI will be measured. This is usually a single month (the CPI does not correspond to a specific day or week of the month), or an annual average. There is about a two-week lag from the reference month to the date on which the index is released (that is, the CPI for May is released in mid-June). The CPIs for most metropolitan areas are not published as frequently as are the data for the U.S. City Average and the four regions. Indexes for the U.S. City Average, the four regions, nine divisions, two city-size classes, eight region-by-size classes, and three major metropolitan areas (Chicago, Los Angeles, and New York) are published monthly. Indexes for the remaining 20 published metropolitan areas are available only on a bimonthly basis. Contact BLS for information on the frequency of publication for the 23 metropolitan areas.
+
+State frequency of adjustment
+
+Adjustments are usually made at fixed intervals, such as quarterly, semiannually, or, most often, annually.
+
+Determine adjustment formula
+
+Determine the formula for the adjustment calculation. Usually the change in payments is directly proportional to the percent change in the CPI index between two specified periods. Consider whether to make an allowance for a “cap” that places an upper limit on the increase in wages, rents, etc., or a “floor” that promises a minimum increase regardless of the percent change (up or down) in the CPI.
+
+Provide for revisions
+
+Provide a built-in method for handling situations that may arise because of major CPI revisions or changes in the CPI index base period. The Bureau always provides timely notification of upcoming revisions or changes in the index base.
+
+The CPI and escalation: Some points to consider
+
+The CPI is calculated for two population groups: All Urban Consumers (CPI-U) and Urban Wage Earners and Clerical Workers (CPI-W). The CPI-U represents over 90 percent of the total U.S. population and is based on the expenditures of all families living in urban areas. The CPI-W is a subset of the CPI-U and is based on the expenditures of families living in urban areas who meet additional requirements related to employment: more than one-half of the family’s income is earned from clerical or hourly-wage occupations. The CPI-W represents approximately 30 percent of the total U.S. population.
+
+There can be small differences in movement of the two indexes over short periods of time because differences in the spending habits of the two population groups result in slightly different weighting. The long-term movements in the indexes are similar. CPI-U and CPI-W indexes are calculated using measurement of price changes of goods and services with the same specifications and from the same retail outlets. The CPI-W is used for escalation primarily in blue-collar cost-of-living adjustments (COLAs). Because the CPI-U population coverage is more comprehensive, it is used in most other escalation agreements.
+
+The 23 metropolitan areas for which BLS publishes separate index series are by-products of the U.S. City Average index. Metropolitan area indexes have a relatively small sample size and, therefore, are subject to substantially larger sampling errors. Metropolitan area and other subcomponents of the national indexes (regions, size-classes) often exhibit greater volatility than the national index. BLS recommends that users adopt the U.S. City Average CPI for use in escalator clauses.
+
+The U.S. City Average CPIs are published on a seasonally adjusted basis as well as on an unadjusted basis. The purpose of seasonal adjustment is to remove the estimated effect of price changes that normally occur at the same time and in about the same magnitude every year (e.g., price movements due to the change in weather patterns, holidays, model change-overs, end-of-season sales, etc.). The primary use of seasonally adjusted data is for current economic analysis. In addition, the factors that are used to seasonally adjust the data are updated annually and seasonally adjusted data are subject to revision for up to 5 years after their original release. For these reasons, the use of seasonally adjusted data in escalation agreements is inappropriate.
+
+Escalation agreements using the CPI usually involve changing the base payment by the percent change in the level of the CPI between the reference period and a subsequent period. This is calculated by first determining the index point change between the two periods and then determining the percent change. The following example illustrates the computation of a percent change:
+
+CPI for current period | 232.945
+
+Less CPI for previous period | 229.815
+
+Equals index point change | 3.130
+
+Divided by previous period CPI | 229.815
+
+Equals | 0.0136
+
+Result multiplied by 100 | 0.0136 x 100
+
+Equals percent change | 1.4%
+
+The Bureau of Labor Statistics neither encourages nor discourages the use of price adjustment measures in contractual agreements. Also, while BLS can provide technical and statistical assistance to parties developing escalation agreements, we can neither develop specific wording for contracts nor mediate legal or interpretive disputes which might arise between the parties to the agreement.
+
+Additional information may be obtained from the Consumer Price Index Information Office at cpi_info@bls.gov or 202-691-7000. Information on the CPI’s overall methodology can be found in the BLS Handbook of Methods.

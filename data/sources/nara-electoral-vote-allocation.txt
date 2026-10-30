@@ -1,0 +1,55 @@
+# Distribution of Electoral Votes
+
+Allocation among the States
+
+Electoral votes are allocated among the States based on the Census. Every State is allocated a number of votes equal to the number of Senators and Representatives in its U.S. Congressional delegation—two votes for its Senators in the U.S. Senate plus a number of votes equal to the number of its Congressional districts.
+
+Under the 23rd Amendment of the Constitution, the District of Columbia is allocated three electors and treated like a State for purposes of the Electoral College.
+
+Each State (which includes the District of Columbia for the Electoral College) decides how to appoint its electors; however, they must do so according to law enacted before Election Day. Currently, all States use the popular vote results from the November general election to decide which political party chooses the individuals who are appointed.
+
+Allocation within each State
+
+All States, except for Maine and Nebraska, have a winner-take-all policy where the State looks only at the overall winner of the state-wide popular vote. Maine and Nebraska, however, appoint individual electors based on the winner of the popular vote within each Congressional district and then 2 "at-large" electors based on the winner of the overall state-wide popular vote.
+
+While it is rare for Maine or Nebraska to have a split vote, each has done so twice: Nebraska in 2008, Maine in 2016, and both Maine and Nebraska in 2020.
+
+Current allocations
+
+The allocations below are based on the 2020 Census. They are effective for the 2024 and 2028 presidential elections.
+
+Total Electoral Votes: 538*; Majority Needed to Elect: 270*
+
+Alabama - 9 votes | Kentucky - 8 votes | North Dakota - 3 votes
+
+Alaska - 3 votes | Louisiana - 8 votes | Ohio - 17 votes
+
+Arizona - 11 votes | Maine - 4 votes | Oklahoma - 7 votes
+
+Arkansas - 6 votes | Maryland - 10 votes | Oregon - 8 votes
+
+California - 54 votes | Massachusetts - 11 votes | Pennsylvania - 19 votes
+
+Colorado - 10 votes | Michigan - 15 votes | Rhode Island - 4 votes
+
+Connecticut - 7 votes | Minnesota - 10 votes | South Carolina - 9 votes
+
+Delaware - 3 votes | Mississippi - 6 votes | South Dakota - 3 votes
+
+District of Columbia - 3 votes | Missouri - 10 votes | Tennessee - 11 votes
+
+Florida - 30 votes | Montana - 4 votes | Texas - 40 votes
+
+Georgia - 16 votes | Nebraska - 5 votes | Utah - 6 votes
+
+Hawaii - 4 votes | Nevada - 6 votes | Vermont - 3 votes
+
+Idaho - 4 votes | New Hampshire - 4 votes | Virginia - 13 votes
+
+Illinois - 19 votes | New Jersey - 14 votes | Washington - 12 votes
+
+Indiana - 11 votes | New Mexico - 5 votes | West Virginia - 4 votes
+
+Iowa - 6 votes | New York - 28 votes | Wisconsin - 10 votes
+
+Kansas - 6 votes | North Carolina - 16 votes | Wyoming - 3 votes

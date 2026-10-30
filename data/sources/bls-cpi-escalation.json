@@ -1,0 +1,13 @@
+{
+  "id": "bls-cpi-escalation",
+  "title": "How to Use the Consumer Price Index for Escalation — U.S. Bureau of Labor Statistics, Consumer Price Index factsheet",
+  "subject": "finance",
+  "locator": "https://www.bls.gov/cpi/factsheets/escalation.htm",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: U.S. Bureau of Labor Statistics, Consumer Price Index, 'How to Use the Consumer Price Index for Escalation'. Credit: U.S. Bureau of Labor Statistics. Per the BLS Linking and Copyright Information, 'The Bureau of Labor Statistics (BLS) is a Federal government agency and everything that we publish, both in hard copy and electronically, is in the public domain, except for previously copyrighted photographs and illustrations. You are free to use our public domain material without specific permission, although we do ask that you cite the Bureau of Labor Statistics as the source.' The U.S. Bureau of Labor Statistics has not reviewed, approved or endorsed this activity.",
+  "sha256": "eb563a53edb7ba595831b970f366b39a5a1efa7b8259280013f29552e37ce6cd",
+  "textFile": "bls-cpi-escalation.txt",
+  "retrievedAt": "2026-10-30T11:26:00Z",
+  "transcription": "Main factsheet text only (the CPI program banner and its left navigation, 'SHARE ON:' widget, search box, 'Last Modified Date: June 8, 2023' line, publications footer list and social-media links removed). Section headings (h4) kept as plain lines. The percent-change worked example is a two-column table on the page and is transcribed as pipe-separated lines, one per table row. Inline links flattened to their text; the closing contact line (cpi_info@bls.gov, 202-691-7000) kept as printed. Curly quotation marks around 'cap' and 'floor' and the em dashes kept as printed. Whitespace normalised.",
+  "purpose": "library: CPI escalation — six ordered guidelines for writing an escalation agreement (define the base payment, identify the index series with population/area/series/base-period, specify the reference period, state the adjustment frequency, determine the adjustment formula, provide for revisions), CPI-U vs CPI-W compared (over 90 percent vs approximately 30 percent of the U.S. population), why seasonally adjusted data are inappropriate in escalation clauses, and a full worked percent-change example (232.945 minus 229.815 = 3.130; 3.130 / 229.815 = 0.0136; 0.0136 x 100 = 1.4%). Fits step ordering (the guidelines), quiz cards with predict-then-reveal on the worked example, a compare table of CPI-U vs CPI-W, and the formula explorer for the percent-change computation."
+}

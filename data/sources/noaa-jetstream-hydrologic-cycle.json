@@ -1,0 +1,13 @@
+{
+  "id": "noaa-jetstream-hydrologic-cycle",
+  "title": "The Hydrologic Cycle — NOAA National Weather Service, JetStream",
+  "subject": "earth-science",
+  "locator": "https://www.noaa.gov/jetstream/atmosphere/hydro",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NOAA National Weather Service, JetStream, 'The Hydrologic Cycle'. Credit: NOAA National Weather Service. NOAA's Education and Outreach FAQ states 'Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission', requires credit to NOAA and the NOAA program, and requires that any edits, including those made with a generative AI program, be made clear; the AI-generated lesson carrying this material is labelled as AI-generated in the product. NOAA has not reviewed, approved or endorsed this activity.",
+  "sha256": "03cf335151841e953503b179c2b883ccfb8a9e47f4c740dcfa8c65ef05ff1e03",
+  "textFile": "noaa-jetstream-hydrologic-cycle.txt",
+  "retrievedAt": "2026-10-30T11:26:00Z",
+  "transcription": "Main article text only (share widget, the right-sidebar lesson navigation repeated three times around the article, and the 'Download Image' utility link removed). The caption of the cycle diagram figure ('The basic hydrologic (water) cycle') kept as its own line; the two uncaptioned illustrative images inside the Condensation and Runoff sections contribute no text. The five-process list flattened to • items. The in-body 'Learning Lesson: …' promo lines and the closing 'Take it to the MAX! What-a-cycle' line kept as printed (inline links flattened to their text). The 38½\" measure and the apostrophe in 'Sweatin' to the Coldies' kept as printed. Whitespace normalised.",
+  "purpose": "library: the water cycle as an ordered set of processes — the five named stages (evaporation, transpiration, condensation, precipitation, runoff), each with its mechanism (energy sources for evaporation; the 1% growth / 99% atmosphere split of transpired water; dew point and saturation for condensation and its released heat feeding hurricanes; the ~38½ inch (980 mm) average annual world precipitation; runoff feeding rivers, lakes and terminal salt lakes such as the Great Salt Lake and the Dead Sea). Fits step ordering (the cycle), quiz cards with predict-then-reveal on the percentages and precipitation figure, and a concept map of the cycle processes."
+}

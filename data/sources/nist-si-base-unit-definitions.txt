@@ -1,0 +1,47 @@
+# Definitions of SI Base Units
+
+Second – Unit of Time
+
+Symbol: s
+
+The second is defined by taking the fixed numerical value of the cesium frequency ∆νCs, the unperturbed ground-state hyperfine transition frequency of the cesium-133 atom, to be 9,192,631,770 when expressed in the unit Hz, which is equal to s^−1.
+
+Meter – Unit of Length
+
+Symbol: m
+
+The meter is defined by taking the fixed numerical value of the speed of light in vacuum c to be 299,792,458 when expressed in the unit m s^−1, where the second is defined in terms of ∆νCs.
+
+Kilogram – Unit of Mass
+
+Symbol: kg
+
+The kilogram is defined by taking the fixed numerical value of the Planck constant h to be 6.62607015 ×10^−34 when expressed in the unit J s, which is equal to kg m^2 s^−1, where the meter and the second are defined in terms of c and ∆νCs.
+
+Ampere – Unit of Electric Current
+
+Symbol: A
+
+The ampere is defined by taking the fixed numerical value of the elementary charge e to be 1.602176634 × 10^−19 when expressed in the unit C, which is equal to A s, where the second is defined in terms of ∆νCs.
+
+Kelvin – Unit of Thermodynamic Temperature
+
+Symbol: K
+
+The kelvin is defined by taking the fixed numerical value of the Boltzmann constant k to be 1.380 649 ×10^−23 when expressed in the unit J K^−1, which is equal to kg m^2 s^−2 K^−1, where the kilogram, meter and second are defined in terms of h, c and ∆νCs.
+
+Mole – Unit of Amount of Substance
+
+Symbol: mol
+
+One mole contains exactly 6.02214076 × 10^23 elementary entities. This number is the fixed numerical value of the Avogadro constant, NA, when expressed in the unit mol^−1 and is called the Avogadro number. The amount of substance, symbol n, of a system is a measure of the number of specified elementary entities. An elementary entity may be an atom, a molecule, an ion, an electron, any other particle or specified group of particles.
+
+Candela – Unit of Luminous Intensity
+
+Symbol: cd
+
+The candela is defined by taking the fixed numerical value of the luminous efficacy of monochromatic radiation of frequency 540 × 10^12 Hz, Kcd, to be 683 when expressed in the unit lm W^−1, which is equal to cd sr W^−1, or cd sr kg^−1 m^−2 s^3, where the kilogram, meter and second are defined in terms of h, c and ∆νCs.
+
+Meet the Constants
+
+As you can see above, the units in the revised SI are based completely on seven unchanging quantities or “universal constants,” including the speed of light, the amount of electric charge in an electron, and the Planck constant. Learn more about each of these “invariants of nature” and how they come into play in the revised SI.

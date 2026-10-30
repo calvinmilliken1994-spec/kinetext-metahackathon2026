@@ -1,0 +1,13 @@
+{
+  "id": "nara-constitutional-amendment-process",
+  "title": "Constitutional Amendment Process — National Archives, Office of the Federal Register",
+  "subject": "civics",
+  "locator": "https://www.archives.gov/federal-register/constitution",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: National Archives and Records Administration, Office of the Federal Register, 'Constitutional Amendment Process'. Per NARA's Privacy and Use Policies, 'Works of the U.S. Government that have been produced by the National Archives and Records Administration are in the public domain and may be copied and distributed without permission. These works are available for worldwide use and reuse under the terms of the Creative Commons CC0 1.0 Universal license.' The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+  "sha256": "5777ce95a0692bd6c516da858e21712c8ca966bb8b257c991968e31b13e8b53f",
+  "textFile": "nara-constitutional-amendment-process.txt",
+  "retrievedAt": "2026-10-30T11:26:00Z",
+  "transcription": "Main article text only (site header and menus, sidebar, and the trailing 'Links to Constitutional Amendment Information in the Treasures of Congress Exhibit' block of links after the horizontal rule removed). The five process paragraphs kept in order; inline links flattened to their text ('Constitution', 'Article V', '1 U.S.C. 106b'). Straight quotation marks around \"red-line\" and apostrophes kept as printed. Whitespace normalised.",
+  "purpose": "library: how the U.S. Constitution is amended — an ordered process with stated thresholds and counts (proposal by two-thirds of both Houses or by a convention called by two-thirds of the State legislatures; ratification by three-fourths of the States, 38 of 50; none of the 27 amendments proposed by convention; no presidential role; OFR examination, the Archivist's certification published in the Federal Register; rejection and rescission practice; ceremonial signings including the May 18, 1992 certification of the 27th Amendment). Fits step ordering (the amendment process), quiz cards with predict-then-reveal on the fractions and counts, and a compare table (Congressional proposal vs constitutional convention)."
+}

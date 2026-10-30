@@ -1,0 +1,13 @@
+{
+  "id": "nist-si-base-unit-definitions",
+  "title": "Definitions of SI Base Units — NIST, SI Redefinition",
+  "subject": "maths",
+  "locator": "https://www.nist.gov/si-redefinition/definitions-si-base-units",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NIST, SI Redefinition, 'Definitions of SI Base Units'. Credit: NIST. Per the NIST Copyrights & Disclaimers, 'NIST web pages are provided as a public service by the National Institute of Standards and Technology (NIST). With the exception of material marked as copyrighted, information presented on NIST sites are considered public information and may be distributed or copied. Use of appropriate byline/photo/image credits is requested.' The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+  "sha256": "cb4b3a449af325e676ebf2069948e47aa6c8d58a0463a26e8f0d5a207fbafc9c",
+  "textFile": "nist-si-base-unit-definitions.txt",
+  "retrievedAt": "2026-10-30T11:26:00Z",
+  "transcription": "Main article text only (site header and menus, the SI Redefinition section nav, each unit's symbol-circle image, the 'Learn More' button link under each definition and the 'Created May 29, 2019, Updated August 13, 2025' line removed). The seven unit blocks kept in the page's order, each as its heading ('Second – Unit of Time' etc., en dashes as printed), its 'Symbol: …' line and its definition paragraph; the closing 'Meet the Constants' callout kept as heading plus paragraph. Superscripts rendered with ^ (s^−1, 10^−34, kg m^2 s^−1); subscripts flattened (∆νCs, NA, Kcd); the internal spacing of the fixed numerical values ('6.62607015 ×10^−34', '1.380 649 ×10^−23') kept as served. Whitespace normalised.",
+  "purpose": "library: the seven SI base units defined by fixed exact values of their defining constants — cesium frequency 9,192,631,770 Hz; speed of light 299,792,458 m s^−1; Planck constant 6.62607015 ×10^−34 J s; elementary charge 1.602176634 × 10^−19 C; Boltzmann constant 1.380 649 ×10^−23 J K^−1; Avogadro constant 6.02214076 × 10^23 mol^−1; luminous efficacy 683 lm W^−1 at 540 × 10^12 Hz. A seven-row data table that fits compare tables (unit × symbol × constant × value), quiz cards with predict-then-reveal on the exact values, and matching/ordering activities between units and constants."
+}
