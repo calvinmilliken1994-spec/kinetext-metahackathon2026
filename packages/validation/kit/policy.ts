@@ -120,10 +120,11 @@ export function kitDisplayFields(componentId: string, gen: unknown): DisplayFiel
 
 /**
  * Publisher-claim + plain-text problems over the component's display fields. Publisher tokens come
- * from the provided sources' own title/attribution metadata (the same builder A-09/OV-03 use) but the
- * kit sweep matches in KIT mode (lead rulings 3-4): the full publisher name and its acronyms, and
- * "according to" only when a publisher name/acronym follows within ~4 words — never an ordinary
- * single word of the name ("deep ocean") and never "according to the definition". `affected` lists EVERY violating field (once each, document order).
+ * from the provided sources' own title/attribution metadata (the same builder and the same
+ * narrowed matcher A-09/OV-03 use — lead rulings 3-4): the full publisher name and its acronyms,
+ * and "according to" only when a publisher name/acronym follows within ~4 words — never an
+ * ordinary single word of the name ("deep ocean") and never "according to the definition".
+ * `affected` lists EVERY violating field (once each, document order).
  */
 export function kitPolicyProblems(componentId: string, gen: unknown, sources: SourceDocument[]): KitPolicyProblems {
   const idx = buildSourceIndex(Array.isArray(sources) ? sources : []);
@@ -134,7 +135,7 @@ export function kitPolicyProblems(componentId: string, gen: unknown, sources: So
   // fields), so only the plain-text rule is added there; every other component gets both.
   const publisherOwnedElsewhere = componentId === 'overview-v1';
   for (const f of kitDisplayFields(componentId, gen)) {
-    const claim = publisherOwnedElsewhere ? null : findPublisherClaim(f.text, tokens, { kit: true });
+    const claim = publisherOwnedElsewhere ? null : findPublisherClaim(f.text, tokens);
     const plain = plainTextProblems(f.path, f.text);
     if (claim !== null) {
       problems.push(`publisher claim at ${f.path}: "${truncate(f.text, 60)}" (token "${claim}"; never name or endorse the publisher in generated text)`);

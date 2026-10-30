@@ -528,28 +528,11 @@ export function chemicalFormulaTokens(text: string): string[] {
 }
 
 /* ------------------------------------------------------------------ */
-/* A-09 / OV-03 publisher-claim tokens                                 */
+/* Publisher-claim tokens (kit policy sweep, A-09, OV-03)              */
 /* ------------------------------------------------------------------ */
 
 /** The frozen generic phrases (design §1.6 A-09): matched word-boundary, case-insensitive. */
 export const GENERIC_PUBLISHER_PHRASES = ['according to', 'as stated by', 'official', 'endorsed'] as const;
-
-/**
- * Words that only ever appear inside publisher names in this corpus and would false-reject
- * ordinary teaching text as single tokens ("research", "center", "national", ...). They still
- * match inside the full publisher phrase.
- */
-export const COMMON_PUBLISHER_WORDS = new Set([
-  'national', 'institute', 'institutes', 'archives', 'records', 'administration', 'research',
-  'center', 'centre', 'consumer', 'financial', 'protection', 'bureau', 'justice', 'department',
-  'office', 'agency', 'commission', 'committee', 'association', 'organization', 'organisation',
-  'society', 'council', 'service', 'services', 'federal', 'united', 'states', 'state',
-  'government', 'university', 'college', 'school', 'press', 'publishing', 'publications',
-  'library', 'museum', 'foundation', 'corporation', 'company', 'international', 'american',
-  'guide', 'guides', 'beginners', 'material', 'source', 'sources', 'teacher', 'teachers',
-  'provided', 'pasted', 'text', 'page', 'pages', 'notes', 'project', 'authored', 'synthetic',
-  'document', 'documents', 'introduction', 'background', 'family', 'personal', 'website',
-]);
 
 /** Acronym-like all-caps tokens that are not publisher names (roman numerals, locale marks). */
 const ACRONYM_EXCLUDE = new Set(['US', 'USA', 'II', 'III', 'IV', 'VI', 'IX', 'XI', 'AI', 'UK', 'UN', 'AM', 'PM', 'ET']);
@@ -557,27 +540,15 @@ const ACRONYM_EXCLUDE = new Set(['US', 'USA', 'II', 'III', 'IV', 'VI', 'IX', 'XI
 export interface PublisherTokens {
   /** Lowercased full publisher phrases (>= 2 words), matched as substrings of normalised text. */
   phrases: string[];
-  /** Lowercased distinctive single words from the publisher phrase, matched word-boundary. */
-  singles: Set<string>;
-  /** Lowercased all-caps acronyms from the attribution metadata, matched word-boundary. */
-  acronyms: Set<string>;
   /**
-   * KIT sweep only (lead ruling 4): acronyms of the publisher NAME — the all-caps words of the
-   * publisher phrase (NASA, NOAA) or the initials of its content words (NARA, CFPB, NIJ, NRC,
-   * USGS). Never ordinary words, never loose all-caps metadata words (FAQ, URL).
+   * Acronyms of the publisher NAME (lead ruling 4): the all-caps words of the publisher phrase
+   * (NASA, NOAA) or the initials of its content words (NARA, CFPB, NIJ, NRC, USGS). Never
+   * ordinary words, never loose all-caps metadata words (FAQ, URL) and never all-caps words of a
+   * page title quoted inside the attribution (PCR, DNA).
    */
   nameAcronyms: Set<string>;
-  /** KIT sweep only: the full publisher name without a leading "U.S." / "the" (>= 2 words), lowercased. */
+  /** The full publisher name without a leading "U.S." / "the" (>= 2 words), lowercased. */
   namePhrases: string[];
-}
-
-export interface FindPublisherClaimOptions {
-  /**
-   * Kit display-field mode (lead rulings 3-4). "according to" counts only when a publisher name or
-   * acronym follows within ~4 words, and publisher matching uses the full name plus the name
-   * acronyms — not the distinctive single words. Default false = the A-09 / OV-03 behaviour.
-   */
-  kit?: boolean;
 }
 
 const NAME_STOPWORDS = new Set(['and', 'of', 'the', 'for', 'on', 'in', '&']);
@@ -612,57 +583,52 @@ function kitNameTokens(norm: string, out: { nameAcronyms: Set<string>; namePhras
  * attribution only — the source TEXT is the subject matter, not a publisher claim). The
  * publisher phrase is the first comma-separated segment after "Source material:" in the
  * attribution, plus the first comma-separated segment after the dash in the title.
+ *
+ * Narrowed builder (2026-10-30, lead rulings 3-4 extended to A-09/OV-03): only FULL publisher
+ * name phrases and NAME acronyms are produced. The old distinctive-single-word set ("census" from
+ * "U.S. Census Bureau", "general" from "(U.S. General Services Administration)") and the loose
+ * all-caps scan of the WHOLE attribution (which caught page-title words quoted there — "PCR",
+ * "DNA" — and credit junk like FAQ/URL/NSF/WHOI) are gone: on 2026-10-30 they caused 12 of 13
+ * Spark 1.3 analysis repairs, and every inspected one degraded true page content
+ * (docs/evidence/stage-7/batch-2026-10-30/README.md).
  */
 export function publisherTokensOf(doc: Pick<SourceDocument, 'title' | 'attribution'>): PublisherTokens {
-  const tokens: PublisherTokens = { phrases: [], singles: new Set(), acronyms: new Set(), nameAcronyms: new Set(), namePhrases: [] };
-  const addPhrase = (phrase: string | undefined, withSingles: boolean): void => {
+  const tokens: PublisherTokens = { phrases: [], nameAcronyms: new Set(), namePhrases: [] };
+  const addPhrase = (phrase: string | undefined): void => {
     if (phrase === undefined) return;
     const norm = normalizeWhitespace(phrase).replace(/[.,;:]+$/, '');
     if (norm === '') return;
     const words = norm.split(/\s+/).filter(w => /^[A-Za-z'][A-Za-z'-]*$/.test(w));
     if (words.length >= 2) tokens.phrases.push(norm.toLowerCase());
-    if (!withSingles) return;
-    for (const w of words) {
-      const clean = w.replace(/[^A-Za-z]/g, '').toLowerCase();
-      if (clean.length >= 4 && !COMMON_PUBLISHER_WORDS.has(clean) && !ACRONYM_EXCLUDE.has(clean.toUpperCase())) {
-        tokens.singles.add(clean);
-      }
-    }
   };
   const attribution = typeof doc.attribution === 'string' ? doc.attribution : '';
   const title = typeof doc.title === 'string' ? doc.title : '';
-  // Project convention for licensed sources: "Source material: <publisher>, <work>. ..." — only
-  // this segment yields distinctive single-word tokens. Attributions without the marker (e.g.
-  // teacher-pasted sources) match as full phrases only, so ordinary metadata words like
-  // "teacher" or "provided" can never false-reject ordinary teaching text.
+  // Project convention for licensed sources: "Source material: <publisher>, <work>. ..." Attributions
+  // without the marker (e.g. teacher-pasted sources) match as full phrases only, so ordinary
+  // metadata words like "teacher" or "provided" can never false-reject ordinary teaching text.
   const sourceMaterial = /Source material:\s*([^.]*\.)/i.exec(attribution)?.[1] ?? /Source material:\s*([^.]*)/i.exec(attribution)?.[1];
   if (sourceMaterial !== undefined) {
-    addPhrase(sourceMaterial.split(',')[0], true);
+    addPhrase(sourceMaterial.split(',')[0]);
   } else {
-    addPhrase(attribution.split(/[.,;]/)[0], false);
+    addPhrase(attribution.split(/[.,;]/)[0]);
   }
   // Title publisher part: text after an em/en dash, first comma segment.
   const titleParts = title.split(/\s+[—–]\s+/);
-  if (titleParts.length >= 2) addPhrase((titleParts[titleParts.length - 1] as string).split(',')[0], true);
-  // KIT-mode name tokens (lead ruling 4), derived separately from the old A-09 builder: the publisher
-  // name is the whole first comma segment after "Source material:" (so "U.S. Nuclear Regulatory
-  // Commission" keeps its dots) — initials derived — plus the title's publisher segment (no initials).
+  if (titleParts.length >= 2) addPhrase((titleParts[titleParts.length - 1] as string).split(',')[0]);
+  // Name tokens (lead ruling 4): the publisher name is the whole first comma segment after
+  // "Source material:" (so "U.S. Nuclear Regulatory Commission" keeps its dots) — initials
+  // derived — plus the title's publisher segment (no initials). Neither ever sees the quoted
+  // page-title or credit parts of the attribution.
   const kitSegment = /Source material:\s*([^,]+)/i.exec(attribution)?.[1];
   if (kitSegment !== undefined) kitNameTokens(normalizeWhitespace(kitSegment).replace(/[;:]+$/, ''), tokens, true);
   if (titleParts.length >= 2) kitNameTokens(normalizeWhitespace((titleParts[titleParts.length - 1] as string).split(',')[0] as string), tokens, false);
-  for (const m of attribution.matchAll(/\b[A-Z]{2,}\b/g)) {
-    const acr = m[0];
-    if (!ACRONYM_EXCLUDE.has(acr)) tokens.acronyms.add(acr.toLowerCase());
-  }
   return tokens;
 }
 
 export function mergePublisherTokens(list: PublisherTokens[]): PublisherTokens {
-  const out: PublisherTokens = { phrases: [], singles: new Set(), acronyms: new Set(), nameAcronyms: new Set(), namePhrases: [] };
+  const out: PublisherTokens = { phrases: [], nameAcronyms: new Set(), namePhrases: [] };
   for (const t of list) {
     for (const p of t.phrases) if (!out.phrases.includes(p)) out.phrases.push(p);
-    for (const s of t.singles) out.singles.add(s);
-    for (const a of t.acronyms) out.acronyms.add(a);
     for (const a of t.nameAcronyms) out.nameAcronyms.add(a);
     for (const p of t.namePhrases) if (!out.namePhrases.includes(p)) out.namePhrases.push(p);
   }
@@ -677,7 +643,7 @@ function wordStarts(text: string): number[] {
 /** How many words may sit between "according to" and the publisher name that follows it (lead ruling 3). */
 const ACCORDING_TO_WINDOW_WORDS = 4;
 
-/** Kit mode: the publisher name/acronym token that starts within the window after "according to", or null. */
+/** The publisher name/acronym token that starts within the window after "according to", or null. */
 function publisherAfterAccordingTo(norm: string, tokens: PublisherTokens): string | null {
   const re = /\baccording to\b/gi;
   for (let m = re.exec(norm); m !== null; m = re.exec(norm)) {
@@ -699,43 +665,28 @@ function publisherAfterAccordingTo(norm: string, tokens: PublisherTokens): strin
 }
 
 /**
- * The publisher-claim hit in an AI-written string, or null. Default mode (A-09 / OV-03) matches the
- * frozen generic phrases (according to | as stated by | official | endorsed), any publisher phrase
- * from the sources' own metadata, its distinctive single words and its acronyms (NASA, NIJ, ...).
- * Kit mode (`{ kit: true }`, lead rulings 3-4) matches "as stated by" / "official" / "endorsed", the
- * FULL publisher name and the name acronyms; "according to" counts only when a publisher name or
- * acronym follows within ~4 words ("according to the definition" passes), and ordinary single words
- * of the name ("ocean" in "NOAA Office of Ocean Exploration") never match on their own.
+ * The publisher-claim hit in an AI-written string, or null. ONE narrowed rule for every publisher
+ * sweep (kit policy, A-09 analysis, OV-03 overview — lead rulings 3-4, extended to the analysis
+ * side on 2026-10-30): matches "as stated by" / "official" / "endorsed", the FULL publisher name
+ * and the name acronyms; "according to" counts only when a publisher name or acronym follows
+ * within ~4 words ("according to the definition" passes), and ordinary single words of the name
+ * ("ocean" in "NOAA Office of Ocean Exploration", "census" in "U.S. Census Bureau") never match
+ * on their own.
  */
-export function findPublisherClaim(text: unknown, tokens: PublisherTokens, opts: FindPublisherClaimOptions = {}): string | null {
+export function findPublisherClaim(text: unknown, tokens: PublisherTokens): string | null {
   if (typeof text !== 'string' || text === '') return null;
   const norm = normalizeWhitespace(text);
   const lower = norm.toLowerCase();
-  if (opts.kit === true) {
-    for (const phrase of GENERIC_PUBLISHER_PHRASES) {
-      if (phrase === 'according to') continue;
-      if (new RegExp(`\\b${phrase}\\b`, 'i').test(norm)) return phrase;
-    }
-    const afterAccordingTo = publisherAfterAccordingTo(norm, tokens);
-    if (afterAccordingTo !== null) return afterAccordingTo;
-    for (const phrase of [...tokens.phrases, ...tokens.namePhrases]) {
-      if (lower.includes(phrase)) return phrase;
-    }
-    for (const acr of tokens.nameAcronyms) {
-      if (new RegExp(`\\b${escapeRegExp(acr)}\\b`, 'i').test(norm)) return acr;
-    }
-    return null;
-  }
   for (const phrase of GENERIC_PUBLISHER_PHRASES) {
+    if (phrase === 'according to') continue;
     if (new RegExp(`\\b${phrase}\\b`, 'i').test(norm)) return phrase;
   }
-  for (const phrase of tokens.phrases) {
+  const afterAccordingTo = publisherAfterAccordingTo(norm, tokens);
+  if (afterAccordingTo !== null) return afterAccordingTo;
+  for (const phrase of [...tokens.phrases, ...tokens.namePhrases]) {
     if (lower.includes(phrase)) return phrase;
   }
-  for (const single of tokens.singles) {
-    if (new RegExp(`\\b${escapeRegExp(single)}\\b`, 'i').test(norm)) return single;
-  }
-  for (const acr of tokens.acronyms) {
+  for (const acr of tokens.nameAcronyms) {
     if (new RegExp(`\\b${escapeRegExp(acr)}\\b`, 'i').test(norm)) return acr;
   }
   return null;

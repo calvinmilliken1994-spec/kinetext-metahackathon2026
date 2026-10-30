@@ -22,9 +22,10 @@
 //     focusQuote regions). R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9
 //     (2-4-variable formula) need model judgement or the component spec and are NOT machine
 //     checked here; the pass message says so.
-//   - A-09 publisher tokens come from each source's own title/attribution metadata (publisher
-//     phrase, its distinctive single words, its all-caps acronyms) plus the frozen generic phrase
-//     list; quotes are verbatim source text and exempt.
+//   - A-09 publisher tokens come from each source's own title/attribution metadata and match with
+//     the SAME narrowed rule the kit policy sweep and OV-03 use (2026-10-30: full publisher name
+//     phrases + name acronyms; "according to" only when it names the publisher; "as stated by" /
+//     "official" / "endorsed" always); quotes are verbatim source text and exempt.
 //   - A-10 (N-01): digits in AI text must occur as whole numeric tokens in the cited page (entry
 //     fields) or any provided page (global fields). A-11 checks the frozen markup ban; quote
 //     fields are exempt (verbatim source characters, formula/equation spans included).
@@ -68,6 +69,9 @@ const analysisV2SchemaValidate: ValidateFunction = ajv.compile(sourceAnalysisV2G
 
 const QUOTE_MAX = KIT_LIMITS.common.quote.max;
 const A = KIT_LIMITS.analysis;
+
+/** Generic phrases that are a claim without any publisher named ("according to" needs a name). */
+const ENDORSEMENT_PHRASES = GENERIC_PUBLISHER_PHRASES.filter(p => p !== 'according to');
 
 export interface AnalysisV2ValidateOptions { revision?: number; artifactId?: string }
 
@@ -406,11 +410,11 @@ export function validateAnalysisV2(analysis: unknown, sources: SourceDocument[],
       return hits.length === 0
         ? {
             passed: true,
-            message: `no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (${GENERIC_PUBLISHER_PHRASES.join(' | ')}); quotes are verbatim source text and exempt (no-publisher-claim)`,
+            message: `no generated field names a publisher (full name or name acronym from the sources' own title/attribution metadata); "according to" counts only when it names the publisher, and "${ENDORSEMENT_PHRASES.join('" / "')}" wording is always a claim; quotes are verbatim source text and exempt (no-publisher-claim)`,
           }
         : {
             passed: false,
-            message: `publisher claim found at ${hits.map(h => `${h.path}: "${truncate(h.text, 60)}" (token "${h.token}")`).join('; ')} (R-SUB-4: never name the publisher in generated strings, and never use "${GENERIC_PUBLISHER_PHRASES.join('" / "')}" wording)`,
+            message: `publisher claim found at ${hits.map(h => `${h.path}: "${truncate(h.text, 60)}" (token "${h.token}")`).join('; ')} (R-SUB-4: never name the publisher in generated strings — not by full name, not by acronym, not via "according to"; never use "${ENDORSEMENT_PHRASES.join('" / "')}" wording)`,
             path: hits[0].path,
             affected: hits.map(h => h.path),
           };

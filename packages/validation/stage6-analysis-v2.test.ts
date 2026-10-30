@@ -135,7 +135,7 @@ test('A-08: duplicate families and multiple premiums fail the plan rules', () =>
   assert.ok(failedIds(validateAnalysisV2(c, [dragSource()])).includes('A-08'));
 });
 
-test('A-09: publisher tokens and the frozen generic phrases are rejected', () => {
+test('A-09: publisher names, name acronyms and the frozen generic phrases are rejected', () => {
   const a = clone(usableAnalysis());
   a.overview.headline = 'According to NASA, drag rises with speed squared and density.';
   const report = expectFailures(validateAnalysisV2(a, [dragSource()]), ['A-09'], 'schema.analysis-v2');
@@ -144,7 +144,7 @@ test('A-09: publisher tokens and the frozen generic phrases are rejected', () =>
   b.pageCoverage = 'The official page teaches the drag equation and its factors.';
   assert.ok(failedIds(validateAnalysisV2(b, [dragSource()])).includes('A-09'));
   const c = clone(usableAnalysis());
-  c.overview.keyPoints[0]!.point = 'The Glenn research story collects the drag factors in one relation.';
+  c.overview.keyPoints[0]!.point = 'The NASA Glenn Research Center story collects the drag factors in one relation.';
   assert.ok(failedIds(validateAnalysisV2(c, [dragSource()])).includes('A-09'));
 });
 
@@ -196,7 +196,7 @@ test('A-09 publisher tokens: no false rejects on ordinary text for ANY real sour
   const ids = listSourceIds();
   assert.ok(ids.length >= 20, `expected the real source corpus, got ${ids.length}`);
   const all = mergePublisherTokens(ids.map(id => publisherTokensOf(loadSourceMeta(id))));
-  assert.ok(all.acronyms.has('nasa'), 'the NASA acronym must be a token of the GRC sources');
+  assert.ok(all.nameAcronyms.has('nasa'), 'the NASA acronym must be a token of the GRC sources');
   for (const text of NEUTRAL_TEXTS) {
     assert.equal(findPublisherClaim(text, all), null, `false reject on ordinary text: "${text}"`);
   }
@@ -214,9 +214,13 @@ test('A-09 publisher tokens: real publisher claims are caught', () => {
   const drag = byId.get('nasa-grc-drag-equation');
   assert.ok(drag !== undefined);
   assert.notEqual(findPublisherClaim('NASA states that drag rises with speed.', drag), null);
-  assert.notEqual(findPublisherClaim('The Glenn center explains drag.', drag), null);
-  assert.notEqual(findPublisherClaim('According to the page, drag rises.', drag), null); // frozen generic phrase
+  assert.notEqual(findPublisherClaim('According to NASA, drag rises.', drag), null);
+  assert.notEqual(findPublisherClaim('The NASA Glenn Research Center explains drag.', drag), null);
   assert.notEqual(findPublisherClaim('This is endorsed by the authors.', drag), null);
+  // Narrowed matching (2026-10-30, same rule as the kit sweep): an ordinary single word of the
+  // publisher name and a bare "according to" are NOT claims.
+  assert.equal(findPublisherClaim('The Glenn center explains drag.', drag), null);
+  assert.equal(findPublisherClaim('According to the page, drag rises.', drag), null);
   const nara = byId.get('nara-constitution');
   assert.ok(nara !== undefined);
   assert.notEqual(findPublisherClaim('The National Archives and Records Administration presents this document.', nara), null);

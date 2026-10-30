@@ -1,9 +1,10 @@
-// Stage 6 lead rulings 3, 4 (kit publisher sweep) and the compare page-wording rule.
-// Ruling 3: in KIT display fields "according to" is a publisher claim only when a publisher name or
-//           acronym of the source follows within ~4 words. Overview / analysis (A-09, OV-03) unchanged.
-// Ruling 4: kit publisher matching uses acronyms (NASA, NOAA, NARA, CFPB, NRC, USGS, NIJ) and the FULL
-//           publisher name, never an ordinary word inside the name ("ocean" in "NOAA Office of Ocean
-//           Exploration"). A-09 / OV-03 keep the old token builder (stored analysis verdicts).
+// Stage 6 lead rulings 3, 4 (publisher sweep) and the compare page-wording rule.
+// Ruling 3: "according to" is a publisher claim only when a publisher name or acronym of the source
+//           follows within ~4 words. Since 2026-10-30 this applies to EVERY publisher sweep — kit
+//           display fields, overview OV-03 and analysis A-09 (see stage6-a09-narrowed.test.ts).
+// Ruling 4: publisher matching uses name acronyms (NASA, NOAA, NARA, CFPB, NRC, USGS, NIJ) and the
+//           FULL publisher name, never an ordinary word inside the name ("ocean" in "NOAA Office of
+//           Ocean Exploration"). The old single-word / loose-acronym builder is gone.
 // Compare: a kebab-case / underscore name is "id-like" only if it does NOT occur in the cited source text.
 // Run: node --test packages/validation/stage6-rulings-publisher-compare.test.ts
 import test from 'node:test';
@@ -48,19 +49,22 @@ test('ruling 3: the other frozen generic phrases ("as stated by", "official", "e
   assert.deepEqual(hits('quiz', 'As stated by the author, drag rises', 'nasa-grc-drag-equation'), ['/cards/0/stem']);
 });
 
-test('ruling 3: default (A-09 / OV-03) mode keeps "according to" as a bare generic phrase', () => {
+test('ruling 3 (extended 2026-10-30): A-09 / OV-03 share the narrowed "according to" rule', () => {
   const tokens = publisherTokensOf(dragSource());
-  assert.equal(findPublisherClaim('What does it include according to the definition', tokens), 'according to');
-  assert.equal(findPublisherClaim('What does it include according to the definition', tokens, { kit: false }), 'according to');
-  assert.equal(findPublisherClaim('What does it include according to the definition', tokens, { kit: true }), null);
-  // The overview gate (OV-03) still rejects it and so does analysis A-09.
+  // A bare "according to" no longer matches anywhere — kit sweep, OV-03 and A-09 agree.
+  assert.equal(findPublisherClaim('What does it include according to the definition', tokens), null);
+  assert.notEqual(findPublisherClaim('What does it include according to NASA', tokens), null);
+  // The overview gate (OV-03) and analysis A-09 follow the same rule.
   const ov = clone(usableAnalysis().overview);
   ov.headline = 'Drag rises with speed according to the definition';
   const ovReport = validateKitComponent('overview-v1', ov, [dragSource()]);
-  assert.equal(checkOf(ovReport, 'OV-03').passed, false);
+  assert.equal(checkOf(ovReport, 'OV-03').passed, true);
   const an = clone(usableAnalysis());
   an.overview.headline = 'Drag rises with speed according to the definition';
-  assert.equal(checkOf(validateAnalysisV2(an, [dragSource()]), 'A-09').passed, false);
+  assert.equal(checkOf(validateAnalysisV2(an, [dragSource()]), 'A-09').passed, true);
+  const named = clone(usableAnalysis());
+  named.overview.headline = 'Drag rises with speed according to NASA';
+  assert.equal(checkOf(validateAnalysisV2(named, [dragSource()]), 'A-09').passed, false);
 });
 
 /* ------------------------------------------------------------------ */
@@ -71,10 +75,10 @@ test('ruling 4: the real NOAA stem "…primary production where sunlight is abse
   const stem = 'What kind of energy runs primary production where sunlight is absent in the deep ocean';
   assert.deepEqual(hits('quiz', stem, 'noaa-oceanexplorer-fueling-life-on-earth'), []);
   assert.deepEqual(hits('quiz', 'Which exploration method samples the ocean floor?', 'noaa-oceanexplorer-fueling-life-on-earth'), []);
-  // …while the old builder (A-09 / OV-03) still flags the ordinary word, so stored analysis verdicts are untouched.
+  // Since 2026-10-30 every sweep (kit, OV-03, A-09) uses the narrowed matcher: the ordinary word
+  // "ocean" of the publisher name no longer flags anything.
   const tokens = publisherTokensOf(loadSource('noaa-oceanexplorer-fueling-life-on-earth'));
-  assert.equal(findPublisherClaim(stem, tokens), 'ocean');
-  assert.equal(findPublisherClaim(stem, tokens, { kit: true }), null);
+  assert.equal(findPublisherClaim(stem, tokens), null);
 });
 
 test('ruling 4: ordinary words inside other publisher names no longer trigger the kit sweep', () => {
@@ -96,7 +100,7 @@ test('ruling 4: acronyms derived from the publisher string and the full names ar
   ];
   for (const [name, sourceId, stem] of cases) {
     const tokens = publisherTokensOf(loadSource(sourceId));
-    assert.equal(findPublisherClaim(stem, tokens, { kit: true })?.toLowerCase(), name.toLowerCase(), `${name} acronym`);
+    assert.equal(findPublisherClaim(stem, tokens)?.toLowerCase(), name.toLowerCase(), `${name} acronym`);
     assert.deepEqual(hits('quiz', stem, sourceId), ['/cards/0/stem'], `${name} stem`);
   }
   // Full names, with and without the leading "U.S." / acronym.
@@ -107,10 +111,10 @@ test('ruling 4: acronyms derived from the publisher string and the full names ar
   assert.deepEqual(hits('quiz', 'The Consumer Financial Protection Bureau explains what?', 'cfpb-compound-interest'), ['/cards/0/stem']);
 });
 
-test('ruling 4: metadata junk acronyms (FAQ, URL) never become kit publisher tokens', () => {
+test('ruling 4: metadata junk acronyms (FAQ, URL) never become publisher tokens', () => {
   const tokens = mergePublisherTokens([publisherTokensOf(loadSource('noaa-oceanexplorer-fueling-life-on-earth'))]);
-  assert.equal(findPublisherClaim('Which FAQ item is easiest?', tokens, { kit: true }), null);
-  assert.equal(findPublisherClaim('A URL names a page', tokens, { kit: true }), null);
+  assert.equal(findPublisherClaim('Which FAQ item is easiest?', tokens), null);
+  assert.equal(findPublisherClaim('A URL names a page', tokens), null);
 });
 
 test('rulings 3-4: the publisher sweep still fails a bare publisher in every real source (kit mode never goes silent)', () => {

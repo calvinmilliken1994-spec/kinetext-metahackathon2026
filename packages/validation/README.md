@@ -225,13 +225,16 @@ the quote's number tokens to the variables for one that reproduces
    (repair path) rather than the check weakened. `fixtures/stage6.ts`
    `repairedOverviewGen()` shows a passing rewrite; the gap is pinned in
    `stage6-kit-golden.test.ts`.
-8. A-09 publisher tokens: publisher phrase = first comma segment after
-   "Source material:" and of the post-dash title part; distinctive single
-   words only from those segments (COMMON_PUBLISHER_WORDS stoplist); all-caps
-   acronyms from the attribution (NASA, NIJ, ...); plus the frozen generic
-   phrases. Non-conforming attributions (teacher-pasted) match as full
-   phrases only. Tested against every real `data/sources` metadata entry with
-   a neutral-text battery (no false rejects).
+8. A-09 / OV-03 / kit publisher sweep (one rule since 2026-10-30): a claim is
+   the full publisher name phrase or a name acronym (all-caps words of the
+   publisher name, or the initials of its content words: NASA, NOAA, NARA,
+   CFPB, NRC, USGS, NIJ, NHGRI), plus the frozen endorsement phrases
+   ("as stated by", "official", "endorsed"); "according to" counts only when a
+   publisher name or acronym follows within ~4 words. Ordinary single words of
+   the attribution and words of the page title never become tokens (they caused
+   false alarms such as "census", "PCR", "nuclear"; replay in
+   `docs/evidence/stage-7/batch-2026-10-30/README.md`). Known limit: a domain
+   name such as "USA.gov" yields no name token.
 
 ## Stage 6 tests
 
