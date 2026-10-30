@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261030044914-ec86012e",
+  "analysisRef": "job-20261030044914-ec86012e/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030044914-ec86012e:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Right triangle ratios define sine cosine tangent as functions of angle",
+    "sources": [
+      {
+        "id": "nasa-grc-sine-cosine-tangent",
+        "title": "Sine-Cosine-Tangent — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/sine-cosine-tangent/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "3f90979d8b1710fa0dbffead40968b37333b0e8dbb45f50696a604f272e181b9"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "77c2503f9bb44b729043b2c634015a08",
+      "runId": "job-20261030044914-ec86012e",
+      "promptVersion": "s6-v4",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-30T04:49:55.314Z"
+    },
+    "seed": 3328915624,
+    "headline": "Right triangle ratios define sine cosine tangent as functions of angle",
+    "keyPoints": [
+      {
+        "id": "triangle-angle-sum",
+        "point": "A right triangle contains one angle equal to 90 degrees and triangle properties show angle sum relation",
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "quote": "A right triangle is a three sided figure with one angle equal to 90 degrees."
+      },
+      {
+        "id": "sine-ratio-definition",
+        "point": "Sine is ratio of opposite side to hypotenuse for right triangle",
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "quote": "We will call the ratio of the opposite side of a right triangle to the hypotenuse the sine and give it the symbol sin."
+      },
+      {
+        "id": "ladder-ratio-function",
+        "point": "Ladder example shows ratio stays same for any right triangle with same angle",
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "quote": "The ratio stays the same for any right triangle with a 75.5 degree angle."
+      },
+      {
+        "id": "cosine-function-relation",
+        "point": "Ratio of adjacent side to hypotenuse is function of angle and varies with angle change",
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "quote": "The ratio of the adjacent side to the hypotenuse is a function of the angle c, so we can write the symbol as cos(c) = value."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "hypotenuse",
+        "term": "hypotenuse",
+        "gloss": "longest side opposite right angle across triangle",
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "quote": "We define the side of the triangle opposite from the right angle to be the hypotenuse."
+      },
+      {
+        "id": "sine-term",
+        "term": "sine",
+        "gloss": "ratio of opposite side to hypotenuse depending on angle",
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "quote": "We will call the ratio of the opposite side of a right triangle to the hypotenuse the sine and give it the symbol sin."
+      },
+      {
+        "id": "cosine-term",
+        "term": "cosine",
+        "gloss": "ratio of adjacent side to hypotenuse varying with angle",
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "quote": "The ratio of the adjacent side of a right triangle to the hypotenuse is called the cosine and given the symbol cos."
+      },
+      {
+        "id": "tangent-term",
+        "term": "tangent",
+        "gloss": "ratio of opposite side to adjacent side for angle",
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "quote": "Finally, the ratio of the opposite side to the adjacent side is called the tangent and given the symbol tan."
+      },
+      {
+        "id": "function-term",
+        "term": "function",
+        "gloss": "relationship where ratio value depends uniquely on angle",
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "quote": "The ratio of the adjacent side to the hypotenuse is a function of the angle c, so we can write the symbol as cos(c) = value."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261030044914-ec86012e:sequence-v1:r3",
+      "status": "failed",
+      "reason": "SEQ-03: steps[2] (pythagorean-formula) starts at offset 3760 of source \"nasa-grc-sine-cosine-tangent\", not after steps[1] (offset 3826) — page-order requires strictly ascending quote start offsets in array order",
+      "revision": 3
+    },
+    {
+      "componentId": "formula-explorer-v1",
+      "specId": "job-20261030044914-ec86012e:formula-explorer-v1:r3",
+      "status": "failed",
+      "reason": "FE-05: sourceExample.resultNumber 0.967 does not appear as a number in the sourceExample quote (the result must be stated in the quoted passage) (expected a single quotable passage that explicitly binds every variable — \"x = 6\", \"x is 6\" or \"6 for x\" — and states the result, matching our evaluation at thos",
+      "revision": 3
+    }
+  ]
+}

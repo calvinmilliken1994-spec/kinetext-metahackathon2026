@@ -1,0 +1,117 @@
+{
+  "jobId": "job-20261030044333-6d5ec141",
+  "analysisRef": "job-20261030044333-6d5ec141/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030044333-6d5ec141:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How the United States elects a president from candidacy to inauguration",
+    "sources": [
+      {
+        "id": "usagov-presidential-election-process",
+        "title": "Overview of the presidential election process — USA.gov (U.S. General Services Administration)",
+        "locator": "https://www.usa.gov/presidential-election-process",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: USA.gov, 'Overview of the presidential election process'. USA.gov is an official website of the U.S. General Services Administration; per the GSA website policies, 'Most material on our site is free of copyright and may be copied and distributed without permission. Works produced by federal government employees in the course of their employment are generally not protected by copyright and are in the public domain in the U.S.' The U.S. General Services Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "dab5e0bb2bd4fbb8ad6e9d4e8554cef8d4d363028ced8cd2650173905c0efc2a"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18b1f-4e43-7776-a3f3-104ae7038e43",
+      "runId": "job-20261030044333-6d5ec141",
+      "promptVersion": "s6-v4",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-30T04:44:07.269Z"
+    },
+    "seed": 2722890183,
+    "headline": "How the United States elects a president from candidacy to inauguration",
+    "keyPoints": [
+      {
+        "id": "election-timing",
+        "point": "Election for president happens every four years in November",
+        "quote": "An election for president of the United States happens every four years on the first Tuesday after the first Monday in November.",
+        "sourceId": "usagov-presidential-election-process"
+      },
+      {
+        "id": "cycle-duration",
+        "point": "Process of electing a president takes almost two years",
+        "quote": "The process of electing a president takes almost two years.",
+        "sourceId": "usagov-presidential-election-process"
+      },
+      {
+        "id": "primaries-caucuses",
+        "point": "States and parties hold presidential primaries and caucuses",
+        "quote": "States and parties hold presidential primaries and caucuses.",
+        "sourceId": "usagov-presidential-election-process"
+      },
+      {
+        "id": "electoral-vote-count",
+        "point": "Electors cast votes for president in Electoral College",
+        "quote": "Electors cast their votes for president in the Electoral College.",
+        "sourceId": "usagov-presidential-election-process"
+      },
+      {
+        "id": "inauguration-timing",
+        "point": "Congress counts electoral votes before Inauguration Day",
+        "quote": "Congress counts the electoral votes.",
+        "sourceId": "usagov-presidential-election-process"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "Commission where Candidates register to run for president",
+        "id": "federal-commission",
+        "quote": "Candidates register with the Federal Election Commission to run for president.",
+        "sourceId": "usagov-presidential-election-process",
+        "term": "Federal Election Commission"
+      },
+      {
+        "gloss": "States and parties hold contests for presidential choice",
+        "id": "primaries",
+        "quote": "States and parties hold presidential primaries and caucuses.",
+        "sourceId": "usagov-presidential-election-process",
+        "term": "primaries"
+      },
+      {
+        "gloss": "Group where Electors cast votes for president",
+        "id": "electoral-college",
+        "quote": "Electors cast their votes for president in the Electoral College.",
+        "sourceId": "usagov-presidential-election-process",
+        "term": "Electoral College"
+      },
+      {
+        "gloss": "Person that presidential candidate announces during convention",
+        "id": "running-mate",
+        "quote": "Just before or during the convention, the presidential candidate announces their vice presidential running mate.",
+        "sourceId": "usagov-presidential-election-process",
+        "term": "vice presidential running mate"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261030044333-6d5ec141:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261030044333-6d5ec141:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

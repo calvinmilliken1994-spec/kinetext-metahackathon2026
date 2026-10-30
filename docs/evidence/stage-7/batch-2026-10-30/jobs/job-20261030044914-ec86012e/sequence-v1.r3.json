@@ -1,0 +1,230 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "Tracing the right triangle ladder check using the Pythagorean relation",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follows page order from setup through calculation to result",
+    "steps": [
+      {
+        "id": "pythagorean-theorem-intro",
+        "label": "Pythagorean Theorem",
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "quote": "You can check this distance by using the Pythagorean Theorem that relates the sides of a right triangle:",
+        "orderHint": "Notice how rearrangement leads to substitution"
+      },
+      {
+        "id": "final-height",
+        "label": "o = 7.745",
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "quote": "o = 7.745",
+        "orderHint": ""
+      },
+      {
+        "id": "pythagorean-formula",
+        "label": "h^2 = a^2 + o^2",
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "quote": "h^2 = a^2 + o^2",
+        "orderHint": ""
+      },
+      {
+        "id": "rearranged-formula",
+        "label": "o^2 = h^2 – a^2",
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "quote": "o^2 = h^2 – a^2",
+        "orderHint": ""
+      },
+      {
+        "id": "substitute-values",
+        "label": "o^2 = 8^2 – 2^2",
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "quote": "o^2 = 8^2 – 2^2",
+        "orderHint": ""
+      },
+      {
+        "id": "compute-squares",
+        "label": "o^2 = 64 – 4 = 60",
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "quote": "o^2 = 64 – 4 = 60",
+        "orderHint": ""
+      },
+      {
+        "id": "ladder-right-triangle",
+        "label": "right triangle",
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "quote": "Later, if we know the value of an angle in a right triangle, the tables tells us the ratio of the sides of the triangle.",
+        "orderHint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261030044914-ec86012e:sequence-v1:r3",
+    "revision": 3,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 7 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step label occurs in its own quote after normalisation (labels-in-quotes)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": false,
+        "message": "steps[2] (pythagorean-formula) starts at offset 3760 of source \"nasa-grc-sine-cosine-tangent\", not after steps[1] (offset 3826) — page-order requires strictly ascending quote start offsets in array order",
+        "path": "/steps/2/quote",
+        "affected": [
+          "/steps/2/quote",
+          "/steps/2/sourceId"
+        ]
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 7 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "sequence-v1: no weakening — every one of the 1 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "70f0260ae14f47ae9ece9f44bb5880ba",
+    "usage": {
+      "promptTokens": 5240,
+      "completionTokens": 14106,
+      "reasoningTokens": 13671,
+      "cachedTokens": 0
+    },
+    "latencyMs": 56356,
+    "estCostUSD": 0.0665005,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030044914-ec86012e:sequence-v1:r3",
+    "componentId": "sequence-v1",
+    "title": "Tracing the right triangle ladder check using the Pythagorean relation",
+    "sources": [
+      {
+        "id": "nasa-grc-sine-cosine-tangent",
+        "title": "Sine-Cosine-Tangent — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/sine-cosine-tangent/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "3f90979d8b1710fa0dbffead40968b37333b0e8dbb45f50696a604f272e181b9"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "70f0260ae14f47ae9ece9f44bb5880ba",
+      "runId": "job-20261030044914-ec86012e",
+      "promptVersion": "s6-v4",
+      "revision": 3,
+      "repairOf": 2,
+      "generatedAt": "2026-10-30T04:53:20.780Z"
+    },
+    "seed": 743958254,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follows page order from setup through calculation to result",
+    "steps": [
+      {
+        "id": "pythagorean-theorem-intro",
+        "label": "Pythagorean Theorem",
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "quote": "You can check this distance by using the Pythagorean Theorem that relates the sides of a right triangle:",
+        "orderHint": "Notice how rearrangement leads to substitution"
+      },
+      {
+        "id": "final-height",
+        "label": "o = 7.745",
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "quote": "o = 7.745",
+        "orderHint": ""
+      },
+      {
+        "id": "pythagorean-formula",
+        "label": "h^2 = a^2 + o^2",
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "quote": "h^2 = a^2 + o^2",
+        "orderHint": ""
+      },
+      {
+        "id": "rearranged-formula",
+        "label": "o^2 = h^2 – a^2",
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "quote": "o^2 = h^2 – a^2",
+        "orderHint": ""
+      },
+      {
+        "id": "substitute-values",
+        "label": "o^2 = 8^2 – 2^2",
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "quote": "o^2 = 8^2 – 2^2",
+        "orderHint": ""
+      },
+      {
+        "id": "compute-squares",
+        "label": "o^2 = 64 – 4 = 60",
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "quote": "o^2 = 64 – 4 = 60",
+        "orderHint": ""
+      },
+      {
+        "id": "ladder-right-triangle",
+        "label": "right triangle",
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "quote": "Later, if we know the value of an angle in a right triangle, the tables tells us the ratio of the sides of the triangle.",
+        "orderHint": ""
+      }
+    ]
+  }
+}

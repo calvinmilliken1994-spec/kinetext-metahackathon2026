@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261030044238-bae5788f",
+  "analysisRef": "job-20261030044238-bae5788f/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030044238-bae5788f:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Branches of government roles and checks and balances",
+    "sources": [
+      {
+        "id": "usagov-branches-of-government",
+        "title": "Branches of the U.S. government — USA.gov (U.S. General Services Administration)",
+        "locator": "https://www.usa.gov/branches-of-government",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: USA.gov, 'Branches of the U.S. government'. USA.gov is an official website of the U.S. General Services Administration; per the GSA website policies, 'Most material on our site is free of copyright and may be copied and distributed without permission. Works produced by federal government employees in the course of their employment are generally not protected by copyright and are in the public domain in the U.S.' The U.S. General Services Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "ae307d5c1f332d7d6c2b5d22721b7a7e2d4334785f551008b702cf03e1a9fd41"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18b1e-6603-7538-a950-cbc525174cf9",
+      "runId": "job-20261030044238-bae5788f",
+      "promptVersion": "s6-v4",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-30T04:43:07.747Z"
+    },
+    "seed": 149657412,
+    "headline": "Branches of government roles and checks and balances",
+    "keyPoints": [
+      {
+        "id": "constitution-divides-power",
+        "point": "The Constitution divides federal government power into legislative, judicial, and executive branches.",
+        "quote": "The Constitution of the United States divides the federal government into three branches:",
+        "sourceId": "usagov-branches-of-government"
+      },
+      {
+        "id": "legislative-congress",
+        "point": "The legislative branch is made up of Congress with Senate and House support offices.",
+        "quote": "The legislative branch is made up of Congress:",
+        "sourceId": "usagov-branches-of-government"
+      },
+      {
+        "id": "judicial-interpreting-laws",
+        "point": "Judicial work includes Interpreting the meaning of laws and deciding if laws violate the Constitution.",
+        "quote": "Interpreting the meaning of laws",
+        "sourceId": "usagov-branches-of-government"
+      },
+      {
+        "id": "president-veto-checks",
+        "point": "The president can veto legislation created by Congress as part of checks and balances.",
+        "quote": "The president can veto legislation created by Congress.",
+        "sourceId": "usagov-branches-of-government"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "elected body that makes up the legislative branch",
+        "id": "congress",
+        "quote": "The legislative branch is made up of Congress:",
+        "sourceId": "usagov-branches-of-government",
+        "term": "Congress"
+      },
+      {
+        "gloss": "highest federal court that evaluates laws for constitutionality",
+        "id": "supreme-court",
+        "quote": "The judicial branch includes the Supreme Court and other federal courts.",
+        "sourceId": "usagov-branches-of-government",
+        "term": "Supreme Court"
+      },
+      {
+        "gloss": "presidential rejection of legislation created by Congress",
+        "id": "veto",
+        "quote": "The president can veto legislation created by Congress.",
+        "sourceId": "usagov-branches-of-government",
+        "term": "veto"
+      },
+      {
+        "gloss": "group of advisors to the president including department heads",
+        "id": "cabinet",
+        "quote": "The cabinet members serve as advisors to the president.",
+        "sourceId": "usagov-branches-of-government",
+        "term": "cabinet"
+      },
+      {
+        "gloss": "system where each branch can respond to actions of other branches",
+        "id": "checks-and-balances",
+        "quote": "The ability of each branch to respond to the actions of the other branches is the system of checks and balances.",
+        "sourceId": "usagov-branches-of-government",
+        "term": "checks and balances"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261030044238-bae5788f:compare-table-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261030044238-bae5788f:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

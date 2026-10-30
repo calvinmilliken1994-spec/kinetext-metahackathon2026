@@ -1,0 +1,217 @@
+{
+  "gen": {
+    "cards": [
+      {
+        "hint": "Think about lab testing with moving air.",
+        "id": "drag-coeff-method",
+        "options": [
+          "using a wind tunnel",
+          "by guessing without testing",
+          "from wing area alone"
+        ],
+        "quote": "Drag coefficients are almost always determined experimentally using a wind tunnel.",
+        "sourceId": "nasa-grc-drag-equation",
+        "stem": "How are drag coefficients usually found for a given shape?"
+      },
+      {
+        "hint": "Focus on speed terms in the opening line.",
+        "id": "drag-velocity-factor",
+        "options": [
+          "the square of the velocity",
+          "the color of the surface",
+          "the cabin noise level"
+        ],
+        "quote": "Drag depends on the density of the air, the square of the velocity",
+        "sourceId": "nasa-grc-drag-equation",
+        "stem": "Which velocity related factor affects drag?"
+      },
+      {
+        "hint": "Recall collecting simple and complex effects.",
+        "id": "drag-effects-single",
+        "options": [
+          "into a single equation",
+          "to ignore shape and friction",
+          "to remove density from drag"
+        ],
+        "quote": "This allows us to collect all the effects, simple and complex, into a single equation.",
+        "sourceId": "nasa-grc-drag-equation",
+        "stem": "What does use of the drag coefficient allow?"
+      },
+      {
+        "hint": "Look for how the area letter is described.",
+        "id": "reference-area-term",
+        "options": [
+          "reference area",
+          "total thrust",
+          "dynamic pressure"
+        ],
+        "quote": "Notice that the area (A) given in the drag equation is given as a reference area.",
+        "sourceId": "nasa-grc-drag-equation",
+        "stem": "What is the area term in the drag equation called?"
+      }
+    ],
+    "schemaVersion": "quiz-cards-v1",
+    "title": "How Drag Works"
+  },
+  "report": {
+    "artifactId": "job-20261030045525-4039fec5:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18b2a-de59-73a2-a6c0-909b0080be62",
+    "usage": {
+      "promptTokens": 2728,
+      "completionTokens": 7060,
+      "reasoningTokens": 6736,
+      "cachedTokens": 0
+    },
+    "latencyMs": 28929,
+    "estCostUSD": 0.033415,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030045525-4039fec5:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "How Drag Works",
+    "sources": [
+      {
+        "id": "nasa-grc-drag-equation",
+        "title": "Drag Equation — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/drag-equation/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "9462a6186d8b00e0dbf2618e4a6701edc9448614e144af1f4bc0b53b59f6ceed"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18b2a-de59-73a2-a6c0-909b0080be62",
+      "runId": "job-20261030045525-4039fec5",
+      "promptVersion": "s6-v4",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-30T04:56:44.967Z"
+    },
+    "seed": 2688092212,
+    "cards": [
+      {
+        "hint": "Think about lab testing with moving air.",
+        "id": "drag-coeff-method",
+        "options": [
+          "using a wind tunnel",
+          "by guessing without testing",
+          "from wing area alone"
+        ],
+        "quote": "Drag coefficients are almost always determined experimentally using a wind tunnel.",
+        "sourceId": "nasa-grc-drag-equation",
+        "stem": "How are drag coefficients usually found for a given shape?"
+      },
+      {
+        "hint": "Focus on speed terms in the opening line.",
+        "id": "drag-velocity-factor",
+        "options": [
+          "the square of the velocity",
+          "the color of the surface",
+          "the cabin noise level"
+        ],
+        "quote": "Drag depends on the density of the air, the square of the velocity",
+        "sourceId": "nasa-grc-drag-equation",
+        "stem": "Which velocity related factor affects drag?"
+      },
+      {
+        "hint": "Recall collecting simple and complex effects.",
+        "id": "drag-effects-single",
+        "options": [
+          "into a single equation",
+          "to ignore shape and friction",
+          "to remove density from drag"
+        ],
+        "quote": "This allows us to collect all the effects, simple and complex, into a single equation.",
+        "sourceId": "nasa-grc-drag-equation",
+        "stem": "What does use of the drag coefficient allow?"
+      },
+      {
+        "hint": "Look for how the area letter is described.",
+        "id": "reference-area-term",
+        "options": [
+          "reference area",
+          "total thrust",
+          "dynamic pressure"
+        ],
+        "quote": "Notice that the area (A) given in the drag equation is given as a reference area.",
+        "sourceId": "nasa-grc-drag-equation",
+        "stem": "What is the area term in the drag equation called?"
+      }
+    ]
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261030045905-bdd4864e",
+  "analysisRef": "job-20261030045905-bdd4864e/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030045905-bdd4864e:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Louisiana Purchase doubled nation and deepened sectional and Native conflicts",
+    "sources": [
+      {
+        "id": "nara-louisiana-purchase-treaty",
+        "title": "Louisiana Purchase Treaty (1803) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/louisiana-purchase-treaty",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Louisiana Purchase Treaty (1803)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "6da19e2b0134ca81169b3c5b0a0461ae48243446219561e760b32cb2ed7cce4b"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18b2d-8f0d-7779-af80-76fb92870dd9",
+      "runId": "job-20261030045905-bdd4864e",
+      "promptVersion": "s6-v4",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-30T04:59:41.289Z"
+    },
+    "seed": 3379373108,
+    "headline": "Louisiana Purchase doubled nation and deepened sectional and Native conflicts",
+    "keyPoints": [
+      {
+        "id": "purchase-scale",
+        "point": "The United States purchased land west of the Mississippi River from France and expanded westward",
+        "quote": "signed on April 30, 1803, the United States purchased 828,000 square miles of land west of the Mississippi River for $15 million.",
+        "sourceId": "nara-louisiana-purchase-treaty"
+      },
+      {
+        "id": "negotiators-offer",
+        "point": "Negotiators were offered entire territory of Louisiana beyond original authorization and agreed to purchase",
+        "quote": "when they were offered the entire territory of Louisiana",
+        "sourceId": "nara-louisiana-purchase-treaty"
+      },
+      {
+        "id": "slavery-division",
+        "point": "Expansion exposed sectional weaknesses over slavery and required fragile compromises to balance free states and slave states",
+        "quote": "the desire to maintain a balance between \"free states\" and \"slave states\" required a series of fragile compromises",
+        "sourceId": "nara-louisiana-purchase-treaty"
+      },
+      {
+        "id": "native-impact",
+        "point": "Ceded lands populated with American Indians across tribes led to conflict and forced removal to reservations",
+        "quote": "The land ceded in this agreement (and later expansions) was populated with thousands of American Indians across dozens of tribes.",
+        "sourceId": "nara-louisiana-purchase-treaty"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "Louisiana land transaction that expanded the nation westward",
+        "id": "louisiana-purchase",
+        "quote": "In addition, the Louisiana Purchase ignored the potential impact on Native Americans.",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "term": "Louisiana Purchase"
+      },
+      {
+        "gloss": "Treaty portion of the agreement covering cession of territory",
+        "id": "treaty-of-cession",
+        "quote": "is made up of the Treaty of Cession and the two conventions regarding the financial aspects of the transaction.",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "term": "Treaty of Cession"
+      },
+      {
+        "gloss": "Compromise intended to maintain balance between free states and slave states",
+        "id": "missouri-compromise",
+        "quote": "(notably the Missouri Compromise and the Compromise of 1850).",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "term": "Missouri Compromise"
+      },
+      {
+        "gloss": "Native peoples living on ceded lands who faced conflict and removal",
+        "id": "native-americans",
+        "quote": "leading to conflict with Native Americans.",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "term": "Native Americans"
+      },
+      {
+        "gloss": "President who questioned authority to acquire new territory",
+        "id": "thomas-jefferson",
+        "quote": "President Thomas Jefferson was generally a strict interpreter of the Constitution",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "term": "Thomas Jefferson"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261030045905-bdd4864e:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261030045905-bdd4864e:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

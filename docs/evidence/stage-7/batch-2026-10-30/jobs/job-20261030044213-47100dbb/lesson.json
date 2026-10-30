@@ -1,0 +1,111 @@
+{
+  "jobId": "job-20261030044213-47100dbb",
+  "analysisRef": "job-20261030044213-47100dbb/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030044213-47100dbb:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How cosine works as a function of angle in similar triangles",
+    "sources": [
+      {
+        "id": "nasa-grc-idea-of-functions",
+        "title": "Idea of Functions — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/idea-of-functions/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "6fce3423e0f40551beee636574cc686090a85588891583ee35762c32af992108"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18b1e-25a3-7796-a5a7-f0e6b8d45559",
+      "runId": "job-20261030044213-47100dbb",
+      "promptVersion": "s6-v4",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-30T04:42:51.315Z"
+    },
+    "seed": 592327403,
+    "headline": "How cosine works as a function of angle in similar triangles",
+    "keyPoints": [
+      {
+        "id": "function-idea",
+        "point": "A function means variable value depends uniquely on different variable value",
+        "quote": "the value of one variable in a problem depends uniquely on the value of another variable in the problem.",
+        "sourceId": "nasa-grc-idea-of-functions"
+      },
+      {
+        "id": "trig-relations",
+        "point": "Trigonometric functions relate triangle sides and angles",
+        "quote": "The trigonometric functions sine, cosine, and tangent relate the various sides and angles of a triangle.",
+        "sourceId": "nasa-grc-idea-of-functions"
+      },
+      {
+        "id": "black-cosine",
+        "point": "Black triangle cosine is equal to divided side values",
+        "quote": "For the black triangle, the cosine of “b” is equal to x divided by y.",
+        "sourceId": "nasa-grc-idea-of-functions"
+      },
+      {
+        "id": "cosine-depends",
+        "point": "Cosine value depends only on angle value not side length",
+        "quote": "The value of cosine “b” just depends on the value of “b” and not the length of the sides that form “b”.",
+        "sourceId": "nasa-grc-idea-of-functions"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "idea where a quantity depends uniquely on a different quantity",
+        "id": "function",
+        "quote": "An important mathematical concept is the idea of function",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "term": "function"
+      },
+      {
+        "gloss": "ratio of adjacent side to hypotenuse for a given triangle angle",
+        "id": "cosine",
+        "quote": "For the black triangle, the cosine of “b” is equal to x divided by y.",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "term": "cosine"
+      },
+      {
+        "gloss": "trigonometric function relating sides and angles of triangle",
+        "id": "sine",
+        "quote": "The trigonometric functions sine, cosine, and tangent relate the various sides and angles of a triangle.",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "term": "sine"
+      },
+      {
+        "gloss": "longest side length opposite right angle in red triangle",
+        "id": "hypotenuse",
+        "quote": "For the red triangle, the length of the hypotenuse “h” is 2y, twice the hypotenuse of the black triangle.",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "term": "hypotenuse"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261030044213-47100dbb:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261030044213-47100dbb:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

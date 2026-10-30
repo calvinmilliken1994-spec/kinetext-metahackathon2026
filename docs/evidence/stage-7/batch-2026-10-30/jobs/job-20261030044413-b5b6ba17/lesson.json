@@ -1,0 +1,111 @@
+{
+  "jobId": "job-20261030044413-b5b6ba17",
+  "analysisRef": "job-20261030044413-b5b6ba17/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030044413-b5b6ba17:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Copying small DNA segments for lab study through repeated heating and building",
+    "sources": [
+      {
+        "id": "nhgri-pcr-fact-sheet",
+        "title": "Polymerase Chain Reaction (PCR) Fact Sheet — National Human Genome Research Institute, genome.gov",
+        "locator": "https://www.genome.gov/about-genomics/fact-sheets/Polymerase-Chain-Reaction-Fact-Sheet",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Human Genome Research Institute (NHGRI), genome.gov, 'Polymerase Chain Reaction (PCR) Fact Sheet'. Per the NHGRI Copyright Policy, 'Text, graphics, videos, illustrations and other information on National Human Genome Research Institute (NHGRI) websites are in the public domain, unless otherwise indicated'. Courtesy: National Human Genome Research Institute. The National Human Genome Research Institute has not reviewed, approved or endorsed this activity.",
+        "sha256": "d4a11c85387eeb3080dfdf528b93202d09a5e14654d7b3cb2d92ac557369748b"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18b20-8b98-7742-85bd-6ac1bce87e5a",
+      "runId": "job-20261030044413-b5b6ba17",
+      "promptVersion": "s6-v4",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-30T04:45:28.479Z"
+    },
+    "seed": 3838674164,
+    "headline": "Copying small DNA segments for lab study through repeated heating and building",
+    "keyPoints": [
+      {
+        "id": "pcr-purpose-material",
+        "point": "This method makes small segments of DNA to provide material for molecular and genetic analyses",
+        "quote": "Because significant amounts of a sample of DNA are necessary for molecular and genetic analyses",
+        "sourceId": "nhgri-pcr-fact-sheet"
+      },
+      {
+        "id": "mapping-techniques-use",
+        "point": "Amplified DNA supports mapping techniques used in laboratory work and large projects",
+        "quote": "For example, most mapping techniques in the Human Genome Project (HGP) relied on PCR.",
+        "sourceId": "nhgri-pcr-fact-sheet"
+      },
+      {
+        "id": "heating-denatures-sample",
+        "point": "A sample is heated so DNA denatures and separates into pieces for copying",
+        "quote": "To amplify a segment of DNA using PCR, the sample is first heated so the DNA denatures, or separates into two pieces of single-stranded DNA.",
+        "sourceId": "nhgri-pcr-fact-sheet"
+      },
+      {
+        "id": "cycling-process-hours",
+        "point": "The cycling process is automated and completes synthesis work in a few hours",
+        "quote": "The entire cycling process of PCR is automated and can be completed in just a few hours.",
+        "sourceId": "nhgri-pcr-fact-sheet"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "Small segments of genetic material copied by the technique",
+        "id": "dna",
+        "quote": "Polymerase chain reaction (PCR) is a technique used to \"amplify\" small segments of DNA.",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "term": "DNA"
+      },
+      {
+        "gloss": "Method that produces amplified DNA for laboratory procedures",
+        "id": "pcr",
+        "quote": "Once amplified, the DNA produced by PCR can be used in many different laboratory procedures.",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "term": "laboratory procedures"
+      },
+      {
+        "gloss": "Enzyme that builds new strands using original strands as templates",
+        "id": "taq-polymerase",
+        "quote": "Next, an enzyme called \"Taq polymerase\" synthesizes - builds - two new strands of DNA, using the original strands as templates.",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "term": "Taq polymerase"
+      },
+      {
+        "gloss": "Machine programmed to alter temperature to direct reaction steps",
+        "id": "thermocycler",
+        "quote": "It is directed by a machine called a thermocycler, which is programmed to alter the temperature of the reaction",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "term": "thermocycler"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261030044413-b5b6ba17:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261030044413-b5b6ba17:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

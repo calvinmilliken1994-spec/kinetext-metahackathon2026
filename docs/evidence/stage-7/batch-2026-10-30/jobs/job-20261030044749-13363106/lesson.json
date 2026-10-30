@@ -1,0 +1,111 @@
+{
+  "jobId": "job-20261030044749-13363106",
+  "analysisRef": "job-20261030044749-13363106/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030044749-13363106:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Copying small DNA segments for lab analysis",
+    "sources": [
+      {
+        "id": "nhgri-pcr-fact-sheet",
+        "title": "Polymerase Chain Reaction (PCR) Fact Sheet — National Human Genome Research Institute, genome.gov",
+        "locator": "https://www.genome.gov/about-genomics/fact-sheets/Polymerase-Chain-Reaction-Fact-Sheet",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Human Genome Research Institute (NHGRI), genome.gov, 'Polymerase Chain Reaction (PCR) Fact Sheet'. Per the NHGRI Copyright Policy, 'Text, graphics, videos, illustrations and other information on National Human Genome Research Institute (NHGRI) websites are in the public domain, unless otherwise indicated'. Courtesy: National Human Genome Research Institute. The National Human Genome Research Institute has not reviewed, approved or endorsed this activity.",
+        "sha256": "d4a11c85387eeb3080dfdf528b93202d09a5e14654d7b3cb2d92ac557369748b"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18b23-8614-71fc-adf4-76a33942fef2",
+      "runId": "job-20261030044749-13363106",
+      "promptVersion": "s6-v4",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-30T04:48:43.628Z"
+    },
+    "seed": 255165128,
+    "headline": "Copying small DNA segments for lab analysis",
+    "keyPoints": [
+      {
+        "id": "pcr-amplifies-dna",
+        "point": "The technique copies small segments for study",
+        "quote": "Polymerase chain reaction (PCR) is a technique used to \"amplify\" small segments of DNA.",
+        "sourceId": "nhgri-pcr-fact-sheet"
+      },
+      {
+        "id": "isolated-dna-needs-pcr",
+        "point": "Studies of isolated pieces are nearly impossible without amplification",
+        "quote": "studies of isolated pieces of DNA are nearly impossible without PCR amplification.",
+        "sourceId": "nhgri-pcr-fact-sheet"
+      },
+      {
+        "id": "pcr-lab-clinical-uses",
+        "point": "The method supports fingerprinting, detection and diagnosis of genetic disorders",
+        "quote": "including DNA fingerprinting, detection of bacteria or viruses (particularly AIDS), and diagnosis of genetic disorders.",
+        "sourceId": "nhgri-pcr-fact-sheet"
+      },
+      {
+        "id": "repeated-cycles-billion-copies",
+        "point": "repeated denaturing and synthesis cycles yield many billion exact copies of original DNA",
+        "quote": "is repeated as many as 30 or 40 times, leading to more than one billion exact copies of the original DNA segment.",
+        "sourceId": "nhgri-pcr-fact-sheet"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "small segments of genetic material copied by the technique",
+        "id": "dna",
+        "quote": "Polymerase chain reaction (PCR) is a technique used to \"amplify\" small segments of DNA.",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "term": "DNA"
+      },
+      {
+        "gloss": "enzyme that builds new DNA strands using original templates",
+        "id": "taq-polymerase",
+        "quote": "Next, an enzyme called \"Taq polymerase\" synthesizes - builds - two new strands of DNA, using the original strands as templates.",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "term": "Taq polymerase"
+      },
+      {
+        "gloss": "separates double-stranded DNA into single-stranded pieces when heated",
+        "id": "denatures",
+        "quote": "To amplify a segment of DNA using PCR, the sample is first heated so the DNA denatures, or separates into two pieces of single-stranded DNA.",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "term": "denatures"
+      },
+      {
+        "gloss": "machine programmed to alter temperature for denaturing and synthesis",
+        "id": "thermocycler",
+        "quote": "It is directed by a machine called a thermocycler, which is programmed to alter the temperature of the reaction every few minutes",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "term": "thermocycler"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261030044749-13363106:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261030044749-13363106:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

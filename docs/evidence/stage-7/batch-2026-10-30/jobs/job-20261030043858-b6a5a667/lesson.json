@@ -1,0 +1,117 @@
+{
+  "jobId": "job-20261030043858-b6a5a667",
+  "analysisRef": "job-20261030043858-b6a5a667/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030043858-b6a5a667:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Legislative, judicial, and executive branches divide power with checks",
+    "sources": [
+      {
+        "id": "usagov-branches-of-government",
+        "title": "Branches of the U.S. government — USA.gov (U.S. General Services Administration)",
+        "locator": "https://www.usa.gov/branches-of-government",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: USA.gov, 'Branches of the U.S. government'. USA.gov is an official website of the U.S. General Services Administration; per the GSA website policies, 'Most material on our site is free of copyright and may be copied and distributed without permission. Works produced by federal government employees in the course of their employment are generally not protected by copyright and are in the public domain in the U.S.' The U.S. General Services Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "ae307d5c1f332d7d6c2b5d22721b7a7e2d4334785f551008b702cf03e1a9fd41"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18b1b-0e5d-740c-9537-5eaa3096ded0",
+      "runId": "job-20261030043858-b6a5a667",
+      "promptVersion": "s6-v4",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-30T04:39:28.727Z"
+    },
+    "seed": 3110231653,
+    "headline": "Legislative, judicial, and executive branches divide power with checks",
+    "keyPoints": [
+      {
+        "id": "division-into-three-branches",
+        "point": "The Constitution divides the federal government into three branches to prevent concentrated power",
+        "quote": "The Constitution of the United States divides the federal government into three branches:",
+        "sourceId": "usagov-branches-of-government"
+      },
+      {
+        "id": "legislative-congress-focus",
+        "point": "The legislative branch is made up of Congress with Senate and House support offices",
+        "quote": "The legislative branch is made up of Congress:",
+        "sourceId": "usagov-branches-of-government"
+      },
+      {
+        "id": "judicial-courts-role",
+        "point": "The judicial branch includes the Supreme Court and other federal courts that evaluate laws",
+        "quote": "The judicial branch includes the Supreme Court and other federal courts.",
+        "sourceId": "usagov-branches-of-government"
+      },
+      {
+        "id": "executive-members-role",
+        "point": "The executive branch members include the president, vice president, and cabinet in key roles",
+        "quote": "The president, the vice president, and the president's cabinet are the members of the executive branch.",
+        "sourceId": "usagov-branches-of-government"
+      },
+      {
+        "id": "checks-balances-system",
+        "point": "Each branch can respond to actions of other branches through the system of checks and balances",
+        "quote": "The ability of each branch to respond to the actions of the other branches is the system of checks and balances.",
+        "sourceId": "usagov-branches-of-government"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "branch made up of Congress to draft laws",
+        "id": "legislative-branch",
+        "quote": "The legislative branch is made up of Congress:",
+        "sourceId": "usagov-branches-of-government",
+        "term": "legislative branch"
+      },
+      {
+        "gloss": "branch that includes Supreme Court and federal courts to evaluate laws",
+        "id": "judicial-branch",
+        "quote": "The judicial branch includes the Supreme Court and other federal courts.",
+        "sourceId": "usagov-branches-of-government",
+        "term": "judicial branch"
+      },
+      {
+        "gloss": "branch whose members are president, vice president, and cabinet advisors",
+        "id": "executive-branch",
+        "quote": "The president, the vice president, and the president's cabinet are the members of the executive branch.",
+        "sourceId": "usagov-branches-of-government",
+        "term": "executive branch"
+      },
+      {
+        "gloss": "system where each branch can respond to actions of other branches",
+        "id": "checks-and-balances",
+        "quote": "The ability of each branch to respond to the actions of the other branches is the system of checks and balances.",
+        "sourceId": "usagov-branches-of-government",
+        "term": "checks and balances"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261030043858-b6a5a667:compare-table-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261030043858-b6a5a667:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261030045750-9b0dec59",
+  "analysisRef": "job-20261030045750-9b0dec59/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030045750-9b0dec59:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How sunlight and vent chemistry each fuel life on Earth",
+    "sources": [
+      {
+        "id": "noaa-oceanexplorer-fueling-life-on-earth",
+        "title": "Fueling Life on Earth: Chemosynthesis versus Photosynthesis — NOAA Office of Ocean Exploration, Educator Guide and Teacher Key (grades 9-12 chemistry)",
+        "locator": "https://oceanexplorer.noaa.gov/wp-content/uploads/2025/04/educator-guide-fueling-life-on-earth.pdf",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NOAA Office of Ocean Exploration and Research (NOAA Ocean Exploration), education materials, 'Fueling Life on Earth: Chemosynthesis versus Photosynthesis' educator guide. NOAA's Education and Outreach FAQ (https://www.noaa.gov/office-education/outreach-communication/faq) states: 'Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission', and requires credit to NOAA without claiming or endorsing; edits and generative-AI outputs must not be presented as official NOAA material. The document itself asks: 'If reproducing this activity, please cite NOAA as the source, and provide the following URL: https://oceanexplorer.noaa.gov.' Text only: the third-party photo credit printed on page 1 ('Image courtesy of NOAA Ocean Exploration, NSF/NOAA, Jason, Copyright WHOI') and the video/image links on the resources page are not stored. NOAA has not reviewed, approved or endorsed this activity.",
+        "sha256": "9b2415e432e49be30eed9aa244d306d6231675cab53c566a4a4c874215b23c92"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18b2c-7bb0-712c-be81-4fb0f6b2ccc8",
+      "runId": "job-20261030045750-9b0dec59",
+      "promptVersion": "s6-v4",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-30T04:58:30.757Z"
+    },
+    "seed": 296487766,
+    "headline": "How sunlight and vent chemistry each fuel life on Earth",
+    "keyPoints": [
+      {
+        "id": "photosynthesis-fuels-life",
+        "point": "Most life relies on sunlight because plants make food through photosynthesis.",
+        "quote": "The majority of life on Earth is based on a food web which revolves around the Sun, as plants use sunlight to make food via photosynthesis.",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth"
+      },
+      {
+        "id": "chemosynthesis-chemical-energy",
+        "point": "Deep sea microbes produce food using chemical energy without sunlight in vent environments.",
+        "quote": "organisms instead rely on primary production through a process called chemosynthesis, which runs on chemical energy.",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth"
+      },
+      {
+        "id": "conservation-matter-law",
+        "point": "Matter cannot be created or destroyed, so reactants must fully become products.",
+        "quote": "Remind students that the law of conservation of matter states that matter cannot be created or destroyed.",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth"
+      },
+      {
+        "id": "vent-hydrogen-sulfide",
+        "point": "Vent microbes use hydrogen sulfide with carbon dioxide and oxygen to make food.",
+        "quote": "One common form of chemosynthesis found at hydrothermal vents uses hydrogen sulfide.",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "plants convert carbon dioxide and water into food using sunlight energy",
+        "id": "photosynthesis",
+        "quote": "Photosynthesis: The process used by plants to convert carbon dioxide and water into oxygen and sugars (food), using energy from the sun.",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+        "term": "Photosynthesis"
+      },
+      {
+        "gloss": "microbes create food using energy released from chemical reactions",
+        "id": "chemosynthesis",
+        "quote": "Chemosynthesis: The process by which microbes create sugars (food) using energy released from chemical reactions.",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+        "term": "Chemosynthesis"
+      },
+      {
+        "gloss": "organisms that make food from raw materials and energy as producers",
+        "id": "autotroph",
+        "quote": "Autotroph: Organisms that are able to make their own food from raw materials and energy, also known as producers.",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+        "term": "Autotroph"
+      },
+      {
+        "gloss": "organisms that consume producers or other consumers for nutrition",
+        "id": "heterotroph",
+        "quote": "Heterotroph: Organisms that consume producers or other consumers, also known as consumers.",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+        "term": "Heterotroph"
+      },
+      {
+        "gloss": "starting substance that changes in a chemical reaction",
+        "id": "reactants",
+        "quote": "Reactants: A substance that changes in a chemical reaction.",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+        "term": "Reactants"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "balance-equation-v1",
+      "specId": "job-20261030045750-9b0dec59:balance-equation-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261030045750-9b0dec59:compare-table-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

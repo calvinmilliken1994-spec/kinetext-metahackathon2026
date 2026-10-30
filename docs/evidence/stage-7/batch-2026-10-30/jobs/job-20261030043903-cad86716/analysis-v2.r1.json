@@ -1,0 +1,233 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "componentPlan": [
+      {
+        "componentId": "sequence-v1",
+        "focusQuote": "Once a bill is introduced, it is assigned to a committee whose members will research, discuss, and make changes to the bill.",
+        "focusSourceId": "usagov-how-laws-are-made",
+        "pedagogicalReason": "Models the numbered bill to law path in taught order from introduction through votes to presidential action"
+      },
+      {
+        "componentId": "compare-table-v1",
+        "focusQuote": "Only the House can initiate tax and revenue-related legislation",
+        "focusSourceId": "usagov-how-laws-are-made",
+        "pedagogicalReason": "Contrasts House and Senate powers on shared lawmaking duties to clarify chamber differences"
+      }
+    ],
+    "declineCode": "",
+    "declineSummary": "",
+    "overview": {
+      "headline": "How Congress turns bills into laws and how chambers differ",
+      "keyPoints": [
+        {
+          "id": "bill-becomes-law",
+          "point": "Congress serves as the lawmaking branch for federal government action",
+          "quote": "Congress is the lawmaking branch of the federal government.",
+          "sourceId": "usagov-how-laws-are-made"
+        },
+        {
+          "id": "committee-research-changes",
+          "point": "Bills move to a committee whose members research, discuss and make changes before a chamber vote",
+          "quote": "Once a bill is introduced, it is assigned to a committee whose members will research, discuss, and make changes to the bill.",
+          "sourceId": "usagov-how-laws-are-made"
+        },
+        {
+          "id": "both-chambers-president",
+          "point": "Both chambers vote on the same version of the bill after resolving differences",
+          "quote": "Then both chambers vote on the same version of the bill.",
+          "sourceId": "usagov-how-laws-are-made"
+        },
+        {
+          "id": "veto-override-pocket",
+          "point": "A presidential veto can be overridden by Congress, but a pocket veto cannot be overridden",
+          "quote": "This action is called a pocket veto, and it cannot be overridden by Congress.",
+          "sourceId": "usagov-how-laws-are-made"
+        },
+        {
+          "id": "house-senate-differences",
+          "point": "The Senate and House show procedural differences in handling legislation and votes",
+          "quote": "The Senate and the House have some procedural differences.",
+          "sourceId": "usagov-how-laws-are-made"
+        }
+      ],
+      "keyTerms": [
+        {
+          "gloss": "proposal for a new law that can change an existing law",
+          "id": "bill",
+          "quote": "A bill is a proposal for a new law or a change to an existing law.",
+          "sourceId": "usagov-how-laws-are-made",
+          "term": "bill"
+        },
+        {
+          "gloss": "group whose members research and discuss a bill and make changes",
+          "id": "committee",
+          "quote": "Once a bill is introduced, it is assigned to a committee whose members will research, discuss, and make changes to the bill.",
+          "sourceId": "usagov-how-laws-are-made",
+          "term": "committee"
+        },
+        {
+          "gloss": "refuse to approve a bill when the president withholds signature",
+          "id": "veto",
+          "quote": "Or the president can refuse to approve a bill. This is called a veto.",
+          "sourceId": "usagov-how-laws-are-made",
+          "term": "veto"
+        },
+        {
+          "gloss": "action called a pocket veto that cannot be overridden by Congress",
+          "id": "pocket-veto",
+          "quote": "This action is called a pocket veto, and it cannot be overridden by Congress.",
+          "sourceId": "usagov-how-laws-are-made",
+          "term": "pocket veto"
+        },
+        {
+          "gloss": "tax and revenue legislation that the House can initiate",
+          "id": "legislation",
+          "quote": "Only the House can initiate tax and revenue-related legislation",
+          "sourceId": "usagov-how-laws-are-made",
+          "term": "legislation"
+        }
+      ]
+    },
+    "pageCoverage": "Page covers the step by step path from bill idea through committee review chamber votes reconciliation presidential approval veto and override plus House Senate differences.",
+    "subject": "civics",
+    "usable": true
+  },
+  "report": {
+    "artifactId": "job-20261030043903-cad86716:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"civics\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 2203 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 12 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 5, keyTerms 5, componentPlan 2; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (2 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      },
+      {
+        "id": "OV-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 10 overview quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "OV-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every key term appears in its own quote or in the source sentence containing the quote (term-in-quote)"
+      },
+      {
+        "id": "OV-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no AI-written overview field names a publisher token from the sources' own metadata or uses the frozen generic attribution phrases; quotes are exempt (no-publisher-text)"
+      },
+      {
+        "id": "OV-04",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in AI-written overview text appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "OV-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "keyPoints 5 (3-6) and keyTerms 5 (3-8) are within the frozen counts; repair is by retry only (counts-valid)"
+      },
+      {
+        "id": "OV-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every key point shares >= 2 and every gloss >= 1 distinct content word (>= 4 letters, frozen stoplist) with its own quote (point-quote-overlap)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18b1b-141d-7779-8b24-9af170f30218",
+    "usage": {
+      "promptTokens": 4661,
+      "completionTokens": 6841,
+      "reasoningTokens": 5953,
+      "cachedTokens": 0
+    },
+    "latencyMs": 27189,
+    "estCostUSD": 0.0349005,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  }
+}

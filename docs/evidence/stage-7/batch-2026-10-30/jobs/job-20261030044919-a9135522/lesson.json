@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261030044919-a9135522",
+  "analysisRef": "job-20261030044919-a9135522/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030044919-a9135522:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Trigonometric functions as angle dependent ratios shown by similar triangles",
+    "sources": [
+      {
+        "id": "nasa-grc-idea-of-functions",
+        "title": "Idea of Functions — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/idea-of-functions/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "6fce3423e0f40551beee636574cc686090a85588891583ee35762c32af992108"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "ede5ea9fc5374f14a5fb03aaef8db47c",
+      "runId": "job-20261030044919-a9135522",
+      "promptVersion": "s6-v4",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-30T04:50:29.057Z"
+    },
+    "seed": 3994516059,
+    "headline": "Trigonometric functions as angle dependent ratios shown by similar triangles",
+    "keyPoints": [
+      {
+        "id": "function-dependence",
+        "point": "A function means one variable depends uniquely on another variable and changes consistently",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "the value of one variable in a problem depends uniquely on the value of another variable in the problem."
+      },
+      {
+        "id": "exponential-log-inverse",
+        "point": "Logarithmic function is inverse of exponential counting times to multiply variable to obtain given number",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "The logarithmic function is the inverse of the exponential;"
+      },
+      {
+        "id": "trig-angle-only",
+        "point": "Trigonometric ratio depends only on angle value not on length of any one side of right triangle",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "this ratio depends only on the value of the angle formed by two sides of the triangle and not on the length of any one side."
+      },
+      {
+        "id": "cosine-scaling-invariant",
+        "point": "Dividing out scaled sides still gives x divided by y with same value as black triangle",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "Dividing out the “2’s” gives x divided by y, the same value as the black triangle."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "exponential-function",
+        "term": "exponential function",
+        "gloss": "relation where variable appears as multiplier count",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "The exponential function relates a variable to the number of times another variable is used as a multiplier"
+      },
+      {
+        "id": "logarithmic-function",
+        "term": "logarithmic function",
+        "gloss": "inverse of exponential counting times to multiply variable to get given number",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "The logarithmic function is the inverse of the exponential;"
+      },
+      {
+        "id": "trigonometric-functions",
+        "term": "trigonometric functions",
+        "gloss": "set of functions that relate triangle sides and angles",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "The trigonometric functions sine, cosine, and tangent relate the various sides and angles of a triangle."
+      },
+      {
+        "id": "cosine-term",
+        "term": "cosine",
+        "gloss": "ratio of adjacent side to hypotenuse equal to x divided by y for angle b",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "For the black triangle, the cosine of “b” is equal to x divided by y."
+      },
+      {
+        "id": "ratio-term",
+        "term": "ratio",
+        "gloss": "value obtained by dividing two side lengths that depends on angle",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "this ratio depends only on the value of the angle formed by two sides of the triangle and not on the length of any one side."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261030044919-a9135522:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261030044919-a9135522:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

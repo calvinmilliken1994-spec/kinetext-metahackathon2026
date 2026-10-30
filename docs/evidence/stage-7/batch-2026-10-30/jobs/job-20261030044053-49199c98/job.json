@@ -1,0 +1,46 @@
+{
+  "jobId": "job-20261030044053-49199c98",
+  "sourceId": "nasa-grc-sine-cosine-tangent",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-30T04:40:53.257Z",
+  "flow": "lesson",
+  "model": "muse-spark-1.3",
+  "provider": "meta-api",
+  "providerModel": "muse-spark-1.3",
+  "totalCostUSD": 0.098869,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [
+    {
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "A-05",
+        "OV-01"
+      ],
+      "fixed": [
+        "A-05",
+        "OV-01"
+      ],
+      "remaining": [],
+      "passed": true
+    }
+  ],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 43944,
+    "startedAt": "2026-10-30T04:40:53.257Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 1,
+    "componentsPublished": 1,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "finishedAt": "2026-10-30T04:42:09.931Z"
+}

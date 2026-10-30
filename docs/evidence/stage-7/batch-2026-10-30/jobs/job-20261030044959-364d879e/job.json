@@ -1,0 +1,35 @@
+{
+  "jobId": "job-20261030044959-364d879e",
+  "sourceId": "census-computing-apportionment",
+  "status": "failed",
+  "purpose": "test-live",
+  "createdAt": "2026-10-30T04:49:59.436Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.165158,
+  "reservedUnknownUSD": 0.165158,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 43944,
+    "startedAt": "2026-10-30T04:49:59.436Z"
+  },
+  "lesson": {
+    "overviewReady": false,
+    "componentsPlanned": 0,
+    "componentsPublished": 0,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "error": {
+    "code": "TIMEOUT",
+    "message": "timeout"
+  },
+  "finishedAt": "2026-10-30T04:51:59.461Z"
+}

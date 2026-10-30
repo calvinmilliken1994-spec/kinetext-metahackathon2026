@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261030043747-f52a90e0",
+  "analysisRef": "job-20261030043747-f52a90e0/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030043747-f52a90e0:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Right triangle ratios define sine cosine and tangent for flight problems",
+    "sources": [
+      {
+        "id": "nasa-grc-sine-cosine-tangent",
+        "title": "Sine-Cosine-Tangent — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/sine-cosine-tangent/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "3f90979d8b1710fa0dbffead40968b37333b0e8dbb45f50696a604f272e181b9"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18b1a-1f61-712d-87a5-dbc77134c277",
+      "runId": "job-20261030043747-f52a90e0",
+      "promptVersion": "s6-v4",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-30T04:38:27.520Z"
+    },
+    "seed": 4251491253,
+    "headline": "Right triangle ratios define sine cosine and tangent for flight problems",
+    "keyPoints": [
+      {
+        "id": "right-triangle-basics",
+        "point": "A right triangle has one right angle and three sides whose ratios support flight calculations",
+        "quote": "A right triangle is a three sided figure with one angle equal to 90 degrees.",
+        "sourceId": "nasa-grc-sine-cosine-tangent"
+      },
+      {
+        "id": "sine-ratio-meaning",
+        "point": "the sine names the ratio of the opposite side to the hypotenuse in a right triangle",
+        "quote": "We will call the ratio of the opposite side of a right triangle to the hypotenuse the sine and give it the symbol sin.",
+        "sourceId": "nasa-grc-sine-cosine-tangent"
+      },
+      {
+        "id": "cosine-ratio-meaning",
+        "point": "the cosine names the ratio of the adjacent side to the hypotenuse in a right triangle",
+        "quote": "The ratio of the adjacent side of a right triangle to the hypotenuse is called the cosine and given the symbol cos.",
+        "sourceId": "nasa-grc-sine-cosine-tangent"
+      },
+      {
+        "id": "tangent-ratio-meaning",
+        "point": "the tangent names the ratio of the opposite side to the adjacent side in a triangle",
+        "quote": "Finally, the ratio of the opposite side to the adjacent side is called the tangent and given the symbol tan.",
+        "sourceId": "nasa-grc-sine-cosine-tangent"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "three sided figure with one angle equal to right angle",
+        "id": "right-triangle",
+        "quote": "A right triangle is a three sided figure with one angle equal to 90 degrees.",
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "term": "right triangle"
+      },
+      {
+        "gloss": "side opposite the right angle and longest side of triangle",
+        "id": "hypotenuse",
+        "quote": "We define the side of the triangle opposite from the right angle to be the hypotenuse.",
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "term": "hypotenuse"
+      },
+      {
+        "gloss": "ratio of opposite side to hypotenuse for a given angle",
+        "id": "sine",
+        "quote": "We will call the ratio of the opposite side of a right triangle to the hypotenuse the sine and give it the symbol sin.",
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "term": "sine"
+      },
+      {
+        "gloss": "ratio of adjacent side to hypotenuse for a given angle",
+        "id": "cosine",
+        "quote": "The ratio of the adjacent side of a right triangle to the hypotenuse is called the cosine and given the symbol cos.",
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "term": "cosine"
+      },
+      {
+        "gloss": "ratio of opposite side to adjacent side for a given angle",
+        "id": "tangent",
+        "quote": "Finally, the ratio of the opposite side to the adjacent side is called the tangent and given the symbol tan.",
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "term": "tangent"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "formula-explorer-v1",
+      "specId": "job-20261030043747-f52a90e0:formula-explorer-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261030043747-f52a90e0:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

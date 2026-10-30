@@ -1,0 +1,170 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "user-accf5f60ebed-job-20261030045700-654c4d96",
+  "title": "Throwing a Ball on the Moon",
+  "learningObjectives": [
+    "Calculate maximum height from vertical speed and gravity using ymax = V0^2 / (2*g).",
+    "Explain that horizontal speed stays unchanged while vertical slowing determines the highest point.",
+    "Compare the same throw on the Moon and Earth to show lower gravity yields a higher arc."
+  ],
+  "sources": [
+    {
+      "id": "user-accf5f60ebed",
+      "title": "Throwing a ball on the Moon (project-authored test text)",
+      "locator": "Provided by a teacher (pasted text)",
+      "license": "own-work",
+      "attribution": "Written by the Make knowledge interactive project team for testing.",
+      "sha256": "accf5f60ebedb3b3ab1f553ec33a9f500ad353e682cdf88b8e45c99a57ca6ac1"
+    }
+  ],
+  "explanations": [
+    {
+      "evidence": [
+        {
+          "quote": "On the Moon there is no air, so a thrown ball feels no drag at all.",
+          "sourceId": "user-accf5f60ebed"
+        },
+        {
+          "quote": "Its flight is purely ballistic.",
+          "sourceId": "user-accf5f60ebed"
+        }
+      ],
+      "id": "no-air-no-drag",
+      "text": "On the Moon there is no air, so a thrown ball feels no drag and its flight is purely ballistic."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "Vertically, gravity slows the ball at a steady rate g.",
+          "sourceId": "user-accf5f60ebed"
+        },
+        {
+          "quote": "On the Moon g is about 1.62 m/s^2, roughly one sixth of the 9.8 m/s^2 we feel on Earth.",
+          "sourceId": "user-accf5f60ebed"
+        }
+      ],
+      "id": "gravity-slows-ascent",
+      "text": "Gravity slows the rising ball at a steady rate, with Moon gravity about 1.62 m/s^2 compared with 9.8 m/s^2 on Earth."
+    },
+    {
+      "evidence": [
+        {
+          "quote": "The ball stops rising when V = 0, which happens at t = V0 / g.",
+          "sourceId": "user-accf5f60ebed"
+        },
+        {
+          "quote": "Because g on the Moon is about six times smaller, the same throw rises about six times higher than on Earth.",
+          "sourceId": "user-accf5f60ebed"
+        }
+      ],
+      "id": "max-height-formula",
+      "text": "The ball stops rising when vertical speed reaches zero, fixing the highest point, so the same throw rises about six times higher on the Moon."
+    }
+  ],
+  "simulation": {
+    "engine": "projectile-v1",
+    "equation": "y_max=V0^2/(2*g)",
+    "horizontalSpeedMps": {
+      "unit": "m/s",
+      "default": 10,
+      "max": 50,
+      "min": 5
+    },
+    "verticalSpeedMps": {
+      "unit": "m/s",
+      "default": 10,
+      "max": 30,
+      "min": 5
+    },
+    "gravityMps2": {
+      "unit": "m/s^2",
+      "default": 1.62,
+      "max": 24.8,
+      "min": 1.5
+    },
+    "scenario": {
+      "objectLabel": "Thrown ball",
+      "settingLabel": "Moon surface with no air"
+    }
+  },
+  "behavioralTests": [
+    {
+      "expectedMaxHeightM": 0.504,
+      "gravityMps2": 24.8,
+      "horizontalSpeedMps": 8,
+      "name": "low-arc heavy-gravity toss",
+      "tolerance": 0.01,
+      "verticalSpeedMps": 5
+    },
+    {
+      "expectedMaxHeightM": 241.9753,
+      "gravityMps2": 1.62,
+      "horizontalSpeedMps": 12,
+      "name": "high-arc moon throw",
+      "tolerance": 0.1,
+      "verticalSpeedMps": 28
+    },
+    {
+      "expectedMaxHeightM": 7.3469,
+      "gravityMps2": 9.8,
+      "horizontalSpeedMps": 10,
+      "name": "earth comparison throw",
+      "tolerance": 0.02,
+      "verticalSpeedMps": 12
+    },
+    {
+      "expectedMaxHeightM": 69.4444,
+      "gravityMps2": 1.62,
+      "horizontalSpeedMps": 15,
+      "name": "mid-arc moon throw",
+      "tolerance": 0.1,
+      "verticalSpeedMps": 15
+    }
+  ],
+  "predictions": [
+    {
+      "expectedMaxHeightM": 30.8642,
+      "gravityMps2": 1.62,
+      "horizontalSpeedMps": 10,
+      "id": "moon-opening-throw",
+      "prompt": "A ball is thrown on the Moon with horizontal speed 10 m/s and vertical speed 10 m/s where gravity is 1.62 m/s^2. Predict the maximum height.",
+      "tolerance": 0.05,
+      "verticalSpeedMps": 10
+    },
+    {
+      "expectedMaxHeightM": 123.4568,
+      "gravityMps2": 1.62,
+      "horizontalSpeedMps": 12,
+      "id": "moon-higher-arc",
+      "prompt": "A ball is thrown on the Moon with horizontal speed 12 m/s and vertical speed 20 m/s where gravity is 1.62 m/s^2. Predict the maximum height.",
+      "tolerance": 0.1,
+      "verticalSpeedMps": 20
+    },
+    {
+      "expectedMaxHeightM": 5.102,
+      "gravityMps2": 9.8,
+      "horizontalSpeedMps": 10,
+      "id": "earth-same-throw",
+      "prompt": "The same ball is thrown on Earth with horizontal speed 10 m/s and vertical speed 10 m/s where gravity is 9.8 m/s^2. Predict the maximum height.",
+      "tolerance": 0.02,
+      "verticalSpeedMps": 10
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18b2c-104f-73c2-962f-4f86a04cde7e",
+    "runId": "job-20261030045700-654c4d96",
+    "promptVersion": "v10",
+    "generatedAt": "2026-10-30T04:58:03.355Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

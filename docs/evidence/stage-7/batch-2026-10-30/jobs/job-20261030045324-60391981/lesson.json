@@ -1,0 +1,125 @@
+{
+  "jobId": "job-20261030045324-60391981",
+  "analysisRef": "job-20261030045324-60391981/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030045324-60391981:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Steps of the United States presidential election cycle",
+    "sources": [
+      {
+        "id": "usagov-presidential-election-process",
+        "title": "Overview of the presidential election process — USA.gov (U.S. General Services Administration)",
+        "locator": "https://www.usa.gov/presidential-election-process",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: USA.gov, 'Overview of the presidential election process'. USA.gov is an official website of the U.S. General Services Administration; per the GSA website policies, 'Most material on our site is free of copyright and may be copied and distributed without permission. Works produced by federal government employees in the course of their employment are generally not protected by copyright and are in the public domain in the U.S.' The U.S. General Services Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "dab5e0bb2bd4fbb8ad6e9d4e8554cef8d4d363028ced8cd2650173905c0efc2a"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "e56e624dd69d4ae597d0619bbb4b5930",
+      "runId": "job-20261030045324-60391981",
+      "promptVersion": "s6-v4",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-30T04:53:53.290Z"
+    },
+    "seed": 48307271,
+    "headline": "Steps of the United States presidential election cycle",
+    "keyPoints": [
+      {
+        "id": "election-timing",
+        "point": "Presidential election occurs every four years on the first Tuesday after the first Monday in November",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "An election for president of the United States happens every four years on the first Tuesday after the first Monday in November."
+      },
+      {
+        "id": "cycle-duration",
+        "point": "Presidential election cycle spans almost two years from candidate registration to inauguration",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "The process of electing a president takes almost two years."
+      },
+      {
+        "id": "candidate-registration",
+        "point": "Candidates register with Federal Election Commission and later announce intentions before primaries",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Candidates register with the Federal Election Commission to run for president."
+      },
+      {
+        "id": "electors-and-count",
+        "point": "Electors cast their votes in December and Congress counts electoral votes in early January before inauguration",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Electors cast their votes for president in the Electoral College."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "federal-election-commission",
+        "term": "Federal Election Commission",
+        "gloss": "agency where candidates register to run for president",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Candidates register with the Federal Election Commission to run for president."
+      },
+      {
+        "id": "primaries",
+        "term": "primaries",
+        "gloss": "state contests that help choose presidential candidates",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "States and parties hold presidential primaries and caucuses."
+      },
+      {
+        "id": "caucuses",
+        "term": "caucuses",
+        "gloss": "party meetings that help choose presidential candidates",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "States and parties hold presidential primaries and caucuses."
+      },
+      {
+        "id": "electoral-college",
+        "term": "Electoral College",
+        "gloss": "body of electors that casts votes for president",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Electors cast their votes for president in the Electoral College."
+      },
+      {
+        "id": "inauguration-day",
+        "term": "Inauguration Day",
+        "gloss": "ceremony when presidential term officially begins",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Presidential Inauguration Day"
+      },
+      {
+        "id": "nominating-conventions",
+        "term": "nominating conventions",
+        "gloss": "party gatherings to choose presidential candidates",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Parties hold nominating conventions to choose their presidential candidates."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261030045324-60391981:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261030045324-60391981:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

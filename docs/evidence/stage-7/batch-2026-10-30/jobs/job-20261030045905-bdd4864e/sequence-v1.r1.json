@@ -1,0 +1,191 @@
+{
+  "gen": {
+    "cyclic": false,
+    "orderBasis": "page-order",
+    "orderNote": "Follow the cause and effect chain from expansion to conflict in order",
+    "schemaVersion": "sequence-v1",
+    "steps": [
+      {
+        "id": "expanding-westward",
+        "label": "expanding the nation westward",
+        "orderHint": "expansion begins",
+        "quote": "the United States doubled its size, expanding the nation westward.",
+        "sourceId": "nara-louisiana-purchase-treaty"
+      },
+      {
+        "id": "first-cession",
+        "label": "first major cession of land",
+        "orderHint": "long series starts",
+        "quote": "The Louisiana Purchase was the first major cession of land in a long series of expansions",
+        "sourceId": "nara-louisiana-purchase-treaty"
+      },
+      {
+        "id": "sectional-weaknesses",
+        "label": "sectional weaknesses between the North and South",
+        "orderHint": "division appears",
+        "quote": "also exposed the sectional weaknesses between the North and South, especially related to the issue of slavery.",
+        "sourceId": "nara-louisiana-purchase-treaty"
+      },
+      {
+        "id": "fragile-compromises",
+        "label": "series of fragile compromises",
+        "orderHint": "compromise attempt",
+        "quote": "the desire to maintain a balance between \"free states\" and \"slave states\" required a series of fragile compromises",
+        "sourceId": "nara-louisiana-purchase-treaty"
+      },
+      {
+        "id": "civil-war-inevitable",
+        "label": "civil war became inevitable",
+        "orderHint": "conflict results",
+        "quote": "Eventually, as agreements became more difficult to achieve, civil war became inevitable.",
+        "sourceId": "nara-louisiana-purchase-treaty"
+      }
+    ],
+    "title": "From Expansion to Sectional Conflict"
+  },
+  "report": {
+    "artifactId": "job-20261030045905-bdd4864e:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step label occurs in its own quote after normalisation (labels-in-quotes)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 5 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18b2d-d9de-7276-a483-bef2a034c0e9",
+    "usage": {
+      "promptTokens": 2823,
+      "completionTokens": 5781,
+      "reasoningTokens": 5440,
+      "cachedTokens": 0
+    },
+    "latencyMs": 19169,
+    "estCostUSD": 0.028098,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030045905-bdd4864e:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "From Expansion to Sectional Conflict",
+    "sources": [
+      {
+        "id": "nara-louisiana-purchase-treaty",
+        "title": "Louisiana Purchase Treaty (1803) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/louisiana-purchase-treaty",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Louisiana Purchase Treaty (1803)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "6da19e2b0134ca81169b3c5b0a0461ae48243446219561e760b32cb2ed7cce4b"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18b2d-d9de-7276-a483-bef2a034c0e9",
+      "runId": "job-20261030045905-bdd4864e",
+      "promptVersion": "s6-v4",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-30T05:00:00.475Z"
+    },
+    "seed": 1639854772,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follow the cause and effect chain from expansion to conflict in order",
+    "steps": [
+      {
+        "id": "expanding-westward",
+        "label": "expanding the nation westward",
+        "orderHint": "expansion begins",
+        "quote": "the United States doubled its size, expanding the nation westward.",
+        "sourceId": "nara-louisiana-purchase-treaty"
+      },
+      {
+        "id": "first-cession",
+        "label": "first major cession of land",
+        "orderHint": "long series starts",
+        "quote": "The Louisiana Purchase was the first major cession of land in a long series of expansions",
+        "sourceId": "nara-louisiana-purchase-treaty"
+      },
+      {
+        "id": "sectional-weaknesses",
+        "label": "sectional weaknesses between the North and South",
+        "orderHint": "division appears",
+        "quote": "also exposed the sectional weaknesses between the North and South, especially related to the issue of slavery.",
+        "sourceId": "nara-louisiana-purchase-treaty"
+      },
+      {
+        "id": "fragile-compromises",
+        "label": "series of fragile compromises",
+        "orderHint": "compromise attempt",
+        "quote": "the desire to maintain a balance between \"free states\" and \"slave states\" required a series of fragile compromises",
+        "sourceId": "nara-louisiana-purchase-treaty"
+      },
+      {
+        "id": "civil-war-inevitable",
+        "label": "civil war became inevitable",
+        "orderHint": "conflict results",
+        "quote": "Eventually, as agreements became more difficult to achieve, civil war became inevitable.",
+        "sourceId": "nara-louisiana-purchase-treaty"
+      }
+    ]
+  }
+}

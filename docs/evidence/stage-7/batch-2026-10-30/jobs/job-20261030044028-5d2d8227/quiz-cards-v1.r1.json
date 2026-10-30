@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "cards": [
+      {
+        "hint": "Think of identity testing done with DNA samples",
+        "id": "dna-fingerprinting-use",
+        "options": [
+          "DNA fingerprinting",
+          "protein sequencing",
+          "vitamin testing",
+          "blood pressure screening"
+        ],
+        "quote": "including DNA fingerprinting,",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "stem": "Which laboratory procedure is listed as a use for amplified DNA"
+      },
+      {
+        "hint": "Think of finding tiny germs in samples",
+        "id": "bacteria-virus-detection-use",
+        "options": [
+          "detection of bacteria or viruses",
+          "measurement of heart rate",
+          "testing of vision clarity",
+          "screening for iron levels"
+        ],
+        "quote": "detection of bacteria or viruses (particularly AIDS),",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "stem": "Which task involving microbes is named as a clinical use of copied DNA"
+      },
+      {
+        "hint": "Think of identifying inherited conditions",
+        "id": "genetic-disorders-diagnosis",
+        "options": [
+          "diagnosis of genetic disorders",
+          "treatment of broken bones",
+          "screening for vitamin intake",
+          "therapy for muscle strain"
+        ],
+        "quote": "and diagnosis of genetic disorders.",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "stem": "Which health related task is named as a use for amplified DNA"
+      },
+      {
+        "hint": "Think of charting work in a large study effort",
+        "id": "mapping-techniques-use",
+        "options": [
+          "mapping techniques",
+          "bridge construction",
+          "weather forecasting",
+          "food preservation"
+        ],
+        "quote": "most mapping techniques in the Human Genome Project (HGP) relied on PCR.",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "stem": "Which project work is said to have relied on copied DNA"
+      }
+    ],
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Copying small DNA pieces for lab work"
+  },
+  "report": {
+    "artifactId": "job-20261030044028-5d2d8227:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18b1d-7a40-76ce-92ac-2c3f19133a28",
+    "usage": {
+      "promptTokens": 2763,
+      "completionTokens": 7504,
+      "reasoningTokens": 7160,
+      "cachedTokens": 0
+    },
+    "latencyMs": 30709,
+    "estCostUSD": 0.03534575,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030044028-5d2d8227:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Copying small DNA pieces for lab work",
+    "sources": [
+      {
+        "id": "nhgri-pcr-fact-sheet",
+        "title": "Polymerase Chain Reaction (PCR) Fact Sheet — National Human Genome Research Institute, genome.gov",
+        "locator": "https://www.genome.gov/about-genomics/fact-sheets/Polymerase-Chain-Reaction-Fact-Sheet",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Human Genome Research Institute (NHGRI), genome.gov, 'Polymerase Chain Reaction (PCR) Fact Sheet'. Per the NHGRI Copyright Policy, 'Text, graphics, videos, illustrations and other information on National Human Genome Research Institute (NHGRI) websites are in the public domain, unless otherwise indicated'. Courtesy: National Human Genome Research Institute. The National Human Genome Research Institute has not reviewed, approved or endorsed this activity.",
+        "sha256": "d4a11c85387eeb3080dfdf528b93202d09a5e14654d7b3cb2d92ac557369748b"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18b1d-7a40-76ce-92ac-2c3f19133a28",
+      "runId": "job-20261030044028-5d2d8227",
+      "promptVersion": "s6-v4",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-30T04:42:07.418Z"
+    },
+    "seed": 3210220898,
+    "cards": [
+      {
+        "hint": "Think of identity testing done with DNA samples",
+        "id": "dna-fingerprinting-use",
+        "options": [
+          "DNA fingerprinting",
+          "protein sequencing",
+          "vitamin testing",
+          "blood pressure screening"
+        ],
+        "quote": "including DNA fingerprinting,",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "stem": "Which laboratory procedure is listed as a use for amplified DNA"
+      },
+      {
+        "hint": "Think of finding tiny germs in samples",
+        "id": "bacteria-virus-detection-use",
+        "options": [
+          "detection of bacteria or viruses",
+          "measurement of heart rate",
+          "testing of vision clarity",
+          "screening for iron levels"
+        ],
+        "quote": "detection of bacteria or viruses (particularly AIDS),",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "stem": "Which task involving microbes is named as a clinical use of copied DNA"
+      },
+      {
+        "hint": "Think of identifying inherited conditions",
+        "id": "genetic-disorders-diagnosis",
+        "options": [
+          "diagnosis of genetic disorders",
+          "treatment of broken bones",
+          "screening for vitamin intake",
+          "therapy for muscle strain"
+        ],
+        "quote": "and diagnosis of genetic disorders.",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "stem": "Which health related task is named as a use for amplified DNA"
+      },
+      {
+        "hint": "Think of charting work in a large study effort",
+        "id": "mapping-techniques-use",
+        "options": [
+          "mapping techniques",
+          "bridge construction",
+          "weather forecasting",
+          "food preservation"
+        ],
+        "quote": "most mapping techniques in the Human Genome Project (HGP) relied on PCR.",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "stem": "Which project work is said to have relied on copied DNA"
+      }
+    ]
+  }
+}

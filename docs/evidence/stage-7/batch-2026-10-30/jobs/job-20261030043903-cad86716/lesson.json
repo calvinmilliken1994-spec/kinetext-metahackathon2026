@@ -1,0 +1,124 @@
+{
+  "jobId": "job-20261030043903-cad86716",
+  "analysisRef": "job-20261030043903-cad86716/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030043903-cad86716:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How Congress turns bills into laws and how chambers differ",
+    "sources": [
+      {
+        "id": "usagov-how-laws-are-made",
+        "title": "How laws are made — USA.gov (U.S. General Services Administration)",
+        "locator": "https://www.usa.gov/how-laws-are-made",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: USA.gov, 'How laws are made'. USA.gov is an official website of the U.S. General Services Administration; per the GSA website policies, 'Most material on our site is free of copyright and may be copied and distributed without permission. Works produced by federal government employees in the course of their employment are generally not protected by copyright and are in the public domain in the U.S.' The U.S. General Services Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "a0fa06d928204b895fc85a6e90675ea52362ca38af3e3c44b154b827b81b5f87"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18b1b-141d-7779-8b24-9af170f30218",
+      "runId": "job-20261030043903-cad86716",
+      "promptVersion": "s6-v4",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-30T04:39:30.220Z"
+    },
+    "seed": 2157342965,
+    "headline": "How Congress turns bills into laws and how chambers differ",
+    "keyPoints": [
+      {
+        "id": "bill-becomes-law",
+        "point": "Congress serves as the lawmaking branch for federal government action",
+        "quote": "Congress is the lawmaking branch of the federal government.",
+        "sourceId": "usagov-how-laws-are-made"
+      },
+      {
+        "id": "committee-research-changes",
+        "point": "Bills move to a committee whose members research, discuss and make changes before a chamber vote",
+        "quote": "Once a bill is introduced, it is assigned to a committee whose members will research, discuss, and make changes to the bill.",
+        "sourceId": "usagov-how-laws-are-made"
+      },
+      {
+        "id": "both-chambers-president",
+        "point": "Both chambers vote on the same version of the bill after resolving differences",
+        "quote": "Then both chambers vote on the same version of the bill.",
+        "sourceId": "usagov-how-laws-are-made"
+      },
+      {
+        "id": "veto-override-pocket",
+        "point": "A presidential veto can be overridden by Congress, but a pocket veto cannot be overridden",
+        "quote": "This action is called a pocket veto, and it cannot be overridden by Congress.",
+        "sourceId": "usagov-how-laws-are-made"
+      },
+      {
+        "id": "house-senate-differences",
+        "point": "The Senate and House show procedural differences in handling legislation and votes",
+        "quote": "The Senate and the House have some procedural differences.",
+        "sourceId": "usagov-how-laws-are-made"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "proposal for a new law that can change an existing law",
+        "id": "bill",
+        "quote": "A bill is a proposal for a new law or a change to an existing law.",
+        "sourceId": "usagov-how-laws-are-made",
+        "term": "bill"
+      },
+      {
+        "gloss": "group whose members research and discuss a bill and make changes",
+        "id": "committee",
+        "quote": "Once a bill is introduced, it is assigned to a committee whose members will research, discuss, and make changes to the bill.",
+        "sourceId": "usagov-how-laws-are-made",
+        "term": "committee"
+      },
+      {
+        "gloss": "refuse to approve a bill when the president withholds signature",
+        "id": "veto",
+        "quote": "Or the president can refuse to approve a bill. This is called a veto.",
+        "sourceId": "usagov-how-laws-are-made",
+        "term": "veto"
+      },
+      {
+        "gloss": "action called a pocket veto that cannot be overridden by Congress",
+        "id": "pocket-veto",
+        "quote": "This action is called a pocket veto, and it cannot be overridden by Congress.",
+        "sourceId": "usagov-how-laws-are-made",
+        "term": "pocket veto"
+      },
+      {
+        "gloss": "tax and revenue legislation that the House can initiate",
+        "id": "legislation",
+        "quote": "Only the House can initiate tax and revenue-related legislation",
+        "sourceId": "usagov-how-laws-are-made",
+        "term": "legislation"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261030043903-cad86716:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261030043903-cad86716:compare-table-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

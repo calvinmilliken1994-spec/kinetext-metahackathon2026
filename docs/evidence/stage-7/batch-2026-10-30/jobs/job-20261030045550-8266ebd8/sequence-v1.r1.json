@@ -1,0 +1,191 @@
+{
+  "gen": {
+    "cyclic": false,
+    "orderBasis": "page-order",
+    "orderNote": "Follows the page from convening through debate to compromise",
+    "schemaVersion": "sequence-v1",
+    "steps": [
+      {
+        "id": "convened-in-philadelphia",
+        "label": "Federal Convention convened",
+        "orderHint": "gathering begins",
+        "quote": "The Federal Convention convened in the State House (Independence Hall) in Philadelphia on May 14, 1787",
+        "sourceId": "nara-constitution"
+      },
+      {
+        "id": "quorum-obtained",
+        "label": "quorum of seven states was obtained",
+        "orderHint": "waiting for enough states",
+        "quote": "the members adjourned from day to day until a quorum of seven states was obtained on May 25",
+        "sourceId": "nara-constitution"
+      },
+      {
+        "id": "new-frame-government",
+        "label": "entirely new frame of government",
+        "orderHint": "choice to start anew",
+        "quote": "rather than amend the existing Articles, the Convention would draft an entirely new frame of government",
+        "sourceId": "nara-constitution"
+      },
+      {
+        "id": "debated-redrafted",
+        "label": "delegates debated",
+        "orderHint": "closed debate and redraft",
+        "quote": "in closed sessions, the delegates debated, and redrafted the articles of the new Constitution",
+        "sourceId": "nara-constitution"
+      },
+      {
+        "id": "art-of-compromise",
+        "label": "art of compromise",
+        "orderHint": "cooperation closes work",
+        "quote": "The work of many minds, the Constitution stands as a model of cooperative statesmanship and the art of compromise",
+        "sourceId": "nara-constitution"
+      }
+    ],
+    "title": "How Delegates Built a New Frame of Government"
+  },
+  "report": {
+    "artifactId": "job-20261030045550-8266ebd8:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step label occurs in its own quote after normalisation (labels-in-quotes)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 5 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18b2b-4733-7251-a033-152a43c8dfed",
+    "usage": {
+      "promptTokens": 2396,
+      "completionTokens": 6699,
+      "reasoningTokens": 6369,
+      "cachedTokens": 0
+    },
+    "latencyMs": 32169,
+    "estCostUSD": 0.03146575,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030045550-8266ebd8:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "How Delegates Built a New Frame of Government",
+    "sources": [
+      {
+        "id": "nara-constitution",
+        "title": "Constitution of the United States (1787) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/constitution",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Constitution of the United States (1787)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "a14175b009333bebd61eaff70e3393928a8f0dbd0ae00027067c07b15d176db4"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18b2b-4733-7251-a033-152a43c8dfed",
+      "runId": "job-20261030045550-8266ebd8",
+      "promptVersion": "s6-v4",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-30T04:57:11.822Z"
+    },
+    "seed": 1813634475,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follows the page from convening through debate to compromise",
+    "steps": [
+      {
+        "id": "convened-in-philadelphia",
+        "label": "Federal Convention convened",
+        "orderHint": "gathering begins",
+        "quote": "The Federal Convention convened in the State House (Independence Hall) in Philadelphia on May 14, 1787",
+        "sourceId": "nara-constitution"
+      },
+      {
+        "id": "quorum-obtained",
+        "label": "quorum of seven states was obtained",
+        "orderHint": "waiting for enough states",
+        "quote": "the members adjourned from day to day until a quorum of seven states was obtained on May 25",
+        "sourceId": "nara-constitution"
+      },
+      {
+        "id": "new-frame-government",
+        "label": "entirely new frame of government",
+        "orderHint": "choice to start anew",
+        "quote": "rather than amend the existing Articles, the Convention would draft an entirely new frame of government",
+        "sourceId": "nara-constitution"
+      },
+      {
+        "id": "debated-redrafted",
+        "label": "delegates debated",
+        "orderHint": "closed debate and redraft",
+        "quote": "in closed sessions, the delegates debated, and redrafted the articles of the new Constitution",
+        "sourceId": "nara-constitution"
+      },
+      {
+        "id": "art-of-compromise",
+        "label": "art of compromise",
+        "orderHint": "cooperation closes work",
+        "quote": "The work of many minds, the Constitution stands as a model of cooperative statesmanship and the art of compromise",
+        "sourceId": "nara-constitution"
+      }
+    ]
+  }
+}

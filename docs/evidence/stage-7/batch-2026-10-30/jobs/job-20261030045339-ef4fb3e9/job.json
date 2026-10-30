@@ -1,0 +1,46 @@
+{
+  "jobId": "job-20261030045339-ef4fb3e9",
+  "sourceId": "nhgri-dna-sequencing-fact-sheet",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-30T04:53:39.928Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.17234,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [
+    {
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "A-09",
+        "OV-03"
+      ],
+      "fixed": [
+        "A-09",
+        "OV-03"
+      ],
+      "remaining": [],
+      "passed": true
+    }
+  ],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 43944,
+    "startedAt": "2026-10-30T04:53:39.928Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 2,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "finishedAt": "2026-10-30T04:55:45.956Z"
+}

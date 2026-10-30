@@ -1,0 +1,31 @@
+{
+  "jobId": "job-20261030044238-bae5788f",
+  "sourceId": "usagov-branches-of-government",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-30T04:42:38.465Z",
+  "flow": "lesson",
+  "model": "muse-spark-1.3",
+  "provider": "meta-api",
+  "providerModel": "muse-spark-1.3",
+  "totalCostUSD": 0.123325,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 43944,
+    "startedAt": "2026-10-30T04:42:38.465Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 2,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "finishedAt": "2026-10-30T04:44:12.565Z"
+}

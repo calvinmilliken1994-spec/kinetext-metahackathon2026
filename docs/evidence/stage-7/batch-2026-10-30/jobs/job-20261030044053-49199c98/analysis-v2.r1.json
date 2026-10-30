@@ -1,0 +1,236 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "componentPlan": [
+      {
+        "componentId": "sequence-v1",
+        "focusQuote": "If we incline the ladder so that its base is 2 feet from the wall, the ladder forms an angle of nearly 75.5 degrees degrees with the ground.",
+        "focusSourceId": "nasa-grc-sine-cosine-tangent",
+        "pedagogicalReason": "Walks through ladder measurements in page order to show how angle fixes side ratios"
+      }
+    ],
+    "declineCode": "",
+    "declineSummary": "",
+    "overview": {
+      "headline": "Right triangle sine cosine tangent ratios shown with ladder examples",
+      "keyPoints": [
+        {
+          "id": "right-triangle-ratios",
+          "point": "The ratio of the sides of a right triangle depends only on the value of the angle",
+          "quote": "the ratio of the sides of a right triangle depend only on the value of the angle “c\".",
+          "sourceId": "nasa-grc-sine-cosine-tangent"
+        },
+        {
+          "id": "sine-definition",
+          "point": "Sine is defined as the ratio of the opposite side to the hypotenuse",
+          "quote": "We will call the ratio of the opposite side of a right triangle to the hypotenuse the sine and give it the symbol sin.",
+          "sourceId": "nasa-grc-sine-cosine-tangent"
+        },
+        {
+          "id": "cosine-definition",
+          "point": "Cosine is the ratio of the adjacent side to the hypotenuse for angle c",
+          "quote": "The ratio of the adjacent side of a right triangle to the hypotenuse is called the cosine and given the symbol cos.",
+          "sourceId": "nasa-grc-sine-cosine-tangent"
+        },
+        {
+          "id": "tangent-definition",
+          "point": "Tangent is the ratio of the opposite side to the adjacent side",
+          "quote": "Finally, the ratio of the opposite side to the adjacent side is called the tangent and given the symbol tan.",
+          "sourceId": "nasa-grc-sine-cosine-tangent"
+        }
+      ],
+      "keyTerms": [
+        {
+          "gloss": "longest side opposite the right angle",
+          "id": "hypotenuse",
+          "quote": "We define the side of the triangle opposite from the right angle to be the hypotenuse.",
+          "sourceId": "nasa-grc-sine-cosine-tangent",
+          "term": "hypotenuse"
+        },
+        {
+          "gloss": "side across from angle c labeled o",
+          "id": "opposite-side",
+          "quote": "There is a side opposite the angle c which we label o for “opposite”.",
+          "sourceId": "nasa-grc-sine-cosine-tangent",
+          "term": "opposite"
+        },
+        {
+          "gloss": "remaining side forming angle c with hypotenuse",
+          "id": "adjacent-side",
+          "quote": "The remaining side we label a for “adjacent”.",
+          "sourceId": "nasa-grc-sine-cosine-tangent",
+          "term": "adjacent"
+        },
+        {
+          "gloss": "ratio of opposite side to hypotenuse",
+          "id": "sine-ratio",
+          "quote": "We will call the ratio of the opposite side of a right triangle to the hypotenuse the sine and give it the symbol sin.",
+          "sourceId": "nasa-grc-sine-cosine-tangent",
+          "term": "sine"
+        },
+        {
+          "gloss": "ratio of adjacent side to hypotenuse",
+          "id": "cosine-ratio",
+          "quote": "The ratio of the adjacent side of a right triangle to the hypotenuse is called the cosine and given the symbol cos.",
+          "sourceId": "nasa-grc-sine-cosine-tangent",
+          "term": "cosine"
+        },
+        {
+          "gloss": "ratio of opposite side to adjacent side",
+          "id": "tangent-ratio",
+          "quote": "Finally, the ratio of the opposite side to the adjacent side is called the tangent and given the symbol tan.",
+          "sourceId": "nasa-grc-sine-cosine-tangent",
+          "term": "tangent"
+        }
+      ]
+    },
+    "pageCoverage": "Page defines right triangle sides and sine cosine tangent ratios and uses leaning ladder measurements and complementary angle relations to show ratios depend only on angle",
+    "subject": "maths",
+    "usable": true
+  },
+  "report": {
+    "artifactId": "job-20261030044053-49199c98:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"maths\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 6365 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": false,
+        "message": "keyPoints[0] (right-triangle-ratios): quote \"the ratio of the sides of a right triangle depend only on th\" was not found verbatim in source \"nasa-grc-sine-cosine-tangent\" after whitespace normalisation (expected verbatim quotes of 1-150 characters that appear in the cited source)",
+        "path": "/overview/keyPoints/0/quote",
+        "affected": [
+          "/overview/keyPoints/0/quote"
+        ]
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 4, keyTerms 6, componentPlan 1; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (1 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      },
+      {
+        "id": "OV-01",
+        "kind": "grounding",
+        "passed": false,
+        "message": "keyPoints[0] (right-triangle-ratios): quote \"the ratio of the sides of a right triangle depend only on th\" was not found verbatim in source \"nasa-grc-sine-cosine-tangent\" after whitespace normalisation (expected verbatim quotes of 1-150 characters from the cited source)",
+        "path": "/overview/keyPoints/0/quote",
+        "affected": [
+          "/overview/keyPoints/0/quote"
+        ]
+      },
+      {
+        "id": "OV-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every key term appears in its own quote or in the source sentence containing the quote (term-in-quote)"
+      },
+      {
+        "id": "OV-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no AI-written overview field names a publisher token from the sources' own metadata or uses the frozen generic attribution phrases; quotes are exempt (no-publisher-text)"
+      },
+      {
+        "id": "OV-04",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in AI-written overview text appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "OV-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "keyPoints 4 (3-6) and keyTerms 6 (3-8) are within the frozen counts; repair is by retry only (counts-valid)"
+      },
+      {
+        "id": "OV-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every key point shares >= 2 and every gloss >= 1 distinct content word (>= 4 letters, frozen stoplist) with its own quote (point-quote-overlap)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18b1c-ea1f-76bf-9ec2-434d5cd78615",
+    "usage": {
+      "promptTokens": 5681,
+      "completionTokens": 8678,
+      "reasoningTokens": 7795,
+      "cachedTokens": 3953
+    },
+    "latencyMs": 37232,
+    "estCostUSD": 0.039634449999999995,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  }
+}

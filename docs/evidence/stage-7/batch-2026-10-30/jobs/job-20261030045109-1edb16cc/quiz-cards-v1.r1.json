@@ -1,0 +1,217 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Branch Roles and Checks Quiz",
+    "cards": [
+      {
+        "id": "executive-members-card",
+        "stem": "Which group is identified as members of the executive branch?",
+        "options": [
+          "The president, the vice president, and the president's cabinet",
+          "The U.S. Senate and House of Representatives",
+          "The Supreme Court and other federal courts"
+        ],
+        "sourceId": "usagov-branches-of-government",
+        "quote": "The president, the vice president, and the president's cabinet are the members of the executive branch.",
+        "hint": "Think of the president and advisors"
+      },
+      {
+        "id": "checks-balances-define-card",
+        "stem": "Which description defines the system of checks and balances?",
+        "options": [
+          "The ability of each branch to respond to the actions of the other branches",
+          "Having the authority to declare war",
+          "Surveying the budget"
+        ],
+        "sourceId": "usagov-branches-of-government",
+        "quote": "The ability of each branch to respond to the actions of the other branches is the system of checks and balances.",
+        "hint": "Focus on how branches respond to each other"
+      },
+      {
+        "id": "legislative-makeup-card",
+        "stem": "Which branch includes Congress as its core makeup?",
+        "options": [
+          "The legislative branch is made up of Congress:",
+          "The judicial branch includes the Supreme Court",
+          "The president is the head of state"
+        ],
+        "sourceId": "usagov-branches-of-government",
+        "quote": "The legislative branch is made up of Congress:",
+        "hint": "Consider which branch drafts proposed laws"
+      },
+      {
+        "id": "judicial-interpret-card",
+        "stem": "What is one way the judicial branch evaluates laws?",
+        "options": [
+          "Interpreting the meaning of laws",
+          "Drafting proposed laws",
+          "Confirming presidential nominations"
+        ],
+        "sourceId": "usagov-branches-of-government",
+        "quote": "Interpreting the meaning of laws",
+        "hint": "Think about what courts do with laws"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261030045109-1edb16cc:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "c371053d9b394532b716874c13a8c88c",
+    "usage": {
+      "promptTokens": 2697,
+      "completionTokens": 4871,
+      "reasoningTokens": 4502,
+      "cachedTokens": 0
+    },
+    "latencyMs": 20080,
+    "estCostUSD": 0.024073,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030045109-1edb16cc:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Branch Roles and Checks Quiz",
+    "sources": [
+      {
+        "id": "usagov-branches-of-government",
+        "title": "Branches of the U.S. government — USA.gov (U.S. General Services Administration)",
+        "locator": "https://www.usa.gov/branches-of-government",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: USA.gov, 'Branches of the U.S. government'. USA.gov is an official website of the U.S. General Services Administration; per the GSA website policies, 'Most material on our site is free of copyright and may be copied and distributed without permission. Works produced by federal government employees in the course of their employment are generally not protected by copyright and are in the public domain in the U.S.' The U.S. General Services Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "ae307d5c1f332d7d6c2b5d22721b7a7e2d4334785f551008b702cf03e1a9fd41"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "c371053d9b394532b716874c13a8c88c",
+      "runId": "job-20261030045109-1edb16cc",
+      "promptVersion": "s6-v4",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-30T04:52:22.814Z"
+    },
+    "seed": 1516306798,
+    "cards": [
+      {
+        "id": "executive-members-card",
+        "stem": "Which group is identified as members of the executive branch?",
+        "options": [
+          "The president, the vice president, and the president's cabinet",
+          "The U.S. Senate and House of Representatives",
+          "The Supreme Court and other federal courts"
+        ],
+        "sourceId": "usagov-branches-of-government",
+        "quote": "The president, the vice president, and the president's cabinet are the members of the executive branch.",
+        "hint": "Think of the president and advisors"
+      },
+      {
+        "id": "checks-balances-define-card",
+        "stem": "Which description defines the system of checks and balances?",
+        "options": [
+          "The ability of each branch to respond to the actions of the other branches",
+          "Having the authority to declare war",
+          "Surveying the budget"
+        ],
+        "sourceId": "usagov-branches-of-government",
+        "quote": "The ability of each branch to respond to the actions of the other branches is the system of checks and balances.",
+        "hint": "Focus on how branches respond to each other"
+      },
+      {
+        "id": "legislative-makeup-card",
+        "stem": "Which branch includes Congress as its core makeup?",
+        "options": [
+          "The legislative branch is made up of Congress:",
+          "The judicial branch includes the Supreme Court",
+          "The president is the head of state"
+        ],
+        "sourceId": "usagov-branches-of-government",
+        "quote": "The legislative branch is made up of Congress:",
+        "hint": "Consider which branch drafts proposed laws"
+      },
+      {
+        "id": "judicial-interpret-card",
+        "stem": "What is one way the judicial branch evaluates laws?",
+        "options": [
+          "Interpreting the meaning of laws",
+          "Drafting proposed laws",
+          "Confirming presidential nominations"
+        ],
+        "sourceId": "usagov-branches-of-government",
+        "quote": "Interpreting the meaning of laws",
+        "hint": "Think about what courts do with laws"
+      }
+    ]
+  }
+}

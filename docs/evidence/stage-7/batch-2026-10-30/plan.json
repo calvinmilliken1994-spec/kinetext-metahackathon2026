@@ -1,0 +1,254 @@
+[
+ {
+  "sourceId": "nasa-grc-sine-cosine-tangent",
+  "model": "muse-spark-1.3",
+  "run": 1,
+  "set": "new-pages"
+ },
+ {
+  "sourceId": "nasa-grc-idea-of-functions",
+  "model": "muse-spark-1.3",
+  "run": 1,
+  "set": "new-pages"
+ },
+ {
+  "sourceId": "census-computing-apportionment",
+  "model": "muse-spark-1.3",
+  "run": 1,
+  "set": "new-pages"
+ },
+ {
+  "sourceId": "usagov-branches-of-government",
+  "model": "muse-spark-1.3",
+  "run": 1,
+  "set": "new-pages"
+ },
+ {
+  "sourceId": "usagov-how-laws-are-made",
+  "model": "muse-spark-1.3",
+  "run": 1,
+  "set": "new-pages"
+ },
+ {
+  "sourceId": "usagov-presidential-election-process",
+  "model": "muse-spark-1.3",
+  "run": 1,
+  "set": "new-pages"
+ },
+ {
+  "sourceId": "nhgri-pcr-fact-sheet",
+  "model": "muse-spark-1.3",
+  "run": 1,
+  "set": "new-pages"
+ },
+ {
+  "sourceId": "nhgri-dna-sequencing-fact-sheet",
+  "model": "muse-spark-1.3",
+  "run": 1,
+  "set": "new-pages"
+ },
+ {
+  "sourceId": "nasa-grc-sine-cosine-tangent",
+  "model": "muse-spark-1.3",
+  "run": 2,
+  "set": "new-pages"
+ },
+ {
+  "sourceId": "nasa-grc-idea-of-functions",
+  "model": "muse-spark-1.3",
+  "run": 2,
+  "set": "new-pages"
+ },
+ {
+  "sourceId": "census-computing-apportionment",
+  "model": "muse-spark-1.3",
+  "run": 2,
+  "set": "new-pages"
+ },
+ {
+  "sourceId": "usagov-branches-of-government",
+  "model": "muse-spark-1.3",
+  "run": 2,
+  "set": "new-pages"
+ },
+ {
+  "sourceId": "usagov-how-laws-are-made",
+  "model": "muse-spark-1.3",
+  "run": 2,
+  "set": "new-pages"
+ },
+ {
+  "sourceId": "usagov-presidential-election-process",
+  "model": "muse-spark-1.3",
+  "run": 2,
+  "set": "new-pages"
+ },
+ {
+  "sourceId": "nhgri-pcr-fact-sheet",
+  "model": "muse-spark-1.3",
+  "run": 2,
+  "set": "new-pages"
+ },
+ {
+  "sourceId": "nhgri-dna-sequencing-fact-sheet",
+  "model": "muse-spark-1.3",
+  "run": 2,
+  "set": "new-pages"
+ },
+ {
+  "sourceId": "nasa-grc-sine-cosine-tangent",
+  "model": "muse-spark-1.3",
+  "run": 3,
+  "set": "new-pages"
+ },
+ {
+  "sourceId": "nasa-grc-idea-of-functions",
+  "model": "muse-spark-1.3",
+  "run": 3,
+  "set": "new-pages"
+ },
+ {
+  "sourceId": "census-computing-apportionment",
+  "model": "muse-spark-1.3",
+  "run": 3,
+  "set": "new-pages"
+ },
+ {
+  "sourceId": "usagov-branches-of-government",
+  "model": "muse-spark-1.3",
+  "run": 3,
+  "set": "new-pages"
+ },
+ {
+  "sourceId": "usagov-how-laws-are-made",
+  "model": "muse-spark-1.3",
+  "run": 3,
+  "set": "new-pages"
+ },
+ {
+  "sourceId": "usagov-presidential-election-process",
+  "model": "muse-spark-1.3",
+  "run": 3,
+  "set": "new-pages"
+ },
+ {
+  "sourceId": "nhgri-pcr-fact-sheet",
+  "model": "muse-spark-1.3",
+  "run": 3,
+  "set": "new-pages"
+ },
+ {
+  "sourceId": "nhgri-dna-sequencing-fact-sheet",
+  "model": "muse-spark-1.3",
+  "run": 3,
+  "set": "new-pages"
+ },
+ {
+  "sourceId": "nasa-grc-sine-cosine-tangent",
+  "model": "muse-spark-open",
+  "run": 1,
+  "set": "new-pages"
+ },
+ {
+  "sourceId": "nasa-grc-idea-of-functions",
+  "model": "muse-spark-open",
+  "run": 1,
+  "set": "new-pages"
+ },
+ {
+  "sourceId": "census-computing-apportionment",
+  "model": "muse-spark-open",
+  "run": 1,
+  "set": "new-pages"
+ },
+ {
+  "sourceId": "usagov-branches-of-government",
+  "model": "muse-spark-open",
+  "run": 1,
+  "set": "new-pages"
+ },
+ {
+  "sourceId": "usagov-how-laws-are-made",
+  "model": "muse-spark-open",
+  "run": 1,
+  "set": "new-pages"
+ },
+ {
+  "sourceId": "usagov-presidential-election-process",
+  "model": "muse-spark-open",
+  "run": 1,
+  "set": "new-pages"
+ },
+ {
+  "sourceId": "nhgri-pcr-fact-sheet",
+  "model": "muse-spark-open",
+  "run": 1,
+  "set": "new-pages"
+ },
+ {
+  "sourceId": "nhgri-dna-sequencing-fact-sheet",
+  "model": "muse-spark-open",
+  "run": 1,
+  "set": "new-pages"
+ },
+ {
+  "sourceId": "user-accf5f60ebed",
+  "model": "muse-spark-1.3",
+  "run": 1,
+  "set": "demo"
+ },
+ {
+  "sourceId": "nasa-grc-drag-equation",
+  "model": "muse-spark-1.3",
+  "run": 1,
+  "set": "demo"
+ },
+ {
+  "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+  "model": "muse-spark-1.3",
+  "run": 1,
+  "set": "demo"
+ },
+ {
+  "sourceId": "nara-constitution",
+  "model": "muse-spark-1.3",
+  "run": 1,
+  "set": "demo"
+ },
+ {
+  "sourceId": "nara-louisiana-purchase-treaty",
+  "model": "muse-spark-1.3",
+  "run": 1,
+  "set": "demo"
+ },
+ {
+  "sourceId": "user-accf5f60ebed",
+  "model": "muse-spark-1.3",
+  "run": 2,
+  "set": "demo"
+ },
+ {
+  "sourceId": "nasa-grc-drag-equation",
+  "model": "muse-spark-1.3",
+  "run": 2,
+  "set": "demo"
+ },
+ {
+  "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+  "model": "muse-spark-1.3",
+  "run": 2,
+  "set": "demo"
+ },
+ {
+  "sourceId": "nara-constitution",
+  "model": "muse-spark-1.3",
+  "run": 2,
+  "set": "demo"
+ },
+ {
+  "sourceId": "nara-louisiana-purchase-treaty",
+  "model": "muse-spark-1.3",
+  "run": 2,
+  "set": "demo"
+ }
+]

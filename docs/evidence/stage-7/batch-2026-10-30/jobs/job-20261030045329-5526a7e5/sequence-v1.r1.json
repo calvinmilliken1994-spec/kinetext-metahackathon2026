@@ -1,0 +1,191 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "How DNA segments are copied through heating and synthesis",
+    "orderBasis": "page-order",
+    "cyclic": true,
+    "orderNote": "Follow the order described for how the copying process works",
+    "steps": [
+      {
+        "id": "heat-denatures-strand",
+        "label": "first heated",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "To amplify a segment of DNA using PCR, the sample is first heated so the DNA denatures, or separates into two pieces of single-stranded DNA.",
+        "orderHint": "Put the actions in the order they occur"
+      },
+      {
+        "id": "taq-polymerase-builds",
+        "label": "Taq polymerase",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "Next, an enzyme called \"Taq polymerase\" synthesizes - builds - two new strands of DNA, using the original strands as templates.",
+        "orderHint": "Put the actions in the order they occur"
+      },
+      {
+        "id": "duplication-old-new",
+        "label": "duplication of the original DNA",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "This process results in the duplication of the original DNA, with each of the new molecules containing one old and one new strand of DNA.",
+        "orderHint": "Put the actions in the order they occur"
+      },
+      {
+        "id": "create-two-new-copies",
+        "label": "create two new copies",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "Then each of these strands can be used to create two new copies, and so on, and so on.",
+        "orderHint": "Put the actions in the order they occur"
+      },
+      {
+        "id": "cycle-repeated-thirty-forty",
+        "label": "repeated as many as 30 or 40 times",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "The cycle of denaturing and synthesizing new DNA is repeated as many as 30 or 40 times",
+        "orderHint": "Put the actions in the order they occur"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261030045329-5526a7e5:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step label occurs in its own quote after normalisation (labels-in-quotes)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 5 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "0050673b7aa34efdb05754cec5ba8a02",
+    "usage": {
+      "promptTokens": 2719,
+      "completionTokens": 8569,
+      "reasoningTokens": 8172,
+      "cachedTokens": 0
+    },
+    "latencyMs": 43609,
+    "estCostUSD": 0.039817,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030045329-5526a7e5:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "How DNA segments are copied through heating and synthesis",
+    "sources": [
+      {
+        "id": "nhgri-pcr-fact-sheet",
+        "title": "Polymerase Chain Reaction (PCR) Fact Sheet — National Human Genome Research Institute, genome.gov",
+        "locator": "https://www.genome.gov/about-genomics/fact-sheets/Polymerase-Chain-Reaction-Fact-Sheet",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Human Genome Research Institute (NHGRI), genome.gov, 'Polymerase Chain Reaction (PCR) Fact Sheet'. Per the NHGRI Copyright Policy, 'Text, graphics, videos, illustrations and other information on National Human Genome Research Institute (NHGRI) websites are in the public domain, unless otherwise indicated'. Courtesy: National Human Genome Research Institute. The National Human Genome Research Institute has not reviewed, approved or endorsed this activity.",
+        "sha256": "d4a11c85387eeb3080dfdf528b93202d09a5e14654d7b3cb2d92ac557369748b"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "0050673b7aa34efdb05754cec5ba8a02",
+      "runId": "job-20261030045329-5526a7e5",
+      "promptVersion": "s6-v4",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-30T04:55:14.175Z"
+    },
+    "seed": 4270391543,
+    "orderBasis": "page-order",
+    "cyclic": true,
+    "orderNote": "Follow the order described for how the copying process works",
+    "steps": [
+      {
+        "id": "heat-denatures-strand",
+        "label": "first heated",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "To amplify a segment of DNA using PCR, the sample is first heated so the DNA denatures, or separates into two pieces of single-stranded DNA.",
+        "orderHint": "Put the actions in the order they occur"
+      },
+      {
+        "id": "taq-polymerase-builds",
+        "label": "Taq polymerase",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "Next, an enzyme called \"Taq polymerase\" synthesizes - builds - two new strands of DNA, using the original strands as templates.",
+        "orderHint": "Put the actions in the order they occur"
+      },
+      {
+        "id": "duplication-old-new",
+        "label": "duplication of the original DNA",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "This process results in the duplication of the original DNA, with each of the new molecules containing one old and one new strand of DNA.",
+        "orderHint": "Put the actions in the order they occur"
+      },
+      {
+        "id": "create-two-new-copies",
+        "label": "create two new copies",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "Then each of these strands can be used to create two new copies, and so on, and so on.",
+        "orderHint": "Put the actions in the order they occur"
+      },
+      {
+        "id": "cycle-repeated-thirty-forty",
+        "label": "repeated as many as 30 or 40 times",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "The cycle of denaturing and synthesizing new DNA is repeated as many as 30 or 40 times",
+        "orderHint": "Put the actions in the order they occur"
+      }
+    ]
+  }
+}

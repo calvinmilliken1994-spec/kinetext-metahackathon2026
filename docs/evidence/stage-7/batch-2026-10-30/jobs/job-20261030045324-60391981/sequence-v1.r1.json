@@ -1,0 +1,219 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "Steps of the presidential election cycle",
+    "orderBasis": "page-order",
+    "cyclic": true,
+    "orderNote": "Follows the order listed in the typical cycle table",
+    "steps": [
+      {
+        "id": "candidates-register",
+        "label": "Candidates register with the Federal Election Commission",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Candidates register with the Federal Election Commission to run for president.",
+        "orderHint": "Follow the order shown in the cycle table"
+      },
+      {
+        "id": "id",
+        "label": "Candidates announce their intentions to run",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Candidates announce their intentions to run.",
+        "orderHint": "Follow the order shown in the cycle table"
+      },
+      {
+        "id": "candidates-announce",
+        "label": "States and parties hold presidential primaries and caucuses",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "States and parties hold presidential primaries and caucuses.",
+        "orderHint": "Follow the order shown in the cycle table"
+      },
+      {
+        "id": "nominating-conventions",
+        "label": "Parties hold nominating conventions to choose their presidential candidates",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Parties hold nominating conventions to choose their presidential candidates.",
+        "orderHint": "Follow the order shown in the cycle table"
+      },
+      {
+        "id": "electors-cast-votes",
+        "label": "Electors cast their votes for president in the Electoral College",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Electors cast their votes for president in the Electoral College.",
+        "orderHint": "Follow the order shown in the cycle table"
+      },
+      {
+        "id": "congress-counts-votes",
+        "label": "Congress counts the electoral votes",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Congress counts the electoral votes.",
+        "orderHint": "Follow the order shown in the cycle table"
+      },
+      {
+        "id": "inauguration-day",
+        "label": "Presidential Inauguration Day",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Presidential Inauguration Day",
+        "orderHint": "Follow the order shown in the cycle table"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261030045324-60391981:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 7 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step label occurs in its own quote after normalisation (labels-in-quotes)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 7 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "105c54d25a3045998946065431ab4990",
+    "usage": {
+      "promptTokens": 2456,
+      "completionTokens": 4157,
+      "reasoningTokens": 3731,
+      "cachedTokens": 0
+    },
+    "latencyMs": 16403,
+    "estCostUSD": 0.02073725,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030045324-60391981:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "Steps of the presidential election cycle",
+    "sources": [
+      {
+        "id": "usagov-presidential-election-process",
+        "title": "Overview of the presidential election process — USA.gov (U.S. General Services Administration)",
+        "locator": "https://www.usa.gov/presidential-election-process",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: USA.gov, 'Overview of the presidential election process'. USA.gov is an official website of the U.S. General Services Administration; per the GSA website policies, 'Most material on our site is free of copyright and may be copied and distributed without permission. Works produced by federal government employees in the course of their employment are generally not protected by copyright and are in the public domain in the U.S.' The U.S. General Services Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "dab5e0bb2bd4fbb8ad6e9d4e8554cef8d4d363028ced8cd2650173905c0efc2a"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "105c54d25a3045998946065431ab4990",
+      "runId": "job-20261030045324-60391981",
+      "promptVersion": "s6-v4",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-30T04:54:09.698Z"
+    },
+    "seed": 1034663418,
+    "orderBasis": "page-order",
+    "cyclic": true,
+    "orderNote": "Follows the order listed in the typical cycle table",
+    "steps": [
+      {
+        "id": "candidates-register",
+        "label": "Candidates register with the Federal Election Commission",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Candidates register with the Federal Election Commission to run for president.",
+        "orderHint": "Follow the order shown in the cycle table"
+      },
+      {
+        "id": "id",
+        "label": "Candidates announce their intentions to run",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Candidates announce their intentions to run.",
+        "orderHint": "Follow the order shown in the cycle table"
+      },
+      {
+        "id": "candidates-announce",
+        "label": "States and parties hold presidential primaries and caucuses",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "States and parties hold presidential primaries and caucuses.",
+        "orderHint": "Follow the order shown in the cycle table"
+      },
+      {
+        "id": "nominating-conventions",
+        "label": "Parties hold nominating conventions to choose their presidential candidates",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Parties hold nominating conventions to choose their presidential candidates.",
+        "orderHint": "Follow the order shown in the cycle table"
+      },
+      {
+        "id": "electors-cast-votes",
+        "label": "Electors cast their votes for president in the Electoral College",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Electors cast their votes for president in the Electoral College.",
+        "orderHint": "Follow the order shown in the cycle table"
+      },
+      {
+        "id": "congress-counts-votes",
+        "label": "Congress counts the electoral votes",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Congress counts the electoral votes.",
+        "orderHint": "Follow the order shown in the cycle table"
+      },
+      {
+        "id": "inauguration-day",
+        "label": "Presidential Inauguration Day",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Presidential Inauguration Day",
+        "orderHint": "Follow the order shown in the cycle table"
+      }
+    ]
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "jobId": "job-20261030044438-5cd9a47f",
+  "analysisRef": "job-20261030044438-5cd9a47f/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030044438-5cd9a47f:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Right triangle ratios define sine cosine and tangent for flight math",
+    "sources": [
+      {
+        "id": "nasa-grc-sine-cosine-tangent",
+        "title": "Sine-Cosine-Tangent — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/sine-cosine-tangent/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "3f90979d8b1710fa0dbffead40968b37333b0e8dbb45f50696a604f272e181b9"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18b20-558b-739a-b019-3b800ab64544",
+      "runId": "job-20261030044438-5cd9a47f",
+      "promptVersion": "s6-v4",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-30T04:45:14.679Z"
+    },
+    "seed": 3482203937,
+    "headline": "Right triangle ratios define sine cosine and tangent for flight math",
+    "keyPoints": [
+      {
+        "id": "right-triangle-angle-sum",
+        "point": "Right triangle angles include a right angle and two acute angles that sum with it",
+        "quote": "The sum of the angles of any triangle is equal to 180 degrees.",
+        "sourceId": "nasa-grc-sine-cosine-tangent"
+      },
+      {
+        "id": "sine-ratio-definition",
+        "point": "Sine relates opposite side length to hypotenuse length for a chosen angle",
+        "quote": "We will call the ratio of the opposite side of a right triangle to the hypotenuse the sine and give it the symbol sin.",
+        "sourceId": "nasa-grc-sine-cosine-tangent"
+      },
+      {
+        "id": "cosine-ratio-definition",
+        "point": "Cosine relates adjacent side length to hypotenuse length for a chosen angle",
+        "quote": "The ratio of the adjacent side of a right triangle to the hypotenuse is called the cosine and given the symbol cos.",
+        "sourceId": "nasa-grc-sine-cosine-tangent"
+      },
+      {
+        "id": "tangent-ratio-definition",
+        "point": "Tangent relates opposite side length to adjacent side length for a chosen angle",
+        "quote": "Finally, the ratio of the opposite side to the adjacent side is called the tangent and given the symbol tan.",
+        "sourceId": "nasa-grc-sine-cosine-tangent"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "longest side across from the right angle in a right triangle",
+        "id": "hypotenuse",
+        "quote": "We define the side of the triangle opposite from the right angle to be the hypotenuse.",
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "term": "hypotenuse"
+      },
+      {
+        "gloss": "side opposite the chosen angle forming sine numerator",
+        "id": "opposite-side",
+        "quote": "The ratio of the opposite to the hypotenuse is .967 and defined to be the sine of the angle c = 75.5 degrees.",
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "term": "opposite"
+      },
+      {
+        "gloss": "side adjacent to the chosen angle forming cosine numerator",
+        "id": "adjacent-side",
+        "quote": "The ratio of the adjacent side of a right triangle to the hypotenuse is called the cosine and given the symbol cos.",
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "term": "adjacent"
+      },
+      {
+        "gloss": "ratio of opposite side to adjacent side for an angle",
+        "id": "tangent-ratio",
+        "quote": "Finally, the ratio of the opposite side to the adjacent side is called the tangent and given the symbol tan.",
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "term": "tangent"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "formula-explorer-v1",
+      "specId": "job-20261030044438-5cd9a47f:formula-explorer-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261030044438-5cd9a47f:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

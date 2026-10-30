@@ -1,0 +1,286 @@
+{
+  "gen": {
+    "schemaVersion": "formula-explorer-v1",
+    "title": "Right triangle sine ratio",
+    "formulaText": "sin(c) = o/h",
+    "sourceId": "nasa-grc-sine-cosine-tangent",
+    "quote": "sin(c) = o/h",
+    "expression": "o/h",
+    "variables": [
+      {
+        "name": "o",
+        "pageSymbol": "o",
+        "meaning": "opposite side length along wall",
+        "meaningQuoted": false,
+        "quote": "There is a side opposite the angle c which we label o for “opposite”.",
+        "unit": "",
+        "min": 2,
+        "max": 8,
+        "default": 7.745
+      },
+      {
+        "name": "h",
+        "pageSymbol": "h",
+        "meaning": "hypotenuse length of ladder",
+        "meaningQuoted": false,
+        "quote": "We label the hypotenuse with the symbol h.",
+        "unit": "",
+        "min": 4,
+        "max": 16,
+        "default": 8
+      }
+    ],
+    "xVariable": "o",
+    "cases": [
+      {
+        "id": "case-1",
+        "inputs": [
+          {
+            "name": "o",
+            "value": 7.745
+          },
+          {
+            "name": "h",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "id": "case-2",
+        "inputs": [
+          {
+            "name": "o",
+            "value": 4
+          },
+          {
+            "name": "h",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "id": "case-3",
+        "inputs": [
+          {
+            "name": "o",
+            "value": 6
+          },
+          {
+            "name": "h",
+            "value": 8
+          }
+        ]
+      }
+    ],
+    "sourceExample": {
+      "quote": "o^2 = 8^2 – 2^2\n\no^2 = 64 – 4 = 60\n\no = 7.745\n\nThe ratio of the opposite to the hypotenuse is .967",
+      "resultNumber": 0.967,
+      "tolerance": 0.01
+    },
+    "hasSourceExample": true
+  },
+  "report": {
+    "artifactId": "job-20261030044914-ec86012e:formula-explorer-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every formula-explorer case id and title shape is within the frozen limits"
+      },
+      {
+        "id": "FE-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "the formula quote (1 quote) appears verbatim in source \"nasa-grc-sine-cosine-tangent\" and formulaText occurs inside the quote after normalisation, with no mathematical token cut at the quote edges (formula-quoted)"
+      },
+      {
+        "id": "FE-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "expression parses in the frozen grammar (<= 120 chars, AST <= 50 nodes, no \"**\", no implicit multiplication) and its variable set equals the declared set (expression-parses)"
+      },
+      {
+        "id": "FE-03",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 2 variables are declared with valid unique non-reserved names, exact page symbols, grounded quotes (top-level sourceId) and xVariable \"o\" is one of them (variables-declared)"
+      },
+      {
+        "id": "FE-04",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "all 3 case(s) carry exactly the declared variables with finite in-range inputs and every recomputed output is finite (the system sets the outputs) (cases-recomputed)"
+      },
+      {
+        "id": "FE-05",
+        "kind": "behavioral",
+        "passed": false,
+        "message": "sourceExample.resultNumber 0.967 does not appear as a number in the sourceExample quote (the result must be stated in the quoted passage) (expected a single quotable passage that explicitly binds every variable — \"x = 6\", \"x is 6\" or \"6 for x\" — and states the result, matching our evaluation at those bindings within a tolerance in [1e-9, 0.25])",
+        "path": "/sourceExample/resultNumber",
+        "affected": [
+          "/sourceExample/resultNumber",
+          "/sourceExample/quote"
+        ]
+      },
+      {
+        "id": "FE-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every slider range is sane (finite, min < max, default inside, positive-range ratio <= 1000000) and no literal exponent exceeds 100 (ranges-sane)"
+      },
+      {
+        "id": "FE-07",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title and variable meanings appears on the page or in the same quote (N-01); units and formula fields are notation and exempt (numbers-checkable)"
+      },
+      {
+        "id": "FE-08",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the expression matches the page formula \"o/h\" parsed from the quote with the same grammar: 18/18 finite independent comparison points agree within relative 1e-9 with no mismatch (expression-matches-page-formula)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "formula-explorer-v1: no weakening — every one of the 1 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "6407f90c8f654d539294bf5decea7d8e",
+    "usage": {
+      "promptTokens": 5668,
+      "completionTokens": 13800,
+      "reasoningTokens": 13469,
+      "cachedTokens": 0
+    },
+    "latencyMs": 50030,
+    "estCostUSD": 0.065735,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030044914-ec86012e:formula-explorer-v1:r2",
+    "componentId": "formula-explorer-v1",
+    "title": "Right triangle sine ratio",
+    "sources": [
+      {
+        "id": "nasa-grc-sine-cosine-tangent",
+        "title": "Sine-Cosine-Tangent — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/sine-cosine-tangent/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "3f90979d8b1710fa0dbffead40968b37333b0e8dbb45f50696a604f272e181b9"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "6407f90c8f654d539294bf5decea7d8e",
+      "runId": "job-20261030044914-ec86012e",
+      "promptVersion": "s6-v4",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-30T04:51:46.492Z"
+    },
+    "seed": 4146805117,
+    "formulaText": "sin(c) = o/h",
+    "sourceId": "nasa-grc-sine-cosine-tangent",
+    "quote": "sin(c) = o/h",
+    "expression": "o/h",
+    "variables": [
+      {
+        "name": "o",
+        "pageSymbol": "o",
+        "meaning": "opposite side length along wall",
+        "meaningQuoted": false,
+        "quote": "There is a side opposite the angle c which we label o for “opposite”.",
+        "unit": "",
+        "min": 2,
+        "max": 8,
+        "default": 7.745
+      },
+      {
+        "name": "h",
+        "pageSymbol": "h",
+        "meaning": "hypotenuse length of ladder",
+        "meaningQuoted": false,
+        "quote": "We label the hypotenuse with the symbol h.",
+        "unit": "",
+        "min": 4,
+        "max": 16,
+        "default": 8
+      }
+    ],
+    "xVariable": "o",
+    "cases": [
+      {
+        "id": "case-1",
+        "inputs": [
+          {
+            "name": "o",
+            "value": 7.745
+          },
+          {
+            "name": "h",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "id": "case-2",
+        "inputs": [
+          {
+            "name": "o",
+            "value": 4
+          },
+          {
+            "name": "h",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "id": "case-3",
+        "inputs": [
+          {
+            "name": "o",
+            "value": 6
+          },
+          {
+            "name": "h",
+            "value": 8
+          }
+        ]
+      }
+    ],
+    "sourceExample": {
+      "quote": "o^2 = 8^2 – 2^2\n\no^2 = 64 – 4 = 60\n\no = 7.745\n\nThe ratio of the opposite to the hypotenuse is .967",
+      "resultNumber": 0.967,
+      "tolerance": 0.01
+    },
+    "hasSourceExample": true
+  }
+}

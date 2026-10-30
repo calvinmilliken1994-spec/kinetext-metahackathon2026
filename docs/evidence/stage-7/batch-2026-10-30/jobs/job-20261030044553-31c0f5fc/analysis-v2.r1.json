@@ -1,0 +1,220 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "componentPlan": [
+      {
+        "componentId": "quiz-cards-v1",
+        "focusQuote": "the value of one variable in a problem depends uniquely on the value of another variable in the problem.",
+        "focusSourceId": "nasa-grc-idea-of-functions",
+        "pedagogicalReason": "Checks recall of function definition and named trig relations before examples."
+      },
+      {
+        "componentId": "sequence-v1",
+        "focusQuote": "Finally, let us consider the blue triangle. It was formed by tripling the size of sides of the black triangle.",
+        "focusSourceId": "nasa-grc-idea-of-functions",
+        "pedagogicalReason": "Follows black to red to blue scaling in page order to show cosine ratio stays fixed."
+      }
+    ],
+    "declineCode": "",
+    "declineSummary": "",
+    "overview": {
+      "headline": "Functions link variables uniquely with trig ratios fixed by angle",
+      "keyPoints": [
+        {
+          "id": "function-dependence",
+          "point": "A function means one variable depends uniquely on another variable in a problem",
+          "quote": "the value of one variable in a problem depends uniquely on the value of another variable in the problem.",
+          "sourceId": "nasa-grc-idea-of-functions"
+        },
+        {
+          "id": "exponential-multiplier",
+          "point": "An exponential function relates a variable to times it is used as a multiplier",
+          "quote": "The exponential function relates a variable to the number of times another variable is used as a multiplier",
+          "sourceId": "nasa-grc-idea-of-functions"
+        },
+        {
+          "id": "trig-sides-angles",
+          "point": "Sine cosine and tangent relate sides and angles of a triangle",
+          "quote": "The trigonometric functions sine, cosine, and tangent relate the various sides and angles of a triangle.",
+          "sourceId": "nasa-grc-idea-of-functions"
+        },
+        {
+          "id": "cosine-invariance",
+          "point": "Dividing scaled sides gives same value as black triangle showing ratio fixed",
+          "quote": "Dividing out the “2’s” gives x divided by y, the same value as the black triangle.",
+          "sourceId": "nasa-grc-idea-of-functions"
+        }
+      ],
+      "keyTerms": [
+        {
+          "gloss": "uniquely determined link where value depends on another variable",
+          "id": "function",
+          "quote": "An important mathematical concept is the idea of function – the value of one variable in a problem depends uniquely",
+          "sourceId": "nasa-grc-idea-of-functions",
+          "term": "function"
+        },
+        {
+          "gloss": "repeated multiplier use where variable counts times as multiplier",
+          "id": "exponential-function",
+          "quote": "The exponential function relates a variable to the number of times another variable is used as a multiplier",
+          "sourceId": "nasa-grc-idea-of-functions",
+          "term": "exponential function"
+        },
+        {
+          "gloss": "inverse operation that counts times variable must multiply itself",
+          "id": "logarithmic-function",
+          "quote": "The logarithmic function is the inverse of the exponential; it gives the number of times that you must multiply a variable by itself",
+          "sourceId": "nasa-grc-idea-of-functions",
+          "term": "logarithmic function"
+        },
+        {
+          "gloss": "adjacent side divided by hypotenuse for fixed angle value",
+          "id": "cosine",
+          "quote": "For the black triangle, the cosine of “b” is equal to x divided by y.",
+          "sourceId": "nasa-grc-idea-of-functions",
+          "term": "cosine"
+        }
+      ]
+    },
+    "pageCoverage": "Explains idea of function with exponential logarithmic and trig examples and shows cosine ratio stays same across scaled right triangles.",
+    "subject": "maths",
+    "usable": true
+  },
+  "report": {
+    "artifactId": "job-20261030044553-31c0f5fc:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"maths\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 4157 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 10 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 4, keyTerms 4, componentPlan 2; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (2 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher token from the sources' own title/attribution metadata and none uses the generic phrases (according to | as stated by | official | endorsed); quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      },
+      {
+        "id": "OV-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 8 overview quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "OV-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every key term appears in its own quote or in the source sentence containing the quote (term-in-quote)"
+      },
+      {
+        "id": "OV-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no AI-written overview field names a publisher token from the sources' own metadata or uses the frozen generic attribution phrases; quotes are exempt (no-publisher-text)"
+      },
+      {
+        "id": "OV-04",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in AI-written overview text appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "OV-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "keyPoints 4 (3-6) and keyTerms 4 (3-8) are within the frozen counts; repair is by retry only (counts-valid)"
+      },
+      {
+        "id": "OV-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every key point shares >= 2 and every gloss >= 1 distinct content word (>= 4 letters, frozen stoplist) with its own quote (point-quote-overlap)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18b21-8006-7438-9eec-f31b2e967334",
+    "usage": {
+      "promptTokens": 5080,
+      "completionTokens": 8861,
+      "reasoningTokens": 8062,
+      "cachedTokens": 0
+    },
+    "latencyMs": 37138,
+    "estCostUSD": 0.04400925,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "jobId": "job-20261030045159-a3857667",
+  "analysisRef": "job-20261030045159-a3857667/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030045159-a3857667:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Congress turns bill ideas into law through 7 ordered steps",
+    "sources": [
+      {
+        "id": "usagov-how-laws-are-made",
+        "title": "How laws are made — USA.gov (U.S. General Services Administration)",
+        "locator": "https://www.usa.gov/how-laws-are-made",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: USA.gov, 'How laws are made'. USA.gov is an official website of the U.S. General Services Administration; per the GSA website policies, 'Most material on our site is free of copyright and may be copied and distributed without permission. Works produced by federal government employees in the course of their employment are generally not protected by copyright and are in the public domain in the U.S.' The U.S. General Services Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "a0fa06d928204b895fc85a6e90675ea52362ca38af3e3c44b154b827b81b5f87"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "c8db970ede584c528444f073d363f791",
+      "runId": "job-20261030045159-a3857667",
+      "promptVersion": "s6-v4",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-30T04:52:27.203Z"
+    },
+    "seed": 122288212,
+    "headline": "Congress turns bill ideas into law through 7 ordered steps",
+    "keyPoints": [
+      {
+        "id": "lawmaking-branch",
+        "point": "Congress serves as the lawmaking branch of the federal government",
+        "sourceId": "usagov-how-laws-are-made",
+        "quote": "Congress is the lawmaking branch of the federal government."
+      },
+      {
+        "id": "bill-proposal",
+        "point": "A bill is a proposal for a new law or a change to existing law brought by members or petitions",
+        "sourceId": "usagov-how-laws-are-made",
+        "quote": "A bill is a proposal for a new law or a change to an existing law."
+      },
+      {
+        "id": "committee-assignment",
+        "point": "Once introduced a bill is assigned to a committee whose members research discuss and make changes",
+        "sourceId": "usagov-how-laws-are-made",
+        "quote": "Once a bill is introduced, it is assigned to a committee whose members will research, discuss, and make changes to the bill."
+      },
+      {
+        "id": "same-version-vote",
+        "point": "Both bodies must vote to accept the same version of the bill before presenting it to the president",
+        "sourceId": "usagov-how-laws-are-made",
+        "quote": "Once both bodies vote to accept a bill, they must work out any differences between the two versions."
+      },
+      {
+        "id": "veto-override",
+        "point": "If the president vetoes a bill Congress can often vote to override that veto and make it law",
+        "sourceId": "usagov-how-laws-are-made",
+        "quote": "If the president chooses to veto a bill, in most cases Congress can vote to override that veto and the bill becomes a law."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "term-bill",
+        "term": "bill",
+        "gloss": "a proposal for a new law or a change to existing law",
+        "sourceId": "usagov-how-laws-are-made",
+        "quote": "A bill is a proposal for a new law or a change to an existing law."
+      },
+      {
+        "id": "term-committee",
+        "term": "committee",
+        "gloss": "group assigned to research discuss and make changes to a bill",
+        "sourceId": "usagov-how-laws-are-made",
+        "quote": "Once a bill is introduced, it is assigned to a committee whose members will research, discuss, and make changes to the bill."
+      },
+      {
+        "id": "term-veto",
+        "term": "veto",
+        "gloss": "refuse to approve a bill by the president called a veto",
+        "sourceId": "usagov-how-laws-are-made",
+        "quote": "Or the president can refuse to approve a bill. This is called a veto."
+      },
+      {
+        "id": "term-pocket-veto",
+        "term": "pocket veto",
+        "gloss": "action where an unsigned bill is vetoed by default when Congress is no longer in session and cannot be overridden",
+        "sourceId": "usagov-how-laws-are-made",
+        "quote": "This action is called a pocket veto, and it cannot be overridden by Congress."
+      },
+      {
+        "id": "term-house",
+        "term": "House",
+        "gloss": "chamber that can initiate tax and revenue related legislation",
+        "sourceId": "usagov-how-laws-are-made",
+        "quote": "Only the House can initiate tax and revenue-related legislation"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261030045159-a3857667:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261030045159-a3857667:compare-table-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

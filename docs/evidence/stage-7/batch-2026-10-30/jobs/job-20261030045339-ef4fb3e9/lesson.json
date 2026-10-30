@@ -1,0 +1,124 @@
+{
+  "jobId": "job-20261030045339-ef4fb3e9",
+  "analysisRef": "job-20261030045339-ef4fb3e9/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030045339-ef4fb3e9:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Sequencing reads base order and shapes health research",
+    "sources": [
+      {
+        "id": "nhgri-dna-sequencing-fact-sheet",
+        "title": "DNA Sequencing Fact Sheet — National Human Genome Research Institute, genome.gov",
+        "locator": "https://www.genome.gov/about-genomics/fact-sheets/DNA-Sequencing-Fact-Sheet",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Human Genome Research Institute (NHGRI), genome.gov, 'DNA Sequencing Fact Sheet'. Per the NHGRI Copyright Policy, 'Text, graphics, videos, illustrations and other information on National Human Genome Research Institute (NHGRI) websites are in the public domain, unless otherwise indicated'. Courtesy: National Human Genome Research Institute. The National Human Genome Research Institute has not reviewed, approved or endorsed this activity.",
+        "sha256": "3555c872ba407e81cd9059ac95d10207f341baaee7a4cb05c878f68df181052e"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "89e0d98ccb16441c884c2df4ad37832f",
+      "runId": "job-20261030045339-ef4fb3e9",
+      "promptVersion": "s6-v4",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-30T04:55:02.877Z"
+    },
+    "seed": 203339709,
+    "headline": "Sequencing reads base order and shapes health research",
+    "keyPoints": [
+      {
+        "id": "sequencing-order",
+        "point": "Sequencing means determining the order of chemical bases that make up the molecule",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Sequencing DNA means determining the order of the four chemical building blocks - called \"bases\" - that make up the DNA molecule."
+      },
+      {
+        "id": "base-pairing",
+        "point": "Adenine always pairs with thymine and cytosine always pairs with guanine to form base pairs",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Adenine (A) always pairs with thymine (T); cytosine (C) always pairs with guanine (G)."
+      },
+      {
+        "id": "genome-size",
+        "point": "About 3 billion base pairs spell out instructions for making and maintaining a being",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "The human genome contains about 3 billion base pairs that spell out the instructions for making and maintaining a human being."
+      },
+      {
+        "id": "cost-goal",
+        "point": "Goal is to reduce cost of sequencing to even higher quality for less than $1,000",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "reduce the cost of sequencing a human genome of even higher quality than is possible today and for less than $1,000"
+      },
+      {
+        "id": "nanopore-method",
+        "point": "Nanopore sequencing involves threading single strands through extremely tiny pores in a membrane",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Nanopore-based DNA sequencing involves threading single DNA strands through extremely tiny pores in a membrane."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "base-pairs",
+        "term": "base pairs",
+        "gloss": "paired units that spell out instructions for making and maintaining a being",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "The human genome contains about 3 billion base pairs that spell out the instructions for making and maintaining a human being."
+      },
+      {
+        "id": "dna-sequencing",
+        "term": "bases",
+        "gloss": "units called chemical building blocks that make up the molecule",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "DNA sequencing determines the order of the four chemical building blocks - called \"bases\" - that make up the DNA molecule."
+      },
+      {
+        "id": "genome-term",
+        "term": "instructions",
+        "gloss": "directions that contains about 3 billion paired units for making and maintaining a being",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "The human genome contains about 3 billion base pairs that spell out the instructions for making and maintaining a human being."
+      },
+      {
+        "id": "dna-polymerase",
+        "term": "polymerase",
+        "gloss": "enzyme molecules that are watched as they copy to read sequence in cells",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "watching DNA polymerase molecules as they copy DNA - the same molecules that make new copies of DNA in our cells"
+      },
+      {
+        "id": "nanopores-term",
+        "term": "nanopores",
+        "gloss": "tiny membrane openings that offer potential advantages for current sequencing methods",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Using nanopores to sequence DNA offers many potential advantages over current methods."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261030045339-ef4fb3e9:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sort-groups-v1",
+      "specId": "job-20261030045339-ef4fb3e9:sort-groups-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

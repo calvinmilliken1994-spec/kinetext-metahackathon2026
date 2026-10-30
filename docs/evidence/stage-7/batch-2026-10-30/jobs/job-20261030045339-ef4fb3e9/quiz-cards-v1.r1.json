@@ -1,0 +1,217 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Base pairing and genome size",
+    "cards": [
+      {
+        "id": "genome-size-fact",
+        "stem": "About how many paired units carry instructions for a human being",
+        "options": [
+          "3 billion base pairs",
+          "1 million bases",
+          "100,000 billion bases"
+        ],
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "The human genome contains about 3 billion base pairs that spell out the instructions for making and maintaining a human being.",
+        "hint": "Recall the scale of the full set of instructions"
+      },
+      {
+        "id": "base-pair-adenine-thymine",
+        "stem": "Which pairing always occurs between the four chemical bases",
+        "options": [
+          "Adenine (A) always pairs with thymine (T)",
+          "Adenine (A) always pairs with guanine (G)",
+          "Adenine (A) always pairs with cytosine (C)"
+        ],
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Adenine (A) always pairs with thymine (T);",
+        "hint": "Think about the fixed partners in the double helix"
+      },
+      {
+        "id": "base-pair-cytosine-guanine",
+        "stem": "What is the constant partner for cytosine in the double helix",
+        "options": [
+          "cytosine (C) always pairs with guanine (G)",
+          "cytosine (C) always pairs with thymine (T)",
+          "cytosine (C) always pairs with adenine (A)"
+        ],
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "cytosine (C) always pairs with guanine (G).",
+        "hint": "Remember the second part of the pairing statement"
+      },
+      {
+        "id": "sequencing-definition",
+        "stem": "What does determining the order of the four building blocks called bases accomplish",
+        "options": [
+          "four chemical building blocks - called \"bases\"",
+          "four chemical building blocks - called \"genes\"",
+          "four chemical building blocks - called \"proteins\""
+        ],
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "DNA sequencing determines the order of the four chemical building blocks - called \"bases\" - that make up the DNA molecule.",
+        "hint": "Focus on the term for the basic units of the molecule"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261030045339-ef4fb3e9:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "a1d277f8550041f5a346ec291a77bac0",
+    "usage": {
+      "promptTokens": 3344,
+      "completionTokens": 9796,
+      "reasoningTokens": 9345,
+      "cachedTokens": 0
+    },
+    "latencyMs": 43064,
+    "estCostUSD": 0.045813,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030045339-ef4fb3e9:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Base pairing and genome size",
+    "sources": [
+      {
+        "id": "nhgri-dna-sequencing-fact-sheet",
+        "title": "DNA Sequencing Fact Sheet — National Human Genome Research Institute, genome.gov",
+        "locator": "https://www.genome.gov/about-genomics/fact-sheets/DNA-Sequencing-Fact-Sheet",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Human Genome Research Institute (NHGRI), genome.gov, 'DNA Sequencing Fact Sheet'. Per the NHGRI Copyright Policy, 'Text, graphics, videos, illustrations and other information on National Human Genome Research Institute (NHGRI) websites are in the public domain, unless otherwise indicated'. Courtesy: National Human Genome Research Institute. The National Human Genome Research Institute has not reviewed, approved or endorsed this activity.",
+        "sha256": "3555c872ba407e81cd9059ac95d10207f341baaee7a4cb05c878f68df181052e"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "a1d277f8550041f5a346ec291a77bac0",
+      "runId": "job-20261030045339-ef4fb3e9",
+      "promptVersion": "s6-v4",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-30T04:55:45.948Z"
+    },
+    "seed": 378565456,
+    "cards": [
+      {
+        "id": "genome-size-fact",
+        "stem": "About how many paired units carry instructions for a human being",
+        "options": [
+          "3 billion base pairs",
+          "1 million bases",
+          "100,000 billion bases"
+        ],
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "The human genome contains about 3 billion base pairs that spell out the instructions for making and maintaining a human being.",
+        "hint": "Recall the scale of the full set of instructions"
+      },
+      {
+        "id": "base-pair-adenine-thymine",
+        "stem": "Which pairing always occurs between the four chemical bases",
+        "options": [
+          "Adenine (A) always pairs with thymine (T)",
+          "Adenine (A) always pairs with guanine (G)",
+          "Adenine (A) always pairs with cytosine (C)"
+        ],
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Adenine (A) always pairs with thymine (T);",
+        "hint": "Think about the fixed partners in the double helix"
+      },
+      {
+        "id": "base-pair-cytosine-guanine",
+        "stem": "What is the constant partner for cytosine in the double helix",
+        "options": [
+          "cytosine (C) always pairs with guanine (G)",
+          "cytosine (C) always pairs with thymine (T)",
+          "cytosine (C) always pairs with adenine (A)"
+        ],
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "cytosine (C) always pairs with guanine (G).",
+        "hint": "Remember the second part of the pairing statement"
+      },
+      {
+        "id": "sequencing-definition",
+        "stem": "What does determining the order of the four building blocks called bases accomplish",
+        "options": [
+          "four chemical building blocks - called \"bases\"",
+          "four chemical building blocks - called \"genes\"",
+          "four chemical building blocks - called \"proteins\""
+        ],
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "DNA sequencing determines the order of the four chemical building blocks - called \"bases\" - that make up the DNA molecule.",
+        "hint": "Focus on the term for the basic units of the molecule"
+      }
+    ]
+  }
+}

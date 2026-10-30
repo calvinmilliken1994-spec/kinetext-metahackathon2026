@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261030045435-d508f3be",
+  "analysisRef": "job-20261030045435-d508f3be/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030045435-d508f3be:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Moon throws fly ballistic without drag under low gravity",
+    "sources": [
+      {
+        "id": "user-accf5f60ebed",
+        "title": "Throwing a ball on the Moon (project-authored test text)",
+        "locator": "Provided by a teacher (pasted text)",
+        "license": "own-work",
+        "attribution": "Written by the Make knowledge interactive project team for testing.",
+        "sha256": "accf5f60ebedb3b3ab1f553ec33a9f500ad353e682cdf88b8e45c99a57ca6ac1"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18b29-5847-7669-84a5-936653fd1b99",
+      "runId": "job-20261030045435-d508f3be",
+      "promptVersion": "s6-v4",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-30T04:55:05.151Z"
+    },
+    "seed": 2786271048,
+    "headline": "Moon throws fly ballistic without drag under low gravity",
+    "keyPoints": [
+      {
+        "id": "lunar-ballistic-flight",
+        "point": "A thrown ball on the Moon flies ballistic with no drag because there is no air.",
+        "quote": "On the Moon there is no air, so a thrown ball feels no drag at all.",
+        "sourceId": "user-accf5f60ebed"
+      },
+      {
+        "id": "steady-horizontal-motion",
+        "point": "Horizontal speed stays steady through flight because nothing pushes the ball sideways.",
+        "quote": "Nothing pushes the ball sideways, so the horizontal speed stays U0 for the whole flight",
+        "sourceId": "user-accf5f60ebed"
+      },
+      {
+        "id": "slowed-vertical-motion",
+        "point": "Gravity slows vertical motion at a steady rate and changes speed over time.",
+        "quote": "Vertically, gravity slows the ball at a steady rate g.",
+        "sourceId": "user-accf5f60ebed"
+      },
+      {
+        "id": "highest-point-rise",
+        "point": "The ball stops rising at the highest point predicted by the height equation.",
+        "quote": "The ball stops rising when V = 0, which happens at t = V0 / g.",
+        "sourceId": "user-accf5f60ebed"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "resistance from air that would slow a thrown ball",
+        "id": "drag",
+        "quote": "On the Moon there is no air, so a thrown ball feels no drag at all.",
+        "sourceId": "user-accf5f60ebed",
+        "term": "drag"
+      },
+      {
+        "gloss": "flight with no drag after launch pulled only by weight",
+        "id": "ballistic",
+        "quote": "Its flight is purely ballistic.",
+        "sourceId": "user-accf5f60ebed",
+        "term": "ballistic"
+      },
+      {
+        "gloss": "downward force that pulls the ball straight down",
+        "id": "weight",
+        "quote": "The only force on the ball after it leaves the hand is its weight, which pulls it straight down.",
+        "sourceId": "user-accf5f60ebed",
+        "term": "weight"
+      },
+      {
+        "gloss": "sideways speed that stays steady during flight",
+        "id": "horizontal-speed",
+        "quote": "Nothing pushes the ball sideways, so the horizontal speed stays U0 for the whole flight",
+        "sourceId": "user-accf5f60ebed",
+        "term": "horizontal speed"
+      },
+      {
+        "gloss": "upward speed that changes over time during flight",
+        "id": "vertical-speed",
+        "quote": "The vertical speed is V = V0 - g * t, and the height is y = V0 * t - g * t^2 / 2.",
+        "sourceId": "user-accf5f60ebed",
+        "term": "vertical speed"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "projectile-v1",
+      "specId": "user-accf5f60ebed-job-20261030045435-d508f3be",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261030045435-d508f3be:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

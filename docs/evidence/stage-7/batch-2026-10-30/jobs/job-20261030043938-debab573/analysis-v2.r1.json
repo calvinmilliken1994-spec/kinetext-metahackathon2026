@@ -1,0 +1,229 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "componentPlan": [
+      {
+        "componentId": "sequence-v1",
+        "focusQuote": "Parties hold nominating conventions to choose their presidential candidates.",
+        "focusSourceId": "usagov-presidential-election-process",
+        "pedagogicalReason": "Models the ordered election stages in taught order for process learning."
+      },
+      {
+        "componentId": "quiz-cards-v1",
+        "focusQuote": "An election for president of the United States happens every four years on the first Tuesday after the first Monday in November.",
+        "focusSourceId": "usagov-presidential-election-process",
+        "pedagogicalReason": "Checks recall of timing and stage facts with answerable quotes."
+      }
+    ],
+    "declineCode": "",
+    "declineSummary": "",
+    "overview": {
+      "headline": "Presidential election cycle from primaries to inauguration",
+      "keyPoints": [
+        {
+          "id": "election-timing",
+          "point": "Presidential election happens every four years in November on a set Tuesday rule.",
+          "quote": "An election for president of the United States happens every four years on the first Tuesday after the first Monday in November.",
+          "sourceId": "usagov-presidential-election-process"
+        },
+        {
+          "id": "election-span",
+          "point": "The process of electing a president spans almost two years of steps.",
+          "quote": "The process of electing a president takes almost two years.",
+          "sourceId": "usagov-presidential-election-process"
+        },
+        {
+          "id": "primaries-caucuses",
+          "point": "States and parties hold presidential primaries and caucuses before conventions.",
+          "quote": "States and parties hold presidential primaries and caucuses.",
+          "sourceId": "usagov-presidential-election-process"
+        },
+        {
+          "id": "electoral-vote",
+          "point": "Electors cast votes for president in the Electoral College in December.",
+          "quote": "Electors cast their votes for president in the Electoral College.",
+          "sourceId": "usagov-presidential-election-process"
+        }
+      ],
+      "keyTerms": [
+        {
+          "gloss": "Contests where parties hold votes to choose presidential candidates",
+          "id": "primaries",
+          "quote": "States and parties hold presidential primaries and caucuses.",
+          "sourceId": "usagov-presidential-election-process",
+          "term": "primaries"
+        },
+        {
+          "gloss": "Local party meeting where debates take place to review candidates",
+          "id": "caucus",
+          "quote": "Primary and caucus debates take place.",
+          "sourceId": "usagov-presidential-election-process",
+          "term": "caucus"
+        },
+        {
+          "gloss": "Group where electors cast votes for president after November",
+          "id": "electoral-college",
+          "quote": "Electors cast their votes for president in the Electoral College.",
+          "sourceId": "usagov-presidential-election-process",
+          "term": "Electoral College"
+        },
+        {
+          "gloss": "Gatherings where parties choose presidential candidates for the general election",
+          "id": "nominating-conventions",
+          "quote": "Parties hold nominating conventions to choose their presidential candidates.",
+          "sourceId": "usagov-presidential-election-process",
+          "term": "nominating conventions"
+        }
+      ]
+    },
+    "pageCoverage": "The page covers the timing and ordered stages of the presidential election cycle, from candidate registration and primaries through conventions, debates, general election, Electoral College vote, congressional count, and inauguration.",
+    "subject": "civics",
+    "usable": true
+  },
+  "report": {
+    "artifactId": "job-20261030043938-debab573:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"civics\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 1901 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 10 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 4, keyTerms 4, componentPlan 2; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (2 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": false,
+        "message": "publisher claim found at /pageCoverage: \"The page covers the timing and ordered stages of the preside\" (token \"general\"); /overview/keyTerms/3/gloss: \"Gatherings where parties choose presidential candidates for \" (token \"general\") (R-SUB-4: never name the publisher in generated strings, and never use \"according to\" / \"as stated by\" / \"official\" / \"endorsed\" wording)",
+        "path": "/pageCoverage",
+        "affected": [
+          "/pageCoverage",
+          "/overview/keyTerms/3/gloss"
+        ]
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      },
+      {
+        "id": "OV-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 8 overview quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "OV-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every key term appears in its own quote or in the source sentence containing the quote (term-in-quote)"
+      },
+      {
+        "id": "OV-03",
+        "kind": "semantic",
+        "passed": false,
+        "message": "publisher claim found at /keyTerms/3/gloss: \"Gatherings where parties choose presidential candidates for \" (token \"general\") (expected no publisher naming in generated text)",
+        "path": "/overview/keyTerms/3/gloss",
+        "affected": [
+          "/overview/keyTerms/3/gloss"
+        ]
+      },
+      {
+        "id": "OV-04",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in AI-written overview text appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "OV-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "keyPoints 4 (3-6) and keyTerms 4 (3-8) are within the frozen counts; repair is by retry only (counts-valid)"
+      },
+      {
+        "id": "OV-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every key point shares >= 2 and every gloss >= 1 distinct content word (>= 4 letters, frozen stoplist) with its own quote (point-quote-overlap)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18b1b-a92b-77c9-908d-88d7e487b118",
+    "usage": {
+      "promptTokens": 4564,
+      "completionTokens": 7581,
+      "reasoningTokens": 6957,
+      "cachedTokens": 0
+    },
+    "latencyMs": 30223,
+    "estCostUSD": 0.03792425,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  }
+}

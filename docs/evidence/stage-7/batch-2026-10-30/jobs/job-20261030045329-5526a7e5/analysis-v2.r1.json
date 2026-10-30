@@ -1,0 +1,259 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "biology",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "The page explains what PCR is, how significant amounts of DNA are needed, its uses in mapping and diagnostics, and the heated denaturing and synthesis cycle directed by a thermocycler.",
+    "overview": {
+      "headline": "How PCR copies tiny DNA segments into billions for lab study",
+      "keyPoints": [
+        {
+          "id": "pcr-amplification",
+          "point": "PCR is a technique that amplifies small segments of DNA for molecular analysis",
+          "sourceId": "nhgri-pcr-fact-sheet",
+          "quote": "Polymerase chain reaction (PCR) is a technique used to \"amplify\" small segments of DNA."
+        },
+        {
+          "id": "nobel-recognition",
+          "point": "Creator Kary Mullis was awarded the Nobel Prize for Chemistry in 1993",
+          "sourceId": "nhgri-pcr-fact-sheet",
+          "quote": "its creator, Kary B. Mullis, was awarded the Nobel Prize for Chemistry in 1993."
+        },
+        {
+          "id": "lab-uses",
+          "point": "Amplified DNA supports laboratory techniques including fingerprinting and diagnosis of genetic disorders",
+          "sourceId": "nhgri-pcr-fact-sheet",
+          "quote": "including DNA fingerprinting, detection of bacteria or viruses (particularly AIDS), and diagnosis of genetic disorders."
+        },
+        {
+          "id": "cycling-process",
+          "point": "Sample is heated so DNA denatures into single strands that serve as templates for synthesis",
+          "sourceId": "nhgri-pcr-fact-sheet",
+          "quote": "To amplify a segment of DNA using PCR, the sample is first heated so the DNA denatures, or separates into two pieces of single-stranded DNA."
+        },
+        {
+          "id": "repeated-cycles",
+          "point": "Cycle of denaturing and synthesizing is repeated many times leading to more than one billion exact copies",
+          "sourceId": "nhgri-pcr-fact-sheet",
+          "quote": "The cycle of denaturing and synthesizing new DNA is repeated as many as 30 or 40 times"
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "pcr-term",
+          "term": "PCR",
+          "gloss": "fast technique that copies small segments of DNA by amplification",
+          "sourceId": "nhgri-pcr-fact-sheet",
+          "quote": "Polymerase chain reaction (PCR) is a technique used to \"amplify\" small segments of DNA."
+        },
+        {
+          "id": "denatures-term",
+          "term": "denatures",
+          "gloss": "heated separation where DNA splits into single strands",
+          "sourceId": "nhgri-pcr-fact-sheet",
+          "quote": "To amplify a segment of DNA using PCR, the sample is first heated so the DNA denatures, or separates into two pieces of single-stranded DNA."
+        },
+        {
+          "id": "taq-polymerase-term",
+          "term": "Taq polymerase",
+          "gloss": "enzyme that builds new strands using original templates",
+          "sourceId": "nhgri-pcr-fact-sheet",
+          "quote": "Next, an enzyme called \"Taq polymerase\" synthesizes - builds - two new strands of DNA, using the original strands as templates."
+        },
+        {
+          "id": "thermocycler-term",
+          "term": "thermocycler",
+          "gloss": "machine programmed to alter temperature to allow denaturing and synthesis",
+          "sourceId": "nhgri-pcr-fact-sheet",
+          "quote": "It is directed by a machine called a thermocycler, which is programmed to alter the temperature of the reaction every few minutes to allow DNA denaturing and synthesis."
+        },
+        {
+          "id": "fingerprinting-term",
+          "term": "fingerprinting",
+          "gloss": "laboratory identification using amplified DNA patterns for diagnosis",
+          "sourceId": "nhgri-pcr-fact-sheet",
+          "quote": "including DNA fingerprinting, detection of bacteria or viruses (particularly AIDS), and diagnosis of genetic disorders."
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "sequence-v1",
+        "pedagogicalReason": "Sequence makes the ordered denaturing and synthesis cycle visible so learners can recall the steps in correct order",
+        "focusQuote": "To amplify a segment of DNA using PCR, the sample is first heated so the DNA denatures, or separates into two pieces of single-stranded DNA.",
+        "focusSourceId": "nhgri-pcr-fact-sheet"
+      },
+      {
+        "componentId": "quiz-cards-v1",
+        "pedagogicalReason": "Quiz cards reinforce checkable facts about PCR uses and recognition like fingerprinting and the Nobel award",
+        "focusQuote": "its creator, Kary B. Mullis, was awarded the Nobel Prize for Chemistry in 1993.",
+        "focusSourceId": "nhgri-pcr-fact-sheet"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261030045329-5526a7e5:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"biology\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 2042 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": false,
+        "message": "keyTerms[3] (thermocycler-term): quote \"It is directed by a machine called a thermocycler, which is \" is 168 characters, expected <= 150 (expected verbatim quotes of 1-150 characters that appear in the cited source)",
+        "path": "/overview/keyTerms/3/quote",
+        "affected": [
+          "/overview/keyTerms/3/quote"
+        ]
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": false,
+        "message": "keyTerms[3].quote is 168 characters, expected 1-150",
+        "path": "/overview/keyTerms/3/quote",
+        "affected": [
+          "/overview/keyTerms/3/quote"
+        ]
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (2 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": false,
+        "message": "publisher claim found at /pageCoverage: \"The page explains what PCR is, how significant amounts of DN\" (token \"pcr\"); /overview/headline: \"How PCR copies tiny DNA segments into billions for lab study\" (token \"pcr\"); /overview/keyPoints/0/point: \"PCR is a technique that amplifies small segments of DNA for \" (token \"pcr\"); /overview/keyTerms/0/term: \"PCR\" (token \"pcr\"); /componentPlan/1/pedagogicalReason: \"Quiz cards reinforce checkable facts about PCR uses and reco\" (token \"pcr\") (R-SUB-4: never name the publisher in generated strings, and never use \"according to\" / \"as stated by\" / \"official\" / \"endorsed\" wording)",
+        "path": "/pageCoverage",
+        "affected": [
+          "/pageCoverage",
+          "/overview/headline",
+          "/overview/keyPoints/0/point",
+          "/overview/keyTerms/0/term",
+          "/componentPlan/1/pedagogicalReason"
+        ]
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      },
+      {
+        "id": "OV-01",
+        "kind": "grounding",
+        "passed": false,
+        "message": "keyTerms[3] (thermocycler-term): quote \"It is directed by a machine called a thermocycler, which is \" is 168 characters, expected <= 150 (expected verbatim quotes of 1-150 characters from the cited source)",
+        "path": "/overview/keyTerms/3/quote",
+        "affected": [
+          "/overview/keyTerms/3/quote"
+        ]
+      },
+      {
+        "id": "OV-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every key term appears in its own quote or in the source sentence containing the quote (term-in-quote)"
+      },
+      {
+        "id": "OV-03",
+        "kind": "semantic",
+        "passed": false,
+        "message": "publisher claim found at /headline: \"How PCR copies tiny DNA segments into billions for lab study\" (token \"pcr\"); /keyPoints/0/point: \"PCR is a technique that amplifies small segments of DNA for \" (token \"pcr\"); /keyTerms/0/term: \"PCR\" (token \"pcr\") (expected no publisher naming in generated text)",
+        "path": "/overview/headline",
+        "affected": [
+          "/overview/headline",
+          "/overview/keyPoints/0/point",
+          "/overview/keyTerms/0/term"
+        ]
+      },
+      {
+        "id": "OV-04",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in AI-written overview text appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "OV-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "keyPoints 5 (3-6) and keyTerms 5 (3-8) are within the frozen counts; repair is by retry only (counts-valid)"
+      },
+      {
+        "id": "OV-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every key point shares >= 2 and every gloss >= 1 distinct content word (>= 4 letters, frozen stoplist) with its own quote (point-quote-overlap)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "f1041365e17042d3952190393bc17f77",
+    "usage": {
+      "promptTokens": 3916,
+      "completionTokens": 11026,
+      "reasoningTokens": 10124,
+      "cachedTokens": 0
+    },
+    "latencyMs": 37556,
+    "estCostUSD": 0.0517555,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "jobId": "job-20261030044553-31c0f5fc",
+  "analysisRef": "job-20261030044553-31c0f5fc/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030044553-31c0f5fc:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Functions link variables uniquely with trig ratios fixed by angle",
+    "sources": [
+      {
+        "id": "nasa-grc-idea-of-functions",
+        "title": "Idea of Functions — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/idea-of-functions/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "6fce3423e0f40551beee636574cc686090a85588891583ee35762c32af992108"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18b21-8006-7438-9eec-f31b2e967334",
+      "runId": "job-20261030044553-31c0f5fc",
+      "promptVersion": "s6-v4",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-30T04:46:31.044Z"
+    },
+    "seed": 3329356609,
+    "headline": "Functions link variables uniquely with trig ratios fixed by angle",
+    "keyPoints": [
+      {
+        "id": "function-dependence",
+        "point": "A function means one variable depends uniquely on another variable in a problem",
+        "quote": "the value of one variable in a problem depends uniquely on the value of another variable in the problem.",
+        "sourceId": "nasa-grc-idea-of-functions"
+      },
+      {
+        "id": "exponential-multiplier",
+        "point": "An exponential function relates a variable to times it is used as a multiplier",
+        "quote": "The exponential function relates a variable to the number of times another variable is used as a multiplier",
+        "sourceId": "nasa-grc-idea-of-functions"
+      },
+      {
+        "id": "trig-sides-angles",
+        "point": "Sine cosine and tangent relate sides and angles of a triangle",
+        "quote": "The trigonometric functions sine, cosine, and tangent relate the various sides and angles of a triangle.",
+        "sourceId": "nasa-grc-idea-of-functions"
+      },
+      {
+        "id": "cosine-invariance",
+        "point": "Dividing scaled sides gives same value as black triangle showing ratio fixed",
+        "quote": "Dividing out the “2’s” gives x divided by y, the same value as the black triangle.",
+        "sourceId": "nasa-grc-idea-of-functions"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "uniquely determined link where value depends on another variable",
+        "id": "function",
+        "quote": "An important mathematical concept is the idea of function – the value of one variable in a problem depends uniquely",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "term": "function"
+      },
+      {
+        "gloss": "repeated multiplier use where variable counts times as multiplier",
+        "id": "exponential-function",
+        "quote": "The exponential function relates a variable to the number of times another variable is used as a multiplier",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "term": "exponential function"
+      },
+      {
+        "gloss": "inverse operation that counts times variable must multiply itself",
+        "id": "logarithmic-function",
+        "quote": "The logarithmic function is the inverse of the exponential; it gives the number of times that you must multiply a variable by itself",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "term": "logarithmic function"
+      },
+      {
+        "gloss": "adjacent side divided by hypotenuse for fixed angle value",
+        "id": "cosine",
+        "quote": "For the black triangle, the cosine of “b” is equal to x divided by y.",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "term": "cosine"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261030044553-31c0f5fc:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261030044553-31c0f5fc:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

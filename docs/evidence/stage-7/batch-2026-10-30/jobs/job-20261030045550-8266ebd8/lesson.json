@@ -1,0 +1,111 @@
+{
+  "jobId": "job-20261030045550-8266ebd8",
+  "analysisRef": "job-20261030045550-8266ebd8/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030045550-8266ebd8:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Secret drafting and compromise behind the new Constitution",
+    "sources": [
+      {
+        "id": "nara-constitution",
+        "title": "Constitution of the United States (1787) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/constitution",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Constitution of the United States (1787)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "a14175b009333bebd61eaff70e3393928a8f0dbd0ae00027067c07b15d176db4"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18b2a-c98b-728f-8151-446fd23641eb",
+      "runId": "job-20261030045550-8266ebd8",
+      "promptVersion": "s6-v4",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-30T04:56:39.648Z"
+    },
+    "seed": 3362047613,
+    "headline": "Secret drafting and compromise behind the new Constitution",
+    "keyPoints": [
+      {
+        "id": "convention-new-frame",
+        "point": "The Convention decided not to amend the Articles but to draft an entirely new frame of government",
+        "quote": "rather than amend the existing Articles, the Convention would draft an entirely new frame of government",
+        "sourceId": "nara-constitution"
+      },
+      {
+        "id": "secret-signing-sept",
+        "point": "Delegates drafted in secret during the summer and signed the document that established the government of the United States",
+        "quote": "signed on September 17, 1787, established the government of the United States",
+        "sourceId": "nara-constitution"
+      },
+      {
+        "id": "power-representation-debate",
+        "point": "Chief debate covered how much power to allow the central government and how many representatives each state should have",
+        "quote": "Among the chief points at issue were how much power to allow the central government",
+        "sourceId": "nara-constitution"
+      },
+      {
+        "id": "quorum-philadelphia-meet",
+        "point": "The Federal Convention convened in Philadelphia and adjourned daily until a quorum of seven states was obtained",
+        "quote": "until a quorum of seven states was obtained on May 25",
+        "sourceId": "nara-constitution"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "gathering of delegates that debated in secret during the summer",
+        "id": "constitutional-convention",
+        "quote": "Drafted in secret by delegates to the Constitutional Convention during the summer of 1787",
+        "sourceId": "nara-constitution",
+        "term": "Constitutional Convention"
+      },
+      {
+        "gloss": "earlier system that delegates voted to revise in favor of a new frame",
+        "id": "articles-of-confederation",
+        "quote": "to revise the Articles of Confederation",
+        "sourceId": "nara-constitution",
+        "term": "Articles of Confederation"
+      },
+      {
+        "gloss": "minimum number of states needed before business could proceed",
+        "id": "quorum",
+        "quote": "until a quorum of seven states was obtained on May 25",
+        "sourceId": "nara-constitution",
+        "term": "quorum"
+      },
+      {
+        "gloss": "national authority whose power was debated by delegates",
+        "id": "central-government",
+        "quote": "how much power to allow the central government",
+        "sourceId": "nara-constitution",
+        "term": "central government"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261030045550-8266ebd8:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261030045550-8266ebd8:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

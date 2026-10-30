@@ -1,0 +1,255 @@
+{
+  "gen": {
+    "schemaVersion": "sort-groups-v1",
+    "title": "Sort Base Pairing and Sequencing Examples",
+    "groups": [
+      {
+        "id": "base-pairs",
+        "label": "base pairs"
+      },
+      {
+        "id": "nanopores",
+        "label": "nanopores"
+      },
+      {
+        "id": "dna-polymerase",
+        "label": "DNA polymerase"
+      }
+    ],
+    "items": [
+      {
+        "id": "adenine-a",
+        "label": "Adenine (A)",
+        "groupId": "base-pairs",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Adenine (A) always pairs with thymine (T); cytosine (C) always pairs with guanine (G)."
+      },
+      {
+        "id": "thymine-t",
+        "label": "thymine (T)",
+        "groupId": "base-pairs",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Adenine (A) always pairs with thymine (T); cytosine (C) always pairs with guanine (G)."
+      },
+      {
+        "id": "cytosine-c",
+        "label": "cytosine (C)",
+        "groupId": "base-pairs",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Adenine (A) always pairs with thymine (T); cytosine (C) always pairs with guanine (G)."
+      },
+      {
+        "id": "guanine-g",
+        "label": "guanine (G)",
+        "groupId": "base-pairs",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Adenine (A) always pairs with thymine (T); cytosine (C) always pairs with guanine (G)."
+      },
+      {
+        "id": "tiny-pores",
+        "label": "extremely tiny pores",
+        "groupId": "nanopores",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Nanopore-based DNA sequencing involves threading single DNA strands through extremely tiny pores in a membrane."
+      },
+      {
+        "id": "single-strands",
+        "label": "single DNA strands",
+        "groupId": "nanopores",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Nanopore-based DNA sequencing involves threading single DNA strands through extremely tiny pores in a membrane."
+      },
+      {
+        "id": "polymerase-molecules",
+        "label": "DNA polymerase molecules",
+        "groupId": "dna-polymerase",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "One new sequencing technology involves watching DNA polymerase molecules as they copy DNA"
+      },
+      {
+        "id": "bright-dyes",
+        "label": "bright dyes",
+        "groupId": "dna-polymerase",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "and incorporating different colors of bright dyes, one each for the letters A, T, C and G."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261030045339-ef4fb3e9:sort-groups-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sort text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SORT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 8 item quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SORT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every item label occurs in its quote and every group label occurs in the quote or the same source paragraph (item-and-group-in-quote; the design discloses the weak-link false accept on long paragraphs — every quote is shown to the teacher)"
+      },
+      {
+        "id": "SORT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every declared group is referenced by >= 2 items and every item groupId resolves (groups-covered)"
+      },
+      {
+        "id": "SORT-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every item has a distinct label after normalisation (distinct-items)"
+      },
+      {
+        "id": "SORT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "groups 3 (2-4) and items 8 (6-12) are within the frozen counts (counts-valid)"
+      },
+      {
+        "id": "SORT-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in group and item labels appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "260069cbaf8743a8b8355f55830fea80",
+    "usage": {
+      "promptTokens": 3321,
+      "completionTokens": 5904,
+      "reasoningTokens": 5349,
+      "cachedTokens": 0
+    },
+    "latencyMs": 24893,
+    "estCostUSD": 0.02924325,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030045339-ef4fb3e9:sort-groups-v1:r1",
+    "componentId": "sort-groups-v1",
+    "title": "Sort Base Pairing and Sequencing Examples",
+    "sources": [
+      {
+        "id": "nhgri-dna-sequencing-fact-sheet",
+        "title": "DNA Sequencing Fact Sheet — National Human Genome Research Institute, genome.gov",
+        "locator": "https://www.genome.gov/about-genomics/fact-sheets/DNA-Sequencing-Fact-Sheet",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Human Genome Research Institute (NHGRI), genome.gov, 'DNA Sequencing Fact Sheet'. Per the NHGRI Copyright Policy, 'Text, graphics, videos, illustrations and other information on National Human Genome Research Institute (NHGRI) websites are in the public domain, unless otherwise indicated'. Courtesy: National Human Genome Research Institute. The National Human Genome Research Institute has not reviewed, approved or endorsed this activity.",
+        "sha256": "3555c872ba407e81cd9059ac95d10207f341baaee7a4cb05c878f68df181052e"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "260069cbaf8743a8b8355f55830fea80",
+      "runId": "job-20261030045339-ef4fb3e9",
+      "promptVersion": "s6-v4",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-30T04:55:27.786Z"
+    },
+    "seed": 912651466,
+    "groups": [
+      {
+        "id": "base-pairs",
+        "label": "base pairs"
+      },
+      {
+        "id": "nanopores",
+        "label": "nanopores"
+      },
+      {
+        "id": "dna-polymerase",
+        "label": "DNA polymerase"
+      }
+    ],
+    "items": [
+      {
+        "id": "adenine-a",
+        "label": "Adenine (A)",
+        "groupId": "base-pairs",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Adenine (A) always pairs with thymine (T); cytosine (C) always pairs with guanine (G)."
+      },
+      {
+        "id": "thymine-t",
+        "label": "thymine (T)",
+        "groupId": "base-pairs",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Adenine (A) always pairs with thymine (T); cytosine (C) always pairs with guanine (G)."
+      },
+      {
+        "id": "cytosine-c",
+        "label": "cytosine (C)",
+        "groupId": "base-pairs",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Adenine (A) always pairs with thymine (T); cytosine (C) always pairs with guanine (G)."
+      },
+      {
+        "id": "guanine-g",
+        "label": "guanine (G)",
+        "groupId": "base-pairs",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Adenine (A) always pairs with thymine (T); cytosine (C) always pairs with guanine (G)."
+      },
+      {
+        "id": "tiny-pores",
+        "label": "extremely tiny pores",
+        "groupId": "nanopores",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Nanopore-based DNA sequencing involves threading single DNA strands through extremely tiny pores in a membrane."
+      },
+      {
+        "id": "single-strands",
+        "label": "single DNA strands",
+        "groupId": "nanopores",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Nanopore-based DNA sequencing involves threading single DNA strands through extremely tiny pores in a membrane."
+      },
+      {
+        "id": "polymerase-molecules",
+        "label": "DNA polymerase molecules",
+        "groupId": "dna-polymerase",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "One new sequencing technology involves watching DNA polymerase molecules as they copy DNA"
+      },
+      {
+        "id": "bright-dyes",
+        "label": "bright dyes",
+        "groupId": "dna-polymerase",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "and incorporating different colors of bright dyes, one each for the letters A, T, C and G."
+      }
+    ]
+  }
+}

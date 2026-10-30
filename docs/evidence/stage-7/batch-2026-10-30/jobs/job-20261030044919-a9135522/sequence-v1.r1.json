@@ -1,0 +1,191 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "Seeing Cosine as a Function of Angle Through Scaling",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follow black to red to blue triangles to see cosine ratio stay the same",
+    "steps": [
+      {
+        "id": "black-triangle",
+        "label": "black triangle",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "For the black triangle, the cosine of “b” is equal to x divided by y.",
+        "orderHint": "Start with the smallest triangle's adjacent to hypotenuse ratio"
+      },
+      {
+        "id": "red-triangle",
+        "label": "red triangle",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "For the red triangle, the cosine of “b” is equal to 2x divided by 2y.",
+        "orderHint": "Double the sides and see how the ratio is written"
+      },
+      {
+        "id": "dividing-twos",
+        "label": "same value as the black triangle",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "Dividing out the “2’s” gives x divided by y, the same value as the black triangle.",
+        "orderHint": "Cancel the common factor to find the unchanged ratio"
+      },
+      {
+        "id": "blue-triangle",
+        "label": "blue triangle",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "For the blue triangle, the cosine of “b” is equal to 3x divided by 3y.",
+        "orderHint": "Triple the sides and check the ratio again"
+      },
+      {
+        "id": "cosine-dependence",
+        "label": "value of cosine “b” just depends",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "The value of cosine “b” just depends on the value of “b” and not the length of the sides that form “b”.",
+        "orderHint": "Conclude that cosine depends on angle not side length"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261030044919-a9135522:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step label occurs in its own quote after normalisation (labels-in-quotes)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 5 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "da80d1f13bcf45c6a5a9956f305fa59b",
+    "usage": {
+      "promptTokens": 3046,
+      "completionTokens": 5461,
+      "reasoningTokens": 5081,
+      "cachedTokens": 0
+    },
+    "latencyMs": 21901,
+    "estCostUSD": 0.02701675,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030044919-a9135522:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "Seeing Cosine as a Function of Angle Through Scaling",
+    "sources": [
+      {
+        "id": "nasa-grc-idea-of-functions",
+        "title": "Idea of Functions — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/idea-of-functions/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "6fce3423e0f40551beee636574cc686090a85588891583ee35762c32af992108"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "da80d1f13bcf45c6a5a9956f305fa59b",
+      "runId": "job-20261030044919-a9135522",
+      "promptVersion": "s6-v4",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-30T04:50:50.971Z"
+    },
+    "seed": 3254599877,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follow black to red to blue triangles to see cosine ratio stay the same",
+    "steps": [
+      {
+        "id": "black-triangle",
+        "label": "black triangle",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "For the black triangle, the cosine of “b” is equal to x divided by y.",
+        "orderHint": "Start with the smallest triangle's adjacent to hypotenuse ratio"
+      },
+      {
+        "id": "red-triangle",
+        "label": "red triangle",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "For the red triangle, the cosine of “b” is equal to 2x divided by 2y.",
+        "orderHint": "Double the sides and see how the ratio is written"
+      },
+      {
+        "id": "dividing-twos",
+        "label": "same value as the black triangle",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "Dividing out the “2’s” gives x divided by y, the same value as the black triangle.",
+        "orderHint": "Cancel the common factor to find the unchanged ratio"
+      },
+      {
+        "id": "blue-triangle",
+        "label": "blue triangle",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "For the blue triangle, the cosine of “b” is equal to 3x divided by 3y.",
+        "orderHint": "Triple the sides and check the ratio again"
+      },
+      {
+        "id": "cosine-dependence",
+        "label": "value of cosine “b” just depends",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "The value of cosine “b” just depends on the value of “b” and not the length of the sides that form “b”.",
+        "orderHint": "Conclude that cosine depends on angle not side length"
+      }
+    ]
+  }
+}

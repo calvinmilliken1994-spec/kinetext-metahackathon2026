@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Presidential Election Timing Quiz",
+    "cards": [
+      {
+        "id": "timing-frequency",
+        "stem": "What interval does the page give for electing a president?",
+        "options": [
+          "every four years",
+          "annually",
+          "every two years",
+          "each decade"
+        ],
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "An election for president of the United States happens every four years on the first Tuesday after the first Monday in November.",
+        "hint": "Focus on the frequency stated at the start of the section."
+      },
+      {
+        "id": "next-election-date",
+        "stem": "What date is given for the next presidential election?",
+        "options": [
+          "November 7, 2028",
+          "January 20",
+          "early November",
+          "December"
+        ],
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "The next presidential election is scheduled to be on November 7, 2028.",
+        "hint": "Look for the scheduled date in November."
+      },
+      {
+        "id": "candidate-registration",
+        "stem": "Which agency handles candidate registration to run for president?",
+        "options": [
+          "Federal Election Commission",
+          "Electoral College",
+          "Senate",
+          "House of Representatives"
+        ],
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Candidates register with the Federal Election Commission to run for president.",
+        "hint": "Recall where candidates file to run."
+      },
+      {
+        "id": "electors-vote-december",
+        "stem": "Which group casts votes for president in December?",
+        "options": [
+          "Electors",
+          "Congress",
+          "candidates",
+          "state governors"
+        ],
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Electors cast their votes for president in the Electoral College.",
+        "hint": "Check who votes in December before Congress counts."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261030045324-60391981:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "55ef962a66894249b87433a0fa16e673",
+    "usage": {
+      "promptTokens": 2441,
+      "completionTokens": 9178,
+      "reasoningTokens": 8845,
+      "cachedTokens": 0
+    },
+    "latencyMs": 41056,
+    "estCostUSD": 0.04205775,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030045324-60391981:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Presidential Election Timing Quiz",
+    "sources": [
+      {
+        "id": "usagov-presidential-election-process",
+        "title": "Overview of the presidential election process — USA.gov (U.S. General Services Administration)",
+        "locator": "https://www.usa.gov/presidential-election-process",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: USA.gov, 'Overview of the presidential election process'. USA.gov is an official website of the U.S. General Services Administration; per the GSA website policies, 'Most material on our site is free of copyright and may be copied and distributed without permission. Works produced by federal government employees in the course of their employment are generally not protected by copyright and are in the public domain in the U.S.' The U.S. General Services Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "dab5e0bb2bd4fbb8ad6e9d4e8554cef8d4d363028ced8cd2650173905c0efc2a"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "55ef962a66894249b87433a0fa16e673",
+      "runId": "job-20261030045324-60391981",
+      "promptVersion": "s6-v4",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-30T04:54:34.362Z"
+    },
+    "seed": 3303637795,
+    "cards": [
+      {
+        "id": "timing-frequency",
+        "stem": "What interval does the page give for electing a president?",
+        "options": [
+          "every four years",
+          "annually",
+          "every two years",
+          "each decade"
+        ],
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "An election for president of the United States happens every four years on the first Tuesday after the first Monday in November.",
+        "hint": "Focus on the frequency stated at the start of the section."
+      },
+      {
+        "id": "next-election-date",
+        "stem": "What date is given for the next presidential election?",
+        "options": [
+          "November 7, 2028",
+          "January 20",
+          "early November",
+          "December"
+        ],
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "The next presidential election is scheduled to be on November 7, 2028.",
+        "hint": "Look for the scheduled date in November."
+      },
+      {
+        "id": "candidate-registration",
+        "stem": "Which agency handles candidate registration to run for president?",
+        "options": [
+          "Federal Election Commission",
+          "Electoral College",
+          "Senate",
+          "House of Representatives"
+        ],
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Candidates register with the Federal Election Commission to run for president.",
+        "hint": "Recall where candidates file to run."
+      },
+      {
+        "id": "electors-vote-december",
+        "stem": "Which group casts votes for president in December?",
+        "options": [
+          "Electors",
+          "Congress",
+          "candidates",
+          "state governors"
+        ],
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Electors cast their votes for president in the Electoral College.",
+        "hint": "Check who votes in December before Congress counts."
+      }
+    ]
+  }
+}

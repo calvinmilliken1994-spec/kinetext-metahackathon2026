@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261030043747-4359ec50",
+  "analysisRef": "job-20261030043747-4359ec50/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030043747-4359ec50:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Functions link variables uniquely, shown by constant cosine ratios in similar triangles",
+    "sources": [
+      {
+        "id": "nasa-grc-idea-of-functions",
+        "title": "Idea of Functions — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/idea-of-functions/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "6fce3423e0f40551beee636574cc686090a85588891583ee35762c32af992108"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18b1a-3265-71a9-8d30-4710c34536d7",
+      "runId": "job-20261030043747-4359ec50",
+      "promptVersion": "s6-v4",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-30T04:38:32.471Z"
+    },
+    "seed": 3598974858,
+    "headline": "Functions link variables uniquely, shown by constant cosine ratios in similar triangles",
+    "keyPoints": [
+      {
+        "id": "function-dependence",
+        "point": "A function means one variable depends uniquely on another variable in a problem",
+        "quote": "the value of one variable in a problem depends uniquely on the value of another variable in the problem",
+        "sourceId": "nasa-grc-idea-of-functions"
+      },
+      {
+        "id": "trig-relations",
+        "point": "trigonometric sine cosine and tangent relate sides and angles of a triangle",
+        "quote": "The trigonometric functions sine, cosine, and tangent relate the various sides and angles of a triangle.",
+        "sourceId": "nasa-grc-idea-of-functions"
+      },
+      {
+        "id": "cosine-constant",
+        "point": "Cosine of angle b is adjacent divided by hypotenuse and stays same when sides double or triple",
+        "quote": "Dividing out the “2’s” gives x divided by y, the same value as the black triangle.",
+        "sourceId": "nasa-grc-idea-of-functions"
+      },
+      {
+        "id": "tables-solve-sides",
+        "point": "Tables of sine cosine and tangent let us solve for unknown sides and angles",
+        "quote": "If we know the length of any one side, we can solve for the length of the other sides.",
+        "sourceId": "nasa-grc-idea-of-functions"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "dependence fixed by angle rather than side length",
+        "id": "function",
+        "quote": "Scientists call this type of dependence a function.",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "term": "function"
+      },
+      {
+        "gloss": "ratio of adjacent side to hypotenuse fixed by angle",
+        "id": "cosine",
+        "quote": "because the ratio of x to y, (x/y), is defined to be the cosine of “b” and this value is fixed by “b”.",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "term": "cosine"
+      },
+      {
+        "gloss": "longest side whose length is y in smallest triangle",
+        "id": "hypotenuse",
+        "quote": "The black triangle is the smallest triangle and has a hypotenuse “h” of length “y” and an adjacent side “a” equal to “x”.",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "term": "hypotenuse"
+      },
+      {
+        "gloss": "side forming angle whose ratio to hypotenuse gives cosine",
+        "id": "adjacent-side",
+        "quote": "The ratio of the adjacent side to the hypotenuse is a function of the angle “b”.",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "term": "adjacent side"
+      },
+      {
+        "gloss": "relation using a variable as repeated multiplier",
+        "id": "exponential-function",
+        "quote": "The exponential function relates a variable to the number of times another variable is used as a multiplier",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "term": "exponential function"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261030043747-4359ec50:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261030043747-4359ec50:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}
