@@ -44,7 +44,7 @@ interface Props {
 /**
  * The desktop-app frame: a backdrop in a lighter shade of the app colour, and a window with a slim title bar
  * (decorative traffic lights), the app body, and a slim footer naming the hackathon this entry was built for.
- * Below 900 px the window fills the screen and the backdrop and traffic lights go away.
+ * The window always fits the viewport with a gap that scales with it; below 900 px the gap narrows and the traffic lights go away.
  */
 export function AppWindow({ title, titleIsHeading = false, titlebarExtra, children }: Props) {
   const [theme, toggleTheme] = useTheme();
