@@ -1,0 +1,13 @@
+{
+  "id": "medlineplus-protein-production",
+  "title": "How do genes direct the production of proteins? — MedlinePlus Genetics, Help Me Understand Genetics",
+  "subject": "biology",
+  "locator": "https://medlineplus.gov/genetics/understanding/howgeneswork/makingprotein/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: MedlinePlus Genetics, 'Help Me Understand Genetics', U.S. National Library of Medicine. Courtesy of MedlinePlus from the National Library of Medicine. MedlinePlus's 'Linking to and Using Content from MedlinePlus' policy states that works produced by the federal government are not copyrighted under U.S. law and lists the Help Me Understand Genetics handbook among MedlinePlus's public-domain areas; MedlinePlus has not reviewed, approved or endorsed this activity.",
+  "sha256": "c477ae45c51062d816f0a0359713d0ba6c996d2278003e7209e3b7b222b0639b",
+  "textFile": "medlineplus-protein-production.txt",
+  "retrievedAt": "2026-10-30T15:45:00Z",
+  "transcription": "Main article text only: the 'URL of this page:' line, the duplicate in-content H1 (served twice), the chapter navigation ('Topics in the … chapter' link list, 'Other chapters in Help Me Understand Genetics') and the closing medical-advice disclaimer removed; inline links flattened to their text. H1 title line from the page's own H1. Whitespace normalised, LF. The figure credit line 'Credit: U.S. National Library of Medicine' (the labelled central-dogma figure is not stored) removed.",
+  "purpose": "library: protein synthesis as an ordered two-step process — transcription (the information in a gene's DNA passed to messenger RNA in the cell nucleus; RNA and DNA both nucleotide chains with slightly different chemical properties; mRNA carrying the message to the cytoplasm) and translation (the ribosome reading the mRNA nucleotide sequence; each three-nucleotide codon usually coding one amino acid; transfer RNA assembling the protein one amino acid at a time until a stop codon), together called gene expression — the DNA→RNA→protein flow known as the central dogma. Fits step ordering of transcription→translation, quiz cards with predict-then-reveal on codon length and the stop signal, and a concept map of DNA/mRNA/ribosome/tRNA roles. The page carries a labelled central-dogma figure (not stored; a future diagram engine could use the real page image)."
+}

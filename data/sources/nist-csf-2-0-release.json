@@ -1,0 +1,13 @@
+{
+  "id": "nist-csf-2-0-release",
+  "title": "NIST Releases Version 2.0 of Landmark Cybersecurity Framework — NIST News",
+  "subject": "computing",
+  "locator": "https://www.nist.gov/news-events/news/2024/02/nist-releases-version-20-landmark-cybersecurity-framework",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NIST, 'NIST Releases Version 2.0 of Landmark Cybersecurity Framework' (NIST News). Credit: NIST. Per the NIST Copyrights & Disclaimers, 'NIST web pages are provided as a public service by the National Institute of Standards and Technology (NIST). With the exception of material marked as copyrighted, information presented on NIST sites are considered public information and may be distributed or copied. Use of appropriate byline/photo/image credits is requested.' The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+  "sha256": "a4c7ce2ca7d3c035aeb3f9dac0d3c8d25b6931ef97d0f90e3896e16d384eb6ee",
+  "textFile": "nist-csf-2-0-release.txt",
+  "retrievedAt": "2026-10-30T16:15:00Z",
+  "transcription": "Main article text only (site header and menus, the 'NEWS' kicker, the social share widget, the 'Media Contact' block, the 'Released February 26, 2024, Updated February 19, 2025' utility line, the 'Information technology and Cybersecurity and privacy' tags block, related-news teasers and the footer removed). The deck ('The agency has finalized the framework's first major update since its creation in 2014.'), the 'February 26, 2024' dateline and the three • takeaways are kept as printed. Two photographs are not stored; their caption/credit lines are kept as printed ('More roads lead to NIST's updated cybersecurity framework, which now features…' with 'Credit: N. Hanacek/NIST'; 'Credit: Natasha Hanacek, NIST'). Quotes from Laurie E. Locascio and Kevin Stine kept with curly quotes as served. Whitespace normalised.",
+  "purpose": "library: the NIST Cybersecurity Framework (CSF) 2.0 release — expanded scope from critical infrastructure to all organizations, the six Functions (Govern added to Identify, Protect, Detect, Respond, Recover) as a risk-management life cycle, governance as enterprise risk alongside finance and reputation, quick-start guides, the CSF 2.0 Reference Tool, informative references cross-walking 50+ documents, 13 translations and ISO/IEC alignment. Fits a compare table of the six Functions, quiz cards predict-then-reveal (2014 origin, six Functions, 13 languages) and a concept map of CSF 2.0 resources."
+}

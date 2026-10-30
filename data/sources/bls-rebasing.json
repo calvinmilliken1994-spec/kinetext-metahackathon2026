@@ -1,0 +1,13 @@
+{
+  "id": "bls-rebasing",
+  "title": "Rebasing an index — U.S. Bureau of Labor Statistics, Consumer Price Index factsheet",
+  "subject": "maths",
+  "locator": "https://www.bls.gov/cpi/factsheets/rebasing.htm",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: U.S. Bureau of Labor Statistics, Consumer Price Index, 'Rebasing an index'. Credit: U.S. Bureau of Labor Statistics. Per the BLS Linking and Copyright Information, 'The Bureau of Labor Statistics (BLS) is a Federal government agency and everything that we publish, both in hard copy and electronically, is in the public domain, except for previously copyrighted photographs and illustrations. You are free to use our public domain material without specific permission, although we do ask that you cite the Bureau of Labor Statistics as the source.' The U.S. Bureau of Labor Statistics has not reviewed, approved or endorsed this activity.",
+  "sha256": "12b5479a4b039561a9b371a9ff42e67a18717caf06659d7262130e3d95b1088e",
+  "textFile": "bls-rebasing.txt",
+  "retrievedAt": "2026-10-30T16:15:00Z",
+  "transcription": "Main factsheet text only (site header and menus, the CPI program left nav, 'Related Information' links, the 'Last modified date' line and the footer removed). Table 1 (12-month percent changes, old 1967=100 base vs current 1982-1984=100 base, 2000–2005) and Table 2 (month-by-month rebasing of the CPI-U, January 2015=100) are kept as pipe-separated rows with their header rows, including the trailing '=' signs inside cells ('234.722 / 233.707 =', '100 * 1.00434 =') and empty cells exactly as served. Whitespace normalised.",
+  "purpose": "library: index rebasing — why an alternate reference base is needed, the demonstration that 12-month percent changes are identical under the 1967=100 and 1982-1984=100 bases (2000–2005: 3.4, 1.6, 2.4, 1.9, 3.3, 3.4), and the stated rebasing procedure (divide each data point by the previous one to get index relatives, set the chosen base period to 100, then chain by multiplying the previous rebased value by the current relative) with a full month-by-month worked table for January 2015=100 (233.707 → 100.000; February 234.722/233.707 = 1.00434 → 100 × 1.00434 = 100.434; … through December 2016 = 103.305). Fits step ordering of the procedure, a formula explorer for the chaining computation, and quiz cards predict-then-reveal on the worked rows."
+}

@@ -1,0 +1,13 @@
+{
+  "id": "nist-dads-big-o-notation",
+  "title": "big-O notation — NIST Dictionary of Algorithms and Data Structures",
+  "subject": "computing",
+  "locator": "https://xlinux.nist.gov/dads/HTML/bigOnotation.html",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NIST Dictionary of Algorithms and Data Structures (Paul E. Black, ed.), 'big-O notation'. Per the dictionary's Citation and Credit Notice, 'Many of the definitions, as well as the site itself, were originally developed at the National Institute of Standards and Technology by employees of the Federal Government in the course of their official duties. Pursuant to title 17 Section 105 of the United States Code these are not subject to copyright protection and are in the public domain.' Courtesy: NIST Dictionary of Algorithms and Data Structures. The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+  "sha256": "8a683981b6992055fcae5aa99b2f047c41df971de59a647d35e0d8825836952e",
+  "textFile": "nist-dads-big-o-notation.txt",
+  "retrievedAt": "2026-10-30T16:15:00Z",
+  "transcription": "Full entry text only (the NIST banner image, the 'Go to the Dictionary of Algorithms and Data Structures home page' link lines, the 'If you have suggestions, corrections, or comments…' line, the 'Entry modified'/'HTML page formatted' stamps, the Created/Updated trailer with editor emails, the page-URL line and the 'Cite this as' block removed). The entry-type tag and the 'Definition:'/'Note:'/'Author:' labels and relationship headings ('Generalization (I am a kind of ...)', etc.) are kept as printed; each relationship list follows its heading on the same line as on the page, with links to other entries flattened to their term text. 'Implementation' and 'More information' link lists flattened to their text. Whitespace normalised. The page's H1 is the hyphenated 'big-O notation'. The formal definition, the worked example ('n² + 3n + 4 is O(n²), since n² + 3n + 4 < 2n² for all n > 10') and the quicksort-vs-bubble-sort comparison keep the page's Unicode superscripts and inequality signs as printed.",
+  "purpose": "library: big-O notation — the informal and formal definitions (f(n) = O(g(n)) means positive constants c and k exist with 0 ≤ f(n) ≤ cg(n) for all n ≥ k), the worked example n² + 3n + 4 is O(n²) because n² + 3n + 4 < 2n² for all n > 10, the Θ versus O distinction, and the worked quicksort-versus-bubble-sort comparison for 1,000,000 numbers (20,000,000 steps on average versus 1,000,000,000,000). Fits quiz cards with predict-then-reveal on the step counts, a compare table of O/Θ/Ω notations, and a formula explorer for the inequality."
+}

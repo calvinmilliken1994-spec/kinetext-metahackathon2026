@@ -1,0 +1,13 @@
+{
+  "id": "noaa-oceanservice-ocean-acidification",
+  "title": "What is Ocean Acidification? — NOAA National Ocean Service, Ocean Facts",
+  "subject": "chemistry",
+  "locator": "https://oceanservice.noaa.gov/facts/acidification.html",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NOAA National Ocean Service, Ocean Facts, 'What is Ocean Acidification?'. Credit: NOAA National Ocean Service. NOAA's Education and Outreach FAQ states 'Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission', requires credit to NOAA and the NOAA program, and requires that any edits, including those made with a generative AI program, be made clear; the AI-generated lesson carrying this material is labelled as AI-generated in the product. NOAA has not reviewed, approved or endorsed this activity.",
+  "sha256": "2fd351cd28a1bf3be2f402200128f20d39c708536b13ea27329611fbaaf63c7c",
+  "textFile": "noaa-oceanservice-ocean-acidification.txt",
+  "retrievedAt": "2026-10-30T15:49:00Z",
+  "transcription": "Main article text only from the fact page's inner content column: breadcrumbs, site header/footer, the 'Get Social' and 'More Information' link lists and the 'Last updated / Author / How to cite this article / Contact Us' footer removed. H1 title line from the page's own H1; the one-line subheader answer kept as the first body line; the in-body video pointer ('Watch our video for a quick overview.') kept as printed. CO2 subscripts rendered as served ('CO2'). Whitespace normalised, LF.",
+  "purpose": "library: ocean acidification as acid-base chemistry — a reduction in ocean pH from uptake of atmospheric CO2; more than 200 years of rising atmospheric CO2 from fossil-fuel burning and land-use change; the ocean absorbing about 30 percent of released CO2; the series of chemical reactions that raise hydrogen-ion concentration (more acidic seawater) and make carbonate ions relatively less abundant; carbonate ions as the building block of shells and coral skeletons; the resulting difficulty for calcifying organisms (oysters, clams, sea urchins, shallow and deep sea corals, calcareous plankton); effects on non-calcifying organisms (fish predator detection) and the food web. Fits quiz cards with predict-then-reveal on the 30-percent and 200-year figures, step ordering of the cause→reaction→effect chain, and a concept map."
+}

@@ -1,0 +1,13 @@
+{
+  "id": "nasa-grc-combustion-process",
+  "title": "Combustion Process — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+  "subject": "chemistry",
+  "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/combustion-process/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+  "sha256": "52579f531d16a59a0faaa30000970771b2ce5fd24f478dbaa9459442fb522e4b",
+  "textFile": "nasa-grc-combustion-process.txt",
+  "retrievedAt": "2026-10-30T15:49:00Z",
+  "transcription": "Main article text only (site banner, menus and sidenav removed); H1 title line from the page's own H1. The two display equations are MathJax LaTeX on the page (\\(\\LARGE T_4=T_3+\\frac Q{cv}\\) and \\(\\LARGE p_4=p_3+\\frac{T_4}{T_3}\\)); each is rendered as a plain-text line with the LaTeX wrappers removed, the fraction flattened and subscripts flattened (T4=T3+Q/cv and p4=p3+T4/T3), the same convention as the stored NASA equation-of-state page; the '+' in the pressure equation is the page's own. Inline subscript references in prose keep the page's served spacing ('T 4 is greater than T 3', 'p 3', 'p 4'). The two figure images (Wright 1903 engine cylinder; labelled parts drawing) are not stored; their captions kept as lines. Whitespace normalised, LF.",
+  "purpose": "library: the combustion process of a four-stroke internal-combustion engine — Stage 3→4 of the Otto cycle: the compressed fuel/air mixture ignited by a spark as the electrical contact opens, rapid combustion releasing heat and producing exhaust gases at nearly constant volume (piston treated as motionless), ending at Stage 4 and the start of the power stroke — and its thermodynamics: temperature rise T4=T3+Q/cv (Q = heat released, depending on the fuel and fuel/air ratio; cv = specific heat at constant volume) and pressure rise p4=p3+T4/T3, with the final pressure scaling with the initial compression (higher p3 → greater p4 → more work and power). Fits a formula explorer for the two stage equations, quiz cards with predict-then-reveal, step ordering of the burn, and a compare table of Stage 3 vs Stage 4."
+}

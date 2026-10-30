@@ -1,0 +1,13 @@
+{
+  "id": "noaa-climate-gov-atmospheric-carbon-dioxide",
+  "title": "Climate change: atmospheric carbon dioxide — NOAA Climate.gov",
+  "subject": "earth-science",
+  "locator": "https://www.climate.gov/news-features/understanding-climate/climate-change-atmospheric-carbon-dioxide",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NOAA Climate.gov, 'Climate change: atmospheric carbon dioxide'. Credit: NOAA Climate.gov. NOAA's Education and Outreach FAQ states 'Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission', requires credit to NOAA and the NOAA program, and requires that any edits, including those made with a generative AI program, be made clear; the AI-generated lesson carrying this material is labelled as AI-generated in the product. NOAA has not reviewed, approved or endorsed this activity.",
+  "sha256": "407ee5d0a24d391a0d9c368c628007f1d8c75de1105ea65a2948570abc7ce770",
+  "textFile": "noaa-climate-gov-atmospheric-carbon-dioxide.txt",
+  "retrievedAt": "2026-10-30T15:42:00Z",
+  "transcription": "Main article text only: the related-article teaser widgets after the References ('NEWS & FEATURES', 'MAPS & DATA', 'TEACHING CLIMATE', 'CLIMATE RESILIENCE TOOLKIT' blocks) removed; chart images not stored, their captions kept as lines; the in-article 'More on carbon dioxide' link list and the References list kept as printed (links flattened to their text). H1 title line from the page's own H1. CO2 subscripts rendered as served ('CO2'); curly quotes and the page's own caption typo 'atmopsheric' kept as printed. Whitespace normalised, LF.",
+  "purpose": "library: the carbon cycle under fossil-fuel forcing, with the modern CO2 record — continuous Mauna Loa observations since 1958 (global CO2 already 315 ppm then); 2024 global average 422.8 ppm; the growth rate about 0.8 ppm per year in the 1960s, doubling to 1.6 ppm per year in the 1980s; El Niño years tending to bring the largest annual increases; natural sinks (plant growth, ocean absorption) absorbing only part of emissions while fossil fuels overwhelm the natural carbon cycle; ice-core evidence that over the past 800,000 years CO2 never exceeded 300 ppm and was 280 ppm or less before the Industrial Revolution; the recent rise being about 100 times faster than previous natural increases; and scenario futures (emissions possibly reaching 75 billion tons per year). Fits quiz cards with predict-then-reveal on the ppm and growth-rate figures, a compare table of ice-age vs pre-industrial vs 2024 concentrations, and step ordering of the emissions→sink→concentration chain; the page's time-series records are charts as images."
+}

@@ -1,0 +1,13 @@
+{
+  "id": "usgs-earthquake-magnitude-energy-intensity",
+  "title": "Earthquake Magnitude, Energy Release, and Shaking Intensity — USGS Earthquake Hazards Program",
+  "subject": "earth-science",
+  "locator": "https://www.usgs.gov/programs/earthquake-hazards/earthquake-magnitude-energy-release-and-shaking-intensity",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: U.S. Geological Survey, Earthquake Hazards Program, 'Earthquake Magnitude, Energy Release, and Shaking Intensity'. Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+  "sha256": "eff8fa887798c0f7a22ac2d03c1526697c587ed24cb2b9d6b06f58640476f068",
+  "textFile": "usgs-earthquake-magnitude-energy-intensity.txt",
+  "retrievedAt": "2026-10-30T15:45:00Z",
+  "transcription": "Main article text only: banner, breadcrumbs, the 'By Earthquake Hazards Program' byline and the media-widget chrome lines ('Media', 'Icon', 'Sources/Usage: … View Media Details') removed; figure titles and descriptive captions kept as lines ('Traditional seismometer', 'Sketch of a traditional seismometer. (Public domain.)', the Mw-10 fault-map captions); images not stored. The closing acknowledgement ('Thanks to Gavin Hayes and David Wald for providing much of the material for this page.') kept as printed. Subscripts flattened as served (Mw, ML, Me, Mblg); the page's own 'it represents an 32 times more energy release' grammar kept as printed. Whitespace normalised, LF.",
+  "purpose": "library: magnitude vs energy vs intensity — magnitude as the single size measure of the earthquake source on a logarithmic scale (each whole-number increase is a tenfold increase in measured amplitude and about 32 times more energy release; 5.3 moderate, 6.3 strong); the Richter scale (ML) used today mainly for small local earthquakes vs moment magnitude (Mw) as the standard; the energy estimate log E = 5.24 + 1.44Mw; energy magnitude (Me) measuring a different property than Mw; the Modified Mercalli Intensity scale varying from place to place with distance from the rupture, rupture direction and site geology; and the fault-length/slip arithmetic of hypothetical great earthquakes (San Andreas end-to-end ~1400 km with ~10 m slip → Mw 8.47; South American subduction ~6400 km with ~40 m slip → Mw 9.86; ~14,000 km needed for Mw 10; ~80,000 km for Mw 10.5; the ~110-year global total ≈ Mw 9.95). Fits a formula explorer for log E = 5.24 + 1.44Mw, quiz cards with predict-then-reveal on the tenfold/32× steps and the worked magnitudes, and a compare table of magnitude vs energy vs intensity."
+}

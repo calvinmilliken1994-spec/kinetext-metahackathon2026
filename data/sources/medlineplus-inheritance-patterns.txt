@@ -1,0 +1,27 @@
+# What are the different ways a genetic condition can be inherited?
+
+Some genetic conditions are caused by variants (also known as mutations) in a single gene. These conditions are usually inherited in one of several patterns, depending on the gene involved:
+
+| Inheritance pattern | Description | Examples |
+
+| Autosomal dominant | One altered copy of the gene in each cell is sufficient for a person to be affected by an autosomal dominant disorder. In some cases, an affected person inherits the condition from an affected parent. In others, the condition may result from a new variant in the gene and occur in people with no history of the disorder in their family. | Huntington's disease, Marfan syndrome |
+
+| Autosomal recessive | In autosomal recessive inheritance, variants occur in both copies of the gene in each cell. The parents of an individual with an autosomal recessive condition each carry one copy of the altered gene, but they typically do not show signs and symptoms of the condition. Autosomal recessive disorders are typically not seen in every generation of an affected family. | cystic fibrosis, sickle cell disease |
+
+| X-linked dominant | X-linked dominant disorders are caused by variants in genes on the X chromosome. In males (who have only one X chromosome), a variant in the only copy of the gene in each cell causes the disorder. In females (who have two X chromosomes), a variant in one of the two copies of the gene in each cell is sufficient to cause the disorder. Females may experience less severe symptoms of the disorder than males. A characteristic of X-linked inheritance is that fathers cannot pass X-linked traits to their sons (no male-to-male transmission). | fragile X syndrome |
+
+| X-linked recessive | X-linked recessive disorders are also caused by variants in genes on the X chromosome. In males (who have only one X chromosome), one altered copy of the gene in each cell is sufficient to cause the condition. In females (who have two X chromosomes), a variant would have to occur in both copies of the gene to cause the disorder. Because it is unlikely that females will have two altered copies of this gene, males are affected by X-linked recessive disorders much more frequently than females. A characteristic of X-linked inheritance is that fathers cannot pass X-linked traits to their sons (no male-to-male transmission). | hemophilia |
+
+| X-linked | Because the inheritance pattern of many X-linked disorders is not clearly dominant or recessive, some experts suggest that conditions be considered X-linked rather than X-linked dominant or X-linked recessive. X-linked disorders are caused by variants in genes on the X chromosome, one of the two sex chromosomes in each cell. In males (who have only one X chromosome), an alteration in the only copy of the gene in each cell is sufficient to cause the condition. In females (who have two X chromosomes), one altered copy of the gene usually leads to less severe health problems than those in affected males, or it may cause no signs or symptoms at all. A characteristic of X-linked inheritance is that fathers cannot pass X-linked traits to their sons (no male-to-male transmission). | glucose-6-phosphate-dehydrogenase-deficiency, X-linked thrombocytopenia |
+
+| Y-linked | A condition is considered Y-linked if the altered gene that causes the disorder is located on the Y chromosome, one of the two sex chromosomes in each of a male's cells. Because only males have a Y chromosome, in Y-linked inheritance, a variant can only be passed from father to son. | Y chromosome infertility, some cases of Swyer syndrome |
+
+| Codominant | In codominant inheritance, two different versions (alleles) of a gene are expressed, and each version makes a slightly different protein. Both alleles influence the genetic trait or determine the characteristics of the genetic condition. | ABO blood group, alpha-1 antitrypsin deficiency |
+
+| Mitochondrial | Mitochondrial inheritance, also known as maternal inheritance, applies to genes in mitochondrial DNA. Mitochondria, which are structures in each cell that convert molecules into energy, each contain a small amount of DNA. Because only egg cells contribute mitochondria to the developing embryo, only females can pass on mitochondrial variants to their children. Conditions resulting from variants in mitochondrial DNA can appear in every generation of a family and can affect both males and females, but fathers do not pass these disorders to their daughters or sons. | Leber hereditary optic neuropathy (LHON) |
+
+Many health conditions are caused by the combined effects of multiple genes (described as polygenic) or by interactions between genes and the environment. Such disorders usually do not follow the patterns of inheritance listed above. Examples of conditions caused by variants in multiple genes or gene/environment interactions include heart disease, type 2 diabetes, schizophrenia, and certain types of cancer. For more information, please see What are complex or multifactorial disorders?
+
+Disorders caused by changes in the number or structure of chromosomes also do not follow the straightforward patterns of inheritance listed above. To read about how chromosomal conditions occur, please see Are chromosomal disorders inherited?
+
+Other genetic factors sometimes influence how a disorder is inherited. For an example, please see What are genomic imprinting and uniparental disomy?

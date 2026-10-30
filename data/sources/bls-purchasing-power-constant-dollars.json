@@ -1,0 +1,13 @@
+{
+  "id": "bls-purchasing-power-constant-dollars",
+  "title": "Purchasing power and constant dollars — U.S. Bureau of Labor Statistics, Consumer Price Index factsheet",
+  "subject": "maths",
+  "locator": "https://www.bls.gov/cpi/factsheets/purchasing-power-constant-dollars.htm",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: U.S. Bureau of Labor Statistics, Consumer Price Index, 'Purchasing power and constant dollars'. Credit: U.S. Bureau of Labor Statistics. Per the BLS Linking and Copyright Information, 'The Bureau of Labor Statistics (BLS) is a Federal government agency and everything that we publish, both in hard copy and electronically, is in the public domain, except for previously copyrighted photographs and illustrations. You are free to use our public domain material without specific permission, although we do ask that you cite the Bureau of Labor Statistics as the source.' The U.S. Bureau of Labor Statistics has not reviewed, approved or endorsed this activity.",
+  "sha256": "d70cd76c4b9043e17e99ce430e45904d64b1055c247edaae37dff23e7898f04f",
+  "textFile": "bls-purchasing-power-constant-dollars.txt",
+  "retrievedAt": "2026-10-30T16:15:00Z",
+  "transcription": "Main factsheet text only (site header and menus, the CPI program left nav, 'Related Information' links, the 'Last modified date' line and the footer removed). Tables 1–4 are kept as pipe-separated rows with their header rows; the table-3/4 column header 'Median U.S. Household Income1' carries its literal '1' exactly as served, empty cells kept empty, and the 'Source: St. Louis FED, FRED database, MEHOINUSA672N' caption lines are kept as printed. Curly quotes kept as served. Whitespace normalised.",
+  "purpose": "library: purchasing power and constant-dollar conversion — the purchasing-power ratio (270.970 / 292.655 = 0.926 → 92.6%, a 7.4% decline of the dollar from 2021 to 2022), the equivalent-dollar worked example ($500 in December 2021 × 296.797 / 278.802 = 1.065 → $532.50 in December 2022), and two constant-dollar conversion tables for median U.S. household income 2010–2017 (constant 2010 dollars) and 2010–2021 (constant 2021 dollars, ratio 270.97 / yearly index), closing with the nominal 43.6% versus real <16% income-growth comparison. Fits a formula explorer for the conversion ratio, a compare table of nominal versus real income, and quiz cards predict-then-reveal on the worked values."
+}

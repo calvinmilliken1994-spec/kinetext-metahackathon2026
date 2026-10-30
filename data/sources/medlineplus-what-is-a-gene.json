@@ -1,0 +1,13 @@
+{
+  "id": "medlineplus-what-is-a-gene",
+  "title": "What is a gene? — MedlinePlus Genetics, Help Me Understand Genetics",
+  "subject": "biology",
+  "locator": "https://medlineplus.gov/genetics/understanding/basics/gene/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: MedlinePlus Genetics, 'Help Me Understand Genetics', U.S. National Library of Medicine. Courtesy of MedlinePlus from the National Library of Medicine. MedlinePlus's 'Linking to and Using Content from MedlinePlus' policy states that works produced by the federal government are not copyrighted under U.S. law and lists the Help Me Understand Genetics handbook among MedlinePlus's public-domain areas; MedlinePlus has not reviewed, approved or endorsed this activity.",
+  "sha256": "f16d75671a5537177f5299f8a7b9f6e06b33d24b58f687a97864b87686bea6c4",
+  "textFile": "medlineplus-what-is-a-gene.txt",
+  "retrievedAt": "2026-10-30T16:14:00Z",
+  "transcription": "Main article text only: the 'URL of this page:' line, the duplicate in-content H1 (served twice), the chapter navigation ('Topics in the … chapter' link list, 'Other chapters in Help Me Understand Genetics') and the closing medical-advice disclaimer removed; inline links flattened to their text. H1 title line from the page's own H1. Whitespace normalised, LF.",
+  "purpose": "library: what a gene is — a distinct stretch of DNA coding for a molecule that has a function (usually a protein); the estimate that humans have between 20,000 and 25,000 protein-coding genes (and the history of that estimate from the Human Genome Project); DNA bases' small differences as alleles contributing to unique physical features; how scientists name and track genes. Fits quiz cards with predict-then-reveal on the gene-count range, a compare table of gene vs DNA vs chromosome (with the stored MedlinePlus DNA and cell pages), and a concept map."
+}

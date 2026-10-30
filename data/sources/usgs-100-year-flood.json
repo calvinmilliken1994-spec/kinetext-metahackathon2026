@@ -1,0 +1,13 @@
+{
+  "id": "usgs-100-year-flood",
+  "title": "The 100-Year Flood — U.S. Geological Survey, Water Science School",
+  "subject": "maths",
+  "locator": "https://www.usgs.gov/water-science-school/science/100-year-flood",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: U.S. Geological Survey, Water Science School, 'The 100-Year Flood'. Credit: U.S. Geological Survey. Per the USGS Copyrights and Credits policy, 'USGS-authored or produced data and information are considered to be in the U.S. Public Domain.' The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+  "sha256": "55ac21c4f23e9155fc6ab2b5683e09e743f9a49916222bca885041d1277199da",
+  "textFile": "usgs-100-year-flood.txt",
+  "retrievedAt": "2026-10-30T16:15:00Z",
+  "transcription": "Main article text only (site header and mega-menu, the breadcrumb with 'Completed / By Water Science School / June 7, 2018', the 'Surface Water Data for the Nation' promo box, the Water Science School topic strip, the 'Education Activities' links, and the related science-topics, multimedia, publications and FAQ widgets and the footer removed). The pull-quote ('\"100-year floods can happen 2 years in a row\"') and the CoreCast podcast callout ('►► Two 500-Year Floods Within 15 Years? Bob Holmes…') are kept as printed. The recurrence-interval table is kept as pipe-separated rows with its header ('Recurrence interval, years | Annual exceedance probability, percent'). The glossary of flood terms is kept as term/definition paragraph pairs, including the page's own duplicated recurrence-interval paragraph (once after 'Floodplain' ending with a period, once under 'Recurrence interval' ending without one) exactly as served. Superscripts render with ^ (ft^3/s, mi^2). The two charts of dam and urban-development effects are images, not stored; their surrounding text is kept. Whitespace normalised.",
+  "purpose": "library: flood probability maths — why a '100-year flood' can happen twice in two years, frequency analysis and recurrence intervals, the worked 1-in-50 rainfall example (6.60 inches in 24 hours = a 50-year recurrence interval) and the 1-in-100 streamflow example (15,000 ft^3/s), the recurrence-interval ↔ annual-exceedance-probability table (250 y = 5% down to 500 y = 0.2%, AEP = 100/T, a 0.2 AEP flood = 20% = 5-year), 1-percent-per-year = 10,000 occurrences per 1 million years, the ten-or-more-years data requirement, and why a 100-year storm does not always cause a 100-year flood. Fits a formula explorer for the AEP ↔ recurrence-interval conversion, a compare table of intervals and probabilities, and quiz cards with predict-then-reveal."
+}

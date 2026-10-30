@@ -1,0 +1,97 @@
+# Calculating percent changes
+
+One-month percent changes
+
+Movements of an index from one month to another are usually expressed as percent changes rather than as changes in the index value, because index value changes are affected by the level of the index in relation to its base period, while percent changes are not. To find the percent change, you first subtract the earlier index value from the later one, then divide that difference by the earlier index value, and finally multiply the result by 100. Table 1 shows an example of a CPI one-month change between November 2021 and December 2021 using the CPI-U U.S. city average series for all items, not seasonally adjusted. You can find full historical data for this series in our online database.
+
+Table 1, 1-month percent change in CPI-U U.S. city average series for all items
+
+Quantity | Representation | Value
+
+Index value, December 2021 |  | 278.802
+
+Index value, November 2021 |  | 277.948
+
+Difference in index values | 278.802 - 277.948 | 0.854
+
+Ratio of difference to earlier index value | 0.854 / 277.948 | 0.003
+
+Ratio multiplied by 100 | .003 * 100 | 0.3
+
+Twelve-month percent changes
+
+To arrive at a percent change over an entire year, the beginning and ending periods of a CPI series must always be the same month, such as December 2021 and December 2022. Note: A calculation using January and December data would result in an 11-month change, not a 12- month or year-over-year change. Table 2 shows an example 12-month change in the CPI-U U.S. city average series for all items from December 2021 to December 2022.
+
+Table 2, 12-month percent change in CPI-U U.S. city average series for all items
+
+Quantity | Representation | Value
+
+Index value, December 2022 |  | 296.797
+
+Index value, December 2021 |  | 278.802
+
+Difference in index values | 296.797 - 278.802 | 17.995
+
+Ratio of difference to earlier index value | 17.995 / 278.802 | 0.065
+
+Ratio multiplied by 100 | .065 * 100 | 6.5
+
+There are two critical points to remember when calculating percent changes:
+
+• Always use the same reference base period for all calculations. If the earlier data point uses the 1982-84=100 base, the later data point must also use that base.
+
+• An over-the-year percent change, such as December 2021 to December 2022, is not equal to the sum of the over-the-month changes between those two time periods.
+
+Annual average percent changes
+
+Annual averages are the sum of the 12 monthly data points (i.e. index values), divided by 12. As an example, the calculation of the annual average for the CPI-U U.S. city average series for all items is shown in table 3. Annual averages represent an average index for a given year, not a particular month. An annual average percent change should not be confused with the over the year percent change, such as the calculation of the December-to-December change mentioned in the previous section.
+
+Table 3, annual average of the CPI-U U.S. city average series for all items
+
+Quantity | Value
+
+Index value, January 2021 | 261.582
+
+Index value, February 2021 | 263.014
+
+Index value, March 2021 | 264.877
+
+Index value, April 2021 | 267.054
+
+Index value, May 2021 | 269.195
+
+Index value, June 2021 | 271.696
+
+Index value, July 2021 | 273.003
+
+Index value, August 2021 | 273.567
+
+Index value, September 2021 | 274.310
+
+Index value, October 2021 | 276.589
+
+Index value, November 2021 | 277.948
+
+Index value, December 2021 | 278.802
+
+Sum of index values for 2021 | 3251.637
+
+Sum of index values for 2021, divided by 12 | 270.970
+
+A December-to-December percent change is unlikely to be the same as the change in the annual average percent change between the same two years. The annual average percent change between 2021 and 2022 for the CPI-U U.S. city average series for all items is presented in table 4 as an example. Users should take care to examine the data with which the CPI is being compared to determine whether the annual average or 12- month percent change is more appropriate for their purposes.
+
+Table 4, annual average percent change in CPI-U U.S. city average series for all items
+
+Quantity | Representation | Value
+
+Annual average index value, December 2022 |  | 292.655
+
+Annual average index value, December 2021 |  | 270.970
+
+Difference in index values | 292.655 - 270.970 | 21.685
+
+Ratio of difference to earlier index value | 21.685 / 270.970 | 0.080
+
+Ratio multiplied by 100 | .080 * 100 | 8.0
+
+In addition, users should note that, for an index series that is published every other month, such as those for many metropolitan areas, the annual average is based on 12 months of data. Many food and energy prices are collected for the off-cycle months, and the unpublished off-cycle indexes are carried forward from the previous month and used in the annual average.

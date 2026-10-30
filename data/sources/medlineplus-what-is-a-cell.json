@@ -1,0 +1,13 @@
+{
+  "id": "medlineplus-what-is-a-cell",
+  "title": "What is a cell? — MedlinePlus Genetics, Help Me Understand Genetics",
+  "subject": "biology",
+  "locator": "https://medlineplus.gov/genetics/understanding/basics/cell/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: MedlinePlus Genetics, 'Help Me Understand Genetics', U.S. National Library of Medicine. Courtesy of MedlinePlus from the National Library of Medicine. MedlinePlus's 'Linking to and Using Content from MedlinePlus' policy states that works produced by the federal government are not copyrighted under U.S. law and lists the Help Me Understand Genetics handbook among MedlinePlus's public-domain areas; MedlinePlus has not reviewed, approved or endorsed this activity.",
+  "sha256": "e1e13e682d36c67bceb40f4665d1bb179174796619028f4cd49b9ec874b4f2b3",
+  "textFile": "medlineplus-what-is-a-cell.txt",
+  "retrievedAt": "2026-10-30T16:14:00Z",
+  "transcription": "Main article text only: the 'URL of this page:' line, the duplicate in-content H1 (served twice), the chapter navigation ('Topics in the … chapter' link list, 'Other chapters in Help Me Understand Genetics') and the closing medical-advice disclaimer removed; inline links flattened to their text. H1 title line from the page's own H1. Whitespace normalised, LF.",
+  "purpose": "library: the cell as the basic building block of living things — trillions of cells in the human body; organelles as specialised structures; the page's alphabetical tour of major human cell parts with functions: cytoplasm/cytosol, cytoskeleton, endoplasmic reticulum, Golgi apparatus, mitochondria, nucleus, ribosomes, vesicles and peroxisomes and more, each with its job; cells' shared DNA and their specialisation. Fits a compare table of organelle × function, quiz cards with predict-then-reveal, and a concept map of the cell parts. Carries labelled cell-diagram figures (not stored; a future diagram engine could use the real page images)."
+}

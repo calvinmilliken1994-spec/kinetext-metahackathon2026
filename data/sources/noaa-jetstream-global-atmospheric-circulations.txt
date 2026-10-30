@@ -1,0 +1,29 @@
+# Global Atmospheric Circulations
+
+Air flow on a planet with no rotation and no water.
+
+Global Atmospheric Circulation is the movement of air around the planet. It explains how thermal energy and storm systems move over the Earth's surface.
+
+Without the Earth’s rotation, tilt relative to the sun, and surface water, global circulation would be simple. With the Sun directly over the equator, the ground and atmosphere there would heat up more than the rest of the planet. This region would become very hot, with hot air rising into the upper atmosphere. This would create a constant belt of low pressure around the equator. That warm air would then move directly north toward the poles, where it would become very cold and sink, creating a large area of high pressure. The temperature and pressure difference would return the now-cold air south to the equator (above right), creating a simple global circulation.
+
+Learning Lesson: Toasty Wind
+
+However, the Earth’s tilt means that the Sun is not always directly over the equator, and thus the exact location where the most solar radiation is received is constantly shifting. The Earth’s rotation results in an easterly-movement of air, called the Coriolis effect (this is described in more detail in the next section, The Jet Stream). The uneven distribution of water and land around the globe further breaks up the uniformity of air movement, with larger amounts of land in the Northern Hemisphere creating semi-permanent highs and lows. As a result, the actual global pattern of atmospheric circulation is much more complicated than a direct flow between the equator and poles.
+
+Instead of one large circulation in each hemisphere, there are three circulations in each:
+
+1. Hadley cell – At low latitudes, air moves toward the equator, where it is heated and rises vertically. In the upper atmosphere, air moves poleward. This forms a convection cell that covers tropical and sub-tropical climates. This cell is named for English physicist and meteorologist George Hadley, who proposed the single circulation for each hemisphere in 1735.
+
+2. Ferrel cell – In this mid-latitude atmospheric circulation cell, air near the surface flows poleward and eastward, while air higher in the atmosphere moves equatorward and westward. Proposed by William Ferrell in 1856, it was the first to account for westerly winds between 35° and 60° N/S, which are caused by friction, not heat differences at the equator and poles.
+
+3. Polar cell – At higher latitudes, air rises and travels toward the poles. Once over the poles, the air sinks, forming areas of high atmospheric pressure called the polar highs. At the surface, air moves outward from the polar highs, creating east-blowing surface winds called polar easterlies. It is the smallest and weakest of the cells.
+
+Three main circulations exist between the equator and poles due to the Earth's rotation.
+
+These cells describe circulations in both the Northern and Southern Hemispheres, although the difference in landmasses result in varying degrees of uniformity.
+
+Between each of these circulation cells are surface-level bands of high and low pressure. The high pressure band is located at about 30° N/S latitude and at each pole. Low pressure bands are found at the equator and 50°-60° N/S.
+
+Usually, fair and dry/hot weather is associated with high pressure, while rainy and stormy weather is associated with low pressure. You can see the results of these circulations on a globe. Look at the number of deserts located along the 30°N/S latitude around the world (including the American Southwest and Mexico, northern Africa, and Australia). Then look at the region between 50°and 60° N/S latitude (including Canada, Alaska, the British Isles, and Russia in the Northern Hemisphere). These latitudes, especially on the west coast of continents, tend to have more precipitation due to more storms moving around the Earth.
+
+Latitude Map

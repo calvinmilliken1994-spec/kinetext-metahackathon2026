@@ -1,0 +1,13 @@
+{
+  "id": "ftc-phishing-scams",
+  "title": "How To Recognize and Avoid Phishing Scams — FTC Consumer Advice",
+  "subject": "computing",
+  "locator": "https://consumer.ftc.gov/articles/how-recognize-avoid-phishing-scams",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: FTC Consumer Advice, 'How To Recognize and Avoid Phishing Scams'. Source: United States Federal Trade Commission, www.ftc.gov. Per the FTC Website Policy, 'Most material on the FTC's website is considered work of the United States Government, meaning that the material is in the public domain and is not subject to copyright restrictions (17 U.S.C. 105). The use, duplication, or redistribution of such material should be accompanied by appropriate attribution, where feasible.' The Federal Trade Commission has not reviewed, approved or endorsed this activity.",
+  "sha256": "00f4ee7c44edc99f06bb6aa3167c8aed6947b565d62c5d776486741caa206b0c",
+  "textFile": "ftc-phishing-scams.txt",
+  "retrievedAt": "2026-10-30T16:15:00Z",
+  "transcription": "Main article text only (site header and mega-menu, the Spanish toggle, the in-page anchor nav listing the five section links, the 'Search Terms'/'Topics'/'Related Items' blocks, the 'September 2022' date line, the 'Return to top' link and the footer removed). The example phishing email is a page image (not stored); its introducing sentence is kept and the three • 'signs that this email is a scam' items describing the image are kept as printed, so no key content is image-only. The scam-tactics list, the three MFA credential categories and the reporting destinations are kept as • items; the numbered 'Four Ways To Protect Yourself From Phishing' list keeps its 1.–4. numbering. Inline links flattened to their text (IdentityTheft.gov, ReportFraud.ftc.gov, reportphishing@apwg.org, 'SPAM (7726)'). Curly quotes kept as served. Whitespace normalised.",
+  "purpose": "library: phishing recognition and response — common scam tactics (a story to trick you, fake suspicious-activity claims, account problems, unrecognized invoices, payment links with malware, fake government refunds, coupons), a worked example spotting a fake email by its three signs, the numbered four-step protection process (security software, automatic updates, multi-factor authentication, backups), the three MFA credential categories (something you know / something you have / something you are), the do-I-have-an-account decision question with its No/Yes branches, what to do after responding, and the three reporting destinations. Fits step ordering, a compare table of MFA credential types, and quiz cards."
+}

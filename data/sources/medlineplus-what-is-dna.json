@@ -1,0 +1,13 @@
+{
+  "id": "medlineplus-what-is-dna",
+  "title": "What is DNA? — MedlinePlus Genetics, Help Me Understand Genetics",
+  "subject": "biology",
+  "locator": "https://medlineplus.gov/genetics/understanding/basics/dna/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: MedlinePlus Genetics, 'Help Me Understand Genetics', U.S. National Library of Medicine. Courtesy of MedlinePlus from the National Library of Medicine. MedlinePlus's 'Linking to and Using Content from MedlinePlus' policy states that works produced by the federal government are not copyrighted under U.S. law and lists the Help Me Understand Genetics handbook among MedlinePlus's public-domain areas; MedlinePlus has not reviewed, approved or endorsed this activity.",
+  "sha256": "ee6e2bcb658439847bbb8ace196e703d81653cdf0826dae13149d08af007fb80",
+  "textFile": "medlineplus-what-is-dna.txt",
+  "retrievedAt": "2026-10-30T15:42:00Z",
+  "transcription": "Main article text only: the 'URL of this page:' line, the duplicate in-content H1 (served twice), the chapter navigation ('Topics in the … chapter' link list, 'Other chapters in Help Me Understand Genetics') and the closing medical-advice disclaimer removed; inline links flattened to their text. H1 title line from the page's own H1. Whitespace normalised, LF.",
+  "purpose": "library: DNA structure and function — deoxyribonucleic acid as the hereditary material in humans and almost all other organisms, present in nearly every cell; the code of four chemical bases adenine (A), guanine (G), cytosine (C) and thymine (T); human DNA's about 3 billion bases with more than 99 percent identical in all people; base sequence as the information for building and maintaining an organism; base pairing (A with T, C with G) forming base pairs, each base attached to a sugar and a phosphate (the sugar-phosphate backbone) in the double helix; and replication (each strand as a template for copying). Fits quiz cards with predict-then-reveal on the numbers (4 bases, ~3 billion, >99 percent), a compare table of the base pairings, and step ordering of replication. Carries a labelled DNA-structure figure (not stored)."
+}

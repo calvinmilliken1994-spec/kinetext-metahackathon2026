@@ -1,0 +1,13 @@
+{
+  "id": "noaa-jetstream-climate-zones",
+  "title": "Climate Zones — NOAA National Weather Service, JetStream",
+  "subject": "earth-science",
+  "locator": "https://www.noaa.gov/jetstream/global/climate-zones",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NOAA National Weather Service, JetStream, 'Climate Zones'. Credit: NOAA National Weather Service. NOAA's Education and Outreach FAQ states 'Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission', requires credit to NOAA and the NOAA program, and requires that any edits, including those made with a generative AI program, be made clear; the AI-generated lesson carrying this material is labelled as AI-generated in the product. NOAA has not reviewed, approved or endorsed this activity.",
+  "sha256": "9e8263f9fb048729c92d00c7603e536c248951e07afdff0ba85b66b6fcbff04d",
+  "textFile": "noaa-jetstream-climate-zones.txt",
+  "retrievedAt": "2026-10-30T15:51:00Z",
+  "transcription": "Main article text only (share widget, the lesson navigation and the 'Download Image' utility links removed); H1 title line from the page's own H1. The in-body 'Take it to the MAX!' promo lines kept as printed (inline links flattened to their text); figure captions kept as their own lines; images not stored. Whitespace normalised, LF. The zone captions kept as printed; the U.S. Köppen-zones map is an image (caption 'The major Köppen zones in the U.S.' kept).",
+  "purpose": "library: the Köppen-Geiger climate classification as comparable categories — climate as the reoccurring average weather measured over 30-year intervals; Wladimir Köppen (1846-1940) dividing world climates by temperature profile related to latitude, modified with Rudolf Geiger; A tropical (all months averaging above 64°F (18°C), annual precipitation above 59 inches, 15°-25° latitude), B dry (potential evaporation and transpiration exceeding precipitation, 20°-35° latitudes and continental mid-latitudes), C moist subtropical mid-latitude (30°-50°, warm humid summers, mild winters, mid-latitude cyclones), D moist continental mid-latitude (warm to cool summers, cold winters), E polar (warmest month below 50°F (10°C)) and H highlands (elevation-driven). Fits a compare table of zone × criteria × location, quiz cards with predict-then-reveal on the temperature and precipitation thresholds and latitude bands, and a concept map."
+}

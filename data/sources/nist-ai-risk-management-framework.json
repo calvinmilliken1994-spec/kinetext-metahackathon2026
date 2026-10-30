@@ -1,0 +1,13 @@
+{
+  "id": "nist-ai-risk-management-framework",
+  "title": "AI Risk Management Framework — NIST Information Technology Laboratory, AI Program",
+  "subject": "computing",
+  "locator": "https://www.nist.gov/itl/ai-risk-management-framework",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NIST Information Technology Laboratory, AI Program, 'AI Risk Management Framework'. Credit: NIST. Per the NIST Copyrights & Disclaimers, 'NIST web pages are provided as a public service by the National Institute of Standards and Technology (NIST). With the exception of material marked as copyrighted, information presented on NIST sites are considered public information and may be distributed or copied. Use of appropriate byline/photo/image credits is requested.' The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+  "sha256": "d76ad1bde2388b029d9a4d6e3dc33f0cfc73a8131ca1a4e1343cbf828a44c8d1",
+  "textFile": "nist-ai-risk-management-framework.txt",
+  "retrievedAt": "2026-10-30T16:15:00Z",
+  "transcription": "Main article text only (site header and menus, the left 'AI RMF Development | NIST AI RMF Playbook | AI RMF Critical Infrastructure Profile | Engage | Resources | Perspectives | FAQs | AI @ NIST' section nav, the 'Quick Links' download block, the 'News & Updates' teasers, the 'Contact Us' email block and the footer removed). The opening callout ('On April 7, 2026, NIST released a concept note…Learn more.') and the 'The AI RMF 1.0 is being revised as part of the White House AI Action Plan.' banner each appear twice on the page (callout plus body text) and are kept twice as printed. The Translations and Prior Documents link lists are kept as • items with link text flattened; inline links flattened to their text ('Learn more.', '(Fact Sheet)', 'the AI RMF Development page'). Whitespace normalised.",
+  "purpose": "library: the NIST AI Risk Management Framework (AI RMF 1.0) — a voluntary framework for managing risk to individuals, organizations and society from AI, released January 26, 2023 through a consensus process (RFI, drafts, workshops), with its companion Playbook, Roadmap and Crosswalk, the Trustworthy and Responsible AI Resource Center (launched March 30, 2023), the Generative AI Profile NIST-AI-600-1 (July 26, 2024), the April 7, 2026 critical-infrastructure profile concept note, and the translations/prior-draft document trail. Fits step ordering of the release timeline, quiz cards with predict-then-reveal on dates and companion documents, and a concept map of AI RMF resources."
+}

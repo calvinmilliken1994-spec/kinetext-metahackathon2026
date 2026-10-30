@@ -1,0 +1,13 @@
+{
+  "id": "nasa-grc-kinetic-theory-of-gasses",
+  "title": "Kinetic Theory of Gases — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+  "subject": "chemistry",
+  "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/kinetic-theory-of-gasses/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+  "sha256": "d348d7fadb5d1d605627298358bc29f9b9041782d38636f0968fb21659df5ea4",
+  "textFile": "nasa-grc-kinetic-theory-of-gasses.txt",
+  "retrievedAt": "2026-10-30T15:49:00Z",
+  "transcription": "Main article text only (site banner, menus and the 'On this page' sidenav removed). H1 title line from the page's own H1 ('Kinetic Theory of Gases'); the URL slug keeps NASA's 'gasses' spelling. The molecules-in-motion figure is an image and not stored (its descriptive text exists only as image metadata). Inline bolded terms kept as plain text. Whitespace normalised, LF.",
+  "purpose": "library: the kinetic theory of gases — modelling a gas as molecules very small relative to the distance between them, in constant random motion, frequently colliding with each other and with container walls; density as the sum of molecular mass divided by volume; pressure as a measure of the molecules' linear momentum (collisions impart momentum to the walls, producing a measurable force; force divided by area is pressure); temperature as a measure of the mean kinetic energy (mass times the square of the velocity of the random motion); solid vs gas molecular behaviour; and the random vs ordered (wind) motion components, which are indistinguishable at the molecular level. Fits quiz cards with predict-then-reveal, a compare table of what density/pressure/temperature each measure molecularly, and a concept map of the theory's assumptions; pairs with the stored ideal-gas equation-of-state page."
+}

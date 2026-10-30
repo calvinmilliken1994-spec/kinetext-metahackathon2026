@@ -1,0 +1,13 @@
+{
+  "id": "nasa-grc-gas-properties-definitions",
+  "title": "Gas Properties Definitions — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+  "subject": "chemistry",
+  "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/gas-properties-definitions/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+  "sha256": "d996769acf644cd6f6e0c861e1328045e77a19a762ed2807c893e7451e3a79b0",
+  "textFile": "nasa-grc-gas-properties-definitions.txt",
+  "retrievedAt": "2026-10-30T15:49:00Z",
+  "transcription": "Main article text only (site banner, menus and sidenav removed). The page H1 is served twice (site header and article); kept once as the '# Gas Properties Definitions' title line. Figure images not stored. The en dashes in the 'Large Scale Motion of a Gas – Macro Scale' and 'Individual Molecular Motion of a Gas – Micro Scale' headings kept as printed. Whitespace normalised, LF.",
+  "purpose": "library: definitions of the gas state properties used across the Beginner's Guide gas pages — fluid dynamics framing; matter made of atoms with solid, liquid and gas states; gas mass characterised by molecular weight; extensive vs intensive properties; the macro-scale treatment (density, pressure and temperature averaged over many molecules) vs the micro-scale kinetic theory; diffusion; convection as ordered transport (a blast of cold weather); viscosity (stickiness) and compressibility of gases around moving objects. Fits a compare table of macro vs micro scale and of the property definitions, quiz cards, and a concept map; groundwork for the stored equation-of-state and specific-heat pages."
+}

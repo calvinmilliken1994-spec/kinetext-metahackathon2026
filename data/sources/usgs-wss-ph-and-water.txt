@@ -1,0 +1,47 @@
+# pH and Water
+
+pH is a measure of how acidic/basic water is. The range goes from 0 to 14, with 7 being neutral. pHs of less than 7 indicate acidity, whereas a pH of greater than 7 indicates a base. The pH of water is a very important measurement concerning water quality.
+
+No, you don't often hear your local news broadcaster say "Folks, today's pH value of Dryville Creek is 6.3!" But pH is quite an important measurement of water. Maybe for a science project in school you took the pH of water samples in a chemistry class ... and here at the U.S. Geological Survey we take a pH measurement whenever water is studied. Not only does the pH of a stream affect organisms living in the water, a changing pH in a stream can be an indicator of increasing pollution or some other environmental factor.
+
+pH: Definition and measurement units
+
+By the way.....for a solution to have a pH, it has to be aqueous (contains water). Thus, you can't have a pH of vegetable oil or alcohol.
+
+By the way.....for a solution to have a pH, it has to be aqueous (contain water). Thus, you can't have a pH of vegetable oil or pure alcohol.
+
+pH is a measure of how acidic/basic water is. The concept of pH was introduced by the Danish biochemist S. P. L. Sørensen in two scientific papers published in 1909. They were published simultaneously in German and French so the “p” comes from the first letter in the German water “Potenz” and French word “puissance”, which translate into English as “power”, both in the sense of potency of the hydrogen ion and the power of ten of the effective concentration of hydrogen ion in solution. The “H” is the symbol for the element hydrogen, so represents the hydrogen ion. There are strong, covalent bonds between the hydrogen and oxygen in the water molecule, but a tiny fraction of these bonds break-apart naturally to produce hydrogen ions (H+) and hydroxide ions (OH-): H2O = H^+ + OH^-. In pure water, the fraction is about 1 in 55,000,000 (5.5x10^8 in scientific notation).
+
+The range goes from 0 to 14, with 7 being neutral. pHs of less than 7 indicate acidity, whereas a pH of greater than 7 indicates a base. pH is really a measure of the relative amount of free hydrogen (H^+) and hydroxyl ions (OH^-) in the water. Water that has more free hydrogen ions is acidic, whereas water that has more free hydroxyl ions is basic. Since pH can be affected by chemicals in the water, pH is an important indicator of water that is changing chemically. pH is reported in "logarithmic units". Each number represents a 10-fold change in the acidity/basicness of the water. Water with a pH of five is ten times more acidic than water having a pH of six.
+
+Importance of pH
+
+The pH of water determines the solubility (amount that can be dissolved in the water) and biological availability (amount that can be utilized by aquatic life) of chemical constituents such as nutrients (phosphorus, nitrogen, and carbon) and heavy metals (lead, copper, cadmium, etc.). For example, in addition to affecting how much and what form of phosphorus is most abundant in the water, pH also determines whether aquatic life can use it. In the case of heavy metals, the degree to which they are soluble determines their toxicity. Metals tend to be more toxic at lower pH because they are more soluble. (Source: A Citizen's Guide to Understanding and Monitoring Lakes and Streams)
+
+Diagram of pH
+
+As this diagram shows, pH ranges from 0 to 14, with 7 being neutral. pHs less than 7 are acidic while pHs greater than 7 are alkaline (basic). Normal rainfall has a pH of about 5.6—slightly acidic due to carbon dioxide gas from the atmosphere. You can see that acid rain can be very acidic, and it can affect the environment in a negative way.
+
+The pH scale ranges from 0 to 14, with 7 being neutral. pHs less than 7 are acidic while pHs greater than 7 are alkaline (basic).
+
+Measuring pH
+
+The U.S. Geological Survey analyzes hundreds of thousands of water samples every year. Many measurements are made right at the field site, and many more are made on water samples back at the lab. pH is an important water measurement, which may be measured both at the sampling site and in the lab. There are large and small models of pH meters. Portable models are available to take out in the field and larger models, such as this one, are used in the lab.
+
+To use the pH meter in the photograph below, the water sample is placed in the cup and the glass probe at the end of the retractable arm is placed in the water. Inside the thin glass bulb at the end of the probe there are two electrodes that measure voltage. One electrode is contained in a liquid that has a fixed acidity, or pH. The other electrode responds to the acidity of the water sample. A voltmeter in the probe measures the difference between the voltages of the two electrodes. The meter then translates the voltage difference into pH and displays it on the little screen on the main box.
+
+Taking pH at home or school
+
+One of the most popular school science projects is to take the pH of water from different sources. If your school does not have an electronic pH meter lying around, you can still get an estimate of pH by using litmus paper. Litmus paper, which can be found at pet-supply stores (to check the pH of aquariums) is simply a strip of paper that, when a sample of water is dropped onto it, turns a certain color, giving a rough estimate of pH.
+
+pH and water quality
+
+Excessively high and low pHs can be detrimental for the use of water. High pH causes a bitter taste, water pipes and water-using appliances become encrusted with deposits, and it depresses the effectiveness of the disinfection of chlorine, thereby causing the need for additional chlorine when pH is high. Low-pH water will corrode or dissolve metals and other substances.
+
+Pollution can change a water's pH, which in turn can harm animals and plants living in the water. For instance, water coming out of an abandoned coal mine can have a pH of 2, which is very acidic andcan lead to fish kills downstream since most life cannot survive when pH is that low! As pH uses a logarithmic scale, this mine-drainage water would be 100,000 times more acidic than neutral water -- so stay out of abandoned mines.
+
+Variation of pH across the United States
+
+The pH of precipitation, and water bodies, vary widely across the United States. Natural and human processes determine the pH of water. The National Atmospheric Deposition Program has developed maps showing pH patterns, such as the one below showing the spatial pattern of the pH of precipitation at field sites for 2002. You should be aware that this contour map was developed using the pH measurements at the specific sampling locations; thus, the contours and isolines were created using interpolation between data points. You should not necessarily use the map to document the pH at other particular map locations, but rather, use the map as a general indicator of pH throughout the country.
+
+Note: This map shows one point in time, and since 2002 there has been a general reduction in things that cause acid rain. A newer map might look very different than this one. Still, lower precipitation pH values still will occur in the northeastern U.S.

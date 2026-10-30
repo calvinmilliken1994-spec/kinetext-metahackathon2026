@@ -1,0 +1,13 @@
+{
+  "id": "census-poverty-measures",
+  "title": "How the Census Bureau Measures Poverty — U.S. Census Bureau",
+  "subject": "maths",
+  "locator": "https://www.census.gov/topics/income-poverty/poverty/guidance/poverty-measures.html",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: U.S. Census Bureau, Income and Poverty, 'How the Census Bureau Measures Poverty'. Credit: U.S. Census Bureau. Per Census Bureau policy DS027 (Research Transparency and Public Access), 'Data/works created by Census Bureau employees generally are not subject to copyright protection within the United States.' The U.S. Census Bureau has not reviewed, approved or endorsed this activity.",
+  "sha256": "d4596ea891842c2ee0ed4b34986ca579ae50aef29dbbb308f0ce50b4e3cff0b5",
+  "textFile": "census-poverty-measures.txt",
+  "retrievedAt": "2026-10-30T16:15:00Z",
+  "transcription": "Main article text only (site header and mega-menu, the breadcrumb, the left topic nav, the feedback widget, the 'Page Last Revised - January 13, 2026' line and the footer removed). The 'Poverty Thresholds' data table is an embedded linked data widget; its card text is kept as printed ('• Table Poverty Thresholds Poverty Thresholds by Size of Family and Number of Related Children Under 18 Years Source: Current Population Survey (CPS)') — the threshold values themselves are not in the page text. The related-link card ('• The History of the Official Poverty Measure…') is kept flattened to its text. Money-income included/excluded items, threshold facts and the cannot-be-determined groups are • lists. The worked example keeps its Situation/Step 1–3/Conclusion structure and both formula lines exactly as printed, including the page's missing space in 'Income / Threshold = $39,950 / $39,384= 1.01' and the en dash in 'Income – Threshold = $39,950 - $39,384 = $566'. Whitespace normalised.",
+  "purpose": "library: the official poverty measurement computation — money income before taxes (20 included sources, 3 exclusions), the 48 poverty thresholds varying by family size and composition and updated annually with CPI-U, the family-income aggregation procedure, the less-than versus equals-or-greater decision rule against the threshold, people whose poverty status cannot be determined, and the worked Family A example (5 members, incomes $0 + $0 + $14,250 + $14,700 + $11,000 = $39,950 versus the $39,384 threshold → Ratio of Income to Poverty 1.01, Income Surplus $566, not in poverty). Fits a formula explorer for Ratio = Income / Threshold, step ordering of the computation, and quiz cards predict-then-reveal on the worked example."
+}

@@ -1,0 +1,143 @@
+# How the Census Bureau Measures Poverty
+
+Following the Office of Management and Budget's (OMB) Statistical Policy Directive 14, the Census Bureau uses a set of money income thresholds that vary by family size and composition to determine who is in poverty. If a family's total income is less than the family's threshold, then that family and every individual in it is considered in poverty. The official poverty thresholds do not vary geographically, but they are updated for inflation using the Consumer Price Index (CPI-U). The official poverty definition uses money income before taxes and does not include capital gains or noncash benefits (such as public housing, Medicaid, and food stamps).
+
+For historical information, see the History of the Poverty Measure page in the About section of the Poverty subtopic site.
+
+• The History of the Official Poverty Measure Learn about the history of the poverty measure through OMB Statistical Policy Directive 14, several reports, & a visualization on the topic.
+
+Money Income: Income Used to Compute Poverty Status
+
+The income used to compute poverty status includes (before taxes):
+
+• Earnings
+
+• Unemployment compensation
+
+• Workers' compensation
+
+• Social Security
+
+• Supplemental Security Income
+
+• Public assistance
+
+• Veterans' payments
+
+• Survivor benefits
+
+• Pension or retirement income
+
+• Interest
+
+• Dividends
+
+• Rents
+
+• Royalties
+
+• Income from estates
+
+• Trusts
+
+• Educational assistance
+
+• Alimony
+
+• Child support
+
+• Assistance from outside the household
+
+• Other miscellaneous sources
+
+Money income does not include:
+
+• Capital gains or losses
+
+• Noncash benefits (e.g. food stamps and housing subsidies)
+
+• Tax credits
+
+Poverty Thresholds: Measure of Need
+
+Poverty thresholds are the dollar amounts used to determine poverty status.
+
+The Census Bureau assigns each person or family one out of 48 possible poverty thresholds.
+
+• Thresholds vary by the size of the family and age of the members.
+
+• The same thresholds are used throughout the United States (they do not vary geographically).
+
+• Thresholds are updated annually for inflation using the Consumer Price Index for All Urban Consumers (CPI-U).
+
+• Although the thresholds in some sense reflect a family’s needs, they are intended for use as a statistical yardstick, not as a complete description of what people and families need to live.
+
+• Table Poverty Thresholds Poverty Thresholds by Size of Family and Number of Related Children Under 18 Years Source: Current Population Survey (CPS)
+
+Computation
+
+To calculate total family income, the incomes of all related family members that live together are added up to determine poverty status. If an individual or group of individuals (such as housemates) are not living with family members, their own individual income is compared with their individual poverty threshold.
+
+Thus, all family members have the same poverty status, and some families may be composed of single unrelated individuals.
+
+If total family income:
+
+• Is less than the poverty threshold for that family - that family and everyone in it is considered to be in poverty.
+
+• Equals or is greater than the poverty threshold - the family is not considered to be in poverty.
+
+People Whose Poverty Status Cannot Be Determined
+
+Poverty status cannot be determined for people in:
+
+• Institutional group quarters (such as prisons or nursing homes)
+
+• College dormitories
+
+• Military barracks
+
+• Living situations without conventional housing (and who are not in shelters)
+
+Additionally, poverty status cannot be determined for unrelated individuals under age 15 (such as foster children) because income questions are asked of people age 15 and older and, if someone is under age 15 and not living with a family member, we do not know their income. Since we cannot determine their poverty status, they are excluded from the “poverty universe” (table totals).
+
+Example
+
+Situation
+
+Family A has five members: two children, one mother, one father, and one great-aunt.
+
+Step 1: Determine the family’s poverty threshold for that year
+
+The family’s 2025 poverty threshold (link below) is $39,384.
+
+• Poverty Thresholds Primary Topic: Poverty Poverty Thresholds by Size of Family and Number of Related Children Under 18 Years Source: Current Population Survey (CPS)
+
+Step 2: Calculate the total family income for the same year
+
+Suppose the members’ incomes in 2025 were:
+
+• Child 1: $0
+
+• Child 2: $0
+
+• Mother: $14,250
+
+• Father: $14,700
+
+• Great-aunt: $11,000
+
+Thus, Family A’s total income for 2025 was $39,950.
+
+Step 3: Compare the family’s total income with the poverty threshold
+
+The total family income divided by the poverty threshold is called the Ratio of Income to Poverty.
+
+Income / Threshold = $39,950 / $39,384= 1.01
+
+The difference in dollars between family income and the family’s poverty threshold is called the Income Deficit (for families in poverty) or Income Surplus (for families above poverty).
+
+Income – Threshold = $39,950 - $39,384 = $566
+
+Conclusion
+
+Since Family A’s total income was greater than their poverty threshold, they are not considered “in poverty” according to the official definition.

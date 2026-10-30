@@ -1,0 +1,35 @@
+# Climate Zones
+
+The climate is the reoccurring average weather found in any particular place, measured over 30 year intervals. The Earth's tilt, rotation and land/sea distribution affect these global weather patterns, resulting in variations between different locations.
+
+German climatologist and amateur botanist Wladimir Köppen (1846-1940) divided the world's climates into categories based upon general temperature profile related to latitude. He worked with Rudolf Geiger to modify these categories into what is known today as the Köppen-Geiger climate classification system The major categories are as follows:
+
+A - Tropical Climates
+
+Moist tropical climates extend north and south from the equator to about 15° to 25° latitude. In these climates, all months have average temperatures greater than 64°F (18°C) and annual precipitation greater than 59".
+
+B - Dry Climates
+
+The most obvious climatic feature of this climate is that potential evaporation and transpiration exceed precipitation; in other words, they are very dry. These climates extend from 20°-35° North and South of the equator and in large continental regions of the mid-latitudes, often surrounded by mountains.
+
+C - Moist Subtropical Mid-Latitude Climates
+
+This climate generally has warm and humid summers with mild winters. It extends from 30°-50° latitude mainly on the eastern and western borders of most continents. During the winter, the main weather feature is the mid-latitude cyclone. Convective thunderstorms dominate summer months.
+
+D - Moist Continental Mid-Latitude Climates
+
+Moist continental mid-latitude climates have warm to cool summers and cold winters. The location of these climates is poleward of the "C" climates. The average temperature of the warmest month is greater than 50°F (10°C), while the coldest month average temperature is less than 27°F (-3°C). Winters are severe, with snowstorms, strong winds, and bitter cold from Continental Polar or Arctic air masses.
+
+E - Polar Climates
+
+Polar climates have year-round cold temperatures, with the warmest month less than 50°F (10°C). Polar climates are found on the northern coastal areas of North America, Europe, Asia, and on the land masses of Greenland and Antarctica.
+
+H - Highlands
+
+Unique climates that are a result of elevation. Highland climates occur in mountainous terrain where rapid elevation changes cause rapid climatic changes over short distances.
+
+Take it to the MAX! Learn about further sub-divisions of these climate zones.
+
+The map (below) shows where these major categories occur in the mainland United States.
+
+The major Köppen zones in the U.S.

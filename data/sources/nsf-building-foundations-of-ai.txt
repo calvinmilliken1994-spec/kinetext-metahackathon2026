@@ -1,0 +1,73 @@
+# Building the Foundations of Artificial Intelligence
+
+Since the 1960s, the U.S. National Science Foundation has funded research breakthroughs in artificial intelligence that built the foundation for technologies Americans use every day, such as digital assistants like Alexa and Siri, Face ID, image generators and chatbots like ChatGPT.
+
+What is AI?
+
+AI is a technology that enables computer systems to learn, reason and make decisions, performing complex tasks commonly thought of as requiring human intelligence — like recognizing speech, analyzing data and solving problems.
+
+In this 10-minute video, Michael Littman, NSF division director for Information and Intelligent Systems, looks at where the field of artificial intelligence has been and where it's going.
+
+Dive deeper with "NSF's Discovery Files": Areas of Artificial Intelligence Research
+
+Researchers use large, high-quality image datasets to train and test deep learning systems, helping them compare and improve computer vision models.
+
+Credit: Images by Adobe Stock
+
+Decoding the visual world
+
+Computer vision emerged in the early 1960s as researchers began exploring whether machines could learn to see and interpret simple patterns and objects. By the mid-1960s, NSF-funded researchers were developing tools to detect edges in images and algorithms to recognize lines, shapes and simple patterns.
+
+Over the following decades, NSF researchers advanced core mathematical frameworks and key techniques that allow computers to interpret pixels as meaningful patterns. A pivotal moment came in 2009, when Fei-Fei Li, supported by an NSF Faculty Early Career Development award, and her team launched ImageNet, a publicly available database containing more than 3 million images across 5,000 categories. Techniques perfected on this database became central to technologies like Face ID, tagging friends in photos and detecting tumors in MRI scans.
+
+Learn more about NSF's impacts in image recognition
+
+Predicting the unpredictable
+
+Initially developed during the 1930s and 1940s to study natural occurrences like bacterial growth and gas molecule movement, stochastic modeling is the idea of capturing real-world randomness mathematically.
+
+In the 1970s and 1980s, NSF-funded researchers, such as Monroe Donsker, Srinivasa Varadhan and Daniel Stroock, advanced these conceptual models, making them more powerful and adaptable. Today, stochastic modeling underpins technologies like GPS traffic routing, internet congestion management and speech recognition systems.
+
+Stochastic modeling improves the accuracy and reliability of GPS navigation systems.
+
+Credit: escapejaja/Adobe Stock
+
+Machine learning models can help determine the structure of proteins.
+
+Credit: Courtesy of the researchers, using cryo-EM images provided by the authors of Walls et al. 2020
+
+Deep learning, deeper insights
+
+Neural networks — computational models inspired by the human brain — power technologies like photo-generation apps, digital assistants and advanced drug design.
+
+In the 1980s, NSF-funded researchers made a breakthrough in which their neural networks recognized handwritten numbers. However, their early models were slow and too inaccurate to handle complex tasks. By the 2010s, researchers discovered how to use high-performance graphics-processing units to dramatically improve the speed and accuracy of the learning and inference processes of these models.
+
+For example, DeepMind's AI-powered tool AlphaFold2, led by Demis Hassabis and John Jumper, accurately predicts protein complex structures from amino acid sequences, enabling new medical treatments. Their AI model solved a 50-year-old problem, earning the researchers a portion of the 2024 Nobel Prize in chemistry.
+
+Learning by doing
+
+Reinforcement learning is a type of machine learning where an AI system learns from trial and error, receiving a "reward" for certain actions and penalties for mistakes. This technique, which trains AI to optimize decisions, has been used to improve water treatment facilities, develop language-learning apps, optimize supply chains and advance studies on creativity and addiction.
+
+NSF-funded researcher Andrew Barto of the University of Massachusetts helped define the field, developing core algorithms and co-authoring its most influential textbook. His work laid the foundation for a dynamic field with wide-ranging scientific and practical applications.
+
+Andrew Barto and Richard Sutton were awarded the 2024 Turing Award — often called the "Nobel Prize of computing" — for their pioneering contributions to reinforcement learning.
+
+Learn more about NSF's impacts in reinforcement learning Students from various disciplines collaborate to create evolving video game systems known as Polymorphic Games.
+
+Credit: University of Idaho Visual Productions
+
+Duolingo, one of the most popular language-learning tools, got its start from NSF funding.
+
+Credit: Diego Thomazini/Shutterstock
+
+Duolingo taking flight
+
+With over 500 million users, Duolingo is one of the most popular language-learning apps, using the power of large language AI models to create and design curricula and individualized lesson plans. Launched in 2011, Duolingo is rooted in decades of NSF-supported linguistic and AI-driven learning research.
+
+In the 1980s, NSF supported the development of intelligent tutoring systems, which aim to bridge the gap between students' current ability and expert-level problem-solving, while identifying actions to help students grow their skills.
+
+Today, NSF continues to advance AI-driven learning technology and experiences, including virtual teachers (both digital and robotic) that incorporate speech, gesture, gaze and facial expression.
+
+• Dive deeper: NSF gave Duolingo its wings!
+
+• Reference to a company does not constitute an endorsement by the U.S. National Science Foundation.

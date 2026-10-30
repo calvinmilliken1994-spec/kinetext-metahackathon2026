@@ -1,0 +1,99 @@
+# The 100-Year Flood
+
+A 100-year flood happened last year so it won't happen for another 99 years, right? Not exactly. Misinterpretation of terminology often leads to confusion about flood recurrence intervals. Read on to learn more.
+
+Floods: Recurrence intervals and 100-year floods (USGS)
+
+Possibly you can remember when a really big rain, be it from a hurricane or a large frontal system, hit your town. If flood conditions occurred because of the rain then you might have heard the radio or TV weatherman say something like "This storm has resulted in a 100-year flood on Soandso River, which crested at a stage of 20 feet." Obviously, this means that the river reached a peak stage (height) that happens only once every 100 years, right? A hydrologist would answer "Well, not exactly." Hydrologists don't like to hear a term like "100-year flood" because, scientifically, it is a misinterpretation of terminology that leads to a misconception of what a 100-year flood really is.
+
+Instead of the term "100-year flood" a hydrologist would rather describe this extreme hydrologic event as a flood having a 100-year recurrence interval. What this means is described in detail below, but a short explanation is that, according to historical data about rainfall and stream stage, the probability of Soandso River reaching a stage of 20 feet is once in 100 years. In other words, a flood of that magnitude has a 1 percent chance of happening in any year.
+
+What is a recurrence interval?
+
+"100-year floods can happen 2 years in a row"
+
+Statistical techniques, through a process called frequency analysis, are used to estimate the probability of the occurrence of a given precipitation event. The recurrence interval is based on the probability that the given event will be equaled or exceeded in any given year. For example, assume there is a 1 in 50 chance that 6.60 inches of rain will fall in a certain area in a 24-hour period during any given year. Thus, a rainfall total of 6.60 inches in a consecutive 24-hour period is said to have a 50-year recurrence interval. Likewise, using a frequency analysis (Interagency Advisory Committee on Water Data, 1982) there is a 1 in 100 chance that a streamflow of 15,000 cubic feet per second (ft^3/s) will occur during any year at a certain streamflow-measurement site. Thus, a peak flow of 15,000 ft^3/s at the site is said to have a 100-year recurrence interval. Rainfall recurrence intervals are based on both the magnitude and the duration of a rainfall event, whereas streamflow recurrence intervals are based solely on the magnitude of the annual peak flow.
+
+Ten or more years of data are required to perform a frequency analysis for the determination of recurrence intervals. Of course, the more years of historical data the better—a hydrologist will have more confidence on an analysis of a river with 30 years of record than one based on 10 years of record.
+
+Recurrence intervals for the annual peak streamflow at a given location change if there are significant changes in the flow patterns at that location, possibly caused by an impoundment or diversion of flow. The effects of development (conversion of land from forested or agricultural uses to commercial, residential, or industrial uses) on peak flows is generally much greater for low-recurrence interval floods than for high-recurrence interval floods, such as 25- 50- or 100-year floods. During these larger floods, the soil is saturated and does not have the capacity to absorb additional rainfall. Under these conditions, essentially all of the rain that falls, whether on paved surfaces or on saturated soil, runs off and becomes streamflow.
+
+How can we have two "100-year floods" in less than two years?
+
+►► Two 500-Year Floods Within 15 Years? Bob Holmes, the National Flood Coordinator for the USGS, discusses this in a podcast. (From the USGS CoreCast podcast and video series)
+
+This question points out the importance of proper terminology. The term "100-year flood" is used in an attempt to simplify the definition of a flood that statistically has a 1-percent chance of occurring in any given year. Likewise, the term "100-year storm" is used to define a rainfall event that statistically has this same 1-percent chance of occurring. In other words, over the course of 1 million years, these events would be expected to occur 10,000 times. But, just because it rained 10 inches in one day last year doesn't mean it can't rain 10 inches in one day again this year.
+
+Recurrence intervals and probabilities of occurrences
+
+Recurrence interval, years | Annual exceedance probability, percent
+
+2 | 50
+
+5 | 20
+
+10 | 10
+
+25 | 4
+
+50 | 2
+
+100 | 1
+
+200 | 0.5
+
+500 | 0.2
+
+What is an Annual Exceedance Probability?
+
+The USGS and other agencies often refer to the percent chance of occurrence as an Annual Exceedance Probability or AEP. An AEP is always a fraction of one. So a 0.2 AEP flood has a 20% chance of occurring in any given year, and this corresponds to a 5-year recurrence-interval flood. Recurrence-interval terminology tends to be more understandable for flood intensity comparisons. However, AEP terminology reminds the observer that a rare flood does not reduce the chances of another rare flood within a short time period.
+
+Does a 100-year storm always cause a 100-year flood?
+
+No. Several factors can independently influence the cause-and-effect relation between rainfall and streamflow.
+
+Extent of rainfall in the watershed: When rainfall data are collected at a point within a stream basin, it is highly unlikely that this same amount of rainfall occurred uniformly throughout the entire basin. During intensely localized storms, rainfall amounts throughout the basin can differ greatly from the rainfall amount measured at the location of the rain gage. Some parts of the basin may even remain dry, supplying no additional runoff to the streamflow and lessening the impact of the storm.
+
+Soil saturation before the storm: Existing conditions prior to the storm can influence the amount of stormwater runoff into the stream system. Dry soil allows greater infiltration of rainfall and reduces the amount of runoff entering the stream. Conversely, soil that is already wet from previous rains has a lower capacity for infiltration, allowing more runoff to enter the stream.
+
+Relation between the size of the watershed and duration of the storm: Another factor to consider is the relation between the duration of the storm and the size of the stream basin in which the storm occurs. For example, a 100-year storm of 30-minutes duration in a 1-square-mile (mi^2) basin will have a more significant effect on streamflow than the same storm in a 50-mi^2 basin. Generally, streams with larger drainage areas require storms of longer duration for a significant increase in streamflow to occur. These and other factors determine whether or not a 100-year storm will produce a 100-year flood.
+
+The 100-year flood level can change
+
+Since the 100-year flood level is statistically computed using past, existing data, as more data comes in, the level of the 100-year flood will change (especially if a huge flood hits in the current year). As more data are collected, or when a river basin is altered in a way that affects the flow of water in the river, scientists re-evaluate the frequency of flooding. Dams and urban development are examples of some man-made changes in a basin that affect floods, as shown in the charts below.
+
+Glossary of flood terms
+
+Flood
+
+A flood is any relatively high streamflow that overtops the natural or artificial banks of a river.
+
+Discharge
+
+Discharge is another term for streamflow; it is the measured volume of water that moves past a point in the river in a given amount of time. Discharge is usually expressed in cubic feet per second.
+
+Cubic foot per second
+
+One cubic foot per second (cfs) is about 450 gallons per minute. The average discharge of the Columbia River in September at The Dalles, Oregon, is about 120,000 cfs. The average discharge of the Puyallup River in September is about 1,700 cfs at Puyallup, Wash.
+
+Floodplain
+
+The floodplain is the relatively flat lowland that borders a river, usually dry but subject to flooding. Floodplain soils actually are former flood deposits.
+
+The average number of years between floods of a certain size is the recurrence interval or return period. The actual number of years between floods of any given size varies a lot because of the naturally changing climate.
+
+Recurrence interval
+
+The average number of years between floods of a certain size is the recurrence interval or return period. The actual number of years between floods of any given size varies a lot because of the naturally changing climate
+
+Hydrograph
+
+A hydrograph is a graph that shows changes in discharge or river stage over time. The time scale may be in minutes, hours, days, months, years, or decades.
+
+River stage
+
+The river stage is the height of the water in the river, measured relative to an arbitrary fixed point.
+
+What about a 100-year drought?
+
+Undoubtedly, a 100-year flood occurrence can have a significant and lasting impact on every aspect of the local environment. If streamflow statistics define what a 100-year flood is, do you think similar statistics could define the opposite event – a 50- or 100-year drought? Certainly it can. And, although a drought doesn't have the immediate and devastating impact that a flood has, it can still have severe effects on the local environment just as a flood does (only it is drawn out over a longer time period). As an example, read about the severe drought in Maine in 1999-2000, or the Utah drought of 1999-2002.

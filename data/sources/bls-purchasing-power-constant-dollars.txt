@@ -1,0 +1,101 @@
+# Purchasing power and constant dollars
+
+Purchasing power
+
+The CPI can be used to show how the purchasing power of a dollar changes over time. The purchasing power of a dollar in 2022 was about 92.6 percent of the purchasing power of a dollar in 2021. This can be calculated by dividing the CPI-U U.S. city average all items annual average index value for 2021 by the CPI-U U.S. city average all items annual average index value for 2022, as shown in table 1.
+
+Table 1, Purchasing power comparison, percent
+
+Quantity | Representation | Value
+
+Annual average index value, December 2021 |  | 270.970
+
+Annual average index value, December 2022 |  | 292.655
+
+Ratio of index values | 270.970 / 292.655 | 0.926
+
+Ratio multiplied by 100 | 0.926 * 100 | 92.6
+
+This means that the purchasing power of the dollar declined about 7.4 percent between 2021 and 2022 because of inflation. Or stated another way, a dollar in 2022 could only buy 92.6 percent of what it could buy, on average, in 2021. An automatic “CPI Inflation Calculator” is available online for annual comparisons of purchasing power. Similarly, one can calculate equivalent dollar amounts for any two months in different years using a ratio of those monthly indexes. For example, to determine how much money one would need in December 2022 to have the same spending power as $500 in December 2021, multiply the dollar amount by the ratio of the CPI-U U.S. city average all items index values for December 2022 and December 2021, as shown in table 2.
+
+Table 2, Purchasing power comparison, dollars
+
+Quantity | Representation | Value
+
+Index value, December 2022 |  | 296.797
+
+Index value, December 2021 |  | 278.802
+
+Ratio of index values | 296.797 / 278.802 | 1.065
+
+Ratio multiplied by $500 | 1.065 * $500 | $532.50
+
+This means that a basket of goods costing $500 in December 2021 would cost $532.50 in December 2022.
+
+Constant dollars
+
+For analysis involving long time periods, it is frequently necessary to convert current or nominal dollars into constant or real dollars. This is done by multiplying each dollar amount by a ratio of price indexes, using one year as the base, as shown below. An example conversion to constant 2010 dollars is shown in table 3.
+
+Table 3, Constant 2010 dollars
+
+Year | Median U.S. Household Income1 | Annual average index value, CPI-U U.S. city average all items index | Ratio of base index value to yearly index value | Ratio equals | Median U.S. Household Income, constant 2010 dollars
+
+2010 | $49,276.00 | 218.06 | 218.06 / 218.06 = | 1.00 | $49,276.00
+
+2011 | $50,054.00 | 224.94 | 218.06 / 224.94 = | 0.97 | $48,552.38
+
+2012 | $51,017.00 | 229.59 | 218.06 / 229.59 = | 0.95 | $48,466.15
+
+2013 | $53,585.00 | 232.96 | 218.06 / 232.96 = | 0.94 | $50,369.90
+
+2014 | $53,657.00 | 236.74 | 218.06 / 236.74 = | 0.92 | $49,364.44
+
+2015 | $56,516.00 | 237.02 | 218.06 / 237.02 = | 0.92 | $51,994.72
+
+2016 | $59,039.00 | 240.01 | 218.06 / 240.01 = | 0.91 | $53,725.49
+
+2017 | $61,136.00 | 245.12 | 218.06 / 245.12 = | 0.89 | $54,411.04
+
+2018 | $63,179.00 | 251.11 | 218.06 / 251.11 = | 0.87 | $54,965.73
+
+2019 | $68,703.00 | 255.66 | 218.06 / 255.66 = | 0.85 | $58,397.55
+
+2020 | $68,010.00 | 258.81 | 218.06 / 258.81 = | 0.84 | $57,128.40
+
+2021 | $70,784.00 | 270.97 | 218.06 / 270.97 = | 0.80 | $56,627.20
+
+Source: St. Louis FED, FRED database, MEHOINUSA672N
+
+To convert the same data to constant 2021 dollars, use 2021 as the base instead, as shown in table 4.
+
+Table 4, Constant 2021 dollars
+
+Year | Median U.S. Household Income1 | Annual average index value, CPI-U U.S. city average all items index | Ratio of base index value to yearly index value | Ratio equals | Median U.S. Household Income, constant 2021 dollars
+
+2010 | $49,276.00 | 218.06 | 270.97 / 218.06 = | 1.24 | $61,102.24
+
+2011 | $50,054.00 | 224.94 | 270.97 / 224.94 = | 1.20 | $60,064.80
+
+2012 | $51,017.00 | 229.59 | 270.97 / 229.59 = | 1.18 | $60,200.06
+
+2013 | $53,585.00 | 232.96 | 270.97 / 232.96 = | 1.16 | $62,158.60
+
+2014 | $53,657.00 | 236.74 | 270.97 / 236.74 = | 1.14 | $61,168.98
+
+2015 | $56,516.00 | 237.02 | 270.97 / 237.02 = | 1.14 | $64,428.24
+
+2016 | $59,039.00 | 240.01 | 270.97 / 240.01 = | 1.13 | $66,714.07
+
+2017 | $61,136.00 | 245.12 | 270.97 / 245.12 = | 1.11 | $67,860.96
+
+2018 | $63,179.00 | 251.11 | 270.97 / 251.11 = | 1.08 | $68,233.32
+
+2019 | $68,703.00 | 255.66 | 270.97 / 255.66 = | 1.06 | $72,825.18
+
+2020 | $68,010.00 | 258.81 | 270.97 / 258.81 = | 1.05 | $71,410.50
+
+2021 | $70,784.00 | 270.97 | 270.97 / 270.97 = | 1.00 | $70,784.00
+
+Source: St. Louis FED, FRED database, MEHOINUSA672N
+
+In this example, while the nominal U.S. median household income rose from $49,276 to $70,784 from 2010 to 2021, an increase of 43.6 percent, the growth in real U.S. median household income, after adjusting for inflation, was more modest, slightly less than 16 percent.

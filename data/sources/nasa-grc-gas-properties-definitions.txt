@@ -1,0 +1,35 @@
+# Gas Properties Definitions
+
+Fluid Dynamics
+
+Fluid dynamics involves the interactions between an object and a surrounding fluid, a liquid, or a gas. Fluid dynamics play a major role in the development of thrust in a rocket engine, and in the generation of aerodynamic drag for flight within the atmosphere. To better understand these interactions, we need to know some things about gases.
+
+Characteristics of Gases
+
+All matter is made from atoms with the configuration of the atom (number of protons, number of neutrons…) determining the kind of matter present (oxygen, lead, silver, neon…). Individual atoms can combine with other atoms to form molecules. Oxygen and nitrogen, which are the major components of air on Earth, occur in nature as diatomic (2 atom) molecules. The atmosphere of Mars is mostly composed of carbon dioxide, a molecule with one carbon atom and two oxygen atoms.
+
+Under normal conditions, matter exists as either a solid, a liquid, or a gas. Atmospheres are composed of gases. In any gas, we have a very large number of molecules that are only weakly attracted to each other and are free to move about in space. When studying gases, we can investigate the motions and interactions of individual molecules, or we can investigate the large-scale action of the gas as a whole. Scientists refer to the large-scale motion of the gas as the macro scale and the individual molecular motions as the micro scale.
+
+Some phenomena are easier to understand and explain based on the macro scale, while others are more easily explained on the micro scale. Macro scale investigations are based on things that we can easily observe and measure. But micro scale investigations are based on rather simple theories because we cannot actually observe an individual gas molecule in motion. Macro scale and micro scale investigations are just two views of the same thing.
+
+Large Scale Motion of a Gas – Macro Scale
+
+The atmosphere is treated as a uniform gas with properties that are averaged from all the individual components (oxygen, nitrogen, water vapor…). On the macro scale, we are dealing with large scale effects that we can measure, such as the gas velocity, the pressure exerted on the surroundings, or the temperature of the gas. A gas does not have a fixed shape or size but will expand to fill any container.
+
+Because the molecules are free to move about in a gas, the mass of the gas is normally characterized by the density. Density is the mass per volume of a substance. On the macro scale, the properties of the gas can change with altitude and depend on the thermodynamic state of the gas. The state of the gas can be changed by thermodynamic processes. Mathematical equations have been developed which describe the relations of the pressure, density, temperature, and velocity of a moving gas. The equations are very hard to solve in general. Some simplified versions of the equations can be solved to model certain fluids problems.
+
+Individual Molecular Motion of a Gas – Micro Scale
+
+On the micro scale, a gas is modeled by the kinetic theory. The model assumes that the molecules are very small relative to the distance between molecules. The molecules are in constant, random motion and frequently collide with each other and with the walls of any container. The molecules have the standard physical properties of mass, momentum, and energy. And these properties are related to the macro properties of density, pressure, and temperature. The interactions of the molecules introduce some other properties that we normally do not encounter when dealing with solids.
+
+In a solid, the location of the molecules relative to each other remains almost constant. But in a fluid, the molecules can move around and interact with each other and with their surroundings in different ways. As mentioned above, there is always a random component of molecular motion. But the entire fluid can be made to move as well in an ordered motion. As the molecules move, the properties of the fluid move as well. If the properties are transported by the random motion, the process is called diffusion. An example of diffusion is the spread of an odor in a perfectly still room.
+
+If the properties are transported by the ordered motion, the process is called convection. An example of convection is a blast of cold weather brought down from Canada. If the flow of a gas produces a net angular momentum, we say the flow is rotational. No net angular momentum in the fluid is called irrotational.
+
+Viscosity
+
+As an object moves through a gas, the viscosity (stickiness) of the gas becomes very important. Gas molecules stick to any surface, creating a layer of air near the surface (called a boundary layer) that, in effect, changes the shape of the object. To make things more confusing, the boundary layer may lift off or “separate” from the body and create an effective shape much different from the physical shape of an object. And to make it even more confusing, the flow conditions in and near the boundary layer are often unsteady (changing in time) and may become randomly turbulent. The boundary layer is very important in determining both the drag and lift of an object.
+
+Compressibility
+
+As an object moves through a gas, the compressibility of the gas also becomes important. Gas molecules move around an object as it passes through. If the object passes at a low speed (typically less than 200 mph), the density of the fluid remains constant. But for high speeds, some of the energy of the object goes into compressing the fluid, moving the molecules closer together and changing the gas density, which alters the amount of the resulting force on the object. This effect is more important as speed increases. Near and beyond the speed of sound (about 700 mph), shock waves are produced that affect both the lift and drag of an object.

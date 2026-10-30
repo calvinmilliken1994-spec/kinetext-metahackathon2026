@@ -1,0 +1,13 @@
+{
+  "id": "bls-calculating-percent-changes",
+  "title": "Calculating percent changes — U.S. Bureau of Labor Statistics, Consumer Price Index factsheet",
+  "subject": "maths",
+  "locator": "https://www.bls.gov/cpi/factsheets/calculating-percent-changes.htm",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: U.S. Bureau of Labor Statistics, Consumer Price Index, 'Calculating percent changes'. Credit: U.S. Bureau of Labor Statistics. Per the BLS Linking and Copyright Information, 'The Bureau of Labor Statistics (BLS) is a Federal government agency and everything that we publish, both in hard copy and electronically, is in the public domain, except for previously copyrighted photographs and illustrations. You are free to use our public domain material without specific permission, although we do ask that you cite the Bureau of Labor Statistics as the source.' The U.S. Bureau of Labor Statistics has not reviewed, approved or endorsed this activity.",
+  "sha256": "829533faa09f497cfa3c6b4a03b5afbd5c44b73ae3194ed951f4d6d61e19f6de",
+  "textFile": "bls-calculating-percent-changes.txt",
+  "retrievedAt": "2026-10-30T16:15:00Z",
+  "transcription": "Main factsheet text only (site header and menus, the CPI program left nav, 'Related Information' links, the 'Last modified date: February 9, 2023' line and the footer removed). Tables 1–4 are kept as pipe-separated rows with their header rows ('Quantity | Representation | Value'); cells the page leaves empty are kept as empty cells ('Index value, December 2021 |  | 278.802'). The two 'critical points to remember' are kept as • items. Whitespace normalised.",
+  "purpose": "library: CPI percent-change computation — the stated one-month procedure (subtract the earlier index value from the later one, divide by the earlier value, multiply by 100) with four worked tables: 1-month change (278.802 − 277.948 = 0.854; 0.854 / 277.948 = 0.003; × 100 = 0.3%), 12-month change December 2021 to December 2022 (17.995 / 278.802 = 0.065 → 6.5%), the annual average (12 monthly values summing to 3251.637 divided by 12 = 270.970), and the annual-average percent change (21.685 / 270.970 = 0.080 → 8.0%). Fits a formula explorer for percent change, step ordering of the procedure, and quiz cards predict-then-reveal on each worked table."
+}

@@ -1,0 +1,13 @@
+{
+  "id": "noaa-jetstream-global-atmospheric-circulations",
+  "title": "Global Atmospheric Circulations — NOAA National Weather Service, JetStream",
+  "subject": "earth-science",
+  "locator": "https://www.noaa.gov/jetstream/global/global-atmospheric-circulations",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NOAA National Weather Service, JetStream, 'Global Atmospheric Circulations'. Credit: NOAA National Weather Service. NOAA's Education and Outreach FAQ states 'Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission', requires credit to NOAA and the NOAA program, and requires that any edits, including those made with a generative AI program, be made clear; the AI-generated lesson carrying this material is labelled as AI-generated in the product. NOAA has not reviewed, approved or endorsed this activity.",
+  "sha256": "2b099d0243e2edbc42421df046fe3a0041adbe63087eedcbb3d8710070bbe672",
+  "textFile": "noaa-jetstream-global-atmospheric-circulations.txt",
+  "retrievedAt": "2026-10-30T15:51:00Z",
+  "transcription": "Main article text only (share widget, the lesson navigation and the 'Download Image' utility links removed); H1 title line from the page's own H1. The in-body 'Take it to the MAX!' promo lines kept as printed (inline links flattened to their text); figure captions kept as their own lines; images not stored. Whitespace normalised, LF. The three-cell numbered list rendered as '1.'/'2.'/'3.' items as served; figure captions kept as lines.",
+  "purpose": "library: global atmospheric circulation as an ordered system — the no-rotation, no-water thought experiment (equatorial heating, rising air, a constant low-pressure belt, poleward return flow) and why Earth's rotation (the Coriolis effect) and land/water distribution break it into three circulation cells per hemisphere: 1. Hadley cell (low latitudes; George Hadley, 1735), 2. Ferrel cell (mid-latitudes; William Ferrell, 1856; the westerlies between 35° and 60° N/S), 3. Polar cell (high latitudes; sinking air over the poles forming high pressure). Fits step ordering of the circulation sequence, a compare table of the three cells (latitude band × flow × history), quiz cards with predict-then-reveal on the dates and latitude bands, and a concept map."
+}

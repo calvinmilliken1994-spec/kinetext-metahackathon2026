@@ -1,0 +1,13 @@
+{
+  "id": "nist-dads-quicksort",
+  "title": "quicksort — NIST Dictionary of Algorithms and Data Structures",
+  "subject": "computing",
+  "locator": "https://xlinux.nist.gov/dads/HTML/quicksort.html",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NIST Dictionary of Algorithms and Data Structures (Paul E. Black, ed.), 'quicksort'. Per the dictionary's Citation and Credit Notice, 'Many of the definitions, as well as the site itself, were originally developed at the National Institute of Standards and Technology by employees of the Federal Government in the course of their official duties. Pursuant to title 17 Section 105 of the United States Code these are not subject to copyright protection and are in the public domain.' Courtesy: NIST Dictionary of Algorithms and Data Structures. The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+  "sha256": "75f753d28767d46e64ab224b9e5b19559f5944a5a78bba8b9148153a28656364",
+  "textFile": "nist-dads-quicksort.txt",
+  "retrievedAt": "2026-10-30T16:15:00Z",
+  "transcription": "Full entry text only (the NIST banner image, the 'Go to the Dictionary of Algorithms and Data Structures home page' link lines, the 'If you have suggestions, corrections, or comments…' line, the 'Entry modified'/'HTML page formatted' stamps, the Created/Updated trailer with editor emails, the page-URL line and the 'Cite this as' block removed). The entry-type tag and the 'Definition:'/'Note:'/'Author:' labels and relationship headings ('Generalization (I am a kind of ...)', etc.) are kept as printed; each relationship list follows its heading on the same line as on the page, with links to other entries flattened to their term text. 'Implementation' and 'More information' link lists flattened to their text. Whitespace normalised. The complexity line keeps the page's Unicode superscript ('Θ(n²)').",
+  "purpose": "library: quicksort — the pivot/partition/recurse procedure stated as steps, its variants (pivot selection, partitioning, switching algorithms for small partitions), worst-case Θ(n²) versus typical O(n log n) running time, using Select for good pivots to get an O(n log n) worst case, and faster dual-pivot variants. Fits step ordering of the algorithm, a compare table of quicksort versus other sorts, and quiz cards on the complexities."
+}

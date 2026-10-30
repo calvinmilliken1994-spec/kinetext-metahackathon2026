@@ -1,0 +1,13 @@
+{
+  "id": "medlineplus-inheritance-patterns",
+  "title": "What are the different ways a genetic condition can be inherited? — MedlinePlus Genetics, Help Me Understand Genetics",
+  "subject": "biology",
+  "locator": "https://medlineplus.gov/genetics/understanding/inheritance/inheritancepatterns/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: MedlinePlus Genetics, 'Help Me Understand Genetics', U.S. National Library of Medicine. Courtesy of MedlinePlus from the National Library of Medicine. MedlinePlus's 'Linking to and Using Content from MedlinePlus' policy states that works produced by the federal government are not copyrighted under U.S. law and lists the Help Me Understand Genetics handbook among MedlinePlus's public-domain areas; MedlinePlus has not reviewed, approved or endorsed this activity.",
+  "sha256": "6c3e0ea6ffae78fec81ece6e4f2fb86ebcc073655e940de575de6d5cb59318e4",
+  "textFile": "medlineplus-inheritance-patterns.txt",
+  "retrievedAt": "2026-10-30T15:42:00Z",
+  "transcription": "Main article text only: the 'URL of this page:' line, the duplicate in-content H1 (served twice), the chapter navigation ('Topics in the … chapter' link list, 'Other chapters in Help Me Understand Genetics') and the closing medical-advice disclaimer removed; inline links flattened to their text. H1 title line from the page's own H1. Whitespace normalised, LF. The inheritance-pattern table is kept as pipe-separated rows including the header row.",
+  "purpose": "library: the categories of single-gene inheritance as a comparison table — autosomal dominant (one altered copy of the gene in each cell is sufficient), autosomal recessive (variants in both copies; unaffected carrier parents), X-linked dominant and X-linked recessive (with the note that many X-linked disorders are not clearly dominant or recessive), Y-linked, codominant (two different alleles both expressed) and mitochondrial (maternal) inheritance, each row with its description and examples; plus reduced penetrance and variable expressivity, anticipation, genomic imprinting and uniparental disomy, and why some conditions are more common in particular ethnic groups. Fits a compare table of pattern × mechanism × examples, quiz cards with predict-then-reveal, and a concept map of the inheritance categories."
+}

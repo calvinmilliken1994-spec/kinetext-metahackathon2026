@@ -1,0 +1,13 @@
+{
+  "id": "nist-dads-hash-table",
+  "title": "hash table — NIST Dictionary of Algorithms and Data Structures",
+  "subject": "computing",
+  "locator": "https://xlinux.nist.gov/dads/HTML/hashtab.html",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NIST Dictionary of Algorithms and Data Structures (Paul E. Black, ed.), 'hash table'. Per the dictionary's Citation and Credit Notice, 'Many of the definitions, as well as the site itself, were originally developed at the National Institute of Standards and Technology by employees of the Federal Government in the course of their official duties. Pursuant to title 17 Section 105 of the United States Code these are not subject to copyright protection and are in the public domain.' Courtesy: NIST Dictionary of Algorithms and Data Structures. The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+  "sha256": "a4af72aded8e18f670421243f39c32d314f524160bba1353a10d0271dc6e8e31",
+  "textFile": "nist-dads-hash-table.txt",
+  "retrievedAt": "2026-10-30T16:15:00Z",
+  "transcription": "Full entry text only (the NIST banner image, the 'Go to the Dictionary of Algorithms and Data Structures home page' link lines, the 'If you have suggestions, corrections, or comments…' line, the 'Entry modified'/'HTML page formatted' stamps, the Created/Updated trailer with editor emails, the page-URL line and the 'Cite this as' block removed). The entry-type tag and the 'Definition:'/'Note:'/'Author:' labels and relationship headings ('Generalization (I am a kind of ...)', etc.) are kept as printed; each relationship list follows its heading on the same line as on the page, with links to other entries flattened to their term text. 'Implementation' and 'More information' link lists flattened to their text. Whitespace normalised. The Historical Note quoting Knuth ('The idea of hashing appears to have been originated by H. P. Luhn, who wrote an internal IBM memorandum in January 1953' [Knuth98, 3:547, Sect. 6.4]) is kept as printed.",
+  "purpose": "library: hash tables — keys mapped to array positions by hash functions, collisions and the three families of collision resolution (open addressing, chaining, a special overflow area), perfect hashing, bucket arrays and overflow, constant Θ(1) complexity when the table is big enough or grows, clustering, and the 1953 Luhn/IBM historical note. Fits a compare table of collision-resolution schemes, a concept map of hashing terms, and quiz cards."
+}

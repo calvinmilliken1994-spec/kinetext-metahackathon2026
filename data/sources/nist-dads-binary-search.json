@@ -1,0 +1,13 @@
+{
+  "id": "nist-dads-binary-search",
+  "title": "binary search — NIST Dictionary of Algorithms and Data Structures",
+  "subject": "computing",
+  "locator": "https://xlinux.nist.gov/dads/HTML/binarySearch.html",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NIST Dictionary of Algorithms and Data Structures (Paul E. Black, ed.), 'binary search'. Per the dictionary's Citation and Credit Notice, 'Many of the definitions, as well as the site itself, were originally developed at the National Institute of Standards and Technology by employees of the Federal Government in the course of their official duties. Pursuant to title 17 Section 105 of the United States Code these are not subject to copyright protection and are in the public domain.' Courtesy: NIST Dictionary of Algorithms and Data Structures. The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+  "sha256": "61d27dc69db770ce1bfe2d15276cf22cb9e6e33120855967d41d6615ce692b53",
+  "textFile": "nist-dads-binary-search.txt",
+  "retrievedAt": "2026-10-30T16:15:00Z",
+  "transcription": "Full entry text only (the NIST banner image, the 'Go to the Dictionary of Algorithms and Data Structures home page' link lines, the 'If you have suggestions, corrections, or comments…' line, the 'Entry modified'/'HTML page formatted' stamps, the Created/Updated trailer with editor emails, the page-URL line and the 'Cite this as' block removed). The entry-type tag and the 'Definition:'/'Note:'/'Author:' labels and relationship headings ('Generalization (I am a kind of ...)', etc.) are kept as printed; each relationship list follows its heading on the same line as on the page, with links to other entries flattened to their term text. 'Implementation' and 'More information' link lists flattened to their text. Whitespace normalised. The two middle-index code lines ('mid = (high + low)/2;' and 'mid = low + (high - low)/2;') and the 'Thanks to Colin D. Wright, 1 June 2005.' line are kept as printed.",
+  "purpose": "library: binary search — the halving procedure over a sorted array stated as ordered steps, run time O(ln n), the overflow-safe middle-index formula (mid = low + (high - low)/2 versus the overflow-prone mid = (high + low)/2), and its behavior on an ordered linked list (O(n) traversals but O(log n) comparisons, like linear search). Fits step ordering of the search procedure, quiz cards on the formulas and complexity, and a compare table of binary versus linear search."
+}

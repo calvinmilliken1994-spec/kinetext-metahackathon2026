@@ -1,0 +1,13 @@
+{
+  "id": "nist-dads-bubble-sort",
+  "title": "bubble sort — NIST Dictionary of Algorithms and Data Structures",
+  "subject": "computing",
+  "locator": "https://xlinux.nist.gov/dads/HTML/bubblesort.html",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NIST Dictionary of Algorithms and Data Structures (Paul E. Black, ed.), 'bubble sort'. Per the dictionary's Citation and Credit Notice, 'Many of the definitions, as well as the site itself, were originally developed at the National Institute of Standards and Technology by employees of the Federal Government in the course of their official duties. Pursuant to title 17 Section 105 of the United States Code these are not subject to copyright protection and are in the public domain.' Courtesy: NIST Dictionary of Algorithms and Data Structures. The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+  "sha256": "7034ebf8337b63fd948fec934b5580cbcd77a018b54bf00db8ae76ea0e4015ca",
+  "textFile": "nist-dads-bubble-sort.txt",
+  "retrievedAt": "2026-10-30T16:15:00Z",
+  "transcription": "Full entry text only (the NIST banner image, the 'Go to the Dictionary of Algorithms and Data Structures home page' link lines, the 'If you have suggestions, corrections, or comments…' line, the 'Entry modified'/'HTML page formatted' stamps, the Created/Updated trailer with editor emails, the page-URL line and the 'Cite this as' block removed). The entry-type tag and the 'Definition:'/'Note:'/'Author:' labels and relationship headings ('Generalization (I am a kind of ...)', etc.) are kept as printed; each relationship list follows its heading on the same line as on the page, with links to other entries flattened to their term text. 'Implementation' and 'More information' link lists flattened to their text. Whitespace normalised. The contributor's email address is served through Cloudflare email protection and appears as '[email protected]' — kept exactly as served. The complexity line keeps the page's superscript rendering ('O(n^2)', 'Θ(n)').",
+  "purpose": "library: bubble sort — the compare-adjacent-pairs/swap/repeat-until-no-swaps procedure stated as steps, its O(n^2) complexity for arbitrary data versus approaching Θ(n) for nearly sorted lists, the pass-shrinking improvement, its 'sinking sort' name origin, and how bidirectional bubble sort and gnome sort improve on it. Fits step ordering of the passes, a compare table with quicksort, and quiz cards on the two complexity cases."
+}

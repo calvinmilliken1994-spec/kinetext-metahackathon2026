@@ -1,0 +1,13 @@
+{
+  "id": "nasa-nssdc-planetary-fact-sheet-metric",
+  "title": "Planetary Fact Sheet - Metric — NASA Goddard Space Flight Center, NSSDCA",
+  "subject": "earth-science",
+  "locator": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NASA Goddard Space Flight Center, National Space Science Data Center (NSSDCA), 'Planetary Fact Sheet - Metric'. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+  "sha256": "5a08a7d4b2ff163bfdb7717a8f5e6ae8cca5d767841fc9f65e833b847be959c3",
+  "textFile": "nasa-nssdc-planetary-fact-sheet-metric.txt",
+  "retrievedAt": "2026-10-30T15:42:00Z",
+  "transcription": "The page is one comparison table; kept as pipe-separated rows including the header row and the repeated bottom header row exactly as served, plus the '* - See the Fact Sheet Notes.' footnote (link flattened to its text; the served line break inside the footnote rejoined). Superscripts rendered ^x as served ('10^24kg', '10^6 km', 'kg/m^3', 'm/s^2'); the Moon's asterisked values (distance from Sun, perihelion, aphelion, orbital period and velocity relative to Earth) kept as printed with their '*'. The related-links list ('Planetary Fact Sheet in U.S. Units', 'Index of Planetary Fact Sheets', 'Schoolyard Solar System'), the Author/Curator and NASA Official credit lines and the 'Last Updated' footer removed. H1 title line from the page's own H1. Whitespace normalised, LF.",
+  "purpose": "library: the metric planetary fact sheet — a 21-property × 10-body comparison table (Mercury, Venus, Earth, Moon, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto): mass, diameter, density, gravity, escape velocity, rotation period, length of day, distance from Sun, perihelion and aphelion, orbital period, orbital velocity, inclination, eccentricity, obliquity, mean temperature, surface pressure, number of moons, ring system and global magnetic field. Fits a compare table and quiz cards with predict-then-reveal across bodies (gravity 9.8 Earth vs 1.6 Moon vs 23.1 Jupiter; 1 moon for Earth vs 95 Jupiter vs 274 Saturn; orbital period 88.0 days Mercury vs 365.2 Earth); the reference data-table page style."
+}
