@@ -3,6 +3,8 @@ import type { CompareTableSpec } from '../../../../packages/contracts/kit.ts';
 import { NOT_STATED, compareGrid, gradePredict, planPredict } from '../lib/compare.ts';
 import type { CiteProps } from './Explanations.tsx';
 import { QuoteBlock } from './QuoteBlock.tsx';
+import { Linked } from './Linked.tsx';
+import { linkKey } from '../lib/linking.ts';
 import { Mark } from './icons.tsx';
 
 interface Props { spec: CompareTableSpec; cite: CiteProps }
@@ -51,9 +53,9 @@ export function CompareView({ spec, cite }: Props) {
                   const reveal = plan !== null && locked && cell.id === plan.cellId;
                   const blocked = leaks(cell.quote);
                   return (
-                    <td key={ai} className={reveal ? (correct ? 'cell-right' : 'cell-miss') : ''}>
+                    <Linked as="td" key={ai} className={reveal ? (correct ? 'cell-right' : 'cell-miss') : ''} links={[linkKey(cell.sourceId, cell.quote)]}>
                       <button type="button" className={`cell-btn${isOpen ? ' cell-open' : ''}`} aria-expanded={isOpen} disabled={blocked} title={blocked ? 'Opens after you lock in your prediction' : undefined} onClick={() => setOpen(isOpen ? null : cell.id)}>{cell.value}</button>
-                    </td>
+                    </Linked>
                   );
                 })}
               </tr>

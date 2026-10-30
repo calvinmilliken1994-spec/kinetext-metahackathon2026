@@ -3,6 +3,8 @@ import type { OverviewSpec } from '../../../../packages/contracts/kit.ts';
 import { AiWritten } from './Disclosure.tsx';
 import type { CiteProps } from './Explanations.tsx';
 import { QuoteBlock } from './QuoteBlock.tsx';
+import { Linked } from './Linked.tsx';
+import { linkKeysOf } from '../lib/linking.ts';
 
 interface Props {
   overview: OverviewSpec;
@@ -25,10 +27,10 @@ export function OverviewView({ overview, pageCoverage, cite }: Props) {
       <h3>Key points</h3>
       <ul className="key-points">
         {overview.keyPoints.map((p) => (
-          <li key={p.id}>
+          <Linked as="li" key={p.id} links={linkKeysOf([p])}>
             <p>{p.point}</p>
             <QuoteBlock componentId="overview-v1" part="point" id={p.id} sourceId={p.sourceId} quote={p.quote} cite={cite} />
-          </li>
+          </Linked>
         ))}
       </ul>
 
@@ -37,13 +39,13 @@ export function OverviewView({ overview, pageCoverage, cite }: Props) {
           <h3>Key terms</h3>
           <dl className="key-terms">
             {overview.keyTerms.map((t) => (
-              <div key={t.id} className="key-term">
+              <Linked key={t.id} className="key-term" links={linkKeysOf([t])}>
                 <dt>{t.term}</dt>
                 <dd>
                   <p>{t.gloss}</p>
                   <QuoteBlock componentId="overview-v1" part="term" id={t.id} sourceId={t.sourceId} quote={t.quote} cite={cite} />
                 </dd>
-              </div>
+              </Linked>
             ))}
           </dl>
         </>

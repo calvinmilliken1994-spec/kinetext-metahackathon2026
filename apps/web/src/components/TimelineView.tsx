@@ -5,6 +5,8 @@ import { SchematicTag } from './controls.tsx';
 import { AiWritten } from './Disclosure.tsx';
 import type { CiteProps } from './Explanations.tsx';
 import { EventEvidence } from './EventEvidence.tsx';
+import { Linked } from './Linked.tsx';
+import { linkKeysOf } from '../lib/linking.ts';
 
 export const TIMELINE_LABEL = 'Schematic — events are spaced evenly in date order, not to scale in time';
 
@@ -28,11 +30,11 @@ export function TimelineView({ events, scenario, cite }: Props) {
       {scenario.settingLabel !== '' && <p className="muted small timeline-setting">{scenario.settingLabel}</p>}
       <ol className="timeline-track" aria-label="Events in date order, earliest first">
         {ordered.map((e) => (
-          <li key={e.id} className="timeline-card">
+          <Linked as="li" key={e.id} className="timeline-card" links={linkKeysOf(e.evidence)}>
             <p className="timeline-date">{formatEventDate(e)}</p>
             <p className="timeline-label">{e.label}</p>
             <EventEvidence event={e} cite={cite} />
-          </li>
+          </Linked>
         ))}
       </ol>
     </section>

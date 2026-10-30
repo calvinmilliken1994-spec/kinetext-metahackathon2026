@@ -1,1 +1,65 @@
 /* Stage 7 slice 'linking' styles (docs/specs/STAGE-7-teacher-polish.md). Uses the tokens in ../styles.css. */
+
+/* One "quoted" colour for both sides of a link: the evidence amber of the source highlights. The light theme's highlight
+ * line (#e2c25a) is too faint for an outline on white, so its link line is a darker amber (3:1+ against the panel). */
+:root, [data-theme="dark"] {
+  --link-line: var(--hl-ev-line);
+  --link-tint: color-mix(in srgb, var(--hl-ev) 45%, transparent);
+}
+[data-theme="light"] {
+  --link-line: #a87b00;
+  --link-tint: color-mix(in srgb, var(--hl-ev) 70%, transparent);
+}
+
+/* ---- hover linking: lesson side ---- */
+/* The lit area reaches 6px past the element (a solid spread, no blur) so text never touches the ring, and the layout never
+ * moves. */
+.linkable {
+  border-radius: 2px;
+  outline: 2px solid transparent;
+  outline-offset: 6px;
+  transition: outline-color 120ms ease-out, background-color 120ms ease-out, box-shadow 120ms ease-out;
+}
+.linkable.is-linked { outline-color: var(--link-line); background-color: var(--link-tint); box-shadow: 0 0 0 6px var(--link-tint); }
+/* A quote inside a lit card is lit with it: one ring, not boxes in boxes. */
+.is-linked .linkable.is-linked { outline-color: transparent; background-color: transparent; box-shadow: none; }
+.is-linked blockquote { color: var(--ink); text-decoration: underline 1px var(--link-line); text-underline-offset: 3px; }
+/* Table cells and list rows sit flush with their neighbours: draw the ring inside. */
+td.linkable { outline-offset: -2px; border-radius: 0; }
+td.linkable.is-linked { box-shadow: none; }
+
+/* ---- hover linking: source side ---- */
+mark[data-links] { cursor: default; }
+/* Overlapping quotes split one quote into several marks, so a ring per mark would read as boxes; a stronger fill with an
+ * underline in the link colour runs continuously across the pieces instead. */
+mark.is-linked {
+  background: var(--flash-bg);
+  box-shadow: 0 0 0 1px var(--flash-bg), inset 0 -2px 0 var(--link-line);
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+}
+mark[data-links]:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .linkable { transition: none; }
+}
+
+/* ---- live substituted equation ---- */
+.eq-line {
+  position: relative; margin: 10px 0 0; padding: 6px 2px;
+  font-size: var(--fs-16); line-height: 1.6; color: var(--ink);
+  font-variant-numeric: tabular-nums; overflow-wrap: anywhere;
+}
+.eq-line var { font-family: var(--serif); font-style: italic; }
+.eq-line sub, .eq-line sup { font-size: 0.72em; line-height: 0; }
+.eq-line sub { font-style: normal; }
+.eq-num { color: var(--ink-2); }
+.eq-result { font-weight: var(--fw-bold); }
+.explorer-controls .eq-line { font-size: var(--fs-14); margin: 4px 0; }
+.explorer-formula-text { margin: 0; justify-self: start; }
+
+/* ---- predict-then-reveal placeholder ---- */
+.concealed {
+  display: inline-block; min-width: 1.4em; text-align: center;
+  color: var(--ink-3); font-weight: var(--fw-bold);
+  border-bottom: 1px dashed var(--line-3);
+}

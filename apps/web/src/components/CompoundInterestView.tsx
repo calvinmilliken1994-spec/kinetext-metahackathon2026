@@ -4,7 +4,7 @@ import { engineOutput, scenarioLabels, shortInputLabel, sliderModels } from '../
 import { trimmed } from '../lib/format.ts';
 import { linearScale, niceAxis, pointString } from '../lib/charts.ts';
 import {
-  compoundEquation, compoundSubstitution, compoundingName, compoundingStops, formatUSD, growthPoints, interestEarned
+  compoundingName, compoundingStops, formatUSD, growthPoints, interestEarned
 } from '../lib/compound.ts';
 import type { StaticViewProps } from './ProjectileView.tsx';
 import { Readout, ResetSliders, SchematicTag, Slider, StopSlider } from './controls.tsx';
@@ -16,7 +16,7 @@ const H = 335;
 const PLOT = { l: 100, r: 760, t: 68, b: 272 };
 const CURVE_STEPS = 80;
 
-export function CompoundInterestView({ spec, inputs, onInput, onReset, predict }: StaticViewProps<CompoundInterestActivitySpec>) {
+export function CompoundInterestView({ spec, inputs, onInput, onReset, predict, equation, concealed = false }: StaticViewProps<CompoundInterestActivitySpec>) {
   const titleId = useId();
   const models = sliderModels(spec);
   const sc = scenarioLabels(spec);
@@ -45,7 +45,7 @@ export function CompoundInterestView({ spec, inputs, onInput, onReset, predict }
   const interest = interestEarned(input.principalUSD, amount);
   const label = `${sc.objectLabel}${sc.placeLabel !== '' ? ` · ${sc.placeLabel}` : ''}`;
   const rateText = `${trimmed(input.annualRatePercent, 3)} percent`;
-  const alt = `${label}. Balance over time for ${formatUSD(input.principalUSD)} at ${rateText} a year, compounded ${compoundingName(input.compoundsPerYear)}. After ${trimmed(years, 3)} years the engine balance is ${formatUSD(amount)}, which is ${formatUSD(interest)} of interest.`;
+  const alt = `${label}. Balance over time for ${formatUSD(input.principalUSD)} at ${rateText} a year, compounded ${compoundingName(input.compoundsPerYear)}. After ${trimmed(years, 3)} years the engine balance is ${concealed ? 'hidden until case 1 is run' : `${formatUSD(amount)}, which is ${formatUSD(interest)} of interest`}.`;
 
   return (
     <div className="simulation" data-engine="compound-interest-v1">
@@ -73,7 +73,7 @@ export function CompoundInterestView({ spec, inputs, onInput, onReset, predict }
             <polyline points={compoundLine} fill="none" className="line-compound" />
             <circle cx={sx(0)} cy={sy(input.principalUSD)} r={5} className="chart-dot chart-dot-start" />
             <circle cx={end.x} cy={end.y} r={7} className="chart-dot" />
-            <text x={Math.min(end.x, PLOT.r)} y={end.y - 14} textAnchor="end" className="scene-label">{formatUSD(amount)}</text>
+            <text x={Math.min(end.x, PLOT.r)} y={end.y - 14} textAnchor="end" className="scene-label">{concealed ? '?' : formatUSD(amount)}</text>
 
           </g>
         </svg>
@@ -82,8 +82,7 @@ export function CompoundInterestView({ spec, inputs, onInput, onReset, predict }
       {predict}
 
       <div className="formula" role="group" aria-label="Formula with the current numbers">
-        <p><code>{compoundEquation()}</code></p>
-        <p><code>{compoundSubstitution(input)}</code> <strong>= {formatUSD(amount)}</strong></p>
+        {equation}
         <p className="muted small">A = balance, P = starting amount, r = yearly rate in percent, n = times the interest is added per year, t = years. The curve draws the formula at every moment; a real account adds interest only on its compounding dates.</p>
       </div>
 
@@ -110,8 +109,8 @@ export function CompoundInterestView({ spec, inputs, onInput, onReset, predict }
           <ResetSliders onReset={onReset} />
         </div>
         <dl className="readouts" aria-label="Live readouts from the engine">
-          <Readout name="Balance A (engine)" value={formatUSD(amount)} unit="" accent="x" />
-          <Readout name="Interest earned" value={formatUSD(interest)} unit="" accent="force" />
+          <Readout name="Balance A (engine)" value={formatUSD(amount)} unit="" accent="x" concealed={concealed} />
+          <Readout name="Interest earned" value={formatUSD(interest)} unit="" accent="force" concealed={concealed} />
         </dl>
       </div>
     </div>

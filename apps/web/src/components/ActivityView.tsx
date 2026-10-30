@@ -6,6 +6,11 @@ import { caseInputs, defaultInputs, formatOutputValue, isEngineSpec, outputInfo,
 import type { Grade } from '../lib/predictions.ts';
 import { trimmed } from '../lib/format.ts';
 import { revealInPanels } from '../lib/scroll.ts';
+import { engineEquation } from '../lib/equation.ts';
+import { equationQuoteLinks } from '../lib/linking.ts';
+import { initialConcealed, nextConcealed } from '../lib/reveal.ts';
+import type { RevealEvent } from '../lib/reveal.ts';
+import { EquationLine } from './EquationLine.tsx';
 import { isTimelineSpec } from '../lib/timeline.ts';
 import type { AnyActivitySpec } from '../lib/timeline.ts';
 import { ActivityHeader } from './ActivityHeader.tsx';
@@ -77,6 +82,13 @@ function Shell({ spec, cite, repairBadge, provenance, engine, last, simRef, onRu
   );
 }
 
+/** Case 1's answer stays hidden until the class has predicted (lib/reveal.ts). */
+function useReveal(caseCount: number): [boolean, (event: RevealEvent) => void] {
+  const [concealed, setConcealed] = useState(() => initialConcealed(caseCount));
+  const reveal = useCallback((event: RevealEvent) => setConcealed((c) => nextConcealed(c, event)), []);
+  return [concealed, reveal];
+}
+
 function scrollToScene(el: HTMLElement | null): void {
   // Bring the scene into view (inside the lesson column only) so the student watches the motion that answers their prediction.
   revealInPanels(el, 'start');
@@ -84,22 +96,37 @@ function scrollToScene(el: HTMLElement | null): void {
 
 function ForcesActivity(props: NumericProps & { spec: ForcesActivitySpec }) {
   const { spec } = props;
-  const ctl = useSimulation(spec);
+  const raw = useSimulation(spec);
   const simRef = useRef<HTMLDivElement>(null);
   const [last, setLast] = useState<LastResult | null>(null);
-  const { runWith } = ctl;
+  const [concealed, reveal] = useReveal(spec.predictions.length);
+  const { runWith } = raw;
+  // Any slider move, Play or scrub reveals case 1's answer (predict-then-reveal).
+  const ctl = useMemo(() => ({
+    ...raw,
+    setMass: (v: number) => { reveal('slider'); raw.setMass(v); },
+    setForce: (v: number) => { reveal('slider'); raw.setForce(v); },
+    play: () => { reveal('play'); raw.play(); },
+    scrub: (t: number) => { reveal('scrub'); raw.scrub(t); },
+  }), [raw, reveal]);
 
   const onRun = useCallback((p: AnyPrediction, index: number, grade: Grade) => {
     const fp = p as Prediction;
+    reveal('run-case');
     runWith(fp.massKg, fp.netForceN);
     setLast({ index, grade });
     scrollToScene(simRef.current);
-  }, [runWith]);
+  }, [runWith, reveal]);
 
-  const predict = <PredictionCards engine="forces-1d-v1" predictions={spec.predictions as AnyPrediction[]} onRun={onRun} part="first" />;
+  const caseValues = useMemo(() => ({
+    massKg: spec.predictions.map((p) => p.massKg),
+    netForceN: spec.predictions.map((p) => p.netForceN),
+  }), [spec]);
+  const predict = <PredictionCards engine="forces-1d-v1" predictions={spec.predictions as AnyPrediction[]} onRun={onRun} part="first" answerHidden={concealed} />;
+  const equation = <EquationLine equation={engineEquation('forces-1d-v1', { massKg: ctl.massKg, netForceN: ctl.netForceN })} concealed={concealed} links={equationQuoteLinks(spec)} />;
   return (
     <Shell {...props} engine="forces-1d-v1" last={last} simRef={simRef} onRun={onRun}>
-      <Simulation sim={spec.simulation} ctl={ctl} predict={predict} />
+      <Simulation sim={spec.simulation} ctl={ctl} predict={predict} equation={equation} concealed={concealed} caseValues={caseValues} />
     </Shell>
   );
 }
@@ -114,32 +141,42 @@ function ClosedFormActivity(props: NumericProps & { engine: Exclude<EngineId, 'f
   const pb = usePlayback(plan?.durationS ?? 0, plan?.speed ?? 1, plan?.initialT ?? 0);
   const simRef = useRef<HTMLDivElement>(null);
   const [last, setLast] = useState<LastResult | null>(null);
+  const [concealed, reveal] = useReveal(spec.predictions.length);
   const { rewind, restart, reset } = pb;
   // Page-stated preset values need the page text (projectile only for now; GET of the already-shown source).
   const doc = useSourceDoc(engine === 'projectile-v1' ? cite.sourceId : null);
   const sourceText = doc?.state === 'ready' ? doc.data.text : null;
 
   const onInput = useCallback((key: string, value: number) => {
+    reveal('slider');
     setInputs((prev) => ({ ...prev, [key]: value }));
     // A new launch changes the whole trajectory, so restart it from t = 0 (the play state is kept).
     if (engine === 'projectile-v1') rewind();
-  }, [engine, rewind]);
+  }, [engine, rewind, reveal]);
 
   const onReset = useCallback(() => {
     setInputs(opening);
     reset();
   }, [opening, reset]);
-  const resetPb = useMemo(() => ({ ...pb, reset: onReset }), [pb, onReset]);
+  const resetPb = useMemo(() => ({
+    ...pb,
+    reset: onReset,
+    play: () => { reveal('play'); pb.play(); },
+    scrub: (t: number) => { reveal('scrub'); pb.scrub(t); },
+  }), [pb, onReset, reveal]);
 
   const onRun = useCallback((p: AnyPrediction, index: number, grade: Grade) => {
+    reveal('run-case');
     setInputs(caseInputs(engine, p));
     restart();
     setLast({ index, grade });
     scrollToScene(simRef.current);
-  }, [engine, restart]);
+  }, [engine, restart, reveal]);
 
-  const predict = <PredictionCards engine={engine} predictions={spec.predictions as AnyPrediction[]} onRun={onRun} part="first" />;
-  const view = { inputs, onInput, onReset, predict };
+  const predict = <PredictionCards engine={engine} predictions={spec.predictions as AnyPrediction[]} onRun={onRun} part="first" answerHidden={concealed} />;
+  const eqLinks = useMemo(() => equationQuoteLinks(spec), [spec]);
+  const equation = <EquationLine equation={engineEquation(engine, inputs)} concealed={concealed} links={eqLinks} />;
+  const view = { inputs, onInput, onReset, predict, equation, concealed };
   return (
     <Shell {...props} engine={engine} last={last} simRef={simRef} onRun={onRun}>
       {isEngineSpec(spec, 'projectile-v1') && <ProjectileView spec={spec} {...view} pb={resetPb} sourceText={sourceText} />}

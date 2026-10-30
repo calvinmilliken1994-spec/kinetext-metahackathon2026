@@ -4,6 +4,7 @@ import type { Frame } from '../../../../packages/activities/forces-1d/engine.ts'
 import type { ForcesActivitySpec as ActivitySpec } from '../../../../packages/contracts/index.ts';
 import { fixed } from '../lib/format.ts';
 import { sliderStep } from '../lib/track.ts';
+import { caseFriendlyStep } from '../lib/sliderSteps.ts';
 import { Scene } from './Scene.tsx';
 import { Graph } from './Graph.tsx';
 import { Readout, Slider } from './controls.tsx';
@@ -15,7 +16,10 @@ const pickX = (f: Frame): number => f.x;
 const pickA = (f: Frame): number => f.a;
 
 /** `predict` (case 1's predict card) sits right under the playback bar, above the sliders and graphs. */
-export function Simulation({ sim, ctl, predict }: { sim: ActivitySpec['simulation']; ctl: SimControls; predict?: ReactNode }) {
+const NO_CASES = { massKg: [] as number[], netForceN: [] as number[] };
+
+/** `caseValues`: the lesson's case inputs (case 1 first), so each slider step lands on them (Stage 7). */
+export function Simulation({ sim, ctl, predict, equation, concealed = false, caseValues = NO_CASES }: { sim: ActivitySpec['simulation']; ctl: SimControls; predict?: ReactNode; equation?: ReactNode; concealed?: boolean; caseValues?: { massKg: readonly number[]; netForceN: readonly number[] } }) {
   const scrubId = useId();
   const obs = new Set(sim.observables);
   const forceMaxAbs = Math.max(Math.abs(sim.netForceN.min), Math.abs(sim.netForceN.max));
@@ -59,21 +63,22 @@ export function Simulation({ sim, ctl, predict }: { sim: ActivitySpec['simulatio
         </div>
       </div>
 
+      {equation}
       {predict}
 
       <div className="controls-row">
         <div className="sliders">
           <Slider
             label="Mass" symbol="m" unit="kg"
-            min={sim.massKg.min} max={sim.massKg.max} step={sliderStep(sim.massKg.min, sim.massKg.max)} value={ctl.massKg} onChange={ctl.setMass}
+            min={sim.massKg.min} max={sim.massKg.max} step={caseFriendlyStep(sim.massKg.min, sim.massKg.max, sliderStep(sim.massKg.min, sim.massKg.max), caseValues.massKg)} value={ctl.massKg} onChange={ctl.setMass}
           />
           <Slider
             label="Net force" symbol="F_net" unit="N"
-            min={sim.netForceN.min} max={sim.netForceN.max} step={sliderStep(sim.netForceN.min, sim.netForceN.max)} value={ctl.netForceN} onChange={ctl.setForce}
+            min={sim.netForceN.min} max={sim.netForceN.max} step={caseFriendlyStep(sim.netForceN.min, sim.netForceN.max, sliderStep(sim.netForceN.min, sim.netForceN.max), caseValues.netForceN)} value={ctl.netForceN} onChange={ctl.setForce}
           />
         </div>
         <dl className="readouts" aria-label="Live readouts from the engine">
-          {obs.has('acceleration') && <Readout name="a = F/m" value={fixed(ctl.acceleration, 3)} unit="m/s²" accent="a" />}
+          {obs.has('acceleration') && <Readout name="a = F/m" value={fixed(ctl.acceleration, 3)} unit="m/s²" accent="a" concealed={concealed} />}
           {obs.has('velocity') && <Readout name="v" value={fixed(ctl.now.v, 2)} unit="m/s" accent="v" />}
           {obs.has('position') && <Readout name="x" value={fixed(ctl.now.x, 2)} unit="m" accent="x" />}
           <Readout name="t" value={fixed(ctl.now.t, 2)} unit="s" />
@@ -87,7 +92,7 @@ export function Simulation({ sim, ctl, predict }: { sim: ActivitySpec['simulatio
         {obs.has('position') && (
           <Graph title="x–t · position" yUnit="m" color="var(--c-pos)" frames={ctl.frames} pick={pickX} now={ctl.now} durationS={ctl.durationS} onScrub={ctl.scrub} />
         )}
-        {obs.has('acceleration') && (
+        {obs.has('acceleration') && !concealed && (
           <Graph title="a–t · acceleration" yUnit="m/s²" color="var(--c-acc)" frames={ctl.frames} pick={pickA} now={ctl.now} durationS={ctl.durationS} onScrub={ctl.scrub} />
         )}
       </div>

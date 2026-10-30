@@ -15,7 +15,7 @@ const CX = 400;
 const CY = 215;
 const ARROW_MAX = 150;
 
-export function LiftView({ spec, inputs, onInput, onReset, predict }: StaticViewProps<LiftActivitySpec>) {
+export function LiftView({ spec, inputs, onInput, onReset, predict, equation, concealed = false }: StaticViewProps<LiftActivitySpec>) {
   const titleId = useId();
   const models = sliderModels(spec);
   const sc = scenarioLabels(spec);
@@ -38,10 +38,10 @@ export function LiftView({ spec, inputs, onInput, onReset, predict }: StaticView
   const lines = flowLineCount(rho, maxima['airDensityKgM3'] ?? rho);
   const wingScale = 0.55 + 0.45 * Math.sqrt(Math.min(1, Math.max(0, area / (maxima['wingAreaM2'] ?? area))));
   const label = `${sc.objectLabel}${sc.placeLabel !== '' ? ` · ${sc.placeLabel}` : ''}`;
-  const liftText = `${formatQuantity(liftN)} N`;
+  const liftText = concealed ? '? N' : `${formatQuantity(liftN)} N`;
   const up = liftN >= 0;
   const tipY = CY - 14 - arrow; // negative arrow → points down
-  const alt = `${label}. Lift coefficient ${trimmed(cl, 3)}, air density ${trimmed(rho, 3)} kilograms per cubic metre, airspeed ${trimmed(v, 3)} metres per second, wing area ${trimmed(area, 3)} square metres. Engine lift ${liftText}${up ? ', pointing up' : ', pointing down'}.`;
+  const alt = `${label}. Lift coefficient ${trimmed(cl, 3)}, air density ${trimmed(rho, 3)} kilograms per cubic metre, airspeed ${trimmed(v, 3)} metres per second, wing area ${trimmed(area, 3)} square metres. Engine lift ${concealed ? 'hidden until case 1 is run' : liftText}${up ? ', pointing up' : ', pointing down'}.`;
   const flowStyle = { '--flow-s': `${cycle}s` } as CSSProperties;
 
   return (
@@ -79,11 +79,12 @@ export function LiftView({ spec, inputs, onInput, onReset, predict }: StaticView
               <text x={CX + 16} y={up ? tipY + 14 : tipY - 8} className="scene-label">L = {liftText}</text>
             </g>
           )}
-          {arrow === 0 && <text x={CX} y={CY - 34} textAnchor="middle" className="scene-label arrow-lift-zero">L = 0 N (no lift arrow)</text>}
+          {arrow === 0 && <text x={CX} y={CY - 34} textAnchor="middle" className="scene-label arrow-lift-zero">{concealed ? 'L = ? N' : 'L = 0 N (no lift arrow)'}</text>}
           <text x={W - 56} y={H - 12} textAnchor="end" className="scene-label-small">Lift arrow: logarithmic length, not proportional</text>
         </svg>
       </div>
 
+      {equation}
       {predict}
 
       <div className="controls-row">
@@ -94,7 +95,7 @@ export function LiftView({ spec, inputs, onInput, onReset, predict }: StaticView
           <ResetSliders onReset={onReset} />
         </div>
         <dl className="readouts" aria-label="Live readouts from the engine">
-          <Readout name="Lift L (engine)" value={formatQuantity(liftN)} unit="N" accent="force" />
+          <Readout name="Lift L (engine)" value={formatQuantity(liftN)} unit="N" accent="force" concealed={concealed} />
         </dl>
       </div>
     </div>

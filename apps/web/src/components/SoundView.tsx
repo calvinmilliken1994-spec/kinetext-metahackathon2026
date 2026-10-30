@@ -15,7 +15,7 @@ const CX = 400;
 const CY = 195;
 const R_MAX = 150;
 
-export function SoundView({ spec, inputs, onInput, pb, predict }: ClosedFormViewProps<SoundActivitySpec>) {
+export function SoundView({ spec, inputs, onInput, pb, predict, equation, concealed = false }: ClosedFormViewProps<SoundActivitySpec>) {
   const titleId = useId();
   const models = sliderModels(spec);
   const sc = scenarioLabels(spec);
@@ -41,7 +41,7 @@ export function SoundView({ spec, inputs, onInput, pb, predict }: ClosedFormView
   }
 
   const label = `${sc.objectLabel}${sc.placeLabel !== '' ? ` · ${sc.placeLabel}` : ''}`;
-  const alt = `${label}. Sound spreads outward from a source in rings. Gas: gamma ${trimmed(input.gamma, 3)}, gas constant ${trimmed(input.gasConstantJPerKgK, 3)} joules per kilogram kelvin, temperature ${trimmed(input.temperatureK, 3)} kelvin. Engine speed of sound ${formatQuantity(a)} metres per second. ${rings.length} wavefronts shown at ${fixed(pb.t, 2)} seconds.`;
+  const alt = `${label}. Sound spreads outward from a source in rings. Gas: gamma ${trimmed(input.gamma, 3)}, gas constant ${trimmed(input.gasConstantJPerKgK, 3)} joules per kilogram kelvin, temperature ${trimmed(input.temperatureK, 3)} kelvin. Engine speed of sound ${concealed ? 'hidden until case 1 is run' : `${formatQuantity(a)} metres per second`}. ${rings.length} wavefronts shown at ${fixed(pb.t, 2)} seconds.`;
 
   return (
     <div className="simulation" data-engine="speed-of-sound-v1">
@@ -61,14 +61,14 @@ export function SoundView({ spec, inputs, onInput, pb, predict }: ClosedFormView
               return (
                 <g key={r.index}>
                   <circle cx={CX} cy={CY} r={px} className="wavefront" style={{ opacity: Math.max(0.15, r.opacity) }} />
-                  {px > 30 && <text x={lx} y={ly} className="scene-label-small ring-label" style={{ opacity: Math.max(0.45, r.opacity) }}>{fixed(r.radiusM, 0)} m</text>}
+                  {px > 30 && !concealed && <text x={lx} y={ly} className="scene-label-small ring-label" style={{ opacity: Math.max(0.45, r.opacity) }}>{fixed(r.radiusM, 0)} m</text>}
                 </g>
               );
             })}
             <circle cx={CX} cy={CY} r={7} className="sound-source" />
             <text x={CX} y={CY + 26} textAnchor="middle" className="scene-label-small">source</text>
           </g>
-          <text x={W - 56} y={H - 14} textAnchor="end" className="scene-label">a = {formatQuantity(a)} m/s</text>
+          <text x={W - 56} y={H - 14} textAnchor="end" className="scene-label">a = {concealed ? '?' : formatQuantity(a)} m/s</text>
         </svg>
       </div>
 
@@ -80,6 +80,7 @@ export function SoundView({ spec, inputs, onInput, pb, predict }: ClosedFormView
         <span className="muted small" aria-live="off">Simulated time {fixed(pb.t, 2)} s · one new wavefront every {SOUND_EMIT_EVERY_S} s</span>
       </div>
 
+      {equation}
       {predict}
 
       <div className="controls-row">
@@ -89,7 +90,7 @@ export function SoundView({ spec, inputs, onInput, pb, predict }: ClosedFormView
           ))}
         </div>
         <dl className="readouts" aria-label="Live readouts from the engine">
-          <Readout name="Speed of sound a (engine)" value={fixed(a, 2)} unit="m/s" accent="v" />
+          <Readout name="Speed of sound a (engine)" value={fixed(a, 2)} unit="m/s" accent="v" concealed={concealed} />
         </dl>
       </div>
     </div>

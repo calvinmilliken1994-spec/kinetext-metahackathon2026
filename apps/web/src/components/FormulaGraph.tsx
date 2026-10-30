@@ -8,14 +8,18 @@ interface Props {
   yName: string;
   /** Meaning and unit of the horizontal variable, for example “velocity (m/s)”. */
   xName: string;
+  /** Case 1's answer is not shown yet: the current value reads '?'. */
+  concealed?: boolean;
 }
 
 /** Output against the x variable: the line over the slider range, with the current point marked. Pure SVG, no chart library. */
-export function FormulaGraph({ geometry: g, yName, xName }: Props) {
+export function FormulaGraph({ geometry: g, yName, xName, concealed = false }: Props) {
   const id = useId();
   const { plot, current } = g;
-  const nowText = current.defined ? `${yName} = ${sig6(current.y)}` : 'not defined here';
-  const summary = current.defined
+  const nowText = concealed ? `${yName} = ?` : current.defined ? `${yName} = ${sig6(current.y)}` : 'not defined here';
+  const summary = concealed
+    ? `${yName} against ${xName}. The current value is hidden until case 1 is checked. The line covers ${sig6(g.xMin)} to ${sig6(g.xMax)}.`
+    : current.defined
     ? `${yName} against ${xName}. Now ${xName} is ${sig6(current.x)} and ${yName} is ${sig6(current.y)}. The line covers ${sig6(g.xMin)} to ${sig6(g.xMax)}.`
     : `${yName} against ${xName}. At ${sig6(current.x)} the formula has no value.`;
   return (

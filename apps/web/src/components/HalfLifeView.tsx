@@ -15,7 +15,7 @@ const PLOT = { l: 100, r: 760, t: 68, b: 276 };
 const CURVE_STEPS = 120;
 const MIN_LABEL_GAP_PX = 64;
 
-export function HalfLifeView({ spec, inputs, onInput, onReset, predict }: StaticViewProps<HalfLifeActivitySpec>) {
+export function HalfLifeView({ spec, inputs, onInput, onReset, predict, equation, concealed = false }: StaticViewProps<HalfLifeActivitySpec>) {
   const titleId = useId();
   const models = sliderModels(spec);
   const sc = scenarioLabels(spec);
@@ -43,7 +43,7 @@ export function HalfLifeView({ spec, inputs, onInput, onReset, predict }: Static
   const lives = halfLivesElapsed(t, halfLife);
   const label = `${sc.objectLabel}${sc.placeLabel !== '' ? ` · ${sc.placeLabel}` : ''}`;
   const share = n0 > 0 ? (remaining / n0) * 100 : 0;
-  const alt = `${label}. Decay curve: ${formatAmount(n0)} at the start, halving every ${formatWithUnit(halfLife, timeUnit, (n) => trimmed(n, 3))}. After ${formatWithUnit(t, timeUnit, (n) => trimmed(n, 3))}${lives === null ? '' : `, which is ${trimmed(lives, 3)} half-lives`}, ${formatAmount(remaining)} remains. ${markers.length === 0 ? 'The half-life is longer than the time axis, so no half-life markers are shown.' : `${markers.length} half-life markers: ${markers.slice(0, 4).map((m) => `${m.fractionLabel} left after ${trimmed(m.t, 3)}`).join(', ')}${markers.length > 4 ? ', and so on' : ''}.`}`;
+  const alt = `${label}. Decay curve: ${formatAmount(n0)} at the start, halving every ${formatWithUnit(halfLife, timeUnit, (n) => trimmed(n, 3))}. After ${formatWithUnit(t, timeUnit, (n) => trimmed(n, 3))}${lives === null ? '' : `, which is ${trimmed(lives, 3)} half-lives`}, ${concealed ? 'the amount left is hidden until case 1 is run' : `${formatAmount(remaining)} remains`}. ${markers.length === 0 ? 'The half-life is longer than the time axis, so no half-life markers are shown.' : `${markers.length} half-life markers: ${markers.slice(0, 4).map((m) => `${m.fractionLabel} left after ${trimmed(m.t, 3)}`).join(', ')}${markers.length > 4 ? ', and so on' : ''}.`}`;
 
   return (
     <div className="simulation" data-engine="half-life-v1">
@@ -84,7 +84,7 @@ export function HalfLifeView({ spec, inputs, onInput, onReset, predict }: Static
             <line x1={sx(t)} y1={PLOT.t} x2={sx(t)} y2={PLOT.b} className="chart-now" />
             <circle cx={sx(t)} cy={sy(remaining)} r={7} className="chart-dot" />
             <text x={sx(t) > PLOT.r - 120 ? sx(t) - 12 : sx(t) + 12} y={sy(remaining) + (sy(remaining) < PLOT.t + 24 ? 22 : -12)} textAnchor={sx(t) > PLOT.r - 120 ? 'end' : 'start'} className="scene-label">
-              N = {formatAmount(remaining)}
+              N = {concealed ? '?' : formatAmount(remaining)}
             </text>
           </g>
         </svg>
@@ -95,6 +95,7 @@ export function HalfLifeView({ spec, inputs, onInput, onReset, predict }: Static
           : `One half-life (${formatWithUnit(halfLife, timeUnit, (n) => trimmed(n, 3))}) is longer than the time axis, so no half-life dots are drawn.`}
       </p>
 
+      {equation}
       {predict}
 
       <div className="controls-row">
@@ -105,10 +106,10 @@ export function HalfLifeView({ spec, inputs, onInput, onReset, predict }: Static
           <ResetSliders onReset={onReset} />
         </div>
         <dl className="readouts" aria-label="Live readouts from the engine">
-          <Readout name="Remaining N (engine)" value={formatAmount(remaining)} unit="" accent="x" />
+          <Readout name="Remaining N (engine)" value={formatAmount(remaining)} unit="" accent="x" concealed={concealed} />
           <Readout name="Half-lives passed (t/T)" value={lives === null ? '—' : trimmed(lives, 3)} unit="" accent="v" />
-          <Readout name="Share left" value={`${fixed(share, share >= 10 ? 1 : 2)}%`} unit="" accent="force" />
-          {lives !== null && Number.isInteger(lives) && lives <= 10 && <Readout name="As a fraction" value={fractionLabel(lives)} unit="" />}
+          <Readout name="Share left" value={`${fixed(share, share >= 10 ? 1 : 2)}%`} unit="" accent="force" concealed={concealed} />
+          {lives !== null && Number.isInteger(lives) && lives <= 10 && <Readout name="As a fraction" value={fractionLabel(lives)} unit="" concealed={concealed} />}
         </dl>
       </div>
     </div>

@@ -1,5 +1,7 @@
 import { lessonQuoteKey } from '../lib/lesson.ts';
 import { CitationChip } from './Explanations.tsx';
+import { Linked } from './Linked.tsx';
+import { linkKey } from '../lib/linking.ts';
 import type { CiteProps } from './Explanations.tsx';
 
 interface Props {
@@ -18,10 +20,10 @@ interface Props {
 export function QuoteBlock({ componentId, part, id, sourceId, quote, cite, caption }: Props) {
   const key = lessonQuoteKey(componentId, part, id);
   return (
-    <figure className="event-quote lesson-quote">
+    <Linked as="figure" className="event-quote lesson-quote" links={[linkKey(sourceId, quote)]}>
       {caption !== undefined && <figcaption className="quote-caption">{caption}</figcaption>}
       <blockquote>“{quote}”</blockquote>
       <CitationChip label="Show in source" quote={quote} citeKey={key} enabled={sourceId === cite.sourceId && cite.located.has(key)} onCite={cite.onCite} />
-    </figure>
+    </Linked>
   );
 }

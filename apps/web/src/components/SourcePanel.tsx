@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import type { FocusEvent as ReactFocusEvent, MouseEvent as ReactMouseEvent } from 'react';
 import type { Loadable } from '../hooks.ts';
 import type { SourceDoc, SourceMeta } from '../api.ts';
 import type { HighlightResult } from '../lib/highlight.ts';
 import { isEvidenceKey } from '../lib/evidence.ts';
 import type { QuoteRef } from '../lib/evidence.ts';
-import { revealInPanels } from '../lib/scroll.ts';
+import { linkStore, markLinks, segmentIsTabStop } from '../lib/linking.ts';
+import { revealInPanels, scrollContainersOf, scrollTopToReveal } from '../lib/scroll.ts';
 import { markdownDecorations, sourcePieces } from '../lib/sourceText.ts';
 import { isHttpUrl, sourceLicenseText, sourceOptionLabel, TEACHER_TAG } from '../lib/sources.ts';
 import { CitationChip } from './Explanations.tsx';
@@ -24,7 +26,25 @@ export interface SourcePanelProps {
   onCite: (key: string) => void;
 }
 
-function HighlightedText({ text, highlights, byKey, flash }: { text: string; highlights: HighlightResult | null; byKey: Map<string, QuoteRef>; flash: Flash | null }) {
+const reducedMotion = (): boolean => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const linksOf = (el: Element | null): string[] => (el?.getAttribute('data-links') ?? '').split(' ').filter((k) => k !== '');
+const markOf = (target: EventTarget | null): HTMLElement | null => (target instanceof Element ? target.closest<HTMLElement>('mark[data-links]') : null);
+
+/**
+ * Bring a lit quote into view inside the source text only — never the workspace or the page, so the lesson element under
+ * the pointer does not move. Nothing scrolls when the quote is already visible.
+ */
+function revealInSource(mark: HTMLElement, panel: HTMLElement): void {
+  const box = scrollContainersOf(mark)[0];
+  if (box === undefined || !panel.contains(box)) return;
+  const r = box.getBoundingClientRect();
+  const m = mark.getBoundingClientRect();
+  if (m.top >= r.top + 8 && m.bottom <= r.bottom - 8) return;
+  const top = scrollTopToReveal({ top: r.top + box.clientTop, height: box.clientHeight, scrollTop: box.scrollTop, scrollHeight: box.scrollHeight }, { top: m.top, height: m.height }, 'center');
+  box.scrollTo({ top, behavior: reducedMotion() ? 'auto' : 'smooth' });
+}
+
+function HighlightedText({ text, highlights, byKey, flash, sourceId }: { text: string; highlights: HighlightResult | null; byKey: Map<string, QuoteRef>; flash: Flash | null; sourceId: string }) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -57,15 +77,72 @@ function HighlightedText({ text, highlights, byKey, flash }: { text: string; hig
       if (p.keys.length === 0) return cls === '' ? <span key={p.start}>{slice}</span> : <span key={p.start} className={cls}>{slice}</span>;
       const isEvidence = p.keys.some(isEvidenceKey);
       const owners = [...new Set(p.keys.map((k) => byKey.get(k)?.ownerLabel ?? k))].join(', ');
+      // Hover linking (Stage 7): the quote's link keys, and one tab stop where each quote begins.
+      const links = markLinks(p.keys, (k) => byKey.get(k)?.quote, sourceId);
+      const tabStop = links.length > 0 && highlights !== null && segmentIsTabStop(p, highlights.ranges);
       return (
-        <mark key={p.start} data-keys={p.keys.join(' ')} className={`${isEvidence ? 'ev-explanation' : 'ev-concept'}${cls === '' ? '' : ` ${cls}`}`} title={`Evidence for: ${owners}`}>
+        <mark
+          key={p.start}
+          data-keys={p.keys.join(' ')}
+          data-links={links.length > 0 ? links.join(' ') : undefined}
+          tabIndex={tabStop ? 0 : undefined}
+          className={`${isEvidence ? 'ev-explanation' : 'ev-concept'}${cls === '' ? '' : ` ${cls}`}`}
+          title={`Evidence for: ${owners}`}
+        >
           {slice}
         </mark>
       );
     });
-  }, [text, highlights, decorations, byKey]);
+  }, [text, highlights, decorations, byKey, sourceId]);
 
-  return <div ref={ref} className="source-text" tabIndex={0} aria-label="Source text with highlighted evidence quotes">{parts}</div>;
+  // Light every mark that carries an active link key; when the pointer is on a lesson element, bring its first quote into
+  // view after a short dwell (so sweeping the pointer across the lesson does not make the page jump).
+  useEffect(() => {
+    const root = ref.current;
+    if (root === null) return;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    const apply = (): void => {
+      const active = linkStore.get();
+      const keys = new Set(active?.keys ?? []);
+      let first: HTMLElement | null = null;
+      for (const m of Array.from(root.querySelectorAll<HTMLElement>('mark[data-links]'))) {
+        const on = keys.size > 0 && linksOf(m).some((k) => keys.has(k));
+        m.classList.toggle('is-linked', on);
+        if (on && first === null) first = m;
+      }
+      if (timer !== null) { clearTimeout(timer); timer = null; }
+      const panel = root.closest<HTMLElement>('.source-panel');
+      if (first !== null && active?.origin === 'lesson' && panel !== null) {
+        const target = first;
+        timer = setTimeout(() => revealInSource(target, panel), 160);
+      }
+    };
+    apply();
+    const off = linkStore.subscribe(apply);
+    return () => { off(); if (timer !== null) clearTimeout(timer); };
+  }, [parts]);
+
+  // Hovering or focusing a quote lights every lesson element that cites it (one delegated listener for all marks).
+  const over = (e: ReactMouseEvent): void => {
+    const m = markOf(e.target);
+    if (m !== null) linkStore.enter('source:hover', linksOf(m), 'source');
+  };
+  const out = (e: ReactMouseEvent): void => {
+    const m = markOf(e.target);
+    if (m !== null && markOf(e.relatedTarget) !== m) linkStore.leave('source:hover');
+  };
+  const focus = (e: ReactFocusEvent): void => {
+    const m = markOf(e.target);
+    if (m !== null) linkStore.enter('source:focus', linksOf(m), 'source');
+  };
+  const blur = (): void => linkStore.leave('source:focus');
+  useEffect(() => () => { linkStore.leave('source:hover'); linkStore.leave('source:focus'); }, []);
+
+  return (
+    <div ref={ref} className="source-text" tabIndex={0} aria-label="Source text with highlighted evidence quotes" onMouseOver={over} onMouseOut={out} onFocus={focus} onBlur={blur}>
+      {parts}
+    </div>
+  );
 }
 
 export function SourcePanel({ sources, selectedId, onSelect, onReload, doc, highlights, quotes, flash, onCite }: SourcePanelProps) {
@@ -129,7 +206,7 @@ export function SourcePanel({ sources, selectedId, onSelect, onReload, doc, high
           <p className="legend" aria-label="Highlight legend">
             <span><mark className="ev-explanation">Quoted</mark> by the lesson</span>
             <span><mark className="ev-concept">Concept</mark> Muse found</span>
-            <span className="muted">{located} of {quotes.length} quotes found on the page</span>
+            <span className="muted">{located} of {quotes.length} quotes found on the page · point at one to see where the lesson uses it</span>
           </p>
         )}
       </div>
@@ -138,7 +215,7 @@ export function SourcePanel({ sources, selectedId, onSelect, onReload, doc, high
         {doc === null && <p className="muted pad">Select a page.</p>}
         {doc?.state === 'loading' && <p className="muted pad">Loading the page…</p>}
         {doc?.state === 'error' && <div className="callout callout-error" role="alert">{doc.message}</div>}
-        {doc?.state === 'ready' && <HighlightedText text={doc.data.text} highlights={highlights} byKey={byKey} flash={flash} />}
+        {doc?.state === 'ready' && <HighlightedText text={doc.data.text} highlights={highlights} byKey={byKey} flash={flash} sourceId={selectedId ?? ''} />}
       </div>
 
       {concepts.length > 0 && (

@@ -7,6 +7,7 @@ import { computeOutput, inputsOf } from '../../../../packages/activities/registr
 import { flightTimeOf, stateAt } from '../../../../packages/activities/projectile-v1/engine.ts';
 import { fixed, trimmed } from './format.ts';
 import { sliderStep } from './track.ts';
+import { caseFriendlyStep } from './sliderSteps.ts';
 import { formatMoney } from './compound.ts';
 import { formatAmount } from './decay.ts';
 import { formatFrequency } from './genetics.ts';
@@ -83,13 +84,16 @@ function rangeOf(spec: ActivitySpec, key: string): RangeLike | null {
 export function sliderModels(spec: ActivitySpec): SliderModel[] {
   const engine = spec.simulation.engine;
   if (!isEngineId(engine)) return [];
+  const cases = ((spec.predictions as readonly unknown[] | undefined) ?? []).filter((c): c is Record<string, unknown> => typeof c === 'object' && c !== null);
   const out: SliderModel[] = [];
   for (const input of ENGINES[engine].inputs) {
     const r = rangeOf(spec, input.key);
     if (r === null) continue;
+    // Stage 7: the step must land on the case values (g = 1.62 on a 0.2-step slider sat at 1.6); case 1 comes first.
+    const values = cases.map((c) => c[input.key]).filter((v): v is number => typeof v === 'number' && Number.isFinite(v));
     out.push({
       key: input.key, label: input.label, unit: prettyUnit(input.unit),
-      min: r.min, max: r.max, step: sliderStep(r.min, r.max), value: r.default,
+      min: r.min, max: r.max, step: caseFriendlyStep(r.min, r.max, sliderStep(r.min, r.max), values), value: r.default,
     });
   }
   return out;

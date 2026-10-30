@@ -16,7 +16,7 @@ const CURVE = { l: 540, r: 760, t: 84, b: 244 };
 const H_MAX = 0.5;
 const CURVE_STEPS = 50;
 
-export function HardyWeinbergView({ spec, inputs, onInput, onReset, predict }: StaticViewProps<HardyWeinbergActivitySpec>) {
+export function HardyWeinbergView({ spec, inputs, onInput, onReset, predict, equation, concealed = false }: StaticViewProps<HardyWeinbergActivitySpec>) {
   const titleId = useId();
   const models = sliderModels(spec);
   const sc = scenarioLabels(spec);
@@ -36,7 +36,7 @@ export function HardyWeinbergView({ spec, inputs, onInput, onReset, predict }: S
   const label = `${sc.objectLabel}${sc.placeLabel !== '' ? ` · ${sc.placeLabel}` : ''}`;
   const sum = bars.reduce((s, b) => s + b.frequency, 0);
   const sumOk = frequenciesSumToOne(bars);
-  const alt = `${label}. Allele frequency p is ${formatFrequency(p)} and q is ${formatFrequency(q)}. Genotype frequencies: ${bars.map((b) => `${b.label} (${b.formula}) ${formatFrequency(b.frequency)}`).join(', ')}. They add up to ${formatFrequency(sum)}. A small curve shows the heterozygote frequency 2pq against p, highest at 0.5 when p is 0.5.`;
+  const alt = `${label}. Allele frequency p is ${formatFrequency(p)} and q is ${formatFrequency(q)}. Genotype frequencies: ${bars.map((b) => `${b.label} (${b.formula}) ${concealed && b.checked ? 'hidden until case 1 is run' : formatFrequency(b.frequency)}`).join(', ')}. They add up to ${formatFrequency(sum)}. A small curve shows the heterozygote frequency 2pq against p, highest at 0.5 when p is 0.5.`;
 
   return (
     <div className="simulation" data-engine="hardy-weinberg-v1">
@@ -62,7 +62,7 @@ export function HardyWeinbergView({ spec, inputs, onInput, onReset, predict }: S
                   <rect x={BAR.l} y={y} width={Math.max(0, w)} height={BAR.h} className={b.checked ? 'bar-fill bar-checked' : 'bar-fill'} />
                   <text x={BAR.l - 8} y={y + BAR.h / 2 + 5} textAnchor="end" className="scene-label">{b.label}</text>
                   <text x={BAR.l + 8} y={y - 5} className="scene-label-small">{b.formula}</text>
-                  <text x={Math.max(BAR.l + w + 8, BAR.l + 8)} y={y + BAR.h / 2 + 5} className="scene-label">{formatFrequency(b.frequency)}</text>
+                  <text x={Math.max(BAR.l + w + 8, BAR.l + 8)} y={y + BAR.h / 2 + 5} className="scene-label">{concealed && b.checked ? '?' : formatFrequency(b.frequency)}</text>
                 </g>
               );
             })}
@@ -84,9 +84,10 @@ export function HardyWeinbergView({ spec, inputs, onInput, onReset, predict }: S
       </div>
 
       <p className={`sum-note${sumOk ? '' : ' sum-note-bad'}`} role="note">
-        p² + 2pq + q² = {bars.map((b) => formatFrequency(b.frequency)).join(' + ')} = <strong>{formatFrequency(sum)}</strong> — the three genotype frequencies always add up to 1, and so do p + q = {formatFrequency(p)} + {formatFrequency(q)} = {formatFrequency(p + q)}.
+        p² + 2pq + q² = {bars.map((b) => (concealed && b.checked ? '?' : formatFrequency(b.frequency))).join(' + ')} = <strong>{formatFrequency(sum)}</strong> — the three genotype frequencies always add up to 1, and so do p + q = {formatFrequency(p)} + {formatFrequency(q)} = {formatFrequency(p + q)}.
       </p>
 
+      {equation}
       {predict}
 
       <div className="controls-row">
@@ -98,8 +99,8 @@ export function HardyWeinbergView({ spec, inputs, onInput, onReset, predict }: S
         </div>
         <dl className="readouts" aria-label="Live readouts from the engine">
           <Readout name="q = 1 − p" value={formatFrequency(q)} unit="" accent="v" />
-          <Readout name="Heterozygotes 2pq (engine)" value={formatFrequency(het)} unit="" accent="force" />
-          <Readout name="Aa share of population" value={`${trimmed(het * 100, 2)}%`} unit="" />
+          <Readout name="Heterozygotes 2pq (engine)" value={formatFrequency(het)} unit="" accent="force" concealed={concealed} />
+          <Readout name="Aa share of population" value={`${trimmed(het * 100, 2)}%`} unit="" concealed={concealed} />
         </dl>
       </div>
     </div>

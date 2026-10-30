@@ -2,6 +2,8 @@ import type { ActivitySpec } from '../../../../packages/contracts/index.ts';
 import { previewQuote, quoteKey } from '../lib/evidence.ts';
 import { AiWritten } from './Disclosure.tsx';
 import { IconLocate } from './icons.tsx';
+import { Linked } from './Linked.tsx';
+import { linkKeysOf } from '../lib/linking.ts';
 
 export interface CiteProps {
   /** Source currently shown in the Source panel. */
@@ -37,7 +39,7 @@ export function Explanations({ explanations, cite }: { explanations: ActivitySpe
       </div>
       <ul className="explanations">
         {explanations.map((ex) => (
-          <li key={ex.id}>
+          <Linked as="li" key={ex.id} links={linkKeysOf(ex.evidence)}>
             <p>{ex.text}</p>
             <div className="chips" role="group" aria-label={`Evidence for ${ex.id}`}>
               {ex.evidence.map((ev, i) => {
@@ -53,7 +55,7 @@ export function Explanations({ explanations, cite }: { explanations: ActivitySpe
                 );
               })}
             </div>
-          </li>
+          </Linked>
         ))}
       </ul>
     </section>

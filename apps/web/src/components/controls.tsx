@@ -4,6 +4,7 @@ import { readableNumber, sliderEndLabel } from '../lib/format.ts';
 import { stopIndex } from '../lib/compound.ts';
 import { unitForValue } from '../lib/engines.ts';
 import { IconReset } from './icons.tsx';
+import { CONCEALED, CONCEALED_HINT } from '../lib/reveal.ts';
 
 export interface SliderProps {
   label: string;
@@ -97,11 +98,14 @@ export function StopSlider({ label, stops, value, format, onChange }: StopSlider
   );
 }
 
-export function Readout({ name, value, unit, accent }: { name: string; value: string; unit: string; accent?: string }) {
+/** `concealed`: case 1's answer is not shown yet (predict-then-reveal); a neutral '?' stands in for the number. */
+export function Readout({ name, value, unit, accent, concealed = false }: { name: string; value: string; unit: string; accent?: string; concealed?: boolean }) {
   return (
     <div className={`readout${accent ? ` readout-${accent}` : ''}`}>
       <dt>{name}</dt>
-      <dd><span className="num">{value}</span> <span className="unit">{unit}</span></dd>
+      {concealed
+        ? <dd><span className="num concealed" title={CONCEALED_HINT}>{CONCEALED}</span><span className="sr-only"> ({CONCEALED_HINT})</span></dd>
+        : <dd><span className="num">{value}</span> <span className="unit">{unit}</span></dd>}
     </div>
   );
 }

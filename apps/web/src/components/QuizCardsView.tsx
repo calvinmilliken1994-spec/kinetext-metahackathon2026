@@ -4,6 +4,8 @@ import { gradeQuizCard, quizCards, quizSummary } from '../lib/quiz.ts';
 import type { QuizGrade } from '../lib/quiz.ts';
 import type { CiteProps } from './Explanations.tsx';
 import { QuoteBlock } from './QuoteBlock.tsx';
+import { Linked } from './Linked.tsx';
+import { linkKey } from '../lib/linking.ts';
 import { Mark } from './icons.tsx';
 
 interface Props { spec: QuizCardsSpec; cite: CiteProps }
@@ -36,7 +38,7 @@ export function QuizCardsView({ spec, cite }: Props) {
           const grade = locked[c.id] ?? null;
           const legendId = `${uid}-${c.id}-q`;
           return (
-            <li key={c.id} className="prediction quiz-card">
+            <Linked as="li" key={c.id} className="prediction quiz-card" links={[linkKey(c.sourceId, c.quote)]}>
               <fieldset className="choice-set" aria-labelledby={legendId}>
                 <legend id={legendId} className="prediction-head">
                   <span className="case-label">Card {i + 1}</span> <span className="quiz-stem">{c.stem}</span>
@@ -75,7 +77,7 @@ export function QuizCardsView({ spec, cite }: Props) {
                 </div>
               )}
               {grade !== null && <QuoteBlock componentId="quiz-cards-v1" part="card" id={c.id} sourceId={c.sourceId} quote={c.quote} cite={cite} caption="The page’s words" />}
-            </li>
+            </Linked>
           );
         })}
       </ol>

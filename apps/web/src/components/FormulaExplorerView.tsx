@@ -14,7 +14,13 @@ import { Readout, Slider } from './controls.tsx';
 import type { CiteProps } from './Explanations.tsx';
 import { FormulaGraph } from './FormulaGraph.tsx';
 import { QuoteBlock } from './QuoteBlock.tsx';
+import { Linked } from './Linked.tsx';
 import { Mark } from './icons.tsx';
+import { EquationLine } from './EquationLine.tsx';
+import { explorerEquation } from '../lib/equation.ts';
+import { linkKey } from '../lib/linking.ts';
+import { CONCEALED, CONCEALED_HINT, initialConcealed, nextConcealed } from '../lib/reveal.ts';
+import { caseFriendlyStep } from '../lib/sliderSteps.ts';
 
 interface Props { spec: FormulaExplorerSpec; cite: CiteProps }
 
@@ -45,7 +51,23 @@ export function FormulaExplorerView({ spec, cite }: Props) {
   const table = useMemo(() => (model.ok ? niceValueRows(model, spec, inputs) : []), [model, spec, inputs]);
   const cases = useMemo(() => (model.ok ? caseOutputs(model, spec) : []), [model, spec]);
 
-  const onSlider = useCallback((name: string, value: number) => setInputs((prev) => ({ ...prev, [name]: value })), []);
+  // Predict-then-reveal: case 1's answer (the output, the value table, the graph's current value) is '?' until a case is
+  // checked or a slider moves.
+  const [concealed, setConcealed] = useState(() => initialConcealed(spec.cases.length));
+  const onSlider = useCallback((name: string, value: number) => {
+    setConcealed((c) => nextConcealed(c, 'slider'));
+    setInputs((prev) => ({ ...prev, [name]: value }));
+  }, []);
+  const equation = useMemo(
+    () => (model.ok ? explorerEquation(spec.expression, model.names, yName, inputs, output) : null),
+    [model, spec.expression, yName, inputs, output],
+  );
+  const formulaLinks = useMemo(() => [linkKey(spec.sourceId, spec.quote)], [spec.sourceId, spec.quote]);
+  // Slider steps that land on the case values (case 1 first).
+  const steps = useMemo(() => Object.fromEntries(spec.variables.map((v) => [
+    v.name,
+    caseFriendlyStep(v.min, v.max, sliderStep(v), spec.cases.flatMap((c) => c.inputs.filter((i) => i.name === v.name).map((i) => i.value))),
+  ])), [spec]);
 
   if (!model.ok) {
     return <div className="kit-message" role="note"><p><strong>{CALCULATOR_FAILURE}</strong></p><p className="muted small">Nothing from this component is shown, because it was not confirmed by the page.</p></div>;
@@ -61,6 +83,7 @@ export function FormulaExplorerView({ spec, cite }: Props) {
     if (!Number.isFinite(out.output)) { setResults((r) => ({ ...r, [caseId]: { raw: r[caseId]?.raw ?? '', grade: null, error: 'The formula has no value for this case, so it cannot be graded.' } })); return; }
     // The reference value is always the calculator's, computed from the expression; reveal it by moving the sliders to the case.
     setResults((r) => ({ ...r, [caseId]: { raw: r[caseId]?.raw ?? '', grade: gradeCaseGuess(guess, out.output), error: null } }));
+    setConcealed((c) => nextConcealed(c, 'run-case'));
     setInputs(inputsOfCase(c));
   };
 
@@ -70,7 +93,7 @@ export function FormulaExplorerView({ spec, cite }: Props) {
     <div className="explorer" data-testid="formula-explorer">
       <div className="explorer-formula">
         <p className="field-label">Formula on the page</p>
-        <code>{spec.formulaText}</code>
+        <Linked as="p" className="explorer-formula-text" links={formulaLinks}><code>{spec.formulaText}</code></Linked>
         <QuoteBlock componentId="formula-explorer-v1" part="equation" id="equation" sourceId={spec.sourceId} quote={spec.quote} cite={cite} caption="The page’s words" />
         {formulaStatus !== 'matches' && <p className="note small" role="note" data-testid="ai-formula-notice">{AI_FORMULA_NOTICE}</p>}
       </div>
@@ -87,31 +110,32 @@ export function FormulaExplorerView({ spec, cite }: Props) {
                 unit={prettyUnit(v.unit)}
                 min={v.min}
                 max={v.max}
-                step={sliderStep(v)}
+                step={steps[v.name] ?? sliderStep(v)}
                 value={inputs[v.name] ?? v.default}
                 onChange={(val) => onSlider(v.name, val)}
               />
             ))}
           </div>
+          <EquationLine equation={equation} concealed={concealed} links={formulaLinks} />
           <dl className="readouts explorer-readout" aria-live="polite">
-            <Readout name={yName} value={sig6(output)} unit="" />
+            <Readout name={yName} value={sig6(output)} unit="" concealed={concealed} />
           </dl>
-          {!Number.isFinite(output) && <p className="field-error" role="status">Not defined for these inputs.</p>}
+          {!Number.isFinite(output) && !concealed && <p className="field-error" role="status">Not defined for these inputs.</p>}
           <button type="button" className="btn btn-small" onClick={() => setInputs(defaultInputs(spec))}>Reset sliders</button>
         </div>
 
         <div className="explorer-visual">
-          <FormulaGraph geometry={geometry} yName={yName} xName={xName} />
+          <FormulaGraph geometry={geometry} yName={yName} xName={xName} concealed={concealed} />
           <table className="value-table">
             <caption>{yName} as {xVar?.meaning ?? spec.xVariable} changes (other sliders as set)</caption>
             <thead><tr><th scope="col">{xName}</th><th scope="col">{yName}</th></tr></thead>
             <tbody>
               <tr className="value-now">
                 <th scope="row">Now: {sig6(inputs[spec.xVariable] ?? 0)}</th>
-                <td>{sig6(output)}</td>
+                <td>{concealed ? <span className="concealed" title={CONCEALED_HINT}>{CONCEALED}</span> : sig6(output)}</td>
               </tr>
               {table.map((row, i) => (
-                <tr key={i}><th scope="row">{sig6(row.x)}</th><td>{sig6(row.y)}</td></tr>
+                <tr key={i}><th scope="row">{sig6(row.x)}</th><td>{concealed ? <span className="concealed" title={CONCEALED_HINT}>{CONCEALED}</span> : sig6(row.y)}</td></tr>
               ))}
             </tbody>
           </table>
@@ -128,7 +152,7 @@ export function FormulaExplorerView({ spec, cite }: Props) {
       {spec.cases.length > 0 && (
         <section aria-labelledby={`${uid}-predict`}>
           <h3 id={`${uid}-predict`}>Predict, then reveal</h3>
-          <p className="muted small">Commit to a number first; checking moves the sliders and the graph to that case.</p>
+          <p className="muted small">Commit to a number first; checking moves the sliders and the graph to that case.{concealed ? ' Until then the result shows as ?.' : ''}</p>
           <ol className="predictions">
             {spec.cases.map((c, i) => {
               const r = results[c.id];

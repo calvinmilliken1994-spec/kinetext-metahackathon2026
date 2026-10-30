@@ -1,6 +1,8 @@
 import type { TimelineEvent } from '../../../../packages/contracts/index.ts';
 import { quoteKey } from '../lib/evidence.ts';
 import { CitationChip } from './Explanations.tsx';
+import { Linked } from './Linked.tsx';
+import { linkKey } from '../lib/linking.ts';
 import type { CiteProps } from './Explanations.tsx';
 
 /** The verbatim quote(s) behind an event's date, each with a "show in source" chip that highlights it in the source text. */
@@ -10,7 +12,7 @@ export function EventEvidence({ event, cite }: { event: TimelineEvent; cite: Cit
       {event.evidence.map((ev, i) => {
         const key = quoteKey('event', event.id, i);
         return (
-          <figure key={key} className="event-quote">
+          <Linked as="figure" key={key} className="event-quote" links={[linkKey(ev.sourceId, ev.quote)]}>
             <blockquote>“{ev.quote}”</blockquote>
             <CitationChip
               label="Show in source"
@@ -19,7 +21,7 @@ export function EventEvidence({ event, cite }: { event: TimelineEvent; cite: Cit
               enabled={ev.sourceId === cite.sourceId && cite.located.has(key)}
               onCite={cite.onCite}
             />
-          </figure>
+          </Linked>
         );
       })}
     </div>

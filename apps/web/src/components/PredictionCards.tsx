@@ -92,9 +92,11 @@ export interface PredictionCardsProps {
    * below the sliders; 'all' = every case in one list (default).
    */
   part?: 'first' | 'rest' | 'all';
+  /** Case 1's answer is still hidden in the scene and readouts (shown as '?'). */
+  answerHidden?: boolean;
 }
 
-export function PredictionCards({ engine, predictions, onRun, part = 'all' }: PredictionCardsProps) {
+export function PredictionCards({ engine, predictions, onRun, part = 'all', answerHidden = false }: PredictionCardsProps) {
   const headingId = useId();
   const from = part === 'rest' ? 1 : 0;
   const to = part === 'first' ? Math.min(1, predictions.length) : predictions.length;
@@ -103,7 +105,7 @@ export function PredictionCards({ engine, predictions, onRun, part = 'all' }: Pr
   const heading = part === 'rest' ? 'More cases' : 'Predict, then run';
   const hint = part === 'rest'
     ? '“Run it” moves the sliders to that case and plays it.'
-    : 'Commit to a number first; “Run it” sets the sliders, plays the model and checks your guess.';
+    : `Commit to a number first; “Run it” sets the sliders, plays the model and checks your guess.${answerHidden ? ' Until then the answer shows as ?.' : ''}`;
   return (
     <section className={part === 'first' ? 'predict-first' : 'card'} aria-labelledby={headingId} data-part={part}>
       <h3 id={headingId}>{heading}</h3>

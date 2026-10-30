@@ -7,6 +7,7 @@ import { fixed, trimmed } from '../lib/format.ts';
 import { leaderLine, PROJECTILE_FRAME, projectileScene } from '../lib/geometry.ts';
 import type { Px } from '../lib/geometry.ts';
 import { activePreset, comparisonValues, pagePresets } from '../lib/presets.ts';
+import { concealNumbers } from '../lib/reveal.ts';
 import { Readout, SchematicTag, Slider } from './controls.tsx';
 import type { PlaybackCtl } from './usePlayback.ts';
 import { IconPause, IconPlay, IconReplay, IconReset } from './icons.tsx';
@@ -24,6 +25,10 @@ export interface ClosedFormViewProps<S> {
   predict?: ReactNode;
   /** Sliders back to the lesson's opening case. */
   onReset: () => void;
+  /** The live substituted equation (EquationLine), shown right under the scene. */
+  equation?: ReactNode;
+  /** Case 1's answer is not shown yet: every printed value of the engine's output reads '?'. */
+  concealed?: boolean;
 }
 
 /** The views without a playback clock (lift, compound interest, Hardy-Weinberg, half-life). */
@@ -31,7 +36,7 @@ export type StaticViewProps<S> = Omit<ClosedFormViewProps<S>, 'pb'>;
 
 const pts = (list: readonly Px[]): string => list.map((p) => `${p.px.toFixed(1)},${p.py.toFixed(1)}`).join(' ');
 
-export function ProjectileView({ spec, inputs, onInput, pb, predict, sourceText }: ClosedFormViewProps<ProjectileActivitySpec> & { sourceText?: string | null }) {
+export function ProjectileView({ spec, inputs, onInput, pb, predict, equation, concealed = false, sourceText }: ClosedFormViewProps<ProjectileActivitySpec> & { sourceText?: string | null }) {
   const titleId = useId();
   const scrubId = useId();
   const models = sliderModels(spec);
@@ -58,7 +63,7 @@ export function ProjectileView({ spec, inputs, onInput, pb, predict, sourceText 
   trail.push(pos);
   const finished = pb.t >= scene.flightTimeS - 1e-9;
   const ghostText = scene.ghosts.map((g) => `${trimmed(g.gravityMps2, 4)} metres per second squared, which peaks at ${fixed(g.maxHeightM, 2)} metres`).join('; ');
-  const alt = `${label}. Launched at ${trimmed(input.horizontalSpeedMps, 3)} metres per second sideways and ${trimmed(input.verticalSpeedMps, 3)} upward under ${trimmed(input.gravityMps2, 3)} metres per second squared. Maximum height ${fixed(scene.maxHeightM, 2)} metres, flight time ${fixed(scene.flightTimeS, 2)} seconds. At ${fixed(now.t, 2)} seconds: x ${fixed(now.x, 2)} metres, height ${fixed(now.y, 2)} metres.${ghostText === '' ? '' : ` Faint comparison arc for the same launch at the page's other gravity value: ${ghostText}.`}`;
+  const alt = `${label}. Launched at ${trimmed(input.horizontalSpeedMps, 3)} metres per second sideways and ${trimmed(input.verticalSpeedMps, 3)} upward under ${trimmed(input.gravityMps2, 3)} metres per second squared. Maximum height ${concealed ? 'hidden until case 1 is run' : `${fixed(scene.maxHeightM, 2)} metres`}, flight time ${fixed(scene.flightTimeS, 2)} seconds. At ${fixed(now.t, 2)} seconds: x ${fixed(now.x, 2)} metres, height ${fixed(now.y, 2)} metres.${ghostText === '' ? '' : ` Faint comparison arc for the same launch at the page's other gravity value: ${ghostText}.`}`;
   const apexLead = leaderLine(scene.labels.apex, scene.apex);
   const active = activePreset(gPresets, input.gravityMps2);
 
@@ -99,7 +104,7 @@ export function ProjectileView({ spec, inputs, onInput, pb, predict, sourceText 
             <line x1={scene.apex.px} y1={scene.apex.py} x2={scene.apex.px} y2={BOX.bottom} className="guide" />
             <circle cx={scene.apex.px} cy={scene.apex.py} r={5.5} className="apex-dot" />
             {apexLead !== null && <line {...apexLead} className="label-leader" />}
-            <text x={scene.labels.apex.x} y={scene.labels.apex.y} textAnchor={scene.labels.apex.anchor} className="scene-label apex-label">{scene.labels.apex.text}</text>
+            <text x={scene.labels.apex.x} y={scene.labels.apex.y} textAnchor={scene.labels.apex.anchor} className="scene-label apex-label">{concealed ? concealNumbers(scene.labels.apex.text) : scene.labels.apex.text}</text>
             <circle cx={scene.land.px} cy={scene.land.py} r={4} className="landing-dot" />
             <text x={scene.labels.landing.x} y={scene.labels.landing.y} textAnchor={scene.labels.landing.anchor} className="scene-label-small">{scene.labels.landing.text}</text>
           </g>
@@ -134,6 +139,7 @@ export function ProjectileView({ spec, inputs, onInput, pb, predict, sourceText 
         </div>
       </div>
 
+      {equation}
       {predict}
 
       <div className="controls-row">
@@ -146,7 +152,7 @@ export function ProjectileView({ spec, inputs, onInput, pb, predict, sourceText 
           ))}
         </div>
         <dl className="readouts" aria-label="Live readouts from the engine">
-          <Readout name="Max height (engine)" value={fixed(scene.maxHeightM, 3)} unit="m" accent="a" />
+          <Readout name="Max height (engine)" value={fixed(scene.maxHeightM, 3)} unit="m" accent="a" concealed={concealed} />
           <Readout name="Flight time (engine)" value={fixed(scene.flightTimeS, 3)} unit="s" accent="v" />
           <Readout name="Range" value={fixed(scene.rangeM, 2)} unit="m" accent="x" />
           <Readout name="Now: x, height" value={`${fixed(now.x, 1)}, ${fixed(now.y, 1)}`} unit="m" />
