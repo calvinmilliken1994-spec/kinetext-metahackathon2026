@@ -95,9 +95,18 @@ export function sliderModels(spec: ActivitySpec): SliderModel[] {
   return out;
 }
 
-/** The spec's default slider positions, keyed by engine input key. */
+/**
+ * The lesson's OPENING slider positions, keyed by engine input key (Stage 7): the first prediction (`predictions[0]`, the
+ * lesson's own opening scenario) clamped into each slider's range. The spec default is used only when there is no case,
+ * or for an input the case does not carry as a finite number. Every view opens here and Reset returns here.
+ */
 export function defaultInputs(spec: ActivitySpec): Record<string, number> {
-  return Object.fromEntries(sliderModels(spec).map((m) => [m.key, m.value]));
+  const first = (spec.predictions as readonly unknown[] | undefined)?.[0];
+  const rec = typeof first === 'object' && first !== null ? first as Record<string, unknown> : {};
+  return Object.fromEntries(sliderModels(spec).map((m) => {
+    const v = rec[m.key];
+    return [m.key, typeof v === 'number' && Number.isFinite(v) ? clampToSlider(m, v) : m.value];
+  }));
 }
 
 /** Largest value of each input range (used to fix drawing scales so moving a slider visibly changes the picture). */

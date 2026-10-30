@@ -4,7 +4,8 @@ import { engineOutput, formatWithUnit, rangeMaxima, scenarioLabels, shortInputLa
 import { fixed, trimmed } from '../lib/format.ts';
 import { linearScale, niceAxis, pointString } from '../lib/charts.ts';
 import { decayPoints, formatAmount, fractionLabel, halfLifeMarkers, halfLivesElapsed, markerLabelStride } from '../lib/decay.ts';
-import { Readout, SchematicTag, Slider } from './controls.tsx';
+import type { StaticViewProps } from './ProjectileView.tsx';
+import { Readout, ResetSliders, SchematicTag, Slider } from './controls.tsx';
 
 export const HALF_LIFE_LABEL = 'Schematic — the smooth average curve; a real sample decays atom by atom at random';
 
@@ -14,13 +15,7 @@ const PLOT = { l: 100, r: 760, t: 68, b: 276 };
 const CURVE_STEPS = 120;
 const MIN_LABEL_GAP_PX = 64;
 
-interface Props {
-  spec: HalfLifeActivitySpec;
-  inputs: Record<string, number>;
-  onInput: (key: string, value: number) => void;
-}
-
-export function HalfLifeView({ spec, inputs, onInput }: Props) {
+export function HalfLifeView({ spec, inputs, onInput, onReset, predict }: StaticViewProps<HalfLifeActivitySpec>) {
   const titleId = useId();
   const models = sliderModels(spec);
   const sc = scenarioLabels(spec);
@@ -100,11 +95,14 @@ export function HalfLifeView({ spec, inputs, onInput }: Props) {
           : `One half-life (${formatWithUnit(halfLife, timeUnit, (n) => trimmed(n, 3))}) is longer than the time axis, so no half-life dots are drawn.`}
       </p>
 
+      {predict}
+
       <div className="controls-row">
         <div className="sliders">
           {models.map((m) => (
             <Slider key={m.key} label={shortInputLabel(m.label)} unit={m.unit} min={m.min} max={m.max} step={m.step} value={inputs[m.key] ?? m.value} onChange={(v) => onInput(m.key, v)} />
           ))}
+          <ResetSliders onReset={onReset} />
         </div>
         <dl className="readouts" aria-label="Live readouts from the engine">
           <Readout name="Remaining N (engine)" value={formatAmount(remaining)} unit="" accent="x" />

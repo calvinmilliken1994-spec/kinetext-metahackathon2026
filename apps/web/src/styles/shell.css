@@ -1,1 +1,34 @@
 /* Stage 7 slice 'shell' styles (docs/specs/STAGE-7-teacher-polish.md). Uses the tokens in ../styles.css. */
+
+/* ---- Provenance: one review status + the trust receipt, then one plain line ------------------------------------- */
+.provenance { display: grid; gap: 6px; max-width: none; }
+.prov-status { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; }
+.review-status { font-size: var(--fs-14); font-weight: var(--fw-medium); color: var(--ink); }
+.prov-line { max-width: 75ch; }
+
+/* The receipt is a quiet button: counts in tabular figures, colour only when something did not pass. */
+.receipt-btn {
+  display: inline-flex; align-items: center; gap: 0; padding: 3px 6px 3px 10px;
+  border: 1px solid var(--line-2); border-radius: var(--r-s); background: transparent;
+  color: var(--ink); font-size: var(--fs-14); font-variant-numeric: tabular-nums; line-height: 1.4; cursor: pointer;
+}
+.receipt-btn:hover { background: var(--panel-2); border-color: var(--line-3); }
+.receipt-btn[aria-expanded="true"] { background: var(--panel-2); }
+.receipt-btn .icon { margin-left: 6px; color: var(--ink-3); }
+.receipt-seg { white-space: nowrap; }
+.receipt-seg.tone-ok, .receipt-seg.tone-neutral { color: var(--ink); }
+.receipt-seg.tone-bad, .receipt-seg.tone-warn { color: var(--bad); }
+.receipt-sep { margin: 0 7px; color: var(--ink-3); }
+
+/* The checks it opens: the drawer's panels, laid on the lesson column without their drawer rules. */
+.receipt-panel {
+  margin-top: 4px; padding: 4px 16px 8px; border: 1px solid var(--line); border-radius: var(--r-l); background: var(--panel);
+}
+.receipt-panel .drawer-section { padding: 12px 0; border-top: 0; }
+.receipt-panel .drawer-section + .drawer-section { border-top: 1px solid var(--line); }
+.receipt-panel .card-head { margin-bottom: 0; }
+
+/* ---- Drawer: its title, no second tab strip (the rail switches panels) ------------------------------------------- */
+.drawer-title { margin: 0; font-size: var(--fs-16); font-weight: var(--fw-bold); color: var(--ink); }
+.drawer-title:focus { outline: none; }
+

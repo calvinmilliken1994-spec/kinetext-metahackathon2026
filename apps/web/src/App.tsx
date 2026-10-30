@@ -3,7 +3,8 @@ import { api, describeError } from './api.ts';
 import { useHealth, useJobDetail, useJobs, useModels, useSourceDoc, useSources } from './hooks.ts';
 import { buildHighlights } from './lib/highlight.ts';
 import { collectQuoteRefs } from './lib/evidence.ts';
-import { newestFirst, pickDefaultJob } from './lib/jobs.ts';
+import { newestFirst, pickDefaultJob, pickOpeningJob, requestedJobId } from './lib/jobs.ts';
+import type { OpeningJob } from './lib/jobs.ts';
 import { generateState, isServerBusy } from './lib/health.ts';
 import { madeWithPhrase, modelToSend, pickModel, readStoredModel, resolveJobModel, writeStoredModel } from './lib/models.ts';
 import type { ModelId } from './lib/models.ts';
@@ -16,7 +17,8 @@ import { defaultRevision, overallRepairBadge, revisionInputs, validationHeading 
 import { timelineEventLabels } from './lib/timeline.ts';
 import { demoFaultToSend, disclosureText } from './lib/sources.ts';
 import type { DemoChoice } from './lib/sources.ts';
-import { activityRepairCounts, lessonRepairCounts, repairPhrases } from './lib/provenance.ts';
+import { activityRepairCounts, checkTally, lessonRepairCounts, quoteTally, repairPhrases, sectionTally } from './lib/provenance.ts';
+import { readStoredTech, writeStoredTech } from './lib/techDetails.ts';
 import { revealInPanels, scrollPanelToTop } from './lib/scroll.ts';
 import { ApiStatus } from './components/ApiStatus.tsx';
 import { AppWindow } from './components/AppWindow.tsx';
@@ -35,25 +37,23 @@ import { LessonView } from './components/LessonView.tsx';
 import { ComponentRepairTimeline } from './components/ComponentRepairTimeline.tsx';
 import { LessonChecksPanel } from './components/LessonChecksPanel.tsx';
 import { Provenance } from './components/Provenance.tsx';
+import type { ProvenanceReceipt } from './components/Provenance.tsx';
 import type { SourceRef } from '../../../packages/contracts/index.ts';
 
 const NO_JOBS: never[] = [];
-
-/** After React has shown a panel, scroll the drawer (never the page) to a section and move focus to its heading. */
-function revealAfterRender(find: () => HTMLElement | null): void {
-  requestAnimationFrame(() => requestAnimationFrame(() => {
-    const el = find();
-    if (el === null) return;
-    revealInPanels(el, 'start', 8);
-    const heading = el.matches('h2, h3') ? el : el.querySelector<HTMLElement>('h2, h3');
-    if (heading !== null) { heading.tabIndex = -1; heading.focus({ preventScroll: true }); }
-  }));
-}
 
 /** The model choice lasts for the browser session (a reload keeps it); blocked storage just means it lasts for the page. */
 function sessionStore(): Storage | null {
   try { return typeof window === 'undefined' ? null : window.sessionStorage; } catch { return null; }
 }
+
+/** Kept across visits (like the colour theme); blocked storage just means it lasts for the page. */
+function localStore(): Storage | null {
+  try { return typeof window === 'undefined' ? null : window.localStorage; } catch { return null; }
+}
+
+/** `?job=<id>` opens that stored run instead of the most recent lesson. */
+const LINKED_JOB = typeof window === 'undefined' ? null : requestedJobId(window.location.search);
 
 export function App() {
   const { health, down, refresh: refreshHealth } = useHealth();
@@ -74,8 +74,25 @@ export function App() {
   const [wantedModel, setWantedModel] = useState<ModelId | null>(() => readStoredModel(sessionStore()));
   const modelChoice = pickModel(models, wantedModel);
 
+  // Window layout: the lesson and its source page fill the window; runs, steps and checks open in a drawer from the rail.
+  const [showSource, setShowSource] = useState(true);
+  const [drawer, setDrawer] = useState<DrawerMode | null>(null);
+  const [tech, setTech] = useState(() => readStoredTech(localStore()));
+  const onTech = useCallback((on: boolean) => { setTech(on); writeStoredTech(localStore(), on); }, []);
+
+  // Stage 7: the app opens on a chosen lesson — a ?job= link, else the most recent succeeded lesson-flow run — and
+  // else on the New lesson view; never on whatever old run belongs to the first source in the list. Decided once,
+  // when the runs list first arrives, so a run finishing later never pulls the view away.
+  const [opening, setOpening] = useState<OpeningJob | null | undefined>(undefined);
+  if (opening === undefined && jobs.state !== 'loading') {
+    const first = jobs.state === 'ready' ? pickOpeningJob(jobs.data, LINKED_JOB) : null;
+    setOpening(first);
+    if (first === null && jobs.state === 'ready') setDrawer('new');
+  }
+
   const sourceList = sources.state === 'ready' ? sources.data : null;
-  const selectedSourceId = pickedSource ?? sourceList?.[0]?.id ?? null;
+  const openingSourceId = opening !== null && opening !== undefined && sourceList?.some((s) => s.id === opening.sourceId) === true ? opening.sourceId : null;
+  const selectedSourceId = pickedSource ?? openingSourceId ?? (opening === undefined ? null : sourceList?.[0]?.id ?? null);
   const selectedSource = sourceList?.find((s) => s.id === selectedSourceId) ?? null;
 
   const allJobs = jobs.state === 'ready' ? jobs.data : NO_JOBS;
@@ -87,7 +104,9 @@ export function App() {
 
   const selectedJobId = pickedJob !== null && pickedJob.sourceId === selectedSourceId
     ? pickedJob.jobId
-    : pickDefaultJob(jobsForSource, generate.busy)?.jobId ?? null;
+    : pickedSource === null && openingSourceId !== null && opening !== null && opening !== undefined
+      ? opening.jobId
+      : pickDefaultJob(jobsForSource, generate.busy)?.jobId ?? null;
   const detail = useJobDetail(selectedJobId);
   const ready = detail?.state === 'ready' && detail.data.summary.sourceId === selectedSourceId ? detail.data : null;
 
@@ -108,9 +127,6 @@ export function App() {
   );
   const located = useMemo(() => new Set(Object.keys(highlights?.ranges ?? {})), [highlights]);
 
-  // Window layout: the lesson and its source page fill the window; runs, steps and checks open in a drawer from the rail.
-  const [showSource, setShowSource] = useState(true);
-  const [drawer, setDrawer] = useState<DrawerMode | null>(null);
   const mainRef = useRef<HTMLElement>(null);
   // A citation highlights its quote in the source text, so it brings the source panel back if it was hidden.
   const onCite = useCallback((key: string) => { setShowSource(true); setFlash((f) => ({ key, n: (f?.n ?? 0) + 1 })); }, []);
@@ -124,10 +140,6 @@ export function App() {
   }, []);
   const openDrawer = useCallback((mode: DrawerMode) => setDrawer(mode), []);
   const closeDrawer = useCallback(() => setDrawer(null), []);
-  const onChecks = useCallback(() => {
-    setDrawer('runs');
-    revealAfterRender(() => document.getElementById('drawer-checks'));
-  }, []);
 
   const onGenerate = useCallback(() => {
     if (selectedSourceId === null) return;
@@ -194,8 +206,6 @@ export function App() {
     attribution: selectedSource.attribution, sha256: selectedSource.sha256,
   }]), [selectedSource]);
 
-  const hasChecks = ready !== null && (report !== null || analysisReport !== null || (ready.lessonData !== undefined && checkSections.length > 0));
-
   // The one provenance line under the lesson title: who wrote it (and on which model), the publisher disclosure, that code
   // checked it, that it needs teacher review, and which repairs happened (natural vs system-made), with a way to the details.
   const disclosure = disclosureText(selectedSource, jobModel === null ? undefined : madeWithPhrase(jobModel));
@@ -208,11 +218,32 @@ export function App() {
         repaired: repairBadge === null ? null : repairBadge.tone === 'fault' ? 'system' : 'natural',
         demoFault: ready.summary.demoFault !== undefined,
       });
+  // The trust receipt: counts from the stored run (checks of the published result), the page text beside the lesson
+  // (quotes found) and the job's recorded cost. It opens the same check list as the drawer. Not shown while running.
+  const publishedReport = revisions.find((r) => r.revision === defaultRev)?.report ?? ready?.report ?? null;
+  const receipt = useMemo((): ProvenanceReceipt | null => {
+    if (ready === null || ready.summary.status === 'running') return null;
+    const lesson = ready.lessonData !== undefined;
+    const checks = lesson ? sectionTally(checkSections) : checkTally(publishedReport);
+    if (checks === null) return null;
+    return {
+      input: {
+        checks,
+        quotes: quoteTally(quotes, highlights === null ? null : located),
+        costUSD: ready.summary.totalCostUSD,
+        reservedUSD: ready.summary.reservedUnknownUSD,
+      },
+      checks: lesson
+        ? <LessonChecksPanel sections={checkSections} />
+        : publishedReport !== null && <ValidationPanel report={publishedReport} heading={validationHeading(defaultRev, revisions.length, ready.summary.publishedRevision)} showPublish={false} compact />,
+    };
+  }, [ready, checkSections, publishedReport, quotes, highlights, located, defaultRev, revisions.length]);
   const provenance = (
     <Provenance
       disclosure={disclosure}
       phrases={repairCounts === null ? [] : repairPhrases(repairCounts)}
       onDetails={ready === null ? undefined : () => openDrawer('runs')}
+      receipt={receipt}
     />
   );
 
@@ -222,10 +253,8 @@ export function App() {
         <IconRail
           showSource={showSource}
           drawer={drawer}
-          onNewLesson={() => openDrawer('new')}
+          onNewLesson={() => (drawer === 'new' ? closeDrawer() : openDrawer('new'))}
           onLesson={onLesson}
-          onChecks={onChecks}
-          hasChecks={hasChecks}
           onToggleSource={() => setShowSource((v) => !v)}
           onRuns={() => (drawer === 'runs' ? closeDrawer() : openDrawer('runs'))}
           busy={generate.busy}
@@ -297,7 +326,7 @@ export function App() {
         </div>
 
         {drawer !== null && (
-          <RunsDrawer mode={drawer} onMode={setDrawer} onClose={closeDrawer}>
+          <RunsDrawer mode={drawer} onClose={closeDrawer} tech={tech} onTech={onTech}>
             {drawer === 'new' && (
               <NewLessonSection
                 sources={sources}

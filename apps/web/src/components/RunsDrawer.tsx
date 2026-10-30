@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useRef } from 'react';
 import type { ReactNode } from 'react';
 import { IconClose } from './icons.tsx';
 
@@ -6,23 +6,25 @@ export type DrawerMode = 'new' | 'runs';
 
 interface Props {
   mode: DrawerMode;
-  onMode: (mode: DrawerMode) => void;
   onClose: () => void;
+  /** "Show technical details" (persisted by the app; off on a first visit). */
+  tech: boolean;
+  onTech: (on: boolean) => void;
   children: ReactNode;
 }
 
-const TITLES: Record<DrawerMode, string> = { new: 'New lesson', runs: 'Runs and checks' };
+export const DRAWER_TITLES: Record<DrawerMode, string> = { new: 'New lesson', runs: 'Runs and checks' };
 
 /**
- * The pipeline drawer, opened from the rail: "New lesson" (page, model, Generate, run options) or "Runs and checks"
- * (the runs for this page, their steps, repairs and checks). On wide windows it sits beside the lesson; on narrower
- * ones it slides over it. Esc or the close button dismisses it, and focus returns to whatever opened it.
+ * The pipeline drawer. The rail is its only switch: "New lesson" (page, model, Generate, run options) or "Runs"
+ * (the runs for this page, their steps, repairs and checks) — the drawer itself shows just its title, no second tab
+ * strip. On wide windows it sits beside the lesson; on narrower ones it slides over it. Esc or the close button
+ * dismisses it, and focus returns to whatever opened it.
  */
-export function RunsDrawer({ mode, onMode, onClose, children }: Props) {
+export function RunsDrawer({ mode, onClose, tech, onTech, children }: Props) {
   const headingId = useId();
   const ref = useRef<HTMLElement>(null);
   const opener = useRef<HTMLElement | null>(null);
-  const [tech, setTech] = useState(false);
 
   // Remember what had focus when the drawer opened, and give it back on close.
   useEffect(() => {
@@ -39,7 +41,7 @@ export function RunsDrawer({ mode, onMode, onClose, children }: Props) {
     if (root === null) return;
     root.querySelector<HTMLElement>('.drawer-body')?.scrollTo({ top: 0 });
     const first = mode === 'new' ? root.querySelector<HTMLElement>('#new-lesson-source') : null;
-    (first ?? root.querySelector<HTMLElement>('.seg[aria-pressed="true"]'))?.focus({ preventScroll: true });
+    (first ?? root.querySelector<HTMLElement>('.drawer-title'))?.focus({ preventScroll: true });
   }, [mode]);
 
   useEffect(() => {
@@ -56,16 +58,12 @@ export function RunsDrawer({ mode, onMode, onClose, children }: Props) {
       <div className="drawer-scrim" aria-hidden="true" onClick={onClose} />
       <aside ref={ref} className={`drawer${tech ? ' show-tech' : ''}`} aria-labelledby={headingId} data-testid="runs-drawer">
         <header className="drawer-head">
-          <h2 id={headingId} className="sr-only">{TITLES[mode]}</h2>
-          <div className="drawer-tabs" role="group" aria-label="Panel">
-            <button type="button" className="seg" aria-pressed={mode === 'new'} onClick={() => onMode('new')}>New lesson</button>
-            <button type="button" className="seg" aria-pressed={mode === 'runs'} onClick={() => onMode('runs')}>Runs and checks</button>
-          </div>
+          <h2 id={headingId} className="drawer-title" tabIndex={-1}>{DRAWER_TITLES[mode]}</h2>
           <button type="button" className="chrome-btn" onClick={onClose} aria-label="Close panel (Esc)" title="Close (Esc)"><IconClose /></button>
         </header>
         {mode === 'runs' && (
           <label className="tech-toggle">
-            <input type="checkbox" checked={tech} onChange={(e) => setTech(e.target.checked)} />
+            <input type="checkbox" checked={tech} onChange={(e) => onTech(e.target.checked)} />
             Show technical details (ids, tokens, model strings)
           </label>
         )}

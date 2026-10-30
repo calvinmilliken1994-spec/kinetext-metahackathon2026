@@ -38,8 +38,15 @@ export function buildExplorer(spec: FormulaExplorerSpec): ExplorerResult {
 
 const clamp = (v: number, lo: number, hi: number): number => Math.min(hi, Math.max(lo, v));
 
+/**
+ * The explorer's OPENING slider positions (Stage 7): the first case's inputs (the page's own opening scenario), each clamped
+ * into its slider range; a variable's default only when there is no case or the case does not give that variable a finite
+ * value. The view opens here and "Reset sliders" returns here.
+ */
 export function defaultInputs(spec: FormulaExplorerSpec): Inputs {
-  return Object.fromEntries(spec.variables.map((v) => [v.name, clamp(v.default, v.min, v.max)]));
+  const first = spec.cases[0];
+  const given = new Map((first?.inputs ?? []).filter((i) => Number.isFinite(i.value)).map((i) => [i.name, i.value] as const));
+  return Object.fromEntries(spec.variables.map((v) => [v.name, clamp(given.get(v.name) ?? v.default, v.min, v.max)]));
 }
 
 /** Slider step: the range in 100 equal steps (design §2.7). */

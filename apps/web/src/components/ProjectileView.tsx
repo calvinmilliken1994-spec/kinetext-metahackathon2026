@@ -1,68 +1,66 @@
 import { useId, useMemo } from 'react';
-import { simulate, stateAt } from '../../../../packages/activities/projectile-v1/engine.ts';
+import type { ReactNode } from 'react';
+import { stateAt } from '../../../../packages/activities/projectile-v1/engine.ts';
 import type { ProjectileActivitySpec } from '../../../../packages/contracts/index.ts';
-import { projectileSummary, scenarioLabels, sliderModels } from '../lib/engines.ts';
+import { scenarioLabels, sliderModels } from '../lib/engines.ts';
 import { fixed, trimmed } from '../lib/format.ts';
-import { projectileLayout } from '../lib/geometry.ts';
+import { leaderLine, PROJECTILE_FRAME, projectileScene } from '../lib/geometry.ts';
+import type { Px } from '../lib/geometry.ts';
+import { activePreset, comparisonValues, pagePresets } from '../lib/presets.ts';
 import { Readout, SchematicTag, Slider } from './controls.tsx';
 import type { PlaybackCtl } from './usePlayback.ts';
 import { IconPause, IconPlay, IconReplay, IconReset } from './icons.tsx';
 
 export const PROJECTILE_LABEL = 'Schematic — drag-free model';
 
-const W = 800;
-const H = 320;
-const BOX = { left: 64, right: 760, top: 56, bottom: 252 };
+const { W, H, box: BOX, titleY, tickLabelDy } = PROJECTILE_FRAME;
 
 export interface ClosedFormViewProps<S> {
   spec: S;
   inputs: Record<string, number>;
   onInput: (key: string, value: number) => void;
   pb: PlaybackCtl;
+  /** Case 1's predict card: rendered right under the scene and its playback bar, above the sliders. */
+  predict?: ReactNode;
+  /** Sliders back to the lesson's opening case. */
+  onReset: () => void;
 }
 
-export function ProjectileView({ spec, inputs, onInput, pb }: ClosedFormViewProps<ProjectileActivitySpec>) {
+/** The views without a playback clock (lift, compound interest, Hardy-Weinberg, half-life). */
+export type StaticViewProps<S> = Omit<ClosedFormViewProps<S>, 'pb'>;
+
+const pts = (list: readonly Px[]): string => list.map((p) => `${p.px.toFixed(1)},${p.py.toFixed(1)}`).join(' ');
+
+export function ProjectileView({ spec, inputs, onInput, pb, predict, sourceText }: ClosedFormViewProps<ProjectileActivitySpec> & { sourceText?: string | null }) {
   const titleId = useId();
   const scrubId = useId();
   const models = sliderModels(spec);
   const sc = scenarioLabels(spec);
-  const summary = useMemo(() => projectileSummary(inputs), [inputs]);
+  const label = `${sc.objectLabel}${sc.placeLabel !== '' ? ` · ${sc.placeLabel}` : ''}`;
   const input = useMemo(() => ({
     horizontalSpeedMps: inputs['horizontalSpeedMps'] ?? 0,
     verticalSpeedMps: inputs['verticalSpeedMps'] ?? 0,
     gravityMps2: inputs['gravityMps2'] ?? 0,
   }), [inputs]);
+  // Gravity values the lesson's cases use AND the page states: one-click chips, and faint comparison arcs for the others.
+  const gPresets = useMemo(() => pagePresets(spec, 'gravityMps2', sourceText), [spec, sourceText]);
+  const ghostGs = useMemo(() => comparisonValues(gPresets, input.gravityMps2), [gPresets, input.gravityMps2]);
+  const scene = useMemo(() => projectileScene(input, ghostGs, label), [input, ghostGs, label]);
 
-  const frames = useMemo(() => {
-    if (summary === null) return [];
-    try {
-      return simulate(input, summary.flightTimeS / 160);
-    } catch {
-      return [];
-    }
-  }, [input, summary]);
-
-  const layout = useMemo(
-    () => (summary === null ? null : projectileLayout(summary.rangeM, summary.maxHeightM, BOX)),
-    [summary],
-  );
-
-  if (summary === null || layout === null || frames.length === 0) {
+  if (scene === null) {
     return <div className="callout callout-error" role="alert">The engine rejected these inputs. Adjust the sliders.</div>;
   }
 
-  const now = stateAt(input, pb.t);
+  const { layout } = scene;
+  const now = stateAt(input, Math.min(pb.t, scene.flightTimeS));
   const pos = layout.toPx(now.x, now.y);
-  const path = frames.map((f) => { const p = layout.toPx(f.x, f.y); return `${p.px.toFixed(1)},${p.py.toFixed(1)}`; }).join(' ');
-  const trail = frames.filter((f) => f.t <= now.t).map((f) => { const p = layout.toPx(f.x, f.y); return `${p.px.toFixed(1)},${p.py.toFixed(1)}`; });
-  trail.push(`${pos.px.toFixed(1)},${pos.py.toFixed(1)}`);
-  const apex = stateAt(input, summary.apexTimeS);
-  const apexPx = layout.toPx(apex.x, apex.y);
-  const land = layout.toPx(summary.rangeM, 0);
-  const finished = pb.t >= summary.flightTimeS - 1e-9;
-  const label = `${sc.objectLabel}${sc.placeLabel !== '' ? ` · ${sc.placeLabel}` : ''}`;
-  const alt = `${label}. Launched at ${trimmed(input.horizontalSpeedMps, 3)} metres per second sideways and ${trimmed(input.verticalSpeedMps, 3)} upward under ${trimmed(input.gravityMps2, 3)} metres per second squared. Maximum height ${fixed(summary.maxHeightM, 2)} metres, flight time ${fixed(summary.flightTimeS, 2)} seconds. At ${fixed(now.t, 2)} seconds: x ${fixed(now.x, 2)} metres, height ${fixed(now.y, 2)} metres.`;
-  const apexLabelLeft = apexPx.px > BOX.right - 150;
+  const trail = scene.points.filter((_, i) => (scene.pointTimes[i] ?? 0) <= now.t + 1e-9);
+  trail.push(pos);
+  const finished = pb.t >= scene.flightTimeS - 1e-9;
+  const ghostText = scene.ghosts.map((g) => `${trimmed(g.gravityMps2, 4)} metres per second squared, which peaks at ${fixed(g.maxHeightM, 2)} metres`).join('; ');
+  const alt = `${label}. Launched at ${trimmed(input.horizontalSpeedMps, 3)} metres per second sideways and ${trimmed(input.verticalSpeedMps, 3)} upward under ${trimmed(input.gravityMps2, 3)} metres per second squared. Maximum height ${fixed(scene.maxHeightM, 2)} metres, flight time ${fixed(scene.flightTimeS, 2)} seconds. At ${fixed(now.t, 2)} seconds: x ${fixed(now.x, 2)} metres, height ${fixed(now.y, 2)} metres.${ghostText === '' ? '' : ` Faint comparison arc for the same launch at the page's other gravity value: ${ghostText}.`}`;
+  const apexLead = leaderLine(scene.labels.apex, scene.apex);
+  const active = activePreset(gPresets, input.gravityMps2);
 
   return (
     <div className="simulation" data-engine="projectile-v1">
@@ -70,67 +68,87 @@ export function ProjectileView({ spec, inputs, onInput, pb }: ClosedFormViewProp
       <div className="scene-wrap">
         <svg className="scene" viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby={titleId} preserveAspectRatio="xMidYMid meet">
           <title id={titleId}>{alt}</title>
-          <text x={BOX.left} y={26} className="object-label">{label}</text>
+          <text x={BOX.left} y={titleY} className="object-label">{label}</text>
           <rect x={BOX.left - 14} y={BOX.bottom - 3} width={BOX.right - BOX.left + 28} height={8} rx={4} className="track-band" />
           {layout.xTicks.map((x) => {
             const p = layout.toPx(x, 0);
             return (
               <g key={x} aria-hidden="true">
-                <line x1={p.px} y1={BOX.bottom + 5} x2={p.px} y2={BOX.bottom + 14} className={x === 0 ? 'tick tick-zero' : 'tick'} />
-                <text x={p.px} y={BOX.bottom + 30} textAnchor="middle" className="tick-label">{trimmed(x, 3)}</text>
+                <line x1={p.px} y1={BOX.bottom + 5} x2={p.px} y2={BOX.bottom + 12} className={x === 0 ? 'tick tick-zero' : 'tick'} />
+                <text x={p.px} y={BOX.bottom + tickLabelDy} textAnchor="middle" className="tick-label">{trimmed(x, 3)}</text>
               </g>
             );
           })}
-          <text x={BOX.right + 28} y={BOX.bottom + 30} textAnchor="end" className="tick-label tick-unit">m</text>
+          <text x={BOX.right + 28} y={BOX.bottom + tickLabelDy} textAnchor="end" className="tick-label tick-unit">m</text>
 
-          <polyline points={path} fill="none" className="traj-ghost" />
-          <polyline points={trail.join(' ')} fill="none" className="traj-trail" />
+          {scene.ghosts.map((g) => {
+            const lead = leaderLine(g.label, g.apex);
+            return (
+              <g key={g.gravityMps2} className="compare-arc" aria-hidden="true">
+                <polyline points={pts(g.points)} fill="none" className="traj-compare" />
+                {lead !== null && <line {...lead} className="label-leader" />}
+                <text x={g.label.x} y={g.label.y} textAnchor={g.label.anchor} className="scene-label-small compare-label">{g.label.text}</text>
+              </g>
+            );
+          })}
+
+          <polyline points={pts(scene.points)} fill="none" className="traj-ghost" />
+          <polyline points={pts(trail)} fill="none" className="traj-trail" />
 
           <g aria-hidden="true">
-            <line x1={apexPx.px} y1={apexPx.py} x2={apexPx.px} y2={BOX.bottom} className="guide" />
-            <circle cx={apexPx.px} cy={apexPx.py} r={5.5} className="apex-dot" />
-            <text x={apexLabelLeft ? apexPx.px - 10 : apexPx.px + 10} y={apexPx.py - 8} textAnchor={apexLabelLeft ? 'end' : 'start'} className="scene-label apex-label">
-              max height {fixed(summary.maxHeightM, 2)} m
-            </text>
-            <circle cx={land.px} cy={land.py} r={4} className="landing-dot" />
-            <text x={Math.min(land.px, BOX.right + 20)} y={BOX.bottom - 20} textAnchor="end" className="scene-label-small">lands at t = {fixed(summary.flightTimeS, 2)} s</text>
+            <line x1={scene.apex.px} y1={scene.apex.py} x2={scene.apex.px} y2={BOX.bottom} className="guide" />
+            <circle cx={scene.apex.px} cy={scene.apex.py} r={5.5} className="apex-dot" />
+            {apexLead !== null && <line {...apexLead} className="label-leader" />}
+            <text x={scene.labels.apex.x} y={scene.labels.apex.y} textAnchor={scene.labels.apex.anchor} className="scene-label apex-label">{scene.labels.apex.text}</text>
+            <circle cx={scene.land.px} cy={scene.land.py} r={4} className="landing-dot" />
+            <text x={scene.labels.landing.x} y={scene.labels.landing.y} textAnchor={scene.labels.landing.anchor} className="scene-label-small">{scene.labels.landing.text}</text>
           </g>
 
           <circle cx={pos.px} cy={pos.py} r={9} className="ball" />
         </svg>
       </div>
+      {scene.ghosts.length > 0 && (
+        <p className="muted small compare-note">
+          Faint dotted arc: the same launch at {scene.ghosts.map((g) => `g = ${trimmed(g.gravityMps2, 4)} m/s²`).join(' and ')}, {scene.ghosts.length === 1 ? 'the other value the page states' : 'the other values the page states'}, drawn on the same scale.
+        </p>
+      )}
 
       <div className="transport" role="group" aria-label="Playback">
         <button type="button" className="btn btn-primary" onClick={pb.playing ? pb.pause : pb.play}>
           {pb.playing ? <><IconPause /> Pause</> : finished ? <><IconReplay /> Replay</> : <><IconPlay /> Play</>}
         </button>
-        <button type="button" className="btn" onClick={pb.reset}><IconReset /> Reset</button>
+        <button type="button" className="btn" onClick={pb.reset} title="Back to the lesson's opening case, paused at t = 0"><IconReset /> Reset</button>
         <div className="scrub">
           <label htmlFor={scrubId}>Time</label>
           <input
             id={scrubId}
             type="range"
             min={0}
-            max={summary.flightTimeS}
-            step={summary.flightTimeS / 200}
-            value={pb.t}
-            aria-valuetext={`${fixed(pb.t, 2)} of ${fixed(summary.flightTimeS, 2)} seconds`}
+            max={scene.flightTimeS}
+            step={scene.flightTimeS / 200}
+            value={Math.min(pb.t, scene.flightTimeS)}
+            aria-valuetext={`${fixed(pb.t, 2)} of ${fixed(scene.flightTimeS, 2)} seconds`}
             onChange={(e) => pb.scrub(Number(e.target.value))}
           />
-          <output htmlFor={scrubId} className="scrub-value">{fixed(pb.t, 2)} / {fixed(summary.flightTimeS, 2)} s</output>
+          <output htmlFor={scrubId} className="scrub-value">{fixed(Math.min(pb.t, scene.flightTimeS), 2)} / {fixed(scene.flightTimeS, 2)} s</output>
         </div>
       </div>
+
+      {predict}
 
       <div className="controls-row">
         <div className="sliders">
           {models.map((m) => (
-            <Slider key={m.key} label={m.label} unit={m.unit} min={m.min} max={m.max} step={m.step} value={inputs[m.key] ?? m.value} onChange={(v) => onInput(m.key, v)} />
+            <Slider
+              key={m.key} label={m.label} unit={m.unit} min={m.min} max={m.max} step={m.step} value={inputs[m.key] ?? m.value} onChange={(v) => onInput(m.key, v)}
+              presets={m.key === 'gravityMps2' ? gPresets.map((p) => ({ value: p.value, label: p.label, title: `On the page: “${p.sentence}”`, active: p === active })) : undefined}
+            />
           ))}
         </div>
         <dl className="readouts" aria-label="Live readouts from the engine">
-          <Readout name="Max height (engine)" value={fixed(summary.maxHeightM, 3)} unit="m" accent="a" />
-          <Readout name="Flight time (engine)" value={fixed(summary.flightTimeS, 3)} unit="s" accent="v" />
-          <Readout name="Range" value={fixed(summary.rangeM, 2)} unit="m" accent="x" />
+          <Readout name="Max height (engine)" value={fixed(scene.maxHeightM, 3)} unit="m" accent="a" />
+          <Readout name="Flight time (engine)" value={fixed(scene.flightTimeS, 3)} unit="s" accent="v" />
+          <Readout name="Range" value={fixed(scene.rangeM, 2)} unit="m" accent="x" />
           <Readout name="Now: x, height" value={`${fixed(now.x, 1)}, ${fixed(now.y, 1)}`} unit="m" />
         </dl>
       </div>

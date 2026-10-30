@@ -3,6 +3,7 @@ import type { ChangeEvent } from 'react';
 import { readableNumber, sliderEndLabel } from '../lib/format.ts';
 import { stopIndex } from '../lib/compound.ts';
 import { unitForValue } from '../lib/engines.ts';
+import { IconReset } from './icons.tsx';
 
 export interface SliderProps {
   label: string;
@@ -15,9 +16,13 @@ export interface SliderProps {
   step: number;
   value: number;
   onChange: (v: number) => void;
+  /** One-click values stated on the source page (Stage 7); the slider stays free. `title` is the page sentence. */
+  presets?: readonly SliderPreset[];
 }
 
-export function Slider({ label, symbol, unit, min, max, step, value, onChange }: SliderProps) {
+export interface SliderPreset { value: number; label: string; title: string; active: boolean }
+
+export function Slider({ label, symbol, unit, min, max, step, value, onChange, presets }: SliderProps) {
   const id = useId();
   const shown = readableNumber(value);
   const shownUnit = unitForValue(unit, Number(shown));
@@ -38,6 +43,16 @@ export function Slider({ label, symbol, unit, min, max, step, value, onChange }:
         onChange={(e: ChangeEvent<HTMLInputElement>) => onChange(Number(e.target.value))}
       />
       <div className="slider-ends" aria-hidden="true"><span>{sliderEndLabel(min, unit)}</span><span>{sliderEndLabel(max, unit)}</span></div>
+      {presets !== undefined && presets.length > 0 && (
+        <div className="slider-presets" role="group" aria-label={`${label}: values stated on the page`}>
+          <span className="slider-presets-label">On the page</span>
+          {presets.map((p) => (
+            <button key={p.value} type="button" className="preset-chip" aria-pressed={p.active} title={p.title} onClick={() => onChange(p.value)}>
+              {p.label}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -94,4 +109,13 @@ export function Readout({ name, value, unit, accent }: { name: string; value: st
 /** The honesty label every closed-form animation carries. */
 export function SchematicTag({ text }: { text: string }) {
   return <p className="schematic-tag" role="note">{text}</p>;
+}
+
+/** Sliders back to the lesson's opening case (its first prediction; the spec defaults when there is no case). */
+export function ResetSliders({ onReset }: { onReset: () => void }) {
+  return (
+    <button type="button" className="btn btn-small reset-sliders" onClick={onReset} title="Back to the lesson's opening case">
+      <IconReset /> Reset sliders
+    </button>
+  );
 }

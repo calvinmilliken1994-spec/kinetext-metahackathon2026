@@ -4,7 +4,8 @@ import { engineOutput, scenarioLabels, shortInputLabel, sliderModels } from '../
 import { trimmed } from '../lib/format.ts';
 import { linearScale, pointString } from '../lib/charts.ts';
 import { alleleQ, formatFrequency, frequenciesSumToOne, genotypeBars, heterozygoteCurve } from '../lib/genetics.ts';
-import { Readout, SchematicTag, Slider } from './controls.tsx';
+import type { StaticViewProps } from './ProjectileView.tsx';
+import { Readout, ResetSliders, SchematicTag, Slider } from './controls.tsx';
 
 export const HARDY_WEINBERG_LABEL = 'Schematic — an ideal population: random mating, no selection, migration or drift';
 
@@ -15,13 +16,7 @@ const CURVE = { l: 540, r: 760, t: 84, b: 244 };
 const H_MAX = 0.5;
 const CURVE_STEPS = 50;
 
-interface Props {
-  spec: HardyWeinbergActivitySpec;
-  inputs: Record<string, number>;
-  onInput: (key: string, value: number) => void;
-}
-
-export function HardyWeinbergView({ spec, inputs, onInput }: Props) {
+export function HardyWeinbergView({ spec, inputs, onInput, onReset, predict }: StaticViewProps<HardyWeinbergActivitySpec>) {
   const titleId = useId();
   const models = sliderModels(spec);
   const sc = scenarioLabels(spec);
@@ -92,11 +87,14 @@ export function HardyWeinbergView({ spec, inputs, onInput }: Props) {
         p² + 2pq + q² = {bars.map((b) => formatFrequency(b.frequency)).join(' + ')} = <strong>{formatFrequency(sum)}</strong> — the three genotype frequencies always add up to 1, and so do p + q = {formatFrequency(p)} + {formatFrequency(q)} = {formatFrequency(p + q)}.
       </p>
 
+      {predict}
+
       <div className="controls-row">
         <div className="sliders">
           {models.map((m) => (
             <Slider key={m.key} label={shortInputLabel(m.label)} unit={m.unit} min={m.min} max={m.max} step={m.step} value={inputs[m.key] ?? m.value} onChange={(v) => onInput(m.key, v)} />
           ))}
+          <ResetSliders onReset={onReset} />
         </div>
         <dl className="readouts" aria-label="Live readouts from the engine">
           <Readout name="q = 1 − p" value={formatFrequency(q)} unit="" accent="v" />

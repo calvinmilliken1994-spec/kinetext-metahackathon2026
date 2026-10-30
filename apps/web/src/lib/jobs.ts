@@ -228,14 +228,38 @@ export function newestFirst<T extends Pick<JobLike, 'createdAt'>>(jobs: readonly
   return [...jobs].sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
 }
 
+/** Stage 6 lesson runs carry flow 'lesson'; classic single-activity runs carry 'activity' or (older) nothing. */
+type FlowLike = { flow?: 'lesson' | 'activity' | undefined };
+
 /**
  * Pick the job to show for a source: a running one (only when the SERVER is busy — a stale 'running'
- * record left by a dead process must not hijack the view), else the newest succeeded, else the newest.
+ * record left by a dead process must not hijack the view), else the newest succeeded LESSON run, else the
+ * newest succeeded run, else the newest.
  */
-export function pickDefaultJob<T extends JobLike>(jobsForSource: readonly T[], serverBusy: boolean): T | null {
+export function pickDefaultJob<T extends JobLike & FlowLike>(jobsForSource: readonly T[], serverBusy: boolean): T | null {
   const sorted = newestFirst(jobsForSource);
   return (serverBusy ? sorted.find((j) => j.status === 'running') : undefined)
+    ?? sorted.find((j) => j.status === 'succeeded' && j.flow === 'lesson')
     ?? sorted.find((j) => j.status === 'succeeded')
     ?? sorted[0]
     ?? null;
+}
+
+export interface OpeningJob { jobId: string; sourceId: string }
+
+/**
+ * The run the app opens on: a `?job=` deep link when it names a stored run, else the most recent SUCCEEDED lesson-flow
+ * run across all sources. Null means there is none, and the app opens the New lesson view instead — never an old
+ * classic test run just because its source is first in the list.
+ */
+export function pickOpeningJob<T extends JobLike & FlowLike & { sourceId: string }>(jobs: readonly T[], requested?: string | null): OpeningJob | null {
+  const linked = requested !== undefined && requested !== null && requested !== '' ? jobs.find((j) => j.jobId === requested) : undefined;
+  const pick = linked ?? newestFirst(jobs).find((j) => j.status === 'succeeded' && j.flow === 'lesson');
+  return pick === undefined ? null : { jobId: pick.jobId, sourceId: pick.sourceId };
+}
+
+/** The `?job=<id>` deep link in a query string, or null. */
+export function requestedJobId(search: string): string | null {
+  const id = new URLSearchParams(search).get('job');
+  return id === null || id === '' ? null : id;
 }

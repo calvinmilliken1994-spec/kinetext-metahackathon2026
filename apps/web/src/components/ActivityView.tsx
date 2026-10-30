@@ -16,6 +16,7 @@ import { Explanations } from './Explanations.tsx';
 import type { CiteProps } from './Explanations.tsx';
 import { Mark } from './icons.tsx';
 import { useSimulation } from './useSimulation.ts';
+import { useSourceDoc } from '../hooks.ts';
 import { usePlayback } from './usePlayback.ts';
 import { ProjectileView } from './ProjectileView.tsx';
 import { LiftView } from './LiftView.tsx';
@@ -49,7 +50,10 @@ interface ShellProps extends NumericProps {
   children: ReactNode;
 }
 
-/** Header with the provenance line, last prediction result, engine view, predictions, explanations. */
+/**
+ * Header with the provenance line, the last prediction result, the engine view (which shows case 1's predict card right under
+ * its scene, above the sliders), the remaining cases, explanations.
+ */
 function Shell({ spec, cite, repairBadge, provenance, engine, last, simRef, onRun, children }: ShellProps) {
   const out = outputInfo(engine);
   const unit = out.unit === '' ? '' : ` ${out.unit}`;
@@ -61,13 +65,13 @@ function Shell({ spec, cite, repairBadge, provenance, engine, last, simRef, onRu
           <div className={`last-result ${last.grade.withinTolerance ? 'grade-ok' : 'grade-miss'}`} role="status">
             <strong><Mark kind={last.grade.withinTolerance ? 'ok' : 'bad'} />Prediction {last.index + 1}: {last.grade.withinTolerance ? 'close enough' : 'not close enough'}</strong>
             <span>
-              you guessed {trimmed(last.grade.guess, 4)}{unit}, the engine gives {formatOutputValue(engine, last.grade.actual)}{unit} (±{trimmed(last.grade.tolerance, 6)} allowed)
+              you guessed {trimmed(last.grade.guess, 4)}{unit}, the engine gives {formatOutputValue(engine, last.grade.actual)}{unit} (±{trimmed(last.grade.tolerance, 4)} allowed)
             </span>
           </div>
         )}
         {children}
       </div>
-      <PredictionCards engine={engine} predictions={spec.predictions as AnyPrediction[]} onRun={onRun} />
+      <PredictionCards engine={engine} predictions={spec.predictions as AnyPrediction[]} onRun={onRun} part="rest" />
       <Explanations explanations={spec.explanations} cite={cite} />
     </article>
   );
@@ -80,7 +84,7 @@ function scrollToScene(el: HTMLElement | null): void {
 
 function ForcesActivity(props: NumericProps & { spec: ForcesActivitySpec }) {
   const { spec } = props;
-  const ctl = useSimulation(spec.simulation);
+  const ctl = useSimulation(spec);
   const simRef = useRef<HTMLDivElement>(null);
   const [last, setLast] = useState<LastResult | null>(null);
   const { runWith } = ctl;
@@ -92,28 +96,40 @@ function ForcesActivity(props: NumericProps & { spec: ForcesActivitySpec }) {
     scrollToScene(simRef.current);
   }, [runWith]);
 
+  const predict = <PredictionCards engine="forces-1d-v1" predictions={spec.predictions as AnyPrediction[]} onRun={onRun} part="first" />;
   return (
     <Shell {...props} engine="forces-1d-v1" last={last} simRef={simRef} onRun={onRun}>
-      <Simulation sim={spec.simulation} ctl={ctl} />
+      <Simulation sim={spec.simulation} ctl={ctl} predict={predict} />
     </Shell>
   );
 }
 
 /** projectile / lift / speed-of-sound / compound interest / Hardy-Weinberg / half-life: slider state + (for animated engines) a playback clock, all fed to the shared engines. */
 function ClosedFormActivity(props: NumericProps & { engine: Exclude<EngineId, 'forces-1d-v1'> }) {
-  const { spec, engine } = props;
-  const [inputs, setInputs] = useState<Record<string, number>>(() => defaultInputs(spec));
+  const { spec, engine, cite } = props;
+  // The lesson opens on its first case (clamped to the sliders); Reset returns here.
+  const opening = useMemo(() => defaultInputs(spec), [spec]);
+  const [inputs, setInputs] = useState<Record<string, number>>(opening);
   const plan = useMemo(() => playbackPlan(engine, inputs), [engine, inputs]);
   const pb = usePlayback(plan?.durationS ?? 0, plan?.speed ?? 1, plan?.initialT ?? 0);
   const simRef = useRef<HTMLDivElement>(null);
   const [last, setLast] = useState<LastResult | null>(null);
-  const { rewind, restart } = pb;
+  const { rewind, restart, reset } = pb;
+  // Page-stated preset values need the page text (projectile only for now; GET of the already-shown source).
+  const doc = useSourceDoc(engine === 'projectile-v1' ? cite.sourceId : null);
+  const sourceText = doc?.state === 'ready' ? doc.data.text : null;
 
   const onInput = useCallback((key: string, value: number) => {
     setInputs((prev) => ({ ...prev, [key]: value }));
     // A new launch changes the whole trajectory, so restart it from t = 0 (the play state is kept).
     if (engine === 'projectile-v1') rewind();
   }, [engine, rewind]);
+
+  const onReset = useCallback(() => {
+    setInputs(opening);
+    reset();
+  }, [opening, reset]);
+  const resetPb = useMemo(() => ({ ...pb, reset: onReset }), [pb, onReset]);
 
   const onRun = useCallback((p: AnyPrediction, index: number, grade: Grade) => {
     setInputs(caseInputs(engine, p));
@@ -122,14 +138,16 @@ function ClosedFormActivity(props: NumericProps & { engine: Exclude<EngineId, 'f
     scrollToScene(simRef.current);
   }, [engine, restart]);
 
+  const predict = <PredictionCards engine={engine} predictions={spec.predictions as AnyPrediction[]} onRun={onRun} part="first" />;
+  const view = { inputs, onInput, onReset, predict };
   return (
     <Shell {...props} engine={engine} last={last} simRef={simRef} onRun={onRun}>
-      {isEngineSpec(spec, 'projectile-v1') && <ProjectileView spec={spec} inputs={inputs} onInput={onInput} pb={pb} />}
-      {isEngineSpec(spec, 'lift-equation-v1') && <LiftView spec={spec} inputs={inputs} onInput={onInput} />}
-      {isEngineSpec(spec, 'speed-of-sound-v1') && <SoundView spec={spec} inputs={inputs} onInput={onInput} pb={pb} />}
-      {isEngineSpec(spec, 'compound-interest-v1') && <CompoundInterestView spec={spec} inputs={inputs} onInput={onInput} />}
-      {isEngineSpec(spec, 'hardy-weinberg-v1') && <HardyWeinbergView spec={spec} inputs={inputs} onInput={onInput} />}
-      {isEngineSpec(spec, 'half-life-v1') && <HalfLifeView spec={spec} inputs={inputs} onInput={onInput} />}
+      {isEngineSpec(spec, 'projectile-v1') && <ProjectileView spec={spec} {...view} pb={resetPb} sourceText={sourceText} />}
+      {isEngineSpec(spec, 'lift-equation-v1') && <LiftView spec={spec} {...view} />}
+      {isEngineSpec(spec, 'speed-of-sound-v1') && <SoundView spec={spec} {...view} pb={resetPb} />}
+      {isEngineSpec(spec, 'compound-interest-v1') && <CompoundInterestView spec={spec} {...view} />}
+      {isEngineSpec(spec, 'hardy-weinberg-v1') && <HardyWeinbergView spec={spec} {...view} />}
+      {isEngineSpec(spec, 'half-life-v1') && <HalfLifeView spec={spec} {...view} />}
     </Shell>
   );
 }

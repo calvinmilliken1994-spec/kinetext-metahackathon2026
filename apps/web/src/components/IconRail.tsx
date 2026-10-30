@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import type { DrawerMode } from './RunsDrawer.tsx';
-import { IconChecks, IconLesson, IconNewLesson, IconRuns, IconSourcePanel } from './icons.tsx';
+import { IconLesson, IconNewLesson, IconRuns, IconSourcePanel } from './icons.tsx';
 
 interface RailButtonProps {
   /** Visible label under the icon. */
@@ -41,31 +41,33 @@ export interface IconRailProps {
   showSource: boolean;
   /** Which drawer panel is open, if any. */
   drawer: DrawerMode | null;
+  /** Open (or, when open, close) the New lesson drawer. */
   onNewLesson: () => void;
   /** Scroll the lesson column to the top and focus it. */
   onLesson: () => void;
-  /** Open the runs drawer at the checks behind the selected run. */
-  onChecks: () => void;
-  hasChecks: boolean;
   onToggleSource: () => void;
+  /** Open (or, when open, close) the Runs and checks drawer. */
   onRuns: () => void;
   /** A run is being generated. */
   busy: boolean;
 }
 
-/** The left rail of the window, with a visible label under every icon. Every button acts on UI that exists. */
+/**
+ * The left rail of the window, with a visible label under every icon. It is the one set of controls for the drawer:
+ * "New lesson" and "Runs" open it on that panel (pressed while open) and close it when pressed again. A lesson's
+ * checks open from its trust receipt, so there is no separate Checks entry.
+ */
 export function IconRail(p: IconRailProps) {
   return (
     <nav className="rail" aria-label="Workspace">
       <ul className="rail-group">
-        <RailButton label="New lesson" icon={<IconNewLesson />} onClick={p.onNewLesson} pressed={p.drawer === 'new'} />
+        <RailButton label="New lesson" name="New lesson panel" icon={<IconNewLesson />} onClick={p.onNewLesson} pressed={p.drawer === 'new'} />
         <RailButton label="Lesson" name="Go to the lesson" icon={<IconLesson />} onClick={p.onLesson} />
         <RailButton label="Source" name="Source page" icon={<IconSourcePanel />} onClick={p.onToggleSource} pressed={p.showSource} hint={p.showSource ? 'Hide the source page' : 'Show the source page'} />
       </ul>
       <span className="rail-sep" aria-hidden="true" />
       <ul className="rail-group">
-        <RailButton label="Runs" name="Runs and steps" icon={<IconRuns />} onClick={p.onRuns} pressed={p.drawer === 'runs'} dot={p.busy} hint={p.busy ? 'A run is in progress' : undefined} />
-        <RailButton label="Checks" name="Checks behind this lesson" icon={<IconChecks />} onClick={p.onChecks} disabled={!p.hasChecks} hint={p.hasChecks ? undefined : 'Select a run first'} />
+        <RailButton label="Runs" name="Runs and checks panel" icon={<IconRuns />} onClick={p.onRuns} pressed={p.drawer === 'runs'} dot={p.busy} hint={p.busy ? 'A run is in progress' : undefined} />
       </ul>
     </nav>
   );

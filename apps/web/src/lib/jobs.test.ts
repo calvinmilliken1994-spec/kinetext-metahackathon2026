@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildTimeline, formatCostUSD, formatDuration, INTERRUPTED_TEXT, isInterrupted, jobStatusLabel, newestFirst, pickDefaultJob, rowLabel, runBadge, rowModel, shortId, totalEventCost } from './jobs.ts';
+import { buildTimeline, formatCostUSD, formatDuration, INTERRUPTED_TEXT, isInterrupted, jobStatusLabel, newestFirst, pickDefaultJob, pickOpeningJob, requestedJobId, rowLabel, runBadge, rowModel, shortId, totalEventCost } from './jobs.ts';
 import { resolveJobModel } from './models.ts';
 import type { StageEvent } from '../../../../packages/contracts/index.ts';
 import type { TimelineRow } from './jobs.ts';
@@ -123,6 +123,51 @@ test('newestFirst / pickDefaultJob prefer running, then newest succeeded', () =>
   assert.equal(pickDefaultJob([...jobs, { jobId: 'r', status: 'running' as const, createdAt: '2026-10-20T00:00:00Z' }], false)?.jobId, 'b');
   assert.equal(pickDefaultJob([], true), null);
   assert.equal(pickDefaultJob([jobs[0] as (typeof jobs)[number]], false)?.jobId, 'a');
+});
+
+// ---- Stage 7 item 2e: the app opens on a chosen lesson, never on an old classic test run ------------------------------
+
+test('pickDefaultJob prefers the newest succeeded LESSON run of a source over a newer classic run', () => {
+  const jobs = [
+    { jobId: 'v1-new', status: 'succeeded' as const, createdAt: '2026-10-29T00:00:00Z' },
+    { jobId: 'lesson', status: 'succeeded' as const, createdAt: '2026-10-28T00:00:00Z', flow: 'lesson' as const },
+    { jobId: 'act', status: 'succeeded' as const, createdAt: '2026-10-30T00:00:00Z', flow: 'activity' as const },
+  ];
+  assert.equal(pickDefaultJob(jobs, false)?.jobId, 'lesson');
+  // no lesson run: the newest succeeded classic run, as before
+  assert.equal(pickDefaultJob(jobs.filter((j) => j.jobId !== 'lesson'), false)?.jobId, 'act');
+});
+
+test('pickOpeningJob: the most recent succeeded lesson-flow run across all sources', () => {
+  const jobs = [
+    { jobId: 'moon-v1', sourceId: 'moon', status: 'succeeded' as const, createdAt: '2026-10-31T00:00:00Z' },
+    { jobId: 'fail', sourceId: 'a', status: 'failed' as const, createdAt: '2026-10-30T00:00:00Z', flow: 'lesson' as const },
+    { jobId: 'decl', sourceId: 'b', status: 'unsupported' as const, createdAt: '2026-10-29T12:00:00Z', flow: 'lesson' as const },
+    { jobId: 'run', sourceId: 'c', status: 'running' as const, createdAt: '2026-10-29T13:00:00Z', flow: 'lesson' as const },
+    { jobId: 'good', sourceId: 'd', status: 'succeeded' as const, createdAt: '2026-10-29T00:00:00Z', flow: 'lesson' as const },
+    { jobId: 'older', sourceId: 'e', status: 'succeeded' as const, createdAt: '2026-10-28T00:00:00Z', flow: 'lesson' as const },
+  ];
+  assert.deepEqual(pickOpeningJob(jobs), { jobId: 'good', sourceId: 'd' });
+  // nothing suitable: null (the app then opens the New lesson view)
+  assert.equal(pickOpeningJob(jobs.filter((j) => j.flow !== 'lesson' || j.status !== 'succeeded')), null);
+  assert.equal(pickOpeningJob([]), null);
+});
+
+test('pickOpeningJob honours a ?job= deep link to any stored run, and ignores an unknown one', () => {
+  const jobs = [
+    { jobId: 'moon-v1', sourceId: 'moon', status: 'succeeded' as const, createdAt: '2026-10-27T00:00:00Z' },
+    { jobId: 'good', sourceId: 'd', status: 'succeeded' as const, createdAt: '2026-10-29T00:00:00Z', flow: 'lesson' as const },
+  ];
+  assert.deepEqual(pickOpeningJob(jobs, 'moon-v1'), { jobId: 'moon-v1', sourceId: 'moon' });
+  assert.deepEqual(pickOpeningJob(jobs, 'job-missing'), { jobId: 'good', sourceId: 'd' });
+  assert.deepEqual(pickOpeningJob(jobs, ''), { jobId: 'good', sourceId: 'd' });
+});
+
+test('requestedJobId reads ?job= from a query string', () => {
+  assert.equal(requestedJobId('?job=job-20261029-abc'), 'job-20261029-abc');
+  assert.equal(requestedJobId('?lesson-demo=1'), null);
+  assert.equal(requestedJobId(''), null);
+  assert.equal(requestedJobId('?job='), null);
 });
 
 // ---- TASK-024c: analysis repair rows sit between Analyse and Specify, labelled as their own step -------------------

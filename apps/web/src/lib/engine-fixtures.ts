@@ -141,7 +141,7 @@ export function makeHardyWeinbergSpec(): HardyWeinbergActivitySpec {
     simulation: {
       engine: 'hardy-weinberg-v1',
       equation: '2pq, q=1-p',
-      alleleFrequencyP: { unit: '1', min: 0, max: 1, default: 0.3 },
+      alleleFrequencyP: { unit: '1', min: 0, max: 1, default: 0.9 },
       scenario: { objectLabel: 'Flower colour gene', settingLabel: 'Large random-mating population' },
     },
     behavioralTests: [
@@ -184,9 +184,9 @@ export function makeHalfLifeSpec(): HalfLifeActivitySpec {
     simulation: {
       engine: 'half-life-v1',
       equation: 'N=N0*(1/2)^(t/T)',
-      initialAmount: { unit: '1', min: 10, max: 200, default: 80 },
-      halfLife: { unit: 'time', min: 1, max: 20, default: 8 },
-      elapsedTime: { unit: 'time', min: 0, max: 80, default: 24 },
+      initialAmount: { unit: '1', min: 10, max: 200, default: 200 },
+      halfLife: { unit: 'time', min: 1, max: 20, default: 10 },
+      elapsedTime: { unit: 'time', min: 0, max: 80, default: 30 },
       scenario: { objectLabel: 'Radioactive sample', settingLabel: 'Sealed laboratory container' },
     },
     behavioralTests: [

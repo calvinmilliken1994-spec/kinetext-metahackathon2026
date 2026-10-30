@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { accelerationOf, simulate, stateAt } from '../../../../packages/activities/forces-1d/engine.ts';
 import type { Frame } from '../../../../packages/activities/forces-1d/engine.ts';
 import type { ForcesActivitySpec as ActivitySpec } from '../../../../packages/contracts/index.ts';
+import { defaultInputs } from '../lib/engines.ts';
 
 export interface SimControls {
   massKg: number;
@@ -21,6 +22,7 @@ export interface SimControls {
   setForce: (v: number) => void;
   play: () => void;
   pause: () => void;
+  /** Back to the opening case (the lesson's first prediction) at t = 0, paused. */
   reset: () => void;
   scrub: (t: number) => void;
   /** Set both sliders, rewind and start playing (predict-then-run). */
@@ -29,10 +31,16 @@ export interface SimControls {
 
 const ZERO: Frame = { t: 0, x: 0, v: 0, a: 0 };
 
-export function useSimulation(sim: ActivitySpec['simulation']): SimControls {
+export function useSimulation(spec: ActivitySpec): SimControls {
+  const sim = spec.simulation;
   const durationS = sim.durationS;
-  const [massKg, setMassKg] = useState(sim.massKg.default);
-  const [netForceN, setForceN] = useState(sim.netForceN.default);
+  // Opens on the lesson's first case (clamped to the sliders); the spec defaults only when there is no case.
+  const opening = useMemo(() => {
+    const o = defaultInputs(spec);
+    return { massKg: o['massKg'] ?? sim.massKg.default, netForceN: o['netForceN'] ?? sim.netForceN.default };
+  }, [spec, sim]);
+  const [massKg, setMassKg] = useState(opening.massKg);
+  const [netForceN, setForceN] = useState(opening.netForceN);
   const [t, setT] = useState(0);
   const [playing, setPlaying] = useState(false);
   const tRef = useRef(0);
@@ -86,7 +94,12 @@ export function useSimulation(sim: ActivitySpec['simulation']): SimControls {
     setPlaying(true);
   }, [durationS, setTime]);
   const pause = useCallback(() => setPlaying(false), []);
-  const reset = useCallback(() => { setPlaying(false); setTime(0); }, [setTime]);
+  const reset = useCallback(() => {
+    setPlaying(false);
+    setTime(0);
+    setMassKg(opening.massKg);
+    setForceN(opening.netForceN);
+  }, [opening, setTime]);
   const scrub = useCallback((v: number) => { setPlaying(false); setTime(Math.min(Math.max(v, 0), durationS)); }, [durationS, setTime]);
   // Changing a parameter changes the whole trajectory, so restart from t = 0 (play state is kept).
   const setMass = useCallback((v: number) => { setMassKg(v); setTime(0); }, [setTime]);

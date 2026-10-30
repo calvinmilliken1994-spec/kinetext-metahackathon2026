@@ -6,7 +6,8 @@ import { linearScale, niceAxis, pointString } from '../lib/charts.ts';
 import {
   compoundEquation, compoundSubstitution, compoundingName, compoundingStops, formatUSD, growthPoints, interestEarned
 } from '../lib/compound.ts';
-import { Readout, SchematicTag, Slider, StopSlider } from './controls.tsx';
+import type { StaticViewProps } from './ProjectileView.tsx';
+import { Readout, ResetSliders, SchematicTag, Slider, StopSlider } from './controls.tsx';
 
 export const COMPOUND_LABEL = 'Schematic — idealised account: fixed rate, no fees, no taxes, no withdrawals';
 
@@ -15,13 +16,7 @@ const H = 335;
 const PLOT = { l: 100, r: 760, t: 68, b: 272 };
 const CURVE_STEPS = 80;
 
-interface Props {
-  spec: CompoundInterestActivitySpec;
-  inputs: Record<string, number>;
-  onInput: (key: string, value: number) => void;
-}
-
-export function CompoundInterestView({ spec, inputs, onInput }: Props) {
+export function CompoundInterestView({ spec, inputs, onInput, onReset, predict }: StaticViewProps<CompoundInterestActivitySpec>) {
   const titleId = useId();
   const models = sliderModels(spec);
   const sc = scenarioLabels(spec);
@@ -84,6 +79,8 @@ export function CompoundInterestView({ spec, inputs, onInput }: Props) {
         </svg>
       </div>
 
+      {predict}
+
       <div className="formula" role="group" aria-label="Formula with the current numbers">
         <p><code>{compoundEquation()}</code></p>
         <p><code>{compoundSubstitution(input)}</code> <strong>= {formatUSD(amount)}</strong></p>
@@ -110,6 +107,7 @@ export function CompoundInterestView({ spec, inputs, onInput }: Props) {
             const step = m.key === 'years' && m.max - m.min >= 10 ? 0.5 : m.step;
             return <Slider key={m.key} label={shortInputLabel(m.label)} unit={m.unit} min={m.min} max={m.max} step={step} value={value} onChange={(v) => onInput(m.key, v)} />;
           })}
+          <ResetSliders onReset={onReset} />
         </div>
         <dl className="readouts" aria-label="Live readouts from the engine">
           <Readout name="Balance A (engine)" value={formatUSD(amount)} unit="" accent="x" />

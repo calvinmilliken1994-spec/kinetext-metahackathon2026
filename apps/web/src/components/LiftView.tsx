@@ -4,8 +4,8 @@ import type { LiftActivitySpec } from '../../../../packages/contracts/index.ts';
 import { engineOutput, formatQuantity, rangeMaxima, scenarioLabels, sliderModels } from '../lib/engines.ts';
 import { trimmed } from '../lib/format.ts';
 import { flowCycleS, flowLineCount, liftArrowPx, liftScaleMax, wingTiltDeg } from '../lib/geometry.ts';
-import { Readout, SchematicTag, Slider } from './controls.tsx';
-import type { ClosedFormViewProps } from './ProjectileView.tsx';
+import { Readout, ResetSliders, SchematicTag, Slider } from './controls.tsx';
+import type { StaticViewProps } from './ProjectileView.tsx';
 
 export const LIFT_LABEL = 'Schematic';
 
@@ -15,7 +15,7 @@ const CX = 400;
 const CY = 215;
 const ARROW_MAX = 150;
 
-export function LiftView({ spec, inputs, onInput }: Omit<ClosedFormViewProps<LiftActivitySpec>, 'pb'>) {
+export function LiftView({ spec, inputs, onInput, onReset, predict }: StaticViewProps<LiftActivitySpec>) {
   const titleId = useId();
   const models = sliderModels(spec);
   const sc = scenarioLabels(spec);
@@ -84,11 +84,14 @@ export function LiftView({ spec, inputs, onInput }: Omit<ClosedFormViewProps<Lif
         </svg>
       </div>
 
+      {predict}
+
       <div className="controls-row">
         <div className="sliders">
           {models.map((m) => (
             <Slider key={m.key} label={m.label} unit={m.unit} min={m.min} max={m.max} step={m.step} value={inputs[m.key] ?? m.value} onChange={(val) => onInput(m.key, val)} />
           ))}
+          <ResetSliders onReset={onReset} />
         </div>
         <dl className="readouts" aria-label="Live readouts from the engine">
           <Readout name="Lift L (engine)" value={formatQuantity(liftN)} unit="N" accent="force" />

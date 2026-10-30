@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import type { FormEvent } from 'react';
 import type { AnyPrediction, EngineId, TimelineEvent } from '../../../../packages/contracts/index.ts';
 import { engineOutput, formatOutputValue, outputInfo, predictionExplanation } from '../lib/engines.ts';
@@ -83,14 +83,33 @@ function PredictionCard({ engine, prediction: p, index, onRun }: CardProps) {
   );
 }
 
-export function PredictionCards({ engine, predictions, onRun }: { engine: EngineId; predictions: readonly AnyPrediction[]; onRun: RunPrediction }) {
-  if (predictions.length === 0) return null;
+export interface PredictionCardsProps {
+  engine: EngineId;
+  predictions: readonly AnyPrediction[];
+  onRun: RunPrediction;
+  /**
+   * 'first' = only case 1, shown right under the scene so the class predicts before anything moves; 'rest' = cases 2…n
+   * below the sliders; 'all' = every case in one list (default).
+   */
+  part?: 'first' | 'rest' | 'all';
+}
+
+export function PredictionCards({ engine, predictions, onRun, part = 'all' }: PredictionCardsProps) {
+  const headingId = useId();
+  const from = part === 'rest' ? 1 : 0;
+  const to = part === 'first' ? Math.min(1, predictions.length) : predictions.length;
+  if (to <= from) return null;
+  const shown = predictions.slice(from, to);
+  const heading = part === 'rest' ? 'More cases' : 'Predict, then run';
+  const hint = part === 'rest'
+    ? '“Run it” moves the sliders to that case and plays it.'
+    : 'Commit to a number first; “Run it” sets the sliders, plays the model and checks your guess.';
   return (
-    <section className="card" aria-labelledby="pred-heading">
-      <h3 id="pred-heading">Predict, then run</h3>
-      <p className="muted small">Commit to a number first; “Run it” sets the sliders, plays the model and checks your guess.</p>
-      <ol className="predictions">
-        {predictions.map((p, i) => <PredictionCard key={p.id} engine={engine} prediction={p} index={i} onRun={onRun} />)}
+    <section className={part === 'first' ? 'predict-first' : 'card'} aria-labelledby={headingId} data-part={part}>
+      <h3 id={headingId}>{heading}</h3>
+      <p className="muted small">{hint}</p>
+      <ol className="predictions" start={from + 1}>
+        {shown.map((p, i) => <PredictionCard key={p.id} engine={engine} prediction={p} index={from + i} onRun={onRun} />)}
       </ol>
     </section>
   );

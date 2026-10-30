@@ -70,9 +70,10 @@ test('sliderModels: skips inputs the spec does not carry and survives junk range
   assert.deepEqual(keys, ['liftCoefficient', 'airDensityKgM3']);
 });
 
-test('defaultInputs / rangeMaxima / clampToSlider', () => {
+test('defaultInputs (opening case) / rangeMaxima / clampToSlider', () => {
   const spec = makeSoundSpec();
-  assert.deepEqual(defaultInputs(spec), { gamma: 1.4, gasConstantJPerKgK: 287, temperatureK: 288.15 });
+  // Stage 7: the view opens on the first prediction (hot day, 320 K), not the slider default 288.15 K.
+  assert.deepEqual(defaultInputs(spec), { gamma: 1.4, gasConstantJPerKgK: 287, temperatureK: 320 });
   assert.deepEqual(rangeMaxima(spec), { gamma: 1.6, gasConstantJPerKgK: 600, temperatureK: 400 });
   assert.equal(clampToSlider({ min: 1, max: 3 }, 9), 3);
   assert.equal(clampToSlider({ min: 1, max: 3 }, -9), 1);
@@ -211,12 +212,13 @@ test('sliderModels: compound interest has four sliders with the spec ranges and 
 
 test('sliderModels: Hardy-Weinberg has one dimensionless slider, half-life three with generic time units', () => {
   const hw = sliderModels(makeHardyWeinbergSpec());
-  assert.deepEqual(hw.map((m) => [m.key, m.unit, m.min, m.max, m.value]), [['alleleFrequencyP', '', 0, 1, 0.3]]);
+  assert.deepEqual(hw.map((m) => [m.key, m.unit, m.min, m.max, m.value]), [['alleleFrequencyP', '', 0, 1, 0.9]]);
   assert.ok((hw[0]?.step ?? 0) > 0 && (hw[0]?.step ?? 1) <= 0.05);
   const hl = sliderModels(makeHalfLifeSpec());
   assert.deepEqual(hl.map((m) => m.key), ['initialAmount', 'halfLife', 'elapsedTime']);
   assert.deepEqual(hl.map((m) => m.unit), ['', 'time units', 'time units']);
-  assert.deepEqual(defaultInputs(makeHalfLifeSpec()), { initialAmount: 80, halfLife: 8, elapsedTime: 24 });
+  assert.deepEqual(hl.map((m) => m.value), [200, 10, 30], 'slider defaults equal the first case (semantic.opening-case)');
+  assert.deepEqual(defaultInputs(makeHalfLifeSpec()), { initialAmount: 200, halfLife: 10, elapsedTime: 30 });
   assert.deepEqual(rangeMaxima(makeHalfLifeSpec()), { initialAmount: 200, halfLife: 20, elapsedTime: 80 });
 });
 

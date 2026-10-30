@@ -19,10 +19,27 @@ test('the fixture builds an explorer with four variables', () => {
   assert.equal(m.xVariable, 'v');
 });
 
-test('defaults come from the spec and sliders have 100 steps', () => {
+test('opening inputs come from the first case and sliders have 100 steps', () => {
   assert.deepEqual(defaultInputs(spec), { cd: 0.5, rho: 1.2, v: 10, a: 1 });
   assert.ok(Math.abs(sliderStep({ min: 1, max: 100 }) - 0.99) < 1e-12);
   assert.ok(Math.abs(sliderStep({ min: 0.1, max: 1 }) - 0.009) < 1e-12);
+});
+
+test('Stage 7: the explorer opens on the FIRST case (clamped to the slider range); spec defaults only with no case', () => {
+  const second = spec.cases[1];
+  assert.ok(second !== undefined);
+  const reordered: FormulaExplorerSpec = { ...spec, cases: [second, ...spec.cases.filter((c) => c.id !== second.id)] };
+  assert.deepEqual(defaultInputs(reordered), { cd: 0.8, rho: 1, v: 20, a: 2 });
+  const outOfRange: FormulaExplorerSpec = {
+    ...spec,
+    cases: [{ ...second, inputs: second.inputs.map((i) => (i.name === 'v' ? { ...i, value: 1e6 } : i.name === 'cd' ? { ...i, value: -5 } : i)) }],
+  };
+  const vMax = spec.variables.find((v) => v.name === 'v')?.max;
+  const cdMin = spec.variables.find((v) => v.name === 'cd')?.min;
+  assert.deepEqual(defaultInputs(outOfRange), { cd: cdMin, rho: 1, v: vMax, a: 2 });
+  const partial: FormulaExplorerSpec = { ...spec, cases: [{ ...second, inputs: second.inputs.filter((i) => i.name !== 'rho') }] };
+  assert.deepEqual(defaultInputs(partial), { cd: 0.8, rho: 1.2, v: 20, a: 2 }, 'a variable the case lacks keeps its default');
+  assert.deepEqual(defaultInputs({ ...spec, cases: [] }), { cd: 0.5, rho: 1.2, v: 10, a: 1 });
 });
 
 test('the output is computed by our evaluator from the expression', () => {

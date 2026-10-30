@@ -15,7 +15,7 @@ const CX = 400;
 const CY = 195;
 const R_MAX = 150;
 
-export function SoundView({ spec, inputs, onInput, pb }: ClosedFormViewProps<SoundActivitySpec>) {
+export function SoundView({ spec, inputs, onInput, pb, predict }: ClosedFormViewProps<SoundActivitySpec>) {
   const titleId = useId();
   const models = sliderModels(spec);
   const sc = scenarioLabels(spec);
@@ -79,6 +79,8 @@ export function SoundView({ spec, inputs, onInput, pb }: ClosedFormViewProps<Sou
         <button type="button" className="btn" onClick={pb.reset}><IconReset /> Reset</button>
         <span className="muted small" aria-live="off">Simulated time {fixed(pb.t, 2)} s · one new wavefront every {SOUND_EMIT_EVERY_S} s</span>
       </div>
+
+      {predict}
 
       <div className="controls-row">
         <div className="sliders">

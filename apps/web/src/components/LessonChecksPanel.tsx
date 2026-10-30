@@ -1,16 +1,19 @@
+import { useId } from 'react';
 import type { CheckSection } from '../lib/lessonJob.ts';
 import { Mark } from './icons.tsx';
 
 /** The checks behind a lesson, kept quiet: one closed fold-out per checked part, readable names, raw ids under Technical details. */
 export function LessonChecksPanel({ sections }: { sections: readonly CheckSection[] }) {
+  // The same panel can be on screen twice (runs drawer and the lesson's trust receipt), so its heading id is per instance.
+  const headingId = useId();
   if (sections.length === 0) return null;
   const passed = sections.reduce((n, s) => n + s.passed, 0);
   const total = sections.reduce((n, s) => n + s.total, 0);
   const allPassed = passed === total;
   return (
-    <section className="drawer-section validation lesson-checks" aria-labelledby="lesson-checks-heading" data-testid="lesson-checks">
+    <section className="drawer-section validation lesson-checks" aria-labelledby={headingId} data-testid="lesson-checks">
       <div className="card-head">
-        <h3 id="lesson-checks-heading" className="section-title">Checks behind this lesson</h3>
+        <h3 id={headingId} className="section-title">Checks behind this lesson</h3>
         <span className={`card-status ${allPassed ? 'tone-ok' : 'tone-bad'}`}>{passed} of {total} passed</span>
       </div>
       <p className="muted small">Code compares every quote with the page and recomputes every number. Open a part to see what it checked.</p>

@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import type { ValidationReport } from '../../../../packages/contracts/index.ts';
 import { checkName, groupChecks, KIND_BLURB, PROSE_CHECK_ID, proseScopeNotice, summarizeReport, validationBlurb } from '../lib/checks.ts';
 import { Mark } from './icons.tsx';
@@ -14,16 +15,20 @@ export interface ValidationPanelProps {
   showPublish: boolean;
   /** Readable check names; defaults to the timeline names. The source-analysis panel passes the analysis names. */
   nameOf?: (id: string) => string | null;
+  /** Fold each passing check group shut (the lesson's trust receipt); groups with a failure stay open. */
+  compact?: boolean;
 }
 
-export function ValidationPanel({ report, heading, showPublish, nameOf = checkName }: ValidationPanelProps) {
+export function ValidationPanel({ report, heading, showPublish, nameOf = checkName, compact = false }: ValidationPanelProps) {
   const summary = summarizeReport(report);
   const groups = groupChecks(report);
   const scope = proseScopeNotice(report);
+  // The same panel can be on screen twice (runs drawer and the lesson's trust receipt), so its heading id is per instance.
+  const headingId = useId();
   return (
-    <section className="drawer-section validation" aria-labelledby="val-heading">
+    <section className="drawer-section validation" aria-labelledby={headingId}>
       <div className="card-head">
-        <h3 id="val-heading" className="section-title">{heading}</h3>
+        <h3 id={headingId} className="section-title">{heading}</h3>
         <span className={`card-status ${summary.allPassed ? 'tone-ok' : 'tone-bad'}`}>{summary.label}</span>
       </div>
       <p className="muted small">{validationBlurb(report)}</p>
@@ -31,7 +36,7 @@ export function ValidationPanel({ report, heading, showPublish, nameOf = checkNa
         <strong>Not machine-verified:</strong> {scope.message}
       </p>
       {groups.map((g) => (
-        <details key={g.kind} className="check-group" open>
+        <details key={g.kind} className="check-group" open={!compact || g.failed > 0}>
           <summary>
             <span className="group-name">{g.label}</span>
             <span className="group-blurb">{KIND_BLURB[g.kind]}</span>

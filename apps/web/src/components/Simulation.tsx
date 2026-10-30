@@ -1,4 +1,5 @@
 import { useId } from 'react';
+import type { ReactNode } from 'react';
 import type { Frame } from '../../../../packages/activities/forces-1d/engine.ts';
 import type { ForcesActivitySpec as ActivitySpec } from '../../../../packages/contracts/index.ts';
 import { fixed } from '../lib/format.ts';
@@ -13,7 +14,8 @@ const pickV = (f: Frame): number => f.v;
 const pickX = (f: Frame): number => f.x;
 const pickA = (f: Frame): number => f.a;
 
-export function Simulation({ sim, ctl }: { sim: ActivitySpec['simulation']; ctl: SimControls }) {
+/** `predict` (case 1's predict card) sits right under the playback bar, above the sliders and graphs. */
+export function Simulation({ sim, ctl, predict }: { sim: ActivitySpec['simulation']; ctl: SimControls; predict?: ReactNode }) {
   const scrubId = useId();
   const obs = new Set(sim.observables);
   const forceMaxAbs = Math.max(Math.abs(sim.netForceN.min), Math.abs(sim.netForceN.max));
@@ -56,6 +58,8 @@ export function Simulation({ sim, ctl }: { sim: ActivitySpec['simulation']; ctl:
           <output htmlFor={scrubId} className="scrub-value">{fixed(ctl.t, 2)} / {fixed(ctl.durationS, 1)} s</output>
         </div>
       </div>
+
+      {predict}
 
       <div className="controls-row">
         <div className="sliders">
