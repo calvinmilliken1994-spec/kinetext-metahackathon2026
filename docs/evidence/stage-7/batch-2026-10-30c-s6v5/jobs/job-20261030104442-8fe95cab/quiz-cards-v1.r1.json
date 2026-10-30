@@ -1,0 +1,199 @@
+{
+  "gen": {
+    "cards": [
+      {
+        "hint": "Think about national authority.",
+        "id": "central-government-power",
+        "options": [
+          "how much power to allow the central government",
+          "whether to crown a king for life",
+          "which language to use for official records"
+        ],
+        "quote": "Among the chief points at issue were how much power to allow the central government,",
+        "sourceId": "nara-constitution",
+        "stem": "What did delegates list as a chief point at issue about national authority?"
+      },
+      {
+        "hint": "Think about Congress membership.",
+        "id": "representatives-each-state",
+        "options": [
+          "how many representatives in Congress to allow each state",
+          "the salaries for convention secretaries",
+          "the number of judges on local courts"
+        ],
+        "quote": "how many representatives in Congress to allow each state, and how these representatives should be elected",
+        "sourceId": "nara-constitution",
+        "stem": "What did delegates debate about state presence in Congress?"
+      },
+      {
+        "hint": "Think about voters versus legislatures.",
+        "id": "how-representatives-elected",
+        "options": [
+          "directly by the people or by the state legislators",
+          "by a council of former governors",
+          "by lot from among wealthy merchants"
+        ],
+        "quote": "and how these representatives should be elected—directly by the people or by the state legislators.",
+        "sourceId": "nara-constitution",
+        "stem": "What choice did delegates debate for choosing representatives?"
+      }
+    ],
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Power and representation debates"
+  },
+  "report": {
+    "artifactId": "job-20261030104442-8fe95cab:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": false,
+        "message": "publisher claim at /cards/0/options/2: \"which language to use for official records\" (token \"official\"; never name or endorse the publisher in generated text) (expected plain, publisher-neutral text in every generated display field; verbatim quotes are exempt)",
+        "path": "/cards/0/options/2",
+        "affected": [
+          "/cards/0/options/2"
+        ]
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18c6a-32db-724a-8e93-d87fa30168cc",
+    "usage": {
+      "promptTokens": 2444,
+      "completionTokens": 7892,
+      "reasoningTokens": 7612,
+      "cachedTokens": 0
+    },
+    "latencyMs": 27083,
+    "estCostUSD": 0.036596,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "pruned": true,
+  "dropped": [],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030104442-8fe95cab:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Power and representation debates",
+    "sources": [
+      {
+        "id": "nara-constitution",
+        "title": "Constitution of the United States (1787) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/constitution",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Constitution of the United States (1787)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "a14175b009333bebd61eaff70e3393928a8f0dbd0ae00027067c07b15d176db4"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18c6a-32db-724a-8e93-d87fa30168cc",
+      "runId": "job-20261030104442-8fe95cab",
+      "promptVersion": "s6-v5",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-30T10:45:32.679Z"
+    },
+    "seed": 2355586012,
+    "cards": [
+      {
+        "hint": "Think about national authority.",
+        "id": "central-government-power",
+        "options": [
+          "how much power to allow the central government",
+          "whether to crown a king for life",
+          "which language to use for official records"
+        ],
+        "quote": "Among the chief points at issue were how much power to allow the central government,",
+        "sourceId": "nara-constitution",
+        "stem": "What did delegates list as a chief point at issue about national authority?"
+      },
+      {
+        "hint": "Think about Congress membership.",
+        "id": "representatives-each-state",
+        "options": [
+          "how many representatives in Congress to allow each state",
+          "the salaries for convention secretaries",
+          "the number of judges on local courts"
+        ],
+        "quote": "how many representatives in Congress to allow each state, and how these representatives should be elected",
+        "sourceId": "nara-constitution",
+        "stem": "What did delegates debate about state presence in Congress?"
+      },
+      {
+        "hint": "Think about voters versus legislatures.",
+        "id": "how-representatives-elected",
+        "options": [
+          "directly by the people or by the state legislators",
+          "by a council of former governors",
+          "by lot from among wealthy merchants"
+        ],
+        "quote": "and how these representatives should be elected—directly by the people or by the state legislators.",
+        "sourceId": "nara-constitution",
+        "stem": "What choice did delegates debate for choosing representatives?"
+      }
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "jobId": "job-20261030104212-f733800b",
+  "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-30T10:42:12.253Z",
+  "flow": "lesson",
+  "model": "muse-spark-1.3",
+  "provider": "meta-api",
+  "providerModel": "muse-spark-1.3",
+  "totalCostUSD": 0.126955,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 17764,
+    "startedAt": "2026-10-30T10:42:12.253Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 2,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "finishedAt": "2026-10-30T10:43:32.326Z"
+}

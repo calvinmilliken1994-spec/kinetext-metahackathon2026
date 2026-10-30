@@ -1,0 +1,111 @@
+{
+  "jobId": "job-20261030104212-f733800b",
+  "analysisRef": "job-20261030104212-f733800b/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030104212-f733800b:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Comparing photosynthesis and chemosynthesis as fuel for life",
+    "sources": [
+      {
+        "id": "noaa-oceanexplorer-fueling-life-on-earth",
+        "title": "Fueling Life on Earth: Chemosynthesis versus Photosynthesis — NOAA Office of Ocean Exploration, Educator Guide and Teacher Key (grades 9-12 chemistry)",
+        "locator": "https://oceanexplorer.noaa.gov/wp-content/uploads/2025/04/educator-guide-fueling-life-on-earth.pdf",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NOAA Office of Ocean Exploration and Research (NOAA Ocean Exploration), education materials, 'Fueling Life on Earth: Chemosynthesis versus Photosynthesis' educator guide. NOAA's Education and Outreach FAQ (https://www.noaa.gov/office-education/outreach-communication/faq) states: 'Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission', and requires credit to NOAA without claiming or endorsing; edits and generative-AI outputs must not be presented as official NOAA material. The document itself asks: 'If reproducing this activity, please cite NOAA as the source, and provide the following URL: https://oceanexplorer.noaa.gov.' Text only: the third-party photo credit printed on page 1 ('Image courtesy of NOAA Ocean Exploration, NSF/NOAA, Jason, Copyright WHOI') and the video/image links on the resources page are not stored. NOAA has not reviewed, approved or endorsed this activity.",
+        "sha256": "9b2415e432e49be30eed9aa244d306d6231675cab53c566a4a4c874215b23c92"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18c67-d3ea-704e-9e83-0214044f51b5",
+      "runId": "job-20261030104212-f733800b",
+      "promptVersion": "s6-v5",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-30T10:42:57.237Z"
+    },
+    "seed": 1089595413,
+    "headline": "Comparing photosynthesis and chemosynthesis as fuel for life",
+    "keyPoints": [
+      {
+        "id": "plants-sunlight-food",
+        "point": "Students learn how plants use sunlight to make food through photosynthesis.",
+        "quote": "plants use sunlight to make food via photosynthesis.",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth"
+      },
+      {
+        "id": "chemosynthesis-energy",
+        "point": "Students learn that deep sea organisms rely on chemosynthesis using chemical energy for production.",
+        "quote": "organisms instead rely on primary production through a process called chemosynthesis, which runs on chemical energy.",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth"
+      },
+      {
+        "id": "vent-food-webs",
+        "point": "Students learn how microbes form the base of food webs at hydrothermal vents.",
+        "quote": "form the base of food webs at hydrothermal vents and cold seeps",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth"
+      },
+      {
+        "id": "matter-conservation",
+        "point": "Students learn that matter cannot be created or destroyed during chemical reactions.",
+        "quote": "matter cannot be created or destroyed.",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "Process where plants convert carbon dioxide into sugars using sunlight",
+        "id": "photosynthesis",
+        "quote": "Photosynthesis: The process used by plants to convert carbon dioxide and water into oxygen and sugars (food)",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+        "term": "Photosynthesis"
+      },
+      {
+        "gloss": "Process where microbes create sugars using energy from chemical reactions",
+        "id": "chemosynthesis",
+        "quote": "Chemosynthesis: The process by which microbes create sugars (food) using energy released from chemical reactions.",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+        "term": "Chemosynthesis"
+      },
+      {
+        "gloss": "Organisms able to make their own food from raw materials",
+        "id": "autotroph",
+        "quote": "Autotroph: Organisms that are able to make their own food from raw materials and energy, also known as producers.",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+        "term": "Autotroph"
+      },
+      {
+        "gloss": "Starting substance that changes in a chemical reaction as material",
+        "id": "reactants",
+        "quote": "Reactants: A substance that changes in a chemical reaction.",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+        "term": "Reactants"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "balance-equation-v1",
+      "specId": "job-20261030104212-f733800b:balance-equation-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261030104212-f733800b:compare-table-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

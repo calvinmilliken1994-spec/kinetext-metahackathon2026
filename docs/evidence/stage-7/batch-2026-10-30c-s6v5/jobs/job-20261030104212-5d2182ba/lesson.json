@@ -1,0 +1,111 @@
+{
+  "jobId": "job-20261030104212-5d2182ba",
+  "analysisRef": "job-20261030104212-5d2182ba/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030104212-5d2182ba:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How balls fly higher in lunar gravity without drag",
+    "sources": [
+      {
+        "id": "user-accf5f60ebed",
+        "title": "Throwing a ball on the Moon (project-authored test text)",
+        "locator": "Provided by a teacher (pasted text)",
+        "license": "own-work",
+        "attribution": "Written by the Make knowledge interactive project team for testing.",
+        "sha256": "accf5f60ebedb3b3ab1f553ec33a9f500ad353e682cdf88b8e45c99a57ca6ac1"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18c67-82f5-76ef-9f53-1f9fe50548d5",
+      "runId": "job-20261030104212-5d2182ba",
+      "promptVersion": "s6-v5",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-30T10:42:36.695Z"
+    },
+    "seed": 1220560558,
+    "headline": "How balls fly higher in lunar gravity without drag",
+    "keyPoints": [
+      {
+        "id": "lunar-drag-free",
+        "point": "Students learn that a thrown ball feels no drag on the airless Moon.",
+        "quote": "so a thrown ball feels no drag at all",
+        "sourceId": "user-accf5f60ebed"
+      },
+      {
+        "id": "horizontal-motion",
+        "point": "Students learn that horizontal speed stays constant throughout the flight.",
+        "quote": "the horizontal speed stays U0 for the whole flight",
+        "sourceId": "user-accf5f60ebed"
+      },
+      {
+        "id": "vertical-motion",
+        "point": "Students learn how vertical speed and height change with time under steady gravity.",
+        "quote": "The vertical speed is V = V0 - g * t, and the height is y = V0 * t - g * t^2 / 2.",
+        "sourceId": "user-accf5f60ebed"
+      },
+      {
+        "id": "max-height",
+        "point": "Students learn that the highest point follows from the time when vertical velocity reaches zero.",
+        "quote": "Putting that time into the height equation gives the highest point: ymax = V0^2 / (2 * g).",
+        "sourceId": "user-accf5f60ebed"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "Resistance felt by a moving ball that vanishes without air",
+        "id": "drag",
+        "quote": "so a thrown ball feels no drag at all",
+        "sourceId": "user-accf5f60ebed",
+        "term": "drag"
+      },
+      {
+        "gloss": "Flight with no drag where only weight acts",
+        "id": "ballistic",
+        "quote": "Its flight is purely ballistic.",
+        "sourceId": "user-accf5f60ebed",
+        "term": "ballistic"
+      },
+      {
+        "gloss": "Downward force that pulls the ball after release",
+        "id": "weight",
+        "quote": "The only force on the ball after it leaves the hand is its weight, which pulls it straight down.",
+        "sourceId": "user-accf5f60ebed",
+        "term": "weight"
+      },
+      {
+        "gloss": "Steady pull that slows a rising ball",
+        "id": "gravity",
+        "quote": "Vertically, gravity slows the ball at a steady rate g.",
+        "sourceId": "user-accf5f60ebed",
+        "term": "gravity"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "projectile-v1",
+      "specId": "user-accf5f60ebed-job-20261030104212-5d2182ba",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261030104212-5d2182ba:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

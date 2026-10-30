@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261030104333-c7083fa8",
+  "analysisRef": "job-20261030104333-c7083fa8/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261030104333-c7083fa8:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Ballistic flight on the Moon without air drag",
+    "sources": [
+      {
+        "id": "user-accf5f60ebed",
+        "title": "Throwing a ball on the Moon (project-authored test text)",
+        "locator": "Provided by a teacher (pasted text)",
+        "license": "own-work",
+        "attribution": "Written by the Make knowledge interactive project team for testing.",
+        "sha256": "accf5f60ebedb3b3ab1f553ec33a9f500ad353e682cdf88b8e45c99a57ca6ac1"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18c68-e5f1-716f-ac32-edd23152370b",
+      "runId": "job-20261030104333-c7083fa8",
+      "promptVersion": "s6-v5",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-30T10:44:07.642Z"
+    },
+    "seed": 1703836880,
+    "headline": "Ballistic flight on the Moon without air drag",
+    "keyPoints": [
+      {
+        "id": "no-drag-on-moon",
+        "point": "Students learn that a thrown ball on the Moon feels no drag because there is no air.",
+        "quote": "On the Moon there is no air, so a thrown ball feels no drag at all.",
+        "sourceId": "user-accf5f60ebed"
+      },
+      {
+        "id": "horizontal-motion",
+        "point": "Students learn that horizontal speed stays constant during flight when nothing pushes sideways.",
+        "quote": "Nothing pushes the ball sideways, so the horizontal speed stays U0 for the whole flight and the ball moves x = U0 * t across the ground.",
+        "sourceId": "user-accf5f60ebed"
+      },
+      {
+        "id": "vertical-motion",
+        "point": "Students learn how vertical speed falls with time while height follows a curved path under gravity.",
+        "quote": "The vertical speed is V = V0 - g * t, and the height is y = V0 * t - g * t^2 / 2.",
+        "sourceId": "user-accf5f60ebed"
+      },
+      {
+        "id": "highest-point",
+        "point": "Students learn that the highest point of flight comes from the height equation at the top of the rise.",
+        "quote": "Putting that time into the height equation gives the highest point: ymax = V0^2 / (2 * g).",
+        "sourceId": "user-accf5f60ebed"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "Resistance from air that slows a thrown ball",
+        "id": "drag",
+        "quote": "On the Moon there is no air, so a thrown ball feels no drag at all.",
+        "sourceId": "user-accf5f60ebed",
+        "term": "drag"
+      },
+      {
+        "gloss": "Moving in free flight under gravity alone after launch",
+        "id": "ballistic",
+        "quote": "Its flight is purely ballistic.",
+        "sourceId": "user-accf5f60ebed",
+        "term": "ballistic"
+      },
+      {
+        "gloss": "Sideways speed that stays constant when nothing pushes sideways",
+        "id": "horizontal-speed",
+        "quote": "Nothing pushes the ball sideways, so the horizontal speed stays U0 for the whole flight and the ball moves x = U0 * t across the ground.",
+        "sourceId": "user-accf5f60ebed",
+        "term": "horizontal speed"
+      },
+      {
+        "gloss": "Steady pull that slows rising motion and causes falling",
+        "id": "gravity",
+        "quote": "Vertically, gravity slows the ball at a steady rate g.",
+        "sourceId": "user-accf5f60ebed",
+        "term": "gravity"
+      },
+      {
+        "gloss": "highest position reached when upward motion stops",
+        "id": "ymax",
+        "quote": "Putting that time into the height equation gives the highest point: ymax = V0^2 / (2 * g).",
+        "sourceId": "user-accf5f60ebed",
+        "term": "ymax"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "projectile-v1",
+      "specId": "user-accf5f60ebed-job-20261030104333-c7083fa8",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261030104333-c7083fa8:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}
