@@ -1,0 +1,13 @@
+{
+  "id": "cfpb-ways-to-pay-for-college",
+  "title": "What are the different ways to pay for college or graduate school? — Consumer Financial Protection Bureau, Ask CFPB",
+  "subject": "finance",
+  "locator": "https://www.consumerfinance.gov/ask-cfpb/what-are-the-different-ways-to-pay-for-college-or-graduate-school-en-545/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: Consumer Financial Protection Bureau, Ask CFPB, 'What are the different ways to pay for college or graduate school?'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+  "sha256": "c2f41ceeb5a9c980341ce04560a1baa319fe6ab50aac7e281e775f5d9b26f4cd",
+  "textFile": "cfpb-ways-to-pay-for-college.txt",
+  "retrievedAt": "2026-10-30T17:24:00Z",
+  "transcription": "Main answer text only (breadcrumb, 'last reviewed: MAY 14, 2024' line, related-questions block, 'Page last modified' stamp, About-us sidebar and Legal disclaimer footer removed). Question-form section headings kept as plain lines. The 'Key differences between federal and private student loans' two-column table is transcribed as pipe-separated lines; multi-item cells join their list items in reading order separated by spaces (the page renders them as separate bullets inside the cells). Inline links flattened to their text; the page's en-dash style 'lenders–with varying rates and terms–' kept as printed. Whitespace normalised.",
+  "purpose": "library: ways to pay for college compared — grants vs scholarships (need- vs merit-based), tuition payment plans (no interest but possible up-front fees), federal work study, income share agreements (a percentage of future income, defined repayment caps), 529 savings plans, and federal vs private student loans (fixed vs variable rates, income-driven repayment, forbearance, subsidised interest, PSLF after 120 payments, forgiveness after 10/20/25 years). Fits compare tables and quiz cards with predict-then-reveal."
+}

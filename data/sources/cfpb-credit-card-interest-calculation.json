@@ -1,0 +1,13 @@
+{
+  "id": "cfpb-credit-card-interest-calculation",
+  "title": "How does my credit card company calculate the amount of interest I owe? — Consumer Financial Protection Bureau, Ask CFPB",
+  "subject": "finance",
+  "locator": "https://www.consumerfinance.gov/ask-cfpb/how-does-my-credit-card-company-calculate-the-amount-of-interest-i-owe-en-51/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: Consumer Financial Protection Bureau, Ask CFPB, 'How does my credit card company calculate the amount of interest I owe?'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+  "sha256": "1d5dbef610660615ac5db9d0b780497b890eb934df9e556f60d3b5900893fa3e",
+  "textFile": "cfpb-credit-card-interest-calculation.txt",
+  "retrievedAt": "2026-10-30T17:33:00Z",
+  "transcription": "Main answer text only (the 'Credit cards' breadcrumb, 'last reviewed: JAN 22, 2024' line, related-questions block, 'Page last modified' stamp, About-us sidebar and Legal disclaimer footer removed). Question-form section headings kept as plain lines. Inline links flattened to their text; the page's stray space in 'grace period ,' kept as printed. Curly apostrophes kept. Whitespace normalised.",
+  "purpose": "library: credit-card interest calculation — daily interest on the average daily balance, the daily periodic rate, separate APRs per balance category shown on the statement, grace-period rules (purchases only, and only when no balance is carried), and the payment-application order (amounts over the minimum go to the highest-rate balance first, then descending). Fits step ordering of the calculation and payment rules, a compare table of balance categories, and quiz cards."
+}

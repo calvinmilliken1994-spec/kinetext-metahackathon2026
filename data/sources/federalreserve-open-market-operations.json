@@ -1,0 +1,13 @@
+{
+  "id": "federalreserve-open-market-operations",
+  "title": "Open Market Operations — Board of Governors of the Federal Reserve System, Monetary Policy",
+  "subject": "finance",
+  "locator": "https://www.federalreserve.gov/monetarypolicy/openmarket.htm",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: Board of Governors of the Federal Reserve System, 'Open Market Operations'. Credit: Board of Governors of the Federal Reserve System. Per the Board's website Disclaimer, 'Unless otherwise indicated, information on Board's website is in the public domain and may be copied and distributed without permission. Please cite to the Board as the source of the information.' The Board of Governors of the Federal Reserve System has not reviewed, approved or endorsed this activity.",
+  "sha256": "7020d09b4ed3b1a3698aae3a5d3119fe66680cd1536a6ba8b88387521ffa6724",
+  "textFile": "federalreserve-open-market-operations.txt",
+  "retrievedAt": "2026-10-30T17:33:00Z",
+  "transcription": "Article text and the target-rate history tables (site header and menus, breadcrumb and footer removed; the page's H1 is the Board's corporate name, so the article's own h3 heading 'Open Market Operations' is used as the '# ' title line). The year-tab navigation row and every 'Back to year navigation' link line are removed as in-content navigation; the 'Return to Text' link text is dropped from the two footnote lines, whose text is kept as printed ('Basis points: 1/100 percentage point'; the July 10, 2024 correction note for March 4, 2020). Each year's FOMC table (Date | Increase | Decrease | Level (%)) is transcribed as pipe-separated lines with the year on its own line; ellipsis cells ('...') and the 2008 '75-100' range kept as printed. Paragraph-internal line breaks rendered as separate lines. Whitespace normalised.",
+  "purpose": "library: open market operations — what OMOs are (buying and selling securities to implement monetary policy under the FOMC's objective), the federal funds rate definition, and the dated evolution of the toolkit (pre-crisis reserve supply, the near-zero range from late 2008 and large-scale purchases through October 2014, ON RRPs from December 2015, repo operations from September 2019 and March 2020, the standing repo facility since 2021), followed by the complete dated table of every FOMC target-rate change 2003–2026 in basis points (e.g. March 16, 2020 cut of 100 to 0-0.25; September 17, 2026 increase of 25 to 3.75-4.00). Fits timeline/step ordering, quiz cards with predict-then-reveal on rate levels and dates, and basis-point arithmetic."
+}

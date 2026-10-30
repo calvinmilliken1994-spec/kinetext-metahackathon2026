@@ -1,0 +1,13 @@
+{
+  "id": "census-about-decennial-census",
+  "title": "About the Decennial Census of Population and Housing — U.S. Census Bureau",
+  "subject": "civics",
+  "locator": "https://www.census.gov/programs-surveys/decennial-census/about.html",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: U.S. Census Bureau, 'Decennial Census of Population and Housing, 'About the Decennial Census of Population and Housing''. Credit: U.S. Census Bureau. Per Census Bureau policy DS027 (Research Transparency and Public Access), 'Data/works created by Census Bureau employees generally are not subject to copyright protection within the United States'; the embedded quotations of the U.S. Constitution are in the public domain by age. The U.S. Census Bureau has not reviewed, approved or endorsed this activity.",
+  "sha256": "1c9559b79c96a4eccd7d2e58876da4b72cbba0c2de2e199390b7832abe710840",
+  "textFile": "census-about-decennial-census.txt",
+  "retrievedAt": "2026-10-30T17:39:00Z",
+  "transcription": "Main article text only (site header, Helpful Links and Skip-Navigation chrome, breadcrumb and footer removed). The page's H1 renders outside the main content grid and is supplied as the '# ' title line. Section headings kept as plain lines. AEM debug fragments served as visible text ('<div class=\"uscb-list__derived\"> indexPagination: false ...' lines, an 'SDI include (path: ...)' line and a 'CMS-7584 ...' line) are removed as site chrome; the related-resource link cards between them are kept as • lines as printed, including their dates and the video running time. Curly quotes kept as printed. Whitespace normalised.",
+  "purpose": "library: the decennial census — conducted every 10 years in years ending in zero on Census Day, April 1; the first census in 1790 under George Washington led by Thomas Jefferson counted 3,929,625 people and apportioned 105 seats among 15 states; Article I Sections 2 and 9 and the Title 13 codification of 1954 with its notification deadlines (subjects three years before, question wording two years before); apportionment as the original legal purpose, the House fixed at 435 in 1913; redistricting after each census; and the 72-year confidentiality rule (records from 1950 and earlier at the National Archives). Fits quiz cards with predict-then-reveal on the numbers and dates, a compare table of apportionment vs redistricting, and step ordering."
+}

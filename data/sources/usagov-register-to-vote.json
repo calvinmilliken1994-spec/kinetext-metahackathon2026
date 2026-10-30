@@ -1,0 +1,13 @@
+{
+  "id": "usagov-register-to-vote",
+  "title": "How to register to vote — USA.gov (U.S. General Services Administration)",
+  "subject": "civics",
+  "locator": "https://www.usa.gov/register-to-vote",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: USA.gov, 'How to register to vote'. USA.gov is an official website of the U.S. General Services Administration; per the GSA website policies, 'Most material on our site is free of copyright and may be copied and distributed without permission. Works produced by federal government employees in the course of their employment are generally not protected by copyright and are in the public domain in the U.S.' The U.S. General Services Administration has not reviewed, approved or endorsed this activity.",
+  "sha256": "f8d5a15bf1bc22c4b181555f4a66df77abf7286a87030044ebbba345d0817cb3",
+  "textFile": "usagov-register-to-vote.txt",
+  "retrievedAt": "2026-10-30T17:39:00Z",
+  "transcription": "Main article text only (site header, breadcrumb, sidenav, the 'LAST UPDATED: October 6, 2026' block, share widgets, the 'Have a question?' contact block and footer removed). Section headings kept as plain lines; bullet lists use • markers. In-content link lines ('Start your registration on vote.gov') kept as printed. Curly apostrophes kept. Whitespace normalised.",
+  "purpose": "library: how to register to vote — the vote.gov process (select state or territory, then register online, by mail, or in person depending on state rules), the National Mail Voter Registration Form, other registration locations (local government offices, DMV, public-assistance offices such as SNAP/food stamp or TANF), the Federal Voting Assistance Program for citizens abroad, service members and their spouses, and the identification documents states may require. Fits step ordering and quiz cards."
+}

@@ -1,0 +1,13 @@
+{
+  "id": "dos-alaska-purchase",
+  "title": "Purchase of Alaska, 1867 — U.S. Department of State, Office of the Historian, Milestones: 1866–1898",
+  "subject": "history",
+  "locator": "https://history.state.gov/milestones/1866-1898/alaska-purchase",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: U.S. Department of State, Office of the Historian, 'Milestones: 1866–1898 — Purchase of Alaska, 1867'. Per the Department's Copyright Information page, 'Unless a copyright is indicated, information on State Department websites is in the public domain and may be copied and distributed without permission. Citation of the U.S. State Department as source of the information is appreciated.' The U.S. Department of State has not reviewed, approved or endorsed this activity.",
+  "sha256": "108a7038cad1fe36f6facd30ee54ff6b1ee2768e3902e234455f33fabf00008b",
+  "textFile": "dos-alaska-purchase.txt",
+  "retrievedAt": "2026-10-30T17:25:00Z",
+  "transcription": "Milestones essay text only (site header and menus, the 'Milestones: 1866–1898' section banner, the 'NOTE TO READERS' retirement notice about the series no longer being maintained, breadcrumb and footer removed; the essay is taken from the page's TEI content div, whose own 'Purchase of Alaska, 1867' heading is used as the '# ' title line). The 'Signing of the Alaska Treaty, 1867' image caption kept as printed; image not stored. Curly quotes and apostrophes kept as printed. Whitespace normalised.",
+  "purpose": "library: the purchase of Alaska — a dated diplomatic chronology (Peter the Great dispatches Vitus Bering in 1725; Russia offers to sell in 1859; the Civil War delays; Secretary of State William Seward agrees with Russian Minister Edouard de Stoeckl on March 30, 1867 to purchase Alaska for $7.2 million; the Senate approves April 9; President Andrew Johnson signs May 28; formal transfer October 18, 1867), three decades of military/naval/Treasury rule, civil government in 1884, 'Seward's Folly' vindicated by the 1896 Yukon gold discovery, World War II strategic recognition, and statehood on January 3, 1959 — with the 'fewer than four hundred' permanent Russian settlers detail. Fits timeline ordering and quiz cards with predict-then-reveal on dates and the price."
+}

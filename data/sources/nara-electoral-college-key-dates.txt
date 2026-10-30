@@ -1,0 +1,45 @@
+# Electoral College Timeline of Events
+
+Under the 23rd Amendment of the Constitution, the District of Columbia is allocated three electors and treated like a State for purposes of the Electoral College.
+
+In the following discussion, the term “State” also refers to the District of Columbia, and the term “Executive” also refers to State Governors and the Mayor of the District of Columbia.
+
+November 5, 2024—Election Day
+
+(first Tuesday after the first Monday in November*)
+
+During the general election your vote helps determine your State's electors. When you vote for a Presidential candidate, you aren't actually voting for President. You are telling your State which candidate you want your State to vote for at the meeting of the electors. The States use these general election results (also known as the popular vote) to appoint their electors. The winning candidate's State political party selects the individuals who will be the electors.
+
+*States that appoint electors by popular vote (currently all) may include a modified voting period necessitated by force majeure events that are extraordinary and catastrophic as part of ‘election day’.
+
+By December 11, 2024—States issue Certificates of Ascertainment
+
+(at least six days before the meeting of the electors)
+
+Your State's Executive prepares seven Certificates of Ascertainment. Immediately after the election results in your State are certified, the Executive sends one of those original Certificates of Ascertainment to the Archivist.
+
+December 17, 2024—electors vote in their States
+
+The electors meet in their respective States and vote for President and Vice President on separate ballots. The electors record their votes on six Certificates of Vote, which are paired with the six remaining Certificates of Ascertainment. The electors sign, seal up, and certify six sets of electoral votes. A set of electoral votes consists of one Certificate of Ascertainment and one Certificate of Vote.
+
+December 25, 2024—electoral votes arrive
+
+Electoral votes must be received by the President of the Senate and the Archivist no later than the fourth Wednesday in December. If votes are lost or delayed, the Archivist may take extraordinary measures to retrieve duplicate originals.
+
+On or before January 3, 2025—Archivist transfers Certificates to Congress
+
+As the new Congress assembles, the Archivist transmits sets of Certificates to Congress, as requested. This generally happens when the Senate does not receive its set of Certificates on time. The transfer occurs in late December or early January when OFR’s Legal staff meets with representatives of the Secretary of the Senate, the Clerk of the House, and Congressional Parliamentarians.
+
+January 6, 2025—Congress counts the electoral votes
+
+Congress meets in joint session to count the electoral votes. The Vice President, as President of the Senate, presides over the count and announces the results of the Electoral College vote. The President of the Senate then declares which persons, if any, have been elected President and Vice President of the United States.
+
+If any objections to the electoral votes are made, they must be submitted in writing and be signed by at least one-fifth of the members of the House and one-fifth of the Senators. If objections are presented, the House and Senate withdraw to their respective chambers to consider the merits of the objection(s) under procedures set out in Federal law. Only two grounds for objection are acceptable: that the electors of the State were not lawfully certified under a Certificate of Ascertainment, or that the vote of one or more electors has not been regularly given.
+
+If no Presidential candidate wins at least 270 electoral votes (a majority of the 538 available votes), under the 12th Amendment to the Constitution the House of Representatives decides the Presidential election. If necessary, the House would elect the President by majority vote, choosing from among the three candidates who received the greatest number of electoral votes. The vote would be taken by State, with each State having one vote. (The District of Columbia does not vote because it doesn't have voting members in the House of Representatives.)
+
+If no Vice Presidential candidate wins at least 270 electoral votes (a majority or the 538 available votes), under the 12th Amendment the Senate elects the Vice President. If necessary, the Senate would elect the Vice President by majority vote, choosing between the two candidates who received the greatest number of electoral votes. Each Senator would have one vote.
+
+January 20, 2025 at Noon—Inauguration Day
+
+The President-elect and Vice President-elect take the Oath of Office and become the President of the United States and Vice President of the United States, respectively.

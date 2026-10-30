@@ -1,0 +1,13 @@
+{
+  "id": "nara-what-is-the-electoral-college",
+  "title": "What is the Electoral College? — National Archives, U.S. Electoral College",
+  "subject": "civics",
+  "locator": "https://www.archives.gov/electoral-college/about",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: National Archives and Records Administration, U.S. Electoral College, 'What is the Electoral College?'. Per NARA's Privacy and Use Policies, 'Works of the U.S. Government that have been produced by the National Archives and Records Administration are in the public domain and may be copied and distributed without permission. These works are available for worldwide use and reuse under the terms of the Creative Commons CC0 1.0 Universal license.' The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+  "sha256": "4b1141642b66f6e4b5dc8e1085b321d5e51d41c348d845433b13bce147d2bd88",
+  "textFile": "nara-what-is-the-electoral-college.txt",
+  "retrievedAt": "2026-10-30T17:24:00Z",
+  "transcription": "Main article text only (site header and menus, breadcrumb, Bookmark/Share widget, sidebar and footer removed; content taken from the page's main content block). Question-form section headings kept as plain lines. Inline links flattened to their text ('Read more about the allocation of electoral votes.'). Curly quotes and apostrophes kept as printed. Whitespace normalised.",
+  "purpose": "library: what the Electoral College is — 'a process, not a place', the constitutional compromise, 538 electors and the 270 majority, electors = Representatives + Senators with 3 for the District of Columbia under the 23rd Amendment, party-chosen slates, the general election on the Tuesday after the first Monday in November, winner-take-all vs the Maine and Nebraska variations, Certificates of Ascertainment and Vote, the electors' meeting on the first Tuesday after the second Wednesday in December, the January 6 joint-session count presided over by the Vice President, and the January 20 inauguration. Fits step ordering, the formula explorer for electors, compare tables and quiz cards."
+}

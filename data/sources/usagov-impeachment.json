@@ -1,0 +1,13 @@
+{
+  "id": "usagov-impeachment",
+  "title": "How federal impeachment works — USA.gov (U.S. General Services Administration)",
+  "subject": "civics",
+  "locator": "https://www.usa.gov/impeachment",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: USA.gov, 'How federal impeachment works'. USA.gov is an official website of the U.S. General Services Administration; per the GSA website policies, 'Most material on our site is free of copyright and may be copied and distributed without permission. Works produced by federal government employees in the course of their employment are generally not protected by copyright and are in the public domain in the U.S.' The U.S. General Services Administration has not reviewed, approved or endorsed this activity.",
+  "sha256": "e2ad6fbbadad11e3751966452191cdcf57c63d5a5c31609f144004e3226733de",
+  "textFile": "usagov-impeachment.txt",
+  "retrievedAt": "2026-10-30T17:25:00Z",
+  "transcription": "Main article text only (site header, breadcrumb, sidenav, the 'LAST UPDATED: November 13, 2025' block, share widgets, the 'Have a question?' contact block and footer removed). The impeachment steps keep their 1.–5. numbering; the impeached-presidents list uses • markers as printed. Inline links flattened to their text ('Learn more about the House's role in impeachment.'). Curly quotes kept. Whitespace normalised.",
+  "purpose": "library: how federal impeachment works — grounds (treason, bribery, and 'other high crimes and misdemeanors'), the five-step process (House brings articles, simple-majority adoption impeaches, Senate trial with the chief justice presiding for a president, removal if guilty, possible bar on future office), the numbers (more than 60 proceedings, 21 impeachments, three presidents, one cabinet secretary, one senator; 8 convicted and removed, all federal judges), the impeached presidents with years (Johnson 1868, Clinton 1998, Trump 2019 and 2021, all acquitted) and Nixon's 1974 resignation without impeachment, plus the state/local note. Fits step ordering, quiz cards with predict-then-reveal on counts and dates, and a compare table of House vs Senate roles."
+}

@@ -1,0 +1,13 @@
+{
+  "id": "cfpb-loan-interest-rate-vs-apr",
+  "title": "What is the difference between a loan interest rate and the APR? — Consumer Financial Protection Bureau, Ask CFPB",
+  "subject": "finance",
+  "locator": "https://www.consumerfinance.gov/ask-cfpb/what-is-the-difference-between-a-loan-interest-rate-and-the-apr-en-733/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: Consumer Financial Protection Bureau, Ask CFPB, 'What is the difference between a loan interest rate and the APR?'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+  "sha256": "bb4deef0545569be19f0aa5a83968994bacccfa69a6746764044ef4762991700",
+  "textFile": "cfpb-loan-interest-rate-vs-apr.txt",
+  "retrievedAt": "2026-10-30T17:24:00Z",
+  "transcription": "Main answer text only (the 'Auto loans' breadcrumb, 'last reviewed: AUG 28, 2026' line, 'Don't see what you're looking for?' related-questions block, 'Page last modified' stamp, About-us sidebar and Legal disclaimer footer removed). Section headings ('Interest rate', 'Annual Percentage Rate (APR)', 'How to get the best rates', 'What lenders are required to provide') kept as plain lines; the in-answer 'Know before you shop' promo paragraph and its closing link line kept as printed. Inline links flattened to their text. Curly apostrophes kept. Whitespace normalised.",
+  "purpose": "library: interest rate versus APR — two measures of the price of borrowing compared (the interest rate is the yearly cost of the money alone; the APR is the rate plus lender fees such as origination charges, both as percentages), credit-score and rate-shopping guidance, and the Truth in Lending Act requirement that lenders disclose the APR before finalising an auto loan. Fits a compare table (interest rate vs APR) and quiz cards with predict-then-reveal."
+}

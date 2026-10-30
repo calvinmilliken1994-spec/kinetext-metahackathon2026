@@ -1,0 +1,13 @@
+{
+  "id": "investorgov-what-is-compound-interest",
+  "title": "What is compound interest? — Investor.gov, U.S. Securities and Exchange Commission (Office of Investor Education and Advocacy)",
+  "subject": "finance",
+  "locator": "https://www.investor.gov/additional-resources/information/youth/teachers-classroom-resources/what-compound-interest",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: Investor.gov, U.S. Securities and Exchange Commission (Office of Investor Education and Advocacy), 'What is compound interest?'. Investor.gov is an SEC website and its privacy policy refers users to SEC.gov policy; per the SEC 'Website Dissemination' policy, 'Information presented on sec.gov is considered public information and may be copied or further distributed by users of the web site without the SEC's permission. Please consider appropriate citation to the SEC as the source.' The page's own disclaimer reads: 'The Office of Investor Education and Advocacy has provided this information as a service to investors. It is neither a legal interpretation nor a statement of SEC policy.' The U.S. Securities and Exchange Commission has not reviewed, approved or endorsed this activity.",
+  "sha256": "d13f49be2c935e2a5982c1304925d5598d996864a13d60a7614e9e3505480649",
+  "textFile": "investorgov-what-is-compound-interest.txt",
+  "retrievedAt": "2026-10-30T17:33:00Z",
+  "transcription": "Article text only (the audience 'Main navigation' menu, site header and footer, Related/Featured content cards and the Spanish-language toggle removed). The H1 kept as the '# ' title line; 'Rule of 72' and 'Suggested student activities' headings kept as plain lines. Bullets flattened one per line with • markers; the nested pizza questions kept at the same level with their bracketed answer keys as printed ('[The correct answer is $730.]'). The page's missing period after 'almost $340' kept as served. Straight and curly quotes mixed as printed. Whitespace normalised.",
+  "purpose": "library: compound interest for students — the $100-at-5% worked example ($105 after year one, $110.25 after year two including $0.25 interest-on-interest, more than $162 after 10 years, almost $340 after 25), the Rule of 72 stated as a division (72 divided by 9 equals 8 years to double), and the pizza-savings exercises with answer key ($2 x 365 = $730 a year; $931.69 after five years at 5%; $3,155.02 after 30). Fits the compound-interest formula explorer, quiz cards with predict-then-reveal on every worked answer, and Rule-of-72 arithmetic."
+}

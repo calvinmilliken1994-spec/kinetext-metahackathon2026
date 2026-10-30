@@ -1,0 +1,13 @@
+{
+  "id": "nasa-apollo-11-mission-overview",
+  "title": "Apollo 11 Mission Overview — NASA",
+  "subject": "history",
+  "locator": "https://www.nasa.gov/missions/apollo/apollo-11/apollo-11-mission-overview/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NASA, 'Apollo 11 Mission Overview'. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; no NASA images or logos are stored and this activity is labelled AI-generated. NASA has not reviewed, approved or endorsed this activity.",
+  "sha256": "d4b29539152f1ed2229358538d39df45198fafd17251631e6efc9561260db7e1",
+  "textFile": "nasa-apollo-11-mission-overview.txt",
+  "retrievedAt": "2026-10-30T17:52:00Z",
+  "transcription": "Article text only (site header, breadcrumb, mission-list navigation, share/print widgets, the NASA+ video promo, related-story cards, the closing 'Get more details on the Apollo 11 mission' button and footer removed). The page's H1 renders outside the entry content and is supplied as the '# ' title line. The opening image caption ('Apollo 11 mission insignia'), its 'NASA' credit line and the '“The Eagle has landed…”' epigraph kept as printed; images not stored. The Crew, Backup Crew, Payload, Prelaunch Milestones, Launch, Orbit and Landing reference sections are <br>-separated line groups inside paragraphs; each printed line is rendered as its own line. En and em dashes and curly quotes kept as printed. Whitespace normalised.",
+  "purpose": "library: the Apollo 11 mission chronology — President Kennedy's May 25, 1961 national goal; launch from Cape Kennedy July 16, 1969 at 9:32 a.m. EDT (Saturn-V AS-506, Pad 39A); trans-lunar injection two hours 44 minutes after launch; the July 19 lunar-orbit insertion burns (357.5 seconds, then 17 seconds); Eagle undocking at 100 hours 12 minutes and the 756.3-second powered descent on July 20; landing in the Sea of Tranquility at 102 hours 45 minutes, about four miles downrange; Armstrong's step at about 109 hours 42 minutes (an estimated 650 million watching), Aldrin 20 minutes later; a 21-hour 36-minute surface stay; ascent, docking at 128 hours 3 minutes, trans-Earth injection July 21; splashdown July 24, 1969 at 12:50 p.m. EDT after 195 hours 18 minutes 35 seconds, 13 miles from USS Hornet — plus the dated Prelaunch Milestones list (November 21, 1968 to June 26, 1969) and full flight statistics (953,054 miles, 30 revolutions). Fits timeline ordering, quiz cards with predict-then-reveal on mission-clock figures, and compare tables of crew vs backup crew."
+}

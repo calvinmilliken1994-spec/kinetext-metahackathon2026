@@ -1,0 +1,13 @@
+{
+  "id": "irs-tax-inflation-adjustments-2026",
+  "title": "IRS releases tax inflation adjustments for tax year 2026, including amendments from the One, Big, Beautiful Bill — Internal Revenue Service, IRS Newsroom",
+  "subject": "finance",
+  "locator": "https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2026-including-amendments-from-the-one-big-beautiful-bill",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: Internal Revenue Service, IRS Newsroom, 'IRS releases tax inflation adjustments for tax year 2026, including amendments from the One, Big, Beautiful Bill' (IR-2025-103). Credit: Internal Revenue Service. Per the IRS 'Use of content from IRS.gov' policy, 'Content on this website that was created or maintained by federal employees in the course of their duties is not subject to copyright and may be freely copied. Credit is requested.' The Internal Revenue Service has not reviewed, approved or endorsed this activity.",
+  "sha256": "13b2f585e7b6efe64e1ee4d954562f657b4f78bec5b0d6feafe1204e687ed9b0",
+  "textFile": "irs-tax-inflation-adjustments-2026.txt",
+  "retrievedAt": "2026-10-30T17:33:00Z",
+  "transcription": "Main news-release text only (site header, breadcrumb, the archival 'Notice: Historical Content' banner above the release, sidebar, share widgets and footer removed). The release-ID line 'IR-2025-103, Oct. 9, 2025' kept as printed. The standard-deduction comparison table (3 columns x 2 data rows) is transcribed as pipe-separated lines, one per table row. Bullet items keep • markers. Inline links flattened to their text ('Revenue Procedure 2025-32 PDF'). Em dashes kept as printed. Whitespace normalised.",
+  "purpose": "library: IRS tax year 2026 inflation adjustments — standard deduction ($32,200 joint / $16,100 single / $24,150 head of household, with the TY2025-vs-TY2026 table), the full marginal-rate schedule with income thresholds (37% over $640,600 down to 10% at $12,400 or less), AMT exemption ($90,100 phasing out at $500,000), estate-tax basic exclusion ($15,000,000, up from $13,990,000), EITC maximum ($8,231), and items frozen by statute (personal exemptions at 0). Fits quiz cards with predict-then-reveal on the dollar amounts, a compare table of tax years, and percent-increase arithmetic on the adjustments."
+}
