@@ -1,0 +1,772 @@
+{
+ "note": "Measured in Chrome via CDP on Vite dev (:5173) against the running API (GET only). figure/fit = figure height / .pz-fit (the stage area StageFit fills); figure/stage = / .pz-stage (heading + fit); figure/viewport = / window height. Deltas: every element rect in .pz-beat plus .pz-zone, index-matched before/after R and before/after \u2192, screenshots taken with captureBeyondViewport false.",
+ "before": {
+  "presentation 1366x768 live DNA": {
+   "figureHeightPx": 405,
+   "figure/fit": 0.882,
+   "zoom": 1.034
+  },
+  "presentation 1920x1080 live DNA": {
+   "figureHeightPx": 592,
+   "figure/fit": 0.886,
+   "zoom": 1.511
+  },
+  "lesson 1920x1080 live DNA, source panel open": {
+   "figureWidthPx": 514.5,
+   "how": "old grid (1.15fr/1fr) and 560 px cap re-applied as an injected style on the same page"
+  }
+ },
+ "presentation": [
+  {
+   "target": "harness dna-live",
+   "viewport": "1366x768",
+   "theme": "dark",
+   "steps": 7,
+   "zoom": 1.02027,
+   "figureHeightPx": 444.8,
+   "figure/fit": 0.969,
+   "figure/stage": 0.879,
+   "figure/viewport": 0.579,
+   "maxDyR": 0.0,
+   "maxDhR": 0.0,
+   "maxDyNext": 0.0,
+   "zoomSameOnR": true,
+   "countSameOnR": true,
+   "docScroll": [
+    768,
+    768
+   ],
+   "fitScroll": [
+    459,
+    459
+   ],
+   "coversBeforeLastR": 7,
+   "maxTagsShown": 6,
+   "tagOverlapIssues": 0,
+   "textLeaksBeforeR": 0,
+   "answerOverflow": 0
+  },
+  {
+   "target": "harness dna-live",
+   "viewport": "1366x768",
+   "theme": "light",
+   "steps": 7,
+   "zoom": 1.02027,
+   "figureHeightPx": 444.8,
+   "figure/fit": 0.969,
+   "figure/stage": 0.879,
+   "figure/viewport": 0.579,
+   "maxDyR": 0.0,
+   "maxDhR": 0.0,
+   "maxDyNext": 0.0,
+   "zoomSameOnR": true,
+   "countSameOnR": true,
+   "docScroll": [
+    768,
+    768
+   ],
+   "fitScroll": [
+    459,
+    459
+   ],
+   "coversBeforeLastR": 7,
+   "maxTagsShown": 6,
+   "tagOverlapIssues": 0,
+   "textLeaksBeforeR": 0,
+   "answerOverflow": 0
+  },
+  {
+   "target": "harness dna-live",
+   "viewport": "1920x1080",
+   "theme": "dark",
+   "steps": 7,
+   "zoom": 1.49099,
+   "figureHeightPx": 650.1,
+   "figure/fit": 0.973,
+   "figure/stage": 0.885,
+   "figure/viewport": 0.602,
+   "maxDyR": 0.0,
+   "maxDhR": 0.0,
+   "maxDyNext": 0.0,
+   "zoomSameOnR": true,
+   "countSameOnR": true,
+   "docScroll": [
+    1080,
+    1080
+   ],
+   "fitScroll": [
+    668,
+    668
+   ],
+   "coversBeforeLastR": 7,
+   "maxTagsShown": 6,
+   "tagOverlapIssues": 0,
+   "textLeaksBeforeR": 0,
+   "answerOverflow": 0
+  },
+  {
+   "target": "harness dna-live",
+   "viewport": "1920x1080",
+   "theme": "light",
+   "steps": 7,
+   "zoom": 1.49099,
+   "figureHeightPx": 650.1,
+   "figure/fit": 0.973,
+   "figure/stage": 0.885,
+   "figure/viewport": 0.602,
+   "maxDyR": 0.0,
+   "maxDhR": 0.0,
+   "maxDyNext": 0.0,
+   "zoomSameOnR": true,
+   "countSameOnR": true,
+   "docScroll": [
+    1080,
+    1080
+   ],
+   "fitScroll": [
+    668,
+    668
+   ],
+   "coversBeforeLastR": 7,
+   "maxTagsShown": 6,
+   "tagOverlapIssues": 0,
+   "textLeaksBeforeR": 0,
+   "answerOverflow": 0
+  },
+  {
+   "target": "harness water-live",
+   "viewport": "1366x768",
+   "theme": "dark",
+   "steps": 7,
+   "zoom": 1.02027,
+   "figureHeightPx": 444.8,
+   "figure/fit": 0.969,
+   "figure/stage": 0.879,
+   "figure/viewport": 0.579,
+   "maxDyR": 0.0,
+   "maxDhR": 0.0,
+   "maxDyNext": 0.0,
+   "zoomSameOnR": true,
+   "countSameOnR": true,
+   "docScroll": [
+    768,
+    768
+   ],
+   "fitScroll": [
+    459,
+    459
+   ],
+   "coversBeforeLastR": 8,
+   "maxTagsShown": 6,
+   "tagOverlapIssues": 0,
+   "textLeaksBeforeR": 0,
+   "answerOverflow": 0
+  },
+  {
+   "target": "harness water-live",
+   "viewport": "1366x768",
+   "theme": "light",
+   "steps": 7,
+   "zoom": 1.02027,
+   "figureHeightPx": 444.8,
+   "figure/fit": 0.969,
+   "figure/stage": 0.879,
+   "figure/viewport": 0.579,
+   "maxDyR": 0.0,
+   "maxDhR": 0.0,
+   "maxDyNext": 0.0,
+   "zoomSameOnR": true,
+   "countSameOnR": true,
+   "docScroll": [
+    768,
+    768
+   ],
+   "fitScroll": [
+    459,
+    459
+   ],
+   "coversBeforeLastR": 8,
+   "maxTagsShown": 6,
+   "tagOverlapIssues": 0,
+   "textLeaksBeforeR": 0,
+   "answerOverflow": 0
+  },
+  {
+   "target": "harness water-live",
+   "viewport": "1920x1080",
+   "theme": "dark",
+   "steps": 7,
+   "zoom": 1.49099,
+   "figureHeightPx": 650.1,
+   "figure/fit": 0.973,
+   "figure/stage": 0.885,
+   "figure/viewport": 0.602,
+   "maxDyR": 0.0,
+   "maxDhR": 0.0,
+   "maxDyNext": 0.0,
+   "zoomSameOnR": true,
+   "countSameOnR": true,
+   "docScroll": [
+    1080,
+    1080
+   ],
+   "fitScroll": [
+    668,
+    668
+   ],
+   "coversBeforeLastR": 8,
+   "maxTagsShown": 6,
+   "tagOverlapIssues": 0,
+   "textLeaksBeforeR": 0,
+   "answerOverflow": 0
+  },
+  {
+   "target": "harness water-live",
+   "viewport": "1920x1080",
+   "theme": "light",
+   "steps": 7,
+   "zoom": 1.49099,
+   "figureHeightPx": 650.1,
+   "figure/fit": 0.973,
+   "figure/stage": 0.885,
+   "figure/viewport": 0.602,
+   "maxDyR": 0.0,
+   "maxDhR": 0.0,
+   "maxDyNext": 0.0,
+   "zoomSameOnR": true,
+   "countSameOnR": true,
+   "docScroll": [
+    1080,
+    1080
+   ],
+   "fitScroll": [
+    668,
+    668
+   ],
+   "coversBeforeLastR": 8,
+   "maxTagsShown": 6,
+   "tagOverlapIssues": 0,
+   "textLeaksBeforeR": 0,
+   "answerOverflow": 0
+  },
+  {
+   "target": "job-20261031051459-6bf49d3d",
+   "viewport": "1366x768",
+   "theme": "dark",
+   "steps": 7,
+   "zoom": 1.02027,
+   "figureHeightPx": 444.8,
+   "figure/fit": 0.969,
+   "figure/stage": 0.879,
+   "figure/viewport": 0.579,
+   "maxDyR": 0.0,
+   "maxDhR": 0.0,
+   "maxDyNext": 0.0,
+   "zoomSameOnR": true,
+   "countSameOnR": true,
+   "docScroll": [
+    768,
+    768
+   ],
+   "fitScroll": [
+    459,
+    459
+   ],
+   "coversBeforeLastR": 6,
+   "maxTagsShown": 6,
+   "tagOverlapIssues": 0,
+   "textLeaksBeforeR": 0,
+   "answerOverflow": 0
+  },
+  {
+   "target": "job-20261031051459-6bf49d3d",
+   "viewport": "1366x768",
+   "theme": "light",
+   "steps": 7,
+   "zoom": 1.02027,
+   "figureHeightPx": 444.8,
+   "figure/fit": 0.969,
+   "figure/stage": 0.879,
+   "figure/viewport": 0.579,
+   "maxDyR": 0.0,
+   "maxDhR": 0.0,
+   "maxDyNext": 0.0,
+   "zoomSameOnR": true,
+   "countSameOnR": true,
+   "docScroll": [
+    768,
+    768
+   ],
+   "fitScroll": [
+    459,
+    459
+   ],
+   "coversBeforeLastR": 6,
+   "maxTagsShown": 6,
+   "tagOverlapIssues": 0,
+   "textLeaksBeforeR": 0,
+   "answerOverflow": 0
+  },
+  {
+   "target": "job-20261031051459-6bf49d3d",
+   "viewport": "1920x1080",
+   "theme": "dark",
+   "steps": 7,
+   "zoom": 1.49099,
+   "figureHeightPx": 650.1,
+   "figure/fit": 0.973,
+   "figure/stage": 0.885,
+   "figure/viewport": 0.602,
+   "maxDyR": 0.0,
+   "maxDhR": 0.0,
+   "maxDyNext": 0.0,
+   "zoomSameOnR": true,
+   "countSameOnR": true,
+   "docScroll": [
+    1080,
+    1080
+   ],
+   "fitScroll": [
+    668,
+    668
+   ],
+   "coversBeforeLastR": 6,
+   "maxTagsShown": 6,
+   "tagOverlapIssues": 0,
+   "textLeaksBeforeR": 0,
+   "answerOverflow": 0
+  },
+  {
+   "target": "job-20261031051459-6bf49d3d",
+   "viewport": "1920x1080",
+   "theme": "light",
+   "steps": 7,
+   "zoom": 1.49099,
+   "figureHeightPx": 650.1,
+   "figure/fit": 0.973,
+   "figure/stage": 0.885,
+   "figure/viewport": 0.602,
+   "maxDyR": 0.0,
+   "maxDhR": 0.0,
+   "maxDyNext": 0.0,
+   "zoomSameOnR": true,
+   "countSameOnR": true,
+   "docScroll": [
+    1080,
+    1080
+   ],
+   "fitScroll": [
+    668,
+    668
+   ],
+   "coversBeforeLastR": 6,
+   "maxTagsShown": 6,
+   "tagOverlapIssues": 0,
+   "textLeaksBeforeR": 0,
+   "answerOverflow": 0
+  },
+  {
+   "target": "job-20261031051459-dbf3765c",
+   "viewport": "1366x768",
+   "theme": "dark",
+   "steps": 6,
+   "zoom": 1.02027,
+   "figureHeightPx": 444.8,
+   "figure/fit": 0.969,
+   "figure/stage": 0.879,
+   "figure/viewport": 0.579,
+   "maxDyR": 0.0,
+   "maxDhR": 0.0,
+   "maxDyNext": 0.0,
+   "zoomSameOnR": true,
+   "countSameOnR": true,
+   "docScroll": [
+    768,
+    768
+   ],
+   "fitScroll": [
+    459,
+    459
+   ],
+   "coversBeforeLastR": 5,
+   "maxTagsShown": 5,
+   "tagOverlapIssues": 0,
+   "textLeaksBeforeR": 0,
+   "answerOverflow": 0
+  },
+  {
+   "target": "job-20261031051459-dbf3765c",
+   "viewport": "1366x768",
+   "theme": "light",
+   "steps": 6,
+   "zoom": 1.02027,
+   "figureHeightPx": 444.8,
+   "figure/fit": 0.969,
+   "figure/stage": 0.879,
+   "figure/viewport": 0.579,
+   "maxDyR": 0.0,
+   "maxDhR": 0.0,
+   "maxDyNext": 0.0,
+   "zoomSameOnR": true,
+   "countSameOnR": true,
+   "docScroll": [
+    768,
+    768
+   ],
+   "fitScroll": [
+    459,
+    459
+   ],
+   "coversBeforeLastR": 5,
+   "maxTagsShown": 5,
+   "tagOverlapIssues": 0,
+   "textLeaksBeforeR": 0,
+   "answerOverflow": 0
+  },
+  {
+   "target": "job-20261031051459-dbf3765c",
+   "viewport": "1920x1080",
+   "theme": "dark",
+   "steps": 6,
+   "zoom": 1.49099,
+   "figureHeightPx": 650.1,
+   "figure/fit": 0.973,
+   "figure/stage": 0.885,
+   "figure/viewport": 0.602,
+   "maxDyR": 0.0,
+   "maxDhR": 0.0,
+   "maxDyNext": 0.0,
+   "zoomSameOnR": true,
+   "countSameOnR": true,
+   "docScroll": [
+    1080,
+    1080
+   ],
+   "fitScroll": [
+    668,
+    668
+   ],
+   "coversBeforeLastR": 5,
+   "maxTagsShown": 5,
+   "tagOverlapIssues": 0,
+   "textLeaksBeforeR": 0,
+   "answerOverflow": 0
+  },
+  {
+   "target": "job-20261031051459-dbf3765c",
+   "viewport": "1920x1080",
+   "theme": "light",
+   "steps": 6,
+   "zoom": 1.49099,
+   "figureHeightPx": 650.1,
+   "figure/fit": 0.973,
+   "figure/stage": 0.885,
+   "figure/viewport": 0.602,
+   "maxDyR": 0.0,
+   "maxDhR": 0.0,
+   "maxDyNext": 0.0,
+   "zoomSameOnR": true,
+   "countSameOnR": true,
+   "docScroll": [
+    1080,
+    1080
+   ],
+   "fitScroll": [
+    668,
+    668
+   ],
+   "coversBeforeLastR": 5,
+   "maxTagsShown": 5,
+   "tagOverlapIssues": 0,
+   "textLeaksBeforeR": 0,
+   "answerOverflow": 0
+  },
+  {
+   "target": "job-20261031051634-7731ba24",
+   "viewport": "1366x768",
+   "theme": "dark",
+   "steps": 7,
+   "zoom": 1.02027,
+   "figureHeightPx": 444.8,
+   "figure/fit": 0.969,
+   "figure/stage": 0.879,
+   "figure/viewport": 0.579,
+   "maxDyR": 0.0,
+   "maxDhR": 0.0,
+   "maxDyNext": 0.0,
+   "zoomSameOnR": true,
+   "countSameOnR": true,
+   "docScroll": [
+    768,
+    768
+   ],
+   "fitScroll": [
+    459,
+    459
+   ],
+   "coversBeforeLastR": 5,
+   "maxTagsShown": 6,
+   "tagOverlapIssues": 0,
+   "textLeaksBeforeR": 0,
+   "answerOverflow": 0
+  },
+  {
+   "target": "job-20261031051634-7731ba24",
+   "viewport": "1366x768",
+   "theme": "light",
+   "steps": 7,
+   "zoom": 1.02027,
+   "figureHeightPx": 444.8,
+   "figure/fit": 0.969,
+   "figure/stage": 0.879,
+   "figure/viewport": 0.579,
+   "maxDyR": 0.0,
+   "maxDhR": 0.0,
+   "maxDyNext": 0.0,
+   "zoomSameOnR": true,
+   "countSameOnR": true,
+   "docScroll": [
+    768,
+    768
+   ],
+   "fitScroll": [
+    459,
+    459
+   ],
+   "coversBeforeLastR": 5,
+   "maxTagsShown": 6,
+   "tagOverlapIssues": 0,
+   "textLeaksBeforeR": 0,
+   "answerOverflow": 0
+  },
+  {
+   "target": "job-20261031051634-7731ba24",
+   "viewport": "1920x1080",
+   "theme": "dark",
+   "steps": 7,
+   "zoom": 1.49099,
+   "figureHeightPx": 650.1,
+   "figure/fit": 0.973,
+   "figure/stage": 0.885,
+   "figure/viewport": 0.602,
+   "maxDyR": 0.0,
+   "maxDhR": 0.0,
+   "maxDyNext": 0.0,
+   "zoomSameOnR": true,
+   "countSameOnR": true,
+   "docScroll": [
+    1080,
+    1080
+   ],
+   "fitScroll": [
+    668,
+    668
+   ],
+   "coversBeforeLastR": 5,
+   "maxTagsShown": 6,
+   "tagOverlapIssues": 0,
+   "textLeaksBeforeR": 0,
+   "answerOverflow": 0
+  },
+  {
+   "target": "job-20261031051634-7731ba24",
+   "viewport": "1920x1080",
+   "theme": "light",
+   "steps": 7,
+   "zoom": 1.49099,
+   "figureHeightPx": 650.1,
+   "figure/fit": 0.973,
+   "figure/stage": 0.885,
+   "figure/viewport": 0.602,
+   "maxDyR": 0.0,
+   "maxDhR": 0.0,
+   "maxDyNext": 0.0,
+   "zoomSameOnR": true,
+   "countSameOnR": true,
+   "docScroll": [
+    1080,
+    1080
+   ],
+   "fitScroll": [
+    668,
+    668
+   ],
+   "coversBeforeLastR": 5,
+   "maxTagsShown": 6,
+   "tagOverlapIssues": 0,
+   "textLeaksBeforeR": 0,
+   "answerOverflow": 0
+  }
+ ],
+ "lesson": [
+  {
+   "target": "job-20261031051459-6bf49d3d",
+   "viewport": "1920x1080",
+   "theme": "dark",
+   "figureWidthPx": 577.2,
+   "upscale": 0.962,
+   "sourcePanelOpen": true,
+   "coversBefore": 6,
+   "coversAfterReveal": 0,
+   "tagsAfterReveal": 6,
+   "tagOverlapIssues": 0,
+   "docOverflow": false
+  },
+  {
+   "target": "job-20261031051459-dbf3765c",
+   "viewport": "1920x1080",
+   "theme": "dark",
+   "figureWidthPx": 577.2,
+   "upscale": 1.009,
+   "sourcePanelOpen": true,
+   "coversBefore": 5,
+   "coversAfterReveal": 0,
+   "tagsAfterReveal": 5,
+   "tagOverlapIssues": 0,
+   "docOverflow": false
+  },
+  {
+   "target": "job-20261031051634-7731ba24",
+   "viewport": "1920x1080",
+   "theme": "dark",
+   "figureWidthPx": 577.2,
+   "upscale": 1.009,
+   "sourcePanelOpen": true,
+   "coversBefore": 5,
+   "coversAfterReveal": 0,
+   "tagsAfterReveal": 6,
+   "tagOverlapIssues": 0,
+   "docOverflow": false
+  },
+  {
+   "target": "job-20261031051459-6bf49d3d",
+   "viewport": "1920x1080",
+   "theme": "light",
+   "figureWidthPx": 577.2,
+   "upscale": 0.962,
+   "sourcePanelOpen": true,
+   "coversBefore": 6,
+   "coversAfterReveal": 0,
+   "tagsAfterReveal": 6,
+   "tagOverlapIssues": 0,
+   "docOverflow": false
+  },
+  {
+   "target": "job-20261031051459-dbf3765c",
+   "viewport": "1920x1080",
+   "theme": "light",
+   "figureWidthPx": 577.2,
+   "upscale": 1.009,
+   "sourcePanelOpen": true,
+   "coversBefore": 5,
+   "coversAfterReveal": 0,
+   "tagsAfterReveal": 5,
+   "tagOverlapIssues": 0,
+   "docOverflow": false
+  },
+  {
+   "target": "job-20261031051634-7731ba24",
+   "viewport": "1920x1080",
+   "theme": "light",
+   "figureWidthPx": 577.2,
+   "upscale": 1.009,
+   "sourcePanelOpen": true,
+   "coversBefore": 5,
+   "coversAfterReveal": 0,
+   "tagsAfterReveal": 6,
+   "tagOverlapIssues": 0,
+   "docOverflow": false
+  },
+  {
+   "target": "job-20261031051459-6bf49d3d",
+   "viewport": "1366x768",
+   "theme": "dark",
+   "figureWidthPx": 422.9,
+   "upscale": 0.705,
+   "sourcePanelOpen": true,
+   "coversBefore": 6,
+   "coversAfterReveal": 0,
+   "tagsAfterReveal": 6,
+   "tagOverlapIssues": 0,
+   "docOverflow": false
+  },
+  {
+   "target": "job-20261031051459-dbf3765c",
+   "viewport": "1366x768",
+   "theme": "dark",
+   "figureWidthPx": 422.9,
+   "upscale": 0.739,
+   "sourcePanelOpen": true,
+   "coversBefore": 5,
+   "coversAfterReveal": 0,
+   "tagsAfterReveal": 5,
+   "tagOverlapIssues": 0,
+   "docOverflow": false
+  },
+  {
+   "target": "job-20261031051634-7731ba24",
+   "viewport": "1366x768",
+   "theme": "dark",
+   "figureWidthPx": 422.9,
+   "upscale": 0.739,
+   "sourcePanelOpen": true,
+   "coversBefore": 5,
+   "coversAfterReveal": 0,
+   "tagsAfterReveal": 6,
+   "tagOverlapIssues": 0,
+   "docOverflow": false
+  },
+  {
+   "target": "harness dna-live",
+   "viewport": "1920x1080",
+   "theme": "dark",
+   "figureWidthPx": 481.2,
+   "upscale": 0.802,
+   "sourcePanelOpen": false,
+   "coversBefore": 7,
+   "coversAfterReveal": 0,
+   "tagsAfterReveal": 6,
+   "tagOverlapIssues": 0,
+   "docOverflow": false
+  },
+  {
+   "target": "harness dna-live",
+   "viewport": "1920x1080",
+   "theme": "light",
+   "figureWidthPx": 481.2,
+   "upscale": 0.802,
+   "sourcePanelOpen": false,
+   "coversBefore": 7,
+   "coversAfterReveal": 0,
+   "tagsAfterReveal": 6,
+   "tagOverlapIssues": 0,
+   "docOverflow": false
+  },
+  {
+   "target": "harness water-live",
+   "viewport": "1920x1080",
+   "theme": "dark",
+   "figureWidthPx": 481.2,
+   "upscale": 0.841,
+   "sourcePanelOpen": false,
+   "coversBefore": 8,
+   "coversAfterReveal": 0,
+   "tagsAfterReveal": 6,
+   "tagOverlapIssues": 0,
+   "docOverflow": false
+  },
+  {
+   "target": "harness water-live",
+   "viewport": "1920x1080",
+   "theme": "light",
+   "figureWidthPx": 481.2,
+   "upscale": 0.841,
+   "sourcePanelOpen": false,
+   "coversBefore": 8,
+   "coversAfterReveal": 0,
+   "tagsAfterReveal": 6,
+   "tagOverlapIssues": 0,
+   "docOverflow": false
+  }
+ ]
+}

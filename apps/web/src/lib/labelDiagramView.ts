@@ -3,7 +3,7 @@
 // figure, decides what a presenter step shows, and checks a student's placements by name.
 // Coordinates: part points and label boxes are normalised 0..1000 (Meta's perception grid); regions are image pixels.
 
-import type { LabelDiagramSpec, LabelPartGen, LabelRegion } from '../../../../packages/contracts/kit.ts';
+import type { LabelDiagramSpec, LabelFigureRef, LabelPartGen, LabelRegion } from '../../../../packages/contracts/kit.ts';
 import { aiLabel } from './displayText.ts';
 import type { QuoteLike } from './linking.ts';
 import { seededOrder } from './seeded.ts';
@@ -88,6 +88,49 @@ export function labelMasks(parts: readonly LabelPartGen[]): LabelMask[] {
   return out;
 }
 
+/** Image pixels a stored (lead-verified) label cover reaches past its box: the box is tight around the glyphs. */
+export const FIGURE_COVER_PAD = 2;
+
+type PixelBox = { x1: number; y1: number; x2: number; y2: number };
+
+/**
+ * Covers from the figure's stored printed-label boxes (`figure.labelBoxes`, image pixels, x2/y2 exclusive): one cover
+ * per box, padded by FIGURE_COVER_PAD pixels and clamped to the image. When the padding would hide a part's point, the
+ * box itself is used. Boxes that are empty after clamping are skipped. The covers name no part (`partIds` is empty):
+ * they hide every printed word, not just the answers.
+ */
+export function figureLabelMasks(figure: Pick<LabelFigureRef, 'width' | 'height' | 'labelBoxes'>, parts: readonly Pick<LabelPartGen, 'x' | 'y'>[]): LabelMask[] {
+  const W = figure.width;
+  const H = figure.height;
+  const boxes = figure.labelBoxes ?? [];
+  if (!(W > 0) || !(H > 0)) return [];
+  const points = parts.map((p) => ({ x: (clamp(p.x, 0, GRID) * W) / GRID, y: (clamp(p.y, 0, GRID) * H) / GRID }));
+  const hides = (b: PixelBox): boolean => points.some((p) => p.x > b.x1 && p.x < b.x2 && p.y > b.y1 && p.y < b.y2);
+  const out: LabelMask[] = [];
+  boxes.forEach((b, i) => {
+    if (!(b.x2 > b.x1) || !(b.y2 > b.y1)) return;
+    const padded: PixelBox = { x1: b.x1 - FIGURE_COVER_PAD, y1: b.y1 - FIGURE_COVER_PAD, x2: b.x2 + FIGURE_COVER_PAD, y2: b.y2 + FIGURE_COVER_PAD };
+    const box = pixelBoxPct(hides(padded) ? b : padded, figure);
+    if (box !== null) out.push({ key: `figure-${i}`, partIds: [], box });
+  });
+  return out;
+}
+
+/** Where a lesson's label covers come from: the figure's stored boxes when it has any usable one, else Muse's part boxes. */
+export function coverSource(spec: Pick<LabelDiagramSpec, 'parts' | 'figure'>): 'figure' | 'model' {
+  return figureLabelMasks(spec.figure, spec.parts).length > 0 ? 'figure' : 'model';
+}
+
+/**
+ * The covers a lesson draws over the figure until the reveal. With stored label boxes (`figure.labelBoxes`, lessons made
+ * after Stage 8b live run 3) exactly those boxes are covered and Muse's per-part label boxes are not used; older lessons
+ * fall back to Muse's boxes (labelMasks).
+ */
+export function coverMasks(spec: Pick<LabelDiagramSpec, 'parts' | 'figure'>): LabelMask[] {
+  const fromFigure = figureLabelMasks(spec.figure, spec.parts);
+  return fromFigure.length > 0 ? fromFigure : labelMasks(spec.parts);
+}
+
 export interface PartView {
   part: LabelPartGen;
   index: number;
@@ -99,23 +142,134 @@ export interface PartView {
   /** The SAM region around the part, or null when segmentation found none for it. */
   region: PctBox | null;
   confidence: number | null;
-  /** Where the region's name tag sits: above the outline, or inside it when the outline touches the top edge. */
-  tag: 'above' | 'inside';
-  /** How far down its region the part's point sits (0 = top edge, 1 = bottom), so the tag can clear the marker. */
-  pointDepth: number;
 }
 
 export function partViews(spec: Pick<LabelDiagramSpec, 'parts' | 'regions' | 'figure'>): PartView[] {
   return spec.parts.map((part, index) => {
     const r = spec.regions.find((x) => x.partId === part.id);
     const region = r === undefined ? null : pixelBoxPct(r, spec.figure);
-    const point = pointPct(part);
-    return {
-      part, index, number: index + 1, name: aiLabel(part.name.trim()), point, region,
-      confidence: r?.confidence ?? null, tag: region !== null && region.top < 6 ? 'inside' : 'above',
-      pointDepth: region === null ? 0 : clamp((point.top - region.top) / region.height, 0, 1),
-    };
+    return { part, index, number: index + 1, name: aiLabel(part.name.trim()), point: pointPct(part), region, confidence: r?.confidence ?? null };
   });
+}
+
+// ---- name tags ---------------------------------------------------------------------------------------------------------
+
+/** An axis-aligned rectangle in rendered pixels (any one consistent unit). */
+export interface Rect { x: number; y: number; w: number; h: number }
+export type TagSide = 'above' | 'below' | 'right' | 'left';
+export interface TagPlacement {
+  /** Top-left corner of the tag in the figure's rendered pixels. */
+  x: number;
+  y: number;
+  side: TagSide;
+  /** False when no position cleared every other tag, cover and marker (the least-overlapping one was used). */
+  clear: boolean;
+}
+export interface TagLayoutInput {
+  /** The rendered figure. */
+  width: number;
+  height: number;
+  /** Side of a (square) marker, centred on its part's point. */
+  marker: number;
+  /** One per part, in spec order: the part's point and its name tag's size. */
+  tags: readonly { x: number; y: number; w: number; h: number }[];
+  /** Label covers (and anything else a tag must not sit on). */
+  covers: readonly Rect[];
+  /** Space kept between a tag and its marker, and between two tags. */
+  gap?: number;
+}
+
+const SIDES: readonly TagSide[] = ['above', 'below', 'right', 'left'];
+/** How many nudge steps each side tries before giving up on a clear position. */
+export const TAG_NUDGES = 6;
+
+const overlapArea = (a: Rect, b: Rect, gap = 0): number => {
+  const w = Math.min(a.x + a.w, b.x + b.w) + gap - Math.max(a.x, b.x);
+  const h = Math.min(a.y + a.h, b.y + b.h) + gap - Math.max(a.y, b.y);
+  return w > 0 && h > 0 ? w * h : 0;
+};
+
+/** True when the rectangles overlap (touching edges do not count). */
+export function rectsOverlap(a: Rect, b: Rect): boolean {
+  return overlapArea(a, b) > 0;
+}
+
+/**
+ * Where each part's name tag sits on the revealed figure, so no two tags overlap and no tag sits on a label cover or a
+ * marker, or leaves the figure. Deterministic: tags are placed in spec order; each tries, in a fixed order, above its
+ * marker, below, right, left, then the same sides nudged step by step (sideways along the marker, then outwards), and
+ * takes the first position that is clear of the figure's edges, the tags already placed, every cover and every marker.
+ * When none is clear it takes the candidate inside the figure with the least overlap (tags first, then markers, then
+ * covers) and says so (`clear: false`). Positions do not depend on which tags are shown, so revealing never moves one.
+ */
+export function placeTags(input: TagLayoutInput): TagPlacement[] {
+  const { width: W, height: H, marker: m, tags, covers } = input;
+  const gap = input.gap ?? Math.max(2, Math.round(m / 8));
+  const half = m / 2;
+  const markers: Rect[] = tags.map((t) => ({ x: t.x - half, y: t.y - half, w: m, h: m }));
+  const placed: Rect[] = [];
+  const out: TagPlacement[] = [];
+  for (const t of tags) {
+    const base = (side: TagSide): { x: number; y: number } => {
+      switch (side) {
+        case 'above': return { x: t.x - t.w / 2, y: t.y - half - gap - t.h };
+        case 'below': return { x: t.x - t.w / 2, y: t.y + half + gap };
+        case 'right': return { x: t.x + half + gap, y: t.y - t.h / 2 };
+        case 'left': return { x: t.x - half - gap - t.w, y: t.y - t.h / 2 };
+      }
+    };
+    // Sideways steps keep the tag beside its own marker (at most half the tag's length); outward steps lift it clear.
+    const along = (side: TagSide): number => (side === 'above' || side === 'below' ? t.w : t.h) / (2 * TAG_NUDGES);
+    const outStep = (side: TagSide): number => (side === 'above' || side === 'below' ? t.h : t.w / 4) / 2;
+    const candidates: { side: TagSide; r: Rect }[] = [];
+    const push = (side: TagSide, da: number, dout: number): void => {
+      const b = base(side);
+      const vertical = side === 'above' || side === 'below';
+      const sign = side === 'above' || side === 'left' ? -1 : 1;
+      const x = b.x + (vertical ? da : sign * dout);
+      const y = b.y + (vertical ? sign * dout : da);
+      candidates.push({ side, r: { x, y, w: t.w, h: t.h } });
+    };
+    for (const side of SIDES) push(side, 0, 0);
+    for (let k = 1; k <= TAG_NUDGES; k++) {
+      for (const side of SIDES) {
+        const a = along(side) * k;
+        push(side, a, 0);
+        push(side, -a, 0);
+      }
+      for (const side of SIDES) {
+        const o = outStep(side) * k;
+        push(side, 0, o);
+        push(side, along(side) * k, o);
+        push(side, -along(side) * k, o);
+      }
+    }
+    const inside = (r: Rect): boolean => r.x >= 0 && r.y >= 0 && r.x + r.w <= W && r.y + r.h <= H;
+    const cost = (r: Rect): [number, number, number] => [
+      placed.reduce((s, p) => s + overlapArea(r, p, gap), 0),
+      markers.reduce((s, p) => s + overlapArea(r, p), 0),
+      covers.reduce((s, p) => s + overlapArea(r, p), 0),
+    ];
+    let best: { side: TagSide; r: Rect; c: [number, number, number] } | null = null;
+    let chosen: { side: TagSide; r: Rect; clear: boolean } | null = null;
+    for (const c of candidates) {
+      if (!inside(c.r)) continue;
+      const k = cost(c.r);
+      if (k[0] === 0 && k[1] === 0 && k[2] === 0) { chosen = { ...c, clear: true }; break; }
+      if (best === null || k[0] < best.c[0] || (k[0] === best.c[0] && (k[1] < best.c[1] || (k[1] === best.c[1] && k[2] < best.c[2])))) best = { ...c, c: k };
+    }
+    if (chosen === null) {
+      if (best !== null) chosen = { side: best.side, r: best.r, clear: false };
+      else {
+        // The tag is larger than the figure allows anywhere: above its marker, pulled inside the figure.
+        const b = base('above');
+        chosen = { side: 'above', r: { x: clamp(b.x, 0, Math.max(0, W - t.w)), y: clamp(b.y, 0, Math.max(0, H - t.h)), w: t.w, h: t.h }, clear: false };
+      }
+    }
+    placed.push(chosen.r);
+    out.push({ x: chosen.r.x, y: chosen.r.y, side: chosen.side, clear: chosen.clear });
+  }
+  return out;
 }
 
 /** The figure's size on a slide: the image aspect inside a box of at most maxW × maxH (square when the size is unknown). */
@@ -124,6 +278,14 @@ export function stageFigureSize(figure: { width: number; height: number }, maxW:
   const H = figure.height > 0 ? figure.height : 1;
   const k = Math.min(maxW / W, maxH / H);
   return { width: Math.round(W * k), height: Math.round(H * k) };
+}
+
+/** The most a lesson enlarges a figure past its natural size (the page's figures are small raster images). */
+export const LESSON_MAX_UPSCALE = 1.6;
+
+/** The widest a lesson draws the figure: LESSON_MAX_UPSCALE × its natural width (null when the size is unknown). */
+export function lessonFigureMaxWidth(figure: { width: number; height: number }): number | null {
+  return figure.width > 0 ? Math.round(figure.width * LESSON_MAX_UPSCALE) : null;
 }
 
 // ---- word bank and answers -----------------------------------------------------------------------------------------
@@ -182,8 +344,8 @@ export function checkPlacements(spec: Pick<LabelDiagramSpec, 'parts'>, placement
 // ---- presentation --------------------------------------------------------------------------------------------------
 
 /** How many presenter steps the view uses: one per part, plus one that uncovers the printed labels when there are any. */
-export function labelDiagramPresentationSteps(spec: Pick<LabelDiagramSpec, 'parts'>): number {
-  return Math.max(1, spec.parts.length + (labelMasks(spec.parts).length > 0 ? 1 : 0));
+export function labelDiagramPresentationSteps(spec: Pick<LabelDiagramSpec, 'parts' | 'figure'>): number {
+  return Math.max(1, spec.parts.length + (coverMasks(spec).length > 0 ? 1 : 0));
 }
 
 export interface StageState {
@@ -198,7 +360,7 @@ export interface StageState {
 }
 
 /** Step k asks about part k with the parts before it named; R names part k; the last step's R uncovers the labels. */
-export function stageView(spec: Pick<LabelDiagramSpec, 'parts'>, step: number, revealed: boolean): StageState {
+export function stageView(spec: Pick<LabelDiagramSpec, 'parts' | 'figure'>, step: number, revealed: boolean): StageState {
   const n = spec.parts.length;
   const s = clamp(Math.trunc(step), 0, labelDiagramPresentationSteps(spec) - 1);
   const final = n > 0 && s >= n;
@@ -211,7 +373,7 @@ export function stageView(spec: Pick<LabelDiagramSpec, 'parts'>, step: number, r
 }
 
 /** The slide's question for a step: the marker number only, never a name. */
-export function stageQuestion(spec: Pick<LabelDiagramSpec, 'parts'>, step: number): { eyebrow: string; question: string } {
+export function stageQuestion(spec: Pick<LabelDiagramSpec, 'parts' | 'figure'>, step: number): { eyebrow: string; question: string } {
   const n = spec.parts.length;
   const s = clamp(Math.trunc(step), 0, labelDiagramPresentationSteps(spec) - 1);
   if (n > 0 && s >= n) return { eyebrow: 'Last step', question: 'Now the figure’s own labels.' };

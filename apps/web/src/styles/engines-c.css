@@ -19,7 +19,6 @@
   --ld-region-strong: #0064e0;
   --ld-tag: #0050b3;
   --ld-tag-ink: #ffffff;
-  --pin-half: 13px;
   container-type: inline-size;
   display: grid;
   gap: 16px;
@@ -29,14 +28,15 @@
 .ld-stack > * { grid-area: 1 / 1; }
 .ld-stack > [data-on="false"] { visibility: hidden; }
 
-.ld-body { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(240px, 1fr); gap: 20px 28px; align-items: start; }
+.ld-body { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(240px, 1fr); gap: 20px 28px; align-items: start; }
 @container (max-width: 640px) {
   .ld[data-mode="lesson"] .ld-body { grid-template-columns: minmax(0, 1fr); }
 }
 
 /* ---- the figure ------------------------------------------------------------------------------------------------- */
 .ld-figure { display: grid; gap: 6px; margin: 0; min-inline-size: 0; }
-.ld[data-mode="lesson"] .ld-figure { max-inline-size: 560px; }
+/* The lesson figure fills its column, up to 1.6× its natural width (inline max-inline-size from lib lessonFigureMaxWidth). */
+.ld[data-mode="lesson"] .ld-figure { inline-size: 100%; }
 .ld-plate {
   position: relative; inline-size: 100%; background: var(--ld-plate);
   border: 1px solid var(--ld-plate-line); border-radius: var(--r-l); overflow: hidden;
@@ -51,20 +51,22 @@
 }
 .ld-mask[data-on="false"] { opacity: 0; visibility: hidden; }
 
-/* A part's SAM region, outlined softly with its name once named. */
+/* A part's SAM region, outlined softly once named. */
 .ld-region {
   position: absolute; border-radius: 6px; border: 1.5px solid var(--ld-region); background: var(--ld-region-fill);
   pointer-events: none; transition: opacity 0.2s ease-out, visibility 0.2s;
 }
 .ld-region[data-on="false"] { opacity: 0; visibility: hidden; }
 .ld-region[data-current="true"] { border-color: var(--ld-region-strong); box-shadow: 0 0 0 1px var(--ld-region-strong); }
-.ld-region-tag {
-  /* Sits above the outline, raised past the part's marker when the marker pokes out of the outline's top edge. */
-  position: absolute; inset-inline-start: -1px; inset-block-end: calc(100% + max(3px, var(--pin-half) + 4px - var(--depth, 0) * 100%));
-  padding: 1px 6px; border-radius: 4px; background: var(--ld-tag); color: var(--ld-tag-ink);
-  font-size: var(--fs-12); font-weight: var(--fw-medium); line-height: 1.4; white-space: nowrap;
+/* A part's name tag beside its marker, at the spot lib placeTags chose (clear of other tags, covers and markers). */
+.ld-tag {
+  position: absolute; z-index: 2; inset-block-start: 0; inset-inline-start: 0; box-sizing: border-box;
+  padding: 1px 6px; border-radius: 4px; background: var(--ld-tag); color: var(--ld-tag-ink); pointer-events: none;
+  font-size: var(--fs-12); font-weight: var(--fw-medium); line-height: 1.4; white-space: nowrap; overflow: hidden;
+  box-shadow: 0 1px 3px rgba(10, 19, 23, 0.3); transition: opacity 0.2s ease-out, visibility 0.2s;
 }
-.ld-region-tag[data-tag="inside"] { inset-block-end: auto; inset-block-start: 3px; inset-inline-start: 3px; }
+.ld-tag[data-on="false"] { opacity: 0; visibility: hidden; }
+.ld-tag[data-current="true"] { background: var(--ld-region-strong); }
 
 /* The numbered marker sits ON the part's point. */
 .ld-marker-slot { display: contents; }
@@ -74,7 +76,7 @@
   border: 0; border-radius: 7px; background: var(--ld-pin); color: var(--ld-pin-ink);
   box-shadow: 0 0 0 2px var(--ld-pin-ring), 0 2px 6px -1px rgba(10, 19, 23, 0.45);
   font: inherit; font-size: var(--fs-14); font-weight: var(--fw-bold); line-height: 1; font-variant-numeric: tabular-nums;
-  transition: background-color 0.16s ease-out, box-shadow 0.16s ease-out, transform 0.16s ease-out;
+  transition: background-color 0.16s ease-out, box-shadow 0.16s ease-out, transform 0.16s ease-out, opacity 0.2s ease-out;
 }
 button.ld-marker { cursor: pointer; }
 button.ld-marker:disabled { cursor: default; }
@@ -149,24 +151,30 @@ button.ld-chip:hover:not(:disabled) { border-color: var(--line-3); }
 .ld-quotes { display: grid; gap: 8px; }
 
 /* ---- presentation (stage): figure left at a fixed design size, the question and the numbers right --------------- */
-.ld[data-mode="stage"] .ld-body { grid-template-columns: auto minmax(0, 1fr); column-gap: 40px; }
-.ld[data-mode="stage"] .ld-side { gap: 16px; padding-block-start: 4px; }
+.ld[data-mode="stage"] .ld-body { grid-template-columns: auto minmax(0, 1fr); column-gap: 40px; align-items: stretch; }
+/* The figure sets the slide's height; the side column fits beside it with the credit at its foot. */
+.ld[data-mode="stage"] .ld-side { gap: 16px; padding-block-start: 4px; grid-template-rows: auto auto auto auto minmax(0, 1fr); }
+.ld-stage-credit { align-self: end; }
+/* The slide's last reveal shows the figure's own labels clean: outlines and name tags fade out (the numbered list keeps
+   every name), markers dim so a word printed under one still reads. Opacity only, so nothing moves. */
+.ld[data-mode="stage"] .ld-plate[data-labels="shown"] .ld-region,
+.ld[data-mode="stage"] .ld-plate[data-labels="shown"] .ld-tag { opacity: 0; visibility: hidden; }
+.ld[data-mode="stage"] .ld-plate[data-labels="shown"] .ld-marker { opacity: 0.35; }
 .ld-question { font-size: var(--fs-26); font-weight: var(--fw-bold); line-height: 1.2; letter-spacing: -0.01em; text-wrap: balance; }
 .ld-progress { margin-inline-start: 6px; font-size: var(--fs-16); font-weight: var(--fw-medium); color: var(--ink-3); letter-spacing: 0; white-space: nowrap; }
 .ld[data-mode="stage"] .ld-chip { font-size: var(--fs-16); padding: 5px 12px; }
 .ld[data-mode="stage"] .ld-chip[data-used="true"] { text-decoration: line-through; text-decoration-color: var(--line-3); }
 .ld[data-mode="stage"] .ld-rows { gap: 4px; }
-.ld[data-mode="stage"] .ld-rows[data-cols="2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 20px; }
+.ld[data-mode="stage"] .ld-rows[data-cols="2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 20px; max-inline-size: 620px; }
 .ld[data-mode="stage"] .ld-row { grid-template-columns: 28px minmax(0, 1fr); min-block-size: 36px; padding-inline-end: 8px; }
 .ld[data-mode="stage"] .ld-row-n { inline-size: 28px; block-size: 28px; font-size: var(--fs-16); }
 .ld[data-mode="stage"] .ld-answer { font-size: var(--fs-20); }
 .ld[data-mode="stage"] .ld-row .concealed { font-size: var(--fs-16); }
-.ld[data-mode="stage"] { --pin-half: 14px; }
 .ld[data-mode="stage"] .ld-marker { inline-size: 28px; block-size: 28px; font-size: var(--fs-16); }
-.ld[data-mode="stage"] .ld-region-tag { font-size: var(--fs-14); }
+.ld[data-mode="stage"] .ld-tag { font-size: var(--fs-14); }
 .ld-foot { font-size: var(--fs-16); color: var(--ink-2); }
 .ld-foot kbd { font-size: 0.85em; }
 
 @media (prefers-reduced-motion: reduce) {
-  .ld-mask, .ld-region, .ld-marker { transition: none; }
+  .ld-mask, .ld-region, .ld-marker, .ld-tag { transition: none; }
 }

@@ -1,0 +1,639 @@
+[
+ {
+  "job": "job-20261031051459-6bf49d3d",
+  "viewport": "1920x1080",
+  "theme": "dark",
+  "before": {
+   "inner": [
+    1920,
+    1080
+   ],
+   "plateW": 577.2,
+   "plateH": 577.2,
+   "natural": [
+    600,
+    600
+   ],
+   "upscale": 0.962,
+   "sourcePanelOpen": true,
+   "sourcePanelW": 491,
+   "covers": 6,
+   "tags": 0,
+   "issues": [],
+   "docScroll": [
+    1080,
+    1080
+   ]
+  },
+  "revealed": {
+   "inner": [
+    1920,
+    1080
+   ],
+   "plateW": 577.2,
+   "plateH": 577.2,
+   "natural": [
+    600,
+    600
+   ],
+   "upscale": 0.962,
+   "sourcePanelOpen": true,
+   "sourcePanelW": 491,
+   "covers": 0,
+   "tags": 6,
+   "issues": [],
+   "docScroll": [
+    1080,
+    1080
+   ]
+  }
+ },
+ {
+  "job": "job-20261031051459-dbf3765c",
+  "viewport": "1920x1080",
+  "theme": "dark",
+  "before": {
+   "inner": [
+    1920,
+    1080
+   ],
+   "plateW": 577.2,
+   "plateH": 508.6,
+   "natural": [
+    572,
+    504
+   ],
+   "upscale": 1.009,
+   "sourcePanelOpen": true,
+   "sourcePanelW": 491,
+   "covers": 5,
+   "tags": 0,
+   "issues": [],
+   "docScroll": [
+    1080,
+    1080
+   ]
+  },
+  "revealed": {
+   "inner": [
+    1920,
+    1080
+   ],
+   "plateW": 577.2,
+   "plateH": 508.6,
+   "natural": [
+    572,
+    504
+   ],
+   "upscale": 1.009,
+   "sourcePanelOpen": true,
+   "sourcePanelW": 491,
+   "covers": 0,
+   "tags": 5,
+   "issues": [],
+   "docScroll": [
+    1080,
+    1080
+   ]
+  }
+ },
+ {
+  "job": "job-20261031051634-7731ba24",
+  "viewport": "1920x1080",
+  "theme": "dark",
+  "before": {
+   "inner": [
+    1920,
+    1080
+   ],
+   "plateW": 577.2,
+   "plateH": 508.6,
+   "natural": [
+    572,
+    504
+   ],
+   "upscale": 1.009,
+   "sourcePanelOpen": true,
+   "sourcePanelW": 491,
+   "covers": 5,
+   "tags": 0,
+   "issues": [],
+   "docScroll": [
+    1080,
+    1080
+   ]
+  },
+  "revealed": {
+   "inner": [
+    1920,
+    1080
+   ],
+   "plateW": 577.2,
+   "plateH": 508.6,
+   "natural": [
+    572,
+    504
+   ],
+   "upscale": 1.009,
+   "sourcePanelOpen": true,
+   "sourcePanelW": 491,
+   "covers": 0,
+   "tags": 6,
+   "issues": [],
+   "docScroll": [
+    1080,
+    1080
+   ]
+  }
+ },
+ {
+  "job": "job-20261031051459-6bf49d3d",
+  "viewport": "1920x1080",
+  "theme": "light",
+  "before": {
+   "inner": [
+    1920,
+    1080
+   ],
+   "plateW": 577.2,
+   "plateH": 577.2,
+   "natural": [
+    600,
+    600
+   ],
+   "upscale": 0.962,
+   "sourcePanelOpen": true,
+   "sourcePanelW": 491,
+   "covers": 6,
+   "tags": 0,
+   "issues": [],
+   "docScroll": [
+    1080,
+    1080
+   ]
+  },
+  "revealed": {
+   "inner": [
+    1920,
+    1080
+   ],
+   "plateW": 577.2,
+   "plateH": 577.2,
+   "natural": [
+    600,
+    600
+   ],
+   "upscale": 0.962,
+   "sourcePanelOpen": true,
+   "sourcePanelW": 491,
+   "covers": 0,
+   "tags": 6,
+   "issues": [],
+   "docScroll": [
+    1080,
+    1080
+   ]
+  }
+ },
+ {
+  "job": "job-20261031051459-dbf3765c",
+  "viewport": "1920x1080",
+  "theme": "light",
+  "before": {
+   "inner": [
+    1920,
+    1080
+   ],
+   "plateW": 577.2,
+   "plateH": 508.6,
+   "natural": [
+    572,
+    504
+   ],
+   "upscale": 1.009,
+   "sourcePanelOpen": true,
+   "sourcePanelW": 491,
+   "covers": 5,
+   "tags": 0,
+   "issues": [],
+   "docScroll": [
+    1080,
+    1080
+   ]
+  },
+  "revealed": {
+   "inner": [
+    1920,
+    1080
+   ],
+   "plateW": 577.2,
+   "plateH": 508.6,
+   "natural": [
+    572,
+    504
+   ],
+   "upscale": 1.009,
+   "sourcePanelOpen": true,
+   "sourcePanelW": 491,
+   "covers": 0,
+   "tags": 5,
+   "issues": [],
+   "docScroll": [
+    1080,
+    1080
+   ]
+  }
+ },
+ {
+  "job": "job-20261031051634-7731ba24",
+  "viewport": "1920x1080",
+  "theme": "light",
+  "before": {
+   "inner": [
+    1920,
+    1080
+   ],
+   "plateW": 577.2,
+   "plateH": 508.6,
+   "natural": [
+    572,
+    504
+   ],
+   "upscale": 1.009,
+   "sourcePanelOpen": true,
+   "sourcePanelW": 491,
+   "covers": 5,
+   "tags": 0,
+   "issues": [],
+   "docScroll": [
+    1080,
+    1080
+   ]
+  },
+  "revealed": {
+   "inner": [
+    1920,
+    1080
+   ],
+   "plateW": 577.2,
+   "plateH": 508.6,
+   "natural": [
+    572,
+    504
+   ],
+   "upscale": 1.009,
+   "sourcePanelOpen": true,
+   "sourcePanelW": 491,
+   "covers": 0,
+   "tags": 6,
+   "issues": [],
+   "docScroll": [
+    1080,
+    1080
+   ]
+  }
+ },
+ {
+  "job": "job-20261031051459-6bf49d3d",
+  "viewport": "1366x768",
+  "theme": "dark",
+  "before": {
+   "inner": [
+    1366,
+    768
+   ],
+   "plateW": 422.9,
+   "plateH": 422.9,
+   "natural": [
+    600,
+    600
+   ],
+   "upscale": 0.705,
+   "sourcePanelOpen": true,
+   "sourcePanelW": 340,
+   "covers": 6,
+   "tags": 0,
+   "issues": [],
+   "docScroll": [
+    768,
+    768
+   ]
+  },
+  "revealed": {
+   "inner": [
+    1366,
+    768
+   ],
+   "plateW": 422.9,
+   "plateH": 422.9,
+   "natural": [
+    600,
+    600
+   ],
+   "upscale": 0.705,
+   "sourcePanelOpen": true,
+   "sourcePanelW": 340,
+   "covers": 0,
+   "tags": 6,
+   "issues": [],
+   "docScroll": [
+    768,
+    768
+   ]
+  }
+ },
+ {
+  "job": "job-20261031051459-dbf3765c",
+  "viewport": "1366x768",
+  "theme": "dark",
+  "before": {
+   "inner": [
+    1366,
+    768
+   ],
+   "plateW": 422.9,
+   "plateH": 372.6,
+   "natural": [
+    572,
+    504
+   ],
+   "upscale": 0.739,
+   "sourcePanelOpen": true,
+   "sourcePanelW": 340,
+   "covers": 5,
+   "tags": 0,
+   "issues": [],
+   "docScroll": [
+    768,
+    768
+   ]
+  },
+  "revealed": {
+   "inner": [
+    1366,
+    768
+   ],
+   "plateW": 422.9,
+   "plateH": 372.6,
+   "natural": [
+    572,
+    504
+   ],
+   "upscale": 0.739,
+   "sourcePanelOpen": true,
+   "sourcePanelW": 340,
+   "covers": 0,
+   "tags": 5,
+   "issues": [],
+   "docScroll": [
+    768,
+    768
+   ]
+  }
+ },
+ {
+  "job": "job-20261031051634-7731ba24",
+  "viewport": "1366x768",
+  "theme": "dark",
+  "before": {
+   "inner": [
+    1366,
+    768
+   ],
+   "plateW": 422.9,
+   "plateH": 372.6,
+   "natural": [
+    572,
+    504
+   ],
+   "upscale": 0.739,
+   "sourcePanelOpen": true,
+   "sourcePanelW": 340,
+   "covers": 5,
+   "tags": 0,
+   "issues": [],
+   "docScroll": [
+    768,
+    768
+   ]
+  },
+  "revealed": {
+   "inner": [
+    1366,
+    768
+   ],
+   "plateW": 422.9,
+   "plateH": 372.6,
+   "natural": [
+    572,
+    504
+   ],
+   "upscale": 0.739,
+   "sourcePanelOpen": true,
+   "sourcePanelW": 340,
+   "covers": 0,
+   "tags": 6,
+   "issues": [],
+   "docScroll": [
+    768,
+    768
+   ]
+  }
+ },
+ {
+  "harnessTab": "dna-live",
+  "viewport": "1920x1080",
+  "theme": "dark",
+  "before": {
+   "inner": [
+    1920,
+    1080
+   ],
+   "plateW": 481.2,
+   "plateH": 481.2,
+   "natural": [
+    600,
+    600
+   ],
+   "upscale": 0.802,
+   "sourcePanelOpen": false,
+   "sourcePanelW": 0,
+   "covers": 7,
+   "tags": 0,
+   "issues": [],
+   "docScroll": [
+    1080,
+    1080
+   ]
+  },
+  "revealed": {
+   "inner": [
+    1920,
+    1080
+   ],
+   "plateW": 481.2,
+   "plateH": 481.2,
+   "natural": [
+    600,
+    600
+   ],
+   "upscale": 0.802,
+   "sourcePanelOpen": false,
+   "sourcePanelW": 0,
+   "covers": 0,
+   "tags": 6,
+   "issues": [],
+   "docScroll": [
+    1080,
+    1080
+   ]
+  }
+ },
+ {
+  "harnessTab": "dna-live",
+  "viewport": "1920x1080",
+  "theme": "light",
+  "before": {
+   "inner": [
+    1920,
+    1080
+   ],
+   "plateW": 481.2,
+   "plateH": 481.2,
+   "natural": [
+    600,
+    600
+   ],
+   "upscale": 0.802,
+   "sourcePanelOpen": false,
+   "sourcePanelW": 0,
+   "covers": 7,
+   "tags": 0,
+   "issues": [],
+   "docScroll": [
+    1080,
+    1080
+   ]
+  },
+  "revealed": {
+   "inner": [
+    1920,
+    1080
+   ],
+   "plateW": 481.2,
+   "plateH": 481.2,
+   "natural": [
+    600,
+    600
+   ],
+   "upscale": 0.802,
+   "sourcePanelOpen": false,
+   "sourcePanelW": 0,
+   "covers": 0,
+   "tags": 6,
+   "issues": [],
+   "docScroll": [
+    1080,
+    1080
+   ]
+  }
+ },
+ {
+  "harnessTab": "water-live",
+  "viewport": "1920x1080",
+  "theme": "dark",
+  "before": {
+   "inner": [
+    1920,
+    1080
+   ],
+   "plateW": 481.2,
+   "plateH": 424,
+   "natural": [
+    572,
+    504
+   ],
+   "upscale": 0.841,
+   "sourcePanelOpen": false,
+   "sourcePanelW": 0,
+   "covers": 8,
+   "tags": 0,
+   "issues": [],
+   "docScroll": [
+    1080,
+    1080
+   ]
+  },
+  "revealed": {
+   "inner": [
+    1920,
+    1080
+   ],
+   "plateW": 481.2,
+   "plateH": 424,
+   "natural": [
+    572,
+    504
+   ],
+   "upscale": 0.841,
+   "sourcePanelOpen": false,
+   "sourcePanelW": 0,
+   "covers": 0,
+   "tags": 6,
+   "issues": [],
+   "docScroll": [
+    1080,
+    1080
+   ]
+  }
+ },
+ {
+  "harnessTab": "water-live",
+  "viewport": "1920x1080",
+  "theme": "light",
+  "before": {
+   "inner": [
+    1920,
+    1080
+   ],
+   "plateW": 481.2,
+   "plateH": 424,
+   "natural": [
+    572,
+    504
+   ],
+   "upscale": 0.841,
+   "sourcePanelOpen": false,
+   "sourcePanelW": 0,
+   "covers": 8,
+   "tags": 0,
+   "issues": [],
+   "docScroll": [
+    1080,
+    1080
+   ]
+  },
+  "revealed": {
+   "inner": [
+    1920,
+    1080
+   ],
+   "plateW": 481.2,
+   "plateH": 424,
+   "natural": [
+    572,
+    504
+   ],
+   "upscale": 0.841,
+   "sourcePanelOpen": false,
+   "sourcePanelW": 0,
+   "covers": 0,
+   "tags": 6,
+   "issues": [],
+   "docScroll": [
+    1080,
+    1080
+   ]
+  }
+ }
+]

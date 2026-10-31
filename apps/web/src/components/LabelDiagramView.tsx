@@ -1,13 +1,15 @@
 // Label the diagram (label-diagram-v1, Stage 8b): the page's own figure with its printed labels covered, a numbered
 // marker on each part, and a word bank of the page's part names. The class drags (or picks, then places) each name onto
 // its number; Check marks each number; Show the answers uncovers the printed labels and outlines each part's region with
-// its name. All geometry comes from the spec (lib/labelDiagramView.ts scales it); nothing here is computed beyond that.
-import { createContext, useContext, useMemo, useState } from 'react';
-import type { CSSProperties, DragEvent, ReactNode } from 'react';
+// its name. All geometry comes from the spec (lib/labelDiagramView.ts scales it and places the name tags); the view only
+// measures the rendered tag sizes for that placement.
+import { createContext, useContext, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import type { CSSProperties, DragEvent, ReactNode, RefObject } from 'react';
 import type { LabelDiagramSpec } from '../../../../packages/contracts/kit.ts';
 import type { EnginePresentation } from '../lib/enginePresentation.ts';
 import {
-  checkPlacements, labelDiagramPresentationSteps, labelMasks, partViews, place, stageFigureSize, stageQuestion, stageView, unplace, wordBank,
+  checkPlacements, coverMasks, labelDiagramPresentationSteps, lessonFigureMaxWidth, partViews, place, placeTags, stageFigureSize, stageQuestion,
+  stageView, unplace, wordBank,
 } from '../lib/labelDiagramView.ts';
 import type { CheckResult, LabelMask, PartView, PctBox, Placements } from '../lib/labelDiagramView.ts';
 import { aiLabel } from '../lib/displayText.ts';
@@ -22,13 +24,71 @@ export interface LabelDiagramViewProps { spec: LabelDiagramSpec; cite: CiteProps
 /** Where the figure image comes from. The app reads the API; the dev harness serves the committed file instead. */
 export const FigureSrcContext = createContext<(figureId: string) => string>((id) => `/api/figures/${encodeURIComponent(id)}/image`);
 
-/** Design size of the figure on a slide (StageFit scales the whole part to the stage; Beats lays it out 1100 wide). */
-const STAGE_FIGURE = { maxW: 560, maxH: 392 };
+/**
+ * Design size of the figure on a slide. Beats lays the part out 1100 wide and StageFit scales it whole to the stage
+ * (about 1189×453 at 1366×768 and 1670×662 at 1920×1080, i.e. ~2.55:1), so a figure 436 tall IS the part's height: the
+ * side column (question, names, numbers, credit) stays shorter, and the figure fills the stage from top to bottom.
+ */
+const STAGE_FIGURE = { maxW: 600, maxH: 436 };
 
 const pct = (b: PctBox): CSSProperties => ({ left: `${b.left}%`, top: `${b.top}%`, width: `${b.width}%`, height: `${b.height}%` });
 const DRAG_TYPE = 'text/plain';
 
 type MarkerState = 'idle' | 'current' | 'right' | 'wrong';
+
+/** A tag's top-left corner as a percentage of the plate, and its width in layout px (the name's measured width). */
+type TagPos = { left: number; top: number; width: number };
+
+let measureCtx: CanvasRenderingContext2D | null | undefined;
+/** A name's width in the tag's font (layout px), measured off-DOM so a hidden tag never holds its answer's text. */
+function textWidth(text: string, font: string): number {
+  if (measureCtx === undefined) measureCtx = document.createElement('canvas').getContext('2d');
+  if (measureCtx === null) return text.length * 8;
+  measureCtx.font = font;
+  return measureCtx.measureText(text).width;
+}
+
+/**
+ * Places every name tag once per rendered size (lib placeTags: no tag on another tag, a cover or a marker, none outside
+ * the figure). Every tag is laid out up front from its name's measured width (a hidden tag holds no name), so naming one
+ * never moves another. Sizes are read in the plate's own layout units (client/offset sizes, unaffected by a slide's CSS
+ * zoom).
+ */
+function useTagLayout(plateRef: RefObject<HTMLDivElement | null>, views: readonly PartView[], masks: readonly LabelMask[]): readonly TagPos[] | null {
+  const [layout, setLayout] = useState<{ key: string; list: TagPos[] } | null>(null);
+  useLayoutEffect(() => {
+    const plate = plateRef.current;
+    if (plate === null) return undefined;
+    const measure = (): void => {
+      const W = plate.clientWidth;
+      const H = plate.clientHeight;
+      if (!(W > 0) || !(H > 0)) return;
+      const tagEls = Array.from(plate.querySelectorAll<HTMLElement>(':scope > .ld-tag'));
+      const marker = plate.querySelector<HTMLElement>('.ld-marker');
+      // the marker's white ring (2 px) counts as part of it
+      const m = (marker?.offsetWidth ?? 26) + 4;
+      const tags = views.map((v, i) => {
+        const el = tagEls[i];
+        let w = 0;
+        if (el !== undefined) {
+          const cs = getComputedStyle(el);
+          w = Math.ceil(textWidth(v.name, cs.font) + parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight)) + 1;
+        }
+        return { x: (v.point.left * W) / 100, y: (v.point.top * H) / 100, w, h: el?.offsetHeight ?? 0 };
+      });
+      const covers = masks.map((c) => ({ x: (c.box.left * W) / 100, y: (c.box.top * H) / 100, w: (c.box.width * W) / 100, h: (c.box.height * H) / 100 }));
+      const list = placeTags({ width: W, height: H, marker: m, tags, covers }).map((p, i) => ({ left: (p.x * 100) / W, top: (p.y * 100) / H, width: tags[i]?.w ?? 0 }));
+      const key = list.map((p) => `${p.left.toFixed(3)},${p.top.toFixed(3)},${p.width}`).join(';');
+      setLayout((prev) => (prev !== null && prev.key === key ? prev : { key, list }));
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(plate);
+    for (const t of Array.from(plate.querySelectorAll(':scope > .ld-tag'))) ro.observe(t);
+    return () => ro.disconnect();
+  }, [plateRef, views, masks]);
+  return layout?.list ?? null;
+}
 
 interface FigureProps {
   spec: LabelDiagramSpec;
@@ -41,23 +101,32 @@ interface FigureProps {
   current: number | null;
   /** Fixed slide size; the lesson figure fills its column at the image's aspect instead. */
   size?: { width: number; height: number };
+  /** Caption and credit under the figure (lesson); a slide shows the credit in its side column instead. */
   caption: boolean;
   /** Lesson only: markers are buttons and drop targets. */
   marker?: (v: PartView, style: CSSProperties, state: MarkerState) => ReactNode;
 }
 
 /** The page's figure: printed labels covered, a numbered marker per part, region outlines with names once named. */
+function figureCredit(fig: LabelDiagramSpec['figure']): string {
+  return [fig.credit.trim(), fig.license.trim()].filter((s) => s !== '').join(' · ');
+}
+
 function Figure({ spec, views, masks, named, labelsShown, markerState, current, size, caption, marker }: FigureProps) {
   const srcOf = useContext(FigureSrcContext);
   const [failed, setFailed] = useState(false);
+  const plateRef = useRef<HTMLDivElement>(null);
+  const tagPos = useTagLayout(plateRef, views, masks);
   const fig = spec.figure;
   const plateStyle: CSSProperties = size !== undefined
     ? { width: size.width, height: size.height }
     : { aspectRatio: `${fig.width > 0 ? fig.width : 1} / ${fig.height > 0 ? fig.height : 1}` };
-  const credit = [fig.credit.trim(), fig.license.trim()].filter((s) => s !== '').join(' · ');
+  const maxW = lessonFigureMaxWidth(fig);
+  const figureStyle: CSSProperties | undefined = size !== undefined ? { width: size.width } : maxW !== null ? { maxInlineSize: `${maxW}px` } : undefined;
+  const credit = figureCredit(fig);
   return (
-    <figure className="ld-figure" style={size !== undefined ? { width: size.width } : undefined}>
-      <div className="ld-plate" style={plateStyle}>
+    <figure className="ld-figure" style={figureStyle}>
+      <div className="ld-plate" style={plateStyle} ref={plateRef} data-labels={labelsShown ? 'shown' : 'covered'}>
         {failed
           ? <p className="ld-missing">The figure could not be loaded.</p>
           : <img src={srcOf(spec.figureId)} alt={fig.caption.trim() === '' ? 'The page’s figure, labels covered' : `The page’s figure, labels covered: ${fig.caption.trim()}`} draggable={false} onError={() => setFailed(true)} />}
@@ -66,11 +135,9 @@ function Figure({ spec, views, masks, named, labelsShown, markerState, current, 
         ))}
         {views.map((v) => (v.region === null ? null : (
           <span
-            key={`r-${v.part.id}`} className="ld-region" style={{ ...pct(v.region), '--depth': v.pointDepth } as CSSProperties} data-on={named[v.index] === true ? 'true' : 'false'}
+            key={`r-${v.part.id}`} className="ld-region" style={pct(v.region)} data-on={named[v.index] === true ? 'true' : 'false'}
             data-current={current === v.index ? 'true' : 'false'} aria-hidden="true"
-          >
-            <span className="ld-region-tag" data-tag={v.tag}>{v.name}</span>
-          </span>
+          />
         )))}
         {views.map((v) => {
           const state = markerState(v);
@@ -79,11 +146,24 @@ function Figure({ spec, views, masks, named, labelsShown, markerState, current, 
             ? <span key={`m-${v.part.id}`} className="ld-marker-slot">{marker(v, style, state)}</span>
             : <span key={`m-${v.part.id}`} className="ld-marker" data-state={state} style={style} aria-hidden="true"><span className="num">{v.number}</span></span>;
         })}
+        {/* Name tags last (above markers), one per part in spec order, placed once by lib placeTags; shown when named. */}
+        {views.map((v) => {
+          const p = tagPos?.[v.index];
+          const on = named[v.index] === true && p !== undefined;
+          return (
+            <span
+              key={`t-${v.part.id}`} className="ld-tag" aria-hidden="true" data-on={on ? 'true' : 'false'} data-current={current === v.index ? 'true' : 'false'}
+              style={p === undefined ? undefined : { left: `${p.left}%`, top: `${p.top}%`, inlineSize: p.width }}
+            >{named[v.index] === true ? v.name : '\u00a0'}</span>
+          );
+        })}
       </div>
-      <figcaption className="ld-figcaption">
-        {caption && fig.caption.trim() !== '' && <span className="ld-caption">{fig.caption.trim()}</span>}
-        {credit !== '' && <span className="ld-credit">{credit}</span>}
-      </figcaption>
+      {caption && (
+        <figcaption className="ld-figcaption">
+          {fig.caption.trim() !== '' && <span className="ld-caption">{fig.caption.trim()}</span>}
+          {credit !== '' && <span className="ld-credit">{credit}</span>}
+        </figcaption>
+      )}
     </figure>
   );
 }
@@ -116,7 +196,7 @@ function PageQuotes({ spec, views, cite }: { spec: LabelDiagramSpec; views: read
 
 function LessonDiagram({ spec, cite }: { spec: LabelDiagramSpec; cite: CiteProps }) {
   const views = useMemo(() => partViews(spec), [spec]);
-  const masks = useMemo(() => labelMasks(spec.parts), [spec]);
+  const masks = useMemo(() => coverMasks(spec), [spec]);
   const bank = useMemo(() => wordBank(spec), [spec]);
   const [placements, setPlacements] = useState<Placements>({});
   const [selected, setSelected] = useState<string | null>(null);
@@ -277,14 +357,16 @@ function LessonDiagram({ spec, cite }: { spec: LabelDiagramSpec; cite: CiteProps
 
 function StageDiagram({ spec, presentation }: { spec: LabelDiagramSpec; presentation: EnginePresentation }) {
   const views = useMemo(() => partViews(spec), [spec]);
-  const masks = useMemo(() => labelMasks(spec.parts), [spec]);
+  const masks = useMemo(() => coverMasks(spec), [spec]);
   const bank = useMemo(() => wordBank(spec), [spec]);
   const steps = labelDiagramPresentationSteps(spec);
   const st = stageView(spec, presentation.step, presentation.revealed);
   const size = stageFigureSize(spec.figure, STAGE_FIGURE.maxW, STAGE_FIGURE.maxH);
   const markerState = (v: PartView): MarkerState => (st.current === v.index ? 'current' : 'idle');
   const namedTokens = new Set(views.filter((v) => st.named[v.index] === true).map((v) => v.part.id));
-  const cols = spec.parts.length > 6 ? 2 : 1;
+  // Two columns of numbers from five parts on, so the side stays shorter than the figure (which sets the slide's height).
+  const cols = spec.parts.length > 4 ? 2 : 1;
+  const credit = figureCredit(spec.figure);
   const step = st.final ? spec.parts.length : (st.current ?? 0);
 
   return (
@@ -333,6 +415,7 @@ function StageDiagram({ spec, presentation }: { spec: LabelDiagramSpec; presenta
             <p data-on={st.final && !presentation.revealed ? 'true' : 'false'}>Press <kbd>R</kbd> to uncover the figure’s labels.</p>
             <p data-on={st.labelsShown ? 'true' : 'false'}>These are the labels the figure prints.</p>
           </div>
+          {credit !== '' && <p className="ld-credit ld-stage-credit">{credit}</p>}
         </div>
       </div>
     </div>
