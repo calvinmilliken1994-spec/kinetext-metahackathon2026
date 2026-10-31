@@ -51,6 +51,26 @@ export interface PagePreset {
 
 const same = (a: number, b: number): boolean => Math.abs(a - b) <= 1e-9 * Math.max(1, Math.abs(a), Math.abs(b));
 
+// Set A (W2-05): the page must write the value AS that quantity, i.e. the number followed directly by one of the unit's
+// written forms. "The experiment lasts 9.8 seconds" is not a 9.8 m/s² gravity. Units without a known form get no chips.
+const METRE = '(?:m|metres?|meters?)';
+const UNIT_FORMS: Readonly<Record<string, RegExp>> = {
+  // m/s², m/s^2, m/s2, m s^-2, m s⁻², m·s⁻², ms^-2, m/sec², metres per second squared, … per second per second
+  'm/s²': new RegExp(`^\\s*(?:m(?:\\s*/\\s*s(?:ec)?\\s*(?:\\^\\s*2|²|2)|[\\s·⋅]*s(?:ec)?\\s*(?:\\^\\s*\\(?\\s*-\\s*2\\s*\\)?|⁻²|-2))(?![\\w²³⁰-⁹^]|\\.\\d)|${METRE}\\s+per\\s+second\\s+(?:squared|per\\s+second)\\b)`, 'iu'),
+  // m/s, m s^-1, m s⁻¹, metres per second (but not "per second squared" / "per second per second")
+  'm/s': new RegExp(`^\\s*(?:m(?:\\s*/\\s*s(?:ec)?|[\\s·⋅]*s(?:ec)?\\s*(?:\\^\\s*\\(?\\s*-\\s*1\\s*\\)?|⁻¹|-1))(?![\\w²³⁰-⁹⁻^/]|\\s*(?:\\^|²|⁻))|${METRE}\\s+per\\s+second\\b(?!\\s+(?:squared|per\\b)))`, 'iu'),
+};
+const canonicalUnit = (unit: string): string => {
+  const u = unit.replace(/\s+/g, '').replace(/\^2/g, '²').replace(/\*/g, '·');
+  return u === 'm/s²' || u === 'm·s⁻²' || u === 'ms⁻²' ? 'm/s²' : u === 'm/s' || u === 'm·s⁻¹' ? 'm/s' : u;
+};
+
+/** Whether `after` (the page text right after a number) starts with a written form of `unit` (raw or display form). */
+export function unitFollows(after: string, unit: string): boolean {
+  const form = UNIT_FORMS[canonicalUnit(unit)];
+  return form !== undefined && form.test(after);
+}
+
 /** Chips for one slider input, in case order (the opening case first). Values outside the slider range are left out. */
 export function pagePresets(spec: ActivitySpec, key: string, sourceText: string | null | undefined): PagePreset[] {
   if (typeof sourceText !== 'string' || sourceText === '') return [];
@@ -63,12 +83,13 @@ export function pagePresets(spec: ActivitySpec, key: string, sourceText: string 
     if (typeof v !== 'number' || !Number.isFinite(v) || v < model.min || v > model.max) continue;
     if (!values.some((x) => same(x, v))) values.push(v);
   }
-  const tokens = numberTokens(sourceText);
+  // Only tokens that carry the slider's unit on the page count (a 40-character look-ahead covers every written form).
+  const tokens = numberTokens(sourceText).filter((t) => unitFollows(sourceText.slice(t.end, t.end + 40), model.unit));
   const out: PagePreset[] = [];
   for (const v of values) {
     const tok = tokens.find((t) => same(t.value, v));
     if (tok === undefined) continue;
-    out.push({ value: v, label: model.unit === '' ? tok.text : `${tok.text} ${model.unit}`, sentence: sentenceAround(sourceText, tok.start, tok.end) });
+    out.push({ value: v, label: `${tok.text} ${model.unit}`, sentence: sentenceAround(sourceText, tok.start, tok.end) });
   }
   return out;
 }

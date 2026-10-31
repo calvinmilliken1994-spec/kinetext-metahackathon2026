@@ -116,14 +116,40 @@ function parseOverview(raw: unknown): OverviewSpec | null {
   return { ...(raw as unknown as OverviewSpec), keyPoints: keyPoints as unknown as OverviewSpec['keyPoints'], keyTerms: keyTerms as unknown as OverviewSpec['keyTerms'], sources: Array.isArray(raw.sources) ? raw.sources as OverviewSpec['sources'] : [] };
 }
 
+/**
+ * Set A: the plain reason of a stored part that passed when it was built but fails TODAY's validators (the API re-runs
+ * every passed part and sends `recheck: { publishable, failedChecks }`). The stored artifacts stay as recorded; the web
+ * app just withholds the part, so neither the lesson nor presentation mode shows it as checked.
+ */
+export const HELD_BACK_REASON = 'Held back: this part no longer passes today’s checks.';
+
+/** A lesson entry as parsed here: a withheld part carries the ids of today's checks it fails. */
+type HeldBackEntry = LessonComponentEntry & { heldBack?: { failedChecks: string[] } };
+
+/** For a withheld part, today's failed checks with their plain names (id when it has no name); null for any other part. */
+export function heldBackChecks(entry: LessonComponentEntry): Array<{ id: string; name: string }> | null {
+  const held = (entry as HeldBackEntry).heldBack;
+  if (held === undefined) return null;
+  return held.failedChecks.map((id) => ({ id, name: lessonCheckName(id) ?? id }));
+}
+
 function parseLessonSpec(raw: unknown): LessonSpec | null {
   if (!isRecord(raw) || !Array.isArray(raw.components)) return null;
   const components = raw.components.filter(isRecord)
     .filter((c) => isPlanComponentId(c.componentId) && str(c.specId) && (LESSON_COMPONENT_STATUSES as readonly unknown[]).includes(c.status))
-    .map((c): LessonComponentEntry => ({
-      componentId: c.componentId as PlanComponentId, specId: c.specId as string, status: c.status as LessonComponentStatus,
-      reason: str(c.reason) ? c.reason : '', revision: typeof c.revision === 'number' ? c.revision : 1,
-    }));
+    .map((c): LessonComponentEntry => {
+      const entry: HeldBackEntry = {
+        componentId: c.componentId as PlanComponentId, specId: c.specId as string, status: c.status as LessonComponentStatus,
+        reason: str(c.reason) ? c.reason : '', revision: typeof c.revision === 'number' ? c.revision : 1,
+      };
+      // Only an explicit `publishable: false` on a passed part withholds it; anything else keeps the stored verdict.
+      if (entry.status === 'passed' && isRecord(c.recheck) && c.recheck.publishable === false) {
+        entry.status = 'failed';
+        entry.reason = HELD_BACK_REASON;
+        entry.heldBack = { failedChecks: [...new Set(strings(c.recheck.failedChecks))] };
+      }
+      return entry;
+    });
   return { jobId: str(raw.jobId) ? raw.jobId : '', analysisRef: str(raw.analysisRef) ? raw.analysisRef : '', overview: parseOverview(raw.overview), components };
 }
 
@@ -155,9 +181,12 @@ export function parseLessonData(raw: unknown): LessonData | null {
       targeted: strings(r.targeted), fixed: strings(r.fixed), remaining: strings(r.remaining), passed: r.passed === true,
       ...(typeof r.afterInjectedFault === 'boolean' ? { afterInjectedFault: r.afterInjectedFault } : {}),
     }));
+  const lesson = parseLessonSpec(raw.lesson);
+  // A withheld part's spec is not served: no view can mount it and no quote of it lights up in the page.
+  const withheld = new Set((lesson?.components ?? []).filter((c) => heldBackChecks(c) !== null).map((c) => c.specId));
   return {
     analysis: parseAnalysisV2(raw.analysisV2), analysisReport: parseReport(raw.analysisV2Report), analysisRevisions: revisions,
-    lesson: parseLessonSpec(raw.lesson), kitSpecs: Object.fromEntries(kitEntries), componentReports: Object.fromEntries(reportEntries), componentRepairs: repairs,
+    lesson, kitSpecs: Object.fromEntries(kitEntries.filter(([k, v]) => !withheld.has(k) && !withheld.has(v.id))), componentReports: Object.fromEntries(reportEntries), componentRepairs: repairs,
   };
 }
 
@@ -386,18 +415,18 @@ export const STAGE6_CHECK_NAMES: Readonly<Record<keyof typeof STAGE6_CHECKS, str
   'ALG-07': 'The number of stated facts is in range',
   'LOG-01': 'Each quote appears word for word on the page',
   'LOG-02': 'The page states the factor for each step',
-  'LOG-03': 'The page names the scale',
+  'LOG-03': 'The scale runs the way the page says',
   'LOG-04': 'Each point on the scale is quoted from the page',
   'LOG-05': 'The points on the scale are all different',
   'LOG-06': 'Each comparison starts and ends on a quoted point',
-  'LOG-07': 'Numbers in the labels match the page and the scale',
+  'LOG-07': 'Each point’s own number matches the scale',
   'TH-01': 'Each quote appears word for word on the page',
   'TH-02': 'The page states how many vote',
   'TH-03': 'The page states the voting rule',
-  'TH-04': 'The stated number needed matches the rule',
+  'TH-04': 'The page’s "N of M" sets the total and the votes needed',
   'TH-05': 'The try-it vote counts are valid',
   'TH-06': 'Numbers in the text can be found on the page',
-  'TH-07': 'The number of stages and scenarios is in range',
+  'TH-07': 'The share needed is at most all of them',
   'DT-01': 'Each quote appears word for word on the page',
   'DT-02': 'Headers and row names come from their quotes',
   'DT-03': 'Every table value is copied from its quote',
@@ -407,7 +436,7 @@ export const STAGE6_CHECK_NAMES: Readonly<Record<keyof typeof STAGE6_CHECKS, str
   'DT-07': 'The rate schedule is in order',
   'DT-08': 'Numbers in the text can be found on the page',
   'LD-01': 'Each quote appears word for word on the page',
-  'LD-02': 'Each part name is in its quote',
+  'LD-02': 'Each name is the word printed in its label',
   'LD-03': 'The figure belongs to this page',
   'LD-04': 'Each part point is valid and off its printed label',
   'LD-05': 'Printed-label boxes are valid',
@@ -730,7 +759,11 @@ export function buildLessonSteps(detail: JobDetail): LessonStep[] {
         });
         break;
       }
-      case 'failed': steps.push({ ...base, status: 'failed', outcome: 'unverified', detail: failureMessage(slot.componentId), tags: [], ...span }); break;
+      case 'failed': {
+        const held = entry === undefined ? null : heldBackChecks(entry);
+        steps.push({ ...base, status: 'failed', outcome: 'unverified', detail: held === null ? failureMessage(slot.componentId) : HELD_BACK_REASON, tags: held === null ? [] : [{ text: 'Held back today', tone: 'warn' }], ...span });
+        break;
+      }
       case 'skipped': steps.push({ ...base, status: 'skipped', outcome: 'skipped', detail: SKIPPED_MESSAGE, tags: [], ...span }); break;
     }
   }
@@ -827,6 +860,8 @@ const sectionOf = (key: string, label: string, report: ValidationReport): CheckS
   checks: report.checks.map((c) => ({ id: c.id, name: lessonCheckName(c.id) ?? c.id, passed: c.passed, message: c.message })),
 });
 
+const TODAY_FAILED = 'Fails when re-run with today’s checks (it passed when this run was built).';
+
 /** The checks behind a lesson, one section per checked part (page analysis first, then components in plan order). For the quiet "checks" list. */
 export function lessonCheckSections(detail: JobDetail): CheckSection[] {
   const data = detail.lessonData;
@@ -837,7 +872,16 @@ export function lessonCheckSections(detail: JobDetail): CheckSection[] {
   for (const id of stream.order) {
     const entry = data.lesson?.components.find((c) => c.componentId === id);
     const report = entry === undefined ? undefined : data.componentReports[entry.specId];
-    if (report !== undefined) out.push(sectionOf(`component-${id}`, componentLabel(id), report));
+    const held = entry === undefined ? null : heldBackChecks(entry);
+    if (report === undefined) continue;
+    const section = sectionOf(`component-${id}`, componentLabel(id), report);
+    if (held !== null) {
+      // The stored report passed; today's re-run fails these checks, so the list says so instead of the old verdict.
+      const failing = new Set(held.map((h) => h.id));
+      const checks = section.checks.map((c) => (failing.has(c.id) ? { ...c, passed: false, message: TODAY_FAILED } : c));
+      for (const h of held) if (!checks.some((c) => c.id === h.id)) checks.push({ id: h.id, name: h.name, passed: false, message: TODAY_FAILED });
+      out.push({ ...section, label: `${section.label} (held back today)`, checks, passed: checks.filter((c) => c.passed).length, total: checks.length });
+    } else out.push(section);
   }
   return out;
 }

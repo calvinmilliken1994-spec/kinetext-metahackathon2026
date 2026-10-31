@@ -7,6 +7,7 @@ import type { AnyActivitySpec } from '../lib/timeline.ts';
 import { declineText, lessonCards, lessonItems } from '../lib/lesson.ts';
 import { sourceLicenseText } from '../lib/sources.ts';
 import type { ReportLike } from '../lib/failures.ts';
+import { heldBackChecks } from '../lib/lessonJob.ts';
 import type { LessonCard, PendingSlot } from '../lib/lesson.ts';
 import { ActivityPanel } from './ActivityPanel.tsx';
 import { AlgorithmTraceView } from './AlgorithmTraceView.tsx';
@@ -157,6 +158,12 @@ function LiveTitle({ title }: { title: string }) {
   );
 }
 
+/** Set A: today's failed checks of a part the API's re-check withheld (null for every other part). */
+function heldBackOf(lesson: LessonSpec, card: LessonCard): ReturnType<typeof heldBackChecks> {
+  const entry = lesson.components.find((c) => `${c.componentId}:${c.specId}` === card.key);
+  return entry === undefined ? null : heldBackChecks(entry);
+}
+
 /** Stage 9: a part that arrives while the view is watching the build reveals itself; a lesson at rest renders as before. */
 function Arrival({ live, index, children }: { live: boolean; index: number; children: ReactNode }) {
   if (!live) return <>{children}</>;
@@ -216,7 +223,7 @@ export function LessonView({ lesson, specs, analysis, sources, cite, disclosure,
                 {item.card.premium && item.card.status === 'passed' && premium !== null
                   ? <PremiumCard card={item.card} premium={premium} cite={cite} disclosure={disclosure} repairBadge={repairBadge} />
                   : (
-                    <KitCard card={item.card} trace={live === null ? null : <BuildTrace build={live.builds[item.card.componentId]} />}>
+                    <KitCard card={item.card} heldBack={heldBackOf(lesson, item.card)} trace={live === null ? null : <BuildTrace build={live.builds[item.card.componentId]} />}>
                       {item.card.spec !== null && <KitBody spec={item.card.spec} cite={cite} building={live !== null} />}
                     </KitCard>
                   )}

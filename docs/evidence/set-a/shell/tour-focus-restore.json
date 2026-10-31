@@ -1,0 +1,15 @@
+{
+ "skip-keyboard": {
+  "url": "?tour=0&seta=2",
+  "tourGone": true,
+  "focusAfter": "BUTTON.rail-btn Tour"
+ },
+ "escape": {
+  "tourGone": true,
+  "focusAfter": "BUTTON.rail-btn Tour (measured in the previous call)"
+ },
+ "autostart-escape": {
+  "url": "?seta=3",
+  "focusAfter": "MAIN.panel activity-panel"
+ }
+}

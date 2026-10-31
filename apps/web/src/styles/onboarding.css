@@ -22,6 +22,8 @@
 .tour-title:focus, .tour-title:focus-visible { outline: none; }
 .tour-body { font-size: var(--fs-16); line-height: 1.5; color: var(--ink-2); }
 .tour-wait { font-size: var(--fs-14); color: var(--ink-3); }
+.tour-problem { display: grid; gap: 8px; font-size: var(--fs-14); color: var(--ink); }
+.tour-problem-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 .tour-actions { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
 .tour-spacer { flex: 1 1 auto; }
 .tour-skip { font-size: var(--fs-14); }

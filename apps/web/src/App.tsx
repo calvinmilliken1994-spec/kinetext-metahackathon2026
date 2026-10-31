@@ -3,7 +3,7 @@ import { api, describeError } from './api.ts';
 import { useHealth, useJobDetail, useJobs, useModels, useSourceDoc, useSources } from './hooks.ts';
 import { buildHighlights } from './lib/highlight.ts';
 import { collectQuoteRefs } from './lib/evidence.ts';
-import { newestFirst, pickDefaultJob, pickOpeningJob, requestedJobId } from './lib/jobs.ts';
+import { newestFirst, pickDefaultJob } from './lib/jobs.ts';
 import type { OpeningJob } from './lib/jobs.ts';
 import { generateState, isServerBusy } from './lib/health.ts';
 import { madeWithPhrase, modelToSend, pickModel, readStoredModel, resolveJobModel, writeStoredModel } from './lib/models.ts';
@@ -46,7 +46,10 @@ import { LessonChecksPanel } from './components/LessonChecksPanel.tsx';
 import { Provenance } from './components/Provenance.tsx';
 import type { ProvenanceReceipt } from './components/Provenance.tsx';
 import { PresentationMode } from './components/presentation/PresentationMode.tsx';
+import { ReplayLabel } from './components/LiveBuild.tsx';
 import type { LiveContext } from './components/LiveBuild.tsx';
+import { latestLesson, linkNotice, resolveRunLink, runLink } from './lib/lessonJobLinks.ts';
+import type { LinkNoticeState } from './lib/lessonJobLinks.ts';
 import { useReplay } from './components/useReplay.ts';
 import { jobStartMs, liveStrip, partBuilds } from './lib/liveBuild.ts';
 import { replayRequest } from './lib/replay.ts';
@@ -73,8 +76,11 @@ function localStore(): Storage | null {
 const PRESENT_REQUEST = typeof window === 'undefined' ? null : presentRequest(window.location.search);
 /** Stage 9: `?replay=<id>[&speed=N]` plays that stored run's recorded events through the live build view, labelled as a replay. */
 const REPLAY_REQUEST = typeof window === 'undefined' ? null : replayRequest(window.location.search);
-/** `?job=<id>` opens that stored run instead of the most recent lesson. */
-const LINKED_JOB = typeof window === 'undefined' ? null : REPLAY_REQUEST?.jobId ?? requestedJobId(window.location.search) ?? PRESENT_REQUEST?.jobId ?? null;
+/**
+ * The run a `?replay=`, `?job=` or `?present=` link names (Set A): an unknown id opens no other lesson in its place, and a
+ * replay link to a classic single-activity run opens its stored result with a message instead of a fake running state.
+ */
+const RUN_LINK = typeof window === 'undefined' ? null : runLink(window.location.search);
 /** Stage 9b: `?tour=1[&speed=N]` forces the first-run tour (the scripted demo path), `?tour=0` keeps it closed. */
 const TOUR_REQUEST = tourRequest(typeof window === 'undefined' ? '' : window.location.search);
 
@@ -118,11 +124,21 @@ export function App() {
   // else on the New lesson view; never on whatever old run belongs to the first source in the list. Decided once,
   // when the runs list first arrives, so a run finishing later never pulls the view away.
   const [opening, setOpening] = useState<OpeningJob | null | undefined>(undefined);
+  // Stage 9: a replay feeds the recorded run's detail, moment by moment, in place of the polled one.
+  // Stage 9b: the tour starts a replay without a reload, so the request is state (seeded from the URL).
+  const [replayReq, setReplayReq] = useState<ReplayRequest | null>(REPLAY_REQUEST);
+  // Set A: what a deep link could not open (shown in the lesson column until the teacher picks a lesson).
+  const [linkState, setLinkState] = useState<LinkNoticeState | null>(null);
   if (opening === undefined && jobs.state !== 'loading') {
-    const first = jobs.state === 'ready' ? pickOpeningJob(jobs.data, LINKED_JOB) : null;
-    setOpening(first);
-    if (first === null && jobs.state === 'ready') setDrawer('new');
+    const res = jobs.state === 'ready' ? resolveRunLink(RUN_LINK, jobs.data) : { opening: null, notice: null, replay: false };
+    setOpening(res.opening);
+    setLinkState(res.notice);
+    if (RUN_LINK?.kind === 'replay' && !res.replay) setReplayReq(null);
+    if (res.notice?.problem === 'not-found') setPresenting(null);
+    if (res.opening === null && res.notice === null && jobs.state === 'ready') setDrawer('new');
   }
+  // A link that named nothing holds the lesson column for its notice until the teacher picks a page or a run.
+  const linkHold = linkState?.problem === 'not-found' && pickedJob === null && pickedSource === null;
 
   const sourceList = sources.state === 'ready' ? sources.data : null;
   const openingSourceId = opening !== null && opening !== undefined && sourceList?.some((s) => s.id === opening.sourceId) === true ? opening.sourceId : null;
@@ -138,19 +154,27 @@ export function App() {
   );
   const generate = generateState({ health, down, generating, hasSource: selectedSource !== null });
 
-  const selectedJobId = pickedJob !== null && pickedJob.sourceId === selectedSourceId
+  const selectedJobId = linkHold
+    ? null
+    : pickedJob !== null && pickedJob.sourceId === selectedSourceId
     ? pickedJob.jobId
     : pickedSource === null && openingSourceId !== null && opening !== null && opening !== undefined
       ? opening.jobId
       : pickDefaultJob(jobsForSource, generate.busy)?.jobId ?? null;
-  // Stage 9: a replay feeds the recorded run's detail, moment by moment, in place of the polled one.
-  // Stage 9b: the tour starts a replay without a reload, so the request is state (seeded from the URL).
-  const [replayReq, setReplayReq] = useState<ReplayRequest | null>(REPLAY_REQUEST);
   const replaying = replayReq !== null && selectedJobId === replayReq.jobId;
   const replay = useReplay(replayReq);
   const polled = useJobDetail(replaying ? null : selectedJobId);
   const detail = replaying ? replay.detail : polled;
   const ready = detail?.state === 'ready' && detail.data.summary.sourceId === selectedSourceId ? detail.data : null;
+  // A linked run the server lists but cannot read: the same calm notice, never an error wall or another lesson.
+  const linkUnreadable = RUN_LINK !== null && linkState === null && pickedJob === null && pickedSource === null
+    && selectedJobId === RUN_LINK.jobId && detail?.state === 'error';
+  const notice: LinkNoticeState | null = linkHold
+    ? linkState
+    : linkUnreadable && RUN_LINK !== null
+      ? { problem: 'unreadable', kind: RUN_LINK.kind, jobId: RUN_LINK.jobId }
+      : linkState?.problem === 'classic-replay' && selectedJobId === linkState.jobId ? linkState : null;
+  if (linkUnreadable && presenting !== null) setPresenting(null);
   // A lesson this view has watched while it was running keeps its live build view (trace lines, reserved space) until
   // another run is opened, so finishing never rearranges what the teacher is looking at.
   const [watched, setWatched] = useState<string | null>(null);
@@ -342,10 +366,18 @@ export function App() {
     const active = sourceList.filter((s) => s.kind === 'library' && !isRetiredPage(s));
     return { pages: active.length, subjects: new Set(active.map((s) => s.subject ?? 'other')).size };
   }, [sourceList]);
+  const tourReplayFailed = replayReq?.jobId === TOUR_JOB_ID && replay.detail?.state === 'error';
   const signals = useMemo(() => tourSignals({
-    replayAvailable: tourJob !== null || jobs.state === 'loading', replayLoading: jobs.state === 'loading', replaying: tourReplaying, detail: ready, builds: liveCtx?.builds ?? {}, strip: liveCtx?.strip ?? null,
+    replayAvailable: tourJob !== null || jobs.state === 'loading', replayLoading: jobs.state === 'loading', replaying: tourReplaying, replayFailed: tourReplayFailed,
+    detail: ready, builds: liveCtx?.builds ?? {}, strip: liveCtx?.strip ?? null,
     canPresent: deck !== null, library, speed: TOUR_REQUEST.speed,
-  }), [tourJob, jobs.state, tourReplaying, ready, liveCtx, deck, library]);
+  }), [tourJob, jobs.state, tourReplaying, tourReplayFailed, ready, liveCtx, deck, library]);
+  // W-08: the recording could not be read and the teacher goes on without it: drop the replay, back to the opening lesson.
+  const skipTourReplay = useCallback(() => {
+    setReplayReq((r) => (r?.jobId === TOUR_JOB_ID ? null : r));
+    setPickedJob(null);
+    setPickedSource(null);
+  }, []);
   const startTourReplay = useCallback(() => {
     if (tourJob === null) return;
     setDrawer(null);
@@ -424,7 +456,15 @@ export function App() {
           <main className="panel activity-panel" aria-label="Lesson" ref={mainRef} tabIndex={-1}>
             <div className="main-inner">
               {jobs.state === 'error' && <div className="callout callout-error" role="alert">{jobs.message}</div>}
-              {selectedJobId === null && jobs.state === 'ready' && (
+              {notice !== null && (
+                <LinkNotice
+                  notice={notice}
+                  onChoose={() => { setRunScope('all'); openDrawer('runs'); }}
+                  latest={notice.problem === 'classic-replay' ? null : latestLesson(allJobs)}
+                  onOpen={onSelectJob}
+                />
+              )}
+              {selectedJobId === null && jobs.state === 'ready' && !linkHold && (
                 <div className="empty">
                   <h2>No lesson for this page yet</h2>
                   <p className="muted">
@@ -439,7 +479,7 @@ export function App() {
               )}
               {selectedJobId === null && jobs.state === 'loading' && <p className="muted">Loading…</p>}
               {detail?.state === 'loading' && <p className="muted">Loading the lesson…</p>}
-              {detail?.state === 'error' && <div className="callout callout-error" role="alert">{detail.message}</div>}
+              {detail?.state === 'error' && !linkUnreadable && <div className="callout callout-error" role="alert">{detail.message}</div>}
               {ready !== null && lessonMode === 'v1' && spec !== undefined && ready.summary.status === 'succeeded' && (
                 <ActivityPanel
                   key={spec.id}
@@ -470,7 +510,12 @@ export function App() {
                 />
               )}
               {ready !== null && ((lessonMode === 'v1' && (spec === undefined || ready.summary.status !== 'succeeded')) || (lessonMode === 'working' && liveCtx === null) || lessonMode === 'outcome') && (
-                <JobOutcome detail={ready} serverBusy={health === null ? null : generate.busy} />
+                <>
+                  {/* W-07: a replayed run that ends on its outcome card is still labelled as a replay. */}
+                  {replaying && liveCtx?.replay != null && <div className="lb-bar lb-bar-outcome"><ReplayLabel replay={liveCtx.replay} /></div>}
+                  {/* During a replay the record reads "running" by design; never call it left behind. */}
+                  <JobOutcome detail={ready} serverBusy={replaying ? true : health === null ? null : generate.busy} />
+                </>
               )}
             </div>
           </main>
@@ -559,7 +604,10 @@ export function App() {
         )}
       </div>
       {touring && presenting === null && (
-        <Onboarding signals={signals} onStartReplay={startTourReplay} onPresent={onPresent} onClose={closeTour} onStep={onTourStep} />
+        <Onboarding
+          signals={signals} onStartReplay={startTourReplay} onPresent={onPresent} onClose={closeTour} onStep={onTourStep}
+          onRetryReplay={replay.retry} onSkipReplay={skipTourReplay}
+        />
       )}
       {presenting !== null && deck !== null && deck.jobId === presenting.jobId && (
         <PresentationMode
@@ -573,5 +621,29 @@ export function App() {
         />
       )}
     </AppWindow>
+  );
+}
+
+/** Set A: what a deep link could not open, in calm words, with a way back to the library (never another lesson silently). */
+function LinkNotice({ notice, onChoose, latest, onOpen }: {
+  notice: LinkNoticeState; onChoose: () => void; latest: { jobId: string; sourceId: string } | null; onOpen: (jobId: string, sourceId: string) => void;
+}) {
+  const text = linkNotice(notice);
+  const headRef = useRef<HTMLHeadingElement>(null);
+  const missing = notice.problem !== 'classic-replay';
+  // A missing lesson replaces the lesson column, so its heading takes focus (no scroll); the replay note just sits above.
+  useEffect(() => { if (missing) headRef.current?.focus({ preventScroll: true }); }, [missing, notice.jobId]);
+  return (
+    <section className={`link-notice${missing ? ' is-missing' : ''}`} role="status" aria-labelledby="link-notice-title" data-testid="link-notice" data-problem={notice.problem}>
+      <h2 id="link-notice-title" ref={headRef} tabIndex={-1}>{text.title}</h2>
+      <p>{text.body}</p>
+      {missing && (
+        <p className="link-notice-actions">
+          <button type="button" className="btn btn-primary" onClick={onChoose}>Choose a lesson</button>
+          {latest !== null && <button type="button" className="btn btn-quiet" onClick={() => onOpen(latest.jobId, latest.sourceId)}>Open the latest lesson</button>}
+        </p>
+      )}
+      {missing && notice.jobId !== '' && <p className="small muted link-notice-id">Link id: <code>{notice.jobId}</code></p>}
+    </section>
   );
 }

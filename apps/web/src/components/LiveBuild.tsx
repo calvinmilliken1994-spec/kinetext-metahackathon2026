@@ -62,6 +62,18 @@ function speedText(speed: number): string {
   return `${Number.isInteger(speed) ? speed : speed.toFixed(2).replace(/0+$/, '')}× speed`;
 }
 
+/** The replay disclosure: a recorded run is never shown as live (also above a replayed run's outcome card, W-07). */
+export function ReplayLabel({ replay }: { replay: ReplayInfo }) {
+  return (
+    <p className="lb-replay" data-testid="replay-label">
+      <strong>{REPLAY_LABEL}</strong>
+      <span>{speedText(replay.speed)}</span>
+      {recordedText(replay.recordedAt) !== '' && <span>{recordedText(replay.recordedAt)}</span>}
+      <button type="button" className="link-btn" onClick={replay.onRestart}>{replay.finished ? 'Replay again' : 'Restart'}</button>
+    </p>
+  );
+}
+
 /**
  * The bar at the top of a building lesson, sticky while the column scrolls. In a replay, first the replay label (never
  * shown as live). Then, while running, the model and every call open right now with its real elapsed time, and what
@@ -76,14 +88,7 @@ export function LiveBar({ live }: { live: LiveContext }) {
   const samOnly = strip.ops.length > 0 && strip.ops.every((op) => op.actor === 'sam');
   return (
     <div className="lb-bar" data-testid="live-bar" data-tour="live-strip" data-state={running ? 'running' : close?.ready === true ? 'ready' : 'done'}>
-      {replay !== null && (
-        <p className="lb-replay" data-testid="replay-label">
-          <strong>{REPLAY_LABEL}</strong>
-          <span>{speedText(replay.speed)}</span>
-          {recordedText(replay.recordedAt) !== '' && <span>{recordedText(replay.recordedAt)}</span>}
-          <button type="button" className="link-btn" onClick={replay.onRestart}>{replay.finished ? 'Replay again' : 'Restart'}</button>
-        </p>
-      )}
+      {replay !== null && <ReplayLabel replay={replay} />}
       {running ? (
         <p className="lb-main" key="running">
           {/* A replay is already labelled in the row above; a live run says so here. */}

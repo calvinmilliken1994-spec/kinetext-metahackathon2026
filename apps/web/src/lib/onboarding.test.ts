@@ -44,8 +44,9 @@ test('shouldAutoStart: once on a plain first visit, never over a deep link, alwa
 
 test('steps: eight in order; the replay steps drop out when the recorded run is missing', () => {
   assert.deepEqual(ids(sig(null)), ['welcome', 'library', 'reading', 'overview', 'checking', 'ready', 'try', 'present']);
+  // W-08 (Set A): without the recording and with nothing on screen to try, the try step drops out too.
   const none = sig(null, { replayAvailable: false });
-  assert.deepEqual(ids(none), ['welcome', 'library', 'try', 'present']);
+  assert.deepEqual(ids(none), ['welcome', 'library', 'present']);
   assert.equal(activeSteps(none)[1]?.primary, 'next', 'no replay button when nothing can be replayed');
   assert.equal(activeSteps(sig(null))[1]?.primary, 'replay');
   assert.equal(activeSteps(sig(null))[1]?.primaryLabel, 'Watch a lesson being built');

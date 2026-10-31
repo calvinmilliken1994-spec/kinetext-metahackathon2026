@@ -54,6 +54,8 @@ export interface TourSignals {
   replayLoading: boolean;
   /** The view is playing the tour's replay. */
   replaying: boolean;
+  /** The tour's recorded run was asked for but could not be read (the card offers Retry and Continue). */
+  replayFailed: boolean;
   /** Muse's overview has landed in the lesson. */
   overview: boolean;
   /** A part has done something worth watching (SAM outlining, checks run, written), beyond being queued or first written. */
@@ -70,6 +72,8 @@ export interface TourSignals {
   finished: boolean;
   /** The first part that passed, in plan order: the one the teacher tries. */
   firstPart: string | null;
+  /** Without a replay: the first checked part of the lesson open on screen (the fallback for the try step). */
+  openPart: string | null;
   /** A finished lesson that presentation mode can open. */
   canPresent: boolean;
   /** Pages and subjects in the library (active pages only), when the list has loaded. */
@@ -84,6 +88,7 @@ export interface SignalInput {
   replayAvailable: boolean;
   replayLoading?: boolean;
   replaying: boolean;
+  replayFailed?: boolean;
   detail: JobDetail | null;
   builds: Readonly<Record<string, PartBuild>>;
   strip: StripState | null;
@@ -100,10 +105,17 @@ export function tourSignals(i: SignalInput): TourSignals {
   const passed = (d?.lessonData?.lesson?.components ?? []).filter((c) => c.status === 'passed').map((c) => c.componentId as string);
   const progress = builds.some((b) => b.lines.some((l) => l.kind === 'outlining' || l.kind === 'checks-failed' || l.kind === 'checks-passed' || l.kind === 'unusable' || (l.kind === 'writing' && !l.open)));
   const finished = i.replaying && i.strip !== null && i.strip.finished;
+  // The lesson on screen when nothing is replaying (W-08): its first checked part, in plan order.
+  const open = i.replaying ? null : i.detail;
+  const openPassed = (open?.lessonData?.lesson?.components ?? []).filter((c) => c.status === 'passed').map((c) => c.componentId as string);
+  const openPlan = (open?.lessonData?.analysis?.componentPlan ?? []).map((e) => e.componentId as string);
+  const openPart = openPlan.find((id) => openPassed.includes(id)) ?? openPassed[0] ?? null;
+  const replayPart = plan.find((id) => passed.includes(id)) ?? passed[0] ?? null;
   return {
     replayAvailable: i.replayAvailable,
     replayLoading: i.replayLoading === true,
     replaying: i.replaying && d !== null,
+    replayFailed: i.replayFailed === true,
     overview: d?.lessonData?.lesson?.overview != null,
     partProgress: progress,
     repairPart: repair,
@@ -111,7 +123,9 @@ export function tourSignals(i: SignalInput): TourSignals {
     repairRevision: repair === null ? 2 : Math.max(2, i.builds[repair]?.revision ?? 2),
     watchPart: repair ?? plan[0] ?? null,
     finished,
-    firstPart: plan.find((id) => passed.includes(id)) ?? passed[0] ?? null,
+    // With a recording, the replay decides which part is tried; without one, the lesson on screen does.
+    firstPart: i.replaying ? replayPart : i.replayAvailable ? null : openPart,
+    openPart,
     canPresent: i.canPresent,
     library: i.library,
     model: i.strip?.model ?? 'Muse Spark',
@@ -225,9 +239,30 @@ export function autoUntil(id: TourStepId, s: TourSignals): boolean {
 
 export interface TourState { index: number; enteredAt: number }
 
-/** The steps that will actually be shown (replay steps drop out when the recorded run is not available). */
+/**
+ * The steps that will actually be shown. Replay steps drop out when the recorded run is not available; without a replay
+ * the try step needs a checked part on screen, so a tour with nothing to try still reaches its last step (W-08).
+ */
 export function activeSteps(s: TourSignals): TourStep[] {
-  return tourSteps(s).filter((x) => !x.needsReplay || s.replayAvailable);
+  return tourSteps(s).filter((x) => (x.needsReplay ? s.replayAvailable : x.id !== 'try' || s.replayAvailable || s.firstPart !== null));
+}
+
+/** The signals with the replay set aside (the teacher pressed Continue after the recording failed to load). */
+export function withoutReplay(s: TourSignals): TourSignals {
+  return { ...s, replayAvailable: false, replaying: false, replayFailed: false, firstPart: s.firstPart ?? s.openPart };
+}
+
+const STEP_ORDER: readonly TourStepId[] = ['welcome', 'library', 'reading', 'overview', 'checking', 'ready', 'try', 'present'];
+
+/** Where the tour stands in `after` once the steps changed: the same step when it survives, else the next one that does. */
+export function indexAfterSkip(before: readonly TourStep[], index: number, after: readonly TourStep[]): number {
+  const id = before[Math.min(index, before.length - 1)]?.id;
+  if (id === undefined || after.length === 0) return 0;
+  const same = after.findIndex((x) => x.id === id);
+  if (same >= 0) return same;
+  const at = STEP_ORDER.indexOf(id);
+  const next = after.findIndex((x) => STEP_ORDER.indexOf(x.id) > at);
+  return next >= 0 ? next : after.length - 1;
 }
 
 /** The index of the next step after `index`, or null at the end. */

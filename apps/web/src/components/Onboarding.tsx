@@ -3,7 +3,7 @@
 // (lib/onboarding.ts); this file only measures targets and draws. No confetti, no bounce, no glow: one opacity fade.
 import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import type { Rect, TourOutcome, TourSignals, TourStep } from '../lib/onboarding.ts';
-import { activeSteps, autoAdvance, canGoNext, clipRect, placeCard, unionRect } from '../lib/onboarding.ts';
+import { activeSteps, autoAdvance, canGoNext, clipRect, indexAfterSkip, placeCard, unionRect, withoutReplay } from '../lib/onboarding.ts';
 import { revealInPanels } from '../lib/scroll.ts';
 
 export interface OnboardingProps {
@@ -16,6 +16,10 @@ export interface OnboardingProps {
   onClose: (how: TourOutcome) => void;
   /** Each time a step is entered, so the app can open what it points at (the source panel). */
   onStep?: (step: TourStep) => void;
+  /** The recorded run failed to load: read it again. */
+  onRetryReplay?: () => void;
+  /** The recorded run failed to load and the teacher goes on without it (the app puts the lesson back). */
+  onSkipReplay?: () => void;
 }
 
 const PAD = 8;
@@ -61,7 +65,10 @@ function holePath(rects: readonly Rect[], w: number, h: number): string {
   return `M0 0H${w}V${h}H0Z${rects.map((r) => rr(r)).join('')}`;
 }
 
-export function Onboarding({ signals, onStartReplay, onPresent, onClose, onStep }: OnboardingProps) {
+export function Onboarding({ signals: given, onStartReplay, onPresent, onClose, onStep, onRetryReplay, onSkipReplay }: OnboardingProps) {
+  // W-08: after a failed replay fetch the teacher can go on without the recording; the replay steps then drop out.
+  const [skipReplay, setSkipReplay] = useState(false);
+  const signals = skipReplay ? withoutReplay(given) : given;
   const steps = activeSteps(signals);
   const [state, setState] = useState(() => ({ index: 0, enteredAt: Date.now() }));
   const index = Math.min(state.index, steps.length - 1);
@@ -83,6 +90,24 @@ export function Onboarding({ signals, onStartReplay, onPresent, onClose, onStep 
   }, []);
 
   const go = useCallback((to: number) => setState({ index: to, enteredAt: Date.now() }), []);
+  const continueWithout = (): void => {
+    go(indexAfterSkip(steps, index, activeSteps(withoutReplay(given))));
+    setSkipReplay(true);
+    onSkipReplay?.();
+  };
+
+  // W-11: closing the tour gives focus back to what opened it (the rail button), else to the lesson column.
+  const opener = useRef<Element | null>(typeof document === 'undefined' ? null : document.activeElement);
+  useEffect(() => () => {
+    const now = document.activeElement;
+    // Only when focus was in the tour or is lost; a view that took focus on purpose (presentation mode) keeps it.
+    if (now !== null && now !== document.body && now.isConnected && now.closest('.tour') === null) return;
+    const back = opener.current;
+    const target = back instanceof HTMLElement && back.isConnected && back !== document.body && back.closest('.tour') === null
+      ? back
+      : document.querySelector<HTMLElement>('main.activity-panel');
+    target?.focus({ preventScroll: true });
+  }, []);
   const next = (): void => {
     if (step.primary === 'replay') onStartReplay();
     if (step.primary === 'present') { onPresent(); onClose('done'); return; }
@@ -90,6 +115,9 @@ export function Onboarding({ signals, onStartReplay, onPresent, onClose, onStep 
     go(index + 1);
   };
   const nextReady = step.primary === 'replay' ? !signals.replayLoading : step.primary === 'present' || step.primary === 'finish' || canGoNext(steps, index, signals);
+  // The recording could not be read while the tour waits on it: say so and offer Retry / Continue instead of waiting.
+  const nextStep = steps[index + 1];
+  const replayBroken = signals.replayFailed && (step.needsReplay || nextStep?.needsReplay === true) && step.primary !== 'replay';
 
   // Entering a step: let the app open what it points at, bring the target into view, then focus the card's heading.
   const stepId = step.id;
@@ -168,12 +196,21 @@ export function Onboarding({ signals, onStartReplay, onPresent, onClose, onStep 
         <p className="tour-count">Step {index + 1} of {steps.length}</p>
         <h2 id={titleId} className="tour-title" tabIndex={-1}>{step.title}</h2>
         <p id={bodyId} className="tour-body">{step.body}</p>
-        {!nextReady && <p className="tour-wait" role="status">{step.primary === 'replay' ? 'Loading the recorded run…' : 'The next step starts when the replay gets there.'}</p>}
+        {replayBroken && (
+          <div className="tour-problem" role="alert">
+            <p>The recorded run could not be loaded, so this part of the tour cannot play.</p>
+            <p className="tour-problem-actions">
+              {onRetryReplay !== undefined && <button type="button" className="btn btn-quiet" onClick={onRetryReplay}>Retry</button>}
+              <button type="button" className="btn btn-quiet" onClick={continueWithout}>Continue without it</button>
+            </p>
+          </div>
+        )}
+        {!nextReady && !replayBroken && <p className="tour-wait" role="status">{step.primary === 'replay' ? 'Loading the recorded run…' : 'The next step starts when the replay gets there.'}</p>}
         <div className="tour-actions">
           <button type="button" className="link-btn tour-skip" onClick={() => onClose('skipped')}>{last ? 'Close' : 'Skip tour'}</button>
           <span className="tour-spacer" />
           {index > 0 && <button type="button" className="btn btn-quiet" onClick={() => go(index - 1)}>Back</button>}
-          <button type="button" className="btn btn-primary" onClick={next} disabled={!nextReady}>{step.primaryLabel}</button>
+          {!replayBroken && <button type="button" className="btn btn-primary" onClick={next} disabled={!nextReady}>{step.primaryLabel}</button>}
         </div>
       </div>
     </div>

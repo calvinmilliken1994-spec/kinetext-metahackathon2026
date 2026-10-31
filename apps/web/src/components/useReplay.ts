@@ -17,6 +17,8 @@ export interface ReplayState {
   finished: boolean;
   recordedAt: string;
   restart: () => void;
+  /** Fetch the stored run again after a failed read (the tour's Retry). */
+  retry: () => void;
 }
 
 export function useReplay(req: ReplayRequest | null): ReplayState {
@@ -24,6 +26,7 @@ export function useReplay(req: ReplayRequest | null): ReplayState {
   const [detail, setDetail] = useState<JobDetail | null>(null);
   const [finished, setFinished] = useState(false);
   const [run, setRun] = useState(0);
+  const [attempt, setAttempt] = useState(0);
   const wallStart = useRef(Date.now());
   const speed = req?.speed ?? 1;
   const clock = useCallback<JobClock>(() => (Date.now() - wallStart.current) * speed - LEAD_IN_MS, [speed]);
@@ -42,7 +45,7 @@ export function useReplay(req: ReplayRequest | null): ReplayState {
         (e: unknown) => { if (!(e instanceof DOMException && e.name === 'AbortError')) setRaw({ id: jobId, value: { state: 'error', message: e instanceof Error ? e.message : 'The stored run could not be read.' } }); },
       );
     return () => ctl.abort();
-  }, [jobId]);
+  }, [jobId, attempt]);
 
   const data = raw !== null && raw.id === jobId && raw.value.state === 'ready' ? raw.value.data : null;
   useEffect(() => {
@@ -71,11 +74,12 @@ export function useReplay(req: ReplayRequest | null): ReplayState {
   }, [data]);
 
   const restart = useCallback(() => setRun((n) => n + 1), []);
+  const retry = useCallback(() => { setRaw(null); setAttempt((n) => n + 1); }, []);
   let out: Loadable<JobDetail> | null = null;
   if (jobId !== null) {
     if (raw === null || raw.id !== jobId) out = { state: 'loading' };
     else if (raw.value.state === 'error') out = { state: 'error', message: raw.value.message };
     else out = detail === null ? { state: 'loading' } : { state: 'ready', data: detail };
   }
-  return { detail: out, clock, finished, recordedAt, restart };
+  return { detail: out, clock, finished, recordedAt, restart, retry };
 }
