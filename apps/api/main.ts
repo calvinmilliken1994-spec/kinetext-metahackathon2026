@@ -118,6 +118,11 @@ async function startup(): Promise<void> {
           purpose,
           // Stage 5: the optional labelled demo fault requested by POST /api/jobs.
           demoFault: jobOpts?.demoFault,
+          // Stage 8b: SAM 3.1 segmentation for label-diagram-v1 revisions runs on the
+          // Meta API key and the job's spending ledger (USD 0.0025 per image, reserved
+          // and reconciled like every model call). The key is read from the environment
+          // here only and never logged.
+          sam: { apiKey: process.env.MODEL_API_KEY, ledger },
           // S6-W: the pipeline choice from POST /api/jobs (default 'lesson').
           flow,
           // R-11: one job-wide deadline and per-stage output caps from config;

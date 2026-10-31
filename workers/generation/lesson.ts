@@ -37,10 +37,14 @@ import {
   repairAnalysisV2,
   repairKitComponent,
 } from '../../packages/meta/pipeline-v2.ts';
-import type { V2RevisionComparator, V2Validator } from '../../packages/meta/pipeline-v2.ts';
+import type { V2ImageInput, V2RevisionComparator, V2Validator } from '../../packages/meta/pipeline-v2.ts';
+import { segmentPoints } from '../../packages/meta/sam.ts';
+import type { SamBox, SamPoint, SegmentPointsResult } from '../../packages/meta/sam.ts';
+import type { Ledger } from '../../packages/meta/ledger.ts';
 import { generateSpec, repairSpec } from '../../packages/meta/pipeline.ts';
 import type { TimelineSourceAnalysis } from '../../packages/meta/pipeline.ts';
 import { STAGE6_PROMPT_VERSION } from '../../packages/meta/prompts-v2.ts';
+import { isMetaProvider } from '../../packages/meta/pricing.ts';
 import type { MetaProvider } from '../../packages/meta/pricing.ts';
 import { compareAnalysisV2Revisions, validateLessonAnalysisGate } from '../../packages/validation/analysis-v2.ts';
 import {
@@ -58,6 +62,7 @@ import {
   ACTIVITY_IDS,
   assembleKitSpec,
   assembleOverviewSpec,
+  attachLabelRegions,
   isActivityId,
   isKitGenComponentId,
   isSequenceEngineId,
@@ -69,6 +74,9 @@ import type {
   DemoFault,
   FaultRecord,
   KitSpec,
+  LabelDiagramSpec,
+  LabelFigureRef,
+  LabelRegion,
   LessonComponentEntry,
   LessonSpec,
   MetaReceipt,
@@ -93,8 +101,12 @@ import type {
   FormulaExplorerGen,
   KitGenByComponent,
   KitGenComponentId,
+  LabelDiagramGen,
+  LabelPartGen,
   PlanComponentId,
 } from '../../packages/contracts/kit.ts';
+import { listFigures, loadFigure } from '../../packages/sources/figures.ts';
+import type { FigureMeta } from '../../packages/sources/figures.ts';
 import { sha256 } from '../../packages/sources/index.ts';
 import { applyLessonDemoFault, lessonFaultTarget, lessonIntendedChecks } from './demo-faults.ts';
 import { formulaNormalisedNote, normaliseFormulaExplorerGen } from './formula-normalise.ts';
@@ -145,8 +157,9 @@ export interface ComponentRepairRecord {
   afterInjectedFault?: boolean;
 }
 
-/** The contracts' Stage union extended with the two frozen lesson stages. */
-export type LessonStage = Stage | 'overview' | 'component';
+/** The contracts' Stage union extended with the frozen lesson stages ('segment' is the
+ *  Stage 8b SAM 3.1 segmentation step of a label-diagram-v1 revision). */
+export type LessonStage = Stage | 'overview' | 'component' | 'segment';
 /** Repair events target the analysis, the v1 spec loop, or one lesson component. */
 export type LessonRepairTarget = 'analysis' | 'spec' | 'component';
 
@@ -163,6 +176,22 @@ export interface LessonEventExtra {
   componentId?: string;
   provider?: MetaProvider;
   providerModel?: string;
+  /** Stage 8b: SAM usage kind images_processed, on 'segment' events. */
+  imagesProcessed?: number;
+}
+
+/**
+ * Stage 8b: what the lesson flow needs to run ONE SAM 3.1 point-segmentation request per
+ * label-diagram-v1 revision (docs/specs/STAGE-8b-label-diagram.md flow step 3). The ledger is
+ * the job's spending ledger — the SAM reservation/reconciliation lands there exactly like a
+ * model call's — and the worker mirrors the settled amounts into the job's single cost
+ * accumulator. `fetch`/`baseUrl` are test seams (a fake SAM transport, no live calls).
+ */
+export interface SamSegmentDeps {
+  apiKey: string | undefined;
+  ledger: Ledger;
+  fetch?: typeof fetch;
+  baseUrl?: string;
 }
 
 /**
@@ -182,6 +211,8 @@ export interface LessonContext {
   specMaxOutputTokens: number;
   maxRepairAttempts: number;
   demoFault?: DemoFault;
+  /** Stage 8b: SAM 3.1 segmentation deps; required only when the plan carries label-diagram-v1. */
+  sam?: SamSegmentDeps;
   /** The mutable job summary (flow 'lesson'; lesson counts kept current for the list view). */
   summary: JobSummary;
   emit(stage: LessonStage, status: StageStatus, extra?: LessonEventExtra): void;
@@ -213,8 +244,19 @@ type AnyKitGen = KitGenByComponent[KitGenComponentId];
  * the existing bounded analysis repair loop. The overview is never published without its
  * OV checks; an honest decline gets no usable-overview checks.
  */
-export function validateLessonAnalysis(analysis: unknown, sources: SourceDocument[]): ValidationReport {
-  return validateLessonAnalysisGate(analysis, sources);
+export function validateLessonAnalysis(
+  analysis: unknown,
+  sources: SourceDocument[],
+  figures?: readonly FigureMeta[],
+): ValidationReport {
+  // Stage 8b (A-08): the figure list travels with the analysis validation, so a
+  // label-diagram-v1 plan is judged against the figures the analysis call actually saw.
+  // An empty/absent list means "this source has no figures" (Spark Open jobs never pass one).
+  return validateLessonAnalysisGate(
+    analysis,
+    sources,
+    figures !== undefined && figures.length > 0 ? { figures } : {},
+  );
 }
 
 /**
@@ -225,7 +267,7 @@ export function validateLessonAnalysis(analysis: unknown, sources: SourceDocumen
 export function compareLessonAnalysisRevisions(
   baseline: unknown,
   next: unknown,
-  context?: { sources?: SourceDocument[]; findings?: RepairFinding[] },
+  context?: { sources?: SourceDocument[]; findings?: RepairFinding[]; figures?: readonly FigureMeta[] },
 ): ValidationCheck {
   return compareAnalysisV2Revisions(baseline, next, context);
 }
@@ -261,6 +303,61 @@ export function adaptPremiumAnalysis(analysis: SourceAnalysisV2, activity: Activ
 /** Deterministic non-negative safe-integer seed per job+component (KitSpecBase.seed). */
 export function seedFor(jobId: string, componentId: string): number {
   return Number.parseInt(sha256(`${jobId}:${componentId}`).slice(0, 8), 16);
+}
+
+/** Stage 8b: clamp a converted pixel coordinate inside the figure (non-finite → lo). */
+function clampToInt(value: number, lo: number, hi: number): number {
+  if (!Number.isFinite(value)) {
+    return lo;
+  }
+  const rounded = Math.round(value);
+  if (rounded < lo) {
+    return lo;
+  }
+  if (rounded > hi) {
+    return hi;
+  }
+  return rounded;
+}
+
+/**
+ * Stage 8b flow step 3: map SAM boxes back to the gen's parts. Object id i belongs to
+ * parts[i-1] (ids 1..n in part order); a missing object is simply absent (LD-06 then fails
+ * for that part), and a stray id outside 1..n is ignored. Exported for tests.
+ */
+export function boxesToRegions(boxes: readonly SamBox[], parts: readonly LabelPartGen[]): LabelRegion[] {
+  const byId = new Map<number, SamBox>();
+  for (const box of boxes) {
+    byId.set(box.id, box);
+  }
+  const out: LabelRegion[] = [];
+  parts.forEach((part, i) => {
+    const box = byId.get(i + 1);
+    if (box !== undefined) {
+      out.push({
+        partId: part.id,
+        x1: box.x1,
+        y1: box.y1,
+        x2: box.x2,
+        y2: box.y2,
+        confidence: box.confidence,
+      });
+    }
+  });
+  return out;
+}
+
+/** Stage 8b flow step 5: the system-owned figure reference of the published spec. */
+export function labelFigureRefOf(meta: FigureMeta): LabelFigureRef {
+  return {
+    id: meta.id,
+    width: meta.width,
+    height: meta.height,
+    caption: meta.caption,
+    credit: meta.credit,
+    license: meta.license,
+    labelsInImage: meta.labelsInImage,
+  };
 }
 
 function provenanceFor(receipt: MetaReceipt, jobId: string, revision: number, now: () => Date): Provenance {
@@ -358,6 +455,21 @@ export const OUTPUT_INVALID_REASON = 'The model returned output that does not ma
  * into reasoning). Fixed system-owned wording; provider text never reaches an entry.
  */
 export const OUTPUT_TRUNCATED_REASON = 'Muse ran out of room while writing this part, so it was left out.';
+
+/**
+ * Stage 8b plain-sentence entry reason for a label-diagram-v1 component whose SAM 3.1
+ * segmentation could not complete (an HTTP/network/ledger failure of the segmentation call).
+ * Fixed system-owned wording; provider text never reaches an entry. The failure is
+ * COMPONENT-level (partial publish), never lesson-fatal.
+ */
+export const SEGMENTATION_FAILED_REASON = 'The system could not segment the figure for this part, so it was left out.';
+/**
+ * Stage 8b plain-sentence entry reason for a label-diagram-v1 component whose listed figure
+ * could not be loaded or failed its sha256 verification (or when the job's provider has no
+ * figure access at all — a Spark Open job never sees figures, so a stray plan fails here or
+ * in A-08 honestly).
+ */
+export const FIGURE_UNAVAILABLE_REASON = 'The figure this part needs could not be loaded, so it was left out.';
 
 /**
  * BUG-006: recognise the client's OUTPUT_TRUNCATED MetaError — a PAID, settled call whose
@@ -588,15 +700,31 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
     partialPublish: false,
   };
 
+  // --- Stage 8b: figure access (Muse Spark 1.3 / meta-api jobs only) ----------
+  // Library sources may carry licence-checked figures (data/figures sidecars); user sources
+  // never do. Spark Open (Modal) jobs get NO figure list — the analysis never sees figures,
+  // so it cannot plan label-diagram-v1 (a stray plan fails A-08 honestly), and the worker
+  // never attaches an image for that provider. At most the first 3 figures in listed order
+  // (listFigures sorts by id) travel through analysis, generation, validation and publish.
+  const jobProvider: MetaProvider = isMetaProvider(summary.provider) ? summary.provider : 'meta-api';
+  const jobFigures: FigureMeta[] = jobProvider === 'meta-api' ? listFigures(source.id).slice(0, 3) : [];
+
   // --- Call 1: analysis v2 (same-call overview + component plan) -------------
   ctx.emit('analyze', 'started');
   const analysisValidator: V2Validator<SourceAnalysisV2> = (a, s) =>
-    fixReport(validateLessonAnalysis(a, s), `${jobId}:analysis`, 1);
+    fixReport(validateLessonAnalysis(a, s, jobFigures), `${jobId}:analysis`, 1);
   let call1: { analysis: SourceAnalysisV2; report?: ValidationReport; receipt: MetaReceipt };
   try {
     call1 = await analyzeSourceV2(ctx.client, source, ctx.purpose, {
       signal: ctx.signal,
       validate: analysisValidator,
+      // Stage 8b flow step 1: the analysis message lists the figures (id — caption —
+      // labelsInImage) so Muse may plan label-diagram-v1 for a page with its own diagram.
+      ...(jobFigures.length > 0
+        ? {
+            figures: jobFigures.map(f => ({ id: f.id, caption: f.caption, labelsInImage: f.labelsInImage })),
+          }
+        : {}),
     });
   } catch (err: unknown) {
     // MetaError / GeneratedOutputErrorV2 at the analysis stage are lesson-level failures
@@ -631,7 +759,13 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
   const baselineReport: ValidationReport = curReport;
   const baselineFindings: RepairFinding[] = repairFindings(baselineReport);
   const analysisComparator: V2RevisionComparator<SourceAnalysisV2> = (b, n, s) =>
-    compareLessonAnalysisRevisions(b, n, { sources: s, findings: baselineFindings });
+    compareLessonAnalysisRevisions(b, n, {
+      sources: s,
+      findings: baselineFindings,
+      // Stage 8b: the revision-1 authority recomputes with the SAME figure list the
+      // analysis call saw, so A-08 agrees on both sides of a repair comparison.
+      ...(jobFigures.length > 0 ? { figures: jobFigures } : {}),
+    });
   let analysisAttemptsDone = 0;
   while (!curReport.publishable && analysisAttemptsDone < ctx.maxRepairAttempts) {
     const attempt = analysisAttemptsDone + 1;
@@ -885,15 +1019,21 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
     report: ValidationReport,
     receipt: MetaReceipt,
     extra?: Record<string, unknown>,
+    label?: { figure: LabelFigureRef; regions: LabelRegion[] },
   ): void {
     const record: Record<string, unknown> = { gen, report, receipt, ...(extra ?? {}) };
     try {
-      const spec: KitSpec = assembleKitSpec(gen, cid, {
+      let spec: KitSpec = assembleKitSpec(gen, cid, {
         id: kitSpecId(jobId, cid, revision),
         sources,
         provenance: provenanceFor(receipt, jobId, revision, ctx.now),
         seed: seedFor(jobId, cid),
       });
+      if (label !== undefined) {
+        // Stage 8b flow step 5: the published spec is the gen body plus the system fields
+        // `figure` (the resolved figure reference) and `regions` (this revision's SAM boxes).
+        spec = attachLabelRegions(spec as LabelDiagramSpec, label.figure, label.regions) as KitSpec;
+      }
       record.spec = spec;
     } catch {
       // A gen that cannot assemble is stored without a spec; the report already gates serving.
@@ -901,14 +1041,217 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
     ctx.writeJson(`${cid}.r${revision}.json`, record);
   }
 
+  /**
+   * Stage 8b flow step 3: ONE SAM 3.1 point-segmentation request per label-diagram-v1
+   * revision. Each part's normalised (x,y) becomes an image pixel (round + clamp) and an
+   * object id (index + 1); the returned boxes map back to parts in order.
+   *
+   * Money discipline (identical to a model call): the SAM reserve/reconcile goes through the
+   * job's spending ledger, and the settled amount is accounted through the job's ONE cost
+   * accumulator BEFORE any fallible event/artifact write — on success the reconciled usage
+   * cost, on error the amounts the wrapped ledger actually reconciled (sam.ts MetaErrors
+   * carry no chargedUSD, so the wrapper's trace is authoritative; an uncertain-outcome
+   * reconciliation counts as charged AND unknown exactly like a client reservation charge).
+   *
+   * Failure discipline: ANY segmentation failure (SAM HTTP status, network, budget, ledger,
+   * a missing SAM configuration or an unusable figure) fails ONLY this component (partial
+   * publish), never the lesson, with a fixed allow-listed detail code and a plain-sentence
+   * entry reason.
+   */
+  interface SegmentOk {
+    ok: true;
+    regions: LabelRegion[];
+  }
+  interface SegmentFail {
+    ok: false;
+    reason: string;
+    detail: string;
+    extra: LessonEventExtra;
+  }
+  async function segmentLabelRevision(
+    cid: KitGenComponentId,
+    revision: number,
+    gen: LabelDiagramGen,
+    figure: { meta: FigureMeta; bytes: Uint8Array },
+  ): Promise<SegmentOk | SegmentFail> {
+    const width = figure.meta.width;
+    const height = figure.meta.height;
+    const parts: readonly LabelPartGen[] = Array.isArray(gen.parts) ? gen.parts : [];
+    ctx.emit('segment', 'started', {
+      componentId: cid,
+      revision,
+      detail: `sam-3.1 point segmentation of ${parts.length} part(s)`,
+    });
+    const segmentFail = (detail: string, reason: string): SegmentFail => {
+      const extra: LessonEventExtra = { componentId: cid, revision, detail };
+      ctx.emit('segment', 'failed', extra);
+      return { ok: false, reason, detail, extra };
+    };
+    if (
+      !(Number.isFinite(width) && width > 0 && Number.isFinite(height) && height > 0) ||
+      parts.length === 0
+    ) {
+      // A figure sidecar without usable dimensions (or an empty parts list the schema gate
+      // should have caught): a store/invariant break, never provider text.
+      return segmentFail('FIGURE_UNAVAILABLE', FIGURE_UNAVAILABLE_REASON);
+    }
+    if (ctx.sam === undefined) {
+      // Config invariant: a live API always wires the SAM deps; failing here is INTERNAL.
+      return segmentFail('INTERNAL', SEGMENTATION_FAILED_REASON);
+    }
+    const points: SamPoint[] = parts.map((p, i) => ({
+      id: i + 1,
+      x: clampToInt(Math.round((p.x * width) / 1000), 0, width - 1),
+      y: clampToInt(Math.round((p.y * height) / 1000), 0, height - 1),
+    }));
+    // The wrapper ledger mirrors every settled reconciliation into `trace`, so the job's
+    // accumulator can account EXACTLY what the spending ledger holds — without re-deriving
+    // sam.ts's billing rules from error codes. `close` is a no-op: the job's ledger outlives
+    // one component's segmentation call.
+    const trace = { charged: 0, unknown: 0 };
+    const real: Ledger = ctx.sam.ledger;
+    const wrapped: Ledger = {
+      get capUSD(): number {
+        return real.capUSD;
+      },
+      ...(real.providerCapsUSD !== undefined ? { providerCapsUSD: real.providerCapsUSD } : {}),
+      reserve: req => real.reserve(req),
+      reconcile: (reservationId, actual) => {
+        try {
+          real.reconcile(reservationId, actual);
+        } catch (err) {
+          // The reconciliation itself failed: the ledger outcome is unknown — never drop money.
+          trace.unknown += Math.max(0, actual.costUSD);
+          throw err;
+        }
+        const amount = Math.max(0, actual.costUSD);
+        trace.charged += amount;
+        if (actual.note === 'uncertain outcome') {
+          trace.unknown += amount;
+        }
+      },
+      committedUSD: provider => real.committedUSD(provider),
+      close: () => {
+        // never close the job's ledger from a component
+      },
+    };
+    let result: SegmentPointsResult;
+    try {
+      result = await segmentPoints({
+        apiKey: ctx.sam.apiKey,
+        ...(ctx.sam.baseUrl !== undefined ? { baseUrl: ctx.sam.baseUrl } : {}),
+        ...(ctx.sam.fetch !== undefined ? { fetch: ctx.sam.fetch } : {}),
+        ledger: wrapped,
+        purpose: ctx.purpose,
+        image: { bytes: figure.bytes, mime: figure.meta.mime, width, height },
+        points,
+        signal: ctx.signal,
+      });
+    } catch (err: unknown) {
+      const charge = errorCharge(err, { componentId: cid, revision });
+      const chargedUSD = charge.chargedUSD > 0 ? charge.chargedUSD : trace.charged;
+      const unknownUSD = charge.unknownUSD > 0 ? charge.unknownUSD : trace.unknown;
+      // ONE accumulator FIRST, before the fallible event write below (S6R-07 discipline).
+      ctx.account(chargedUSD, unknownUSD);
+      const extra: LessonEventExtra = { ...charge.extra, componentId: cid, revision };
+      if (chargedUSD > 0) {
+        extra.estCostUSD = chargedUSD;
+      }
+      ctx.emit('segment', 'failed', extra);
+      // R-01: the fixed code from the shared charge vocabulary (SAM_HTTP_<status>,
+      // NETWORK_ERROR, BUDGET_EXCEEDED, LEDGER_ERROR, TIMEOUT, INTERNAL, ...), never
+      // provider text.
+      return { ok: false, reason: SEGMENTATION_FAILED_REASON, detail: charge.code, extra };
+    }
+    ctx.account(result.costUSD, 0);
+    const regions = boxesToRegions(result.boxes, parts);
+    ctx.emit('segment', 'succeeded', {
+      componentId: cid,
+      revision,
+      latencyMs: result.latencyMs,
+      imagesProcessed: result.imagesProcessed,
+      estCostUSD: result.costUSD,
+      detail: `sam-3.1 returned ${regions.length} of ${parts.length} region(s)`,
+    });
+    return { ok: true, regions };
+  }
+
   async function runKitComponent(index: number, planEntry: ComponentPlanEntry, cid: KitGenComponentId): Promise<void> {
     const specIdFor = (rev: number): string => kitSpecId(jobId, cid, rev);
     // S6-W fix: EVERY validation of a formula-explorer gen — ours below and the one the
     // pipeline injects — runs on the deterministically tidied expression (a leading
     // `<name> =` stripped). The tidy never validates: FE-02/FE-08 still run on the result.
+    // Stage 8b: label-diagram-v1 validations carry the source's figure list (LD-03); the
+    // SAM regions only exist after the call returned, so the pipeline-internal validation
+    // runs without them (LD-06/LD-07: 'segmentation did not run') and the worker revalidates
+    // each revision WITH its regions below.
     const kitValidate = (g: AnyKitGen, s: SourceDocument[]): ValidationReport =>
-      validateKitComponent(cid, normaliseGenFor(cid, g).gen, s);
+      validateKitComponent(
+        cid,
+        normaliseGenFor(cid, g).gen,
+        s,
+        cid === 'label-diagram-v1' && jobFigures.length > 0 ? { figures: jobFigures } : {},
+      );
+
+    // --- Stage 8b (label-diagram-v1): resolve the figure BEFORE any paid call ---
+    // The FIRST listed figure is the one sent to Muse (flow step 2) and the one SAM
+    // segments; its exact stored bytes (sha256-verified by loadFigure) travel as base64.
+    let labelFigure: { meta: FigureMeta; bytes: Uint8Array } | null = null;
+    let labelImage: V2ImageInput | null = null;
+    if (cid === 'label-diagram-v1') {
+      const first = jobFigures[0];
+      if (first !== undefined) {
+        try {
+          const loaded = loadFigure(first.id);
+          labelFigure = loaded;
+          labelImage = { mime: loaded.meta.mime, base64: Buffer.from(loaded.bytes).toString('base64') };
+        } catch {
+          labelFigure = null; // FIGURE_NOT_FOUND / FIGURE_HASH_MISMATCH → component-level failure below
+        }
+      }
+    }
+    /** Stage 8b flow step 5: figure ref + regions for the published spec of one revision. */
+    const labelSpecData = (gen: AnyKitGen, regions: LabelRegion[]): { figure: LabelFigureRef; regions: LabelRegion[] } => {
+      const gd = gen as LabelDiagramGen;
+      const meta = jobFigures.find(f => f.id === gd.figureId) ?? (labelFigure as { meta: FigureMeta }).meta;
+      return { figure: labelFigureRefOf(meta), regions };
+    };
+    /**
+     * The revision report the worker persists/publishes for label-diagram-v1: the full
+     * revalidation WITH this revision's regions and the figure list, plus any check the
+     * pipeline added that the revalidation does not own (the repair comparator's).
+     */
+    const mergedLabelReport = (
+      pipelineReport: ValidationReport | undefined,
+      gen: AnyKitGen,
+      revision: number,
+      regions: LabelRegion[],
+    ): ValidationReport => {
+      const revalidated = validateKitComponent(cid, gen, sources, {
+        revision,
+        labelRegions: regions,
+        ...(jobFigures.length > 0 ? { figures: jobFigures } : {}),
+      });
+      const reIds = new Set(revalidated.checks.map(c => c.id));
+      const extraChecks = (pipelineReport?.checks ?? []).filter(c => !reIds.has(c.id));
+      const checks = [...revalidated.checks, ...extraChecks];
+      return fixReport(
+        { ...revalidated, checks, publishable: checks.every(c => c.passed) },
+        specIdFor(revision),
+        revision,
+      );
+    };
+    /** Stage 8b: the REVISION-1 SAM regions — the repair comparator's authority input. */
+    let baselineLabelRegions: LabelRegion[] | null = null;
+
     ctx.emit('component', 'started', { componentId: cid, revision: 1 });
+    if (cid === 'label-diagram-v1' && (labelFigure === null || labelImage === null)) {
+      // No listed figure, or its bytes could not be loaded/verified: fail ONLY this
+      // component (partial publish); no paid call was made. Fixed detail code, plain reason.
+      ctx.emit('component', 'failed', { componentId: cid, revision: 1, detail: 'FIGURE_UNAVAILABLE' });
+      failOutcome(index, cid, specIdFor(1), 1, FIGURE_UNAVAILABLE_REASON);
+      return;
+    }
     let genRes: { gen: AnyKitGen; report?: ValidationReport; receipt: MetaReceipt };
     try {
       genRes = await generateKitComponent(
@@ -917,7 +1260,12 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
         curAnalysis,
         { ...planEntry, componentId: cid },
         ctx.purpose,
-        { signal: ctx.signal, validate: kitValidate },
+        {
+          signal: ctx.signal,
+          validate: kitValidate,
+          // Stage 8b flow step 2: the vision generation call carries the page's own figure.
+          ...(labelImage !== null ? { image: labelImage } : {}),
+        },
       );
     } catch (err: unknown) {
       componentCallError(err, index, cid, specIdFor(1), 1, 'component', { componentId: cid, revision: 1 });
@@ -981,8 +1329,41 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
         });
         ctx.writeJob();
       }
-    } else {
+    } else if (cid !== 'label-diagram-v1') {
       persistKitRevision(cid, 1, gen, report, lastReceipt, r1Extra);
+    }
+
+    // --- Stage 8b: segment revision 1, then revalidate WITH its regions -------
+    if (cid === 'label-diagram-v1' && labelFigure !== null) {
+      const seg = await segmentLabelRevision(cid, 1, gen as LabelDiagramGen, labelFigure);
+      if (seg.ok) {
+        baselineLabelRegions = seg.regions;
+        report = mergedLabelReport(genRes.report, gen, 1, seg.regions);
+        persistKitRevision(
+          cid,
+          1,
+          gen,
+          report,
+          lastReceipt,
+          { ...r1Extra, regions: seg.regions },
+          labelSpecData(gen, seg.regions),
+        );
+      } else {
+        // Segmentation never completed: persist the revision validated WITHOUT regions
+        // (LD-06/LD-07 fail 'segmentation did not run' — no repair permission), report the
+        // fixed detail beside the receipt, and fail ONLY this component. A dead SAM endpoint
+        // must not burn paid Muse repair calls, so the repair loop is skipped entirely.
+        report = fixReport(kitValidate(gen, sources), specIdFor(1), 1);
+        persistKitRevision(cid, 1, gen, report, lastReceipt, r1Extra);
+        ctx.emit('component', 'failed', {
+          componentId: cid,
+          revision: 1,
+          ...receiptFields(genRes.receipt),
+          detail: `segmentation failed: ${seg.detail}`,
+        });
+        failOutcome(index, cid, specIdFor(1), 1, seg.reason);
+        return;
+      }
     }
 
     // --- prune BEFORE repair (system-owned drops while the minimum remains) ---
@@ -1046,7 +1427,18 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
               compareKitRevisions(cid, normaliseGenFor(cid, b).gen, normaliseGenFor(cid, n).gen, {
                 sources: s,
                 findings: baselineFindingsK,
+                // Stage 8b: the revision-1 authority recomputes with the figure list and the
+                // REVISION-1 SAM regions, so LD-03/LD-06/LD-07 agree on both sides of the
+                // comparison with the report the repair model actually saw.
+                ...(cid === 'label-diagram-v1'
+                  ? {
+                      ...(jobFigures.length > 0 ? { figures: jobFigures } : {}),
+                      ...(baselineLabelRegions !== null ? { labelRegions: baselineLabelRegions } : {}),
+                    }
+                  : {}),
               }),
+            // Stage 8b flow step 4: the repair call carries the SAME figure image.
+            ...(labelImage !== null ? { image: labelImage } : {}),
           },
         );
       } catch (err: unknown) {
@@ -1076,15 +1468,44 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
       const repNorm = normaliseGenFor(cid, rep.gen);
       gen = repNorm.gen;
       lastReceipt = rep.receipt;
-      report = fixReport(rep.report, specIdFor(revision), revision);
-      persistKitRevision(
-        cid,
-        revision,
-        gen,
-        report,
-        lastReceipt,
-        repNorm.normalisedFrom !== null ? { normalisedFrom: repNorm.normalisedFrom } : undefined,
-      );
+      const normExtra: Record<string, unknown> =
+        repNorm.normalisedFrom !== null ? { normalisedFrom: repNorm.normalisedFrom } : {};
+      if (cid === 'label-diagram-v1' && labelFigure !== null) {
+        // Stage 8b flow step 4: segmentation RE-RUNS on the repaired revision, and the
+        // revision is validated/persisted with ITS OWN regions.
+        const seg = await segmentLabelRevision(cid, revision, gen as LabelDiagramGen, labelFigure);
+        if (!seg.ok) {
+          // The repair call itself succeeded and was billed; the segmentation step died.
+          // The attempt ran, was paid and cannot pass: record it like a died repair, persist
+          // the revision validated without regions, and fail ONLY this component.
+          report = fixReport(kitValidate(gen, sources), specIdFor(revision), revision);
+          persistKitRevision(cid, revision, gen, report, lastReceipt, normExtra);
+          pushDiedRepairRecord(summary, cid, attempt, revision, targeted);
+          diedReason = seg.reason;
+          ctx.writeJob();
+          break;
+        }
+        report = mergedLabelReport(rep.report, gen, revision, seg.regions);
+        persistKitRevision(
+          cid,
+          revision,
+          gen,
+          report,
+          lastReceipt,
+          { ...normExtra, regions: seg.regions },
+          labelSpecData(gen, seg.regions),
+        );
+      } else {
+        report = fixReport(rep.report, specIdFor(revision), revision);
+        persistKitRevision(
+          cid,
+          revision,
+          gen,
+          report,
+          lastReceipt,
+          repNorm.normalisedFrom !== null ? { normalisedFrom: repNorm.normalisedFrom } : undefined,
+        );
+      }
       const passingIds = new Set(report.checks.filter(c => c.passed).map(c => c.id));
       const remaining = failedCheckIds(report);
       (summary.componentRepairs ??= []).push({

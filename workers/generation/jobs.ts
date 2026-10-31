@@ -94,6 +94,7 @@ import {
 } from './job-support.ts';
 import { fabricatedQuoteWithNonce } from './demo-faults.ts';
 import { isJobFlow, runLesson } from './lesson.ts';
+import type { SamSegmentDeps } from './lesson.ts';
 import type {
   ComponentRepairRecord,
   JobFlow,
@@ -256,6 +257,12 @@ export interface JobDeps {
   /** Labelled system-made fault to inject into revision 1 before validation (demo only). */
   demoFault?: DemoFault;
   /**
+   * Stage 8b: SAM 3.1 segmentation deps for lesson-flow jobs whose plan carries
+   * label-diagram-v1 (the spending ledger is the job's ledger; `fetch`/`baseUrl` are test
+   * seams). A lesson that plans label-diagram-v1 without these fails ONLY that component.
+   */
+  sam?: SamSegmentDeps;
+  /**
    * S6-W: which pipeline to run. 'lesson' = the Stage 6 lesson flow; 'activity' (default) =
    * the unchanged v1 pipeline. The API server defaults to 'lesson' per the frozen contract;
    * the worker keeps 'activity' as its own default so pre-Stage-6 callers/tests are unchanged.
@@ -295,6 +302,8 @@ export type JobStageEvent = Omit<StageEvent, 'stage' | 'target'> & {
   componentId?: string;
   provider?: MetaProvider;
   providerModel?: string;
+  /** Stage 8b: SAM usage kind images_processed, on 'segment' events. */
+  imagesProcessed?: number;
 };
 
 /** Stage 5b: anything Muse may generate — a numeric engine's generated spec or the timeline's. */
@@ -794,6 +803,9 @@ async function runJob(
       specMaxOutputTokens: budget.specMaxOutputTokens,
       maxRepairAttempts: deps.limits?.maxRepairAttempts ?? DEFAULT_MAX_REPAIR_ATTEMPTS,
       demoFault: deps.demoFault,
+      // Stage 8b: SAM 3.1 segmentation deps (absent for callers that never plan
+      // label-diagram-v1; the lesson flow then fails only that component).
+      ...(deps.sam !== undefined ? { sam: deps.sam } : {}),
       summary,
       emit,
       accountReceipt,

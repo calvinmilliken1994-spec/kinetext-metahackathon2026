@@ -18,6 +18,12 @@
 //   GET  /api/sources/:id → metadata + hash-checked text (library and user sources)
 //   GET  /api/jobs        → newest-first job summaries
 //   GET  /api/jobs/:id    → {summary, events, revisions, analysis?, spec?, report?}
+//   GET  /api/figures/:id → Stage 8b: the figure's FigureMeta sidecar JSON (404 unknown id)
+//   GET  /api/figures/:id/image → Stage 8b: the figure's EXACT stored bytes (never re-encoded),
+//                           Content-Type from the sidecar mime, long public cache, ETag = the
+//                           recorded sha256 (If-None-Match answers 304). Ids must be bare
+//                           store ids (/^[a-z0-9-]{1,80}$/); nothing outside data/figures is
+//                           ever served.
 //   POST /api/jobs        → 202 {jobId}; body {sourceId, demoFault?, model?, flow?}; at most
 //                           `maxConcurrentJobs` live jobs at a time (409 JOB_RUNNING while
 //                           that many are running — the pre-concurrency single-job gate is
@@ -52,6 +58,8 @@ import {
   userSourcesDirOf,
   USER_SOURCE_ID_PATTERN,
 } from '../../packages/sources/index.ts';
+import { loadFigure } from '../../packages/sources/figures.ts';
+import type { FigureMeta } from '../../packages/sources/figures.ts';
 import { DEMO_FAULTS, validateUserSourceInput } from '../../packages/contracts/index.ts';
 import type { DemoFault } from '../../packages/contracts/index.ts';
 import { isModelChoice } from '../../packages/meta/pricing.ts';
@@ -102,6 +110,13 @@ const MAX_BODY_BYTES = 10 * 1024;
 /** Teacher-pasted source bodies may be larger than job bodies, but stay bounded (Stage 5). */
 const MAX_SOURCE_BODY_BYTES = 64 * 1024;
 const DEFAULT_ALLOWED_HOSTS: readonly string[] = ['127.0.0.1:5173', 'localhost:5173'];
+
+/** Stage 8b: a bare figure-store id — never a path, never dots, bounded length. */
+const FIGURE_ID_PATTERN = /^[a-z0-9-]{1,80}$/;
+/** Stage 8b: only real image mimes are served as bytes (a tampered sidecar never becomes HTML). */
+const FIGURE_IMAGE_MIME = /^image\/(jpeg|png|gif|webp)$/;
+/** Stage 8b: the licensed figure store is immutable (exact bytes, sha256-pinned) — cache long. */
+const FIGURE_CACHE_CONTROL = 'public, max-age=31536000, immutable';
 
 interface SourceRefResponse {
   id: string;
@@ -432,6 +447,66 @@ export function createApiServer(opts: ApiOptions): Server {
         }
         return sendError(res, 500, 'SOURCE_UNAVAILABLE'); // e.g. sha256 mismatch
       }
+    }
+
+    // Stage 8b: the licence-checked figure library (read-only). The meta endpoint answers
+    // the sidecar JSON; the image endpoint answers the EXACT sha256-verified stored bytes
+    // with a long public cache. Ids never become paths: only a bare store id matching
+    // FIGURE_ID_PATTERN is looked up, and only the sidecar's own (basename) file is served.
+    if (pathname.startsWith('/api/figures/')) {
+      if (method !== 'GET') {
+        return sendError(res, 405, 'METHOD_NOT_ALLOWED');
+      }
+      const segments = decodeURIComponent(pathname.slice('/api/figures/'.length)).split('/');
+      const id = segments[0] ?? '';
+      const sub = segments.length === 2 ? segments[1] : '';
+      if (
+        segments.length > 2 ||
+        !FIGURE_ID_PATTERN.test(id) ||
+        (segments.length === 2 && sub !== 'image')
+      ) {
+        return sendError(res, 404, 'NOT_FOUND');
+      }
+      let meta: FigureMeta;
+      let bytes: Uint8Array;
+      try {
+        const loaded = loadFigure(id); // re-verifies the recorded sha256 on every load
+        meta = loaded.meta;
+        bytes = loaded.bytes;
+      } catch (err: unknown) {
+        if (err instanceof Error && err.message === 'FIGURE_NOT_FOUND') {
+          return sendError(res, 404, 'NOT_FOUND');
+        }
+        return sendError(res, 500, 'FIGURE_UNAVAILABLE'); // e.g. sha256 mismatch (tampered store)
+      }
+      if (sub === '') {
+        return sendJson(res, 200, meta);
+      }
+      // Defence in depth: even a compromised sidecar can never point the response at a
+      // path outside data/figures or at a non-image content type.
+      if (
+        meta.file.includes('/') ||
+        meta.file.includes('\\') ||
+        meta.file.includes('..') ||
+        !FIGURE_IMAGE_MIME.test(meta.mime)
+      ) {
+        return sendError(res, 500, 'FIGURE_UNAVAILABLE');
+      }
+      const etag = `"${meta.sha256}"`;
+      if (req.headers['if-none-match'] === etag) {
+        res.writeHead(304, { etag, 'cache-control': FIGURE_CACHE_CONTROL });
+        res.end();
+        return;
+      }
+      res.writeHead(200, {
+        'content-type': meta.mime,
+        'content-length': bytes.length,
+        'x-content-type-options': 'nosniff',
+        'cache-control': FIGURE_CACHE_CONTROL,
+        etag,
+      });
+      res.end(Buffer.from(bytes));
+      return;
     }
 
     if (pathname === '/api/jobs') {
