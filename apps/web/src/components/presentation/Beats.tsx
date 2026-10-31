@@ -16,6 +16,7 @@ import { linkKey, linkKeysOf } from '../../lib/linking.ts';
 import { ActivityPanel } from '../ActivityPanel.tsx';
 import { AlgorithmTraceView } from '../AlgorithmTraceView.tsx';
 import { DataTableView } from '../DataTableView.tsx';
+import { LabelDiagramView } from '../LabelDiagramView.tsx';
 import { LogLadderView } from '../LogLadderView.tsx';
 import { ThresholdView } from '../ThresholdView.tsx';
 import { BalanceView } from '../BalanceView.tsx';
@@ -471,6 +472,7 @@ function EnginePart({ spec, cite, presentation }: { spec: EngineSpec; cite: Cite
     case 'log-ladder-v1': return <LogLadderView spec={spec} cite={cite} presentation={presentation} />;
     case 'threshold-v1': return <ThresholdView spec={spec} cite={cite} presentation={presentation} />;
     case 'data-table-v1': return <DataTableView spec={spec} cite={cite} presentation={presentation} />;
+    case 'label-diagram-v1': return <LabelDiagramView spec={spec} cite={cite} presentation={presentation} />;
   }
 }
 
@@ -493,7 +495,7 @@ function EngineBeat({ beat, step, revealed, cite }: { beat: KindOf<'engine'>; st
 
 /** Design width each engine is laid out at before it is scaled to the stage. */
 const ENGINE_WIDTH: Readonly<Record<EngineSpec['componentId'], number>> = {
-  'algorithm-trace-v1': 980, 'log-ladder-v1': 980, 'threshold-v1': 940, 'data-table-v1': 1180,
+  'algorithm-trace-v1': 980, 'log-ladder-v1': 980, 'threshold-v1': 940, 'data-table-v1': 1180, 'label-diagram-v1': 1100,
 };
 
 function StageBeat({ beat, cite, deck, repairBadge }: { beat: KindOf<'stage'>; cite: CiteProps; deck: Deck; repairBadge: Badge | null }) {

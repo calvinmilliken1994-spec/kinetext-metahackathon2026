@@ -1,5 +1,5 @@
-// Stage 6 kit contracts v0.6.0 + Stage 8a subject engines — frozen by the lead from `docs/specs/STAGE-6-design.md` + addendum + `docs/specs/STAGE-8a-subject-engines.md`.
-// Stage 6 check count: 92 (63 + 7 ALG + 7 LOG + 7 TH + 8 DT). KIT_SCHEMA_VERSION stays 0.6.0: existing shapes unchanged.
+// Stage 6 kit contracts v0.6.0 + Stage 8a subject engines + Stage 8b label-diagram — frozen by the lead from `docs/specs/STAGE-6-design.md` + addendum + `docs/specs/STAGE-8a-subject-engines.md` + `docs/specs/STAGE-8b-label-diagram.md`.
+// Stage 6 check count: 101 checks — 92 + 9 (63 + 7 ALG + 7 LOG + 7 TH + 8 DT + 9 LD). KIT_SCHEMA_VERSION stays 0.6.0: existing shapes unchanged.
 // Runtime: Node 24 type stripping, so only erasable TypeScript syntax (no enums, namespaces or parameter properties).
 // Browser-safe: no node:* imports; structuredClone only.
 import type { Execution, Provenance, SourceDocument, SourceRef } from './index.ts';
@@ -17,13 +17,13 @@ export function isSubject(v: unknown): v is Subject {
 export const DECLINE_CODES = ['too-short', 'not-prose', 'boilerplate-only', 'no-teachable-content', 'unreadable', 'prompt-injection-only'] as const;
 export type DeclineCode = typeof DECLINE_CODES[number];
 
-export const KIT_COMPONENT_IDS = ['overview-v1', 'quiz-cards-v1', 'sequence-v1', 'sort-groups-v1', 'concept-map-v1', 'compare-table-v1', 'formula-explorer-v1', 'balance-equation-v1', 'algorithm-trace-v1', 'log-ladder-v1', 'threshold-v1', 'data-table-v1'] as const;
+export const KIT_COMPONENT_IDS = ['overview-v1', 'quiz-cards-v1', 'sequence-v1', 'sort-groups-v1', 'concept-map-v1', 'compare-table-v1', 'formula-explorer-v1', 'balance-equation-v1', 'algorithm-trace-v1', 'log-ladder-v1', 'threshold-v1', 'data-table-v1', 'label-diagram-v1'] as const;
 export type KitComponentId = typeof KIT_COMPONENT_IDS[number];
 export function isKitComponentId(v: unknown): v is KitComponentId {
   return typeof v === 'string' && (KIT_COMPONENT_IDS as readonly string[]).includes(v);
 }
 
-export const KIT_GEN_COMPONENT_IDS = ['quiz-cards-v1', 'sequence-v1', 'sort-groups-v1', 'concept-map-v1', 'compare-table-v1', 'formula-explorer-v1', 'balance-equation-v1', 'algorithm-trace-v1', 'log-ladder-v1', 'threshold-v1', 'data-table-v1'] as const;
+export const KIT_GEN_COMPONENT_IDS = ['quiz-cards-v1', 'sequence-v1', 'sort-groups-v1', 'concept-map-v1', 'compare-table-v1', 'formula-explorer-v1', 'balance-equation-v1', 'algorithm-trace-v1', 'log-ladder-v1', 'threshold-v1', 'data-table-v1', 'label-diagram-v1'] as const;
 export type KitGenComponentId = typeof KIT_GEN_COMPONENT_IDS[number];
 export function isKitGenComponentId(v: unknown): v is KitGenComponentId {
   return typeof v === 'string' && (KIT_GEN_COMPONENT_IDS as readonly string[]).includes(v);
@@ -46,7 +46,8 @@ export const KIT_GEN_SCHEMA_FILES: Readonly<Record<KitGenComponentId, string>> =
   'algorithm-trace-v1': 'algorithm-trace.gen.json',
   'log-ladder-v1': 'log-ladder.gen.json',
   'threshold-v1': 'threshold.gen.json',
-  'data-table-v1': 'data-table.gen.json'
+  'data-table-v1': 'data-table.gen.json',
+  'label-diagram-v1': 'label-diagram.gen.json'
 };
 export const SOURCE_ANALYSIS_V2_GEN_SCHEMA_FILE = 'source-analysis-v2.gen.json';
 
@@ -190,6 +191,14 @@ export const KIT_LIMITS = {
     unit: { min: 0, max: 20 },
     label: { min: 1, max: 60 },
     value: { min: 1, max: 40 }
+  },
+  labelDiagram: {
+    parts: { min: 3, max: 8 },
+    name: { min: 1, max: 40 },
+    coordMax: 1000,
+    maxRegionAreaFraction: 0.5,
+    minRegionAreaFraction: 0.0005,
+    maxRegionOverlapIoU: 0.6
   }
 } as const;
 
@@ -498,6 +507,42 @@ export interface DataBracketsGen {
   overColumnIndex: number;
   exampleIncome: number;
 }
+export interface LabelDiagramGen {
+  schemaVersion: 'label-diagram-v1';
+  title: string;
+  figureId: string;
+  parts: LabelPartGen[];
+  hint: string;
+}
+export interface LabelPartGen {
+  id: string;
+  name: string;
+  sourceId: string;
+  quote: string;
+  x: number;
+  y: number;
+  labelX1: number;
+  labelY1: number;
+  labelX2: number;
+  labelY2: number;
+}
+export interface LabelFigureRef {
+  id: string;
+  width: number;
+  height: number;
+  caption: string;
+  credit: string;
+  license: string;
+  labelsInImage: boolean;
+}
+export interface LabelRegion {
+  partId: string;
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+  confidence: number | null;
+}
 
 export interface KitGenByComponent {
   'quiz-cards-v1': QuizCardsGen;
@@ -511,6 +556,7 @@ export interface KitGenByComponent {
   'log-ladder-v1': LogLadderGen;
   'threshold-v1': ThresholdGen;
   'data-table-v1': DataTableGen;
+  'label-diagram-v1': LabelDiagramGen;
 }
 
 /** System-owned base fields shared by every kit spec. */
@@ -602,6 +648,13 @@ export interface DataTableSpec extends KitSpecBase<'data-table-v1'> {
   chartColumnIndex: number;
   brackets: DataBracketsGen;
 }
+export interface LabelDiagramSpec extends KitSpecBase<'label-diagram-v1'> {
+  figureId: string;
+  parts: LabelPartGen[];
+  hint: string;
+  figure: LabelFigureRef;
+  regions: LabelRegion[];
+}
 export interface KitSpecByComponent {
   'overview-v1': OverviewSpec;
   'quiz-cards-v1': QuizCardsSpec;
@@ -615,8 +668,9 @@ export interface KitSpecByComponent {
   'log-ladder-v1': LogLadderSpec;
   'threshold-v1': ThresholdSpec;
   'data-table-v1': DataTableSpec;
+  'label-diagram-v1': LabelDiagramSpec;
 }
-export type KitSpec = OverviewSpec | QuizCardsSpec | SequenceSpec | SortGroupsSpec | ConceptMapSpec | CompareTableSpec | FormulaExplorerSpec | BalanceEquationSpec | AlgorithmTraceSpec | LogLadderSpec | ThresholdSpec | DataTableSpec;
+export type KitSpec = OverviewSpec | QuizCardsSpec | SequenceSpec | SortGroupsSpec | ConceptMapSpec | CompareTableSpec | FormulaExplorerSpec | BalanceEquationSpec | AlgorithmTraceSpec | LogLadderSpec | ThresholdSpec | DataTableSpec | LabelDiagramSpec;
 
 export const LESSON_COMPONENT_STATUSES = ['passed', 'failed', 'skipped'] as const;
 export type LessonComponentStatus = typeof LESSON_COMPONENT_STATUSES[number];
@@ -640,7 +694,8 @@ export interface LessonSpec {
  * docs/specs/STAGE-7e-library-and-wording.md option (a): step labels are AI-written short event
  * names, grounded by their step's verbatim quote); unlike A-02/BAL-06 it is NOT emitted as an
  * always-pass stub, and the id is never reused. Sequence ids keep their numbers (SEQ-01,
- * SEQ-03..SEQ-06) so stored evidence stays readable. Stage 8a appends ALG/LOG/TH/DT checks (92 total). */
+ * SEQ-03..SEQ-06) so stored evidence stays readable. Stage 8a appends ALG/LOG/TH/DT checks (92 total).
+ * Stage 8b appends LD checks (101 checks — 92 + 9). */
 export const STAGE6_CHECKS = {
   'A-01': 'version-is-2',
   'A-02': 'mirrors-agree',
@@ -733,7 +788,16 @@ export const STAGE6_CHECKS = {
   'DT-05': 'questions-valid',
   'DT-06': 'chart-valid',
   'DT-07': 'brackets-valid',
-  'DT-08': 'numbers-checkable'
+  'DT-08': 'numbers-checkable',
+  'LD-01': 'quotes-verbatim',
+  'LD-02': 'name-in-quote',
+  'LD-03': 'figure-valid',
+  'LD-04': 'points-valid',
+  'LD-05': 'label-boxes-valid',
+  'LD-06': 'regions-found',
+  'LD-07': 'regions-distinct',
+  'LD-08': 'numbers-checkable',
+  'LD-09': 'counts-valid'
 } as const;
 export type Stage6CheckId = keyof typeof STAGE6_CHECKS;
 export const STAGE6_CHECK_IDS: readonly Stage6CheckId[] = Object.keys(STAGE6_CHECKS) as unknown as readonly Stage6CheckId[];
@@ -752,7 +816,8 @@ export const CHECK_PREFIX_BY_COMPONENT = {
   'algorithm-trace-v1': 'ALG',
   'log-ladder-v1': 'LOG',
   'threshold-v1': 'TH',
-  'data-table-v1': 'DT'
+  'data-table-v1': 'DT',
+  'label-diagram-v1': 'LD'
 } as const;
 export function checkIdsFor(target: 'analysis' | KitComponentId): Stage6CheckId[] {
   const prefix = CHECK_PREFIX_BY_COMPONENT[target];
@@ -781,7 +846,8 @@ export const KIT_GEN_BODY_KEYS: Readonly<Record<KitGenComponentId, readonly stri
   'algorithm-trace-v1': ['algorithm', 'algorithmName', 'sourceId', 'quote', 'input', 'hasTarget', 'target', 'claims'],
   'log-ladder-v1': ['quantity', 'factor', 'factorText', 'effectPhrase', 'increasing', 'sourceId', 'quote', 'rungs', 'cases'],
   'threshold-v1': ['stages', 'scenarios'],
-  'data-table-v1': ['labelHeader', 'columns', 'rows', 'questions', 'chartColumnIndex', 'brackets']
+  'data-table-v1': ['labelHeader', 'columns', 'rows', 'questions', 'chartColumnIndex', 'brackets'],
+  'label-diagram-v1': ['figureId', 'parts', 'hint']
 };
 /** Combine a gen body with system-owned fields into a kit spec; the gen body and system objects are deep-copied. */
 export function assembleKitSpec<C extends KitGenComponentId>(gen: KitGenByComponent[C], componentId: C, opts: KitAssembleOptions): KitSpecByComponent[C] {
@@ -812,6 +878,13 @@ export function assembleKitSpec<C extends KitGenComponentId>(gen: KitGenByCompon
     seed: opts.seed,
     ...body
   } as unknown as KitSpecByComponent[C];
+}
+/** Attach the worker-resolved figure reference and SAM regions to an assembled label-diagram spec; inputs are deep-copied, never mutated. */
+export function attachLabelRegions(spec: LabelDiagramSpec, figure: LabelFigureRef, regions: LabelRegion[]): LabelDiagramSpec {
+  const copy: LabelDiagramSpec = structuredClone(spec);
+  copy.figure = structuredClone(figure);
+  copy.regions = structuredClone(regions);
+  return copy;
 }
 /** Copy a usable v2 analysis overview into an overview spec; analysis and system objects are deep-copied. */
 export function assembleOverviewSpec(analysis: SourceAnalysisV2, opts: KitAssembleOptions): OverviewSpec {

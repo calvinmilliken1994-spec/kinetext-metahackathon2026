@@ -52,6 +52,7 @@ test('every kit component has the exact failure message from the design', () => 
     'log-ladder-v1': 'The scale and its step factor could not be verified against the page.',
     'threshold-v1': 'The voting rule could not be verified against the page.',
     'data-table-v1': 'The table could not be verified against the page.',
+    'label-diagram-v1': 'The diagram parts could not be verified against the page.',
   });
   for (const id of KIT_GEN_COMPONENT_IDS) assert.ok(FAILURE_MESSAGES[id].length > 10);
 });

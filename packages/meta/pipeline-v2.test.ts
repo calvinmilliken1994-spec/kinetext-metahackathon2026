@@ -489,7 +489,8 @@ test('malformed output for every function', async () => {
 
 test('generateKitComponent for every component', async () => {
   const usable = loadFixture('source-analysis-v2.usable.json') as SourceAnalysisV2;
-  for (const c of KIT_GEN_COMPONENT_IDS) {
+  // label-diagram-v1 needs the figure image; covered by pipeline-v2.label.test.ts (Stage 8b).
+  for (const c of KIT_GEN_COMPONENT_IDS.filter((id) => id !== 'label-diagram-v1')) {
     const golden = fixtureFor(c);
     const src = sourceForComponent(c);
     const analysis = analysisFor(c, golden);

@@ -795,6 +795,7 @@ export const KIT_FAILURE_MESSAGES: Readonly<Record<string, string>> = {
   'log-ladder-v1': 'The scale and its step factor could not be verified against the page.',
   'threshold-v1': 'The voting rule could not be verified against the page.',
   'data-table-v1': 'The table could not be verified against the page.',
+  'label-diagram-v1': 'The diagram parts could not be verified against the page.',
 };
 
 export function buildReport(artifactId: string, checks: ValidationCheck[], revision = 1): ValidationReport {

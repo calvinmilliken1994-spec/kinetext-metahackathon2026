@@ -406,6 +406,15 @@ export const STAGE6_CHECK_NAMES: Readonly<Record<keyof typeof STAGE6_CHECKS, str
   'DT-06': 'The chart uses a numeric column',
   'DT-07': 'The rate schedule is in order',
   'DT-08': 'Numbers in the text can be found on the page',
+  'LD-01': 'Each quote appears word for word on the page',
+  'LD-02': 'Each part name is in its quote',
+  'LD-03': 'The figure belongs to this page',
+  'LD-04': 'Each part point is valid and off its printed label',
+  'LD-05': 'Printed-label boxes are valid',
+  'LD-06': 'SAM found one region around each part point',
+  'LD-07': 'The part regions do not overlap too much',
+  'LD-08': 'Numbers in the text can be found on the page',
+  'LD-09': 'The number of parts is in range',
 };
 
 export function stage6CheckName(id: string): string | null {

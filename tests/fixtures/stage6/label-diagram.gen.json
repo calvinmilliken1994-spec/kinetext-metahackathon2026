@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "label-diagram-v1",
+  "title": "Label the DNA diagram",
+  "figureId": "medlineplus-dna-structure-1",
+  "parts": [
+    {
+      "id": "part-base-pairs",
+      "name": "base pairs",
+      "sourceId": "medlineplus-what-is-dna",
+      "quote": "to form units called base pairs",
+      "x": 283,
+      "y": 475,
+      "labelX1": 397,
+      "labelY1": 303,
+      "labelX2": 542,
+      "labelY2": 330
+    },
+    {
+      "id": "part-adenine",
+      "name": "adenine",
+      "sourceId": "medlineplus-what-is-dna",
+      "quote": "four chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T)",
+      "x": 650,
+      "y": 317,
+      "labelX1": 595,
+      "labelY1": 353,
+      "labelX2": 707,
+      "labelY2": 380
+    },
+    {
+      "id": "part-thymine",
+      "name": "thymine",
+      "sourceId": "medlineplus-what-is-dna",
+      "quote": "four chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T)",
+      "x": 800,
+      "y": 317,
+      "labelX1": 762,
+      "labelY1": 353,
+      "labelX2": 873,
+      "labelY2": 380
+    },
+    {
+      "id": "part-guanine",
+      "name": "guanine",
+      "sourceId": "medlineplus-what-is-dna",
+      "quote": "four chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T)",
+      "x": 658,
+      "y": 478,
+      "labelX1": 595,
+      "labelY1": 510,
+      "labelX2": 707,
+      "labelY2": 537
+    },
+    {
+      "id": "part-cytosine",
+      "name": "cytosine",
+      "sourceId": "medlineplus-what-is-dna",
+      "quote": "four chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T)",
+      "x": 800,
+      "y": 478,
+      "labelX1": 762,
+      "labelY1": 510,
+      "labelX2": 880,
+      "labelY2": 537
+    },
+    {
+      "id": "part-backbone",
+      "name": "sugar-phosphate backbone",
+      "sourceId": "medlineplus-what-is-dna",
+      "quote": "DNA is a double helix formed by base pairs attached to a sugar-phosphate backbone",
+      "x": 358,
+      "y": 683,
+      "labelX1": 508,
+      "labelY1": 672,
+      "labelX2": 697,
+      "labelY2": 733
+    }
+  ],
+  "hint": "Tap each part of the DNA diagram and name it with the page words."
+}

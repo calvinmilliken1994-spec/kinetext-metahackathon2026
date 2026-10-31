@@ -45,9 +45,12 @@ export type MetaErrorCode =
   | 'OUTPUT_NOT_JSON'
   | 'EMPTY_OUTPUT'
   | 'DEADLINE_EXCEEDED'
-  | 'INPUT_TOO_LARGE';
+  | 'INPUT_TOO_LARGE'
+  | 'IMAGES_NOT_SUPPORTED'
+  | 'IMAGE_IN_SYSTEM_MESSAGE'
+  | `SAM_HTTP_${number}`;
 
-export const META_ERROR_MESSAGES: Readonly<Record<MetaErrorCode, string>> = {
+const META_ERROR_BASE_MESSAGES = {
   LIVE_CALLS_DISABLED: 'live calls disabled',
   MODEL_API_KEY_MISSING: 'model API key missing',
   MODAL_PROXY_TOKEN_MISSING: 'modal proxy token missing',
@@ -68,7 +71,12 @@ export const META_ERROR_MESSAGES: Readonly<Record<MetaErrorCode, string>> = {
   EMPTY_OUTPUT: 'empty output',
   DEADLINE_EXCEEDED: 'job deadline exceeded',
   INPUT_TOO_LARGE: 'input too large',
-};
+  IMAGES_NOT_SUPPORTED: 'images not supported',
+  IMAGE_IN_SYSTEM_MESSAGE: 'image in system message',
+} as const;
+
+export const META_ERROR_MESSAGES: Readonly<Record<MetaErrorCode, string>> =
+  META_ERROR_BASE_MESSAGES as unknown as Readonly<Record<MetaErrorCode, string>>;
 
 export class MetaError extends Error {
   code: MetaErrorCode;
@@ -98,7 +106,7 @@ export class MetaError extends Error {
       provider?: MetaProvider;
     },
   ) {
-    super(META_ERROR_MESSAGES[code]);
+    super(META_ERROR_MESSAGES[code] ?? 'http error');
     void message;
     this.name = 'MetaError';
     this.code = code;
@@ -131,9 +139,14 @@ export class MetaError extends Error {
   }
 }
 
+export interface ChatImage {
+  url: string;
+}
+
 export interface ChatMessage {
   role: 'system' | 'user';
   content: string;
+  images?: ChatImage[];
 }
 
 export interface CompleteRequest {
@@ -165,6 +178,46 @@ export interface MetaClientOptions {
   sleep?: (ms: number, signal?: AbortSignal) => Promise<void>;
   now?: () => number;
   providerConfig?: ProviderConfig;
+}
+
+export const IMAGE_PART_TOKEN_COUNT = 1600;
+
+function countImages(messages: ReadonlyArray<ChatMessage>): number {
+  let count = 0;
+  for (const m of messages) {
+    if (Array.isArray(m.images)) {
+      count += m.images.length;
+    }
+  }
+  return count;
+}
+
+function systemMessageHasImage(messages: ReadonlyArray<ChatMessage>): boolean {
+  for (const m of messages) {
+    if (m.role === 'system' && Array.isArray(m.images) && m.images.length > 0) {
+      return true;
+    }
+  }
+  return false;
+}
+
+type SerializedContentPart =
+  | { type: 'text'; text: string }
+  | { type: 'image_url'; image_url: { url: string } };
+
+function serializeMessages(
+  messages: ReadonlyArray<ChatMessage>,
+): Array<{ role: 'system' | 'user'; content: string | SerializedContentPart[] }> {
+  return messages.map((m): { role: 'system' | 'user'; content: string | SerializedContentPart[] } => {
+    if (Array.isArray(m.images) && m.images.length > 0) {
+      const parts: SerializedContentPart[] = [{ type: 'text', text: m.content }];
+      for (const img of m.images) {
+        parts.push({ type: 'image_url', image_url: { url: img.url } });
+      }
+      return { role: m.role, content: parts };
+    }
+    return { role: m.role, content: m.content };
+  });
 }
 
 function toUsage(raw: unknown): { usage: Usage | null; cachedUnknown: boolean } {
@@ -510,7 +563,26 @@ export function createMetaClient(opts: MetaClientOptions): MetaClient {
       });
     }
 
-    const bound: number = inputTokenBound(req.messages, req.jsonSchema);
+    if (systemMessageHasImage(req.messages)) {
+      throw new MetaError('IMAGE_IN_SYSTEM_MESSAGE', undefined, {
+        chargedUSD: 0,
+        reservedUnknownUSD: 0,
+        costBasis: 'usage',
+        provider: effectiveProvider,
+      });
+    }
+    const imageCount: number = countImages(req.messages);
+    if (effectiveProvider !== 'meta-api' && imageCount > 0) {
+      throw new MetaError('IMAGES_NOT_SUPPORTED', undefined, {
+        chargedUSD: 0,
+        reservedUnknownUSD: 0,
+        costBasis: 'usage',
+        provider: effectiveProvider,
+      });
+    }
+    const bound: number =
+      inputTokenBound(req.messages, req.jsonSchema) +
+      imageCount * IMAGE_PART_TOKEN_COUNT;
     if (bound > maxInputTokens) {
       throw new MetaError('INPUT_TOO_LARGE', undefined, {
         chargedUSD: 0,
@@ -537,7 +609,7 @@ export function createMetaClient(opts: MetaClientOptions): MetaClient {
     const url: string = requestUrl;
     const body: Record<string, unknown> = {
       model: effectiveProviderModel,
-      messages: req.messages,
+      messages: serializeMessages(req.messages),
       max_tokens: req.maxOutputTokens,
       reasoning_effort: 'high',
       stream: false,

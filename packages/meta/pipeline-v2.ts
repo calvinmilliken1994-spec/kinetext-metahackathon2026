@@ -25,7 +25,7 @@ import {
   buildKitComponentRepairMessages
 } from './prompts-v2.ts';
 import { GeneratedOutputError } from './pipeline.ts';
-import type { CompleteRequest, MetaClient } from './client.ts';
+import type { ChatMessage, CompleteRequest, MetaClient } from './client.ts';
 
 export const ANALYSIS_V2_MAX_OUTPUT_TOKENS: 32000 = 32000;
 export const KIT_CALL_MAX_OUTPUT_TOKENS: 24000 = 24000;
@@ -37,6 +37,11 @@ export type V2RevisionComparator<T> = (baseline: T, candidate: T, sources: Sourc
 export interface V2CallOptions {
   signal?: AbortSignal;
   maxOutputTokens?: number;
+}
+
+export interface V2ImageInput {
+  mime: string;
+  base64: string;
 }
 
 export type V2GeneratedOutputStage = 'analyze-v2' | 'component' | 'component-repair' | 'analysis-v2-repair';
@@ -207,18 +212,33 @@ function computeAuthorizedPaths<T>(validate: V2Validator<T>, baseline: T, source
   return authorizedFromReport(rep);
 }
 
+function labelImageDataUrl(image: V2ImageInput): string {
+  return `data:${image.mime};base64,${image.base64}`;
+}
+
+function attachImageToUserMessage(messages: ChatMessage[], image: V2ImageInput): ChatMessage[] {
+  if (messages.length === 0) {
+    return messages;
+  }
+  const head: ChatMessage[] = messages.slice(0, -1);
+  const last: ChatMessage = messages[messages.length - 1] as ChatMessage;
+  const url: string = labelImageDataUrl(image);
+  const updated: ChatMessage = { ...last, images: [{ url }] };
+  return [...head, updated];
+}
+
 export async function analyzeSourceV2(
   client: MetaClient,
   source: SourceDocument,
   purpose: V2Purpose,
-  opts?: V2CallOptions & { validate?: V2Validator<SourceAnalysisV2> }
+  opts?: V2CallOptions & { validate?: V2Validator<SourceAnalysisV2>; figures?: Array<{ id: string; caption: string; labelsInImage: boolean }> }
 ): Promise<{ analysis: SourceAnalysisV2; report?: ValidationReport; receipt: MetaReceipt }> {
   const maxOutputTokens: number = resolveMaxTokens(opts?.maxOutputTokens, ANALYSIS_V2_MAX_OUTPUT_TOKENS);
   const req: CompleteRequest = {
     purpose,
     schemaName: ANALYSIS_V2_SCHEMA_NAME,
     jsonSchema: sourceAnalysisV2GenSchema as unknown as Record<string, unknown>,
-    messages: buildAnalysisV2Messages(source),
+    messages: buildAnalysisV2Messages(source, opts?.figures),
     maxOutputTokens
   };
   if (opts?.signal !== undefined) {
@@ -247,15 +267,22 @@ export async function generateKitComponent<C extends KitGenComponentId>(
   analysis: SourceAnalysisV2,
   planEntry: ComponentPlanEntry & { componentId: C },
   purpose: V2Purpose,
-  opts?: V2CallOptions & { validate?: V2Validator<KitGenByComponent[C]> }
+  opts?: V2CallOptions & { validate?: V2Validator<KitGenByComponent[C]>; image?: V2ImageInput }
 ): Promise<{ gen: KitGenByComponent[C]; report?: ValidationReport; receipt: MetaReceipt }> {
   const maxOutputTokens: number = resolveMaxTokens(opts?.maxOutputTokens, KIT_CALL_MAX_OUTPUT_TOKENS);
   const c: KitGenComponentId = requireKitPlan(analysis, planEntry);
+  if (c === 'label-diagram-v1' && opts?.image === undefined) {
+    throw new Error('LABEL_DIAGRAM_IMAGE_REQUIRED');
+  }
+  const baseMessages: ChatMessage[] = buildKitComponentMessages(source, analysis, planEntry);
+  const messages: ChatMessage[] = c === 'label-diagram-v1' && opts?.image !== undefined
+    ? attachImageToUserMessage(baseMessages, opts.image)
+    : baseMessages;
   const req: CompleteRequest = {
     purpose,
     schemaName: KIT_SCHEMA_NAMES[c],
     jsonSchema: kitGenSchemaFor(c) as unknown as Record<string, unknown>,
-    messages: buildKitComponentMessages(source, analysis, planEntry),
+    messages,
     maxOutputTokens
   };
   if (opts?.signal !== undefined) {
@@ -285,7 +312,7 @@ export async function repairKitComponent<C extends KitGenComponentId>(
   planEntry: ComponentPlanEntry & { componentId: C },
   previous: { gen: KitGenByComponent[C]; report: ValidationReport; attempt: number; baseline?: { gen: KitGenByComponent[C] } },
   purpose: V2Purpose,
-  opts: V2CallOptions & { validate: V2Validator<KitGenByComponent[C]>; compare?: V2RevisionComparator<KitGenByComponent[C]> }
+  opts: V2CallOptions & { validate: V2Validator<KitGenByComponent[C]>; compare?: V2RevisionComparator<KitGenByComponent[C]>; image?: V2ImageInput }
 ): Promise<{ gen: KitGenByComponent[C]; report: ValidationReport; receipt: MetaReceipt; authorizedPaths: string[] }> {
   const maxOutputTokens: number = resolveMaxTokens(opts.maxOutputTokens, KIT_CALL_MAX_OUTPUT_TOKENS);
   const c: KitGenComponentId = requireKitPlan(analysis, planEntry);
@@ -304,19 +331,26 @@ export async function repairKitComponent<C extends KitGenComponentId>(
       throw new Error('COMPONENT_MISMATCH');
     }
   }
+  if (c === 'label-diagram-v1' && opts.image === undefined) {
+    throw new Error('LABEL_DIAGRAM_IMAGE_REQUIRED');
+  }
   const baseline: KitGenByComponent[C] = previous.baseline?.gen ?? previous.gen;
   const authorizedPaths: string[] = computeAuthorizedPaths(opts.validate, baseline, source);
   const findings: RepairFinding[] = findingsFromReport(previous.report);
+  const baseMessages: ChatMessage[] = buildKitComponentRepairMessages(source, analysis, planEntry, {
+    original: baseline,
+    previous: previous.gen,
+    findings,
+    authorizedPaths
+  });
+  const messages: ChatMessage[] = c === 'label-diagram-v1' && opts.image !== undefined
+    ? attachImageToUserMessage(baseMessages, opts.image)
+    : baseMessages;
   const req: CompleteRequest = {
     purpose,
     schemaName: KIT_REPAIR_SCHEMA_NAMES[c],
     jsonSchema: kitGenSchemaFor(c) as unknown as Record<string, unknown>,
-    messages: buildKitComponentRepairMessages(source, analysis, planEntry, {
-      original: baseline,
-      previous: previous.gen,
-      findings,
-      authorizedPaths
-    }),
+    messages,
     maxOutputTokens
   };
   if (opts.signal !== undefined) {

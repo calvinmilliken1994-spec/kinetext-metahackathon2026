@@ -23,12 +23,13 @@ import type { PredictPlan } from './compare.ts';
 import type { CheckTally, QuoteTally } from './provenance.ts';
 import { isTimelineSpec, pairOptions } from './timeline.ts';
 import type { AnyActivitySpec } from './timeline.ts';
-import type { AlgorithmTraceSpec, DataTableSpec, LogLadderSpec, ThresholdSpec } from '../../../../packages/contracts/kit.ts';
+import type { AlgorithmTraceSpec, DataTableSpec, LabelDiagramSpec, LogLadderSpec, ThresholdSpec } from '../../../../packages/contracts/kit.ts';
 import type { EnginePresentation } from './enginePresentation.ts';
 import { algorithmPresentationSteps } from './algorithmView.ts';
 import { logLadderPresentationSteps } from './logLadderView.ts';
 import { thresholdPresentationSteps, thresholdRevealQuote } from './thresholdView.ts';
 import { dataTablePresentationSteps, dataTableRevealQuote } from './dataTableView.ts';
+import { labelDiagramPresentationSteps } from './labelDiagramView.ts';
 
 // ---- the deck -----------------------------------------------------------------------------------------------------
 
@@ -129,10 +130,10 @@ export type BeatKind = Beat['kind'];
 
 // ---- the Stage 8a subject engines (docs/specs/STAGE-8a-subject-engines.md §4) -----------------------------------------
 
-export type EngineSpec = AlgorithmTraceSpec | LogLadderSpec | ThresholdSpec | DataTableSpec;
+export type EngineSpec = AlgorithmTraceSpec | LogLadderSpec | ThresholdSpec | DataTableSpec | LabelDiagramSpec;
 
 export function isEngineSpec(spec: KitSpec): spec is EngineSpec {
-  return spec.componentId === 'algorithm-trace-v1' || spec.componentId === 'log-ladder-v1' || spec.componentId === 'threshold-v1' || spec.componentId === 'data-table-v1';
+  return spec.componentId === 'algorithm-trace-v1' || spec.componentId === 'log-ladder-v1' || spec.componentId === 'threshold-v1' || spec.componentId === 'data-table-v1' || spec.componentId === 'label-diagram-v1';
 }
 
 /** How many presenter steps an engine part has (its view's own count; at least 1, whatever the view returns). */
@@ -143,6 +144,7 @@ export function enginePresentationSteps(spec: EngineSpec): number {
     case 'log-ladder-v1': n = logLadderPresentationSteps(spec); break;
     case 'threshold-v1': n = thresholdPresentationSteps(spec); break;
     case 'data-table-v1': n = dataTablePresentationSteps(spec); break;
+    case 'label-diagram-v1': n = labelDiagramPresentationSteps(spec); break;
   }
   return Number.isFinite(n) && n >= 1 ? Math.trunc(n) : 1;
 }
@@ -159,7 +161,7 @@ function engineRevealQuote(spec: EngineSpec, step: number): QuoteLike | null {
 const STAGE_LABELS: Readonly<Record<string, string>> = {
   'sequence-v1': 'Sequence', 'sort-groups-v1': 'Sort', 'concept-map-v1': 'Concept map', 'compare-table-v1': 'Compare',
   'formula-explorer-v1': 'Formula', 'balance-equation-v1': 'Balance', 'quiz-cards-v1': 'Quiz', 'timeline-v1': 'Timeline',
-  'algorithm-trace-v1': 'Algorithm', 'log-ladder-v1': 'Scale', 'threshold-v1': 'Vote', 'data-table-v1': 'Table',
+  'algorithm-trace-v1': 'Algorithm', 'log-ladder-v1': 'Scale', 'threshold-v1': 'Vote', 'data-table-v1': 'Table', 'label-diagram-v1': 'Diagram',
 };
 
 const CUE = {
@@ -198,6 +200,7 @@ export function partQuotes(part: DeckPart): QuoteLike[] {
     case 'algorithm-trace-v1': return [{ sourceId: spec.sourceId, quote: spec.quote }, ...spec.claims.map((c) => ({ sourceId: c.sourceId, quote: c.quote }))];
     case 'log-ladder-v1': return [{ sourceId: spec.sourceId, quote: spec.quote }, ...spec.rungs.map((r) => ({ sourceId: r.sourceId, quote: r.quote }))];
     case 'threshold-v1': return spec.stages.flatMap((s) => [{ sourceId: s.sourceId, quote: s.quote }, { sourceId: s.sourceId, quote: s.totalQuote }]);
+    case 'label-diagram-v1': return spec.parts.map((p) => ({ sourceId: p.sourceId, quote: p.quote }));
     case 'data-table-v1': return spec.rows.flatMap((r) => [{ sourceId: r.sourceId, quote: r.quote }, ...r.values.map((v) => ({ sourceId: v.sourceId, quote: v.quote }))]);
     default: return [];
   }

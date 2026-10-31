@@ -23,6 +23,7 @@ export const FAILURE_MESSAGES: Readonly<Record<KitGenComponentId, string>> = {
   'log-ladder-v1': 'The scale and its step factor could not be verified against the page.',
   'threshold-v1': 'The voting rule could not be verified against the page.',
   'data-table-v1': 'The table could not be verified against the page.',
+  'label-diagram-v1': 'The diagram parts could not be verified against the page.',
 };
 export const PREMIUM_FAILURE_MESSAGE = 'This activity could not be verified against the page.';
 export const SKIPPED_MESSAGE = 'This component was not built for this lesson.';
@@ -39,6 +40,7 @@ const KIT_LABELS: Readonly<Record<KitGenComponentId, string>> = {
   'log-ladder-v1': 'Climb the scale',
   'threshold-v1': 'Does it pass?',
   'data-table-v1': 'Data table',
+  'label-diagram-v1': 'Label the diagram',
 };
 
 export function componentLabel(id: PlanComponentId): string {
@@ -203,6 +205,9 @@ export function collectLessonQuotes(sourceId: string, overview: OverviewSpec | n
           add(spec.componentId, 'row', `row-${i}`, r.label, r);
           r.values.forEach((v, j) => add(spec.componentId, 'cell', `cell-${i}-${j}`, v.value, v));
         });
+        break;
+      case 'label-diagram-v1':
+        for (const p of spec.parts) add(spec.componentId, 'part', p.id, p.name, p);
         break;
       default: break;
     }

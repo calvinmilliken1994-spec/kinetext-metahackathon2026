@@ -121,6 +121,10 @@ export function kitDisplayFields(componentId: string, gen: unknown): DisplayFiel
       add('/title', g.title);
       add('/labelHeader', g.labelHeader);
       break;
+    case 'label-diagram-v1':
+      add('/title', g.title);
+      add('/hint', g.hint);
+      break;
     case 'overview-v1':
       add('/headline', g.headline);
       each('keyPoints', (x, p) => add(`${p}/point`, x.point));

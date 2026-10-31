@@ -1,0 +1,96 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "title",
+    "figureId",
+    "parts",
+    "hint"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "enum": [
+        "label-diagram-v1"
+      ],
+      "description": "Generator schema version, always the component id."
+    },
+    "title": {
+      "type": "string",
+      "description": "Short title for students in plain text."
+    },
+    "figureId": {
+      "type": "string",
+      "description": "Id of the library figure this lesson labels."
+    },
+    "parts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name",
+          "sourceId",
+          "quote",
+          "x",
+          "y",
+          "labelX1",
+          "labelY1",
+          "labelX2",
+          "labelY2"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Lowercase kebab part id, 40 characters or fewer."
+          },
+          "name": {
+            "type": "string",
+            "description": "Part name with the words the page uses, 1 to 40 characters. It occurs in the quote."
+          },
+          "sourceId": {
+            "type": "string",
+            "description": "Id of the source the quote was copied from."
+          },
+          "quote": {
+            "type": "string",
+            "description": "Exact characters copied from the source, no ellipsis, 150 characters or fewer."
+          },
+          "x": {
+            "type": "integer",
+            "description": "Horizontal point on the part itself, never on its printed label, normalised 0 to 1000."
+          },
+          "y": {
+            "type": "integer",
+            "description": "Vertical point on the part itself, never on its printed label, normalised 0 to 1000."
+          },
+          "labelX1": {
+            "type": "integer",
+            "description": "Left edge of the box around the printed part label, normalised 0 to 1000; all four label edges are 0 when there is no printed label."
+          },
+          "labelY1": {
+            "type": "integer",
+            "description": "Top edge of the box around the printed part label, normalised 0 to 1000; all four label edges are 0 when there is no printed label."
+          },
+          "labelX2": {
+            "type": "integer",
+            "description": "Right edge of the box around the printed part label, normalised 0 to 1000; all four label edges are 0 when there is no printed label."
+          },
+          "labelY2": {
+            "type": "integer",
+            "description": "Bottom edge of the box around the printed part label, normalised 0 to 1000; all four label edges are 0 when there is no printed label."
+          }
+        }
+      },
+      "minItems": 3,
+      "maxItems": 8,
+      "description": "Diagram parts, 3 to 8."
+    },
+    "hint": {
+      "type": "string",
+      "description": "Hint in plain text."
+    }
+  }
+}

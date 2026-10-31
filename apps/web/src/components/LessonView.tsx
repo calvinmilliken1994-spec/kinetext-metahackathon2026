@@ -12,6 +12,7 @@ import { ActivityPanel } from './ActivityPanel.tsx';
 import { AlgorithmTraceView } from './AlgorithmTraceView.tsx';
 import { BalanceView } from './BalanceView.tsx';
 import { DataTableView } from './DataTableView.tsx';
+import { LabelDiagramView } from './LabelDiagramView.tsx';
 import { LogLadderView } from './LogLadderView.tsx';
 import { ThresholdView } from './ThresholdView.tsx';
 import { CompareView } from './CompareView.tsx';
@@ -79,6 +80,7 @@ function KitBody({ spec, cite }: { spec: KitSpec; cite: CiteProps }) {
     case 'log-ladder-v1': return <LogLadderView spec={spec} cite={cite} />;
     case 'threshold-v1': return <ThresholdView spec={spec} cite={cite} />;
     case 'data-table-v1': return <DataTableView spec={spec} cite={cite} />;
+    case 'label-diagram-v1': return <LabelDiagramView spec={spec} cite={cite} />;
     default: return null;
   }
 }

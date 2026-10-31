@@ -30,7 +30,10 @@ import type {
   LogLadderGen,
   ThresholdGen,
   DataTableGen,
+  LabelDiagramGen,
+  LabelRegion,
 } from '../../contracts/kit.ts';
+import type { FigureMeta } from '../../sources/figures.ts';
 import { kitGenSchemaFor } from '../../contracts/schemas.ts';
 import { schemaAffectedPaths, schemaFailureMessage } from '../validate.ts';
 import { buildReport } from './shared.ts';
@@ -47,6 +50,7 @@ import { validateAlgorithmTrace } from './algorithm.ts';
 import { validateLogLadder } from './log-ladder.ts';
 import { validateThreshold } from './threshold.ts';
 import { validateDataTable } from './data-table.ts';
+import { validateLabelDiagram } from './label-diagram.ts';
 import { compareGuardedRevisions } from './repair.ts';
 import type { RevisionGuardContext } from './repair.ts';
 
@@ -61,7 +65,13 @@ function genValidatorFor(componentId: KitGenComponentId): ValidateFunction {
   return v;
 }
 
-export interface KitValidateOptions { revision?: number; artifactId?: string }
+export interface KitValidateOptions {
+  revision?: number;
+  artifactId?: string;
+  /** Stage 8b label-diagram-v1 only: SAM regions for this revision and the source's figure list. */
+  labelRegions?: readonly LabelRegion[];
+  figures?: readonly FigureMeta[];
+}
 
 /**
  * Validate one Stage 6 kit component gen against the provided source documents.
@@ -128,10 +138,10 @@ export function validateKitComponent(
       };
     }
   }
-  return applyKitPolicy(componentId, gen, sources, validateKitBody(componentId, gen, sources, artifactId, revision));
+  return applyKitPolicy(componentId, gen, sources, validateKitBody(componentId, gen, sources, artifactId, revision, opts));
 }
 
-function validateKitBody(componentId: KitGenComponentId, gen: unknown, sources: SourceDocument[], artifactId: string, revision: number): ValidationReport {
+function validateKitBody(componentId: KitGenComponentId, gen: unknown, sources: SourceDocument[], artifactId: string, revision: number, opts: KitValidateOptions = {}): ValidationReport {
   switch (componentId) {
     case 'quiz-cards-v1': return validateQuizCards(gen as QuizCardsGen, sources, { revision });
     case 'sequence-v1': return validateSequence(gen as SequenceGen, sources, { revision });
@@ -144,6 +154,7 @@ function validateKitBody(componentId: KitGenComponentId, gen: unknown, sources: 
     case 'log-ladder-v1': return validateLogLadder(gen as LogLadderGen, sources, { revision });
     case 'threshold-v1': return validateThreshold(gen as ThresholdGen, sources, { revision });
     case 'data-table-v1': return validateDataTable(gen as DataTableGen, sources, { revision });
+    case 'label-diagram-v1': return validateLabelDiagram(gen as LabelDiagramGen, sources, { revision, ...(opts.labelRegions !== undefined ? { regions: opts.labelRegions } : {}), ...(opts.figures !== undefined ? { figures: opts.figures } : {}) });
     default: {
       const never: never = componentId;
       return buildReport(artifactId, [{ id: 'schema.gen', kind: 'schema', passed: false, message: `no validator for ${String(never)}` }], revision);

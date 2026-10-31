@@ -569,6 +569,29 @@ function dataTableSchema(cid: KitGenComponentId): Record<string, unknown> {
   });
 }
 
+function labelDiagramSchema(cid: KitGenComponentId): Record<string, unknown> {
+  const coord = (desc: string): Record<string, unknown> => ({ type: 'integer', description: desc });
+  const part = obj({
+    id: str('Lowercase kebab part id, 40 characters or fewer.'),
+    name: str('Part name with the words the page uses, 1 to 40 characters. It occurs in the quote.'),
+    sourceId: str('Id of the source the quote was copied from.'),
+    quote: str(QUOTE_DESC),
+    x: coord('Horizontal point on the part itself, never on its printed label, normalised 0 to 1000.'),
+    y: coord('Vertical point on the part itself, never on its printed label, normalised 0 to 1000.'),
+    labelX1: coord('Left edge of the box around the printed part label, normalised 0 to 1000; all four label edges are 0 when there is no printed label.'),
+    labelY1: coord('Top edge of the box around the printed part label, normalised 0 to 1000; all four label edges are 0 when there is no printed label.'),
+    labelX2: coord('Right edge of the box around the printed part label, normalised 0 to 1000; all four label edges are 0 when there is no printed label.'),
+    labelY2: coord('Bottom edge of the box around the printed part label, normalised 0 to 1000; all four label edges are 0 when there is no printed label.')
+  });
+  return obj({
+    schemaVersion: { type: 'string', enum: [cid], description: 'Generator schema version, always the component id.' },
+    title: str('Short title for students in plain text.'),
+    figureId: str('Id of the library figure this lesson labels.'),
+    parts: arr(part, KIT_LIMITS.labelDiagram.parts.min, KIT_LIMITS.labelDiagram.parts.max, 'Diagram parts, 3 to 8.'),
+    hint: str('Hint in plain text.')
+  });
+}
+
 emit(SOURCE_ANALYSIS_V2_GEN_SCHEMA_FILE, analysisV2Schema());
 emit(KIT_GEN_SCHEMA_FILES['quiz-cards-v1'] as string, quizSchema('quiz-cards-v1'));
 emit(KIT_GEN_SCHEMA_FILES['sequence-v1'] as string, sequenceSchema('sequence-v1'));
@@ -581,6 +604,7 @@ emit(KIT_GEN_SCHEMA_FILES['algorithm-trace-v1'] as string, algorithmTraceSchema(
 emit(KIT_GEN_SCHEMA_FILES['log-ladder-v1'] as string, logLadderSchema('log-ladder-v1'));
 emit(KIT_GEN_SCHEMA_FILES['threshold-v1'] as string, thresholdSchema('threshold-v1'));
 emit(KIT_GEN_SCHEMA_FILES['data-table-v1'] as string, dataTableSchema('data-table-v1'));
+emit(KIT_GEN_SCHEMA_FILES['label-diagram-v1'] as string, labelDiagramSchema('label-diagram-v1'));
 
 if (check && changed > 0) process.exit(1);
 console.log(check ? 'schemas up to date' : `done (${changed} file(s) changed)`);
