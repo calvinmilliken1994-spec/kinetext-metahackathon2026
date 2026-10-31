@@ -29,3 +29,18 @@ Changes after run 2:
 - Lead: LD-06 now accepts a point within 2% of the image's longer side of its region (`KIT_LIMITS.labelDiagram.pointToleranceFraction`).
 - Lead: the pH figure is removed from the label set.
 - Muse s8b-m9: design text s6-v10 (separately drawn parts only, points at the visual centre on ink, one tight label box per printed label).
+
+## Run 3 (prompts s6-v10, LD-06 tolerance): 4 lessons, USD 0.54
+| Page | Job | Label the diagram |
+|---|---|---|
+| Water cycle | job-20261031051459-dbf3765c | ✓ first try (5 parts) |
+| Water cycle | job-20261031051634-7731ba24 | ✓ first try (6 parts) |
+| DNA | job-20261031051459-6bf49d3d | ✓ first try (6 parts) |
+| DNA | job-20261031051459-cb750300 | ✗ LD-06: the 'base pairs' point gave a region covering 98% of the image; two repairs left the points unchanged |
+
+3 of 4 published. Lead check of the DNA lesson in presentation mode:
+- The flow works with real SAM regions.
+- **Answer leak:** Muse's label boxes sit slightly off the printed text, so "Sugar phosphate" and the ends of "Guanine"/"Cytosine" stay readable beside their covers.
+- Name tags collide on the reveal step (the 'Adenine' tag sits under 'Thymine').
+- The figure renders small on the slide.
+- Repairs of LD-06 do not move points: the r2/r3 revisions are identical, so 2 calls are wasted.
