@@ -55,7 +55,7 @@ function extractBetween(text: string, open: string, close: string): string {
 
 test('v1 unchanged pin and versions', () => {
   assert.equal(PROMPT_VERSION, 'v10');
-  assert.equal(STAGE6_PROMPT_VERSION, 's6-v7');
+  assert.equal(STAGE6_PROMPT_VERSION, 's6-v8');
   const source = loadSource('nasa-grc-drag-equation');
   const messages = buildAnalysisMessages(source);
   const digest = createHash('sha256').update(JSON.stringify(messages), 'utf8').digest('hex');
@@ -535,8 +535,8 @@ test('s6-v6 sequence step labels are short event names', () => {
   assert.ok(system.includes('No numbers in a label'), 'system states numbers rule');
 });
 
-test('s6-v7 every kit component has prompts', () => {
-  assert.equal(STAGE6_PROMPT_VERSION, 's6-v7');
+test('s6-v8 every kit component has prompts', () => {
+  assert.equal(STAGE6_PROMPT_VERSION, 's6-v8');
   assert.deepEqual(Object.keys(KIT_SCHEMA_NAMES), [...KIT_GEN_COMPONENT_IDS]);
   assert.deepEqual(Object.keys(KIT_REPAIR_SCHEMA_NAMES), [...KIT_GEN_COMPONENT_IDS]);
   assert.deepEqual(Object.keys(KIT_COMPONENT_GUIDANCE), [...KIT_GEN_COMPONENT_IDS]);
@@ -586,4 +586,36 @@ test('s6-v7 subject guidance names new components', () => {
   assert.ok(system.includes('threshold-v1'), 'analysis names threshold-v1');
   assert.ok(system.includes('log-ladder-v1'), 'analysis names log-ladder-v1');
   assert.ok(system.includes('data-table-v1'), 'analysis names data-table-v1');
+});
+
+test('s6-v8 algorithm-trace when row needs no printed example', () => {
+  const source = loadSource('nasa-grc-drag-equation');
+  const system = buildAnalysisV2Messages(source)[0].content;
+  assert.ok(system.includes('even without a printed example'), 'when row allows no printed example');
+  assert.ok(system.includes('generator chooses the small teaching input'), 'when row says generator chooses input');
+  assert.ok(!system.includes('with a runnable example'), 'when row no longer requires runnable example');
+  assert.ok(!system.includes('without a concrete input'), 'when row no longer excludes prose without input');
+  assert.ok(system.includes('outside that list'), 'when row excludes unsupported algorithms');
+  assert.ok(system.includes('only mention an algorithm in passing'), 'when row excludes passing mentions');
+});
+
+test('s6-v8 computing plans algorithm-trace-v1 first', () => {
+  const row = SUBJECT_GUIDANCE['computing'];
+  assert.ok(row.includes('plan algorithm-trace-v1 first'), 'computing plans trace first');
+  assert.ok(row.includes('duplicate'), 'computing calls same-steps sequence a duplicate');
+  assert.ok(row.includes('quiz-cards-v1 or compare-table-v1'), 'computing pairs trace with quiz or compare');
+  const source = loadSource('nasa-grc-drag-equation');
+  const system = buildAnalysisV2Messages(source)[0].content;
+  assert.ok(system.includes('plan algorithm-trace-v1 first'), 'analysis carries computing guidance');
+});
+
+test('s6-v8 civics prefers threshold-v1 alongside the process', () => {
+  const row = SUBJECT_GUIDANCE['civics'];
+  assert.ok(row.includes('vote or ratification rule with its total'), 'civics names rule with total');
+  assert.ok(row.includes('plan threshold-v1 alongside'), 'civics plans threshold alongside process');
+  assert.ok(row.includes('sequence-v1 + threshold-v1'), 'civics names sequence plus threshold');
+  assert.ok(row.includes('in preference to quiz-cards-v1'), 'civics prefers threshold over quiz');
+  const source = loadSource('nasa-grc-drag-equation');
+  const system = buildAnalysisV2Messages(source)[0].content;
+  assert.ok(system.includes('plan threshold-v1 alongside'), 'analysis carries civics guidance');
 });

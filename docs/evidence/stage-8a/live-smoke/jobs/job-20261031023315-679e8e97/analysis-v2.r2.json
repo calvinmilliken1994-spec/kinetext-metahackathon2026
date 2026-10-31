@@ -1,0 +1,239 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "componentPlan": [
+      {
+        "componentId": "sequence-v1",
+        "focusQuote": "selection of the electors, the meeting of the electors where they vote for President and Vice President, and the counting",
+        "focusSourceId": "nara-what-is-the-electoral-college",
+        "pedagogicalReason": "Introduces the three step election process in taught order before detailed facts."
+      },
+      {
+        "componentId": "threshold-v1",
+        "focusQuote": "A majority of 270 electoral votes is required to elect the President.",
+        "focusSourceId": "nara-what-is-the-electoral-college",
+        "pedagogicalReason": "Clarifies the 270 vote majority needed from 538 electors to win."
+      }
+    ],
+    "declineCode": "",
+    "declineSummary": "",
+    "overview": {
+      "headline": "How the Electoral College elects the president",
+      "keyPoints": [
+        {
+          "id": "process-not-place",
+          "point": "Students learn that the Electoral College is a process for choosing the president, not a place.",
+          "quote": "The Electoral College is a process, not a place.",
+          "sourceId": "nara-what-is-the-electoral-college"
+        },
+        {
+          "id": "total-electors",
+          "point": "Students learn that the Electoral College consists of 538 electors who choose the president.",
+          "quote": "The Electoral College consists of 538 electors.",
+          "sourceId": "nara-what-is-the-electoral-college"
+        },
+        {
+          "id": "majority-needed",
+          "point": "Students learn that a majority of 270 electoral votes is required to elect the President.",
+          "quote": "A majority of 270 electoral votes is required to elect the President.",
+          "sourceId": "nara-what-is-the-electoral-college"
+        },
+        {
+          "id": "state-allocation",
+          "point": "Students learn that each state has the same number of electors as members in its congressional delegation.",
+          "quote": "Your State has the same number of electors as it does Members in its Congressional delegation",
+          "sourceId": "nara-what-is-the-electoral-college"
+        },
+        {
+          "id": "winner-take-all-rule",
+          "point": "Students learn that most states have a system that awards all electors to the candidate winning the popular vote.",
+          "quote": "Most States have a “winner-take-all” system that awards all electors to the Presidential candidate who wins the State's popular vote.",
+          "sourceId": "nara-what-is-the-electoral-college"
+        }
+      ],
+      "keyTerms": [
+        {
+          "gloss": "Process used to elect the President and Vice President",
+          "id": "electoral-college",
+          "quote": "The Electoral College is a process, not a place.",
+          "sourceId": "nara-what-is-the-electoral-college",
+          "term": "Electoral College"
+        },
+        {
+          "gloss": "Individuals chosen to cast electoral votes for president",
+          "id": "electors",
+          "quote": "The Electoral College consists of 538 electors.",
+          "sourceId": "nara-what-is-the-electoral-college",
+          "term": "electors"
+        },
+        {
+          "gloss": "House members plus senators determining state electors",
+          "id": "congressional-delegation",
+          "quote": "Your State has the same number of electors as it does Members in its Congressional delegation",
+          "sourceId": "nara-what-is-the-electoral-college",
+          "term": "Congressional delegation"
+        },
+        {
+          "gloss": "Document listing the names of appointed electors in a state",
+          "id": "certificate-of-ascertainment",
+          "quote": "your State's Executive prepares a Certificate of Ascertainment listing the names",
+          "sourceId": "nara-what-is-the-electoral-college",
+          "term": "Certificate of Ascertainment"
+        },
+        {
+          "gloss": "System that awards all electors to the candidate winning the popular vote",
+          "id": "winner-take-all",
+          "quote": "Most States have a “winner-take-all” system that awards all electors to the Presidential candidate who wins the State's popular vote.",
+          "sourceId": "nara-what-is-the-electoral-college",
+          "term": "winner-take-all"
+        }
+      ]
+    },
+    "pageCoverage": "Explains the Electoral College process from selection of electors through voting and congressional counting, including 538 electors, 270 votes to win, and state winner take all rules.",
+    "subject": "civics",
+    "usable": true
+  },
+  "report": {
+    "artifactId": "job-20261031023315-679e8e97:analysis",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"civics\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 4048 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 12 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 5, keyTerms 5, componentPlan 2; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (2 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher (full name or name acronym from the sources' own title/attribution metadata); \"according to\" counts only when it names the publisher, and \"as stated by\" / \"official\" / \"endorsed\" wording is always a claim; quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      },
+      {
+        "id": "OV-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 10 overview quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "OV-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every key term appears in its own quote or in the source sentence containing the quote (term-in-quote)"
+      },
+      {
+        "id": "OV-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no AI-written overview field names a publisher token from the sources' own metadata or uses the frozen generic attribution phrases; quotes are exempt (no-publisher-text)"
+      },
+      {
+        "id": "OV-04",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in AI-written overview text appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "OV-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "keyPoints 5 (3-6) and keyTerms 5 (3-8) are within the frozen counts; repair is by retry only (counts-valid)"
+      },
+      {
+        "id": "OV-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every key point shares >= 2 and every gloss >= 1 distinct content word (>= 4 letters, frozen stoplist) with its own quote (point-quote-overlap)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "source-analysis-v2: no weakening — every one of the 1 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18fce-fcfc-7379-9028-886e8342dfab",
+    "usage": {
+      "promptTokens": 8206,
+      "completionTokens": 2744,
+      "reasoningTokens": 1933,
+      "cachedTokens": 0
+    },
+    "latencyMs": 14130,
+    "estCostUSD": 0.0219195,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  }
+}

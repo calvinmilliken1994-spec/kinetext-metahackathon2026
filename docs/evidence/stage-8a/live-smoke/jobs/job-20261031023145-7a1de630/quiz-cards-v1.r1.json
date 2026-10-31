@@ -1,0 +1,199 @@
+{
+  "gen": {
+    "cards": [
+      {
+        "hint": "Think about the lowest and highest values.",
+        "id": "ph-scale-range",
+        "options": [
+          "The range goes from 0 to 14",
+          "The range goes from 0 to 7",
+          "The range goes from 7 to 14",
+          "The range goes from 1 to 10"
+        ],
+        "quote": "The range goes from 0 to 14, with 7 being neutral.",
+        "sourceId": "usgs-wss-ph-and-water",
+        "stem": "Which statement describes the extent of the pH scale?"
+      },
+      {
+        "hint": "Look for the precipitation example in the quote.",
+        "id": "ph-rainfall-example",
+        "options": [
+          "Normal rainfall",
+          "Acid rain",
+          "Mine drainage",
+          "Pure water"
+        ],
+        "quote": "Normal rainfall has a pH of about 5.6—slightly acidic due to carbon dioxide gas from the atmosphere.",
+        "sourceId": "usgs-wss-ph-and-water",
+        "stem": "Which example is described as slightly acidic precipitation?"
+      },
+      {
+        "hint": "Focus on the first sample mentioned in the comparison.",
+        "id": "ph-tenfold-sample",
+        "options": [
+          "Water with a pH of five",
+          "Water with a pH of 2",
+          "Water with a pH of 7",
+          "Water with a pH of 10"
+        ],
+        "quote": "Water with a pH of five is ten times more acidic than water having a pH of six.",
+        "sourceId": "usgs-wss-ph-and-water",
+        "stem": "Which water sample is ten times more acidic than pH six water?"
+      }
+    ],
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Understanding the pH scale"
+  },
+  "report": {
+    "artifactId": "job-20261031023145-7a1de630:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18fcd-d5d8-744f-b849-772e93c2572c",
+    "usage": {
+      "promptTokens": 4003,
+      "completionTokens": 10148,
+      "reasoningTokens": 9828,
+      "cachedTokens": 0
+    },
+    "latencyMs": 49078,
+    "estCostUSD": 0.04813275,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031023145-7a1de630:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Understanding the pH scale",
+    "sources": [
+      {
+        "id": "usgs-wss-ph-and-water",
+        "title": "pH and Water — USGS Water Science School",
+        "locator": "https://www.usgs.gov/water-science-school/science/ph-and-water",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey, Water Science School, 'pH and Water'. Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "0a7704fb9e90edf2d06709108c1312fadfa47a21b994347f76f3072e3ae939ff"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18fcd-d5d8-744f-b849-772e93c2572c",
+      "runId": "job-20261031023145-7a1de630",
+      "promptVersion": "s6-v7",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T02:33:14.126Z"
+    },
+    "seed": 3302831790,
+    "cards": [
+      {
+        "hint": "Think about the lowest and highest values.",
+        "id": "ph-scale-range",
+        "options": [
+          "The range goes from 0 to 14",
+          "The range goes from 0 to 7",
+          "The range goes from 7 to 14",
+          "The range goes from 1 to 10"
+        ],
+        "quote": "The range goes from 0 to 14, with 7 being neutral.",
+        "sourceId": "usgs-wss-ph-and-water",
+        "stem": "Which statement describes the extent of the pH scale?"
+      },
+      {
+        "hint": "Look for the precipitation example in the quote.",
+        "id": "ph-rainfall-example",
+        "options": [
+          "Normal rainfall",
+          "Acid rain",
+          "Mine drainage",
+          "Pure water"
+        ],
+        "quote": "Normal rainfall has a pH of about 5.6—slightly acidic due to carbon dioxide gas from the atmosphere.",
+        "sourceId": "usgs-wss-ph-and-water",
+        "stem": "Which example is described as slightly acidic precipitation?"
+      },
+      {
+        "hint": "Focus on the first sample mentioned in the comparison.",
+        "id": "ph-tenfold-sample",
+        "options": [
+          "Water with a pH of five",
+          "Water with a pH of 2",
+          "Water with a pH of 7",
+          "Water with a pH of 10"
+        ],
+        "quote": "Water with a pH of five is ten times more acidic than water having a pH of six.",
+        "sourceId": "usgs-wss-ph-and-water",
+        "stem": "Which water sample is ten times more acidic than pH six water?"
+      }
+    ]
+  }
+}

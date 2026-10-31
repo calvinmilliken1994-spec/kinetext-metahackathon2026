@@ -1,0 +1,111 @@
+{
+  "jobId": "job-20261031023421-facdad1d",
+  "analysisRef": "job-20261031023421-facdad1d/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031023421-facdad1d:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "2026 tax inflation adjustments raise deductions, brackets and credits",
+    "sources": [
+      {
+        "id": "irs-tax-inflation-adjustments-2026",
+        "title": "IRS releases tax inflation adjustments for tax year 2026, including amendments from the One, Big, Beautiful Bill — Internal Revenue Service, IRS Newsroom",
+        "locator": "https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2026-including-amendments-from-the-one-big-beautiful-bill",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Internal Revenue Service, IRS Newsroom, 'IRS releases tax inflation adjustments for tax year 2026, including amendments from the One, Big, Beautiful Bill' (IR-2025-103). Credit: Internal Revenue Service. Per the IRS 'Use of content from IRS.gov' policy, 'Content on this website that was created or maintained by federal employees in the course of their duties is not subject to copyright and may be freely copied. Credit is requested.' The Internal Revenue Service has not reviewed, approved or endorsed this activity.",
+        "sha256": "13b2f585e7b6efe64e1ee4d954562f657b4f78bec5b0d6feafe1204e687ed9b0"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18fcf-ad4f-7312-981d-dcdf266cbd2f",
+      "runId": "job-20261031023421-facdad1d",
+      "promptVersion": "s6-v7",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T02:35:14.734Z"
+    },
+    "seed": 3654764808,
+    "headline": "2026 tax inflation adjustments raise deductions, brackets and credits",
+    "keyPoints": [
+      {
+        "id": "standard-deduction-2026",
+        "point": "Students learn the 2026 standard deduction amounts differ by filing status and increase from 2025.",
+        "quote": "For tax year 2026, the standard deduction increases to $32,200 for married couples filing jointly.",
+        "sourceId": "irs-tax-inflation-adjustments-2026"
+      },
+      {
+        "id": "marginal-rates-2026",
+        "point": "Students learn the top 2026 individual rate remains 37 percent above income thresholds that vary by filing status.",
+        "quote": "For tax year 2026, the top tax rate remains 37% for individual single taxpayers with incomes greater than $640,600",
+        "sourceId": "irs-tax-inflation-adjustments-2026"
+      },
+      {
+        "id": "estate-exclusion-2026",
+        "point": "Students learn estates of decedents dying during 2026 have a basic exclusion amount of $15,000,000.",
+        "quote": "Estates of decedents who die during 2026 have a basic exclusion amount of $15,000,000",
+        "sourceId": "irs-tax-inflation-adjustments-2026"
+      },
+      {
+        "id": "eitc-maximum-2026",
+        "point": "Students learn the maximum 2026 Earned Income Tax Credit for three or more children is $8,231.",
+        "quote": "The tax year 2026 maximum Earned Income Tax Credit (EITC) amount is $8,231",
+        "sourceId": "irs-tax-inflation-adjustments-2026"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "Amount that reduces taxable income based on filing status without itemizing deductions.",
+        "id": "standard-deduction",
+        "quote": "For tax year 2026, the standard deduction increases to $32,200 for married couples filing jointly.",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "term": "standard deduction"
+      },
+      {
+        "gloss": "Income thresholds where different tax rates apply to single and joint filers.",
+        "id": "marginal-rates",
+        "quote": "Marginal Rates: For tax year 2026, the top tax rate remains 37% for individual single taxpayers",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "term": "Marginal Rates"
+      },
+      {
+        "gloss": "Minimum tax exemption that phases out above income limits for unmarried filers.",
+        "id": "amt-exemption",
+        "quote": "Alternative Minimum Tax Exemption Amounts. For tax year 2026, the exemption amount for unmarried individuals is $90,100",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "term": "Alternative Minimum Tax"
+      },
+      {
+        "gloss": "Refundable credit whose maximum amount rises with number of qualifying children.",
+        "id": "earned-income-credit",
+        "quote": "The tax year 2026 maximum Earned Income Tax Credit (EITC) amount is $8,231",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "term": "Earned Income Tax Credit"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "data-table-v1",
+      "specId": "job-20261031023421-facdad1d:data-table-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031023421-facdad1d:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

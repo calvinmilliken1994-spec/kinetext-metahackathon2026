@@ -1,0 +1,138 @@
+{
+  "jobId": "job-20261031023020-a07a5fd2",
+  "analysisRef": "job-20261031023020-a07a5fd2/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031023020-a07a5fd2:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Earthquake magnitude, energy and shaking intensity explained",
+    "sources": [
+      {
+        "id": "usgs-earthquake-magnitude-energy-intensity",
+        "title": "Earthquake Magnitude, Energy Release, and Shaking Intensity — USGS Earthquake Hazards Program",
+        "locator": "https://www.usgs.gov/programs/earthquake-hazards/earthquake-magnitude-energy-release-and-shaking-intensity",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey, Earthquake Hazards Program, 'Earthquake Magnitude, Energy Release, and Shaking Intensity'. Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "eff8fa887798c0f7a22ac2d03c1526697c587ed24cb2b9d6b06f58640476f068"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18fcc-0286-77ee-bda5-35f163763ce9",
+      "runId": "job-20261031023020-a07a5fd2",
+      "promptVersion": "s6-v7",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T02:31:14.411Z"
+    },
+    "seed": 2084930605,
+    "headline": "Earthquake magnitude, energy and shaking intensity explained",
+    "keyPoints": [
+      {
+        "id": "magnitude-single-value",
+        "point": "Students learn that magnitude measures earthquake size as a single value for each event.",
+        "quote": "Magnitude is the size of the earthquake.",
+        "sourceId": "usgs-earthquake-magnitude-energy-intensity"
+      },
+      {
+        "id": "amplitude-tenfold-step",
+        "point": "Students learn that each whole number increase in magnitude means tenfold greater measured amplitude.",
+        "quote": "each whole number increase in magnitude represents a tenfold increase in measured amplitude as measured on a seismogram",
+        "sourceId": "usgs-earthquake-magnitude-energy-intensity"
+      },
+      {
+        "id": "energy-times-release",
+        "point": "Students learn that each magnitude step releases about 32 times more energy.",
+        "quote": "While each whole number increase in magnitude represents a tenfold increase in the measured amplitude, it represents an 32 times more energy release.",
+        "sourceId": "usgs-earthquake-magnitude-energy-intensity"
+      },
+      {
+        "id": "intensity-varies-place",
+        "point": "Students learn that shaking intensity varies by location and distance from fault rupture.",
+        "quote": "The intensity is the measure of shaking at each location, and this varies from place to place",
+        "sourceId": "usgs-earthquake-magnitude-energy-intensity"
+      },
+      {
+        "id": "moment-rigidity-area-slip",
+        "point": "Students learn that seismic moment depends on rigidity, fault area and slip distance.",
+        "quote": "where rigidity is the strength of the rock along the fault, area is the area of the fault that slipped, and slip is the distance the fault moved.",
+        "sourceId": "usgs-earthquake-magnitude-energy-intensity"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "Size of an earthquake reported as one value for the whole event",
+        "id": "magnitude-size",
+        "quote": "Magnitude is the size of the earthquake.",
+        "sourceId": "usgs-earthquake-magnitude-energy-intensity",
+        "term": "Magnitude"
+      },
+      {
+        "gloss": "Measure of shaking at a place that varies with distance and ground type",
+        "id": "shaking-intensity",
+        "quote": "The intensity is the measure of shaking at each location, and this varies from place to place",
+        "sourceId": "usgs-earthquake-magnitude-energy-intensity",
+        "term": "intensity"
+      },
+      {
+        "gloss": "Computed quantity from fault properties that is converted to moment magnitude",
+        "id": "seismic-moment",
+        "quote": "First the seismic moment is computed",
+        "sourceId": "usgs-earthquake-magnitude-energy-intensity",
+        "term": "seismic moment"
+      },
+      {
+        "gloss": "Strength of rock along a fault that helps set seismic moment size",
+        "id": "fault-rigidity",
+        "quote": "where rigidity is the strength of the rock along the fault",
+        "sourceId": "usgs-earthquake-magnitude-energy-intensity",
+        "term": "rigidity"
+      },
+      {
+        "gloss": "Measured size of ground motion recorded on a seismogram",
+        "id": "wave-amplitude",
+        "quote": "each whole number increase in magnitude represents a tenfold increase in measured amplitude as measured on a seismogram",
+        "sourceId": "usgs-earthquake-magnitude-energy-intensity",
+        "term": "amplitude"
+      },
+      {
+        "gloss": "Total shaking energy radiated by an earthquake that reflects damage potential",
+        "id": "energy-release",
+        "quote": "it represents an 32 times more energy release.",
+        "sourceId": "usgs-earthquake-magnitude-energy-intensity",
+        "term": "energy release"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "log-ladder-v1",
+      "specId": "job-20261031023020-a07a5fd2:log-ladder-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "formula-explorer-v1",
+      "specId": "job-20261031023020-a07a5fd2:formula-explorer-v1:r3",
+      "status": "failed",
+      "reason": "FE-08: the page formula line could not be parsed with the calculator grammar (the complete formula line does not parse in the frozen grammar (unknown name \"rigidityxareaxslip\" (not a declared variable, function or constant))) and there is no verified FE-05 source example to ground the expression; an unpars",
+      "revision": 3
+    },
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261031023020-a07a5fd2:compare-table-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

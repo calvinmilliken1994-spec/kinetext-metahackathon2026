@@ -1,0 +1,419 @@
+{
+  "gen": {
+    "brackets": {
+      "enabled": true,
+      "exampleIncome": 640600,
+      "overColumnIndex": 1,
+      "rateColumnIndex": 0
+    },
+    "chartColumnIndex": 1,
+    "columns": [
+      {
+        "header": "Rates",
+        "numeric": true,
+        "quote": "Marginal Rates: For tax year 2026, the top tax rate remains 37% for individual",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "unit": "%"
+      },
+      {
+        "header": "Married",
+        "numeric": true,
+        "quote": "Standard deduction | Single; Married Filing Separately | Married Filing Jointly",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "unit": "$"
+      }
+    ],
+    "labelHeader": "Single",
+    "questions": [
+      {
+        "columnIndex": 0,
+        "id": "top-rate-lookup",
+        "kind": "lookup",
+        "rowIndex": 5
+      },
+      {
+        "columnIndex": 1,
+        "id": "largest-joint-limit",
+        "kind": "largest",
+        "rowIndex": -1
+      },
+      {
+        "columnIndex": 0,
+        "id": "smallest-rate",
+        "kind": "smallest",
+        "rowIndex": -1
+      }
+    ],
+    "rows": [
+      {
+        "label": "$12,400",
+        "quote": "22% for incomes over $50,400 ($100,800 for married couples filing jointly); 12% for incomes over $12,400",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "values": [
+          {
+            "quote": "12% for incomes over $12,400 ($24,800 for married couples filing jointly)",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "value": "12%"
+          },
+          {
+            "quote": "for incomes over $12,400 ($24,800 for married couples filing jointly). The lowest rate is 10%",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "value": "$24,800"
+          }
+        ]
+      },
+      {
+        "label": "$50,400",
+        "quote": "24% for incomes over $105,700 ($211,400 for married couples filing jointly); 22% for incomes over $50,400",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "values": [
+          {
+            "quote": "22% for incomes over $50,400 ($100,800 for married couples filing jointly)",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "value": "22%"
+          },
+          {
+            "quote": "for incomes over $50,400 ($100,800 for married couples filing jointly); 12% for incomes over $12,400",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "value": "$100,800"
+          }
+        ]
+      },
+      {
+        "label": "$105,700",
+        "quote": "32% for incomes over $201,775 ($403,550 for married couples filing jointly); 24% for incomes over $105,700",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "values": [
+          {
+            "quote": "24% for incomes over $105,700 ($211,400 for married couples filing jointly)",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "value": "24%"
+          },
+          {
+            "quote": "for incomes over $105,700 ($211,400 for married couples filing jointly); 22% for incomes over $50,400",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "value": "$211,400"
+          }
+        ]
+      },
+      {
+        "label": "$201,775",
+        "quote": "35% for incomes over $256,225 ($512,450 for married couples filing jointly); 32% for incomes over $201,775",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "values": [
+          {
+            "quote": "32% for incomes over $201,775 ($403,550 for married couples filing jointly)",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "value": "32%"
+          },
+          {
+            "quote": "for incomes over $201,775 ($403,550 for married couples filing jointly); 24% for incomes over $105,700",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "value": "$403,550"
+          }
+        ]
+      },
+      {
+        "label": "$256,225",
+        "quote": "The other rates are: 35% for incomes over $256,225 ($512,450 for married couples filing jointly)",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "values": [
+          {
+            "quote": "rates are: 35% for incomes over $256,225 ($512,450 for married couples filing jointly); 32%",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "value": "35%"
+          },
+          {
+            "quote": "for incomes over $256,225 ($512,450 for married couples filing jointly); 32% for incomes over $201,775",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "value": "$512,450"
+          }
+        ]
+      },
+      {
+        "label": "$640,600",
+        "quote": "the top tax rate remains 37% for individual single taxpayers with incomes greater than $640,600",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "values": [
+          {
+            "quote": "top tax rate remains 37% for individual single taxpayers with incomes greater than $640,600 ($768,700",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "value": "37%"
+          },
+          {
+            "quote": "with incomes greater than $640,600 ($768,700 for married couples filing jointly). The other rates are:",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "value": "$768,700"
+          }
+        ]
+      }
+    ],
+    "schemaVersion": "data-table-v1",
+    "title": "Single and joint income thresholds for 2026 rates"
+  },
+  "report": {
+    "artifactId": "job-20261031023421-facdad1d:data-table-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every data-table title, header, unit, label, value length and question id shape is within the frozen limits"
+      },
+      {
+        "id": "DT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 20 column, row and cell quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "DT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every column header occurs in its column quote and every row label occurs in its row quote or the same source paragraph (headers-and-labels-in-quote)"
+      },
+      {
+        "id": "DT-03",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 12 cell value(s) occur in their own quote exactly as the page prints them, as whole tokens — never a crop of a longer number (values-in-quote)"
+      },
+      {
+        "id": "DT-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the table shape is valid: 6 rows x 2 value columns with exactly one value per slot, every numeric column parses with parseTableNumber, and the row labels are distinct (shape-valid)"
+      },
+      {
+        "id": "DT-05",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "our code answers every question from the table itself: \"top-rate-lookup\" (lookup) → rows[5] \"37%\"; \"largest-joint-limit\" (largest) → rows[5] \"$768,700\"; \"smallest-rate\" (smallest) → rows[0] \"12%\" (questions-valid)"
+      },
+      {
+        "id": "DT-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the chart draws the numeric column 1 (\"Married\") (chart-valid)"
+      },
+      {
+        "id": "DT-07",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the progressive-rate calculator runs on the page's own brackets: an example income of 640600 takes 159268.5 across 5 bracket(s) — thresholds strictly ascending, rates ascending within 0..100 (brackets-valid)"
+      },
+      {
+        "id": "DT-08",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title, the label header, the column headers and units and the row labels appears on the cited page (N-01); cell values are bound to their quotes as printed by DT-03 (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18fd1-3e0f-7583-9b15-d1b58666893a",
+    "usage": {
+      "promptTokens": 4625,
+      "completionTokens": 17346,
+      "reasoningTokens": 16254,
+      "cachedTokens": 0
+    },
+    "latencyMs": 102608,
+    "estCostUSD": 0.07950175,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031023421-facdad1d:data-table-v1:r1",
+    "componentId": "data-table-v1",
+    "title": "Single and joint income thresholds for 2026 rates",
+    "sources": [
+      {
+        "id": "irs-tax-inflation-adjustments-2026",
+        "title": "IRS releases tax inflation adjustments for tax year 2026, including amendments from the One, Big, Beautiful Bill — Internal Revenue Service, IRS Newsroom",
+        "locator": "https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2026-including-amendments-from-the-one-big-beautiful-bill",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Internal Revenue Service, IRS Newsroom, 'IRS releases tax inflation adjustments for tax year 2026, including amendments from the One, Big, Beautiful Bill' (IR-2025-103). Credit: Internal Revenue Service. Per the IRS 'Use of content from IRS.gov' policy, 'Content on this website that was created or maintained by federal employees in the course of their duties is not subject to copyright and may be freely copied. Credit is requested.' The Internal Revenue Service has not reviewed, approved or endorsed this activity.",
+        "sha256": "13b2f585e7b6efe64e1ee4d954562f657b4f78bec5b0d6feafe1204e687ed9b0"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18fd1-3e0f-7583-9b15-d1b58666893a",
+      "runId": "job-20261031023421-facdad1d",
+      "promptVersion": "s6-v7",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T02:36:57.352Z"
+    },
+    "seed": 3836463607,
+    "labelHeader": "Single",
+    "columns": [
+      {
+        "header": "Rates",
+        "numeric": true,
+        "quote": "Marginal Rates: For tax year 2026, the top tax rate remains 37% for individual",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "unit": "%"
+      },
+      {
+        "header": "Married",
+        "numeric": true,
+        "quote": "Standard deduction | Single; Married Filing Separately | Married Filing Jointly",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "unit": "$"
+      }
+    ],
+    "rows": [
+      {
+        "label": "$12,400",
+        "quote": "22% for incomes over $50,400 ($100,800 for married couples filing jointly); 12% for incomes over $12,400",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "values": [
+          {
+            "quote": "12% for incomes over $12,400 ($24,800 for married couples filing jointly)",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "value": "12%"
+          },
+          {
+            "quote": "for incomes over $12,400 ($24,800 for married couples filing jointly). The lowest rate is 10%",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "value": "$24,800"
+          }
+        ]
+      },
+      {
+        "label": "$50,400",
+        "quote": "24% for incomes over $105,700 ($211,400 for married couples filing jointly); 22% for incomes over $50,400",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "values": [
+          {
+            "quote": "22% for incomes over $50,400 ($100,800 for married couples filing jointly)",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "value": "22%"
+          },
+          {
+            "quote": "for incomes over $50,400 ($100,800 for married couples filing jointly); 12% for incomes over $12,400",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "value": "$100,800"
+          }
+        ]
+      },
+      {
+        "label": "$105,700",
+        "quote": "32% for incomes over $201,775 ($403,550 for married couples filing jointly); 24% for incomes over $105,700",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "values": [
+          {
+            "quote": "24% for incomes over $105,700 ($211,400 for married couples filing jointly)",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "value": "24%"
+          },
+          {
+            "quote": "for incomes over $105,700 ($211,400 for married couples filing jointly); 22% for incomes over $50,400",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "value": "$211,400"
+          }
+        ]
+      },
+      {
+        "label": "$201,775",
+        "quote": "35% for incomes over $256,225 ($512,450 for married couples filing jointly); 32% for incomes over $201,775",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "values": [
+          {
+            "quote": "32% for incomes over $201,775 ($403,550 for married couples filing jointly)",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "value": "32%"
+          },
+          {
+            "quote": "for incomes over $201,775 ($403,550 for married couples filing jointly); 24% for incomes over $105,700",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "value": "$403,550"
+          }
+        ]
+      },
+      {
+        "label": "$256,225",
+        "quote": "The other rates are: 35% for incomes over $256,225 ($512,450 for married couples filing jointly)",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "values": [
+          {
+            "quote": "rates are: 35% for incomes over $256,225 ($512,450 for married couples filing jointly); 32%",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "value": "35%"
+          },
+          {
+            "quote": "for incomes over $256,225 ($512,450 for married couples filing jointly); 32% for incomes over $201,775",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "value": "$512,450"
+          }
+        ]
+      },
+      {
+        "label": "$640,600",
+        "quote": "the top tax rate remains 37% for individual single taxpayers with incomes greater than $640,600",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "values": [
+          {
+            "quote": "top tax rate remains 37% for individual single taxpayers with incomes greater than $640,600 ($768,700",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "value": "37%"
+          },
+          {
+            "quote": "with incomes greater than $640,600 ($768,700 for married couples filing jointly). The other rates are:",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "value": "$768,700"
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "columnIndex": 0,
+        "id": "top-rate-lookup",
+        "kind": "lookup",
+        "rowIndex": 5
+      },
+      {
+        "columnIndex": 1,
+        "id": "largest-joint-limit",
+        "kind": "largest",
+        "rowIndex": -1
+      },
+      {
+        "columnIndex": 0,
+        "id": "smallest-rate",
+        "kind": "smallest",
+        "rowIndex": -1
+      }
+    ],
+    "chartColumnIndex": 1,
+    "brackets": {
+      "enabled": true,
+      "exampleIncome": 640600,
+      "overColumnIndex": 1,
+      "rateColumnIndex": 0
+    }
+  }
+}

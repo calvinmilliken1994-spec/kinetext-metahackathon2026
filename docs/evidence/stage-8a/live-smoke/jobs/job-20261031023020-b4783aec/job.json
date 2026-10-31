@@ -1,0 +1,31 @@
+{
+  "jobId": "job-20261031023020-b4783aec",
+  "sourceId": "nist-dads-binary-search",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-31T02:30:20.491Z",
+  "flow": "lesson",
+  "model": "muse-spark-1.3",
+  "provider": "meta-api",
+  "providerModel": "muse-spark-1.3",
+  "totalCostUSD": 0.086946,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 39160,
+    "startedAt": "2026-10-31T02:30:20.491Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 2,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "finishedAt": "2026-10-31T02:31:42.125Z"
+}

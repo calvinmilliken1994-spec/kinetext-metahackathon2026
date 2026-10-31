@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031023145-7a1de630",
+  "analysisRef": "job-20261031023145-7a1de630/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031023145-7a1de630:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How pH measures water acidity and quality",
+    "sources": [
+      {
+        "id": "usgs-wss-ph-and-water",
+        "title": "pH and Water — USGS Water Science School",
+        "locator": "https://www.usgs.gov/water-science-school/science/ph-and-water",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey, Water Science School, 'pH and Water'. Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "0a7704fb9e90edf2d06709108c1312fadfa47a21b994347f76f3072e3ae939ff"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18fcd-168e-7003-99cc-160c8943ea83",
+      "runId": "job-20261031023145-7a1de630",
+      "promptVersion": "s6-v7",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T02:32:25.044Z"
+    },
+    "seed": 4261103979,
+    "headline": "How pH measures water acidity and quality",
+    "keyPoints": [
+      {
+        "id": "ph-neutral-range",
+        "point": "Neutral water has pH 7 on a range from 0 to 14, with lower values acidic.",
+        "quote": "The range goes from 0 to 14, with 7 being neutral.",
+        "sourceId": "usgs-wss-ph-and-water"
+      },
+      {
+        "id": "ph-log-change",
+        "point": "Students learn that water with pH five is ten times more acidic than water with pH six.",
+        "quote": "Water with a pH of five is ten times more acidic than water having a pH of six.",
+        "sourceId": "usgs-wss-ph-and-water"
+      },
+      {
+        "id": "ph-solubility-effects",
+        "point": "Water pH determines solubility and biological availability of nutrients and metals.",
+        "quote": "The pH of water determines the solubility (amount that can be dissolved in the water)",
+        "sourceId": "usgs-wss-ph-and-water"
+      },
+      {
+        "id": "ph-mine-drainage",
+        "point": "Abandoned mine drainage can be very acidic and harm animals and plants downstream.",
+        "quote": "water coming out of an abandoned coal mine can have a pH of 2, which is very acidic",
+        "sourceId": "usgs-wss-ph-and-water"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "Measure of how acidic or basic water is",
+        "id": "ph",
+        "quote": "pH is a measure of how acidic/basic water is.",
+        "sourceId": "usgs-wss-ph-and-water",
+        "term": "pH"
+      },
+      {
+        "gloss": "Property of water that indicates acidity at pH below neutral",
+        "id": "acidity",
+        "quote": "pHs of less than 7 indicate acidity, whereas a pH of greater than 7 indicates a base.",
+        "sourceId": "usgs-wss-ph-and-water",
+        "term": "acidity"
+      },
+      {
+        "gloss": "Water with pH greater than 7 that indicates basic character",
+        "id": "base",
+        "quote": "pHs of less than 7 indicate acidity, whereas a pH of greater than 7 indicates a base.",
+        "sourceId": "usgs-wss-ph-and-water",
+        "term": "base"
+      },
+      {
+        "gloss": "Reported scale where each number shows tenfold change in acidity",
+        "id": "logarithmic-units",
+        "quote": "pH is reported in \"logarithmic units\".",
+        "sourceId": "usgs-wss-ph-and-water",
+        "term": "logarithmic units"
+      },
+      {
+        "gloss": "Amount of substance that can be dissolved in water",
+        "id": "solubility",
+        "quote": "The pH of water determines the solubility (amount that can be dissolved in the water)",
+        "sourceId": "usgs-wss-ph-and-water",
+        "term": "solubility"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031023145-7a1de630:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "log-ladder-v1",
+      "specId": "job-20261031023145-7a1de630:log-ladder-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

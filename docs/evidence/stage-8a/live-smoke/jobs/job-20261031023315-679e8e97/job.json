@@ -1,0 +1,46 @@
+{
+  "jobId": "job-20261031023315-679e8e97",
+  "sourceId": "nara-what-is-the-electoral-college",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-31T02:33:15.899Z",
+  "flow": "lesson",
+  "model": "muse-spark-1.3",
+  "provider": "meta-api",
+  "providerModel": "muse-spark-1.3",
+  "totalCostUSD": 0.144131,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [
+    {
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "A-09",
+        "OV-03"
+      ],
+      "fixed": [
+        "A-09",
+        "OV-03"
+      ],
+      "remaining": [],
+      "passed": true
+    }
+  ],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 39160,
+    "startedAt": "2026-10-31T02:33:15.899Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 2,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "finishedAt": "2026-10-31T02:35:15.319Z"
+}
