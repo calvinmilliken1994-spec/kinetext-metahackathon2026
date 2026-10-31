@@ -65,11 +65,9 @@ export function AppWindow({ title, titleIsHeading = false, titlebarExtra, childr
         </header>
         {children}
         <footer className="window-footer">
+          {/* Text only: Meta's brand guidelines require approval for any use of the Meta logo. */}
           <span className="footer-event">
-            {/* Official Meta logo, unmodified; the variant matches the theme (the other one is display:none). */}
-            <img className="footer-logo footer-logo-on-dark" src="/brand/meta-logo-with-text-dark.svg" alt="Meta" width={61} height={14} />
-            <img className="footer-logo footer-logo-on-light" src="/brand/meta-logo-with-text.svg" alt="Meta" width={64} height={14} />
-            <span className="footer-event-name">Global AI Developer Hackathon 2026</span>
+            <span className="footer-event-name">Built for the Meta Global AI Developer Hackathon 2026</span>
           </span>
         </footer>
       </div>

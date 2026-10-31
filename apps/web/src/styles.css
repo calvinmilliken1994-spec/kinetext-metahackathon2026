@@ -288,10 +288,6 @@ input, textarea { caret-color: var(--accent-text); }
   font-size: var(--fs-12); color: var(--ink-3); min-width: 0;
 }
 .footer-event { display: inline-flex; align-items: center; gap: 8px; min-width: 0; }
-.footer-logo { height: 14px; width: auto; flex: none; display: block; }
-.footer-logo-on-light { display: none; }
-[data-theme="light"] .footer-logo-on-dark { display: none; }
-[data-theme="light"] .footer-logo-on-light { display: block; }
 .footer-event-name { font-weight: var(--fw-medium); color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* ================================================================================================================
