@@ -14,3 +14,4 @@
 - log-ladder.gen.json quotes usgs-earthquake-magnitude-energy-intensity; hand-written schema golden, not model output.
 - threshold.gen.json quotes nara-constitutional-amendment-process; hand-written schema golden, not model output.
 - data-table.gen.json quotes nasa-nssdc-planetary-fact-sheet-metric; hand-written schema golden, not model output.
+- log-ladder.bug013.json quotes usgs-wss-ph-and-water; the EXACT published bad gen of storage/runs/job-20261031111156-12c77646/log-ladder-v1.r2.json (BUG-013 regression; real model output, stored verdict was publishable, now must fail LOG-06+LOG-07).

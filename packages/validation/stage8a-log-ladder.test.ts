@@ -210,6 +210,7 @@ test('LOG-03: a quantity that is not in the quote fails', () => {
 test('LOG-04: a rung value that is only part of the printed number fails (6 inside 6.3)', () => {
   const gen = goldenGen();
   gen.rungs[0]!.value = 5; // the quote prints 5.3
+  gen.cases[0]!.fromValue = 5; // keep the case endpoint ON a rung so this stays a pure LOG-04 vector (BUG-013 rule)
   const report = validate(gen, [quakeSource()]);
   assert.deepEqual(failedIds(report), ['LOG-04'], failureDetail(report));
   assert.ok((checkOf(report, 'LOG-04').affected ?? []).includes('/rungs/0/value'));

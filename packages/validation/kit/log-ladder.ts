@@ -17,6 +17,12 @@
 // Recorded decision: the frozen factor bounds (KIT_LIMITS.logLadder.factor: >1, <=1000) are
 // enforced under LOG-02 'factor-stated' — a factor the ladder engine cannot run is not a factor
 // the page states — so LOG-06 can fail cleanly (never crash) when LOG-02 already failed.
+// BUG-013 (published pH ladder with "Water at pH five" plotted at 6.3): two EXISTING ids were
+// extended rather than new ones added (contracts STAGE6_CHECKS and apps/web STAGE6_CHECK_NAMES pin
+// the id set): LOG-07 also requires every number a rung label states (digits OR number words,
+// statedNumbersIn) to equal that rung's value (multi-number labels: the value must be among them),
+// unlocking label+value+quote; LOG-06 also requires case endpoints to BE rung values, not merely
+// inside the rung range. LOG-04 already enforced value-in-quote (digits), which the bad gen passed.
 // Never throws: malformed input degrades into failed checks (guarded() + local pre-checks).
 
 import type { SourceDocument, ValidationCheck, ValidationReport } from '../../contracts/index.ts';
@@ -35,10 +41,18 @@ import {
   numbersCheckProblems,
   signedNumberTokens,
   signedNumericTokens,
+  statedNumbersIn,
+  truncate,
 } from './shared.ts';
 import type { EntryQuote } from './shared.ts';
 
 const L = KIT_LIMITS.logLadder;
+
+/**
+ * BUG-013 tolerance: a number a rung label states, or a case endpoint, counts as the rung value
+ * when they differ by at most this (float-printing noise only; 6.3 written "6.3" is exact).
+ */
+const VALUE_TOLERANCE = 1e-9;
 
 /**
  * Whole-phrase occurrence (the same rule algorithm.ts ALG-02 uses, kept local to this slice):
@@ -302,9 +316,16 @@ export function validateLogLadder(gen: LogLadderGen, sources: SourceDocument[], 
         if (from < min || from > max) {
           problems.push(`cases[${i}] (${String(c?.id)}): fromValue ${from} is outside the rung range ${min} to ${max} — cases move between points the page states (cases-valid)`);
           affected.push(`/cases/${i}/fromValue`);
+        } else if (!knownValues.some(v => Math.abs(v - from) <= VALUE_TOLERANCE)) {
+          // BUG-013: inside the range is not enough — a case must start ON a rung the page states.
+          problems.push(`cases[${i}] (${String(c?.id)}): fromValue ${from} is not the value of any rung (the rungs sit at ${knownValues.join(', ')}) — a case must start on a rung the page states; set fromValue to one of the rung values (cases-valid)`);
+          affected.push(`/cases/${i}/fromValue`);
         }
         if (to < min || to > max) {
           problems.push(`cases[${i}] (${String(c?.id)}): toValue ${to} is outside the rung range ${min} to ${max} — cases move between points the page states (cases-valid)`);
+          affected.push(`/cases/${i}/toValue`);
+        } else if (!knownValues.some(v => Math.abs(v - to) <= VALUE_TOLERANCE)) {
+          problems.push(`cases[${i}] (${String(c?.id)}): toValue ${to} is not the value of any rung (the rungs sit at ${knownValues.join(', ')}) — a case must end on a rung the page states; set toValue to one of the rung values (cases-valid)`);
           affected.push(`/cases/${i}/toValue`);
         }
         let ratio: number;
@@ -323,7 +344,7 @@ export function validateLogLadder(gen: LogLadderGen, sources: SourceDocument[], 
         ratios.push(`${from} → ${to} is ${String(Number(ratio.toPrecision(6)))} times`);
       });
       return problems.length === 0
-        ? { passed: true, message: `all ${cases.length} case(s) move between distinct values inside the rung range ${min} to ${max}, and every ratio our engine computes (${ratios.join('; ')}) stays within ${L.maxRatio} (cases-valid)` }
+        ? { passed: true, message: `all ${cases.length} case(s) move between distinct values that ARE rungs of this ladder (inside the rung range ${min} to ${max}), and every ratio our engine computes (${ratios.join('; ')}) stays within ${L.maxRatio} (cases-valid)` }
         : { passed: false, message: problems.join('; '), path: affected[0], affected };
     }),
 
@@ -341,9 +362,23 @@ export function validateLogLadder(gen: LogLadderGen, sources: SourceDocument[], 
       rungs.forEach((rung, i) => {
         const cited = typeof rung?.sourceId === 'string' ? idx.textOf(rung.sourceId) : undefined;
         check(`rungs[${i}].label`, rung?.label, `/rungs/${i}/label`, [cited, ...all]);
+        // BUG-013 label-value agreement: a number the label states (digits OR number words like
+        // "five"/"five point six") must be the rung's own value; with several stated numbers (e.g.
+        // "pH 7 water, 10 times more acidic than pH 8") the value must be one of them. A label
+        // without any number is fine. Unlocks label, value AND quote: an honest repair may reword
+        // the label, or move the rung onto the label's number with a quote that prints it (LOG-01
+        // and LOG-04 still hold it to the page).
+        const value = typeof rung?.value === 'number' && Number.isFinite(rung.value) ? rung.value : null;
+        if (value !== null && typeof rung?.label === 'string') {
+          const stated = statedNumbersIn(rung.label);
+          if (stated.length > 0 && !stated.some(n => Math.abs(n - value) <= VALUE_TOLERANCE)) {
+            problems.push(`rungs[${i}] (${String(rung?.id)}): the label "${truncate(rung.label, 60)}" states ${stated.length === 1 ? `the number ${stated[0]}` : `the numbers ${stated.join(', ')} — none of them is the rung's value`} but the rung sits at ${value} on the scale; every number a rung label states (digits or number words) must equal that rung's value — reword the label to the number the page prints for this rung, or move the rung's value and quote to the number the label states (label-value agreement)`);
+            affected.push(`/rungs/${i}/label`, `/rungs/${i}/value`, `/rungs/${i}/quote`);
+          }
+        }
       });
       return problems.length === 0
-        ? { passed: true, message: 'every number in the title, the scale name, the factor wording, the effect phrase and the rung labels appears on the cited page as that whole number (N-01) (numbers-checkable)' }
+        ? { passed: true, message: 'every number in the title, the scale name, the factor wording, the effect phrase and the rung labels appears on the cited page as that whole number (N-01), and every number a rung label states (digits or words) agrees with that rung\'s value (numbers-checkable)' }
         : { passed: false, message: problems.join('; '), path: affected[0], affected };
     }),
   ];

@@ -314,6 +314,61 @@ export function missingSignedNumbers(content: string, text: string): string[] {
 }
 
 /**
+ * The numbers `text` states (BUG-013): every whole signed numeric token (digits, "5.6", "1,200")
+ * PLUS number words zero..twenty, an optional "minus"/"negative" sign word, and word decimals
+ * ("five point six" → 5.6). Hyphenated compounds ("twenty-one", "ten-fold") stay one token and
+ * state nothing we parse — conservative on purpose: a label/value tie may only fail on numbers we
+ * are sure the label states. Callers compare against the item's value with a small tolerance.
+ */
+export function statedNumbersIn(text: unknown): number[] {
+  if (typeof text !== 'string') return [];
+  const norm = normalizeWhitespace(text).toLowerCase();
+  const out: number[] = [];
+  for (const v of signedNumericTokens(norm)) {
+    const n = Number(v);
+    if (Number.isFinite(n)) out.push(n);
+  }
+  const words = norm.match(/[a-z]+(?:-[a-z]+)*/g) ?? [];
+  for (let i = 0; i < words.length; i++) {
+    const base = NUMBER_WORD_VALUES[words[i] as string];
+    if (base === undefined) continue;
+    const prev = i > 0 ? words[i - 1] : undefined;
+    const sign = prev === 'minus' || prev === 'negative' ? -1 : 1;
+    // Word decimals: "<int word> point <digit word>+" ("five point six" → 5.6). Mixed spellings
+    // ("five point 6") are not combined: the digit side is already collected above.
+    if (words[i + 1] === 'point') {
+      const frac: string[] = [];
+      let j = i + 2;
+      while (j < words.length) {
+        const d = DIGIT_WORD_VALUES[words[j] as string];
+        if (d === undefined) break;
+        frac.push(String(d));
+        j += 1;
+      }
+      if (frac.length > 0) {
+        out.push(sign * Number(`${base}.${frac.join('')}`));
+        i = j - 1;
+        continue;
+      }
+    }
+    out.push(sign * base);
+  }
+  return out;
+}
+
+/** The frozen number words `statedNumbersIn` counts (0–20). */
+const NUMBER_WORD_VALUES: Readonly<Record<string, number>> = {
+  zero: 0, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9,
+  ten: 10, eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15, sixteen: 16,
+  seventeen: 17, eighteen: 18, nineteen: 19, twenty: 20,
+};
+
+/** Single-digit words allowed after "point" in a word decimal. */
+const DIGIT_WORD_VALUES: Readonly<Record<string, number>> = {
+  zero: 0, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9,
+};
+
+/**
  * The numbers of `text` that carry `value` inside themselves ("1,200" carries 200, "20" carries
  * 2, "-2" carries 2). Used only for plain-language messages: "the quote prints 20 there".
  */
