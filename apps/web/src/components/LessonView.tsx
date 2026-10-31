@@ -1,5 +1,5 @@
-import { Component, useId } from 'react';
-import type { ErrorInfo, ReactNode } from 'react';
+import { Component, useId, useLayoutEffect, useRef, useState } from 'react';
+import type { CSSProperties, ErrorInfo, ReactNode } from 'react';
 import type { KitSpec, LessonSpec, PlanComponentId, SourceAnalysisV2 } from '../../../../packages/contracts/kit.ts';
 import type { SourceRef } from '../../../../packages/contracts/index.ts';
 import type { Badge } from '../lib/repairs.ts';
@@ -23,6 +23,9 @@ import { FormulaExplorerView } from './FormulaExplorerView.tsx';
 import { KitCard } from './KitCard.tsx';
 import { OverviewView } from './OverviewView.tsx';
 import { PendingCard } from './PendingCard.tsx';
+import { BuildTrace, LiveBar, OverviewSlot, PartFrame } from './LiveBuild.tsx';
+import type { LiveContext } from './LiveBuild.tsx';
+import { IconPresent } from './presentation/icons.tsx';
 import { QuizCardsView } from './QuizCardsView.tsx';
 import { SequenceView } from './SequenceView.tsx';
 import { SortView } from './SortView.tsx';
@@ -53,6 +56,8 @@ export interface LessonViewProps {
   order?: readonly PlanComponentId[];
   /** Stage 7e: each part's last validation report by spec id (lib/failures.ts partReports), so a failed part can say what its repair tried. */
   reports?: Readonly<Record<string, ReportLike>>;
+  /** Stage 9: present while this view is watching the job build (live or a labelled replay); absent for a stored lesson at rest. */
+  live?: LiveContext | null;
 }
 
 // ---- a render error in one component must not take the lesson down -------------------------------------------------
@@ -67,7 +72,7 @@ class CardBoundary extends Component<{ children: ReactNode }, { failed: boolean 
   }
 }
 
-function KitBody({ spec, cite }: { spec: KitSpec; cite: CiteProps }) {
+function KitBody({ spec, cite, building = false }: { spec: KitSpec; cite: CiteProps; building?: boolean }) {
   switch (spec.componentId) {
     case 'quiz-cards-v1': return <QuizCardsView spec={spec} cite={cite} />;
     case 'sequence-v1': return <SequenceView spec={spec} cite={cite} />;
@@ -80,7 +85,7 @@ function KitBody({ spec, cite }: { spec: KitSpec; cite: CiteProps }) {
     case 'log-ladder-v1': return <LogLadderView spec={spec} cite={cite} />;
     case 'threshold-v1': return <ThresholdView spec={spec} cite={cite} />;
     case 'data-table-v1': return <DataTableView spec={spec} cite={cite} />;
-    case 'label-diagram-v1': return <LabelDiagramView spec={spec} cite={cite} />;
+    case 'label-diagram-v1': return <LabelDiagramView spec={spec} cite={cite} build={building} />;
     default: return null;
   }
 }
@@ -134,41 +139,84 @@ function PremiumCard({ card, premium, cite, disclosure, repairBadge }: { card: L
 }
 
 /**
+ * Stage 9: the title while the view watches a build. Muse's headline replaces the page title; the box never gets shorter
+ * than the tallest title it has held (the text sits at its foot), so the lines under it never move up when a shorter
+ * headline arrives. Keyed by its text, so the new title fades in rather than snapping.
+ */
+function LiveTitle({ title }: { title: string }) {
+  const textRef = useRef<HTMLSpanElement>(null);
+  const [tallest, setTallest] = useState(0);
+  useLayoutEffect(() => {
+    const h = textRef.current?.getBoundingClientRect().height ?? 0;
+    if (h > tallest) setTallest(h);
+  });
+  return (
+    <h2 className="lesson-title lb-title" style={tallest > 0 ? { minBlockSize: tallest } : undefined}>
+      <span key={title} ref={textRef} className="lb-title-text">{title}</span>
+    </h2>
+  );
+}
+
+/** Stage 9: a part that arrives while the view is watching the build reveals itself; a lesson at rest renders as before. */
+function Arrival({ live, index, children }: { live: boolean; index: number; children: ReactNode }) {
+  if (!live) return <>{children}</>;
+  return <div className="lb-arrive" style={{ '--i': index } as CSSProperties}>{children}</div>;
+}
+
+/**
  * One lesson: its title and the provenance line, the overview, then the parts in plan order as a vertical stack. A declined
  * page shows the decline card instead. A part that did not pass shows only its message, never its content.
  */
-export function LessonView({ lesson, specs, analysis, sources, cite, disclosure, provenance = null, fallbackTitle = 'Lesson', premium = null, repairBadge = null, pending = [], order = [], reports = NO_REPORTS }: LessonViewProps) {
+export function LessonView({ lesson, specs, analysis, sources, cite, disclosure, provenance = null, fallbackTitle = 'Lesson', premium = null, repairBadge = null, pending = [], order = [], reports = NO_REPORTS, live = null }: LessonViewProps) {
   const declined = analysis !== null && !analysis.usable;
-  if (declined) return <div className="lesson" data-testid="lesson"><DeclineCard analysis={analysis} sources={sources} disclosure={disclosure} /></div>;
+  const liveClass = live === null ? 'lesson' : 'lesson is-live';
+  if (declined) {
+    return (
+      <div className={liveClass} data-testid="lesson">
+        {live !== null && <LiveBar live={live} />}
+        <div className="lb-arrive"><DeclineCard analysis={analysis} sources={sources} disclosure={disclosure} /></div>
+      </div>
+    );
+  }
 
   const cards = lessonCards(lesson, specs, premium !== null, reports);
   const items = lessonItems(cards, pending, order);
   const empty = lesson.overview === null && items.length === 0;
+  const title = lesson.overview?.headline ?? fallbackTitle;
   return (
-    <div className="lesson" data-testid="lesson">
+    <div className={liveClass} data-testid="lesson">
+      {live !== null && <LiveBar live={live} />}
       <header className="lesson-head">
-        <h2 className="lesson-title">{lesson.overview?.headline ?? fallbackTitle}</h2>
+        {/* Keyed by its text, so Muse's headline replacing the page title fades in rather than snapping. */}
+        {live === null ? <h2 className="lesson-title">{title}</h2> : <LiveTitle title={title} />}
+        {/* While building: an invisible twin of the Present button holds its column, so the title never rewraps when it appears. */}
+        {live !== null && <span className="btn present-launch lb-present-slot" aria-hidden="true"><IconPresent size={18} />Present</span>}
         {provenance}
       </header>
-      {lesson.overview !== null && <CardBoundary><OverviewView overview={lesson.overview} /></CardBoundary>}
-      {empty && (
+      {lesson.overview !== null && <CardBoundary><OverviewView overview={lesson.overview} live={live !== null} /></CardBoundary>}
+      {lesson.overview === null && live !== null && !live.strip.finished && <OverviewSlot words={live.sourceWords} />}
+      {empty && live === null && (
         <div className="empty" role="status">
           <h2>This lesson has nothing to show yet</h2>
           <p className="muted">No overview and no parts were stored for this run.</p>
         </div>
       )}
-      {items.map((item) => (
+      {items.map((item, i) => (
         item.kind === 'pending'
-          ? <PendingCard key={`pending:${item.slot.componentId}`} slot={item.slot} />
+          ? (live !== null
+            ? <PartFrame key={`pending:${item.slot.componentId}`} slot={item.slot} build={live.builds[item.slot.componentId]} clock={live.clock} />
+            : <PendingCard key={`pending:${item.slot.componentId}`} slot={item.slot} />)
           : (
             <CardBoundary key={item.card.key}>
-              {item.card.premium && item.card.status === 'passed' && premium !== null
-                ? <PremiumCard card={item.card} premium={premium} cite={cite} disclosure={disclosure} repairBadge={repairBadge} />
-                : (
-                  <KitCard card={item.card}>
-                    {item.card.spec !== null && <KitBody spec={item.card.spec} cite={cite} />}
-                  </KitCard>
-                )}
+              <Arrival live={live !== null} index={i}>
+                {item.card.premium && item.card.status === 'passed' && premium !== null
+                  ? <PremiumCard card={item.card} premium={premium} cite={cite} disclosure={disclosure} repairBadge={repairBadge} />
+                  : (
+                    <KitCard card={item.card} trace={live === null ? null : <BuildTrace build={live.builds[item.card.componentId]} />}>
+                      {item.card.spec !== null && <KitBody spec={item.card.spec} cite={cite} building={live !== null} />}
+                    </KitCard>
+                  )}
+              </Arrival>
             </CardBoundary>
           )
       ))}

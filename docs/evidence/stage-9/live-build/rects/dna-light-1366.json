@@ -1,0 +1,1149 @@
+[
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": null,
+  "slot": [
+   378,
+   132
+  ],
+  "parts": {},
+  "strip": "Replay | Muse Spark 1.3 | Reading the page and planning the lesson | 0 s | 0 s",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 0,
+  "t": 0.22
+ },
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": null,
+  "slot": [
+   378,
+   132
+  ],
+  "parts": {},
+  "strip": "Replay | Muse Spark 1.3 | Reading the page and planning the lesson | 3 s | 1 s",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 1,
+  "t": 0.92
+ },
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": null,
+  "slot": [
+   378,
+   132
+  ],
+  "parts": {},
+  "strip": "Replay | Muse Spark 1.3 | Reading the page and planning the lesson | 5 s | 5 s",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 2,
+  "t": 1.62
+ },
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": null,
+  "slot": [
+   378,
+   132
+  ],
+  "parts": {},
+  "strip": "Replay | Muse Spark 1.3 | Reading the page and planning the lesson | 8 s | 7 s",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 3,
+  "t": 2.32
+ },
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": null,
+  "slot": [
+   378,
+   132
+  ],
+  "parts": {},
+  "strip": "Replay | Muse Spark 1.3 | Reading the page and planning the lesson | 11 s | 11 s",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 4,
+  "t": 3.01
+ },
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": null,
+  "slot": [
+   378,
+   132
+  ],
+  "parts": {},
+  "strip": "Replay | Muse Spark 1.3 | Reading the page and planning the lesson | 14 s | 13 s",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 5,
+  "t": 3.74
+ },
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": null,
+  "slot": [
+   378,
+   132
+  ],
+  "parts": {},
+  "strip": "Replay | Muse Spark 1.3 | Reading the page and planning the lesson | 17 s | 17 s",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 6,
+  "t": 4.45
+ },
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": [
+   378,
+   157
+  ],
+  "slot": null,
+  "parts": {
+   "label-diagram-v1": [
+    "part-frame",
+    559,
+    700
+   ],
+   "quiz-cards-v1": [
+    "part-frame",
+    1283,
+    560
+   ]
+  },
+  "strip": "Replay | Muse Spark 1.3 | Writing Label the diagram | 0 s | Muse Spark 1.3 | Writing Quiz cards | 0 s | 20 s",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 7,
+  "t": 5.17
+ },
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": [
+   378,
+   157
+  ],
+  "slot": null,
+  "parts": {
+   "label-diagram-v1": [
+    "part-frame",
+    559,
+    700
+   ],
+   "quiz-cards-v1": [
+    "part-frame",
+    1283,
+    560
+   ]
+  },
+  "strip": "Replay | Muse Spark 1.3 | Writing Label the diagram | 2 s | Muse Spark 1.3 | Writing Quiz cards | 2 s | 21 s",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 8,
+  "t": 5.93
+ },
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": [
+   378,
+   157
+  ],
+  "slot": null,
+  "parts": {
+   "label-diagram-v1": [
+    "part-frame",
+    559,
+    700
+   ],
+   "quiz-cards-v1": [
+    "part-frame",
+    1283,
+    560
+   ]
+  },
+  "strip": "Replay | Muse Spark 1.3 | Writing Label the diagram | 5 s | Muse Spark 1.3 | Writing Quiz cards | 5 s | 25 s",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 9,
+  "t": 6.67
+ },
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": [
+   378,
+   157
+  ],
+  "slot": null,
+  "parts": {
+   "label-diagram-v1": [
+    "part-frame",
+    559,
+    700
+   ],
+   "quiz-cards-v1": [
+    "part-frame",
+    1283,
+    560
+   ]
+  },
+  "strip": "Replay | Muse Spark 1.3 | Writing Label the diagram | 8 s | Muse Spark 1.3 | Writing Quiz cards | 8 s | 27 s",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 10,
+  "t": 7.4
+ },
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": [
+   378,
+   157
+  ],
+  "slot": null,
+  "parts": {
+   "label-diagram-v1": [
+    "part-frame",
+    559,
+    700
+   ],
+   "quiz-cards-v1": [
+    "part-frame",
+    1283,
+    560
+   ]
+  },
+  "strip": "Replay | Muse Spark 1.3 | Writing Label the diagram | 11 s | Muse Spark 1.3 | Writing Quiz cards | 11 s | 31 s",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 11,
+  "t": 8.13
+ },
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": [
+   378,
+   157
+  ],
+  "slot": null,
+  "parts": {
+   "label-diagram-v1": [
+    "part-frame",
+    559,
+    700
+   ],
+   "quiz-cards-v1": [
+    "part-frame",
+    1283,
+    560
+   ]
+  },
+  "strip": "Replay | Muse Spark 1.3 | Writing Label the diagram | 14 s | Muse Spark 1.3 | Writing Quiz cards | 14 s | 33 s",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 12,
+  "t": 8.86
+ },
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": [
+   378,
+   157
+  ],
+  "slot": null,
+  "parts": {
+   "label-diagram-v1": [
+    "part-frame",
+    559,
+    700
+   ],
+   "quiz-cards-v1": [
+    "part-frame",
+    1283,
+    560
+   ]
+  },
+  "strip": "Replay | Muse Spark 1.3 | Writing Label the diagram | 17 s | Muse Spark 1.3 | Writing Quiz cards | 17 s | 37 s",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 13,
+  "t": 9.6
+ },
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": [
+   378,
+   157
+  ],
+  "slot": null,
+  "parts": {
+   "label-diagram-v1": [
+    "part-frame",
+    559,
+    700
+   ],
+   "quiz-cards-v1": [
+    "part-frame",
+    1283,
+    560
+   ]
+  },
+  "strip": "Replay | Muse Spark 1.3 | Writing Label the diagram | 20 s | Muse Spark 1.3 | Writing Quiz cards | 20 s | 39 s",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 14,
+  "t": 10.32
+ },
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": [
+   378,
+   157
+  ],
+  "slot": null,
+  "parts": {
+   "label-diagram-v1": [
+    "part-frame",
+    559,
+    700
+   ],
+   "quiz-cards-v1": [
+    "part-frame",
+    1283,
+    560
+   ]
+  },
+  "strip": "Replay | Muse Spark 1.3 | Writing Label the diagram | 23 s | Muse Spark 1.3 | Writing Quiz cards | 23 s | 43 s",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 15,
+  "t": 11.03
+ },
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": [
+   378,
+   157
+  ],
+  "slot": null,
+  "parts": {
+   "label-diagram-v1": [
+    "part-frame",
+    559,
+    700
+   ],
+   "quiz-cards-v1": [
+    "part-frame",
+    1283,
+    560
+   ]
+  },
+  "strip": "Replay | Muse Spark 1.3 | Writing Label the diagram | 26 s | Muse Spark 1.3 | Writing Quiz cards | 26 s | 45 s",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 16,
+  "t": 11.75
+ },
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": [
+   378,
+   157
+  ],
+  "slot": null,
+  "parts": {
+   "label-diagram-v1": [
+    "part-frame",
+    559,
+    700
+   ],
+   "quiz-cards-v1": [
+    "part-frame",
+    1283,
+    560
+   ]
+  },
+  "strip": "Replay | Muse Spark 1.3 | Writing Label the diagram | 29 s | Muse Spark 1.3 | Writing Quiz cards | 29 s | 49 s",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 17,
+  "t": 12.47
+ },
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": [
+   378,
+   157
+  ],
+  "slot": null,
+  "parts": {
+   "label-diagram-v1": [
+    "part-frame",
+    559,
+    700
+   ],
+   "quiz-cards-v1": [
+    "part-frame",
+    1283,
+    560
+   ]
+  },
+  "strip": "Replay | Muse Spark 1.3 | Writing Label the diagram | 32 s | Muse Spark 1.3 | Writing Quiz cards | 32 s | 51 s",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 18,
+  "t": 13.23
+ },
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": [
+   378,
+   157
+  ],
+  "slot": null,
+  "parts": {
+   "label-diagram-v1": [
+    "part-frame",
+    559,
+    700
+   ],
+   "quiz-cards-v1": [
+    "ARTICLE",
+    1283,
+    1394.4
+   ]
+  },
+  "strip": "Replay | Muse Spark 1.3 | Writing Label the diagram | 35 s | 55 s",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 19,
+  "t": 13.96
+ },
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": [
+   378,
+   157
+  ],
+  "slot": null,
+  "parts": {
+   "label-diagram-v1": [
+    "part-frame",
+    559,
+    700
+   ],
+   "quiz-cards-v1": [
+    "ARTICLE",
+    1283,
+    1394.4
+   ]
+  },
+  "strip": "Replay | Muse Spark 1.3 | Writing Label the diagram | 38 s | 57 s",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 20,
+  "t": 14.7
+ },
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": [
+   378,
+   157
+  ],
+  "slot": null,
+  "parts": {
+   "label-diagram-v1": [
+    "part-frame",
+    559,
+    700
+   ],
+   "quiz-cards-v1": [
+    "ARTICLE",
+    1283,
+    1394.4
+   ]
+  },
+  "strip": "Replay | Muse Spark 1.3 | Writing Label the diagram | 40 s | 59 s",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 21,
+  "t": 15.41
+ },
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": [
+   378,
+   157
+  ],
+  "slot": null,
+  "parts": {
+   "label-diagram-v1": [
+    "part-frame",
+    559,
+    700
+   ],
+   "quiz-cards-v1": [
+    "ARTICLE",
+    1283,
+    1394.4
+   ]
+  },
+  "strip": "Replay | Muse Spark 1.3 | Writing Label the diagram | 43 s | 1 min 3 s",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 22,
+  "t": 16.15
+ },
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": [
+   378,
+   157
+  ],
+  "slot": null,
+  "parts": {
+   "label-diagram-v1": [
+    "part-frame",
+    559,
+    700
+   ],
+   "quiz-cards-v1": [
+    "ARTICLE",
+    1283,
+    1394.4
+   ]
+  },
+  "strip": "Replay | SAM 3.1 | Outlining 6 parts of the figure | 0 s | 1 min 6 s",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 23,
+  "t": 16.87
+ },
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": [
+   378,
+   157
+  ],
+  "slot": null,
+  "parts": {
+   "label-diagram-v1": [
+    "part-frame",
+    559,
+    700
+   ],
+   "quiz-cards-v1": [
+    "ARTICLE",
+    1283,
+    1394.4
+   ]
+  },
+  "strip": "Replay | SAM 3.1 | Outlining 6 parts of the figure | 3 s | 1 min 9 s",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 24,
+  "t": 17.58
+ },
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": [
+   378,
+   157
+  ],
+  "slot": null,
+  "parts": {
+   "label-diagram-v1": [
+    "part-frame",
+    559,
+    700
+   ],
+   "quiz-cards-v1": [
+    "ARTICLE",
+    1283,
+    1394.4
+   ]
+  },
+  "strip": "Replay | Muse Spark 1.3 | Reworking Label the diagram | 2 s | 1 min 11 s",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 25,
+  "t": 18.28
+ },
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": [
+   378,
+   157
+  ],
+  "slot": null,
+  "parts": {
+   "label-diagram-v1": [
+    "part-frame",
+    559,
+    700
+   ],
+   "quiz-cards-v1": [
+    "ARTICLE",
+    1283,
+    1394.4
+   ]
+  },
+  "strip": "Replay | Muse Spark 1.3 | Reworking Label the diagram | 5 s | 1 min 15 s",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 26,
+  "t": 18.99
+ },
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": [
+   378,
+   157
+  ],
+  "slot": null,
+  "parts": {
+   "label-diagram-v1": [
+    "part-frame",
+    559,
+    700
+   ],
+   "quiz-cards-v1": [
+    "ARTICLE",
+    1283,
+    1394.4
+   ]
+  },
+  "strip": "Replay | Muse Spark 1.3 | Reworking Label the diagram | 8 s | 1 min 17 s",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 27,
+  "t": 19.7
+ },
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": [
+   378,
+   157
+  ],
+  "slot": null,
+  "parts": {
+   "label-diagram-v1": [
+    "part-frame",
+    559,
+    700
+   ],
+   "quiz-cards-v1": [
+    "ARTICLE",
+    1283,
+    1394.4
+   ]
+  },
+  "strip": "Replay | Muse Spark 1.3 | Reworking Label the diagram | 10 s | 1 min 19 s",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 28,
+  "t": 20.4
+ },
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": [
+   378,
+   157
+  ],
+  "slot": null,
+  "parts": {
+   "label-diagram-v1": [
+    "part-frame",
+    559,
+    700
+   ],
+   "quiz-cards-v1": [
+    "ARTICLE",
+    1283,
+    1394.4
+   ]
+  },
+  "strip": "Replay | Muse Spark 1.3 | Reworking Label the diagram | 13 s | 1 min 23 s",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 29,
+  "t": 21.13
+ },
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": [
+   378,
+   157
+  ],
+  "slot": null,
+  "parts": {
+   "label-diagram-v1": [
+    "part-frame",
+    559,
+    700
+   ],
+   "quiz-cards-v1": [
+    "ARTICLE",
+    1283,
+    1394.4
+   ]
+  },
+  "strip": "Replay | Muse Spark 1.3 | Reworking Label the diagram | 16 s | 1 min 25 s",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 30,
+  "t": 21.84
+ },
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": [
+   378,
+   157
+  ],
+  "slot": null,
+  "parts": {
+   "label-diagram-v1": [
+    "part-frame",
+    559,
+    700
+   ],
+   "quiz-cards-v1": [
+    "ARTICLE",
+    1283,
+    1394.4
+   ]
+  },
+  "strip": "Replay | SAM 3.1 | Outlining 6 parts of the figure | 1 s | 1 min 29 s",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 31,
+  "t": 22.55
+ },
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": [
+   378,
+   157
+  ],
+  "slot": null,
+  "parts": {
+   "label-diagram-v1": [
+    "ARTICLE",
+    559,
+    742.8
+   ],
+   "quiz-cards-v1": [
+    "ARTICLE",
+    1325.8,
+    1394.4
+   ]
+  },
+  "strip": "Replay | Built in 1 min 30 s | 4 Muse Spark 1.3 calls | 2 SAM 3.1 calls | $0.154 est.",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 32,
+  "t": 23.35
+ },
+ {
+  "bar": [
+   90.6,
+   66
+  ],
+  "title": [
+   188.6,
+   62.4
+  ],
+  "prov": [
+   256.9,
+   97.1
+  ],
+  "overview": [
+   378,
+   157
+  ],
+  "slot": null,
+  "parts": {
+   "label-diagram-v1": [
+    "ARTICLE",
+    559,
+    742.8
+   ],
+   "quiz-cards-v1": [
+    "ARTICLE",
+    1325.8,
+    1394.4
+   ]
+  },
+  "strip": "Replay | Built in 1 min 30 s | 4 Muse Spark 1.3 calls | 2 SAM 3.1 calls | $0.154 est.",
+  "scrollTop": 0,
+  "docOverflow": 0,
+  "i": 33,
+  "t": 24.72
+ }
+]

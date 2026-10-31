@@ -46,6 +46,10 @@ import { LessonChecksPanel } from './components/LessonChecksPanel.tsx';
 import { Provenance } from './components/Provenance.tsx';
 import type { ProvenanceReceipt } from './components/Provenance.tsx';
 import { PresentationMode } from './components/presentation/PresentationMode.tsx';
+import type { LiveContext } from './components/LiveBuild.tsx';
+import { useReplay } from './components/useReplay.ts';
+import { jobStartMs, liveStrip, partBuilds } from './lib/liveBuild.ts';
+import { replayRequest } from './lib/replay.ts';
 import { IconPresent } from './components/presentation/icons.tsx';
 import type { SourceRef } from '../../../packages/contracts/index.ts';
 
@@ -63,8 +67,10 @@ function localStore(): Storage | null {
 
 /** `?present=<id>[&beat=N]` opens that stored run straight into presentation mode (Stage 7c). */
 const PRESENT_REQUEST = typeof window === 'undefined' ? null : presentRequest(window.location.search);
+/** Stage 9: `?replay=<id>[&speed=N]` plays that stored run's recorded events through the live build view, labelled as a replay. */
+const REPLAY_REQUEST = typeof window === 'undefined' ? null : replayRequest(window.location.search);
 /** `?job=<id>` opens that stored run instead of the most recent lesson. */
-const LINKED_JOB = typeof window === 'undefined' ? null : requestedJobId(window.location.search) ?? PRESENT_REQUEST?.jobId ?? null;
+const LINKED_JOB = typeof window === 'undefined' ? null : REPLAY_REQUEST?.jobId ?? requestedJobId(window.location.search) ?? PRESENT_REQUEST?.jobId ?? null;
 
 export function App() {
   const { health, down, refresh: refreshHealth } = useHealth();
@@ -127,13 +133,32 @@ export function App() {
     : pickedSource === null && openingSourceId !== null && opening !== null && opening !== undefined
       ? opening.jobId
       : pickDefaultJob(jobsForSource, generate.busy)?.jobId ?? null;
-  const detail = useJobDetail(selectedJobId);
+  // Stage 9: a replay feeds the recorded run's detail, moment by moment, in place of the polled one.
+  const replaying = REPLAY_REQUEST !== null && selectedJobId === REPLAY_REQUEST.jobId;
+  const replay = useReplay(REPLAY_REQUEST);
+  const polled = useJobDetail(replaying ? null : selectedJobId);
+  const detail = replaying ? replay.detail : polled;
   const ready = detail?.state === 'ready' && detail.data.summary.sourceId === selectedSourceId ? detail.data : null;
+  // A lesson this view has watched while it was running keeps its live build view (trace lines, reserved space) until
+  // another run is opened, so finishing never rearranges what the teacher is looking at.
+  const [watched, setWatched] = useState<string | null>(null);
+  if (ready !== null && ready.summary.status === 'running' && ready.lessonData !== undefined && watched !== ready.summary.jobId) setWatched(ready.summary.jobId);
 
   const doc = useSourceDoc(selectedSourceId);
   // Stage 6: a lesson job streams in; `stream` says what is ready now (overview, which components, which are placeholders).
   const lessonMode = useMemo(() => (ready === null ? 'v1' : lessonRenderMode(ready)), [ready]);
   const stream = useMemo(() => (ready === null || ready.lessonData === undefined ? null : buildLessonStream(ready)), [ready]);
+  const liveOn = ready !== null && ready.lessonData !== undefined && (replaying || watched === ready.summary.jobId);
+  const liveStart = ready === null ? null : jobStartMs(ready.events);
+  const liveWords = useMemo(() => (doc?.state === 'ready' ? doc.data.text.split(/\s+/).filter((w) => /[\p{L}\d]/u.test(w)).length : null), [doc]);
+  const liveCtx = useMemo((): LiveContext | null => {
+    if (!liveOn || ready === null) return null;
+    const clock = replaying ? replay.clock : () => (liveStart === null ? 0 : Date.now() - liveStart);
+    return {
+      clock, strip: liveStrip(ready), builds: partBuilds(ready), sourceWords: liveWords,
+      replay: replaying && REPLAY_REQUEST !== null ? { speed: REPLAY_REQUEST.speed, recordedAt: replay.recordedAt, finished: replay.finished, onRestart: replay.restart } : null,
+    };
+  }, [liveOn, ready, replaying, replay.clock, replay.recordedAt, replay.finished, replay.restart, liveStart, liveWords]);
   const quotes = useMemo(() => {
     if (selectedSourceId === null) return [];
     const v1 = collectQuoteRefs(selectedSourceId, ready?.spec, ready?.analysis?.analysis);
@@ -337,6 +362,7 @@ export function App() {
               flash={flash}
               onCite={onCite}
               onCollapse={() => setShowSource(false)}
+              live={liveCtx !== null}
             />
           ) : (
             <SourceTab
@@ -375,7 +401,7 @@ export function App() {
                   provenance={provenance}
                 />
               )}
-              {ready !== null && stream !== null && lessonMode === 'lesson' && (
+              {ready !== null && stream !== null && (lessonMode === 'lesson' || (lessonMode === 'working' && liveCtx !== null)) && (
                 <LessonView
                   key={ready.summary.jobId}
                   lesson={stream.lesson}
@@ -391,9 +417,10 @@ export function App() {
                   pending={stream.pending}
                   order={stream.order}
                   reports={reports}
+                  live={liveCtx}
                 />
               )}
-              {ready !== null && ((lessonMode === 'v1' && (spec === undefined || ready.summary.status !== 'succeeded')) || lessonMode === 'working' || lessonMode === 'outcome') && (
+              {ready !== null && ((lessonMode === 'v1' && (spec === undefined || ready.summary.status !== 'succeeded')) || (lessonMode === 'working' && liveCtx === null) || lessonMode === 'outcome') && (
                 <JobOutcome detail={ready} serverBusy={health === null ? null : generate.busy} />
               )}
             </div>

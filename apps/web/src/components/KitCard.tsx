@@ -22,13 +22,15 @@ export function StatusText({ card }: { card: Pick<LessonCard, 'status' | 'note'>
 interface Props {
   card: LessonCard;
   children?: ReactNode;
+  /** Stage 9: how the part was built (BuildTrace), shown under the meta line while the view watched the build. */
+  trace?: ReactNode;
 }
 
 /**
  * The frame around one lesson part: title, a meta line (kind of part · AI-written · status), the note about dropped
  * items, and (for a part that could not be verified) only its message. Content is passed as children only when it passed.
  */
-export function KitCard({ card, children }: Props) {
+export function KitCard({ card, children, trace = null }: Props) {
   const headId = useId();
   const shown = card.status === 'passed';
   return (
@@ -41,6 +43,7 @@ export function KitCard({ card, children }: Props) {
           {shown && <AiWritten />}
           <StatusText card={card} />
         </p>
+        {trace}
       </header>
       {shown && card.note !== '' && <p className="note small" role="note">{droppedNoteForTeacher(card.note)}</p>}
       {shown && children}

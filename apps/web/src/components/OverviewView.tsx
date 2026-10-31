@@ -1,4 +1,5 @@
 import { useId, useState } from 'react';
+import type { CSSProperties } from 'react';
 import type { OverviewSpec } from '../../../../packages/contracts/kit.ts';
 import { Linked } from './Linked.tsx';
 import { IconChevronDown, IconChevronUp } from './icons.tsx';
@@ -8,6 +9,8 @@ import { overviewParts } from '../lib/lessonLayout.ts';
 
 interface Props {
   overview: OverviewSpec;
+  /** Stage 9: the overview has just arrived in a building lesson; its points come in one by one (CSS, on mount only). */
+  live?: boolean;
 }
 
 const points = (n: number): string => `${n} more ${n === 1 ? 'point' : 'points'}`;
@@ -18,7 +21,7 @@ const points = (n: number): string => `${n} more ${n === 1 ? 'point' : 'points'}
  * sentence in the source page, which is how a teacher sees where it comes from. Every quote is still checked and still
  * highlighted in the source text.
  */
-export function OverviewView({ overview }: Props) {
+export function OverviewView({ overview, live = false }: Props) {
   const headId = useId();
   const moreId = useId();
   const [open, setOpen] = useState(false);
@@ -29,11 +32,11 @@ export function OverviewView({ overview }: Props) {
     ? `Key terms (${terms.length})${more.length > 0 ? ` and ${points(more.length)}` : ''}`
     : points(more.length);
   return (
-    <section className="overview overview-compact" aria-labelledby={headId} data-testid="overview">
+    <section className="overview overview-compact" aria-labelledby={headId} data-testid="overview" data-arrive={live ? 'true' : undefined} style={live ? ({ '--n': lead.length } as CSSProperties) : undefined}>
       <h2 id={headId} className="sr-only">Page overview</h2>
       <ul className="key-points" aria-label="Key points">
-        {lead.map((p) => (
-          <Linked as="li" key={p.id} links={linkKeysOf([p])} tabIndex={0}>
+        {lead.map((p, i) => (
+          <Linked as="li" key={p.id} links={linkKeysOf([p])} tabIndex={0} style={live ? ({ '--i': i } as CSSProperties) : undefined}>
             {prettyExponents(p.point)}
           </Linked>
         ))}

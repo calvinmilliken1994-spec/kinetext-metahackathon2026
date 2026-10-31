@@ -1,5 +1,5 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
-import type { FocusEvent as ReactFocusEvent, MouseEvent as ReactMouseEvent } from 'react';
+import type { CSSProperties, FocusEvent as ReactFocusEvent, MouseEvent as ReactMouseEvent } from 'react';
 import type { Loadable } from '../hooks.ts';
 import type { SourceDoc, SourceMeta } from '../api.ts';
 import type { HighlightResult } from '../lib/highlight.ts';
@@ -28,6 +28,8 @@ export interface SourcePanelProps {
   onCite: (key: string) => void;
   /** Collapse the panel to its slim tab (slice L; App keeps the choice across visits). */
   onCollapse: () => void;
+  /** Stage 9: the lesson is being built in view; each newly cited sentence lights up as it arrives (CSS, on mount). */
+  live?: boolean;
 }
 
 const reducedMotion = (): boolean => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -48,7 +50,7 @@ function revealInSource(mark: HTMLElement, panel: HTMLElement): void {
   box.scrollTo({ top, behavior: reducedMotion() ? 'auto' : 'smooth' });
 }
 
-function HighlightedText({ text, highlights, byKey, flash, sourceId }: { text: string; highlights: HighlightResult | null; byKey: Map<string, QuoteRef>; flash: Flash | null; sourceId: string }) {
+function HighlightedText({ text, highlights, byKey, flash, sourceId, order }: { text: string; highlights: HighlightResult | null; byKey: Map<string, QuoteRef>; flash: Flash | null; sourceId: string; order: Map<string, number> | null }) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -84,20 +86,23 @@ function HighlightedText({ text, highlights, byKey, flash, sourceId }: { text: s
       // Hover linking (Stage 7): the quote's link keys, and one tab stop where each quote begins.
       const links = markLinks(p.keys, (k) => byKey.get(k)?.quote, sourceId);
       const tabStop = links.length > 0 && highlights !== null && segmentIsTabStop(p, highlights.ranges);
+      // Stage 9: while the lesson builds, a mark lights up in the order its quote arrived (earliest key wins).
+      const rank = order === null ? null : Math.min(...p.keys.map((k) => order.get(k) ?? 99));
       return (
         <mark
+          style={rank === null ? undefined : { '--i': Math.min(rank, 12) } as CSSProperties}
           key={p.start}
           data-keys={p.keys.join(' ')}
           data-links={links.length > 0 ? links.join(' ') : undefined}
           tabIndex={tabStop ? 0 : undefined}
-          className={`${isEvidence ? 'ev-explanation' : 'ev-concept'}${cls === '' ? '' : ` ${cls}`}`}
+          className={`${isEvidence ? 'ev-explanation' : 'ev-concept'}${cls === '' ? '' : ` ${cls}`}${rank === null ? '' : ' lb-lit'}`}
           title={`Evidence for: ${owners}`}
         >
           {slice}
         </mark>
       );
     });
-  }, [text, highlights, decorations, byKey, sourceId]);
+  }, [text, highlights, decorations, byKey, sourceId, order]);
 
   // Light every mark that carries an active link key; when the pointer is on a lesson element, bring its first quote into
   // view after a short dwell (so sweeping the pointer across the lesson does not make the page jump).
@@ -149,8 +154,9 @@ function HighlightedText({ text, highlights, byKey, flash, sourceId }: { text: s
   );
 }
 
-export function SourcePanel({ sources, selectedId, onSelect, onReload, doc, highlights, quotes, flash, onCite, onCollapse }: SourcePanelProps) {
+export function SourcePanel({ sources, selectedId, onSelect, onReload, doc, highlights, quotes, flash, onCite, onCollapse, live = false }: SourcePanelProps) {
   const byKey = useMemo(() => new Map(quotes.map((q) => [q.key, q] as const)), [quotes]);
+  const order = useMemo(() => (live ? new Map(quotes.map((q, i) => [q.key, i] as const)) : null), [live, quotes]);
   const concepts = quotes.filter((q) => q.kind === 'concept');
   const located = highlights ? Object.keys(highlights.ranges).length : 0;
   const meta = sources.state === 'ready' ? sources.data.find((s) => s.id === selectedId) : undefined;
@@ -236,7 +242,7 @@ export function SourcePanel({ sources, selectedId, onSelect, onReload, doc, high
         {doc === null && <p className="muted pad">Select a page.</p>}
         {doc?.state === 'loading' && <p className="muted pad">Loading the page…</p>}
         {doc?.state === 'error' && <div className="callout callout-error" role="alert">{doc.message}</div>}
-        {doc?.state === 'ready' && <HighlightedText text={doc.data.text} highlights={highlights} byKey={byKey} flash={flash} sourceId={selectedId ?? ''} />}
+        {doc?.state === 'ready' && <HighlightedText text={doc.data.text} highlights={highlights} byKey={byKey} flash={flash} sourceId={selectedId ?? ''} order={order} />}
       </div>
     </section>
   );

@@ -19,7 +19,11 @@ import { Linked } from './Linked.tsx';
 import { QuoteBlock } from './QuoteBlock.tsx';
 import { IconClose, Mark } from './icons.tsx';
 
-export interface LabelDiagramViewProps { spec: LabelDiagramSpec; cite: CiteProps; presentation?: EnginePresentation }
+export interface LabelDiagramViewProps {
+  spec: LabelDiagramSpec; cite: CiteProps; presentation?: EnginePresentation;
+  /** Stage 9: the part has just arrived in a building lesson: its markers and SAM regions draw in one by one, then the regions fade (CSS, on mount). */
+  build?: boolean;
+}
 
 /** Where the figure image comes from. The app reads the API; the dev harness serves the committed file instead. */
 export const FigureSrcContext = createContext<(figureId: string) => string>((id) => `/api/figures/${encodeURIComponent(id)}/image`);
@@ -105,6 +109,8 @@ interface FigureProps {
   caption: boolean;
   /** Lesson only: markers are buttons and drop targets. */
   marker?: (v: PartView, style: CSSProperties, state: MarkerState) => ReactNode;
+  /** Stage 9: draw the markers and SAM regions in, part by part. */
+  build?: boolean;
 }
 
 /** The page's figure: printed labels covered, a numbered marker per part, region outlines with names once named. */
@@ -112,7 +118,7 @@ function figureCredit(fig: LabelDiagramSpec['figure']): string {
   return [fig.credit.trim(), fig.license.trim()].filter((s) => s !== '').join(' · ');
 }
 
-function Figure({ spec, views, masks, named, labelsShown, markerState, current, size, caption, marker }: FigureProps) {
+function Figure({ spec, views, masks, named, labelsShown, markerState, current, size, caption, marker, build = false }: FigureProps) {
   const srcOf = useContext(FigureSrcContext);
   const [failed, setFailed] = useState(false);
   const plateRef = useRef<HTMLDivElement>(null);
@@ -126,7 +132,7 @@ function Figure({ spec, views, masks, named, labelsShown, markerState, current, 
   const credit = figureCredit(fig);
   return (
     <figure className="ld-figure" style={figureStyle}>
-      <div className="ld-plate" style={plateStyle} ref={plateRef} data-labels={labelsShown ? 'shown' : 'covered'}>
+      <div className="ld-plate" style={plateStyle} ref={plateRef} data-labels={labelsShown ? 'shown' : 'covered'} data-build={build ? 'draw' : undefined}>
         {failed
           ? <p className="ld-missing">The figure could not be loaded.</p>
           : <img src={srcOf(spec.figureId)} alt={fig.caption.trim() === '' ? 'The page’s figure, labels covered' : `The page’s figure, labels covered: ${fig.caption.trim()}`} draggable={false} onError={() => setFailed(true)} />}
@@ -135,7 +141,7 @@ function Figure({ spec, views, masks, named, labelsShown, markerState, current, 
         ))}
         {views.map((v) => (v.region === null ? null : (
           <span
-            key={`r-${v.part.id}`} className="ld-region" style={pct(v.region)} data-on={named[v.index] === true ? 'true' : 'false'}
+            key={`r-${v.part.id}`} className="ld-region" style={build ? { ...pct(v.region), '--i': v.index } as CSSProperties : pct(v.region)} data-on={named[v.index] === true ? 'true' : 'false'}
             data-current={current === v.index ? 'true' : 'false'} aria-hidden="true"
           />
         )))}
@@ -143,7 +149,7 @@ function Figure({ spec, views, masks, named, labelsShown, markerState, current, 
           const state = markerState(v);
           const style: CSSProperties = { left: `${v.point.left}%`, top: `${v.point.top}%` };
           return marker !== undefined
-            ? <span key={`m-${v.part.id}`} className="ld-marker-slot">{marker(v, style, state)}</span>
+            ? <span key={`m-${v.part.id}`} className="ld-marker-slot" style={build ? { '--i': v.index } as CSSProperties : undefined}>{marker(v, style, state)}</span>
             : <span key={`m-${v.part.id}`} className="ld-marker" data-state={state} style={style} aria-hidden="true"><span className="num">{v.number}</span></span>;
         })}
         {/* Name tags last (above markers), one per part in spec order, placed once by lib placeTags; shown when named. */}
@@ -194,7 +200,7 @@ function PageQuotes({ spec, views, cite }: { spec: LabelDiagramSpec; views: read
 
 // ---- lesson ----------------------------------------------------------------------------------------------------------
 
-function LessonDiagram({ spec, cite }: { spec: LabelDiagramSpec; cite: CiteProps }) {
+function LessonDiagram({ spec, cite, build = false }: { spec: LabelDiagramSpec; cite: CiteProps; build?: boolean }) {
   const views = useMemo(() => partViews(spec), [spec]);
   const masks = useMemo(() => coverMasks(spec), [spec]);
   const bank = useMemo(() => wordBank(spec), [spec]);
@@ -282,7 +288,7 @@ function LessonDiagram({ spec, cite }: { spec: LabelDiagramSpec; cite: CiteProps
   return (
     <div className="ld" data-mode="lesson" data-testid="label-diagram">
       <div className="ld-body">
-        <Figure spec={spec} views={views} masks={masks} named={named} labelsShown={revealed} markerState={markerState} current={null} caption marker={marker} />
+        <Figure spec={spec} views={views} masks={masks} named={named} labelsShown={revealed} markerState={markerState} current={null} caption marker={marker} build={build} />
         <div className="ld-side">
           <div className="ld-bank" role="group" aria-label="Word bank: the page’s names for the parts">
             {bank.map((b) => {
@@ -426,7 +432,7 @@ function StageDiagram({ spec, presentation }: { spec: LabelDiagramSpec; presenta
  * Label the diagram. In a lesson: drag or place the page's names on the numbered parts, check, hint, show the answers.
  * On a slide (`presentation`): one part per presenter step, R names it; the last step's R uncovers the printed labels.
  */
-export function LabelDiagramView({ spec, cite, presentation }: LabelDiagramViewProps) {
+export function LabelDiagramView({ spec, cite, presentation, build = false }: LabelDiagramViewProps) {
   if (presentation !== undefined) return <StageDiagram spec={spec} presentation={presentation} />;
-  return <LessonDiagram spec={spec} cite={cite} />;
+  return <LessonDiagram spec={spec} cite={cite} build={build} />;
 }
