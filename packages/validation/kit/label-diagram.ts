@@ -331,8 +331,9 @@ export function validateLabelDiagram(gen: LabelDiagramGen, sources: SourceDocume
         }
         const px = (p.x * width) / L.coordMax;
         const py = (p.y * height) / L.coordMax;
-        if (!(rx1 <= px && px <= rx2 && ry1 <= py && py <= ry2)) {
-          problems.push(`the point of parts[${i}] (${nameOf(i)}) at image pixel (${Math.round(px * 10) / 10}, ${Math.round(py * 10) / 10}) lies outside its region (${rx1},${ry1})-(${rx2},${ry2}); expected the region to contain the point`);
+        const tol = L.pointToleranceFraction * Math.max(width, height);
+        if (!(rx1 - tol <= px && px <= rx2 + tol && ry1 - tol <= py && py <= ry2 + tol)) {
+          problems.push(`the point of parts[${i}] (${nameOf(i)}) at image pixel (${Math.round(px * 10) / 10}, ${Math.round(py * 10) / 10}) lies outside its region (${rx1},${ry1})-(${rx2},${ry2}) by more than ${Math.round(tol * 10) / 10} px; expected the region to contain the point`);
           affected.push(`/parts/${i}/x`, `/parts/${i}/y`);
         }
         const fraction = ((rx2 - rx1) * (ry2 - ry1)) / imageArea;

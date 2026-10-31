@@ -198,7 +198,10 @@ export const KIT_LIMITS = {
     coordMax: 1000,
     maxRegionAreaFraction: 0.5,
     minRegionAreaFraction: 0.0005,
-    maxRegionOverlapIoU: 0.6
+    maxRegionOverlapIoU: 0.6,
+    // Stage 8b live run (lead): SAM boxes hug thin arrows and strands, so LD-06 accepts a point within this
+    // fraction of the image's longer side outside its region box (12 px on a 600 px figure).
+    pointToleranceFraction: 0.02
   }
 } as const;
 

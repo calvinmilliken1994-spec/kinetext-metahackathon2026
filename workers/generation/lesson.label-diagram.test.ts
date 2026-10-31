@@ -446,13 +446,16 @@ test('label-diagram: figures reach the analysis call, the image reaches generati
   assert.equal(samBody['model'], 'sam-3.1');
   assert.equal(samBody['stream'], true);
   assert.deepEqual(samBody['metadata'], { include_confidence: 'true' });
-  const img = samBody['image'] as Record<string, unknown>;
-  assert.equal(img['mime'], 'image/jpeg');
-  assert.equal(img['width'], FIG_W);
-  assert.equal(img['height'], FIG_H);
-  assert.equal(img['data'], expectedB64, 'SAM receives the exact stored bytes');
+  // Documented Responses shape (dev.meta.ai/docs/sam/segmenting; lead fix after the first live run's HTTP 400s).
+  assert.equal(samBody['input_text'], undefined);
+  assert.equal(samBody['image'], undefined);
+  const content = ((samBody['input'] as Array<Record<string, unknown>>)[0]!['content']) as Array<Record<string, unknown>>;
+  assert.equal(content[1]!['type'], 'input_image');
+  assert.equal(content[1]!['image_url'], `data:image/jpeg;base64,${expectedB64}`, 'SAM receives the exact stored bytes');
+  void FIG_W; void FIG_H;
   // parts[0] (283, 475) → (round(283*600/1000), round(475*600/1000)) = (170, 285), object id 1
-  const inputText = String(samBody['input_text']);
+  assert.equal(content[0]!['type'], 'input_text');
+  const inputText = String(content[0]!['text']);
   assert.ok(inputText.startsWith('<0f>1<|point;x=170;y=285;w=600;h=600|>,'), `point prompt: ${inputText.slice(0, 60)}`);
   assert.equal(inputText.split('<|point;').length - 1, 6, 'one point per part, ids 1..n');
 

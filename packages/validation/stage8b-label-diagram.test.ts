@@ -112,7 +112,7 @@ test('LD-02: a name that is not a whole phrase of its own quote fails alone', ()
 
 test('LD-03: an unknown figureId fails, and missing figures fail closed', () => {
   const gen = golden();
-  gen.figureId = 'usgs-ph-scale-1'; // a real library figure, but not this source's
+  gen.figureId = 'noaa-hydrologic-cycle-1'; // a real library figure, but not this source's
   const report = validate(gen, { figures: [dnaFigure()] });
   assert.ok(failedIds(report).includes('LD-03'), failureDetail(report));
   assert.ok((checkOf(report, 'LD-03').affected ?? []).includes('/figureId'));

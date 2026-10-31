@@ -95,18 +95,24 @@ describe('parseSamOutput', (): void => {
 });
 
 describe('segmentPoints', (): void => {
-  it('sends the SAM request, parses deltas, and reconciles usage cost', async (): Promise<void> => {
+  it('sends the documented Responses body, parses deltas, and reconciles usage cost', async (): Promise<void> => {
     const fake = makeFakeLedger();
-    const captured: { body: Record<string, unknown>; count: number } = { body: {}, count: 0 };
+    const captured: { body: Record<string, unknown>; headers: Record<string, string>; count: number } = {
+      body: {},
+      headers: {},
+      count: 0,
+    };
     const line =
       '<0f>1<|box;x1=10;y1=20;x2=30;y2=40;w=600;h=600;c=0.91|>' +
       '<|mask;x=0;y=0;c=0.91;data=27,60,~!!!!M!0c[0o9|>';
+    const expectedPrompt = '<0f>1<|point;x=15;y=25;w=600;h=600|>,2<|point;x=590;y=300;w=600;h=600|>';
     const fetchImpl = (async (
       _url: Parameters<typeof fetch>[0],
       init?: Parameters<typeof fetch>[1],
     ): Promise<Response> => {
       captured.count += 1;
       captured.body = JSON.parse(init?.body as string) as Record<string, unknown>;
+      captured.headers = { ...(init?.headers as Record<string, string>) };
       const body = sseBody([
         { type: 'response.output_text.delta', delta: line },
         { type: 'response.completed', usage: { images_processed: 2 } },
@@ -130,10 +136,22 @@ describe('segmentPoints', (): void => {
     assert.equal(captured.body['model'], 'sam-3.1');
     assert.equal(captured.body['stream'], true);
     assert.deepEqual(captured.body['metadata'], { include_confidence: 'true' });
-    assert.equal(
-      captured.body['input_text'],
-      '<0f>1<|point;x=15;y=25;w=600;h=600|>,2<|point;x=590;y=300;w=600;h=600|>',
-    );
+    assert.ok(!('input_text' in captured.body));
+    assert.ok(!('image' in captured.body));
+    const input: unknown = captured.body['input'];
+    assert.ok(Array.isArray(input));
+    assert.equal((input as unknown[]).length, 1);
+    const message = (input as Array<Record<string, unknown>>)[0] as Record<string, unknown>;
+    assert.equal(message['type'], 'message');
+    assert.equal(message['role'], 'user');
+    const content = message['content'] as Array<Record<string, unknown>>;
+    assert.ok(Array.isArray(content));
+    assert.equal(content.length, 2);
+    assert.equal(content[0]?.['type'], 'input_text');
+    assert.equal(content[0]?.['text'], expectedPrompt);
+    assert.equal(content[1]?.['type'], 'input_image');
+    assert.equal(content[1]?.['image_url'], 'data:image/jpeg;base64,AQID');
+    assert.equal(captured.headers['Accept'], 'text/event-stream');
     assert.equal(result.imagesProcessed, 2);
     assert.equal(result.costUSD, 0.0025 * 2);
     assert.equal(result.boxes.length, 1);

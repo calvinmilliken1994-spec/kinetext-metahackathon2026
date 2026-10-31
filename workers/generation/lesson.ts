@@ -1204,7 +1204,7 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
         try {
           const loaded = loadFigure(first.id);
           labelFigure = loaded;
-          labelImage = { mime: loaded.meta.mime, base64: Buffer.from(loaded.bytes).toString('base64') };
+          labelImage = { figureId: loaded.meta.id, mime: loaded.meta.mime, base64: Buffer.from(loaded.bytes).toString('base64') };
         } catch {
           labelFigure = null; // FIGURE_NOT_FOUND / FIGURE_HASH_MISMATCH → component-level failure below
         }

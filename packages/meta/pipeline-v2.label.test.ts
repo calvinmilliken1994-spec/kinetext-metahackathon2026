@@ -24,8 +24,10 @@ const fakeReceipt: MetaReceipt = {
   attempts: 1
 };
 
-const LABEL_IMAGE = { mime: 'image/jpeg', base64: 'aGVsbG8td29ybGQ=' };
+const LABEL_FIGURE_ID = 'drag-fig-1';
+const LABEL_IMAGE = { mime: 'image/jpeg', base64: 'aGVsbG8td29ybGQ=', figureId: LABEL_FIGURE_ID };
 const LABEL_DATA_URL = 'data:image/jpeg;base64,aGVsbG8td29ybGQ=';
+const LABEL_ID_LINE = `The figure attached is figureId "${LABEL_FIGURE_ID}" (use exactly this figureId).`;
 
 function loadFixture(name: string): unknown {
   return JSON.parse(readFileSync(new URL(`../../tests/fixtures/stage6/${name}`, import.meta.url), 'utf8'));
@@ -93,7 +95,14 @@ function assertNoImages(req: CompleteRequest): void {
   }
 }
 
-test('label-diagram-v1 generate sends exactly one image with the data URL', async () => {
+function assertNoFigureIdLine(req: CompleteRequest): void {
+  for (const m of req.messages) {
+    assert.equal(typeof m.content, 'string');
+    assert.ok(!(m.content as string).includes('figureId'));
+  }
+}
+
+test('label-diagram-v1 generate sends exactly one image with the data URL and the figureId line', async () => {
   const { source, golden, analysis, plan } = labelSetup();
   const requests: CompleteRequest[] = [];
   const out = await generateKitComponent(fakeClientFor(golden, requests), source, analysis, plan, 'test-live', {
@@ -106,13 +115,14 @@ test('label-diagram-v1 generate sends exactly one image with the data URL', asyn
   assert.ok(Array.isArray(sent.images));
   assert.equal(sent.images?.length, 1);
   assert.equal(sent.images?.[0]?.url, LABEL_DATA_URL);
+  assert.ok((sent.content as string).includes(LABEL_ID_LINE));
   const base = buildKitComponentMessages(source, analysis, plan);
   const baseLast: ChatMessage = base[base.length - 1] as ChatMessage;
-  assert.equal(sent.content, baseLast.content);
+  assert.equal(sent.content, `${baseLast.content}\n\n${LABEL_ID_LINE}`);
   assert.equal(sent.role, baseLast.role);
 });
 
-test('other components never send images', async () => {
+test('other components never send images and never carry the figureId line', async () => {
   const { source, golden, analysis, plan } = quizSetup();
   {
     const requests: CompleteRequest[] = [];
@@ -121,12 +131,14 @@ test('other components never send images', async () => {
     });
     assert.equal(requests.length, 1);
     assertNoImages(requests[0] as CompleteRequest);
+    assertNoFigureIdLine(requests[0] as CompleteRequest);
   }
   {
     const requests: CompleteRequest[] = [];
     await generateKitComponent(fakeClientFor(golden, requests), source, analysis, plan, 'test-live');
     assert.equal(requests.length, 1);
     assertNoImages(requests[0] as CompleteRequest);
+    assertNoFigureIdLine(requests[0] as CompleteRequest);
   }
 });
 
@@ -140,7 +152,7 @@ test('label-diagram-v1 generate without an image throws before the client is cal
   assert.equal(requests.length, 0);
 });
 
-test('label-diagram-v1 repair carries the image and guards the missing image', async () => {
+test('label-diagram-v1 repair carries the image, the figureId line, and guards the missing image', async () => {
   const { source, golden, analysis, plan } = labelSetup();
   const failing: ValidationReport = {
     artifactId: 'label-diagram-v1',
@@ -171,6 +183,7 @@ test('label-diagram-v1 repair carries the image and guards the missing image', a
     assert.ok(Array.isArray(sent.images));
     assert.equal(sent.images?.length, 1);
     assert.equal(sent.images?.[0]?.url, LABEL_DATA_URL);
+    assert.ok((sent.content as string).includes(LABEL_ID_LINE));
     assert.equal(out.report.revision, 2);
     assert.deepEqual(out.authorizedPaths, ['/title']);
   }
@@ -192,7 +205,7 @@ test('label-diagram-v1 repair carries the image and guards the missing image', a
   }
 });
 
-test('repair of other components ignores a supplied image', async () => {
+test('repair of other components ignores a supplied image and carries no figureId line', async () => {
   const { source, golden, analysis, plan } = quizSetup();
   const failing: ValidationReport = {
     artifactId: 'quiz-cards-v1',
@@ -213,6 +226,7 @@ test('repair of other components ignores a supplied image', async () => {
   );
   assert.equal(requests.length, 1);
   assertNoImages(requests[0] as CompleteRequest);
+  assertNoFigureIdLine(requests[0] as CompleteRequest);
 });
 
 test('analyzeSourceV2 forwards figures to the message builder', async () => {

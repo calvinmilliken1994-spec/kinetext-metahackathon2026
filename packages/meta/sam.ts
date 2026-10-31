@@ -240,18 +240,24 @@ export async function segmentPoints(opts: SegmentPointsOptions): Promise<Segment
   const headers: Record<string, string> = {
     Authorization: `Bearer ${opts.apiKey}`,
     'Content-Type': 'application/json',
+    Accept: 'text/event-stream',
   };
+  const imageBase64: string = Buffer.from(opts.image.bytes).toString('base64');
+  const dataUrl: string = `data:${opts.image.mime};base64,${imageBase64}`;
   const bodyJson: string = JSON.stringify({
     model: SAM_MODEL,
+    input: [
+      {
+        type: 'message',
+        role: 'user',
+        content: [
+          { type: 'input_text', text: prompt },
+          { type: 'input_image', image_url: dataUrl },
+        ],
+      },
+    ],
     stream: true,
     metadata: { include_confidence: 'true' },
-    input_text: prompt,
-    image: {
-      data: Buffer.from(opts.image.bytes).toString('base64'),
-      mime: opts.image.mime,
-      width: opts.image.width,
-      height: opts.image.height,
-    },
   });
   const fetchImpl: typeof fetch = opts.fetch ?? (globalThis.fetch as typeof fetch);
   const start: number = Date.now();

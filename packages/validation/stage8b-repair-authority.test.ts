@@ -42,3 +42,18 @@ test('without the figure list the recomputed authority must not unlock /figureId
   const r = compareKitRevisions('label-diagram-v1', golden, next, { sources, figures: [figure], labelRegions: regionsAt(golden) });
   assert.equal(r.passed, false);
 });
+
+test('LD-06 tolerates a point a few pixels outside a thin region (live water-cycle arrow) but not a far one', () => {
+  const regions = regionsAt(golden);
+  const near = structuredClone(regions);
+  // Region 2 px wide of the point's left side: the point sits ~5 px outside, within 2% of 600 px = 12 px.
+  const p0 = golden.parts[0]!;
+  const cx = Math.round((p0.x * W) / 1000), cy = Math.round((p0.y * H) / 1000);
+  near[0] = { ...near[0]!, x1: cx + 5, x2: cx + 15, y1: cy - 40, y2: cy + 40 };
+  const ok = validateKitComponent('label-diagram-v1', golden, sources, { figures: [figure], labelRegions: near });
+  assert.ok(ok.checks.some((c) => c.id === 'LD-06' && c.passed));
+  const far = structuredClone(regions);
+  far[0] = { ...far[0]!, x1: cx + 30, x2: cx + 60, y1: cy - 40, y2: cy + 40 };
+  const bad = validateKitComponent('label-diagram-v1', golden, sources, { figures: [figure], labelRegions: far });
+  assert.ok(bad.checks.some((c) => c.id === 'LD-06' && !c.passed));
+});

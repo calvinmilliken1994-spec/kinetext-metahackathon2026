@@ -115,3 +115,6 @@ A Node check re-read every `data/figures/*.json` and its image: field set and or
 5. Publisher conditions to carry into the view/validator: credit NOAA and the NOAA program for the two JetStream figures; disclose AI edits (NOAA) and label the lesson AI-generated, never "according to NASA", with no NASA insignia shown (NASA); credit "U.S. National Library of Medicine"/MedlinePlus and "U.S. Geological Survey"; no publisher endorsement implied anywhere.
 6. `.gitattributes` currently protects `data/sources` bytes. The new `data/figures/*.json` are text: a CRLF rewrite would change their bytes (the image hashes are unaffected, but the JSONs would diff). Extending `.gitattributes` to `data/figures/**` is a lead change — this task created new files only and modified nothing.
 7. Coverage gap if the lead wants it: physics and biology have 2 figures each. The cheapest additions are the four size-rejected figures above (all otherwise eligible, all public domain) and `secondlaw-600x353.jpg`.
+
+## Lead review after the live run (2026-10-31)
+- `usgs-ph-scale-1` removed from the label set: the pH scale is one continuous colour bar, not separately drawn parts, so SAM 3.1 point prompts on its "parts" return overlapping regions (LD-07 IoU 0.69–0.88 in job-20261031050706-dc84cbe5). The page keeps its log ladder, which passed. Files are kept outside the repo.

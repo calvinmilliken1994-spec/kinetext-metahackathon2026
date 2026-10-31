@@ -55,7 +55,7 @@ function extractBetween(text: string, open: string, close: string): string {
 
 test('v1 unchanged pin and versions', () => {
   assert.equal(PROMPT_VERSION, 'v10');
-  assert.equal(STAGE6_PROMPT_VERSION, 's6-v9');
+  assert.equal(STAGE6_PROMPT_VERSION, 's6-v10');
   const source = loadSource('nasa-grc-drag-equation');
   const messages = buildAnalysisMessages(source);
   const digest = createHash('sha256').update(JSON.stringify(messages), 'utf8').digest('hex');
@@ -536,7 +536,7 @@ test('s6-v6 sequence step labels are short event names', () => {
 });
 
 test('s6-v8 every kit component has prompts', () => {
-  assert.equal(STAGE6_PROMPT_VERSION, 's6-v9');
+  assert.equal(STAGE6_PROMPT_VERSION, 's6-v10');
   assert.deepEqual(Object.keys(KIT_SCHEMA_NAMES), [...KIT_GEN_COMPONENT_IDS]);
   assert.deepEqual(Object.keys(KIT_REPAIR_SCHEMA_NAMES), [...KIT_GEN_COMPONENT_IDS]);
   assert.deepEqual(Object.keys(KIT_COMPONENT_GUIDANCE), [...KIT_GEN_COMPONENT_IDS]);

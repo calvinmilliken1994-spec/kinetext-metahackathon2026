@@ -42,6 +42,7 @@ export interface V2CallOptions {
 export interface V2ImageInput {
   mime: string;
   base64: string;
+  figureId: string;
 }
 
 export type V2GeneratedOutputStage = 'analyze-v2' | 'component' | 'component-repair' | 'analysis-v2-repair';
@@ -216,6 +217,10 @@ function labelImageDataUrl(image: V2ImageInput): string {
   return `data:${image.mime};base64,${image.base64}`;
 }
 
+function figureIdLine(image: V2ImageInput): string {
+  return `The figure attached is figureId "${image.figureId}" (use exactly this figureId).`;
+}
+
 function attachImageToUserMessage(messages: ChatMessage[], image: V2ImageInput): ChatMessage[] {
   if (messages.length === 0) {
     return messages;
@@ -223,7 +228,17 @@ function attachImageToUserMessage(messages: ChatMessage[], image: V2ImageInput):
   const head: ChatMessage[] = messages.slice(0, -1);
   const last: ChatMessage = messages[messages.length - 1] as ChatMessage;
   const url: string = labelImageDataUrl(image);
-  const updated: ChatMessage = { ...last, images: [{ url }] };
+  const line: string = figureIdLine(image);
+  const prevContent: unknown = (last as { content?: unknown }).content;
+  let nextContent: ChatMessage['content'];
+  if (typeof prevContent === 'string') {
+    nextContent = `${prevContent}\n\n${line}` as ChatMessage['content'];
+  } else if (Array.isArray(prevContent)) {
+    nextContent = [...prevContent, { type: 'text', text: line }] as unknown as ChatMessage['content'];
+  } else {
+    nextContent = line as ChatMessage['content'];
+  }
+  const updated: ChatMessage = { ...last, content: nextContent, images: [{ url }] };
   return [...head, updated];
 }
 

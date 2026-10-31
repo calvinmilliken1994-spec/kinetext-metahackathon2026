@@ -44,7 +44,7 @@ function labelAnalysis(source: SourceDocument): SourceAnalysisV2 {
 }
 
 test('prompt version is s6-v9', () => {
-  assert.equal(STAGE6_PROMPT_VERSION, 's6-v9');
+  assert.equal(STAGE6_PROMPT_VERSION, 's6-v10');
 });
 
 test('every component has gen/repair names, design text and a when row', () => {
@@ -82,7 +82,7 @@ test('label subject guidance for biology, earth-science, chemistry and physics',
       `${subject} guidance must mention label-diagram-v1`
     );
     assert.ok(
-      SUBJECT_GUIDANCE[subject].includes('may plan label-diagram-v1 when a listed figure shows parts the page names'),
+      SUBJECT_GUIDANCE[subject].includes('Plan label-diagram-v1 when a listed figure shows parts the page names.'),
       `${subject} guidance must carry the listed-figure rule`
     );
   }
