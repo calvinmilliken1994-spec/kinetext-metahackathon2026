@@ -28,7 +28,7 @@ ENGINE_LABEL = {
     "compare-table-v1": "Compare table", "formula-explorer-v1": "Formula explorer", "balance-equation-v1": "Balance equation",
     "algorithm-trace-v1": "Algorithm tracer", "log-ladder-v1": "Log-scale ladder", "threshold-v1": "Vote threshold",
     "data-table-v1": "Data table", "label-diagram-v1": "Label the diagram", "timeline-v1": "Timeline",
-    "forces-1d-v1": "Forces sim", "projectile-v1": "Projectile sim", "lift-equation-v1": "Lift sim",
+    "forces-1d-v1": "Forces sim", "speed-of-sound-v1": "Speed of sound sim", "projectile-v1": "Projectile sim", "lift-equation-v1": "Lift sim",
     "half-life-v1": "Half-life sim", "hardy-weinberg-v1": "Hardy-Weinberg sim", "compound-interest-v1": "Compound interest sim",
 }
 
@@ -190,10 +190,14 @@ COL = {"muse-spark-1.3": "#0064e0", "muse-spark-open": "#00a884"}
 FONT = "font-family='Inter, Segoe UI, system-ui, sans-serif'"
 
 
+def esc(s):
+    return str(s).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
 def svg_wrap(w, h, body, title):
     return (f"<svg xmlns='http://www.w3.org/2000/svg' width='{w}' height='{h}' viewBox='0 0 {w} {h}' {FONT}>"
             f"<rect width='100%' height='100%' fill='#ffffff'/>"
-            f"<text x='24' y='36' font-size='20' font-weight='600' fill='{FG}'>{title}</text>{body}</svg>")
+            f"<text x='24' y='36' font-size='20' font-weight='600' fill='{FG}'>{esc(title)}</text>{body}</svg>")
 
 
 def legend(x, y):
@@ -206,7 +210,7 @@ def legend(x, y):
 
 def grouped_rate_chart(path, title, cats, values, cat_label):
     """values[model][cat] = rate dict; horizontal bars with Wilson whiskers, 0..100%."""
-    w, left, right, top, row = 960, 190, 60, 80, 46
+    w, left, right, top, row = 960, 190, 150, 80, 46
     h = top + row * len(cats) + 50
     pw = w - left - right
     body = legend(left, 62)
@@ -215,7 +219,7 @@ def grouped_rate_chart(path, title, cats, values, cat_label):
         body += f"<line x1='{x}' y1='{top - 6}' x2='{x}' y2='{h - 40}' stroke='{GRID}'/><text x='{x}' y='{h - 20}' font-size='12' fill='{MUTED}' text-anchor='middle'>{t}%</text>"
     for i, c in enumerate(cats):
         y0 = top + i * row
-        body += f"<text x='{left - 12}' y='{y0 + 24}' font-size='14' fill='{FG}' text-anchor='end'>{cat_label(c)}</text>"
+        body += f"<text x='{left - 12}' y='{y0 + 24}' font-size='14' fill='{FG}' text-anchor='end'>{esc(cat_label(c))}</text>"
         for k, m in enumerate(MODELS):
             r = values[m].get(c)
             if not r or r["rate"] is None:
@@ -223,12 +227,14 @@ def grouped_rate_chart(path, title, cats, values, cat_label):
             y = y0 + 6 + k * 17
             body += f"<rect x='{left}' y='{y}' width='{pw * r['rate']:.1f}' height='14' rx='3' fill='{COL[m]}'/>"
             lo, hi = r["ci95"]
-            body += f"<line x1='{left + pw * lo:.1f}' y1='{y + 7}' x2='{left + pw * hi:.1f}' y2='{y + 7}' stroke='{FG}' stroke-width='1.5' opacity='0.55'/>"
-            body += f"<text x='{left + pw * r['rate'] + 8:.1f}' y='{y + 12}' font-size='12' fill='{MUTED}'>{round(100 * r['rate'])}% ({r['k']}/{r['n']})</text>"
+            body += (f"<line x1='{left + pw * lo:.1f}' y1='{y + 7}' x2='{left + pw * hi:.1f}' y2='{y + 7}' stroke='{FG}' stroke-width='1.5' opacity='0.45'/>"
+                     f"<line x1='{left + pw * lo:.1f}' y1='{y + 3}' x2='{left + pw * lo:.1f}' y2='{y + 11}' stroke='{FG}' stroke-width='1.5' opacity='0.45'/>"
+                     f"<line x1='{left + pw * hi:.1f}' y1='{y + 3}' x2='{left + pw * hi:.1f}' y2='{y + 11}' stroke='{FG}' stroke-width='1.5' opacity='0.45'/>")
+            body += f"<text x='{left + pw + 12:.1f}' y='{y + 12}' font-size='12' fill='{COL[m]}' font-weight='600'>{round(100 * r['rate'])}%</text><text x='{left + pw + 52:.1f}' y='{y + 12}' font-size='12' fill='{MUTED}'>({r['k']}/{r['n']})</text>"
     path.write_text(svg_wrap(w, h, body, title), encoding="utf-8", newline="\n")
 
 
-def bar_pair_chart(path, title, items, unit):
+def bar_pair_chart(path, title, items, unit, digits=2, prefix=''):
     """items: list of (label, {model: value}); vertical grouped bars."""
     w, h, left, bottom, top = 960, 420, 70, 70, 90
     vmax = max((v for _, d in items for v in d.values() if v is not None), default=1) * 1.18
@@ -238,7 +244,7 @@ def bar_pair_chart(path, title, items, unit):
     for t in range(5):
         v = vmax * t / 4
         y = top + ph - ph * t / 4
-        body += f"<line x1='{left}' y1='{y}' x2='{w - 30}' y2='{y}' stroke='{GRID}'/><text x='{left - 8}' y='{y + 4}' font-size='12' fill='{MUTED}' text-anchor='end'>{v:.2f}{unit}</text>"
+        body += f"<line x1='{left}' y1='{y}' x2='{w - 30}' y2='{y}' stroke='{GRID}'/><text x='{left - 8}' y='{y + 4}' font-size='12' fill='{MUTED}' text-anchor='end'>{prefix}{v:.{digits}f}{unit}</text>"
     for i, (lab, d) in enumerate(items):
         x0 = left + i * gw
         for k, m in enumerate(MODELS):
@@ -248,8 +254,8 @@ def bar_pair_chart(path, title, items, unit):
             bh = ph * v / vmax
             x = x0 + gw * 0.18 + k * gw * 0.32
             body += f"<rect x='{x:.1f}' y='{top + ph - bh:.1f}' width='{gw * 0.28:.1f}' height='{bh:.1f}' rx='3' fill='{COL[m]}'/>"
-            body += f"<text x='{x + gw * 0.14:.1f}' y='{top + ph - bh - 6:.1f}' font-size='12' fill='{FG}' text-anchor='middle'>{v:.2f}{unit}</text>"
-        body += f"<text x='{x0 + gw / 2:.1f}' y='{h - bottom + 24}' font-size='14' fill='{FG}' text-anchor='middle'>{lab}</text>"
+            body += f"<text x='{x + gw * 0.14:.1f}' y='{top + ph - bh - 6:.1f}' font-size='13' font-weight='600' fill='{FG}' text-anchor='middle'>{prefix}{v:.{digits}f}{unit}</text>"
+        body += f"<text x='{x0 + gw / 2:.1f}' y='{h - bottom + 24}' font-size='14' fill='{FG}' text-anchor='middle'>{esc(lab)}</text>"
     path.write_text(svg_wrap(w, h, body, title), encoding="utf-8", newline="\n")
 
 
@@ -272,7 +278,7 @@ def stacked_paths_chart(path, title, paths):
         for k in cols:
             ww = pw * p[k] / tot
             body += f"<rect x='{x:.1f}' y='{y + 6}' width='{ww:.1f}' height='28' fill='{cols[k]}'/>"
-            if ww > 60:
+            if ww > 46:
                 body += f"<text x='{x + ww / 2:.1f}' y='{y + 25}' font-size='13' fill='{'#ffffff' if k == 'firstTry' else FG}' text-anchor='middle'>{p[k]} ({round(100 * p[k] / tot)}%)</text>"
             x += ww
     path.write_text(svg_wrap(w, h, body, title), encoding="utf-8", newline="\n")
@@ -287,7 +293,7 @@ def engine_chart(path, title, eng):
     body = legend(left, 62)
     for i, k in enumerate(keys):
         y0 = top + i * row
-        body += f"<text x='{left - 12}' y='{y0 + 18}' font-size='13' fill='{FG}' text-anchor='end'>{ENGINE_LABEL.get(k, k)}</text>"
+        body += f"<text x='{left - 12}' y='{y0 + 18}' font-size='13' fill='{FG}' text-anchor='end'>{esc(ENGINE_LABEL.get(k, k))}</text>"
         for j, m in enumerate(MODELS):
             d = eng[m].get(k, {"planned": 0, "published": 0})
             y = y0 + 4 + j * 13
@@ -366,9 +372,9 @@ def main():
                         {m: summary["models"][m]["overall"]["outcomePaths"] for m in MODELS})
     o = {m: summary["models"][m]["overall"] for m in MODELS}
     bar_pair_chart(ch / "time.svg", "Time to a finished lesson (seconds)",
-                   [("Median", {m: o[m]["wallS"]["p50"] for m in MODELS}), ("90th percentile", {m: o[m]["wallS"]["p90"] for m in MODELS})], "s")
+                   [("Median", {m: o[m]["wallS"]["p50"] for m in MODELS}), ("90th percentile", {m: o[m]["wallS"]["p90"] for m in MODELS})], " s", 0)
     bar_pair_chart(ch / "cost.svg", "Cost (USD)",
-                   [("Per lesson", {m: o[m]["costPerJob"] for m in MODELS}), ("Per published part", {m: o[m]["costPerPublishedPart"] for m in MODELS})], "")
+                   [("Per lesson", {m: o[m]["costPerJob"] for m in MODELS}), ("Per published part", {m: o[m]["costPerPublishedPart"] for m in MODELS})], "", 3, "$")
     engine_chart(ch / "engines.svg", "Which interactive parts Muse chose, and how many published", {m: summary["models"][m]["engines"] for m in MODELS})
 
     # REPORT.md

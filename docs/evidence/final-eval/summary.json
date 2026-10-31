@@ -1,0 +1,2361 @@
+{
+  "generatedAt": "2026-10-31T20:16:23",
+  "models": {
+    "muse-spark-1.3": {
+      "overall": {
+        "jobs": 194,
+        "lessonWithPart": {
+          "k": 189,
+          "n": 194,
+          "rate": 0.9742,
+          "ci95": [
+            0.9411,
+            0.9889
+          ]
+        },
+        "lessonWithPartOfUsable": {
+          "k": 189,
+          "n": 192,
+          "rate": 0.9844,
+          "ci95": [
+            0.9551,
+            0.9947
+          ]
+        },
+        "declined": {
+          "k": 2,
+          "n": 194,
+          "rate": 0.0103,
+          "ci95": [
+            0.0028,
+            0.0368
+          ]
+        },
+        "failed": {
+          "k": 3,
+          "n": 194,
+          "rate": 0.0155,
+          "ci95": [
+            0.0053,
+            0.0445
+          ]
+        },
+        "errorCodes": {
+          "NETWORK_ERROR": 1,
+          "TIMEOUT": 1,
+          "ANALYSIS_INVALID": 1
+        },
+        "partsPlanned": 379,
+        "partsPublished": 348,
+        "partsRate": {
+          "k": 348,
+          "n": 379,
+          "rate": 0.9182,
+          "ci95": [
+            0.8862,
+            0.9418
+          ]
+        },
+        "publishedPerJob": 1.794,
+        "firstTry": {
+          "k": 303,
+          "n": 379,
+          "rate": 0.7995,
+          "ci95": [
+            0.7562,
+            0.8367
+          ]
+        },
+        "naturalRepair": {
+          "k": 45,
+          "n": 76,
+          "rate": 0.5921,
+          "ci95": [
+            0.4798,
+            0.6956
+          ]
+        },
+        "repairTargets": {
+          "FE-08": 20,
+          "LD-07": 10,
+          "CM-03": 10,
+          "schema.gen": 10,
+          "LD-06": 9,
+          "FE-05": 6,
+          "DT-05": 5,
+          "LD-04": 5,
+          "DT-01": 5,
+          "SEQ-03": 4,
+          "DT-04": 4,
+          "Q-06": 3
+        },
+        "analysisRepairs": 22,
+        "wallS": {
+          "p50": 75.286,
+          "p90": 144.82,
+          "max": 251.174
+        },
+        "costUSD": 29.1409,
+        "costPerJob": 0.1502,
+        "costPerPublishedPart": 0.0837,
+        "failedPartCostUSD": 4.2126,
+        "reservedUnknownUSD": 0.2866,
+        "tokens": {
+          "promptTokens": 3259024,
+          "completionTokens": 5988647,
+          "reasoningTokens": 5590208
+        },
+        "sam": {
+          "calls": 23,
+          "usd": 0.0575,
+          "msP50": 2802
+        },
+        "outcomePaths": {
+          "firstTry": 303,
+          "repaired": 45,
+          "failed": 31
+        }
+      },
+      "bySubject": {
+        "biology": {
+          "jobs": 22,
+          "lessonWithPart": {
+            "k": 22,
+            "n": 22,
+            "rate": 1.0,
+            "ci95": [
+              0.8513,
+              1.0
+            ]
+          },
+          "lessonWithPartOfUsable": {
+            "k": 22,
+            "n": 22,
+            "rate": 1.0,
+            "ci95": [
+              0.8513,
+              1.0
+            ]
+          },
+          "declined": {
+            "k": 0,
+            "n": 22,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1487
+            ]
+          },
+          "failed": {
+            "k": 0,
+            "n": 22,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1487
+            ]
+          },
+          "errorCodes": {},
+          "partsPlanned": 44,
+          "partsPublished": 37,
+          "partsRate": {
+            "k": 37,
+            "n": 44,
+            "rate": 0.8409,
+            "ci95": [
+              0.7063,
+              0.9207
+            ]
+          },
+          "publishedPerJob": 1.682,
+          "firstTry": {
+            "k": 30,
+            "n": 44,
+            "rate": 0.6818,
+            "ci95": [
+              0.5344,
+              0.8
+            ]
+          },
+          "naturalRepair": {
+            "k": 7,
+            "n": 14,
+            "rate": 0.5,
+            "ci95": [
+              0.268,
+              0.732
+            ]
+          },
+          "repairTargets": {
+            "CM-03": 9,
+            "LD-06": 6,
+            "LD-07": 6,
+            "LD-04": 3,
+            "SEQ-03": 2,
+            "schema.gen": 1,
+            "SORT-01": 1
+          },
+          "analysisRepairs": 2,
+          "wallS": {
+            "p50": 86.321,
+            "p90": 143.265,
+            "max": 167.374
+          },
+          "costUSD": 3.3621,
+          "costPerJob": 0.1528,
+          "costPerPublishedPart": 0.0909,
+          "failedPartCostUSD": 0.7461,
+          "reservedUnknownUSD": 0.0,
+          "tokens": {
+            "promptTokens": 372213,
+            "completionTokens": 695598,
+            "reasoningTokens": 652588
+          },
+          "sam": {
+            "calls": 10,
+            "usd": 0.025,
+            "msP50": 3133
+          },
+          "outcomePaths": {
+            "firstTry": 30,
+            "repaired": 7,
+            "failed": 7
+          }
+        },
+        "chemistry": {
+          "jobs": 20,
+          "lessonWithPart": {
+            "k": 18,
+            "n": 20,
+            "rate": 0.9,
+            "ci95": [
+              0.699,
+              0.9721
+            ]
+          },
+          "lessonWithPartOfUsable": {
+            "k": 18,
+            "n": 18,
+            "rate": 1.0,
+            "ci95": [
+              0.8241,
+              1.0
+            ]
+          },
+          "declined": {
+            "k": 2,
+            "n": 20,
+            "rate": 0.1,
+            "ci95": [
+              0.0279,
+              0.301
+            ]
+          },
+          "failed": {
+            "k": 0,
+            "n": 20,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1611
+            ]
+          },
+          "errorCodes": {},
+          "partsPlanned": 36,
+          "partsPublished": 33,
+          "partsRate": {
+            "k": 33,
+            "n": 36,
+            "rate": 0.9167,
+            "ci95": [
+              0.7817,
+              0.9713
+            ]
+          },
+          "publishedPerJob": 1.65,
+          "firstTry": {
+            "k": 31,
+            "n": 36,
+            "rate": 0.8611,
+            "ci95": [
+              0.7134,
+              0.9392
+            ]
+          },
+          "naturalRepair": {
+            "k": 2,
+            "n": 5,
+            "rate": 0.4,
+            "ci95": [
+              0.1176,
+              0.7693
+            ]
+          },
+          "repairTargets": {
+            "FE-08": 4,
+            "LD-07": 1,
+            "BAL-09": 1,
+            "Q-06": 1
+          },
+          "analysisRepairs": 0,
+          "wallS": {
+            "p50": 65.96,
+            "p90": 100.037,
+            "max": 184.325
+          },
+          "costUSD": 2.5095,
+          "costPerJob": 0.1255,
+          "costPerPublishedPart": 0.076,
+          "failedPartCostUSD": 0.3764,
+          "reservedUnknownUSD": 0.0,
+          "tokens": {
+            "promptTokens": 298988,
+            "completionTokens": 517892,
+            "reasoningTokens": 487241
+          },
+          "sam": {
+            "calls": 3,
+            "usd": 0.0075,
+            "msP50": 1415
+          },
+          "outcomePaths": {
+            "firstTry": 31,
+            "repaired": 2,
+            "failed": 3
+          }
+        },
+        "civics": {
+          "jobs": 20,
+          "lessonWithPart": {
+            "k": 20,
+            "n": 20,
+            "rate": 1.0,
+            "ci95": [
+              0.8389,
+              1.0
+            ]
+          },
+          "lessonWithPartOfUsable": {
+            "k": 20,
+            "n": 20,
+            "rate": 1.0,
+            "ci95": [
+              0.8389,
+              1.0
+            ]
+          },
+          "declined": {
+            "k": 0,
+            "n": 20,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1611
+            ]
+          },
+          "failed": {
+            "k": 0,
+            "n": 20,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1611
+            ]
+          },
+          "errorCodes": {},
+          "partsPlanned": 40,
+          "partsPublished": 40,
+          "partsRate": {
+            "k": 40,
+            "n": 40,
+            "rate": 1.0,
+            "ci95": [
+              0.9124,
+              1.0
+            ]
+          },
+          "publishedPerJob": 2.0,
+          "firstTry": {
+            "k": 31,
+            "n": 40,
+            "rate": 0.775,
+            "ci95": [
+              0.625,
+              0.8768
+            ]
+          },
+          "naturalRepair": {
+            "k": 9,
+            "n": 9,
+            "rate": 1.0,
+            "ci95": [
+              0.7008,
+              1.0
+            ]
+          },
+          "repairTargets": {
+            "schema.gen": 3,
+            "TH-06": 1,
+            "DT-04": 1,
+            "DT-05": 1,
+            "CT-02": 1,
+            "DT-01": 1
+          },
+          "analysisRepairs": 5,
+          "wallS": {
+            "p50": 68.91,
+            "p90": 117.895,
+            "max": 145.669
+          },
+          "costUSD": 2.6266,
+          "costPerJob": 0.1313,
+          "costPerPublishedPart": 0.0657,
+          "failedPartCostUSD": 0,
+          "reservedUnknownUSD": 0.0,
+          "tokens": {
+            "promptTokens": 328262,
+            "completionTokens": 542481,
+            "reasoningTokens": 502718
+          },
+          "sam": {
+            "calls": 0,
+            "usd": 0.0,
+            "msP50": null
+          },
+          "outcomePaths": {
+            "firstTry": 31,
+            "repaired": 9,
+            "failed": 0
+          }
+        },
+        "computing": {
+          "jobs": 20,
+          "lessonWithPart": {
+            "k": 20,
+            "n": 20,
+            "rate": 1.0,
+            "ci95": [
+              0.8389,
+              1.0
+            ]
+          },
+          "lessonWithPartOfUsable": {
+            "k": 20,
+            "n": 20,
+            "rate": 1.0,
+            "ci95": [
+              0.8389,
+              1.0
+            ]
+          },
+          "declined": {
+            "k": 0,
+            "n": 20,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1611
+            ]
+          },
+          "failed": {
+            "k": 0,
+            "n": 20,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1611
+            ]
+          },
+          "errorCodes": {},
+          "partsPlanned": 40,
+          "partsPublished": 39,
+          "partsRate": {
+            "k": 39,
+            "n": 40,
+            "rate": 0.975,
+            "ci95": [
+              0.8712,
+              0.9956
+            ]
+          },
+          "publishedPerJob": 1.95,
+          "firstTry": {
+            "k": 35,
+            "n": 40,
+            "rate": 0.875,
+            "ci95": [
+              0.7389,
+              0.9454
+            ]
+          },
+          "naturalRepair": {
+            "k": 4,
+            "n": 5,
+            "rate": 0.8,
+            "ci95": [
+              0.3755,
+              0.9638
+            ]
+          },
+          "repairTargets": {
+            "schema.gen": 2,
+            "Q-06": 1,
+            "DT-05": 1,
+            "CM-03": 1
+          },
+          "analysisRepairs": 4,
+          "wallS": {
+            "p50": 62.381,
+            "p90": 128.923,
+            "max": 172.786
+          },
+          "costUSD": 2.6454,
+          "costPerJob": 0.1323,
+          "costPerPublishedPart": 0.0678,
+          "failedPartCostUSD": 0.1655,
+          "reservedUnknownUSD": 0.0,
+          "tokens": {
+            "promptTokens": 299115,
+            "completionTokens": 555192,
+            "reasoningTokens": 521078
+          },
+          "sam": {
+            "calls": 0,
+            "usd": 0.0,
+            "msP50": null
+          },
+          "outcomePaths": {
+            "firstTry": 35,
+            "repaired": 4,
+            "failed": 1
+          }
+        },
+        "earth-science": {
+          "jobs": 22,
+          "lessonWithPart": {
+            "k": 21,
+            "n": 22,
+            "rate": 0.9545,
+            "ci95": [
+              0.782,
+              0.9919
+            ]
+          },
+          "lessonWithPartOfUsable": {
+            "k": 21,
+            "n": 22,
+            "rate": 0.9545,
+            "ci95": [
+              0.782,
+              0.9919
+            ]
+          },
+          "declined": {
+            "k": 0,
+            "n": 22,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1487
+            ]
+          },
+          "failed": {
+            "k": 1,
+            "n": 22,
+            "rate": 0.0455,
+            "ci95": [
+              0.0081,
+              0.218
+            ]
+          },
+          "errorCodes": {
+            "ANALYSIS_INVALID": 1
+          },
+          "partsPlanned": 42,
+          "partsPublished": 37,
+          "partsRate": {
+            "k": 37,
+            "n": 42,
+            "rate": 0.881,
+            "ci95": [
+              0.75,
+              0.9481
+            ]
+          },
+          "publishedPerJob": 1.682,
+          "firstTry": {
+            "k": 32,
+            "n": 42,
+            "rate": 0.7619,
+            "ci95": [
+              0.6147,
+              0.8652
+            ]
+          },
+          "naturalRepair": {
+            "k": 5,
+            "n": 10,
+            "rate": 0.5,
+            "ci95": [
+              0.2366,
+              0.7634
+            ]
+          },
+          "repairTargets": {
+            "FE-08": 6,
+            "FE-02": 2,
+            "DT-04": 2,
+            "DT-05": 1,
+            "Q-06": 1,
+            "LD-04": 1,
+            "LOG-02": 1
+          },
+          "analysisRepairs": 2,
+          "wallS": {
+            "p50": 87.215,
+            "p90": 129.958,
+            "max": 229.589
+          },
+          "costUSD": 3.4748,
+          "costPerJob": 0.1579,
+          "costPerPublishedPart": 0.0939,
+          "failedPartCostUSD": 0.6383,
+          "reservedUnknownUSD": 0.0,
+          "tokens": {
+            "promptTokens": 416011,
+            "completionTokens": 727554,
+            "reasoningTokens": 679188
+          },
+          "sam": {
+            "calls": 3,
+            "usd": 0.0075,
+            "msP50": 2670
+          },
+          "outcomePaths": {
+            "firstTry": 32,
+            "repaired": 5,
+            "failed": 5
+          }
+        },
+        "finance": {
+          "jobs": 22,
+          "lessonWithPart": {
+            "k": 22,
+            "n": 22,
+            "rate": 1.0,
+            "ci95": [
+              0.8513,
+              1.0
+            ]
+          },
+          "lessonWithPartOfUsable": {
+            "k": 22,
+            "n": 22,
+            "rate": 1.0,
+            "ci95": [
+              0.8513,
+              1.0
+            ]
+          },
+          "declined": {
+            "k": 0,
+            "n": 22,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1487
+            ]
+          },
+          "failed": {
+            "k": 0,
+            "n": 22,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1487
+            ]
+          },
+          "errorCodes": {},
+          "partsPlanned": 44,
+          "partsPublished": 41,
+          "partsRate": {
+            "k": 41,
+            "n": 44,
+            "rate": 0.9318,
+            "ci95": [
+              0.8177,
+              0.9765
+            ]
+          },
+          "publishedPerJob": 1.864,
+          "firstTry": {
+            "k": 37,
+            "n": 44,
+            "rate": 0.8409,
+            "ci95": [
+              0.7063,
+              0.9207
+            ]
+          },
+          "naturalRepair": {
+            "k": 4,
+            "n": 7,
+            "rate": 0.5714,
+            "ci95": [
+              0.2505,
+              0.8418
+            ]
+          },
+          "repairTargets": {
+            "FE-08": 6,
+            "FE-01": 3,
+            "FE-05": 2,
+            "repair.no-weakening": 2,
+            "DT-04": 1,
+            "DT-05": 1,
+            "schema.gen": 1,
+            "Q-01": 1
+          },
+          "analysisRepairs": 2,
+          "wallS": {
+            "p50": 92.538,
+            "p90": 153.826,
+            "max": 192.913
+          },
+          "costUSD": 3.6642,
+          "costPerJob": 0.1666,
+          "costPerPublishedPart": 0.0894,
+          "failedPartCostUSD": 0.5004,
+          "reservedUnknownUSD": 0.0,
+          "tokens": {
+            "promptTokens": 364961,
+            "completionTokens": 767524,
+            "reasoningTokens": 722933
+          },
+          "sam": {
+            "calls": 0,
+            "usd": 0.0,
+            "msP50": null
+          },
+          "outcomePaths": {
+            "firstTry": 37,
+            "repaired": 4,
+            "failed": 3
+          }
+        },
+        "history": {
+          "jobs": 22,
+          "lessonWithPart": {
+            "k": 20,
+            "n": 22,
+            "rate": 0.9091,
+            "ci95": [
+              0.7218,
+              0.9747
+            ]
+          },
+          "lessonWithPartOfUsable": {
+            "k": 20,
+            "n": 22,
+            "rate": 0.9091,
+            "ci95": [
+              0.7218,
+              0.9747
+            ]
+          },
+          "declined": {
+            "k": 0,
+            "n": 22,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1487
+            ]
+          },
+          "failed": {
+            "k": 2,
+            "n": 22,
+            "rate": 0.0909,
+            "ci95": [
+              0.0253,
+              0.2782
+            ]
+          },
+          "errorCodes": {
+            "NETWORK_ERROR": 1,
+            "TIMEOUT": 1
+          },
+          "partsPlanned": 41,
+          "partsPublished": 35,
+          "partsRate": {
+            "k": 35,
+            "n": 41,
+            "rate": 0.8537,
+            "ci95": [
+              0.7156,
+              0.9312
+            ]
+          },
+          "publishedPerJob": 1.591,
+          "firstTry": {
+            "k": 27,
+            "n": 41,
+            "rate": 0.6585,
+            "ci95": [
+              0.5055,
+              0.7844
+            ]
+          },
+          "naturalRepair": {
+            "k": 8,
+            "n": 14,
+            "rate": 0.5714,
+            "ci95": [
+              0.3259,
+              0.7862
+            ]
+          },
+          "repairTargets": {
+            "schema.gen": 3
+          },
+          "analysisRepairs": 2,
+          "wallS": {
+            "p50": 112.296,
+            "p90": 211.729,
+            "max": 251.174
+          },
+          "costUSD": 4.3713,
+          "costPerJob": 0.1987,
+          "costPerPublishedPart": 0.1249,
+          "failedPartCostUSD": 1.0011,
+          "reservedUnknownUSD": 0.2866,
+          "tokens": {
+            "promptTokens": 406619,
+            "completionTokens": 852240,
+            "reasoningTokens": 788841
+          },
+          "sam": {
+            "calls": 0,
+            "usd": 0.0,
+            "msP50": null
+          },
+          "outcomePaths": {
+            "firstTry": 27,
+            "repaired": 8,
+            "failed": 6
+          }
+        },
+        "maths": {
+          "jobs": 20,
+          "lessonWithPart": {
+            "k": 20,
+            "n": 20,
+            "rate": 1.0,
+            "ci95": [
+              0.8389,
+              1.0
+            ]
+          },
+          "lessonWithPartOfUsable": {
+            "k": 20,
+            "n": 20,
+            "rate": 1.0,
+            "ci95": [
+              0.8389,
+              1.0
+            ]
+          },
+          "declined": {
+            "k": 0,
+            "n": 20,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1611
+            ]
+          },
+          "failed": {
+            "k": 0,
+            "n": 20,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1611
+            ]
+          },
+          "errorCodes": {},
+          "partsPlanned": 40,
+          "partsPublished": 36,
+          "partsRate": {
+            "k": 36,
+            "n": 40,
+            "rate": 0.9,
+            "ci95": [
+              0.7695,
+              0.9604
+            ]
+          },
+          "publishedPerJob": 1.8,
+          "firstTry": {
+            "k": 31,
+            "n": 40,
+            "rate": 0.775,
+            "ci95": [
+              0.625,
+              0.8768
+            ]
+          },
+          "naturalRepair": {
+            "k": 5,
+            "n": 9,
+            "rate": 0.5556,
+            "ci95": [
+              0.2666,
+              0.8112
+            ]
+          },
+          "repairTargets": {
+            "FE-05": 4,
+            "FE-08": 4,
+            "DT-01": 4,
+            "SEQ-03": 2,
+            "DT-03": 2,
+            "DT-05": 1
+          },
+          "analysisRepairs": 3,
+          "wallS": {
+            "p50": 82.123,
+            "p90": 143.611,
+            "max": 192.668
+          },
+          "costUSD": 3.2714,
+          "costPerJob": 0.1636,
+          "costPerPublishedPart": 0.0909,
+          "failedPartCostUSD": 0.6758,
+          "reservedUnknownUSD": 0.0,
+          "tokens": {
+            "promptTokens": 405493,
+            "completionTokens": 667934,
+            "reasoningTokens": 622628
+          },
+          "sam": {
+            "calls": 0,
+            "usd": 0.0,
+            "msP50": null
+          },
+          "outcomePaths": {
+            "firstTry": 31,
+            "repaired": 5,
+            "failed": 4
+          }
+        },
+        "physics": {
+          "jobs": 26,
+          "lessonWithPart": {
+            "k": 26,
+            "n": 26,
+            "rate": 1.0,
+            "ci95": [
+              0.8713,
+              1.0
+            ]
+          },
+          "lessonWithPartOfUsable": {
+            "k": 26,
+            "n": 26,
+            "rate": 1.0,
+            "ci95": [
+              0.8713,
+              1.0
+            ]
+          },
+          "declined": {
+            "k": 0,
+            "n": 26,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1287
+            ]
+          },
+          "failed": {
+            "k": 0,
+            "n": 26,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1287
+            ]
+          },
+          "errorCodes": {},
+          "partsPlanned": 52,
+          "partsPublished": 50,
+          "partsRate": {
+            "k": 50,
+            "n": 52,
+            "rate": 0.9615,
+            "ci95": [
+              0.8702,
+              0.9894
+            ]
+          },
+          "publishedPerJob": 1.923,
+          "firstTry": {
+            "k": 49,
+            "n": 52,
+            "rate": 0.9423,
+            "ci95": [
+              0.8436,
+              0.9802
+            ]
+          },
+          "naturalRepair": {
+            "k": 1,
+            "n": 3,
+            "rate": 0.3333,
+            "ci95": [
+              0.0615,
+              0.7923
+            ]
+          },
+          "repairTargets": {
+            "LD-06": 3,
+            "LD-07": 3,
+            "LD-05": 1,
+            "LD-04": 1
+          },
+          "analysisRepairs": 2,
+          "wallS": {
+            "p50": 66.648,
+            "p90": 82.174,
+            "max": 101.157
+          },
+          "costUSD": 3.2156,
+          "costPerJob": 0.1237,
+          "costPerPublishedPart": 0.0643,
+          "failedPartCostUSD": 0.109,
+          "reservedUnknownUSD": 0.0,
+          "tokens": {
+            "promptTokens": 367362,
+            "completionTokens": 662232,
+            "reasoningTokens": 612993
+          },
+          "sam": {
+            "calls": 7,
+            "usd": 0.0175,
+            "msP50": 3232
+          },
+          "outcomePaths": {
+            "firstTry": 49,
+            "repaired": 1,
+            "failed": 2
+          }
+        }
+      },
+      "consistency": {
+        "pages": 97,
+        "sameOutcome": {
+          "k": 94,
+          "n": 97,
+          "rate": 0.9691,
+          "ci95": [
+            0.913,
+            0.9894
+          ]
+        },
+        "samePlan": {
+          "k": 74,
+          "n": 97,
+          "rate": 0.7629,
+          "ci95": [
+            0.6693,
+            0.8365
+          ]
+        },
+        "samePublishedCount": {
+          "k": 85,
+          "n": 97,
+          "rate": 0.8763,
+          "ci95": [
+            0.7961,
+            0.9278
+          ]
+        }
+      },
+      "engines": {
+        "quiz-cards-v1": {
+          "planned": 133,
+          "published": 133
+        },
+        "sequence-v1": {
+          "planned": 58,
+          "published": 58
+        },
+        "compare-table-v1": {
+          "planned": 33,
+          "published": 33
+        },
+        "formula-explorer-v1": {
+          "planned": 29,
+          "published": 18
+        },
+        "data-table-v1": {
+          "planned": 25,
+          "published": 22
+        },
+        "sort-groups-v1": {
+          "planned": 18,
+          "published": 18
+        },
+        "timeline-v1": {
+          "planned": 18,
+          "published": 12
+        },
+        "label-diagram-v1": {
+          "planned": 11,
+          "published": 4
+        },
+        "concept-map-v1": {
+          "planned": 10,
+          "published": 6
+        },
+        "threshold-v1": {
+          "planned": 8,
+          "published": 8
+        },
+        "algorithm-trace-v1": {
+          "planned": 8,
+          "published": 8
+        },
+        "compound-interest-v1": {
+          "planned": 6,
+          "published": 6
+        },
+        "forces-1d-v1": {
+          "planned": 4,
+          "published": 4
+        },
+        "speed-of-sound-v1": {
+          "planned": 4,
+          "published": 4
+        },
+        "half-life-v1": {
+          "planned": 4,
+          "published": 4
+        },
+        "log-ladder-v1": {
+          "planned": 4,
+          "published": 4
+        },
+        "lift-equation-v1": {
+          "planned": 2,
+          "published": 2
+        },
+        "hardy-weinberg-v1": {
+          "planned": 2,
+          "published": 2
+        },
+        "balance-equation-v1": {
+          "planned": 2,
+          "published": 2
+        }
+      }
+    },
+    "muse-spark-open": {
+      "overall": {
+        "jobs": 194,
+        "lessonWithPart": {
+          "k": 178,
+          "n": 194,
+          "rate": 0.9175,
+          "ci95": [
+            0.8702,
+            0.9486
+          ]
+        },
+        "lessonWithPartOfUsable": {
+          "k": 178,
+          "n": 192,
+          "rate": 0.9271,
+          "ci95": [
+            0.8813,
+            0.9561
+          ]
+        },
+        "declined": {
+          "k": 2,
+          "n": 194,
+          "rate": 0.0103,
+          "ci95": [
+            0.0028,
+            0.0368
+          ]
+        },
+        "failed": {
+          "k": 14,
+          "n": 194,
+          "rate": 0.0722,
+          "ci95": [
+            0.0435,
+            0.1175
+          ]
+        },
+        "errorCodes": {
+          "TIMEOUT": 11,
+          "ANALYSIS_INVALID": 2
+        },
+        "partsPlanned": 374,
+        "partsPublished": 342,
+        "partsRate": {
+          "k": 342,
+          "n": 374,
+          "rate": 0.9144,
+          "ci95": [
+            0.8817,
+            0.9387
+          ]
+        },
+        "publishedPerJob": 1.763,
+        "firstTry": {
+          "k": 272,
+          "n": 374,
+          "rate": 0.7273,
+          "ci95": [
+            0.68,
+            0.7699
+          ]
+        },
+        "naturalRepair": {
+          "k": 70,
+          "n": 102,
+          "rate": 0.6863,
+          "ci95": [
+            0.5909,
+            0.7682
+          ]
+        },
+        "repairTargets": {
+          "DT-02": 22,
+          "FE-08": 21,
+          "schema.gen": 14,
+          "ALG-02": 10,
+          "DT-01": 9,
+          "DT-05": 9,
+          "DT-03": 9,
+          "repair.no-weakening": 7,
+          "FE-05": 6,
+          "DT-04": 5,
+          "Q-06": 5,
+          "CM-03": 5
+        },
+        "analysisRepairs": 86,
+        "wallS": {
+          "p50": 127.925,
+          "p90": 220.174,
+          "max": 307.97
+        },
+        "costUSD": 36.0961,
+        "costPerJob": 0.1861,
+        "costPerPublishedPart": 0.1055,
+        "failedPartCostUSD": 4.4435,
+        "reservedUnknownUSD": 2.2191,
+        "tokens": {
+          "promptTokens": 3702677,
+          "completionTokens": 6905624,
+          "reasoningTokens": 6398469
+        },
+        "sam": {
+          "calls": 0,
+          "usd": 0.0,
+          "msP50": null
+        },
+        "outcomePaths": {
+          "firstTry": 272,
+          "repaired": 70,
+          "failed": 32
+        }
+      },
+      "bySubject": {
+        "biology": {
+          "jobs": 22,
+          "lessonWithPart": {
+            "k": 21,
+            "n": 22,
+            "rate": 0.9545,
+            "ci95": [
+              0.782,
+              0.9919
+            ]
+          },
+          "lessonWithPartOfUsable": {
+            "k": 21,
+            "n": 22,
+            "rate": 0.9545,
+            "ci95": [
+              0.782,
+              0.9919
+            ]
+          },
+          "declined": {
+            "k": 0,
+            "n": 22,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1487
+            ]
+          },
+          "failed": {
+            "k": 1,
+            "n": 22,
+            "rate": 0.0455,
+            "ci95": [
+              0.0081,
+              0.218
+            ]
+          },
+          "errorCodes": {
+            "TIMEOUT": 1
+          },
+          "partsPlanned": 44,
+          "partsPublished": 41,
+          "partsRate": {
+            "k": 41,
+            "n": 44,
+            "rate": 0.9318,
+            "ci95": [
+              0.8177,
+              0.9765
+            ]
+          },
+          "publishedPerJob": 1.864,
+          "firstTry": {
+            "k": 36,
+            "n": 44,
+            "rate": 0.8182,
+            "ci95": [
+              0.6804,
+              0.9049
+            ]
+          },
+          "naturalRepair": {
+            "k": 5,
+            "n": 8,
+            "rate": 0.625,
+            "ci95": [
+              0.3057,
+              0.8632
+            ]
+          },
+          "repairTargets": {
+            "CM-03": 5,
+            "ALG-02": 2,
+            "SEQ-03": 1,
+            "SORT-01": 1
+          },
+          "analysisRepairs": 7,
+          "wallS": {
+            "p50": 127.925,
+            "p90": 158.441,
+            "max": 214.671
+          },
+          "costUSD": 3.7122,
+          "costPerJob": 0.1687,
+          "costPerPublishedPart": 0.0905,
+          "failedPartCostUSD": 0.4012,
+          "reservedUnknownUSD": 0.3651,
+          "tokens": {
+            "promptTokens": 330666,
+            "completionTokens": 690308,
+            "reasoningTokens": 645329
+          },
+          "sam": {
+            "calls": 0,
+            "usd": 0.0,
+            "msP50": null
+          },
+          "outcomePaths": {
+            "firstTry": 36,
+            "repaired": 5,
+            "failed": 3
+          }
+        },
+        "chemistry": {
+          "jobs": 20,
+          "lessonWithPart": {
+            "k": 17,
+            "n": 20,
+            "rate": 0.85,
+            "ci95": [
+              0.6396,
+              0.9476
+            ]
+          },
+          "lessonWithPartOfUsable": {
+            "k": 17,
+            "n": 18,
+            "rate": 0.9444,
+            "ci95": [
+              0.7424,
+              0.9901
+            ]
+          },
+          "declined": {
+            "k": 2,
+            "n": 20,
+            "rate": 0.1,
+            "ci95": [
+              0.0279,
+              0.301
+            ]
+          },
+          "failed": {
+            "k": 1,
+            "n": 20,
+            "rate": 0.05,
+            "ci95": [
+              0.0089,
+              0.2361
+            ]
+          },
+          "errorCodes": {
+            "TIMEOUT": 1
+          },
+          "partsPlanned": 36,
+          "partsPublished": 31,
+          "partsRate": {
+            "k": 31,
+            "n": 36,
+            "rate": 0.8611,
+            "ci95": [
+              0.7134,
+              0.9392
+            ]
+          },
+          "publishedPerJob": 1.55,
+          "firstTry": {
+            "k": 24,
+            "n": 36,
+            "rate": 0.6667,
+            "ci95": [
+              0.5033,
+              0.7979
+            ]
+          },
+          "naturalRepair": {
+            "k": 7,
+            "n": 12,
+            "rate": 0.5833,
+            "ci95": [
+              0.3195,
+              0.8067
+            ]
+          },
+          "repairTargets": {
+            "FE-08": 6,
+            "repair.no-weakening": 3,
+            "Q-06": 3,
+            "FE-05": 2,
+            "LOG-04": 2,
+            "BAL-01": 2,
+            "BAL-02": 2,
+            "Q-01": 1,
+            "Q-02": 1,
+            "Q-05": 1,
+            "CT-03": 1,
+            "LOG-07": 1
+          },
+          "analysisRepairs": 9,
+          "wallS": {
+            "p50": 120.766,
+            "p90": 205.516,
+            "max": 296.721
+          },
+          "costUSD": 3.4416,
+          "costPerJob": 0.1721,
+          "costPerPublishedPart": 0.111,
+          "failedPartCostUSD": 0.6378,
+          "reservedUnknownUSD": 0.1318,
+          "tokens": {
+            "promptTokens": 406196,
+            "completionTokens": 659296,
+            "reasoningTokens": 614253
+          },
+          "sam": {
+            "calls": 0,
+            "usd": 0.0,
+            "msP50": null
+          },
+          "outcomePaths": {
+            "firstTry": 24,
+            "repaired": 7,
+            "failed": 5
+          }
+        },
+        "civics": {
+          "jobs": 20,
+          "lessonWithPart": {
+            "k": 20,
+            "n": 20,
+            "rate": 1.0,
+            "ci95": [
+              0.8389,
+              1.0
+            ]
+          },
+          "lessonWithPartOfUsable": {
+            "k": 20,
+            "n": 20,
+            "rate": 1.0,
+            "ci95": [
+              0.8389,
+              1.0
+            ]
+          },
+          "declined": {
+            "k": 0,
+            "n": 20,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1611
+            ]
+          },
+          "failed": {
+            "k": 0,
+            "n": 20,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1611
+            ]
+          },
+          "errorCodes": {},
+          "partsPlanned": 40,
+          "partsPublished": 38,
+          "partsRate": {
+            "k": 38,
+            "n": 40,
+            "rate": 0.95,
+            "ci95": [
+              0.835,
+              0.9862
+            ]
+          },
+          "publishedPerJob": 1.9,
+          "firstTry": {
+            "k": 26,
+            "n": 40,
+            "rate": 0.65,
+            "ci95": [
+              0.4951,
+              0.7787
+            ]
+          },
+          "naturalRepair": {
+            "k": 12,
+            "n": 14,
+            "rate": 0.8571,
+            "ci95": [
+              0.6006,
+              0.9599
+            ]
+          },
+          "repairTargets": {
+            "TH-05": 4,
+            "schema.gen": 3,
+            "repair.no-weakening": 2,
+            "DT-02": 2,
+            "TH-01": 1,
+            "SEQ-01": 1,
+            "SEQ-03": 1,
+            "TH-03": 1,
+            "DT-04": 1,
+            "DT-05": 1
+          },
+          "analysisRepairs": 14,
+          "wallS": {
+            "p50": 115.512,
+            "p90": 151.927,
+            "max": 166.731
+          },
+          "costUSD": 3.2338,
+          "costPerJob": 0.1617,
+          "costPerPublishedPart": 0.0851,
+          "failedPartCostUSD": 0.1162,
+          "reservedUnknownUSD": 0.0,
+          "tokens": {
+            "promptTokens": 403574,
+            "completionTokens": 642191,
+            "reasoningTokens": 592856
+          },
+          "sam": {
+            "calls": 0,
+            "usd": 0.0,
+            "msP50": null
+          },
+          "outcomePaths": {
+            "firstTry": 26,
+            "repaired": 12,
+            "failed": 2
+          }
+        },
+        "computing": {
+          "jobs": 20,
+          "lessonWithPart": {
+            "k": 20,
+            "n": 20,
+            "rate": 1.0,
+            "ci95": [
+              0.8389,
+              1.0
+            ]
+          },
+          "lessonWithPartOfUsable": {
+            "k": 20,
+            "n": 20,
+            "rate": 1.0,
+            "ci95": [
+              0.8389,
+              1.0
+            ]
+          },
+          "declined": {
+            "k": 0,
+            "n": 20,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1611
+            ]
+          },
+          "failed": {
+            "k": 0,
+            "n": 20,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1611
+            ]
+          },
+          "errorCodes": {},
+          "partsPlanned": 40,
+          "partsPublished": 40,
+          "partsRate": {
+            "k": 40,
+            "n": 40,
+            "rate": 1.0,
+            "ci95": [
+              0.9124,
+              1.0
+            ]
+          },
+          "publishedPerJob": 2.0,
+          "firstTry": {
+            "k": 26,
+            "n": 40,
+            "rate": 0.65,
+            "ci95": [
+              0.4951,
+              0.7787
+            ]
+          },
+          "naturalRepair": {
+            "k": 14,
+            "n": 14,
+            "rate": 1.0,
+            "ci95": [
+              0.7847,
+              1.0
+            ]
+          },
+          "repairTargets": {
+            "ALG-02": 8,
+            "schema.gen": 4,
+            "ALG-03": 2,
+            "SEQ-01": 1,
+            "Q-06": 1,
+            "ALG-01": 1,
+            "CT-01": 1
+          },
+          "analysisRepairs": 6,
+          "wallS": {
+            "p50": 126.81,
+            "p90": 176.355,
+            "max": 232.571
+          },
+          "costUSD": 3.1992,
+          "costPerJob": 0.16,
+          "costPerPublishedPart": 0.08,
+          "failedPartCostUSD": 0,
+          "reservedUnknownUSD": 0.0,
+          "tokens": {
+            "promptTokens": 329342,
+            "completionTokens": 655888,
+            "reasoningTokens": 617067
+          },
+          "sam": {
+            "calls": 0,
+            "usd": 0.0,
+            "msP50": null
+          },
+          "outcomePaths": {
+            "firstTry": 26,
+            "repaired": 14,
+            "failed": 0
+          }
+        },
+        "earth-science": {
+          "jobs": 22,
+          "lessonWithPart": {
+            "k": 21,
+            "n": 22,
+            "rate": 0.9545,
+            "ci95": [
+              0.782,
+              0.9919
+            ]
+          },
+          "lessonWithPartOfUsable": {
+            "k": 21,
+            "n": 22,
+            "rate": 0.9545,
+            "ci95": [
+              0.782,
+              0.9919
+            ]
+          },
+          "declined": {
+            "k": 0,
+            "n": 22,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1487
+            ]
+          },
+          "failed": {
+            "k": 1,
+            "n": 22,
+            "rate": 0.0455,
+            "ci95": [
+              0.0081,
+              0.218
+            ]
+          },
+          "errorCodes": {
+            "ANALYSIS_INVALID": 1
+          },
+          "partsPlanned": 42,
+          "partsPublished": 38,
+          "partsRate": {
+            "k": 38,
+            "n": 42,
+            "rate": 0.9048,
+            "ci95": [
+              0.7793,
+              0.9623
+            ]
+          },
+          "publishedPerJob": 1.727,
+          "firstTry": {
+            "k": 32,
+            "n": 42,
+            "rate": 0.7619,
+            "ci95": [
+              0.6147,
+              0.8652
+            ]
+          },
+          "naturalRepair": {
+            "k": 6,
+            "n": 10,
+            "rate": 0.6,
+            "ci95": [
+              0.3127,
+              0.8318
+            ]
+          },
+          "repairTargets": {
+            "FE-08": 6,
+            "DT-02": 4,
+            "SEQ-01": 1,
+            "DT-04": 1,
+            "SORT-01": 1,
+            "schema.gen": 1,
+            "DT-01": 1,
+            "DT-03": 1,
+            "DT-06": 1,
+            "DT-08": 1,
+            "DT-05": 1
+          },
+          "analysisRepairs": 7,
+          "wallS": {
+            "p50": 150.258,
+            "p90": 247.914,
+            "max": 288.072
+          },
+          "costUSD": 3.9987,
+          "costPerJob": 0.1818,
+          "costPerPublishedPart": 0.1052,
+          "failedPartCostUSD": 0.5328,
+          "reservedUnknownUSD": 0.0,
+          "tokens": {
+            "promptTokens": 445759,
+            "completionTokens": 828080,
+            "reasoningTokens": 767244
+          },
+          "sam": {
+            "calls": 0,
+            "usd": 0.0,
+            "msP50": null
+          },
+          "outcomePaths": {
+            "firstTry": 32,
+            "repaired": 6,
+            "failed": 4
+          }
+        },
+        "finance": {
+          "jobs": 22,
+          "lessonWithPart": {
+            "k": 19,
+            "n": 22,
+            "rate": 0.8636,
+            "ci95": [
+              0.6666,
+              0.9525
+            ]
+          },
+          "lessonWithPartOfUsable": {
+            "k": 19,
+            "n": 22,
+            "rate": 0.8636,
+            "ci95": [
+              0.6666,
+              0.9525
+            ]
+          },
+          "declined": {
+            "k": 0,
+            "n": 22,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1487
+            ]
+          },
+          "failed": {
+            "k": 3,
+            "n": 22,
+            "rate": 0.1364,
+            "ci95": [
+              0.0475,
+              0.3334
+            ]
+          },
+          "errorCodes": {
+            "TIMEOUT": 3
+          },
+          "partsPlanned": 42,
+          "partsPublished": 36,
+          "partsRate": {
+            "k": 36,
+            "n": 42,
+            "rate": 0.8571,
+            "ci95": [
+              0.7216,
+              0.9328
+            ]
+          },
+          "publishedPerJob": 1.636,
+          "firstTry": {
+            "k": 31,
+            "n": 42,
+            "rate": 0.7381,
+            "ci95": [
+              0.5893,
+              0.847
+            ]
+          },
+          "naturalRepair": {
+            "k": 5,
+            "n": 11,
+            "rate": 0.4545,
+            "ci95": [
+              0.2127,
+              0.7199
+            ]
+          },
+          "repairTargets": {
+            "DT-02": 6,
+            "DT-05": 4,
+            "DT-01": 3,
+            "DT-04": 3,
+            "FE-08": 3,
+            "FE-01": 2,
+            "DT-03": 2,
+            "repair.no-weakening": 1,
+            "schema.gen": 1,
+            "DT-08": 1,
+            "CT-01": 1,
+            "SEQ-03": 1
+          },
+          "analysisRepairs": 10,
+          "wallS": {
+            "p50": 116.823,
+            "p90": 182.833,
+            "max": 295.502
+          },
+          "costUSD": 4.5778,
+          "costPerJob": 0.2081,
+          "costPerPublishedPart": 0.1272,
+          "failedPartCostUSD": 0.818,
+          "reservedUnknownUSD": 0.4564,
+          "tokens": {
+            "promptTokens": 459100,
+            "completionTokens": 834700,
+            "reasoningTokens": 771209
+          },
+          "sam": {
+            "calls": 0,
+            "usd": 0.0,
+            "msP50": null
+          },
+          "outcomePaths": {
+            "firstTry": 31,
+            "repaired": 5,
+            "failed": 6
+          }
+        },
+        "history": {
+          "jobs": 22,
+          "lessonWithPart": {
+            "k": 15,
+            "n": 22,
+            "rate": 0.6818,
+            "ci95": [
+              0.4732,
+              0.8364
+            ]
+          },
+          "lessonWithPartOfUsable": {
+            "k": 15,
+            "n": 22,
+            "rate": 0.6818,
+            "ci95": [
+              0.4732,
+              0.8364
+            ]
+          },
+          "declined": {
+            "k": 0,
+            "n": 22,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1487
+            ]
+          },
+          "failed": {
+            "k": 7,
+            "n": 22,
+            "rate": 0.3182,
+            "ci95": [
+              0.1636,
+              0.5268
+            ]
+          },
+          "errorCodes": {
+            "TIMEOUT": 6,
+            "ANALYSIS_INVALID": 1
+          },
+          "partsPlanned": 37,
+          "partsPublished": 34,
+          "partsRate": {
+            "k": 34,
+            "n": 37,
+            "rate": 0.9189,
+            "ci95": [
+              0.787,
+              0.972
+            ]
+          },
+          "publishedPerJob": 1.545,
+          "firstTry": {
+            "k": 30,
+            "n": 37,
+            "rate": 0.8108,
+            "ci95": [
+              0.6579,
+              0.9052
+            ]
+          },
+          "naturalRepair": {
+            "k": 4,
+            "n": 7,
+            "rate": 0.5714,
+            "ci95": [
+              0.2505,
+              0.8418
+            ]
+          },
+          "repairTargets": {
+            "schema.gen": 2
+          },
+          "analysisRepairs": 10,
+          "wallS": {
+            "p50": 135.184,
+            "p90": 265.646,
+            "max": 288.855
+          },
+          "costUSD": 5.1849,
+          "costPerJob": 0.2357,
+          "costPerPublishedPart": 0.1525,
+          "failedPartCostUSD": 0.5933,
+          "reservedUnknownUSD": 0.9935,
+          "tokens": {
+            "promptTokens": 379452,
+            "completionTokens": 879867,
+            "reasoningTokens": 818086
+          },
+          "sam": {
+            "calls": 0,
+            "usd": 0.0,
+            "msP50": null
+          },
+          "outcomePaths": {
+            "firstTry": 30,
+            "repaired": 4,
+            "failed": 3
+          }
+        },
+        "maths": {
+          "jobs": 20,
+          "lessonWithPart": {
+            "k": 20,
+            "n": 20,
+            "rate": 1.0,
+            "ci95": [
+              0.8389,
+              1.0
+            ]
+          },
+          "lessonWithPartOfUsable": {
+            "k": 20,
+            "n": 20,
+            "rate": 1.0,
+            "ci95": [
+              0.8389,
+              1.0
+            ]
+          },
+          "declined": {
+            "k": 0,
+            "n": 20,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1611
+            ]
+          },
+          "failed": {
+            "k": 0,
+            "n": 20,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1611
+            ]
+          },
+          "errorCodes": {},
+          "partsPlanned": 41,
+          "partsPublished": 34,
+          "partsRate": {
+            "k": 34,
+            "n": 41,
+            "rate": 0.8293,
+            "ci95": [
+              0.6874,
+              0.9147
+            ]
+          },
+          "publishedPerJob": 1.7,
+          "firstTry": {
+            "k": 25,
+            "n": 41,
+            "rate": 0.6098,
+            "ci95": [
+              0.4573,
+              0.7434
+            ]
+          },
+          "naturalRepair": {
+            "k": 9,
+            "n": 16,
+            "rate": 0.5625,
+            "ci95": [
+              0.3318,
+              0.769
+            ]
+          },
+          "repairTargets": {
+            "DT-02": 8,
+            "FE-08": 6,
+            "DT-03": 5,
+            "FE-05": 4,
+            "DT-01": 4,
+            "DT-05": 2,
+            "SORT-02": 2,
+            "schema.gen": 1,
+            "FE-03": 1,
+            "Q-06": 1,
+            "SEQ-03": 1,
+            "repair.no-weakening": 1
+          },
+          "analysisRepairs": 13,
+          "wallS": {
+            "p50": 132.847,
+            "p90": 238.742,
+            "max": 307.97
+          },
+          "costUSD": 4.4208,
+          "costPerJob": 0.221,
+          "costPerPublishedPart": 0.13,
+          "failedPartCostUSD": 1.1119,
+          "reservedUnknownUSD": 0.2723,
+          "tokens": {
+            "promptTokens": 512535,
+            "completionTokens": 825390,
+            "reasoningTokens": 761565
+          },
+          "sam": {
+            "calls": 0,
+            "usd": 0.0,
+            "msP50": null
+          },
+          "outcomePaths": {
+            "firstTry": 25,
+            "repaired": 9,
+            "failed": 7
+          }
+        },
+        "physics": {
+          "jobs": 26,
+          "lessonWithPart": {
+            "k": 25,
+            "n": 26,
+            "rate": 0.9615,
+            "ci95": [
+              0.8111,
+              0.9932
+            ]
+          },
+          "lessonWithPartOfUsable": {
+            "k": 25,
+            "n": 26,
+            "rate": 0.9615,
+            "ci95": [
+              0.8111,
+              0.9932
+            ]
+          },
+          "declined": {
+            "k": 0,
+            "n": 26,
+            "rate": 0.0,
+            "ci95": [
+              0.0,
+              0.1287
+            ]
+          },
+          "failed": {
+            "k": 1,
+            "n": 26,
+            "rate": 0.0385,
+            "ci95": [
+              0.0068,
+              0.1889
+            ]
+          },
+          "errorCodes": {},
+          "partsPlanned": 52,
+          "partsPublished": 50,
+          "partsRate": {
+            "k": 50,
+            "n": 52,
+            "rate": 0.9615,
+            "ci95": [
+              0.8702,
+              0.9894
+            ]
+          },
+          "publishedPerJob": 1.923,
+          "firstTry": {
+            "k": 42,
+            "n": 52,
+            "rate": 0.8077,
+            "ci95": [
+              0.681,
+              0.892
+            ]
+          },
+          "naturalRepair": {
+            "k": 8,
+            "n": 10,
+            "rate": 0.8,
+            "ci95": [
+              0.4902,
+              0.9433
+            ]
+          },
+          "repairTargets": {
+            "schema.gen": 2,
+            "DT-02": 2,
+            "FE-02": 2,
+            "DT-03": 1,
+            "FE-03": 1,
+            "DT-01": 1,
+            "DT-05": 1
+          },
+          "analysisRepairs": 10,
+          "wallS": {
+            "p50": 116.917,
+            "p90": 205.298,
+            "max": 220.174
+          },
+          "costUSD": 4.3272,
+          "costPerJob": 0.1664,
+          "costPerPublishedPart": 0.0865,
+          "failedPartCostUSD": 0.2322,
+          "reservedUnknownUSD": 0.0,
+          "tokens": {
+            "promptTokens": 436053,
+            "completionTokens": 889904,
+            "reasoningTokens": 810860
+          },
+          "sam": {
+            "calls": 0,
+            "usd": 0.0,
+            "msP50": null
+          },
+          "outcomePaths": {
+            "firstTry": 42,
+            "repaired": 8,
+            "failed": 2
+          }
+        }
+      },
+      "consistency": {
+        "pages": 97,
+        "sameOutcome": {
+          "k": 87,
+          "n": 97,
+          "rate": 0.8969,
+          "ci95": [
+            0.8205,
+            0.943
+          ]
+        },
+        "samePlan": {
+          "k": 55,
+          "n": 97,
+          "rate": 0.567,
+          "ci95": [
+            0.4677,
+            0.6612
+          ]
+        },
+        "samePublishedCount": {
+          "k": 74,
+          "n": 97,
+          "rate": 0.7629,
+          "ci95": [
+            0.6693,
+            0.8365
+          ]
+        }
+      },
+      "engines": {
+        "quiz-cards-v1": {
+          "planned": 124,
+          "published": 124
+        },
+        "sequence-v1": {
+          "planned": 81,
+          "published": 81
+        },
+        "compare-table-v1": {
+          "planned": 32,
+          "published": 30
+        },
+        "formula-explorer-v1": {
+          "planned": 28,
+          "published": 18
+        },
+        "sort-groups-v1": {
+          "planned": 25,
+          "published": 23
+        },
+        "data-table-v1": {
+          "planned": 22,
+          "published": 17
+        },
+        "timeline-v1": {
+          "planned": 9,
+          "published": 6
+        },
+        "algorithm-trace-v1": {
+          "planned": 9,
+          "published": 8
+        },
+        "half-life-v1": {
+          "planned": 9,
+          "published": 8
+        },
+        "threshold-v1": {
+          "planned": 8,
+          "published": 6
+        },
+        "compound-interest-v1": {
+          "planned": 5,
+          "published": 3
+        },
+        "concept-map-v1": {
+          "planned": 4,
+          "published": 2
+        },
+        "forces-1d-v1": {
+          "planned": 4,
+          "published": 4
+        },
+        "log-ladder-v1": {
+          "planned": 4,
+          "published": 4
+        },
+        "speed-of-sound-v1": {
+          "planned": 3,
+          "published": 2
+        },
+        "balance-equation-v1": {
+          "planned": 3,
+          "published": 2
+        },
+        "lift-equation-v1": {
+          "planned": 2,
+          "published": 2
+        },
+        "hardy-weinberg-v1": {
+          "planned": 2,
+          "published": 2
+        }
+      }
+    }
+  },
+  "paired": {
+    "pages": 97,
+    "sparkAhead": 18,
+    "openAhead": 11,
+    "tied": 68
+  }
+}
