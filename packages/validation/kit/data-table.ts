@@ -73,7 +73,7 @@ function questionsOf(gen: DataTableGen): DataQuestionGen[] {
  *   - a trailing footnote mark is not part of the number ("0.384" is whole in "0.384*").
  * `printed` is the longer printed run around a blocked occurrence, for the plain-language message.
  */
-export function valueAsPrintedIn(value: unknown, quote: unknown): { ok: boolean; contained: boolean; printed: string | null } {
+export function valueAsPrintedIn(value: unknown, quote: unknown, sourceText?: string): { ok: boolean; contained: boolean; printed: string | null } {
   if (typeof value !== 'string' || typeof quote !== 'string') return { ok: false, contained: false, printed: null };
   const hay = normalizeWhitespace(quote).toLowerCase();
   const ndl = normalizeWhitespace(value).toLowerCase();
@@ -82,37 +82,60 @@ export function valueAsPrintedIn(value: unknown, quote: unknown): { ok: boolean;
   const startsLetter = /^[a-z]/.test(ndl);
   const endsDigit = /[0-9]$/.test(ndl);
   const endsLetter = /[a-z]$/.test(ndl);
+  // Set A (B-04): the characters just outside the quote in the SOURCE (one occurrence = one context), so a value
+  // at the quote's edge is judged against what the page prints next to it. No source, or a quote the source does
+  // not contain (DT-01 owns that), judges the quote alone.
+  const contexts: { before: string; after: string }[] = [];
+  if (typeof sourceText === 'string') {
+    const srcLower = sourceText.toLowerCase();
+    for (let at = srcLower.indexOf(hay); at !== -1; at = srcLower.indexOf(hay, at + 1)) {
+      contexts.push({ before: srcLower.slice(Math.max(0, at - 12), at), after: srcLower.slice(at + hay.length, at + hay.length + 12) });
+    }
+  }
+  if (contexts.length === 0) contexts.push({ before: '', after: '' });
   let contained = false;
   let printed: string | null = null;
   for (let at = hay.indexOf(ndl); at !== -1; at = hay.indexOf(ndl, at + 1)) {
     contained = true;
     const end = at + ndl.length;
-    const prev = at === 0 ? '' : (hay[at - 1] as string);
-    const next = (hay[end] ?? '') as string;
-    const next2 = (hay[end + 1] ?? '') as string;
-    const blocked =
-      /[0-9$%\-]/.test(prev) ||
-      ((prev === '.' || prev === ',') && startsDigit) ||
-      (startsLetter && /[a-z]/.test(prev)) ||
-      /[0-9]/.test(next) ||
-      (next === '%' && !ndl.endsWith('%')) ||
-      (next === '$' && endsDigit) ||
-      ((next === '.' || next === ',') && /[0-9]/.test(next2)) ||
-      (next === '-' && /[0-9]/.test(next2)) ||
-      (endsLetter && /[a-z0-9]/.test(next)) ||
-      (endsDigit && /[a-z]/.test(next));
-    if (!blocked) return { ok: true, contained: true, printed: null };
-    if (printed === null) printed = printedRunAround(hay, at, end);
+    let blockedBy: string | null = null;
+    for (const ctx of contexts) {
+      const x = ctx.before + hay + ctx.after; // the quote with its neighbours in the source
+      const xs = at + ctx.before.length;
+      const xe = end + ctx.before.length;
+      const prev = xs === 0 ? '' : (x[xs - 1] as string);
+      const next = (x[xe] ?? '') as string;
+      const next2 = (x[xe + 1] ?? '') as string;
+      const blocked =
+        PRINTED_PREV_BLOCK.test(prev) ||
+        ((prev === '.' || prev === ',') && startsDigit) ||
+        (startsLetter && /[a-z]/.test(prev)) ||
+        /[0-9]/.test(next) ||
+        (next === '%' && !ndl.endsWith('%')) ||
+        (next === '$' && endsDigit) ||
+        ((next === '.' || next === ',') && /[0-9]/.test(next2)) ||
+        (PRINTED_DASH.test(next) && /[0-9]/.test(next2)) ||
+        (endsLetter && /[a-z0-9]/.test(next)) ||
+        (endsDigit && /[a-z]/.test(next));
+      if (blocked) { blockedBy = printedRunAround(x, xs, xe); break; }
+    }
+    if (blockedBy === null) return { ok: true, contained: true, printed: null };
+    if (printed === null) printed = blockedBy;
   }
   return { ok: false, contained, printed };
 }
+
+/** Characters that, directly before a value, extend or sign it: digits, $, %, and every minus/dash form. */
+const PRINTED_PREV_BLOCK = /[0-9$%\-\u2212\uFF0D\uFE63\u2010-\u2015\uFE58]/;
+/** Hyphen, minus and dash forms that, directly after a value and before a digit, make a range or a longer token. */
+const PRINTED_DASH = /[\-\u2212\uFF0D\uFE63\u2010-\u2015\uFE58]/;
 
 /** The maximal printed number-ish run around [start, end) of `hay` (for "the quote prints X there"). */
 function printedRunAround(hay: string, start: number, end: number): string {
   let s = start;
   let e = end;
-  while (s > 0 && /[0-9$.,\-]/.test(hay[s - 1] as string)) s--;
-  while (e < hay.length && /[0-9$.,%\-*]/.test(hay[e] as string)) e++;
+  while (s > 0 && /[0-9$.,\-\u2212\uFF0D\uFE63]/.test(hay[s - 1] as string)) s--;
+  while (e < hay.length && /[0-9$.,%\-\u2212\uFF0D\uFE63*]/.test(hay[e] as string)) e++;
   return hay.slice(s, e);
 }
 
@@ -205,7 +228,7 @@ export function validateDataTable(gen: DataTableGen, sources: SourceDocument[], 
       let checked = 0;
       rows.forEach((row, i) => {
         valuesOf(row).forEach((v, j) => {
-          const r = valueAsPrintedIn(v?.value, v?.quote);
+          const r = valueAsPrintedIn(v?.value, v?.quote, typeof v?.sourceId === 'string' ? idx.textOf(v.sourceId) : undefined);
           if (r.ok) { checked++; return; }
           const shown = truncate(String(v?.quote ?? ''), QUOTE_MESSAGE_LIMIT);
           problems.push(r.contained

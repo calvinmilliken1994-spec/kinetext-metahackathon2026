@@ -537,8 +537,8 @@ export interface LabelFigureRef {
   credit: string;
   license: string;
   labelsInImage: boolean;
-  /** Stage 8b (lead): lead-verified boxes (image pixels) around EVERY printed label; the view covers these. Absent on older lessons. */
-  labelBoxes?: { x1: number; y1: number; x2: number; y2: number }[];
+  /** Stage 8b (lead): lead-verified boxes (image pixels) around EVERY printed label; the view covers these. Absent on older lessons. `text`/`group` (optional, Set A): the printed words in the box and the group shared by the lines of ONE printed label; LD-02 binds part names to them. */
+  labelBoxes?: { x1: number; y1: number; x2: number; y2: number; text?: string; group?: number }[];
 }
 export interface LabelRegion {
   partId: string;

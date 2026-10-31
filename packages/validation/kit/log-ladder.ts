@@ -37,13 +37,15 @@ import {
   duplicateOccurrences,
   idProblems,
   lengthProblems,
+  numberCutAtQuoteEdge,
   numbersCarryingToken,
   numbersCheckProblems,
   signedNumberTokens,
   signedNumericTokens,
-  statedNumbersIn,
+  statedNumbersOrdered,
   truncate,
 } from './shared.ts';
+import { scaleDirectionProblems } from './log-scales.ts';
 import type { EntryQuote } from './shared.ts';
 
 const L = KIT_LIMITS.logLadder;
@@ -53,6 +55,45 @@ const L = KIT_LIMITS.logLadder;
  * when they differ by at most this (float-printing noise only; 6.3 written "6.3" is exact).
  */
 const VALUE_TOLERANCE = 1e-9;
+
+/**
+ * Set A (W-03 / B2-04c): the most whole steps the view may be asked to draw, per case and across the rungs
+ * (the factor floor 1.000001 with the 1e12 ratio cap would otherwise allow ~27 million ticks).
+ */
+export const LADDER_MAX_WHOLE_STEPS = 60;
+
+const NAMING_FILLER = new Set(['of', 'at', 'is', 'about', 'around', 'roughly', 'nearly', 'near', 'approximately', 'level', 'value', 'reading', 'a', 'an', 'the', 'scale', 'on']);
+
+/**
+ * Set A (B-02): the number that NAMES a rung label: the first stated number right after the quantity word
+ * ("Magnitude 6.3, 5.3 times stronger" names 6.3; "pH of seven" names 7), or a plain digit number right before it
+ * ("a 6.3 magnitude quake"). null when no number is attached to the quantity word. Positions are in the
+ * whitespace-normalised, lower-cased label.
+ */
+export function rungNamingNumber(label: unknown, quantity: unknown): number | null {
+  if (typeof label !== 'string' || typeof quantity !== 'string') return null;
+  const lab = normalizeWhitespace(label).toLowerCase();
+  const names = [normalizeWhitespace(quantity).toLowerCase()];
+  const bare = names[0]!.replace(/\s+scale$/, '');
+  if (bare !== '' && bare !== names[0]) names.push(bare);
+  const ordered = statedNumbersOrdered(lab);
+  for (const name of names) {
+    if (name === '') continue;
+    const esc = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    for (const m of lab.matchAll(new RegExp(`(?<![a-z0-9])${esc}(?![a-z0-9])`, 'g'))) {
+      const qs = m.index ?? 0;
+      const qe = qs + name.length;
+      const after = ordered.find(n => n.start >= qe);
+      if (after !== undefined) {
+        const between = lab.slice(qe, after.start).split(/[\s=:,]+/).filter(t => t !== '');
+        if (between.length <= 3 && between.every(t => NAMING_FILLER.has(t))) return after.value;
+      }
+      const before = /(\d+(?:\.\d+)?)\s*$/.exec(lab.slice(0, qs));
+      if (before !== null) return Number(before[1]);
+    }
+  }
+  return null;
+}
 
 /**
  * Whole-phrase occurrence (the same rule algorithm.ts ALG-02 uses, kept local to this slice):
@@ -224,19 +265,27 @@ export function validateLogLadder(gen: LogLadderGen, sources: SourceDocument[], 
     }),
 
     guarded('LOG-03', 'grounding', () => {
+      const problems: string[] = [];
+      const affected: string[] = [];
       const quantity = typeof gen?.quantity === 'string' ? normalizeWhitespace(gen.quantity) : '';
       if (quantity === '') {
-        return { passed: false, message: `quantity is ${JSON.stringify(gen?.quantity)}, expected the scale's name as the page writes it (e.g. "pH", "magnitude") (quantity-in-quote)`, path: '/quantity', affected: ['/quantity'] };
+        problems.push(`quantity is ${JSON.stringify(gen?.quantity)}, expected the scale's name as the page writes it (e.g. "pH", "magnitude") (quantity-in-quote)`);
+        affected.push('/quantity');
+      } else if (!phraseOccursWhole(gen?.quote, quantity)) {
+        problems.push(`quantity "${quantity}" does not occur as a whole phrase in the quote "${typeof gen?.quote === 'string' ? gen.quote.slice(0, 60) : String(gen?.quote)}" — the quote must name the scale (quantity-in-quote)`);
+        affected.push('/quantity', '/quote');
       }
-      if (!phraseOccursWhole(gen?.quote, quantity)) {
-        return {
-          passed: false,
-          message: `quantity "${quantity}" does not occur as a whole phrase in the quote "${typeof gen?.quote === 'string' ? gen.quote.slice(0, 60) : String(gen?.quote)}" — the quote must name the scale (quantity-in-quote)`,
-          path: '/quantity',
-          affected: ['/quantity', '/quote'],
-        };
+      // Set A (B-02/W-02): the direction the view prints and grades is bound to a known scale or to the quote.
+      const context = [gen?.title, gen?.quote, ...rungs.flatMap(r => [r?.label, r?.quote])].filter((t): t is string => typeof t === 'string').join(' ');
+      // The factor pin only applies when LOG-02 already accepts the factor wording (no double reporting).
+      const factorWordingOk = typeof gen?.factorText === 'string' && phraseOccursWhole(gen?.quote, gen.factorText) && statedFactorOf(gen.factorText) === gen?.factor;
+      for (const d of scaleDirectionProblems({ quantity: gen?.quantity, effectPhrase: gen?.effectPhrase, increasing: gen?.increasing, factor: factorWordingOk ? gen?.factor : null, quote: gen?.quote, context })) {
+        problems.push(d.message);
+        affected.push(...d.affected);
       }
-      return { passed: true, message: `the quote names the scale "${quantity}" as a whole phrase (quantity-in-quote)` };
+      return problems.length === 0
+        ? { passed: true, message: `the quote names the scale "${quantity}" as a whole phrase and the direction of the effect "${String(gen?.effectPhrase)}" (increasing ${String(gen?.increasing)}) is bound to a known scale or stated by the quote (quantity-in-quote)` }
+        : { passed: false, message: problems.join('; '), path: affected[0], affected: [...new Set(affected)] };
     }),
 
     guarded('LOG-04', 'grounding', () => {
@@ -251,6 +300,13 @@ export function validateLogLadder(gen: LogLadderGen, sources: SourceDocument[], 
           return;
         }
         const tokens = signedNumberTokens(quote).map(t => t.value);
+        // Set A (B-04): the matched number must not continue past the quote's edge in the SOURCE (12 cut from 120).
+        const cutAtEdge = tokens.includes(canonical) ? numberCutAtQuoteEdge(canonical, quote, typeof rung?.sourceId === 'string' ? idx.textOf(rung.sourceId) : undefined) : { cut: false, printed: null };
+        if (cutAtEdge.cut) {
+          problems.push(`rungs[${i}] (${String(rung?.id)}): the quote \"${quote.slice(0, 60)}\" ends or starts inside a longer number: the page prints ${cutAtEdge.printed === null ? 'a longer number' : `\"${cutAtEdge.printed}\"`} there, not ${canonical} — quote the whole number (rung-values-in-quote)`);
+          affected.push(`/rungs/${i}/value`, `/rungs/${i}/quote`);
+          return;
+        }
         if (!tokens.includes(canonical)) {
           const carriers = numbersCarryingToken(quote, canonical);
           problems.push(`rungs[${i}] (${String(rung?.id)}): the value ${canonical} does not occur as a whole number in its quote "${quote.slice(0, 60)}"${carriers.length === 0 ? '' : ` — the quote prints ${carriers.map(c => `"${c}"`).join(', ')} there`} (a number inside a larger number, like 3 inside 33 or 6 inside 6.3, is a different value) (rung-values-in-quote)`);
@@ -294,6 +350,12 @@ export function validateLogLadder(gen: LogLadderGen, sources: SourceDocument[], 
       }
       const min = Math.min(...knownValues);
       const max = Math.max(...knownValues);
+      // Set A (W-03/B2-04c): a bounded number of whole steps, per axis span and per case, so the view is never
+      // asked for millions of ticks (the 1e12 ratio cap alone allows ~27 million steps at factor 1.000001).
+      if (max - min > LADDER_MAX_WHOLE_STEPS) {
+        problems.push(`the rungs span ${max - min} whole steps (${min} to ${max}); the ladder draws at most ${LADDER_MAX_WHOLE_STEPS} whole steps, so keep the rungs within ${LADDER_MAX_WHOLE_STEPS} of each other`);
+        rungValues.forEach((v, i) => { if (v === min || v === max) affected.push(`/rungs/${i}/value`); });
+      }
       const ratios: string[] = [];
       cases.forEach((c, i) => {
         const from = c?.fromValue;
@@ -306,6 +368,11 @@ export function validateLogLadder(gen: LogLadderGen, sources: SourceDocument[], 
         if (typeof to !== 'number' || !Number.isFinite(to)) {
           problems.push(`cases[${i}] (${String(c?.id)}): toValue is ${JSON.stringify(to)}, expected a finite scale value (cases-valid)`);
           affected.push(`/cases/${i}/toValue`);
+          return;
+        }
+        if (Math.abs(to - from) > LADDER_MAX_WHOLE_STEPS) {
+          problems.push(`cases[${i}] (${String(c?.id)}): from ${from} to ${to} is ${Math.abs(to - from)} whole steps; the ladder draws at most ${LADDER_MAX_WHOLE_STEPS} whole steps per case (cases-valid)`);
+          affected.push(`/cases/${i}/fromValue`, `/cases/${i}/toValue`);
           return;
         }
         if (from === to) {
@@ -370,10 +437,17 @@ export function validateLogLadder(gen: LogLadderGen, sources: SourceDocument[], 
         // and LOG-04 still hold it to the page).
         const value = typeof rung?.value === 'number' && Number.isFinite(rung.value) ? rung.value : null;
         if (value !== null && typeof rung?.label === 'string') {
-          const stated = statedNumbersIn(rung.label);
-          if (stated.length > 0 && !stated.some(n => Math.abs(n - value) <= VALUE_TOLERANCE)) {
-            problems.push(`rungs[${i}] (${String(rung?.id)}): the label "${truncate(rung.label, 60)}" states ${stated.length === 1 ? `the number ${stated[0]}` : `the numbers ${stated.join(', ')} — none of them is the rung's value`} but the rung sits at ${value} on the scale; every number a rung label states (digits or number words) must equal that rung's value — reword the label to the number the page prints for this rung, or move the rung's value and quote to the number the label states (label-value agreement)`);
-            affected.push(`/rungs/${i}/label`, `/rungs/${i}/value`, `/rungs/${i}/quote`);
+          const stated = statedNumbersOrdered(rung.label).map(n => n.value);
+          if (stated.length > 0) {
+            // Set A (B-02): the number that NAMES the rung must equal its value; a different number elsewhere in
+            // the label (a factor, a neighbour rung) cannot rescue it. Without a number next to the quantity
+            // word, the label's first stated number names the rung.
+            const named = rungNamingNumber(rung.label, gen?.quantity) ?? stated[0]!;
+            const others = stated.length > 1 ? ` (the label also states ${stated.filter(n => n !== named).join(', ')}, which cannot stand in for it)` : '';
+            if (Math.abs(named - value) > VALUE_TOLERANCE) {
+              problems.push(`rungs[${i}] (${String(rung?.id)}): the label "${truncate(rung.label, 60)}" names this rung with the number ${named}${others} but the rung sits at ${value} on the scale; the number that names a rung (the one next to the scale word, digits or words) must equal that rung's value — reword the label so its own number is ${value}, or move the rung's value and quote to the number the label names (label-value agreement)`);
+              affected.push(`/rungs/${i}/label`, `/rungs/${i}/value`, `/rungs/${i}/quote`);
+            }
           }
         }
       });

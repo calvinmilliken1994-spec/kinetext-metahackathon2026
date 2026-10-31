@@ -254,18 +254,28 @@ export interface SignedNumberToken {
 }
 
 /**
+ * The one minus grammar shared by number parsing (kit-engines/table.ts parseTableNumber) and grounding:
+ * ASCII hyphen-minus, U+2212 MINUS SIGN, U+FF0D FULLWIDTH HYPHEN-MINUS and U+FE63 SMALL HYPHEN-MINUS
+ * (Set A, B2-04a/B-04; the fullwidth capital F and low line once listed as minus were code-point slips).
+ */
+export const MINUS_SIGN_CHARS = '-\u2212\uFF0D\uFE63';
+export function isMinusSign(ch: string | undefined): boolean {
+  return typeof ch === 'string' && ch.length === 1 && MINUS_SIGN_CHARS.includes(ch);
+}
+
+/**
  * A signed numeric token: optional sign, digits with optional thousands grouping, optional
  * decimal part (a leading decimal point is allowed: ".00326"). A hyphen/dash that follows a
  * digit is not a sign ("2-3" holds 2 and 3, never -3), and a token never begins inside another
  * number, its grouping or its decimal part.
  */
-const SIGNED_NUMBER_RE = /(?<![\d.,])(?:([-\u2212])?(?:(\d{1,3}(?:,\d{3})+)(?!\d)|(\d+))(?:\.(\d+))?|([-\u2212])?\.(\d+))/g;
+const SIGNED_NUMBER_RE = /(?<![\d.,])(?:([-\u2212\uFF0D\uFE63])?(?:(\d{1,3}(?:,\d{3})+)(?!\d)|(\d+))(?:\.(\d+))?|([-\u2212\uFF0D\uFE63])?\.(\d+))/g;
 
 /** Canonical value string of a numeric token (sign kept, grouping removed, trailing zeros dropped). */
 function canonicalNumber(sign: string | undefined, intPart: string, fracPart: string): string {
   const digits = intPart.replace(/,/g, '').replace(/^0+(?=\d)/, '') || '0';
   const frac = fracPart.replace(/0+$/, '');
-  const negative = (sign === '-' || sign === '\u2212') && !(digits === '0' && frac === '');
+  const negative = sign !== undefined && isMinusSign(sign) && !(digits === '0' && frac === '');
   return `${negative ? '-' : ''}${digits}${frac === '' ? '' : `.${frac}`}`;
 }
 
@@ -305,6 +315,67 @@ export function signedNumericTokens(text: string): string[] {
 /** True when `value` (a canonical number) occurs in `text` as a whole signed numeric token. */
 export function signedNumberOccursIn(value: string, text: string): boolean {
   return signedNumberTokens(text).some(t => t.value === value);
+}
+
+/**
+ * Set A (B-04 / B2-04a): is the number `value` (canonical, e.g. "12") that a value check matched at the EDGE of
+ * `quote` actually longer in the SOURCE? The quote is located in the whitespace-normalised source text and, for
+ * each occurrence, a matching token that starts the quote is checked against the source character before it, and
+ * one that ends the quote against the characters after it:
+ *   - a digit continues the number ("12" cut from "120");
+ *   - a decimal point or grouping comma followed/preceded by a digit continues it ("12" from "12.5" or "12,104",
+ *     "104" from "12,104", "3" from "5.3");
+ *   - a minus sign (ASCII, U+2212, U+FF0D, U+FE63) before a token that the quote prints unsigned is a cut sign
+ *     ("120" from "-120"); a hyphen after a digit ("2-3") is a range, never a sign.
+ * A matching token inside the quote cannot be cut. The quote counts as clean when SOME matching token is clean
+ * at EVERY occurrence of the quote (repeated occurrences that disagree fail closed). `printed` is the number as
+ * the source prints it there, for plain-language messages. No source, or a quote the source does not contain
+ * (the quote checks own that), cuts nothing.
+ */
+export function numberCutAtQuoteEdge(value: string, quote: string, sourceText: string | undefined): { cut: boolean; printed: string | null } {
+  if (typeof sourceText !== 'string' || typeof quote !== 'string' || typeof value !== 'string') return { cut: false, printed: null };
+  const nq = normalizeWhitespace(quote);
+  if (nq === '') return { cut: false, printed: null };
+  const tokens = signedNumberTokenSpans(nq).filter(t => t.value === value);
+  if (tokens.length === 0) return { cut: false, printed: null };
+  const occurrences: number[] = [];
+  for (let at = sourceText.indexOf(nq); at !== -1; at = sourceText.indexOf(nq, at + 1)) occurrences.push(at);
+  if (occurrences.length === 0) return { cut: false, printed: null };
+  const isDigit = (c: string | undefined): boolean => c !== undefined && c >= '0' && c <= '9';
+  let printed: string | null = null;
+  const cutAt = (tok: SignedNumberSpan, at: number): boolean => {
+    let cut = false;
+    if (tok.start === 0) {
+      const prev = at === 0 ? undefined : sourceText[at - 1];
+      const prev2 = at < 2 ? undefined : sourceText[at - 2];
+      const signedInQuote = isMinusSign(tok.raw[0]);
+      if (isDigit(prev) || ((prev === '.' || prev === ',') && isDigit(prev2))) cut = true;
+      else if (signedInQuote && (prev === '.' || prev === ',')) cut = true;
+      else if (isMinusSign(prev) && !signedInQuote && !(isDigit(prev2) || prev2 === '.' || prev2 === ',')) cut = true;
+    }
+    if (tok.end === nq.length) {
+      const end = at + nq.length;
+      const next = sourceText[end];
+      const next2 = sourceText[end + 1];
+      if (isDigit(next) || ((next === '.' || next === ',') && isDigit(next2))) cut = true;
+    }
+    if (cut && printed === null) {
+      let a = at + tok.start;
+      let b = at + tok.end;
+      while (a > 0 && /[0-9.,\u2212\uFF0D\uFE63-]/.test(sourceText[a - 1] as string)) a--;
+      while (b < sourceText.length && /[0-9.,]/.test(sourceText[b] as string)) b++;
+      const run = sourceText.slice(a, b).replace(/^[.,]+/, '').replace(/[.,]+$/, '');
+      printed = run === '' ? null : run;
+    }
+    return cut;
+  };
+  const clean = tokens.some(tok => occurrences.every(at => !cutAt(tok, at)));
+  return { cut: !clean, printed: clean ? null : printed };
+}
+
+/** True when the number `value` matched at the edge of `quote` continues past that edge in the source. */
+export function quoteEdgeCutsNumber(value: string, quote: string, sourceText: string | undefined): boolean {
+  return numberCutAtQuoteEdge(value, quote, sourceText).cut;
 }
 
 /** Canonical numbers stated in `content` that do NOT occur in `text` as the same whole number. */
@@ -354,6 +425,44 @@ export function statedNumbersIn(text: unknown): number[] {
     out.push(sign * base);
   }
   return out;
+}
+
+/**
+ * The same numbers as `statedNumbersIn`, in the order the text states them (digits and number words
+ * interleaved by position), each with its start offset in the whitespace-normalised, lower-cased text.
+ */
+export function statedNumbersOrdered(text: unknown): { value: number; start: number }[] {
+  if (typeof text !== 'string') return [];
+  const norm = normalizeWhitespace(text).toLowerCase();
+  const out: { value: number; start: number }[] = [];
+  for (const t of signedNumberTokenSpans(norm)) {
+    const n = Number(t.value);
+    if (Number.isFinite(n)) out.push({ value: n, start: t.start });
+  }
+  const words = [...norm.matchAll(/[a-z]+(?:-[a-z]+)*/g)].map(m => ({ w: m[0], at: m.index ?? 0 }));
+  for (let i = 0; i < words.length; i++) {
+    const base = NUMBER_WORD_VALUES[words[i]!.w];
+    if (base === undefined) continue;
+    const prev = i > 0 ? words[i - 1]!.w : undefined;
+    const sign = prev === 'minus' || prev === 'negative' ? -1 : 1;
+    if (words[i + 1]?.w === 'point') {
+      const frac: string[] = [];
+      let j = i + 2;
+      while (j < words.length) {
+        const d = DIGIT_WORD_VALUES[words[j]!.w];
+        if (d === undefined) break;
+        frac.push(String(d));
+        j += 1;
+      }
+      if (frac.length > 0) {
+        out.push({ value: sign * Number(`${base}.${frac.join('')}`), start: words[i]!.at });
+        i = j - 1;
+        continue;
+      }
+    }
+    out.push({ value: sign * base, start: words[i]!.at });
+  }
+  return out.sort((a, b) => a.start - b.start);
 }
 
 /** The frozen number words `statedNumbersIn` counts (0–20). */

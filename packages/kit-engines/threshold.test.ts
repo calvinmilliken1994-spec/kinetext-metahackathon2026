@@ -116,3 +116,8 @@ test('invalid threshold inputs throw', () => {
   );
   assert.throws(() => fractionWords(2, 0), /THRESHOLD_INVALID/);
 });
+
+test('Set A (B2-04b): a fraction above 1 throws instead of requiring more votes than exist', () => {
+  assert.throws(() => requiredCount({ total: 10, rule: 'fraction', numerator: 5, denominator: 4, statedCount: 0 }), /fraction must be at most 1/);
+  assert.equal(requiredCount({ total: 10, rule: 'fraction', numerator: 4, denominator: 4, statedCount: 0 }), 10);
+});

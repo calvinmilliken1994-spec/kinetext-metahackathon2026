@@ -239,3 +239,11 @@ test('progressiveTax handles partial brackets and rejects bad input', () => {
   assert.throws(() => progressiveTax([{ rate: 10, over: 0 }], -5), /BRACKETS_INVALID/);
 }
 );
+
+test('Set A (B2-04a): parseTableNumber reads U+2212, U+FF0D and U+FE63 as minus and no longer reads fullwidth F or low line', () => {
+  assert.equal(parseTableNumber('\u22125'), -5);
+  assert.equal(parseTableNumber('\uFF0D5'), -5);
+  assert.equal(parseTableNumber('\uFE635.5%'), -5.5);
+  assert.equal(parseTableNumber('\uFF265'), null);
+  assert.equal(parseTableNumber('\uFF3F12'), null);
+})

@@ -8,7 +8,10 @@
 //   LD-01 every part quote verbatim (shared collectQuoteFailures convention: an unresolvable
 //         sourceId unlocks sourceId AND quote, any other quote problem unlocks the quote only);
 //   LD-02 each part name is a WHOLE PHRASE of its own quote, case-insensitive (shared
-//         phraseOccursWhole rule, so "base pair" never passes on a printed "base pairs");
+//         phraseOccursWhole rule, so "base pair" never passes on a printed "base pairs"), AND, when the
+//         figure's stored printed-label boxes carry their text (Set A, B-06/W-01), equals the printed
+//         label (group joined) whose box its own label box sits on — one part per printed label
+//         (kit/label-identity.ts); figures without stored text keep the old rule only;
 //   LD-03 the figureId is one of the source's figures; no figure list given fails closed;
 //   LD-04 points are integers in 0..1000 and each lies OUTSIDE every printed-label box (a point
 //         inside ANY label box — its own or another part's — fails: points go on the part itself);
@@ -54,6 +57,7 @@ import {
 } from './shared.ts';
 import type { EntryQuote } from './shared.ts';
 import { phraseOccursWhole } from './threshold.ts';
+import { printedLabelProblems } from './label-identity.ts';
 
 const L = KIT_LIMITS.labelDiagram;
 
@@ -191,8 +195,13 @@ export function validateLabelDiagram(gen: LabelDiagramGen, sources: SourceDocume
         problems.push(`parts[${i}]: the name ${JSON.stringify(p?.name)} does not occur as a whole phrase in its quote "${truncate(String(p?.quote ?? ''), QUOTE_MESSAGE_LIMIT)}" (expected the page's own complete wording for the part, case-insensitive)`);
         affected.push(`/parts/${i}/name`, `/parts/${i}/quote`);
       });
+      // Set A (B-06/W-01): when the figure's stored boxes carry the printed words, the name must also be the
+      // word printed in the slot the part's label box sits on (one part per printed label).
+      const printed = printedLabelProblems(parts, figure);
+      problems.push(...printed.problems);
+      affected.push(...printed.affected);
       return problems.length === 0
-        ? { passed: true, message: `every one of the ${parts.length} part name(s) occurs as a whole phrase in its own quote, case-insensitive (name-in-quote)` }
+        ? { passed: true, message: `every one of the ${parts.length} part name(s) occurs as a whole phrase in its own quote, case-insensitive, and is the printed word of its slot where the figure's printed labels are stored (name-in-quote)` }
         : { passed: false, message: problems.join('; '), path: affected[0], affected };
     }),
 

@@ -57,12 +57,23 @@ export function listFigures(sourceId: string, dir: URL = FIGURES_DIR): FigureMet
   return out;
 }
 
-/** One printed-label box in image pixels (x2/y2 exclusive). */
+/** Longest printed-label text a stored box may carry (matches the label name limit family). */
+export const FIGURE_LABEL_TEXT_MAX = 80;
+
+/**
+ * One printed-label box in image pixels (x2/y2 exclusive).
+ * `text` (Set A, B-06/W-01) is the printed word(s) inside the box, in reading order; `group` is a
+ * non-negative integer shared by the boxes that are lines or pieces of ONE printed label
+ * ("Sugar phosphate" over "backbone"). Both are optional: a box without `text` carries no known
+ * words (a drawing, or a word nobody has transcribed yet) and the label-identity check ignores it.
+ */
 export interface FigureLabelBox {
   x1: number;
   y1: number;
   x2: number;
   y2: number;
+  text?: string;
+  group?: number;
 }
 
 /**
@@ -85,8 +96,19 @@ export function loadFigureLabelBoxes(figureId: string, dir: URL = FIGURES_DIR): 
         (o['x1'] as number) < (o['x2'] as number) && (o['y1'] as number) < (o['y2'] as number) &&
         (o['x2'] as number) <= meta.width && (o['y2'] as number) <= meta.height;
     };
-    if (!raw.boxes.every(ok)) return [];
-    return (raw.boxes as FigureLabelBox[]).map(({ x1, y1, x2, y2 }) => ({ x1, y1, x2, y2 }));
+    const extrasOk = (b: unknown): boolean => {
+      const o = b as Record<string, unknown>;
+      const text = o['text'];
+      const group = o['group'];
+      return (text === undefined || (typeof text === 'string' && text.length >= 1 && text.length <= FIGURE_LABEL_TEXT_MAX)) &&
+        (group === undefined || (Number.isInteger(group) && (group as number) >= 0));
+    };
+    if (!raw.boxes.every(ok) || !raw.boxes.every(extrasOk)) return [];
+    return (raw.boxes as FigureLabelBox[]).map(({ x1, y1, x2, y2, text, group }) => ({
+      x1, y1, x2, y2,
+      ...(text !== undefined ? { text } : {}),
+      ...(group !== undefined ? { group } : {}),
+    }));
   } catch {
     return [];
   }

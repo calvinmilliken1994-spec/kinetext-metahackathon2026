@@ -8,7 +8,9 @@ export function parseTableNumber(text: string): number | null {
   if (trimmed === '') {
     return null;
   }
-  const normalized = trimmed.replace(/[−‐‑‒–—―﹘＿Ｆ]/g, '-');
+  // One minus grammar with the grounding checks (validation/kit/shared.ts MINUS_SIGN_CHARS): U+2212, U+FF0D,
+  // U+FE63 and the dash forms U+2010..U+2015 / U+FE58. (U+FF26 and U+FF3F used to be listed: code-point slips.)
+  const normalized = trimmed.replace(/[\u2212\uFF0D\uFE63\u2010-\u2015\uFE58]/g, '-');
   const m = /^([+-]?)\$?(\d{1,3}(?:,\d{3})+|\d+)(?:\.(\d+))?(%?)$/.exec(normalized);
   if (m === null) {
     return null;

@@ -23,6 +23,9 @@ export function requiredCount(stage: StageInput): number {
     if (!Number.isInteger(d) || d < 1) {
       throw new RangeError('THRESHOLD_INVALID: denominator must be a positive integer');
     }
+    if (n > d) {
+      throw new RangeError('THRESHOLD_INVALID: fraction must be at most 1 (numerator <= denominator)');
+    }
     const need = Math.ceil((total * n) / d);
     if (!Number.isFinite(need)) {
       throw new RangeError('THRESHOLD_INVALID: required count is not finite');

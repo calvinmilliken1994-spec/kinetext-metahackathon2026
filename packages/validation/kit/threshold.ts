@@ -10,14 +10,14 @@
 //   TH-03 the rule is stated IN the quote: majority ⇒ the word "majority"; fraction ⇒ one of the
 //         engine's fractionWords(n, d) spellings as a whole phrase ("two-thirds", "three-fourths",
 //         "3/4"…); count ⇒ statedCount as a whole numeric token;
-//   TH-04 stated-count consistency: with a statedCount > 0 under majority/fraction the engine's
+//   TH-04 stated-count consistency (and, Set A, the roles of "N of M body": total = M, required = N, body word): with a statedCount > 0 under majority/fraction the engine's
 //         requiredCount must equal it (270 = majority of 538; 38 = three-fourths of 50); the count
 //         rule requires a page-stated integer 1..total; statedCount 0 means "the page states none";
 //   TH-05 scenarios: one integer yes count per stage within [0, total], distinct vectors; the
 //         engine (stagePasses) runs every scenario and the message reports each outcome;
 //   TH-06 the shared N-01 numbers-checkable rule over the AI-written title, stage bodies and
 //         scenario labels (scenario yes counts are engine inputs, not page claims);
-//   TH-07 counts and sentinel discipline: stage/scenario counts within KIT_LIMITS.threshold, total
+//   TH-07 counts and sentinel discipline (a fraction is at most 1): stage/scenario counts within KIT_LIMITS.threshold, total
 //         an integer 1..100000, numerator/denominator positive integers exactly for the fraction
 //         rule and the 0 sentinel otherwise.
 // schema.gen owns the non-quote structural shape (title, id pattern/uniqueness, body/label lengths)
@@ -38,6 +38,7 @@ import {
   idProblems,
   lengthProblems,
   normalizeWhitespace,
+  numberCutAtQuoteEdge,
   numbersCheckProblems,
   signedNumberOccursIn,
   truncate,
@@ -73,13 +74,52 @@ export function phraseOccursWhole(haystack: unknown, phrase: unknown): boolean {
   return new RegExp(`(?<![A-Za-z0-9])${escapeRegExpLocal(ndl)}(?![A-Za-z0-9])`).test(hay);
 }
 
+/** Words that follow "N of M" without being the body being counted ("38 of 50 are needed"). */
+const NOT_A_BODY = new Set(['are', 'is', 'were', 'was', 'will', 'must', 'to', 'and', 'or', 'in', 'on', 'for', 'the', 'a', 'an', 'be', 'have', 'has', 'can', 'may', 'that', 'which', 'who', 'it', 'as', 'at', 'by', 'with', 'if', 'but', 'so']);
+
+/** One "N of M <body>" / "N out of M <body>" statement of a quote (digits only, after un-grouping thousands). */
+export interface NofM { n: number; m: number; body: string | null; text: string }
+
+/**
+ * Set A (B-03 / B2-04b): the "N of M body" statements a quote makes ("38 of 50 States", "270 out of 538 electors"):
+ * M is the size of the voting body, N the votes it takes, the next word the body. Only plain digit forms count and
+ * N must not exceed M; anything else is not parsed (fail open: no statement, no role binding).
+ */
+export function statedNofM(quote: unknown): NofM[] {
+  if (typeof quote !== 'string') return [];
+  const text = normalizeWhitespace(quote);
+  const out: NofM[] = [];
+  const re = /(?<![\d.,])(\d{1,3}(?:,\d{3})+|\d+)\s+(?:of|out\s+of)\s+(?:the\s+)?(\d{1,3}(?:,\d{3})+|\d+)(?![\d]|[.,]\d)(?:\s+([A-Za-z][A-Za-z'-]*))?/gi;
+  for (const m of text.matchAll(re)) {
+    const n = Number((m[1] as string).replace(/,/g, ''));
+    const mm = Number((m[2] as string).replace(/,/g, ''));
+    if (!Number.isFinite(n) || !Number.isFinite(mm) || n < 1 || n > mm) continue;
+    const word = m[3] !== undefined && !NOT_A_BODY.has(m[3].toLowerCase()) ? m[3] : null;
+    out.push({ n, m: mm, body: word, text: m[0] });
+  }
+  return out;
+}
+
+const bodyStem = (w: string): string => {
+  const x = w.toLowerCase().replace(/[^a-z]/g, '');
+  return x.length >= 4 && x.endsWith('s') && !x.endsWith('ss') ? x.slice(0, -1) : x;
+};
+
+/** True when the stage body (AI-written, e.g. "Ratifying states") contains the page's body word, plural-insensitive. */
+export function bodyNamesWord(body: unknown, word: string): boolean {
+  if (typeof body !== 'string') return false;
+  const target = bodyStem(word);
+  return target !== '' && (body.match(/[A-Za-z]+/g) ?? []).some(w => bodyStem(w) === target);
+}
+
 /** The engine's rule inputs are usable only when these preconditions hold (requiredCount throws otherwise). */
 function ruleInputsUsable(stage: ThresholdStageGen): boolean {
   const total = stage?.total;
   if (!Number.isInteger(total) || total < L.total.min || total > L.total.max) return false;
   if (stage?.rule === 'fraction') {
     return Number.isInteger(stage?.numerator) && stage.numerator >= 1
-      && Number.isInteger(stage?.denominator) && stage.denominator >= 1;
+      && Number.isInteger(stage?.denominator) && stage.denominator >= 1
+      && stage.numerator <= stage.denominator;
   }
   if (stage?.rule === 'count') {
     return Number.isInteger(stage?.statedCount) && stage.statedCount >= 1 && stage.statedCount <= total;
@@ -164,6 +204,13 @@ export function validateThreshold(gen: ThresholdGen, sources: SourceDocument[], 
         if (!signedNumberOccursIn(String(total), s.totalQuote)) {
           problems.push(`stages[${i}]: the total ${total} does not occur as that whole number in totalQuote "${truncate(s.totalQuote, QUOTE_MESSAGE_LIMIT)}" — the page itself must state the total (a page that states only the rule, without the number of voters, cannot ground it)`);
           affected.push(`/stages/${i}/total`, `/stages/${i}/totalQuote`);
+        } else {
+          // Set A (B-04): the total must not continue past the quote's edge in the source ("5" cut from "50").
+          const cut = numberCutAtQuoteEdge(String(total), s.totalQuote, typeof s?.sourceId === 'string' ? idx.textOf(s.sourceId) : undefined);
+          if (cut.cut) {
+            problems.push(`stages[${i}]: the total ${total} sits at the edge of totalQuote "${truncate(s.totalQuote, QUOTE_MESSAGE_LIMIT)}" and the page prints ${cut.printed === null ? 'a longer number' : `"${cut.printed}"`} there — quote the whole number`);
+            affected.push(`/stages/${i}/total`, `/stages/${i}/totalQuote`);
+          }
         }
       });
       return problems.length === 0
@@ -201,6 +248,12 @@ export function validateThreshold(gen: ThresholdGen, sources: SourceDocument[], 
           if (!Number.isInteger(sc) || sc < 1 || !signedNumberOccursIn(String(sc), quote)) {
             problems.push(`stages[${i}]: the count rule needs the page-stated required count, but ${JSON.stringify(sc)} does not occur as that whole number in the quote "${shown}"`);
             affected.push(`/stages/${i}/statedCount`, `/stages/${i}/quote`);
+          } else {
+            const cut = numberCutAtQuoteEdge(String(sc), quote, typeof s?.sourceId === 'string' ? idx.textOf(s.sourceId) : undefined);
+            if (cut.cut) {
+              problems.push(`stages[${i}]: the count ${sc} sits at the edge of the quote "${shown}" and the page prints ${cut.printed === null ? 'a longer number' : `"${cut.printed}"`} there — quote the whole number`);
+              affected.push(`/stages/${i}/statedCount`, `/stages/${i}/quote`);
+            }
           }
         } else {
           problems.push(`stages[${i}].rule is ${JSON.stringify(rule)}, expected majority, fraction or count`);
@@ -216,6 +269,35 @@ export function validateThreshold(gen: ThresholdGen, sources: SourceDocument[], 
       const problems: string[] = [];
       const affected: string[] = [];
       const agreed: string[] = [];
+      // Set A (B-03 / B2-04b): when a quote states "N of M <body>" ("38 of 50 States"), the stage's total must be M,
+      // its required count (the count rule's number, or what the fraction/majority rule computes) must be N, and its
+      // body must name the page's body word. A statement that matches no reading of the stage is reported by role.
+      stages.forEach((s, i) => {
+        const stated = [...statedNofM(s?.quote), ...statedNofM(s?.totalQuote)].filter((p, k, all) => all.findIndex(q => q.n === p.n && q.m === p.m && q.body === p.body) === k);
+        if (stated.length === 0) return;
+        type Found = { message: string; paths: string[] };
+        const evaluate = (p: NofM): Found[] => {
+          const out: Found[] = [];
+          if (Number.isInteger(s?.total) && s.total !== p.m) {
+            out.push({ message: `stages[${i}]: the page says "${p.text}": the voting body has ${p.m} members, so total must be ${p.m} (not ${s.total}); ${p.n} is the number of votes it takes`, paths: [`/stages/${i}/total`, `/stages/${i}/totalQuote`] });
+          } else {
+            let need: number | null = null;
+            if (s?.rule === 'count') need = Number.isInteger(s?.statedCount) ? s.statedCount : null;
+            else if (ruleInputsUsable(s)) need = requiredCount(s);
+            if (need !== null && need !== p.n) {
+              out.push({ message: `stages[${i}]: the page says "${p.text}": ${p.n} of ${p.m} are required, but this stage requires ${need} of ${s.total} (${s.rule === 'count' ? `statedCount ${s.statedCount}` : describeRule(s)}); the required count is ${p.n}, never the total ${p.m}`, paths: [`/stages/${i}/statedCount`, `/stages/${i}/numerator`, `/stages/${i}/denominator`, `/stages/${i}/rule`] });
+            }
+          }
+          if (p.body !== null && !bodyNamesWord(s?.body, p.body)) {
+            out.push({ message: `stages[${i}]: the page counts "${p.body}" ("${p.text}"), but the stage body is "${String(s?.body)}"; name the body the page counts`, paths: [`/stages/${i}/body`] });
+          }
+          return out;
+        };
+        const results = stated.map(p => ({ p, found: evaluate(p) }));
+        if (results.some(r => r.found.length === 0)) return;
+        const best = results.reduce((a, b) => (b.found.length < a.found.length ? b : a));
+        for (const f of best.found) { problems.push(f.message); affected.push(...f.paths); }
+      });
       stages.forEach((s, i) => {
         const sc = s?.statedCount;
         if (!Number.isInteger(sc) || sc < 0) {
@@ -356,6 +438,10 @@ export function validateThreshold(gen: ThresholdGen, sources: SourceDocument[], 
           if (!Number.isInteger(d) || d < 1) {
             problems.push(`stages[${i}].denominator is ${JSON.stringify(d)}, expected a positive integer for the fraction rule`);
             affected.push(`/stages/${i}/denominator`);
+          }
+          if (Number.isInteger(n) && Number.isInteger(d) && n >= 1 && d >= 1 && n > d) {
+            problems.push(`stages[${i}]: the fraction ${n}/${d} is above 1, so no vote count can ever reach it; a threshold fraction is at most 1 (numerator at most the denominator)`);
+            affected.push(`/stages/${i}/numerator`, `/stages/${i}/denominator`);
           }
         } else if ((n !== 0 && n !== undefined) || (d !== 0 && d !== undefined)) {
           problems.push(`stages[${i}]: numerator ${JSON.stringify(n)} and denominator ${JSON.stringify(d)} must be the 0 sentinel unless the rule is fraction`);
