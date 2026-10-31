@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import type { DrawerMode } from './RunsDrawer.tsx';
 import { IconLesson, IconNewLesson, IconRuns, IconSourcePanel } from './icons.tsx';
 import { IconPresent } from './presentation/icons.tsx';
+import { IconTour } from './Onboarding.tsx';
 
 interface RailButtonProps {
   /** Visible label under the icon. */
@@ -16,9 +17,11 @@ interface RailButtonProps {
   hint?: string;
   /** A small dot on the icon (e.g. a run is in progress). */
   dot?: boolean;
+  /** Stage 9b: an anchor the first-run tour points at. */
+  tour?: string;
 }
 
-function RailButton({ label, name, icon, onClick, pressed, disabled = false, hint, dot = false }: RailButtonProps) {
+function RailButton({ label, name, icon, onClick, pressed, disabled = false, hint, dot = false, tour }: RailButtonProps) {
   return (
     <li>
       <button
@@ -30,6 +33,7 @@ function RailButton({ label, name, icon, onClick, pressed, disabled = false, hin
         title={hint}
         onClick={onClick}
         disabled={disabled}
+        data-tour={tour}
       >
         <span className="rail-icon">{icon}{dot && <span className="rail-dot" aria-hidden="true" />}</span>
         <span className="rail-label">{label}</span>
@@ -55,6 +59,9 @@ export interface IconRailProps {
   onPresent: () => void;
   /** The open lesson can be presented (a finished, checked lesson or activity). */
   canPresent: boolean;
+  /** Stage 9b: reopen the first-run tour. */
+  onTour?: () => void;
+  touring?: boolean;
 }
 
 /**
@@ -66,7 +73,7 @@ export function IconRail(p: IconRailProps) {
   return (
     <nav className="rail" aria-label="Workspace">
       <ul className="rail-group">
-        <RailButton label="New lesson" name="New lesson panel" icon={<IconNewLesson />} onClick={p.onNewLesson} pressed={p.drawer === 'new'} />
+        <RailButton label="New lesson" name="New lesson panel" icon={<IconNewLesson />} onClick={p.onNewLesson} pressed={p.drawer === 'new'} tour="new-lesson" />
         <RailButton label="Lesson" name="Go to the lesson" icon={<IconLesson />} onClick={p.onLesson} />
         <RailButton label="Source" name="Source page" icon={<IconSourcePanel />} onClick={p.onToggleSource} pressed={p.showSource} hint={p.showSource ? 'Hide the source page' : 'Show the source page'} />
         <RailButton label="Present" name="Present this lesson" icon={<IconPresent />} onClick={p.onPresent} disabled={!p.canPresent} hint={p.canPresent ? 'Full screen, one step at a time' : 'Open a finished lesson to present it'} />
@@ -74,6 +81,9 @@ export function IconRail(p: IconRailProps) {
       <span className="rail-sep" aria-hidden="true" />
       <ul className="rail-group">
         <RailButton label="Runs" name="Runs and checks panel" icon={<IconRuns />} onClick={p.onRuns} pressed={p.drawer === 'runs'} dot={p.busy} hint={p.busy ? 'A run is in progress' : undefined} />
+        {p.onTour !== undefined && (
+          <RailButton label="Tour" name="Take the tour" icon={<IconTour />} onClick={p.onTour} pressed={p.touring === true} hint="A short walk through the app, using a recorded build" />
+        )}
       </ul>
     </nav>
   );

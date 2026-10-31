@@ -1,15 +1,17 @@
-// Stage 9: the live build view's pieces (docs/specs/STAGE-9-live-build-view.md). Every line here shows a recorded
-// event or a served artifact: the strip lists the calls open right now, a planned part's frame keeps its work log, a
-// finished part keeps a one-line trace. Counters read a job clock (live: wall time since the job's first event; replay:
-// the replay clock), so nothing here ever waits on a timer to look busy.
-import { useEffect, useId, useState } from 'react';
-import type { CSSProperties, ReactNode } from 'react';
-import type { LogLine, PartBuild, StripState, TraceStep } from '../lib/liveBuild.ts';
-import { formatElapsed, reserveHeight, stagger } from '../lib/liveBuild.ts';
-import { formatCostUSD } from '../lib/jobs.ts';
+// Stage 9: the live build view's pieces (docs/specs/STAGE-9-live-build-view.md, pass 2: STAGE-9b). Every line here shows
+// a recorded event or a served artifact: the strip lists the calls open right now and, once the job has finished, sums
+// it up; a planned part's frame keeps its work log over a faint preview of the part's shape; a finished part keeps a
+// one-line trace. Counters read a job clock (live: wall time since the job's first event; replay: the replay clock), so
+// nothing here ever waits on a timer to look busy.
+import { useEffect, useId, useRef, useState } from 'react';
+import type { CSSProperties, ReactNode, RefObject } from 'react';
+import type { LogLine, PartBuild, PartPreview, PreviewPhase, StripState, TraceStep } from '../lib/liveBuild.ts';
+import { closingBeat, followFocus, formatElapsed, previewOf, previewPhase, progressFacts, reserveHeight, stagger } from '../lib/liveBuild.ts';
 import { REPLAY_LABEL } from '../lib/replay.ts';
+import { scrollTopToReveal } from '../lib/scroll.ts';
 import type { PendingSlot } from '../lib/lesson.ts';
 import { Mark } from './icons.tsx';
+import { IconPresent } from './presentation/icons.tsx';
 
 /** Job-relative milliseconds now (0 = the job's first event). */
 export type JobClock = () => number;
@@ -29,6 +31,8 @@ export interface LiveContext {
   replay: ReplayInfo | null;
   /** Words in the page being read (from the source text the app already shows), or null before it has loaded. */
   sourceWords: number | null;
+  /** Opens the finished lesson in presentation mode (the closing beat's button); null until it can be presented. */
+  onPresent?: (() => void) | null;
 }
 
 /** Re-render once per `ms` while mounted (only the small counters use it). */
@@ -59,19 +63,19 @@ function speedText(speed: number): string {
 }
 
 /**
- * The slim bar at the top of a building lesson: in a replay, first the replay label (never shown as live), then one line
- * naming the model and every call open right now with its real elapsed time; once the job has finished, what it took.
+ * The bar at the top of a building lesson, sticky while the column scrolls. In a replay, first the replay label (never
+ * shown as live). Then, while running, the model and every call open right now with its real elapsed time, and what
+ * has finished so far; once the job has finished, the closing beat: lesson ready, what it took, and a Present button.
+ * Both states have the same rows, so the morph moves nothing.
  */
 export function LiveBar({ live }: { live: LiveContext }) {
   const { strip, clock, replay } = live;
   const running = !strip.finished;
   useTick(500, running);
-  const calls = [
-    strip.museCalls > 0 ? `${strip.museCalls} ${strip.model} ${strip.museCalls === 1 ? 'call' : 'calls'}` : '',
-    strip.samCalls > 0 ? `${strip.samCalls} SAM 3.1 ${strip.samCalls === 1 ? 'call' : 'calls'}` : '',
-  ].filter((s) => s !== '');
+  const close = running ? null : closingBeat(strip);
+  const samOnly = strip.ops.length > 0 && strip.ops.every((op) => op.actor === 'sam');
   return (
-    <div className="lb-bar" data-testid="live-bar" data-state={running ? 'running' : 'done'}>
+    <div className="lb-bar" data-testid="live-bar" data-tour="live-strip" data-state={running ? 'running' : close?.ready === true ? 'ready' : 'done'}>
       {replay !== null && (
         <p className="lb-replay" data-testid="replay-label">
           <strong>{REPLAY_LABEL}</strong>
@@ -80,28 +84,37 @@ export function LiveBar({ live }: { live: LiveContext }) {
           <button type="button" className="link-btn" onClick={replay.onRestart}>{replay.finished ? 'Replay again' : 'Restart'}</button>
         </p>
       )}
-      <p className="lb-strip">
-        <span className="lb-mode">{replay !== null ? 'Replay' : running ? 'Live' : 'Built'}</span>
-        {running && (
+      {running ? (
+        <p className="lb-main" key="running">
+          {/* A replay is already labelled in the row above; a live run says so here. */}
+          {replay === null && <span className="lb-mode">Live</span>}
+          {!samOnly && <span className="lb-model">{strip.model}</span>}
           <span className="lb-ops" role="status" aria-live="polite">
-            {strip.ops.length === 0 && <span className="lb-op lb-op-idle">{strip.museCalls === 0 ? 'Starting' : 'Checking against the page'}</span>}
+            {strip.ops.length === 0 && <span className="lb-op lb-op-idle"><span className="lb-op-text">{strip.museCalls === 0 ? 'Starting' : 'Checking against the page'}</span></span>}
             {strip.ops.map((op) => (
               <span key={op.key} className="lb-op" data-actor={op.actor}>
-                <span className="lb-actor">{op.actor === 'sam' ? 'SAM 3.1' : strip.model}</span>
-                <span className="lb-op-text">{op.text}</span>
-                <Elapsed clock={clock} startMs={op.startMs} />
+                {op.actor === 'sam' && <span className="lb-actor">SAM 3.1</span>}
+                <span className="lb-op-text">{op.actor === 'sam' ? op.text.charAt(0).toLowerCase() + op.text.slice(1) : op.text}</span>
+                {/* One call open since the start (the analysis): the job clock on the right already says it. */}
+                {!(strip.ops.length === 1 && op.startMs < 1000) && <Elapsed clock={clock} startMs={op.startMs} />}
               </span>
             ))}
           </span>
-        )}
-        {!running && (
-          <span className="lb-ops lb-summary">
-            <span>Built in {formatElapsed(strip.totalMs ?? 0)}</span>
-            {calls.map((c) => <span key={c}>{c}</span>)}
-            {strip.costUSD !== null && <span>{formatCostUSD(strip.costUSD)} est.</span>}
-          </span>
-        )}
-        {running && <span className="lb-total" aria-hidden="true">{formatElapsed(clock())}</span>}
+          <span className="lb-total" aria-hidden="true">{formatElapsed(clock())}</span>
+        </p>
+      ) : (
+        <p className="lb-main lb-closing" key="done">
+          {close?.ready === true ? <Mark kind="ok" /> : <span className="lb-mode">{replay !== null ? 'Replay' : 'Built'}</span>}
+          <span className="lb-headline" role="status">{close?.headline}</span>
+          {close?.ready === true && live.onPresent != null && (
+            <button type="button" className="btn btn-primary lb-present" data-tour="present" onClick={live.onPresent}>
+              <IconPresent size={18} />Present
+            </button>
+          )}
+        </p>
+      )}
+      <p className="lb-facts" key={running ? 'facts-running' : 'facts-done'}>
+        {(running ? progressFacts(strip) : close?.facts ?? []).map((f) => <span key={f}>{f}</span>)}
       </p>
     </div>
   );
@@ -112,6 +125,9 @@ export function OverviewSlot({ words }: { words: number | null }) {
   return (
     <div className="lb-overview-slot" data-testid="overview-slot">
       <p>{words === null ? '' : `The page has ${words.toLocaleString('en-US')} words. `}The summary appears here as soon as Muse has read it.</p>
+      <div className="lb-pv lb-pv-lines lb-overview-pv" aria-hidden="true">
+        {[62, 78, 70].map((x, i) => <span key={i} className="pv-bar" style={{ inlineSize: `${x}%` }} />)}
+      </div>
     </div>
   );
 }
@@ -145,17 +161,146 @@ function stateWord(build: PartBuild, slot: PendingSlot): string {
   return 'Checking';
 }
 
+// ---- the skeleton preview -------------------------------------------------------------------------------------------
+
+const WIDTHS = [72, 54, 86, 64, 78, 58, 82, 68, 60, 74, 50, 80];
+const width = (i: number): string => `${WIDTHS[i % WIDTHS.length] ?? 70}%`;
+const range = (n: number): number[] => Array.from({ length: n }, (_, i) => i);
+const Bar = ({ i, className = 'pv-bar' }: { i: number; className?: string }) => <span className={className} style={{ inlineSize: width(i) }} />;
+
+function PreviewBody({ p }: { p: PartPreview }): ReactNode {
+  switch (p.kind) {
+    case 'quiz':
+      return (
+        <div className="pv-quiz">
+          {range(p.cols * 2).map((c) => (
+            <div key={c} className="pv-box pv-col">
+              <Bar i={c} className="pv-bar pv-strong" />
+              {range(p.rows).map((r) => <span key={r} className="pv-option"><span className="pv-radio" /><Bar i={c + r + 1} /></span>)}
+            </div>
+          ))}
+        </div>
+      );
+    case 'sequence':
+      return (
+        <div className="pv-col pv-fill">
+          <Bar i={2} />
+          {range(p.rows).map((r) => <span key={r} className="pv-rung"><span className="pv-num">{r + 1}</span><Bar i={r + 3} /></span>)}
+          <span className="pv-row"><span className="pv-pill" /><span className="pv-pill pv-pill-wide" /></span>
+        </div>
+      );
+    case 'grid':
+      return (
+        <div className="pv-grid" style={vars({ '--cols': p.cols })}>
+          {range(p.cols).map((c) => <span key={`h${c}`} className="pv-cell pv-head"><Bar i={c} className="pv-bar pv-strong" /></span>)}
+          {range((p.rows - 1) * p.cols).map((k) => <span key={k} className="pv-cell"><Bar i={k + 2} /></span>)}
+        </div>
+      );
+    case 'explorer':
+      return (
+        <div className="pv-col pv-fill">
+          <Bar i={0} className="pv-bar pv-strong pv-eq" />
+          <div className="pv-explorer">
+            <div className="pv-col">
+              {range(p.rows).map((r) => <span key={r} className="pv-slider"><Bar i={r + 4} /><span className="pv-track"><span className="pv-knob" style={{ insetInlineStart: width(r + 6) }} /></span></span>)}
+            </div>
+            <svg className="pv-graph" viewBox="0 0 100 60" preserveAspectRatio="none" aria-hidden="true">
+              <path className="pv-axis" d="M6 4V54H98" vectorEffect="non-scaling-stroke" />
+              <path className="pv-curve" d="M6 50 C 30 46, 50 34, 96 10" vectorEffect="non-scaling-stroke" />
+            </svg>
+          </div>
+          <div className="pv-quiz pv-cases">{range(2).map((c) => <div key={c} className="pv-box pv-col"><Bar i={c + 1} className="pv-bar pv-strong" /><Bar i={c + 5} /><span className="pv-pill" /></div>)}</div>
+        </div>
+      );
+    case 'figure':
+      return (
+        <div className="pv-figure">
+          <div className="pv-box pv-plate"><span className="pv-caption">The page’s figure</span></div>
+          <div className="pv-col pv-chips">
+            <Bar i={0} />
+            {range(p.rows).map((r) => <span key={r} className="pv-chip" />)}
+          </div>
+        </div>
+      );
+    case 'bins':
+      return (
+        <div className="pv-col pv-fill">
+          <span className="pv-row pv-tray">{range(7).map((k) => <span key={k} className="pv-chip pv-chip-inline" />)}</span>
+          <div className="pv-bins" style={vars({ '--cols': p.cols })}>{range(p.cols).map((c) => <div key={c} className="pv-box pv-col"><Bar i={c} className="pv-bar pv-strong" /></div>)}</div>
+        </div>
+      );
+    case 'map':
+      return (
+        <svg className="pv-map" viewBox="0 0 100 60" preserveAspectRatio="none" aria-hidden="true">
+          {[[50, 10, 20, 46], [50, 10, 80, 46], [50, 10, 50, 50], [20, 46, 50, 50]].map(([x1, y1, x2, y2], i) => <line key={i} className="pv-edge" x1={x1} y1={y1} x2={x2} y2={y2} vectorEffect="non-scaling-stroke" />)}
+          {[[50, 10], [20, 46], [80, 46], [50, 50]].map(([x, y], i) => <rect key={i} className="pv-node" x={(x ?? 0) - 9} y={(y ?? 0) - 4} width="18" height="8" rx="2" vectorEffect="non-scaling-stroke" />)}
+        </svg>
+      );
+    case 'equation':
+      return (
+        <div className="pv-col pv-fill">
+          <span className="pv-row pv-equation">{range(p.cols).map((c) => <span key={c} className="pv-box pv-term" />)}</span>
+          {range(p.rows).map((r) => <div key={r} className="pv-col pv-balance"><Bar i={r} className="pv-bar pv-strong" /><span className="pv-meter"><span style={{ inlineSize: width(r + 3) }} /></span><span className="pv-meter"><span style={{ inlineSize: width(r + 5) }} /></span></div>)}
+        </div>
+      );
+    case 'bars':
+      return (
+        <div className="pv-col pv-fill">
+          <div className="pv-bars">{range(p.cols).map((c) => <span key={c} className="pv-vbar" style={{ blockSize: `${[78, 42, 24, 64, 90, 52][c % 6] ?? 50}%` }} />)}</div>
+          <Bar i={3} />
+          <span className="pv-row"><span className="pv-pill" /><span className="pv-pill pv-pill-wide" /><span className="pv-pill" /></span>
+        </div>
+      );
+    case 'ladder':
+      return (
+        <div className="pv-ladder">
+          <div className="pv-rail">{range(p.rows).map((r) => <span key={r} className="pv-rung pv-rung-tick"><span className="pv-tick" /><Bar i={r} /></span>)}</div>
+          <div className="pv-box pv-col"><Bar i={1} className="pv-bar pv-strong" /><Bar i={4} /><Bar i={6} /><span className="pv-pill" /></div>
+        </div>
+      );
+    case 'meter':
+      return (
+        <div className="pv-col pv-fill">
+          <Bar i={2} />
+          <span className="pv-meter pv-meter-tall"><span style={{ inlineSize: '58%' }} /><i className="pv-threshold" /></span>
+          <span className="pv-slider"><Bar i={5} /><span className="pv-track"><span className="pv-knob" style={{ insetInlineStart: '58%' }} /></span></span>
+          <Bar i={7} /><Bar i={9} />
+        </div>
+      );
+    case 'scene':
+      return (
+        <div className="pv-col pv-fill">
+          <div className="pv-box pv-plate" />
+          <span className="pv-row"><span className="pv-pill" /><span className="pv-pill pv-pill-wide" /><span className="pv-pill" /></span>
+        </div>
+      );
+    case 'lines':
+      return <div className="pv-col pv-fill">{range(p.rows).map((r) => <Bar key={r} i={r} />)}</div>;
+  }
+}
+
+/** A faint, static sketch of the part's shape (no shimmer): it fills the frame's reserved space until the part arrives. */
+export function PartPreviewSketch({ preview, phase }: { preview: PartPreview; phase: PreviewPhase }) {
+  return (
+    <div className={`lb-pv lb-pv-${preview.kind}`} data-phase={phase} data-testid="part-preview" aria-hidden="true">
+      <PreviewBody p={preview} />
+    </div>
+  );
+}
+
 /**
- * A planned part that has not arrived yet: named by its kind, Muse's reason for planning it, and one log line per
- * recorded event. It reserves about the height of the part it stands for.
+ * A planned part that has not arrived yet: named by its kind, Muse's reason for planning it, one log line per recorded
+ * event, and under them a faint preview of the part's shape filling the space the part will take.
  */
 export function PartFrame({ slot, build, clock }: { slot: PendingSlot; build: PartBuild | undefined; clock: JobClock }) {
   const headId = useId();
   const lines = build?.lines ?? [];
+  const phase = previewPhase(build);
+  const h = reserveHeight(slot.componentId);
   return (
     <article
       className="card kit-card lb-frame" aria-labelledby={headId} aria-busy="true" data-component={slot.componentId} data-status={slot.state}
-      data-testid="part-frame" style={{ minBlockSize: reserveHeight(slot.componentId) }}
+      data-phase={phase} data-testid="part-frame" style={{ minBlockSize: h, blockSize: h }}
     >
       <header className="kit-head">
         <h2 id={headId}>{slot.label}</h2>
@@ -177,6 +322,7 @@ export function PartFrame({ slot, build, clock }: { slot: PendingSlot; build: Pa
           ))}
         </ol>
       )}
+      <PartPreviewSketch preview={previewOf(slot.componentId, build)} phase={phase} />
     </article>
   );
 }
@@ -189,4 +335,69 @@ export function BuildTrace({ build }: { build: PartBuild | undefined }): ReactNo
       {build.trace.map((s: TraceStep, i) => <span key={`${i}:${s.text}`} className={`lb-step tone-${s.tone}`}>{s.text}</span>)}
     </p>
   );
+}
+
+// ---- keep the moment worth watching in view (Stage 9b) -----------------------------------------------------------------
+
+function reducedMotion(): boolean {
+  return typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+const SCROLL_KEYS = new Set(['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End', ' ']);
+
+/**
+ * While the view watches a build, gently scroll the lesson column to the part where something worth watching happens
+ * (lib/liveBuild.ts followFocus: an arrival, SAM outlining, a rework), just under the sticky strip. The column only:
+ * never the document. It stops for good the moment the user scrolls the column themselves (wheel, touch, keys,
+ * scrollbar drag), so a teacher reading something is never pulled away.
+ */
+export function useFollowBuild(root: RefObject<HTMLElement | null>, live: LiveContext | null, arrived: readonly string[], order: readonly string[]): void {
+  const focus = useRef<string | null>(null);
+  const seen = useRef<Set<string> | null>(null);
+  const userMoved = useRef(false);
+  const on = live !== null;
+
+  useEffect(() => {
+    if (!on) return undefined;
+    const box = root.current?.closest<HTMLElement>('.activity-panel');
+    if (box === null || box === undefined) return undefined;
+    const stop = (): void => { userMoved.current = true; };
+    const onKey = (e: KeyboardEvent): void => { if (SCROLL_KEYS.has(e.key) && !(e.target instanceof HTMLInputElement)) stop(); };
+    const onDown = (e: PointerEvent): void => { if (e.target === box) stop(); };
+    box.addEventListener('wheel', stop, { passive: true });
+    box.addEventListener('touchstart', stop, { passive: true });
+    box.addEventListener('keydown', onKey);
+    box.addEventListener('pointerdown', onDown);
+    return () => {
+      box.removeEventListener('wheel', stop);
+      box.removeEventListener('touchstart', stop);
+      box.removeEventListener('keydown', onKey);
+      box.removeEventListener('pointerdown', onDown);
+    };
+  }, [on, root]);
+
+  useEffect(() => {
+    if (live === null) return;
+    // Parts already there when the view started watching (a replay opened mid-way) are not arrivals.
+    if (seen.current === null) seen.current = new Set(arrived);
+    const known = seen.current;
+    const newly = arrived.filter((id) => !known.has(id));
+    for (const id of newly) known.add(id);
+    const next = followFocus(focus.current, live.builds, order, newly);
+    if (next === focus.current && newly.length === 0) return;
+    focus.current = next;
+    if (next === null || userMoved.current) return;
+    const lesson = root.current;
+    const box = lesson?.closest<HTMLElement>('.activity-panel');
+    const target = lesson?.querySelector<HTMLElement>(`[data-component="${next}"]`);
+    if (box == null || target == null) return;
+    const strip = lesson?.querySelector<HTMLElement>('.lb-bar');
+    const b = box.getBoundingClientRect();
+    const t = target.getBoundingClientRect();
+    const top = scrollTopToReveal(
+      { top: b.top, height: box.clientHeight, scrollTop: box.scrollTop, scrollHeight: box.scrollHeight },
+      { top: t.top, height: t.height }, 'start', (strip?.offsetHeight ?? 0) + 20,
+    );
+    if (Math.abs(top - box.scrollTop) > 24) box.scrollTo({ top, behavior: reducedMotion() ? 'auto' : 'smooth' });
+  });
 }

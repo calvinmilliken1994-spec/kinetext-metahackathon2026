@@ -5,10 +5,11 @@
 // Times are job-relative milliseconds (0 = the job's first event).
 
 import type { StageEvent } from '../../../../packages/contracts/index.ts';
-import { isPlanComponentId } from '../../../../packages/contracts/kit.ts';
+import { isKitGenComponentId, isPlanComponentId } from '../../../../packages/contracts/kit.ts';
 import type { PlanComponentId } from '../../../../packages/contracts/kit.ts';
 import type { JobDetail } from '../api.ts';
 import { aiText, joinSentences } from './displayText.ts';
+import { formatCostUSD } from './jobs.ts';
 import { componentLabel } from './lesson.ts';
 import { lessonCheckName } from './lessonJob.ts';
 import { resolveJobModel } from './models.ts';
@@ -77,17 +78,97 @@ export function stagger(index: number, stepMs: number, capMs = 600): number {
   return Math.min(capMs, Math.max(0, index) * stepMs);
 }
 
+// ---- the skeleton preview of a planned part (Stage 9b) ----------------------------------------------------------------
+
+/** The coarse shape a pending frame draws, faintly, so the lesson visibly takes shape before the part arrives. */
+export type PreviewKind = 'quiz' | 'sequence' | 'grid' | 'explorer' | 'figure' | 'bins' | 'map' | 'equation' | 'bars' | 'ladder' | 'meter' | 'scene' | 'lines';
+
+export interface PartPreview {
+  kind: PreviewKind;
+  /** Height of the preview body under the frame head, px. The frame's reserve is FRAME_HEAD_PX + bodyPx. */
+  bodyPx: number;
+  /** Rows (rungs, table rows, option rows, sliders) and columns (table columns, bins) the skeleton draws. */
+  rows: number;
+  cols: number;
+}
+
+/** The frame head (title, meta line) plus the gap under it, px. */
+export const FRAME_HEAD_PX = 64;
+
 /**
- * Height reserved for a planned part's frame before its content arrives: a typical rendered height at the lesson column
- * width, so the arrival moves later frames as little as possible. Estimates, not promises.
+ * Per-kind preview shapes. Body heights come from the median rendered height of stored, published parts of each kind
+ * at 1920×1080 and 1366×768 (pass 1 under-reserved quiz cards by ~700 px and explorers by ~850 px), minus the head.
  */
-const RESERVE: Readonly<Record<string, number>> = {
-  'label-diagram-v1': 700, 'sequence-v1': 540, 'quiz-cards-v1': 560, 'sort-groups-v1': 440, 'concept-map-v1': 460,
-  'compare-table-v1': 360, 'formula-explorer-v1': 520, 'balance-equation-v1': 400, 'algorithm-trace-v1': 820,
-  'log-ladder-v1': 460, 'threshold-v1': 440, 'data-table-v1': 420,
+const PREVIEW: Readonly<Record<string, PartPreview>> = {
+  'quiz-cards-v1': { kind: 'quiz', bodyPx: 1180, rows: 4, cols: 2 },
+  'sequence-v1': { kind: 'sequence', bodyPx: 520, rows: 6, cols: 1 },
+  'sort-groups-v1': { kind: 'bins', bodyPx: 640, rows: 3, cols: 3 },
+  'concept-map-v1': { kind: 'map', bodyPx: 840, rows: 3, cols: 3 },
+  'compare-table-v1': { kind: 'grid', bodyPx: 240, rows: 4, cols: 3 },
+  'data-table-v1': { kind: 'grid', bodyPx: 480, rows: 7, cols: 4 },
+  'formula-explorer-v1': { kind: 'explorer', bodyPx: 1300, rows: 3, cols: 2 },
+  'threshold-v1': { kind: 'meter', bodyPx: 420, rows: 2, cols: 1 },
+  'log-ladder-v1': { kind: 'ladder', bodyPx: 640, rows: 7, cols: 1 },
+  'algorithm-trace-v1': { kind: 'bars', bodyPx: 860, rows: 1, cols: 6 },
+  'balance-equation-v1': { kind: 'equation', bodyPx: 740, rows: 2, cols: 4 },
+  'label-diagram-v1': { kind: 'figure', bodyPx: 650, rows: 5, cols: 1 },
 };
+const PREMIUM_PREVIEW: PartPreview = { kind: 'scene', bodyPx: 640, rows: 2, cols: 1 };
+const GENERIC_PREVIEW: PartPreview = { kind: 'lines', bodyPx: 416, rows: 4, cols: 1 };
+
+/**
+ * The preview of a planned part. A label diagram's label column shows one chip per part SAM was asked to outline once
+ * that call has been recorded (the plan names no figure, so the figure itself stays a plain frame).
+ */
+export function previewOf(componentId: string, build?: PartBuild): PartPreview {
+  // A premium activity (a simulation or a timeline) draws a scene with its controls; an unknown id a few lines.
+  const base = PREVIEW[componentId] ?? (isPlanComponentId(componentId) && !isKitGenComponentId(componentId) ? PREMIUM_PREVIEW : GENERIC_PREVIEW);
+  if (base.kind !== 'figure' || build === undefined) return base;
+  const asked = [...build.lines].reverse().find((l) => l.kind === 'outlining' && l.parts !== undefined)?.parts;
+  return asked === undefined ? base : { ...base, rows: Math.max(1, Math.min(12, asked)) };
+}
+
+/**
+ * Height reserved for a planned part's frame before its content arrives: the frame head plus its preview body, so the
+ * arrival moves later frames as little as possible. Estimates, not promises.
+ */
 export function reserveHeight(componentId: string): number {
-  return RESERVE[componentId] ?? 480;
+  return FRAME_HEAD_PX + previewOf(componentId).bodyPx;
+}
+
+/** How far along a planned part is, for the preview's emphasis (it only changes opacity and the outline tone). */
+export type PreviewPhase = 'waiting' | 'writing' | 'outlining' | 'reworking' | 'checked' | 'left-out';
+
+export function previewPhase(build: PartBuild | undefined): PreviewPhase {
+  if (build === undefined || build.lines.length === 0) return 'waiting';
+  const open = build.lines.find((l) => l.open);
+  if (open?.kind === 'queued') return 'waiting';
+  if (open?.kind === 'outlining') return 'outlining';
+  if (open?.kind === 'writing') return open.revision > 1 ? 'reworking' : 'writing';
+  if (build.lines.some((l) => l.kind === 'unusable')) return 'left-out';
+  if (build.lines.some((l) => l.kind === 'checks-passed')) return 'checked';
+  return 'writing';
+}
+
+/**
+ * Which part the lesson column should keep in view while a build plays (Stage 9b follow). Only moments worth watching
+ * move it: a part that has just arrived, SAM outlining a figure, or a part being reworked after a failed check. Plain
+ * writing never pulls the view away from the overview. Several parts at once: the current focus stays while it is
+ * still busy, else the first in plan order.
+ */
+export function followFocus(
+  prev: string | null, builds: Readonly<Record<string, PartBuild>>, order: readonly string[], newlyArrived: readonly string[],
+): string | null {
+  const arrived = order.find((id) => newlyArrived.includes(id)) ?? newlyArrived[0];
+  if (arrived !== undefined) return arrived;
+  const watchable = (id: string): boolean => {
+    const open = builds[id]?.lines.find((l) => l.open);
+    return open !== undefined && (open.kind === 'outlining' || (open.kind === 'writing' && open.revision > 1));
+  };
+  const outlining = order.find((id) => builds[id]?.lines.some((l) => l.open && l.kind === 'outlining') === true);
+  if (outlining !== undefined) return outlining;
+  if (prev !== null && watchable(prev)) return prev;
+  return order.find(watchable) ?? prev;
 }
 
 // ---- the strip ----------------------------------------------------------------------------------------------------
@@ -106,6 +187,12 @@ export interface StripState {
   costUSD: number | null;
   /** The model's display name ("Muse Spark 1.3"). */
   model: string;
+  /** Parts in the plan (0 before the analysis lands), parts published so far, parts left out after failing. */
+  partsPlanned: number;
+  partsPassed: number;
+  partsLeftOut: number;
+  /** The job ended in failure (not a declined page, which finishes normally with nothing planned). */
+  failed: boolean;
 }
 
 const MUSE_STAGES = new Set(['analyze', 'component', 'repair']);
@@ -146,10 +233,47 @@ export function liveStrip(detail: JobDetail): StripState {
   const sum = evs.reduce((a, e) => a + (num(e.estCostUSD) ?? 0), 0);
   const recorded = num(detail.summary.totalCostUSD);
   const last = evs[evs.length - 1];
+  const components = detail.lessonData?.lesson?.components ?? [];
   return {
     ops, finished: !running, totalMs: running || last === undefined ? null : last.t, museCalls, samCalls,
     costUSD: !running && recorded !== null ? recorded : evs.some((e) => num(e.estCostUSD) !== null) ? sum : null, model,
+    partsPlanned: planOrder(detail).length,
+    partsPassed: components.filter((c) => c.status === 'passed').length,
+    partsLeftOut: components.filter((c) => c.status === 'failed').length,
+    failed: detail.summary.status === 'failed',
   };
+}
+
+const calls = (n: number, who: string): string => `${n} ${who} ${n === 1 ? 'call' : 'calls'}`;
+
+/**
+ * The strip's second line while a build runs: what has finished so far, from the recorded events only.
+ * "2 Muse Spark 1.3 calls done · 1 SAM 3.1 call · 1 of 2 parts checked".
+ */
+export function progressFacts(s: StripState): string[] {
+  const out: string[] = [s.museCalls === 0 ? 'No call finished yet' : `${calls(s.museCalls, s.model)} done`];
+  if (s.samCalls > 0) out.push(calls(s.samCalls, 'SAM 3.1'));
+  if (s.partsPlanned > 0) out.push(`${s.partsPassed} of ${s.partsPlanned} ${s.partsPlanned === 1 ? 'part' : 'parts'} checked`);
+  return out;
+}
+
+/**
+ * The closing beat (Stage 9b): the strip's headline and facts once the job has finished. "Every part checked" is said
+ * only when every planned part passed its checks; otherwise how many did and how many were left out.
+ */
+export function closingBeat(s: StripState): { headline: string; facts: string[]; ready: boolean } {
+  const took = formatElapsed(s.totalMs ?? 0);
+  const ready = !s.failed && s.partsPlanned > 0 && s.partsPassed > 0;
+  const headline = s.failed ? `The run stopped after ${took}` : s.partsPlanned === 0 ? `Finished in ${took}` : ready ? `Lesson ready · built in ${took}` : `Built in ${took}`;
+  const facts: string[] = [];
+  if (s.museCalls > 0) facts.push(calls(s.museCalls, s.model));
+  if (s.samCalls > 0) facts.push(calls(s.samCalls, 'SAM 3.1'));
+  if (s.partsPlanned > 0) {
+    if (s.partsPassed === s.partsPlanned) facts.push(s.partsPlanned === 1 ? 'the part was checked' : 'every part checked');
+    else facts.push(`${s.partsPassed} of ${s.partsPlanned} parts checked`, ...(s.partsLeftOut > 0 ? [`${s.partsLeftOut} left out`] : []));
+  }
+  if (s.costUSD !== null) facts.push(`${formatCostUSD(s.costUSD)} est.`);
+  return { headline, facts, ready };
 }
 
 // ---- part work logs -------------------------------------------------------------------------------------------------

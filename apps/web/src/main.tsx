@@ -13,6 +13,7 @@ import './styles/engines-a.css';
 import './styles/engines-b.css';
 import './styles/engines-c.css';
 import './styles/live.css';
+import './styles/onboarding.css';
 
 interface BoundaryState { failed: boolean }
 

@@ -23,7 +23,7 @@ import { FormulaExplorerView } from './FormulaExplorerView.tsx';
 import { KitCard } from './KitCard.tsx';
 import { OverviewView } from './OverviewView.tsx';
 import { PendingCard } from './PendingCard.tsx';
-import { BuildTrace, LiveBar, OverviewSlot, PartFrame } from './LiveBuild.tsx';
+import { BuildTrace, LiveBar, OverviewSlot, PartFrame, useFollowBuild } from './LiveBuild.tsx';
 import type { LiveContext } from './LiveBuild.tsx';
 import { IconPresent } from './presentation/icons.tsx';
 import { QuizCardsView } from './QuizCardsView.tsx';
@@ -170,21 +170,25 @@ function Arrival({ live, index, children }: { live: boolean; index: number; chil
 export function LessonView({ lesson, specs, analysis, sources, cite, disclosure, provenance = null, fallbackTitle = 'Lesson', premium = null, repairBadge = null, pending = [], order = [], reports = NO_REPORTS, live = null }: LessonViewProps) {
   const declined = analysis !== null && !analysis.usable;
   const liveClass = live === null ? 'lesson' : 'lesson is-live';
+  const rootRef = useRef<HTMLDivElement>(null);
+  const cards = lessonCards(lesson, specs, premium !== null, reports);
+  const items = lessonItems(cards, pending, order);
+  // Stage 9b: while watching a build, keep the part where something is happening in view (until the user scrolls).
+  const arrived = items.flatMap((it) => (it.kind === 'card' ? [it.card.componentId as string] : []));
+  useFollowBuild(rootRef, live, arrived, order);
   if (declined) {
     return (
-      <div className={liveClass} data-testid="lesson">
+      <div className={liveClass} data-testid="lesson" ref={rootRef}>
         {live !== null && <LiveBar live={live} />}
         <div className="lb-arrive"><DeclineCard analysis={analysis} sources={sources} disclosure={disclosure} /></div>
       </div>
     );
   }
 
-  const cards = lessonCards(lesson, specs, premium !== null, reports);
-  const items = lessonItems(cards, pending, order);
   const empty = lesson.overview === null && items.length === 0;
   const title = lesson.overview?.headline ?? fallbackTitle;
   return (
-    <div className={liveClass} data-testid="lesson">
+    <div className={liveClass} data-testid="lesson" ref={rootRef}>
       {live !== null && <LiveBar live={live} />}
       <header className="lesson-head">
         {/* Keyed by its text, so Muse's headline replacing the page title fades in rather than snapping. */}

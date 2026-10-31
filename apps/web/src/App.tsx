@@ -50,6 +50,10 @@ import type { LiveContext } from './components/LiveBuild.tsx';
 import { useReplay } from './components/useReplay.ts';
 import { jobStartMs, liveStrip, partBuilds } from './lib/liveBuild.ts';
 import { replayRequest } from './lib/replay.ts';
+import type { ReplayRequest } from './lib/replay.ts';
+import { shouldAutoStart, tourRequest, tourSignals, TOUR_JOB_ID, TOUR_STORAGE_KEY } from './lib/onboarding.ts';
+import type { TourOutcome, TourStep } from './lib/onboarding.ts';
+import { Onboarding } from './components/Onboarding.tsx';
 import { IconPresent } from './components/presentation/icons.tsx';
 import type { SourceRef } from '../../../packages/contracts/index.ts';
 
@@ -71,6 +75,12 @@ const PRESENT_REQUEST = typeof window === 'undefined' ? null : presentRequest(wi
 const REPLAY_REQUEST = typeof window === 'undefined' ? null : replayRequest(window.location.search);
 /** `?job=<id>` opens that stored run instead of the most recent lesson. */
 const LINKED_JOB = typeof window === 'undefined' ? null : REPLAY_REQUEST?.jobId ?? requestedJobId(window.location.search) ?? PRESENT_REQUEST?.jobId ?? null;
+/** Stage 9b: `?tour=1[&speed=N]` forces the first-run tour (the scripted demo path), `?tour=0` keeps it closed. */
+const TOUR_REQUEST = tourRequest(typeof window === 'undefined' ? '' : window.location.search);
+
+function readTourOutcome(): string | null {
+  try { return localStore()?.getItem(TOUR_STORAGE_KEY) ?? null; } catch { return null; }
+}
 
 export function App() {
   const { health, down, refresh: refreshHealth } = useHealth();
@@ -134,8 +144,10 @@ export function App() {
       ? opening.jobId
       : pickDefaultJob(jobsForSource, generate.busy)?.jobId ?? null;
   // Stage 9: a replay feeds the recorded run's detail, moment by moment, in place of the polled one.
-  const replaying = REPLAY_REQUEST !== null && selectedJobId === REPLAY_REQUEST.jobId;
-  const replay = useReplay(REPLAY_REQUEST);
+  // Stage 9b: the tour starts a replay without a reload, so the request is state (seeded from the URL).
+  const [replayReq, setReplayReq] = useState<ReplayRequest | null>(REPLAY_REQUEST);
+  const replaying = replayReq !== null && selectedJobId === replayReq.jobId;
+  const replay = useReplay(replayReq);
   const polled = useJobDetail(replaying ? null : selectedJobId);
   const detail = replaying ? replay.detail : polled;
   const ready = detail?.state === 'ready' && detail.data.summary.sourceId === selectedSourceId ? detail.data : null;
@@ -156,9 +168,9 @@ export function App() {
     const clock = replaying ? replay.clock : () => (liveStart === null ? 0 : Date.now() - liveStart);
     return {
       clock, strip: liveStrip(ready), builds: partBuilds(ready), sourceWords: liveWords,
-      replay: replaying && REPLAY_REQUEST !== null ? { speed: REPLAY_REQUEST.speed, recordedAt: replay.recordedAt, finished: replay.finished, onRestart: replay.restart } : null,
+      replay: replaying && replayReq !== null ? { speed: replayReq.speed, recordedAt: replay.recordedAt, finished: replay.finished, onRestart: replay.restart } : null,
     };
-  }, [liveOn, ready, replaying, replay.clock, replay.recordedAt, replay.finished, replay.restart, liveStart, liveWords]);
+  }, [liveOn, ready, replaying, replayReq, replay.clock, replay.recordedAt, replay.finished, replay.restart, liveStart, liveWords]);
   const quotes = useMemo(() => {
     if (selectedSourceId === null) return [];
     const v1 = collectQuoteRefs(selectedSourceId, ready?.spec, ready?.analysis?.analysis);
@@ -318,8 +330,43 @@ export function App() {
       return null;
     });
   }, []);
+  // The closing beat of a watched build offers the same Present button (Stage 9b).
+  const liveView = useMemo((): LiveContext | null => (liveCtx === null ? null : { ...liveCtx, onPresent: deck === null ? null : onPresent }), [liveCtx, deck, onPresent]);
+
+  // Stage 9b: the first-run tour. It opens by itself once, on a plain first visit (or with ?tour=1), and from the rail.
+  const [touring, setTouring] = useState(() => typeof window !== 'undefined' && shouldAutoStart(readTourOutcome(), window.location.search));
+  const tourJob = allJobs.find((j) => j.jobId === TOUR_JOB_ID) ?? null;
+  const tourReplaying = replaying && replayReq?.jobId === TOUR_JOB_ID;
+  const library = useMemo(() => {
+    if (sourceList === null) return null;
+    const active = sourceList.filter((s) => s.kind === 'library' && !isRetiredPage(s));
+    return { pages: active.length, subjects: new Set(active.map((s) => s.subject ?? 'other')).size };
+  }, [sourceList]);
+  const signals = useMemo(() => tourSignals({
+    replayAvailable: tourJob !== null || jobs.state === 'loading', replayLoading: jobs.state === 'loading', replaying: tourReplaying, detail: ready, builds: liveCtx?.builds ?? {}, strip: liveCtx?.strip ?? null,
+    canPresent: deck !== null, library, speed: TOUR_REQUEST.speed,
+  }), [tourJob, jobs.state, tourReplaying, ready, liveCtx, deck, library]);
+  const startTourReplay = useCallback(() => {
+    if (tourJob === null) return;
+    setDrawer(null);
+    setShowSource(true);
+    setPickedSource(tourJob.sourceId);
+    setFlash(null);
+    setPickedJob({ jobId: tourJob.jobId, sourceId: tourJob.sourceId });
+    if (replayReq?.jobId === tourJob.jobId) replay.restart();
+    else setReplayReq({ jobId: tourJob.jobId, speed: TOUR_REQUEST.speed });
+  }, [tourJob, replayReq, replay]);
+  const onTourStep = useCallback((step: TourStep) => {
+    if (step.id === 'library' || step.id === 'overview') { setShowSource(true); setDrawer(null); }
+    if (step.id === 'present') setDrawer(null);
+  }, []);
+  const closeTour = useCallback((how: TourOutcome) => {
+    setTouring(false);
+    try { localStore()?.setItem(TOUR_STORAGE_KEY, how); } catch { /* blocked storage: the tour just reopens next visit */ }
+  }, []);
+
   const presentButton = deck === null ? null : (
-    <button type="button" className="btn present-launch" onClick={onPresent} title="Present this lesson full screen, one step at a time">
+    <button type="button" className="btn present-launch" data-tour="present" onClick={onPresent} title="Present this lesson full screen, one step at a time">
       <IconPresent size={18} />Present
     </button>
   );
@@ -348,6 +395,8 @@ export function App() {
           busy={generate.busy}
           onPresent={onPresent}
           canPresent={deck !== null}
+          onTour={() => setTouring(true)}
+          touring={touring}
         />
         <div className={`workspace${showSource ? '' : ' hide-source'}`}>
           {showSource ? (
@@ -417,7 +466,7 @@ export function App() {
                   pending={stream.pending}
                   order={stream.order}
                   reports={reports}
-                  live={liveCtx}
+                  live={liveView}
                 />
               )}
               {ready !== null && ((lessonMode === 'v1' && (spec === undefined || ready.summary.status !== 'succeeded')) || (lessonMode === 'working' && liveCtx === null) || lessonMode === 'outcome') && (
@@ -509,6 +558,9 @@ export function App() {
           </RunsDrawer>
         )}
       </div>
+      {touring && presenting === null && (
+        <Onboarding signals={signals} onStartReplay={startTourReplay} onPresent={onPresent} onClose={closeTour} onStep={onTourStep} />
+      )}
       {presenting !== null && deck !== null && deck.jobId === presenting.jobId && (
         <PresentationMode
           key={deck.jobId}

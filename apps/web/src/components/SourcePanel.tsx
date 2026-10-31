@@ -148,7 +148,7 @@ function HighlightedText({ text, highlights, byKey, flash, sourceId, order }: { 
   useEffect(() => () => { linkStore.leave('source:hover'); linkStore.leave('source:focus'); }, []);
 
   return (
-    <div ref={ref} className="source-text" tabIndex={0} aria-label="Source text with highlighted evidence quotes" onMouseOver={over} onMouseOut={out} onFocus={focus} onBlur={blur}>
+    <div ref={ref} className="source-text" data-tour="source-text" tabIndex={0} aria-label="Source text with highlighted evidence quotes" onMouseOver={over} onMouseOut={out} onFocus={focus} onBlur={blur}>
       {parts}
     </div>
   );
@@ -166,7 +166,7 @@ export function SourcePanel({ sources, selectedId, onSelect, onReload, doc, high
 
   return (
     <section className="panel source-panel" aria-labelledby="source-heading">
-      <div className="source-head">
+      <div className="source-head" data-tour="library">
         <h2 id="source-heading" className="sr-only">Source page</h2>
         <div className="source-head-row">
           {sources.state === 'loading' && <p className="muted">Loading pages…</p>}

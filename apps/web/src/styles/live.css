@@ -1,39 +1,68 @@
-/* Stage 9: the live build view (docs/specs/STAGE-9-live-build-view.md). Every animation here plays once, on mount, in a
- * lesson this view watched being built (.is-live) or in its source page; a lesson opened at rest never animates.
- * Motion: 150–400 ms, one ease-out curve, opacity / small translate / clip-path only. Reduced motion: opacity only. */
+/* Stage 9: the live build view (docs/specs/STAGE-9-live-build-view.md; pass 2: STAGE-9b). Every animation here plays
+ * once, on mount, in a lesson this view watched being built (.is-live) or in its source page; a lesson opened at rest
+ * never animates. Motion: 150–400 ms, one ease-out curve, opacity / small translate / clip-path only. Reduced motion:
+ * opacity only. */
 
 :root { --lb-ease: cubic-bezier(0.16, 1, 0.3, 1); }
 
-/* ---- the strip (and, in a replay, its label) ---------------------------------------------------------------------- */
-.lb-bar { display: grid; gap: 6px; }
+/* ---- the strip: sticky at the top of the lesson column, legible in a 1080p recording ------------------------------ */
+.lb-bar {
+  position: sticky; top: 0; z-index: 4; display: grid; gap: 2px; padding: 10px 18px 10px;
+  border: 1px solid var(--line-2); border-radius: var(--r-l); background: var(--panel);
+  /* covers the column's top padding so scrolled content never shows above the stuck strip */
+  box-shadow: 0 -10px 0 0 var(--lb-under, var(--window-bg));
+  font-variant-numeric: tabular-nums; transition: border-color 240ms var(--lb-ease);
+}
+.lb-bar[data-state="ready"] { border-color: var(--ok-line); }
+/* A narrower lesson column (1366×768 and below): one step down in size, so two open calls still fit on the line. */
+.lesson.is-live { container-type: inline-size; container-name: lesson; }
+@container lesson (max-width: 900px) {
+  .lb-main { font-size: var(--fs-16); gap: 10px; }
+  .lb-ops { gap: 16px; }
+  .lb-time, .lb-replay, .lb-replay .link-btn, .lb-facts { font-size: var(--fs-14); }
+  .lb-total { font-size: var(--fs-16); }
+}
 .lb-replay {
-  display: flex; align-items: baseline; gap: 0; min-block-size: 20px; min-width: 0; overflow: hidden; white-space: nowrap;
-  font-size: var(--fs-12); line-height: 20px; color: var(--ink-2);
+  display: flex; align-items: baseline; min-block-size: 22px; min-width: 0; overflow: hidden; white-space: nowrap;
+  font-size: var(--fs-14); line-height: 22px; color: var(--ink-2);
 }
 .lb-replay strong { color: var(--ink); font-weight: var(--fw-bold); }
-.lb-replay > * + *::before { content: "·"; margin: 0 8px; color: var(--ink-3); }
-.lb-replay .link-btn { font-size: var(--fs-12); }
-.lb-strip {
-  display: flex; align-items: center; gap: 14px; block-size: 40px; min-width: 0; padding: 0 14px; overflow: hidden; white-space: nowrap;
-  border: 1px solid var(--line); border-radius: var(--r); background: var(--panel);
-  font-size: var(--fs-14); color: var(--ink-2); font-variant-numeric: tabular-nums;
+.lb-replay > * + *::before { content: "·"; display: inline-block; margin: 0 8px; color: var(--ink-3); }
+.lb-replay .link-btn { font-size: var(--fs-14); }
+.lb-main {
+  display: flex; align-items: center; gap: 14px; block-size: 44px; min-width: 0; overflow: hidden; white-space: nowrap;
+  font-size: var(--fs-20); line-height: 1.2; color: var(--ink); animation: lb-in 260ms var(--lb-ease) both;
 }
-.lb-mode { flex: none; font-size: var(--fs-12); font-weight: var(--fw-bold); color: var(--accent-text); }
-.lb-bar[data-state="done"] .lb-mode { color: var(--ink-3); }
-.lb-ops { display: flex; align-items: baseline; gap: 22px; flex: 1 1 auto; min-width: 0; overflow: hidden; }
-.lb-op { display: inline-flex; align-items: baseline; gap: 7px; min-width: 0; animation: lb-in 220ms var(--lb-ease) both; }
+.lb-mode {
+  flex: none; padding: 2px 8px; border: 1px solid var(--accent-line); border-radius: var(--r);
+  font-size: var(--fs-14); font-weight: var(--fw-bold); color: var(--accent-text);
+}
+.lb-bar[data-state="done"] .lb-mode { border-color: var(--line-2); color: var(--ink-2); }
+.lb-model { flex: none; font-weight: var(--fw-bold); }
+.lb-ops { display: flex; align-items: baseline; gap: 24px; flex: 1 1 auto; min-width: 0; overflow: hidden; }
+.lb-op { display: inline-flex; align-items: baseline; gap: 8px; min-width: 0; color: var(--ink-2); animation: lb-in 220ms var(--lb-ease) both; }
+.lb-op:first-child { color: var(--ink); }
 .lb-op::before {
-  content: ""; flex: none; align-self: center; inline-size: 7px; block-size: 7px; border-radius: 50%; background: var(--accent-text);
+  content: ""; flex: none; align-self: center; inline-size: 8px; block-size: 8px; border-radius: 50%; background: var(--accent-text);
 }
-.lb-op[data-actor="sam"]::before { background: transparent; box-shadow: inset 0 0 0 1.5px var(--ink-2); }
+.lb-op[data-actor="sam"]::before { background: transparent; box-shadow: inset 0 0 0 2px var(--ink-2); }
 .lb-op-idle::before { background: var(--line-3); }
-.lb-actor { flex: none; color: var(--ink); font-weight: var(--fw-medium); }
+.lb-actor { flex: none; font-weight: var(--fw-bold); color: var(--ink); }
 .lb-op-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
-.lb-time { flex: none; color: var(--ink-3); }
-.lb-total { flex: none; margin-left: auto; color: var(--ink-3); }
-.lb-summary { gap: 0; animation: lb-in 240ms var(--lb-ease) both; }
-.lb-summary > * + *::before { content: "·"; margin: 0 8px; color: var(--ink-3); }
-.lb-summary > :first-child { color: var(--ink); }
+.lb-time { flex: none; font-size: var(--fs-16); color: var(--ink-3); }
+.lb-total { flex: none; margin-left: auto; font-size: var(--fs-20); color: var(--ink-2); }
+.lb-closing .mark { margin: 0; }
+.lb-closing .mark .icon { inline-size: 22px; block-size: 22px; }
+.lb-headline { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; font-weight: var(--fw-bold); }
+.lb-present { flex: none; display: inline-flex; align-items: center; gap: 8px; padding-block: 6px; font-size: var(--fs-16); }
+.lb-facts {
+  display: flex; align-items: baseline; min-block-size: 22px; min-width: 0; overflow: hidden; white-space: nowrap;
+  font-size: var(--fs-16); line-height: 22px; color: var(--ink-2); animation: lb-in 260ms var(--lb-ease) both;
+}
+.lb-facts > span { flex: none; }
+.lb-facts > span:last-child { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.lb-facts > * + *::before { content: "·"; margin: 0 10px; color: var(--ink-3); }
+.lb-bar[data-state="ready"] .lb-facts { color: var(--ink); }
 
 /* ---- the title and the overview arriving --------------------------------------------------------------------------- */
 .lb-title { display: flex; flex-direction: column; justify-content: flex-end; }
@@ -51,14 +80,18 @@
 .lesson.is-live .prov-line { min-block-size: 3lh; }
 .overview[data-arrive="true"] .key-points li { animation: lb-rise 320ms var(--lb-ease) calc(var(--i, 0) * 90ms + 80ms) both; }
 .overview[data-arrive="true"] .overview-foot { animation: lb-in 240ms var(--lb-ease) calc(var(--n, 3) * 90ms + 160ms) both; }
-.lb-overview-slot { min-block-size: 132px; padding: 4px 0 0 20px; }
+.lb-overview-slot { display: grid; align-content: start; gap: 14px; min-block-size: 132px; padding: 4px 0 0 20px; }
 .lb-overview-slot p { font-size: var(--fs-14); color: var(--ink-3); }
+.lb-overview-pv { gap: 12px; opacity: 0.8; }
 
-/* ---- a planned part's frame ----------------------------------------------------------------------------------------- */
+/* ---- a planned part's frame: its log over a faint sketch of the part's shape ----------------------------------------- */
 .lb-frame {
-  align-content: start; background: transparent; border: 1px dashed var(--line-2);
-  animation: lb-in 260ms var(--lb-ease) calc(var(--i, 0) * 80ms) both;
+  display: flex; flex-direction: column; gap: 14px; overflow: hidden; background: transparent; border: 1px dashed var(--line-2);
+  animation: lb-in 260ms var(--lb-ease) calc(var(--i, 0) * 80ms) both; transition: border-color 240ms var(--lb-ease);
 }
+.lb-frame > * { flex: none; }
+.lb-frame[data-phase="writing"], .lb-frame[data-phase="outlining"] { border-color: var(--accent-line); }
+.lb-frame[data-phase="reworking"] { border-color: var(--bad-line); }
 .lb-frame .kit-head h2 { color: var(--ink); }
 .lb-state { color: var(--ink-2); }
 .lb-reason { max-width: 70ch; font-size: var(--fs-14); line-height: 1.5; color: var(--ink-2); }
@@ -76,6 +109,78 @@
 .lb-tick { display: inline-grid; place-items: center; inline-size: 12px; block-size: 12px; animation: lb-tick 200ms var(--lb-ease) var(--d, 0ms) both; }
 .lb-tick svg { fill: none; stroke: var(--ok); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .lb-tick[data-ok="false"] svg { stroke: var(--bad); }
+
+/* The sketch: shapes in the faint surface tone, no text but the figure's caption. It fills what the log leaves of the
+ * frame's reserve; its emphasis follows the part's phase (opacity only, never motion). */
+.lb-frame > .lb-pv { flex: 1 1 auto; min-block-size: 96px; }
+.lb-pv {
+  --pv-fill: var(--panel-2); --pv-line: var(--line); --pv-strong: var(--panel-3);
+  display: flex; flex-direction: column; min-height: 0; opacity: 0.55; transition: opacity 320ms var(--lb-ease);
+}
+/* On the white light-theme panel the first surface tones vanish: one step stronger there. */
+[data-theme="light"] .lb-pv { --pv-fill: var(--panel-3); --pv-line: var(--line-2); --pv-strong: var(--line-2); }
+.lb-pv[data-phase="writing"], .lb-pv[data-phase="reworking"] { opacity: 0.8; }
+.lb-pv[data-phase="outlining"], .lb-pv[data-phase="checked"] { opacity: 1; }
+.lb-pv > * { flex: 1 1 auto; min-height: 0; }
+.pv-col { display: flex; flex-direction: column; gap: 12px; min-height: 0; min-width: 0; }
+.pv-fill { block-size: 100%; }
+.pv-row { display: flex; gap: 10px; align-items: center; flex: none; }
+.pv-bar { display: block; flex: none; block-size: 12px; border-radius: 6px; background: var(--pv-fill); }
+.pv-strong { block-size: 16px; background: var(--pv-strong); }
+.pv-box { border: 1px solid var(--pv-line); border-radius: var(--r); padding: 16px; min-height: 0; }
+.pv-pill { display: block; inline-size: 92px; block-size: 32px; border-radius: 16px; background: var(--pv-fill); }
+.pv-pill-wide { inline-size: 150px; }
+.pv-chip { display: block; flex: none; block-size: 30px; border-radius: var(--r); border: 1px solid var(--pv-line); background: var(--pv-fill); }
+.pv-chip-inline { inline-size: 96px; }
+
+.pv-quiz { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 1fr; gap: 14px; }
+.pv-option { display: flex; align-items: center; gap: 10px; flex: none; padding: 10px 12px; border: 1px solid var(--pv-line); border-radius: var(--r); }
+.pv-option .pv-bar { flex: 1 1 auto; max-inline-size: 70%; }
+.pv-radio { flex: none; inline-size: 14px; block-size: 14px; border-radius: 50%; border: 1.5px solid var(--pv-strong); }
+.pv-rung { display: flex; align-items: center; gap: 14px; flex: 1 1 0; max-block-size: 56px; padding: 0 14px; border: 1px solid var(--pv-line); border-radius: var(--r); }
+.pv-rung .pv-bar { max-inline-size: 60%; }
+.pv-num {
+  display: grid; place-items: center; flex: none; inline-size: 26px; block-size: 26px; border-radius: 50%;
+  background: var(--pv-fill); font-size: var(--fs-12); color: var(--ink-3);
+}
+.pv-grid {
+  display: grid; grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr)); grid-auto-rows: 1fr;
+  border-right: 1px solid var(--pv-line); border-bottom: 1px solid var(--pv-line); border-radius: var(--r); overflow: hidden;
+}
+.pv-cell { display: flex; align-items: center; padding: 0 14px; border-top: 1px solid var(--pv-line); border-left: 1px solid var(--pv-line); min-block-size: 0; }
+.pv-head { background: color-mix(in srgb, var(--pv-fill) 45%, transparent); }
+.pv-cell .pv-bar { inline-size: 70%; }
+.pv-explorer { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 20px; flex: 1 1 auto; min-height: 0; }
+.pv-explorer > .pv-col { justify-content: space-around; }
+.pv-eq { inline-size: 40% !important; block-size: 22px; }
+.pv-slider { display: flex; flex-direction: column; gap: 10px; flex: none; }
+.pv-track { position: relative; display: block; block-size: 4px; border-radius: 2px; background: var(--pv-fill); }
+.pv-knob { position: absolute; top: 50%; inline-size: 16px; block-size: 16px; margin: -8px 0 0 -8px; border-radius: 50%; background: var(--pv-strong); }
+.pv-graph, .pv-map { inline-size: 100%; block-size: 100%; min-height: 0; border: 1px solid var(--pv-line); border-radius: var(--r); }
+.pv-axis { fill: none; stroke: var(--pv-strong); stroke-width: 1.5; }
+.pv-curve { fill: none; stroke: var(--pv-strong); stroke-width: 2; stroke-dasharray: 6 5; }
+.pv-cases { flex: 0 0 auto; }
+.pv-figure { display: grid; grid-template-columns: minmax(0, 1fr) minmax(160px, 26%); gap: 20px; }
+.pv-plate { display: grid; place-items: center; background: color-mix(in srgb, var(--pv-fill) 40%, transparent); }
+.pv-caption { font-size: var(--fs-14); color: var(--ink-3); }
+.pv-chips { justify-content: flex-start; }
+.pv-tray { flex-wrap: wrap; }
+.pv-bins { display: grid; grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr)); gap: 14px; flex: 1 1 auto; }
+.pv-edge { stroke: var(--pv-strong); stroke-width: 1.5; }
+.pv-node { fill: var(--panel); stroke: var(--pv-strong); stroke-width: 1.5; }
+.pv-equation { justify-content: center; gap: 28px; padding: 8px 0; }
+.pv-term { inline-size: 92px; block-size: 56px; padding: 0; }
+.pv-balance { flex: 1 1 0; justify-content: center; }
+.pv-meter { position: relative; display: block; flex: none; block-size: 18px; border-radius: 4px; background: color-mix(in srgb, var(--pv-fill) 45%, transparent); }
+.pv-meter > span { display: block; block-size: 100%; border-radius: 4px; background: var(--pv-fill); }
+.pv-meter-tall { block-size: 40px; }
+.pv-threshold { position: absolute; inset-block: -6px; inset-inline-start: 58%; inline-size: 2px; background: var(--pv-strong); }
+.pv-bars { display: flex; align-items: flex-end; justify-content: center; gap: 18px; flex: 1 1 auto; min-height: 0; padding: 12px 0 0; border-bottom: 1px solid var(--pv-line); }
+.pv-vbar { display: block; inline-size: 9%; border-radius: 4px 4px 0 0; background: var(--pv-fill); }
+.pv-ladder { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; }
+.pv-rail { display: flex; flex-direction: column; justify-content: space-between; padding-left: 18px; box-shadow: inset 1px 0 0 var(--pv-line); }
+.pv-rung-tick { border: 0; padding: 0; max-block-size: none; flex: none; }
+.pv-tick { flex: none; inline-size: 18px; block-size: 2px; margin-left: -18px; background: var(--pv-strong); }
 
 /* ---- a part arriving: the content unrolls under its header ---------------------------------------------------------- */
 .lb-arrive { animation: lb-reveal 380ms var(--lb-ease) both; }
@@ -115,9 +220,14 @@ mark.lb-lit { animation: lb-lit 900ms var(--lb-ease) calc(var(--i, 0) * 70ms + 1
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .lb-op, .lb-summary, .lb-log li, .lb-frame, .lb-arrive, .lb-tick, .lb-title-text,
+  .lb-op, .lb-main, .lb-facts, .lb-log li, .lb-frame, .lb-arrive, .lb-tick, .lb-title-text,
   .overview[data-arrive="true"] .key-points li, .overview[data-arrive="true"] .overview-foot {
     animation: lb-in 120ms linear both; animation-delay: 0s;
   }
+  .lb-pv, .lb-bar, .lb-frame { transition: none; }
   mark.lb-lit, .ld-plate[data-build="draw"] .ld-marker, .ld-plate[data-build="draw"] .ld-region { animation: none; }
 }
+
+/* Scene (premium activity) and meter sketches spread over their reserve instead of collecting at the top. */
+.lb-pv-scene .pv-plate { flex: 1 1 auto; min-block-size: 0; }
+.lb-pv-meter .pv-fill, .lb-pv-equation .pv-fill { justify-content: space-around; }

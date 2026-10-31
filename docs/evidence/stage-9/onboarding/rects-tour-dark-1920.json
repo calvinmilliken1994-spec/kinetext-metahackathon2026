@@ -1,0 +1,1005 @@
+[
+{
+"i": 0,
+"label": "welcome",
+"step": "welcome",
+"side": "center",
+"stripState": null,
+"strip": null,
+"title": [
+109,
+36
+],
+"prov": [
+182,
+65
+],
+"ov": [
+271,
+253
+],
+"p1": null,
+"p2": null,
+"scroll": 0,
+"cardOverHole": false,
+"cardInView": true,
+"docOverflow": 0,
+"stripOverflow": null,
+"main": null,
+"facts": null
+},
+{
+"i": 1,
+"label": "library",
+"step": "library",
+"side": "right",
+"stripState": null,
+"strip": null,
+"title": [
+109,
+36
+],
+"prov": [
+182,
+65
+],
+"ov": [
+271,
+253
+],
+"p1": null,
+"p2": null,
+"scroll": 0,
+"cardOverHole": false,
+"cardInView": true,
+"docOverflow": 0,
+"stripOverflow": null,
+"main": null,
+"facts": null
+},
+{
+"i": 2,
+"label": "replay 0.8s",
+"step": "reading",
+"side": "left",
+"stripState": "running",
+"strip": [
+101,
+114
+],
+"title": [
+247,
+36
+],
+"prov": [
+320,
+65
+],
+"ov": null,
+"p1": null,
+"p2": null,
+"scroll": 0,
+"cardOverHole": false,
+"cardInView": true,
+"docOverflow": 0,
+"stripOverflow": 0,
+"main": "Muse Spark 1.3 Reading the page and planning the lesson 1 s",
+"facts": "No call finished yet"
+},
+{
+"i": 3,
+"label": "replay 1.7s",
+"step": "reading",
+"side": "left",
+"stripState": "running",
+"strip": [
+101,
+114
+],
+"title": [
+247,
+36
+],
+"prov": [
+320,
+65
+],
+"ov": null,
+"p1": null,
+"p2": null,
+"scroll": 0,
+"cardOverHole": false,
+"cardInView": true,
+"docOverflow": 0,
+"stripOverflow": 0,
+"main": "Muse Spark 1.3 Reading the page and planning the lesson 5 s",
+"facts": "No call finished yet"
+},
+{
+"i": 4,
+"label": "replay 2.7s",
+"step": "reading",
+"side": "left",
+"stripState": "running",
+"strip": [
+101,
+114
+],
+"title": [
+247,
+36
+],
+"prov": [
+320,
+65
+],
+"ov": null,
+"p1": null,
+"p2": null,
+"scroll": 0,
+"cardOverHole": false,
+"cardInView": true,
+"docOverflow": 0,
+"stripOverflow": 0,
+"main": "Muse Spark 1.3 Reading the page and planning the lesson 9 s",
+"facts": "No call finished yet"
+},
+{
+"i": 5,
+"label": "replay 3.6s",
+"step": "reading",
+"side": "left",
+"stripState": "running",
+"strip": [
+101,
+114
+],
+"title": [
+247,
+36
+],
+"prov": [
+320,
+65
+],
+"ov": null,
+"p1": null,
+"p2": null,
+"scroll": 0,
+"cardOverHole": false,
+"cardInView": true,
+"docOverflow": 0,
+"stripOverflow": 0,
+"main": "Muse Spark 1.3 Reading the page and planning the lesson 13 s",
+"facts": "No call finished yet"
+},
+{
+"i": 6,
+"label": "replay 4.5s",
+"step": "reading",
+"side": "left",
+"stripState": "running",
+"strip": [
+101,
+114
+],
+"title": [
+247,
+36
+],
+"prov": [
+320,
+65
+],
+"ov": null,
+"p1": null,
+"p2": null,
+"scroll": 0,
+"cardOverHole": false,
+"cardInView": true,
+"docOverflow": 0,
+"stripOverflow": 0,
+"main": "Muse Spark 1.3 Reading the page and planning the lesson 15 s",
+"facts": "No call finished yet"
+},
+{
+"i": 7,
+"label": "replay 5.4s",
+"step": "reading",
+"side": "left",
+"stripState": "running",
+"strip": [
+101,
+114
+],
+"title": [
+247,
+36
+],
+"prov": [
+320,
+65
+],
+"ov": null,
+"p1": null,
+"p2": null,
+"scroll": 0,
+"cardOverHole": false,
+"cardInView": true,
+"docOverflow": 0,
+"stripOverflow": 0,
+"main": "Muse Spark 1.3 Reading the page and planning the lesson 19 s",
+"facts": "No call finished yet"
+},
+{
+"i": 8,
+"label": "replay 6.3s",
+"step": "reading",
+"side": "left",
+"stripState": "running",
+"strip": [
+101,
+114
+],
+"title": [
+247,
+36
+],
+"prov": [
+320,
+65
+],
+"ov": null,
+"p1": null,
+"p2": null,
+"scroll": 0,
+"cardOverHole": false,
+"cardInView": true,
+"docOverflow": 0,
+"stripOverflow": 0,
+"main": "Muse Spark 1.3 Reading the page and planning the lesson 23 s",
+"facts": "No call finished yet"
+},
+{
+"i": 9,
+"label": "replay 7.3s",
+"step": "reading",
+"side": "left",
+"stripState": "running",
+"strip": [
+101,
+114
+],
+"title": [
+247,
+36
+],
+"prov": [
+320,
+65
+],
+"ov": null,
+"p1": null,
+"p2": null,
+"scroll": 0,
+"cardOverHole": false,
+"cardInView": true,
+"docOverflow": 0,
+"stripOverflow": 0,
+"main": "Muse Spark 1.3 Reading the page and planning the lesson 27 s",
+"facts": "No call finished yet"
+},
+{
+"i": 10,
+"label": "replay 8.2s",
+"step": "reading",
+"side": "left",
+"stripState": "running",
+"strip": [
+101,
+114
+],
+"title": [
+247,
+36
+],
+"prov": [
+320,
+65
+],
+"ov": null,
+"p1": null,
+"p2": null,
+"scroll": 0,
+"cardOverHole": false,
+"cardInView": true,
+"docOverflow": 0,
+"stripOverflow": 0,
+"main": "Muse Spark 1.3 Reading the page and planning the lesson 31 s",
+"facts": "No call finished yet"
+},
+{
+"i": 11,
+"label": "replay 9.1s",
+"step": "overview",
+"side": "below",
+"stripState": "running",
+"strip": [
+101,
+114
+],
+"title": [
+247,
+36
+],
+"prov": [
+320,
+65
+],
+"ov": [
+409,
+181
+],
+"p1": [
+614,
+714
+],
+"p2": [
+1352,
+584
+],
+"scroll": 0,
+"cardOverHole": false,
+"cardInView": true,
+"docOverflow": 0,
+"stripOverflow": 0,
+"main": "Muse Spark 1.3 Writing Label the diagram 0 s Writing Sequence 0 s 35 s",
+"facts": "1 Muse Spark 1.3 call done 0 of 2 parts checked"
+},
+{
+"i": 12,
+"label": "replay 10.0s",
+"step": "overview",
+"side": "below",
+"stripState": "running",
+"strip": [
+101,
+114
+],
+"title": [
+247,
+36
+],
+"prov": [
+320,
+65
+],
+"ov": [
+409,
+181
+],
+"p1": [
+614,
+714
+],
+"p2": [
+1352,
+584
+],
+"scroll": 0,
+"cardOverHole": false,
+"cardInView": true,
+"docOverflow": 0,
+"stripOverflow": 0,
+"main": "Muse Spark 1.3 Writing Label the diagram 4 s Writing Sequence 4 s 37 s",
+"facts": "1 Muse Spark 1.3 call done 0 of 2 parts checked"
+},
+{
+"i": 13,
+"label": "replay 11.0s",
+"step": "overview",
+"side": "below",
+"stripState": "running",
+"strip": [
+101,
+114
+],
+"title": [
+247,
+36
+],
+"prov": [
+320,
+65
+],
+"ov": [
+409,
+181
+],
+"p1": [
+614,
+714
+],
+"p2": [
+1352,
+584
+],
+"scroll": 0,
+"cardOverHole": false,
+"cardInView": true,
+"docOverflow": 0,
+"stripOverflow": 0,
+"main": "Muse Spark 1.3 Writing Label the diagram 8 s Writing Sequence 8 s 41 s",
+"facts": "1 Muse Spark 1.3 call done 0 of 2 parts checked"
+},
+{
+"i": 14,
+"label": "replay 11.9s",
+"step": "overview",
+"side": "below",
+"stripState": "running",
+"strip": [
+101,
+114
+],
+"title": [
+247,
+36
+],
+"prov": [
+320,
+65
+],
+"ov": [
+409,
+181
+],
+"p1": [
+614,
+714
+],
+"p2": [
+1352,
+584
+],
+"scroll": 0,
+"cardOverHole": false,
+"cardInView": true,
+"docOverflow": 0,
+"stripOverflow": 0,
+"main": "Muse Spark 1.3 Writing Label the diagram 11 s Writing Sequence 11 s 45 s",
+"facts": "1 Muse Spark 1.3 call done 0 of 2 parts checked"
+},
+{
+"i": 15,
+"label": "replay 12.9s",
+"step": "overview",
+"side": "below",
+"stripState": "running",
+"strip": [
+101,
+114
+],
+"title": [
+247,
+36
+],
+"prov": [
+320,
+65
+],
+"ov": [
+409,
+181
+],
+"p1": [
+614,
+714
+],
+"p2": [
+1352,
+584
+],
+"scroll": 0,
+"cardOverHole": false,
+"cardInView": true,
+"docOverflow": 0,
+"stripOverflow": 0,
+"main": "Muse Spark 1.3 Writing Label the diagram 15 s Writing Sequence 15 s 49 s",
+"facts": "1 Muse Spark 1.3 call done 0 of 2 parts checked"
+},
+{
+"i": 16,
+"label": "replay 13.8s",
+"step": "overview",
+"side": "below",
+"stripState": "running",
+"strip": [
+101,
+114
+],
+"title": [
+247,
+36
+],
+"prov": [
+320,
+65
+],
+"ov": [
+409,
+181
+],
+"p1": [
+614,
+714
+],
+"p2": [
+1352,
+584
+],
+"scroll": 0,
+"cardOverHole": false,
+"cardInView": true,
+"docOverflow": 0,
+"stripOverflow": 0,
+"main": "Muse Spark 1.3 Writing Label the diagram 19 s Writing Sequence 19 s 53 s",
+"facts": "1 Muse Spark 1.3 call done 0 of 2 parts checked"
+},
+{
+"i": 17,
+"label": "replay 14.7s",
+"step": "overview",
+"side": "below",
+"stripState": "running",
+"strip": [
+101,
+114
+],
+"title": [
+247,
+36
+],
+"prov": [
+320,
+65
+],
+"ov": [
+409,
+181
+],
+"p1": [
+614,
+714
+],
+"p2": [
+1352,
+584
+],
+"scroll": 0,
+"cardOverHole": false,
+"cardInView": true,
+"docOverflow": 0,
+"stripOverflow": 0,
+"main": "Muse Spark 1.3 Writing Label the diagram 23 s Writing Sequence 23 s 57 s",
+"facts": "1 Muse Spark 1.3 call done 0 of 2 parts checked"
+},
+{
+"i": 18,
+"label": "replay 15.7s",
+"step": "checking",
+"side": "left",
+"stripState": "running",
+"strip": [
+101,
+114
+],
+"title": [
+247,
+36
+],
+"prov": [
+320,
+65
+],
+"ov": [
+409,
+181
+],
+"p1": [
+614,
+714
+],
+"p2": [
+1352,
+584
+],
+"scroll": 388,
+"cardOverHole": false,
+"cardInView": true,
+"docOverflow": 0,
+"stripOverflow": 0,
+"main": "Muse Spark 1.3 Reworking Label the diagram 0 s Writing Sequence 27 s 1 min 1 s",
+"facts": "2 Muse Spark 1.3 calls done 1 SAM 3.1 call 0 of 2 parts checked"
+},
+{
+"i": 19,
+"label": "replay 16.7s",
+"step": "checking",
+"side": "left",
+"stripState": "running",
+"strip": [
+101,
+114
+],
+"title": [
+247,
+36
+],
+"prov": [
+320,
+65
+],
+"ov": [
+409,
+181
+],
+"p1": [
+614,
+714
+],
+"p2": [
+1352,
+584
+],
+"scroll": 388,
+"cardOverHole": false,
+"cardInView": true,
+"docOverflow": 0,
+"stripOverflow": 0,
+"main": "Muse Spark 1.3 Reworking Label the diagram 4 s Writing Sequence 30 s 1 min 5 s",
+"facts": "2 Muse Spark 1.3 calls done 1 SAM 3.1 call 0 of 2 parts checked"
+},
+{
+"i": 20,
+"label": "replay 17.7s",
+"step": "checking",
+"side": "left",
+"stripState": "running",
+"strip": [
+101,
+114
+],
+"title": [
+247,
+36
+],
+"prov": [
+320,
+65
+],
+"ov": [
+409,
+181
+],
+"p1": [
+614,
+714
+],
+"p2": [
+1352,
+584
+],
+"scroll": 388,
+"cardOverHole": false,
+"cardInView": true,
+"docOverflow": 0,
+"stripOverflow": 0,
+"main": "Muse Spark 1.3 Reworking Label the diagram 8 s Writing Sequence 34 s 1 min 9 s",
+"facts": "2 Muse Spark 1.3 calls done 1 SAM 3.1 call 0 of 2 parts checked"
+},
+{
+"i": 21,
+"label": "replay 18.6s",
+"step": "checking",
+"side": "left",
+"stripState": "running",
+"strip": [
+101,
+114
+],
+"title": [
+247,
+36
+],
+"prov": [
+320,
+65
+],
+"ov": [
+409,
+181
+],
+"p1": [
+614,
+714
+],
+"p2": [
+1352,
+572
+],
+"scroll": 973,
+"cardOverHole": false,
+"cardInView": true,
+"docOverflow": 0,
+"stripOverflow": 0,
+"main": "Muse Spark 1.3 Reworking Label the diagram 12 s 1 min 13 s",
+"facts": "3 Muse Spark 1.3 calls done 1 SAM 3.1 call 1 of 2 parts checked"
+},
+{
+"i": 22,
+"label": "replay 19.6s",
+"step": "checking",
+"side": "left",
+"stripState": "running",
+"strip": [
+101,
+114
+],
+"title": [
+247,
+36
+],
+"prov": [
+320,
+65
+],
+"ov": [
+409,
+181
+],
+"p1": [
+614,
+714
+],
+"p2": [
+1352,
+572
+],
+"scroll": 388,
+"cardOverHole": false,
+"cardInView": true,
+"docOverflow": 0,
+"stripOverflow": 0,
+"main": "Muse Spark 1.3 Reworking Label the diagram 16 s 1 min 17 s",
+"facts": "3 Muse Spark 1.3 calls done 1 SAM 3.1 call 1 of 2 parts checked"
+},
+{
+"i": 23,
+"label": "replay 20.6s",
+"step": "checking",
+"side": "left",
+"stripState": "running",
+"strip": [
+101,
+114
+],
+"title": [
+247,
+36
+],
+"prov": [
+320,
+65
+],
+"ov": [
+409,
+181
+],
+"p1": [
+614,
+714
+],
+"p2": [
+1352,
+572
+],
+"scroll": 388,
+"cardOverHole": false,
+"cardInView": true,
+"docOverflow": 0,
+"stripOverflow": 0,
+"main": "Muse Spark 1.3 Reworking Label the diagram 20 s 1 min 21 s",
+"facts": "3 Muse Spark 1.3 calls done 1 SAM 3.1 call 1 of 2 parts checked"
+},
+{
+"i": 24,
+"label": "replay 21.5s",
+"step": "ready",
+"side": "left",
+"stripState": "ready",
+"strip": [
+101,
+114
+],
+"title": [
+247,
+36
+],
+"prov": [
+320,
+65
+],
+"ov": [
+409,
+181
+],
+"p1": [
+614,
+740
+],
+"p2": [
+1378,
+572
+],
+"scroll": 388,
+"cardOverHole": false,
+"cardInView": true,
+"docOverflow": 0,
+"stripOverflow": 0,
+"main": "Lesson ready \u00b7 built in 1 min 22 s Present",
+"facts": "4 Muse Spark 1.3 calls 2 SAM 3.1 calls every part checked $0.144 est."
+},
+{
+"i": 25,
+"label": "ready",
+"step": "ready",
+"side": "left",
+"stripState": "ready",
+"strip": [
+101,
+114
+],
+"title": [
+247,
+36
+],
+"prov": [
+320,
+65
+],
+"ov": [
+409,
+181
+],
+"p1": [
+614,
+740
+],
+"p2": [
+1378,
+572
+],
+"scroll": 388,
+"cardOverHole": false,
+"cardInView": true,
+"docOverflow": 0,
+"stripOverflow": 0,
+"main": "Lesson ready \u00b7 built in 1 min 22 s Present",
+"facts": "4 Muse Spark 1.3 calls 2 SAM 3.1 calls every part checked $0.144 est."
+},
+{
+"i": 26,
+"label": "try",
+"step": "try",
+"side": "left",
+"stripState": "ready",
+"strip": [
+101,
+114
+],
+"title": [
+247,
+36
+],
+"prov": [
+320,
+65
+],
+"ov": [
+409,
+181
+],
+"p1": [
+614,
+740
+],
+"p2": [
+1378,
+572
+],
+"scroll": 382,
+"cardOverHole": false,
+"cardInView": true,
+"docOverflow": 0,
+"stripOverflow": 0,
+"main": "Lesson ready \u00b7 built in 1 min 22 s Present",
+"facts": "4 Muse Spark 1.3 calls 2 SAM 3.1 calls every part checked $0.144 est."
+},
+{
+"i": 27,
+"label": "present",
+"step": "present",
+"side": "left",
+"stripState": "ready",
+"strip": [
+101,
+114
+],
+"title": [
+247,
+36
+],
+"prov": [
+320,
+65
+],
+"ov": [
+409,
+181
+],
+"p1": [
+614,
+740
+],
+"p2": [
+1378,
+572
+],
+"scroll": 382,
+"cardOverHole": false,
+"cardInView": true,
+"docOverflow": 0,
+"stripOverflow": 0,
+"main": "Lesson ready \u00b7 built in 1 min 22 s Present",
+"facts": "4 Muse Spark 1.3 calls 2 SAM 3.1 calls every part checked $0.144 est."
+},
+{
+"i": 28,
+"label": "presentation",
+"step": null,
+"side": null,
+"stripState": "ready",
+"strip": [
+101,
+114
+],
+"title": [
+247,
+36
+],
+"prov": [
+320,
+65
+],
+"ov": [
+409,
+181
+],
+"p1": [
+614,
+740
+],
+"p2": [
+1378,
+572
+],
+"scroll": 382,
+"cardOverHole": null,
+"cardInView": null,
+"docOverflow": 0,
+"stripOverflow": 0,
+"main": "Lesson ready \u00b7 built in 1 min 22 s Present",
+"facts": "4 Muse Spark 1.3 calls 2 SAM 3.1 calls every part checked $0.144 est."
+}
+]
