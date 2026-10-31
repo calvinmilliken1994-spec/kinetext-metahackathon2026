@@ -1,0 +1,205 @@
+{
+  "gen": {
+    "cyclic": false,
+    "orderBasis": "page-order",
+    "orderNote": "Follows page order from proposal to certification.",
+    "schemaVersion": "sequence-v1",
+    "steps": [
+      {
+        "id": "congress-proposes-resolution",
+        "label": "Congress proposes joint resolution",
+        "orderHint": "First",
+        "quote": "The Congress proposes an amendment in the form of a joint resolution.",
+        "sourceId": "nara-constitutional-amendment-process"
+      },
+      {
+        "id": "document-forwarded-processing",
+        "label": "Document forwarded for processing",
+        "orderHint": "Next",
+        "quote": "The original document is forwarded directly to NARA's Office of the Federal Register (OFR) for processing and publication.",
+        "sourceId": "nara-constitutional-amendment-process"
+      },
+      {
+        "id": "archivist-submits-to-states",
+        "label": "Archivist submits amendment to states",
+        "orderHint": "Then",
+        "quote": "The Archivist submits the proposed amendment to the States for their consideration by sending a letter of notification to each Governor",
+        "sourceId": "nara-constitutional-amendment-process"
+      },
+      {
+        "id": "governors-submit-legislatures",
+        "label": "Governors submit amendment to legislatures",
+        "orderHint": "Next",
+        "quote": "The Governors then formally submit the amendment to their State legislatures or the state calls for a convention",
+        "sourceId": "nara-constitutional-amendment-process"
+      },
+      {
+        "id": "state-ratifies-sends-action",
+        "label": "State ratifies, sends copy of action",
+        "orderHint": "Then",
+        "quote": "When a State ratifies a proposed amendment, it sends the Archivist an original or certified copy of the State action",
+        "sourceId": "nara-constitutional-amendment-process"
+      },
+      {
+        "id": "certification-published-notice",
+        "label": "Certification published as official notice",
+        "orderHint": "Finally",
+        "quote": "This certification is published in the Federal Register and U.S. Statutes at Large and serves as official notice",
+        "sourceId": "nara-constitutional-amendment-process"
+      }
+    ],
+    "title": "How an amendment moves to ratification"
+  },
+  "report": {
+    "artifactId": "job-20261031023947-5ee5858d:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": false,
+        "message": "publisher claim at /steps/5/label: \"Certification published as official notice\" (token \"official\"; never name or endorse the publisher in generated text) (expected plain, publisher-neutral text in every generated display field; verbatim quotes are exempt)",
+        "path": "/steps/5/label",
+        "affected": [
+          "/steps/5/label"
+        ]
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 6 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18fd5-3571-7756-aee7-2130cbb46bb9",
+    "usage": {
+      "promptTokens": 3406,
+      "completionTokens": 9030,
+      "reasoningTokens": 8630,
+      "cachedTokens": 0
+    },
+    "latencyMs": 49126,
+    "estCostUSD": 0.042635,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "pruned": true,
+  "dropped": [],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031023947-5ee5858d:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "How an amendment moves to ratification",
+    "sources": [
+      {
+        "id": "nara-constitutional-amendment-process",
+        "title": "Constitutional Amendment Process — National Archives, Office of the Federal Register",
+        "locator": "https://www.archives.gov/federal-register/constitution",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Office of the Federal Register, 'Constitutional Amendment Process'. Per NARA's Privacy and Use Policies, 'Works of the U.S. Government that have been produced by the National Archives and Records Administration are in the public domain and may be copied and distributed without permission. These works are available for worldwide use and reuse under the terms of the Creative Commons CC0 1.0 Universal license.' The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "5777ce95a0692bd6c516da858e21712c8ca966bb8b257c991968e31b13e8b53f"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18fd5-3571-7756-aee7-2130cbb46bb9",
+      "runId": "job-20261031023947-5ee5858d",
+      "promptVersion": "s6-v8",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T02:41:17.298Z"
+    },
+    "seed": 633698695,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follows page order from proposal to certification.",
+    "steps": [
+      {
+        "id": "congress-proposes-resolution",
+        "label": "Congress proposes joint resolution",
+        "orderHint": "First",
+        "quote": "The Congress proposes an amendment in the form of a joint resolution.",
+        "sourceId": "nara-constitutional-amendment-process"
+      },
+      {
+        "id": "document-forwarded-processing",
+        "label": "Document forwarded for processing",
+        "orderHint": "Next",
+        "quote": "The original document is forwarded directly to NARA's Office of the Federal Register (OFR) for processing and publication.",
+        "sourceId": "nara-constitutional-amendment-process"
+      },
+      {
+        "id": "archivist-submits-to-states",
+        "label": "Archivist submits amendment to states",
+        "orderHint": "Then",
+        "quote": "The Archivist submits the proposed amendment to the States for their consideration by sending a letter of notification to each Governor",
+        "sourceId": "nara-constitutional-amendment-process"
+      },
+      {
+        "id": "governors-submit-legislatures",
+        "label": "Governors submit amendment to legislatures",
+        "orderHint": "Next",
+        "quote": "The Governors then formally submit the amendment to their State legislatures or the state calls for a convention",
+        "sourceId": "nara-constitutional-amendment-process"
+      },
+      {
+        "id": "state-ratifies-sends-action",
+        "label": "State ratifies, sends copy of action",
+        "orderHint": "Then",
+        "quote": "When a State ratifies a proposed amendment, it sends the Archivist an original or certified copy of the State action",
+        "sourceId": "nara-constitutional-amendment-process"
+      },
+      {
+        "id": "certification-published-notice",
+        "label": "Certification published as official notice",
+        "orderHint": "Finally",
+        "quote": "This certification is published in the Federal Register and U.S. Statutes at Large and serves as official notice",
+        "sourceId": "nara-constitutional-amendment-process"
+      }
+    ]
+  }
+}

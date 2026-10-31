@@ -1,0 +1,177 @@
+{
+  "gen": {
+    "algorithm": "quicksort",
+    "algorithmName": "quicksort",
+    "claims": [
+      {
+        "id": "worst-case-quadratic",
+        "kind": "running-time",
+        "quote": "Quicksort has running time Θ(n²) in the worst case, but it is typically O(n log n).",
+        "sourceId": "nist-dads-quicksort",
+        "text": "Quicksort has running time Θ(n²) in the worst case"
+      },
+      {
+        "id": "pivot-partition-rule",
+        "kind": "property",
+        "quote": "Pick an element from the array (the pivot), partition the remaining elements into those greater than and less than this pivot",
+        "sourceId": "nist-dads-quicksort",
+        "text": "Pick an element from the array (the pivot)"
+      }
+    ],
+    "hasTarget": false,
+    "input": [
+      8,
+      3,
+      25,
+      14,
+      6,
+      12
+    ],
+    "quote": "a finely tuned implementation of quicksort beats most sort algorithms",
+    "schemaVersion": "algorithm-trace-v1",
+    "sourceId": "nist-dads-quicksort",
+    "target": 0,
+    "title": "Trace quicksort partition steps"
+  },
+  "report": {
+    "artifactId": "job-20261031024127-4b9b54d5:algorithm-trace-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every algorithm-trace title, name length and claim id/kind/text shape is within the frozen limits"
+      },
+      {
+        "id": "ALG-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "ALG-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "algorithmName \"quicksort\" occurs as a whole phrase in the quote and matches the frozen name pattern for \"quicksort\" (algorithm-named-in-quote)"
+      },
+      {
+        "id": "ALG-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the input is valid: 6 integer values in 0-99, hasTarget is false exactly for the sort, and the target is the sentinel 0 (input-valid)"
+      },
+      {
+        "id": "ALG-04",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "our tracer ran quicksort to completion in 18 frame(s) (limit 400) and the sorted result [3, 6, 8, 12, 14, 25] is ascending and holds every input value — computed by our tested engine, never by the model (trace-runs)"
+      },
+      {
+        "id": "ALG-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 2 claim text(s) occur in their own quote after whitespace normalisation, with every number matching as the same whole number (claims-in-quote)"
+      },
+      {
+        "id": "ALG-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title, the algorithm name and the claim texts appears on the cited page as that whole number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "ALG-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the counts are valid: 6 input values (4-10) and 2 claim(s) (0-3) (counts-valid)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a18fd6-b312-75a8-a2e3-b4e0950736de",
+    "usage": {
+      "promptTokens": 3085,
+      "completionTokens": 7977,
+      "reasoningTokens": 7762,
+      "cachedTokens": 0
+    },
+    "latencyMs": 47945,
+    "estCostUSD": 0.0377585,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031024127-4b9b54d5:algorithm-trace-v1:r1",
+    "componentId": "algorithm-trace-v1",
+    "title": "Trace quicksort partition steps",
+    "sources": [
+      {
+        "id": "nist-dads-quicksort",
+        "title": "quicksort — NIST Dictionary of Algorithms and Data Structures",
+        "locator": "https://xlinux.nist.gov/dads/HTML/quicksort.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NIST Dictionary of Algorithms and Data Structures (Paul E. Black, ed.), 'quicksort'. Per the dictionary's Citation and Credit Notice, 'Many of the definitions, as well as the site itself, were originally developed at the National Institute of Standards and Technology by employees of the Federal Government in the course of their official duties. Pursuant to title 17 Section 105 of the United States Code these are not subject to copyright protection and are in the public domain.' Courtesy: NIST Dictionary of Algorithms and Data Structures. The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+        "sha256": "75f753d28767d46e64ab224b9e5b19559f5944a5a78bba8b9148153a28656364"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18fd6-b312-75a8-a2e3-b4e0950736de",
+      "runId": "job-20261031024127-4b9b54d5",
+      "promptVersion": "s6-v8",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T02:42:54.950Z"
+    },
+    "seed": 961996496,
+    "algorithm": "quicksort",
+    "algorithmName": "quicksort",
+    "sourceId": "nist-dads-quicksort",
+    "quote": "a finely tuned implementation of quicksort beats most sort algorithms",
+    "input": [
+      8,
+      3,
+      25,
+      14,
+      6,
+      12
+    ],
+    "hasTarget": false,
+    "target": 0,
+    "claims": [
+      {
+        "id": "worst-case-quadratic",
+        "kind": "running-time",
+        "quote": "Quicksort has running time Θ(n²) in the worst case, but it is typically O(n log n).",
+        "sourceId": "nist-dads-quicksort",
+        "text": "Quicksort has running time Θ(n²) in the worst case"
+      },
+      {
+        "id": "pivot-partition-rule",
+        "kind": "property",
+        "quote": "Pick an element from the array (the pivot), partition the remaining elements into those greater than and less than this pivot",
+        "sourceId": "nist-dads-quicksort",
+        "text": "Pick an element from the array (the pivot)"
+      }
+    ]
+  }
+}

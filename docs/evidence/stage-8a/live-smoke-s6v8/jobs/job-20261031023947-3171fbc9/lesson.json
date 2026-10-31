@@ -1,0 +1,111 @@
+{
+  "jobId": "job-20261031023947-3171fbc9",
+  "analysisRef": "job-20261031023947-3171fbc9/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031023947-3171fbc9:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Binary search on sorted arrays with safe midpoint calculation",
+    "sources": [
+      {
+        "id": "nist-dads-binary-search",
+        "title": "binary search — NIST Dictionary of Algorithms and Data Structures",
+        "locator": "https://xlinux.nist.gov/dads/HTML/binarySearch.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NIST Dictionary of Algorithms and Data Structures (Paul E. Black, ed.), 'binary search'. Per the dictionary's Citation and Credit Notice, 'Many of the definitions, as well as the site itself, were originally developed at the National Institute of Standards and Technology by employees of the Federal Government in the course of their official duties. Pursuant to title 17 Section 105 of the United States Code these are not subject to copyright protection and are in the public domain.' Courtesy: NIST Dictionary of Algorithms and Data Structures. The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+        "sha256": "61d27dc69db770ce1bfe2d15276cf22cb9e6e33120855967d41d6615ce692b53"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18fd4-9768-749b-a5fb-ba05c718cf74",
+      "runId": "job-20261031023947-3171fbc9",
+      "promptVersion": "s6-v8",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T02:40:36.819Z"
+    },
+    "seed": 3651558474,
+    "headline": "Binary search on sorted arrays with safe midpoint calculation",
+    "keyPoints": [
+      {
+        "id": "sorted-halving",
+        "point": "Students learn that binary search operates on a sorted array by dividing the search interval in half.",
+        "quote": "Search a sorted array by repeatedly dividing the search interval in half.",
+        "sourceId": "nist-dads-binary-search"
+      },
+      {
+        "id": "narrowing-rule",
+        "point": "Students learn to narrow the interval to the lower half or upper half using the search key and middle item.",
+        "quote": "If the value of the search key is less than the item in the middle of the interval, narrow the interval to the lower half.",
+        "sourceId": "nist-dads-binary-search"
+      },
+      {
+        "id": "comparison-cost",
+        "point": "Students learn that binary search only performs logarithmic comparisons while traversing linked structures.",
+        "quote": "but it only performs O(log n) comparisons.",
+        "sourceId": "nist-dads-binary-search"
+      },
+      {
+        "id": "overflow-midpoint",
+        "point": "Students learn why midpoint calculation overflows for large integer values near limits.",
+        "quote": "This overflows if high and low are close to the largest expressible integer.",
+        "sourceId": "nist-dads-binary-search"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "Ordered collection divided in half to narrow the search interval",
+        "id": "sorted-array",
+        "quote": "Search a sorted array by repeatedly dividing the search interval in half.",
+        "sourceId": "nist-dads-binary-search",
+        "term": "sorted array"
+      },
+      {
+        "gloss": "Value compared with the middle item to choose the lower interval",
+        "id": "search-key",
+        "quote": "If the value of the search key is less than the item in the middle of the interval, narrow the interval to the lower half.",
+        "sourceId": "nist-dads-binary-search",
+        "term": "search key"
+      },
+      {
+        "gloss": "Range covering array positions that is divided during search",
+        "id": "search-interval",
+        "quote": "Search a sorted array by repeatedly dividing the search interval in half.",
+        "sourceId": "nist-dads-binary-search",
+        "term": "search interval"
+      },
+      {
+        "gloss": "Central position in the interval used to narrow the search range",
+        "id": "middle",
+        "quote": "If the value of the search key is less than the item in the middle of the interval, narrow the interval to the lower half.",
+        "sourceId": "nist-dads-binary-search",
+        "term": "middle"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "algorithm-trace-v1",
+      "specId": "job-20261031023947-3171fbc9:algorithm-trace-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031023947-3171fbc9:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

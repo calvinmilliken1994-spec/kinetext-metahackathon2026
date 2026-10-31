@@ -1,0 +1,111 @@
+{
+  "jobId": "job-20261031023947-5ee5858d",
+  "analysisRef": "job-20261031023947-5ee5858d/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031023947-5ee5858d:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How constitutional amendments are proposed and ratified",
+    "sources": [
+      {
+        "id": "nara-constitutional-amendment-process",
+        "title": "Constitutional Amendment Process — National Archives, Office of the Federal Register",
+        "locator": "https://www.archives.gov/federal-register/constitution",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Office of the Federal Register, 'Constitutional Amendment Process'. Per NARA's Privacy and Use Policies, 'Works of the U.S. Government that have been produced by the National Archives and Records Administration are in the public domain and may be copied and distributed without permission. These works are available for worldwide use and reuse under the terms of the Creative Commons CC0 1.0 Universal license.' The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "5777ce95a0692bd6c516da858e21712c8ca966bb8b257c991968e31b13e8b53f"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18fd4-7560-757b-a992-d511da6b6f68",
+      "runId": "job-20261031023947-5ee5858d",
+      "promptVersion": "s6-v8",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T02:40:28.153Z"
+    },
+    "seed": 137407994,
+    "headline": "How constitutional amendments are proposed and ratified",
+    "keyPoints": [
+      {
+        "id": "article-v-authority",
+        "point": "Students learn that authority to amend the Constitution is derived from Article V.",
+        "quote": "The authority to amend the Constitution of the United States is derived from Article V of the Constitution.",
+        "sourceId": "nara-constitutional-amendment-process"
+      },
+      {
+        "id": "proposal-routes",
+        "point": "Students learn that Congress may propose an amendment with a two-thirds majority vote in both chambers.",
+        "quote": "an amendment may be proposed either by the Congress with a two-thirds majority vote in both the House of Representatives and the Senate",
+        "sourceId": "nara-constitutional-amendment-process"
+      },
+      {
+        "id": "archivist-role",
+        "point": "Students learn that the Archivist is charged with responsibility for administering the ratification process.",
+        "quote": "the Archivist of the United States, who heads the National Archives and Records Administration (NARA), is charged with responsibility",
+        "sourceId": "nara-constitutional-amendment-process"
+      },
+      {
+        "id": "ratification-threshold",
+        "point": "Students learn that a proposed amendment becomes part of the Constitution when ratified by three-fourths of the States.",
+        "quote": "A proposed amendment becomes part of the Constitution as soon as it is ratified by three-fourths of the States (38 of 50 States).",
+        "sourceId": "nara-constitutional-amendment-process"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "Person charged with responsibility for administering ratification duties.",
+        "id": "archivist",
+        "quote": "the Archivist of the United States, who heads the National Archives and Records Administration (NARA), is charged with responsibility",
+        "sourceId": "nara-constitutional-amendment-process",
+        "term": "Archivist"
+      },
+      {
+        "gloss": "Formal process for approving a proposed amendment by the States.",
+        "id": "ratification",
+        "quote": "is charged with responsibility for administering the ratification process under the provisions of 1 U.S.C. 106b.",
+        "sourceId": "nara-constitutional-amendment-process",
+        "term": "ratification"
+      },
+      {
+        "gloss": "Form used by Congress to propose an amendment to the States.",
+        "id": "joint-resolution",
+        "quote": "The Congress proposes an amendment in the form of a joint resolution.",
+        "sourceId": "nara-constitutional-amendment-process",
+        "term": "joint resolution"
+      },
+      {
+        "gloss": "Published notice that confirms an amendment has become part of the Constitution.",
+        "id": "certification",
+        "quote": "This certification is published in the Federal Register and U.S. Statutes at Large and serves as official notice",
+        "sourceId": "nara-constitutional-amendment-process",
+        "term": "certification"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031023947-5ee5858d:sequence-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    },
+    {
+      "componentId": "threshold-v1",
+      "specId": "job-20261031023947-5ee5858d:threshold-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

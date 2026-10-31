@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031023947-4ddddd11",
+  "analysisRef": "job-20261031023947-4ddddd11/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031023947-4ddddd11:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Bubble sort compares neighbours until the list is ordered",
+    "sources": [
+      {
+        "id": "nist-dads-bubble-sort",
+        "title": "bubble sort — NIST Dictionary of Algorithms and Data Structures",
+        "locator": "https://xlinux.nist.gov/dads/HTML/bubblesort.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NIST Dictionary of Algorithms and Data Structures (Paul E. Black, ed.), 'bubble sort'. Per the dictionary's Citation and Credit Notice, 'Many of the definitions, as well as the site itself, were originally developed at the National Institute of Standards and Technology by employees of the Federal Government in the course of their official duties. Pursuant to title 17 Section 105 of the United States Code these are not subject to copyright protection and are in the public domain.' Courtesy: NIST Dictionary of Algorithms and Data Structures. The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+        "sha256": "7034ebf8337b63fd948fec934b5580cbcd77a018b54bf00db8ae76ea0e4015ca"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18fd4-95e8-7190-a609-38c060eba71c",
+      "runId": "job-20261031023947-4ddddd11",
+      "promptVersion": "s6-v8",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T02:40:36.428Z"
+    },
+    "seed": 4194450350,
+    "headline": "Bubble sort compares neighbours until the list is ordered",
+    "keyPoints": [
+      {
+        "id": "bubble-compare-swap",
+        "point": "Students learn that bubble sort orders a list by comparing each adjacent pair and swapping items when necessary.",
+        "quote": "Sort by comparing each adjacent pair of items in a list in turn, swapping the items if necessary",
+        "sourceId": "nist-dads-bubble-sort"
+      },
+      {
+        "id": "bubble-repeat-passes",
+        "point": "Students learn that repeating a pass through the list stops only when no swaps are done.",
+        "quote": "repeating the pass through the list until no swaps are done",
+        "sourceId": "nist-dads-bubble-sort"
+      },
+      {
+        "id": "bubble-complexity-order",
+        "point": "Students learn that arbitrary data is costly to sort, but a list that is nearly in order needs much less work.",
+        "quote": "Complexity is O(n^2) for arbitrary data, but approaches Θ(n) if the list is nearly in order at the beginning.",
+        "sourceId": "nist-dads-bubble-sort"
+      },
+      {
+        "id": "bubble-pass-improvement",
+        "point": "Students learn that at least one item reaches its final place each pass, so the last position checked can shrink.",
+        "quote": "Since at least one item is moved into its final place for each pass, an improvement is to decrement the last position checked on each pass.",
+        "sourceId": "nist-dads-bubble-sort"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "A comparison sort that repeatedly swaps neighbouring out of order items",
+        "id": "bubble-sort",
+        "quote": "bubble sort",
+        "sourceId": "nist-dads-bubble-sort",
+        "term": "bubble sort"
+      },
+      {
+        "gloss": "Alternate name for bubble sort where items sink to their proper position",
+        "id": "sinking-sort",
+        "quote": "sinking sort, exchange sort",
+        "sourceId": "nist-dads-bubble-sort",
+        "term": "sinking sort"
+      },
+      {
+        "gloss": "Alternate name for bubble sort where neighbouring items are exchanged in order",
+        "id": "exchange-sort",
+        "quote": "sinking sort, exchange sort",
+        "sourceId": "nist-dads-bubble-sort",
+        "term": "exchange sort"
+      },
+      {
+        "gloss": "A sort that reorders items within the same list without extra storage",
+        "id": "in-place-sort",
+        "quote": "Generalization (I am a kind of ...) in-place sort, stable sort.",
+        "sourceId": "nist-dads-bubble-sort",
+        "term": "in-place sort"
+      },
+      {
+        "gloss": "A sort that keeps equal items in their original relative order",
+        "id": "stable-sort",
+        "quote": "Generalization (I am a kind of ...) in-place sort, stable sort.",
+        "sourceId": "nist-dads-bubble-sort",
+        "term": "stable sort"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "algorithm-trace-v1",
+      "specId": "job-20261031023947-4ddddd11:algorithm-trace-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031023947-4ddddd11:quiz-cards-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    }
+  ]
+}

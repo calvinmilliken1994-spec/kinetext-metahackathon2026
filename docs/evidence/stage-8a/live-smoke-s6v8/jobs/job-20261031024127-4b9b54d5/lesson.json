@@ -1,0 +1,105 @@
+{
+  "jobId": "job-20261031024127-4b9b54d5",
+  "analysisRef": "job-20261031024127-4b9b54d5/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031024127-4b9b54d5:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Quicksort partitions around a pivot and sorts recursively",
+    "sources": [
+      {
+        "id": "nist-dads-quicksort",
+        "title": "quicksort — NIST Dictionary of Algorithms and Data Structures",
+        "locator": "https://xlinux.nist.gov/dads/HTML/quicksort.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NIST Dictionary of Algorithms and Data Structures (Paul E. Black, ed.), 'quicksort'. Per the dictionary's Citation and Credit Notice, 'Many of the definitions, as well as the site itself, were originally developed at the National Institute of Standards and Technology by employees of the Federal Government in the course of their official duties. Pursuant to title 17 Section 105 of the United States Code these are not subject to copyright protection and are in the public domain.' Courtesy: NIST Dictionary of Algorithms and Data Structures. The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+        "sha256": "75f753d28767d46e64ab224b9e5b19559f5944a5a78bba8b9148153a28656364"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18fd5-f7bb-7537-aff0-82220b52513a",
+      "runId": "job-20261031024127-4b9b54d5",
+      "promptVersion": "s6-v8",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T02:42:06.999Z"
+    },
+    "seed": 151222725,
+    "headline": "Quicksort partitions around a pivot and sorts recursively",
+    "keyPoints": [
+      {
+        "id": "pivot-partition-sort",
+        "point": "Students learn quicksort picks a pivot and recursively sorts partitions of smaller and larger elements.",
+        "quote": "Pick an element from the array (the pivot), partition the remaining elements into those greater than and less than this pivot",
+        "sourceId": "nist-dads-quicksort"
+      },
+      {
+        "id": "running-time-behavior",
+        "point": "Students learn quicksort running time is quadratic in the worst case but typically faster.",
+        "quote": "Quicksort has running time Θ(n²) in the worst case, but it is typically O(n log n).",
+        "sourceId": "nist-dads-quicksort"
+      },
+      {
+        "id": "good-pivot-variant",
+        "point": "Students learn selecting good pivots can give a variant with better worst case running time.",
+        "quote": "Select can be used to always pick good pivots, thus giving a variant with O(n log n) worst-case running time.",
+        "sourceId": "nist-dads-quicksort"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "Chosen element used to split remaining elements into greater and smaller groups",
+        "id": "pivot",
+        "quote": "Pick an element from the array (the pivot), partition the remaining elements into those greater than and less than this pivot",
+        "sourceId": "nist-dads-quicksort",
+        "term": "pivot"
+      },
+      {
+        "gloss": "Action dividing remaining elements into greater and smaller groups around pivot",
+        "id": "partition",
+        "quote": "Pick an element from the array (the pivot), partition the remaining elements into those greater than and less than this pivot",
+        "sourceId": "nist-dads-quicksort",
+        "term": "partition"
+      },
+      {
+        "gloss": "Repeated use of divide and conquer to sort each partition",
+        "id": "recursion",
+        "quote": "partition, divide and conquer, recursion, Select, sublinear time algorithm.",
+        "sourceId": "nist-dads-quicksort",
+        "term": "recursion"
+      },
+      {
+        "gloss": "Input pattern with slow running time instead of typically fast running time",
+        "id": "worst-case",
+        "quote": "Quicksort has running time Θ(n²) in the worst case, but it is typically O(n log n).",
+        "sourceId": "nist-dads-quicksort",
+        "term": "worst case"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "algorithm-trace-v1",
+      "specId": "job-20261031024127-4b9b54d5:algorithm-trace-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031024127-4b9b54d5:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}
