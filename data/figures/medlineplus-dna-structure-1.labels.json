@@ -1,0 +1,51 @@
+{
+  "figureId": "medlineplus-dna-structure-1",
+  "imageSha256": "84e5b887cdd3a12fc6b15d1fd0b85026384927492baeb86567a4c264cf7e78a9",
+  "width": 600,
+  "height": 600,
+  "method": "Windows built-in OCR (original and 2x upscale) unioned with SAM 3.1 concept prompts 'word' and 'label'; lead added boxes for coloured words OCR missed and verified every figure with a covered-label overlay (2026-10-31). Credit lines are not covered.",
+  "boxes": [
+    {
+      "x1": 235,
+      "y1": 180,
+      "x2": 327,
+      "y2": 203
+    },
+    {
+      "x1": 454,
+      "y1": 209,
+      "x2": 528,
+      "y2": 233
+    },
+    {
+      "x1": 354,
+      "y1": 210,
+      "x2": 426,
+      "y2": 230
+    },
+    {
+      "x1": 354,
+      "y1": 304,
+      "x2": 427,
+      "y2": 324
+    },
+    {
+      "x1": 454,
+      "y1": 304,
+      "x2": 530,
+      "y2": 327
+    },
+    {
+      "x1": 304,
+      "y1": 401,
+      "x2": 448,
+      "y2": 441
+    },
+    {
+      "x1": 304,
+      "y1": 421,
+      "x2": 387,
+      "y2": 440
+    }
+  ]
+}

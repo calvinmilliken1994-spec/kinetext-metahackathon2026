@@ -1,0 +1,93 @@
+{
+  "figureId": "medlineplus-protein-production-1",
+  "imageSha256": "e763dd35e456b768501dec0978e52900d9d4189f4154a40dd8464f277b5cfa3f",
+  "width": 600,
+  "height": 510,
+  "method": "Windows built-in OCR (original and 2x upscale) unioned with SAM 3.1 concept prompts 'word' and 'label'; lead added boxes for coloured words OCR missed and verified every figure with a covered-label overlay (2026-10-31). Credit lines are not covered.",
+  "boxes": [
+    {
+      "x1": 420,
+      "y1": 29,
+      "x2": 497,
+      "y2": 51
+    },
+    {
+      "x1": 209,
+      "y1": 68,
+      "x2": 256,
+      "y2": 89
+    },
+    {
+      "x1": 150,
+      "y1": 88,
+      "x2": 318,
+      "y2": 111
+    },
+    {
+      "x1": 487,
+      "y1": 94,
+      "x2": 586,
+      "y2": 119
+    },
+    {
+      "x1": 115,
+      "y1": 129,
+      "x2": 226,
+      "y2": 152
+    },
+    {
+      "x1": 144,
+      "y1": 164,
+      "x2": 317,
+      "y2": 199
+    },
+    {
+      "x1": 201,
+      "y1": 256,
+      "x2": 263,
+      "y2": 277
+    },
+    {
+      "x1": 187,
+      "y1": 275,
+      "x2": 267,
+      "y2": 290
+    },
+    {
+      "x1": 109,
+      "y1": 316,
+      "x2": 284,
+      "y2": 338
+    },
+    {
+      "x1": 487,
+      "y1": 400,
+      "x2": 541,
+      "y2": 421
+    },
+    {
+      "x1": 25,
+      "y1": 404,
+      "x2": 97,
+      "y2": 425
+    },
+    {
+      "x1": 10,
+      "y1": 436,
+      "x2": 104,
+      "y2": 458
+    },
+    {
+      "x1": 219,
+      "y1": 454,
+      "x2": 314,
+      "y2": 475
+    },
+    {
+      "x1": 171,
+      "y1": 490,
+      "x2": 242,
+      "y2": 508
+    }
+  ]
+}

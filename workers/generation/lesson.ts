@@ -105,7 +105,7 @@ import type {
   LabelPartGen,
   PlanComponentId,
 } from '../../packages/contracts/kit.ts';
-import { listFigures, loadFigure } from '../../packages/sources/figures.ts';
+import { loadFigureLabelBoxes, listFigures, loadFigure } from '../../packages/sources/figures.ts';
 import type { FigureMeta } from '../../packages/sources/figures.ts';
 import { sha256 } from '../../packages/sources/index.ts';
 import { applyLessonDemoFault, lessonFaultTarget, lessonIntendedChecks } from './demo-faults.ts';
@@ -357,6 +357,7 @@ export function labelFigureRefOf(meta: FigureMeta): LabelFigureRef {
     credit: meta.credit,
     license: meta.license,
     labelsInImage: meta.labelsInImage,
+    labelBoxes: loadFigureLabelBoxes(meta.id),
   };
 }
 
@@ -1466,6 +1467,9 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
       // S6-W fix: the repair revision is tidied before it is persisted/published; the
       // pipeline's report already reflects the tidied gen (kitValidate/compare normalise).
       const repNorm = normaliseGenFor(cid, rep.gen);
+      // Stage 8b live run 3 (lead): a label-diagram repair that returns the SAME gen cannot change the
+      // SAM result, so further attempts only spend money; stop after recording this one.
+      const unchangedLabelRepair = cid === 'label-diagram-v1' && JSON.stringify(repNorm.gen) === JSON.stringify(gen);
       gen = repNorm.gen;
       lastReceipt = rep.receipt;
       const normExtra: Record<string, unknown> =
@@ -1533,6 +1537,7 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
           : `failed checks: ${remaining.join(', ')}`,
       });
       ctx.writeJob();
+      if (unchangedLabelRepair && !report.publishable) break;
     }
     if (fatalRef.current !== null) {
       return;

@@ -55,6 +55,41 @@ export function listFigures(sourceId: string, dir: URL = FIGURES_DIR): FigureMet
   return out;
 }
 
+/** One printed-label box in image pixels (x2/y2 exclusive). */
+export interface FigureLabelBox {
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+}
+
+/**
+ * Stage 8b (lead): the lead-verified positions of EVERY printed label in a figure
+ * (`<id>.labels.json`), so the lesson covers them all regardless of the boxes Muse writes.
+ * Missing file, a different image hash or a malformed box gives [] (the view then falls back to Muse's boxes).
+ */
+export function loadFigureLabelBoxes(figureId: string, dir: URL = FIGURES_DIR): FigureLabelBox[] {
+  if (!/^[a-z0-9][a-z0-9-]{0,63}$/.test(figureId)) return [];
+  try {
+    const meta = readMeta(figureId, dir);
+    const raw = JSON.parse(readFileSync(new URL(`${figureId}.labels.json`, dir), 'utf8')) as {
+      figureId?: unknown; imageSha256?: unknown; boxes?: unknown;
+    };
+    if (raw.figureId !== figureId || raw.imageSha256 !== meta.sha256 || !Array.isArray(raw.boxes)) return [];
+    const ok = (b: unknown): b is FigureLabelBox => {
+      const o = b as Record<string, unknown>;
+      return [o?.['x1'], o?.['y1'], o?.['x2'], o?.['y2']].every((n) => Number.isInteger(n)) &&
+        (o['x1'] as number) >= 0 && (o['y1'] as number) >= 0 &&
+        (o['x1'] as number) < (o['x2'] as number) && (o['y1'] as number) < (o['y2'] as number) &&
+        (o['x2'] as number) <= meta.width && (o['y2'] as number) <= meta.height;
+    };
+    if (!raw.boxes.every(ok)) return [];
+    return (raw.boxes as FigureLabelBox[]).map(({ x1, y1, x2, y2 }) => ({ x1, y1, x2, y2 }));
+  } catch {
+    return [];
+  }
+}
+
 /** Load a figure's meta plus its exact stored bytes, refusing any whose bytes no longer match the recorded sha256. */
 export function loadFigure(figureId: string, dir: URL = FIGURES_DIR): { meta: FigureMeta; bytes: Uint8Array } {
   if (!/^[a-z0-9][a-z0-9-]{0,63}$/.test(figureId)) throw new Error('FIGURE_NOT_FOUND');

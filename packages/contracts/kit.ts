@@ -537,6 +537,8 @@ export interface LabelFigureRef {
   credit: string;
   license: string;
   labelsInImage: boolean;
+  /** Stage 8b (lead): lead-verified boxes (image pixels) around EVERY printed label; the view covers these. Absent on older lessons. */
+  labelBoxes?: { x1: number; y1: number; x2: number; y2: number }[];
 }
 export interface LabelRegion {
   partId: string;

@@ -505,7 +505,9 @@ test('label-diagram: figures reach the analysis call, the image reaches generati
   assert.equal(rec.spec.componentId, 'label-diagram-v1');
   assert.equal(rec.spec.id, `${jobId}:label-diagram-v1:r1`);
   assert.equal(rec.spec.figureId, FIGURE_ID);
-  assert.deepEqual(rec.spec.figure, {
+  const { labelBoxes: storedBoxes, ...figureRest } = rec.spec.figure;
+  assert.equal(storedBoxes.length, 7, 'the lead-verified printed-label boxes travel with the figure');
+  assert.deepEqual(figureRest, {
     id: FIGURE_ID,
     width: FIG_W,
     height: FIG_H,
@@ -732,6 +734,38 @@ test('label-diagram: when SAM cannot find one part, LD-06 gates the component ou
   assert.equal(summary.totalCostUSD, 0.045);
   assert.equal(summary.lesson?.componentsPublished, 1);
   assert.equal(summary.lesson?.partialPublish, true);
+});
+
+test('label-diagram (lead, live run 3): a repair that returns the same gen stops the loop; the published figure carries the stored label boxes', async () => {
+  const sam = fakeSamFetch(() => ({ status: 200, body: samSseBody(samBoxesFor(goldenLabelGen, [6]), 1) }));
+  const { ledger } = fakeLedger();
+  const client = fakeClient({
+    analysis: dnaAnalysis,
+    kit: { label_diagram: goldenLabelGen, quiz_cards: dnaQuizGen },
+    kitRepair: { label_diagram_repair: goldenLabelGen },
+  });
+  const { storageDir, jobId, done } = startLabelLesson(client, {
+    sam: { apiKey: 'LLM_SYNTHKEY0001', ledger, fetch: sam.impl },
+    maxRepairAttempts: 2,
+  });
+  const summary = await done;
+  assert.equal(summary.status, 'succeeded');
+  assert.equal((summary.componentRepairs ?? []).length, 1, 'no second paid repair after an unchanged revision');
+  assert.equal(sam.calls.length, 2);
+});
+
+test('label-diagram (lead): the published spec figure carries the lead-verified label boxes', async () => {
+  const sam = fakeSamFetch(() => ({ status: 200, body: samSseBody(samBoxesFor(goldenLabelGen, []), 1) }));
+  const { ledger } = fakeLedger();
+  const client = fakeClient({ analysis: dnaAnalysis, kit: { label_diagram: goldenLabelGen, quiz_cards: dnaQuizGen } });
+  const { storageDir, jobId, done } = startLabelLesson(client, { sam: { apiKey: 'LLM_SYNTHKEY0001', ledger, fetch: sam.impl } });
+  await done;
+  const lesson = readRunFile(storageDir, jobId, 'lesson.json');
+  const labelEntry = lesson.components.find((c: any) => c.componentId === 'label-diagram-v1');
+  assert.equal(labelEntry.status, 'passed');
+  const rec = readRunFile(storageDir, jobId, 'label-diagram-v1.r1.json');
+  const boxes = rec.spec.figure.labelBoxes;
+  assert.ok(Array.isArray(boxes) && boxes.length === 7, `stored DNA label boxes: ${JSON.stringify(boxes)?.slice(0, 80)}`);
 });
 
 /* ------------------------------------------------------------------ */
