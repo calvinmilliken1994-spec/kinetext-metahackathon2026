@@ -21,7 +21,9 @@
 //     plan; the lenient reading serves partial publish and is recorded here), R-PLAN-6 (distinct
 //     focusQuote regions). R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9
 //     (2-4-variable formula) need model judgement or the component spec and are NOT machine
-//     checked here; the pass message says so.
+//     checked here; the pass message says so. Stage 8b adds the figure rule: a componentPlan
+//     entry 'label-diagram-v1' fails A-08 unless opts.figures lists at least one figure for the
+//     source (docs/specs/STAGE-8b-label-diagram.md, Flow step 1).
 //   - A-09 publisher tokens come from each source's own title/attribution metadata and match with
 //     the SAME narrowed rule the kit policy sweep and OV-03 use (2026-10-30: full publisher name
 //     phrases + name acronyms; "according to" only when it names the publisher; "as stated by" /
@@ -73,7 +75,17 @@ const A = KIT_LIMITS.analysis;
 /** Generic phrases that are a claim without any publisher named ("according to" needs a name). */
 const ENDORSEMENT_PHRASES = GENERIC_PUBLISHER_PHRASES.filter(p => p !== 'according to');
 
-export interface AnalysisV2ValidateOptions { revision?: number; artifactId?: string }
+export interface AnalysisV2ValidateOptions {
+  revision?: number;
+  artifactId?: string;
+  /**
+   * Stage 8b: the figures the analysis message listed for this source (A-08 figure rule).
+   * `label-diagram-v1` may be planned only when at least one figure is listed; when this option
+   * is absent or empty, a plan entry naming it fails A-08. Plans without label-diagram-v1
+   * validate exactly as before, with or without the option.
+   */
+  figures?: readonly { id: string }[];
+}
 
 /** Loose post-gate view (the schema gate guarantees the shape). */
 interface LooseAnalysisV2 extends SourceAnalysisV2 {}
@@ -390,6 +402,16 @@ export function validateAnalysisV2(analysis: unknown, sources: SourceDocument[],
           affected.push(`/componentPlan/${i}/focusQuote`, `/componentPlan/${prev}/focusQuote`);
         } else {
           seenQuotes.set(key, i);
+        }
+      });
+      // Stage 8b figure rule (docs/specs/STAGE-8b-label-diagram.md, Flow step 1): the analysis
+      // message lists the source's figures and label-diagram-v1 may be planned only when at least
+      // one is listed. The caller passes that list as opts.figures; absent or empty fails closed.
+      const listedFigures = (Array.isArray(opts.figures) ? opts.figures : []).filter(f => typeof f?.id === 'string' && f.id !== '');
+      plan.forEach((e, i) => {
+        if (e.componentId === 'label-diagram-v1' && listedFigures.length === 0) {
+          problems.push(`componentPlan[${i}] plans label-diagram-v1 but ${opts.figures === undefined ? 'no figure list was provided' : 'no figures are listed'} for this source (label-diagram-v1 may be planned only when at least one figure is listed for the page)`);
+          affected.push(`/componentPlan/${i}/componentId`);
         }
       });
       return problems.length === 0
