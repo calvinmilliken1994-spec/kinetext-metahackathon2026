@@ -48,6 +48,16 @@ async function pickPage(): Promise<ReactNode> {
     const { LessonDemo } = await import('./components/LessonDemo.tsx');
     return <LessonDemo />;
   }
+  // Stage 8a dev-only engine harnesses (?engine-demo=a | b), one per web slice.
+  const engineDemo = import.meta.env.DEV ? new URLSearchParams(window.location.search).get('engine-demo') : null;
+  if (engineDemo === 'a') {
+    const { EngineDemoA } = await import('./components/EngineDemoA.tsx');
+    return <EngineDemoA />;
+  }
+  if (engineDemo === 'b') {
+    const { EngineDemoB } = await import('./components/EngineDemoB.tsx');
+    return <EngineDemoB />;
+  }
   return <App />;
 }
 
