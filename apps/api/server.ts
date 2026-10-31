@@ -67,6 +67,7 @@ import type { ModelChoice } from '../../packages/meta/pricing.ts';
 import { DEFAULT_MODEL, MODEL_INFO } from './model-clients.ts';
 import { MAX_CONCURRENT_JOBS_BOUND } from './resource-limits.ts';
 import { listJobs, readJob } from '../../workers/generation/jobs.ts';
+import { enrichLabelBoxes, recheckLesson } from './recheck.ts';
 import { museSubjectsBySource } from './source-subjects.ts';
 import type { Subject } from '../../packages/contracts/kit.ts';
 import type { JobFlow, JobSummary } from '../../workers/generation/jobs.ts';
@@ -532,6 +533,12 @@ export function createApiServer(opts: ApiOptions): Server {
         if (job === null) {
           return sendError(res, 404, 'NOT_FOUND');
         }
+        // Set A: re-check stored parts with today's validators; fill printed-label text into older specs.
+        recheckLesson(opts.storageDir, job, {
+          ...(opts.sourcesDir !== undefined ? { sourcesDir: opts.sourcesDir } : {}),
+          userSourcesDir: userSourcesDir(),
+        });
+        for (const spec of Object.values(job.kitSpecs ?? {})) enrichLabelBoxes(spec);
         return sendJson(res, 200, job);
       } catch {
         return sendError(res, 404, 'NOT_FOUND'); // JOB_ID_INVALID or unreadable run
