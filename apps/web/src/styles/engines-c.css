@@ -1,1 +1,172 @@
-/* Stage 8b label-diagram styles (owned by web slice U). */
+/* Stage 8b label-diagram-v1 styles (owned by web slice U). Theme tokens from ../styles.css; the figure plate is always
+ * white (the page's figures are drawn on white), so the marks drawn ON the plate use plate tokens that do not switch
+ * with the theme. Every reveal state is laid out from the start (stacked cells + visibility; overlays are absolutely
+ * positioned), so naming a part or uncovering the labels never moves anything. */
+
+.ld {
+  --ld-plate: #ffffff;
+  --ld-plate-line: var(--line-2);
+  --ld-mask: #e7e9ec;
+  --ld-mask-line: #cdd1d6;
+  --ld-pin: #0a1317;
+  --ld-pin-ink: #ffffff;
+  --ld-pin-ring: #ffffff;
+  --ld-pin-current: #0064e0;
+  --ld-pin-ok: #0d7444;
+  --ld-pin-bad: #b3261e;
+  --ld-region: rgba(0, 100, 224, 0.62);
+  --ld-region-fill: rgba(0, 100, 224, 0.07);
+  --ld-region-strong: #0064e0;
+  --ld-tag: #0050b3;
+  --ld-tag-ink: #ffffff;
+  --pin-half: 13px;
+  container-type: inline-size;
+  display: grid;
+  gap: 16px;
+}
+
+.ld-stack { display: grid; }
+.ld-stack > * { grid-area: 1 / 1; }
+.ld-stack > [data-on="false"] { visibility: hidden; }
+
+.ld-body { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(240px, 1fr); gap: 20px 28px; align-items: start; }
+@container (max-width: 640px) {
+  .ld[data-mode="lesson"] .ld-body { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ---- the figure ------------------------------------------------------------------------------------------------- */
+.ld-figure { display: grid; gap: 6px; margin: 0; min-inline-size: 0; }
+.ld[data-mode="lesson"] .ld-figure { max-inline-size: 560px; }
+.ld-plate {
+  position: relative; inline-size: 100%; background: var(--ld-plate);
+  border: 1px solid var(--ld-plate-line); border-radius: var(--r-l); overflow: hidden;
+}
+.ld-plate > img { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: contain; user-select: none; }
+.ld-missing { position: absolute; inset: 0; display: grid; place-items: center; padding: 16px; color: #4e606f; font-size: var(--fs-14); text-align: center; }
+
+/* A printed label, covered: a plain block in the figure's own paper tone. */
+.ld-mask {
+  position: absolute; border-radius: 4px; background: var(--ld-mask); box-shadow: inset 0 0 0 1px var(--ld-mask-line);
+  transition: opacity 0.22s ease-out, visibility 0.22s;
+}
+.ld-mask[data-on="false"] { opacity: 0; visibility: hidden; }
+
+/* A part's SAM region, outlined softly with its name once named. */
+.ld-region {
+  position: absolute; border-radius: 6px; border: 1.5px solid var(--ld-region); background: var(--ld-region-fill);
+  pointer-events: none; transition: opacity 0.2s ease-out, visibility 0.2s;
+}
+.ld-region[data-on="false"] { opacity: 0; visibility: hidden; }
+.ld-region[data-current="true"] { border-color: var(--ld-region-strong); box-shadow: 0 0 0 1px var(--ld-region-strong); }
+.ld-region-tag {
+  /* Sits above the outline, raised past the part's marker when the marker pokes out of the outline's top edge. */
+  position: absolute; inset-inline-start: -1px; inset-block-end: calc(100% + max(3px, var(--pin-half) + 4px - var(--depth, 0) * 100%));
+  padding: 1px 6px; border-radius: 4px; background: var(--ld-tag); color: var(--ld-tag-ink);
+  font-size: var(--fs-12); font-weight: var(--fw-medium); line-height: 1.4; white-space: nowrap;
+}
+.ld-region-tag[data-tag="inside"] { inset-block-end: auto; inset-block-start: 3px; inset-inline-start: 3px; }
+
+/* The numbered marker sits ON the part's point. */
+.ld-marker-slot { display: contents; }
+.ld-marker {
+  position: absolute; z-index: 1; transform: translate(-50%, -50%);
+  display: inline-grid; place-items: center; inline-size: 26px; block-size: 26px; padding: 0;
+  border: 0; border-radius: 7px; background: var(--ld-pin); color: var(--ld-pin-ink);
+  box-shadow: 0 0 0 2px var(--ld-pin-ring), 0 2px 6px -1px rgba(10, 19, 23, 0.45);
+  font: inherit; font-size: var(--fs-14); font-weight: var(--fw-bold); line-height: 1; font-variant-numeric: tabular-nums;
+  transition: background-color 0.16s ease-out, box-shadow 0.16s ease-out, transform 0.16s ease-out;
+}
+button.ld-marker { cursor: pointer; }
+button.ld-marker:disabled { cursor: default; }
+.ld-marker[data-state="current"] { background: var(--ld-pin-current); box-shadow: 0 0 0 2px var(--ld-pin-ring), 0 0 0 5px rgba(0, 100, 224, 0.28); }
+.ld-marker[data-state="right"] { background: var(--ld-pin-ok); }
+.ld-marker[data-state="wrong"] { background: var(--ld-pin-bad); }
+button.ld-marker[data-armed="true"]:hover, .ld-marker[data-over="true"] { transform: translate(-50%, -50%) scale(1.15); box-shadow: 0 0 0 2px var(--ld-pin-ring), 0 0 0 5px rgba(0, 100, 224, 0.35); }
+button.ld-marker:focus-visible { outline: 2px solid var(--ld-pin-current); outline-offset: 3px; }
+
+.ld-figcaption { display: grid; gap: 2px; }
+.ld-caption { font-size: var(--fs-14); color: var(--ink-2); line-height: 1.4; }
+.ld-credit { font-size: var(--fs-12); color: var(--ink-3); line-height: 1.35; }
+
+/* ---- word bank and the numbered list ----------------------------------------------------------------------------- */
+.ld-side { display: grid; gap: 14px; align-content: start; min-inline-size: 0; }
+.ld-bank { display: flex; flex-wrap: wrap; gap: 8px; }
+.ld-chip-wrap { display: inline-flex; border-radius: var(--r-s); }
+.ld-chip {
+  display: inline-flex; align-items: center; margin: 0; padding: 5px 11px; border-radius: var(--r-s);
+  border: 1px solid var(--line-2); background: var(--panel-2); color: var(--ink);
+  font: inherit; font-size: var(--fs-14); line-height: 1.3;
+}
+button.ld-chip { cursor: grab; }
+button.ld-chip:disabled { cursor: default; }
+button.ld-chip:hover:not(:disabled) { border-color: var(--line-3); }
+.ld-chip[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); box-shadow: inset 0 0 0 1px var(--accent); }
+.ld-chip[data-used="true"] { color: var(--ink-3); background: transparent; border-style: dashed; }
+.ld-chip[data-used="true"][aria-pressed="true"] { color: var(--ink); border-style: solid; }
+
+.ld-rows { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.ld-row { display: grid; grid-template-columns: 26px minmax(0, 1fr) 22px; align-items: center; gap: 10px; min-block-size: 36px; border-radius: var(--r-s); }
+.ld-row-n {
+  display: inline-grid; place-items: center; inline-size: 26px; block-size: 26px; border-radius: 7px;
+  background: var(--panel-3); color: var(--ink); font-size: var(--fs-14); font-weight: var(--fw-bold); font-variant-numeric: tabular-nums;
+}
+.ld-row[data-current="true"] .ld-row-n { background: var(--accent); color: var(--accent-ink); }
+.ld-row[data-result="right"] .ld-row-n { background: var(--ok-soft); color: var(--ok-ink); }
+.ld-row[data-result="wrong"] .ld-row-n { background: var(--bad-soft); color: var(--bad-ink); }
+.ld-row-mark { display: inline-flex; justify-content: center; }
+.ld-row-mark .mark { margin: 0; }
+
+.ld-slot-cell { position: relative; display: flex; align-items: center; min-inline-size: 0; }
+.ld-slot {
+  flex: 1; min-inline-size: 0; min-block-size: 34px; display: flex; align-items: center; padding: 4px 38px 4px 10px;
+  border: 1px dashed var(--line-2); border-radius: var(--r-s); background: transparent; color: var(--ink);
+  font: inherit; font-size: var(--fs-14); text-align: start; cursor: pointer;
+}
+.ld-slot:disabled { cursor: default; }
+.ld-slot[data-filled="true"] { border-style: solid; background: var(--panel-2); }
+.ld-slot[data-armed="true"]:hover, .ld-slot[data-over="true"] { border-color: var(--accent); background: var(--accent-soft); }
+.ld-slot-empty { color: var(--ink-3); }
+.ld-slot-name { cursor: grab; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ld-off {
+  /* "Take off" sits inside the filled slot (a token's own ×), away from the right/wrong mark column. */
+  position: absolute; inset-inline-end: 3px; inset-block-start: 50%; transform: translateY(-50%);
+  display: inline-grid; place-items: center; inline-size: 28px; block-size: 28px; padding: 0; border: 0; border-radius: var(--r-s);
+  background: transparent; color: var(--ink-3); cursor: pointer;
+}
+.ld-off:hover { color: var(--ink); background: var(--panel-2); }
+.ld-off[data-on="false"] { visibility: hidden; }
+.ld-answer { align-self: center; font-size: var(--fs-16); font-weight: var(--fw-medium); color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ld-yours { font-size: var(--fs-14); font-weight: var(--fw-regular); color: var(--ink-3); }
+.ld-row .concealed { justify-self: start; align-self: center; }
+
+.ld-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.ld-status { font-size: var(--fs-14); color: var(--ink-2); min-block-size: 1.4em; }
+.ld-hint { font-size: var(--fs-14); color: var(--ink-2); min-block-size: 1.4em; }
+.ld-hint[data-on="false"] { visibility: hidden; }
+
+.ld-quotes > summary { cursor: pointer; font-size: var(--fs-14); color: var(--accent-text); inline-size: fit-content; }
+.ld-quotes[open] > summary { margin-block-end: 8px; }
+.ld-quotes { display: grid; gap: 8px; }
+
+/* ---- presentation (stage): figure left at a fixed design size, the question and the numbers right --------------- */
+.ld[data-mode="stage"] .ld-body { grid-template-columns: auto minmax(0, 1fr); column-gap: 40px; }
+.ld[data-mode="stage"] .ld-side { gap: 16px; padding-block-start: 4px; }
+.ld-question { font-size: var(--fs-26); font-weight: var(--fw-bold); line-height: 1.2; letter-spacing: -0.01em; text-wrap: balance; }
+.ld-progress { margin-inline-start: 6px; font-size: var(--fs-16); font-weight: var(--fw-medium); color: var(--ink-3); letter-spacing: 0; white-space: nowrap; }
+.ld[data-mode="stage"] .ld-chip { font-size: var(--fs-16); padding: 5px 12px; }
+.ld[data-mode="stage"] .ld-chip[data-used="true"] { text-decoration: line-through; text-decoration-color: var(--line-3); }
+.ld[data-mode="stage"] .ld-rows { gap: 4px; }
+.ld[data-mode="stage"] .ld-rows[data-cols="2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 20px; }
+.ld[data-mode="stage"] .ld-row { grid-template-columns: 28px minmax(0, 1fr); min-block-size: 36px; padding-inline-end: 8px; }
+.ld[data-mode="stage"] .ld-row-n { inline-size: 28px; block-size: 28px; font-size: var(--fs-16); }
+.ld[data-mode="stage"] .ld-answer { font-size: var(--fs-20); }
+.ld[data-mode="stage"] .ld-row .concealed { font-size: var(--fs-16); }
+.ld[data-mode="stage"] { --pin-half: 14px; }
+.ld[data-mode="stage"] .ld-marker { inline-size: 28px; block-size: 28px; font-size: var(--fs-16); }
+.ld[data-mode="stage"] .ld-region-tag { font-size: var(--fs-14); }
+.ld-foot { font-size: var(--fs-16); color: var(--ink-2); }
+.ld-foot kbd { font-size: 0.85em; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ld-mask, .ld-region, .ld-marker { transition: none; }
+}

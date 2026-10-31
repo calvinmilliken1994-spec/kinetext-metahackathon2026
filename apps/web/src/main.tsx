@@ -59,6 +59,10 @@ async function pickPage(): Promise<ReactNode> {
     const { EngineDemoB } = await import('./components/EngineDemoB.tsx');
     return <EngineDemoB />;
   }
+  if (engineDemo === 'c') {
+    const { EngineDemoC } = await import('./components/EngineDemoC.tsx');
+    return <EngineDemoC />;
+  }
   return <App />;
 }
 

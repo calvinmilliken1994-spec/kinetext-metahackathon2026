@@ -82,7 +82,7 @@ test('label-diagram golden content matches the task contract', () => {
     [762, 353, 873, 380],
     [595, 510, 707, 537],
     [762, 510, 880, 537],
-    [508, 672, 697, 733]
+    [508, 672, 745, 733]
   ]);
   for (const p of gen.parts) {
     assert.ok(Number.isInteger(p.x) && Number.isInteger(p.y));

@@ -1,0 +1,65 @@
+[
+ {
+  "step": 1,
+  "innerTextCountsOfUnnamedNames(bank only=1)": {
+   "Base pairs": 1,
+   "Adenine": 1,
+   "Thymine": 1,
+   "Guanine": 1,
+   "Cytosine": 1,
+   "Sugar-phosphate backbone": 1
+  },
+  "ariaMentions": [],
+  "zoneBeforeR": ""
+ },
+ {
+  "step": 2,
+  "innerTextCountsOfUnnamedNames(bank only=1)": {
+   "Adenine": 1,
+   "Thymine": 1,
+   "Guanine": 1,
+   "Cytosine": 1,
+   "Sugar-phosphate backbone": 1
+  },
+  "ariaMentions": [],
+  "zoneBeforeR": ""
+ },
+ {
+  "step": 3,
+  "innerTextCountsOfUnnamedNames(bank only=1)": {
+   "Thymine": 1,
+   "Guanine": 1,
+   "Cytosine": 1,
+   "Sugar-phosphate backbone": 1
+  },
+  "ariaMentions": [],
+  "zoneBeforeR": ""
+ },
+ {
+  "step": 4,
+  "innerTextCountsOfUnnamedNames(bank only=1)": {
+   "Guanine": 1,
+   "Cytosine": 1,
+   "Sugar-phosphate backbone": 1
+  },
+  "ariaMentions": [],
+  "zoneBeforeR": ""
+ },
+ {
+  "step": 5,
+  "innerTextCountsOfUnnamedNames(bank only=1)": {
+   "Cytosine": 1,
+   "Sugar-phosphate backbone": 1
+  },
+  "ariaMentions": [],
+  "zoneBeforeR": ""
+ },
+ {
+  "step": 6,
+  "innerTextCountsOfUnnamedNames(bank only=1)": {
+   "Sugar-phosphate backbone": 1
+  },
+  "ariaMentions": [],
+  "zoneBeforeR": ""
+ }
+]

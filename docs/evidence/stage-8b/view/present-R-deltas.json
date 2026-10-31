@@ -1,0 +1,1109 @@
+[
+ {
+  "viewport": [
+   1366,
+   768
+  ],
+  "theme": "dark",
+  "checks": [
+   {
+    "step": 1,
+    "rowsBefore": [
+     "1 ?",
+     "2 ?",
+     "3 ?",
+     "4 ?",
+     "5 ?",
+     "6 ?"
+    ],
+    "rowsAfter": [
+     "1 Base pairs",
+     "2 ?",
+     "3 ?",
+     "4 ?",
+     "5 ?",
+     "6 ?"
+    ],
+    "masksVisibleAfter": 6,
+    "zoneAfter": "The page says \u201cto form units called base pairs\u201d",
+    "zoomBefore": "1.03425",
+    "zoomAfter": "1.03425",
+    "countBefore": 105,
+    "countAfter": 105,
+    "maxDy": 0,
+    "maxDh": 0,
+    "moved": [],
+    "nextStep": {
+     "zoomBefore": "1.03425",
+     "zoomAfter": "1.03425",
+     "countBefore": 105,
+     "countAfter": 105,
+     "maxDy": 0,
+     "maxDh": 0,
+     "moved": []
+    }
+   },
+   {
+    "step": 2,
+    "rowsBefore": [
+     "1 Base pairs",
+     "2 ?",
+     "3 ?",
+     "4 ?",
+     "5 ?",
+     "6 ?"
+    ],
+    "rowsAfter": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 ?",
+     "4 ?",
+     "5 ?",
+     "6 ?"
+    ],
+    "masksVisibleAfter": 6,
+    "zoneAfter": "The page says \u201cfour chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T)\u201d",
+    "zoomBefore": "1.03425",
+    "zoomAfter": "1.03425",
+    "countBefore": 105,
+    "countAfter": 105,
+    "maxDy": 0,
+    "maxDh": 0,
+    "moved": [],
+    "nextStep": {
+     "zoomBefore": "1.03425",
+     "zoomAfter": "1.03425",
+     "countBefore": 105,
+     "countAfter": 105,
+     "maxDy": 0,
+     "maxDh": 0,
+     "moved": []
+    }
+   },
+   {
+    "step": 3,
+    "rowsBefore": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 ?",
+     "4 ?",
+     "5 ?",
+     "6 ?"
+    ],
+    "rowsAfter": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 ?",
+     "5 ?",
+     "6 ?"
+    ],
+    "masksVisibleAfter": 6,
+    "zoneAfter": "The page says \u201cfour chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T)\u201d",
+    "zoomBefore": "1.03425",
+    "zoomAfter": "1.03425",
+    "countBefore": 105,
+    "countAfter": 105,
+    "maxDy": 0,
+    "maxDh": 0,
+    "moved": [],
+    "nextStep": {
+     "zoomBefore": "1.03425",
+     "zoomAfter": "1.03425",
+     "countBefore": 105,
+     "countAfter": 105,
+     "maxDy": 0,
+     "maxDh": 0,
+     "moved": []
+    }
+   },
+   {
+    "step": 4,
+    "rowsBefore": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 ?",
+     "5 ?",
+     "6 ?"
+    ],
+    "rowsAfter": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 Guanine",
+     "5 ?",
+     "6 ?"
+    ],
+    "masksVisibleAfter": 6,
+    "zoneAfter": "The page says \u201cfour chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T)\u201d",
+    "zoomBefore": "1.03425",
+    "zoomAfter": "1.03425",
+    "countBefore": 105,
+    "countAfter": 105,
+    "maxDy": 0,
+    "maxDh": 0,
+    "moved": [],
+    "nextStep": {
+     "zoomBefore": "1.03425",
+     "zoomAfter": "1.03425",
+     "countBefore": 105,
+     "countAfter": 105,
+     "maxDy": 0,
+     "maxDh": 0,
+     "moved": []
+    }
+   },
+   {
+    "step": 5,
+    "rowsBefore": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 Guanine",
+     "5 ?",
+     "6 ?"
+    ],
+    "rowsAfter": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 Guanine",
+     "5 Cytosine",
+     "6 ?"
+    ],
+    "masksVisibleAfter": 6,
+    "zoneAfter": "The page says \u201cfour chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T)\u201d",
+    "zoomBefore": "1.03425",
+    "zoomAfter": "1.03425",
+    "countBefore": 105,
+    "countAfter": 105,
+    "maxDy": 0,
+    "maxDh": 0,
+    "moved": [],
+    "nextStep": {
+     "zoomBefore": "1.03425",
+     "zoomAfter": "1.03425",
+     "countBefore": 105,
+     "countAfter": 105,
+     "maxDy": 0,
+     "maxDh": 0,
+     "moved": []
+    }
+   },
+   {
+    "step": 6,
+    "rowsBefore": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 Guanine",
+     "5 Cytosine",
+     "6 ?"
+    ],
+    "rowsAfter": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 Guanine",
+     "5 Cytosine",
+     "6 Sugar-phosphate backbone"
+    ],
+    "masksVisibleAfter": 6,
+    "zoneAfter": "The page says \u201cDNA is a double helix formed by base pairs attached to a sugar-phosphate backbone\u201d",
+    "zoomBefore": "1.03425",
+    "zoomAfter": "1.03425",
+    "countBefore": 105,
+    "countAfter": 105,
+    "maxDy": 0,
+    "maxDh": 0,
+    "moved": [],
+    "nextStep": {
+     "zoomBefore": "1.03425",
+     "zoomAfter": "1.03425",
+     "countBefore": 105,
+     "countAfter": 105,
+     "maxDy": 0,
+     "maxDh": 0,
+     "moved": []
+    }
+   },
+   {
+    "step": 7,
+    "rowsBefore": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 Guanine",
+     "5 Cytosine",
+     "6 Sugar-phosphate backbone"
+    ],
+    "rowsAfter": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 Guanine",
+     "5 Cytosine",
+     "6 Sugar-phosphate backbone"
+    ],
+    "masksVisibleAfter": 0,
+    "zoneAfter": "",
+    "zoomBefore": "1.03425",
+    "zoomAfter": "1.03425",
+    "countBefore": 105,
+    "countAfter": 105,
+    "maxDy": 0,
+    "maxDh": 0,
+    "moved": []
+   }
+  ],
+  "noScroll": {
+   "fitScroll": 459,
+   "fitClient": 459,
+   "docScroll": 768,
+   "inner": 768
+  },
+  "zoom": "1.03425",
+  "shots": [
+   "present-768-dark-step1-ask.png",
+   "present-768-dark-step4-revealed.png",
+   "present-768-dark-step7-ask.png",
+   "present-768-dark-step7-revealed.png"
+  ],
+  "noScrollEnd": {
+   "fitScroll": 459,
+   "fitClient": 459,
+   "docScroll": 768,
+   "inner": 768
+  }
+ },
+ {
+  "viewport": [
+   1366,
+   768
+  ],
+  "theme": "light",
+  "checks": [
+   {
+    "step": 1,
+    "rowsBefore": [
+     "1 ?",
+     "2 ?",
+     "3 ?",
+     "4 ?",
+     "5 ?",
+     "6 ?"
+    ],
+    "rowsAfter": [
+     "1 Base pairs",
+     "2 ?",
+     "3 ?",
+     "4 ?",
+     "5 ?",
+     "6 ?"
+    ],
+    "masksVisibleAfter": 6,
+    "zoneAfter": "The page says \u201cto form units called base pairs\u201d",
+    "zoomBefore": "1.03425",
+    "zoomAfter": "1.03425",
+    "countBefore": 105,
+    "countAfter": 105,
+    "maxDy": 0,
+    "maxDh": 0,
+    "moved": [],
+    "nextStep": {
+     "zoomBefore": "1.03425",
+     "zoomAfter": "1.03425",
+     "countBefore": 105,
+     "countAfter": 105,
+     "maxDy": 0,
+     "maxDh": 0,
+     "moved": []
+    }
+   },
+   {
+    "step": 2,
+    "rowsBefore": [
+     "1 Base pairs",
+     "2 ?",
+     "3 ?",
+     "4 ?",
+     "5 ?",
+     "6 ?"
+    ],
+    "rowsAfter": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 ?",
+     "4 ?",
+     "5 ?",
+     "6 ?"
+    ],
+    "masksVisibleAfter": 6,
+    "zoneAfter": "The page says \u201cfour chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T)\u201d",
+    "zoomBefore": "1.03425",
+    "zoomAfter": "1.03425",
+    "countBefore": 105,
+    "countAfter": 105,
+    "maxDy": 0,
+    "maxDh": 0,
+    "moved": [],
+    "nextStep": {
+     "zoomBefore": "1.03425",
+     "zoomAfter": "1.03425",
+     "countBefore": 105,
+     "countAfter": 105,
+     "maxDy": 0,
+     "maxDh": 0,
+     "moved": []
+    }
+   },
+   {
+    "step": 3,
+    "rowsBefore": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 ?",
+     "4 ?",
+     "5 ?",
+     "6 ?"
+    ],
+    "rowsAfter": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 ?",
+     "5 ?",
+     "6 ?"
+    ],
+    "masksVisibleAfter": 6,
+    "zoneAfter": "The page says \u201cfour chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T)\u201d",
+    "zoomBefore": "1.03425",
+    "zoomAfter": "1.03425",
+    "countBefore": 105,
+    "countAfter": 105,
+    "maxDy": 0,
+    "maxDh": 0,
+    "moved": [],
+    "nextStep": {
+     "zoomBefore": "1.03425",
+     "zoomAfter": "1.03425",
+     "countBefore": 105,
+     "countAfter": 105,
+     "maxDy": 0,
+     "maxDh": 0,
+     "moved": []
+    }
+   },
+   {
+    "step": 4,
+    "rowsBefore": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 ?",
+     "5 ?",
+     "6 ?"
+    ],
+    "rowsAfter": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 Guanine",
+     "5 ?",
+     "6 ?"
+    ],
+    "masksVisibleAfter": 6,
+    "zoneAfter": "The page says \u201cfour chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T)\u201d",
+    "zoomBefore": "1.03425",
+    "zoomAfter": "1.03425",
+    "countBefore": 105,
+    "countAfter": 105,
+    "maxDy": 0,
+    "maxDh": 0,
+    "moved": [],
+    "nextStep": {
+     "zoomBefore": "1.03425",
+     "zoomAfter": "1.03425",
+     "countBefore": 105,
+     "countAfter": 105,
+     "maxDy": 0,
+     "maxDh": 0,
+     "moved": []
+    }
+   },
+   {
+    "step": 5,
+    "rowsBefore": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 Guanine",
+     "5 ?",
+     "6 ?"
+    ],
+    "rowsAfter": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 Guanine",
+     "5 Cytosine",
+     "6 ?"
+    ],
+    "masksVisibleAfter": 6,
+    "zoneAfter": "The page says \u201cfour chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T)\u201d",
+    "zoomBefore": "1.03425",
+    "zoomAfter": "1.03425",
+    "countBefore": 105,
+    "countAfter": 105,
+    "maxDy": 0,
+    "maxDh": 0,
+    "moved": [],
+    "nextStep": {
+     "zoomBefore": "1.03425",
+     "zoomAfter": "1.03425",
+     "countBefore": 105,
+     "countAfter": 105,
+     "maxDy": 0,
+     "maxDh": 0,
+     "moved": []
+    }
+   },
+   {
+    "step": 6,
+    "rowsBefore": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 Guanine",
+     "5 Cytosine",
+     "6 ?"
+    ],
+    "rowsAfter": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 Guanine",
+     "5 Cytosine",
+     "6 Sugar-phosphate backbone"
+    ],
+    "masksVisibleAfter": 6,
+    "zoneAfter": "The page says \u201cDNA is a double helix formed by base pairs attached to a sugar-phosphate backbone\u201d",
+    "zoomBefore": "1.03425",
+    "zoomAfter": "1.03425",
+    "countBefore": 105,
+    "countAfter": 105,
+    "maxDy": 0,
+    "maxDh": 0,
+    "moved": [],
+    "nextStep": {
+     "zoomBefore": "1.03425",
+     "zoomAfter": "1.03425",
+     "countBefore": 105,
+     "countAfter": 105,
+     "maxDy": 0,
+     "maxDh": 0,
+     "moved": []
+    }
+   },
+   {
+    "step": 7,
+    "rowsBefore": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 Guanine",
+     "5 Cytosine",
+     "6 Sugar-phosphate backbone"
+    ],
+    "rowsAfter": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 Guanine",
+     "5 Cytosine",
+     "6 Sugar-phosphate backbone"
+    ],
+    "masksVisibleAfter": 0,
+    "zoneAfter": "",
+    "zoomBefore": "1.03425",
+    "zoomAfter": "1.03425",
+    "countBefore": 105,
+    "countAfter": 105,
+    "maxDy": 0,
+    "maxDh": 0,
+    "moved": []
+   }
+  ],
+  "noScroll": {
+   "fitScroll": 459,
+   "fitClient": 459,
+   "docScroll": 768,
+   "inner": 768
+  },
+  "zoom": "1.03425",
+  "shots": [
+   "present-768-light-step2-ask.png",
+   "present-768-light-step7-revealed.png"
+  ],
+  "noScrollEnd": {
+   "fitScroll": 459,
+   "fitClient": 459,
+   "docScroll": 768,
+   "inner": 768
+  }
+ },
+ {
+  "viewport": [
+   1920,
+   1080
+  ],
+  "theme": "dark",
+  "checks": [
+   {
+    "step": 1,
+    "rowsBefore": [
+     "1 ?",
+     "2 ?",
+     "3 ?",
+     "4 ?",
+     "5 ?",
+     "6 ?"
+    ],
+    "rowsAfter": [
+     "1 Base pairs",
+     "2 ?",
+     "3 ?",
+     "4 ?",
+     "5 ?",
+     "6 ?"
+    ],
+    "masksVisibleAfter": 6,
+    "zoneAfter": "The page says \u201cto form units called base pairs\u201d",
+    "zoomBefore": "1.51142",
+    "zoomAfter": "1.51142",
+    "countBefore": 105,
+    "countAfter": 105,
+    "maxDy": 0,
+    "maxDh": 0,
+    "moved": [],
+    "nextStep": {
+     "zoomBefore": "1.51142",
+     "zoomAfter": "1.51142",
+     "countBefore": 105,
+     "countAfter": 105,
+     "maxDy": 0,
+     "maxDh": 0,
+     "moved": []
+    }
+   },
+   {
+    "step": 2,
+    "rowsBefore": [
+     "1 Base pairs",
+     "2 ?",
+     "3 ?",
+     "4 ?",
+     "5 ?",
+     "6 ?"
+    ],
+    "rowsAfter": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 ?",
+     "4 ?",
+     "5 ?",
+     "6 ?"
+    ],
+    "masksVisibleAfter": 6,
+    "zoneAfter": "The page says \u201cfour chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T)\u201d",
+    "zoomBefore": "1.51142",
+    "zoomAfter": "1.51142",
+    "countBefore": 105,
+    "countAfter": 105,
+    "maxDy": 0,
+    "maxDh": 0,
+    "moved": [],
+    "nextStep": {
+     "zoomBefore": "1.51142",
+     "zoomAfter": "1.51142",
+     "countBefore": 105,
+     "countAfter": 105,
+     "maxDy": 0,
+     "maxDh": 0,
+     "moved": []
+    }
+   },
+   {
+    "step": 3,
+    "rowsBefore": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 ?",
+     "4 ?",
+     "5 ?",
+     "6 ?"
+    ],
+    "rowsAfter": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 ?",
+     "5 ?",
+     "6 ?"
+    ],
+    "masksVisibleAfter": 6,
+    "zoneAfter": "The page says \u201cfour chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T)\u201d",
+    "zoomBefore": "1.51142",
+    "zoomAfter": "1.51142",
+    "countBefore": 105,
+    "countAfter": 105,
+    "maxDy": 0,
+    "maxDh": 0,
+    "moved": [],
+    "nextStep": {
+     "zoomBefore": "1.51142",
+     "zoomAfter": "1.51142",
+     "countBefore": 105,
+     "countAfter": 105,
+     "maxDy": 0,
+     "maxDh": 0,
+     "moved": []
+    }
+   },
+   {
+    "step": 4,
+    "rowsBefore": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 ?",
+     "5 ?",
+     "6 ?"
+    ],
+    "rowsAfter": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 Guanine",
+     "5 ?",
+     "6 ?"
+    ],
+    "masksVisibleAfter": 6,
+    "zoneAfter": "The page says \u201cfour chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T)\u201d",
+    "zoomBefore": "1.51142",
+    "zoomAfter": "1.51142",
+    "countBefore": 105,
+    "countAfter": 105,
+    "maxDy": 0,
+    "maxDh": 0,
+    "moved": [],
+    "nextStep": {
+     "zoomBefore": "1.51142",
+     "zoomAfter": "1.51142",
+     "countBefore": 105,
+     "countAfter": 105,
+     "maxDy": 0,
+     "maxDh": 0,
+     "moved": []
+    }
+   },
+   {
+    "step": 5,
+    "rowsBefore": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 Guanine",
+     "5 ?",
+     "6 ?"
+    ],
+    "rowsAfter": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 Guanine",
+     "5 Cytosine",
+     "6 ?"
+    ],
+    "masksVisibleAfter": 6,
+    "zoneAfter": "The page says \u201cfour chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T)\u201d",
+    "zoomBefore": "1.51142",
+    "zoomAfter": "1.51142",
+    "countBefore": 105,
+    "countAfter": 105,
+    "maxDy": 0,
+    "maxDh": 0,
+    "moved": [],
+    "nextStep": {
+     "zoomBefore": "1.51142",
+     "zoomAfter": "1.51142",
+     "countBefore": 105,
+     "countAfter": 105,
+     "maxDy": 0,
+     "maxDh": 0,
+     "moved": []
+    }
+   },
+   {
+    "step": 6,
+    "rowsBefore": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 Guanine",
+     "5 Cytosine",
+     "6 ?"
+    ],
+    "rowsAfter": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 Guanine",
+     "5 Cytosine",
+     "6 Sugar-phosphate backbone"
+    ],
+    "masksVisibleAfter": 6,
+    "zoneAfter": "The page says \u201cDNA is a double helix formed by base pairs attached to a sugar-phosphate backbone\u201d",
+    "zoomBefore": "1.51142",
+    "zoomAfter": "1.51142",
+    "countBefore": 105,
+    "countAfter": 105,
+    "maxDy": 0,
+    "maxDh": 0,
+    "moved": [],
+    "nextStep": {
+     "zoomBefore": "1.51142",
+     "zoomAfter": "1.51142",
+     "countBefore": 105,
+     "countAfter": 105,
+     "maxDy": 0,
+     "maxDh": 0,
+     "moved": []
+    }
+   },
+   {
+    "step": 7,
+    "rowsBefore": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 Guanine",
+     "5 Cytosine",
+     "6 Sugar-phosphate backbone"
+    ],
+    "rowsAfter": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 Guanine",
+     "5 Cytosine",
+     "6 Sugar-phosphate backbone"
+    ],
+    "masksVisibleAfter": 0,
+    "zoneAfter": "",
+    "zoomBefore": "1.51142",
+    "zoomAfter": "1.51142",
+    "countBefore": 105,
+    "countAfter": 105,
+    "maxDy": 0,
+    "maxDh": 0,
+    "moved": []
+   }
+  ],
+  "noScroll": {
+   "fitScroll": 668,
+   "fitClient": 668,
+   "docScroll": 1080,
+   "inner": 1080
+  },
+  "zoom": "1.51142",
+  "shots": [
+   "present-1080-dark-step1-ask.png",
+   "present-1080-dark-step3-revealed.png",
+   "present-1080-dark-step7-revealed.png"
+  ],
+  "noScrollEnd": {
+   "fitScroll": 668,
+   "fitClient": 668,
+   "docScroll": 1080,
+   "inner": 1080
+  }
+ },
+ {
+  "viewport": [
+   1920,
+   1080
+  ],
+  "theme": "light",
+  "checks": [
+   {
+    "step": 1,
+    "rowsBefore": [
+     "1 ?",
+     "2 ?",
+     "3 ?",
+     "4 ?",
+     "5 ?",
+     "6 ?"
+    ],
+    "rowsAfter": [
+     "1 Base pairs",
+     "2 ?",
+     "3 ?",
+     "4 ?",
+     "5 ?",
+     "6 ?"
+    ],
+    "masksVisibleAfter": 6,
+    "zoneAfter": "The page says \u201cto form units called base pairs\u201d",
+    "zoomBefore": "1.51142",
+    "zoomAfter": "1.51142",
+    "countBefore": 105,
+    "countAfter": 105,
+    "maxDy": 0,
+    "maxDh": 0,
+    "moved": [],
+    "nextStep": {
+     "zoomBefore": "1.51142",
+     "zoomAfter": "1.51142",
+     "countBefore": 105,
+     "countAfter": 105,
+     "maxDy": 0,
+     "maxDh": 0,
+     "moved": []
+    }
+   },
+   {
+    "step": 2,
+    "rowsBefore": [
+     "1 Base pairs",
+     "2 ?",
+     "3 ?",
+     "4 ?",
+     "5 ?",
+     "6 ?"
+    ],
+    "rowsAfter": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 ?",
+     "4 ?",
+     "5 ?",
+     "6 ?"
+    ],
+    "masksVisibleAfter": 6,
+    "zoneAfter": "The page says \u201cfour chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T)\u201d",
+    "zoomBefore": "1.51142",
+    "zoomAfter": "1.51142",
+    "countBefore": 105,
+    "countAfter": 105,
+    "maxDy": 0,
+    "maxDh": 0,
+    "moved": [],
+    "nextStep": {
+     "zoomBefore": "1.51142",
+     "zoomAfter": "1.51142",
+     "countBefore": 105,
+     "countAfter": 105,
+     "maxDy": 0,
+     "maxDh": 0,
+     "moved": []
+    }
+   },
+   {
+    "step": 3,
+    "rowsBefore": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 ?",
+     "4 ?",
+     "5 ?",
+     "6 ?"
+    ],
+    "rowsAfter": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 ?",
+     "5 ?",
+     "6 ?"
+    ],
+    "masksVisibleAfter": 6,
+    "zoneAfter": "The page says \u201cfour chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T)\u201d",
+    "zoomBefore": "1.51142",
+    "zoomAfter": "1.51142",
+    "countBefore": 105,
+    "countAfter": 105,
+    "maxDy": 0,
+    "maxDh": 0,
+    "moved": [],
+    "nextStep": {
+     "zoomBefore": "1.51142",
+     "zoomAfter": "1.51142",
+     "countBefore": 105,
+     "countAfter": 105,
+     "maxDy": 0,
+     "maxDh": 0,
+     "moved": []
+    }
+   },
+   {
+    "step": 4,
+    "rowsBefore": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 ?",
+     "5 ?",
+     "6 ?"
+    ],
+    "rowsAfter": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 Guanine",
+     "5 ?",
+     "6 ?"
+    ],
+    "masksVisibleAfter": 6,
+    "zoneAfter": "The page says \u201cfour chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T)\u201d",
+    "zoomBefore": "1.51142",
+    "zoomAfter": "1.51142",
+    "countBefore": 105,
+    "countAfter": 105,
+    "maxDy": 0,
+    "maxDh": 0,
+    "moved": [],
+    "nextStep": {
+     "zoomBefore": "1.51142",
+     "zoomAfter": "1.51142",
+     "countBefore": 105,
+     "countAfter": 105,
+     "maxDy": 0,
+     "maxDh": 0,
+     "moved": []
+    }
+   },
+   {
+    "step": 5,
+    "rowsBefore": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 Guanine",
+     "5 ?",
+     "6 ?"
+    ],
+    "rowsAfter": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 Guanine",
+     "5 Cytosine",
+     "6 ?"
+    ],
+    "masksVisibleAfter": 6,
+    "zoneAfter": "The page says \u201cfour chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T)\u201d",
+    "zoomBefore": "1.51142",
+    "zoomAfter": "1.51142",
+    "countBefore": 105,
+    "countAfter": 105,
+    "maxDy": 0,
+    "maxDh": 0,
+    "moved": [],
+    "nextStep": {
+     "zoomBefore": "1.51142",
+     "zoomAfter": "1.51142",
+     "countBefore": 105,
+     "countAfter": 105,
+     "maxDy": 0,
+     "maxDh": 0,
+     "moved": []
+    }
+   },
+   {
+    "step": 6,
+    "rowsBefore": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 Guanine",
+     "5 Cytosine",
+     "6 ?"
+    ],
+    "rowsAfter": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 Guanine",
+     "5 Cytosine",
+     "6 Sugar-phosphate backbone"
+    ],
+    "masksVisibleAfter": 6,
+    "zoneAfter": "The page says \u201cDNA is a double helix formed by base pairs attached to a sugar-phosphate backbone\u201d",
+    "zoomBefore": "1.51142",
+    "zoomAfter": "1.51142",
+    "countBefore": 105,
+    "countAfter": 105,
+    "maxDy": 0,
+    "maxDh": 0,
+    "moved": [],
+    "nextStep": {
+     "zoomBefore": "1.51142",
+     "zoomAfter": "1.51142",
+     "countBefore": 105,
+     "countAfter": 105,
+     "maxDy": 0,
+     "maxDh": 0,
+     "moved": []
+    }
+   },
+   {
+    "step": 7,
+    "rowsBefore": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 Guanine",
+     "5 Cytosine",
+     "6 Sugar-phosphate backbone"
+    ],
+    "rowsAfter": [
+     "1 Base pairs",
+     "2 Adenine",
+     "3 Thymine",
+     "4 Guanine",
+     "5 Cytosine",
+     "6 Sugar-phosphate backbone"
+    ],
+    "masksVisibleAfter": 0,
+    "zoneAfter": "",
+    "zoomBefore": "1.51142",
+    "zoomAfter": "1.51142",
+    "countBefore": 105,
+    "countAfter": 105,
+    "maxDy": 0,
+    "maxDh": 0,
+    "moved": []
+   }
+  ],
+  "noScroll": {
+   "fitScroll": 668,
+   "fitClient": 668,
+   "docScroll": 1080,
+   "inner": 1080
+  },
+  "zoom": "1.51142",
+  "shots": [
+   "present-1080-light-step1-ask.png",
+   "present-1080-light-step5-revealed.png"
+  ],
+  "noScrollEnd": {
+   "fitScroll": 668,
+   "fitClient": 668,
+   "docScroll": 1080,
+   "inner": 1080
+  }
+ }
+]

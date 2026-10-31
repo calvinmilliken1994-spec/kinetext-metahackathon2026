@@ -30,6 +30,7 @@ import { logLadderPresentationSteps } from './logLadderView.ts';
 import { thresholdPresentationSteps, thresholdRevealQuote } from './thresholdView.ts';
 import { dataTablePresentationSteps, dataTableRevealQuote } from './dataTableView.ts';
 import { labelDiagramPresentationSteps } from './labelDiagramView.ts';
+import { labelDiagramRevealQuote } from './labelDiagramView.ts';
 
 // ---- the deck -----------------------------------------------------------------------------------------------------
 
@@ -154,6 +155,7 @@ function engineRevealQuote(spec: EngineSpec, step: number): QuoteLike | null {
   switch (spec.componentId) {
     case 'threshold-v1': return thresholdRevealQuote(spec, step);
     case 'data-table-v1': return dataTableRevealQuote(spec, step);
+    case 'label-diagram-v1': return labelDiagramRevealQuote(spec, step);
     default: return null;
   }
 }
