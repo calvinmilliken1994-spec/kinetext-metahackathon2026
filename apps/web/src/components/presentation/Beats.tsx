@@ -1,4 +1,5 @@
 import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { settleZoom } from '../../lib/stageFit.ts';
 import type { FormEvent, ReactNode } from 'react';
 import type { KitSpec } from '../../../../../packages/contracts/kit.ts';
 import type { Badge } from '../../lib/repairs.ts';
@@ -423,7 +424,10 @@ function StageFit({ children, width = 980, hero, follow, contain = false, frozen
       // Fill the stage; a part taller than the stage shrinks to fit, but not below 85% of its own size (past that it
       // scrolls: the quote zone under every slide takes some height, and a little smaller beats a cut-off graph).
       // `contain` (a predict beat's scene): always the whole part on screen, shrinking below its own size if it must.
-      setZoom(contain ? Math.min(byWidth, byHeight, 1.9) : Math.max(Math.min(byWidth, minZoom), Math.min(byWidth, byHeight, 1.9)));
+      const next = contain ? Math.min(byWidth, byHeight, 1.9) : Math.max(Math.min(byWidth, minZoom), Math.min(byWidth, byHeight, 1.9));
+      // Measuring the zoomed part rounds to device pixels, so each rescale can measure a hair differently and flip the
+      // scale back and forth every frame (a visible vibration at some window sizes). Ignore changes under 0.5%.
+      setZoom((prev) => settleZoom(prev, next));
       if (target !== null && !followed.current) {
         followed.current = true;
         // Bring the revealed answer up on the stage once the new zoom has applied. The stage scrolls by itself only,
