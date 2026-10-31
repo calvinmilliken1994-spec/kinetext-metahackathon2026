@@ -220,6 +220,7 @@ export function validateLabelDiagram(gen: LabelDiagramGen, sources: SourceDocume
       const problems: string[] = [];
       const affected: string[] = [];
       const boxes = parts.map(partBoxOf);
+      const storedFigure = (opts.figures ?? []).find(f => f.id === (gen as { figureId?: unknown })?.figureId);
       parts.forEach((p, i) => {
         for (const axis of ['x', 'y'] as const) {
           const v: unknown = p?.[axis];
@@ -231,6 +232,17 @@ export function validateLabelDiagram(gen: LabelDiagramGen, sources: SourceDocume
         if (!Number.isInteger(p?.x) || !Number.isInteger(p?.y)) return;
         const px = p.x as number;
         const py = p.y as number;
+        // Stage 8b (lead, live run 3): the figure's stored, lead-verified printed-label boxes (image pixels)
+        // are the ground truth for where printed words are; Muse's own boxes can sit off the text.
+        const stored = storedFigure?.labelBoxes ?? [];
+        if (storedFigure !== undefined && stored.length > 0) {
+          const ix = (px * storedFigure.width) / L.coordMax;
+          const iy = (py * storedFigure.height) / L.coordMax;
+          if (stored.some(s => s.x1 <= ix && ix < s.x2 && s.y1 <= iy && iy < s.y2)) {
+            problems.push(`parts[${i}]: the point (${px}, ${py}) lies on a printed word of the figure (image pixel ${Math.round(ix)}, ${Math.round(iy)}); the point must sit on the drawn part itself, never on printed text`);
+            affected.push(`/parts/${i}/x`, `/parts/${i}/y`);
+          }
+        }
         boxes.forEach((b, j) => {
           if (b.box === null) return; // junk edges: LD-05 owns them and they cannot contain a point meaningfully
           if (!b.hasBox) return;

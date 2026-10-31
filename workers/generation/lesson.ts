@@ -708,7 +708,8 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
   // never attaches an image for that provider. At most the first 3 figures in listed order
   // (listFigures sorts by id) travel through analysis, generation, validation and publish.
   const jobProvider: MetaProvider = isMetaProvider(summary.provider) ? summary.provider : 'meta-api';
-  const jobFigures: FigureMeta[] = jobProvider === 'meta-api' ? listFigures(source.id).slice(0, 3) : [];
+  // Stage 8b (lead): each figure carries its stored printed-label boxes so LD-04 (and the repair guard's recompute) can reject points on printed words.
+  const jobFigures: FigureMeta[] = jobProvider === 'meta-api' ? listFigures(source.id).slice(0, 3).map(f => ({ ...f, labelBoxes: loadFigureLabelBoxes(f.id) })) : [];
 
   // --- Call 1: analysis v2 (same-call overview + component plan) -------------
   ctx.emit('analyze', 'started');

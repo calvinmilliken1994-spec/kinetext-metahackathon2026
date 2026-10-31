@@ -6,7 +6,7 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { compareKitRevisions, validateKitComponent } from './kit/index.ts';
 import { loadSource } from '../sources/index.ts';
-import { loadFigure } from '../sources/figures.ts';
+import { loadFigure, loadFigureLabelBoxes } from '../sources/figures.ts';
 import type { LabelDiagramGen, LabelRegion } from '../contracts/kit.ts';
 
 const golden = JSON.parse(readFileSync(fileURLToPath(new URL('../../tests/fixtures/stage6/label-diagram.gen.json', import.meta.url)), 'utf8')) as LabelDiagramGen;
@@ -56,4 +56,17 @@ test('LD-06 tolerates a point a few pixels outside a thin region (live water-cyc
   far[0] = { ...far[0]!, x1: cx + 30, x2: cx + 60, y1: cy - 40, y2: cy + 40 };
   const bad = validateKitComponent('label-diagram-v1', golden, sources, { figures: [figure], labelRegions: far });
   assert.ok(bad.checks.some((c) => c.id === 'LD-06' && !c.passed));
+});
+
+test('LD-04 rejects a point on a printed word of the figure using the stored label boxes (live: DNA Guanine point on the word)', () => {
+  const withBoxes = { ...figure, labelBoxes: loadFigureLabelBoxes(figure.id) };
+  const onWord = structuredClone(golden);
+  // 'Adenine' is printed at image pixels (357..423, 213..227) on the 600x600 figure -> normalised (650, 367).
+  onWord.parts[2]!.x = 650; onWord.parts[2]!.y = 367;
+  const r = validateKitComponent('label-diagram-v1', onWord, sources, { figures: [withBoxes], labelRegions: regionsAt(onWord) });
+  const ld04 = r.checks.find((c) => c.id === 'LD-04')!;
+  assert.equal(ld04.passed, false);
+  assert.match(ld04.message, /printed word/);
+  const ok = validateKitComponent('label-diagram-v1', golden, sources, { figures: [withBoxes], labelRegions: regionsAt(golden) });
+  assert.ok(ok.checks.find((c) => c.id === 'LD-04')!.passed, 'the golden points are all off printed words');
 });

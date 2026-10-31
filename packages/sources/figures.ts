@@ -24,6 +24,8 @@ export interface FigureMeta {
   licenseEvidence: string;
   labelsInImage: boolean;
   retrievedAt: string;
+  /** In-memory only (never in the sidecar JSON): the stored printed-label boxes, attached by the lesson worker. */
+  labelBoxes?: FigureLabelBox[];
 }
 
 function readMeta(id: string, dir: URL): FigureMeta {
