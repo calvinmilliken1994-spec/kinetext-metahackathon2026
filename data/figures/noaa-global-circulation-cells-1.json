@@ -1,0 +1,18 @@
+{
+  "id": "noaa-global-circulation-cells-1",
+  "sourceId": "noaa-jetstream-global-atmospheric-circulations",
+  "file": "noaa-global-circulation-cells-1.jpg",
+  "mime": "image/jpeg",
+  "sha256": "bbc49da5d6a387c3dfd4bf5acac46f360b2c8f2dd007b54e3cbcf8805c64d9be",
+  "width": 419,
+  "height": 325,
+  "imageUrl": "https://www.noaa.gov/sites/default/files/2022-05/circ.jpg",
+  "pageUrl": "https://www.noaa.gov/jetstream/global/global-atmospheric-circulations",
+  "caption": "Three main circulations exist between the equator and poles due to the Earth's rotation.",
+  "altText": "earth's rotation.",
+  "credit": "",
+  "license": "U.S. Government work (NOAA National Weather Service, JetStream), public domain; credit NOAA; AI edits must be disclosed",
+  "licenseEvidence": "https://www.noaa.gov/office-education/outreach-communication/faq — \"Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission.\"; \"Not all content on a NOAA website is NOAA-sourced. Please read credits carefully to verify the source.\" (this figure carries no third-party credit on the page); \"Credit NOAA, the NOAA program, if listed …\"; \"Modify the content or misrepresent the content, and then present it as official government material. (If you make any edits, including using a generative AI program, make it clear that you edited it.)\". Retrieved 2026-10-31 (HTTP 200).",
+  "labelsInImage": false,
+  "retrievedAt": "2026-10-31T02:42:54Z"
+}

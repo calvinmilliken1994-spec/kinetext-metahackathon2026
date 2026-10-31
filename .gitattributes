@@ -4,3 +4,4 @@
 data/sources/*.txt -text
 *.png binary
 *.jpg binary
+data/figures/*.json -text

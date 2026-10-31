@@ -1,0 +1,18 @@
+{
+  "id": "medlineplus-protein-production-1",
+  "sourceId": "medlineplus-protein-production",
+  "file": "medlineplus-protein-production-1.jpg",
+  "mime": "image/jpeg",
+  "sha256": "e763dd35e456b768501dec0978e52900d9d4189f4154a40dd8464f277b5cfa3f",
+  "width": 600,
+  "height": 510,
+  "imageUrl": "https://medlineplus.gov/images/PX00008S_PRESENTATION.jpeg",
+  "pageUrl": "https://medlineplus.gov/genetics/understanding/howgeneswork/makingprotein/",
+  "caption": "Through the processes of transcription and translation, information from genes is used to make proteins.",
+  "altText": "DNA is transcribed into mRNA, which is transported into the cell cytoplasm and translated into a protein.",
+  "credit": "Credit: U.S. National Library of Medicine",
+  "license": "U.S. Government work (U.S. National Library of Medicine), public domain",
+  "licenseEvidence": "https://medlineplus.gov/about/using/usingcontent/ — \"Works produced by the federal government are not copyrighted under U.S. law. You may reproduce, redistribute, and link freely to non-copyrighted content, including on social media.\"; the same page lists among MedlinePlus's public-domain areas \"Summaries on Genetics pages, including health condition, gene, and chromosome pages and the Help Me Understand Genetics handbook\" and \"Illustrations with the 'U.S. National Library of Medicine' watermark and credit.\" This figure prints that credit inside the image and the page carries \"Credit: U.S. National Library of Medicine\". Retrieved 2026-10-31 (HTTP 200). The same page warns that Genetics-page images \"attributed to government agencies, other organizations, or individuals may be copyright protected\" and that unattributed images are licensed stock that may not be reproduced — neither applies here.",
+  "labelsInImage": true,
+  "retrievedAt": "2026-10-31T02:42:52Z"
+}

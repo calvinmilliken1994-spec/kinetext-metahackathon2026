@@ -1,0 +1,18 @@
+{
+  "id": "nasa-grc-forces-of-flight-1",
+  "sourceId": "nasa-grc-simplified-aircraft-motion",
+  "file": "nasa-grc-forces-of-flight-1.jpg",
+  "mime": "image/jpeg",
+  "sha256": "4da33795a127e31a88c406e085d78874510606f8c6bce3a990f63c73d03638a2",
+  "width": 600,
+  "height": 382,
+  "imageUrl": "https://www1.grc.nasa.gov/wp-content/uploads/smotion-600x382.jpg",
+  "pageUrl": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/simplified-aircraft-motion/",
+  "caption": "",
+  "altText": "Image of a airplane ",
+  "credit": "",
+  "license": "U.S. Government work (NASA Glenn Research Center, Beginner's Guide to Aeronautics), generally not subject to copyright; NASA acknowledged as source; no NASA insignia in the figure",
+  "licenseEvidence": "https://www.nasa.gov/nasa-brand-center/images-and-media/ — \"NASA content – images, audio, video, and media files used in the rendition of 3-dimensional models, such as texture maps and polygon data in any format – generally are not subject to copyright in the United States. You may use this material for educational or informational purposes, including photo collections, textbooks, public exhibits, computer graphical simulations and Internet Web pages.\"; \"NASA should be acknowledged as the source of the material.\"; \"NASA occasionally uses copyright-protected material of third parties with permission on its website. Those images will be marked identified as copyright protected with the name of the copyright holder.\" — no such mark appears on this figure or its page; \"Insignia, Logotype, identifiers, and imagery are not in the public domain.\" — no NASA insignia appears in this figure. The same page's \"Super Intelligence (SI) Applications\" section (the AI-use section, retitled per Executive Order 14434 of Sept. 29, 2026) states: \"attribution of the information directly to NASA is not permitted\"; \"NASA does not permit our Insignia (i.e., NASA Meatball, Worm logotype, or Seal) to appear with SI generated imagery or in the training of SI tools\"; \"NASA strongly encourages SI-generated products maintain a marking indicating the product is SI generated\"; \"All outputs from the SI model should be attributed to the SI product itself, not NASA. References like 'according to NASA' or similar are prohibited in SI products.\" Retrieved 2026-10-31 (HTTP 200). The product carries these conditions: the lesson is labelled as AI-generated, is never attributed to NASA, and shows no NASA insignia.",
+  "labelsInImage": true,
+  "retrievedAt": "2026-10-31T02:43:03Z"
+}

@@ -1,0 +1,18 @@
+{
+  "id": "medlineplus-dna-structure-1",
+  "sourceId": "medlineplus-what-is-dna",
+  "file": "medlineplus-dna-structure-1.jpg",
+  "mime": "image/jpeg",
+  "sha256": "84e5b887cdd3a12fc6b15d1fd0b85026384927492baeb86567a4c264cf7e78a9",
+  "width": 600,
+  "height": 600,
+  "imageUrl": "https://medlineplus.gov/images/PX000098_PRESENTATION.jpeg",
+  "pageUrl": "https://medlineplus.gov/genetics/understanding/basics/dna/",
+  "caption": "DNA is a double helix formed by base pairs attached to a sugar-phosphate backbone.",
+  "altText": "DNA is made up of base pairs and a sugar phosphate backbone.",
+  "credit": "Credit: U.S. National Library of Medicine",
+  "license": "U.S. Government work (U.S. National Library of Medicine), public domain",
+  "licenseEvidence": "https://medlineplus.gov/about/using/usingcontent/ — \"Works produced by the federal government are not copyrighted under U.S. law. You may reproduce, redistribute, and link freely to non-copyrighted content, including on social media.\"; the same page lists among MedlinePlus's public-domain areas \"Summaries on Genetics pages, including health condition, gene, and chromosome pages and the Help Me Understand Genetics handbook\" and \"Illustrations with the 'U.S. National Library of Medicine' watermark and credit.\" This figure prints that credit inside the image and the page carries \"Credit: U.S. National Library of Medicine\". Retrieved 2026-10-31 (HTTP 200). The same page warns that Genetics-page images \"attributed to government agencies, other organizations, or individuals may be copyright protected\" and that unattributed images are licensed stock that may not be reproduced — neither applies here.",
+  "labelsInImage": true,
+  "retrievedAt": "2026-10-31T02:42:52Z"
+}

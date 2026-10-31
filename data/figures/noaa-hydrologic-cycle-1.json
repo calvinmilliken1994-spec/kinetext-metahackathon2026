@@ -1,0 +1,18 @@
+{
+  "id": "noaa-hydrologic-cycle-1",
+  "sourceId": "noaa-jetstream-hydrologic-cycle",
+  "file": "noaa-hydrologic-cycle-1.jpg",
+  "mime": "image/jpeg",
+  "sha256": "6d57f4336b0071852d2b6124c88dbf5f907340fa57c64f047f92ec38411ec7ce",
+  "width": 572,
+  "height": 504,
+  "imageUrl": "https://www.noaa.gov/sites/default/files/2022-09/hydro_5cycle.jpg",
+  "pageUrl": "https://www.noaa.gov/jetstream/atmosphere/hydro",
+  "caption": "The basic hydrologic (water) cycle",
+  "altText": "The basic hydrologic (water) cycle",
+  "credit": "",
+  "license": "U.S. Government work (NOAA National Weather Service, JetStream), public domain; credit NOAA; AI edits must be disclosed",
+  "licenseEvidence": "https://www.noaa.gov/office-education/outreach-communication/faq — \"Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission.\"; \"Not all content on a NOAA website is NOAA-sourced. Please read credits carefully to verify the source.\" (this figure carries no third-party credit on the page); \"Credit NOAA, the NOAA program, if listed …\"; \"Modify the content or misrepresent the content, and then present it as official government material. (If you make any edits, including using a generative AI program, make it clear that you edited it.)\". Retrieved 2026-10-31 (HTTP 200).",
+  "labelsInImage": true,
+  "retrievedAt": "2026-10-31T02:42:54Z"
+}
