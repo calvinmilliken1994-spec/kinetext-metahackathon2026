@@ -478,6 +478,9 @@ export const OUTPUT_TRUNCATED_REASON = 'Muse ran out of room while writing this 
  */
 export const TIMEOUT_REASON = 'Ran out of time before this part was finished.';
 
+/** Plain teacher-facing reason when the connection to the model dropped during this part's call. */
+export const NETWORK_REASON = 'The connection to the model dropped before this part was finished.';
+
 /**
  * Minimum remaining job wall-time budget required to START any repair call (analysis, kit
  * component or premium). Below it a repair almost certainly cannot finish (final-evaluation
@@ -510,6 +513,21 @@ function isTimeoutCode(err: unknown): boolean {
   }
   const code = (err as { code?: unknown }).code;
   return code === 'TIMEOUT' || code === 'DEADLINE_EXCEEDED';
+}
+
+/**
+ * After the analysis succeeded, a lost call in ONE component (timeout family, or a dropped
+ * connection) fails only that component with a fixed plain reason; the parts that passed
+ * keep their partial publish. Returns null for every other error (still handled as before).
+ */
+function componentLossReason(err: unknown): string | null {
+  if (isTimeoutCode(err)) {
+    return TIMEOUT_REASON;
+  }
+  if (typeof err === 'object' && err !== null && (err as { code?: unknown }).code === 'NETWORK_ERROR') {
+    return NETWORK_REASON;
+  }
+  return null;
 }
 
 /**
@@ -1077,7 +1095,8 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
       failOutcome(index, componentId, specId, revision, OUTPUT_TRUNCATED_REASON);
       return;
     }
-    if (isTimeoutCode(err)) {
+    const lossReason = componentLossReason(err);
+    if (lossReason !== null) {
       // Timeout partial-publish fix (final-evaluation loss): the analysis succeeded and the
       // overview is published, so a TIMEOUT (per-call provider timeout) or DEADLINE_EXCEEDED
       // (the job's wall-time budget) fails ONLY this component — the parts that passed are
@@ -1087,7 +1106,7 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
       const charge = errorCharge(err, extra);
       ctx.account(charge.chargedUSD, charge.unknownUSD);
       ctx.emit(stage, 'failed', charge.extra);
-      failOutcome(index, componentId, specId, revision, TIMEOUT_REASON);
+      failOutcome(index, componentId, specId, revision, lossReason);
       return;
     }
     if (err instanceof Error && (err.message === 'ENGINE_REQUIRED' || err.message === 'ANALYSIS_DECLINED')) {
@@ -1558,7 +1577,8 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
           ctx.writeJob();
           break;
         }
-        if (isTimeoutCode(err)) {
+        const lossReason = componentLossReason(err);
+        if (lossReason !== null) {
           // Timeout partial-publish fix: the repair call ran out of time (per-call TIMEOUT
           // or the job budget's DEADLINE_EXCEEDED). The attempt ran and its reservation
           // settled — account it HERE through the ONE accumulator (S6R-07), record it, and
@@ -1571,7 +1591,7 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
           ctx.account(charge.chargedUSD, charge.unknownUSD);
           pushDiedRepairRecord(summary, cid, attempt, nextRevision, targeted);
           ctx.emit('repair', 'failed', charge.extra);
-          diedReason = TIMEOUT_REASON;
+          diedReason = lossReason;
           ctx.writeJob();
           break;
         }
@@ -1827,7 +1847,8 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
           ctx.writeJob();
           break;
         }
-        if (isTimeoutCode(err)) {
+        const lossReason = componentLossReason(err);
+        if (lossReason !== null) {
           // Timeout partial-publish fix: the premium repair call ran out of time. Account
           // the settled reservation HERE (S6R-07), record the attempt, fail ONLY this
           // component; the parts that passed keep their partial publish.
@@ -1839,7 +1860,7 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
           ctx.account(charge.chargedUSD, charge.unknownUSD);
           pushDiedRepairRecord(summary, activity, attempt, nextRevision, targeted);
           ctx.emit('repair', 'failed', charge.extra);
-          diedReason = TIMEOUT_REASON;
+          diedReason = lossReason;
           ctx.writeJob();
           break;
         }

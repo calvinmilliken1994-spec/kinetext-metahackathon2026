@@ -1,7 +1,7 @@
 // S6R-07 — concurrent fatal component errors must not lose paid charges.
 //
 // Two components run at once (plan concurrency 2). When BOTH reject with separately
-// charged provider errors (TIMEOUT / NETWORK_ERROR after the client settled a
+// charged provider errors (TIMEOUT / RATE_LIMITED after the client settled a
 // reservation), every charge must reach the ONE job accumulator exactly once, at its own
 // catch boundary, before any fallible event/artifact write — and the terminal cause is
 // the FIRST fatal error. Same when one task fails with a paid fatal error while the
@@ -55,7 +55,7 @@ function fakeReceipt(responseId: string, estCostUSD: number): MetaReceipt {
  *  (Timeout partial-publish fix: TIMEOUT/DEADLINE_EXCEEDED are component-level in the
  *  lesson flow now — covered by lesson.timeout-partial.test.ts — so these concurrent-fatal
  *  accounting tests use two codes that remain job-fatal.) */
-function paidError(code: 'SERVER_ERROR' | 'NETWORK_ERROR', usd: number): MetaError {
+function paidError(code: 'SERVER_ERROR' | 'RATE_LIMITED', usd: number): MetaError {
   return new MetaError(code, undefined, { chargedUSD: usd, reservedUnknownUSD: usd, costBasis: 'reservation' });
 }
 
@@ -138,7 +138,7 @@ test('S6R-07: two concurrent kit calls BOTH reject with separately charged error
   const client = concurrentClient(
     {
       formula_explorer: { kind: 'throw', err: paidError('SERVER_ERROR', 0.2), usd: 0.2, unknown: 0.2 },
-      quiz_cards: { kind: 'throw', err: paidError('NETWORK_ERROR', 0.3), usd: 0.3, unknown: 0.3 },
+      quiz_cards: { kind: 'throw', err: paidError('RATE_LIMITED', 0.3), usd: 0.3, unknown: 0.3 },
     },
     ['formula_explorer', 'quiz_cards'],
   );
@@ -151,7 +151,7 @@ test('S6R-07: two concurrent kit calls BOTH reject with separately charged error
   assert.equal(summary.status, 'failed');
   assert.equal(summary.error?.code, 'SERVER_ERROR', 'the FIRST fatal error is the terminal cause');
   assert.ok(close(summary.totalCostUSD, client.ledger.committedUSD), `total ${summary.totalCostUSD} must equal ledger ${client.ledger.committedUSD}`);
-  assert.ok(close(summary.totalCostUSD, 0.51), 'analysis 0.01 + SERVER_ERROR 0.2 + NETWORK_ERROR 0.3, each once');
+  assert.ok(close(summary.totalCostUSD, 0.51), 'analysis 0.01 + SERVER_ERROR 0.2 + RATE_LIMITED 0.3, each once');
   assert.ok(close(summary.reservedUnknownUSD, client.ledger.unknownUSD));
   assert.ok(close(summary.reservedUnknownUSD, 0.5));
 
@@ -170,7 +170,7 @@ test('S6R-07: two concurrent kit calls BOTH reject with separately charged error
   assert.equal(last?.estCostUSD, 0.2);
   const second = failed.find(e => e.componentId === 'quiz-cards-v1');
   assert.ok(second, 'the second fatal error is recorded on its own event');
-  assert.match(second?.detail ?? '', /^NETWORK_ERROR/);
+  assert.match(second?.detail ?? '', /^RATE_LIMITED/);
   assert.equal(second?.estCostUSD, 0.3);
   const eventCost = failed.reduce((s, e) => s + (typeof e.estCostUSD === 'number' ? e.estCostUSD : 0), 0);
   assert.ok(close(eventCost, 0.5), 'no event double-books a charge');
@@ -180,14 +180,14 @@ test('S6R-07: the settle order decides the terminal cause, never the accounting'
   const client = concurrentClient(
     {
       formula_explorer: { kind: 'throw', err: paidError('SERVER_ERROR', 0.2), usd: 0.2, unknown: 0.2 },
-      quiz_cards: { kind: 'throw', err: paidError('NETWORK_ERROR', 0.3), usd: 0.3, unknown: 0.3 },
+      quiz_cards: { kind: 'throw', err: paidError('RATE_LIMITED', 0.3), usd: 0.3, unknown: 0.3 },
     },
     ['quiz_cards', 'formula_explorer'],
   );
   const storageDir = mkdtempSync(join(tmpdir(), 's6r07-order-'));
   const { done } = startJob(DRAG, { client, storageDir, purpose: 'test-live', flow: 'lesson', newJobId: () => 's6r07-order-000001' });
   const summary = await done;
-  assert.equal(summary.error?.code, 'NETWORK_ERROR');
+  assert.equal(summary.error?.code, 'RATE_LIMITED');
   assert.ok(close(summary.totalCostUSD, 0.51));
   assert.ok(close(summary.reservedUnknownUSD, 0.5));
 });

@@ -13,6 +13,7 @@ import type { ApiOptions } from './server.ts';
 import {
   buildModalClient,
   missingModalTokenClient,
+  MODAL_CALL_TIMEOUT_MS,
   modalTokenAvailable,
   MODEL_INFO,
   PROVIDER_FOR_MODEL,
@@ -369,4 +370,8 @@ test('OW-2: the model catalog carries the frozen labels and provider mapping', (
     ],
   );
   assert.deepEqual(PROVIDER_FOR_MODEL, { 'muse-spark-1.3': 'meta-api', 'muse-spark-open': 'modal' });
+});
+
+test('Spark Open calls get a 180 s per-call timeout (Modal is ~40% slower per call; 120 s cut off its tail)', () => {
+  assert.equal(MODAL_CALL_TIMEOUT_MS, 180_000);
 });

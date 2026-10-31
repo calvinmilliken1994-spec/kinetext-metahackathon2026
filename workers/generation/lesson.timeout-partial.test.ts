@@ -9,7 +9,7 @@
 //   - a repair call is never STARTED when the remaining job budget is below
 //     MIN_REPAIR_BUDGET_MS (the component fails with the same timeout reason, no paid call);
 //   - a timeout during the analysis stage (nothing usable yet) still fails the whole job;
-//   - NETWORK_ERROR stays job-fatal (unchanged).
+//   - NETWORK_ERROR in a component call also fails only that component (NETWORK_REASON).
 //
 // Fake MetaClient with controllable delays/abort (no network, no credits, no .env).
 import { test } from 'node:test';
@@ -22,6 +22,7 @@ import type { JobStageEvent, JobSummary } from './jobs.ts';
 import {
   enoughBudgetForRepair,
   MIN_REPAIR_BUDGET_MS,
+  NETWORK_REASON,
   TIMEOUT_REASON,
 } from './lesson.ts';
 import { MetaError } from '../../packages/meta/client.ts';
@@ -383,10 +384,10 @@ test('no repair call starts when the remaining budget is below MIN_REPAIR_BUDGET
 });
 
 /* ------------------------------------------------------------------ */
-/* NETWORK_ERROR is unchanged (still job-fatal in a component call)     */
+/* NETWORK_ERROR in a component call: partial publish (lead extension)  */
 /* ------------------------------------------------------------------ */
 
-test('NETWORK_ERROR in a component call stays job-fatal (unchanged behaviour)', async () => {
+test('NETWORK_ERROR in a component call fails only that component (passed parts publish, charge kept)', async () => {
   const networkError = new MetaError('NETWORK_ERROR', undefined, {
     chargedUSD: 0.3,
     reservedUnknownUSD: 0.3,
@@ -404,8 +405,15 @@ test('NETWORK_ERROR in a component call stays job-fatal (unchanged behaviour)', 
     limits: { maxJobWallTimeMs: 60_000 },
   });
   const summary = await done;
-  assert.equal(summary.status, 'failed');
-  assert.equal(summary.error?.code, 'NETWORK_ERROR');
+  assert.equal(summary.status, 'succeeded');
+  assert.equal(summary.error, undefined);
+  assert.equal(summary.lesson?.componentsPublished, 1);
+  assert.equal(summary.lesson?.partialPublish, true);
+  const fe = readLesson(storageDir, jobId).components.find(c => c.componentId === 'formula-explorer-v1');
+  assert.equal(fe?.status, 'failed');
+  assert.equal(fe?.reason, NETWORK_REASON);
+  const failed = readEvents(storageDir, jobId).find(e => e.stage === 'component' && e.status === 'failed' && e.componentId === 'formula-explorer-v1');
+  assert.match(failed?.detail ?? '', /^NETWORK_ERROR/);
   assert.ok(close(summary.totalCostUSD, client.ledger.committedUSD));
   assert.ok(close(summary.reservedUnknownUSD, 0.3));
 });

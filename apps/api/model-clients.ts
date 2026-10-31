@@ -138,6 +138,13 @@ export interface ModalClientDeps {
  * or malformed token returns the failing client above, so the job fails with
  * the fixed public error and zero spend.
  */
+/**
+ * Per-call timeout for Muse Spark Open on Modal. Its calls run ~40% slower than Muse Spark 1.3
+ * at the same token count (docs/evidence/final-eval/timeouts.md); the 120 s client default cut
+ * off its slowest generations. The job's own wall-time budget still bounds the whole lesson.
+ */
+export const MODAL_CALL_TIMEOUT_MS = 180_000;
+
 export function buildModalClient(deps: ModalClientDeps): MetaClient {
   const env: Readonly<Record<string, string | undefined>> = deps.env ?? process.env;
   const token = splitModalProxyToken(env['MODAL_PROXY_TOKEN']);
@@ -151,6 +158,7 @@ export function buildModalClient(deps: ModalClientDeps): MetaClient {
       ledger: deps.ledger,
       allowLive: true,
       maxInputTokens: deps.maxInputTokens,
+      timeoutMs: MODAL_CALL_TIMEOUT_MS,
       ...(deps.fetchImpl !== undefined ? { fetchImpl: deps.fetchImpl } : {}),
       providerConfig: {
         provider: 'modal',
