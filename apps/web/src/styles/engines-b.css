@@ -182,7 +182,17 @@
 .dt-chart li[data-hot="true"] { background: var(--panel-2); }
 .dt-bar-label { color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .dt-bar-track { block-size: 14px; }
-.dt-bar { display: block; block-size: 100%; inline-size: max(2px, calc(var(--f) * 100%)); border-radius: 0 3px 3px 0; background: var(--chart-line); opacity: 0.85; transition: opacity 0.12s; }
+.dt-bar-track { position: relative; }
+/* Bars grow from the zero line (--zero, 0 when every value is positive): right for positive, left for negative. */
+.dt-bar {
+  position: absolute; inset-block: 0; inset-inline-start: calc(var(--s, 0) * 100%);
+  inline-size: max(2px, calc(var(--f) * 100%)); border-radius: 0 3px 3px 0; background: var(--chart-line); opacity: 0.85; transition: opacity 0.12s;
+}
+.dt-bar[data-negative="true"] { border-radius: 3px 0 0 3px; }
+.dt-chart[data-signed="true"] .dt-bar-track::before {
+  content: ""; position: absolute; inset-block: -2px; inset-inline-start: calc(var(--zero) * 100%); inline-size: 1px; background: var(--line-3);
+}
+.dt-chart-note { display: block; font-weight: var(--fw-regular, 400); color: var(--ink-3); }
 .dt-chart li[data-hot="true"] .dt-bar { opacity: 1; }
 .dt-chart li[data-mark="answer"] .dt-bar { background: var(--ok); opacity: 1; }
 .dt-bar-value { text-align: end; color: var(--ink); }
@@ -198,6 +208,7 @@
 }
 .dt-tax .dt-tax-input:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
 .dt-tax .dt-tax-input:disabled { opacity: 1; color: var(--ink); background: transparent; border-color: var(--line); }
+.dt-tax-plot { position: relative; display: grid; gap: 4px; }
 .dt-tax-blocks { --fill-max: 96px; display: flex; align-items: flex-end; gap: 2px; padding-block-start: 4px; }
 .dt-tax-block {
   flex: var(--w) 1 0; min-inline-size: 38px;
@@ -210,11 +221,20 @@
 .dt-tax-below .dt-tax-fill { block-size: 12px; background: repeating-linear-gradient(135deg, var(--line-3) 0 2px, transparent 2px 6px); opacity: 1; border-radius: 2px; }
 .dt-tax-rate { font-size: var(--fs-12); font-weight: var(--fw-bold); color: var(--ink); text-align: center; }
 .dt-tax-below .dt-tax-rate { color: var(--ink-3); font-weight: var(--fw-medium); }
-.dt-tax-slice { font-size: var(--fs-12); color: var(--ink-3); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: clip; }
+/* The band edges under the blocks (thresholds and the income), placed by lib placeEdgeLabels: inside the axis, never touching. */
+.dt-tax-axis { position: relative; block-size: 1.5em; font-size: var(--fs-12); color: var(--ink-2); border-block-start: 1px solid var(--line-2); }
+.dt-tax-edge { position: absolute; inset-block-start: 3px; white-space: nowrap; }
+.dt-tax-edge[data-shown="false"] { visibility: hidden; }
+/* The field error sits under the input without taking a row of its own (nothing moves when it appears). */
+.dt-tax-head { position: relative; }
+.dt-tax-error { position: absolute; inset-block-start: 100%; inset-inline-end: 0; z-index: 1; margin: 2px 0 0; padding: 2px 8px; border-radius: var(--r-s); background: var(--bad-soft); font-size: var(--fs-12); color: var(--bad-ink); }
+.dt-tax-error[data-on="false"] { visibility: hidden; }
 .dt-tax-parts { display: grid; grid-template-columns: repeat(auto-fill, minmax(15em, 1fr)); gap: 4px 20px; font-size: var(--fs-14); color: var(--ink-2); }
 .dt-tax-parts .num { color: var(--ink); }
-.dt-tax-total { display: flex; flex-wrap: wrap; gap: 6px 28px; font-size: var(--fs-16); }
-.dt-tax-total strong { font-size: var(--fs-20); margin-inline-start: 6px; }
+.dt-tax-total { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 28px; }
+.dt-tax-sum { display: flex; flex-wrap: wrap; gap: 6px 28px; margin: 0; font-size: var(--fs-16); }
+.dt-tax-sum strong { font-size: var(--fs-20); margin-inline-start: 6px; }
+.dt-tax-partial { margin: 0; flex: 1 1 18em; font-size: var(--fs-14); color: var(--ink-2); max-inline-size: 46ch; }
 .dt-tax-reveal { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: var(--fs-14); }
 .dt-muted { color: var(--ink-3); }
 .dt-fine { font-size: var(--fs-12); color: var(--ink-3); max-inline-size: 90ch; text-wrap: pretty; }
@@ -233,7 +253,7 @@
 .th[data-mode="stage"] .th-verdict strong { font-size: var(--fs-20); }
 .dt[data-mode="stage"] .dt-table { font-size: var(--fs-16); }
 .dt[data-mode="stage"] .dt-table thead th, .dt[data-mode="stage"] .dt-chart figcaption { font-size: var(--fs-14); }
-.dt[data-mode="stage"] .dt-chart li, .dt[data-mode="stage"] .dt-tax-rate, .dt[data-mode="stage"] .dt-tax-slice { font-size: var(--fs-14); }
+.dt[data-mode="stage"] .dt-chart li, .dt[data-mode="stage"] .dt-tax-rate, .dt[data-mode="stage"] .dt-tax-axis { font-size: var(--fs-14); }
 .dt[data-mode="stage"] .dt-hint, .dt[data-mode="stage"] .dt-verdict, .dt[data-mode="stage"] .dt-choice, .dt[data-mode="stage"] .dt-tax-parts { font-size: var(--fs-16); }
 .dt[data-mode="stage"] .dt-question { min-block-size: 0; }
 .dt[data-mode="stage"][data-tax="true"] { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); column-gap: 40px; align-items: start; }

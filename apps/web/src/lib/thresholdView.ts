@@ -134,3 +134,45 @@ export function thresholdRevealQuote(spec: ThresholdSpec, step: number): QuoteLi
   const stage = spec.stages[outcome.failedAt ?? 0];
   return stage === undefined ? null : { sourceId: stage.sourceId, quote: stage.quote };
 }
+
+// ---- concealment (Set A: UX #2 case titles, W-05 Back after a slider move) ----------------------------------------
+
+/**
+ * A try-it scenario's title as the class sees it. Muse writes titles that state the outcome ("Candidate falls just short
+ * of the threshold"), so until that scenario is revealed its title is only its counts: '269 electors' (one stage) or
+ * '30 · 70' (one count per stage). After the reveal the written title is shown (sentence case).
+ */
+export function scenarioTitle(spec: ThresholdSpec, index: number, revealed: boolean): string {
+  const s = spec.scenarios[index];
+  if (s === undefined) return '';
+  if (revealed) return aiLabel(s.label.trim());
+  return neutralCounts(spec, s.yes);
+}
+
+/** Counts only, no verdict: '269 electors', '38 States', or '30 · 70' for several stages. */
+export function neutralCounts(spec: ThresholdSpec, yes: readonly number[]): string {
+  const only = spec.stages.length === 1 ? spec.stages[0] : undefined;
+  if (only !== undefined) return `${countText(clampVotes(only.total, yes[0] ?? 0))} ${only.body.trim()}`;
+  return spec.stages.map((st, i) => countText(clampVotes(st.total, yes[i] ?? 0))).join(' · ');
+}
+
+/**
+ * Whether a scenario's written title may show: on a slide only the current step after R (every other step stays a
+ * question, earlier ones included, since ← can return to them); in the lesson only the chosen scenario once answered.
+ */
+export function scenarioTitleShown(index: number, current: number, revealed: boolean): boolean {
+  return revealed && index === current;
+}
+
+/**
+ * The view's reveal state. On a slide the presenter is authoritative: a count the class tried after R applies only while
+ * the step is revealed, so ← (which un-reveals) shows the scenario's question again, never "Passes" from the old count.
+ * In the lesson the learner's own count reveals the verdict for that count.
+ */
+export function thresholdRevealState(input: { staged: boolean; presenterRevealed: boolean; shown: boolean; own: readonly number[] | null }): { revealed: boolean; own: readonly number[] | null } {
+  if (input.staged) {
+    const own = input.presenterRevealed ? input.own : null;
+    return { revealed: input.presenterRevealed, own };
+  }
+  return { revealed: input.shown || input.own !== null, own: input.own };
+}

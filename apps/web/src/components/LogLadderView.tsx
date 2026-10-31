@@ -7,7 +7,7 @@ import type { CSSProperties, FormEvent } from 'react';
 import type { LogLadderSpec } from '../../../../packages/contracts/kit.ts';
 import type { EnginePresentation } from '../lib/enginePresentation.ts';
 import {
-  gradeLadder, ladderAxis, ladderCases, ladderWording, ratioText, spreadLabels, valueText,
+  gapText, gradeLadder, ladderAxis, ladderCases, ladderWording, ratioText, spreadLabels, valueText,
 } from '../lib/logLadderView.ts';
 import type { LadderCase, LadderGrade } from '../lib/logLadderView.ts';
 import { aiLabel, aiText, capitalFirst } from '../lib/displayText.ts';
@@ -48,7 +48,8 @@ function Ladder({ spec, c, revealed }: { spec: LogLadderSpec; c: LadderCase; rev
   const labelYs = spreadLabels(rungYs, LABEL_GAP, 2, 98);
   const top = Math.min(axis.y(c.from), axis.y(c.to));
   const bottom = Math.max(axis.y(c.from), axis.y(c.to));
-  const gaps = axis.ticks.slice(1);
+  // Pairs of neighbouring marks (a wide scale marks every `stride` steps, so its gaps read ×100, ×1,000, …).
+  const gaps = axis.ticks.slice(1).map((v, i) => ({ v, prev: axis.ticks[i] as number }));
   // The effect grows towards higher values when `increasing`, else towards lower ones (pH: lower is more acidic).
   const growsUp = spec.increasing;
   return (
@@ -67,8 +68,8 @@ function Ladder({ spec, c, revealed }: { spec: LogLadderSpec; c: LadderCase; rev
           ))}
         </ol>
         <Linked as="div" className="ll-gaps" links={factorLinks}>
-          {gaps.map((v) => (
-            <span key={v} className="ll-gap" style={{ top: pct((axis.y(v) + axis.y(v - 1)) / 2) }}>×{ratioText(spec.factor)}</span>
+          {gaps.map((g) => (
+            <span key={g.v} className="ll-gap" style={{ top: pct((axis.y(g.v) + axis.y(g.prev)) / 2) }}>{gapText(spec.factor, g.prev, g.v)}</span>
           ))}
         </Linked>
         <div className="ll-axis">

@@ -1,10 +1,10 @@
 import { useId, useMemo, useState } from 'react';
 import type { CompareTableSpec } from '../../../../packages/contracts/kit.ts';
-import { NOT_STATED, compareGrid, gradePredict, planPredict } from '../lib/compare.ts';
+import { NOT_STATED, compareConcealed, compareGrid, gradePredict, planPredict } from '../lib/compare.ts';
+import { linksUnlessConcealed } from '../lib/conceal.ts';
 import type { CiteProps } from './Explanations.tsx';
 import { QuoteBlock } from './QuoteBlock.tsx';
 import { Linked } from './Linked.tsx';
-import { linkKey } from '../lib/linking.ts';
 import { Mark } from './icons.tsx';
 import { capitalFirst } from '../lib/displayText.ts';
 
@@ -26,10 +26,9 @@ export function CompareView({ spec, cite }: Props) {
   const openCell = open === null ? null : cells.get(open) ?? null;
   const hiddenId = plan !== null && !locked ? plan.cellId : null;
   const correct = plan !== null && pick !== null && gradePredict(plan, pick);
-  // While the prediction is open, a quote that contains (or is shared with) the hidden cell would give the answer away.
-  const hiddenCell = hiddenId === null ? null : cells.get(hiddenId) ?? null;
-  const lower = (t: string): string => t.toLowerCase().replace(/\s+/g, ' ').trim();
-  const leaks = (quote: string): boolean => hiddenCell !== null && (quote === hiddenCell.quote || lower(quote).includes(lower(hiddenCell.value)));
+  // While the prediction is open, a quote that is (or states) the hidden cell would give the answer away: the same policy
+  // as the presentation (lib/compare.ts compareConcealed): no hover link and no quote until the learner locks in.
+  const concealed = useMemo(() => (hiddenId === null ? new Set<string>() : compareConcealed(spec, plan)), [spec, plan, hiddenId]);
   const target = plan === null ? null : { entity: spec.entities[plan.entityIndex] ?? '', attribute: spec.attributes[plan.attributeIndex] ?? '' };
 
   return (
@@ -52,9 +51,10 @@ export function CompareView({ spec, cite }: Props) {
                   if (cell.id === hiddenId) return <td key={ai} className="cell-hidden"><span aria-label="Hidden until you lock in a prediction">? hidden</span></td>;
                   const isOpen = open === cell.id;
                   const reveal = plan !== null && locked && cell.id === plan.cellId;
-                  const blocked = leaks(cell.quote);
+                  const links = linksUnlessConcealed(cell, concealed);
+                  const blocked = links.length === 0;
                   return (
-                    <Linked as="td" key={ai} className={reveal ? (correct ? 'cell-right' : 'cell-miss') : ''} links={[linkKey(cell.sourceId, cell.quote)]}>
+                    <Linked as="td" key={ai} className={reveal ? (correct ? 'cell-right' : 'cell-miss') : ''} links={links}>
                       <button type="button" className={`cell-btn${isOpen ? ' cell-open' : ''}`} aria-expanded={isOpen} disabled={blocked} title={blocked ? 'Opens after you lock in your prediction' : undefined} onClick={() => setOpen(isOpen ? null : cell.id)}>{capitalFirst(cell.value)}</button>
                     </Linked>
                   );

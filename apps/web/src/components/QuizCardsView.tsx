@@ -39,7 +39,8 @@ export function QuizCardsView({ spec, cite }: Props) {
           const grade = locked[c.id] ?? null;
           const legendId = `${uid}-${c.id}-q`;
           return (
-            <Linked as="li" key={c.id} className="prediction quiz-card" links={[linkKey(c.sourceId, c.quote)]}>
+            // The card's page sentence answers it: it lights up only once the card is answered (lib/conceal.ts policy).
+            <Linked as="li" key={c.id} className="prediction quiz-card" links={grade === null ? [] : [linkKey(c.sourceId, c.quote)]}>
               <fieldset className="choice-set" aria-labelledby={legendId}>
                 <legend id={legendId} className="prediction-head">
                   <span className="case-label">Card {i + 1}</span> <span className="quiz-stem">{aiText(c.stem)}</span>

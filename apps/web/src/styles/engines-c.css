@@ -57,7 +57,8 @@
    markers, so a marker drawn close to a printed label never hides the name written there. */
 .ld-slotbox { display: grid; place-items: center; overflow: visible; }
 .ld-slotbox[data-state="named"] { z-index: 2; }
-.ld-marker[data-named="false"] { z-index: 3; }
+/* Numbers always sit above a written name (D2); lib markerSpots also keeps them clear of every printed label. */
+.ld-marker, .ld-marker[data-named="false"] { z-index: 3; }
 .ld-slotbox[data-current="true"] { border-color: var(--ld-slot-current); box-shadow: 0 0 0 1px var(--ld-slot-current); }
 .ld-slotname {
   display: grid; justify-items: center; box-sizing: border-box; min-inline-size: 100%; border-radius: 3px; background: var(--ld-slot);
@@ -158,6 +159,10 @@ button.ld-chip:hover:not(:disabled) { border-color: var(--line-3); }
 
 .ld-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .ld-status { font-size: var(--fs-14); color: var(--ink-2); min-block-size: 1.4em; }
+/* All numbers right (D4): one calm line at the top of the side, in the green of the ✓ marks. Reserved, so it moves nothing. */
+.ld-finish { display: flex; align-items: center; gap: 8px; margin: 0; min-block-size: 1.5em; font-size: var(--fs-16); font-weight: var(--fw-bold); color: var(--ok-ink); }
+.ld-finish[data-on="false"] { visibility: hidden; }
+.ld[data-mode="stage"] .ld-finish { display: none; }
 .ld-hint { font-size: var(--fs-14); color: var(--ink-2); min-block-size: 1.4em; }
 .ld-hint[data-on="false"] { visibility: hidden; }
 
@@ -194,3 +199,6 @@ button.ld-chip:hover:not(:disabled) { border-color: var(--line-3); }
   .ld-mask, .ld-slotbox, .ld-region, .ld-marker, .ld-tag { transition: none; }
   .ld-slotname { animation: none; }
 }
+
+/* Citations reachable by keyboard (W2-03): a focused quoted element shows the focus ring as well as its link. */
+.linkable[tabindex="0"]:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; }

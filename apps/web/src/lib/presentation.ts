@@ -12,9 +12,10 @@ import type {
 import { caseInputs, engineOutput, formatOutputValue, outputInfo, playbackPlan, projectileSummary } from './engines.ts';
 import { buildExplorer, casePrompt, evalAt, groupedSig6, inputsOfCase, outputName } from './explorer.ts';
 import { lessonCards } from './lesson.ts';
-import { linkKey } from './linking.ts';
+import { linkKey, linkKeysOf } from './linking.ts';
 import type { QuoteLike } from './linking.ts';
-import { planPredict } from './compare.ts';
+import { compareConcealed, planPredict } from './compare.ts';
+import { concealedKeys } from './conceal.ts';
 import { aiLabel, amountText, groupThousands } from './displayText.ts';
 import { gradeCaseGuess } from './explorer.ts';
 import { trimmed } from './format.ts';
@@ -117,7 +118,8 @@ interface BeatBase {
 export type Beat =
   | BeatBase & { kind: 'title' }
   | BeatBase & { kind: 'overview' }
-  | BeatBase & { kind: 'terms' }
+  /** `termQuotes`: one sentence per key term, in term order (the concealment of meanings not shown yet). */
+  | BeatBase & { kind: 'terms'; termQuotes: QuoteLike[] }
   | BeatBase & { kind: 'objectives' }
   | BeatBase & { kind: 'quiz'; spec: QuizCardsSpec; cardId: string; number: number; of: number }
   | BeatBase & { kind: 'compare'; spec: CompareTableSpec; plan: PredictPlan | null }
@@ -294,7 +296,10 @@ export function planBeats(deck: Deck): Beat[] {
     beats.push({ kind: 'overview', id: 'overview', label: 'Overview', title: 'What the page says', steps: ov.keyPoints.length, quotes: uniqueQuotes(ov.keyPoints), cue: CUE.overview });
   }
   if (ov !== null && ov.keyTerms.length > 0) {
-    beats.push({ kind: 'terms', id: 'terms', label: 'Key terms', title: 'Key terms', steps: ov.keyTerms.length + 1, quotes: uniqueQuotes(ov.keyTerms), cue: CUE.terms });
+    beats.push({
+      kind: 'terms', id: 'terms', label: 'Key terms', title: 'Key terms', steps: ov.keyTerms.length + 1, quotes: uniqueQuotes(ov.keyTerms), cue: CUE.terms,
+      termQuotes: ov.keyTerms.map((t) => ({ sourceId: t.sourceId, quote: t.quote })),
+    });
   }
   if (deck.objectives.length > 0) {
     beats.push({ kind: 'objectives', id: 'objectives', label: 'Goals', title: 'What we will find out', steps: deck.objectives.length, quotes: [], cue: CUE.objectives });
@@ -701,16 +706,45 @@ export const CLOSING_QUOTES = 3;
 /**
  * What the quote zone shows: the hovered element's quote, else a quote pinned with "Show in source", else the quote the
  * beat revealed, else nothing. A quote already printed in the slide's body is never echoed: hovering it leaves the zone
- * as it was.
+ * as it was. A CONCEALED quote (beatConcealed: it would give an open answer away) is never shown, however it got there —
+ * so ← from a revealed answer empties the zone even while the pointer still rests on the zone's own quote.
  */
-export function zoneQuote(input: { hovered: QuoteLike | null; pinned: QuoteLike | null; revealed: QuoteLike | null; visible: readonly QuoteLike[] }): QuoteLike | null {
+export function zoneQuote(input: { hovered: QuoteLike | null; pinned: QuoteLike | null; revealed: QuoteLike | null; visible: readonly QuoteLike[]; concealed?: ReadonlySet<string> }): QuoteLike | null {
   const printed = new Set(input.visible.map((q) => linkKey(q.sourceId, q.quote)));
-  const fresh = (q: QuoteLike | null): q is QuoteLike => q !== null && linkKey(q.sourceId, q.quote) !== '' && !printed.has(linkKey(q.sourceId, q.quote));
+  const hidden = input.concealed ?? new Set<string>();
+  const fresh = (q: QuoteLike | null): q is QuoteLike => q !== null && linkKey(q.sourceId, q.quote) !== '' && !printed.has(linkKey(q.sourceId, q.quote)) && !hidden.has(linkKey(q.sourceId, q.quote));
   if (fresh(input.hovered)) return input.hovered;
   if (fresh(input.pinned)) return input.pinned;
   if (fresh(input.revealed)) return input.revealed;
   return null;
 }
+
+/**
+ * The link keys a beat keeps dark right now (lib/conceal.ts, the policy the lesson views use too): an open quiz card's
+ * sentence; the hidden compare cell's sentence and every cell sentence that states its value; the sentence behind each
+ * key term whose meaning is not shown yet. Engine views unlink their own answer-bearing quotes (a threshold rule that
+ * states the count, a table cell that is the answer); the presenter also drops every hover on each move, so a quote
+ * the pointer rested on after R never outlives ←. Empty once the answer is revealed.
+ */
+export function beatConcealed(beat: Beat, s: Pick<PresentState, 'step' | 'revealed'>): Set<string> {
+  switch (beat.kind) {
+    case 'quiz': {
+      if (isRevealed(beat, s.step)) return new Set();
+      const card = beat.spec.cards.find((c) => c.id === beat.cardId);
+      return card === undefined ? new Set() : concealedKeys([], { quote: { sourceId: card.sourceId, quote: card.quote }, values: [] });
+    }
+    case 'compare':
+      return isRevealed(beat, s.step) ? new Set() : compareConcealed(beat.spec, beat.plan);
+    case 'terms': {
+      const shown = visibleCount(beat, s.step);
+      // A term whose meaning shows keeps its link, unless it shares the sentence with a term still hidden.
+      return new Set(linkKeysOf(beat.termQuotes.filter((_, i) => i >= shown)));
+    }
+    default:
+      return new Set();
+  }
+}
+
 
 export type ZoneQuoteSize = 'normal' | 'long' | 'longer' | 'longest';
 

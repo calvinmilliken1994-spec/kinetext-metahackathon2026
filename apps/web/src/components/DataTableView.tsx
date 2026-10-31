@@ -1,13 +1,13 @@
 // Data table (data-table-v1): the page's table as printed (numeric columns right-aligned, sortable by their numbers), a
 // bar chart of one column linked to the rows, the questions as predict-then-reveal cards, and in brackets mode a
 // progressive tax calculator. Every number comes from the engine through lib/dataTableView.ts.
-import { useEffect, useId, useMemo, useState } from 'react';
+import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { CSSProperties, ReactNode } from 'react';
 import type { DataTableSpec } from '../../../../packages/contracts/kit.ts';
 import type { EnginePresentation } from '../lib/enginePresentation.ts';
 import {
-  bracketSchedule, chartBars, columnViews, dataTablePresentationSteps, duplicateLabelColumn, moneyText, percentText, presentationStep, questionViews,
-  quoteLeaksAnswer, sortedRows, taxView,
+  bracketColumnName, bracketSchedule, chartBars, chartRowsNote, columnViews, dataTablePresentationSteps, duplicateLabelColumn, moneyText, parseIncome,
+  percentText, placeEdgeLabels, presentationStep, questionViews, quoteLeaksAnswer, sortedRows, taxQuestion, taxView,
 } from '../lib/dataTableView.ts';
 import type { DataTableStep, QuestionView, SortState, TaxView } from '../lib/dataTableView.ts';
 import { aiLabel, groupThousands } from '../lib/displayText.ts';
@@ -47,43 +47,97 @@ function SortMark({ dir }: { dir: 'asc' | 'desc' | null }) {
 
 function TaxCalculator({ spec, staged, revealed, onTouch }: { spec: DataTableSpec; staged: boolean; revealed: boolean; onTouch: () => void }) {
   const inputId = useId();
+  const errorId = useId();
   const example = spec.brackets.exampleIncome;
   const [raw, setRaw] = useState(groupThousands(String(example)));
-  useEffect(() => { if (staged) setRaw(groupThousands(String(example))); }, [staged, example, revealed]);
-  const income = Number(raw.replace(/[,$\s]/g, ''));
-  const t: TaxView | null = taxView(spec, Number.isFinite(income) ? income : 0);
+  // The last income that read: a bad entry shows a field error beside the input and keeps this result (W-10).
+  const [good, setGood] = useState(example);
+  useEffect(() => { if (staged) { setRaw(groupThousands(String(example))); setGood(example); } }, [staged, example, revealed]);
+  const parsed = parseIncome(raw);
+  const error = parsed.ok ? null : parsed.error;
+  const income = parsed.ok ? parsed.income : good;
+  const t: TaxView | null = taxView(spec, income);
   const sched = bracketSchedule(spec);
+  const plotRef = useRef<HTMLDivElement>(null);
+  const edges = useMemo(() => {
+    if (t === null) return [];
+    const list: number[] = [];
+    if (t.below > 0) list.push(t.below);
+    for (const p of t.parts) list.push(p.to);
+    return list;
+  }, [t]);
+  const edgeKey = edges.join(',');
+  const [axis, setAxis] = useState<{ key: string; list: { left: number; shown: boolean }[] }>({ key: '', list: [] });
+  useLayoutEffect(() => {
+    const plot = plotRef.current;
+    if (plot === null) return undefined;
+    const measure = (): void => {
+      const blocks = [...plot.querySelectorAll<HTMLElement>('.dt-tax-block')];
+      const labels = [...plot.querySelectorAll<HTMLElement>('.dt-tax-edge')];
+      const W = plot.clientWidth;
+      if (!(W > 0) || blocks.length !== labels.length) return;
+      const placed = placeEdgeLabels(blocks.map((b, i) => ({ x: b.offsetLeft + b.offsetWidth, w: labels[i]?.offsetWidth ?? 0 })), W);
+      const key = `${edgeKey}@${W}:${placed.map((p) => `${Math.round(p.left)}${p.shown ? '+' : '-'}`).join(';')}`;
+      setAxis((prev) => (prev.key === key ? prev : { key, list: placed }));
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(plot);
+    return () => ro.disconnect();
+  }, [edgeKey]);
   if (t === null || sched === null) return null;
   const cur = t.currency;
   const maxRate = Math.max(...sched.brackets.map((b) => b.rate), 1);
   const span = Math.max(t.income, 1);
   const first = sched.brackets[0];
+  const column = bracketColumnName(spec);
+  // The page's schedule starts above zero (IRS: no 10% row): say so where the result is, not in a footnote (UX #3).
+  const partial = first !== undefined && first.over > 0;
   return (
     <section className="dt-tax" aria-label="Tax calculator">
       <div className="dt-tax-head">
-        <h4 className="dt-tax-title">Tax on an income, bracket by bracket</h4>
-        <label htmlFor={inputId} className="dt-tax-label">Income{cur === '' ? '' : ` (${cur})`}</label>
+        <h4 className="dt-tax-title">{partial ? 'Partial rate schedule: tax band by band' : 'Tax on an income, band by band'}</h4>
+        <label htmlFor={inputId} className="dt-tax-label">Income{cur === '' ? '' : ` (${cur})`}{column === '' ? '' : `, ${column} column`}</label>
         <input
           id={inputId} className="dt-tax-input num" inputMode="decimal" autoComplete="off" value={raw} disabled={staged && !revealed}
-          onChange={(e) => { setRaw(e.target.value); onTouch(); }}
+          aria-invalid={error !== null} aria-describedby={error !== null ? errorId : undefined}
+          onChange={(e) => {
+            const next = e.target.value;
+            setRaw(next);
+            const p = parseIncome(next);
+            if (p.ok) setGood(p.income);
+            onTouch();
+          }}
         />
+        <p id={errorId} className="dt-tax-error" role="status" data-on={error !== null ? 'true' : 'false'}>{error ?? '\u00a0'}</p>
       </div>
-      {/* Each block is one bracket's slice of the income (width) at its rate (height): its area is the tax on that slice. */}
-      <div className="dt-tax-blocks" role="img" aria-label={`Income ${moneyText(t.income, cur)} split into ${t.parts.length} bracket slices`}>
-        {t.below > 0 && (
-          <div className="dt-tax-block dt-tax-below" style={{ '--w': t.below / span, '--h': 0 } as CSSProperties}>
-            <span className="dt-tax-rate">No rate</span>
-            <span className="dt-tax-fill" />
-            <span className="dt-tax-slice num">{moneyText(t.below, cur)}</span>
-          </div>
-        )}
-        {t.parts.map((p) => (
-          <div key={p.from} className="dt-tax-block" style={{ '--w': (p.to - p.from) / span, '--h': p.rate / maxRate } as CSSProperties}>
-            <span className="dt-tax-rate num">{p.rate}%</span>
-            <span className="dt-tax-fill" />
-            <span className="dt-tax-slice num">{moneyText(p.to - p.from, cur)}</span>
-          </div>
-        ))}
+      {/* Each block is one band's slice of the income (width) at its rate (height): its area is the tax on that slice.
+          Under the blocks, the band EDGES (the thresholds and the income), never the slice widths (P2). */}
+      <div className="dt-tax-plot" ref={plotRef}>
+        <div className="dt-tax-blocks" role="img" aria-label={`Income ${moneyText(t.income, cur)} split into ${t.parts.length} bands`}>
+          {t.below > 0 && (
+            <div className="dt-tax-block dt-tax-below" style={{ '--w': t.below / span, '--h': 0 } as CSSProperties}>
+              <span className="dt-tax-rate">No rate</span>
+              <span className="dt-tax-fill" />
+            </div>
+          )}
+          {t.parts.map((p) => (
+            <div key={p.from} className="dt-tax-block" style={{ '--w': (p.to - p.from) / span, '--h': p.rate / maxRate } as CSSProperties}>
+              <span className="dt-tax-rate num">{p.rate}%</span>
+              <span className="dt-tax-fill" />
+            </div>
+          ))}
+        </div>
+        <div className="dt-tax-axis" aria-hidden="true">
+          {edges.map((x, i) => {
+            const at = axis.list[i];
+            return (
+              <span key={`${i}:${x}`} className="dt-tax-edge num" data-shown={at?.shown === true ? 'true' : 'false'} style={at === undefined ? undefined : { left: at.left }}>
+                {moneyText(x, cur)}
+              </span>
+            );
+          })}
+        </div>
       </div>
       <ol className="dt-tax-parts">
         {t.parts.map((p) => {
@@ -97,13 +151,17 @@ function TaxCalculator({ spec, staged, revealed, onTouch }: { spec: DataTableSpe
         })}
         {t.parts.length === 0 && <li className="dt-muted">This income is below every threshold in the table.</li>}
       </ol>
-      <p className="dt-tax-total">
-        <span>Total tax <strong className="num"><Hidden shown={revealed}>{moneyText(t.total, cur)}</Hidden></strong></span>
-        <span>Effective rate <strong className="num"><Hidden shown={revealed}>{percentText(t.effectiveRate)}</Hidden></strong></span>
-      </p>
+      <div className="dt-tax-total">
+        <p className="dt-tax-sum">
+          <span>Tax from the listed bands <strong className="num"><Hidden shown={revealed}>{moneyText(t.total, cur)}</Hidden></strong></span>
+          <span>Share of the income <strong className="num"><Hidden shown={revealed}>{percentText(t.effectiveRate)}</Hidden></strong></span>
+        </p>
+        {partial && first !== undefined && (
+          <p className="dt-tax-partial">The page lists no rate for income up to {moneyText(first.over, cur)}, so this is not the full tax.</p>
+        )}
+      </div>
       <p className="dt-fine">
         Uses only the page’s rate schedule: each rate applies to the part of the income above its threshold. No deductions, credits or other rules.
-        {t.below > 0 && first !== undefined && ` Income up to ${moneyText(first.over, cur)} has no rate in this table.`}
       </p>
     </section>
   );
@@ -136,6 +194,7 @@ export function DataTableView({ spec, cite: _cite, presentation }: DataTableView
   const secret = secretOf(q, !qRevealed);
   const order = useMemo(() => sortedRows(spec, sort), [spec, sort]);
   const chart = useMemo(() => chartBars(spec, order), [spec, order]);
+  const rowsNote = useMemo(() => chartRowsNote(spec), [spec]);
   const pick = q === undefined ? undefined : picks[q.id];
   const answerRow = q !== undefined && qRevealed ? q.answer?.rowIndex ?? null : null;
 
@@ -175,7 +234,7 @@ export function DataTableView({ spec, cite: _cite, presentation }: DataTableView
             </div>
           )}
         </div>
-        <p className="dt-question">{isTax ? `How much tax is due on ${moneyText(spec.brackets.exampleIncome, currency)} of income?` : sq?.text}</p>
+        <p className="dt-question">{isTax ? taxQuestion(spec, currency) : sq?.text}</p>
         {sq !== undefined && sq.choices.length > 0 && (
           <div className="dt-choices" role="group" aria-label="Choose a row">
             {sq.choices.map((r) => {
@@ -280,8 +339,8 @@ export function DataTableView({ spec, cite: _cite, presentation }: DataTableView
         </div>
 
         {chart !== null && (
-          <figure className="dt-chart" aria-label={`Bar chart of ${chart.headerText}`}>
-            <figcaption>{chart.headerText}</figcaption>
+          <figure className="dt-chart" aria-label={`Bar chart of ${chart.headerText}`} data-signed={chart.signed ? 'true' : 'false'} style={{ '--zero': chart.zero } as CSSProperties}>
+            <figcaption>{chart.headerText}{rowsNote !== null && <span className="dt-chart-note">{rowsNote}</span>}</figcaption>
             <ol>
               {chart.bars.map((b) => (
                 <li
@@ -289,7 +348,8 @@ export function DataTableView({ spec, cite: _cite, presentation }: DataTableView
                   onMouseEnter={() => setHot(b.rowIndex)} onMouseLeave={() => setHot((h) => (h === b.rowIndex ? null : h))}
                 >
                   <span className="dt-bar-label">{aiLabel(b.label)}</span>
-                  <span className="dt-bar-track"><span className="dt-bar" style={{ '--f': b.fraction } as CSSProperties} /></span>
+                  {/* Bars grow from the zero line: left for a negative value, right for a positive one (W-09). */}
+                  <span className="dt-bar-track"><span className="dt-bar" data-negative={b.negative ? 'true' : 'false'} style={{ '--f': b.fraction, '--s': b.start } as CSSProperties} /></span>
                   <span className="dt-bar-value num">
                     {secret !== null && secret.row === b.rowIndex && secret.column === chart.column ? <Hidden shown={false}>{b.text}</Hidden> : b.text}
                   </span>

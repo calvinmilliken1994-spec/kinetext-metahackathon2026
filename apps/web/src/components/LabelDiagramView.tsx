@@ -10,8 +10,8 @@ import type { CSSProperties, DragEvent, ReactNode, RefObject } from 'react';
 import type { LabelDiagramSpec } from '../../../../packages/contracts/kit.ts';
 import type { EnginePresentation } from '../lib/enginePresentation.ts';
 import {
-  checkPlacements, coverMasks, fitSlotTexts, labelDiagramPresentationSteps, labelSlots, lessonFigureMaxWidth, partViews, place, placeTags, slotOfPart,
-  slotStates, stageFigureSize, stageOutline, stageQuestion, stageView, unplace, wordBank,
+  changedBy, checkPlacements, coverMasks, finishLine, fitSlotTexts, keepResults, labelDiagramPresentationSteps, labelSlots, lessonFigureMaxWidth, markerSpots,
+  partViews, place, placeTags, slotOfPart, slotStates, stageFigureSize, stageOutline, stageQuestion, stageView, unplace, wordBank,
 } from '../lib/labelDiagramView.ts';
 import type { CheckResult, LabelMask, LabelSlot, PartView, PctBox, Placements, SlotFit, SlotState } from '../lib/labelDiagramView.ts';
 import { aiLabel } from '../lib/displayText.ts';
@@ -60,13 +60,47 @@ function textWidth(text: string, font: string): number {
 /** Weight of the names written into slots (matches .ld-slotname in engines-c.css). */
 const SLOT_WEIGHT = 500;
 
+/** A marker's centre as a percentage of the plate. */
+type Spot = { left: number; top: number };
+
+/**
+ * Where each numbered marker sits (lib markerSpots, D2): on its part's point, or just clear of every printed label /
+ * slot, so a written name never covers a number and no number covers a printed word on the last slide. Once per
+ * rendered size; never per step or reveal, so nothing moves on R.
+ */
+function useMarkerSpots(plateRef: RefObject<HTMLDivElement | null>, views: readonly PartView[], covers: readonly PctBox[]): readonly Spot[] {
+  const raw = useMemo(() => views.map((v) => ({ left: v.point.left, top: v.point.top })), [views]);
+  const [spots, setSpots] = useState<{ key: string; list: Spot[] } | null>(null);
+  useLayoutEffect(() => {
+    const plate = plateRef.current;
+    if (plate === null) return undefined;
+    const measure = (): void => {
+      const W = plate.clientWidth;
+      const H = plate.clientHeight;
+      if (!(W > 0) || !(H > 0)) return;
+      const marker = plate.querySelector<HTMLElement>('.ld-marker');
+      const m = (marker?.offsetWidth ?? 26) + 4;
+      const avoid = covers.map((c) => ({ x: (c.left * W) / 100, y: (c.top * H) / 100, w: (c.width * W) / 100, h: (c.height * H) / 100 }));
+      const list = markerSpots({ width: W, height: H, marker: m, points: raw.map((p) => ({ x: (p.left * W) / 100, y: (p.top * H) / 100 })), avoid })
+        .map((p) => ({ left: (p.x * 100) / W, top: (p.y * 100) / H }));
+      const key = list.map((p) => `${p.left.toFixed(3)},${p.top.toFixed(3)}`).join(';');
+      setSpots((prev) => (prev !== null && prev.key === key ? prev : { key, list }));
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(plate);
+    return () => ro.disconnect();
+  }, [plateRef, raw, covers]);
+  return spots?.list ?? raw;
+}
+
 /**
  * Places the floating name tags once per rendered size (lib placeTags: no tag on another tag, a slot or cover, or a
  * marker, none outside the figure). Only parts without a slot get a tag (`tagged`); the others still count as markers.
  * Every tag is laid out up front from its name's measured width (a hidden tag holds no name), so naming one never moves
  * another. Sizes are read in the plate's own layout units (client/offset sizes, unaffected by a slide's CSS zoom).
  */
-function useTagLayout(plateRef: RefObject<HTMLDivElement | null>, views: readonly PartView[], tagged: readonly boolean[], covers: readonly PctBox[]): readonly TagPos[] | null {
+function useTagLayout(plateRef: RefObject<HTMLDivElement | null>, views: readonly PartView[], tagged: readonly boolean[], covers: readonly PctBox[], spots: readonly Spot[]): readonly TagPos[] | null {
   const [layout, setLayout] = useState<{ key: string; list: TagPos[] } | null>(null);
   useLayoutEffect(() => {
     const plate = plateRef.current;
@@ -85,7 +119,8 @@ function useTagLayout(plateRef: RefObject<HTMLDivElement | null>, views: readonl
           const cs = getComputedStyle(el);
           w = Math.ceil(textWidth(v.name, cs.font) + parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight)) + 1;
         }
-        return { x: (v.point.left * W) / 100, y: (v.point.top * H) / 100, w, h: w > 0 ? (el?.offsetHeight ?? 0) : 0 };
+        const at = spots[v.index] ?? v.point;
+        return { x: (at.left * W) / 100, y: (at.top * H) / 100, w, h: w > 0 ? (el?.offsetHeight ?? 0) : 0 };
       });
       const rects = covers.map((c) => ({ x: (c.left * W) / 100, y: (c.top * H) / 100, w: (c.width * W) / 100, h: (c.height * H) / 100 }));
       const list = placeTags({ width: W, height: H, marker: m, tags, covers: rects }).map((p, i) => ({ left: (p.x * 100) / W, top: (p.y * 100) / H, width: tags[i]?.w ?? 0 }));
@@ -96,7 +131,7 @@ function useTagLayout(plateRef: RefObject<HTMLDivElement | null>, views: readonl
     const ro = new ResizeObserver(measure);
     ro.observe(plate);
     return () => ro.disconnect();
-  }, [plateRef, views, tagged, covers]);
+  }, [plateRef, views, tagged, covers, spots]);
   return layout?.list ?? null;
 }
 
@@ -175,7 +210,8 @@ function Figure({ spec, views, slots, masks, named, slotState, labelsShown, mark
   const slotOf = useMemo(() => slotOfPart(slots, views.length), [slots, views.length]);
   const tagged = useMemo(() => slotOf.map((k) => k === null), [slotOf]);
   const covers = useMemo(() => (slots.length > 0 ? slots.map((s) => s.box) : masks.map((m) => m.box)), [slots, masks]);
-  const tagPos = useTagLayout(plateRef, views, tagged, covers);
+  const spots = useMarkerSpots(plateRef, views, covers);
+  const tagPos = useTagLayout(plateRef, views, tagged, covers, spots);
   const fits = useSlotFits(plateRef, slots, views, slotFont);
   const fig = spec.figure;
   const plateStyle: CSSProperties = size !== undefined
@@ -218,7 +254,8 @@ function Figure({ spec, views, slots, masks, named, slotState, labelsShown, mark
         })}
         {views.map((v) => {
           const state = markerState(v);
-          const style: CSSProperties = { left: `${v.point.left}%`, top: `${v.point.top}%` };
+          const at = spots[v.index] ?? v.point;
+          const style: CSSProperties = { left: `${at.left}%`, top: `${at.top}%` };
           return marker !== undefined
             ? <span key={`m-${v.part.id}`} className="ld-marker-slot" style={build ? { '--i': v.index } as CSSProperties : undefined}>{marker(v, style, state)}</span>
             : <span key={`m-${v.part.id}`} className="ld-marker" data-state={state} data-named={named[v.index] === true ? 'true' : 'false'} style={style} aria-hidden="true"><span className="num">{v.number}</span></span>;
@@ -301,9 +338,11 @@ function LessonDiagram({ spec, cite, build = false }: { spec: LabelDiagramSpec; 
   };
   const put = (token: string, markerId: string): void => {
     if (!open) return;
-    unconfirm(markerId, placedOn.get(token));
+    // A drop on a filled number swaps the two names (D3); only the numbers it changes lose their marks (D1).
+    const changed = changedBy(placements, token, markerId);
+    unconfirm(...changed);
     setPlacements((p) => place(p, token, markerId));
-    setChecked(null);
+    setChecked((c) => keepResults(c, changed));
     setSelected(null);
     setSaid(`${nameOf(token)} is on number ${numberOf(markerId)}.`);
   };
@@ -311,7 +350,7 @@ function LessonDiagram({ spec, cite, build = false }: { spec: LabelDiagramSpec; 
     const token = placements[markerId];
     unconfirm(markerId);
     setPlacements((p) => unplace(p, markerId));
-    setChecked(null);
+    setChecked((c) => keepResults(c, [markerId]));
     setSaid(token === undefined ? '' : `${nameOf(token)} is back in the word bank.`);
   };
   /** A marker or slot clicked: place the chosen name there, or pick up the name already on it. */
@@ -367,10 +406,15 @@ function LessonDiagram({ spec, cite, build = false }: { spec: LabelDiagramSpec; 
     );
   };
 
+  const inSlots = slots.some((s) => s.partIndex !== null);
+  // Every number right after a Check: one calm line in the success colour at the top of the side (D4).
+  const finished = !revealed && checked !== null && checked.stale !== true && checked.right === checked.total && checked.total > 0;
   const status = revealed
-    ? (slots.some((s) => s.partIndex !== null) ? 'Answers shown in the figure’s own label boxes.' : masks.length > 0 ? 'Answers shown, and the figure’s own labels are uncovered.' : 'Answers shown.')
+    ? (inSlots ? 'Answers shown in the figure’s own label boxes.' : masks.length > 0 ? 'Answers shown, and the figure’s own labels are uncovered.' : 'Answers shown.')
     : checked !== null
-      ? (checked.right === checked.total ? `All ${checked.total} right.` : `${checked.right} of ${checked.total} right.${checked.complete ? ' Move the names marked wrong and check again.' : ' Some numbers have no name yet.'}`)
+      ? (finished ? 'Every number has its right name.'
+        : checked.stale === true ? (checked.right > 0 ? `${checked.right} of ${checked.total} still marked right. Check again for the numbers you moved.` : 'Check again for the numbers you moved.')
+        : `${checked.right} of ${checked.total} right.${checked.complete ? ' Move the names marked wrong and check again.' : ' Some numbers have no name yet.'}`)
       : selected !== null
         ? `“${nameOf(selected)}” chosen. Now choose its number.`
         : 'Drag each name onto its number, or choose a name and then a number.';
@@ -383,6 +427,9 @@ function LessonDiagram({ spec, cite, build = false }: { spec: LabelDiagramSpec; 
           outlined={focusPart} slotFont={LESSON_SLOT_FONT} caption marker={marker} onSlotHover={setFocusPart} build={build}
         />
         <div className="ld-side">
+          <p className="ld-finish" data-on={finished ? 'true' : 'false'} aria-hidden={finished ? undefined : true}>
+            <Mark kind="ok" />{finishLine(views.length, inSlots)}
+          </p>
           <div className="ld-bank" role="group" aria-label="Word bank: the page’s names for the parts">
             {bank.map((b) => {
               const on = placedOn.get(b.token);
@@ -496,7 +543,9 @@ function StageDiagram({ spec, presentation }: { spec: LabelDiagramSpec; presenta
             {bank.map((b) => {
               const part = spec.parts.find((p) => p.id === b.token);
               return (
-                <Linked key={b.token} as="p" className="ld-chip" data-used={namedTokens.has(b.token) ? 'true' : 'false'} links={part === undefined ? [] : [linkKey(part.sourceId, part.quote)]}>
+                // A tab stop, so the page's sentence for each name is reachable by keyboard too (W2-03). The bank names
+                // every part already; its sentences say nothing about which number is which.
+                <Linked key={b.token} as="p" className="ld-chip" tabIndex={part === undefined ? undefined : 0} data-used={namedTokens.has(b.token) ? 'true' : 'false'} links={part === undefined ? [] : [linkKey(part.sourceId, part.quote)]}>
                   {b.name}
                 </Linked>
               );
@@ -506,7 +555,8 @@ function StageDiagram({ spec, presentation }: { spec: LabelDiagramSpec; presenta
             {views.map((v) => {
               const on = st.named[v.index] === true;
               return (
-                <Linked as="li" key={v.part.id} className="ld-row" links={on ? [linkKey(v.part.sourceId, v.part.quote)] : []} data-current={st.current === v.index ? 'true' : 'false'}>
+                // A named row is a tab stop for its sentence; an unnamed one has no link and no stop (no early answer).
+                <Linked as="li" key={v.part.id} className="ld-row" tabIndex={on ? 0 : undefined} links={on ? [linkKey(v.part.sourceId, v.part.quote)] : []} data-current={st.current === v.index ? 'true' : 'false'}>
                   <span className="ld-row-n num" aria-hidden="true">{v.number}</span>
                   <span className="ld-stack">
                     <span data-on={on ? 'true' : 'false'} className="ld-answer" aria-hidden={on ? undefined : true}>{on ? v.name : '\u00a0'}</span>

@@ -14,6 +14,7 @@ import { parseGuess } from '../../lib/predictions.ts';
 import { STAGE_LAYOUT } from '../../lib/explorer.ts';
 import { compareEvents, formatEventDate, gradePair } from '../../lib/timeline.ts';
 import { linkKey, linkKeysOf } from '../../lib/linking.ts';
+import { linksUnlessConcealed } from '../../lib/conceal.ts';
 import { ActivityPanel } from '../ActivityPanel.tsx';
 import { AlgorithmTraceView } from '../AlgorithmTraceView.tsx';
 import { DataTableView } from '../DataTableView.tsx';
@@ -43,6 +44,8 @@ export interface BeatProps {
   onAnswer: (value: string) => void;
   cite: CiteProps;
   repairBadge: Badge | null;
+  /** Link keys kept dark while an answer is open (lib/presentation.ts beatConcealed, the policy shared with the lesson). */
+  concealed: ReadonlySet<string>;
 }
 
 const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F'];
@@ -105,7 +108,7 @@ function OverviewBeat({ beat, step, deck }: Pick<BeatProps, 'beat' | 'step' | 'd
   );
 }
 
-function TermsBeat({ beat, step, deck }: Pick<BeatProps, 'beat' | 'step' | 'deck'>) {
+function TermsBeat({ beat, step, deck, concealed }: Pick<BeatProps, 'beat' | 'step' | 'deck' | 'concealed'>) {
   const terms = useMemo(() => shownTerms(deck), [deck]);
   const shown = visibleCount(beat, step);
   return (
@@ -113,7 +116,8 @@ function TermsBeat({ beat, step, deck }: Pick<BeatProps, 'beat' | 'step' | 'deck
       <h2 className="pz-heading">Key terms</h2>
       <dl className={`pz-terms${terms.length > 4 ? ' pz-dense' : ''}`}>
         {terms.map((t, i) => (
-          <Linked key={t.id} className="pz-term" links={linkKeysOf([t])}>
+          // A meaning not shown yet keeps its sentence dark: hovering the term must not answer it (W2-02).
+          <Linked key={t.id} className="pz-term" links={linksUnlessConcealed(t, concealed)}>
             <dt>{t.term}</dt>
             {/* The meaning is laid out from the start (hidden), so showing it never moves the terms below. */}
             <dd data-shown={i < shown ? 'true' : 'false'}>
@@ -208,7 +212,7 @@ function QuizBeat({ beat, step, answer, onAnswer }: AskProps<'quiz'>) {
   );
 }
 
-function CompareBeat({ beat, step, answer, onAnswer }: AskProps<'compare'>) {
+function CompareBeat({ beat, step, answer, onAnswer, concealed }: AskProps<'compare'> & { concealed: ReadonlySet<string> }) {
   const grid = useMemo(() => compareGrid(beat.spec), [beat]);
   const plan = beat.plan;
   const revealed = plan === null || isRevealed(beat, step);
@@ -234,7 +238,8 @@ function CompareBeat({ beat, step, answer, onAnswer }: AskProps<'compare'>) {
                   }
                   const isTarget = plan !== null && cell.id === plan.cellId;
                   return (
-                    <Linked as="td" key={ai} className={isTarget ? (answer === '' ? 'pz-cell-revealed' : right ? 'pz-cell-right' : 'pz-cell-miss') : undefined} links={[linkKey(cell.sourceId, cell.quote)]}>
+                    // A cell whose sentence states the hidden value stays unlinked until R (W-04).
+                    <Linked as="td" key={ai} className={isTarget ? (answer === '' ? 'pz-cell-revealed' : right ? 'pz-cell-right' : 'pz-cell-miss') : undefined} links={linksUnlessConcealed(cell, concealed)}>
                       {aiLabel(cell.value)}
                     </Linked>
                   );
@@ -566,10 +571,10 @@ export function BeatView(p: BeatProps) {
   switch (p.beat.kind) {
     case 'title': return <TitleBeat deck={p.deck} />;
     case 'overview': return <OverviewBeat beat={p.beat} step={p.step} deck={p.deck} />;
-    case 'terms': return <TermsBeat beat={p.beat} step={p.step} deck={p.deck} />;
+    case 'terms': return <TermsBeat beat={p.beat} step={p.step} deck={p.deck} concealed={p.concealed} />;
     case 'objectives': return <ObjectivesBeat beat={p.beat} step={p.step} deck={p.deck} />;
     case 'quiz': return <QuizBeat beat={p.beat} step={p.step} answer={p.answer} onAnswer={p.onAnswer} />;
-    case 'compare': return <CompareBeat beat={p.beat} step={p.step} answer={p.answer} onAnswer={p.onAnswer} />;
+    case 'compare': return <CompareBeat beat={p.beat} step={p.step} answer={p.answer} onAnswer={p.onAnswer} concealed={p.concealed} />;
     case 'predict': return <PredictBeat beat={p.beat} step={p.step} answer={p.answer} onAnswer={p.onAnswer} cite={p.cite} deck={p.deck} />;
     case 'stage': return <StageBeat beat={p.beat} cite={p.cite} deck={p.deck} repairBadge={p.repairBadge} />;
     case 'engine': return <EngineBeat beat={p.beat} step={p.step} revealed={p.revealed} cite={p.cite} />;

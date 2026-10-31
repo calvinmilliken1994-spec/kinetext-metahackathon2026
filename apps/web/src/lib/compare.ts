@@ -4,6 +4,7 @@
 import type { CompareCellGen, CompareTableSpec } from '../../../../packages/contracts/kit.ts';
 import { seededOrder } from './seeded.ts';
 import { hash32 } from './timeline.ts';
+import { concealedKeys } from './conceal.ts';
 
 export const NOT_STATED = 'Not stated on this page';
 
@@ -57,6 +58,17 @@ export function planPredict(spec: CompareTableSpec): PredictPlan | null {
   const pick = candidates[hash32(seed) % candidates.length] as { cell: CompareCellGen; distractors: string[] };
   const options = seededOrder([pick.cell.value, ...pick.distractors], `${seed}:options`, { avoidFirst: pick.cell.value });
   return { cellId: pick.cell.id, entityIndex: pick.cell.entityIndex, attributeIndex: pick.cell.attributeIndex, correct: pick.cell.value, options };
+}
+
+/**
+ * The link keys of every cell quote that would give the hidden cell away while it is open (lib/conceal.ts): its own
+ * sentence, and any other cell's sentence that states its value. Lesson and presentation use the same set.
+ */
+export function compareConcealed(spec: CompareTableSpec, plan: PredictPlan | null): Set<string> {
+  if (plan === null) return new Set();
+  const hidden = spec.cells.find((c) => c.id === plan.cellId);
+  if (hidden === undefined) return new Set();
+  return concealedKeys(spec.cells, { quote: { sourceId: hidden.sourceId, quote: hidden.quote }, values: [hidden.value] });
 }
 
 export function gradePredict(plan: PredictPlan, pickedValue: string): boolean {

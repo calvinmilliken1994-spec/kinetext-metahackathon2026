@@ -1,0 +1,360 @@
+{
+ "compare": {
+  "before": [
+   [
+    "",
+    ""
+   ],
+   [
+    "Made up of Congress",
+    "The page says\n\u201cThe legislative branch is made up of Congress:\u201d"
+   ],
+   [
+    "Congress",
+    "The page says\n\u201cThe legislative branch is made up of Congress:\u201d"
+   ],
+   [
+    "Includes the Supreme Court",
+    "The page says\n\u201cThe judicial branch includes the Supreme Court and other federal courts.\u201d"
+   ],
+   [
+    "Other federal courts",
+    "The page says\n\u201cThe judicial branch includes the Supreme Court and other federal courts.\u201d"
+   ],
+   [
+    "Are the members of the executive branch",
+    ""
+   ],
+   [
+    "?",
+    ""
+   ]
+  ],
+  "state_R": "{\"kind\":\"compare\",\"rev\":\"true\",\"zone\":\"The page says\\n\u201cThe president, the vice president, and the president's cabinet are the members of the executive branch.\u201d\"}",
+  "zone_hover_revealed": "The page says\n\u201cThe president, the vice president, and the president's cabinet are the members of the executive branch.\u201d",
+  "after_back_pointer_on_zone": "{\"kind\":\"compare\",\"rev\":\"false\",\"zone\":\"\"}",
+  "back_hover": [
+   [
+    "",
+    ""
+   ],
+   [
+    "Made up of Congress",
+    "The page says\n\u201cThe legislative branch is made up of Congress:\u201d"
+   ],
+   [
+    "Congress",
+    "The page says\n\u201cThe legislative branch is made up of Congress:\u201d"
+   ],
+   [
+    "Includes the Supreme Court",
+    "The page says\n\u201cThe judicial branch includes the Supreme Court and other federal courts.\u201d"
+   ],
+   [
+    "Other federal courts",
+    "The page says\n\u201cThe judicial branch includes the Supreme Court and other federal courts.\u201d"
+   ],
+   [
+    "Are the members of the executive branch",
+    ""
+   ],
+   [
+    "?",
+    ""
+   ]
+  ]
+ },
+ "dna_quiz_terms": {
+  "quiz_open": [
+   true,
+   "{\"kind\":\"quiz\",\"rev\":\"false\",\"zone\":\"\"}"
+  ],
+  "quiz_R_zone_hover": "{\"kind\":\"quiz\",\"rev\":\"true\",\"zone\":\"The page says\\n\u201cDNA, or deoxyribonucleic acid, is the hereditary material in humans and almost all other organisms.\u201d\"}",
+  "quiz_back_pointer_on_zone": "{\"kind\":\"quiz\",\"rev\":\"false\",\"zone\":\"\"}",
+  "terms_open": [
+   true,
+   "{\"kind\":\"terms\",\"rev\":\"false\",\"zone\":\"\"}"
+  ],
+  "terms_hover_step0": [
+   [
+    "Nuclear DNA\nWhat does it mean?",
+    ""
+   ],
+   [
+    "Mitochondrial DNA\nWhat does it mean?",
+    ""
+   ],
+   [
+    "Base pairs\nWhat does it mean?",
+    ""
+   ],
+   [
+    "Nucleotide\nWhat does it mean?",
+    ""
+   ],
+   [
+    "Double helix\nWhat does it mean?",
+    ""
+   ]
+  ],
+  "terms_hover_step1": [
+   [
+    "Nuclear DNA\nDNA located in the cell nucleus that h",
+    "The page says\n\u201cMost DNA is located in the cell nucleus (where it is called nuclear DNA)\u201d"
+   ],
+   [
+    "Mitochondrial DNA\nWhat does it mean?",
+    ""
+   ],
+   [
+    "Base pairs\nWhat does it mean?",
+    ""
+   ],
+   [
+    "Nucleotide\nWhat does it mean?",
+    ""
+   ],
+   [
+    "Double helix\nWhat does it mean?",
+    ""
+   ]
+  ],
+  "terms_hover_back_step0": [
+   [
+    "Nuclear DNA\nWhat does it mean?",
+    ""
+   ],
+   [
+    "Mitochondrial DNA\nWhat does it mean?",
+    ""
+   ],
+   [
+    "Base pairs\nWhat does it mean?",
+    ""
+   ],
+   [
+    "Nucleotide\nWhat does it mean?",
+    ""
+   ],
+   [
+    "Double helix\nWhat does it mean?",
+    ""
+   ]
+  ]
+ },
+ "threshold_w05": {
+  "open": [
+   true,
+   "{\"kind\":\"engine\",\"rev\":\"false\",\"zone\":\"\"}"
+  ],
+  "before_R": "How many states must ratify an amendment\n\nTry it \u00b7 1 of 3\n\nWill 27 of 50 States be enough?\n\n1\n27 States\n2\n38 States\n3\n50 States\n\nStates\n50 in all\n\nRule: three-fourths\n\u00b7\nneeds \n?\n of 50\n\nPasses?\n\nYes votes\n27 of 50\n\nClass vote: does it pass? Then R.",
+  "after_R": "How many states must ratify an amendment\n\nTry it \u00b7 1 of 3\n\nWill 27 of 50 States be enough?\n\n1\n27 states ratify\n2\n38 States\n3\n50 States\n\nStates\n50 in all\n\nRule: three-fourths\n\u00b7\nneeds \n38\n of 50\n\n11 short\n\n38\nYes votes\n27 of 50\n\nIt fails\n11 short of the 38 needed.",
+  "after_move": "How many states must ratify an amendment\n\nYour own count\n\nWill 40 of 50 States be enough?\n\n1\n27 states ratify\n2\n38 States\n3\n50 States\n\nStates\n50 in all\n\nRule: three-fourths\n\u00b7\nneeds \n38\n of 50\n\nPasses\n\n38\nYes votes\n40 of 50\n\nIt passes\n2 more than the 38 needed.",
+  "after_back": "How many states must ratify an amendment\n\nTry it \u00b7 1 of 3\n\nWill 27 of 50 States be enough?\n\n1\n27 States\n2\n38 States\n3\n50 States\n\nStates\n50 in all\n\nRule: three-fourths\n\u00b7\nneeds \n?\n of 50\n\nPasses?\n\nYes votes\n27 of 50\n\nClass vote: does it pass? Then R.",
+  "after_back_state": "{\"kind\":\"engine\",\"rev\":\"false\",\"zone\":\"\"}"
+ },
+ "electoral_job-20261031023315-679e8e97": {
+  "beat": 5,
+  "labels": [
+   "Title",
+   "Overview",
+   "Key terms",
+   "Sequence",
+   "Vote",
+   "Sources"
+  ],
+  "steps": [
+   {
+    "before": "Electoral votes needed to win\n\nTry it \u00b7 1 of 3\n\nWill 270 of 538 electors be enough?\n\n1\n270 electors\n2\n269 electors\n3\n350 electors\n\nElectors\n538 in all\n\nRule: a majority\n\u00b7\nneeds \n?\n of 538\n\nPasses?\n\nYes votes\n270 of 538\n\nClass vote: does it pass? Then R.",
+    "after": "Electoral votes needed to win\n\nTry it \u00b7 1 of 3\n\nWill 270 of 538 electors be enough?\n\n1\nCandidate earns 270 electoral votes\n2\n269 electors\n3\n350 electors\n\nElectors\n538 in all\n\nRule: a majority\n\u00b7\nneeds \n270\n of 538\n\nPasses\n\n270\nYes votes\n270 of 538\n\nIt passes\nExactly the 270 needed."
+   },
+   {
+    "before": "Electoral votes needed to win\n\nTry it \u00b7 2 of 3\n\nWill 269 of 538 electors be enough?\n\n1\n270 electors\n2\n269 electors\n3\n350 electors\n\nElectors\n538 in all\n\nRule: a majority\n\u00b7\nneeds \n?\n of 538\n\nPasses?\n\nYes votes\n269 of 538\n\nClass vote: does it pass? Then R.",
+    "after": "Electoral votes needed to win\n\nTry it \u00b7 2 of 3\n\nWill 269 of 538 electors be enough?\n\n1\n270 electors\n2\nCandidate falls just short of the threshold\n3\n350 electors\n\nElectors\n538 in all\n\nRule: a majority\n\u00b7\nneeds \n270\n of 538\n\n1 short\n\n270\nYes votes\n269 of 538\n\nIt fails\n1 short of the 270 needed."
+   },
+   {
+    "before": "Electoral votes needed to win\n\nTry it \u00b7 3 of 3\n\nWill 350 of 538 electors be enough?\n\n1\n270 electors\n2\n269 electors\n3\n350 electors\n\nElectors\n538 in all\n\nRule: a majority\n\u00b7\nneeds \n?\n of 538\n\nPasses?\n\nYes votes\n350 of 538\n\nClass vote: does it pass? Then R.",
+    "after": "Electoral votes needed to win\n\nTry it \u00b7 3 of 3\n\nWill 350 of 538 electors be enough?\n\n1\n270 electors\n2\n269 electors\n3\nCandidate earns a broad winning margin\n\nElectors\n538 in all\n\nRule: a majority\n\u00b7\nneeds \n270\n of 538\n\nPasses\n\n270\nYes votes\n350 of 538\n\nIt passes\n80 more than the 270 needed."
+   }
+  ]
+ },
+ "electoral_job-20261031101734-fca565b7": {
+  "beat": 6,
+  "labels": [
+   "Title",
+   "Overview",
+   "Key terms",
+   "Which first?",
+   "Timeline",
+   "Vote",
+   "Sources"
+  ],
+  "steps": [
+   {
+    "before": "Electoral college majority threshold\n\nTry it \u00b7 1 of 2\n\nWill 269 of 538 electors be enough?\n\n1\n269 electors\n2\n270 electors\n\nElectors\n538 in all\n\nRule: a majority\n\u00b7\nneeds \n?\n of 538\n\nPasses?\n\nYes votes\n269 of 538\n\nClass vote: does it pass? Then R.",
+    "after": "Electoral college majority threshold\n\nTry it \u00b7 1 of 2\n\nWill 269 of 538 electors be enough?\n\n1\nJust below required majority\n2\n270 electors\n\nElectors\n538 in all\n\nRule: a majority\n\u00b7\nneeds \n270\n of 538\n\n1 short\n\n270\nYes votes\n269 of 538\n\nIt fails\n1 short of the 270 needed."
+   },
+   {
+    "before": "Electoral college majority threshold\n\nTry it \u00b7 2 of 2\n\nWill 270 of 538 electors be enough?\n\n1\n269 electors\n2\n270 electors\n\nElectors\n538 in all\n\nRule: a majority\n\u00b7\nneeds \n?\n of 538\n\nPasses?\n\nYes votes\n270 of 538\n\nClass vote: does it pass? Then R.",
+    "after": "Electoral college majority threshold\n\nTry it \u00b7 2 of 2\n\nWill 270 of 538 electors be enough?\n\n1\n269 electors\n2\nMeets required majority\n\nElectors\n538 in all\n\nRule: a majority\n\u00b7\nneeds \n270\n of 538\n\nPasses\n\n270\nYes votes\n270 of 538\n\nIt passes\nExactly the 270 needed."
+   }
+  ]
+ },
+ "irs_income": {
+  "100000": "{\"err\":\"\",\"on\":\"false\",\"invalid\":\"false\",\"total\":\"Tax from the listed bands \\n$9,024\\nShare of the income \\n9.0%\",\"card\":true,\"boundary\":false}",
+  "1e308": "{\"err\":\"Type the income as a number, for example 100,000.\",\"on\":\"true\",\"invalid\":\"true\",\"total\":\"Tax from the listed bands \\n$9,024\\nShare of the income \\n9.0%\",\"card\":true,\"boundary\":false}",
+  "-5": "{\"err\":\"Type an income of 0 or more.\",\"on\":\"true\",\"invalid\":\"true\",\"total\":\"Tax from the listed bands \\n$9,024\\nShare of the income \\n9.0%\",\"card\":true,\"boundary\":false}",
+  "abc": "{\"err\":\"Type the income as a number, for example 100,000.\",\"on\":\"true\",\"invalid\":\"true\",\"total\":\"Tax from the listed bands \\n$9,024\\nShare of the income \\n9.0%\",\"card\":true,\"boundary\":false}",
+  "": "{\"err\":\"Type an income, for example 100,000.\",\"on\":\"true\",\"invalid\":\"true\",\"total\":\"Tax from the listed bands \\n$9,024\\nShare of the income \\n9.0%\",\"card\":true,\"boundary\":false}",
+  "99999999999999999": "{\"err\":\"Type an income up to 1,000,000,000,000.\",\"on\":\"true\",\"invalid\":\"true\",\"total\":\"Tax from the listed bands \\n$9,024\\nShare of the income \\n9.0%\",\"card\":true,\"boundary\":false}",
+  "250,000": "{\"err\":\"\",\"on\":\"false\",\"invalid\":\"false\",\"total\":\"Tax from the listed bands \\n$42,716\\nShare of the income \\n17.1%\",\"card\":true,\"boundary\":false}"
+ },
+ "diagram_keyboard": {
+  "before_R": [
+   "ld-chip linkable|Thymine",
+   "ld-chip linkable|Adenine",
+   "ld-chip linkable|Base pairs",
+   "ld-chip linkable|Cytosine",
+   "ld-chip linkable|Sugar-phosphate backbone",
+   "ld-chip linkable|Guanine"
+  ],
+  "tab1": "{\"active\":\"ld-chip linkable is-linked|Thymine\",\"zone\":\"The page says\\n\u201cfour chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T).\u201d\"}",
+  "after_R": [
+   "ld-chip linkable|Thymine",
+   "ld-chip linkable|Adenine",
+   "ld-chip linkable|Base pairs",
+   "ld-chip linkable|Cytosine",
+   "ld-chip linkable|Sugar-phosphate backbone",
+   "ld-chip linkable|Guanine",
+   "ld-row linkable|1\nBase pairs"
+  ]
+ },
+ "dna_lesson_flow": {
+  "after_check": {
+   "status": "4 of 6 right. Move the names marked wrong and check again.",
+   "finish": "false",
+   "marks": [
+    "right",
+    "right",
+    "right",
+    "right",
+    "wrong",
+    "wrong"
+   ],
+   "markers": [
+    "right",
+    "right",
+    "right",
+    "right",
+    "wrong",
+    "wrong"
+   ],
+   "named": [
+    "Base pairs",
+    "Thymine",
+    "Adenine",
+    "Sugar-phosphate\nbackbone"
+   ]
+  },
+  "after_swap": {
+   "status": "4 of 6 still marked right. Check again for the numbers you moved.",
+   "finish": "false",
+   "marks": [
+    "right",
+    "right",
+    "right",
+    "right",
+    "open",
+    "open"
+   ],
+   "markers": [
+    "right",
+    "right",
+    "right",
+    "right",
+    "idle",
+    "idle"
+   ],
+   "named": [
+    "Base pairs",
+    "Thymine",
+    "Adenine",
+    "Sugar-phosphate\nbackbone"
+   ]
+  },
+  "row_names": [
+   "Base pairs",
+   "Sugar-phosphate backbone",
+   "Adenine",
+   "Thymine",
+   "Guanine",
+   "Cytosine"
+  ],
+  "after_recheck": {
+   "status": "Every number has its right name.",
+   "finish": "true",
+   "marks": [
+    "right",
+    "right",
+    "right",
+    "right",
+    "right",
+    "right"
+   ],
+   "markers": [
+    "right",
+    "right",
+    "right",
+    "right",
+    "right",
+    "right"
+   ],
+   "named": [
+    "Base pairs",
+    "Thymine",
+    "Adenine",
+    "Guanine",
+    "Cytosine",
+    "Sugar-phosphate\nbackbone"
+   ]
+  },
+  "marker_slot_overlaps": 0
+ },
+ "lesson_compare": [
+  [
+   "Item",
+   false,
+   0
+  ],
+  [
+   "Made up of Congress",
+   true,
+   1
+  ],
+  [
+   "Congress",
+   true,
+   1
+  ],
+  [
+   "Includes the Supreme Court",
+   true,
+   1
+  ],
+  [
+   "Other federal courts",
+   true,
+   1
+  ],
+  [
+   "Are the members of the executive branch",
+   false,
+   0
+  ],
+  [
+   "? hidden",
+   false,
+   0
+  ]
+ ]
+}

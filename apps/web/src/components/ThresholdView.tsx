@@ -5,10 +5,10 @@ import type { CSSProperties } from 'react';
 import type { ThresholdSpec } from '../../../../packages/contracts/kit.ts';
 import type { EnginePresentation } from '../lib/enginePresentation.ts';
 import {
-  clampVotes, countText, quoteLeaksNeed, scenarioQuestion, stageInfo, thresholdPresentationSteps, verdictText, voteOutcome,
+  clampVotes, countText, quoteLeaksNeed, scenarioQuestion, scenarioTitle, scenarioTitleShown, stageInfo, thresholdPresentationSteps, thresholdRevealState,
+  verdictText, voteOutcome,
 } from '../lib/thresholdView.ts';
 import type { StageInfo, StageOutcome } from '../lib/thresholdView.ts';
-import { aiLabel } from '../lib/displayText.ts';
 import { linkKey } from '../lib/linking.ts';
 import type { CiteProps } from './Explanations.tsx';
 import { Linked } from './Linked.tsx';
@@ -89,6 +89,19 @@ function StageBlock({ info, yes, result, revealed, multi, canMove, onMove }: {
 }
 
 /**
+ * A try-it scenario's title: its counts until revealed, then the written title. Both are laid out from the start in one
+ * stacked cell, so the reveal never widens a chip or re-wraps the list.
+ */
+function ScenarioTitle({ spec, index, shown }: { spec: ThresholdSpec; index: number; shown: boolean }) {
+  return (
+    <span className="th-stack">
+      <span data-on={shown ? 'false' : 'true'} aria-hidden={shown ? true : undefined}>{scenarioTitle(spec, index, false)}</span>
+      <span data-on={shown ? 'true' : 'false'} aria-hidden={shown ? undefined : true}>{scenarioTitle(spec, index, true)}</span>
+    </span>
+  );
+}
+
+/**
  * "Does it pass?" A vote meter for each stage (all must pass), the try-it scenarios as questions the class answers before
  * the reveal, and a slider to try any count. Opens on the first scenario with the required count and the verdict hidden.
  */
@@ -99,15 +112,16 @@ export function ThresholdView({ spec, cite: _cite, presentation }: ThresholdView
   const [pick, setPick] = useState(0);
   const [shown, setShown] = useState(false);
   const [guess, setGuess] = useState<Guess | null>(null);
-  const [own, setOwn] = useState<number[] | null>(null);
+  const [ownRaw, setOwn] = useState<number[] | null>(null);
   const stepIndex = staged ? Math.max(0, Math.min(steps - 1, presentation.step)) : pick;
-  // A new presenter step starts from its scenario again.
-  useEffect(() => { if (staged) setOwn(null); }, [staged, stepIndex]);
+  // A new presenter step, and ← that hides the answer again, start from the scenario's own counts.
+  useEffect(() => { if (staged) setOwn(null); }, [staged, stepIndex, presentation?.revealed]);
+  // On a slide the presenter decides what is revealed: a tried count never outlives ← (lib thresholdRevealState).
+  const { revealed, own } = thresholdRevealState({ staged, presenterRevealed: staged && presentation.revealed, shown, own: ownRaw });
 
   const scenario = spec.scenarios[stepIndex];
   const base = scenario?.yes ?? stages.map(() => 0);
   const yes = stages.map((st, i) => clampVotes(st.total, (own ?? base)[i] ?? 0));
-  const revealed = staged ? presentation.revealed || own !== null : shown || own !== null;
   const outcome = voteOutcome(spec, yes);
   const verdict = verdictText(spec, outcome);
   const multi = stages.length > 1;
@@ -126,20 +140,21 @@ export function ThresholdView({ spec, cite: _cite, presentation }: ThresholdView
   return (
     <div className="th" data-mode={staged ? 'stage' : 'lesson'} data-testid="threshold">
       <div className="th-ask">
-        <p className="th-eyebrow">{own !== null ? 'Your own count' : scenario !== undefined && spec.scenarios.length > 1 ? `Try it · ${stepIndex + 1} of ${spec.scenarios.length}` : `Try it · ${aiLabel(scenario?.label ?? '')}`}</p>
+        <p className="th-eyebrow">{own !== null ? 'Your own count' : scenario !== undefined && spec.scenarios.length > 1 ? `Try it · ${stepIndex + 1} of ${spec.scenarios.length}` : <>Try it · <ScenarioTitle spec={spec} index={stepIndex} shown={revealed} /></>}</p>
         <p className="th-question">{scenarioQuestion(spec, { yes })}</p>
       </div>
 
       {spec.scenarios.length > 1 && (staged
         ? (
           <ol className="th-scenarios" aria-label="Questions on this slide">
-            {spec.scenarios.map((s, i) => <li key={s.id} data-current={i === stepIndex ? 'true' : 'false'}><span className="num">{i + 1}</span>{aiLabel(s.label)}</li>)}
+            {/* Titles state outcomes ("falls just short"), so each is its counts until that step is revealed (UX #2). */}
+            {spec.scenarios.map((s, i) => <li key={s.id} data-current={i === stepIndex ? 'true' : 'false'}><span className="num">{i + 1}</span><ScenarioTitle spec={spec} index={i} shown={scenarioTitleShown(i, stepIndex, revealed)} /></li>)}
           </ol>
         ) : (
           <div className="th-scenarios" role="group" aria-label="Try-it questions">
             {spec.scenarios.map((s, i) => (
               <button key={s.id} type="button" className="th-chip" aria-pressed={own === null && i === pick} onClick={() => choose(i)}>
-                <span className="num">{i + 1}</span>{aiLabel(s.label)}
+                <span className="num">{i + 1}</span><ScenarioTitle spec={spec} index={i} shown={own === null && scenarioTitleShown(i, pick, shown)} />
               </button>
             ))}
           </div>

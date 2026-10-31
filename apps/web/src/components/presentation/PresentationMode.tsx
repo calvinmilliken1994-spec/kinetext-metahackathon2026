@@ -4,7 +4,7 @@ import type { QuoteRef } from '../../lib/evidence.ts';
 import type { Badge } from '../../lib/repairs.ts';
 import type { Deck, PresentAction } from '../../lib/presentation.ts';
 import {
-  acceptsNumber, beatRevealed, canRevealNow, deckQuotes, initialPresent, KEY_MAP, keyAction, keyContext, planBeats, presentReducer, presentSearch,
+  acceptsNumber, beatConcealed, beatRevealed, canRevealNow, deckQuotes, initialPresent, KEY_MAP, keyAction, keyContext, planBeats, presentReducer, presentSearch,
   quoteRefForLinks, revealQuote, visibleQuotes, zoneQuote, zoneQuoteSize,
 } from '../../lib/presentation.ts';
 import type { QuoteLike } from '../../lib/linking.ts';
@@ -136,6 +136,9 @@ export function PresentationMode({ deck, quotes, sourceId, repairBadge, startBea
     setPinned(null);
     stageRef.current?.focus({ preventScroll: true });
   }, [state.beat]);
+  // Every move (→, ←, R) drops the hover and focus links: a quote the pointer rested on (the zone's own, after R) never
+  // outlives the answer it belonged to. The next pointer move over an element links it again.
+  useEffect(() => { linkStore.clear(); }, [state.beat, state.step, state.revealed]);
 
   // ---- keyboard -----------------------------------------------------------------------------------------------------
   const act = useCallback((a: PresentAction) => dispatch(a), []);
@@ -197,7 +200,9 @@ export function PresentationMode({ deck, quotes, sourceId, repairBadge, startBea
   const revealable = canRevealNow(beat, state);
   const revealed = beatRevealed(beat, state);
   const next = beats[state.beat + 1];
-  const zone = zoneQuote({ hovered, pinned, revealed: revealQuote(beat, state.step, state.revealed), visible: visibleQuotes(beat, state.step, beats) });
+  // One concealment policy (lib/conceal.ts): while an answer is open, no hover, pin or reveal shows a sentence that states it.
+  const concealed = beatConcealed(beat, state);
+  const zone = zoneQuote({ hovered, pinned, revealed: revealQuote(beat, state.step, state.revealed), visible: visibleQuotes(beat, state.step, beats), concealed });
 
   const view = (
     <div
@@ -226,6 +231,7 @@ export function PresentationMode({ deck, quotes, sourceId, repairBadge, startBea
             onAnswer={(value) => dispatch({ type: 'answer', beatId: beat.id, value })}
             cite={cite}
             repairBadge={repairBadge}
+            concealed={concealed}
           />
         </div>
         {/* One anchored band, centred under every slide and reserved in the layout: showing or hiding a quote never moves

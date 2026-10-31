@@ -22,7 +22,8 @@ function Pieces({ pieces }: { pieces: readonly EqPiece[] }): ReactNode {
 export function EquationLine({ equation, concealed, links, label = 'The formula with the current numbers' }: { equation: Equation | null; concealed: boolean; links: readonly string[]; label?: string }) {
   if (equation === null) return null;
   return (
-    <Linked as="p" links={links} className="eq-line">
+    // A tab stop when it cites the page, so keyboard users reach the formula's sentence too (W2-03).
+    <Linked as="p" links={links} className="eq-line" tabIndex={links.length > 0 ? 0 : undefined}>
       <span className="sr-only">{label}: {equationText(equation, concealed)}</span>
       <span className="eq-body" aria-hidden="true">
         <span className="eq-part"><Pieces pieces={equation.lhs} /> = <Pieces pieces={equation.symbolic} /></span>

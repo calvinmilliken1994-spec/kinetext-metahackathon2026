@@ -8,6 +8,7 @@ import type { Provenance } from '../../../../packages/contracts/index.ts';
 import {
   checkPlacements, coverMasks, coverSource, FIGURE_COVER_PAD, figureLabelMasks, fitSlotText, fitSlotTexts, groupLabelBoxes, hasLabelBox, labelDiagramPresentationSteps,
   labelDiagramRevealQuote, labelMasks, labelSlots, LESSON_MAX_UPSCALE, lessonFigureMaxWidth, MASK_PAD, MASK_PAD_X, normToPx, partViews, pixelBoxPct, place,
+  changedBy, finishLine, keepResults, labelTextKey, markerSpots, slotGroups, slotText,
   placeTags, pointPct, pointPx, rectsOverlap, sameName, slotStates, stageFigureSize, stageOutline, stageQuestion, stageView, unplace, wordBank,
 } from './labelDiagramView.ts';
 import type { Rect } from './labelDiagramView.ts';
@@ -136,6 +137,46 @@ test('placing a name: one name per marker, a name sits on one marker only, a dis
   p = place(p, 'part-guanine', 'part-thymine');
   assert.deepEqual(p, { 'part-thymine': 'part-guanine' }, 'adenine went back to the bank');
   assert.deepEqual(unplace(p, 'part-thymine'), {});
+});
+
+test('D3: dropping a placed name onto a filled number swaps the two names', () => {
+  const p = { 'part-adenine': 'part-thymine', 'part-thymine': 'part-adenine', 'part-guanine': 'part-cytosine' };
+  assert.deepEqual(place(p, 'part-thymine', 'part-thymine'), { 'part-thymine': 'part-thymine', 'part-adenine': 'part-adenine', 'part-guanine': 'part-cytosine' });
+  assert.deepEqual(changedBy(p, 'part-thymine', 'part-thymine'), ['part-thymine', 'part-adenine']);
+  assert.deepEqual(changedBy(p, 'part-base-pairs', 'part-guanine'), ['part-guanine'], 'from the bank: one number changes');
+  assert.deepEqual(place(p, 'part-base-pairs', 'part-guanine'), { 'part-adenine': 'part-thymine', 'part-thymine': 'part-adenine', 'part-guanine': 'part-base-pairs' }, 'the bank name sends cytosine back');
+});
+
+test('D1: after a Check, a move clears only the marks of the numbers it changed', () => {
+  const spec = { parts: [{ id: 'a', name: 'A' }, { id: 'b', name: 'B' }, { id: 'c', name: 'C' }] } as unknown as LabelDiagramSpec;
+  const r = checkPlacements(spec, { a: 'a', b: 'c', c: 'b' });
+  assert.equal(r.right, 1);
+  const kept = keepResults(r, ['b', 'c']);
+  assert.ok(kept !== null);
+  assert.equal(kept.results.a, 'right', 'the untouched ✓ stays');
+  assert.equal(kept.results.b, 'empty');
+  assert.equal(kept.right, 1);
+  assert.equal(kept.stale, true);
+  assert.equal(keepResults(null, ['a']), null);
+  assert.equal(keepResults(kept, ['b']), kept, 'nothing marked changes: same result');
+});
+
+test('D4: a calm finish line, the count in words', () => {
+  assert.equal(finishLine(6, true), 'All six parts named. Every name sits on the figure’s own label.');
+  assert.equal(finishLine(5, false), 'All five parts named.');
+  assert.equal(finishLine(1, false), 'The part is named.');
+});
+
+test('D2: a marker on a printed label moves just clear of it; markers never stack; a clear one stays on its point', () => {
+  const avoid = [{ x: 354, y: 304, w: 73, h: 20 }];
+  const [on, clear] = markerSpots({ width: 600, height: 600, marker: 26, points: [{ x: 384, y: 301 }, { x: 100, y: 100 }], avoid });
+  assert.ok(on !== undefined && clear !== undefined);
+  const r = { x: on.x - 13, y: on.y - 13, w: 26, h: 26 };
+  assert.ok(r.y + r.h <= 304 - 2 || r.y >= 324 + 2 || r.x + r.w <= 354 - 2 || r.x >= 427 + 2, 'clear of the label');
+  assert.ok(Math.hypot(on.x - 384, on.y - 301) <= 26, 'stays beside its part');
+  assert.deepEqual(clear, { x: 100, y: 100 });
+  const [a, b] = markerSpots({ width: 600, height: 600, marker: 26, points: [{ x: 300, y: 300 }, { x: 305, y: 300 }], avoid: [] });
+  assert.ok(a !== undefined && b !== undefined && Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y)) >= 26, 'two markers do not overlap');
 });
 
 test('names match ignoring case, spacing and hyphen spacing', () => {
@@ -419,6 +460,10 @@ test('the live DNA run’s SAM regions are carried as recorded (the harness copy
 const dnaDemo = demo('dna-demo');
 const waterDemo = demo('water-demo');
 const slotNames = (spec: LabelDiagramSpec): (string | null)[] => labelSlots(spec).map((s) => (s.partIndex === null ? null : spec.parts[s.partIndex]?.name ?? '?'));
+/** The same lesson with an older label store: boxes without printed text or groups (the proximity fallback). */
+const noText = (spec: LabelDiagramSpec): LabelDiagramSpec => ({
+  ...spec, figure: { ...spec.figure, labelBoxes: spec.figure.labelBoxes?.map((b) => ({ x1: b.x1, y1: b.y1, x2: b.x2, y2: b.y2 })) },
+});
 
 test('stored boxes that overlap or stack as one multi-line label are grouped; separate labels are not', () => {
   // DNA: box 5 is "Sugar phosphate backbone" (two lines), box 6 is "backbone" inside it.
@@ -434,28 +479,66 @@ test('stored boxes that overlap or stack as one multi-line label are grouped; se
   assert.deepEqual(groupLabelBoxes(lines, [{ x: 220, y: 135 }]), [[0], [1], [2]]);
 });
 
-test('each part is matched to its printed-label slot by overlap, else nearest centre (demo-set DNA run)', () => {
+test('each part is matched to the printed label that says its name (demo-set DNA run)', () => {
   assert.deepEqual(slotNames(dnaDemo), ['Base pairs', 'Thymine', 'Adenine', 'Guanine', 'Cytosine', 'Sugar-phosphate backbone']);
+  assert.ok(labelSlots(dnaDemo).every((s) => s.partIndex === null || s.matchedBy === 'text'));
   // Live DNA run (Muse boxes offset differently) maps the same way.
   assert.deepEqual(slotNames(liveDna), ['Base pairs', 'Thymine', 'Adenine', 'Guanine', 'Cytosine', 'Sugar-phosphate backbone']);
 });
 
-test('water cycle: every process gets its own slot; a slot no part names stays unmatched; a part without a box gets none', () => {
-  assert.deepEqual(slotNames(waterDemo), ['Condensation', 'Precipitation', 'Transpiration', null, 'Evaporation', 'Runoff']);
+test('without stored text (older stores) parts fall back to overlap, else nearest centre', () => {
+  assert.deepEqual(slotNames(noText(dnaDemo)), ['Base pairs', 'Thymine', 'Adenine', 'Guanine', 'Cytosine', 'Sugar-phosphate backbone']);
+  assert.ok(labelSlots(noText(dnaDemo)).every((s) => s.partIndex === null || s.matchedBy === 'proximity'));
+});
+
+test('W-01: exchanging two parts’ label boxes cannot move a name into the wrong printed label', () => {
+  const ad = dnaDemo.parts.find((p) => p.id === 'adenine');
+  const th = dnaDemo.parts.find((p) => p.id === 'thymine');
+  assert.ok(ad !== undefined && th !== undefined);
+  const box = (p: typeof ad) => ({ labelX1: p.labelX1, labelY1: p.labelY1, labelX2: p.labelX2, labelY2: p.labelY2 });
+  const swapped = { ...dnaDemo, parts: dnaDemo.parts.map((p) => (p.id === 'adenine' ? { ...p, ...box(th) } : p.id === 'thymine' ? { ...p, ...box(ad) } : p)) };
+  const slots = labelSlots(swapped);
+  for (const s of slots) {
+    if (s.partIndex === null) continue;
+    assert.equal(labelTextKey(s.text ?? ''), labelTextKey(swapped.parts[s.partIndex]?.name ?? ''), `${s.text}`);
+  }
+  assert.deepEqual(slotNames(swapped), slotNames(dnaDemo));
+});
+
+test('label text keys ignore case, spacing, hyphens and a plural s; whole label first, then a line', () => {
+  assert.equal(labelTextKey('Sugar-phosphate  backbone'), labelTextKey('Sugar phosphate backbone'));
+  assert.equal(labelTextKey('Base pairs'), labelTextKey('base pair'));
+  assert.equal(labelTextKey('gas'), 'gas');
+  assert.equal(labelTextKey('Glass'), 'glass');
+  assert.notEqual(labelTextKey('Runoff'), labelTextKey('Surface Runoff'));
+  // a word box inside its line box is not read twice; lines read top to bottom
+  const boxes = [{ x1: 0, y1: 0, x2: 100, y2: 40, text: 'Sugar phosphate backbone', group: 1 }, { x1: 0, y1: 20, x2: 60, y2: 40, text: 'backbone', group: 1 }];
+  assert.equal(slotText(boxes, [0, 1]), 'Sugar phosphate backbone');
+  const lines = [{ x1: 0, y1: 22, x2: 60, y2: 40, text: 'backbone' }, { x1: 0, y1: 0, x2: 100, y2: 20, text: 'Sugar phosphate' }];
+  assert.equal(slotText(lines, [0, 1]), 'Sugar phosphate backbone');
+  assert.equal(slotText([{ x1: 0, y1: 0, x2: 1, y2: 1 }], [0]), null);
+  // stored groups decide which boxes are one label
+  assert.deepEqual(slotGroups([{ x1: 0, y1: 0, x2: 10, y2: 10, group: 2 }, { x1: 500, y1: 500, x2: 510, y2: 510, group: 2 }, { x1: 20, y1: 0, x2: 30, y2: 10, group: 1 }], []), [[0, 1], [2]]);
+});
+
+test('water cycle: a process gets the label that prints its name; "Runoff" is printed only as "Surface Runoff", so it gets a tag', () => {
+  assert.deepEqual(slotNames(waterDemo), ['Condensation', 'Precipitation', 'Transpiration', null, 'Evaporation', null]);
   const live = demo('water-live');
   const slots = labelSlots(live);
-  assert.deepEqual(slotNames(live), ['Condensation', 'Precipitation', 'Transpiration', null, 'Evaporation', 'Runoff']);
+  assert.deepEqual(slotNames(live), ['Condensation', 'Precipitation', 'Transpiration', null, 'Evaporation', null]);
+  // the older store (no text) put it in the nearest label by distance
+  assert.deepEqual(slotNames(noText(waterDemo)), ['Condensation', 'Precipitation', 'Transpiration', null, 'Evaporation', 'Runoff']);
   const clouds = live.parts.findIndex((p) => p.id === 'clouds');
   assert.ok(!slots.some((s) => s.partIndex === clouds), 'clouds has no printed label: floating tag');
 });
 
-test('a part whose label box is far from every stored box is left unmatched (no wrong name in a slot)', () => {
-  const far = { ...dnaDemo, parts: dnaDemo.parts.map((p) => (p.id === 'adenine' ? { ...p, labelX1: 20, labelY1: 900, labelX2: 90, labelY2: 930 } : p)) };
+test('without text, a part whose label box is far from every stored box is left unmatched (no wrong name in a slot)', () => {
+  const far = { ...noText(dnaDemo), parts: dnaDemo.parts.map((p) => (p.id === 'adenine' ? { ...p, labelX1: 20, labelY1: 900, labelX2: 90, labelY2: 930 } : p)) };
   const names = slotNames(far);
   assert.ok(!names.includes('Adenine'));
   assert.equal(names[2], null, 'the Adenine slot stays a plain cover');
   // Two parts cannot take one slot: the closer one wins, the other falls back to a tag.
-  const twin = { ...dnaDemo, parts: dnaDemo.parts.map((p) => (p.id === 'thymine' ? { ...p, labelX1: 548, labelY1: 392, labelX2: 662, labelY2: 421 } : p)) };
+  const twin = { ...noText(dnaDemo), parts: dnaDemo.parts.map((p) => (p.id === 'thymine' ? { ...p, labelX1: 548, labelY1: 392, labelX2: 662, labelY2: 421 } : p)) };
   const t = labelSlots(twin);
   assert.equal(t.find((s) => s.boxes.includes(2))?.partIndex, 2, 'Adenine (first in spec order on a tie) keeps its slot');
   assert.ok(!t.some((s) => s.partIndex === 3), 'Thymine, pointing at the same printed word, gets no slot');
@@ -537,8 +620,8 @@ test('slot states: covered until its part is named, the name written in; the fin
   assert.ok(slotStates(slots, st.named, { labelsShown: true, openUnmatched: false }).every((s) => s === 'open'));
   const water = labelSlots(waterDemo);
   const all = waterDemo.parts.map(() => true);
-  assert.deepEqual(slotStates(water, all, { labelsShown: false, openUnmatched: true }), ['named', 'named', 'named', 'open', 'named', 'named']);
-  assert.deepEqual(slotStates(water, all, { labelsShown: false, openUnmatched: false }), ['named', 'named', 'named', 'covered', 'named', 'named']);
+  assert.deepEqual(slotStates(water, all, { labelsShown: false, openUnmatched: true }), ['named', 'named', 'named', 'open', 'named', 'open']);
+  assert.deepEqual(slotStates(water, all, { labelsShown: false, openUnmatched: false }), ['named', 'named', 'named', 'covered', 'named', 'covered']);
 });
 
 test('presentation outlines: only the current part’s region, never on the labels step', () => {

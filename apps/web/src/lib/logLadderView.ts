@@ -16,6 +16,11 @@ export const LADDER_MARGIN = 0.02;
 
 const round10 = (n: number): number => Math.round(n * 1e10) / 1e10;
 
+/** The engine's ratio, or Infinity where the engine refuses a ratio too large to represent (never a render crash). */
+function safeRatio(factor: number, from: number, to: number): number {
+  try { return ladderRatio(factor, from, to); } catch { return Number.POSITIVE_INFINITY; }
+}
+
 /** A scale value as printed on the ladder ('5.6', '7'). */
 export function valueText(n: number): string {
   return trimmed(n, 3);
@@ -83,26 +88,41 @@ export interface LadderCase {
   answerText: string;
 }
 
-/** The ladder's steps from one value to another: whole steps of the factor, then a part step if the case ends between. */
+/** The most running-multiplier steps a case draws; a longer case groups whole steps (×10 per step becomes ×100 per 2). */
+export const MAX_CASE_STEPS = 12;
+/** The most tick marks a ladder draws, whatever the span of its values. */
+export const MAX_TICKS = 12;
+
+/**
+ * The ladder's steps from one value to another: whole steps of the factor, then a part step if the case ends between.
+ * At most MAX_CASE_STEPS (+1 part step) are listed: a longer case groups whole steps evenly, so the work is bounded by a
+ * constant, never by the page's values (W-03). Values that are not finite give no steps.
+ */
 export function ladderSteps(factor: number, from: number, to: number): LadderStep[] {
+  if (!Number.isFinite(from) || !Number.isFinite(to)) return [];
   const sign = to > from ? 1 : -1;
   const diff = round10(Math.abs(to - from));
+  if (!Number.isFinite(diff)) return [];
   const whole = Math.floor(diff + 1e-9);
+  const stride = whole <= MAX_CASE_STEPS ? 1 : Math.ceil(whole / MAX_CASE_STEPS);
   const out: LadderStep[] = [];
   let last = from;
-  for (let k = 1; k <= whole; k++) {
+  for (let k = stride; k <= whole && out.length < MAX_CASE_STEPS; k += stride) {
     const v = round10(from + sign * k);
-    out.push({ from: last, to: v, stepRatio: ladderRatio(factor, last, v), cumulative: ladderRatio(factor, from, v), partial: false });
+    if (v === last) break;
+    out.push({ from: last, to: v, stepRatio: safeRatio(factor, last, v), cumulative: safeRatio(factor, from, v), partial: false });
     last = v;
   }
-  if (diff - whole > 1e-9) out.push({ from: last, to, stepRatio: ladderRatio(factor, last, to), cumulative: ladderRatio(factor, from, to), partial: true });
+  // The rest of the way: a part step (less than one stride), or the whole steps a grouped case had left over.
+  const rest = round10(Math.abs(to - last));
+  if (rest > 1e-9) out.push({ from: last, to, stepRatio: safeRatio(factor, last, to), cumulative: safeRatio(factor, from, to), partial: rest < stride - 1e-9 });
   return out;
 }
 
 export function ladderCases(spec: LogLadderSpec): LadderCase[] {
   const wording = ladderWording(spec);
   return spec.cases.map((c: LogCaseGen, index) => {
-    const ratio = ladderRatio(spec.factor, c.fromValue, c.toValue);
+    const ratio = safeRatio(spec.factor, c.fromValue, c.toValue);
     const direction = ladderDirection(spec.increasing, c.fromValue, c.toValue);
     return {
       id: c.id, index, from: c.fromValue, to: c.toValue, ratio, direction,
@@ -130,22 +150,51 @@ export function gradeLadder(c: Pick<LadderCase, 'ratio' | 'direction'>, guess: n
 export interface LadderAxis {
   min: number;
   max: number;
-  /** Whole values from min to max: the rungs of the scale's own steps. */
+  /** Whole values from min to max, every `stride` values: at most MAX_TICKS + 1 marks. */
   ticks: number[];
+  /** Values between two ticks (1 = every whole step of the scale; a wide span uses 2, 5, 10, 20, …). */
+  stride: number;
   /** Position of a value, in % of the ladder's height from the top (higher values sit higher). */
   y: (v: number) => number;
 }
 
 export function ladderAxis(spec: Pick<LogLadderSpec, 'rungs' | 'cases'>): LadderAxis {
   const values = [...spec.rungs.map((r) => r.value), ...spec.cases.flatMap((c) => [c.fromValue, c.toValue])];
-  let min = Math.floor(Math.min(...values) + 1e-9);
-  let max = Math.ceil(Math.max(...values) - 1e-9);
+  const finite = values.filter((v) => Number.isFinite(v));
+  let min = finite.length === 0 ? 0 : Math.floor(Math.min(...finite) + 1e-9);
+  let max = finite.length === 0 ? 1 : Math.ceil(Math.max(...finite) - 1e-9);
   if (!Number.isFinite(min) || !Number.isFinite(max)) { min = 0; max = 1; }
   if (max <= min) max = min + 1;
-  const ticks: number[] = [];
-  for (let v = min; v <= max; v++) ticks.push(v);
   const span = max - min;
-  return { min, max, ticks, y: (v: number) => round10(((max - v) / span) * 100) };
+  // A fixed tick budget with a round stride (W-03): the loop runs at most MAX_TICKS + 1 times for any span, and values
+  // past the safe-integer range (where v + 1 === v) draw only their two ends.
+  const safe = Number.isSafeInteger(min) && Number.isSafeInteger(max) && Number.isSafeInteger(span);
+  const stride = safe ? niceStride(span / MAX_TICKS) : span;
+  const ticks: number[] = [];
+  if (safe) {
+    for (let k = 0; k <= MAX_TICKS; k++) {
+      const v = min + k * stride;
+      if (v > max) break;
+      ticks.push(v);
+    }
+    if (ticks[ticks.length - 1] !== max) ticks.push(max);
+  } else {
+    ticks.push(min, max);
+  }
+  return { min, max, ticks, stride, y: (v: number) => round10(((max - v) / span) * 100) };
+}
+
+/** The multiplier between two marks of the axis, as the ladder prints it: '×10', or '×100' when marks are two steps apart. */
+export function gapText(factor: number, from: number, to: number): string {
+  return `×${ratioText(safeRatio(factor, from, to))}`;
+}
+
+/** The smallest round stride (1, 2, 5, 10, 20, 50, …) at least `raw`, and at least 1. */
+export function niceStride(raw: number): number {
+  if (!(raw > 1) || !Number.isFinite(raw)) return 1;
+  const p = 10 ** Math.floor(Math.log10(raw));
+  for (const m of [1, 2, 5, 10]) if (m * p >= raw) return m * p;
+  return 10 * p;
 }
 
 /**

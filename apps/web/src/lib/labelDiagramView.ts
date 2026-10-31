@@ -196,6 +196,62 @@ export function groupLabelBoxes(boxes: readonly PixelBox[], points: readonly { x
   return out.sort((a, b) => (a[0] ?? 0) - (b[0] ?? 0));
 }
 
+/**
+ * A stored printed-label box (data/figures/<id>.labels.json, image pixels). Newer stores also carry the words the box
+ * prints (`text`) and which printed label it belongs to (`group`: boxes with the same number are one label).
+ */
+export interface StoredLabelBox { x1: number; y1: number; x2: number; y2: number; text?: string; group?: number }
+
+/**
+ * A name or printed label reduced for comparison: case, spacing, hyphens and a plural s ignored ('Sugar-phosphate
+ * backbone' = 'Sugar phosphate backbone'; 'Base pairs' = 'base pair'). Punctuation other than letters and digits is dropped.
+ */
+export function labelTextKey(s: string): string {
+  return s.toLowerCase().replace(/[-‐‑‒–—_/]/g, ' ').replace(/[^\p{L}\p{N} ]/gu, ' ').replace(/\s+/g, ' ').trim()
+    .split(' ').map((w) => (w.length > 3 && w.endsWith('s') && !w.endsWith('ss') ? w.slice(0, -1) : w)).join(' ');
+}
+
+/** True when a figure's stored boxes say what they print: slots are then matched to parts by that text alone. */
+export function hasBoxText(figure: Pick<LabelFigureRef, 'labelBoxes'>): boolean {
+  return ((figure.labelBoxes ?? []) as readonly StoredLabelBox[]).some((b) => typeof b.text === 'string' && b.text.trim() !== '');
+}
+
+/**
+ * The boxes of the figure grouped into printed labels: by their stored `group` number when every usable box has one,
+ * else by geometry (groupLabelBoxes).
+ */
+export function slotGroups(boxes: readonly StoredLabelBox[], points: readonly { x: number; y: number }[]): number[][] {
+  const usable = boxes.map((b, i) => (b.x2 > b.x1 && b.y2 > b.y1 ? i : -1)).filter((i) => i >= 0);
+  if (usable.length > 0 && usable.every((i) => Number.isInteger(boxes[i]?.group))) {
+    const by = new Map<number, number[]>();
+    for (const i of usable) {
+      const g = boxes[i]?.group as number;
+      const list = by.get(g);
+      if (list === undefined) by.set(g, [i]); else list.push(i);
+    }
+    return [...by.values()].sort((a, b) => (a[0] ?? 0) - (b[0] ?? 0));
+  }
+  return groupLabelBoxes(boxes, points);
+}
+
+/**
+ * What one printed label says: its boxes' texts in reading order (top to bottom, left to right), leaving out a box that
+ * lies inside another box of the label that has text (a word box inside its line box). Null when no box has text.
+ */
+export function slotText(boxes: readonly StoredLabelBox[], group: readonly number[]): string | null {
+  const withText = group.filter((i) => typeof boxes[i]?.text === 'string' && (boxes[i]?.text as string).trim() !== '');
+  if (withText.length === 0) return null;
+  const inside = (a: StoredLabelBox, b: StoredLabelBox): boolean => a.x1 >= b.x1 && a.y1 >= b.y1 && a.x2 <= b.x2 && a.y2 <= b.y2;
+  const kept = withText.filter((i) => !withText.some((j) => j !== i && inside(boxes[i] as StoredLabelBox, boxes[j] as StoredLabelBox) && !(inside(boxes[j] as StoredLabelBox, boxes[i] as StoredLabelBox) && j > i)));
+  kept.sort((a, b) => {
+    const A = boxes[a] as StoredLabelBox;
+    const B = boxes[b] as StoredLabelBox;
+    const line = Math.min(A.y2 - A.y1, B.y2 - B.y1) / 2;
+    return Math.abs(A.y1 - B.y1) > line ? A.y1 - B.y1 : A.x1 - B.x1;
+  });
+  return kept.map((i) => (boxes[i]?.text as string).trim()).join(' ');
+}
+
 /** One printed label of the figure as a worksheet slot: covered, then (once its part is named) holding the part's name. */
 export interface LabelSlot {
   key: string;
@@ -207,12 +263,19 @@ export interface LabelSlot {
   boxes: number[];
   /** The part (spec order) whose name this slot holds, or null when no part names this printed label. */
   partIndex: number | null;
+  /** What the printed label says (stored box text), or null when the figure's store has no text. */
+  text: string | null;
+  /** How the part was matched: by the label's printed text, by distance (older stores without text), or not at all. */
+  matchedBy: 'text' | 'proximity' | null;
 }
 
 /**
  * The figure's printed labels as slots, each matched to at most one part. Only lessons with stored label boxes
  * (`figure.labelBoxes`) have slots; older lessons return [] and keep their covers and floating name tags.
- * Matching: each part's own label box (Muse's labelX1..Y2, 0..1000) against every slot's printed boxes; any overlap
+ * Matching BY TEXT when the stored boxes say what they print (W-01, Set A2): a part's name goes into the printed label
+ * whose text equals it (labelTextKey: case, spacing, hyphens and a plural s ignored), the whole label's text first, then
+ * one of its lines; a part whose name no label prints gets no slot (a floating tag), never the nearest label.
+ * Only without any stored text does it fall back to distance: each part's own label box (Muse's labelX1..Y2, 0..1000) against every slot's printed boxes; any overlap
  * beats any distance (larger overlap first), otherwise the nearest centre within SLOT_MATCH_MAX_DIST of the figure's
  * longer side. Pairs are taken best first, so a slot holds one part and a part one slot (ties go to the earlier part);
  * a part with no box, or none close enough, has no slot.
@@ -224,15 +287,30 @@ export function labelSlots(spec: Pick<LabelDiagramSpec, 'parts' | 'figure'>): La
   const boxes = fig.labelBoxes ?? [];
   if (!(W > 0) || !(H > 0) || coverSource(spec) !== 'figure') return [];
   const points = spec.parts.map((p) => ({ x: (clamp(p.x, 0, GRID) * W) / GRID, y: (clamp(p.y, 0, GRID) * H) / GRID }));
+  const stored = boxes as readonly StoredLabelBox[];
+  const byText = hasBoxText(fig);
   const slots: LabelSlot[] = [];
-  for (const g of groupLabelBoxes(boxes, points)) {
+  for (const g of slotGroups(stored, points)) {
     const raw = unionOf(g.map((i) => boxes[i] as PixelBox));
     const padded: PixelBox = { x1: raw.x1 - FIGURE_COVER_PAD, y1: raw.y1 - FIGURE_COVER_PAD, x2: raw.x2 + FIGURE_COVER_PAD, y2: raw.y2 + FIGURE_COVER_PAD };
     const use = hidesPoint(padded, points) ? raw : padded;
     const px: PixelBox = { x1: clamp(use.x1, 0, W), y1: clamp(use.y1, 0, H), x2: clamp(use.x2, 0, W), y2: clamp(use.y2, 0, H) };
     const box = pixelBoxPct(px, fig);
     if (box === null) continue;
-    slots.push({ key: `slot-${g.join('-')}`, box, px, boxes: g, partIndex: null });
+    slots.push({ key: `slot-${g.join('-')}`, box, px, boxes: g, partIndex: null, text: byText ? slotText(stored, g) : null, matchedBy: null });
+  }
+  if (byText) {
+    const whole = slots.map((s) => (s.text === null ? '' : labelTextKey(s.text)));
+    const lines = slots.map((s) => s.boxes.map((i) => labelTextKey(stored[i]?.text ?? '')).filter((t) => t !== ''));
+    spec.parts.forEach((p, pi) => {
+      const k = labelTextKey(p.name);
+      if (k === '') return;
+      let at = slots.findIndex((s, si) => s.partIndex === null && whole[si] === k);
+      if (at < 0) at = slots.findIndex((s, si) => s.partIndex === null && (lines[si] ?? []).includes(k));
+      const s = slots[at];
+      if (s !== undefined) { s.partIndex = pi; s.matchedBy = 'text'; }
+    });
+    return slots;
   }
   // candidate (part, slot) pairs with a cost: overlap first (−1 − IoU), else the centre distance as a fraction
   const maxDist = SLOT_MATCH_MAX_DIST * Math.max(W, H);
@@ -259,6 +337,7 @@ export function labelSlots(spec: Pick<LabelDiagramSpec, 'parts' | 'figure'>): La
     const s = slots[pr.slot];
     if (s === undefined || s.partIndex !== null || partTaken.has(pr.part)) continue;
     s.partIndex = pr.part;
+    s.matchedBy = 'proximity';
     partTaken.add(pr.part);
   }
   return slots;
@@ -529,12 +608,24 @@ export function wordBank(spec: Pick<LabelDiagramSpec, 'id' | 'parts'>): BankWord
 /** Which name (bank token) sits on which marker (part id). */
 export type Placements = Readonly<Record<string, string>>;
 
-/** Put a name on a marker. A name sits on one marker only (it moves); a name already on that marker goes back to the bank. */
+/**
+ * Put a name on a marker. A name sits on one marker only (it moves). Dropped on a filled marker it SWAPS: the name
+ * already there moves to the marker the new one came from (D3); a name brought from the bank sends it back to the bank.
+ */
 export function place(placements: Placements, token: string, markerId: string): Placements {
+  const from = Object.entries(placements).find(([, t]) => t === token)?.[0];
+  const displaced = placements[markerId];
   const next: Record<string, string> = {};
   for (const [m, t] of Object.entries(placements)) if (t !== token && m !== markerId) next[m] = t;
   next[markerId] = token;
+  if (from !== undefined && from !== markerId && displaced !== undefined && displaced !== token) next[from] = displaced;
   return next;
+}
+
+/** The markers whose name a move changes: the target and, when the name came from another marker, that one too. */
+export function changedBy(placements: Placements, token: string, markerId: string): string[] {
+  const from = Object.entries(placements).find(([, t]) => t === token)?.[0];
+  return from === undefined || from === markerId ? [markerId] : [markerId, from];
 }
 
 /** Take the name off a marker (back to the bank). */
@@ -552,7 +643,11 @@ export function sameName(a: string, b: string): boolean {
 }
 
 export type MarkResult = 'right' | 'wrong' | 'empty';
-export interface CheckResult { results: Record<string, MarkResult>; right: number; total: number; complete: boolean }
+export interface CheckResult {
+  results: Record<string, MarkResult>; right: number; total: number; complete: boolean;
+  /** Some numbers' names changed since the Check: their marks were cleared, the rest kept. */
+  stale?: boolean;
+}
 
 /** Right, wrong or empty per marker. Answers are compared by name, so two parts with the same name accept either. */
 export function checkPlacements(spec: Pick<LabelDiagramSpec, 'parts'>, placements: Placements): CheckResult {
@@ -620,4 +715,69 @@ export function stageQuestion(spec: Pick<LabelDiagramSpec, 'parts' | 'figure'>, 
 export function labelDiagramRevealQuote(spec: Pick<LabelDiagramSpec, 'parts'>, step: number): QuoteLike | null {
   const p = spec.parts[step];
   return p === undefined ? null : { sourceId: p.sourceId, quote: p.quote };
+}
+
+// ---- after a Check (D1, D4) ---------------------------------------------------------------------------------------
+
+/**
+ * The Check's marks after a move: the numbers whose name changed lose their mark, every other number keeps its ✓ or ✗
+ * (D1). Null stays null; a move that changes nothing returns the same result.
+ */
+export function keepResults(checked: CheckResult | null, changed: readonly string[]): CheckResult | null {
+  if (checked === null) return null;
+  if (!changed.some((id) => checked.results[id] !== undefined && checked.results[id] !== 'empty')) return checked;
+  const results: Record<string, MarkResult> = { ...checked.results };
+  for (const id of changed) if (results[id] !== undefined) results[id] = 'empty';
+  const right = Object.values(results).filter((r) => r === 'right').length;
+  return { results, right, total: checked.total, complete: false, stale: true };
+}
+
+const NUMBER_WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'];
+
+/** The finish line once every number is right: calm words, the count in letters. */
+export function finishLine(total: number, inSlots: boolean): string {
+  const n = NUMBER_WORDS[total] ?? String(total);
+  const all = total === 1 ? 'The part is named.' : `All ${n} parts named.`;
+  return inSlots ? `${all} Every name sits on the figure’s own label.` : all;
+}
+
+// ---- markers clear of the printed labels (D2) -------------------------------------------------------------------------
+
+/**
+ * Where each numbered marker sits (centres, rendered px): on its part's point when that is clear, else the nearest spot
+ * around it (up, down, left, right, then the diagonals, a quarter marker further each ring) that covers no printed label
+ * or slot (`avoid`), no earlier marker, and stays inside the figure. A written name then never covers a number, and on
+ * the last slide no number covers a printed word. Decided once per rendered size, never per step or reveal.
+ */
+export function markerSpots(input: { width: number; height: number; marker: number; points: readonly { x: number; y: number }[]; avoid: readonly Rect[]; gap?: number }): { x: number; y: number }[] {
+  const { width: W, height: H, marker: m, points, avoid } = input;
+  const gap = input.gap ?? 2;
+  const half = m / 2;
+  const placed: Rect[] = [];
+  const dirs: readonly [number, number][] = [[0, -1], [0, 1], [-1, 0], [1, 0], [-1, -1], [1, -1], [-1, 1], [1, 1]];
+  const out: { x: number; y: number }[] = [];
+  for (const p of points) {
+    const at = (x: number, y: number): Rect => ({ x: x - half, y: y - half, w: m, h: m });
+    const inside = (r: Rect): boolean => r.x >= 0 && r.y >= 0 && r.x + r.w <= W && r.y + r.h <= H;
+    const cost = (r: Rect): number => avoid.reduce((s, a) => s + overlapArea(r, a, gap), 0) + placed.reduce((s, a) => s + overlapArea(r, a, gap), 0);
+    let best = { x: p.x, y: p.y, c: cost(at(p.x, p.y)) };
+    if (best.c > 0) {
+      // Quarter-marker rings, up to three markers away: a gap between two printed rows that just fits a marker is found.
+      search: for (let ring = 1; ring <= 12; ring++) {
+        for (const [dx, dy] of dirs) {
+          const d = (ring * m) / 4;
+          const x = p.x + dx * d;
+          const y = p.y + dy * d;
+          const r = at(x, y);
+          if (!inside(r)) continue;
+          const c = cost(r);
+          if (c < best.c) best = { x, y, c };
+          if (c === 0) break search;
+        }
+      }
+    }
+    placed.push(at(best.x, best.y));
+    out.push({ x: best.x, y: best.y });
+  }
+  return out;
 }

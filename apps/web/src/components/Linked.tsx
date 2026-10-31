@@ -13,6 +13,8 @@ export interface LinkedProps {
  * Hover / keyboard-focus linking for one lesson element that cites the page (Stage 7 item 3). Hovering or focusing it
  * (or anything inside it) makes its link keys active, so its quote lights up in the source panel; it lights up itself
  * whenever one of its keys is active (a hovered source quote, or another element citing the same words).
+ * Keyboard: an element with no focusable content of its own is given `tabIndex={0}` by its view (only while its quote
+ * may be shown), so focus links it like hover does (W2-03). Keys concealed by lib/conceal.ts are never passed in.
  */
 export function useLinked(keys: readonly string[]): { lit: boolean; props: LinkedProps } {
   const owner = useId();

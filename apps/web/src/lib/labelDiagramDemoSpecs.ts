@@ -21,11 +21,17 @@ export interface FigureMetaLike {
   id: string; width: number; height: number; caption: string; credit: string; license: string; labelsInImage: boolean;
 }
 /** A data/figures/<id>.labels.json: lead-verified boxes (image pixels) around every printed label. */
-export interface FigureLabelsLike { figureId: string; width: number; height: number; boxes: { x1: number; y1: number; x2: number; y2: number }[] }
+export interface FigureLabelsLike { figureId: string; width: number; height: number; boxes: { x1: number; y1: number; x2: number; y2: number; text?: string; group?: number }[] }
 
 export function figureRefOf(m: FigureMetaLike, labels?: FigureLabelsLike): LabelFigureRef {
   const ref: LabelFigureRef = { id: m.id, width: m.width, height: m.height, caption: m.caption, credit: m.credit, license: m.license, labelsInImage: m.labelsInImage };
-  if (labels !== undefined && labels.figureId === m.id) ref.labelBoxes = labels.boxes.map((b) => ({ x1: b.x1, y1: b.y1, x2: b.x2, y2: b.y2 }));
+  // The stored box's printed words and label group come along (Set A2: the view matches names to slots by that text).
+  if (labels !== undefined && labels.figureId === m.id) {
+    ref.labelBoxes = labels.boxes.map((b) => ({
+      x1: b.x1, y1: b.y1, x2: b.x2, y2: b.y2,
+      ...(typeof b.text === 'string' ? { text: b.text } : {}), ...(typeof b.group === 'number' ? { group: b.group } : {}),
+    }));
+  }
   return ref;
 }
 
