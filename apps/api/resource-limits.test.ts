@@ -28,7 +28,7 @@ test('S5-06: the checked-in config parses, with maxRepairAttempts = 2', () => {
   const limits = parseResourceLimits(realConfig);
   assert.equal(limits.maxRepairAttempts, 2);
   assert.equal(MAX_REPAIR_ATTEMPTS_BOUND, 2);
-  assert.equal(limits.capUSD, 50);
+  assert.equal(limits.capUSD, 100);
   assert.equal(limits.analysisMaxOutputTokens, 16000, 'analysis may think as hard as the spec step (Stage 5b evaluation: two truncations at 6000)');
   assert.equal(limits.wallTimeMs, 420000);
   assert.equal(limits.maxOutputTokens, 32000);
@@ -104,7 +104,7 @@ test('the other runtime bounds still fail closed (regression)', () => {
 
 test('OW-2: the checked-in config carries providerCapsUSD and a validated modalBaseUrl', () => {
   const limits = parseResourceLimits(realConfig);
-  assert.deepEqual(limits.providerCapsUSD, { 'meta-api': 50, 'modal': 50 });
+  assert.deepEqual(limits.providerCapsUSD, { 'meta-api': 100, 'modal': 80 });
   assert.equal(
     limits.modalBaseUrl,
     'https://calvinmilliken1994--ep-mki-muse-spark-open-server.us-west.modal.direct/v1',
@@ -188,15 +188,17 @@ test('OW-2: the config caps, handed to openLedger, cap each provider independent
     capUSD: limits.capUSD,
     providerCapsUSD: limits.providerCapsUSD,
   });
+  const modalCap = limits.providerCapsUSD['modal']!;
+  const metaCap = limits.providerCapsUSD['meta-api']!;
   try {
     // Modal spend up to its own cap is admitted...
     const r1 = ledger.reserve({
       purpose: 'test-live',
       model: MODAL_MUSE_SPARK_OPEN_MODEL,
-      estUSD: 49.9,
+      estUSD: modalCap - 0.1,
       provider: 'modal',
     });
-    ledger.reconcile(r1, { costUSD: 49.9 });
+    ledger.reconcile(r1, { costUSD: modalCap - 0.1 });
     // ...past it, refused — even though the meta-api stage cap is untouched.
     assert.throws(
       () => ledger.reserve({ purpose: 'test-live', model: MODAL_MUSE_SPARK_OPEN_MODEL, estUSD: 0.2, provider: 'modal' }),
@@ -204,8 +206,8 @@ test('OW-2: the config caps, handed to openLedger, cap each provider independent
       'modal spend above its provider cap is refused',
     );
     // Meta-API spend is capped by BOTH its provider cap and the stage cap...
-    const r2 = ledger.reserve({ purpose: 'test-live', model: 'muse-spark-1.3', estUSD: 49.99, provider: 'meta-api' });
-    ledger.reconcile(r2, { costUSD: 49.99 });
+    const r2 = ledger.reserve({ purpose: 'test-live', model: 'muse-spark-1.3', estUSD: metaCap - 0.01, provider: 'meta-api' });
+    ledger.reconcile(r2, { costUSD: metaCap - 0.01 });
     assert.throws(
       () => ledger.reserve({ purpose: 'test-live', model: 'muse-spark-1.3', estUSD: 0.02, provider: 'meta-api' }),
       (err: unknown) => err instanceof Error && err.message === 'BUDGET_EXCEEDED',
@@ -216,8 +218,8 @@ test('OW-2: the config caps, handed to openLedger, cap each provider independent
     // vice versa (committedUSD filters per provider).
     const r3 = ledger.reserve({ purpose: 'test-live', model: MODAL_MUSE_SPARK_OPEN_MODEL, estUSD: 0.05, provider: 'modal' });
     ledger.reconcile(r3, { costUSD: 0.05 });
-    assert.ok(Math.abs(ledger.committedUSD('modal') - 49.95) < 1e-9);
-    assert.ok(Math.abs(ledger.committedUSD('meta-api') - 49.99) < 1e-9);
+    assert.ok(Math.abs(ledger.committedUSD('modal') - (modalCap - 0.05)) < 1e-9);
+    assert.ok(Math.abs(ledger.committedUSD('meta-api') - (metaCap - 0.01)) < 1e-9);
   } finally {
     ledger.close();
   }
@@ -227,9 +229,9 @@ test('OW-2: the config caps, handed to openLedger, cap each provider independent
 /* Concurrency (BUG-006 wave, part B): maxConcurrentJobs                 */
 /* ------------------------------------------------------------------ */
 
-test('concurrency: the checked-in config carries maxConcurrentJobs = 3 (the product default)', () => {
+test('concurrency: the checked-in config carries maxConcurrentJobs = 6 (3 per model for the final evaluation; product default stays 3)', () => {
   const limits = parseResourceLimits(realConfig);
-  assert.equal(limits.maxConcurrentJobs, 3);
+  assert.equal(limits.maxConcurrentJobs, 6);
   assert.equal(DEFAULT_MAX_CONCURRENT_JOBS, 3);
   assert.equal(MAX_CONCURRENT_JOBS_BOUND, 8);
 });

@@ -1,0 +1,614 @@
+{
+  "id": "final-eval-2026-10-31",
+  "preRegisteredAt": "2026-10-31",
+  "pages": [
+    {
+      "sourceId": "bls-calculating-percent-changes",
+      "subject": "maths",
+      "featured": false,
+      "sha256": "829533faa09f497cfa3c6b4a03b5afbd5c44b73ae3194ed951f4d6d61e19f6de"
+    },
+    {
+      "sourceId": "bls-cpi-escalation",
+      "subject": "finance",
+      "featured": false,
+      "sha256": "eb563a53edb7ba595831b970f366b39a5a1efa7b8259280013f29552e37ce6cd"
+    },
+    {
+      "sourceId": "bls-purchasing-power-constant-dollars",
+      "subject": "maths",
+      "featured": false,
+      "sha256": "d70cd76c4b9043e17e99ce430e45904d64b1055c247edaae37dff23e7898f04f"
+    },
+    {
+      "sourceId": "bls-rebasing",
+      "subject": "maths",
+      "featured": false,
+      "sha256": "12b5479a4b039561a9b371a9ff42e67a18717caf06659d7262130e3d95b1088e"
+    },
+    {
+      "sourceId": "census-about-decennial-census",
+      "subject": "civics",
+      "featured": false,
+      "sha256": "1c9559b79c96a4eccd7d2e58876da4b72cbba0c2de2e199390b7832abe710840"
+    },
+    {
+      "sourceId": "census-computing-apportionment",
+      "subject": "maths",
+      "featured": false,
+      "sha256": "aebb6d0187c5e1990d7aded30e76276837744417fba607704f46e82a7db34bf0"
+    },
+    {
+      "sourceId": "census-poverty-measures",
+      "subject": "maths",
+      "featured": false,
+      "sha256": "d4596ea891842c2ee0ed4b34986ca579ae50aef29dbbb308f0ce50b4e3cff0b5"
+    },
+    {
+      "sourceId": "cfpb-compound-interest",
+      "subject": "finance",
+      "featured": false,
+      "sha256": "b53156638f6b191a78c86fac8fa0b2051d61a41f7e64c7bf1e8b7258ae8c411c"
+    },
+    {
+      "sourceId": "cfpb-credit-card-interest-calculation",
+      "subject": "finance",
+      "featured": false,
+      "sha256": "1d5dbef610660615ac5db9d0b780497b890eb934df9e556f60d3b5900893fa3e"
+    },
+    {
+      "sourceId": "cfpb-loan-interest-rate-vs-apr",
+      "subject": "finance",
+      "featured": false,
+      "sha256": "bb4deef0545569be19f0aa5a83968994bacccfa69a6746764044ef4762991700"
+    },
+    {
+      "sourceId": "cfpb-mortgage-total-monthly-payment",
+      "subject": "finance",
+      "featured": false,
+      "sha256": "54e2133fc95a619dc83b68fb7b37f0db5f648e72b4ecb95056ce80de11963d02"
+    },
+    {
+      "sourceId": "cfpb-saving-post-secondary-education",
+      "subject": "finance",
+      "featured": false,
+      "sha256": "243a4b56c86936ecc243da4c7fc982bc76b85ee12116c97e4f751cfb8ba6c926"
+    },
+    {
+      "sourceId": "cfpb-teenagers-and-saving",
+      "subject": "finance",
+      "featured": false,
+      "sha256": "a438468abdb47ce3f3afb4ed9e5c4bafa5ebf39e76f40973647383ef8df00b58"
+    },
+    {
+      "sourceId": "cfpb-ways-to-pay-for-college",
+      "subject": "finance",
+      "featured": false,
+      "sha256": "c2f41ceeb5a9c980341ce04560a1baa319fe6ab50aac7e281e775f5d9b26f4cd"
+    },
+    {
+      "sourceId": "dos-alaska-purchase",
+      "subject": "history",
+      "featured": false,
+      "sha256": "108a7038cad1fe36f6facd30ee54ff6b1ee2768e3902e234455f33fabf00008b"
+    },
+    {
+      "sourceId": "federalreserve-open-market-operations",
+      "subject": "finance",
+      "featured": false,
+      "sha256": "7020d09b4ed3b1a3698aae3a5d3119fe66680cd1536a6ba8b88387521ffa6724"
+    },
+    {
+      "sourceId": "ftc-phishing-scams",
+      "subject": "computing",
+      "featured": false,
+      "sha256": "00f4ee7c44edc99f06bb6aa3167c8aed6947b565d62c5d776486741caa206b0c"
+    },
+    {
+      "sourceId": "investorgov-what-is-compound-interest",
+      "subject": "finance",
+      "featured": false,
+      "sha256": "d13f49be2c935e2a5982c1304925d5598d996864a13d60a7614e9e3505480649"
+    },
+    {
+      "sourceId": "irs-tax-inflation-adjustments-2026",
+      "subject": "finance",
+      "featured": false,
+      "sha256": "13b2f585e7b6efe64e1ee4d954562f657b4f78bec5b0d6feafe1204e687ed9b0"
+    },
+    {
+      "sourceId": "medlineplus-inheritance-patterns",
+      "subject": "biology",
+      "featured": false,
+      "sha256": "6c3e0ea6ffae78fec81ece6e4f2fb86ebcc073655e940de575de6d5cb59318e4"
+    },
+    {
+      "sourceId": "medlineplus-protein-production",
+      "subject": "biology",
+      "featured": false,
+      "sha256": "c477ae45c51062d816f0a0359713d0ba6c996d2278003e7209e3b7b222b0639b"
+    },
+    {
+      "sourceId": "medlineplus-what-is-a-cell",
+      "subject": "biology",
+      "featured": false,
+      "sha256": "e1e13e682d36c67bceb40f4665d1bb179174796619028f4cd49b9ec874b4f2b3"
+    },
+    {
+      "sourceId": "medlineplus-what-is-a-gene",
+      "subject": "biology",
+      "featured": false,
+      "sha256": "f16d75671a5537177f5299f8a7b9f6e06b33d24b58f687a97864b87686bea6c4"
+    },
+    {
+      "sourceId": "medlineplus-what-is-dna",
+      "subject": "biology",
+      "featured": false,
+      "sha256": "ee6e2bcb658439847bbb8ace196e703d81653cdf0826dae13149d08af007fb80"
+    },
+    {
+      "sourceId": "nara-19th-amendment",
+      "subject": "history",
+      "featured": false,
+      "sha256": "c9c5fa8ba7209052fb8e76015b935547fdda5ec295a972e802ec5f99ca24effd"
+    },
+    {
+      "sourceId": "nara-articles-of-confederation",
+      "subject": "history",
+      "featured": false,
+      "sha256": "254310acbd3a0b3352ae85953f18138ed309fe49fa6c7841387e92394766c73f"
+    },
+    {
+      "sourceId": "nara-bill-of-rights",
+      "subject": "history",
+      "featured": false,
+      "sha256": "a4a36b13e4682b41a3b938737553b5a5f3e509f35af3132cd2420de67f016531"
+    },
+    {
+      "sourceId": "nara-constitution",
+      "subject": "history",
+      "featured": false,
+      "sha256": "a14175b009333bebd61eaff70e3393928a8f0dbd0ae00027067c07b15d176db4"
+    },
+    {
+      "sourceId": "nara-constitutional-amendment-process",
+      "subject": "civics",
+      "featured": false,
+      "sha256": "5777ce95a0692bd6c516da858e21712c8ca966bb8b257c991968e31b13e8b53f"
+    },
+    {
+      "sourceId": "nara-declaration-of-independence",
+      "subject": "history",
+      "featured": false,
+      "sha256": "f0322f21a85ef6996de0972f6543cc8ed8e3393aed20b7d086cada9260c1c668"
+    },
+    {
+      "sourceId": "nara-electoral-college-key-dates",
+      "subject": "civics",
+      "featured": false,
+      "sha256": "9ac1912fead4e5f46874047ee700d8f03c22e505cb77aad9d7230aaf85f4bb98"
+    },
+    {
+      "sourceId": "nara-electoral-vote-allocation",
+      "subject": "civics",
+      "featured": false,
+      "sha256": "272defde44ff3d32da7dd3f454071e01b7e006aae3e8e661794bad905e992589"
+    },
+    {
+      "sourceId": "nara-emancipation-proclamation",
+      "subject": "history",
+      "featured": false,
+      "sha256": "0d11585e47f04bd0a12b0ded4d23595943f21a5af522811db76a93ef0486f646"
+    },
+    {
+      "sourceId": "nara-lee-resolution",
+      "subject": "history",
+      "featured": false,
+      "sha256": "a18b4131b1c5223c9b0685aed8fa77a746537b2af6e2084d892549e8808ce9e3"
+    },
+    {
+      "sourceId": "nara-louisiana-purchase-treaty",
+      "subject": "history",
+      "featured": false,
+      "sha256": "6da19e2b0134ca81169b3c5b0a0461ae48243446219561e760b32cb2ed7cce4b"
+    },
+    {
+      "sourceId": "nara-voting-rights-act",
+      "subject": "history",
+      "featured": false,
+      "sha256": "c546aa8910d2b60d139449fb21b27959fb6bde49de81940d055b186a945feb60"
+    },
+    {
+      "sourceId": "nara-what-is-the-electoral-college",
+      "subject": "civics",
+      "featured": false,
+      "sha256": "4b1141642b66f6e4b5dc8e1085b321d5e51d41c348d845433b13bce147d2bd88"
+    },
+    {
+      "sourceId": "nasa-apollo-11-mission-overview",
+      "subject": "history",
+      "featured": false,
+      "sha256": "d4b29539152f1ed2229358538d39df45198fafd17251631e6efc9561260db7e1"
+    },
+    {
+      "sourceId": "nasa-grc-bernoullis-equation",
+      "subject": "physics",
+      "featured": true,
+      "sha256": "ce3917d5b0b1392825d9f0c16d2d9b78898e119122bec3a1dd940e1d45437799"
+    },
+    {
+      "sourceId": "nasa-grc-combustion-process",
+      "subject": "chemistry",
+      "featured": false,
+      "sha256": "52579f531d16a59a0faaa30000970771b2ce5fd24f478dbaa9459442fb522e4b"
+    },
+    {
+      "sourceId": "nasa-grc-drag-equation",
+      "subject": "physics",
+      "featured": true,
+      "sha256": "9462a6186d8b00e0dbf2618e4a6701edc9448614e144af1f4bc0b53b59f6ceed"
+    },
+    {
+      "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+      "subject": "earth-science",
+      "featured": false,
+      "sha256": "27cabc2c092bc294e05f921ebe3f7e6c73775f3986f7aed07bf86ba89fff17f5"
+    },
+    {
+      "sourceId": "nasa-grc-effect-of-size-on-lift",
+      "subject": "physics",
+      "featured": false,
+      "sha256": "1bd1a2678b2c2cb6f162ebbeb4ec95d6aa439d14002682604d2ac9cd680d76f4"
+    },
+    {
+      "sourceId": "nasa-grc-equation-of-state-ideal-gas",
+      "subject": "chemistry",
+      "featured": false,
+      "sha256": "1647515d09cd96cf0c68fd8c09acf13b06e089610e1a415924e53f438062e1a4"
+    },
+    {
+      "sourceId": "nasa-grc-gas-properties-definitions",
+      "subject": "chemistry",
+      "featured": false,
+      "sha256": "d996769acf644cd6f6e0c861e1328045e77a19a762ed2807c893e7451e3a79b0"
+    },
+    {
+      "sourceId": "nasa-grc-glider-trajectory-problem",
+      "subject": "physics",
+      "featured": true,
+      "sha256": "66e6cfc191fb83e9cfff3bc323a0394b392cbb4e0278aba87b367f3203c3c1e2"
+    },
+    {
+      "sourceId": "nasa-grc-idea-of-functions",
+      "subject": "maths",
+      "featured": false,
+      "sha256": "6fce3423e0f40551beee636574cc686090a85588891583ee35762c32af992108"
+    },
+    {
+      "sourceId": "nasa-grc-kinetic-theory-of-gasses",
+      "subject": "chemistry",
+      "featured": false,
+      "sha256": "d348d7fadb5d1d605627298358bc29f9b9041782d38636f0968fb21659df5ea4"
+    },
+    {
+      "sourceId": "nasa-grc-lift-equation",
+      "subject": "physics",
+      "featured": false,
+      "sha256": "dd59e60d632407e534757295f073841306676ba982a0a661a5a8c0199a85071a"
+    },
+    {
+      "sourceId": "nasa-grc-motion-of-free-falling-object",
+      "subject": "physics",
+      "featured": true,
+      "sha256": "f94199ea21e14dad578baee19694e534fff3dba5dc88f9bc2ea6ec082445c317"
+    },
+    {
+      "sourceId": "nasa-grc-newtons-laws-of-motion",
+      "subject": "physics",
+      "featured": true,
+      "sha256": "907bae07076eef20118a4e54096ad399b11994ec5e310d9bed74850f6d009014"
+    },
+    {
+      "sourceId": "nasa-grc-range-constant-velocity",
+      "subject": "physics",
+      "featured": false,
+      "sha256": "f1f4102e23398f882264cb387f0c4115207597b855cadae074925c9e7c1a4127"
+    },
+    {
+      "sourceId": "nasa-grc-role-of-the-mach-number",
+      "subject": "physics",
+      "featured": false,
+      "sha256": "a7355b33f7126247cd0576ce48a0975a781814c8687022d8fdf12e11fdeaa3c8"
+    },
+    {
+      "sourceId": "nasa-grc-simplified-aircraft-motion",
+      "subject": "physics",
+      "featured": false,
+      "sha256": "21d6273d590cd157b690fe9491c4c0d202f5b35c5e5a31a8c072b37bbe89edd5"
+    },
+    {
+      "sourceId": "nasa-grc-sine-cosine-tangent",
+      "subject": "maths",
+      "featured": false,
+      "sha256": "3f90979d8b1710fa0dbffead40968b37333b0e8dbb45f50696a604f272e181b9"
+    },
+    {
+      "sourceId": "nasa-grc-specific-heat-cp-cv",
+      "subject": "physics",
+      "featured": false,
+      "sha256": "9df5f948a44c3fd060dd74c26ccaa8247cb311d0b0d618ceaafaf6382ba4d1b8"
+    },
+    {
+      "sourceId": "nasa-grc-speed-of-sound",
+      "subject": "physics",
+      "featured": false,
+      "sha256": "7ebd6e4acd15582d57fbdf4cdea82b7d4748c231e5aea039c2c8756214c8e02a"
+    },
+    {
+      "sourceId": "nasa-grc-weight-equation",
+      "subject": "physics",
+      "featured": false,
+      "sha256": "3bce4bd7de875c5dc08f1b682c3179be302140b673e9a7ea4ee516e778de172c"
+    },
+    {
+      "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+      "subject": "earth-science",
+      "featured": false,
+      "sha256": "5a08a7d4b2ff163bfdb7717a8f5e6ae8cca5d767841fc9f65e833b847be959c3"
+    },
+    {
+      "sourceId": "nhgri-dna-sequencing-fact-sheet",
+      "subject": "biology",
+      "featured": false,
+      "sha256": "3555c872ba407e81cd9059ac95d10207f341baaee7a4cb05c878f68df181052e"
+    },
+    {
+      "sourceId": "nhgri-pcr-fact-sheet",
+      "subject": "biology",
+      "featured": false,
+      "sha256": "d4a11c85387eeb3080dfdf528b93202d09a5e14654d7b3cb2d92ac557369748b"
+    },
+    {
+      "sourceId": "nij-hardy-weinberg-principle",
+      "subject": "biology",
+      "featured": false,
+      "sha256": "db613d58d5101a939f34fed65153bc279e823153472574a035a6071032b4ce8c"
+    },
+    {
+      "sourceId": "nij-heterozygosity",
+      "subject": "biology",
+      "featured": false,
+      "sha256": "b88d68137ace380387528e9b0d424ad162ee448ea6d48d6646cb090dbfc4e1e9"
+    },
+    {
+      "sourceId": "nij-population-genetics",
+      "subject": "biology",
+      "featured": false,
+      "sha256": "3b67b8bbab70fa3f03067b217df5601f05ff044f0f6c0c6cad7b44b5191a29db"
+    },
+    {
+      "sourceId": "nij-random-mating",
+      "subject": "biology",
+      "featured": false,
+      "sha256": "9f06caf792ddeb146476c0c5d2cf1851b1f5e8bd6f0fc7dfae8cb33d50725ad8"
+    },
+    {
+      "sourceId": "nist-ai-risk-management-framework",
+      "subject": "computing",
+      "featured": false,
+      "sha256": "d76ad1bde2388b029d9a4d6e3dc33f0cfc73a8131ca1a4e1343cbf828a44c8d1"
+    },
+    {
+      "sourceId": "nist-csf-2-0-release",
+      "subject": "computing",
+      "featured": false,
+      "sha256": "a4c7ce2ca7d3c035aeb3f9dac0d3c8d25b6931ef97d0f90e3896e16d384eb6ee"
+    },
+    {
+      "sourceId": "nist-dads-big-o-notation",
+      "subject": "computing",
+      "featured": false,
+      "sha256": "8a683981b6992055fcae5aa99b2f047c41df971de59a647d35e0d8825836952e"
+    },
+    {
+      "sourceId": "nist-dads-binary-search",
+      "subject": "computing",
+      "featured": false,
+      "sha256": "61d27dc69db770ce1bfe2d15276cf22cb9e6e33120855967d41d6615ce692b53"
+    },
+    {
+      "sourceId": "nist-dads-bubble-sort",
+      "subject": "computing",
+      "featured": false,
+      "sha256": "7034ebf8337b63fd948fec934b5580cbcd77a018b54bf00db8ae76ea0e4015ca"
+    },
+    {
+      "sourceId": "nist-dads-hash-table",
+      "subject": "computing",
+      "featured": false,
+      "sha256": "a4af72aded8e18f670421243f39c32d314f524160bba1353a10d0271dc6e8e31"
+    },
+    {
+      "sourceId": "nist-dads-merge-sort",
+      "subject": "computing",
+      "featured": false,
+      "sha256": "88d2f5db27bedc35273a07953f6abb257479cb61e9b5a25e95adde4c55970b46"
+    },
+    {
+      "sourceId": "nist-dads-quicksort",
+      "subject": "computing",
+      "featured": false,
+      "sha256": "75f753d28767d46e64ab224b9e5b19559f5944a5a78bba8b9148153a28656364"
+    },
+    {
+      "sourceId": "nist-si-base-unit-definitions",
+      "subject": "maths",
+      "featured": false,
+      "sha256": "cb4b3a449af325e676ebf2069948e47aa6c8d58a0463a26e8f0d5a207fbafc9c"
+    },
+    {
+      "sourceId": "nist-si-units",
+      "subject": "maths",
+      "featured": false,
+      "sha256": "c43e5958aca8c142d4a9c1d75b0294b983d04a0e787bee139b20bfd1f75f21a3"
+    },
+    {
+      "sourceId": "noaa-climate-gov-atmospheric-carbon-dioxide",
+      "subject": "earth-science",
+      "featured": false,
+      "sha256": "407ee5d0a24d391a0d9c368c628007f1d8c75de1105ea65a2948570abc7ce770"
+    },
+    {
+      "sourceId": "noaa-jetstream-climate-zones",
+      "subject": "earth-science",
+      "featured": false,
+      "sha256": "9e8263f9fb048729c92d00c7603e536c248951e07afdff0ba85b66b6fcbff04d"
+    },
+    {
+      "sourceId": "noaa-jetstream-global-atmospheric-circulations",
+      "subject": "earth-science",
+      "featured": false,
+      "sha256": "2b099d0243e2edbc42421df046fe3a0041adbe63087eedcbb3d8710070bbe672"
+    },
+    {
+      "sourceId": "noaa-jetstream-hydrologic-cycle",
+      "subject": "earth-science",
+      "featured": false,
+      "sha256": "03cf335151841e953503b179c2b883ccfb8a9e47f4c740dcfa8c65ef05ff1e03"
+    },
+    {
+      "sourceId": "noaa-jetstream-layers-of-atmosphere",
+      "subject": "earth-science",
+      "featured": false,
+      "sha256": "75a26a66f8c260bac9fb18573281be8d0a62c9cc36a790a7c00e5129e643fdba"
+    },
+    {
+      "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+      "subject": "chemistry",
+      "featured": false,
+      "sha256": "9b2415e432e49be30eed9aa244d306d6231675cab53c566a4a4c874215b23c92"
+    },
+    {
+      "sourceId": "noaa-oceanservice-ocean-acidification",
+      "subject": "chemistry",
+      "featured": false,
+      "sha256": "2fd351cd28a1bf3be2f402200128f20d39c708536b13ea27329611fbaaf63c7c"
+    },
+    {
+      "sourceId": "nrc-backgrounder-plutonium",
+      "subject": "chemistry",
+      "featured": false,
+      "sha256": "03700e48439f4a60c4b8ff3676122131acf7c23ff26eaacb5700f29a06768737"
+    },
+    {
+      "sourceId": "nrc-backgrounder-radioactive-waste",
+      "subject": "chemistry",
+      "featured": false,
+      "sha256": "096bd0acfbc24540be6110113c96ed0fa4b892969980ff5bcf1d7834bc1d71b7"
+    },
+    {
+      "sourceId": "nrc-glossary-half-life",
+      "subject": "chemistry",
+      "featured": false,
+      "sha256": "9877c6c6956308cd42fe37add0cb11802645ecb92867b7ea53a17ad85cf6a5de"
+    },
+    {
+      "sourceId": "nsf-building-foundations-of-ai",
+      "subject": "computing",
+      "featured": false,
+      "sha256": "567b4f973b2805f389f8f63701026bd750e17c11eb4ae3bea26d3aeab2cd4f52"
+    },
+    {
+      "sourceId": "usagov-branches-of-government",
+      "subject": "civics",
+      "featured": false,
+      "sha256": "ae307d5c1f332d7d6c2b5d22721b7a7e2d4334785f551008b702cf03e1a9fd41"
+    },
+    {
+      "sourceId": "usagov-how-laws-are-made",
+      "subject": "civics",
+      "featured": false,
+      "sha256": "a0fa06d928204b895fc85a6e90675ea52362ca38af3e3c44b154b827b81b5f87"
+    },
+    {
+      "sourceId": "usagov-impeachment",
+      "subject": "civics",
+      "featured": false,
+      "sha256": "e2ad6fbbadad11e3751966452191cdcf57c63d5a5c31609f144004e3226733de"
+    },
+    {
+      "sourceId": "usagov-presidential-election-process",
+      "subject": "civics",
+      "featured": false,
+      "sha256": "dab5e0bb2bd4fbb8ad6e9d4e8554cef8d4d363028ced8cd2650173905c0efc2a"
+    },
+    {
+      "sourceId": "usagov-register-to-vote",
+      "subject": "civics",
+      "featured": false,
+      "sha256": "f8d5a15bf1bc22c4b181555f4a66df77abf7286a87030044ebbba345d0817cb3"
+    },
+    {
+      "sourceId": "usgs-100-year-flood",
+      "subject": "maths",
+      "featured": false,
+      "sha256": "55ac21c4f23e9155fc6ab2b5683e09e743f9a49916222bca885041d1277199da"
+    },
+    {
+      "sourceId": "usgs-earthquake-magnitude-energy-intensity",
+      "subject": "earth-science",
+      "featured": false,
+      "sha256": "eff8fa887798c0f7a22ac2d03c1526697c587ed24cb2b9d6b06f58640476f068"
+    },
+    {
+      "sourceId": "usgs-fossils-numeric-time-scale",
+      "subject": "earth-science",
+      "featured": false,
+      "sha256": "d6ba577d359485d9ea0ae92e97f294d27bb3a67e23758783067591896f570f2d"
+    },
+    {
+      "sourceId": "usgs-geologic-age",
+      "subject": "earth-science",
+      "featured": false,
+      "sha256": "6e5bf0115bcc99d56d14dbecdc9d5ce23538b3bf71393efa1f5f77b6969614c2"
+    },
+    {
+      "sourceId": "usgs-powell-geologic-time",
+      "subject": "earth-science",
+      "featured": false,
+      "sha256": "fa7498537478e10722976127bedd9cf61ccb5dda39090e0a4f844635b5a8f71f"
+    },
+    {
+      "sourceId": "usgs-wss-ph-and-water",
+      "subject": "chemistry",
+      "featured": false,
+      "sha256": "0a7704fb9e90edf2d06709108c1312fadfa47a21b994347f76f3072e3ae939ff"
+    }
+  ],
+  "pagesWithFigures": [
+    "medlineplus-protein-production",
+    "medlineplus-what-is-dna",
+    "nasa-grc-combustion-process",
+    "nasa-grc-gas-properties-definitions",
+    "nasa-grc-glider-trajectory-problem",
+    "nasa-grc-simplified-aircraft-motion",
+    "noaa-jetstream-global-atmospheric-circulations",
+    "noaa-jetstream-hydrologic-cycle"
+  ],
+  "runsPerPage": 2,
+  "models": [
+    {
+      "model": "muse-spark-1.3",
+      "provider": "meta-api"
+    },
+    {
+      "model": "muse-spark-open",
+      "provider": "modal",
+      "providerModel": "meta-models/Muse-Spark-Open-816B-A42B"
+    }
+  ],
+  "flow": "lesson",
+  "promptVersion": "s6-v10",
+  "maxRepairAttempts": 2,
+  "concurrencyPerModel": 3
+}

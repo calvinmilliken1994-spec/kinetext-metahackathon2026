@@ -12,8 +12,8 @@
   "maxRetries": 1,
   "maxToolCalls": 12,
   "maxJobWallTimeMs": 420000,
-  "maxConcurrentJobs": 3,
-  "maxConcurrentJobsNote": "Concurrency (BUG-006 wave, part B): how many live jobs POST /api/jobs runs at once; the busy 409 JOB_RUNNING only fires when that many are running. Validated at startup: integer in [1, 8]; absent defaults to 3. Each job keeps its own abort/wall-time budget and cost accumulator; the shared spend ledger holds every outstanding reservation against the stage cap, so concurrent jobs can never overshoot it.",
+  "maxConcurrentJobs": 6,
+  "maxConcurrentJobsNote": "Concurrency (BUG-006 wave, part B): how many live jobs POST /api/jobs runs at once; the busy 409 JOB_RUNNING only fires when that many are running. Validated at startup: integer in [1, 8]; absent defaults to 3. Set to 6 on 2026-10-31 so the final evaluation runs 3 Muse Spark 1.3 and 3 Spark Open jobs at once (separate providers). Each job keeps its own abort/wall-time budget and cost accumulator; the shared spend ledger holds every outstanding reservation against the stage cap, so concurrent jobs can never overshoot it.",
   "maxInputTokens": 32000,
   "maxInputTokensV2": 72000,
   "maxInputTokensV2Note": "S6-W input bound for the Stage 6 lesson flow (analysis v2 + kit component calls). The client's input bound counts BYTES (DEBT-003); S6-M measured the v2 analysis-repair request at 40.8k bytes on the largest current source, so 72,000 covers the 40,000-char source ceiling plus the ~15k-byte system prompt and schema (lead freeze addendum, 2026-10-29). v1 activity calls keep maxInputTokens 32,000. Validated at startup: integer, positive, <= the provider context window (1,048,576 for muse-spark-1.3, docs/MODEL_ROUTING.md).",
@@ -21,17 +21,17 @@
   "analysisMaxOutputTokens": 16000,
   "generatedCodeEnabled": false,
   "externalModelFallbackEnabled": false,
-  "approvedBudgetNote": "meta: USD 150 participant credits, used only for live product test/demo runs (building is subscription-only). Live-run cap USD 50 (Calvin, 2026-10-29; was USD 10 from 2026-10-27). Others 0.",
+  "approvedBudgetNote": "meta: USD 150 participant credits, used only for live product test/demo runs (building is subscription-only). Live-run cap USD 100 (Calvin, 2026-10-31, for the final evaluation; was USD 50 from 2026-10-29, USD 10 from 2026-10-27). Others 0.",
   "ledgerLockPort": 47853,
   "ledgerLockPortNote": "Loopback port held while a process owns storage/ledger.jsonl (TASK-009 N-01). Fixed and below the Windows dynamic range 49152-65535 so it does not collide with ephemeral ports.",
   "stageCapsUSD": {
-    "stage2": 50
+    "stage2": 100
   },
   "providerCapsUSD": {
-    "meta-api": 50,
-    "modal": 50
+    "meta-api": 100,
+    "modal": 80
   },
-  "providerCapsUSDNote": "OW-2 per-provider soft caps enforced by the spend ledger (packages/meta openLedger). meta-api must equal stageCapsUSD.stage2 (validated at startup); modal is capped separately at the USD 50 live-run cap. A provider without a cap fails closed.",
+  "providerCapsUSDNote": "OW-2 per-provider soft caps enforced by the spend ledger (packages/meta openLedger). meta-api must equal stageCapsUSD.stage2 (validated at startup); modal is capped separately: USD 80 of the USD 100 Modal hackathon credit (raised 2026-10-31 for the final evaluation; Calvin treats Modal credit as free tokens). A provider without a cap fails closed.",
   "modalBaseUrl": "https://calvinmilliken1994--ep-mki-muse-spark-open-server.us-west.modal.direct/v1",
   "modalBaseUrlNote": "OW-2 Modal Shared Endpoint base URL for Muse Spark Open (not a secret; copied from the Modal dashboard). Validated at startup as a plain https URL without credentials/query/fragment. Auth comes from MODAL_PROXY_TOKEN in the environment, never from this file."
 }
