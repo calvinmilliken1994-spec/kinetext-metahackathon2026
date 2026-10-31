@@ -44,3 +44,15 @@ Changes after run 2:
 - Name tags collide on the reveal step (the 'Adenine' tag sits under 'Thymine').
 - The figure renders small on the slide.
 - Repairs of LD-06 do not move points: the r2/r3 revisions are identical, so 2 calls are wasted.
+
+## Run 4 (stored label boxes `aa29e74`, view `99e34d2`, LD-04 against the stored boxes `f310d16`): 4 lessons, USD 0.58
+| Page | Job | Label the diagram |
+|---|---|---|
+| Water cycle | job-20261031081105-910f3776 | ✓ after 1 repair: the 'Precipitation' point moved off the printed word (785,350 → 770,195) |
+| DNA | job-20261031081105-7f36a25b | ✓ after 1 repair: the 'guanine'/'cytosine' points moved off the printed words |
+| DNA | job-20261031081105-21355f66 | ✓ after 1 repair: the 'Adenine'/'Thymine'/'Guanine'/'Cytosine' points moved up onto the bars |
+| Water cycle | job-20261031081231-13a0eceb | ✓ after 1 repair: the 'Precipitation' point moved off the word |
+
+**4 of 4 published.** Each failed LD-04 on revision 1 (a point on a printed word, caught with the stored boxes) and was fixed by one natural repair, in which Muse moved only the flagged points. Every published spec carries its figure's stored `labelBoxes` (DNA 7, water cycle 8).
+
+Lead check in presentation mode (`run4-dna-present-revealed.png`): before R, every printed label is covered. Reveals step part by part with SAM outlines and non-overlapping name tags.
