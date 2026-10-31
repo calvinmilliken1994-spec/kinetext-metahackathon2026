@@ -36,6 +36,82 @@ export function parseTableNumber(text: string): number | null {
   return n;
 }
 
+const CEILING_PHRASES: readonly string[] = [
+  'or less',
+  'or under',
+  'and under',
+  'up to',
+  'not over',
+];
+
+function ceilingRemainder(text: string): string | null {
+  const trimmed = text.trim();
+  if (trimmed === '') {
+    return null;
+  }
+  const lower = trimmed.toLowerCase();
+  for (const phrase of CEILING_PHRASES) {
+    if (lower.startsWith(phrase)) {
+      const after: string = lower.slice(phrase.length);
+      if (after !== '' && /[a-z]/.test(after[0] as string)) {
+        continue;
+      }
+      const rest = trimmed.slice(phrase.length).trim();
+      if (rest !== '') {
+        return rest;
+      }
+    }
+    if (lower.endsWith(phrase)) {
+      const at = lower.length - phrase.length;
+      const before: string = at === 0 ? '' : (lower[at - 1] as string);
+      if (before !== '' && /[a-z]/.test(before)) {
+        continue;
+      }
+      const rest = trimmed.slice(0, at).trim();
+      if (rest !== '') {
+        return rest;
+      }
+    }
+  }
+  return null;
+}
+
+function isCeilingPhrase(text: string): boolean {
+  const rest = ceilingRemainder(text);
+  if (rest === null) {
+    return false;
+  }
+  return parseTableNumber(rest) !== null;
+}
+
+export function bracketFloors(overTexts: readonly string[]): number[] | null {
+  if (!Array.isArray(overTexts) || overTexts.length < 1) {
+    return null;
+  }
+  const floors: number[] = [];
+  for (let i = 0; i < overTexts.length; i++) {
+    const text = overTexts[i] as string;
+    if (typeof text !== 'string') {
+      return null;
+    }
+    if (i === 0 && isCeilingPhrase(text)) {
+      floors.push(0);
+      continue;
+    }
+    const v = parseTableNumber(text);
+    if (v === null) {
+      return null;
+    }
+    floors.push(v);
+  }
+  for (let i = 1; i < floors.length; i++) {
+    if (!(floors[i] as number > (floors[i - 1] as number))) {
+      return null;
+    }
+  }
+  return floors;
+}
+
 export function answerQuestion(
   gen: DataTableGen,
   q: DataQuestionGen,
@@ -76,6 +152,59 @@ export function answerQuestion(
     if (!col || col.numeric !== true) {
       return null;
     }
+    const brackets = (gen as { brackets?: { enabled?: unknown; overColumnIndex?: unknown } }).brackets;
+    const useBracketFloors =
+      typeof brackets === 'object' &&
+      brackets !== null &&
+      brackets.enabled === true &&
+      brackets.overColumnIndex === q.columnIndex;
+    if (useBracketFloors) {
+      const overTexts: string[] = [];
+      for (let r = 0; r < rows.length; r++) {
+        const row = rows[r];
+        if (!row || !Array.isArray(row.values) || q.columnIndex >= row.values.length) {
+          return null;
+        }
+        const cell = row.values[q.columnIndex];
+        if (!cell || typeof cell.value !== 'string') {
+          return null;
+        }
+        overTexts.push(cell.value);
+      }
+      if (overTexts.length === 0) {
+        return null;
+      }
+      const floors = bracketFloors(overTexts);
+      if (floors === null) {
+        return null;
+      }
+      let best = 0;
+      for (let r = 1; r < floors.length; r++) {
+        const cur = floors[r] as number;
+        const curBest = floors[best] as number;
+        if (q.kind === 'largest' ? cur > curBest : cur < curBest) {
+          best = r;
+        }
+      }
+      let count = 0;
+      for (const v of floors) {
+        if (v === (floors[best] as number)) {
+          count += 1;
+        }
+      }
+      if (count !== 1) {
+        return null;
+      }
+      const row = rows[best];
+      if (!row || !Array.isArray(row.values) || q.columnIndex >= row.values.length) {
+        return null;
+      }
+      const cell = row.values[q.columnIndex];
+      if (!cell || typeof cell.value !== 'string') {
+        return null;
+      }
+      return { rowIndex: best, value: cell.value };
+    }
     const nums: number[] = [];
     for (let r = 0; r < rows.length; r++) {
       const row = rows[r];
@@ -97,7 +226,7 @@ export function answerQuestion(
     }
     let best = 0;
     for (let r = 1; r < nums.length; r++) {
-      if (q.kind === 'largest' ? nums[r] > nums[best] : nums[r] < nums[best]) {
+      if (q.kind === 'largest' ? nums[r] as number > (nums[best] as number) : nums[r] as number < (nums[best] as number)) {
         best = r;
       }
     }
@@ -143,15 +272,15 @@ export function progressiveTax(
     }
   }
   for (let i = 1; i < brackets.length; i++) {
-    if (brackets[i].over <= brackets[i - 1].over) {
+    if (brackets[i]!.over <= brackets[i - 1]!.over) {
       throw new RangeError('BRACKETS_INVALID: over thresholds must be strictly ascending');
     }
   }
   const parts: TaxSlice[] = [];
   let total = 0;
   for (let i = 0; i < brackets.length; i++) {
-    const from = brackets[i].over;
-    const next: number | null = i + 1 < brackets.length ? brackets[i + 1].over : null;
+    const from = brackets[i]!.over;
+    const next: number | null = i + 1 < brackets.length ? brackets[i + 1]!.over : null;
     const to = next === null ? income : Math.min(income, next);
     if (income <= from) {
       continue;
@@ -160,11 +289,11 @@ export function progressiveTax(
     if (taxable <= 0) {
       continue;
     }
-    const tax = (taxable * brackets[i].rate) / 100;
+    const tax = (taxable * brackets[i]!.rate) / 100;
     if (!Number.isFinite(tax)) {
       throw new RangeError('BRACKETS_INVALID: tax slice is not finite');
     }
-    parts.push({ rate: brackets[i].rate, from, to, tax });
+    parts.push({ rate: brackets[i]!.rate, from, to, tax });
     total += tax;
   }
   if (!Number.isFinite(total)) {

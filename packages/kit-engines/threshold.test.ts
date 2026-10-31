@@ -49,10 +49,43 @@ test('fractionWords covers named fractions plus n/d', () => {
   assert.ok(w34.includes('3/4'));
   const half = fractionWords(1, 2);
   assert.ok(half.includes('half'));
+  assert.ok(half.includes('one-half'));
+  assert.ok(half.includes('one half'));
+  assert.ok(half.includes('a half'));
   assert.ok(half.includes('1/2'));
   assert.deepEqual(fractionWords(2, 5), ['two-fifths', 'two fifths', '2/5']);
   assert.deepEqual(fractionWords(3, 5), ['three-fifths', 'three fifths', '3/5']);
-  assert.deepEqual(fractionWords(3, 7), ['3/7']);
+  assert.deepEqual(fractionWords(3, 11), ['3/11']);
+});
+
+test('fractionWords covers one..nine over halves..tenths', () => {
+  const w15 = fractionWords(1, 5);
+  assert.ok(w15.includes('one-fifth'));
+  assert.ok(w15.includes('one fifth'));
+  assert.ok(w15.includes('1/5'));
+  const w23 = fractionWords(2, 3);
+  assert.ok(w23.includes('two-thirds'));
+  assert.ok(w23.includes('two thirds'));
+  assert.ok(w23.includes('2/3'));
+  const w34 = fractionWords(3, 4);
+  assert.ok(w34.includes('three-quarters'));
+  assert.ok(w34.includes('three-fourths'));
+  assert.ok(w34.includes('3/4'));
+  const w13 = fractionWords(1, 3);
+  assert.ok(w13.includes('one-third'));
+  assert.ok(w13.includes('a third'));
+  assert.ok(w13.includes('1/3'));
+  const w710 = fractionWords(7, 10);
+  assert.ok(w710.includes('seven-tenths'));
+  assert.ok(w710.includes('seven tenths'));
+  assert.ok(w710.includes('7/10'));
+  const w14 = fractionWords(1, 4);
+  assert.ok(w14.includes('one-quarter'));
+  assert.ok(w14.includes('one-fourth'));
+  assert.ok(w14.includes('1/4'));
+  const w32 = fractionWords(3, 2);
+  assert.ok(w32.includes('three-halves'));
+  assert.ok(w32.includes('3/2'));
 });
 
 test('invalid threshold inputs throw', () => {

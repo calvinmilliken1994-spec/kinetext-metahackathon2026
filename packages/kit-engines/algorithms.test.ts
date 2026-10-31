@@ -15,6 +15,17 @@ test('bubble sort traces exact op sequence on [3,1,2]', () => {
   assert.equal(t.frames[t.frames.length - 1].moves, 2);
 });
 
+test('bubble sort stops after the first pass with no swaps', () => {
+  const t = traceAlgorithm('bubble-sort', [1, 2, 3, 4], null);
+  assert.deepEqual(
+    t.frames.map((f) => f.op),
+    ['start', 'compare', 'compare', 'compare', 'done'],
+  );
+  assert.deepEqual(t.sorted, [1, 2, 3, 4]);
+  assert.equal(t.frames[t.frames.length - 1].comparisons, 3);
+  assert.equal(t.frames[t.frames.length - 1].moves, 0);
+});
+
 test('all sorts handle already-sorted input of length 4', () => {
   const ids = [
     'bubble-sort',

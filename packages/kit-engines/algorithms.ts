@@ -206,6 +206,7 @@ export function traceAlgorithm(
     const n = a.length;
     push(a, 'start', [], null, `Start ${name} on ${n} items.`);
     for (let i = 0; i < n - 1; i++) {
+      let swapped = false;
       for (let j = 0; j < n - 1 - i; j++) {
         state.comparisons += 1;
         push(
@@ -223,7 +224,11 @@ export function traceAlgorithm(
           a[j + 1] = tmp;
           state.moves += 1;
           push(a, 'swap', [j, j + 1], null, `Swap positions ${j} and ${j + 1}: ${x} and ${y}.`);
+          swapped = true;
         }
+      }
+      if (!swapped) {
+        break;
       }
     }
     push(a, 'done', [], null, `Done. Sorted list: ${a.join(', ')}.`);

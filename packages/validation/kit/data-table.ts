@@ -28,7 +28,7 @@
 import type { SourceDocument, ValidationCheck, ValidationReport } from '../../contracts/index.ts';
 import { KIT_LIMITS } from '../../contracts/kit.ts';
 import type { DataColumnGen, DataQuestionGen, DataRowGen, DataTableGen } from '../../contracts/kit.ts';
-import { answerQuestion, parseTableNumber, progressiveTax } from '../../kit-engines/table.ts';
+import { answerQuestion, bracketFloors, parseTableNumber, progressiveTax } from '../../kit-engines/table.ts';
 import { guarded, QUOTE_MESSAGE_LIMIT } from '../validate.ts';
 import {
   buildReport,
@@ -241,15 +241,18 @@ export function validateDataTable(gen: DataTableGen, sources: SourceDocument[], 
           affected.push(`/rows/${i}/values`);
         }
       });
+      const bb = (typeof g?.brackets === 'object' && g.brackets !== null ? g.brackets : {}) as Partial<DataTableGen['brackets']>;
+      const bracketsOn = bb.enabled === true;
+      const overColForCeiling = typeof bb.overColumnIndex === 'number' && Number.isInteger(bb.overColumnIndex) && (bb.overColumnIndex as number) >= 0 && (bb.overColumnIndex as number) < columns.length ? (bb.overColumnIndex as number) : -1;
       columns.forEach((c, j) => {
         if (c?.numeric !== true) return;
         rows.forEach((row, i) => {
           const v = valuesOf(row)[j];
           if (v === undefined) return; // the row-length problem above owns the missing slot
-          if (parseTableNumber(String(v?.value)) === null) {
-            problems.push(`rows[${i}].values[${j}].value "${String(v?.value)}" is not a number, but the column "${headerOf(j)}" is numeric: every value in it must parse with parseTableNumber (like "12,104", "$640,600", "37%" or "-0.5")`);
-            affected.push(`/rows/${i}/values/${j}/value`);
-          }
+          if (parseTableNumber(String(v?.value)) !== null) return;
+          if (bracketsOn && j === overColForCeiling && i === 0 && bracketFloors([String(v?.value)]) !== null) return;
+          problems.push(`rows[${i}].values[${j}].value "${String(v?.value)}" is not a number, but the column "${headerOf(j)}" is numeric: every value in it must parse with parseTableNumber (like "12,104", "$640,600", "37%" or "-0.5")`);
+          affected.push(`/rows/${i}/values/${j}/value`);
         });
       });
       const labels = rows.map(r => String(r?.label));
@@ -389,13 +392,34 @@ export function validateDataTable(gen: DataTableGen, sources: SourceDocument[], 
       }
       const rc = rateCol as number;
       const oc = overCol as number;
+      const overTexts: string[] = rows.map((row) => String(valuesOf(row)[oc]?.value ?? ''));
+      const floors = bracketFloors(overTexts);
+      if (floors === null) {
+        rows.forEach((row, i) => {
+          const overText = String(valuesOf(row)[oc]?.value ?? '');
+          if (i === 0) {
+            if (parseTableNumber(overText) === null && bracketFloors([overText]) === null) {
+              problems.push(`rows[${i}]: the bracket calculator cannot read rate "${String(valuesOf(row)[rc]?.value ?? '')}" / threshold "${overText}" (both columns must hold numbers parseTableNumber parses)`);
+              affected.push(`/rows/${i}/values/${rc}/value`, `/rows/${i}/values/${oc}/value`);
+            }
+          } else if (parseTableNumber(overText) === null) {
+            problems.push(`rows[${i}]: the bracket calculator cannot read rate "${String(valuesOf(row)[rc]?.value ?? '')}" / threshold "${overText}" (both columns must hold numbers parseTableNumber parses)`);
+            affected.push(`/rows/${i}/values/${rc}/value`, `/rows/${i}/values/${oc}/value`);
+          }
+        });
+        if (problems.length === 0) {
+          problems.push('the bracket thresholds are not strictly ascending from the first row (bracketFloors)');
+          affected.push(`/rows/0/values/${oc}/value`);
+        }
+        return { passed: false, message: problems.join('; '), path: affected[0], affected };
+      }
       const pairs: { rate: number; over: number }[] = [];
       rows.forEach((row, i) => {
         const rateText = String(valuesOf(row)[rc]?.value ?? '');
         const overText = String(valuesOf(row)[oc]?.value ?? '');
         const rate = parseTableNumber(rateText);
-        const over = parseTableNumber(overText);
-        if (rate === null || over === null) {
+        const over = floors[i] as number;
+        if (rate === null) {
           problems.push(`rows[${i}]: the bracket calculator cannot read rate "${rateText}" / threshold "${overText}" (both columns must hold numbers parseTableNumber parses)`);
           affected.push(`/rows/${i}/values/${rc}/value`, `/rows/${i}/values/${oc}/value`);
           return;

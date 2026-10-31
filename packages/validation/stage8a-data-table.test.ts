@@ -9,7 +9,7 @@ import assert from 'node:assert/strict';
 import { checkIdsFor } from '../contracts/kit.ts';
 import type { DataTableGen } from '../contracts/kit.ts';
 import type { SourceDocument } from '../contracts/index.ts';
-import { progressiveTax, parseTableNumber } from '../kit-engines/table.ts';
+import { progressiveTax, parseTableNumber, bracketFloors } from '../kit-engines/table.ts';
 import { validateKitComponent } from './kit/index.ts';
 import { validateDataTable } from './kit/data-table.ts';
 import { loadSource } from '../sources/index.ts';
@@ -33,6 +33,7 @@ const DT_IDS = ['schema.gen', ...checkIdsFor('data-table-v1')];
 function irsGen(): DataTableGen {
   const cell = (value: string, quote: string): { value: string; sourceId: string; quote: string } => ({ value, sourceId: IRS, quote });
   const topQuote = 'For tax year 2026, the top tax rate remains 37% for individual single taxpayers with incomes greater than $640,600';
+  const bottomQuote = 'The lowest rate is 10% for incomes of single individuals with incomes of $12,400 or less ($24,800 for married couples filing jointly)';
   return {
     schemaVersion: 'data-table-v1',
     title: 'Marginal tax rates for tax year 2026',
@@ -43,6 +44,7 @@ function irsGen(): DataTableGen {
       { header: 'married couples filing jointly', unit: '$', numeric: true, sourceId: IRS, quote: '35% for incomes over $256,225 ($512,450 for married couples filing jointly)' },
     ],
     rows: [
+      ['10%', '$12,400 or less', '$24,800', bottomQuote],
       ['12%', '$12,400', '$24,800', '12% for incomes over $12,400 ($24,800 for married couples filing jointly)'],
       ['22%', '$50,400', '$100,800', '22% for incomes over $50,400 ($100,800 for married couples filing jointly)'],
       ['24%', '$105,700', '$211,400', '24% for incomes over $105,700 ($211,400 for married couples filing jointly)'],
@@ -56,7 +58,7 @@ function irsGen(): DataTableGen {
       values: [cell(rate as string, quote as string), cell(single as string, quote as string), cell(joint as string, quote as string)],
     })),
     questions: [
-      { id: 'rate-over-105700', kind: 'lookup', rowIndex: 2, columnIndex: 1 },
+      { id: 'rate-over-105700', kind: 'lookup', rowIndex: 3, columnIndex: 1 },
       { id: 'top-threshold', kind: 'largest', rowIndex: -1, columnIndex: 1 },
     ],
     chartColumnIndex: -1,
@@ -143,16 +145,18 @@ test('golden data-table (NASA planetary fact sheet) passes every check', () => {
   assert.equal(report.publishable, true);
 });
 
-test('IRS 2026 brackets pass; DT-07 runs progressiveTax on the page values (15472 on 100000)', () => {
+test('IRS 2026 brackets pass; DT-07 runs progressiveTax on the page values (16712 on 100000)', () => {
   const gen = irsGen();
   const report = validateKitComponent('data-table-v1', gen, [irsSource()]);
   assert.deepEqual(failedIds(report), [], failureDetail(report));
   // The engine result the check message must agree with:
-  // 12% on 12,400→50,400 = 4,560 and 22% on 50,400→100,000 = 10,912.
-  const pairs = gen.rows.map(r => ({ rate: parseTableNumber(r.values[0]!.value)!, over: parseTableNumber(r.values[1]!.value)! }));
+  // 10% on 0→12,400 = 1,240, 12% on 12,400→50,400 = 4,560 and 22% on 50,400→100,000 = 10,912.
+  const floors = bracketFloors(gen.rows.map(r => r.values[1]!.value))!;
+  assert.deepEqual(floors, [0, 12400, 50400, 105700, 201775, 256225, 640600]);
+  const pairs = gen.rows.map((r, i) => ({ rate: parseTableNumber(r.values[0]!.value)!, over: floors[i]! }));
   const { total } = progressiveTax(pairs, 100000);
-  assert.equal(total, 15472);
-  assert.match(checkOf(report, 'DT-07').message, /15472/);
+  assert.equal(total, 16712);
+  assert.match(checkOf(report, 'DT-07').message, /16712/);
   assert.match(checkOf(report, 'DT-05').message, /\$105,700/);
 });
 
@@ -202,7 +206,7 @@ test('DT-03: the value "12,10" cut out of the printed "12,104" fails (and takes 
 
 test('DT-03: dropping the printed "$" from "$640,600" fails — values are copied as printed', () => {
   const gen = irsGen();
-  gen.rows[5]!.values[1]!.value = '640,600';
+  gen.rows[6]!.values[1]!.value = '640,600';
   const report = validateKitComponent('data-table-v1', gen, [irsSource()]);
   assert.ok(failedIds(report).includes('DT-03'), failureDetail(report));
   assert.match(checkOf(report, 'DT-03').message, /\$640,600/);
@@ -224,6 +228,22 @@ test('DT-04: a row with fewer values than columns fails with the frozen count wo
   assert.ok(failedIds(report).includes('DT-04'), failureDetail(report));
   assert.match(checkOf(report, 'DT-04').message, /rows\[0\] has 1 values; it needs one per column \(2\)/);
   assert.ok((checkOf(report, 'DT-04').affected ?? []).includes('/rows/0/values'));
+});
+
+test('DT-04: a ceiling phrase on a non-first over row fails the shape check', () => {
+  const gen = irsGen();
+  gen.rows[2]!.values[1]!.value = '$50,400 or less';
+  const report = validateKitComponent('data-table-v1', gen, [irsSource()]);
+  assert.ok(failedIds(report).includes('DT-04'), failureDetail(report));
+  assert.ok((checkOf(report, 'DT-04').affected ?? []).includes('/rows/2/values/1/value'));
+});
+
+test('DT-04: a ceiling phrase in a numeric column of a disabled-bracket table fails', () => {
+  const gen = fedGen();
+  gen.rows[0]!.values[0]!.value = '50 or less';
+  const report = validateKitComponent('data-table-v1', gen, [fedSource()]);
+  assert.ok(failedIds(report).includes('DT-04'), failureDetail(report));
+  assert.ok((checkOf(report, 'DT-04').affected ?? []).includes('/rows/0/values/0/value'));
 });
 
 test('DT-05: a largest question on a tied column has no unique answer and fails', () => {
@@ -253,13 +273,28 @@ test('DT-06: charting a text column fails', () => {
 
 test('DT-07: descending bracket thresholds fail with brackets enabled', () => {
   const gen = irsGen();
-  const rows = gen.rows;
-  gen.rows = [rows[5]!, rows[0]!, rows[1]!, rows[2]!, rows[3]!, rows[4]!]; // 37% bracket first
+  // Drop the row-0 ceiling ('$12,400 or less') so a misplaced ceiling cannot fail DT-04 here;
+  // reversing the remaining pure-number thresholds isolates the DT-07 ascending check.
+  const withoutCeiling = gen.rows.slice(1);
+  gen.rows = [...withoutCeiling].reverse(); // 37% bracket first, thresholds descending
+  // A largest question on the over column compares bracket floors, so it would also fail DT-05
+  // on descending thresholds; probe the rate column instead to isolate DT-07.
+  gen.questions = [
+    { id: 'rate-lookup', kind: 'lookup', rowIndex: 0, columnIndex: 0 },
+    { id: 'largest-rate', kind: 'largest', rowIndex: -1, columnIndex: 0 },
+  ];
   const report = validateKitComponent('data-table-v1', gen, [irsSource()]);
   expectFailures(report, ['DT-07']);
   const affected = checkOf(report, 'DT-07').affected ?? [];
-  assert.ok(affected.includes('/rows/1/values/1/value'));
-  assert.ok(affected.includes('/rows/1/values/0/value'));
+  assert.ok(affected.includes('/rows/0/values/1/value'));
+});
+
+test('DT-07: a ceiling phrase on a non-first over row fails the brackets check', () => {
+  const gen = irsGen();
+  gen.rows[2]!.values[1]!.value = '$50,400 or less';
+  const report = validateKitComponent('data-table-v1', gen, [irsSource()]);
+  assert.ok(failedIds(report).includes('DT-07'), failureDetail(report));
+  assert.ok((checkOf(report, 'DT-07').affected ?? []).includes('/rows/2/values/1/value'));
 });
 
 test('DT-07: disabled brackets must keep the -1/-1/0 sentinels', () => {
