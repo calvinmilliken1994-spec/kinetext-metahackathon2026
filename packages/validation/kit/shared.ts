@@ -791,6 +791,10 @@ export const KIT_FAILURE_MESSAGES: Readonly<Record<string, string>> = {
   'formula-explorer-v1': 'The formula could not be checked with our calculator.',
   'balance-equation-v1': 'The reaction equation could not be verified against the page.',
   'overview-v1': 'The page overview could not be verified against the page.',
+  'algorithm-trace-v1': 'The algorithm could not be matched to the page.',
+  'log-ladder-v1': 'The scale and its step factor could not be verified against the page.',
+  'threshold-v1': 'The voting rule could not be verified against the page.',
+  'data-table-v1': 'The table could not be verified against the page.',
 };
 
 export function buildReport(artifactId: string, checks: ValidationCheck[], revision = 1): ValidationReport {

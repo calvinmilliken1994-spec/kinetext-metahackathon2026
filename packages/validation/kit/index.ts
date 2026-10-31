@@ -157,6 +157,12 @@ function columnCountOf(baseline: unknown): number {
   return Array.isArray(attributes) ? attributes.length : -1;
 }
 
+/** The revision-1 value-column count of a data-table-v1 gen (Stage 8a: same S6R-06 rule for DT-04 row resizes). */
+function dataColumnCountOf(baseline: unknown): number {
+  const columns = (baseline as { columns?: unknown } | null | undefined)?.columns;
+  return Array.isArray(columns) ? columns.length : -1;
+}
+
 /**
  * Guard a kit component repair revision (design §5.4 frozen discipline). The authority is the
  * recomputed revision-1 report over the provided sources; caller findings may only narrow it.
@@ -211,7 +217,11 @@ export function compareKitRevisions(
     extraRules: extras,
     allowListResize: componentId === 'compare-table-v1'
       ? ({ pointer, allowed, after }) => /^\/rows\/\d+\/values$/.test(pointer) && allowed.includes(pointer) && after === columnCountOf(baseline)
-      : undefined,
+      : componentId === 'data-table-v1'
+        // Stage 8a (lead): DT-04 names `/rows/i/values` when a row's value count differs from the column count;
+        // exactly the compare-table S6R-06 rule — tail slots of THAT row only, ending on the revision-1 column count.
+        ? ({ pointer, allowed, after }) => /^\/rows\/\d+\/values$/.test(pointer) && allowed.includes(pointer) && after === dataColumnCountOf(baseline)
+        : undefined,
   });
 }
 
