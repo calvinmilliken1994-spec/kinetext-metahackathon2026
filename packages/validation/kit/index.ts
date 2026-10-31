@@ -224,7 +224,10 @@ export function compareKitRevisions(
   };
   return compareGuardedRevisions(baseline, next, context, {
     targetLabel: `${componentId}`,
-    recompute: (b, sources) => validateKitComponent(componentId, b, sources),
+    recompute: (b, sources) => validateKitComponent(componentId, b, sources, {
+      ...(context?.figures !== undefined ? { figures: context.figures } : {}),
+      ...(context?.labelRegions !== undefined ? { labelRegions: context.labelRegions } : {}),
+    }),
     extraRules: extras,
     allowListResize: componentId === 'compare-table-v1'
       ? ({ pointer, allowed, after }) => /^\/rows\/\d+\/values$/.test(pointer) && allowed.includes(pointer) && after === columnCountOf(baseline)

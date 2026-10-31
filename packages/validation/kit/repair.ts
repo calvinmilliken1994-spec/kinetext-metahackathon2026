@@ -20,6 +20,8 @@
 
 import type { RepairFinding, SourceDocument, ValidationCheck, ValidationReport } from '../../contracts/index.ts';
 import { KIT_ID_PATTERN } from '../../contracts/kit.ts';
+import type { LabelRegion } from '../../contracts/kit.ts';
+import type { FigureMeta } from '../../sources/figures.ts';
 import { affectedByCheckIdOf, affectedPathsOf, COMPARISON_MESSAGE_LIMIT, COMPARISON_PROBLEM_LIMIT, errMsg, truncate } from '../validate.ts';
 
 export interface RevisionGuardContext {
@@ -27,6 +29,12 @@ export interface RevisionGuardContext {
   sources?: SourceDocument[];
   /** repairFindings() of the baseline report handed to the model; may only NARROW the recomputed authority. */
   findings?: RepairFinding[];
+  /**
+   * Stage 8b (lead): validate options the recompute must use so the revision-1 authority matches the
+   * report the model saw — the source's figure list (A-08, LD-03) and the REVISION-1 SAM regions (LD-06/07).
+   */
+  figures?: readonly FigureMeta[];
+  labelRegions?: readonly LabelRegion[];
 }
 
 export interface RevisionGuardOptions {

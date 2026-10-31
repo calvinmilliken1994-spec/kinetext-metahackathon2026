@@ -589,7 +589,7 @@ export function compareAnalysisV2Revisions(
   return compareGuardedRevisions(baseline, next, context, {
     targetLabel: 'source-analysis-v2',
     // The authority is the SAME gate that decides publication (A-checks + OV-01..OV-06).
-    recompute: (b, sources) => validateLessonAnalysisGate(b, sources),
+    recompute: (b, sources) => validateLessonAnalysisGate(b, sources, context?.figures !== undefined ? { figures: context.figures } : {}),
     allowListResize: ({ pointer, allowed, before, after }) => {
       // S6R-10: append-only for an authorised, undersized list. Never a deletion, never beyond the
       // frozen maximum; existing entries (and their ids) stay frozen (the list pointer licenses
@@ -615,8 +615,8 @@ export function compareAnalysisV2Revisions(
  * from the immutable revision 1 (the ONLY authority; callers hand these to the model and to
  * compareAnalysisV2Revisions).
  */
-export function analysisV2RepairAuthority(baseline: unknown, sources: SourceDocument[]): { report: ValidationReport; allowed: string[] } {
-  const report = validateLessonAnalysisGate(baseline, sources);
+export function analysisV2RepairAuthority(baseline: unknown, sources: SourceDocument[], opts: AnalysisV2ValidateOptions = {}): { report: ValidationReport; allowed: string[] } {
+  const report = validateLessonAnalysisGate(baseline, sources, opts);
   return { report, allowed: affectedPathsOf(report) };
 }
 
