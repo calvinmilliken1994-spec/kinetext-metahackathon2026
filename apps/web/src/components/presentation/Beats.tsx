@@ -2,8 +2,9 @@ import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 're
 import type { FormEvent, ReactNode } from 'react';
 import type { KitSpec } from '../../../../../packages/contracts/kit.ts';
 import type { Badge } from '../../lib/repairs.ts';
-import type { Beat, Deck, DeckPart, NumericAnswer } from '../../lib/presentation.ts';
-import { checksLine, CLOSING_QUOTES, deckQuotes, isRevealed, leftOutLine, numericAnswer, predictVerdict, predictVisual, revealDelayMs, shownPoints, shownTerms, titleCard, visibleCount } from '../../lib/presentation.ts';
+import type { Beat, Deck, DeckPart, EngineSpec, NumericAnswer } from '../../lib/presentation.ts';
+import type { EnginePresentation } from '../../lib/enginePresentation.ts';
+import { checksLine, CLOSING_QUOTES, deckQuotes, engineStage, isRevealed, leftOutLine, numericAnswer, predictVerdict, predictVisual, revealDelayMs, shownPoints, shownTerms, titleCard, visibleCount } from '../../lib/presentation.ts';
 import { aiLabel, prettyExponents } from '../../lib/displayText.ts';
 import { REVIEW_STATUS, withoutReviewNote } from '../../lib/provenance.ts';
 import { quizCards } from '../../lib/quiz.ts';
@@ -30,6 +31,8 @@ import type { CiteProps } from '../Explanations.tsx';
 export interface BeatProps {
   beat: Beat;
   step: number;
+  /** An engine beat's current step was revealed with R (lib/presentation.ts PresentState.revealed). */
+  revealed: boolean;
   deck: Deck;
   beats: readonly Beat[];
   /** The class's choice or estimate on this beat ('' when none). */
@@ -374,8 +377,21 @@ function PredictBeat({ beat, step, answer, onAnswer, cite, deck }: AskProps<'pre
  */
 /** The smallest scale a stage part is set at before it scrolls instead. */
 const MIN_STAGE_ZOOM = 0.85;
+/**
+ * The formula explorer's sliders and graph read as one picture, so they shrink further rather than scroll: at 1366×768
+ * the hero needs ~0.65 (Calvin: "slightly smaller until it doesn't require scrolling").
+ */
+const MIN_EXPLORER_ZOOM = 0.6;
+/** The sequence board with its reserved answers fits a 1366×768 slide at ~0.8 rather than scrolling its last card. */
+const MIN_SEQUENCE_ZOOM = 0.75;
 
-function StageFit({ children, width = 980, hero, follow, contain = false }: { children: ReactNode; width?: number; hero?: string; follow?: string; contain?: boolean }) {
+function StageFit({ children, width = 980, hero, follow, contain = false, frozen = false, minZoom = MIN_STAGE_ZOOM }: {
+  children: ReactNode; width?: number; hero?: string; follow?: string; contain?: boolean;
+  /** Fit once per stage size: the part's own changes (a step, a reveal) never rescale it. */
+  frozen?: boolean;
+  /** The smallest scale before the part scrolls instead (not used with `contain`). */
+  minZoom?: number;
+}) {
   const outer = useRef<HTMLDivElement>(null);
   const inner = useRef<HTMLDivElement>(null);
   const [zoom, setZoom] = useState(1);
@@ -392,7 +408,7 @@ function StageFit({ children, width = 980, hero, follow, contain = false }: { ch
     const fit = (): void => {
       // offset size: a scrollbar appearing when the part grows is not a new stage size.
       const size = `${o.offsetWidth}x${o.offsetHeight}`;
-      if (touched.current && follow === undefined && size === lastOuter.current) return;
+      if ((touched.current || frozen) && follow === undefined && size === lastOuter.current) return;
       lastOuter.current = size;
       const natural = i.offsetHeight;
       if (natural <= 0) return;
@@ -401,13 +417,16 @@ function StageFit({ children, width = 980, hero, follow, contain = false }: { ch
       // Once the part reveals its answer further down (a timeline after "Check order"), that answer becomes what must fit.
       const target = follow === undefined ? null : i.querySelector<HTMLElement>(follow);
       const marker = target ?? (hero === undefined ? null : i.querySelector(hero));
-      const needed = target !== null ? target.offsetHeight + 16 : marker === null ? natural : (marker.getBoundingClientRect().bottom - box.top) / current;
+      const heroNeeded = marker === null ? natural : (marker.getBoundingClientRect().bottom - box.top) / current;
+      // A hero that is (nearly) the whole part: fit the whole part, so its bottom padding never adds a scrollbar.
+      const needed = target !== null ? target.offsetHeight + 16 : natural - heroNeeded <= 16 ? natural : heroNeeded;
       const byWidth = o.clientWidth / width;
-      const byHeight = o.clientHeight / Math.max(1, needed);
+      // A few pixels of slack: the zoomed part rounds up, and a 5 px overflow would still show a scrollbar.
+      const byHeight = Math.max(1, o.clientHeight - 6) / Math.max(1, needed);
       // Fill the stage; a part taller than the stage shrinks to fit, but not below 85% of its own size (past that it
       // scrolls: the quote zone under every slide takes some height, and a little smaller beats a cut-off graph).
       // `contain` (a predict beat's scene): always the whole part on screen, shrinking below its own size if it must.
-      setZoom(contain ? Math.min(byWidth, byHeight, 1.9) : Math.max(Math.min(byWidth, MIN_STAGE_ZOOM), Math.min(byWidth, byHeight, 1.9)));
+      setZoom(contain ? Math.min(byWidth, byHeight, 1.9) : Math.max(Math.min(byWidth, minZoom), Math.min(byWidth, byHeight, 1.9)));
       if (target !== null && !followed.current) {
         followed.current = true;
         // Bring the revealed answer up on the stage once the new zoom has applied. The stage scrolls by itself only,
@@ -424,7 +443,7 @@ function StageFit({ children, width = 980, hero, follow, contain = false }: { ch
     ro.observe(o);
     ro.observe(i);
     return () => ro.disconnect();
-  }, [width, hero, follow, contain]);
+  }, [width, hero, follow, contain, frozen, minZoom]);
   const touch = (): void => { touched.current = true; };
   return (
     <div ref={outer} className="pz-fit" onPointerDownCapture={touch} onKeyDownCapture={touch}>
@@ -437,20 +456,49 @@ function StageFit({ children, width = 980, hero, follow, contain = false }: { ch
 
 function KitPart({ spec, cite }: { spec: KitSpec; cite: CiteProps }) {
   switch (spec.componentId) {
-    case 'sequence-v1': return <SequenceView spec={spec} cite={cite} />;
+    case 'sequence-v1': return <SequenceView spec={spec} cite={cite} presentation={{ mode: 'stage' }} />;
     case 'sort-groups-v1': return <SortView spec={spec} cite={cite} />;
     case 'concept-map-v1': return <ConceptMapView spec={spec} cite={cite} />;
     case 'formula-explorer-v1': return <FormulaExplorerView spec={spec} cite={cite} presentation={{ mode: 'stage' }} />;
     case 'balance-equation-v1': return <BalanceView spec={spec} cite={cite} />;
     case 'compare-table-v1': return <CompareView spec={spec} cite={cite} />;
     case 'quiz-cards-v1': return <QuizCardsView spec={spec} cite={cite} />;
-    case 'algorithm-trace-v1': return <AlgorithmTraceView spec={spec} cite={cite} presentation={{ mode: 'stage', step: 0, revealed: false }} />;
-    case 'log-ladder-v1': return <LogLadderView spec={spec} cite={cite} presentation={{ mode: 'stage', step: 0, revealed: false }} />;
-    case 'threshold-v1': return <ThresholdView spec={spec} cite={cite} presentation={{ mode: 'stage', step: 0, revealed: false }} />;
-    case 'data-table-v1': return <DataTableView spec={spec} cite={cite} presentation={{ mode: 'stage', step: 0, revealed: false }} />;
+    // The four Stage 8a engines are engine beats (EngineBeat below), never plain stage beats.
     default: return null;
   }
 }
+
+/** A Stage 8a engine view at projector scale, told which presenter step it is on and whether R revealed it. */
+function EnginePart({ spec, cite, presentation }: { spec: EngineSpec; cite: CiteProps; presentation: EnginePresentation }) {
+  switch (spec.componentId) {
+    case 'algorithm-trace-v1': return <AlgorithmTraceView spec={spec} cite={cite} presentation={presentation} />;
+    case 'log-ladder-v1': return <LogLadderView spec={spec} cite={cite} presentation={presentation} />;
+    case 'threshold-v1': return <ThresholdView spec={spec} cite={cite} presentation={presentation} />;
+    case 'data-table-v1': return <DataTableView spec={spec} cite={cite} presentation={presentation} />;
+  }
+}
+
+/**
+ * One engine part as one beat: → walks its steps (each a question), R reveals the current one. The whole part is kept on
+ * screen (`contain`) and fitted once, so neither a step nor a reveal rescales or moves it.
+ */
+function EngineBeat({ beat, step, revealed, cite }: { beat: KindOf<'engine'>; step: number; revealed: boolean; cite: CiteProps }) {
+  const spec = beat.part.spec;
+  const presentation = useMemo(() => engineStage(beat, { step, revealed }), [beat, step, revealed]);
+  return (
+    <div className="pz-stage pz-engine" data-part={spec.componentId}>
+      <h2 className="pz-heading">{beat.title}</h2>
+      <StageFit key={spec.id} width={ENGINE_WIDTH[spec.componentId]} contain frozen>
+        <EnginePart spec={spec} cite={cite} presentation={presentation} />
+      </StageFit>
+    </div>
+  );
+}
+
+/** Design width each engine is laid out at before it is scaled to the stage. */
+const ENGINE_WIDTH: Readonly<Record<EngineSpec['componentId'], number>> = {
+  'algorithm-trace-v1': 980, 'log-ladder-v1': 980, 'threshold-v1': 940, 'data-table-v1': 1180,
+};
 
 function StageBeat({ beat, cite, deck, repairBadge }: { beat: KindOf<'stage'>; cite: CiteProps; deck: Deck; repairBadge: Badge | null }) {
   const part: DeckPart = beat.part;
@@ -460,6 +508,9 @@ function StageBeat({ beat, cite, deck, repairBadge }: { beat: KindOf<'stage'>; c
       <StageFit
         hero={part.kind === 'activity' ? '.eq-line' : part.spec.componentId === 'formula-explorer-v1' ? '.explorer-main' : undefined}
         follow={part.kind === 'activity' ? '[data-pz-follow]' : undefined}
+        minZoom={part.kind === 'kit' && part.spec.componentId === 'formula-explorer-v1' ? MIN_EXPLORER_ZOOM : part.kind === 'kit' && part.spec.componentId === 'sequence-v1' ? MIN_SEQUENCE_ZOOM : undefined}
+        // The sequence board reserves its answers' room (OrderBoard reserve), so it is fitted once: "Check order" never rescales it.
+        frozen={part.kind === 'kit' && part.spec.componentId === 'sequence-v1'}
       >
         {part.kind === 'activity'
           ? <ActivityPanel key={part.spec.id} spec={part.spec} cite={cite} disclosure={deck.disclosure} repairBadge={repairBadge} presentation={{ mode: 'stage' }} />
@@ -517,6 +568,7 @@ export function BeatView(p: BeatProps) {
     case 'compare': return <CompareBeat beat={p.beat} step={p.step} answer={p.answer} onAnswer={p.onAnswer} />;
     case 'predict': return <PredictBeat beat={p.beat} step={p.step} answer={p.answer} onAnswer={p.onAnswer} cite={p.cite} deck={p.deck} />;
     case 'stage': return <StageBeat beat={p.beat} cite={p.cite} deck={p.deck} repairBadge={p.repairBadge} />;
+    case 'engine': return <EngineBeat beat={p.beat} step={p.step} revealed={p.revealed} cite={p.cite} />;
     case 'closing': return <ClosingBeat deck={p.deck} beats={p.beats} />;
   }
 }

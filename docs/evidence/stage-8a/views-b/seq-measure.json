@@ -1,0 +1,122 @@
+[
+ {
+  "size": "1920x1080",
+  "theme": "dark",
+  "click": "element.click()",
+  "cards": 4,
+  "dy": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "dh": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "zoomBefore": "1.15532",
+  "zoomAfter": "1.15532",
+  "fitScrollHeight_vs_client": [
+   668,
+   668
+  ]
+ },
+ {
+  "size": "1366x768",
+  "theme": "dark",
+  "click": "element.click()",
+  "cards": 4,
+  "dy": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "dh": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "zoomBefore": "0.790576",
+  "zoomAfter": "0.790576",
+  "fitScrollHeight_vs_client": [
+   459,
+   459
+  ]
+ },
+ {
+  "size": "1920x1080",
+  "theme": "light",
+  "click": "element.click()",
+  "cards": 4,
+  "dy": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "dh": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "zoomBefore": "1.15532",
+  "zoomAfter": "1.15532",
+  "fitScrollHeight_vs_client": [
+   668,
+   668
+  ]
+ },
+ {
+  "size": "1366x768",
+  "theme": "light",
+  "click": "element.click()",
+  "cards": 4,
+  "dy": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "dh": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "zoomBefore": "0.790576",
+  "zoomAfter": "0.790576",
+  "fitScrollHeight_vs_client": [
+   459,
+   459
+  ]
+ },
+ {
+  "size": "1920x1080",
+  "theme": "dark",
+  "click": "mouse",
+  "cards": 4,
+  "dy": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "dh": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "zoomBefore": "1.15532",
+  "zoomAfter": "1.15532",
+  "fitScrollHeight_vs_client": [
+   668,
+   668
+  ]
+ }
+]

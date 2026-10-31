@@ -3,6 +3,7 @@ import type { DragEvent, ReactNode } from 'react';
 import { moveItem } from '../lib/timeline.ts';
 import { IconChevronDown, IconChevronUp, IconGrip, Mark } from './icons.tsx';
 import { splitMark } from '../lib/marks.ts';
+import { Linked } from './Linked.tsx';
 
 export interface BoardItem { id: string; label: string }
 
@@ -29,13 +30,20 @@ interface Props<T extends BoardItem> {
   checkLabel?: string;
   /** 'track': the list is drawn as numbered stations on one vertical line (sequence and timeline boards). */
   variant?: 'cards' | 'track';
+  /**
+   * Presentation layout: every card's mark and reveal, and the result line, are laid out from the start (hidden), so
+   * "Check order" fills them in place and moves no card (Δy = 0).
+   */
+  reserve?: boolean;
+  /** Link keys per item once revealed (hover shows the page's words in presentation's quote zone). */
+  linksOf?: (item: T) => string[];
 }
 
 /**
  * “Put these in order”: drag cards, or use each card's move-up and move-down arrows (keyboard and screen-reader friendly), then check.
  * Shared by the timeline activity (graded against dates) and the sequence component (graded against the page's order).
  */
-export function OrderBoard<T extends BoardItem>({ items, startOrder, heading, hint, resultNote, revealed, renderReveal, grade: gradeFn, onCheck, checkLabel = 'Check order', variant = 'cards' }: Props<T>) {
+export function OrderBoard<T extends BoardItem>({ items, startOrder, heading, hint, resultNote, revealed, renderReveal, grade: gradeFn, onCheck, checkLabel = 'Check order', variant = 'cards', reserve = false, linksOf }: Props<T>) {
   const headingId = useId();
   const hintId = useId();
   const byId = new Map(items.map((e) => [e.id, e] as const));
@@ -119,17 +127,9 @@ export function OrderBoard<T extends BoardItem>({ items, startOrder, heading, hi
           const e = byId.get(id);
           if (e === undefined) return null;
           const mark = result?.marks[i] ?? null;
-          return (
-            <li
-              key={id}
-              data-event-id={id}
-              className={`order-item${mark === null ? '' : mark.ok ? ' order-ok' : ' order-miss'}${dragId === id ? ' order-dragging' : ''}${overIndex === i && dragId !== null && dragId !== id ? ' order-over' : ''}`}
-              draggable
-              onDragStart={(ev) => onDragStart(ev, id)}
-              onDragOver={(ev) => onDragOver(ev, i)}
-              onDrop={(ev) => onDrop(ev, i)}
-              onDragEnd={endDrag}
-            >
+          const itemClass = `order-item${mark === null ? '' : mark.ok ? ' order-ok' : ' order-miss'}${dragId === id ? ' order-dragging' : ''}${overIndex === i && dragId !== null && dragId !== id ? ' order-over' : ''}`;
+          const body = (
+            <>
               <span className="order-pos" aria-hidden="true">{variant === 'track' ? i + 1 : `${i + 1}.`}</span>
               <div className="order-body">
                 <p className="order-label">
@@ -137,8 +137,22 @@ export function OrderBoard<T extends BoardItem>({ items, startOrder, heading, hi
                   <strong>{e.label}</strong>
                   <span className="sr-only"> (position {i + 1} of {n})</span>
                 </p>
-                {mark !== null && <p className={`order-mark ${mark.ok ? 'ok' : 'bad'}`}><Mark kind={mark.ok ? 'ok' : 'bad'} />{splitMark(mark.text).text}</p>}
-                {revealed && <div className="order-reveal">{renderReveal(e)}</div>}
+                {reserve
+                  ? (
+                    // Presentation: the mark and the reveal are laid out from the start (hidden), so checking moves no card.
+                    <div className="order-reserve">
+                      <p className={`order-mark ${mark === null || mark.ok ? 'ok' : 'bad'}`} data-on={mark === null ? 'false' : 'true'} aria-hidden={mark === null ? true : undefined}>
+                        <Mark kind={mark === null || mark.ok ? 'ok' : 'bad'} />{mark === null ? 'Not the right place' : splitMark(mark.text).text}
+                      </p>
+                      <div className="order-reveal" data-on={revealed ? 'true' : 'false'} aria-hidden={revealed ? undefined : true}>{renderReveal(e)}</div>
+                    </div>
+                  )
+                  : (
+                    <>
+                      {mark !== null && <p className={`order-mark ${mark.ok ? 'ok' : 'bad'}`}><Mark kind={mark.ok ? 'ok' : 'bad'} />{splitMark(mark.text).text}</p>}
+                      {revealed && <div className="order-reveal">{renderReveal(e)}</div>}
+                    </>
+                  )}
               </div>
               <div className="order-buttons" role="group" aria-label={`Move “${e.label}”`}>
                 <button type="button" className="order-move" data-dir="up" disabled={i === 0} onClick={() => move(id, -1)} aria-label={`Move “${e.label}” up`} title="Move up">
@@ -148,6 +162,21 @@ export function OrderBoard<T extends BoardItem>({ items, startOrder, heading, hi
                   <IconChevronDown />
                 </button>
               </div>
+            </>
+          );
+          const drag = {
+            draggable: true,
+            onDragStart: (ev: DragEvent<HTMLLIElement>) => onDragStart(ev, id),
+            onDragOver: (ev: DragEvent<HTMLLIElement>) => onDragOver(ev, i),
+            onDrop: (ev: DragEvent<HTMLLIElement>) => onDrop(ev, i),
+            onDragEnd: endDrag,
+          };
+          if (linksOf !== undefined) {
+            return <Linked as="li" key={id} data-event-id={id} className={itemClass} links={revealed ? linksOf(e) : []} {...(drag as object)}>{body}</Linked>;
+          }
+          return (
+            <li key={id} data-event-id={id} className={itemClass} {...drag}>
+              {body}
             </li>
           );
         })}
@@ -157,7 +186,14 @@ export function OrderBoard<T extends BoardItem>({ items, startOrder, heading, hi
         <button type="button" className="btn" onClick={reset}>Back to the starting order</button>
       </div>
       <p className="sr-only" role="status" aria-live="polite">{announce}</p>
-      {result !== null && (
+      {reserve ? (
+        <div className={`grade order-result-reserved ${result === null || result.correct ? 'grade-ok' : 'grade-miss'}`} role="status" data-testid="order-result" data-on={result === null ? 'false' : 'true'}>
+          {/* Before the check a hidden stand-in of the longest result keeps the line's room. */}
+          {result === null
+            ? <><strong aria-hidden="true"><Mark kind="bad" />{`${n} of ${n} steps are in the right place. Move the marked steps and check again.`}</strong><span aria-hidden="true">{resultNote}</span></>
+            : <><strong>{splitMark(result.summary).mark !== null && <Mark kind={splitMark(result.summary).mark ?? 'ok'} />}{splitMark(result.summary).text}</strong><span>{resultNote}</span></>}
+        </div>
+      ) : result !== null && (
         <div className={`grade ${result.correct ? 'grade-ok' : 'grade-miss'}`} role="status" data-testid="order-result">
           <strong>{splitMark(result.summary).mark !== null && <Mark kind={splitMark(result.summary).mark ?? 'ok'} />}{splitMark(result.summary).text}</strong>
           <span>{resultNote}</span>

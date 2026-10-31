@@ -1,0 +1,42 @@
+[
+ {
+  "job": "job-20261030104322-609ad85d",
+  "beat": 5,
+  "kind": "quiz",
+  "maxDy": 0,
+  "maxDh": 0,
+  "movedCount": 0,
+  "note": null,
+  "revealedAttr": "true"
+ },
+ {
+  "job": "job-20261030104322-609ad85d",
+  "beat": 6,
+  "kind": "quiz",
+  "maxDy": 0,
+  "maxDh": 0,
+  "movedCount": 0,
+  "note": null,
+  "revealedAttr": "true"
+ },
+ {
+  "job": "job-20261030104212-d509087a",
+  "beat": 4,
+  "kind": "predict",
+  "maxDy": null,
+  "maxDh": null,
+  "movedCount": null,
+  "note": "element count changed",
+  "revealedAttr": "true"
+ },
+ {
+  "job": "job-20261030104212-d509087a",
+  "beat": 6,
+  "kind": "quiz",
+  "maxDy": 0,
+  "maxDh": 0,
+  "movedCount": 0,
+  "note": null,
+  "revealedAttr": "true"
+ }
+]

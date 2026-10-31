@@ -1,0 +1,313 @@
+[
+ {
+  "size": "1366x768",
+  "theme": "dark",
+  "beat": 2,
+  "title": "Electing the President",
+  "step": 1,
+  "of": 3,
+  "revealR": {
+   "elements": 64,
+   "maxDy": 0,
+   "maxDh": 0,
+   "movedCount": 0,
+   "zoomBefore": "1.26489",
+   "zoomAfter": "1.26489"
+  },
+  "fitsWithoutScroll": true,
+  "nextStep": {
+   "maxDy": 0.84,
+   "maxDh": 1.26,
+   "movedCount": 7,
+   "zoomBefore": "1.26489",
+   "zoomAfter": "1.26489"
+  }
+ },
+ {
+  "size": "1366x768",
+  "theme": "dark",
+  "beat": 2,
+  "title": "Electing the President",
+  "step": 2,
+  "of": 3,
+  "revealR": {
+   "elements": 64,
+   "maxDy": 0,
+   "maxDh": 0,
+   "movedCount": 0,
+   "zoomBefore": "1.26489",
+   "zoomAfter": "1.26489"
+  },
+  "fitsWithoutScroll": true,
+  "nextStep": {
+   "maxDy": 0,
+   "maxDh": 0,
+   "movedCount": 0,
+   "zoomBefore": "1.26489",
+   "zoomAfter": "1.26489"
+  }
+ },
+ {
+  "size": "1366x768",
+  "theme": "dark",
+  "beat": 2,
+  "title": "Electing the President",
+  "step": 3,
+  "of": 3,
+  "revealR": {
+   "elements": 64,
+   "maxDy": 0,
+   "maxDh": 0,
+   "movedCount": 0,
+   "zoomBefore": "1.26489",
+   "zoomAfter": "1.26489"
+  },
+  "fitsWithoutScroll": true
+ },
+ {
+  "size": "1366x768",
+  "theme": "dark",
+  "beat": 3,
+  "title": "Ratifying an amendment",
+  "step": 1,
+  "of": 3,
+  "revealR": {
+   "elements": 113,
+   "maxDy": 0,
+   "maxDh": 0,
+   "movedCount": 0,
+   "zoomBefore": "1.17969",
+   "zoomAfter": "1.17969"
+  },
+  "fitsWithoutScroll": true,
+  "nextStep": {
+   "maxDy": 0.79,
+   "maxDh": 1.18,
+   "movedCount": 7,
+   "zoomBefore": "1.17969",
+   "zoomAfter": "1.17969"
+  }
+ },
+ {
+  "size": "1366x768",
+  "theme": "dark",
+  "beat": 3,
+  "title": "Ratifying an amendment",
+  "step": 2,
+  "of": 3,
+  "revealR": {
+   "elements": 113,
+   "maxDy": 0,
+   "maxDh": 0,
+   "movedCount": 0,
+   "zoomBefore": "1.17969",
+   "zoomAfter": "1.17969"
+  },
+  "fitsWithoutScroll": true,
+  "nextStep": {
+   "maxDy": 0,
+   "maxDh": 0,
+   "movedCount": 0,
+   "zoomBefore": "1.17969",
+   "zoomAfter": "1.17969"
+  }
+ },
+ {
+  "size": "1366x768",
+  "theme": "dark",
+  "beat": 3,
+  "title": "Ratifying an amendment",
+  "step": 3,
+  "of": 3,
+  "revealR": {
+   "elements": 113,
+   "maxDy": 0,
+   "maxDh": 0,
+   "movedCount": 0,
+   "zoomBefore": "1.17969",
+   "zoomAfter": "1.17969"
+  },
+  "fitsWithoutScroll": true
+ },
+ {
+  "size": "1366x768",
+  "theme": "dark",
+  "beat": 4,
+  "title": "Amendment threshold",
+  "step": 1,
+  "of": 1,
+  "revealR": {
+   "elements": 106,
+   "maxDy": 0,
+   "maxDh": 0,
+   "movedCount": 0,
+   "zoomBefore": "1.26489",
+   "zoomAfter": "1.26489"
+  },
+  "fitsWithoutScroll": true
+ },
+ {
+  "size": "1366x768",
+  "theme": "dark",
+  "beat": 5,
+  "title": "Two-stage vote (synthetic layout check)",
+  "step": 1,
+  "of": 2,
+  "revealR": {
+   "elements": 107,
+   "maxDy": 0,
+   "maxDh": 0,
+   "movedCount": 0,
+   "zoomBefore": "0.871154",
+   "zoomAfter": "0.871154"
+  },
+  "fitsWithoutScroll": true,
+  "nextStep": {
+   "maxDy": 0.58,
+   "maxDh": 0.87,
+   "movedCount": 7,
+   "zoomBefore": "0.871154",
+   "zoomAfter": "0.871154"
+  }
+ },
+ {
+  "size": "1366x768",
+  "theme": "dark",
+  "beat": 5,
+  "title": "Two-stage vote (synthetic layout check)",
+  "step": 2,
+  "of": 2,
+  "revealR": {
+   "elements": 107,
+   "maxDy": 0,
+   "maxDh": 0,
+   "movedCount": 0,
+   "zoomBefore": "0.871154",
+   "zoomAfter": "0.871154"
+  },
+  "fitsWithoutScroll": true
+ },
+ {
+  "size": "1366x768",
+  "theme": "dark",
+  "beat": 6,
+  "title": "Marginal tax rates for tax year 2026",
+  "step": 1,
+  "of": 3,
+  "revealR": {
+   "elements": 186,
+   "maxDy": 0,
+   "maxDh": 0,
+   "movedCount": 0,
+   "zoomBefore": "0.90239",
+   "zoomAfter": "0.90239"
+  },
+  "fitsWithoutScroll": true,
+  "nextStep": {}
+ },
+ {
+  "size": "1366x768",
+  "theme": "dark",
+  "beat": 6,
+  "title": "Marginal tax rates for tax year 2026",
+  "step": 2,
+  "of": 3,
+  "revealR": {
+   "elements": 189,
+   "maxDy": 0,
+   "maxDh": 0,
+   "movedCount": 0,
+   "zoomBefore": "0.90239",
+   "zoomAfter": "0.90239"
+  },
+  "fitsWithoutScroll": true,
+  "nextStep": {}
+ },
+ {
+  "size": "1366x768",
+  "theme": "dark",
+  "beat": 6,
+  "title": "Marginal tax rates for tax year 2026",
+  "step": 3,
+  "of": 3,
+  "revealR": {
+   "elements": 186,
+   "maxDy": 0,
+   "maxDh": 0,
+   "movedCount": 0,
+   "zoomBefore": "0.90239",
+   "zoomAfter": "0.90239"
+  },
+  "fitsWithoutScroll": true
+ },
+ {
+  "size": "1366x768",
+  "theme": "dark",
+  "beat": 7,
+  "title": "Planet sizes",
+  "step": 1,
+  "of": 2,
+  "revealR": {
+   "elements": 118,
+   "maxDy": 0,
+   "maxDh": 0,
+   "movedCount": 0,
+   "zoomBefore": "1.00763",
+   "zoomAfter": "1.00763"
+  },
+  "fitsWithoutScroll": true,
+  "nextStep": {}
+ },
+ {
+  "size": "1366x768",
+  "theme": "dark",
+  "beat": 7,
+  "title": "Planet sizes",
+  "step": 2,
+  "of": 2,
+  "revealR": {
+   "elements": 115,
+   "maxDy": 0,
+   "maxDh": 0,
+   "movedCount": 0,
+   "zoomBefore": "1.00763",
+   "zoomAfter": "1.00763"
+  },
+  "fitsWithoutScroll": true
+ },
+ {
+  "size": "1366x768",
+  "theme": "dark",
+  "beat": 8,
+  "title": "Target federal funds rate changes",
+  "step": 1,
+  "of": 2,
+  "revealR": {
+   "elements": 171,
+   "maxDy": 0,
+   "maxDh": 0,
+   "movedCount": 0,
+   "zoomBefore": "0.949686",
+   "zoomAfter": "0.949686"
+  },
+  "fitsWithoutScroll": true,
+  "nextStep": {}
+ },
+ {
+  "size": "1366x768",
+  "theme": "dark",
+  "beat": 8,
+  "title": "Target federal funds rate changes",
+  "step": 2,
+  "of": 2,
+  "revealR": {
+   "elements": 174,
+   "maxDy": 0,
+   "maxDh": 0,
+   "movedCount": 0,
+   "zoomBefore": "0.949686",
+   "zoomAfter": "0.949686"
+  },
+  "fitsWithoutScroll": true
+ }
+]

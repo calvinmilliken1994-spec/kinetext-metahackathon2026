@@ -23,6 +23,12 @@ import type { PredictPlan } from './compare.ts';
 import type { CheckTally, QuoteTally } from './provenance.ts';
 import { isTimelineSpec, pairOptions } from './timeline.ts';
 import type { AnyActivitySpec } from './timeline.ts';
+import type { AlgorithmTraceSpec, DataTableSpec, LogLadderSpec, ThresholdSpec } from '../../../../packages/contracts/kit.ts';
+import type { EnginePresentation } from './enginePresentation.ts';
+import { algorithmPresentationSteps } from './algorithmView.ts';
+import { logLadderPresentationSteps } from './logLadderView.ts';
+import { thresholdPresentationSteps, thresholdRevealQuote } from './thresholdView.ts';
+import { dataTablePresentationSteps, dataTableRevealQuote } from './dataTableView.ts';
 
 // ---- the deck -----------------------------------------------------------------------------------------------------
 
@@ -115,9 +121,40 @@ export type Beat =
   | BeatBase & { kind: 'compare'; spec: CompareTableSpec; plan: PredictPlan | null }
   | BeatBase & { kind: 'predict'; target: PredictTarget }
   | BeatBase & { kind: 'stage'; part: DeckPart }
+  /** A Stage 8a subject engine: `steps` = its view's `<name>PresentationSteps(spec)`; R reveals the current step only. */
+  | BeatBase & { kind: 'engine'; part: { kind: 'kit'; spec: EngineSpec } }
   | BeatBase & { kind: 'closing' };
 
 export type BeatKind = Beat['kind'];
+
+// ---- the Stage 8a subject engines (docs/specs/STAGE-8a-subject-engines.md §4) -----------------------------------------
+
+export type EngineSpec = AlgorithmTraceSpec | LogLadderSpec | ThresholdSpec | DataTableSpec;
+
+export function isEngineSpec(spec: KitSpec): spec is EngineSpec {
+  return spec.componentId === 'algorithm-trace-v1' || spec.componentId === 'log-ladder-v1' || spec.componentId === 'threshold-v1' || spec.componentId === 'data-table-v1';
+}
+
+/** How many presenter steps an engine part has (its view's own count; at least 1, whatever the view returns). */
+export function enginePresentationSteps(spec: EngineSpec): number {
+  let n: number;
+  switch (spec.componentId) {
+    case 'algorithm-trace-v1': n = algorithmPresentationSteps(spec); break;
+    case 'log-ladder-v1': n = logLadderPresentationSteps(spec); break;
+    case 'threshold-v1': n = thresholdPresentationSteps(spec); break;
+    case 'data-table-v1': n = dataTablePresentationSteps(spec); break;
+  }
+  return Number.isFinite(n) && n >= 1 ? Math.trunc(n) : 1;
+}
+
+/** The page sentence a revealed engine step shows in the quote zone (views without one: null). */
+function engineRevealQuote(spec: EngineSpec, step: number): QuoteLike | null {
+  switch (spec.componentId) {
+    case 'threshold-v1': return thresholdRevealQuote(spec, step);
+    case 'data-table-v1': return dataTableRevealQuote(spec, step);
+    default: return null;
+  }
+}
 
 const STAGE_LABELS: Readonly<Record<string, string>> = {
   'sequence-v1': 'Sequence', 'sort-groups-v1': 'Sort', 'concept-map-v1': 'Concept map', 'compare-table-v1': 'Compare',
@@ -135,6 +172,7 @@ const CUE = {
   predict: 'Collect a few estimates, agree on one class prediction and type it in, then press R for the engine’s value.',
   pair: 'Let the class vote on which came first, click the event most chose, then press R for the dates.',
   stage: 'Run it with the class. The controls work as in the lesson.',
+  engine: 'Ask the question on screen and let the class decide, then press R. Press → for the next question.',
   closing: 'Close with where the material came from and what was checked.',
 } as const;
 
@@ -212,6 +250,9 @@ function partBeats(part: DeckPart, n: number): Beat[] {
   }
 
   const spec = part.spec;
+  if (isEngineSpec(spec)) {
+    return [{ kind: 'engine', id: `${id}:engine`, label: stageLabel(part), title: aiLabel(spec.title), steps: enginePresentationSteps(spec), quotes, cue: CUE.engine, part: { kind: 'kit', spec } }];
+  }
   switch (spec.componentId) {
     case 'quiz-cards-v1':
       return spec.cards.map((c, i): Beat => ({
@@ -354,6 +395,8 @@ export interface PresentState {
   help: boolean;
   /** Per beat id: the class's choice or estimate, kept while moving around the deck. */
   answers: Readonly<Record<string, string>>;
+  /** An engine beat's current step has been revealed with R (cleared by every move; unused on other beats). */
+  revealed: boolean;
 }
 
 export type PresentAction =
@@ -381,27 +424,49 @@ function typeInto(prev: string, key: string): string {
 const clampBeat = (beats: readonly Beat[], n: number): number => (Number.isFinite(n) ? Math.max(0, Math.min(beats.length - 1, Math.trunc(n))) : 0);
 
 export function initialPresent(beats: readonly Beat[], beat = 0): PresentState {
-  return { beat: clampBeat(beats, beat), step: 0, blank: false, blankTone: 'black', notes: false, help: false, answers: {} };
+  return { beat: clampBeat(beats, beat), step: 0, blank: false, blankTone: 'black', notes: false, help: false, answers: {}, revealed: false };
+}
+
+/** Whether the current beat shows its answer: an engine beat's current step after R, any other beat at its last step. */
+export function beatRevealed(beat: Beat, s: Pick<PresentState, 'step' | 'revealed'>): boolean {
+  return beat.kind === 'engine' ? s.revealed : isRevealed(beat, s.step);
+}
+
+/** Whether R would show something new now (the bar's Reveal button). */
+export function canRevealNow(beat: Beat, s: Pick<PresentState, 'step' | 'revealed'>): boolean {
+  return beat.kind === 'engine' ? !s.revealed : canReveal(beat, s.step);
+}
+
+/** What an engine view is told while presenting (EnginePresentation, frozen in STAGE-8a §4). */
+export function engineStage(beat: Beat, s: Pick<PresentState, 'step' | 'revealed'>): EnginePresentation {
+  const step = Math.max(0, Math.min(beat.steps - 1, s.step));
+  return { mode: 'stage', step, revealed: beat.kind === 'engine' && s.revealed };
 }
 
 /** The navigation reducer for one deck. */
 export function presentReducer(beats: readonly Beat[]) {
   const stepsOf = (i: number): number => beats[i]?.steps ?? 1;
+  const isEngine = (i: number): boolean => beats[i]?.kind === 'engine';
   return (s: PresentState, a: PresentAction): PresentState => {
     const moving = a.type === 'next' || a.type === 'prev' || a.type === 'jump' || a.type === 'first' || a.type === 'last' || a.type === 'reveal';
     // A blanked screen comes back on the next key press without moving (as in slide software).
     if (s.blank && (a.type === 'next' || a.type === 'prev' || a.type === 'reveal')) return { ...s, blank: false };
-    const base = moving ? { ...s, help: false, blank: false } : s;
+    // Every move leaves an engine step unrevealed; only R (below) reveals it.
+    const base = moving ? { ...s, help: false, blank: false, revealed: false } : s;
     switch (a.type) {
       case 'next':
         if (s.step < stepsOf(s.beat) - 1) return { ...base, step: s.step + 1 };
         if (s.beat < beats.length - 1) return { ...base, beat: s.beat + 1, step: 0 };
-        return base;
+        return { ...base, revealed: s.revealed };
       case 'prev':
+        // An engine step's answer is hidden again first (as ← from a revealed predict beat goes back to its question).
+        if (isEngine(s.beat) && s.revealed) return base;
         if (s.step > 0) return { ...base, step: s.step - 1 };
         if (s.beat > 0) return { ...base, beat: s.beat - 1, step: stepsOf(s.beat - 1) - 1 };
         return base;
-      case 'reveal': return { ...base, step: stepsOf(s.beat) - 1 };
+      case 'reveal':
+        // An engine beat reveals its current step; any other beat jumps to its last step (everything revealed).
+        return isEngine(s.beat) ? { ...base, revealed: true } : { ...base, step: stepsOf(s.beat) - 1 };
       case 'jump': return { ...base, beat: clampBeat(beats, a.beat), step: 0 };
       case 'first': return { ...base, beat: 0, step: 0 };
       case 'last': return { ...base, beat: beats.length - 1, step: 0 };
@@ -599,8 +664,9 @@ export function shownPoints(deck: Pick<Deck, 'overview'>): KeyPointGen[] {
 
 // ---- the quote zone: one anchored place per slide for what the page says ------------------------------------------
 
-/** The page quote a beat reveals with R (a quiz card's quote, the hidden compare cell's quote), or null. */
-export function revealQuote(beat: Beat, step: number): QuoteLike | null {
+/** The page quote a beat reveals with R (a quiz card's quote, the hidden compare cell's quote, an engine step's), or null. */
+export function revealQuote(beat: Beat, step: number, revealed = false): QuoteLike | null {
+  if (beat.kind === 'engine') return revealed ? engineRevealQuote(beat.part.spec, step) : null;
   if (!isRevealed(beat, step)) return null;
   if (beat.kind === 'quiz') {
     const card = beat.spec.cards.find((c) => c.id === beat.cardId);

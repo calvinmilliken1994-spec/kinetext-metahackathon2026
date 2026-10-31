@@ -242,6 +242,21 @@
 /* What a part shows on a beat is chosen by its `presentation` prop (title, later cases, explanations and the predict card
  * stay in the lesson view); no class names of other views are hidden from here. */
 
+/* The sequence board in presentation (SequenceView presentation={{mode:'stage'}} → OrderBoard reserve): each card's mark
+ * and its place on the page are laid out from the start in one reserved cell, and the result line keeps its room, so
+ * "Check order" fills them in without moving a card (Δy = 0). */
+.order-reserve { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 16px; }
+.order-reserve > .order-mark[data-on="false"], .order-reserve > .order-reveal[data-on="false"] { visibility: hidden; }
+.order-reserve > .order-reveal[data-on="true"] { animation: pz-words-in 0.35s ease-out both; }
+.order-place { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; color: var(--ink-2); font-size: var(--fs-14); }
+.order-place strong { color: var(--ink); }
+.order-result-reserved { min-block-size: 4.2em; align-content: start; }
+.order-result-reserved[data-on="false"] { visibility: hidden; }
+
+/* An engine beat (Stage 8a): the whole part stays on screen and is fitted once; steps and reveals change it in place. */
+.pz-engine .pz-fit { overflow: hidden; }
+.pz-engine .pz-fit-zoom { margin-inline: auto; }
+
 /* ---- closing: where this came from ---------------------------------------------------------------------------------- */
 .pz-closing { flex: 1; display: flex; flex-direction: column; gap: calc(var(--pz-u) * 2); min-block-size: 0; }
 .pz-display-2 { font-size: calc(var(--pz-h) * 1.25); }

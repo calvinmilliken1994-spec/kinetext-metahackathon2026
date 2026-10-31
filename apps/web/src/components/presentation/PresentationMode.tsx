@@ -4,7 +4,7 @@ import type { QuoteRef } from '../../lib/evidence.ts';
 import type { Badge } from '../../lib/repairs.ts';
 import type { Deck, PresentAction } from '../../lib/presentation.ts';
 import {
-  acceptsNumber, canReveal, deckQuotes, initialPresent, isRevealed, KEY_MAP, keyAction, keyContext, planBeats, presentReducer, presentSearch,
+  acceptsNumber, beatRevealed, canRevealNow, deckQuotes, initialPresent, KEY_MAP, keyAction, keyContext, planBeats, presentReducer, presentSearch,
   quoteRefForLinks, revealQuote, visibleQuotes, zoneQuote, zoneQuoteSize,
 } from '../../lib/presentation.ts';
 import type { QuoteLike } from '../../lib/linking.ts';
@@ -194,10 +194,10 @@ export function PresentationMode({ deck, quotes, sourceId, repairBadge, startBea
 
   if (beat === undefined) return null;
   const n = beats.length;
-  const revealable = canReveal(beat, state.step);
-  const revealed = isRevealed(beat, state.step);
+  const revealable = canRevealNow(beat, state);
+  const revealed = beatRevealed(beat, state);
   const next = beats[state.beat + 1];
-  const zone = zoneQuote({ hovered, pinned, revealed: revealQuote(beat, state.step), visible: visibleQuotes(beat, state.step, beats) });
+  const zone = zoneQuote({ hovered, pinned, revealed: revealQuote(beat, state.step, state.revealed), visible: visibleQuotes(beat, state.step, beats) });
 
   const view = (
     <div
@@ -212,13 +212,14 @@ export function PresentationMode({ deck, quotes, sourceId, repairBadge, startBea
       onPointerDown={wake}
       onClickCapture={onClickCapture}
     >
-      <div className="pz-live sr-only" aria-live="polite">{`Beat ${state.beat + 1} of ${n}: ${beat.title}${revealed ? '. Revealed.' : ''}`}</div>
+      <div className="pz-live sr-only" aria-live="polite">{`Beat ${state.beat + 1} of ${n}: ${beat.title}${beat.kind === 'engine' && beat.steps > 1 ? `, question ${Math.min(state.step, beat.steps - 1) + 1} of ${beat.steps}` : ''}${revealed ? '. Revealed.' : ''}`}</div>
 
       <div ref={stageRef} className={`pz-stage-frame${state.notes ? ' pz-with-notes' : ''}`} tabIndex={-1} aria-label={beat.title}>
         <div key={beat.id} ref={beatRef} className="pz-beat" data-kind={beat.kind} data-revealed={revealed ? 'true' : 'false'}>
           <BeatView
             beat={beat}
             step={state.step}
+            revealed={state.revealed}
             deck={deck}
             beats={beats}
             answer={state.answers[beat.id] ?? ''}
@@ -290,7 +291,7 @@ export function PresentationMode({ deck, quotes, sourceId, repairBadge, startBea
         <button type="button" className="pz-tool" onClick={() => act({ type: 'next' })} aria-label="Next (→)" title="Next (→)" disabled={state.beat === n - 1 && state.step >= beat.steps - 1}><IconNext /></button>
         <span className="pz-count num" aria-hidden="true">{state.beat + 1}/{n}</span>
         <span className="pz-bar-sep" aria-hidden="true" />
-        {revealable && beat.steps === 2 && (
+        {revealable && (beat.steps === 2 || beat.kind === 'engine') && (
           <button type="button" className="pz-tool pz-tool-strong" onClick={() => act({ type: 'reveal' })} title="Reveal (R)"><span>Reveal</span><kbd>R</kbd></button>
         )}
         <button type="button" className="pz-tool" onClick={() => act({ type: 'notes' })} aria-pressed={state.notes} aria-label="Presenter notes (P)" title="Presenter notes (P)"><IconNotes /></button>
