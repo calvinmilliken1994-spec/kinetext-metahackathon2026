@@ -1215,19 +1215,36 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
     // sam.ts's billing rules from error codes. `close` is a no-op: the job's ledger outlives
     // one component's segmentation call.
     const trace = { charged: 0, unknown: 0 };
+    // B-08: every reservation the call made and has not yet settled, by id -> reserved amount.
+    // A hold whose reconcile fails (or is never attempted) stays in the REAL ledger at its
+    // reserved amount, so it is accounted exactly once as charged AND unknown — whatever
+    // amount the failed reconcile was trying to write (a rejected request's 0 included).
+    const openHolds = new Map<string, number>();
+    const accountOutstanding = (amountUSD: number): void => {
+      const amount = Number.isFinite(amountUSD) && amountUSD > 0 ? amountUSD : 0;
+      trace.charged += amount;
+      trace.unknown += amount;
+    };
     const real: Ledger = ctx.sam.ledger;
     const wrapped: Ledger = {
       get capUSD(): number {
         return real.capUSD;
       },
       ...(real.providerCapsUSD !== undefined ? { providerCapsUSD: real.providerCapsUSD } : {}),
-      reserve: req => real.reserve(req),
+      reserve: req => {
+        const reservationId = real.reserve(req);
+        openHolds.set(reservationId, req.estUSD);
+        return reservationId;
+      },
       reconcile: (reservationId, actual) => {
+        const held = openHolds.get(reservationId);
+        openHolds.delete(reservationId);
         try {
           real.reconcile(reservationId, actual);
         } catch (err) {
-          // The reconciliation itself failed: the ledger outcome is unknown — never drop money.
-          trace.unknown += Math.max(0, actual.costUSD);
+          // The reconciliation itself failed: the real ledger keeps the hold, so the
+          // outstanding reservation is charged AND unknown (never drop money).
+          accountOutstanding(Math.max(held ?? 0, Math.max(0, actual.costUSD)));
           throw err;
         }
         const amount = Math.max(0, actual.costUSD);
@@ -1240,6 +1257,14 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
       close: () => {
         // never close the job's ledger from a component
       },
+    };
+    // A reservation that was never settled or attempted (an unexpected exit mid-call) is
+    // still held by the real ledger: settle it into the trace as uncertain, once.
+    const sweepOpenHolds = (): void => {
+      for (const amount of openHolds.values()) {
+        accountOutstanding(amount);
+      }
+      openHolds.clear();
     };
     let result: SegmentPointsResult;
     try {
@@ -1254,9 +1279,12 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
         signal: ctx.signal,
       });
     } catch (err: unknown) {
+      sweepOpenHolds();
       const charge = errorCharge(err, { componentId: cid, revision });
-      const chargedUSD = charge.chargedUSD > 0 ? charge.chargedUSD : trace.charged;
-      const unknownUSD = charge.unknownUSD > 0 ? charge.unknownUSD : trace.unknown;
+      // The error's amounts and the wrapped ledger's trace describe the SAME money from two
+      // sides: take the larger of each, never their sum (no double count).
+      const chargedUSD = Math.max(charge.chargedUSD, trace.charged);
+      const unknownUSD = Math.max(charge.unknownUSD, trace.unknown);
       // ONE accumulator FIRST, before the fallible event write below (S6R-07 discipline).
       ctx.account(chargedUSD, unknownUSD);
       const extra: LessonEventExtra = { ...charge.extra, componentId: cid, revision };
@@ -1269,7 +1297,8 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
       // provider text.
       return { ok: false, reason: SEGMENTATION_FAILED_REASON, detail: charge.code, extra };
     }
-    ctx.account(result.costUSD, 0);
+    sweepOpenHolds();
+    ctx.account(Math.max(result.costUSD, trace.charged), trace.unknown);
     const regions = boxesToRegions(result.boxes, parts);
     ctx.emit('segment', 'succeeded', {
       componentId: cid,

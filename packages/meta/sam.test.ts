@@ -1,6 +1,7 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { buildPointPrompt, parseSamOutput, segmentPoints } from './sam.ts';
+import type { SegmentPointsResult } from './sam.ts';
 import { MetaError } from './client.ts';
 import type { Ledger } from './ledger.ts';
 
@@ -115,7 +116,7 @@ describe('segmentPoints', (): void => {
       captured.headers = { ...(init?.headers as Record<string, string>) };
       const body = sseBody([
         { type: 'response.output_text.delta', delta: line },
-        { type: 'response.completed', usage: { images_processed: 2 } },
+        { type: 'response.completed', usage: { images_processed: 1 } },
       ]);
       return { ok: true, status: 200, text: async (): Promise<string> => body } as unknown as Response;
     }) as unknown as typeof fetch;
@@ -152,8 +153,8 @@ describe('segmentPoints', (): void => {
     assert.equal(content[1]?.['type'], 'input_image');
     assert.equal(content[1]?.['image_url'], 'data:image/jpeg;base64,AQID');
     assert.equal(captured.headers['Accept'], 'text/event-stream');
-    assert.equal(result.imagesProcessed, 2);
-    assert.equal(result.costUSD, 0.0025 * 2);
+    assert.equal(result.imagesProcessed, 1);
+    assert.equal(result.costUSD, 0.0025);
     assert.equal(result.boxes.length, 1);
     assert.equal(result.boxes[0]?.id, 1);
     assert.equal(fake.reserveCalls.length, 1);
@@ -161,7 +162,7 @@ describe('segmentPoints', (): void => {
     assert.equal(fake.reserveCalls[0]?.estUSD, 0.0025);
     assert.equal(fake.reserveCalls[0]?.provider, 'meta-api');
     assert.equal(fake.reconcileCalls.length, 1);
-    assert.equal(fake.reconcileCalls[0]?.actual.costUSD, 0.0025 * 2);
+    assert.equal(fake.reconcileCalls[0]?.actual.costUSD, 0.0025);
   });
 
   it('maps HTTP 400 to SAM_HTTP_400 without leaking the body', async (): Promise<void> => {
@@ -214,5 +215,154 @@ describe('segmentPoints', (): void => {
     assert.equal(result.raw, '');
     assert.equal(result.imagesProcessed, 1);
     assert.equal(result.costUSD, 0.0025 * 1);
+  });
+});
+
+describe('segmentPoints fail-closed billing (B-07)', (): void => {
+  const BOX_LINE =
+    '<0f>1<|box;x1=10;y1=20;x2=30;y2=40;w=600;h=600;c=0.91|>' +
+    '<|mask;x=0;y=0;c=0.91;data=27,60,~!!!!M!0c[0o9|>';
+  const DELTA: unknown = { type: 'response.output_text.delta', delta: BOX_LINE };
+  const SECRET = 'SECRET-PROVIDER-TEXT';
+  const RESERVED = 0.0025;
+
+  async function run(
+    events: unknown[],
+    body?: string,
+  ): Promise<{
+    fake: ReturnType<typeof makeFakeLedger>;
+    outcome: { ok: true; result: SegmentPointsResult } | { ok: false; err: MetaError };
+  }> {
+    const fake = makeFakeLedger();
+    const text: string = body ?? sseBody(events);
+    const fetchImpl = (async (): Promise<Response> =>
+      ({ ok: true, status: 200, text: async (): Promise<string> => text }) as unknown as Response) as unknown as typeof fetch;
+    try {
+      const result: SegmentPointsResult = await segmentPoints({
+        apiKey: 'test-key',
+        fetch: fetchImpl,
+        ledger: fake.ledger,
+        purpose: 'demo',
+        image: { bytes: new Uint8Array([1]), mime: 'image/png', width: 600, height: 600 },
+        points: [{ id: 1, x: 15, y: 25 }],
+      });
+      return { fake, outcome: { ok: true, result } };
+    } catch (err: unknown) {
+      assert.ok(err instanceof MetaError, 'a MetaError with a fixed code, never a raw exception');
+      return { fake, outcome: { ok: false, err } };
+    }
+  }
+
+  function expectUncertain(r: Awaited<ReturnType<typeof run>>, code: string): void {
+    assert.equal(r.outcome.ok, false, `expected ${code}`);
+    if (r.outcome.ok) {
+      return;
+    }
+    const err: MetaError = r.outcome.err;
+    assert.equal(err.code, code);
+    assert.ok(!err.message.includes(SECRET));
+    // Reservation settled as uncertain: charged AND unknown, exactly once.
+    assert.equal(r.fake.reserveCalls.length, 1);
+    assert.equal(r.fake.reconcileCalls.length, 1);
+    assert.equal(r.fake.reconcileCalls[0]?.actual.costUSD, RESERVED);
+    assert.equal(r.fake.reconcileCalls[0]?.actual.note, 'uncertain outcome');
+    assert.equal(err.chargedUSD, RESERVED);
+    assert.equal(err.reservedUnknownUSD, RESERVED);
+  }
+
+  for (const type of ['response.failed', 'response.incomplete', 'error', 'response.error']) {
+    it(`an explicit ${type} event fails the call as uncertain (no boxes returned as success)`, async (): Promise<void> => {
+      const r = await run([DELTA, { type, response: { error: { message: SECRET } }, error: { message: SECRET } }]);
+      expectUncertain(r, 'SAM_STREAM_FAILED');
+    });
+  }
+
+  it('a failure event wins over a later completion event', async (): Promise<void> => {
+    const r = await run([
+      DELTA,
+      { type: 'response.failed', response: { error: { message: SECRET } } },
+      { type: 'response.completed', usage: { images_processed: 1 } },
+    ]);
+    expectUncertain(r, 'SAM_STREAM_FAILED');
+  });
+
+  it('a completion event whose response status is failed is a failure', async (): Promise<void> => {
+    const r = await run([
+      DELTA,
+      { type: 'response.completed', response: { status: 'failed', usage: { images_processed: 1 } } },
+    ]);
+    expectUncertain(r, 'SAM_STREAM_FAILED');
+  });
+
+  it('a stream with no completion event fails as uncertain even when boxes arrived', async (): Promise<void> => {
+    expectUncertain(await run([DELTA]), 'SAM_STREAM_INCOMPLETE');
+    expectUncertain(await run([], 'data: [DONE]\n'), 'SAM_STREAM_INCOMPLETE');
+    expectUncertain(await run([], ''), 'SAM_STREAM_INCOMPLETE');
+  });
+
+  const malformedUsages: Array<[string, unknown]> = [
+    ['fractional 0.9', 0.9],
+    ['fractional 1.5', 1.5],
+    ['negative', -1],
+    ['string', '1'],
+    ['null', null],
+    ['NaN text', 'NaN'],
+    ['boolean', true],
+    ['unsafe integer', 1e300],
+  ];
+  for (const [label, value] of malformedUsages) {
+    it(`malformed usage (${label}) is never floored: reservation stays uncertain`, async (): Promise<void> => {
+      const r = await run([DELTA, { type: 'response.completed', usage: { images_processed: value } }]);
+      expectUncertain(r, 'SAM_USAGE_INVALID');
+    });
+  }
+
+  it('contradictory usage objects are malformed', async (): Promise<void> => {
+    const r = await run([
+      DELTA,
+      {
+        type: 'response.completed',
+        usage: { images_processed: 1 },
+        response: { usage: { images_processed: 0 } },
+      },
+    ]);
+    expectUncertain(r, 'SAM_USAGE_INVALID');
+  });
+
+  it('usage 0 with boxes returned is contradictory and stays uncertain', async (): Promise<void> => {
+    const r = await run([DELTA, { type: 'response.completed', usage: { images_processed: 0 } }]);
+    expectUncertain(r, 'SAM_USAGE_INVALID');
+  });
+
+  for (const processed of [2, 3]) {
+    it(`usage ${processed} on one image: actual charge recorded, flagged, call failed, never reconciled as plain usage`, async (): Promise<void> => {
+      const r = await run([DELTA, { type: 'response.completed', usage: { images_processed: processed } }]);
+      assert.equal(r.outcome.ok, false);
+      if (r.outcome.ok) {
+        return;
+      }
+      const actual = processed * RESERVED;
+      assert.equal(r.outcome.err.code, 'SAM_USAGE_EXCEEDED');
+      assert.equal(r.fake.reserveCalls[0]?.estUSD, RESERVED);
+      assert.equal(r.fake.reconcileCalls.length, 1);
+      assert.equal(r.fake.reconcileCalls[0]?.actual.costUSD, actual);
+      assert.notEqual(r.fake.reconcileCalls[0]?.actual.note, 'usage');
+      assert.equal(r.outcome.err.chargedUSD, actual);
+      assert.equal(r.outcome.err.reservedUnknownUSD, 0);
+    });
+  }
+
+  it('valid usage 1 still succeeds and reconciles the reservation amount as usage', async (): Promise<void> => {
+    const r = await run([DELTA, { type: 'response.completed', usage: { images_processed: 1 } }]);
+    assert.equal(r.outcome.ok, true);
+    assert.equal(r.fake.reconcileCalls.length, 1);
+    assert.equal(r.fake.reconcileCalls[0]?.actual.costUSD, RESERVED);
+    assert.equal(r.fake.reconcileCalls[0]?.actual.note, 'usage');
+  });
+
+  it('usage under response.usage is read; usage 0 with no boxes is a known zero', async (): Promise<void> => {
+    const r = await run([{ type: 'response.completed', response: { usage: { images_processed: 0 } } }]);
+    assert.equal(r.outcome.ok, true);
+    assert.equal(r.fake.reconcileCalls[0]?.actual.costUSD, 0);
   });
 });

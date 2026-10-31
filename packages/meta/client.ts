@@ -48,6 +48,10 @@ export type MetaErrorCode =
   | 'INPUT_TOO_LARGE'
   | 'IMAGES_NOT_SUPPORTED'
   | 'IMAGE_IN_SYSTEM_MESSAGE'
+  | 'SAM_STREAM_FAILED'
+  | 'SAM_STREAM_INCOMPLETE'
+  | 'SAM_USAGE_INVALID'
+  | 'SAM_USAGE_EXCEEDED'
   | `SAM_HTTP_${number}`;
 
 const META_ERROR_BASE_MESSAGES = {
@@ -73,6 +77,10 @@ const META_ERROR_BASE_MESSAGES = {
   INPUT_TOO_LARGE: 'input too large',
   IMAGES_NOT_SUPPORTED: 'images not supported',
   IMAGE_IN_SYSTEM_MESSAGE: 'image in system message',
+  SAM_STREAM_FAILED: 'segmentation stream failed',
+  SAM_STREAM_INCOMPLETE: 'segmentation stream incomplete',
+  SAM_USAGE_INVALID: 'segmentation usage invalid',
+  SAM_USAGE_EXCEEDED: 'segmentation usage exceeded the reservation',
 } as const;
 
 export const META_ERROR_MESSAGES: Readonly<Record<MetaErrorCode, string>> =
