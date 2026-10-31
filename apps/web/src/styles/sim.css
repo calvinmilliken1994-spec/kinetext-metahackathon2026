@@ -99,6 +99,30 @@
   .explorer-dot-settle, .explorer-svg .graph-tick-y { animation: none; transition: none; }
 }
 
+/* ---- the explorer as a slide (presentation stage beat; lib/explorer.ts STAGE_LAYOUT) --------------------------------
+ * The formula and the sliders in a column, a graph drawn at exactly the width of the rest beside it, and the live
+ * equation with the result in one row under the graph. The whole slide keeps to ~450 px of design height, so a
+ * 1366×768 stage shows it at full size and a 1920×1080 one scales it up evenly. */
+.explorer-stage { grid-template-columns: var(--xs-side) minmax(0, 1fr); column-gap: var(--xs-gap); align-items: start; }
+.explorer-stage-side { display: grid; gap: 12px; align-content: start; min-width: 0; }
+.explorer-stage .explorer-formula { gap: 2px; }
+.explorer-stage .explorer-typeset { margin: 0 0 2px; }
+.explorer-stage .sliders { gap: 8px; }
+.explorer-stage .slider-ends { margin-top: -2px; }
+.explorer-stage-example { margin: 0; font-size: var(--fs-14); color: var(--ink-2); justify-self: start; border-radius: var(--r-s); }
+.explorer-stage-example b { color: var(--ink); font-weight: var(--fw-bold); font-variant-numeric: tabular-nums; }
+.explorer-stage-main { gap: 8px; }
+.explorer-stage-result {
+  display: flex; align-items: center; gap: 12px 24px;
+  padding-left: 10px; border-top: 1px solid var(--line); padding-top: 10px;
+}
+.explorer-stage-result .eq-line { flex: 1 1 auto; min-width: 0; margin: 0; font-size: var(--fs-16); }
+.explorer-stage-result .readouts { flex: none; }
+.explorer-stage-result .readout { display: flex; align-items: baseline; gap: 10px; }
+.explorer-stage-result .readout dt { font-size: var(--fs-14); }
+.explorer-stage-result .readout dd { margin: 0; font-size: var(--fs-26); line-height: 1.15; }
+.explorer-stage-result .btn { flex: none; }
+
 /* ---- the projectile scene in presentation mode: height scale, the launch before the reveal, the gliding guess line ---- */
 .height-ruler .ruler-line { stroke: var(--line-3); stroke-width: 1.5; }
 .height-ruler .tick-label { font-size: 13px; }

@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { capitalFirst } from '../lib/displayText.ts';
-import type { FormEvent } from 'react';
+import type { CSSProperties, FormEvent } from 'react';
 import type { FormulaExplorerSpec } from '../../../../packages/contracts/kit.ts';
 import {
-  CALCULATOR_FAILURE, buildExplorer, caseOutputs, casePrompt, curveSamples, defaultInputs, displayUnit, evalAt, graphGeometry, graphReveal, gradeCaseGuess,
+  CALCULATOR_FAILURE, GRAPH_SIZE, STAGE_GRAPH_SIZE, STAGE_LAYOUT, buildExplorer, caseOutputs, casePrompt, curveSamples, defaultInputs, displayUnit, evalAt, graphGeometry, graphReveal, gradeCaseGuess,
   groupedSig6, inputsOfCase, outputName, niceValueRows, pageFormulaStatus, predictSpec, shortMeaning, sliderStep, valueRowsWithNow,
 } from '../lib/explorer.ts';
 import type { Inputs } from '../lib/explorer.ts';
@@ -57,8 +57,8 @@ export function FormulaExplorerView({ spec, cite, presentation }: Props) {
   const samples = useMemo(() => (model.ok ? curveSamples(model, drawn, inputs) : []), [model, drawn, inputs]);
   const output = model.ok ? evalAt(model, inputs) : Number.NaN;
   const geometry = useMemo(
-    () => graphGeometry(samples, { x: inputs[spec.xVariable] ?? xVar?.default ?? 0, y: output }),
-    [samples, inputs, spec.xVariable, xVar, output],
+    () => graphGeometry(samples, { x: inputs[spec.xVariable] ?? xVar?.default ?? 0, y: output }, presentation?.mode === 'stage' ? STAGE_GRAPH_SIZE : GRAPH_SIZE),
+    [samples, inputs, spec.xVariable, xVar, output, presentation?.mode],
   );
   const table = useMemo(() => (model.ok ? niceValueRows(model, spec, inputs) : []), [model, spec, inputs]);
   const cases = useMemo(() => (model.ok ? caseOutputs(model, spec) : []), [model, spec]);
@@ -157,13 +157,67 @@ export function FormulaExplorerView({ spec, cite, presentation }: Props) {
   }
   const rows = valueRowsWithNow(table, inputs[spec.xVariable] ?? 0, output);
 
+  const sliders = (
+    <div className="sliders">
+      {spec.variables.map((v) => (
+        <Slider
+          key={v.name}
+          label={capitalFirst(shortMeaning(v.meaning))}
+          description={v.meaning}
+          symbol={symbols[v.name] === undefined ? v.pageSymbol : <SymbolMark piece={symbols[v.name]!} />}
+          unit={displayUnit(v.unit)}
+          min={v.min}
+          max={v.max}
+          step={steps[v.name] ?? sliderStep(v)}
+          value={inputs[v.name] ?? v.default}
+          onChange={(val) => onSlider(v.name, val)}
+        />
+      ))}
+    </div>
+  );
+  const formula = typeset !== null
+    ? <Linked as="p" className="explorer-typeset" links={formulaLinks}><TypesetFormula formula={typeset} /></Linked>
+    : <Linked as="p" className="explorer-formula-text" links={formulaLinks}><code>{spec.formulaText}</code></Linked>;
+
+  // The slide (presentation stage beat): the formula and sliders in a column beside a graph that fills the rest of the
+  // slide, the live equation and the result in one row under it. Laid out at STAGE_LAYOUT's design width; StageFit zooms it.
+  if (presentation?.mode === 'stage') {
+    const shell = { '--xs-side': `${STAGE_LAYOUT.sideWidth}px`, '--xs-gap': `${STAGE_LAYOUT.gap}px` } as CSSProperties;
+    return (
+      <div className="explorer explorer-stage" data-testid="formula-explorer" data-presentation="stage" style={shell}>
+        <div className="explorer-stage-side">
+          <div className="explorer-formula">
+            {formula}
+            <QuoteBlock componentId="formula-explorer-v1" part="equation" id="equation" sourceId={spec.sourceId} quote={spec.quote} cite={cite} caption="As the page writes it" />
+            {formulaStatus !== 'matches' && <p className="note small" role="note" data-testid="ai-formula-notice">{AI_FORMULA_NOTICE}</p>}
+          </div>
+          {sliders}
+          {spec.hasSourceExample && (
+            // The example's words go to the quote zone under the slide on hover (one place for page quotes).
+            <Linked as="p" className="explorer-stage-example" links={[linkKey(spec.sourceId, spec.sourceExample.quote)]} tabIndex={0}>
+              The page’s own example gives <b>{groupedSig6(spec.sourceExample.resultNumber)}</b>.
+            </Linked>
+          )}
+        </div>
+        <div className="explorer-visual explorer-stage-main" ref={visualRef}>
+          <FormulaGraph geometry={geometry} yName={yName} xName={xName} concealed={concealed} reveal={reveal} />
+          <div className="explorer-stage-result">
+            <EquationLine equation={equation} concealed={concealed} links={formulaLinks} />
+            <dl className="readouts explorer-readout" aria-live="polite">
+              <Readout name={yName} value={Number.isFinite(output) || concealed ? groupedSig6(output) : 'Not defined here'} unit="" concealed={concealed} />
+            </dl>
+            <button type="button" className="btn btn-small" onClick={() => setInputs(defaultInputs(spec))}>Reset sliders</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="explorer" data-testid="formula-explorer">
       <div className="explorer-formula">
         <p className="field-label">The formula</p>
-        {typeset !== null
-          ? <Linked as="p" className="explorer-typeset" links={formulaLinks}><TypesetFormula formula={typeset} /></Linked>
-          : <Linked as="p" className="explorer-formula-text" links={formulaLinks}><code>{spec.formulaText}</code></Linked>}
+        {formula}
         <QuoteBlock componentId="formula-explorer-v1" part="equation" id="equation" sourceId={spec.sourceId} quote={spec.quote} cite={cite} caption="As the page writes it" />
         {formulaStatus !== 'matches' && <p className="note small" role="note" data-testid="ai-formula-notice">{AI_FORMULA_NOTICE}</p>}
       </div>
@@ -171,22 +225,7 @@ export function FormulaExplorerView({ spec, cite, presentation }: Props) {
       <div className="explorer-main">
         <div className="explorer-controls">
           <h3>Move the sliders</h3>
-          <div className="sliders">
-            {spec.variables.map((v) => (
-              <Slider
-                key={v.name}
-                label={capitalFirst(shortMeaning(v.meaning))}
-                description={v.meaning}
-                symbol={symbols[v.name] === undefined ? v.pageSymbol : <SymbolMark piece={symbols[v.name]!} />}
-                unit={displayUnit(v.unit)}
-                min={v.min}
-                max={v.max}
-                step={steps[v.name] ?? sliderStep(v)}
-                value={inputs[v.name] ?? v.default}
-                onChange={(val) => onSlider(v.name, val)}
-              />
-            ))}
-          </div>
+          {sliders}
           <EquationLine equation={equation} concealed={concealed} links={formulaLinks} />
           <dl className="readouts explorer-readout" aria-live="polite">
             <Readout name={yName} value={groupedSig6(output)} unit="" concealed={concealed} />

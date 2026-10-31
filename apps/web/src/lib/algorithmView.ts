@@ -457,6 +457,35 @@ export function boardAt(spec: AlgorithmTraceSpec, trace: AlgoTrace, f: number): 
   };
 }
 
+/** The two outer positions that trade places on a swap frame (the arc under the board), or null. */
+export function swapPair(view: Pick<BoardView, 'op' | 'cells'>): readonly [number, number] | null {
+  if (view.op !== 'swap') return null;
+  const traded = view.cells.filter((c) => c.mark === 'swap' || c.mark === 'pivot').map((c) => c.index);
+  if (traded.length < 2) return null;
+  const lo = Math.min(...traded);
+  const hi = Math.max(...traded);
+  return lo === hi ? null : [lo, hi];
+}
+
+/** Rows the board keeps room for: the marker row (lo · mid · hi, key, min, pivot) and the swap-arc band. */
+export interface BoardRooms { tags: boolean; swapArc: boolean }
+
+/**
+ * Which reserved rows this trace ever uses, read over every frame: a board reserves only those, so merge sort or bubble
+ * sort carry no empty band, and because the answer is the same on every frame, stepping and revealing never move it.
+ */
+export function boardRooms(spec: AlgorithmTraceSpec, trace: AlgoTrace): BoardRooms {
+  let tags = false;
+  let swapArc = false;
+  for (let f = 0; f < trace.frames.length && !(tags && swapArc); f++) {
+    const v = boardAt(spec, trace, f);
+    const m = v.markers;
+    if (!tags && (m.lo ?? m.mid ?? m.hi ?? m.key ?? m.min ?? m.pivot) !== null) tags = true;
+    if (!swapArc && swapPair(v) !== null) swapArc = true;
+  }
+  return { tags, swapArc };
+}
+
 // ---- words around the trace --------------------------------------------------------------------------------------------
 
 /** What the second counter counts, in the engine's terms; null for searches (nothing moves). */

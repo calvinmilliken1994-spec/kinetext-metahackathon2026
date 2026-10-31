@@ -171,6 +171,13 @@ export function displayUnit(unit: string): string {
 
 export interface GraphSize { width: number; height: number }
 export const GRAPH_SIZE: GraphSize = { width: 520, height: 300 };
+/**
+ * The explorer as a slide (presentation stage mode): a column of formula and sliders beside a large graph, laid out at a
+ * fixed design width and zoomed to the stage. The graph is drawn at exactly its column's width, so its type stays 1:1.
+ * `maxHeight` is the design budget the whole slide keeps to, so a 1366×768 stage (~1189×453 px) fits at zoom ≥ 0.85.
+ */
+export const STAGE_LAYOUT = { width: 1180, sideWidth: 370, gap: 40, maxHeight: 450 } as const;
+export const STAGE_GRAPH_SIZE: GraphSize = { width: STAGE_LAYOUT.width - STAGE_LAYOUT.sideWidth - STAGE_LAYOUT.gap, height: 385 };
 /** Room above the plot for the axis name and the 'Now:' value (14 px type), below it for ticks and the axis title. */
 const MARGIN = { l: 62, r: 18, t: 28, b: 46 };
 

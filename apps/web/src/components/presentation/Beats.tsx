@@ -10,6 +10,7 @@ import { REVIEW_STATUS, withoutReviewNote } from '../../lib/provenance.ts';
 import { quizCards } from '../../lib/quiz.ts';
 import { compareGrid, NOT_STATED } from '../../lib/compare.ts';
 import { parseGuess } from '../../lib/predictions.ts';
+import { STAGE_LAYOUT } from '../../lib/explorer.ts';
 import { compareEvents, formatEventDate, gradePair } from '../../lib/timeline.ts';
 import { linkKey, linkKeysOf } from '../../lib/linking.ts';
 import { ActivityPanel } from '../ActivityPanel.tsx';
@@ -377,11 +378,6 @@ function PredictBeat({ beat, step, answer, onAnswer, cite, deck }: AskProps<'pre
  */
 /** The smallest scale a stage part is set at before it scrolls instead. */
 const MIN_STAGE_ZOOM = 0.85;
-/**
- * The formula explorer's sliders and graph read as one picture, so they shrink further rather than scroll: at 1366×768
- * the hero needs ~0.65 (Calvin: "slightly smaller until it doesn't require scrolling").
- */
-const MIN_EXPLORER_ZOOM = 0.6;
 /** The sequence board with its reserved answers fits a 1366×768 slide at ~0.8 rather than scrolling its last card. */
 const MIN_SEQUENCE_ZOOM = 0.75;
 
@@ -506,9 +502,11 @@ function StageBeat({ beat, cite, deck, repairBadge }: { beat: KindOf<'stage'>; c
     <div className="pz-stage" data-part={part.kind === 'kit' ? part.spec.componentId : 'activity'}>
       <h2 className="pz-heading">{beat.title}</h2>
       <StageFit
-        hero={part.kind === 'activity' ? '.eq-line' : part.spec.componentId === 'formula-explorer-v1' ? '.explorer-main' : undefined}
+        // The explorer has its own slide layout (formula and sliders beside a large graph, lib/explorer STAGE_LAYOUT), fitted whole.
+        hero={part.kind === 'activity' ? '.eq-line' : undefined}
+        width={part.kind === 'kit' && part.spec.componentId === 'formula-explorer-v1' ? STAGE_LAYOUT.width : undefined}
         follow={part.kind === 'activity' ? '[data-pz-follow]' : undefined}
-        minZoom={part.kind === 'kit' && part.spec.componentId === 'formula-explorer-v1' ? MIN_EXPLORER_ZOOM : part.kind === 'kit' && part.spec.componentId === 'sequence-v1' ? MIN_SEQUENCE_ZOOM : undefined}
+        minZoom={part.kind === 'kit' && part.spec.componentId === 'sequence-v1' ? MIN_SEQUENCE_ZOOM : undefined}
         // The sequence board reserves its answers' room (OrderBoard reserve), so it is fitted once: "Check order" never rescales it.
         frozen={part.kind === 'kit' && part.spec.componentId === 'sequence-v1'}
       >

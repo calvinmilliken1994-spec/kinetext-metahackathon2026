@@ -34,6 +34,12 @@
 .at-board { position: relative; margin: 0; padding: 28px 0 24px; }
 .at-board[data-ranged="false"] { padding-top: 6px; }
 .at-board[data-ranged="false"] .at-overlay { display: none; }
+/* Rows the trace never uses take no room (lib boardRooms, the same on every frame): merge sort has no marker row and no
+   swap arc, so its halves sit right under the positions instead of below an empty band. */
+.at-board[data-tags="false"] .at-col { grid-template-rows: var(--at-bar-h) auto auto; }
+.at-board[data-tags="false"] .at-tag { display: none; }
+.at-board[data-arc="false"] { padding-bottom: 0; }
+.at-board[data-arc="false"] .at-under { display: none; }
 .at-cols, .at-overlay, .at-under { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 76px)); justify-content: center; column-gap: var(--at-gap); }
 .at-col { display: grid; grid-template-rows: var(--at-bar-h) auto auto 18px; justify-items: center; row-gap: 3px; transition: opacity 220ms ease-out; }
 .at-bar-room { align-self: stretch; justify-self: stretch; display: flex; align-items: flex-end; border-bottom: 1px solid var(--line-2); }

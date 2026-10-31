@@ -47,6 +47,31 @@ export function columnViews(spec: DataTableSpec): ColumnView[] {
   });
 }
 
+const sameText = (s: string): string => s.replace(/\s+/g, '').toLowerCase();
+
+/**
+ * The value column that repeats every row label (IRS brackets: label '12%', Rate column '12%' or '12' with unit '%'), or
+ * null. The view then drops the label column and shows that column as the row header, so the table never prints the
+ * same numbers twice. Kept when a lookup question hides a cell of that column: the row would lose its name.
+ */
+export function duplicateLabelColumn(spec: DataTableSpec): number | null {
+  if (spec.rows.length === 0) return null;
+  const labels = spec.rows.map((r) => sameText(r.label));
+  if (labels.some((l) => l === '')) return null;
+  for (let c = 0; c < spec.columns.length; c++) {
+    const unit = sameText(spec.columns[c]?.unit ?? '');
+    const repeats = spec.rows.every((r, i) => {
+      const v = sameText(r.values[c]?.value ?? '');
+      const l = labels[i] as string;
+      return v !== '' && (v === l || (unit !== '' && (`${v}${unit}` === l || `${unit}${v}` === l)));
+    });
+    if (!repeats) continue;
+    if (spec.questions.some((q) => q.kind === 'lookup' && q.columnIndex === c)) return null;
+    return c;
+  }
+  return null;
+}
+
 /** The row-label column's noun for a question: 'planet', 'date' ('row' when the page gives none). */
 function labelNoun(spec: DataTableSpec): string {
   const h = spec.labelHeader.trim();

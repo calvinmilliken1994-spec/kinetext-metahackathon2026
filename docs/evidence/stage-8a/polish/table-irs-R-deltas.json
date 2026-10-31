@@ -1,0 +1,374 @@
+[
+ {
+  "size": "1366x768",
+  "theme": "dark",
+  "step": 0,
+  "zoom": [
+   "0.90239",
+   "0.90239"
+  ],
+  "elements": 159,
+  "layoutMoved": [],
+  "inserted": [
+   [
+    "replace",
+    [
+     "FIGURE.pz-zone"
+    ],
+    [
+     "FIGURE.pz-zone linkable"
+    ]
+   ]
+  ]
+ },
+ {
+  "size": "1366x768",
+  "theme": "dark",
+  "step": 1,
+  "zoom": [
+   "0.90239",
+   "0.90239"
+  ],
+  "elements": 162,
+  "layoutMoved": [],
+  "inserted": [
+   [
+    "replace",
+    [
+     "TD.dt-num dt-label-col"
+    ],
+    [
+     "TD.dt-num dt-label-col linkabl"
+    ]
+   ],
+   [
+    "replace",
+    [
+     "TD.dt-num dt-target"
+    ],
+    [
+     "TD.dt-num dt-target linkable"
+    ]
+   ],
+   [
+    "replace",
+    [
+     "TD.dt-num"
+    ],
+    [
+     "TD.dt-num linkable"
+    ]
+   ],
+   [
+    "replace",
+    [
+     "FIGURE.pz-zone"
+    ],
+    [
+     "FIGURE.pz-zone linkable"
+    ]
+   ]
+  ]
+ },
+ {
+  "size": "1366x768",
+  "theme": "dark",
+  "step": 2,
+  "zoom": [
+   "0.90239",
+   "0.90239"
+  ],
+  "elements": 159,
+  "layoutMoved": [],
+  "inserted": [
+   [
+    "replace",
+    [
+     "FIGURE.pz-zone"
+    ],
+    [
+     "FIGURE.pz-zone linkable"
+    ]
+   ]
+  ]
+ },
+ {
+  "size": "1920x1080",
+  "theme": "dark",
+  "step": 0,
+  "zoom": [
+   "1.31873",
+   "1.31873"
+  ],
+  "elements": 159,
+  "layoutMoved": [],
+  "inserted": [
+   [
+    "replace",
+    [
+     "FIGURE.pz-zone"
+    ],
+    [
+     "FIGURE.pz-zone linkable"
+    ]
+   ]
+  ]
+ },
+ {
+  "size": "1920x1080",
+  "theme": "dark",
+  "step": 1,
+  "zoom": [
+   "1.31873",
+   "1.31873"
+  ],
+  "elements": 162,
+  "layoutMoved": [],
+  "inserted": [
+   [
+    "replace",
+    [
+     "TD.dt-num dt-label-col"
+    ],
+    [
+     "TD.dt-num dt-label-col linkabl"
+    ]
+   ],
+   [
+    "replace",
+    [
+     "TD.dt-num dt-target"
+    ],
+    [
+     "TD.dt-num dt-target linkable"
+    ]
+   ],
+   [
+    "replace",
+    [
+     "TD.dt-num"
+    ],
+    [
+     "TD.dt-num linkable"
+    ]
+   ],
+   [
+    "replace",
+    [
+     "FIGURE.pz-zone"
+    ],
+    [
+     "FIGURE.pz-zone linkable"
+    ]
+   ]
+  ]
+ },
+ {
+  "size": "1920x1080",
+  "theme": "dark",
+  "step": 2,
+  "zoom": [
+   "1.31873",
+   "1.31873"
+  ],
+  "elements": 159,
+  "layoutMoved": [],
+  "inserted": [
+   [
+    "replace",
+    [
+     "FIGURE.pz-zone"
+    ],
+    [
+     "FIGURE.pz-zone linkable"
+    ]
+   ]
+  ]
+ },
+ {
+  "size": "1366x768",
+  "theme": "light",
+  "step": 0,
+  "zoom": [
+   "0.90239",
+   "0.90239"
+  ],
+  "elements": 159,
+  "layoutMoved": [],
+  "inserted": [
+   [
+    "replace",
+    [
+     "FIGURE.pz-zone"
+    ],
+    [
+     "FIGURE.pz-zone linkable"
+    ]
+   ]
+  ]
+ },
+ {
+  "size": "1366x768",
+  "theme": "light",
+  "step": 1,
+  "zoom": [
+   "0.90239",
+   "0.90239"
+  ],
+  "elements": 162,
+  "layoutMoved": [],
+  "inserted": [
+   [
+    "replace",
+    [
+     "TD.dt-num dt-label-col"
+    ],
+    [
+     "TD.dt-num dt-label-col linkabl"
+    ]
+   ],
+   [
+    "replace",
+    [
+     "TD.dt-num dt-target"
+    ],
+    [
+     "TD.dt-num dt-target linkable"
+    ]
+   ],
+   [
+    "replace",
+    [
+     "TD.dt-num"
+    ],
+    [
+     "TD.dt-num linkable"
+    ]
+   ],
+   [
+    "replace",
+    [
+     "FIGURE.pz-zone"
+    ],
+    [
+     "FIGURE.pz-zone linkable"
+    ]
+   ]
+  ]
+ },
+ {
+  "size": "1366x768",
+  "theme": "light",
+  "step": 2,
+  "zoom": [
+   "0.90239",
+   "0.90239"
+  ],
+  "elements": 159,
+  "layoutMoved": [],
+  "inserted": [
+   [
+    "replace",
+    [
+     "FIGURE.pz-zone"
+    ],
+    [
+     "FIGURE.pz-zone linkable"
+    ]
+   ]
+  ]
+ },
+ {
+  "size": "1920x1080",
+  "theme": "light",
+  "step": 0,
+  "zoom": [
+   "1.31873",
+   "1.31873"
+  ],
+  "elements": 159,
+  "layoutMoved": [],
+  "inserted": [
+   [
+    "replace",
+    [
+     "FIGURE.pz-zone"
+    ],
+    [
+     "FIGURE.pz-zone linkable"
+    ]
+   ]
+  ]
+ },
+ {
+  "size": "1920x1080",
+  "theme": "light",
+  "step": 1,
+  "zoom": [
+   "1.31873",
+   "1.31873"
+  ],
+  "elements": 162,
+  "layoutMoved": [],
+  "inserted": [
+   [
+    "replace",
+    [
+     "TD.dt-num dt-label-col"
+    ],
+    [
+     "TD.dt-num dt-label-col linkabl"
+    ]
+   ],
+   [
+    "replace",
+    [
+     "TD.dt-num dt-target"
+    ],
+    [
+     "TD.dt-num dt-target linkable"
+    ]
+   ],
+   [
+    "replace",
+    [
+     "TD.dt-num"
+    ],
+    [
+     "TD.dt-num linkable"
+    ]
+   ],
+   [
+    "replace",
+    [
+     "FIGURE.pz-zone"
+    ],
+    [
+     "FIGURE.pz-zone linkable"
+    ]
+   ]
+  ]
+ },
+ {
+  "size": "1920x1080",
+  "theme": "light",
+  "step": 2,
+  "zoom": [
+   "1.31873",
+   "1.31873"
+  ],
+  "elements": 159,
+  "layoutMoved": [],
+  "inserted": [
+   [
+    "replace",
+    [
+     "FIGURE.pz-zone"
+    ],
+    [
+     "FIGURE.pz-zone linkable"
+    ]
+   ]
+  ]
+ }
+]

@@ -1,0 +1,257 @@
+[
+ {
+  "size": "1366x768",
+  "theme": "dark",
+  "algo": "Bubble sort",
+  "step": 1,
+  "zoom": [
+   "1.01325",
+   "1.01325"
+  ],
+  "elements": 76,
+  "layoutMoved": [],
+  "contentChanged": 3,
+  "inserted": [
+   [
+    "insert",
+    [],
+    [
+     "DIV.at-swap",
+     "svg."
+    ]
+   ],
+   [
+    "insert",
+    [],
+    [
+     "SPAN.mark mark-ok",
+     "svg."
+    ]
+   ],
+   [
+    "delete",
+    [
+     "SPAN.",
+     "STRONG."
+    ],
+    []
+   ]
+  ]
+ },
+ {
+  "size": "1366x768",
+  "theme": "dark",
+  "algo": "Bubble sort",
+  "step": 2,
+  "zoom": [
+   "1.01325",
+   "1.01325"
+  ],
+  "elements": 76,
+  "layoutMoved": [],
+  "contentChanged": 3,
+  "inserted": [
+   [
+    "insert",
+    [],
+    [
+     "DIV.at-swap",
+     "svg."
+    ]
+   ],
+   [
+    "insert",
+    [],
+    [
+     "SPAN.mark mark-ok",
+     "svg."
+    ]
+   ],
+   [
+    "delete",
+    [
+     "SPAN.",
+     "STRONG."
+    ],
+    []
+   ]
+  ]
+ },
+ {
+  "size": "1366x768",
+  "theme": "dark",
+  "algo": "Binary search",
+  "step": 1,
+  "zoom": [
+   "1.00438",
+   "1.00438"
+  ],
+  "elements": 102,
+  "layoutMoved": [],
+  "contentChanged": 1,
+  "inserted": [
+   [
+    "insert",
+    [],
+    [
+     "SPAN.mark mark-ok",
+     "svg."
+    ]
+   ],
+   [
+    "delete",
+    [
+     "SPAN.",
+     "STRONG."
+    ],
+    []
+   ]
+  ]
+ },
+ {
+  "size": "1366x768",
+  "theme": "dark",
+  "algo": "Binary search",
+  "step": 2,
+  "zoom": [
+   "1.00438",
+   "1.00438"
+  ],
+  "elements": 102,
+  "layoutMoved": [],
+  "contentChanged": 1,
+  "inserted": [
+   [
+    "insert",
+    [],
+    [
+     "SPAN.mark mark-ok",
+     "svg."
+    ]
+   ],
+   [
+    "delete",
+    [
+     "SPAN.",
+     "STRONG."
+    ],
+    []
+   ]
+  ]
+ },
+ {
+  "size": "1366x768",
+  "theme": "dark",
+  "algo": "Merge sort",
+  "step": 1,
+  "zoom": [
+   "1.05517",
+   "1.05517"
+  ],
+  "elements": 93,
+  "layoutMoved": [],
+  "contentChanged": 2,
+  "inserted": [
+   [
+    "insert",
+    [],
+    [
+     "SPAN.mark mark-ok",
+     "svg."
+    ]
+   ],
+   [
+    "delete",
+    [
+     "SPAN.",
+     "STRONG."
+    ],
+    []
+   ]
+  ]
+ },
+ {
+  "size": "1366x768",
+  "theme": "dark",
+  "algo": "Merge sort",
+  "step": 2,
+  "zoom": [
+   "1.05517",
+   "1.05517"
+  ],
+  "elements": 94,
+  "layoutMoved": [],
+  "contentChanged": 2,
+  "inserted": [
+   [
+    "insert",
+    [],
+    [
+     "SPAN.mark mark-ok",
+     "svg."
+    ]
+   ],
+   [
+    "delete",
+    [
+     "SPAN.",
+     "STRONG."
+    ],
+    []
+   ]
+  ]
+ },
+ {
+  "size": "1366x768",
+  "theme": "dark",
+  "algo": "Quicksort",
+  "step": 1,
+  "zoom": [
+   "0.925403",
+   "0.925403"
+  ],
+  "elements": 109,
+  "layoutMoved": [],
+  "contentChanged": 2,
+  "inserted": []
+ },
+ {
+  "size": "1366x768",
+  "theme": "dark",
+  "algo": "Quicksort",
+  "step": 2,
+  "zoom": [
+   "0.925403",
+   "0.925403"
+  ],
+  "elements": 91,
+  "layoutMoved": [],
+  "contentChanged": 3,
+  "inserted": [
+   [
+    "insert",
+    [],
+    [
+     "DIV.at-swap",
+     "svg."
+    ]
+   ],
+   [
+    "insert",
+    [],
+    [
+     "SPAN.mark mark-ok",
+     "svg."
+    ]
+   ],
+   [
+    "delete",
+    [
+     "SPAN.",
+     "STRONG."
+    ],
+    []
+   ]
+  ]
+ }
+]

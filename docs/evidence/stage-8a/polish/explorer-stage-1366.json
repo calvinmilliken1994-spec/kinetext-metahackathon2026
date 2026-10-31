@@ -1,0 +1,115 @@
+{
+ "job-20261030104212-d509087a": {
+  "url": "?present=job-20261030104212-d509087a&beat=5",
+  "zoom": 0.995604,
+  "fit": [
+   1189,
+   459
+  ],
+  "scroll": 0,
+  "inner": 455,
+  "side": 447,
+  "main": 443,
+  "sliders": 4,
+  "example": false,
+  "notice": false,
+  "tab": "Formula"
+ },
+ "job-20261029202625-8a346f30": {
+  "url": "?present=job-20261029202625-8a346f30&beat=5",
+  "zoom": 1.00443,
+  "fit": [
+   1189,
+   459
+  ],
+  "scroll": 0,
+  "inner": 451,
+  "side": 367,
+  "main": 443,
+  "sliders": 3,
+  "example": false,
+  "notice": false,
+  "tab": "Formula"
+ },
+ "job-20261029201508-0cb10404": {
+  "url": "?present=job-20261029201508-0cb10404&beat=6",
+  "zoom": 1.00443,
+  "fit": [
+   1189,
+   459
+  ],
+  "scroll": 0,
+  "inner": 451,
+  "side": 315,
+  "main": 443,
+  "sliders": 2,
+  "example": false,
+  "notice": true,
+  "tab": "Formula"
+ },
+ "job-20261029202711-c24406ab": {
+  "url": "?present=job-20261029202711-c24406ab&beat=5",
+  "zoom": 1.00443,
+  "fit": [
+   1189,
+   459
+  ],
+  "scroll": 0,
+  "inner": 451,
+  "side": 289,
+  "main": 443,
+  "sliders": 2,
+  "example": false,
+  "notice": false,
+  "tab": "Formula"
+ },
+ "job-20261030044438-5cd9a47f": {
+  "url": "?present=job-20261030044438-5cd9a47f&beat=5",
+  "zoom": 1.00443,
+  "fit": [
+   1189,
+   459
+  ],
+  "scroll": 0,
+  "inner": 451,
+  "side": 289,
+  "main": 443,
+  "sliders": 2,
+  "example": false,
+  "notice": false,
+  "tab": "Formula"
+ },
+ "job-20261029201358-e6938f6f": {
+  "url": "?present=job-20261029201358-e6938f6f&beat=6",
+  "zoom": 1.00443,
+  "fit": [
+   1189,
+   459
+  ],
+  "scroll": 0,
+  "inner": 451,
+  "side": 289,
+  "main": 443,
+  "sliders": 2,
+  "example": false,
+  "notice": false,
+  "tab": "Formula"
+ },
+ "job-20261029201342-65f23571": {
+  "url": "?present=job-20261029201342-65f23571&beat=5",
+  "zoom": 1.00443,
+  "fit": [
+   1189,
+   459
+  ],
+  "scroll": 0,
+  "inner": 451,
+  "side": 410,
+  "main": 443,
+  "sliders": 4,
+  "example": false,
+  "notice": false,
+  "tab": "Formula"
+ },
+ "job-20261029144046-8446cd97": "no stage beat"
+}

@@ -1,0 +1,562 @@
+[
+ {
+  "size": "1920x1080",
+  "theme": "dark",
+  "algo": "Bubble sort",
+  "step": 1,
+  "zoom": [
+   "1.47137",
+   "1.47137"
+  ],
+  "elements": 76,
+  "layoutMoved": [],
+  "contentChanged": 3,
+  "inserted": [
+   [
+    "insert",
+    [],
+    [
+     "DIV.at-swap",
+     "svg."
+    ]
+   ],
+   [
+    "insert",
+    [],
+    [
+     "SPAN.mark mark-ok",
+     "svg."
+    ]
+   ],
+   [
+    "delete",
+    [
+     "SPAN.",
+     "STRONG."
+    ],
+    []
+   ]
+  ]
+ },
+ {
+  "size": "1920x1080",
+  "theme": "dark",
+  "algo": "Bubble sort",
+  "step": 2,
+  "zoom": [
+   "1.47137",
+   "1.47137"
+  ],
+  "elements": 76,
+  "layoutMoved": [],
+  "contentChanged": 3,
+  "inserted": [
+   [
+    "insert",
+    [],
+    [
+     "DIV.at-swap",
+     "svg."
+    ]
+   ],
+   [
+    "insert",
+    [],
+    [
+     "SPAN.mark mark-ok",
+     "svg."
+    ]
+   ],
+   [
+    "delete",
+    [
+     "SPAN.",
+     "STRONG."
+    ],
+    []
+   ]
+  ]
+ },
+ {
+  "size": "1920x1080",
+  "theme": "dark",
+  "algo": "Binary search",
+  "step": 1,
+  "zoom": [
+   "1.45852",
+   "1.45852"
+  ],
+  "elements": 102,
+  "layoutMoved": [],
+  "contentChanged": 1,
+  "inserted": [
+   [
+    "insert",
+    [],
+    [
+     "SPAN.mark mark-ok",
+     "svg."
+    ]
+   ],
+   [
+    "delete",
+    [
+     "SPAN.",
+     "STRONG."
+    ],
+    []
+   ]
+  ]
+ },
+ {
+  "size": "1920x1080",
+  "theme": "dark",
+  "algo": "Binary search",
+  "step": 2,
+  "zoom": [
+   "1.45852",
+   "1.45852"
+  ],
+  "elements": 102,
+  "layoutMoved": [],
+  "contentChanged": 1,
+  "inserted": [
+   [
+    "insert",
+    [],
+    [
+     "SPAN.mark mark-ok",
+     "svg."
+    ]
+   ],
+   [
+    "delete",
+    [
+     "SPAN.",
+     "STRONG."
+    ],
+    []
+   ]
+  ]
+ },
+ {
+  "size": "1920x1080",
+  "theme": "dark",
+  "algo": "Merge sort",
+  "step": 1,
+  "zoom": [
+   "1.53211",
+   "1.53211"
+  ],
+  "elements": 93,
+  "layoutMoved": [],
+  "contentChanged": 2,
+  "inserted": [
+   [
+    "insert",
+    [],
+    [
+     "SPAN.mark mark-ok",
+     "svg."
+    ]
+   ],
+   [
+    "delete",
+    [
+     "SPAN.",
+     "STRONG."
+    ],
+    []
+   ]
+  ]
+ },
+ {
+  "size": "1920x1080",
+  "theme": "dark",
+  "algo": "Merge sort",
+  "step": 2,
+  "zoom": [
+   "1.53211",
+   "1.53211"
+  ],
+  "elements": 94,
+  "layoutMoved": [],
+  "contentChanged": 2,
+  "inserted": [
+   [
+    "insert",
+    [],
+    [
+     "SPAN.mark mark-ok",
+     "svg."
+    ]
+   ],
+   [
+    "delete",
+    [
+     "SPAN.",
+     "STRONG."
+    ],
+    []
+   ]
+  ]
+ },
+ {
+  "size": "1920x1080",
+  "theme": "dark",
+  "algo": "Quicksort",
+  "step": 1,
+  "zoom": [
+   "1.34406",
+   "1.34406"
+  ],
+  "elements": 109,
+  "layoutMoved": [],
+  "contentChanged": 5,
+  "inserted": [
+   [
+    "insert",
+    [],
+    [
+     "DIV.at-swap",
+     "svg."
+    ]
+   ],
+   [
+    "insert",
+    [],
+    [
+     "SPAN.mark mark-ok",
+     "svg."
+    ]
+   ],
+   [
+    "delete",
+    [
+     "SPAN.",
+     "STRONG."
+    ],
+    []
+   ]
+  ]
+ },
+ {
+  "size": "1920x1080",
+  "theme": "dark",
+  "algo": "Quicksort",
+  "step": 2,
+  "zoom": [
+   "1.34406",
+   "1.34406"
+  ],
+  "elements": 91,
+  "layoutMoved": [],
+  "contentChanged": 3,
+  "inserted": [
+   [
+    "insert",
+    [],
+    [
+     "DIV.at-swap",
+     "svg."
+    ]
+   ],
+   [
+    "insert",
+    [],
+    [
+     "SPAN.mark mark-ok",
+     "svg."
+    ]
+   ],
+   [
+    "delete",
+    [
+     "SPAN.",
+     "STRONG."
+    ],
+    []
+   ]
+  ]
+ },
+ {
+  "size": "1920x1080",
+  "theme": "light",
+  "algo": "Bubble sort",
+  "step": 1,
+  "zoom": [
+   "1.47137",
+   "1.47137"
+  ],
+  "elements": 76,
+  "layoutMoved": [],
+  "contentChanged": 3,
+  "inserted": [
+   [
+    "insert",
+    [],
+    [
+     "DIV.at-swap",
+     "svg."
+    ]
+   ],
+   [
+    "insert",
+    [],
+    [
+     "SPAN.mark mark-ok",
+     "svg."
+    ]
+   ],
+   [
+    "delete",
+    [
+     "SPAN.",
+     "STRONG."
+    ],
+    []
+   ]
+  ]
+ },
+ {
+  "size": "1920x1080",
+  "theme": "light",
+  "algo": "Bubble sort",
+  "step": 2,
+  "zoom": [
+   "1.47137",
+   "1.47137"
+  ],
+  "elements": 76,
+  "layoutMoved": [],
+  "contentChanged": 3,
+  "inserted": [
+   [
+    "insert",
+    [],
+    [
+     "DIV.at-swap",
+     "svg."
+    ]
+   ],
+   [
+    "insert",
+    [],
+    [
+     "SPAN.mark mark-ok",
+     "svg."
+    ]
+   ],
+   [
+    "delete",
+    [
+     "SPAN.",
+     "STRONG."
+    ],
+    []
+   ]
+  ]
+ },
+ {
+  "size": "1920x1080",
+  "theme": "light",
+  "algo": "Binary search",
+  "step": 1,
+  "zoom": [
+   "1.45852",
+   "1.45852"
+  ],
+  "elements": 102,
+  "layoutMoved": [],
+  "contentChanged": 1,
+  "inserted": [
+   [
+    "insert",
+    [],
+    [
+     "SPAN.mark mark-ok",
+     "svg."
+    ]
+   ],
+   [
+    "delete",
+    [
+     "SPAN.",
+     "STRONG."
+    ],
+    []
+   ]
+  ]
+ },
+ {
+  "size": "1920x1080",
+  "theme": "light",
+  "algo": "Binary search",
+  "step": 2,
+  "zoom": [
+   "1.45852",
+   "1.45852"
+  ],
+  "elements": 102,
+  "layoutMoved": [],
+  "contentChanged": 1,
+  "inserted": [
+   [
+    "insert",
+    [],
+    [
+     "SPAN.mark mark-ok",
+     "svg."
+    ]
+   ],
+   [
+    "delete",
+    [
+     "SPAN.",
+     "STRONG."
+    ],
+    []
+   ]
+  ]
+ },
+ {
+  "size": "1920x1080",
+  "theme": "light",
+  "algo": "Merge sort",
+  "step": 1,
+  "zoom": [
+   "1.53211",
+   "1.53211"
+  ],
+  "elements": 93,
+  "layoutMoved": [],
+  "contentChanged": 2,
+  "inserted": [
+   [
+    "insert",
+    [],
+    [
+     "SPAN.mark mark-ok",
+     "svg."
+    ]
+   ],
+   [
+    "delete",
+    [
+     "SPAN.",
+     "STRONG."
+    ],
+    []
+   ]
+  ]
+ },
+ {
+  "size": "1920x1080",
+  "theme": "light",
+  "algo": "Merge sort",
+  "step": 2,
+  "zoom": [
+   "1.53211",
+   "1.53211"
+  ],
+  "elements": 94,
+  "layoutMoved": [],
+  "contentChanged": 2,
+  "inserted": [
+   [
+    "insert",
+    [],
+    [
+     "SPAN.mark mark-ok",
+     "svg."
+    ]
+   ],
+   [
+    "delete",
+    [
+     "SPAN.",
+     "STRONG."
+    ],
+    []
+   ]
+  ]
+ },
+ {
+  "size": "1920x1080",
+  "theme": "light",
+  "algo": "Quicksort",
+  "step": 1,
+  "zoom": [
+   "1.34406",
+   "1.34406"
+  ],
+  "elements": 109,
+  "layoutMoved": [],
+  "contentChanged": 5,
+  "inserted": [
+   [
+    "insert",
+    [],
+    [
+     "DIV.at-swap",
+     "svg."
+    ]
+   ],
+   [
+    "insert",
+    [],
+    [
+     "SPAN.mark mark-ok",
+     "svg."
+    ]
+   ],
+   [
+    "delete",
+    [
+     "SPAN.",
+     "STRONG."
+    ],
+    []
+   ]
+  ]
+ },
+ {
+  "size": "1920x1080",
+  "theme": "light",
+  "algo": "Quicksort",
+  "step": 2,
+  "zoom": [
+   "1.34406",
+   "1.34406"
+  ],
+  "elements": 91,
+  "layoutMoved": [],
+  "contentChanged": 3,
+  "inserted": [
+   [
+    "insert",
+    [],
+    [
+     "DIV.at-swap",
+     "svg."
+    ]
+   ],
+   [
+    "insert",
+    [],
+    [
+     "SPAN.mark mark-ok",
+     "svg."
+    ]
+   ],
+   [
+    "delete",
+    [
+     "SPAN.",
+     "STRONG."
+    ],
+    []
+   ]
+  ]
+ }
+]

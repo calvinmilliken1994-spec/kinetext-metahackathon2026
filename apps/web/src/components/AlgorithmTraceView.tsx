@@ -7,9 +7,9 @@ import type { CSSProperties } from 'react';
 import type { AlgorithmTraceSpec } from '../../../../packages/contracts/kit.ts';
 import type { EnginePresentation } from '../lib/enginePresentation.ts';
 import {
-  algorithmTrace, boardAt, gradeChoice, movesLabel, presentationFrame, teachingPoints, traceLede, variantNote,
+  algorithmTrace, boardAt, boardRooms, gradeChoice, movesLabel, presentationFrame, swapPair, teachingPoints, traceLede, variantNote,
 } from '../lib/algorithmView.ts';
-import type { BoardMarkers, BoardView, PredictPoint } from '../lib/algorithmView.ts';
+import type { BoardMarkers, BoardRooms, BoardView, PredictPoint } from '../lib/algorithmView.ts';
 import { aiLabel, capitalFirst } from '../lib/displayText.ts';
 import { lessonQuoteKey } from '../lib/lesson.ts';
 import { linkKey } from '../lib/linking.ts';
@@ -70,12 +70,16 @@ function boardLabel(view: BoardView): string {
   return `List: ${values}. ${view.note}`;
 }
 
-function Board({ spec, view, choices }: { spec: AlgorithmTraceSpec; view: BoardView; choices: readonly number[] | null }) {
+function Board({ spec, view, choices, rooms }: { spec: AlgorithmTraceSpec; view: BoardView; choices: readonly number[] | null; rooms: BoardRooms }) {
   const n = view.cells.length;
-  const traded = view.op === 'swap' ? view.cells.filter((c) => c.mark === 'swap' || c.mark === 'pivot').map((c) => c.index) : [];
-  const swapPair = traded.length >= 2 ? [Math.min(...traded), Math.max(...traded)] as const : null;
+  const pair = swapPair(view);
   return (
-    <figure className="at-board" style={{ '--n': n } as CSSProperties} data-op={view.op} data-ranged={spec.algorithm === 'binary-search' || spec.algorithm === 'merge-sort' || spec.algorithm === 'quicksort' ? 'true' : 'false'} data-testid="algorithm-board">
+    <figure
+      className="at-board" style={{ '--n': n } as CSSProperties} data-op={view.op}
+      data-ranged={spec.algorithm === 'binary-search' || spec.algorithm === 'merge-sort' || spec.algorithm === 'quicksort' ? 'true' : 'false'}
+      data-tags={rooms.tags ? 'true' : 'false'} data-arc={rooms.swapArc ? 'true' : 'false'}
+      data-testid="algorithm-board"
+    >
       <div className="at-cols" role="img" aria-label={boardLabel(view)}>
         {view.cells.map((c) => (
           <div
@@ -99,9 +103,10 @@ function Board({ spec, view, choices }: { spec: AlgorithmTraceSpec; view: BoardV
         )}
         {view.split !== null && view.range !== null && view.split > view.range[0] && <div className="at-split" style={{ gridColumn: `${view.split + 1}` }} />}
       </div>
+      {/* The swap-arc band; its room is dropped (data-arc="false") when this trace never swaps. */}
       <div className="at-under" aria-hidden="true">
-        {swapPair !== null && (
-          <div className="at-swap" style={{ gridColumn: `${swapPair[0] + 1} / ${swapPair[1] + 2}`, '--span': swapPair[1] - swapPair[0] + 1 } as CSSProperties}>
+        {pair !== null && (
+          <div className="at-swap" style={{ gridColumn: `${pair[0] + 1} / ${pair[1] + 2}`, '--span': pair[1] - pair[0] + 1 } as CSSProperties}>
             <svg viewBox="0 0 100 18" preserveAspectRatio="none"><path d="M1 2 C 25 18, 75 18, 99 2" vectorEffect="non-scaling-stroke" /></svg>
           </div>
         )}
@@ -251,6 +256,7 @@ function Facts({ spec, cite }: { spec: AlgorithmTraceSpec; cite: CiteProps }) {
 function LessonTrace({ spec, cite }: { spec: AlgorithmTraceSpec; cite: CiteProps }) {
   const trace = useMemo(() => algorithmTrace(spec), [spec]);
   const points = useMemo(() => teachingPoints(spec, trace), [spec, trace]);
+  const rooms = useMemo(() => boardRooms(spec, trace), [spec, trace]);
   const reduced = useReducedMotion();
   const first = points[0]?.ask ?? 0;
   const last = trace.frames.length - 1;
@@ -323,7 +329,7 @@ function LessonTrace({ spec, cite }: { spec: AlgorithmTraceSpec; cite: CiteProps
   return (
     <div className="at" data-algorithm={spec.algorithm} data-mode="lesson" data-testid="algorithm-trace">
       <Lede spec={spec} />
-      <Board spec={spec} view={view} choices={open ? point?.positions ?? null : null} />
+      <Board spec={spec} view={view} choices={open ? point?.positions ?? null : null} rooms={rooms} />
       {spec.algorithm === 'merge-sort' && <Tray view={view} />}
       <Status spec={spec} view={view} />
       <div className="at-controls" role="group" aria-label="Step through the algorithm">
@@ -354,6 +360,7 @@ function LessonTrace({ spec, cite }: { spec: AlgorithmTraceSpec; cite: CiteProps
 function StagedTrace({ spec, presentation }: { spec: AlgorithmTraceSpec; presentation: EnginePresentation }) {
   const trace = useMemo(() => algorithmTrace(spec), [spec]);
   const points = useMemo(() => teachingPoints(spec, trace), [spec, trace]);
+  const rooms = useMemo(() => boardRooms(spec, trace), [spec, trace]);
   const reduced = useReducedMotion();
   const { point: k, frame: goal } = presentationFrame(spec, presentation.step, presentation.revealed, trace);
   const p = points[k] ?? null;
@@ -374,7 +381,7 @@ function StagedTrace({ spec, presentation }: { spec: AlgorithmTraceSpec; present
   return (
     <div className="at" data-algorithm={spec.algorithm} data-mode="stage" data-testid="algorithm-trace" data-revealed={shown ? 'true' : 'false'}>
       <Lede spec={spec} />
-      <Board spec={spec} view={view} choices={!presentation.revealed ? p?.positions ?? null : null} />
+      <Board spec={spec} view={view} choices={!presentation.revealed ? p?.positions ?? null : null} rooms={rooms} />
       {spec.algorithm === 'merge-sort' && <Tray view={view} />}
       <Status spec={spec} view={view} />
       <AskPanel

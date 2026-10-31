@@ -6,7 +6,7 @@ import type { CSSProperties, ReactNode } from 'react';
 import type { DataTableSpec } from '../../../../packages/contracts/kit.ts';
 import type { EnginePresentation } from '../lib/enginePresentation.ts';
 import {
-  bracketSchedule, chartBars, columnViews, dataTablePresentationSteps, moneyText, percentText, presentationStep, questionViews,
+  bracketSchedule, chartBars, columnViews, dataTablePresentationSteps, duplicateLabelColumn, moneyText, percentText, presentationStep, questionViews,
   quoteLeaksAnswer, sortedRows, taxView,
 } from '../lib/dataTableView.ts';
 import type { DataTableStep, QuestionView, SortState, TaxView } from '../lib/dataTableView.ts';
@@ -116,6 +116,8 @@ function TaxCalculator({ spec, staged, revealed, onTouch }: { spec: DataTableSpe
 export function DataTableView({ spec, cite: _cite, presentation }: DataTableViewProps) {
   const staged = presentation !== undefined;
   const cols = useMemo(() => columnViews(spec), [spec]);
+  // A value column that repeats every row label (IRS: the Rate column) is the row header; the label column is not drawn.
+  const dupCol = useMemo(() => duplicateLabelColumn(spec), [spec]);
   const questions = useMemo(() => questionViews(spec).filter((q) => q.answer !== null), [spec]);
   const hasTax = useMemo(() => bracketSchedule(spec) !== null, [spec]);
   const [sort, setSort] = useState<SortState | null>(null);
@@ -223,7 +225,7 @@ export function DataTableView({ spec, cite: _cite, presentation }: DataTableView
             <caption className="sr-only">{aiLabel(spec.title)}{sort !== null ? `, sorted by ${cols[sort.column]?.headerText ?? ''}` : ''}</caption>
             <thead>
               <tr>
-                <th scope="col" className="dt-label-col">{aiLabel(spec.labelHeader)}</th>
+                {dupCol === null && <th scope="col" className="dt-label-col">{aiLabel(spec.labelHeader)}</th>}
                 {cols.map((c) => {
                   const col = spec.columns[c.index];
                   const dir = sort !== null && sort.column === c.index ? sort.dir : null;
@@ -250,16 +252,22 @@ export function DataTableView({ spec, cite: _cite, presentation }: DataTableView
                 const mark = answerRow === r ? 'answer' : picked === r ? 'picked' : undefined;
                 return (
                   <tr key={r} data-hot={hot === r ? 'true' : undefined} data-mark={mark} onMouseEnter={() => setHot(r)} onMouseLeave={() => setHot((h) => (h === r ? null : h))}>
-                    <Linked as="td" className="dt-label-col" links={linksFor(row.sourceId, row.quote)}><span className="dt-row-label">{aiLabel(row.label)}</span></Linked>
+                    {dupCol === null && <Linked as="td" className="dt-label-col" role="rowheader" links={linksFor(row.sourceId, row.quote)}><span className="dt-row-label">{aiLabel(row.label)}</span></Linked>}
                     {row.values.map((cell, c) => {
                       const hidden = secret !== null && secret.row === r && secret.column === c;
                       const target = q !== undefined && !taxStep && q.kind === 'lookup' && q.answer?.rowIndex === r && q.columnIndex === c;
+                      // The column that repeats the row labels is the row header (its cell names the row and cites its line).
+                      const head = c === dupCol;
+                      const links = hidden ? [] : head ? [...new Set([...linksFor(cell.sourceId, cell.quote), ...linksFor(row.sourceId, row.quote)])] : linksFor(cell.sourceId, cell.quote);
                       return (
                         <Linked
-                          as="td" key={c} className={`${cols[c]?.numeric === true ? 'dt-num' : ''}${target ? ' dt-target' : ''}`}
-                          links={hidden ? [] : linksFor(cell.sourceId, cell.quote)} data-revealed={target && qRevealed ? 'true' : undefined}
+                          as="td" key={c} className={`${cols[c]?.numeric === true ? 'dt-num' : ''}${target ? ' dt-target' : ''}${head ? ' dt-label-col' : ''}`}
+                          role={head ? 'rowheader' : undefined}
+                          links={links} data-revealed={target && qRevealed ? 'true' : undefined}
                         >
-                          {target ? <Hidden shown={!hidden}><span className="num">{cell.value}</span></Hidden> : <span className="num">{cell.value}</span>}
+                          {target
+                            ? <Hidden shown={!hidden}><span className="num">{cell.value}</span></Hidden>
+                            : <span className={head ? 'num dt-row-label' : 'num'}>{cell.value}</span>}
                         </Linked>
                       );
                     })}

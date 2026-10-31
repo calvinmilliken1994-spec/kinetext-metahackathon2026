@@ -1,0 +1,134 @@
+[
+ {
+  "theme": "dark",
+  "size": "1920x1080",
+  "beat": 5,
+  "zoomBefore": "1.41525",
+  "zoomAfter": "1.41525",
+  "elements": 179,
+  "moved": [],
+  "movedCount": 0
+ },
+ {
+  "theme": "dark",
+  "size": "1366x768",
+  "beat": 5,
+  "zoomBefore": "0.995604",
+  "zoomAfter": "0.995604",
+  "elements": 179,
+  "moved": [],
+  "movedCount": 0
+ },
+ {
+  "theme": "light",
+  "size": "1920x1080",
+  "beat": 5,
+  "zoomBefore": "1.41525",
+  "zoomAfter": "1.41525",
+  "elements": 179,
+  "moved": [],
+  "movedCount": 0
+ },
+ {
+  "theme": "light",
+  "size": "1366x768",
+  "beat": 5,
+  "zoomBefore": "0.995604",
+  "zoomAfter": "0.995604",
+  "elements": 179,
+  "moved": [],
+  "movedCount": 0
+ },
+ {
+  "theme": "dark",
+  "size": "1920x1080",
+  "beat": 4,
+  "zoom": "1.16764",
+  "elements": 53,
+  "moved": [],
+  "movedCount": 0,
+  "added": [
+   "SPAN.eq-result",
+   "P.pz-slot-value pz-answer-value",
+   "SPAN.num",
+   "P.pz-grade pz-verdict",
+   "P.pz-fine"
+  ],
+  "removed": [
+   "SPAN.eq-result concealed",
+   "P.pz-slot-value pz-slot-hidden",
+   "P.pz-hint",
+   "KBD."
+  ],
+  "note": "SVG internals excluded"
+ },
+ {
+  "theme": "dark",
+  "size": "1366x768",
+  "beat": 4,
+  "zoom": "0.795322",
+  "elements": 53,
+  "moved": [],
+  "movedCount": 0,
+  "added": [
+   "SPAN.eq-result",
+   "P.pz-slot-value pz-answer-value",
+   "SPAN.num",
+   "P.pz-grade pz-verdict",
+   "P.pz-fine"
+  ],
+  "removed": [
+   "SPAN.eq-result concealed",
+   "P.pz-slot-value pz-slot-hidden",
+   "P.pz-hint",
+   "KBD."
+  ],
+  "note": "SVG internals excluded"
+ },
+ {
+  "theme": "light",
+  "size": "1920x1080",
+  "beat": 4,
+  "zoom": "1.16764",
+  "elements": 53,
+  "moved": [],
+  "movedCount": 0,
+  "added": [
+   "SPAN.eq-result",
+   "P.pz-slot-value pz-answer-value",
+   "SPAN.num",
+   "P.pz-grade pz-verdict",
+   "P.pz-fine"
+  ],
+  "removed": [
+   "SPAN.eq-result concealed",
+   "P.pz-slot-value pz-slot-hidden",
+   "P.pz-hint",
+   "KBD."
+  ],
+  "note": "SVG internals excluded"
+ },
+ {
+  "theme": "light",
+  "size": "1366x768",
+  "beat": 4,
+  "zoom": "0.795322",
+  "elements": 53,
+  "moved": [],
+  "movedCount": 0,
+  "added": [
+   "SPAN.eq-result",
+   "P.pz-slot-value pz-answer-value",
+   "SPAN.num",
+   "P.pz-grade pz-verdict",
+   "P.pz-fine"
+  ],
+  "removed": [
+   "SPAN.eq-result concealed",
+   "P.pz-slot-value pz-slot-hidden",
+   "P.pz-hint",
+   "KBD."
+  ],
+  "note": "SVG internals excluded"
+ }
+]
