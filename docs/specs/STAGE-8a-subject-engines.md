@@ -170,4 +170,14 @@ Quicksort uses the last element as its pivot (Lomuto), and merge sort is top-dow
 | W-A views | Claude Opus 5.5 | `components/{AlgorithmTraceView,LogLadderView}.tsx`, `components/presentation/beats/{algorithm,logLadder}.tsx`, `lib/{algorithmView,logLadderView}.ts` (+tests), `styles/engines-a.css` |
 | W-B views + fixes | Claude Opus 5.5 | `components/{ThresholdView,DataTableView}.tsx`, `components/presentation/beats/{threshold,dataTable}.tsx`, `lib/{thresholdView,dataTableView}.ts` (+tests), `styles/engines-b.css`; plus the sequence "Check order" layout in presentation (`SequenceView`/`OrderBoard` presentation path) and the Drag explorer fit at 1366×768 |
 
+## 4. Web contract between slices (frozen)
+- **Views:** `components/{AlgorithmTraceView,LogLadderView,ThresholdView,DataTableView}.tsx` each export `<Name>` with props `{ spec, cite, presentation?: EnginePresentation }`. The type lives in `lib/enginePresentation.ts`: `{ mode: 'stage'; step: number; revealed: boolean }`. Without `presentation`, the component is the normal lesson view.
+- **Step counts:** each view's lib file exports `<name>PresentationSteps(spec): number`:
+  - `lib/algorithmView.ts`: `algorithmPresentationSteps`
+  - `lib/logLadderView.ts`: `logLadderPresentationSteps`
+  - `lib/thresholdView.ts`: `thresholdPresentationSteps`
+  - `lib/dataTableView.ts`: `dataTablePresentationSteps`
+- **Presentation behaviour:** the part's beat has that many steps, and → moves `step` from 0 to n−1. R sets `revealed` for the current step; the view decides what a reveal shows (e.g. the next algorithm state after the class predicts it). Nothing moves or re-lays out on R: reserve the space up front (the Δy = 0 rule).
+- **Who wires what:** W-B owns the presentation core (beat planning and the reducer in `lib/presentation.ts`, plus `components/presentation/Beats.tsx`) and wires all four engines into it through those functions. W-A only implements its two views and their lib functions.
+
 Wave 2 is Stage 8b, Label the diagram with SAM 3.1, in its own spec.
