@@ -6,9 +6,9 @@ import type { LabelDiagramGen, LabelDiagramSpec, LabelPartGen } from '../../../.
 import { KIT_LIMITS } from '../../../../packages/contracts/kit.ts';
 import type { Provenance } from '../../../../packages/contracts/index.ts';
 import {
-  checkPlacements, coverMasks, coverSource, FIGURE_COVER_PAD, figureLabelMasks, hasLabelBox, labelDiagramPresentationSteps, labelDiagramRevealQuote,
-  labelMasks, LESSON_MAX_UPSCALE, lessonFigureMaxWidth, MASK_PAD, MASK_PAD_X, normToPx, partViews, pixelBoxPct, place, placeTags, pointPct, pointPx, rectsOverlap, sameName, stageFigureSize,
-  stageQuestion, stageView, unplace, wordBank,
+  checkPlacements, coverMasks, coverSource, FIGURE_COVER_PAD, figureLabelMasks, fitSlotText, fitSlotTexts, groupLabelBoxes, hasLabelBox, labelDiagramPresentationSteps,
+  labelDiagramRevealQuote, labelMasks, labelSlots, LESSON_MAX_UPSCALE, lessonFigureMaxWidth, MASK_PAD, MASK_PAD_X, normToPx, partViews, pixelBoxPct, place,
+  placeTags, pointPct, pointPx, rectsOverlap, sameName, slotStates, stageFigureSize, stageOutline, stageQuestion, stageView, unplace, wordBank,
 } from './labelDiagramView.ts';
 import type { Rect } from './labelDiagramView.ts';
 import { buildLabelDiagramDemos, figureRefOf, LIVE_DNA_GEN, LIVE_DNA_REGIONS } from './labelDiagramDemoSpecs.ts';
@@ -217,7 +217,7 @@ test('a revealed step puts that part’s page sentence in the quote zone (the la
 // ---- the harness fixtures are plausible SAM output -----------------------------------------------------------------
 
 test('demo fixtures quote the page exactly and carry the figure’s own credit and size', () => {
-  assert.deepEqual(demos.map((d) => d.id), ['dna', 'dna-live', 'water-live', 'bare']);
+  assert.deepEqual(demos.map((d) => d.id), ['dna', 'dna-live', 'water-live', 'dna-demo', 'water-demo', 'bare']);
   for (const d of demos) {
     const text = readFileSync(new URL(`data/sources/${d.sourceId}.txt`, root), 'utf8');
     for (const p of d.spec.parts) assert.ok(text.includes(p.quote), `${d.id}: ${p.quote}`);
@@ -411,4 +411,139 @@ test('a tag with no clear position takes the least-overlapping one inside the fi
 test('the live DNA run’s SAM regions are carried as recorded (the harness copy is the stored output)', () => {
   assert.deepEqual(liveDna.regions, LIVE_DNA_REGIONS);
   assert.deepEqual(liveDna.parts.map((p) => p.id), LIVE_DNA_GEN.parts.map((p) => p.id));
+});
+
+
+// ---- label slots: the printed labels as worksheet slots, each part's name revealed in its own slot ------------------
+
+const dnaDemo = demo('dna-demo');
+const waterDemo = demo('water-demo');
+const slotNames = (spec: LabelDiagramSpec): (string | null)[] => labelSlots(spec).map((s) => (s.partIndex === null ? null : spec.parts[s.partIndex]?.name ?? '?'));
+
+test('stored boxes that overlap or stack as one multi-line label are grouped; separate labels are not', () => {
+  // DNA: box 5 is "Sugar phosphate backbone" (two lines), box 6 is "backbone" inside it.
+  assert.deepEqual(groupLabelBoxes(figureLabels.boxes, []), [[0], [1], [2], [3], [4], [5, 6]]);
+  // Water cycle: 3 sits inside 2 (Transpiration), 7 inside 6 (Surface Runoff).
+  assert.deepEqual(groupLabelBoxes(waterLabels.boxes, []), [[0], [1], [2, 3], [4], [5], [6, 7]]);
+  // Two lines of one label (small gap, overlapping columns) group; two labels a full line apart do not.
+  const lines = [{ x1: 100, y1: 100, x2: 240, y2: 120 }, { x1: 100, y1: 124, x2: 180, y2: 144 }, { x1: 100, y1: 190, x2: 200, y2: 210 }];
+  assert.deepEqual(groupLabelBoxes(lines, []), [[0, 1], [2]]);
+  // Side by side on one baseline (Adenine, Thymine) never group.
+  assert.deepEqual(groupLabelBoxes([{ x1: 354, y1: 210, x2: 426, y2: 230 }, { x1: 454, y1: 209, x2: 528, y2: 233 }], []), [[0], [1]]);
+  // A group whose joined box would hide a part's point stays split.
+  assert.deepEqual(groupLabelBoxes(lines, [{ x: 220, y: 135 }]), [[0], [1], [2]]);
+});
+
+test('each part is matched to its printed-label slot by overlap, else nearest centre (demo-set DNA run)', () => {
+  assert.deepEqual(slotNames(dnaDemo), ['Base pairs', 'Thymine', 'Adenine', 'Guanine', 'Cytosine', 'Sugar-phosphate backbone']);
+  // Live DNA run (Muse boxes offset differently) maps the same way.
+  assert.deepEqual(slotNames(liveDna), ['Base pairs', 'Thymine', 'Adenine', 'Guanine', 'Cytosine', 'Sugar-phosphate backbone']);
+});
+
+test('water cycle: every process gets its own slot; a slot no part names stays unmatched; a part without a box gets none', () => {
+  assert.deepEqual(slotNames(waterDemo), ['Condensation', 'Precipitation', 'Transpiration', null, 'Evaporation', 'Runoff']);
+  const live = demo('water-live');
+  const slots = labelSlots(live);
+  assert.deepEqual(slotNames(live), ['Condensation', 'Precipitation', 'Transpiration', null, 'Evaporation', 'Runoff']);
+  const clouds = live.parts.findIndex((p) => p.id === 'clouds');
+  assert.ok(!slots.some((s) => s.partIndex === clouds), 'clouds has no printed label: floating tag');
+});
+
+test('a part whose label box is far from every stored box is left unmatched (no wrong name in a slot)', () => {
+  const far = { ...dnaDemo, parts: dnaDemo.parts.map((p) => (p.id === 'adenine' ? { ...p, labelX1: 20, labelY1: 900, labelX2: 90, labelY2: 930 } : p)) };
+  const names = slotNames(far);
+  assert.ok(!names.includes('Adenine'));
+  assert.equal(names[2], null, 'the Adenine slot stays a plain cover');
+  // Two parts cannot take one slot: the closer one wins, the other falls back to a tag.
+  const twin = { ...dnaDemo, parts: dnaDemo.parts.map((p) => (p.id === 'thymine' ? { ...p, labelX1: 548, labelY1: 392, labelX2: 662, labelY2: 421 } : p)) };
+  const t = labelSlots(twin);
+  assert.equal(t.find((s) => s.boxes.includes(2))?.partIndex, 2, 'Adenine (first in spec order on a tie) keeps its slot');
+  assert.ok(!t.some((s) => s.partIndex === 3), 'Thymine, pointing at the same printed word, gets no slot');
+  assert.equal(new Set(t.map((s) => s.partIndex).filter((i) => i !== null)).size, t.filter((s) => s.partIndex !== null).length);
+});
+
+test('slots cover every stored box (padded, never over a part point); older lessons have no slots', () => {
+  for (const spec of [dnaDemo, waterDemo, liveDna]) {
+    const slots = labelSlots(spec);
+    const W = spec.figure.width;
+    const H = spec.figure.height;
+    (spec.figure.labelBoxes ?? []).forEach((b, i) => {
+      const s = slots.find((x) => x.boxes.includes(i));
+      assert.ok(s !== undefined, `box ${i} has a slot`);
+      assert.ok((s.box.left * W) / 100 <= b.x1 + 1e-9 && ((s.box.left + s.box.width) * W) / 100 >= b.x2 - 1e-9, `box ${i} x`);
+      assert.ok((s.box.top * H) / 100 <= b.y1 + 1e-9 && ((s.box.top + s.box.height) * H) / 100 >= b.y2 - 1e-9, `box ${i} y`);
+    });
+    for (const s of slots) {
+      for (const p of spec.parts) {
+        const x = p.x / 10;
+        const y = p.y / 10;
+        // (the older live DNA run put Guanine's point on its printed word, which LD-04 now rejects: the bare box is used)
+        const onPrinted = s.boxes.some((i) => { const b = spec.figure.labelBoxes?.[i]; return b !== undefined && (x * W) / 100 > b.x1 && (x * W) / 100 < b.x2 && (y * H) / 100 > b.y1 && (y * H) / 100 < b.y2; });
+        if (onPrinted) continue;
+        assert.ok(!(x > s.box.left && x < s.box.left + s.box.width && y > s.box.top && y < s.box.top + s.box.height), `${s.key} hides ${p.id}`);
+      }
+    }
+  }
+  assert.deepEqual(labelSlots({ ...dnaDemo, figure: { ...dnaDemo.figure, labelBoxes: undefined } }), []);
+  assert.deepEqual(labelSlots(demo('bare')), []);
+});
+
+// a fake text measure: 0.56 em per character
+const measure = (text: string, px: number): number => text.length * px * 0.56;
+
+test('slot text: the largest size that fits on one line, else two lines split at a space, never past the min size', () => {
+  const one = fitSlotText('Adenine', { w: 72, h: 20 }, measure, { min: 8, max: 18 });
+  assert.equal(one.lines.length, 1);
+  assert.ok(one.fits);
+  assert.ok(measure('Adenine', one.fontSize) <= 72 - 2 * one.padX + 1e-9);
+  assert.ok(one.fontSize * one.lineHeight <= 20 + 1e-9);
+  // shrinks for a narrow slot
+  const narrow = fitSlotText('Adenine', { w: 40, h: 20 }, measure, { min: 6, max: 18 });
+  assert.ok(narrow.fontSize < one.fontSize);
+  // a tall slot takes two lines when that is larger than one
+  const two = fitSlotText('Sugar-phosphate backbone', { w: 144, h: 40 }, measure, { min: 8, max: 18 });
+  assert.deepEqual(two.lines, ['Sugar-phosphate', 'backbone']);
+  assert.ok(two.fits);
+  assert.ok(two.fontSize > fitSlotText('Sugar-phosphate backbone', { w: 144, h: 40 }, measure, { min: 8, max: 18, maxLines: 1 }).fontSize);
+  // never more than two lines; a name that does not fit at the min size says so
+  const tiny = fitSlotText('Sugar-phosphate backbone', { w: 30, h: 10 }, measure, { min: 8, max: 18 });
+  assert.equal(tiny.fits, false);
+  assert.equal(tiny.fontSize, 8);
+  assert.ok(tiny.lines.length <= 2);
+  assert.deepEqual(fitSlotText('Adenine', { w: 72, h: 20 }, measure, { min: 8, max: 18 }), one, 'deterministic');
+});
+
+test('all slots share one font size (the smallest of their own best fits); a name that cannot fit keeps its own', () => {
+  const items = [{ name: 'Adenine', w: 72, h: 20 }, null, { name: 'Base pairs', w: 92, h: 23 }, { name: 'Sugar-phosphate backbone', w: 144, h: 40 }, { name: 'Sugar-phosphate backbone', w: 30, h: 10 }];
+  const fits = fitSlotTexts(items, measure, { min: 8, max: 18 });
+  assert.equal(fits[1], null);
+  const own = items.map((it) => (it === null ? null : fitSlotText(it.name, it, measure, { min: 8, max: 18 })));
+  const shared = Math.min(...own.filter((f) => f !== null && f.fits).map((f) => f?.fontSize ?? 99));
+  for (const i of [0, 2, 3]) {
+    assert.equal(fits[i]?.fontSize, shared, `slot ${i}`);
+    assert.ok(fits[i]?.fits);
+  }
+  assert.deepEqual(fits[4], own[4], 'the overflowing one keeps its min-size fit');
+});
+
+test('slot states: covered until its part is named, the name written in; the final step (or a part-less slot after the lesson reveal) uncovers', () => {
+  const slots = labelSlots(dnaDemo);
+  const none = dnaDemo.parts.map(() => false);
+  assert.ok(slotStates(slots, none, { labelsShown: false, openUnmatched: false }).every((s) => s === 'covered'));
+  const st = stageView(dnaDemo, 2, true);
+  const states = slotStates(slots, st.named, { labelsShown: false, openUnmatched: false });
+  // parts 0..2 named: base pairs (slot 0), backbone (slot 5), adenine (slot 2)
+  assert.deepEqual(states, ['named', 'covered', 'named', 'covered', 'covered', 'named']);
+  assert.ok(slotStates(slots, st.named, { labelsShown: true, openUnmatched: false }).every((s) => s === 'open'));
+  const water = labelSlots(waterDemo);
+  const all = waterDemo.parts.map(() => true);
+  assert.deepEqual(slotStates(water, all, { labelsShown: false, openUnmatched: true }), ['named', 'named', 'named', 'open', 'named', 'named']);
+  assert.deepEqual(slotStates(water, all, { labelsShown: false, openUnmatched: false }), ['named', 'named', 'named', 'covered', 'named', 'named']);
+});
+
+test('presentation outlines: only the current part’s region, never on the labels step', () => {
+  assert.equal(stageOutline(stageView(dnaDemo, 0, false)), 0);
+  assert.equal(stageOutline(stageView(dnaDemo, 3, true)), 3);
+  assert.equal(stageOutline(stageView(dnaDemo, 6, false)), null);
+  assert.equal(stageOutline(stageView(dnaDemo, 6, true)), null);
 });

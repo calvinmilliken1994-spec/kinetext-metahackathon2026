@@ -1,17 +1,19 @@
-// Label the diagram (label-diagram-v1, Stage 8b): the page's own figure with its printed labels covered, a numbered
-// marker on each part, and a word bank of the page's part names. The class drags (or picks, then places) each name onto
-// its number; Check marks each number; Show the answers uncovers the printed labels and outlines each part's region with
-// its name. All geometry comes from the spec (lib/labelDiagramView.ts scales it and places the name tags); the view only
-// measures the rendered tag sizes for that placement.
+// Label the diagram (label-diagram-v1, Stage 8b): the page's own figure with its printed labels turned into blank label
+// slots (like a worksheet: the figure's leader lines point at them), a numbered marker on each part, and a word bank of the
+// page's part names. The class drags (or picks, then places) each name onto its number; Check marks each number; a right
+// name, Show the answers or a presenter's R writes the part's name INTO its own slot. Parts with no printed label get a
+// small name tag beside the marker instead. A part's SAM region is outlined only while it is the one in focus. All geometry
+// comes from the spec (lib/labelDiagramView.ts matches parts to slots, fits the text and places the tags); the view only
+// measures the rendered size for that fitting.
 import { createContext, useContext, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { CSSProperties, DragEvent, ReactNode, RefObject } from 'react';
 import type { LabelDiagramSpec } from '../../../../packages/contracts/kit.ts';
 import type { EnginePresentation } from '../lib/enginePresentation.ts';
 import {
-  checkPlacements, coverMasks, labelDiagramPresentationSteps, lessonFigureMaxWidth, partViews, place, placeTags, stageFigureSize, stageQuestion,
-  stageView, unplace, wordBank,
+  checkPlacements, coverMasks, fitSlotTexts, labelDiagramPresentationSteps, labelSlots, lessonFigureMaxWidth, partViews, place, placeTags, slotOfPart,
+  slotStates, stageFigureSize, stageOutline, stageQuestion, stageView, unplace, wordBank,
 } from '../lib/labelDiagramView.ts';
-import type { CheckResult, LabelMask, PartView, PctBox, Placements } from '../lib/labelDiagramView.ts';
+import type { CheckResult, LabelMask, LabelSlot, PartView, PctBox, Placements, SlotFit, SlotState } from '../lib/labelDiagramView.ts';
 import { aiLabel } from '../lib/displayText.ts';
 import { linkKey } from '../lib/linking.ts';
 import type { CiteProps } from './Explanations.tsx';
@@ -34,6 +36,9 @@ export const FigureSrcContext = createContext<(figureId: string) => string>((id)
  * side column (question, names, numbers, credit) stays shorter, and the figure fills the stage from top to bottom.
  */
 const STAGE_FIGURE = { maxW: 600, maxH: 436 };
+/** Font-size range (layout px) for names written into slots: about the printed labels' own size, never unreadably small. */
+const STAGE_SLOT_FONT = { min: 9, max: 17 };
+const LESSON_SLOT_FONT = { min: 9, max: 20 };
 
 const pct = (b: PctBox): CSSProperties => ({ left: `${b.left}%`, top: `${b.top}%`, width: `${b.width}%`, height: `${b.height}%` });
 const DRAG_TYPE = 'text/plain';
@@ -44,7 +49,7 @@ type MarkerState = 'idle' | 'current' | 'right' | 'wrong';
 type TagPos = { left: number; top: number; width: number };
 
 let measureCtx: CanvasRenderingContext2D | null | undefined;
-/** A name's width in the tag's font (layout px), measured off-DOM so a hidden tag never holds its answer's text. */
+/** A name's width in a font (layout px), measured off-DOM so a hidden tag or slot never holds its answer's text. */
 function textWidth(text: string, font: string): number {
   if (measureCtx === undefined) measureCtx = document.createElement('canvas').getContext('2d');
   if (measureCtx === null) return text.length * 8;
@@ -52,13 +57,16 @@ function textWidth(text: string, font: string): number {
   return measureCtx.measureText(text).width;
 }
 
+/** Weight of the names written into slots (matches .ld-slotname in engines-c.css). */
+const SLOT_WEIGHT = 500;
+
 /**
- * Places every name tag once per rendered size (lib placeTags: no tag on another tag, a cover or a marker, none outside
- * the figure). Every tag is laid out up front from its name's measured width (a hidden tag holds no name), so naming one
- * never moves another. Sizes are read in the plate's own layout units (client/offset sizes, unaffected by a slide's CSS
- * zoom).
+ * Places the floating name tags once per rendered size (lib placeTags: no tag on another tag, a slot or cover, or a
+ * marker, none outside the figure). Only parts without a slot get a tag (`tagged`); the others still count as markers.
+ * Every tag is laid out up front from its name's measured width (a hidden tag holds no name), so naming one never moves
+ * another. Sizes are read in the plate's own layout units (client/offset sizes, unaffected by a slide's CSS zoom).
  */
-function useTagLayout(plateRef: RefObject<HTMLDivElement | null>, views: readonly PartView[], masks: readonly LabelMask[]): readonly TagPos[] | null {
+function useTagLayout(plateRef: RefObject<HTMLDivElement | null>, views: readonly PartView[], tagged: readonly boolean[], covers: readonly PctBox[]): readonly TagPos[] | null {
   const [layout, setLayout] = useState<{ key: string; list: TagPos[] } | null>(null);
   useLayoutEffect(() => {
     const plate = plateRef.current;
@@ -67,62 +75,108 @@ function useTagLayout(plateRef: RefObject<HTMLDivElement | null>, views: readonl
       const W = plate.clientWidth;
       const H = plate.clientHeight;
       if (!(W > 0) || !(H > 0)) return;
-      const tagEls = Array.from(plate.querySelectorAll<HTMLElement>(':scope > .ld-tag'));
       const marker = plate.querySelector<HTMLElement>('.ld-marker');
       // the marker's white ring (2 px) counts as part of it
       const m = (marker?.offsetWidth ?? 26) + 4;
-      const tags = views.map((v, i) => {
-        const el = tagEls[i];
+      const tags = views.map((v) => {
+        const el = plate.querySelector<HTMLElement>(`:scope > .ld-tag[data-i="${v.index}"]`);
         let w = 0;
-        if (el !== undefined) {
+        if (el !== null && tagged[v.index] === true) {
           const cs = getComputedStyle(el);
           w = Math.ceil(textWidth(v.name, cs.font) + parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight)) + 1;
         }
-        return { x: (v.point.left * W) / 100, y: (v.point.top * H) / 100, w, h: el?.offsetHeight ?? 0 };
+        return { x: (v.point.left * W) / 100, y: (v.point.top * H) / 100, w, h: w > 0 ? (el?.offsetHeight ?? 0) : 0 };
       });
-      const covers = masks.map((c) => ({ x: (c.box.left * W) / 100, y: (c.box.top * H) / 100, w: (c.box.width * W) / 100, h: (c.box.height * H) / 100 }));
-      const list = placeTags({ width: W, height: H, marker: m, tags, covers }).map((p, i) => ({ left: (p.x * 100) / W, top: (p.y * 100) / H, width: tags[i]?.w ?? 0 }));
+      const rects = covers.map((c) => ({ x: (c.left * W) / 100, y: (c.top * H) / 100, w: (c.width * W) / 100, h: (c.height * H) / 100 }));
+      const list = placeTags({ width: W, height: H, marker: m, tags, covers: rects }).map((p, i) => ({ left: (p.x * 100) / W, top: (p.y * 100) / H, width: tags[i]?.w ?? 0 }));
       const key = list.map((p) => `${p.left.toFixed(3)},${p.top.toFixed(3)},${p.width}`).join(';');
       setLayout((prev) => (prev !== null && prev.key === key ? prev : { key, list }));
     };
     measure();
     const ro = new ResizeObserver(measure);
     ro.observe(plate);
-    for (const t of Array.from(plate.querySelectorAll(':scope > .ld-tag'))) ro.observe(t);
     return () => ro.disconnect();
-  }, [plateRef, views, masks]);
+  }, [plateRef, views, tagged, covers]);
   return layout?.list ?? null;
+}
+
+/**
+ * Fits each matched slot's name to the slot at one shared size (lib fitSlotTexts: shrink to fit, at most two lines), once
+ * per rendered size.
+ * Every slot is fitted up front, named or not, so writing a name in never changes another slot; the names live in
+ * state only and reach the DOM when their part is named.
+ */
+function useSlotFits(plateRef: RefObject<HTMLDivElement | null>, slots: readonly LabelSlot[], views: readonly PartView[], range: { min: number; max: number }): readonly (SlotFit | null)[] {
+  const [fits, setFits] = useState<{ key: string; list: (SlotFit | null)[] }>({ key: '', list: [] });
+  useLayoutEffect(() => {
+    const plate = plateRef.current;
+    if (plate === null) return undefined;
+    const measure = (): void => {
+      const W = plate.clientWidth;
+      const H = plate.clientHeight;
+      if (!(W > 0) || !(H > 0)) return;
+      const family = getComputedStyle(plate).fontFamily;
+      const width = (text: string, px: number): number => textWidth(text, `${SLOT_WEIGHT} ${px}px ${family}`);
+      const list = fitSlotTexts(slots.map((s) => {
+        const v = s.partIndex === null ? undefined : views[s.partIndex];
+        return v === undefined ? null : { name: v.name, w: (s.box.width * W) / 100, h: (s.box.height * H) / 100 };
+      }), width, range);
+      const key = `${W}x${H}:` + list.map((f) => (f === null ? '-' : `${f.fontSize}/${f.lines.length}`)).join(';');
+      setFits((prev) => (prev.key === key ? prev : { key, list }));
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(plate);
+    return () => ro.disconnect();
+  }, [plateRef, slots, views, range]);
+  return fits.list;
 }
 
 interface FigureProps {
   spec: LabelDiagramSpec;
   views: readonly PartView[];
+  /** The printed labels as slots (lessons with stored label boxes); empty for older lessons, which use `masks`. */
+  slots: readonly LabelSlot[];
+  /** Fallback covers (older lessons without stored label boxes). */
   masks: readonly LabelMask[];
   named: readonly boolean[];
+  /** What each slot shows (lib slotStates). */
+  slotState: readonly SlotState[];
+  /** Fallback covers and floating tags: the printed labels are uncovered. */
   labelsShown: boolean;
   markerState: (v: PartView) => MarkerState;
-  /** The outline drawn stronger (the part a slide just revealed). */
+  /** The part a slide is on (its slot and tag drawn in the accent). */
   current: number | null;
+  /** The one part whose SAM region is outlined, or null. */
+  outlined: number | null;
+  /** Font-size range for the names written in slots (layout px). */
+  slotFont: { min: number; max: number };
   /** Fixed slide size; the lesson figure fills its column at the image's aspect instead. */
   size?: { width: number; height: number };
   /** Caption and credit under the figure (lesson); a slide shows the credit in its side column instead. */
   caption: boolean;
   /** Lesson only: markers are buttons and drop targets. */
   marker?: (v: PartView, style: CSSProperties, state: MarkerState) => ReactNode;
+  /** Lesson only: a named slot was hovered (outline its part). */
+  onSlotHover?: (index: number | null) => void;
   /** Stage 9: draw the markers and SAM regions in, part by part. */
   build?: boolean;
 }
 
-/** The page's figure: printed labels covered, a numbered marker per part, region outlines with names once named. */
+/** The page's figure: printed labels as slots (or covers), a numbered marker per part, the focused part's outline. */
 function figureCredit(fig: LabelDiagramSpec['figure']): string {
   return [fig.credit.trim(), fig.license.trim()].filter((s) => s !== '').join(' · ');
 }
 
-function Figure({ spec, views, masks, named, labelsShown, markerState, current, size, caption, marker, build = false }: FigureProps) {
+function Figure({ spec, views, slots, masks, named, slotState, labelsShown, markerState, current, outlined, slotFont, size, caption, marker, onSlotHover, build = false }: FigureProps) {
   const srcOf = useContext(FigureSrcContext);
   const [failed, setFailed] = useState(false);
   const plateRef = useRef<HTMLDivElement>(null);
-  const tagPos = useTagLayout(plateRef, views, masks);
+  const slotOf = useMemo(() => slotOfPart(slots, views.length), [slots, views.length]);
+  const tagged = useMemo(() => slotOf.map((k) => k === null), [slotOf]);
+  const covers = useMemo(() => (slots.length > 0 ? slots.map((s) => s.box) : masks.map((m) => m.box)), [slots, masks]);
+  const tagPos = useTagLayout(plateRef, views, tagged, covers);
+  const fits = useSlotFits(plateRef, slots, views, slotFont);
   const fig = spec.figure;
   const plateStyle: CSSProperties = size !== undefined
     ? { width: size.width, height: size.height }
@@ -136,29 +190,47 @@ function Figure({ spec, views, masks, named, labelsShown, markerState, current, 
         {failed
           ? <p className="ld-missing">The figure could not be loaded.</p>
           : <img src={srcOf(spec.figureId)} alt={fig.caption.trim() === '' ? 'The page’s figure, labels covered' : `The page’s figure, labels covered: ${fig.caption.trim()}`} draggable={false} onError={() => setFailed(true)} />}
-        {masks.map((m) => (
+        {masks.length > 0 && slots.length === 0 && masks.map((m) => (
           <span key={m.key} className="ld-mask" style={pct(m.box)} data-on={labelsShown ? 'false' : 'true'} aria-hidden="true" />
         ))}
         {views.map((v) => (v.region === null ? null : (
           <span
-            key={`r-${v.part.id}`} className="ld-region" style={build ? { ...pct(v.region), '--i': v.index } as CSSProperties : pct(v.region)} data-on={named[v.index] === true ? 'true' : 'false'}
-            data-current={current === v.index ? 'true' : 'false'} aria-hidden="true"
+            key={`r-${v.part.id}`} className="ld-region" style={build ? { ...pct(v.region), '--i': v.index } as CSSProperties : pct(v.region)}
+            data-on={outlined === v.index ? 'true' : 'false'} aria-hidden="true"
           />
         )))}
+        {/* The printed labels as worksheet slots: blank until their part is named, then the name written in. */}
+        {slots.map((s, k) => {
+          const state = slotState[k] ?? 'covered';
+          const fit = fits[k] ?? null;
+          const show = state === 'named' && fit !== null && s.partIndex !== null;
+          const nameStyle: CSSProperties | undefined = fit === null ? undefined : { fontSize: `${fit.fontSize}px`, lineHeight: fit.lineHeight, paddingInline: `${fit.padX}px` };
+          return (
+            <span
+              key={s.key} className="ld-slotbox" style={pct(s.box)} data-state={state} data-fits={fit === null || fit.fits ? 'true' : 'false'}
+              data-current={s.partIndex !== null && s.partIndex === current ? 'true' : 'false'} aria-hidden="true"
+              onPointerEnter={onSlotHover !== undefined && show ? () => onSlotHover(s.partIndex) : undefined}
+              onPointerLeave={onSlotHover !== undefined ? () => onSlotHover(null) : undefined}
+            >
+              {show && <span className="ld-slotname" style={nameStyle}>{fit.lines.map((l, i) => <span key={i} className="ld-slotline">{l}</span>)}</span>}
+            </span>
+          );
+        })}
         {views.map((v) => {
           const state = markerState(v);
           const style: CSSProperties = { left: `${v.point.left}%`, top: `${v.point.top}%` };
           return marker !== undefined
             ? <span key={`m-${v.part.id}`} className="ld-marker-slot" style={build ? { '--i': v.index } as CSSProperties : undefined}>{marker(v, style, state)}</span>
-            : <span key={`m-${v.part.id}`} className="ld-marker" data-state={state} style={style} aria-hidden="true"><span className="num">{v.number}</span></span>;
+            : <span key={`m-${v.part.id}`} className="ld-marker" data-state={state} data-named={named[v.index] === true ? 'true' : 'false'} style={style} aria-hidden="true"><span className="num">{v.number}</span></span>;
         })}
-        {/* Name tags last (above markers), one per part in spec order, placed once by lib placeTags; shown when named. */}
+        {/* Name tags last (above markers), only for parts with no printed-label slot, placed once by lib placeTags. */}
         {views.map((v) => {
+          if (tagged[v.index] !== true) return null;
           const p = tagPos?.[v.index];
           const on = named[v.index] === true && p !== undefined;
           return (
             <span
-              key={`t-${v.part.id}`} className="ld-tag" aria-hidden="true" data-on={on ? 'true' : 'false'} data-current={current === v.index ? 'true' : 'false'}
+              key={`t-${v.part.id}`} className="ld-tag" data-i={v.index} aria-hidden="true" data-on={on ? 'true' : 'false'} data-current={current === v.index ? 'true' : 'false'}
               style={p === undefined ? undefined : { left: `${p.left}%`, top: `${p.top}%`, inlineSize: p.width }}
             >{named[v.index] === true ? v.name : '\u00a0'}</span>
           );
@@ -203,8 +275,13 @@ function PageQuotes({ spec, views, cite }: { spec: LabelDiagramSpec; views: read
 function LessonDiagram({ spec, cite, build = false }: { spec: LabelDiagramSpec; cite: CiteProps; build?: boolean }) {
   const views = useMemo(() => partViews(spec), [spec]);
   const masks = useMemo(() => coverMasks(spec), [spec]);
+  const slots = useMemo(() => labelSlots(spec), [spec]);
   const bank = useMemo(() => wordBank(spec), [spec]);
   const [placements, setPlacements] = useState<Placements>({});
+  /** Parts a Check marked right: their names stay written in until that number's name changes. */
+  const [confirmed, setConfirmed] = useState<ReadonlySet<string>>(new Set());
+  /** The part in focus (marker, row or named slot hovered or focused): only its SAM region is outlined. */
+  const [focusPart, setFocusPart] = useState<number | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
   const [checked, setChecked] = useState<CheckResult | null>(null);
   const [revealed, setRevealed] = useState(false);
@@ -218,8 +295,13 @@ function LessonDiagram({ spec, cite, build = false }: { spec: LabelDiagramSpec; 
   const answers = checkPlacements(spec, placements);
   const open = !revealed;
 
+  /** Unconfirm the numbers a move changes: the target, and the number the name came from. */
+  const unconfirm = (...ids: (string | undefined)[]): void => {
+    setConfirmed((c) => (ids.some((id) => id !== undefined && c.has(id)) ? new Set([...c].filter((id) => !ids.includes(id))) : c));
+  };
   const put = (token: string, markerId: string): void => {
     if (!open) return;
+    unconfirm(markerId, placedOn.get(token));
     setPlacements((p) => place(p, token, markerId));
     setChecked(null);
     setSelected(null);
@@ -227,6 +309,7 @@ function LessonDiagram({ spec, cite, build = false }: { spec: LabelDiagramSpec; 
   };
   const takeOff = (markerId: string): void => {
     const token = placements[markerId];
+    unconfirm(markerId);
     setPlacements((p) => unplace(p, markerId));
     setChecked(null);
     setSaid(token === undefined ? '' : `${nameOf(token)} is back in the word bank.`);
@@ -254,7 +337,12 @@ function LessonDiagram({ spec, cite, build = false }: { spec: LabelDiagramSpec; 
     onDragStart: (e: DragEvent) => { e.dataTransfer.setData(DRAG_TYPE, token); e.dataTransfer.effectAllowed = 'move'; setSelected(null); },
     onDragEnd: () => setOver(null),
   });
-  const reset = (): void => { setPlacements({}); setSelected(null); setChecked(null); setRevealed(false); setHint(false); setSaid(''); };
+  const reset = (): void => { setPlacements({}); setConfirmed(new Set()); setSelected(null); setChecked(null); setRevealed(false); setHint(false); setSaid(''); };
+  const check = (): void => {
+    const r = checkPlacements(spec, placements);
+    setChecked(r);
+    setConfirmed(new Set(spec.parts.filter((p) => r.results[p.id] === 'right').map((p) => p.id)));
+  };
 
   const resultOf = (partId: string): 'right' | 'wrong' | null => {
     const shown = revealed ? answers : checked;
@@ -262,7 +350,9 @@ function LessonDiagram({ spec, cite, build = false }: { spec: LabelDiagramSpec; 
     return r === 'right' || r === 'wrong' ? r : null;
   };
   const markerState = (v: PartView): MarkerState => resultOf(v.part.id) ?? 'idle';
-  const named = views.map(() => revealed);
+  const named = views.map((v) => revealed || confirmed.has(v.part.id));
+  const states = slotStates(slots, named, { labelsShown: false, openUnmatched: revealed });
+  const focusProps = (i: number) => ({ onPointerEnter: () => setFocusPart(i), onPointerLeave: () => setFocusPart((f) => (f === i ? null : f)), onFocus: () => setFocusPart(i), onBlur: () => setFocusPart((f) => (f === i ? null : f)) });
   const armed = selected !== null && open ? 'true' : 'false';
 
   const marker = (v: PartView, style: CSSProperties, state: MarkerState): ReactNode => {
@@ -270,15 +360,15 @@ function LessonDiagram({ spec, cite, build = false }: { spec: LabelDiagramSpec; 
     const label = `Number ${v.number} on the diagram${token === undefined ? ', no name yet' : `, labelled ${nameOf(token)}`}${state === 'right' ? ', right' : state === 'wrong' ? ', wrong' : ''}`;
     return (
       <button
-        type="button" className="ld-marker" data-state={state} data-filled={token !== undefined ? 'true' : 'false'} data-over={over === v.part.id ? 'true' : 'false'}
+        type="button" className="ld-marker" data-state={state} data-named={named[v.index] === true ? 'true' : 'false'} data-filled={token !== undefined ? 'true' : 'false'} data-over={over === v.part.id ? 'true' : 'false'}
         data-armed={armed} style={style} aria-label={label} onClick={() => target(v.part.id)} disabled={!open}
-        {...dropProps(v.part.id)}
+        {...dropProps(v.part.id)} {...focusProps(v.index)}
       ><span className="num">{v.number}</span></button>
     );
   };
 
   const status = revealed
-    ? (masks.length > 0 ? 'Answers shown, and the figure’s own labels are uncovered.' : 'Answers shown.')
+    ? (slots.some((s) => s.partIndex !== null) ? 'Answers shown in the figure’s own label boxes.' : masks.length > 0 ? 'Answers shown, and the figure’s own labels are uncovered.' : 'Answers shown.')
     : checked !== null
       ? (checked.right === checked.total ? `All ${checked.total} right.` : `${checked.right} of ${checked.total} right.${checked.complete ? ' Move the names marked wrong and check again.' : ' Some numbers have no name yet.'}`)
       : selected !== null
@@ -288,7 +378,10 @@ function LessonDiagram({ spec, cite, build = false }: { spec: LabelDiagramSpec; 
   return (
     <div className="ld" data-mode="lesson" data-testid="label-diagram">
       <div className="ld-body">
-        <Figure spec={spec} views={views} masks={masks} named={named} labelsShown={revealed} markerState={markerState} current={null} caption marker={marker} build={build} />
+        <Figure
+          spec={spec} views={views} slots={slots} masks={masks} named={named} slotState={states} labelsShown={revealed} markerState={markerState} current={null}
+          outlined={focusPart} slotFont={LESSON_SLOT_FONT} caption marker={marker} onSlotHover={setFocusPart} build={build}
+        />
         <div className="ld-side">
           <div className="ld-bank" role="group" aria-label="Word bank: the page’s names for the parts">
             {bank.map((b) => {
@@ -311,7 +404,10 @@ function LessonDiagram({ spec, cite, build = false }: { spec: LabelDiagramSpec; 
               const token = placements[v.part.id];
               const r = resultOf(v.part.id);
               return (
-                <Linked as="li" key={v.part.id} className="ld-row" links={revealed ? [linkKey(v.part.sourceId, v.part.quote)] : []} data-result={r ?? 'open'}>
+                <Linked
+                  as="li" key={v.part.id} className="ld-row" links={revealed ? [linkKey(v.part.sourceId, v.part.quote)] : []} data-result={r ?? 'open'}
+                  onPointerEnter={() => setFocusPart(v.index)} onPointerLeave={() => setFocusPart((f) => (f === v.index ? null : f))}
+                >
                   <span className="ld-row-n num" aria-hidden="true">{v.number}</span>
                   <span className="ld-stack">
                     <span data-on={revealed ? 'false' : 'true'} className="ld-slot-cell">
@@ -344,7 +440,7 @@ function LessonDiagram({ spec, cite, build = false }: { spec: LabelDiagramSpec; 
           </ol>
 
           <div className="ld-actions">
-            <button type="button" className="btn btn-primary" onClick={() => setChecked(checkPlacements(spec, placements))} disabled={!open || Object.keys(placements).length === 0}>Check</button>
+            <button type="button" className="btn btn-primary" onClick={check} disabled={!open || Object.keys(placements).length === 0}>Check</button>
             <button type="button" className="btn" onClick={() => setHint((h) => !h)} aria-expanded={hint} disabled={spec.hint.trim() === ''}>Hint</button>
             <button type="button" className="btn" onClick={() => { setRevealed(true); setSelected(null); }} disabled={revealed}>Show the answers</button>
             <button type="button" className="btn btn-quiet" onClick={reset}>Start again</button>
@@ -364,6 +460,7 @@ function LessonDiagram({ spec, cite, build = false }: { spec: LabelDiagramSpec; 
 function StageDiagram({ spec, presentation }: { spec: LabelDiagramSpec; presentation: EnginePresentation }) {
   const views = useMemo(() => partViews(spec), [spec]);
   const masks = useMemo(() => coverMasks(spec), [spec]);
+  const slots = useMemo(() => labelSlots(spec), [spec]);
   const bank = useMemo(() => wordBank(spec), [spec]);
   const steps = labelDiagramPresentationSteps(spec);
   const st = stageView(spec, presentation.step, presentation.revealed);
@@ -378,7 +475,11 @@ function StageDiagram({ spec, presentation }: { spec: LabelDiagramSpec; presenta
   return (
     <div className="ld" data-mode="stage" data-testid="label-diagram">
       <div className="ld-body">
-        <Figure spec={spec} views={views} masks={masks} named={st.named} labelsShown={st.labelsShown} markerState={markerState} current={presentation.revealed ? st.current : null} size={size} caption={false} />
+        <Figure
+          spec={spec} views={views} slots={slots} masks={masks} named={st.named} slotState={slotStates(slots, st.named, { labelsShown: st.labelsShown, openUnmatched: false })}
+          labelsShown={st.labelsShown} markerState={markerState} current={presentation.revealed ? st.current : null} outlined={stageOutline(st)}
+          slotFont={STAGE_SLOT_FONT} size={size} caption={false}
+        />
         <div className="ld-side">
           {/* Every step's question in one stacked cell, so → never moves the slide. */}
           <div className="ld-ask ld-stack">

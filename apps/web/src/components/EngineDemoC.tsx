@@ -1,7 +1,7 @@
 // Stage 8b dev-only harness for web slice U (?engine-demo=c[&tab=<id>][&present=demo-engines-c&beat=N]); owned by that
 // slice. Not bundled in production (main.tsx imports it dynamically behind import.meta.env.DEV). Tabs: the committed
-// golden with hand-made regions (NOT SAM output); the parts and SAM 3.1 regions of two stored live runs (copied in
-// lib/labelDiagramDemoSpecs.ts); a bare layout check. Every figure carries its stored label boxes
+// golden with hand-made regions (NOT SAM output); the parts and SAM 3.1 regions of four stored live runs (two early ones
+// and the two demo-set runs, copied in lib/labelDiagramDemoSpecs.ts); a bare layout check. Every figure carries its stored label boxes
 // (data/figures/<id>.labels.json). The figures are the committed files served by Vite instead of the API.
 import { useMemo, useState } from 'react';
 import labelGolden from '../../../../tests/fixtures/stage6/label-diagram.gen.json';
@@ -27,7 +27,7 @@ import { Provenance as ProvenanceLine } from './Provenance.tsx';
 import { PresentationMode } from './presentation/PresentationMode.tsx';
 import type { CiteProps } from './Explanations.tsx';
 
-const DISCLOSURE = 'Demo fixture: the golden label-diagram parts with hand-made region boxes, and parts and SAM 3.1 regions copied from two stored live runs, each figure with its stored label boxes. Real lessons are written by Muse Spark 1.3 and segmented by SAM 3.1.';
+const DISCLOSURE = 'Demo fixture: the golden label-diagram parts with hand-made region boxes, and parts and SAM 3.1 regions copied from four stored live runs, each figure with its stored label boxes. Real lessons are written by Muse Spark 1.3 and segmented by SAM 3.1.';
 const DECK_JOB = 'demo-engines-c';
 
 type Meta = { id: string; title: string; locator: string; license: string; attribution: string; sha256: string };
@@ -89,7 +89,7 @@ export function EngineDemoC() {
             <h1 className="sr-only">Label-the-diagram view (fixture data)</h1>
             <div className="demo-banner" role="note" data-testid="demo-banner">
               <strong>DEMO — fixture data, not model output.</strong>{' '}
-              The committed golden parts (hand-made regions standing in for SAM 3.1), and the parts and SAM 3.1 regions of two stored live runs, on the real figures with their stored label boxes. This page exists only in development.
+              The committed golden parts (hand-made regions standing in for SAM 3.1), and the parts and SAM 3.1 regions of four stored live runs, on the real figures with their stored label boxes. This page exists only in development.
             </div>
             <nav className="demo-tabs" aria-label="Demo parts">
               {tabs.map((x) => (

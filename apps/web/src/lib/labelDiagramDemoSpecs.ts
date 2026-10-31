@@ -5,6 +5,8 @@
 // - "dna-live" / "water-live": the parts Muse Spark 1.3 wrote and the regions SAM 3.1 returned in two stored live runs
 //   (copied below from storage/runs/<job>/label-diagram-v1.r1.json), with the figure's stored label boxes added — what a
 //   lesson made after the label-box fix carries. Those two runs were made before it, so their own specs have no boxes.
+// - "dna-demo" / "water-demo": the demo-set runs a presenter opens (job-20261031081105-*), whose specs carry the boxes;
+//   the label-slot view (names written into the printed labels' slots) is tested on exactly these parts.
 // - "bare": a synthetic layout check without any label boxes.
 
 import { assembleKitSpec, attachLabelRegions, kitSpecId } from '../../../../packages/contracts/kit.ts';
@@ -88,6 +90,52 @@ export const LIVE_WATER_REGIONS: LabelRegion[] = [
   { partId: 'runoff', x1: 119, y1: 342, x2: 462, y2: 482, confidence: 0.80859375 },
 ];
 
+/**
+ * The demo-set runs (Muse Spark 1.3 parts after one repair, SAM 3.1 regions), copied unchanged from
+ * storage/runs/<job>/label-diagram-v1.r2.json. These are the lessons a presenter opens (?present=<job>); their specs carry
+ * the stored label boxes.
+ */
+export const DEMO_DNA_JOB = 'job-20261031081105-21355f66';
+export const DEMO_DNA_GEN: LabelDiagramGen = {
+  schemaVersion: 'label-diagram-v1', title: 'Parts of the DNA double helix', figureId: 'medlineplus-dna-structure-1',
+  hint: 'Match each label to the coloured part it names in the diagram.',
+  parts: [
+    livePart('base-pairs', 'Base pairs', DNA_SOURCE, 'DNA bases pair up with each other, A with T and C with G, to form units called base pairs.', 250, 500, [350, 308, 532, 340]),
+    livePart('sugar-phosphate-backbone', 'Sugar-phosphate backbone', DNA_SOURCE, 'DNA is a double helix formed by base pairs attached to a sugar-phosphate backbone.', 395, 720, [462, 714, 738, 778]),
+    livePart('adenine', 'Adenine', DNA_SOURCE, 'stored as a code made up of four chemical bases: adenine (A), guanine (G),', 642, 321, [548, 392, 662, 421]),
+    livePart('thymine', 'Thymine', DNA_SOURCE, 'four chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T).', 800, 321, [713, 392, 830, 421]),
+    livePart('guanine', 'Guanine', DNA_SOURCE, 'made up of four chemical bases: adenine (A), guanine (G), cytosine (C),', 640, 502, [548, 553, 668, 582]),
+    livePart('cytosine', 'Cytosine', DNA_SOURCE, 'chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T).', 800, 502, [713, 553, 830, 582]),
+  ],
+};
+export const DEMO_DNA_REGIONS: LabelRegion[] = [
+  { partId: 'base-pairs', x1: 84, y1: 51, x2: 238, y2: 560, confidence: 0.734375 },
+  { partId: 'sugar-phosphate-backbone', x1: 19, y1: 68, x2: 302, y2: 566, confidence: 0.1484375 },
+  { partId: 'adenine', x1: 347, y1: 181, x2: 524, y2: 199, confidence: 0.9375 },
+  { partId: 'thymine', x1: 347, y1: 184, x2: 469, y2: 199, confidence: 0.91015625 },
+  { partId: 'guanine', x1: 351, y1: 292, x2: 528, y2: 309, confidence: 0.25390625 },
+  { partId: 'cytosine', x1: 346, y1: 277, x2: 525, y2: 298, confidence: 0.2197265625 },
+];
+export const DEMO_WATER_JOB = 'job-20261031081105-910f3776';
+export const DEMO_WATER_GEN: LabelDiagramGen = {
+  schemaVersion: 'label-diagram-v1', title: 'Label the water cycle', figureId: 'noaa-hydrologic-cycle-1',
+  hint: 'Match each process name to the clouds, rain and arrows that show it.',
+  parts: [
+    livePart('evaporation', 'Evaporation', WATER_SOURCE, 'Evaporation is the change of state in a substance from a liquid to a gas.', 300, 739, [194, 613, 341, 650]),
+    livePart('transpiration', 'Transpiration', WATER_SOURCE, 'Transpiration is the evaporation of water from plants through stomata.', 115, 588, [11, 457, 231, 489]),
+    livePart('condensation', 'Condensation', WATER_SOURCE, 'Condensation is the process whereby water vapor is changed into a liquid state.', 500, 280, [344, 133, 619, 170]),
+    livePart('precipitation', 'Precipitation', WATER_SOURCE, 'Precipitation can be in the form of rain, hail, snow, or sleet.', 770, 195, [698, 383, 911, 419]),
+    livePart('runoff', 'Runoff', WATER_SOURCE, 'Runoff occurs when there is excessive precipitation and the ground is saturated (cannot absorb any more water).', 585, 694, [620, 702, 861, 733]),
+  ],
+};
+export const DEMO_WATER_REGIONS: LabelRegion[] = [
+  { partId: 'evaporation', x1: 30, y1: 313, x2: 309, y2: 449, confidence: 0.275390625 },
+  { partId: 'transpiration', x1: 61, y1: 227, x2: 69, y2: 330, confidence: 0.81640625 },
+  { partId: 'condensation', x1: 251, y1: 84, x2: 324, y2: 146, confidence: 0.78515625 },
+  { partId: 'precipitation', x1: 400, y1: 95, x2: 473, y2: 147, confidence: 0.6484375 },
+  { partId: 'runoff', x1: 322, y1: 332, x2: 351, y2: 362, confidence: 0.92578125 },
+];
+
 export interface LabelDiagramDemo { id: string; tab: string; note: string; spec: LabelDiagramSpec; sourceId: string }
 
 /** A figure's meta file and its stored label boxes. */
@@ -110,6 +158,10 @@ export function buildLabelDiagramDemos(
   ];
   if (waterFigure !== undefined) {
     out.push({ id: 'water-live', tab: 'Water cycle (live run parts)', note: `Parts and SAM 3.1 regions copied from stored live run ${LIVE_WATER_JOB}; covers from the figure’s stored label boxes, which that run predates.`, spec: make(LIVE_WATER_GEN, 'demo-label-water-live', WATER_SOURCE, figureRefOf(waterFigure.meta, waterFigure.labels), LIVE_WATER_REGIONS, 19), sourceId: WATER_SOURCE });
+  }
+  out.push({ id: 'dna-demo', tab: 'DNA (demo-set run)', note: `Parts and SAM 3.1 regions copied from the demo-set run ${DEMO_DNA_JOB}, with the figure’s stored label boxes.`, spec: make(DEMO_DNA_GEN, 'demo-label-dna-demo', DNA_SOURCE, dnaRef, DEMO_DNA_REGIONS, 23), sourceId: DNA_SOURCE });
+  if (waterFigure !== undefined) {
+    out.push({ id: 'water-demo', tab: 'Water cycle (demo-set run)', note: `Parts and SAM 3.1 regions copied from the demo-set run ${DEMO_WATER_JOB}, with the figure’s stored label boxes.`, spec: make(DEMO_WATER_GEN, 'demo-label-water-demo', WATER_SOURCE, figureRefOf(waterFigure.meta, waterFigure.labels), DEMO_WATER_REGIONS, 29), sourceId: WATER_SOURCE });
   }
   out.push({ id: 'bare', tab: 'No label boxes (layout check)', note: 'Synthetic variant: no label boxes at all (the printed labels stay visible) and the backbone has no region.', spec: make(bare, 'demo-label-bare', DNA_SOURCE, figureRefOf(dnaFigure.meta), DNA_REGIONS.filter((r) => r.partId !== 'part-backbone'), 13), sourceId: DNA_SOURCE });
   return out;

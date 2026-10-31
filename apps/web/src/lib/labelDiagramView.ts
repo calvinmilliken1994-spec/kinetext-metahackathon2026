@@ -131,6 +131,234 @@ export function coverMasks(spec: Pick<LabelDiagramSpec, 'parts' | 'figure'>): La
   return fromFigure.length > 0 ? fromFigure : labelMasks(spec.parts);
 }
 
+// ---- label slots: the printed labels as a worksheet's blank boxes -------------------------------------------------------
+
+/**
+ * Two stored boxes belong to one multi-line printed label when the lower line starts within this fraction of a line
+ * height below the upper one (and their columns overlap and align); a separate label sits a full line or more away.
+ */
+export const SLOT_STACK_GAP = 0.5;
+/** A part's own label box is matched to a slot only within this fraction of the figure's longer side (centre to centre). */
+export const SLOT_MATCH_MAX_DIST = 0.1;
+
+const boxW = (b: PixelBox): number => b.x2 - b.x1;
+const boxH = (b: PixelBox): number => b.y2 - b.y1;
+const unionOf = (bs: readonly PixelBox[]): PixelBox => ({
+  x1: Math.min(...bs.map((b) => b.x1)), y1: Math.min(...bs.map((b) => b.y1)), x2: Math.max(...bs.map((b) => b.x2)), y2: Math.max(...bs.map((b) => b.y2)),
+});
+const hidesPoint = (b: PixelBox, points: readonly { x: number; y: number }[]): boolean => points.some((p) => p.x > b.x1 && p.x < b.x2 && p.y > b.y1 && p.y < b.y2);
+
+/** True when two boxes are one printed label: they overlap, or they are two lines stacked tight in one column. */
+function sameLabel(a: PixelBox, b: PixelBox): boolean {
+  const ix = Math.min(a.x2, b.x2) - Math.max(a.x1, b.x1);
+  const iy = Math.min(a.y2, b.y2) - Math.max(a.y1, b.y1);
+  if (ix > 0 && iy > 0) return true;
+  const line = Math.min(boxH(a), boxH(b));
+  const gap = Math.max(a.y1, b.y1) - Math.min(a.y2, b.y2);
+  if (!(ix >= 0.5 * Math.min(boxW(a), boxW(b))) || gap < 0 || gap > SLOT_STACK_GAP * line) return false;
+  const leftAligned = Math.abs(a.x1 - b.x1) <= line;
+  const centred = Math.abs((a.x1 + a.x2) / 2 - (b.x1 + b.x2) / 2) <= line;
+  return leftAligned || centred;
+}
+
+/**
+ * Groups a figure's stored label boxes (image pixels) into printed labels: boxes that overlap (a word box inside its
+ * line's box) or stack as lines of one label ("Sugar phosphate" over "backbone") join one group. A group whose joined
+ * box would hide a part's point (`points`, image pixels) stays as separate boxes. Groups list box indexes in order and
+ * are ordered by their first box.
+ */
+export function groupLabelBoxes(boxes: readonly PixelBox[], points: readonly { x: number; y: number }[]): number[][] {
+  const usable = boxes.map((b) => b.x2 > b.x1 && b.y2 > b.y1);
+  const parent = boxes.map((_, i) => i);
+  const find = (i: number): number => { while (parent[i] !== i) i = parent[i] as number; return i; };
+  for (let i = 0; i < boxes.length; i++) {
+    for (let j = i + 1; j < boxes.length; j++) {
+      const a = boxes[i];
+      const b = boxes[j];
+      if (a === undefined || b === undefined || !usable[i] || !usable[j] || !sameLabel(a, b)) continue;
+      const ri = find(i);
+      const rj = find(j);
+      if (ri !== rj) parent[Math.max(ri, rj)] = Math.min(ri, rj);
+    }
+  }
+  const groups = new Map<number, number[]>();
+  boxes.forEach((_, i) => {
+    if (!usable[i]) return;
+    const r = find(i);
+    const g = groups.get(r);
+    if (g === undefined) groups.set(r, [i]); else g.push(i);
+  });
+  const out: number[][] = [];
+  for (const g of groups.values()) {
+    if (g.length > 1 && hidesPoint(unionOf(g.map((i) => boxes[i] as PixelBox)), points)) out.push(...g.map((i) => [i]));
+    else out.push(g);
+  }
+  return out.sort((a, b) => (a[0] ?? 0) - (b[0] ?? 0));
+}
+
+/** One printed label of the figure as a worksheet slot: covered, then (once its part is named) holding the part's name. */
+export interface LabelSlot {
+  key: string;
+  /** The slot as a percentage box of the figure (the printed label's footprint, padded like a cover). */
+  box: PctBox;
+  /** The slot in image pixels (same box). */
+  px: PixelBox;
+  /** Indexes into `figure.labelBoxes` this slot covers. */
+  boxes: number[];
+  /** The part (spec order) whose name this slot holds, or null when no part names this printed label. */
+  partIndex: number | null;
+}
+
+/**
+ * The figure's printed labels as slots, each matched to at most one part. Only lessons with stored label boxes
+ * (`figure.labelBoxes`) have slots; older lessons return [] and keep their covers and floating name tags.
+ * Matching: each part's own label box (Muse's labelX1..Y2, 0..1000) against every slot's printed boxes; any overlap
+ * beats any distance (larger overlap first), otherwise the nearest centre within SLOT_MATCH_MAX_DIST of the figure's
+ * longer side. Pairs are taken best first, so a slot holds one part and a part one slot (ties go to the earlier part);
+ * a part with no box, or none close enough, has no slot.
+ */
+export function labelSlots(spec: Pick<LabelDiagramSpec, 'parts' | 'figure'>): LabelSlot[] {
+  const fig = spec.figure;
+  const W = fig.width;
+  const H = fig.height;
+  const boxes = fig.labelBoxes ?? [];
+  if (!(W > 0) || !(H > 0) || coverSource(spec) !== 'figure') return [];
+  const points = spec.parts.map((p) => ({ x: (clamp(p.x, 0, GRID) * W) / GRID, y: (clamp(p.y, 0, GRID) * H) / GRID }));
+  const slots: LabelSlot[] = [];
+  for (const g of groupLabelBoxes(boxes, points)) {
+    const raw = unionOf(g.map((i) => boxes[i] as PixelBox));
+    const padded: PixelBox = { x1: raw.x1 - FIGURE_COVER_PAD, y1: raw.y1 - FIGURE_COVER_PAD, x2: raw.x2 + FIGURE_COVER_PAD, y2: raw.y2 + FIGURE_COVER_PAD };
+    const use = hidesPoint(padded, points) ? raw : padded;
+    const px: PixelBox = { x1: clamp(use.x1, 0, W), y1: clamp(use.y1, 0, H), x2: clamp(use.x2, 0, W), y2: clamp(use.y2, 0, H) };
+    const box = pixelBoxPct(px, fig);
+    if (box === null) continue;
+    slots.push({ key: `slot-${g.join('-')}`, box, px, boxes: g, partIndex: null });
+  }
+  // candidate (part, slot) pairs with a cost: overlap first (−1 − IoU), else the centre distance as a fraction
+  const maxDist = SLOT_MATCH_MAX_DIST * Math.max(W, H);
+  const pairs: { part: number; slot: number; cost: number }[] = [];
+  spec.parts.forEach((p, pi) => {
+    if (!hasLabelBox(p)) return;
+    const m: PixelBox = { x1: (clamp(p.labelX1, 0, GRID) * W) / GRID, y1: (clamp(p.labelY1, 0, GRID) * H) / GRID, x2: (clamp(p.labelX2, 0, GRID) * W) / GRID, y2: (clamp(p.labelY2, 0, GRID) * H) / GRID };
+    slots.forEach((s, si) => {
+      const printed = unionOf(s.boxes.map((i) => boxes[i] as PixelBox));
+      const ix = Math.min(m.x2, printed.x2) - Math.max(m.x1, printed.x1);
+      const iy = Math.min(m.y2, printed.y2) - Math.max(m.y1, printed.y1);
+      if (ix > 0 && iy > 0) {
+        const inter = ix * iy;
+        pairs.push({ part: pi, slot: si, cost: -1 - inter / (boxW(m) * boxH(m) + boxW(printed) * boxH(printed) - inter) });
+        return;
+      }
+      const d = Math.hypot((m.x1 + m.x2) / 2 - (printed.x1 + printed.x2) / 2, (m.y1 + m.y2) / 2 - (printed.y1 + printed.y2) / 2);
+      if (d <= maxDist) pairs.push({ part: pi, slot: si, cost: d / Math.max(W, H) });
+    });
+  });
+  pairs.sort((a, b) => a.cost - b.cost || a.part - b.part || a.slot - b.slot);
+  const partTaken = new Set<number>();
+  for (const pr of pairs) {
+    const s = slots[pr.slot];
+    if (s === undefined || s.partIndex !== null || partTaken.has(pr.part)) continue;
+    s.partIndex = pr.part;
+    partTaken.add(pr.part);
+  }
+  return slots;
+}
+
+/** The slot holding each part's name (spec order), or null when the part has none (it gets a floating tag instead). */
+export function slotOfPart(slots: readonly LabelSlot[], partCount: number): (number | null)[] {
+  return Array.from({ length: partCount }, (_, i) => {
+    const k = slots.findIndex((s) => s.partIndex === i);
+    return k < 0 ? null : k;
+  });
+}
+
+export type SlotState = 'covered' | 'named' | 'open';
+
+/**
+ * What each slot shows: 'covered' (a blank label slot), 'named' (its part's name written in), 'open' (the printed label
+ * shows). `labelsShown` uncovers every slot (the slide's last step); `openUnmatched` uncovers the slots no part names
+ * (the lesson's Show the answers, where those printed words give nothing away).
+ */
+export function slotStates(slots: readonly LabelSlot[], named: readonly boolean[], opts: { labelsShown: boolean; openUnmatched: boolean }): SlotState[] {
+  return slots.map((s) => {
+    if (opts.labelsShown) return 'open';
+    if (s.partIndex === null) return opts.openUnmatched ? 'open' : 'covered';
+    return named[s.partIndex] === true ? 'named' : 'covered';
+  });
+}
+
+export interface SlotFit {
+  /** Font size in the same px unit as the slot. */
+  fontSize: number;
+  /** One or two lines (a name never wraps past two). */
+  lines: string[];
+  /** False when even the minimum size overflows the slot (the view lets the name run past it, centred). */
+  fits: boolean;
+  /** Inline padding the fit kept on each side, and the line height (× font size) it assumed. */
+  padX: number;
+  lineHeight: number;
+}
+
+/** Every way to put a name on at most two lines: whole, or split at a space (or after a hyphen when it has no space). */
+function lineOptions(name: string, maxLines: number): string[][] {
+  const out: string[][] = [[name]];
+  if (maxLines < 2) return out;
+  const words = name.split(' ');
+  if (words.length > 1) {
+    for (let k = 1; k < words.length; k++) out.push([words.slice(0, k).join(' '), words.slice(k).join(' ')]);
+  } else {
+    for (let k = name.indexOf('-'); k > 0 && k < name.length - 1; k = name.indexOf('-', k + 1)) out.push([name.slice(0, k + 1), name.slice(k + 1)]);
+  }
+  return out;
+}
+
+/**
+ * The largest font size (from `max` down to `min`, in 0.25 px steps) at which a name fits its slot on one line or, when
+ * that is larger, two lines split at a space. `measure(text, px)` is the text's width at that font size. When nothing
+ * fits at `min`, returns `min` with the narrowest split and `fits: false`.
+ */
+export function fitSlotText(
+  name: string, slot: { w: number; h: number }, measure: (text: string, px: number) => number,
+  opts: { min: number; max: number; maxLines?: number; lineHeight?: number },
+): SlotFit {
+  const lineHeight = opts.lineHeight ?? 1.15;
+  const padX = clamp(slot.h * 0.15, 1, 4);
+  const wAvail = Math.max(0, slot.w - 2 * padX);
+  const hAvail = Math.max(0, slot.h - 2);
+  const options = lineOptions(name.trim(), opts.maxLines ?? 2);
+  const widest = (lines: string[], px: number): number => Math.max(...lines.map((l) => measure(l, px)));
+  for (let px = opts.max; px >= opts.min - 1e-9; px -= 0.25) {
+    let best: string[] | null = null;
+    for (const lines of options) {
+      if (lines.length * px * lineHeight > hAvail + 1e-9 || widest(lines, px) > wAvail + 1e-9) continue;
+      if (best === null || lines.length < best.length) best = lines;
+    }
+    if (best !== null) return { fontSize: px, lines: best, fits: true, padX, lineHeight };
+  }
+  const narrowest = options.reduce((a, b) => (widest(b, opts.min) < widest(a, opts.min) ? b : a));
+  return { fontSize: opts.min, lines: narrowest, fits: false, padX, lineHeight };
+}
+
+/**
+ * Fits every slot's name at ONE shared font size, like a printed worksheet: the largest size at which every name that
+ * fits at all still fits (each slot's own best fit, the smallest of those wins). A name that cannot fit even at `min`
+ * keeps its own min-size fit. `null` entries (slots without a part) stay null.
+ */
+export function fitSlotTexts(
+  items: readonly ({ name: string; w: number; h: number } | null)[], measure: (text: string, px: number) => number,
+  opts: { min: number; max: number; maxLines?: number; lineHeight?: number },
+): (SlotFit | null)[] {
+  const own = items.map((it) => (it === null ? null : fitSlotText(it.name, it, measure, opts)));
+  const sizes = own.filter((f): f is SlotFit => f !== null && f.fits).map((f) => f.fontSize);
+  if (sizes.length === 0) return own;
+  const shared = Math.min(...sizes);
+  return items.map((it, i) => {
+    const f = own[i] ?? null;
+    if (it === null || f === null || !f.fits) return f;
+    return fitSlotText(it.name, it, measure, { ...opts, max: shared });
+  });
+}
+
 export interface PartView {
   part: LabelPartGen;
   index: number;
@@ -370,6 +598,14 @@ export function stageView(spec: Pick<LabelDiagramSpec, 'parts' | 'figure'>, step
     final,
     labelsShown: final && revealed,
   };
+}
+
+/**
+ * The one SAM region a slide outlines: the part this step asks about (before and after R), none on the labels step.
+ * Earlier parts keep their names but lose their outlines, so large overlapping regions never pile up.
+ */
+export function stageOutline(st: StageState): number | null {
+  return st.final ? null : st.current;
 }
 
 /** The slide's question for a step: the marker number only, never a name. */

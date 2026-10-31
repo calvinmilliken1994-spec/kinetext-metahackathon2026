@@ -6,16 +6,18 @@
 .ld {
   --ld-plate: #ffffff;
   --ld-plate-line: var(--line-2);
-  --ld-mask: #e7e9ec;
-  --ld-mask-line: #cdd1d6;
+  --ld-slot: #f6f7f9;
+  --ld-slot-line: #a9b1ba;
+  --ld-slot-ink: #0a1317;
+  --ld-slot-current: #0064e0;
   --ld-pin: #0a1317;
   --ld-pin-ink: #ffffff;
   --ld-pin-ring: #ffffff;
   --ld-pin-current: #0064e0;
   --ld-pin-ok: #0d7444;
   --ld-pin-bad: #b3261e;
-  --ld-region: rgba(0, 100, 224, 0.62);
-  --ld-region-fill: rgba(0, 100, 224, 0.07);
+  --ld-region: rgba(0, 100, 224, 0.45);
+  --ld-region-fill: rgba(0, 100, 224, 0.05);
   --ld-region-strong: #0064e0;
   --ld-tag: #0050b3;
   --ld-tag-ink: #ffffff;
@@ -44,21 +46,34 @@
 .ld-plate > img { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: contain; user-select: none; }
 .ld-missing { position: absolute; inset: 0; display: grid; place-items: center; padding: 16px; color: #4e606f; font-size: var(--fs-14); text-align: center; }
 
-/* A printed label, covered: a plain block in the figure's own paper tone. */
-.ld-mask {
-  position: absolute; border-radius: 4px; background: var(--ld-mask); box-shadow: inset 0 0 0 1px var(--ld-mask-line);
-  transition: opacity 0.22s ease-out, visibility 0.22s;
+/* A printed label as a worksheet's label slot: the label's own footprint in a light paper fill with a thin rule, so the
+   figure's leader lines point at a blank box. A named part's name is written inside it (font size fitted in lib). */
+.ld-mask, .ld-slotbox {
+  position: absolute; box-sizing: border-box; border-radius: 3px; background: var(--ld-slot); border: 1px solid var(--ld-slot-line);
+  transition: opacity 0.22s ease-out, visibility 0.22s, border-color 0.16s ease-out;
 }
-.ld-mask[data-on="false"] { opacity: 0; visibility: hidden; }
+.ld-mask[data-on="false"], .ld-slotbox[data-state="open"] { opacity: 0; visibility: hidden; }
+/* Stacking: a part still to be named keeps its marker on top; once named, its slot (with the name) sits above the
+   markers, so a marker drawn close to a printed label never hides the name written there. */
+.ld-slotbox { display: grid; place-items: center; overflow: visible; }
+.ld-slotbox[data-state="named"] { z-index: 2; }
+.ld-marker[data-named="false"] { z-index: 3; }
+.ld-slotbox[data-current="true"] { border-color: var(--ld-slot-current); box-shadow: 0 0 0 1px var(--ld-slot-current); }
+.ld-slotname {
+  display: grid; justify-items: center; box-sizing: border-box; min-inline-size: 100%; border-radius: 3px; background: var(--ld-slot);
+  color: var(--ld-slot-ink); font-weight: 500; letter-spacing: 0; text-align: center; white-space: nowrap;
+  animation: ld-write 0.22s ease-out;
+}
+.ld-slotline { display: block; }
+@keyframes ld-write { from { opacity: 0; } to { opacity: 1; } }
 
-/* A part's SAM region, outlined softly once named. */
+/* The focused part's SAM region (one at a time), a faint outline that never hides the drawing. */
 .ld-region {
   position: absolute; border-radius: 6px; border: 1.5px solid var(--ld-region); background: var(--ld-region-fill);
   pointer-events: none; transition: opacity 0.2s ease-out, visibility 0.2s;
 }
 .ld-region[data-on="false"] { opacity: 0; visibility: hidden; }
-.ld-region[data-current="true"] { border-color: var(--ld-region-strong); box-shadow: 0 0 0 1px var(--ld-region-strong); }
-/* A part's name tag beside its marker, at the spot lib placeTags chose (clear of other tags, covers and markers). */
+/* A part with no printed label: its name tag beside its marker, at the spot lib placeTags chose (clear of slots and markers). */
 .ld-tag {
   position: absolute; z-index: 2; inset-block-start: 0; inset-inline-start: 0; box-sizing: border-box;
   padding: 1px 6px; border-radius: 4px; background: var(--ld-tag); color: var(--ld-tag-ink); pointer-events: none;
@@ -155,8 +170,8 @@ button.ld-chip:hover:not(:disabled) { border-color: var(--line-3); }
 /* The figure sets the slide's height; the side column fits beside it with the credit at its foot. */
 .ld[data-mode="stage"] .ld-side { gap: 16px; padding-block-start: 4px; grid-template-rows: auto auto auto auto minmax(0, 1fr); }
 .ld-stage-credit { align-self: end; }
-/* The slide's last reveal shows the figure's own labels clean: outlines and name tags fade out (the numbered list keeps
-   every name), markers dim so a word printed under one still reads. Opacity only, so nothing moves. */
+/* The slide's last reveal shows the figure's own labels clean: slots, outlines and name tags fade out (the numbered list
+   keeps every name), markers dim so a word printed under one still reads. Opacity only, so nothing moves. */
 .ld[data-mode="stage"] .ld-plate[data-labels="shown"] .ld-region,
 .ld[data-mode="stage"] .ld-plate[data-labels="shown"] .ld-tag { opacity: 0; visibility: hidden; }
 .ld[data-mode="stage"] .ld-plate[data-labels="shown"] .ld-marker { opacity: 0.35; }
@@ -176,5 +191,6 @@ button.ld-chip:hover:not(:disabled) { border-color: var(--line-3); }
 .ld-foot kbd { font-size: 0.85em; }
 
 @media (prefers-reduced-motion: reduce) {
-  .ld-mask, .ld-region, .ld-marker, .ld-tag { transition: none; }
+  .ld-mask, .ld-slotbox, .ld-region, .ld-marker, .ld-tag { transition: none; }
+  .ld-slotname { animation: none; }
 }
