@@ -51,8 +51,11 @@ function fakeReceipt(responseId: string, estCostUSD: number): MetaReceipt {
   };
 }
 
-/** A paid provider failure as the real client throws it after settling a reservation. */
-function paidError(code: 'TIMEOUT' | 'NETWORK_ERROR', usd: number): MetaError {
+/** A paid provider failure as the real client throws it after settling a reservation.
+ *  (Timeout partial-publish fix: TIMEOUT/DEADLINE_EXCEEDED are component-level in the
+ *  lesson flow now — covered by lesson.timeout-partial.test.ts — so these concurrent-fatal
+ *  accounting tests use two codes that remain job-fatal.) */
+function paidError(code: 'SERVER_ERROR' | 'NETWORK_ERROR', usd: number): MetaError {
   return new MetaError(code, undefined, { chargedUSD: usd, reservedUnknownUSD: usd, costBasis: 'reservation' });
 }
 
@@ -134,7 +137,7 @@ const close = (a: number, b: number): boolean => Math.abs(a - b) <= 1e-9;
 test('S6R-07: two concurrent kit calls BOTH reject with separately charged errors — both charges land exactly once and match the ledger; the first error is the terminal cause', async () => {
   const client = concurrentClient(
     {
-      formula_explorer: { kind: 'throw', err: paidError('TIMEOUT', 0.2), usd: 0.2, unknown: 0.2 },
+      formula_explorer: { kind: 'throw', err: paidError('SERVER_ERROR', 0.2), usd: 0.2, unknown: 0.2 },
       quiz_cards: { kind: 'throw', err: paidError('NETWORK_ERROR', 0.3), usd: 0.3, unknown: 0.3 },
     },
     ['formula_explorer', 'quiz_cards'],
@@ -146,9 +149,9 @@ test('S6R-07: two concurrent kit calls BOTH reject with separately charged error
 
   assert.deepEqual(client.calls.slice().sort(), ['formula_explorer', 'quiz_cards', 'source_analysis_v2']);
   assert.equal(summary.status, 'failed');
-  assert.equal(summary.error?.code, 'TIMEOUT', 'the FIRST fatal error is the terminal cause');
+  assert.equal(summary.error?.code, 'SERVER_ERROR', 'the FIRST fatal error is the terminal cause');
   assert.ok(close(summary.totalCostUSD, client.ledger.committedUSD), `total ${summary.totalCostUSD} must equal ledger ${client.ledger.committedUSD}`);
-  assert.ok(close(summary.totalCostUSD, 0.51), 'analysis 0.01 + TIMEOUT 0.2 + NETWORK_ERROR 0.3, each once');
+  assert.ok(close(summary.totalCostUSD, 0.51), 'analysis 0.01 + SERVER_ERROR 0.2 + NETWORK_ERROR 0.3, each once');
   assert.ok(close(summary.reservedUnknownUSD, client.ledger.unknownUSD));
   assert.ok(close(summary.reservedUnknownUSD, 0.5));
 
@@ -163,7 +166,7 @@ test('S6R-07: two concurrent kit calls BOTH reject with separately charged error
   const last = events[events.length - 1];
   assert.equal(last?.status, 'failed');
   assert.equal(last?.componentId, 'formula-explorer-v1');
-  assert.match(last?.detail ?? '', /^TIMEOUT/);
+  assert.match(last?.detail ?? '', /^SERVER_ERROR/);
   assert.equal(last?.estCostUSD, 0.2);
   const second = failed.find(e => e.componentId === 'quiz-cards-v1');
   assert.ok(second, 'the second fatal error is recorded on its own event');
@@ -176,7 +179,7 @@ test('S6R-07: two concurrent kit calls BOTH reject with separately charged error
 test('S6R-07: the settle order decides the terminal cause, never the accounting', async () => {
   const client = concurrentClient(
     {
-      formula_explorer: { kind: 'throw', err: paidError('TIMEOUT', 0.2), usd: 0.2, unknown: 0.2 },
+      formula_explorer: { kind: 'throw', err: paidError('SERVER_ERROR', 0.2), usd: 0.2, unknown: 0.2 },
       quiz_cards: { kind: 'throw', err: paidError('NETWORK_ERROR', 0.3), usd: 0.3, unknown: 0.3 },
     },
     ['quiz_cards', 'formula_explorer'],
@@ -194,7 +197,7 @@ test('S6R-07: one paid fatal error + the other task throwing during persistence 
   const jobId = 's6r07-crash-000001';
   const client = concurrentClient(
     {
-      formula_explorer: { kind: 'throw', err: paidError('TIMEOUT', 0.2), usd: 0.2, unknown: 0.2 },
+      formula_explorer: { kind: 'throw', err: paidError('SERVER_ERROR', 0.2), usd: 0.2, unknown: 0.2 },
       quiz_cards: { kind: 'ok', data: quizGen, usd: 0.04 },
     },
     ['formula_explorer', 'quiz_cards'],
@@ -225,7 +228,7 @@ test('S6R-07: one paid fatal error + the other task throwing during persistence 
   assert.ok(close(jobJson.reservedUnknownUSD, 0.2));
 });
 
-test('S6R-07: a single paid fatal repair error is accounted exactly once (no double count on the final failure path)', async () => {
+test('S6R-07 + timeout fix: a single paid repair TIMEOUT is accounted exactly once and fails only its component (partial publish, no double count)', async () => {
   const broken = structuredClone(feGen) as { expression: string };
   broken.expression = `(${feGen.expression as string}) + 1`;
   const ledger: FakeLedger = { committedUSD: 0, unknownUSD: 0 };
@@ -235,7 +238,7 @@ test('S6R-07: a single paid fatal repair error is accounted exactly once (no dou
       if (name === 'formula_explorer_repair') {
         ledger.committedUSD += 0.2;
         ledger.unknownUSD += 0.2;
-        throw paidError('TIMEOUT', 0.2);
+        throw new MetaError('TIMEOUT', undefined, { chargedUSD: 0.2, reservedUnknownUSD: 0.2, costBasis: 'reservation' });
       }
       const data = name === 'source_analysis_v2' ? usableAnalysis : name === 'formula_explorer' ? broken : name === 'quiz_cards' ? quizGen : undefined;
       if (data === undefined) {
@@ -248,20 +251,26 @@ test('S6R-07: a single paid fatal repair error is accounted exactly once (no dou
   const storageDir = mkdtempSync(join(tmpdir(), 's6r07-single-'));
   const { done } = startJob(DRAG, { client, storageDir, purpose: 'test-live', flow: 'lesson', newJobId: () => 's6r07-single-00001' });
   const summary = await done;
-  assert.equal(summary.status, 'failed');
-  assert.equal(summary.error?.code, 'TIMEOUT');
+  // Timeout partial-publish fix: the repair TIMEOUT is component-level — the job survives,
+  // the passed quiz publishes, and the charge is accounted exactly once.
+  assert.equal(summary.status, 'succeeded');
+  assert.equal(summary.error, undefined);
+  assert.equal(summary.lesson?.partialPublish, true);
+  assert.equal(summary.lesson?.componentsPublished, 1);
+  assert.equal(summary.lesson?.componentsFailed, 1);
   assert.ok(close(summary.totalCostUSD, ledger.committedUSD), `total ${summary.totalCostUSD} vs ledger ${ledger.committedUSD}`);
   assert.ok(close(summary.totalCostUSD, 0.23));
   assert.ok(close(summary.reservedUnknownUSD, 0.2));
   const events = readEvents(storageDir, 's6r07-single-00001');
+  const repairFailed = events.find(e => e.stage === 'repair' && e.status === 'failed');
+  assert.equal(repairFailed?.target, 'component');
+  assert.equal(repairFailed?.componentId, 'formula-explorer-v1');
+  assert.equal(repairFailed?.revision, 2);
+  assert.equal(repairFailed?.detail, 'TIMEOUT; cost basis: reservation (outcome uncertain)');
+  assert.equal(repairFailed?.estCostUSD, 0.2);
   const last = events[events.length - 1];
-  assert.equal(last?.stage, 'repair');
-  assert.equal(last?.status, 'failed');
-  assert.equal(last?.target, 'component');
-  assert.equal(last?.componentId, 'formula-explorer-v1');
-  assert.equal(last?.revision, 2);
-  assert.equal(last?.detail, 'TIMEOUT; cost basis: reservation (outcome uncertain)');
-  assert.equal(last?.estCostUSD, 0.2);
+  assert.equal(last?.stage, 'done');
+  assert.equal(last?.status, 'succeeded');
 });
 
 /* ------------------------------------------------------------------ */
@@ -285,7 +294,7 @@ function freeLockPort(): Promise<number> {
   });
 }
 
-test('S6R-07: real ledger — two concurrent kit calls both time out (settled at reservation); job.json totals equal the ledger committed spend', async () => {
+test('S6R-07: real ledger — two concurrent kit calls both time out (settled at reservation); the job survives as an overview-only publish and job.json totals equal the ledger committed spend', async () => {
   const storageDir = mkdtempSync(join(tmpdir(), 's6r07-ledger-'));
   const lockPort = await freeLockPort();
   assert.notEqual(lockPort, 47853, 'never the live evaluation ledger port');
@@ -335,8 +344,13 @@ test('S6R-07: real ledger — two concurrent kit calls both time out (settled at
       limits: { specMaxOutputTokens: LIMITS.maxOutputTokens, maxJobWallTimeMs: LIMITS.maxJobWallTimeMs },
     });
     const summary = await done;
-    assert.equal(summary.status, 'failed');
-    assert.equal(summary.error?.code, 'TIMEOUT');
+    // Timeout partial-publish fix: two component-level timeouts no longer kill the job —
+    // the overview publishes, both components fail alone with the timeout reason, and the
+    // reservation charges still equal the ledger exactly.
+    assert.equal(summary.status, 'succeeded');
+    assert.equal(summary.error, undefined);
+    assert.equal(summary.lesson?.componentsPublished, 0);
+    assert.equal(summary.lesson?.componentsFailed, 2);
     assert.ok(kitArrivals >= 2, 'both kit calls were in flight together');
     const committed = ledger.committedUSD();
     const jobJson = readJobJson(storageDir, jobId);

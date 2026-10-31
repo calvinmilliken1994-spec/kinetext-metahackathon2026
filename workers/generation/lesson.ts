@@ -11,7 +11,10 @@
 //     fallible event/artifact write;
 //   - GeneratedOutputError(V2) receipts are accounted like successful ones (F-01);
 //   - provider-level MetaErrors are fatal for the whole job (fixed public codes via the
-//     caller's failFromError); a component whose OUTPUT failed its checks is a COMPONENT-level
+//     caller's failFromError) EXCEPT the timeout family (TIMEOUT / DEADLINE_EXCEEDED) in a
+//     component generate/repair call after the analysis succeeded: that fails ONLY the
+//     component (partial publish, TIMEOUT_REASON) — the final-evaluation timeout fix;
+//     a component whose OUTPUT failed its checks is a COMPONENT-level
 //     failure (partial publish) — only the overview/analysis stage can fail the lesson;
 //   - INTERNAL causes stay the caller's fixed vocabulary; this module never persists raw
 //     exception text;
@@ -207,6 +210,14 @@ export interface LessonContext {
   now: () => Date;
   /** The job-wide deadline (config maxJobWallTimeMs) covering the WHOLE lesson. */
   signal: AbortSignal;
+  /**
+   * Timeout partial-publish fix: when the job-wide deadline fires, as ms since the epoch
+   * (the same real-time clock AbortSignal.timeout runs on), so the worker can refuse to
+   * START a repair when less than MIN_REPAIR_BUDGET_MS remains. Optional: absent (e.g. a
+   * direct runLesson test context) means no deadline is known and the budget guard never
+   * blocks — the abort signal still ends in-flight calls exactly as before.
+   */
+  deadlineAtMs?: number;
   /** v1 output cap for premium generateSpec/repairSpec calls (config maxOutputTokens). */
   specMaxOutputTokens: number;
   maxRepairAttempts: number;
@@ -458,6 +469,50 @@ export const OUTPUT_INVALID_REASON = 'The model returned output that does not ma
 export const OUTPUT_TRUNCATED_REASON = 'Muse ran out of room while writing this part, so it was left out.';
 
 /**
+ * Timeout partial-publish fix (final-evaluation loss, docs/evidence/final-eval/timeouts.md):
+ * plain-sentence entry reason for a component that ran out of time — either its call hit a
+ * timeout (the client's per-call TIMEOUT or the job budget's DEADLINE_EXCEEDED) after the
+ * analysis succeeded, or the next repair could not start inside the remaining budget. Fixed
+ * system-owned wording; provider text never reaches an entry. The web's teacherFailure shows
+ * a reason without check ids as the plain sentence it is, so this needs no web change.
+ */
+export const TIMEOUT_REASON = 'Ran out of time before this part was finished.';
+
+/**
+ * Minimum remaining job wall-time budget required to START any repair call (analysis, kit
+ * component or premium). Below it a repair almost certainly cannot finish (final-evaluation
+ * evidence: one Spark Open call takes 50–120+ s), so starting one would only spend a paid
+ * reservation that settles as uncertain: the component fails with TIMEOUT_REASON instead,
+ * unpaid. Conservative by design; the threshold is a constant so it is testable and never
+ * config-drifts.
+ */
+export const MIN_REPAIR_BUDGET_MS = 60_000;
+
+/** True when at least MIN_REPAIR_BUDGET_MS of the job budget remains for one repair call. */
+export function enoughBudgetForRepair(remainingMs: number): boolean {
+  return remainingMs >= MIN_REPAIR_BUDGET_MS;
+}
+
+/** Fixed event detail when a repair is not started because the budget ran out (R-01: fixed
+ *  code first, system-owned words only, never provider text). */
+const REPAIR_NOT_STARTED_DETAIL = 'TIMEOUT; repair not started: the job ran out of time';
+
+/**
+ * Recognise the client's timeout family by its fixed codes (duck-typed like
+ * truncatedOutputFailure, so a copy from another module instance behaves identically):
+ * TIMEOUT = the per-call provider timeout fired; DEADLINE_EXCEEDED = the job's wall-time
+ * budget aborted the call. After the analysis succeeded both are COMPONENT-level failures
+ * (partial publish); during the analysis stage they still fail the whole job.
+ */
+function isTimeoutCode(err: unknown): boolean {
+  if (typeof err !== 'object' || err === null) {
+    return false;
+  }
+  const code = (err as { code?: unknown }).code;
+  return code === 'TIMEOUT' || code === 'DEADLINE_EXCEEDED';
+}
+
+/**
  * Stage 8b plain-sentence entry reason for a label-diagram-v1 component whose SAM 3.1
  * segmentation could not complete (an HTTP/network/ledger failure of the segmentation call).
  * Fixed system-owned wording; provider text never reaches an entry. The failure is
@@ -693,6 +748,11 @@ function faultInjectedInto(summary: JobSummary, componentId: string): boolean {
 export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
   const { jobId, source, summary } = ctx;
   const sources: SourceDocument[] = [source];
+  /** Remaining job wall-time budget in ms; +Infinity when no deadline is wired (test seam). */
+  const remainingBudgetMs = (): number =>
+    typeof ctx.deadlineAtMs === 'number' && Number.isFinite(ctx.deadlineAtMs)
+      ? ctx.deadlineAtMs - Date.now()
+      : Number.POSITIVE_INFINITY;
   summary.lesson ??= {
     overviewReady: false,
     componentsPlanned: 0,
@@ -773,6 +833,17 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
     const attempt = analysisAttemptsDone + 1;
     const nextRevision = attempt + 1;
     const targeted = failedCheckIds(curReport);
+    if (!enoughBudgetForRepair(remainingBudgetMs())) {
+      // Timeout partial-publish fix: never START a repair the job budget cannot carry.
+      // Nothing is usable yet (no published overview), so — exactly like a timeout during
+      // the analysis call itself — the whole job fails, with the fixed TIMEOUT code and no
+      // paid call.
+      return ctx.fail('repair', 'TIMEOUT', {
+        target: 'analysis',
+        revision: nextRevision,
+        detail: REPAIR_NOT_STARTED_DETAIL,
+      });
+    }
     ctx.emit('repair', 'started', {
       target: 'analysis',
       revision: nextRevision,
@@ -968,9 +1039,10 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
     finalize();
   }
 
-  /** A component-call error: OUTPUT_INVALID and OUTPUT_TRUNCATED are component-level (their
-   *  paid calls are accounted); anything else (other MetaErrors, unexpected) is fatal for the
-   *  whole job. BUG-006: a truncated generation never fails a lesson that has its overview. */
+  /** A component-call error: OUTPUT_INVALID, OUTPUT_TRUNCATED and the timeout family
+   *  (TIMEOUT / DEADLINE_EXCEEDED — their paid calls are accounted) are component-level;
+   *  anything else (other MetaErrors, unexpected) is fatal for the whole job. BUG-006: a
+   *  truncated generation never fails a lesson that has its overview. */
   function componentCallError(
     err: unknown,
     index: number,
@@ -1003,6 +1075,19 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
       saveTruncatedOutput(ctx, `${componentId}.r${revision}.truncated.txt`, err);
       ctx.emit(stage, 'failed', failExtra);
       failOutcome(index, componentId, specId, revision, OUTPUT_TRUNCATED_REASON);
+      return;
+    }
+    if (isTimeoutCode(err)) {
+      // Timeout partial-publish fix (final-evaluation loss): the analysis succeeded and the
+      // overview is published, so a TIMEOUT (per-call provider timeout) or DEADLINE_EXCEEDED
+      // (the job's wall-time budget) fails ONLY this component — the parts that passed are
+      // kept. The charge (a reservation settled as 'uncertain outcome') is accounted HERE,
+      // at its own catch boundary, through the ONE accumulator, exactly as the fatal path
+      // did (S6R-07); the failed event keeps the fixed-code detail from errorCharge (R-01).
+      const charge = errorCharge(err, extra);
+      ctx.account(charge.chargedUSD, charge.unknownUSD);
+      ctx.emit(stage, 'failed', charge.extra);
+      failOutcome(index, componentId, specId, revision, TIMEOUT_REASON);
       return;
     }
     if (err instanceof Error && (err.message === 'ENGINE_REQUIRED' || err.message === 'ANALYSIS_DECLINED')) {
@@ -1402,6 +1487,20 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
       const attempt = repairsDone + 1;
       const nextRevision = revision + 1;
       const targeted = failedCheckIds(report);
+      if (!enoughBudgetForRepair(remainingBudgetMs())) {
+        // Timeout partial-publish fix: never START a repair the job budget cannot carry —
+        // it would only spend a reservation that settles as uncertain. No paid call, no
+        // repair record (the attempt never ran); the component fails with the timeout
+        // reason and the rest of the lesson keeps its partial publish.
+        ctx.emit('repair', 'failed', {
+          target: 'component',
+          componentId: cid,
+          revision: nextRevision,
+          detail: REPAIR_NOT_STARTED_DETAIL,
+        });
+        diedReason = TIMEOUT_REASON;
+        break;
+      }
       ctx.emit('repair', 'started', {
         target: 'component',
         componentId: cid,
@@ -1456,6 +1555,23 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
           pushDiedRepairRecord(summary, cid, attempt, nextRevision, targeted);
           ctx.emit('repair', 'failed', died.extra);
           diedReason = died.reason;
+          ctx.writeJob();
+          break;
+        }
+        if (isTimeoutCode(err)) {
+          // Timeout partial-publish fix: the repair call ran out of time (per-call TIMEOUT
+          // or the job budget's DEADLINE_EXCEEDED). The attempt ran and its reservation
+          // settled — account it HERE through the ONE accumulator (S6R-07), record it, and
+          // fail ONLY this component; the parts that passed keep their partial publish.
+          const charge = errorCharge(err, {
+            target: 'component',
+            componentId: cid,
+            revision: nextRevision,
+          });
+          ctx.account(charge.chargedUSD, charge.unknownUSD);
+          pushDiedRepairRecord(summary, cid, attempt, nextRevision, targeted);
+          ctx.emit('repair', 'failed', charge.extra);
+          diedReason = TIMEOUT_REASON;
           ctx.writeJob();
           break;
         }
@@ -1635,6 +1751,18 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
       const attempt = repairsDone + 1;
       const nextRevision = current.revision + 1;
       const targeted = failedCheckIds(current.report);
+      if (!enoughBudgetForRepair(remainingBudgetMs())) {
+        // Timeout partial-publish fix: never START a repair the job budget cannot carry
+        // (same rule as the kit loop; no paid call, no repair record).
+        ctx.emit('repair', 'failed', {
+          target: 'component',
+          componentId: activity,
+          revision: nextRevision,
+          detail: REPAIR_NOT_STARTED_DETAIL,
+        });
+        diedReason = TIMEOUT_REASON;
+        break;
+      }
       ctx.emit('repair', 'started', {
         target: 'component',
         componentId: activity,
@@ -1696,6 +1824,22 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
           pushDiedRepairRecord(summary, activity, attempt, nextRevision, targeted);
           ctx.emit('repair', 'failed', died.extra);
           diedReason = died.reason;
+          ctx.writeJob();
+          break;
+        }
+        if (isTimeoutCode(err)) {
+          // Timeout partial-publish fix: the premium repair call ran out of time. Account
+          // the settled reservation HERE (S6R-07), record the attempt, fail ONLY this
+          // component; the parts that passed keep their partial publish.
+          const charge = errorCharge(err, {
+            target: 'component',
+            componentId: activity,
+            revision: nextRevision,
+          });
+          ctx.account(charge.chargedUSD, charge.unknownUSD);
+          pushDiedRepairRecord(summary, activity, attempt, nextRevision, targeted);
+          ctx.emit('repair', 'failed', charge.extra);
+          diedReason = TIMEOUT_REASON;
           ctx.writeJob();
           break;
         }

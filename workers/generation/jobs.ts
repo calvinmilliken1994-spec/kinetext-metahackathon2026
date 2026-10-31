@@ -608,8 +608,14 @@ export function startJob(
   writeJsonAtomic(join(runDir, 'job.json'), summary);
 
   // R-11: one job-wide deadline plus per-stage output caps, wired from config.
+  // Timeout partial-publish fix: deadlineAtMs mirrors the AbortSignal.timeout deadline on
+  // the same real-time clock, so the lesson flow can refuse to START a repair when less
+  // than MIN_REPAIR_BUDGET_MS of the budget remains (an AbortSignal cannot be queried for
+  // its remaining time).
+  const wallTimeMs = positiveOr(deps.limits?.maxJobWallTimeMs, DEFAULT_JOB_WALL_TIME_MS);
   const budget = {
-    signal: AbortSignal.timeout(positiveOr(deps.limits?.maxJobWallTimeMs, DEFAULT_JOB_WALL_TIME_MS)),
+    signal: AbortSignal.timeout(wallTimeMs),
+    deadlineAtMs: Date.now() + wallTimeMs,
     analysisMaxOutputTokens: positiveOr(deps.limits?.analysisMaxOutputTokens, DEFAULT_ANALYSIS_MAX_OUTPUT_TOKENS),
     specMaxOutputTokens: positiveOr(deps.limits?.specMaxOutputTokens, DEFAULT_SPEC_MAX_OUTPUT_TOKENS),
   };
@@ -682,7 +688,7 @@ async function runJob(
   deps: JobDeps,
   summary: JobSummary,
   now: () => Date,
-  budget: { signal: AbortSignal; analysisMaxOutputTokens: number; specMaxOutputTokens: number },
+  budget: { signal: AbortSignal; deadlineAtMs: number; analysisMaxOutputTokens: number; specMaxOutputTokens: number },
   onEvent?: (e: StageEvent) => void,
   progress: { stage: LessonStage } = { stage: 'ingest' },
 ): Promise<JobSummary> {
@@ -800,6 +806,9 @@ async function runJob(
       purpose: deps.purpose,
       now,
       signal: budget.signal,
+      // Timeout partial-publish fix: the lesson flow's repair-start budget guard reads
+      // this deadline (same real-time clock as the abort signal above).
+      deadlineAtMs: budget.deadlineAtMs,
       specMaxOutputTokens: budget.specMaxOutputTokens,
       maxRepairAttempts: deps.limits?.maxRepairAttempts ?? DEFAULT_MAX_REPAIR_ATTEMPTS,
       demoFault: deps.demoFault,
