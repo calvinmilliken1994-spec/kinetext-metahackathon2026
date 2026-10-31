@@ -196,8 +196,8 @@ Qwen, GPT reviewers) under the developer's direction; every commit's authoring r
   its locator, license, attribution text and sha256. Per NASA's media-usage conditions, generated output
   is attributed to this product, never to NASA, and the validator enforces that.
 - The test fixture source text (`tests/fixtures/source.txt`) is original and CC0-1.0.
-- The Meta logo in the app footer is Meta's trademark, used unmodified and only to name the hackathon
-  this project was built for. No endorsement by Meta is implied.
+- The app footer names the hackathon in plain text only. No Meta logo is used, and no endorsement by
+  Meta is implied.
 - A blanket repository license has not been chosen yet (developer decision pending; see
   `docs/PROVENANCE.md`).
 
