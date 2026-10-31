@@ -1,0 +1,115 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "title",
+    "algorithm",
+    "algorithmName",
+    "sourceId",
+    "quote",
+    "input",
+    "hasTarget",
+    "target",
+    "claims"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "enum": [
+        "algorithm-trace-v1"
+      ],
+      "description": "Generator schema version, always the component id."
+    },
+    "title": {
+      "type": "string",
+      "description": "Short title for students in plain text."
+    },
+    "algorithm": {
+      "type": "string",
+      "enum": [
+        "binary-search",
+        "linear-search",
+        "bubble-sort",
+        "insertion-sort",
+        "selection-sort",
+        "merge-sort",
+        "quicksort"
+      ],
+      "description": "Algorithm id to trace."
+    },
+    "algorithmName": {
+      "type": "string",
+      "description": "The page own name for the algorithm, 1 to 60 characters, a whole phrase in the quote, for example binary search."
+    },
+    "sourceId": {
+      "type": "string",
+      "description": "Id of the source the quote was copied from."
+    },
+    "quote": {
+      "type": "string",
+      "description": "Exact characters copied from the source, no ellipsis, 150 characters or fewer. It names and/or describes the algorithm; it contains algorithmName."
+    },
+    "input": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "description": "One input integer 0 to 99."
+      },
+      "minItems": 4,
+      "maxItems": 10,
+      "description": "Input array of 4 to 10 integers 0 to 99; a search needs ascending distinct values."
+    },
+    "hasTarget": {
+      "type": "boolean",
+      "description": "True exactly for search algorithms."
+    },
+    "target": {
+      "type": "integer",
+      "description": "Search target 0 to 99; 0 is the absent sentinel when hasTarget is false."
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "kind",
+          "text",
+          "sourceId",
+          "quote"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Lowercase kebab claim id, 40 characters or fewer."
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "running-time",
+              "property"
+            ],
+            "description": "Kind of page-stated fact."
+          },
+          "text": {
+            "type": "string",
+            "description": "Page-stated fact in plain text, 1 to 80 characters. It occurs in the claim quote after whitespace normalisation."
+          },
+          "sourceId": {
+            "type": "string",
+            "description": "Id of the source the quote was copied from."
+          },
+          "quote": {
+            "type": "string",
+            "description": "Exact characters copied from the source, no ellipsis, 150 characters or fewer. It contains the claim text."
+          }
+        }
+      },
+      "minItems": 0,
+      "maxItems": 3,
+      "description": "Page-stated facts, 0 to 3."
+    }
+  }
+}

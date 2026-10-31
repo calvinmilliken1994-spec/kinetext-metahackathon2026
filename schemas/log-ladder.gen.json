@@ -1,0 +1,126 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "title",
+    "quantity",
+    "factor",
+    "factorText",
+    "effectPhrase",
+    "increasing",
+    "sourceId",
+    "quote",
+    "rungs",
+    "cases"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "enum": [
+        "log-ladder-v1"
+      ],
+      "description": "Generator schema version, always the component id."
+    },
+    "title": {
+      "type": "string",
+      "description": "Short title for students in plain text."
+    },
+    "quantity": {
+      "type": "string",
+      "description": "The scale name as the page writes it, for example pH or magnitude. It occurs in the quote."
+    },
+    "factor": {
+      "type": "number",
+      "description": "Per whole step, more than 1 and at most 1000, for example 10 or 32."
+    },
+    "factorText": {
+      "type": "string",
+      "description": "The page words for the factor, for example ten times or tenfold. It occurs in the quote and states factor."
+    },
+    "effectPhrase": {
+      "type": "string",
+      "description": "What multiplies, in the page words, for example more acidic."
+    },
+    "increasing": {
+      "type": "boolean",
+      "description": "True when a higher scale value means more of the effect; false for pH."
+    },
+    "sourceId": {
+      "type": "string",
+      "description": "Id of the source the quote was copied from."
+    },
+    "quote": {
+      "type": "string",
+      "description": "Exact characters copied from the source, no ellipsis, 150 characters or fewer. It contains factorText and quantity."
+    },
+    "rungs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "label",
+          "value",
+          "sourceId",
+          "quote"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Lowercase kebab rung id, 40 characters or fewer."
+          },
+          "label": {
+            "type": "string",
+            "description": "Rung label in plain text, 1 to 60 characters."
+          },
+          "value": {
+            "type": "number",
+            "description": "Scale value stated on the page; it is a whole numeric token in the quote."
+          },
+          "sourceId": {
+            "type": "string",
+            "description": "Id of the source the quote was copied from."
+          },
+          "quote": {
+            "type": "string",
+            "description": "Exact characters copied from the source, no ellipsis, 150 characters or fewer. It contains the rung value as a whole numeric token."
+          }
+        }
+      },
+      "minItems": 2,
+      "maxItems": 8,
+      "description": "Page-stated points on the scale, 2 to 8."
+    },
+    "cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "fromValue",
+          "toValue"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Lowercase kebab case id, 40 characters or fewer."
+          },
+          "fromValue": {
+            "type": "number",
+            "description": "Starting scale value."
+          },
+          "toValue": {
+            "type": "number",
+            "description": "Ending scale value; must differ from fromValue."
+          }
+        }
+      },
+      "minItems": 1,
+      "maxItems": 3,
+      "description": "Predict-the-ratio cases, 1 to 3."
+    }
+  }
+}

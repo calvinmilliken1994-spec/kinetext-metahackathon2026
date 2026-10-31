@@ -49,6 +49,7 @@ function kitSpec(jobId: string, id: KitGenComponentId, revision: number): KitSpe
     case 'sort-groups-v1': return assembleKitSpec(r.sort, id, opts);
     case 'compare-table-v1': return assembleKitSpec(r.compare, id, opts);
     case 'balance-equation-v1': return assembleKitSpec(r.balance, id, opts);
+    default: throw new Error(`no fixture for ${id}`);
   }
 }
 

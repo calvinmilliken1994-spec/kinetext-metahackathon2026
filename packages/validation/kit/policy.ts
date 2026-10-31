@@ -104,6 +104,23 @@ export function kitDisplayFields(componentId: string, gen: unknown): DisplayFiel
       add('/title', g.title);
       add('/hint', g.hint);
       break;
+    // Stage 8a (lead wiring): only AI-written display text is swept; page-copied fields (names, headers,
+    // row labels, claim text, factor wording) are bound to their quotes by the component's own checks.
+    case 'algorithm-trace-v1':
+      add('/title', g.title);
+      break;
+    case 'log-ladder-v1':
+      add('/title', g.title);
+      each('rungs', (x, p) => add(`${p}/label`, x.label));
+      break;
+    case 'threshold-v1':
+      add('/title', g.title);
+      each('scenarios', (x, p) => add(`${p}/label`, x.label));
+      break;
+    case 'data-table-v1':
+      add('/title', g.title);
+      add('/labelHeader', g.labelHeader);
+      break;
     case 'overview-v1':
       add('/headline', g.headline);
       each('keyPoints', (x, p) => add(`${p}/point`, x.point));

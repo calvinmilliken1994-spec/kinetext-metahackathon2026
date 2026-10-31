@@ -357,7 +357,7 @@ test('every Stage 6 check id has a plain-words name that is not the contract slu
     assert.ok(!/^[a-z0-9-]+$/.test(name), `${id}: "${name}" looks like a slug`);
     assert.ok(!name.includes(id), id);
   }
-  for (const target of ['analysis', 'overview-v1', 'quiz-cards-v1', 'sequence-v1', 'sort-groups-v1', 'concept-map-v1', 'compare-table-v1', 'formula-explorer-v1', 'balance-equation-v1'] as const) {
+  for (const target of ['analysis', 'overview-v1', 'quiz-cards-v1', 'sequence-v1', 'sort-groups-v1', 'concept-map-v1', 'compare-table-v1', 'formula-explorer-v1', 'balance-equation-v1', 'algorithm-trace-v1', 'log-ladder-v1', 'threshold-v1', 'data-table-v1'] as const) {
     const names = checkIdsFor(target).map((id) => stage6CheckName(id));
     assert.equal(new Set(names).size, names.length, `${target}: duplicate names`);
   }

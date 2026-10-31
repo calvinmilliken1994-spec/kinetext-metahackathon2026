@@ -12,6 +12,10 @@ import { parseGuess } from '../../lib/predictions.ts';
 import { compareEvents, formatEventDate, gradePair } from '../../lib/timeline.ts';
 import { linkKey, linkKeysOf } from '../../lib/linking.ts';
 import { ActivityPanel } from '../ActivityPanel.tsx';
+import { AlgorithmTraceView } from '../AlgorithmTraceView.tsx';
+import { DataTableView } from '../DataTableView.tsx';
+import { LogLadderView } from '../LogLadderView.tsx';
+import { ThresholdView } from '../ThresholdView.tsx';
 import { BalanceView } from '../BalanceView.tsx';
 import { ConceptMapView } from '../ConceptMapView.tsx';
 import { FormulaExplorerView } from '../FormulaExplorerView.tsx';
@@ -440,6 +444,10 @@ function KitPart({ spec, cite }: { spec: KitSpec; cite: CiteProps }) {
     case 'balance-equation-v1': return <BalanceView spec={spec} cite={cite} />;
     case 'compare-table-v1': return <CompareView spec={spec} cite={cite} />;
     case 'quiz-cards-v1': return <QuizCardsView spec={spec} cite={cite} />;
+    case 'algorithm-trace-v1': return <AlgorithmTraceView spec={spec} cite={cite} presentation={{ mode: 'stage', step: 0, revealed: false }} />;
+    case 'log-ladder-v1': return <LogLadderView spec={spec} cite={cite} presentation={{ mode: 'stage', step: 0, revealed: false }} />;
+    case 'threshold-v1': return <ThresholdView spec={spec} cite={cite} presentation={{ mode: 'stage', step: 0, revealed: false }} />;
+    case 'data-table-v1': return <DataTableView spec={spec} cite={cite} presentation={{ mode: 'stage', step: 0, revealed: false }} />;
     default: return null;
   }
 }

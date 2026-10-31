@@ -1,0 +1,127 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "title",
+    "stages",
+    "scenarios"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "enum": [
+        "threshold-v1"
+      ],
+      "description": "Generator schema version, always the component id."
+    },
+    "title": {
+      "type": "string",
+      "description": "Short title for students in plain text."
+    },
+    "stages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "body",
+          "total",
+          "rule",
+          "numerator",
+          "denominator",
+          "statedCount",
+          "sourceId",
+          "quote",
+          "totalQuote"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Lowercase kebab stage id, 40 characters or fewer."
+          },
+          "body": {
+            "type": "string",
+            "description": "Who votes, in the page words, 1 to 60 characters, for example States."
+          },
+          "total": {
+            "type": "integer",
+            "description": "Page-stated total voters, integer 1 to 100000. It occurs in totalQuote."
+          },
+          "rule": {
+            "type": "string",
+            "enum": [
+              "majority",
+              "fraction",
+              "count"
+            ],
+            "description": "Passing rule."
+          },
+          "numerator": {
+            "type": "integer",
+            "description": "Fraction numerator; 0 is the absent sentinel when the rule is not fraction."
+          },
+          "denominator": {
+            "type": "integer",
+            "description": "Fraction denominator; 0 is the absent sentinel when the rule is not fraction."
+          },
+          "statedCount": {
+            "type": "integer",
+            "description": "Page-stated required count, or 0 when the page states none; required for rule count."
+          },
+          "sourceId": {
+            "type": "string",
+            "description": "Id of the source the quote was copied from."
+          },
+          "quote": {
+            "type": "string",
+            "description": "Exact characters copied from the source, no ellipsis, 150 characters or fewer. It states the rule words and/or statedCount."
+          },
+          "totalQuote": {
+            "type": "string",
+            "description": "Exact characters copied from the source, no ellipsis, 150 characters or fewer. It contains total; it may equal quote."
+          }
+        }
+      },
+      "minItems": 1,
+      "maxItems": 3,
+      "description": "Stages that must all pass, 1 to 3."
+    },
+    "scenarios": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "label",
+          "yes"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Lowercase kebab scenario id, 40 characters or fewer."
+          },
+          "label": {
+            "type": "string",
+            "description": "Scenario label in plain text, 1 to 80 characters."
+          },
+          "yes": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "description": "Yes votes for one stage, integer within that stage total."
+            },
+            "minItems": 1,
+            "maxItems": 3,
+            "description": "One yes count per stage, in stage order."
+          }
+        }
+      },
+      "minItems": 1,
+      "maxItems": 3,
+      "description": "Try-it vote counts, 1 to 3; engine inputs, not page claims."
+    }
+  }
+}

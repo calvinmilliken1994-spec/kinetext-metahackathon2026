@@ -101,7 +101,7 @@ function firstQuoteFor(componentId: KitGenComponentId, gen: unknown): string {
   if (typeof g['quote'] === 'string' && (g['quote'] as string).length > 0) {
     return g['quote'] as string;
   }
-  for (const key of ['cards', 'steps', 'items', 'links', 'cells'] as const) {
+  for (const key of ['cards', 'steps', 'items', 'links', 'cells', 'stages', 'rungs', 'columns'] as const) {
     const arr = g[key] as Array<Record<string, unknown>> | undefined;
     if (Array.isArray(arr) && typeof arr[0]?.['quote'] === 'string') {
       return arr[0]?.['quote'] as string;
@@ -119,6 +119,10 @@ function sourceForComponent(componentId: KitGenComponentId): SourceDocument {
   if (componentId === 'sort-groups-v1') return loadSource('nij-heterozygosity');
   if (componentId === 'compare-table-v1') return loadSource('nasa-grc-earth-atmosphere-equation-english');
   if (componentId === 'balance-equation-v1') return balanceSourceDoc();
+  if (componentId === 'algorithm-trace-v1') return loadSource('nist-dads-binary-search');
+  if (componentId === 'log-ladder-v1') return loadSource('usgs-earthquake-magnitude-energy-intensity');
+  if (componentId === 'threshold-v1') return loadSource('nara-constitutional-amendment-process');
+  if (componentId === 'data-table-v1') return loadSource('nasa-nssdc-planetary-fact-sheet-metric');
   return loadSource('nasa-grc-drag-equation');
 }
 
@@ -127,6 +131,10 @@ function fixtureFor(componentId: KitGenComponentId): unknown {
   if (componentId === 'sequence-v1') return loadFixture('sequence.gen.json');
   if (componentId === 'sort-groups-v1') return loadFixture('sort-groups.gen.json');
   if (componentId === 'concept-map-v1') return loadFixture('concept-map.gen.json');
+  if (componentId === 'algorithm-trace-v1') return loadFixture('algorithm-trace.gen.json');
+  if (componentId === 'log-ladder-v1') return loadFixture('log-ladder.gen.json');
+  if (componentId === 'threshold-v1') return loadFixture('threshold.gen.json');
+  if (componentId === 'data-table-v1') return loadFixture('data-table.gen.json');
   if (componentId === 'compare-table-v1') return loadFixture('compare-table.gen.json');
   if (componentId === 'formula-explorer-v1') return loadFixture('formula-explorer.gen.json');
   return loadFixture('balance-equation.gen.json');
@@ -137,6 +145,10 @@ function sourceIdFor(componentId: KitGenComponentId): string {
   if (componentId === 'sort-groups-v1') return 'nij-heterozygosity';
   if (componentId === 'compare-table-v1') return 'nasa-grc-earth-atmosphere-equation-english';
   if (componentId === 'balance-equation-v1') return 'synthetic-balance';
+  if (componentId === 'algorithm-trace-v1') return 'nist-dads-binary-search';
+  if (componentId === 'log-ladder-v1') return 'usgs-earthquake-magnitude-energy-intensity';
+  if (componentId === 'threshold-v1') return 'nara-constitutional-amendment-process';
+  if (componentId === 'data-table-v1') return 'nasa-nssdc-planetary-fact-sheet-metric';
   return 'nasa-grc-drag-equation';
 }
 

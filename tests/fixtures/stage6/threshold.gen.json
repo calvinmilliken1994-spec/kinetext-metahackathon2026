@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "threshold-v1",
+  "title": "Amendment threshold",
+  "stages": [
+    {
+      "id": "stage-1",
+      "body": "States",
+      "total": 50,
+      "rule": "fraction",
+      "numerator": 3,
+      "denominator": 4,
+      "statedCount": 38,
+      "sourceId": "nara-constitutional-amendment-process",
+      "quote": "A proposed amendment becomes part of the Constitution as soon as it is ratified by three-fourths of the States (38 of 50 States).",
+      "totalQuote": "A proposed amendment becomes part of the Constitution as soon as it is ratified by three-fourths of the States (38 of 50 States)."
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "scenario-1",
+      "label": "Strong yes vote",
+      "yes": [38]
+    }
+  ]
+}

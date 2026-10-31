@@ -7,15 +7,19 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { ACCEPTED_SCHEMA_VERSIONS, ACTIVITY_IDS, ENGINES, ENGINE_IDS, SCHEMA_VERSION, SEQUENCE_ENGINES } from '../packages/contracts/index.ts';
 import type { EngineDescriptor, EngineId, SequenceDescriptor } from '../packages/contracts/index.ts';
 import {
+  ALGORITHM_CLAIM_KINDS,
+  ALGORITHM_IDS,
   BALANCE_SIDES,
   CONCEPT_MAP_RELATIONS,
+  DATA_TABLE_QUESTION_KINDS,
   DECLINE_CODES,
   KIT_GEN_SCHEMA_FILES,
   KIT_LIMITS,
   PLAN_COMPONENT_IDS,
   SEQUENCE_ORDER_BASES,
   SOURCE_ANALYSIS_V2_GEN_SCHEMA_FILE,
-  SUBJECTS
+  SUBJECTS,
+  THRESHOLD_RULES
 } from '../packages/contracts/kit.ts';
 import type { KitGenComponentId } from '../packages/contracts/kit.ts';
 
@@ -446,6 +450,125 @@ function balanceSchema(cid: KitGenComponentId): Record<string, unknown> {
   });
 }
 
+function algorithmTraceSchema(cid: KitGenComponentId): Record<string, unknown> {
+  const claim = obj({
+    id: str('Lowercase kebab claim id, 40 characters or fewer.'),
+    kind: enumStr(ALGORITHM_CLAIM_KINDS, 'Kind of page-stated fact.'),
+    text: str('Page-stated fact in plain text, 1 to 80 characters. It occurs in the claim quote after whitespace normalisation.'),
+    sourceId: str('Id of the source the quote was copied from.'),
+    quote: str(QUOTE_DESC + ' It contains the claim text.')
+  });
+  return obj({
+    schemaVersion: { type: 'string', enum: [cid], description: 'Generator schema version, always the component id.' },
+    title: str('Short title for students in plain text.'),
+    algorithm: enumStr(ALGORITHM_IDS, 'Algorithm id to trace.'),
+    algorithmName: str('The page own name for the algorithm, 1 to 60 characters, a whole phrase in the quote, for example binary search.'),
+    sourceId: str('Id of the source the quote was copied from.'),
+    quote: str(QUOTE_DESC + ' It names and/or describes the algorithm; it contains algorithmName.'),
+    input: arr(int('One input integer 0 to 99.'), KIT_LIMITS.algorithm.input.min, KIT_LIMITS.algorithm.input.max, 'Input array of 4 to 10 integers 0 to 99; a search needs ascending distinct values.'),
+    hasTarget: bool('True exactly for search algorithms.'),
+    target: int('Search target 0 to 99; 0 is the absent sentinel when hasTarget is false.'),
+    claims: arr(claim, KIT_LIMITS.algorithm.claims.min, KIT_LIMITS.algorithm.claims.max, 'Page-stated facts, 0 to 3.')
+  });
+}
+
+function logLadderSchema(cid: KitGenComponentId): Record<string, unknown> {
+  const rung = obj({
+    id: str('Lowercase kebab rung id, 40 characters or fewer.'),
+    label: str('Rung label in plain text, 1 to 60 characters.'),
+    value: num('Scale value stated on the page; it is a whole numeric token in the quote.'),
+    sourceId: str('Id of the source the quote was copied from.'),
+    quote: str(QUOTE_DESC + ' It contains the rung value as a whole numeric token.')
+  });
+  const kase = obj({
+    id: str('Lowercase kebab case id, 40 characters or fewer.'),
+    fromValue: num('Starting scale value.'),
+    toValue: num('Ending scale value; must differ from fromValue.')
+  });
+  return obj({
+    schemaVersion: { type: 'string', enum: [cid], description: 'Generator schema version, always the component id.' },
+    title: str('Short title for students in plain text.'),
+    quantity: str('The scale name as the page writes it, for example pH or magnitude. It occurs in the quote.'),
+    factor: num('Per whole step, more than 1 and at most 1000, for example 10 or 32.'),
+    factorText: str('The page words for the factor, for example ten times or tenfold. It occurs in the quote and states factor.'),
+    effectPhrase: str('What multiplies, in the page words, for example more acidic.'),
+    increasing: bool('True when a higher scale value means more of the effect; false for pH.'),
+    sourceId: str('Id of the source the quote was copied from.'),
+    quote: str(QUOTE_DESC + ' It contains factorText and quantity.'),
+    rungs: arr(rung, KIT_LIMITS.logLadder.rungs.min, KIT_LIMITS.logLadder.rungs.max, 'Page-stated points on the scale, 2 to 8.'),
+    cases: arr(kase, KIT_LIMITS.logLadder.cases.min, KIT_LIMITS.logLadder.cases.max, 'Predict-the-ratio cases, 1 to 3.')
+  });
+}
+
+function thresholdSchema(cid: KitGenComponentId): Record<string, unknown> {
+  const stage = obj({
+    id: str('Lowercase kebab stage id, 40 characters or fewer.'),
+    body: str('Who votes, in the page words, 1 to 60 characters, for example States.'),
+    total: int('Page-stated total voters, integer 1 to 100000. It occurs in totalQuote.'),
+    rule: enumStr(THRESHOLD_RULES, 'Passing rule.'),
+    numerator: int('Fraction numerator; 0 is the absent sentinel when the rule is not fraction.'),
+    denominator: int('Fraction denominator; 0 is the absent sentinel when the rule is not fraction.'),
+    statedCount: int('Page-stated required count, or 0 when the page states none; required for rule count.'),
+    sourceId: str('Id of the source the quote was copied from.'),
+    quote: str(QUOTE_DESC + ' It states the rule words and/or statedCount.'),
+    totalQuote: str(QUOTE_DESC + ' It contains total; it may equal quote.')
+  });
+  const scenario = obj({
+    id: str('Lowercase kebab scenario id, 40 characters or fewer.'),
+    label: str('Scenario label in plain text, 1 to 80 characters.'),
+    yes: arr(int('Yes votes for one stage, integer within that stage total.'), KIT_LIMITS.threshold.stages.min, KIT_LIMITS.threshold.stages.max, 'One yes count per stage, in stage order.')
+  });
+  return obj({
+    schemaVersion: { type: 'string', enum: [cid], description: 'Generator schema version, always the component id.' },
+    title: str('Short title for students in plain text.'),
+    stages: arr(stage, KIT_LIMITS.threshold.stages.min, KIT_LIMITS.threshold.stages.max, 'Stages that must all pass, 1 to 3.'),
+    scenarios: arr(scenario, KIT_LIMITS.threshold.scenarios.min, KIT_LIMITS.threshold.scenarios.max, 'Try-it vote counts, 1 to 3; engine inputs, not page claims.')
+  });
+}
+
+function dataTableSchema(cid: KitGenComponentId): Record<string, unknown> {
+  const column = obj({
+    header: str('Value-column header as printed, 1 to 40 characters. It occurs in the quote.'),
+    unit: str('Unit label, 0 to 20 characters; empty string means no unit.'),
+    numeric: bool('True when the column holds numbers parsed by parseTableNumber.'),
+    sourceId: str('Id of the source the quote was copied from.'),
+    quote: str(QUOTE_DESC + ' It contains the header.')
+  });
+  const cell = obj({
+    value: str('Cell value as printed, 1 to 40 characters. It is a whole token in the quote.'),
+    sourceId: str('Id of the source the quote was copied from.'),
+    quote: str(QUOTE_DESC + ' It contains the value as a whole token.')
+  });
+  const row = obj({
+    label: str('Row label as printed, 1 to 60 characters. It occurs in the quote.'),
+    sourceId: str('Id of the source the quote was copied from.'),
+    quote: str(QUOTE_DESC + ' It contains the row label.'),
+    values: arr(cell, KIT_LIMITS.dataTable.columns.min, KIT_LIMITS.dataTable.columns.max, 'One value per column, in column order.')
+  });
+  const question = obj({
+    id: str('Lowercase kebab question id, 40 characters or fewer.'),
+    kind: enumStr(DATA_TABLE_QUESTION_KINDS, 'Question kind.'),
+    rowIndex: int('Row index for lookup, otherwise the -1 absent sentinel.'),
+    columnIndex: int('Column index the question asks about.')
+  });
+  const brackets = obj({
+    enabled: bool('True for the progressive-rate calculator, false otherwise.'),
+    rateColumnIndex: int('Rate column index, or the -1 absent sentinel when disabled.'),
+    overColumnIndex: int('Threshold column index, or the -1 absent sentinel when disabled.'),
+    exampleIncome: num('Example income greater than 0 when enabled, else the 0 absent sentinel.')
+  });
+  return obj({
+    schemaVersion: { type: 'string', enum: [cid], description: 'Generator schema version, always the component id.' },
+    title: str('Short title for students in plain text.'),
+    labelHeader: str('Header for the row-label column, 1 to 40 characters, for example Planet.'),
+    columns: arr(column, KIT_LIMITS.dataTable.columns.min, KIT_LIMITS.dataTable.columns.max, 'Value columns, 2 to 6.'),
+    rows: arr(row, KIT_LIMITS.dataTable.rows.min, KIT_LIMITS.dataTable.rows.max, 'Data rows, 3 to 12.'),
+    questions: arr(question, KIT_LIMITS.dataTable.questions.min, KIT_LIMITS.dataTable.questions.max, 'Questions answered by our code, 1 to 4.'),
+    chartColumnIndex: int('Numeric column to chart, or the -1 absent sentinel for no chart.'),
+    brackets
+  });
+}
+
 emit(SOURCE_ANALYSIS_V2_GEN_SCHEMA_FILE, analysisV2Schema());
 emit(KIT_GEN_SCHEMA_FILES['quiz-cards-v1'] as string, quizSchema('quiz-cards-v1'));
 emit(KIT_GEN_SCHEMA_FILES['sequence-v1'] as string, sequenceSchema('sequence-v1'));
@@ -454,6 +577,10 @@ emit(KIT_GEN_SCHEMA_FILES['concept-map-v1'] as string, conceptMapSchema('concept
 emit(KIT_GEN_SCHEMA_FILES['compare-table-v1'] as string, compareSchema('compare-table-v1'));
 emit(KIT_GEN_SCHEMA_FILES['formula-explorer-v1'] as string, formulaExplorerSchema('formula-explorer-v1'));
 emit(KIT_GEN_SCHEMA_FILES['balance-equation-v1'] as string, balanceSchema('balance-equation-v1'));
+emit(KIT_GEN_SCHEMA_FILES['algorithm-trace-v1'] as string, algorithmTraceSchema('algorithm-trace-v1'));
+emit(KIT_GEN_SCHEMA_FILES['log-ladder-v1'] as string, logLadderSchema('log-ladder-v1'));
+emit(KIT_GEN_SCHEMA_FILES['threshold-v1'] as string, thresholdSchema('threshold-v1'));
+emit(KIT_GEN_SCHEMA_FILES['data-table-v1'] as string, dataTableSchema('data-table-v1'));
 
 if (check && changed > 0) process.exit(1);
 console.log(check ? 'schemas up to date' : `done (${changed} file(s) changed)`);

@@ -1,4 +1,5 @@
-// Stage 6 kit contracts v0.6.0 — frozen by the lead from `docs/specs/STAGE-6-design.md` + addendum.
+// Stage 6 kit contracts v0.6.0 + Stage 8a subject engines — frozen by the lead from `docs/specs/STAGE-6-design.md` + addendum + `docs/specs/STAGE-8a-subject-engines.md`.
+// Stage 6 check count: 92 (63 + 7 ALG + 7 LOG + 7 TH + 8 DT). KIT_SCHEMA_VERSION stays 0.6.0: existing shapes unchanged.
 // Runtime: Node 24 type stripping, so only erasable TypeScript syntax (no enums, namespaces or parameter properties).
 // Browser-safe: no node:* imports; structuredClone only.
 import type { Execution, Provenance, SourceDocument, SourceRef } from './index.ts';
@@ -16,13 +17,13 @@ export function isSubject(v: unknown): v is Subject {
 export const DECLINE_CODES = ['too-short', 'not-prose', 'boilerplate-only', 'no-teachable-content', 'unreadable', 'prompt-injection-only'] as const;
 export type DeclineCode = typeof DECLINE_CODES[number];
 
-export const KIT_COMPONENT_IDS = ['overview-v1', 'quiz-cards-v1', 'sequence-v1', 'sort-groups-v1', 'concept-map-v1', 'compare-table-v1', 'formula-explorer-v1', 'balance-equation-v1'] as const;
+export const KIT_COMPONENT_IDS = ['overview-v1', 'quiz-cards-v1', 'sequence-v1', 'sort-groups-v1', 'concept-map-v1', 'compare-table-v1', 'formula-explorer-v1', 'balance-equation-v1', 'algorithm-trace-v1', 'log-ladder-v1', 'threshold-v1', 'data-table-v1'] as const;
 export type KitComponentId = typeof KIT_COMPONENT_IDS[number];
 export function isKitComponentId(v: unknown): v is KitComponentId {
   return typeof v === 'string' && (KIT_COMPONENT_IDS as readonly string[]).includes(v);
 }
 
-export const KIT_GEN_COMPONENT_IDS = ['quiz-cards-v1', 'sequence-v1', 'sort-groups-v1', 'concept-map-v1', 'compare-table-v1', 'formula-explorer-v1', 'balance-equation-v1'] as const;
+export const KIT_GEN_COMPONENT_IDS = ['quiz-cards-v1', 'sequence-v1', 'sort-groups-v1', 'concept-map-v1', 'compare-table-v1', 'formula-explorer-v1', 'balance-equation-v1', 'algorithm-trace-v1', 'log-ladder-v1', 'threshold-v1', 'data-table-v1'] as const;
 export type KitGenComponentId = typeof KIT_GEN_COMPONENT_IDS[number];
 export function isKitGenComponentId(v: unknown): v is KitGenComponentId {
   return typeof v === 'string' && (KIT_GEN_COMPONENT_IDS as readonly string[]).includes(v);
@@ -41,7 +42,11 @@ export const KIT_GEN_SCHEMA_FILES: Readonly<Record<KitGenComponentId, string>> =
   'concept-map-v1': 'concept-map.gen.json',
   'compare-table-v1': 'compare-table.gen.json',
   'formula-explorer-v1': 'formula-explorer.gen.json',
-  'balance-equation-v1': 'balance-equation.gen.json'
+  'balance-equation-v1': 'balance-equation.gen.json',
+  'algorithm-trace-v1': 'algorithm-trace.gen.json',
+  'log-ladder-v1': 'log-ladder.gen.json',
+  'threshold-v1': 'threshold.gen.json',
+  'data-table-v1': 'data-table.gen.json'
 };
 export const SOURCE_ANALYSIS_V2_GEN_SCHEMA_FILE = 'source-analysis-v2.gen.json';
 
@@ -53,6 +58,36 @@ export type SequenceOrderBasis = typeof SEQUENCE_ORDER_BASES[number];
 
 export const BALANCE_SIDES = ['left', 'right'] as const;
 export type BalanceSide = typeof BALANCE_SIDES[number];
+
+export const ALGORITHM_IDS = ['binary-search', 'linear-search', 'bubble-sort', 'insertion-sort', 'selection-sort', 'merge-sort', 'quicksort'] as const;
+export type AlgorithmId = typeof ALGORITHM_IDS[number];
+export function isAlgorithmId(v: unknown): v is AlgorithmId {
+  return typeof v === 'string' && (ALGORITHM_IDS as readonly string[]).includes(v);
+}
+
+export const SEARCH_ALGORITHM_IDS = ['binary-search', 'linear-search'] as const;
+export type SearchAlgorithmId = typeof SEARCH_ALGORITHM_IDS[number];
+export function isSearchAlgorithmId(v: unknown): v is SearchAlgorithmId {
+  return typeof v === 'string' && (SEARCH_ALGORITHM_IDS as readonly string[]).includes(v);
+}
+
+export const ALGORITHM_CLAIM_KINDS = ['running-time', 'property'] as const;
+export type AlgorithmClaimKind = typeof ALGORITHM_CLAIM_KINDS[number];
+export function isAlgorithmClaimKind(v: unknown): v is AlgorithmClaimKind {
+  return typeof v === 'string' && (ALGORITHM_CLAIM_KINDS as readonly string[]).includes(v);
+}
+
+export const THRESHOLD_RULES = ['majority', 'fraction', 'count'] as const;
+export type ThresholdRule = typeof THRESHOLD_RULES[number];
+export function isThresholdRule(v: unknown): v is ThresholdRule {
+  return typeof v === 'string' && (THRESHOLD_RULES as readonly string[]).includes(v);
+}
+
+export const DATA_TABLE_QUESTION_KINDS = ['lookup', 'largest', 'smallest'] as const;
+export type DataTableQuestionKind = typeof DATA_TABLE_QUESTION_KINDS[number];
+export function isDataTableQuestionKind(v: unknown): v is DataTableQuestionKind {
+  return typeof v === 'string' && (DATA_TABLE_QUESTION_KINDS as readonly string[]).includes(v);
+}
 
 export const KIT_ID_PATTERN = /^[a-z0-9][a-z0-9-]{0,39}$/;
 export const FORMULA_VAR_NAME_PATTERN = /^[a-z][a-z0-9_]{0,11}$/;
@@ -124,6 +159,37 @@ export const KIT_LIMITS = {
     coefficient: { min: 1, max: 12 },
     subscript: { min: 1, max: 999 },
     parenDepthMax: 2
+  },
+  algorithm: {
+    input: { min: 4, max: 10 },
+    value: { min: 0, max: 99 },
+    claims: { min: 0, max: 3 },
+    claimText: { min: 1, max: 80 },
+    name: { min: 1, max: 60 },
+    maxFrames: 400
+  },
+  logLadder: {
+    rungs: { min: 2, max: 8 },
+    cases: { min: 1, max: 3 },
+    factor: { min: 1.000001, max: 1000 },
+    label: { min: 1, max: 60 },
+    maxRatio: 1e12
+  },
+  threshold: {
+    stages: { min: 1, max: 3 },
+    scenarios: { min: 1, max: 3 },
+    total: { min: 1, max: 100000 },
+    body: { min: 1, max: 60 },
+    label: { min: 1, max: 80 }
+  },
+  dataTable: {
+    columns: { min: 2, max: 6 },
+    rows: { min: 3, max: 12 },
+    questions: { min: 1, max: 4 },
+    header: { min: 1, max: 40 },
+    unit: { min: 0, max: 20 },
+    label: { min: 1, max: 60 },
+    value: { min: 1, max: 40 }
   }
 } as const;
 
@@ -325,6 +391,113 @@ export interface BalanceSpeciesGen {
   sourceId: string;
   quote: string;
 }
+export interface AlgorithmTraceGen {
+  schemaVersion: 'algorithm-trace-v1';
+  title: string;
+  algorithm: AlgorithmId;
+  algorithmName: string;
+  sourceId: string;
+  quote: string;
+  input: number[];
+  hasTarget: boolean;
+  target: number;
+  claims: AlgorithmClaimGen[];
+}
+export interface AlgorithmClaimGen {
+  id: string;
+  kind: 'running-time' | 'property';
+  text: string;
+  sourceId: string;
+  quote: string;
+}
+export interface LogLadderGen {
+  schemaVersion: 'log-ladder-v1';
+  title: string;
+  quantity: string;
+  factor: number;
+  factorText: string;
+  effectPhrase: string;
+  increasing: boolean;
+  sourceId: string;
+  quote: string;
+  rungs: LogRungGen[];
+  cases: LogCaseGen[];
+}
+export interface LogRungGen {
+  id: string;
+  label: string;
+  value: number;
+  sourceId: string;
+  quote: string;
+}
+export interface LogCaseGen {
+  id: string;
+  fromValue: number;
+  toValue: number;
+}
+export interface ThresholdGen {
+  schemaVersion: 'threshold-v1';
+  title: string;
+  stages: ThresholdStageGen[];
+  scenarios: ThresholdScenarioGen[];
+}
+export interface ThresholdStageGen {
+  id: string;
+  body: string;
+  total: number;
+  rule: 'majority' | 'fraction' | 'count';
+  numerator: number;
+  denominator: number;
+  statedCount: number;
+  sourceId: string;
+  quote: string;
+  totalQuote: string;
+}
+export interface ThresholdScenarioGen {
+  id: string;
+  label: string;
+  yes: number[];
+}
+export interface DataTableGen {
+  schemaVersion: 'data-table-v1';
+  title: string;
+  labelHeader: string;
+  columns: DataColumnGen[];
+  rows: DataRowGen[];
+  questions: DataQuestionGen[];
+  chartColumnIndex: number;
+  brackets: DataBracketsGen;
+}
+export interface DataColumnGen {
+  header: string;
+  unit: string;
+  numeric: boolean;
+  sourceId: string;
+  quote: string;
+}
+export interface DataRowGen {
+  label: string;
+  sourceId: string;
+  quote: string;
+  values: DataCellGen[];
+}
+export interface DataCellGen {
+  value: string;
+  sourceId: string;
+  quote: string;
+}
+export interface DataQuestionGen {
+  id: string;
+  kind: 'lookup' | 'largest' | 'smallest';
+  rowIndex: number;
+  columnIndex: number;
+}
+export interface DataBracketsGen {
+  enabled: boolean;
+  rateColumnIndex: number;
+  overColumnIndex: number;
+  exampleIncome: number;
+}
 
 export interface KitGenByComponent {
   'quiz-cards-v1': QuizCardsGen;
@@ -334,6 +507,10 @@ export interface KitGenByComponent {
   'compare-table-v1': CompareTableGen;
   'formula-explorer-v1': FormulaExplorerGen;
   'balance-equation-v1': BalanceEquationGen;
+  'algorithm-trace-v1': AlgorithmTraceGen;
+  'log-ladder-v1': LogLadderGen;
+  'threshold-v1': ThresholdGen;
+  'data-table-v1': DataTableGen;
 }
 
 /** System-owned base fields shared by every kit spec. */
@@ -392,6 +569,39 @@ export interface BalanceEquationSpec extends KitSpecBase<'balance-equation-v1'> 
   species: BalanceSpeciesGen[];
   hint: string;
 }
+export interface AlgorithmTraceSpec extends KitSpecBase<'algorithm-trace-v1'> {
+  algorithm: AlgorithmId;
+  algorithmName: string;
+  sourceId: string;
+  quote: string;
+  input: number[];
+  hasTarget: boolean;
+  target: number;
+  claims: AlgorithmClaimGen[];
+}
+export interface LogLadderSpec extends KitSpecBase<'log-ladder-v1'> {
+  quantity: string;
+  factor: number;
+  factorText: string;
+  effectPhrase: string;
+  increasing: boolean;
+  sourceId: string;
+  quote: string;
+  rungs: LogRungGen[];
+  cases: LogCaseGen[];
+}
+export interface ThresholdSpec extends KitSpecBase<'threshold-v1'> {
+  stages: ThresholdStageGen[];
+  scenarios: ThresholdScenarioGen[];
+}
+export interface DataTableSpec extends KitSpecBase<'data-table-v1'> {
+  labelHeader: string;
+  columns: DataColumnGen[];
+  rows: DataRowGen[];
+  questions: DataQuestionGen[];
+  chartColumnIndex: number;
+  brackets: DataBracketsGen;
+}
 export interface KitSpecByComponent {
   'overview-v1': OverviewSpec;
   'quiz-cards-v1': QuizCardsSpec;
@@ -401,8 +611,12 @@ export interface KitSpecByComponent {
   'compare-table-v1': CompareTableSpec;
   'formula-explorer-v1': FormulaExplorerSpec;
   'balance-equation-v1': BalanceEquationSpec;
+  'algorithm-trace-v1': AlgorithmTraceSpec;
+  'log-ladder-v1': LogLadderSpec;
+  'threshold-v1': ThresholdSpec;
+  'data-table-v1': DataTableSpec;
 }
-export type KitSpec = OverviewSpec | QuizCardsSpec | SequenceSpec | SortGroupsSpec | ConceptMapSpec | CompareTableSpec | FormulaExplorerSpec | BalanceEquationSpec;
+export type KitSpec = OverviewSpec | QuizCardsSpec | SequenceSpec | SortGroupsSpec | ConceptMapSpec | CompareTableSpec | FormulaExplorerSpec | BalanceEquationSpec | AlgorithmTraceSpec | LogLadderSpec | ThresholdSpec | DataTableSpec;
 
 export const LESSON_COMPONENT_STATUSES = ['passed', 'failed', 'skipped'] as const;
 export type LessonComponentStatus = typeof LESSON_COMPONENT_STATUSES[number];
@@ -426,7 +640,7 @@ export interface LessonSpec {
  * docs/specs/STAGE-7e-library-and-wording.md option (a): step labels are AI-written short event
  * names, grounded by their step's verbatim quote); unlike A-02/BAL-06 it is NOT emitted as an
  * always-pass stub, and the id is never reused. Sequence ids keep their numbers (SEQ-01,
- * SEQ-03..SEQ-06) so stored evidence stays readable. */
+ * SEQ-03..SEQ-06) so stored evidence stays readable. Stage 8a appends ALG/LOG/TH/DT checks (92 total). */
 export const STAGE6_CHECKS = {
   'A-01': 'version-is-2',
   'A-02': 'mirrors-agree',
@@ -490,7 +704,36 @@ export const STAGE6_CHECKS = {
   'BAL-06': 'coefficient-shape',
   'BAL-07': 'numbers-checkable',
   'BAL-08': 'unique-up-to-scale',
-  'BAL-09': 'species-quote-verbatim'
+  'BAL-09': 'species-quote-verbatim',
+  'ALG-01': 'quotes-verbatim',
+  'ALG-02': 'algorithm-named-in-quote',
+  'ALG-03': 'input-valid',
+  'ALG-04': 'trace-runs',
+  'ALG-05': 'claims-in-quote',
+  'ALG-06': 'numbers-checkable',
+  'ALG-07': 'counts-valid',
+  'LOG-01': 'quotes-verbatim',
+  'LOG-02': 'factor-stated',
+  'LOG-03': 'quantity-in-quote',
+  'LOG-04': 'rung-values-in-quote',
+  'LOG-05': 'rungs-distinct',
+  'LOG-06': 'cases-valid',
+  'LOG-07': 'numbers-checkable',
+  'TH-01': 'quotes-verbatim',
+  'TH-02': 'total-in-quote',
+  'TH-03': 'rule-in-quote',
+  'TH-04': 'stated-count-consistent',
+  'TH-05': 'scenarios-valid',
+  'TH-06': 'numbers-checkable',
+  'TH-07': 'counts-valid',
+  'DT-01': 'quotes-verbatim',
+  'DT-02': 'headers-and-labels-in-quote',
+  'DT-03': 'values-in-quote',
+  'DT-04': 'shape-valid',
+  'DT-05': 'questions-valid',
+  'DT-06': 'chart-valid',
+  'DT-07': 'brackets-valid',
+  'DT-08': 'numbers-checkable'
 } as const;
 export type Stage6CheckId = keyof typeof STAGE6_CHECKS;
 export const STAGE6_CHECK_IDS: readonly Stage6CheckId[] = Object.keys(STAGE6_CHECKS) as unknown as readonly Stage6CheckId[];
@@ -505,7 +748,11 @@ export const CHECK_PREFIX_BY_COMPONENT = {
   'concept-map-v1': 'CM',
   'compare-table-v1': 'CT',
   'formula-explorer-v1': 'FE',
-  'balance-equation-v1': 'BAL'
+  'balance-equation-v1': 'BAL',
+  'algorithm-trace-v1': 'ALG',
+  'log-ladder-v1': 'LOG',
+  'threshold-v1': 'TH',
+  'data-table-v1': 'DT'
 } as const;
 export function checkIdsFor(target: 'analysis' | KitComponentId): Stage6CheckId[] {
   const prefix = CHECK_PREFIX_BY_COMPONENT[target];
@@ -530,7 +777,11 @@ export const KIT_GEN_BODY_KEYS: Readonly<Record<KitGenComponentId, readonly stri
   'concept-map-v1': ['nodes', 'links'],
   'compare-table-v1': ['attributes', 'rows'],
   'formula-explorer-v1': ['formulaText', 'sourceId', 'quote', 'expression', 'variables', 'xVariable', 'cases', 'sourceExample', 'hasSourceExample'],
-  'balance-equation-v1': ['equationText', 'sourceId', 'quote', 'species', 'hint']
+  'balance-equation-v1': ['equationText', 'sourceId', 'quote', 'species', 'hint'],
+  'algorithm-trace-v1': ['algorithm', 'algorithmName', 'sourceId', 'quote', 'input', 'hasTarget', 'target', 'claims'],
+  'log-ladder-v1': ['quantity', 'factor', 'factorText', 'effectPhrase', 'increasing', 'sourceId', 'quote', 'rungs', 'cases'],
+  'threshold-v1': ['stages', 'scenarios'],
+  'data-table-v1': ['labelHeader', 'columns', 'rows', 'questions', 'chartColumnIndex', 'brackets']
 };
 /** Combine a gen body with system-owned fields into a kit spec; the gen body and system objects are deep-copied. */
 export function assembleKitSpec<C extends KitGenComponentId>(gen: KitGenByComponent[C], componentId: C, opts: KitAssembleOptions): KitSpecByComponent[C] {

@@ -55,7 +55,7 @@ function extractBetween(text: string, open: string, close: string): string {
 
 test('v1 unchanged pin and versions', () => {
   assert.equal(PROMPT_VERSION, 'v10');
-  assert.equal(STAGE6_PROMPT_VERSION, 's6-v6');
+  assert.equal(STAGE6_PROMPT_VERSION, 's6-v7');
   const source = loadSource('nasa-grc-drag-equation');
   const messages = buildAnalysisMessages(source);
   const digest = createHash('sha256').update(JSON.stringify(messages), 'utf8').digest('hex');
@@ -533,4 +533,57 @@ test('s6-v6 sequence step labels are short event names', () => {
   assert.ok(system.includes('need not appear verbatim'), 'system states labels need not appear verbatim');
   assert.ok(system.includes('must contain what the label names'), 'system states quote must contain label');
   assert.ok(system.includes('No numbers in a label'), 'system states numbers rule');
+});
+
+test('s6-v7 every kit component has prompts', () => {
+  assert.equal(STAGE6_PROMPT_VERSION, 's6-v7');
+  assert.deepEqual(Object.keys(KIT_SCHEMA_NAMES), [...KIT_GEN_COMPONENT_IDS]);
+  assert.deepEqual(Object.keys(KIT_REPAIR_SCHEMA_NAMES), [...KIT_GEN_COMPONENT_IDS]);
+  assert.deepEqual(Object.keys(KIT_COMPONENT_GUIDANCE), [...KIT_GEN_COMPONENT_IDS]);
+  const source = loadSource('nasa-grc-drag-equation');
+  const system = buildAnalysisV2Messages(source)[0].content;
+  for (const id of KIT_GEN_COMPONENT_IDS) {
+    assert.ok(KIT_SCHEMA_NAMES[id].length > 0, `${id} has gen name`);
+    assert.ok(KIT_REPAIR_SCHEMA_NAMES[id].length > 0, `${id} has repair name`);
+    assert.ok(KIT_COMPONENT_GUIDANCE[id].length > 0, `${id} has design text`);
+    assert.ok(system.includes(`- ${id}:`), `system has when row ${id}`);
+  }
+  assert.ok(!system.includes('undefined'), 'no missing when row');
+});
+
+test('s6-v7 new components compute results', () => {
+  const source = loadSource('nasa-grc-drag-equation');
+  const usable = loadFixture('source-analysis-v2.usable.json') as SourceAnalysisV2;
+  const ids = ['algorithm-trace-v1', 'log-ladder-v1', 'threshold-v1', 'data-table-v1'] as const;
+  for (const id of ids) {
+    const guidance = KIT_COMPONENT_GUIDANCE[id];
+    assert.ok(guidance.toLowerCase().includes('system computes'), `${id} states the system computes`);
+    const plan: ComponentPlanEntry = { ...usable.componentPlan[0], componentId: id };
+    const system = buildKitComponentMessages(source, usable, plan)[0].content;
+    assert.ok(system.toLowerCase().includes('system computes'), `${id} system states computing`);
+    const repairSystem = buildKitComponentRepairMessages(source, usable, plan, { original: {}, previous: {}, findings: [], authorizedPaths: [] })[0].content;
+    assert.ok(repairSystem.toLowerCase().includes('system computes'), `${id} repair states computing`);
+  }
+  assert.ok(KIT_COMPONENT_GUIDANCE['algorithm-trace-v1'].includes('you never write steps'));
+  assert.ok(KIT_COMPONENT_GUIDANCE['log-ladder-v1'].includes('you never write ratios'));
+  assert.ok(KIT_COMPONENT_GUIDANCE['threshold-v1'].includes('you never write pass or fail'));
+  assert.ok(KIT_COMPONENT_GUIDANCE['data-table-v1'].includes('you never write answers'));
+});
+
+test('s6-v7 subject guidance names new components', () => {
+  assert.ok(SUBJECT_GUIDANCE['computing'].includes('algorithm-trace-v1'), 'computing names algorithm-trace-v1');
+  assert.ok(SUBJECT_GUIDANCE['civics'].includes('threshold-v1'), 'civics names threshold-v1');
+  assert.ok(SUBJECT_GUIDANCE['chemistry'].includes('log-ladder-v1'), 'chemistry names log-ladder-v1');
+  assert.ok(SUBJECT_GUIDANCE['earth-science'].includes('log-ladder-v1'), 'earth-science names log-ladder-v1');
+  assert.ok(SUBJECT_GUIDANCE['maths'].includes('data-table-v1'), 'maths names data-table-v1');
+  assert.ok(SUBJECT_GUIDANCE['finance'].includes('data-table-v1'), 'finance names data-table-v1');
+  assert.ok(SUBJECT_GUIDANCE['computing'].includes('data-table-v1'), 'computing names data-table-v1');
+  assert.ok(SUBJECT_GUIDANCE['civics'].includes('data-table-v1'), 'civics names data-table-v1');
+  assert.ok(SUBJECT_GUIDANCE['chemistry'].includes('data-table-v1'), 'chemistry names data-table-v1');
+  const source = loadSource('nasa-grc-drag-equation');
+  const system = buildAnalysisV2Messages(source)[0].content;
+  assert.ok(system.includes('algorithm-trace-v1'), 'analysis names algorithm-trace-v1');
+  assert.ok(system.includes('threshold-v1'), 'analysis names threshold-v1');
+  assert.ok(system.includes('log-ladder-v1'), 'analysis names log-ladder-v1');
+  assert.ok(system.includes('data-table-v1'), 'analysis names data-table-v1');
 });

@@ -26,6 +26,10 @@ import type {
   SequenceGen,
   SortGroupsGen,
   FormulaExplorerGen,
+  AlgorithmTraceGen,
+  LogLadderGen,
+  ThresholdGen,
+  DataTableGen,
 } from '../../contracts/kit.ts';
 import { kitGenSchemaFor } from '../../contracts/schemas.ts';
 import { schemaAffectedPaths, schemaFailureMessage } from '../validate.ts';
@@ -39,6 +43,10 @@ import { validateConceptMap, pruneConceptMapLinks } from './concept-map.ts';
 import { validateCompareTable } from './compare.ts';
 import { validateFormulaExplorer, computeCaseOutputs } from './formula-explorer.ts';
 import { validateBalanceEquation, deriveBalanceSolution } from './balance.ts';
+import { validateAlgorithmTrace } from './algorithm.ts';
+import { validateLogLadder } from './log-ladder.ts';
+import { validateThreshold } from './threshold.ts';
+import { validateDataTable } from './data-table.ts';
 import { compareGuardedRevisions } from './repair.ts';
 import type { RevisionGuardContext } from './repair.ts';
 
@@ -132,6 +140,10 @@ function validateKitBody(componentId: KitGenComponentId, gen: unknown, sources: 
     case 'compare-table-v1': return validateCompareTable(gen as CompareTableGen, sources, { revision });
     case 'formula-explorer-v1': return validateFormulaExplorer(gen as FormulaExplorerGen, sources, { revision });
     case 'balance-equation-v1': return validateBalanceEquation(gen as BalanceEquationGen, sources, { revision });
+    case 'algorithm-trace-v1': return validateAlgorithmTrace(gen as AlgorithmTraceGen, sources, { revision });
+    case 'log-ladder-v1': return validateLogLadder(gen as LogLadderGen, sources, { revision });
+    case 'threshold-v1': return validateThreshold(gen as ThresholdGen, sources, { revision });
+    case 'data-table-v1': return validateDataTable(gen as DataTableGen, sources, { revision });
     default: {
       const never: never = componentId;
       return buildReport(artifactId, [{ id: 'schema.gen', kind: 'schema', passed: false, message: `no validator for ${String(never)}` }], revision);

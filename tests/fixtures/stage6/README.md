@@ -10,3 +10,7 @@
 - formula-explorer.gen.json quotes nasa-grc-drag-equation; hand-written schema golden, not model output.
 - balance-equation.gen.json quotes synthetic balance.synthetic-source.txt sourceId synthetic-balance; hand-written schema golden, not model output.
 - balance.synthetic-source.txt is a synthetic methane-burning paragraph; synthetic source for the balance golden.
+- algorithm-trace.gen.json quotes nist-dads-binary-search; hand-written schema golden, not model output.
+- log-ladder.gen.json quotes usgs-earthquake-magnitude-energy-intensity; hand-written schema golden, not model output.
+- threshold.gen.json quotes nara-constitutional-amendment-process; hand-written schema golden, not model output.
+- data-table.gen.json quotes nasa-nssdc-planetary-fact-sheet-metric; hand-written schema golden, not model output.

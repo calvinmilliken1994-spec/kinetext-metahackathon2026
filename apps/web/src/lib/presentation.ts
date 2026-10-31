@@ -122,6 +122,7 @@ export type BeatKind = Beat['kind'];
 const STAGE_LABELS: Readonly<Record<string, string>> = {
   'sequence-v1': 'Sequence', 'sort-groups-v1': 'Sort', 'concept-map-v1': 'Concept map', 'compare-table-v1': 'Compare',
   'formula-explorer-v1': 'Formula', 'balance-equation-v1': 'Balance', 'quiz-cards-v1': 'Quiz', 'timeline-v1': 'Timeline',
+  'algorithm-trace-v1': 'Algorithm', 'log-ladder-v1': 'Scale', 'threshold-v1': 'Vote', 'data-table-v1': 'Table',
 };
 
 const CUE = {
@@ -156,6 +157,10 @@ export function partQuotes(part: DeckPart): QuoteLike[] {
       ...(spec.hasSourceExample ? [{ sourceId: spec.sourceId, quote: spec.sourceExample.quote }] : []),
     ];
     case 'balance-equation-v1': return [{ sourceId: spec.sourceId, quote: spec.quote }, ...spec.species.map((s) => ({ sourceId: s.sourceId, quote: s.quote }))];
+    case 'algorithm-trace-v1': return [{ sourceId: spec.sourceId, quote: spec.quote }, ...spec.claims.map((c) => ({ sourceId: c.sourceId, quote: c.quote }))];
+    case 'log-ladder-v1': return [{ sourceId: spec.sourceId, quote: spec.quote }, ...spec.rungs.map((r) => ({ sourceId: r.sourceId, quote: r.quote }))];
+    case 'threshold-v1': return spec.stages.flatMap((s) => [{ sourceId: s.sourceId, quote: s.quote }, { sourceId: s.sourceId, quote: s.totalQuote }]);
+    case 'data-table-v1': return spec.rows.flatMap((r) => [{ sourceId: r.sourceId, quote: r.quote }, ...r.values.map((v) => ({ sourceId: v.sourceId, quote: v.quote }))]);
     default: return [];
   }
 }

@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "algorithm-trace-v1",
+  "title": "Binary search trace",
+  "algorithm": "binary-search",
+  "algorithmName": "binary search",
+  "sourceId": "nist-dads-binary-search",
+  "quote": "binary search",
+  "input": [2, 11, 23, 31, 44, 58, 79],
+  "hasTarget": true,
+  "target": 31,
+  "claims": [
+    {
+      "id": "claim-1",
+      "kind": "running-time",
+      "text": "Run time is O(ln n).",
+      "sourceId": "nist-dads-binary-search",
+      "quote": "Note: Run time is O(ln n)."
+    }
+  ]
+}

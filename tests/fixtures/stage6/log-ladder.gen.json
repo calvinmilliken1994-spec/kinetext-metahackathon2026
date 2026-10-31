@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "log-ladder-v1",
+  "title": "Earthquake magnitude ladder",
+  "quantity": "magnitude",
+  "factor": 10,
+  "factorText": "tenfold",
+  "effectPhrase": "increase in measured amplitude",
+  "increasing": true,
+  "sourceId": "usgs-earthquake-magnitude-energy-intensity",
+  "quote": "each whole number increase in magnitude represents a tenfold increase in measured amplitude",
+  "rungs": [
+    {
+      "id": "rung-1",
+      "label": "moderate earthquake",
+      "value": 5.3,
+      "sourceId": "usgs-earthquake-magnitude-energy-intensity",
+      "quote": "a magnitude 5.3 is a moderate earthquake,"
+    },
+    {
+      "id": "rung-2",
+      "label": "strong earthquake",
+      "value": 6.3,
+      "sourceId": "usgs-earthquake-magnitude-energy-intensity",
+      "quote": "and a 6.3 is a strong earthquake."
+    }
+  ],
+  "cases": [
+    {
+      "id": "case-1",
+      "fromValue": 5.3,
+      "toValue": 6.3
+    }
+  ]
+}

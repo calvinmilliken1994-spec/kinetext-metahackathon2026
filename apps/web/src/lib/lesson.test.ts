@@ -48,6 +48,10 @@ test('every kit component has the exact failure message from the design', () => 
     'compare-table-v1': 'Comparison could not be verified against the page.',
     'formula-explorer-v1': 'The formula could not be checked with our calculator.',
     'balance-equation-v1': 'The reaction equation could not be verified against the page.',
+    'algorithm-trace-v1': 'The algorithm could not be matched to the page.',
+    'log-ladder-v1': 'The scale and its step factor could not be verified against the page.',
+    'threshold-v1': 'The voting rule could not be verified against the page.',
+    'data-table-v1': 'The table could not be verified against the page.',
   });
   for (const id of KIT_GEN_COMPONENT_IDS) assert.ok(FAILURE_MESSAGES[id].length > 10);
 });

@@ -1,0 +1,112 @@
+{
+  "schemaVersion": "data-table-v1",
+  "title": "Planet sizes",
+  "labelHeader": "Planet",
+  "columns": [
+    {
+      "header": "Mass (10^24kg)",
+      "unit": "10^24kg",
+      "numeric": true,
+      "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+      "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |"
+    },
+    {
+      "header": "Diameter (km)",
+      "unit": "km",
+      "numeric": true,
+      "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+      "quote": "| Diameter (km) | 4879 | 12,104 | 12,756 | 3475 | 6792 | 142,984 | 120,536 | 51,118 | 49,528 | 2376 |"
+    }
+  ],
+  "rows": [
+    {
+      "label": "MERCURY",
+      "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+      "quote": "| | MERCURY | VENUS | EARTH | MOON | MARS |",
+      "values": [
+        {
+          "value": "0.330",
+          "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+          "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |"
+        },
+        {
+          "value": "4879",
+          "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+          "quote": "| Diameter (km) | 4879 | 12,104 | 12,756 | 3475 | 6792 | 142,984 | 120,536 | 51,118 | 49,528 | 2376 |"
+        }
+      ]
+    },
+    {
+      "label": "VENUS",
+      "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+      "quote": "| | MERCURY | VENUS | EARTH | MOON | MARS |",
+      "values": [
+        {
+          "value": "4.87",
+          "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+          "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |"
+        },
+        {
+          "value": "12,104",
+          "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+          "quote": "| Diameter (km) | 4879 | 12,104 | 12,756 | 3475 | 6792 | 142,984 | 120,536 | 51,118 | 49,528 | 2376 |"
+        }
+      ]
+    },
+    {
+      "label": "EARTH",
+      "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+      "quote": "| | MERCURY | VENUS | EARTH | MOON | MARS |",
+      "values": [
+        {
+          "value": "5.97",
+          "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+          "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |"
+        },
+        {
+          "value": "12,756",
+          "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+          "quote": "| Diameter (km) | 4879 | 12,104 | 12,756 | 3475 | 6792 | 142,984 | 120,536 | 51,118 | 49,528 | 2376 |"
+        }
+      ]
+    },
+    {
+      "label": "MARS",
+      "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+      "quote": "| | MERCURY | VENUS | EARTH | MOON | MARS |",
+      "values": [
+        {
+          "value": "0.642",
+          "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+          "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |"
+        },
+        {
+          "value": "6792",
+          "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+          "quote": "| Diameter (km) | 4879 | 12,104 | 12,756 | 3475 | 6792 | 142,984 | 120,536 | 51,118 | 49,528 | 2376 |"
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "q-1",
+      "kind": "lookup",
+      "rowIndex": 2,
+      "columnIndex": 0
+    },
+    {
+      "id": "q-2",
+      "kind": "largest",
+      "rowIndex": -1,
+      "columnIndex": 1
+    }
+  ],
+  "chartColumnIndex": 1,
+  "brackets": {
+    "enabled": false,
+    "rateColumnIndex": -1,
+    "overColumnIndex": -1,
+    "exampleIncome": 0
+  }
+}

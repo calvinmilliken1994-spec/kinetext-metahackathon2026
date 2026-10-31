@@ -1,0 +1,200 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "title",
+    "labelHeader",
+    "columns",
+    "rows",
+    "questions",
+    "chartColumnIndex",
+    "brackets"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "enum": [
+        "data-table-v1"
+      ],
+      "description": "Generator schema version, always the component id."
+    },
+    "title": {
+      "type": "string",
+      "description": "Short title for students in plain text."
+    },
+    "labelHeader": {
+      "type": "string",
+      "description": "Header for the row-label column, 1 to 40 characters, for example Planet."
+    },
+    "columns": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "header",
+          "unit",
+          "numeric",
+          "sourceId",
+          "quote"
+        ],
+        "properties": {
+          "header": {
+            "type": "string",
+            "description": "Value-column header as printed, 1 to 40 characters. It occurs in the quote."
+          },
+          "unit": {
+            "type": "string",
+            "description": "Unit label, 0 to 20 characters; empty string means no unit."
+          },
+          "numeric": {
+            "type": "boolean",
+            "description": "True when the column holds numbers parsed by parseTableNumber."
+          },
+          "sourceId": {
+            "type": "string",
+            "description": "Id of the source the quote was copied from."
+          },
+          "quote": {
+            "type": "string",
+            "description": "Exact characters copied from the source, no ellipsis, 150 characters or fewer. It contains the header."
+          }
+        }
+      },
+      "minItems": 2,
+      "maxItems": 6,
+      "description": "Value columns, 2 to 6."
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "label",
+          "sourceId",
+          "quote",
+          "values"
+        ],
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "Row label as printed, 1 to 60 characters. It occurs in the quote."
+          },
+          "sourceId": {
+            "type": "string",
+            "description": "Id of the source the quote was copied from."
+          },
+          "quote": {
+            "type": "string",
+            "description": "Exact characters copied from the source, no ellipsis, 150 characters or fewer. It contains the row label."
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "value",
+                "sourceId",
+                "quote"
+              ],
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "Cell value as printed, 1 to 40 characters. It is a whole token in the quote."
+                },
+                "sourceId": {
+                  "type": "string",
+                  "description": "Id of the source the quote was copied from."
+                },
+                "quote": {
+                  "type": "string",
+                  "description": "Exact characters copied from the source, no ellipsis, 150 characters or fewer. It contains the value as a whole token."
+                }
+              }
+            },
+            "minItems": 2,
+            "maxItems": 6,
+            "description": "One value per column, in column order."
+          }
+        }
+      },
+      "minItems": 3,
+      "maxItems": 12,
+      "description": "Data rows, 3 to 12."
+    },
+    "questions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "kind",
+          "rowIndex",
+          "columnIndex"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Lowercase kebab question id, 40 characters or fewer."
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "lookup",
+              "largest",
+              "smallest"
+            ],
+            "description": "Question kind."
+          },
+          "rowIndex": {
+            "type": "integer",
+            "description": "Row index for lookup, otherwise the -1 absent sentinel."
+          },
+          "columnIndex": {
+            "type": "integer",
+            "description": "Column index the question asks about."
+          }
+        }
+      },
+      "minItems": 1,
+      "maxItems": 4,
+      "description": "Questions answered by our code, 1 to 4."
+    },
+    "chartColumnIndex": {
+      "type": "integer",
+      "description": "Numeric column to chart, or the -1 absent sentinel for no chart."
+    },
+    "brackets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enabled",
+        "rateColumnIndex",
+        "overColumnIndex",
+        "exampleIncome"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "True for the progressive-rate calculator, false otherwise."
+        },
+        "rateColumnIndex": {
+          "type": "integer",
+          "description": "Rate column index, or the -1 absent sentinel when disabled."
+        },
+        "overColumnIndex": {
+          "type": "integer",
+          "description": "Threshold column index, or the -1 absent sentinel when disabled."
+        },
+        "exampleIncome": {
+          "type": "number",
+          "description": "Example income greater than 0 when enabled, else the 0 absent sentinel."
+        }
+      }
+    }
+  }
+}

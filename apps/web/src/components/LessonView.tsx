@@ -9,7 +9,11 @@ import { sourceLicenseText } from '../lib/sources.ts';
 import type { ReportLike } from '../lib/failures.ts';
 import type { LessonCard, PendingSlot } from '../lib/lesson.ts';
 import { ActivityPanel } from './ActivityPanel.tsx';
+import { AlgorithmTraceView } from './AlgorithmTraceView.tsx';
 import { BalanceView } from './BalanceView.tsx';
+import { DataTableView } from './DataTableView.tsx';
+import { LogLadderView } from './LogLadderView.tsx';
+import { ThresholdView } from './ThresholdView.tsx';
 import { CompareView } from './CompareView.tsx';
 import { ConceptMapView } from './ConceptMapView.tsx';
 import { AiWritten } from './Disclosure.tsx';
@@ -71,6 +75,10 @@ function KitBody({ spec, cite }: { spec: KitSpec; cite: CiteProps }) {
     case 'compare-table-v1': return <CompareView spec={spec} cite={cite} />;
     case 'formula-explorer-v1': return <FormulaExplorerView spec={spec} cite={cite} />;
     case 'balance-equation-v1': return <BalanceView spec={spec} cite={cite} />;
+    case 'algorithm-trace-v1': return <AlgorithmTraceView spec={spec} cite={cite} />;
+    case 'log-ladder-v1': return <LogLadderView spec={spec} cite={cite} />;
+    case 'threshold-v1': return <ThresholdView spec={spec} cite={cite} />;
+    case 'data-table-v1': return <DataTableView spec={spec} cite={cite} />;
     default: return null;
   }
 }

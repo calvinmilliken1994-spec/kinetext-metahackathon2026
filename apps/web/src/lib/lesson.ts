@@ -19,6 +19,10 @@ export const FAILURE_MESSAGES: Readonly<Record<KitGenComponentId, string>> = {
   'compare-table-v1': 'Comparison could not be verified against the page.',
   'formula-explorer-v1': 'The formula could not be checked with our calculator.',
   'balance-equation-v1': 'The reaction equation could not be verified against the page.',
+  'algorithm-trace-v1': 'The algorithm could not be matched to the page.',
+  'log-ladder-v1': 'The scale and its step factor could not be verified against the page.',
+  'threshold-v1': 'The voting rule could not be verified against the page.',
+  'data-table-v1': 'The table could not be verified against the page.',
 };
 export const PREMIUM_FAILURE_MESSAGE = 'This activity could not be verified against the page.';
 export const SKIPPED_MESSAGE = 'This component was not built for this lesson.';
@@ -31,6 +35,10 @@ const KIT_LABELS: Readonly<Record<KitGenComponentId, string>> = {
   'compare-table-v1': 'Compare table',
   'formula-explorer-v1': 'Formula explorer',
   'balance-equation-v1': 'Balance the equation',
+  'algorithm-trace-v1': 'Step through the algorithm',
+  'log-ladder-v1': 'Climb the scale',
+  'threshold-v1': 'Does it pass?',
+  'data-table-v1': 'Data table',
 };
 
 export function componentLabel(id: PlanComponentId): string {
@@ -174,6 +182,27 @@ export function collectLessonQuotes(sourceId: string, overview: OverviewSpec | n
       case 'balance-equation-v1':
         add(spec.componentId, 'equation', 'equation', spec.equationText, spec);
         for (const s of spec.species) add(spec.componentId, 'species', s.id, s.formula, s);
+        break;
+      case 'algorithm-trace-v1':
+        add(spec.componentId, 'algorithm', 'algorithm', spec.algorithmName, spec);
+        for (const c of spec.claims) add(spec.componentId, 'claim', c.id, c.text, c);
+        break;
+      case 'log-ladder-v1':
+        add(spec.componentId, 'factor', 'factor', spec.factorText, spec);
+        for (const r of spec.rungs) add(spec.componentId, 'rung', r.id, r.label, r);
+        break;
+      case 'threshold-v1':
+        for (const s of spec.stages) {
+          add(spec.componentId, 'rule', s.id, s.body, s);
+          if (s.totalQuote !== s.quote) add(spec.componentId, 'total', `${s.id}-total`, s.body, { sourceId: s.sourceId, quote: s.totalQuote });
+        }
+        break;
+      case 'data-table-v1':
+        spec.columns.forEach((c, j) => add(spec.componentId, 'column', `col-${j}`, c.header, c));
+        spec.rows.forEach((r, i) => {
+          add(spec.componentId, 'row', `row-${i}`, r.label, r);
+          r.values.forEach((v, j) => add(spec.componentId, 'cell', `cell-${i}-${j}`, v.value, v));
+        });
         break;
       default: break;
     }
