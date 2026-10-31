@@ -521,11 +521,13 @@ test('label text keys ignore case, spacing, hyphens and a plural s; whole label 
   assert.deepEqual(slotGroups([{ x1: 0, y1: 0, x2: 10, y2: 10, group: 2 }, { x1: 500, y1: 500, x2: 510, y2: 510, group: 2 }, { x1: 20, y1: 0, x2: 30, y2: 10, group: 1 }], []), [[0, 1], [2]]);
 });
 
-test('water cycle: a process gets the label that prints its name; "Runoff" is printed only as "Surface Runoff", so it gets a tag', () => {
-  assert.deepEqual(slotNames(waterDemo), ['Condensation', 'Precipitation', 'Transpiration', null, 'Evaporation', null]);
+test('water cycle: a process gets the label that prints its name; "Runoff" goes into the "… Runoff" label its own box points at (same rule as LD-02)', () => {
+  assert.deepEqual(slotNames(waterDemo), ['Condensation', 'Precipitation', 'Transpiration', null, 'Evaporation', 'Runoff']);
   const live = demo('water-live');
   const slots = labelSlots(live);
-  assert.deepEqual(slotNames(live), ['Condensation', 'Precipitation', 'Transpiration', null, 'Evaporation', null]);
+  assert.deepEqual(slotNames(live), ['Condensation', 'Precipitation', 'Transpiration', null, 'Evaporation', 'Runoff']);
+  const runoff = slots.find((s) => s.text === 'Surface Runoff');
+  assert.equal(runoff?.matchedBy, 'text');
   // the older store (no text) put it in the nearest label by distance
   assert.deepEqual(slotNames(noText(waterDemo)), ['Condensation', 'Precipitation', 'Transpiration', null, 'Evaporation', 'Runoff']);
   const clouds = live.parts.findIndex((p) => p.id === 'clouds');
@@ -620,8 +622,8 @@ test('slot states: covered until its part is named, the name written in; the fin
   assert.ok(slotStates(slots, st.named, { labelsShown: true, openUnmatched: false }).every((s) => s === 'open'));
   const water = labelSlots(waterDemo);
   const all = waterDemo.parts.map(() => true);
-  assert.deepEqual(slotStates(water, all, { labelsShown: false, openUnmatched: true }), ['named', 'named', 'named', 'open', 'named', 'open']);
-  assert.deepEqual(slotStates(water, all, { labelsShown: false, openUnmatched: false }), ['named', 'named', 'named', 'covered', 'named', 'covered']);
+  assert.deepEqual(slotStates(water, all, { labelsShown: false, openUnmatched: true }), ['named', 'named', 'named', 'open', 'named', 'named']);
+  assert.deepEqual(slotStates(water, all, { labelsShown: false, openUnmatched: false }), ['named', 'named', 'named', 'covered', 'named', 'named']);
 });
 
 test('presentation outlines: only the current part’s region, never on the labels step', () => {

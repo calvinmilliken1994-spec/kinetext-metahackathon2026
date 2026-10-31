@@ -307,6 +307,21 @@ export function labelSlots(spec: Pick<LabelDiagramSpec, 'parts' | 'figure'>): La
       if (k === '') return;
       let at = slots.findIndex((s, si) => s.partIndex === null && whole[si] === k);
       if (at < 0) at = slots.findIndex((s, si) => s.partIndex === null && (lines[si] ?? []).includes(k));
+      if (at < 0) {
+        // Same rule as the LD-02 check: the name may be a contiguous whole-word part of the printed label ("Runoff" in
+        // "Surface Runoff"). Several such labels: the one nearest the part's own label box; no box: the first.
+        const cands = slots.map((s, si) => si).filter((si) => slots[si]?.partIndex === null && ` ${whole[si] ?? ''} `.includes(` ${k} `));
+        if (cands.length === 1 || (cands.length > 1 && !hasLabelBox(p))) at = cands[0] ?? -1;
+        else if (cands.length > 1 && hasLabelBox(p)) {
+          const cx = (((clamp(p.labelX1, 0, GRID) + clamp(p.labelX2, 0, GRID)) / 2) * W) / GRID;
+          const cy = (((clamp(p.labelY1, 0, GRID) + clamp(p.labelY2, 0, GRID)) / 2) * H) / GRID;
+          const dist = (si: number): number => {
+            const b = slots[si]?.px as PixelBox;
+            return Math.hypot((b.x1 + b.x2) / 2 - cx, (b.y1 + b.y2) / 2 - cy);
+          };
+          at = cands.reduce((best, si) => (dist(si) < dist(best) ? si : best));
+        }
+      }
       const s = slots[at];
       if (s !== undefined) { s.partIndex = pi; s.matchedBy = 'text'; }
     });
