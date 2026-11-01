@@ -72,9 +72,8 @@
     1,
     2,
     3,
-    4,
     5,
     6
   ],
-  "partLabelGroupsNote": "Lead-curated (STAGE-8c): label groups that name drawn parts of the figure; LD-10 requires a part for each one the page text names."
+  "partLabelGroupsNote": "Lead-curated (STAGE-8c): label groups that name drawn parts. Snowmelt Runoff (group 4) is left out: the page never mentions snowmelt, and its main runoff is Surface Runoff (group 6), which the page calls runoff."
 }

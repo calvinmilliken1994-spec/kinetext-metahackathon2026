@@ -15,7 +15,7 @@ import type { FigureMeta } from '../sources/figures.ts';
 import { FIGURES_DIR, loadFigure, loadFigureLabelBoxes } from '../sources/figures.ts';
 import { loadSource } from '../sources/index.ts';
 import { compareKitRevisions, validateKitComponent } from './kit/index.ts';
-import { validateLabelDiagram, normaliseCoverageText } from './kit/label-diagram.ts';
+import { validateLabelDiagram, normaliseCoverageText, pageWordingOfLabel } from './kit/label-diagram.ts';
 import { NOT_RETROACTIVE_CHECK_IDS, retroactiveFailedIds } from './not-retroactive.ts';
 import { checkOf, clone, expectFailures, failedIds, failureDetail, stage6Fixture } from './fixtures/stage6.ts';
 
@@ -165,12 +165,13 @@ test('LD-10: several missing labels are all named', () => {
   assert.match(checkOf(report, 'LD-10').message, /"Sugar phosphate backbone"/);
 });
 
-test('LD-10: a label the page never prints as a whole phrase is not required', () => {
-  // "Base pair" is only a fragment of the page's "base pairs"; "Zorbulation" is not on the page at all.
+test('LD-10: a label the page never names, wholly or by its last word, is not required', () => {
+  // "Base wobble": neither the whole label nor its last word is on the page; "Zorbulation" is not on the page at all.
+  // (A label whose last word IS on the page, such as "Base pair", counts: see pageWordingOfLabel.)
   const fig = figureWithGroups(DNA_FIGURE, f => {
     f.labelBoxes = [
       ...(f.labelBoxes ?? []),
-      { x1: 10, y1: 10, x2: 90, y2: 30, text: 'Base pair', group: 7 },
+      { x1: 10, y1: 10, x2: 90, y2: 30, text: 'Base wobble', group: 7 },
       { x1: 10, y1: 560, x2: 120, y2: 590, text: 'Zorbulation', group: 8 },
     ];
     f.partLabelGroups = [1, 2, 3, 4, 5, 6, 7, 8];
@@ -246,19 +247,40 @@ function waterParts(names: string[]): LabelPartGen[] {
   });
 }
 const waterGen = (names: string[]): LabelDiagramGen => ({ schemaVersion: 'label-diagram-v1', title: 'Water cycle', figureId: WATER_FIGURE, parts: waterParts(names), hint: 'Tap each part.' });
-const waterLd10 = (names: string[]) => checkOf(validateLabelDiagram(waterGen(names), [loadSource(WATER_SOURCE)], { figures: [figureWithGroups(WATER_FIGURE)] }), 'LD-10');
+const waterLd10 = (names: string[], groups?: number[]) => checkOf(validateLabelDiagram(waterGen(names), [loadSource(WATER_SOURCE)], { figures: [figureWithGroups(WATER_FIGURE, f => { if (groups) f.partLabelGroups = groups; })] }), 'LD-10');
 
-test('LD-10 water cycle: the page names four of the six printed labels; "Snowmelt Runoff" and "Surface Runoff" are not required', () => {
+test('pageWordingOfLabel: the whole label, else the last word of a longer label, as the page words it', () => {
+  assert.equal(pageWordingOfLabel('Surface Runoff', ['Runoff occurs when the ground is saturated.']), 'runoff');
+  assert.equal(pageWordingOfLabel('Sugar phosphate backbone', ['a sugar-phosphate backbone']), 'sugar phosphate backbone');
+  assert.equal(pageWordingOfLabel('Evaporation', ['no such word']), null);
+  assert.equal(pageWordingOfLabel('Run', ['Runoff occurs.']), null, 'a word prefix is not a word');
+  assert.equal(pageWordingOfLabel('Surface Runoff', ['Runoffs']), null);
+  assert.equal(pageWordingOfLabel('  ', ['anything']), null);
+});
+
+test('LD-10 water cycle: the curated five are required, "Surface Runoff" through the page word "runoff"; Snowmelt Runoff is not curated', () => {
+  const text = loadSource(WATER_SOURCE).text;
+  assert.ok(!/snowmelt/i.test(text), 'the page never mentions snowmelt');
+  const five = waterLd10(['Condensation', 'Precipitation', 'Transpiration', 'Evaporation', 'Runoff']);
+  assert.equal(five.passed, true, five.message);
+  const noRunoff = waterLd10(['Condensation', 'Precipitation', 'Transpiration', 'Evaporation']);
+  assert.equal(noRunoff.passed, false, 'the main runoff needs a part');
+  assert.match(noRunoff.message, /"Surface Runoff"/);
+  assert.doesNotMatch(noRunoff.message, /Snowmelt/);
+});
+
+test('LD-10 water cycle: a printed label left out of the curated groups is never required, nor named when missing', () => {
   const text = loadSource(WATER_SOURCE).text;
   for (const named of ['Condensation', 'Precipitation', 'Transpiration', 'Evaporation']) {
     assert.ok(new RegExp(`\\b${named}\\b`, 'i').test(text), `${named} is on the page`);
   }
   assert.ok(!/snowmelt runoff/i.test(text) && !/surface runoff/i.test(text), 'the page prints neither runoff phrase');
-  const four = waterLd10(['Condensation', 'Precipitation', 'Transpiration', 'Evaporation']);
+  const curatedFour = [1, 2, 3, 5];
+  const four = waterLd10(['Condensation', 'Precipitation', 'Transpiration', 'Evaporation'], curatedFour);
   assert.equal(four.passed, true, four.message);
-  const withRunoff = waterLd10(['Condensation', 'Precipitation', 'Transpiration', 'Evaporation', 'Runoff']);
+  const withRunoff = waterLd10(['Condensation', 'Precipitation', 'Transpiration', 'Evaporation', 'Runoff'], curatedFour);
   assert.equal(withRunoff.passed, true, withRunoff.message);
-  const missing = waterLd10(['Condensation', 'Precipitation', 'Runoff']);
+  const missing = waterLd10(['Condensation', 'Precipitation', 'Runoff'], curatedFour);
   assert.equal(missing.passed, false);
   assert.match(missing.message, /"Transpiration"/);
   assert.match(missing.message, /"Evaporation"/);

@@ -154,6 +154,21 @@ function phraseOfText(normalisedText: string, normalisedPhrase: string): boolean
   return normalisedPhrase !== '' && ` ${normalisedText} `.includes(` ${normalisedPhrase} `);
 }
 
+/**
+ * How the page words a printed label (normalised), or null when it never does: the whole label when the page names
+ * it, else the LAST word of a longer label ("Surface Runoff" on a page that only says "runoff"). Which printed labels
+ * count at all is the lead's curation (partLabelGroups), so two labels sharing a last word are never both curated.
+ */
+export function pageWordingOfLabel(label: string, pageTexts: readonly string[]): string | null {
+  const phrase = normaliseCoverageText(label);
+  if (phrase === '') return null;
+  const texts = pageTexts.map(normaliseCoverageText);
+  if (texts.some(t => phraseOfText(t, phrase))) return phrase;
+  const words = phrase.split(' ');
+  const last = words[words.length - 1] as string;
+  return words.length > 1 && texts.some(t => phraseOfText(t, last)) ? last : null;
+}
+
 /** Intersection-over-union of two pixel boxes; 0 when either box has no positive area. */
 export function regionIoU(a: LabelBox, b: LabelBox): number {
   const iw = Math.min(a.x2, b.x2) - Math.max(a.x1, b.x1);
@@ -524,8 +539,7 @@ export function validateLabelDiagram(gen: LabelDiagramGen, sources: SourceDocume
         if (!Number.isInteger(group)) continue;
         const unit = units.find(u => u.group === group);
         if (unit === undefined || unit.text === null) continue;
-        const phrase = normaliseCoverageText(unit.text);
-        if (!pageTexts.some(t => phraseOfText(t, phrase))) continue; // the page never names this label: not required
+        if (pageWordingOfLabel(unit.text, pageTexts) === null) continue; // the page never names this label: not required
         required++;
         if (!claimed.has(unit)) missing.push(`"${unit.text}"`);
       }

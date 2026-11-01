@@ -20,11 +20,17 @@ const WATER_FIGURE = 'noaa-hydrologic-cycle-1';
 const DNA = 'medlineplus-what-is-dna';
 const DNA_FIGURE = 'medlineplus-dna-structure-1';
 
-test('pageNamedPrintedLabels: real water cycle keeps the four labels the page names, drops the two it never names', () => {
-  const printed = loadFigurePrintedLabels(WATER_FIGURE);
-  assert.deepEqual(printed, ['Condensation', 'Precipitation', 'Transpiration', 'Snowmelt Runoff', 'Evaporation', 'Surface Runoff']);
-  const text = loadSource(WATER).text;
-  assert.deepEqual(pageNamedPrintedLabels(printed, [text]), ['Condensation', 'Precipitation', 'Transpiration', 'Evaporation']);
+test('pageNamedPrintedLabels: real water cycle keeps the curated five; Surface Runoff says how the page words it', () => {
+  const curated = loadFigurePrintedLabels(WATER_FIGURE);
+  assert.deepEqual(pageNamedPrintedLabels(curated, [loadSource(WATER).text]), [
+    'Condensation', 'Precipitation', 'Transpiration', 'Evaporation', 'Surface Runoff (the page calls it runoff)',
+  ]);
+});
+
+test('pageNamedPrintedLabels: a label the page names only by its last word says the page word; full names stay as printed', () => {
+  assert.deepEqual(pageNamedPrintedLabels(['Snowmelt Runoff', 'Evaporation'], ['Runoff occurs. Evaporation too.']), [
+    'Snowmelt Runoff (the page calls it runoff)', 'Evaporation',
+  ]);
 });
 
 test('pageNamedPrintedLabels: real DNA page names all six printed labels (hyphen counts as a space)', () => {
@@ -34,7 +40,7 @@ test('pageNamedPrintedLabels: real DNA page names all six printed labels (hyphen
 });
 
 test('pageNamedPrintedLabels: whole phrases only, any of several texts, empty when none', () => {
-  assert.deepEqual(pageNamedPrintedLabels(['Surface Runoff'], ['Runoff occurs when the ground is saturated.']), []);
+  assert.deepEqual(pageNamedPrintedLabels(['Surface Runoff'], ['Rainfall occurs when the ground is saturated.']), []);
   assert.deepEqual(pageNamedPrintedLabels(['Run'], ['Runoff occurs.']), [], 'a word prefix is not a phrase');
   assert.deepEqual(pageNamedPrintedLabels(['Snowmelt Runoff'], ['Spring SNOWMELT-runoff floods rivers.']), ['Snowmelt Runoff']);
   assert.deepEqual(pageNamedPrintedLabels(['Lift', 'Drag'], ['one', 'the drag force']), ['Drag']);
@@ -165,13 +171,12 @@ async function labelGenerationMessage(sourceId: string, analysis: unknown): Prom
   return last.content as string;
 }
 
-test('worker: the water-cycle generation message lists only the four labels the page names', async () => {
+test('worker: the water-cycle generation message lists the five curated labels, the main runoff in the page word', async () => {
   const sent = await labelGenerationMessage(WATER, waterAnalysis);
   assert.ok(sent.includes(`figureId "${WATER_FIGURE}"`), 'the figure line is present');
   assert.ok(
-    sent.includes('"Condensation"; "Precipitation"; "Transpiration"; "Evaporation".'),
-    `expected the four page-named labels, got: ${sent.slice(sent.indexOf('The figure attached'))}`,
+    sent.includes('"Condensation"; "Precipitation"; "Transpiration"; "Evaporation"; "Surface Runoff (the page calls it runoff)".'),
+    `expected the five curated labels, got: ${sent.slice(sent.indexOf('The figure attached'))}`,
   );
-  assert.ok(!sent.includes('Snowmelt Runoff'), 'a label the page never names is not offered');
-  assert.ok(!sent.includes('Surface Runoff'), 'a label the page never names is not offered');
+  assert.ok(!sent.includes('Snowmelt Runoff'), 'the snowmelt label (never mentioned on the page) is not offered');
 });

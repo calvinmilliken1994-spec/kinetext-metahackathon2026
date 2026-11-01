@@ -60,7 +60,7 @@ import {
   validateKitComponent,
 } from '../../packages/validation/kit/index.ts';
 import type { DroppedItem } from '../../packages/validation/kit/index.ts';
-import { normaliseCoverageText } from '../../packages/validation/kit/label-diagram.ts';
+import { normaliseCoverageText, pageWordingOfLabel } from '../../packages/validation/kit/label-diagram.ts';
 import { repairFindings, truncate, validateAnalysis } from '../../packages/validation/validate.ts';
 import type { AnyActivitySpec } from '../../packages/validation/validate.ts';
 import {
@@ -524,11 +524,14 @@ export function pickBestRegions(
  * ("Snowmelt Runoff" on a page that only says "runoff") is not offered. Keeps the input order. Exported for tests.
  */
 export function pageNamedPrintedLabels(labels: readonly string[], pageTexts: readonly string[]): string[] {
-  const texts = pageTexts.map(t => ` ${normaliseCoverageText(t)} `);
-  return labels.filter(label => {
-    const phrase = normaliseCoverageText(label);
-    return phrase !== '' && texts.some(t => t.includes(` ${phrase} `));
-  });
+  const out: string[] = [];
+  for (const label of labels) {
+    const wording = pageWordingOfLabel(label, pageTexts);
+    if (wording === null) continue;
+    // Named only by its last word: say the page's word, so Muse names the part as the page does (LD-02).
+    out.push(wording === normaliseCoverageText(label) ? label : `${label} (the page calls it ${wording})`);
+  }
+  return out;
 }
 
 /** Stage 8b flow step 5: the system-owned figure reference of the published spec. */

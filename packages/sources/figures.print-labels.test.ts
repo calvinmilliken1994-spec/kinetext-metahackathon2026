@@ -32,13 +32,12 @@ const B = (x1: number, text?: string, group?: number) => ({
   ...(group !== undefined ? { group } : {}),
 });
 
-test('real NOAA water cycle: curated groups 1..6 and six printed labels in group order', () => {
-  assert.deepEqual(loadFigurePartLabelGroups('noaa-hydrologic-cycle-1'), [1, 2, 3, 4, 5, 6]);
+test('real NOAA water cycle: curated groups leave out Snowmelt Runoff (the page never mentions snowmelt)', () => {
+  assert.deepEqual(loadFigurePartLabelGroups('noaa-hydrologic-cycle-1'), [1, 2, 3, 5, 6]);
   assert.deepEqual(loadFigurePrintedLabels('noaa-hydrologic-cycle-1'), [
     'Condensation',
     'Precipitation',
     'Transpiration',
-    'Snowmelt Runoff',
     'Evaporation',
     'Surface Runoff',
   ]);
