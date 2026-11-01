@@ -79,3 +79,31 @@ Status: FROZEN by the lead, 2026-11-02 (Calvin: "Go ahead with all of it"). Buil
 
 `@meta-sam/parser` 0.1.0 (Meta, SAM License: royalty-free use and redistribution with a copy of the licence) is a
 runtime dependency, pinned exactly. The repo does not vendor it.
+
+## Addendum A (2026-11-02, Calvin: "keep the box drawing to the models only... cleaner demo boxes")
+Evidence: `docs/evidence/muse-grounding-probe/`. A dedicated Muse grounding call boxes the parts far more cleanly than
+the area fields inside the generation call.
+
+- **Grounding call (worker, every label-diagram revision, after the gen is validated far enough to have parts and
+  before SAM):** one Muse Spark call through the job's own MetaClient (same model, ledger, accounting and receipts as
+  the other Muse calls), using Meta's documented "object grounding expert" box prompt. The prompt is built in
+  `packages/meta/grounding.ts` (`buildGroundingPrompt`), and the strict JSON schema is
+  `{objects:[{object_name, bbox:[{x_min,y_min,x_max,y_max}]}]}` on the 0..1000 grid. Objects are listed in part order as
+  `"the drawn <part name> that the printed label '<printed label text>' points to"`, with `"the drawn <part name>"` when
+  the part claims no printed label. The prompt says to box the drawing and never the label text, and to give one box per
+  piece. maxOutputTokens is 16000 (reasoning alone used ~4,000 tokens).
+- **Using it:** each part's grounding box is the union of its pieces (0..1000), matched by order; a malformed entry
+  (non-integers, x_min >= x_max, outside 0..1000) is ignored. SAM's box prompt for a part is that union plus 4% margin,
+  converted to pixels. With no grounding box the part falls back to the gen area, then to the point (Stage 8c). The best-of
+  retry is unchanged: its E variant widens the box the first pass actually used.
+- **Stored:** `LabelRegion.ground?: { x1: number; y1: number; x2: number; y2: number }` holds the image-pixel union box
+  Muse gave for that part. It is optional, and absent on older runs or when grounding failed.
+- **Failure:** a grounding call that fails (any MetaError, a truncated output, bad JSON) is accounted like any Muse call.
+  The build continues with the gen areas, so it never fails the component on its own. Events: within the existing
+  segment events, the `segment started` detail stays `sam-3.1 point segmentation of N part(s)`. The `segment succeeded`
+  detail appends `; muse-spark-1.3 located K of N part(s) for SAM` (or `; muse-spark-1.3 grounding failed (<CODE>); used
+  the generation areas`).
+- **Web build glow:** during the build, each region is drawn as a BOX: SAM's region box, which already sits tight on the
+  drawing Muse located. It shows only when SAM's confidence is at least 0.5, and draws in, holds, then fades as now; it
+  is a soft glow in the app's accent colour, never a hard border. Traced outlines stay stored but are no longer drawn.
+  The narration reads "Muse Spark located N parts · SAM 3.1 confirmed K".

@@ -1,0 +1,877 @@
+{
+  "at": "2026-11-01T19:19:57.325Z",
+  "results": [
+    {
+      "figure": "noaa-hydrologic-cycle-1",
+      "rep": 1,
+      "prompt": "You are an object grounding expert. Provide the bounding box coordinates of the objects in the image: \"the drawn Condensation that the printed label 'Condensation' points to\", \"the drawn Precipitation that the printed label 'Precipitation' points to\", \"the drawn Transpiration that the printed label 'Transpiration' points to\", \"the drawn Evaporation that the printed label 'Evaporation' points to\", \"the drawn Runoff that the printed label 'Surface Runoff' points to\". Box the drawing itself, never the printed label text. When one object is drawn as several pieces (for example several arrows), give one box per piece. Ensure the objects accurately match the request and do not miss any objects. For each object, answer in the format {\"object_name\": \"<name>\", \"bbox\": [{\"x_min\": <int>, \"y_min\": <int>, \"x_max\": <int>, \"y_max\": <int>}]}. The coordinates should be in the 0-1000 range. Return a JSON object {\"objects\": [...]} with one entry per object. If you cannot find an object, omit it from the results.",
+      "muse": {
+        "objects": [
+          {
+            "bbox": [
+              {
+                "x_max": 568,
+                "x_min": 339,
+                "y_max": 267,
+                "y_min": 183
+              }
+            ],
+            "object_name": "the drawn Condensation that the printed label 'Condensation' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 918,
+                "x_min": 650,
+                "y_max": 389,
+                "y_min": 268
+              }
+            ],
+            "object_name": "the drawn Precipitation that the printed label 'Precipitation' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 80,
+                "x_min": 55,
+                "y_max": 676,
+                "y_min": 445
+              },
+              {
+                "x_max": 104,
+                "x_min": 83,
+                "y_max": 677,
+                "y_min": 477
+              },
+              {
+                "x_max": 128,
+                "x_min": 105,
+                "y_max": 674,
+                "y_min": 414
+              },
+              {
+                "x_max": 150,
+                "x_min": 129,
+                "y_max": 675,
+                "y_min": 448
+              },
+              {
+                "x_max": 172,
+                "x_min": 151,
+                "y_max": 674,
+                "y_min": 444
+              }
+            ],
+            "object_name": "the drawn Transpiration that the printed label 'Transpiration' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 261,
+                "x_min": 237,
+                "y_max": 830,
+                "y_min": 656
+              },
+              {
+                "x_max": 283,
+                "x_min": 259,
+                "y_max": 822,
+                "y_min": 630
+              },
+              {
+                "x_max": 304,
+                "x_min": 280,
+                "y_max": 825,
+                "y_min": 593
+              },
+              {
+                "x_max": 331,
+                "x_min": 307,
+                "y_max": 830,
+                "y_min": 593
+              },
+              {
+                "x_max": 353,
+                "x_min": 329,
+                "y_max": 828,
+                "y_min": 600
+              }
+            ],
+            "object_name": "the drawn Evaporation that the printed label 'Evaporation' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 617,
+                "x_min": 559,
+                "y_max": 750,
+                "y_min": 677
+              }
+            ],
+            "object_name": "the drawn Runoff that the printed label 'Surface Runoff' points to"
+          }
+        ]
+      },
+      "museMs": 17089,
+      "museReceipt": {
+        "purpose": "test-live",
+        "requestedModel": "muse-spark-1.3",
+        "returnedModel": "muse-spark-1.3",
+        "responseId": "chatcmpl-01a1988c-f7c7-7622-9b7f-6b08620be072",
+        "usage": {
+          "promptTokens": 604,
+          "completionTokens": 4348,
+          "reasoningTokens": 3855,
+          "cachedTokens": 0
+        },
+        "latencyMs": 17088,
+        "estCostUSD": 0.019234,
+        "reservedUnknownUSD": 0,
+        "finishReason": "stop",
+        "attempts": 1,
+        "costBasis": "usage",
+        "provider": "meta-api",
+        "model": "muse-spark-1.3",
+        "providerModel": "muse-spark-1.3",
+        "cachedUnknown": false
+      },
+      "samObjects": [
+        {
+          "id": 1,
+          "box": {
+            "x1": 189,
+            "y1": 91,
+            "x2": 330,
+            "y2": 136
+          }
+        },
+        {
+          "id": 2,
+          "box": {
+            "x1": 366,
+            "y1": 133,
+            "x2": 531,
+            "y2": 198
+          }
+        },
+        {
+          "id": 3,
+          "box": {
+            "x1": 29,
+            "y1": 203,
+            "x2": 101,
+            "y2": 347
+          }
+        },
+        {
+          "id": 4,
+          "box": {
+            "x1": 133,
+            "y1": 294,
+            "x2": 205,
+            "y2": 423
+          }
+        },
+        {
+          "id": 5,
+          "box": {
+            "x1": 318,
+            "y1": 340,
+            "x2": 354,
+            "y2": 379
+          }
+        }
+      ],
+      "sam": [
+        {
+          "id": 1,
+          "x1": 183,
+          "y1": 84,
+          "x2": 324,
+          "y2": 146,
+          "confidence": 0.75
+        },
+        {
+          "id": 2,
+          "x1": 368,
+          "y1": 144,
+          "x2": 519,
+          "y2": 202,
+          "confidence": 0.68359375
+        },
+        {
+          "id": 3,
+          "x1": 34,
+          "y1": 214,
+          "x2": 97,
+          "y2": 331,
+          "confidence": 0.8203125
+        },
+        {
+          "id": 4,
+          "x1": 136,
+          "y1": 310,
+          "x2": 197,
+          "y2": 426,
+          "confidence": 0.7734375
+        },
+        {
+          "id": 5,
+          "x1": 318,
+          "y1": 338,
+          "x2": 357,
+          "y2": 378,
+          "confidence": 0.34375
+        }
+      ],
+      "samCostUSD": 0.0025
+    },
+    {
+      "figure": "noaa-hydrologic-cycle-1",
+      "rep": 2,
+      "prompt": "You are an object grounding expert. Provide the bounding box coordinates of the objects in the image: \"the drawn Condensation that the printed label 'Condensation' points to\", \"the drawn Precipitation that the printed label 'Precipitation' points to\", \"the drawn Transpiration that the printed label 'Transpiration' points to\", \"the drawn Evaporation that the printed label 'Evaporation' points to\", \"the drawn Runoff that the printed label 'Surface Runoff' points to\". Box the drawing itself, never the printed label text. When one object is drawn as several pieces (for example several arrows), give one box per piece. Ensure the objects accurately match the request and do not miss any objects. For each object, answer in the format {\"object_name\": \"<name>\", \"bbox\": [{\"x_min\": <int>, \"y_min\": <int>, \"x_max\": <int>, \"y_max\": <int>}]}. The coordinates should be in the 0-1000 range. Return a JSON object {\"objects\": [...]} with one entry per object. If you cannot find an object, omit it from the results.",
+      "muse": {
+        "objects": [
+          {
+            "bbox": [
+              {
+                "x_max": 568,
+                "x_min": 390,
+                "y_max": 313,
+                "y_min": 197
+              }
+            ],
+            "object_name": "the drawn Condensation that the printed label 'Condensation' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 912,
+                "x_min": 650,
+                "y_max": 448,
+                "y_min": 310
+              }
+            ],
+            "object_name": "the drawn Precipitation that the printed label 'Precipitation' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 78,
+                "x_min": 58,
+                "y_max": 670,
+                "y_min": 451
+              },
+              {
+                "x_max": 103,
+                "x_min": 83,
+                "y_max": 670,
+                "y_min": 430
+              },
+              {
+                "x_max": 124,
+                "x_min": 104,
+                "y_max": 667,
+                "y_min": 446
+              },
+              {
+                "x_max": 148,
+                "x_min": 128,
+                "y_max": 668,
+                "y_min": 427
+              },
+              {
+                "x_max": 170,
+                "x_min": 150,
+                "y_max": 672,
+                "y_min": 450
+              }
+            ],
+            "object_name": "the drawn Transpiration that the printed label 'Transpiration' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 260,
+                "x_min": 236,
+                "y_max": 862,
+                "y_min": 639
+              },
+              {
+                "x_max": 284,
+                "x_min": 260,
+                "y_max": 858,
+                "y_min": 616
+              },
+              {
+                "x_max": 307,
+                "x_min": 284,
+                "y_max": 857,
+                "y_min": 593
+              },
+              {
+                "x_max": 330,
+                "x_min": 306,
+                "y_max": 857,
+                "y_min": 595
+              },
+              {
+                "x_max": 351,
+                "x_min": 328,
+                "y_max": 860,
+                "y_min": 596
+              }
+            ],
+            "object_name": "the drawn Evaporation that the printed label 'Evaporation' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 618,
+                "x_min": 560,
+                "y_max": 720,
+                "y_min": 658
+              }
+            ],
+            "object_name": "the drawn Runoff that the printed label 'Surface Runoff' points to"
+          }
+        ]
+      },
+      "museMs": 20126,
+      "museReceipt": {
+        "purpose": "test-live",
+        "requestedModel": "muse-spark-1.3",
+        "returnedModel": "muse-spark-1.3",
+        "responseId": "chatcmpl-01a1988d-4acb-7200-bb7f-4e32c8929abb",
+        "usage": {
+          "promptTokens": 604,
+          "completionTokens": 5311,
+          "reasoningTokens": 4818,
+          "cachedTokens": 0
+        },
+        "latencyMs": 20126,
+        "estCostUSD": 0.02332675,
+        "reservedUnknownUSD": 0,
+        "finishReason": "stop",
+        "attempts": 1,
+        "costBasis": "usage",
+        "provider": "meta-api",
+        "model": "muse-spark-1.3",
+        "providerModel": "muse-spark-1.3",
+        "cachedUnknown": false
+      },
+      "samObjects": [
+        {
+          "id": 1,
+          "box": {
+            "x1": 219,
+            "y1": 97,
+            "x2": 329,
+            "y2": 160
+          }
+        },
+        {
+          "id": 2,
+          "box": {
+            "x1": 366,
+            "y1": 153,
+            "x2": 528,
+            "y2": 229
+          }
+        },
+        {
+          "id": 3,
+          "box": {
+            "x1": 31,
+            "y1": 210,
+            "x2": 100,
+            "y2": 344
+          }
+        },
+        {
+          "id": 4,
+          "box": {
+            "x1": 132,
+            "y1": 293,
+            "x2": 203,
+            "y2": 440
+          }
+        },
+        {
+          "id": 5,
+          "box": {
+            "x1": 319,
+            "y1": 330,
+            "x2": 355,
+            "y2": 364
+          }
+        }
+      ],
+      "sam": [
+        {
+          "id": 1,
+          "x1": 224,
+          "y1": 107,
+          "x2": 324,
+          "y2": 149,
+          "confidence": 0.6171875
+        },
+        {
+          "id": 2,
+          "x1": 370,
+          "y1": 146,
+          "x2": 519,
+          "y2": 227,
+          "confidence": 0.76171875
+        },
+        {
+          "id": 3,
+          "x1": 34,
+          "y1": 214,
+          "x2": 96,
+          "y2": 331,
+          "confidence": 0.81640625
+        },
+        {
+          "id": 4,
+          "x1": 136,
+          "y1": 310,
+          "x2": 197,
+          "y2": 427,
+          "confidence": 0.765625
+        },
+        {
+          "id": 5,
+          "x1": 322,
+          "y1": 332,
+          "x2": 351,
+          "y2": 362,
+          "confidence": 0.921875
+        }
+      ],
+      "samCostUSD": 0.0025
+    },
+    {
+      "figure": "medlineplus-dna-structure-1",
+      "rep": 1,
+      "prompt": "You are an object grounding expert. Provide the bounding box coordinates of the objects in the image: \"the drawn base pairs that the printed label 'Base pairs' points to\", \"the drawn adenine that the printed label 'Adenine' points to\", \"the drawn thymine that the printed label 'Thymine' points to\", \"the drawn guanine that the printed label 'Guanine' points to\", \"the drawn cytosine that the printed label 'Cytosine' points to\", \"the drawn sugar-phosphate backbone that the printed label 'Sugar phosphate backbone' points to\". Box the drawing itself, never the printed label text. When one object is drawn as several pieces (for example several arrows), give one box per piece. Ensure the objects accurately match the request and do not miss any objects. For each object, answer in the format {\"object_name\": \"<name>\", \"bbox\": [{\"x_min\": <int>, \"y_min\": <int>, \"x_max\": <int>, \"y_max\": <int>}]}. The coordinates should be in the 0-1000 range. Return a JSON object {\"objects\": [...]} with one entry per object. If you cannot find an object, omit it from the results.",
+      "muse": {
+        "objects": [
+          {
+            "bbox": [
+              {
+                "x_max": 341,
+                "x_min": 243,
+                "y_max": 443,
+                "y_min": 423
+              },
+              {
+                "x_max": 384,
+                "x_min": 191,
+                "y_max": 485,
+                "y_min": 465
+              }
+            ],
+            "object_name": "the drawn base pairs that the printed label 'Base pairs' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 732,
+                "x_min": 577,
+                "y_max": 332,
+                "y_min": 301
+              }
+            ],
+            "object_name": "the drawn adenine that the printed label 'Adenine' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 875,
+                "x_min": 716,
+                "y_max": 332,
+                "y_min": 301
+              }
+            ],
+            "object_name": "the drawn thymine that the printed label 'Thymine' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 738,
+                "x_min": 577,
+                "y_max": 495,
+                "y_min": 463
+              }
+            ],
+            "object_name": "the drawn guanine that the printed label 'Guanine' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 875,
+                "x_min": 735,
+                "y_max": 495,
+                "y_min": 463
+              }
+            ],
+            "object_name": "the drawn cytosine that the printed label 'Cytosine' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 358,
+                "x_min": 137,
+                "y_max": 936,
+                "y_min": 84
+              }
+            ],
+            "object_name": "the drawn sugar-phosphate backbone that the printed label 'Sugar phosphate backbone' points to"
+          }
+        ]
+      },
+      "museMs": 14330,
+      "museReceipt": {
+        "purpose": "test-live",
+        "requestedModel": "muse-spark-1.3",
+        "returnedModel": "muse-spark-1.3",
+        "responseId": "chatcmpl-01a1988d-8b85-70ce-9b00-903b25748e21",
+        "usage": {
+          "promptTokens": 707,
+          "completionTokens": 3157,
+          "reasoningTokens": 2803,
+          "cachedTokens": 0
+        },
+        "latencyMs": 14330,
+        "estCostUSD": 0.014301,
+        "reservedUnknownUSD": 0,
+        "finishReason": "stop",
+        "attempts": 1,
+        "costBasis": "usage",
+        "provider": "meta-api",
+        "model": "muse-spark-1.3",
+        "providerModel": "muse-spark-1.3",
+        "cachedUnknown": false
+      },
+      "samObjects": [
+        {
+          "id": 1,
+          "box": {
+            "x1": 110,
+            "y1": 252,
+            "x2": 235,
+            "y2": 292
+          }
+        },
+        {
+          "id": 2,
+          "box": {
+            "x1": 342,
+            "y1": 180,
+            "x2": 443,
+            "y2": 200
+          }
+        },
+        {
+          "id": 3,
+          "box": {
+            "x1": 426,
+            "y1": 180,
+            "x2": 529,
+            "y2": 200
+          }
+        },
+        {
+          "id": 4,
+          "box": {
+            "x1": 342,
+            "y1": 277,
+            "x2": 447,
+            "y2": 298
+          }
+        },
+        {
+          "id": 5,
+          "box": {
+            "x1": 438,
+            "y1": 277,
+            "x2": 528,
+            "y2": 298
+          }
+        },
+        {
+          "id": 6,
+          "box": {
+            "x1": 77,
+            "y1": 30,
+            "x2": 220,
+            "y2": 582
+          }
+        }
+      ],
+      "sam": [
+        {
+          "id": 1,
+          "x1": 114,
+          "y1": 275,
+          "x2": 230,
+          "y2": 289,
+          "confidence": 0.828125
+        },
+        {
+          "id": 2,
+          "x1": 347,
+          "y1": 182,
+          "x2": 440,
+          "y2": 199,
+          "confidence": 0.91015625
+        },
+        {
+          "id": 3,
+          "x1": 434,
+          "y1": 182,
+          "x2": 524,
+          "y2": 199,
+          "confidence": 0.9140625
+        },
+        {
+          "id": 4,
+          "x1": 346,
+          "y1": 279,
+          "x2": 442,
+          "y2": 296,
+          "confidence": 0.921875
+        },
+        {
+          "id": 5,
+          "x1": 440,
+          "y1": 278,
+          "x2": 524,
+          "y2": 296,
+          "confidence": 0.921875
+        },
+        {
+          "id": 6,
+          "x1": 84,
+          "y1": 51,
+          "x2": 239,
+          "y2": 561,
+          "confidence": 0.75390625
+        }
+      ],
+      "samCostUSD": 0.0025
+    },
+    {
+      "figure": "medlineplus-dna-structure-1",
+      "rep": 2,
+      "prompt": "You are an object grounding expert. Provide the bounding box coordinates of the objects in the image: \"the drawn base pairs that the printed label 'Base pairs' points to\", \"the drawn adenine that the printed label 'Adenine' points to\", \"the drawn thymine that the printed label 'Thymine' points to\", \"the drawn guanine that the printed label 'Guanine' points to\", \"the drawn cytosine that the printed label 'Cytosine' points to\", \"the drawn sugar-phosphate backbone that the printed label 'Sugar phosphate backbone' points to\". Box the drawing itself, never the printed label text. When one object is drawn as several pieces (for example several arrows), give one box per piece. Ensure the objects accurately match the request and do not miss any objects. For each object, answer in the format {\"object_name\": \"<name>\", \"bbox\": [{\"x_min\": <int>, \"y_min\": <int>, \"x_max\": <int>, \"y_max\": <int>}]}. The coordinates should be in the 0-1000 range. Return a JSON object {\"objects\": [...]} with one entry per object. If you cannot find an object, omit it from the results.",
+      "muse": {
+        "objects": [
+          {
+            "bbox": [
+              {
+                "x_max": 340,
+                "x_min": 152,
+                "y_max": 396,
+                "y_min": 372
+              },
+              {
+                "x_max": 384,
+                "x_min": 188,
+                "y_max": 437,
+                "y_min": 416
+              }
+            ],
+            "object_name": "the drawn base pairs that the printed label 'Base pairs' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 728,
+                "x_min": 576,
+                "y_max": 299,
+                "y_min": 266
+              }
+            ],
+            "object_name": "the drawn adenine that the printed label 'Adenine' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 876,
+                "x_min": 716,
+                "y_max": 299,
+                "y_min": 264
+              }
+            ],
+            "object_name": "the drawn thymine that the printed label 'Thymine' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 737,
+                "x_min": 576,
+                "y_max": 493,
+                "y_min": 463
+              }
+            ],
+            "object_name": "the drawn guanine that the printed label 'Guanine' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 875,
+                "x_min": 730,
+                "y_max": 494,
+                "y_min": 463
+              }
+            ],
+            "object_name": "the drawn cytosine that the printed label 'Cytosine' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 402,
+                "x_min": 138,
+                "y_max": 933,
+                "y_min": 87
+              }
+            ],
+            "object_name": "the drawn sugar-phosphate backbone that the printed label 'Sugar phosphate backbone' points to"
+          }
+        ]
+      },
+      "museMs": 19831,
+      "museReceipt": {
+        "purpose": "test-live",
+        "requestedModel": "muse-spark-1.3",
+        "returnedModel": "muse-spark-1.3",
+        "responseId": "chatcmpl-01a1988d-dce8-761c-941e-fdc434c52a5f",
+        "usage": {
+          "promptTokens": 707,
+          "completionTokens": 5347,
+          "reasoningTokens": 4993,
+          "cachedTokens": 0
+        },
+        "latencyMs": 19831,
+        "estCostUSD": 0.0236085,
+        "reservedUnknownUSD": 0,
+        "finishReason": "stop",
+        "attempts": 1,
+        "costBasis": "usage",
+        "provider": "meta-api",
+        "model": "muse-spark-1.3",
+        "providerModel": "muse-spark-1.3",
+        "cachedUnknown": false
+      },
+      "samObjects": [
+        {
+          "id": 1,
+          "box": {
+            "x1": 86,
+            "y1": 222,
+            "x2": 236,
+            "y2": 264
+          }
+        },
+        {
+          "id": 2,
+          "box": {
+            "x1": 342,
+            "y1": 159,
+            "x2": 440,
+            "y2": 180
+          }
+        },
+        {
+          "id": 3,
+          "box": {
+            "x1": 426,
+            "y1": 158,
+            "x2": 529,
+            "y2": 180
+          }
+        },
+        {
+          "id": 4,
+          "box": {
+            "x1": 342,
+            "y1": 277,
+            "x2": 446,
+            "y2": 297
+          }
+        },
+        {
+          "id": 5,
+          "box": {
+            "x1": 435,
+            "y1": 277,
+            "x2": 528,
+            "y2": 297
+          }
+        },
+        {
+          "id": 6,
+          "box": {
+            "x1": 76,
+            "y1": 32,
+            "x2": 248,
+            "y2": 580
+          }
+        }
+      ],
+      "sam": [
+        {
+          "id": 1,
+          "x1": 92,
+          "y1": 224,
+          "x2": 203,
+          "y2": 265,
+          "confidence": 0.7109375
+        },
+        {
+          "id": 2,
+          "x1": 345,
+          "y1": 161,
+          "x2": 443,
+          "y2": 182,
+          "confidence": 0.4453125
+        },
+        {
+          "id": 3,
+          "x1": 428,
+          "y1": 158,
+          "x2": 528,
+          "y2": 182,
+          "confidence": 0.55859375
+        },
+        {
+          "id": 4,
+          "x1": 347,
+          "y1": 279,
+          "x2": 442,
+          "y2": 296,
+          "confidence": 0.921875
+        },
+        {
+          "id": 5,
+          "x1": 440,
+          "y1": 279,
+          "x2": 524,
+          "y2": 296,
+          "confidence": 0.921875
+        },
+        {
+          "id": 6,
+          "x1": 84,
+          "y1": 51,
+          "x2": 239,
+          "y2": 561,
+          "confidence": 0.80859375
+        }
+      ],
+      "samCostUSD": 0.0025
+    }
+  ]
+}
