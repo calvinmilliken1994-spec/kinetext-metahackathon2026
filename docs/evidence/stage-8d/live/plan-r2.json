@@ -1,0 +1,3 @@
+[
+  { "sourceId": "noaa-jetstream-hydrologic-cycle", "model": "muse-spark-open", "run": 2, "set": "stage-8d" }
+]

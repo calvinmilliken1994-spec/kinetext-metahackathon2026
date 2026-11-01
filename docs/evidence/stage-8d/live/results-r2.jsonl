@@ -1,0 +1,1 @@
+{"sourceId":"noaa-jetstream-hydrologic-cycle","model":"muse-spark-open","run":2,"set":"stage-8d","jobId":"job-20261101212123-3e4734fe","status":"succeeded","wallS":145,"costUSD":0.137436,"engine":null,"planned":2,"published":2,"components":["sequence-v1:passed","label-diagram-v1:passed"],"failureCode":null}
