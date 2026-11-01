@@ -107,3 +107,26 @@ the area fields inside the generation call.
   drawing Muse located. It shows only when SAM's confidence is at least 0.5, and draws in, holds, then fades as now; it
   is a soft glow in the app's accent colour, never a hard border. Traced outlines stay stored but are no longer drawn.
   The narration reads "Muse Spark located N parts · SAM 3.1 confirmed K".
+
+## Addendum B (2026-11-02): numbers sit on the part the models located
+Live round 3 (`docs/evidence/stage-8c/live/results-r3.jsonl`): with grounding, SAM was 0.59-0.95 sure of EVERY part on
+both figures, and the boxes are right. Both diagrams still failed only on the number position from the generation call:
+LD-06 (water cycle runoff point 15 px left of the stream) and LD-04/LD-06 (DNA guanine/cytosine points on the printed
+words). Repairs move them inconsistently.
+
+- **Placement (worker, after SAM and the best-of retry, before validation of the revision):** a part is placed when its
+  region has `ground` (Muse grounding), a numeric confidence ≥ `minRegionConfidence`, and a decodable mask. Its
+  published `x`/`y` (0..1000) become the mask's ink pixel nearest the mask's centroid, and its `areaX1..areaY2` become
+  the grounding union (0..1000). A part that is not placed keeps Muse's generation values unchanged. Muse's own
+  generation values are kept in the revision artifact as `genPositions: { partId, x, y, areaX1, areaY1, areaX2, areaY2 }[]`
+  for the placed parts (audit). Event: the `segment succeeded` detail appends `; placed K number(s) on the located parts`.
+- **Agreement check, a new criterion inside LD-06 (no new id):** for a region with `ground`, SAM's box must lie inside the
+  grounding box expanded by 25% of its width/height on each side. Otherwise it fails with a message naming the part
+  (SAM's region spilled outside what Muse located), and the affected paths are that part's x/y/area. This is the
+  cross-model check that replaces "Muse's point lies in SAM's box" for placed parts. That point check still runs, and
+  holds by construction once the number is placed.
+- LD-04 (point not on printed text, point inside area) runs on the placed values as before. A placed point that still
+  lands on printed text fails LD-04 honestly.
+- Repairs: the repair input is the published (placed) revision as today. Fields the worker places are re-placed on every
+  revision, so a repair cannot "fix" them by hand.
+- Stored runs: unchanged (no `ground`, so nothing is placed and the new LD-06 criterion is skipped).
