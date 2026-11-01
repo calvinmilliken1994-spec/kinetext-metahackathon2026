@@ -554,14 +554,28 @@ export function outlineToDraw(view: Pick<PartView, 'outline' | 'confidence'>): s
   return view.confidence !== null && view.confidence < MIN_REGION_CONFIDENCE ? null : view.outline;
 }
 
-export type RegionDrawing = { kind: 'outline'; d: string } | { kind: 'box'; box: PctBox };
+export type RegionDrawing = { kind: 'box'; box: PctBox };
 
-/** What a part's SAM region draws during the build: its traced outline when it has one, else its box; null when weak. */
+/**
+ * What a part's SAM region draws during the build: its BOX, as a soft accent glow (STAGE-8c Addendum A, Calvin
+ * 2026-11-02: "keep the box drawing to the models only"). SAM's box sits tight on the drawing Muse's grounding call
+ * located. A stored traced outline no longer changes what is drawn (it stays on the region; `outlineToDraw` keeps the
+ * old rule should outlines come back). Null when SAM was less than 50% sure, or found no region.
+ */
 export function regionDrawing(view: Pick<PartView, 'region' | 'outline' | 'confidence'>): RegionDrawing | null {
-  const d = outlineToDraw(view);
-  if (d !== null) return { kind: 'outline', d };
   const box = regionToDraw(view);
   return box === null ? null : { kind: 'box', box };
+}
+
+/** Space the glow keeps around SAM's box (layout px), so its line never cuts the drawing it frames. */
+export const GLOW_PAD_PX = 4;
+
+/** The glow's CSS box: SAM's box (percent of the figure) grown by `pad` layout px on every side. */
+export function glowStyle(box: PctBox, pad: number = GLOW_PAD_PX): { left: string; top: string; width: string; height: string } {
+  return {
+    left: `calc(${box.left}% - ${pad}px)`, top: `calc(${box.top}% - ${pad}px)`,
+    width: `calc(${box.width}% + ${2 * pad}px)`, height: `calc(${box.height}% + ${2 * pad}px)`,
+  };
 }
 
 /** The outline overlay's viewBox: the figure's own pixel grid (outlines are image pixels); null when the size is unknown. */

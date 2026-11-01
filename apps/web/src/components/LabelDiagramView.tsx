@@ -3,15 +3,15 @@
 // page's part names. The class drags (or picks, then places) each name onto its number; Check marks each number; a right
 // name, Show the answers or a presenter's R writes the part's name INTO its own slot. Parts with no printed label get a
 // small name tag beside the marker instead. A printed label no part claims is a muted patch in the figure's own colour,
-// never a slot (Stage 8c). SAM's regions show only while a build draws them in: traced outlines where SAM gave one,
-// boxes otherwise. All geometry
+// never a slot (Stage 8c). SAM's region boxes show only while a build draws them in, as a soft accent glow (Stage 8c
+// Addendum A: boxes from the models only, never a traced outline). All geometry
 // comes from the spec (lib/labelDiagramView.ts matches parts to slots, fits the text and places the tags); the view only
 // measures the rendered size for that fitting.
 import { createContext, useCallback, useContext, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { CSSProperties, DragEvent, ReactNode, RefObject } from 'react';
 import type { LabelDiagramSpec } from '../../../../packages/contracts/kit.ts';
 import type { EnginePresentation } from '../lib/enginePresentation.ts';
-import { outlineViewBox, patchFills, regionDrawing,
+import { glowStyle, patchFills, regionDrawing,
   changedBy, checkPlacements, coverMasks, finishLine, fitSlotTexts, keepResults, labelDiagramPresentationSteps, labelSlots, lessonFigureMaxWidth, markerSpots,
   partViews, place, placeTags, slotOfPart, slotStates, stageFigureSize, stageOutline, stageQuestion, stageView, unplace, wordBank,
 } from '../lib/labelDiagramView.ts';
@@ -204,24 +204,6 @@ function usePatchColours(img: HTMLImageElement | null, ready: boolean, slots: re
   return colours;
 }
 
-/** Image pixels per layout px of the plate, so the outline strokes keep one screen width whatever the figure's size. */
-function useStrokeUnit(plateRef: RefObject<HTMLDivElement | null>, figureWidth: number, on: boolean): number {
-  const [unit, setUnit] = useState(1);
-  useLayoutEffect(() => {
-    const plate = plateRef.current;
-    if (!on || plate === null || !(figureWidth > 0)) return undefined;
-    const measure = (): void => {
-      const W = plate.clientWidth;
-      if (W > 0) setUnit((u) => (Math.abs(u - figureWidth / W) < 1e-3 ? u : figureWidth / W));
-    };
-    measure();
-    const ro = new ResizeObserver(measure);
-    ro.observe(plate);
-    return () => ro.disconnect();
-  }, [plateRef, figureWidth, on]);
-  return unit;
-}
-
 interface FigureProps {
   spec: LabelDiagramSpec;
   views: readonly PartView[];
@@ -272,12 +254,10 @@ function Figure({ spec, views, slots, masks, named, slotState, labelsShown, mark
   const fits = useSlotFits(plateRef, slots, views, slotFont);
   const fig = spec.figure;
   const patches = usePatchColours(imgEl, imgReady, slots, fig);
-  // Stage 8c: SAM's regions as the build draws them (weak ones not at all): a traced outline where SAM gave one, else
-  // the box. Outlines exist only while a build plays; nothing is drawn at rest, on hover or on slides.
+  // Stage 8c Addendum A: SAM's region BOXES as the build draws them in (weak ones not at all), a soft accent glow padded
+  // a little around SAM's box. They exist only while a build plays; nothing is drawn at rest, on hover or on slides.
+  // Traced outlines stay stored on the regions but are not drawn.
   const drawings = useMemo(() => views.map((v) => regionDrawing(v)), [views]);
-  const viewBox = outlineViewBox(fig);
-  const traced = build && viewBox !== null ? views.filter((v) => drawings[v.index]?.kind === 'outline') : [];
-  const unit = useStrokeUnit(plateRef, fig.width, traced.length > 0);
   const plateStyle: CSSProperties = size !== undefined
     ? { width: size.width, height: size.height }
     : { aspectRatio: `${fig.width > 0 ? fig.width : 1} / ${fig.height > 0 ? fig.height : 1}` };
@@ -293,32 +273,15 @@ function Figure({ spec, views, slots, masks, named, slotState, labelsShown, mark
         {masks.length > 0 && slots.length === 0 && masks.map((m) => (
           <span key={m.key} className="ld-mask" style={pct(m.box)} data-on={labelsShown ? 'false' : 'true'} aria-hidden="true" />
         ))}
-        {views.map((v) => {
+        {build && views.map((v) => {
           const d = drawings[v.index] ?? null; // SAM's weak regions (< 50% sure) are not drawn
-          return d === null || d.kind !== 'box' ? null : (
-          <span
-            key={`r-${v.part.id}`} className="ld-region" style={build ? { ...pct(d.box), '--i': v.index } as CSSProperties : pct(d.box)}
-            data-on={outlined === v.index ? 'true' : 'false'} aria-hidden="true"
-          />
+          return d === null ? null : (
+            <span
+              key={`r-${v.part.id}`} className="ld-region" style={{ ...glowStyle(d.box), '--i': v.index } as CSSProperties}
+              data-on={outlined === v.index ? 'true' : 'false'} aria-hidden="true"
+            />
           );
         })}
-        {traced.length > 0 && viewBox !== null && (
-          // SAM's traced outlines (image pixels, so the figure's own grid), drawn in during the build, then gone.
-          <svg className="ld-outlines" viewBox={viewBox} preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false" style={{ '--ld-u': unit } as CSSProperties}>
-            {traced.map((v) => {
-              const d = drawings[v.index];
-              if (d === undefined || d === null || d.kind !== 'outline') return null;
-              return (
-                <g key={`o-${v.part.id}`} className="ld-outline" style={{ '--i': v.index } as CSSProperties}>
-                  <path className="ld-outline-fill" d={d.d} />
-                  <path className="ld-outline-shade" d={d.d} pathLength={1} />
-                  <path className="ld-outline-halo" d={d.d} pathLength={1} />
-                  <path className="ld-outline-line" d={d.d} pathLength={1} />
-                </g>
-              );
-            })}
-          </svg>
-        )}
         {/* The printed labels as worksheet slots: blank until their part is named, then the name written in. */}
         {slots.map((s, k) => {
           const state = slotState[k] ?? 'covered';

@@ -24,6 +24,7 @@ import { AppWindow } from './AppWindow.tsx';
 import { LessonView } from './LessonView.tsx';
 import { FigureSrcContext, LabelDiagramView } from './LabelDiagramView.tsx';
 import { WATER_OUTLINES } from '../lib/labelOutline.fixtures.ts';
+import { GROUNDING_PROBE_WATER_REGIONS } from '../lib/labelGrounding.fixtures.ts';
 import { Provenance as ProvenanceLine } from './Provenance.tsx';
 import { PresentationMode } from './presentation/PresentationMode.tsx';
 import type { CiteProps } from './Explanations.tsx';
@@ -43,20 +44,30 @@ const FIGURES: Readonly<Record<string, string>> = { [dnaFigureMeta.id]: dnaFigur
 const figureSrc = (id: string): string => FIGURES[id] ?? `/api/figures/${encodeURIComponent(id)}/image`;
 
 /**
- * Stage 8c build harness (&build=outline | box): the water-cycle demo-set part with SAM 3.1's traced outlines from the
- * mask probe (lib/labelOutline.fixtures.ts) or with its stored boxes only, played as the build's draw-in. Evaporation
- * (0.28 sure) must draw nothing either way.
+ * Stage 8c build harness (&build=outline | box | grounded): the water-cycle demo-set part played as the build's draw-in,
+ * with SAM 3.1's traced outlines from the mask probe attached (lib/labelOutline.fixtures.ts; since Addendum A they are
+ * stored but not drawn, so it glows the same boxes as `box`), with its stored boxes only (evaporation, 0.28 sure, draws
+ * nothing), or with SAM's boxes from the Muse grounding probe (lib/labelGrounding.fixtures.ts, all five confident).
  */
+type BuildMode = 'outline' | 'box' | 'grounded';
 function withOutlines(spec: LabelDiagramSpec): LabelDiagramSpec {
   return { ...spec, regions: spec.regions.map((r) => (WATER_OUTLINES[r.partId] === undefined ? r : { ...r, outline: WATER_OUTLINES[r.partId] })) };
 }
+function withGrounding(spec: LabelDiagramSpec): LabelDiagramSpec {
+  return { ...spec, regions: spec.regions.map((r) => GROUNDING_PROBE_WATER_REGIONS.find((g) => g.partId === r.partId) ?? r) };
+}
+const BUILD_NOTE: Record<BuildMode, string> = {
+  outline: 'stored boxes with SAM 3.1 traced outlines attached (outlines are stored, not drawn)',
+  box: 'stored region boxes of the demo-set run',
+  grounded: 'SAM 3.1 boxes from the Muse grounding probe (water cycle, rep 2)',
+};
 
-function BuildHarness({ t, mode, cite }: { t: LabelDiagramDemo; mode: 'outline' | 'box'; cite: CiteProps }) {
+function BuildHarness({ t, mode, cite }: { t: LabelDiagramDemo; mode: BuildMode; cite: CiteProps }) {
   const [run, setRun] = useState(0);
-  const spec = useMemo(() => (mode === 'outline' ? withOutlines(t.spec) : t.spec), [t, mode]);
+  const spec = useMemo(() => (mode === 'outline' ? withOutlines(t.spec) : mode === 'grounded' ? withGrounding(t.spec) : t.spec), [t, mode]);
   return (
     <section className="demo-build" data-testid="build-harness" data-mode={mode}>
-      <p className="muted small">Build draw-in: {mode === 'outline' ? 'SAM 3.1 traced outlines (mask probe of the demo-set run)' : 'stored region boxes (no outlines)'}.</p>
+      <p className="muted small">Build draw-in: {BUILD_NOTE[mode]}.</p>
       <button type="button" className="btn btn-small" onClick={() => setRun((n) => n + 1)}>Play the draw-in again</button>
       <LabelDiagramView key={run} spec={spec} cite={cite} build />
     </section>
@@ -86,7 +97,8 @@ export function EngineDemoC() {
   const [presenting, setPresenting] = useState<number | null>(asked !== null && asked.jobId === DECK_JOB ? asked.beat : null);
   const [toast, setToast] = useState('');
   const t = tabs.find((x) => x.id === id) ?? tabs[0];
-  const buildMode = params.get('build') === 'outline' ? 'outline' : params.get('build') === 'box' ? 'box' : null;
+  const asBuild = params.get('build');
+  const buildMode: BuildMode | null = asBuild === 'outline' || asBuild === 'box' || asBuild === 'grounded' ? asBuild : null;
   const deck = useMemo(demoDeck, []);
   if (t === undefined) return null;
   const cite: CiteProps = { sourceId: t.sourceId, located: new Set(), onCite: (key) => setToast(`Demo: in the workspace this highlights the quote in the source panel (${key}).`) };

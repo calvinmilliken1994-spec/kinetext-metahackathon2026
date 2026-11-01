@@ -16,13 +16,14 @@
   --ld-pin-current: #0064e0;
   --ld-pin-ok: #0d7444;
   --ld-pin-bad: #b3261e;
-  /* SAM 3.1's regions (demo pair review #1a): a resting line in a dark blue with a white halo, so it reads on a sky-blue
-     figure as well as on a white one; the focused part (and the draw-in) in the strong blue, a white inner line, a dark
-     outer shadow and a light tint. The plate is always white, so none of these switch with the theme. */
-  --ld-region: rgba(0, 72, 168, 0.72);
-  --ld-region-halo: rgba(255, 255, 255, 0.9);
-  --ld-region-shade: rgba(10, 19, 23, 0.42);
-  --ld-region-tint: rgba(0, 100, 224, 0.14);
+  /* SAM 3.1's region boxes during the build (STAGE-8c Addendum A): a soft glow in the app's accent, never a hard
+     border. The accent is the same in both themes, and the plate is always the page's own figure, so these do not
+     switch with the theme. A faint light rim under the glow keeps the line readable on a blue sky and on green grass. */
+  --ld-glow: color-mix(in srgb, var(--accent) 78%, white);
+  --ld-glow-fill: color-mix(in srgb, var(--accent) 14%, transparent);
+  --ld-glow-soft: color-mix(in srgb, var(--accent) 55%, transparent);
+  --ld-glow-rim: rgba(255, 255, 255, 0.6);
+  --ld-glow-shadow: 0 0 0 1px var(--ld-glow-rim), 0 0 18px 4px var(--ld-glow-soft);
   --ld-region-strong: #0064e0;
   --ld-tag: #0050b3;
   --ld-tag-ink: #ffffff;
@@ -73,35 +74,16 @@
 .ld-slotline { display: block; }
 @keyframes ld-write { from { opacity: 0; } to { opacity: 1; } }
 
-/* SAM's regions. In a lesson every part keeps a quiet outline (SAM's work stays visible, and it names nothing: the numbers
-   already sit on the parts); the part in focus is drawn strong. On a slide only the current part is outlined. Outlines are
-   absolutely placed and border-box, so changing their weight never moves anything. Whole-pixel widths: Chrome rounds
-   1.5 px borders down to 1 px at 100% zoom. */
+/* SAM 3.1's region boxes exist only while a build draws them in (Calvin 2026-11-02; styles/live.css lb-glow): a rounded
+   box a few px outside SAM's box (lib glowStyle), a light accent wash, a 2px accent line and a soft accent glow, so it
+   frames the drawing like a highlight and never reads as a label slot (slots are small grey paper boxes with square
+   corners). Hidden as a base: at rest, on hover and on slides the numbers and slots carry the activity. */
 .ld-region {
-  position: absolute; box-sizing: border-box; border-radius: 6px; pointer-events: none;
-  border: 2px solid var(--ld-region); background-color: transparent; box-shadow: 0 0 0 1px var(--ld-region-halo);
-  transition: opacity 0.2s ease-out, visibility 0.2s, border-color 0.2s ease-out, border-width 0.2s ease-out, background-color 0.2s ease-out, box-shadow 0.2s ease-out;
+  position: absolute; box-sizing: border-box; border-radius: 12px; pointer-events: none;
+  border: 2px solid var(--ld-glow); background-color: var(--ld-glow-fill);
+  box-shadow: var(--ld-glow-shadow);
+  opacity: 0; visibility: hidden;
 }
-.ld-region[data-on="true"] {
-  border: 3px solid var(--ld-region-strong); background-color: var(--ld-region-tint);
-  box-shadow: 0 0 0 1.5px var(--ld-region-halo), 0 0 0 3.5px var(--ld-region-shade), inset 0 0 0 1px var(--ld-region-halo);
-}
-.ld[data-mode="stage"] .ld-region[data-on="false"] { opacity: 0; visibility: hidden; }
-/* Calvin 2026-11-02: SAM's regions show only while a build draws them in (styles/live.css lb-outline), then they are
-   gone: at rest, on hover and on slides the numbers and slots carry the activity, and a box around SAM's weaker regions
-   read as a mistake. The animation overrides this while it plays. */
-.ld-plate .ld-region { opacity: 0; visibility: hidden; }
-/* Stage 8c: SAM's traced outlines, one SVG over the plate on the figure's own pixel grid (object-fit: contain, like the
-   image). They exist only while a build plays (styles/live.css lb-trace); hidden as a base, like the boxes. The strokes
-   are in layout px (--ld-u: image px per layout px): a dark shade, a white halo and the strong blue line, so the trace
-   reads on the water cycle's sky as well as on white. */
-.ld-outlines { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; overflow: visible; pointer-events: none; }
-.ld-outline { opacity: 0; visibility: hidden; }
-.ld-outline path { fill: none; stroke-linejoin: round; stroke-linecap: butt; fill-rule: evenodd; }
-.ld-outline .ld-outline-fill { fill: var(--ld-region-tint); fill-opacity: 0; stroke: none; }
-.ld-outline .ld-outline-shade { stroke: var(--ld-region-shade); stroke-width: calc(var(--ld-u, 1) * 8px); }
-.ld-outline .ld-outline-halo { stroke: var(--ld-region-halo); stroke-width: calc(var(--ld-u, 1) * 6px); }
-.ld-outline .ld-outline-line { stroke: var(--ld-region-strong); stroke-width: calc(var(--ld-u, 1) * 3px); }
 /* Stage 8c: a printed label no part claims (no part's name goes there) is covered by a patch in the colour around it
    (read from the figure, --ld-patch), with soft edges and no border, so it reads as part of the picture, never as a
    blank slot to fill. Without that colour it falls back to a frosted patch. It fades open with the other labels. */

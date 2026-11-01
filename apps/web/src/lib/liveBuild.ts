@@ -56,9 +56,22 @@ export function parseSegmentAsk(detail: string | undefined): number | null {
   return m === null ? null : Number(m[1]);
 }
 
-function parseSegmentGot(detail: string | undefined): { got: number; of: number } | null {
+/** "sam-3.1 returned 5 of 5 region(s)" (notes may follow after ';') → SAM's region count. */
+export function parseSegmentGot(detail: string | undefined): { got: number; of: number } | null {
   const m = /returned (\d+) of (\d+) region/.exec(detail ?? '');
   return m === null ? null : { got: Number(m[1]), of: Number(m[2]) };
+}
+
+/**
+ * STAGE-8c Addendum A: Muse's grounding call before SAM, as the worker notes it in the `segment succeeded` detail:
+ * "; muse-spark-1.3 located K of N part(s) for SAM" → { located: K, of: N }; "; muse-spark-1.3 grounding failed (CODE);
+ * used the generation areas" → 'failed'. Null for older runs, which had no grounding call. Any order of notes.
+ */
+export function parseGrounding(detail: string | undefined): { located: number; of: number } | 'failed' | null {
+  const d = detail ?? '';
+  const m = /\blocated (\d+) of (\d+) part\(s\) for SAM\b/.exec(d);
+  if (m !== null) return { located: Number(m[1]), of: Number(m[2]) };
+  return /\bgrounding failed\b/.test(d) ? 'failed' : null;
 }
 
 /** A live counter: "12 s", "1 min 23 s". */
@@ -142,10 +155,12 @@ export function reserveHeight(componentId: string): number {
  * every other kind, so the frame never claims SAM work that has not been recorded. It never draws regions: those exist
  * only once the checked part arrives.
  */
-export function figureNote(build: PartBuild | undefined): { actor: 'SAM 3.1'; text: string; working: boolean } | null {
+export function figureNote(build: PartBuild | undefined): { actor: 'SAM 3.1'; text: string; working: boolean; muse?: { actor: 'Muse Spark'; text: string } } | null {
   if (build === undefined || build.componentId !== 'label-diagram-v1') return null;
   const sam = [...build.lines].reverse().find((l) => l.kind === 'outlining');
   if (sam === undefined) return null;
+  // Addendum A: a grounded call reads "Muse Spark located 5 parts · SAM 3.1 confirmed 5 of 5 in 1.9 s"
+  if (sam.muse !== undefined && sam.sam !== undefined) return { actor: 'SAM 3.1', text: sam.sam, working: sam.open, muse: { actor: 'Muse Spark', text: sam.muse } };
   // the log line without its actor ("SAM 3.1 is outlining 5 parts…" → "is outlining 5 parts…")
   const text = sam.text.replace(/^SAM 3\.1\s+/, '');
   return { actor: 'SAM 3.1', text, working: sam.open };
@@ -322,6 +337,10 @@ export interface LogLine {
   revision: number;
   /** SAM: parts asked for. */
   parts?: number;
+  /** SAM (Addendum A): what Muse's grounding call located before SAM ("located 5 parts"), when recorded. */
+  muse?: string;
+  /** SAM (Addendum A): the SAM half of a grounded line ("confirmed 5 of 5 in 1.9 s"). */
+  sam?: string;
   checks?: { passed: number; total: number };
 }
 
@@ -385,13 +404,25 @@ function logFor(id: PlanComponentId, evs: readonly Ev[], model: string, running:
       const end = r.find((e) => e.stage === 'segment' && e.status !== 'started' && e.seq > seg.seq);
       const parts = parseSegmentAsk(seg.detail) ?? undefined;
       const got = parseSegmentGot(end?.detail);
+      const grounding = end?.status === 'succeeded' ? parseGrounding(end.detail) : null;
       const open = running && end === undefined;
       const durationMs = end === undefined ? null : num(end.latencyMs) ?? end.t - seg.t;
+      // Addendum A: a grounded call names Muse's part first, then what SAM confirmed. A failed grounding call and
+      // older runs keep the SAM-only wording.
+      const grounded = !open && got !== null && grounding !== null && grounding !== 'failed'
+        ? {
+          muse: `located ${grounding.located === grounding.of ? plural(grounding.located, 'part', 'parts') : `${grounding.located} of ${plural(grounding.of, 'part', 'parts')}`}`,
+          sam: `confirmed ${got.got} of ${got.of} in ${formatSeconds(durationMs ?? 0)}`,
+        }
+        : null;
       lines.push({
         key: `sam-r${rev}-${seg.seq}`, kind: 'outlining', open, startMs: seg.t, durationMs, tokens: null, revision: rev, ...(parts === undefined ? {} : { parts }),
+        ...(grounded === null ? {} : grounded),
         text: open
           ? `SAM 3.1 is outlining ${parts === undefined ? 'the' : parts} parts of the figure`
-          : end?.status === 'failed' ? 'SAM 3.1 could not outline the parts' : `SAM 3.1 outlined ${got === null ? (parts ?? '') : `${got.got} of ${got.of}`} parts in ${formatSeconds(durationMs ?? 0)}`,
+          : end?.status === 'failed' ? 'SAM 3.1 could not outline the parts'
+            : grounded !== null ? `Muse Spark ${grounded.muse} · SAM 3.1 ${grounded.sam}`
+              : `SAM 3.1 outlined ${got === null ? (parts ?? '') : `${got.got} of ${got.of}`} parts in ${formatSeconds(durationMs ?? 0)}`,
       });
     }
     // checks

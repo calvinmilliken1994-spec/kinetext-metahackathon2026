@@ -229,7 +229,12 @@ function PreviewBody({ p, note = null }: { p: PartPreview; note?: FigureNote }):
           <div className="pv-box pv-plate" data-sam={note === null ? undefined : note.working ? 'working' : 'done'}>
             {note === null
               ? <span className="pv-caption">The page’s figure</span>
-              : <span className="pv-caption pv-sam"><strong>{note.actor}</strong> {note.text}</span>}
+              : <span className="pv-caption pv-sam">
+                <span>
+                  {note.muse !== undefined && <><strong>{note.muse.actor}</strong> {note.muse.text} · </>}
+                  <strong>{note.actor}</strong> {note.text}
+                </span>
+              </span>}
           </div>
           <div className="pv-col pv-chips">
             <Bar i={0} />
