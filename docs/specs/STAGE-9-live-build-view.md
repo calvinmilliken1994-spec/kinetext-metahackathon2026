@@ -73,3 +73,6 @@ N× speed · recorded <date>` with a Replay again button, and the strip says Rep
 `lib/liveBuild.ts` (strip, part logs, traces, reserves), `lib/replay.ts` (request parsing, moment snapshots),
 `components/LiveBuild.tsx`, `components/useReplay.ts`, `styles/live.css`; small props on `LessonView`, `KitCard`,
 `OverviewView`, `SourcePanel`, `LabelDiagramView`, wired in `App.tsx`. Evidence: `docs/evidence/stage-9/live-build/`.
+
+## Amendment (2026-11-01): working cues
+Calvin: the seconds counter alone did not show that work was happening. While calls are open, three indeterminate cues loop: a light sweeping the strip's lower edge, a breathing dot on each open call, and a shimmer on the sketches of parts being written or reworked and on the summary placeholder. They stop the moment the strip closes. No fake percentages. Reduced motion: no loops (a static accent line).

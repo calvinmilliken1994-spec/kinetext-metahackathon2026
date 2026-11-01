@@ -219,6 +219,33 @@ mark.lb-lit { animation: lb-lit 900ms var(--lb-ease) calc(var(--i, 0) * 70ms + 1
   100% { opacity: 0; visibility: visible; border-color: var(--ld-region); clip-path: inset(0 0 0 0 round 6px); }
 }
 
+/* ---- working cues: loop only while calls are open (Calvin: the seconds counter alone did not show work going on) ----
+ * The exception to "play once": each cue is tied to an open call or an unfinished part and stops the moment it closes.
+ * Indeterminate on purpose: no fake percentages. Transform / opacity only. */
+.lb-sweep {
+  position: absolute; inset: auto 14px -1px; block-size: 3px; overflow: hidden; border-radius: 2px; pointer-events: none;
+}
+.lb-sweep::before {
+  content: ""; position: absolute; inset: 0; inline-size: 36%;
+  background: linear-gradient(90deg, transparent, var(--accent-text), transparent);
+  animation: lb-sweep 1.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+/* the dot of each open call (and of "Starting" / "Checking against the page") breathes */
+.lb-bar[data-state="running"] .lb-op::before,
+.lb-dot.is-open { animation: lb-breathe 1.4s ease-in-out infinite; }
+/* the sketch of a part still being written or reworked, and the summary placeholder, shimmer row by row */
+.lb-frame[data-phase="writing"] .pv-bar, .lb-frame[data-phase="reworking"] .pv-bar,
+.lb-frame[data-phase="outlining"] .pv-bar, .lb-overview-pv .pv-bar {
+  background: linear-gradient(90deg, var(--pv-fill) 30%, color-mix(in oklab, var(--pv-fill), var(--ink) 22%) 50%, var(--pv-fill) 70%);
+  background-size: 300% 100%;
+  animation: lb-shimmer 1.8s ease-in-out infinite;
+}
+.lb-overview-pv .pv-bar:nth-child(2), .lb-frame .pv-bar:nth-child(3n + 2) { animation-delay: 160ms; }
+.lb-overview-pv .pv-bar:nth-child(3), .lb-frame .pv-bar:nth-child(3n) { animation-delay: 320ms; }
+@keyframes lb-sweep { from { transform: translateX(-100%); } to { transform: translateX(340%); } }
+@keyframes lb-breathe { 0%, 100% { opacity: 1; scale: 1; } 50% { opacity: 0.35; scale: 0.75; } }
+@keyframes lb-shimmer { from { background-position: 100% 0; } to { background-position: 0 0; } }
+
 @media (prefers-reduced-motion: reduce) {
   .lb-op, .lb-main, .lb-facts, .lb-log li, .lb-frame, .lb-arrive, .lb-tick, .lb-title-text,
   .overview[data-arrive="true"] .key-points li, .overview[data-arrive="true"] .overview-foot {
@@ -226,6 +253,9 @@ mark.lb-lit { animation: lb-lit 900ms var(--lb-ease) calc(var(--i, 0) * 70ms + 1
   }
   .lb-pv, .lb-bar, .lb-frame { transition: none; }
   mark.lb-lit, .ld-plate[data-build="draw"] .ld-marker, .ld-plate[data-build="draw"] .ld-region { animation: none; }
+  /* no looping motion: the open-call dot and the sweep hold still; the sweep stays as a static accent line */
+  .lb-bar[data-state="running"] .lb-op::before, .lb-dot.is-open, .lb-frame .pv-bar, .lb-overview-pv .pv-bar { animation: none; }
+  .lb-sweep::before { animation: none; inline-size: 100%; opacity: 0.5; }
 }
 
 /* Scene (premium activity) and meter sketches spread over their reserve instead of collecting at the top. */

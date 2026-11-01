@@ -89,6 +89,8 @@ export function LiveBar({ live }: { live: LiveContext }) {
   return (
     <div className="lb-bar" data-testid="live-bar" data-tour="live-strip" data-state={running ? 'running' : close?.ready === true ? 'ready' : 'done'}>
       {replay !== null && <ReplayLabel replay={replay} />}
+      {/* While calls are open a light sweeps the strip's lower edge: the clock alone did not show work going on. */}
+      {running && <span className="lb-sweep" aria-hidden="true" />}
       {running ? (
         <p className="lb-main" key="running">
           {/* A replay is already labelled in the row above; a live run says so here. */}
