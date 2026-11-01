@@ -62,6 +62,7 @@ import {
   publisherTokensOf,
   quoteProblems,
 } from './kit/shared.ts';
+import { normalizeEquationText, parseChemicalFormula, parseEquationParts } from './chemistry.ts';
 import { compareGuardedRevisions } from './kit/repair.ts';
 import type { RevisionGuardContext } from './kit/repair.ts';
 import { validateOverviewGen } from './kit/overview.ts';
@@ -94,6 +95,40 @@ interface LooseAnalysisV2 extends SourceAnalysisV2 {}
  * Validate a SourceAnalysisV2 against the provided source documents (checks A-01..A-11).
  * Never throws; a schema failure short-circuits into a single failed 'schema.analysis-v2' check.
  */
+/**
+ * Plan-time pre-check for balance-equation-v1 (found on job-20261031111156-12c77646): the planned focus quote must hold
+ * ONE printed reaction the balancer can handle — exactly one reaction arrow, every species a neutral formula. "=" is not
+ * an arrow and charged ions are outside the balancer, so such a plan could never pass; failing it here lets the analysis
+ * repair pick another part before any generation call is paid. Returns a plain problem, or null when balanceable.
+ */
+export function balancePlanProblem(focusQuote: string): string | null {
+  const t = normalizeEquationText(typeof focusQuote === 'string' ? focusQuote : '');
+  const arrows = t.split('->').length - 1;
+  if (arrows === 0) return 'its focus quote has no reaction arrow ("=" is not one), so there is no printed reaction to balance';
+  if (arrows > 1) return `its focus quote has ${arrows} reaction arrows; the balancer takes exactly one reaction`;
+  const at = t.indexOf('->');
+  const leftTerms = t.slice(0, at).split('+');
+  const rightTerms = t.slice(at + 2).split('+');
+  // The equation may sit inside a sentence: keep only the formula-like end of the first term and start of the last one.
+  const first = /(\d+\s*)?[^\s:;,]+\s*$/.exec(leftTerms[0] ?? '')?.[0] ?? '';
+  const lastIdx = rightTerms.length - 1;
+  const last = /^\s*(\d+\s*)?[^\s,;.]+/.exec((rightTerms[lastIdx] ?? '').replace(/[.,;]\s*$/, ''))?.[0] ?? '';
+  leftTerms[0] = first;
+  rightTerms[lastIdx] = last;
+  // Charge markers written after a formula ("H+", "OH-", "Fe3+", "e-") split into empty terms: treat them as charged.
+  if ([...leftTerms, ...rightTerms].some(x => x.trim() === '')) {
+    return 'its focus quote has charged species (ions such as H+ or OH-), which the balancer does not handle';
+  }
+  const candidate = `${leftTerms.join('+')}->${rightTerms.join('+')}`;
+  const parsed = parseEquationParts(candidate);
+  if (!parsed.ok) return `its focus quote does not hold a reaction the balancer can read (${parsed.error})`;
+  for (const part of parsed.parts) {
+    const f = parseChemicalFormula(part.formula);
+    if (!f.ok) return /charge/.test(f.error) ? `its focus quote has charged species ("${part.formula}"), which the balancer does not handle` : `its focus quote has a species the balancer cannot read: ${f.error}`;
+  }
+  return null;
+}
+
 export function validateAnalysisV2(analysis: unknown, sources: SourceDocument[], opts: AnalysisV2ValidateOptions = {}): ValidationReport {
   const artifactId = opts.artifactId ?? 'source-analysis-v2';
   const revision = opts.revision ?? 1;
@@ -412,6 +447,15 @@ export function validateAnalysisV2(analysis: unknown, sources: SourceDocument[],
         if (e.componentId === 'label-diagram-v1' && listedFigures.length === 0) {
           problems.push(`componentPlan[${i}] plans label-diagram-v1 but ${opts.figures === undefined ? 'no figure list was provided' : 'no figures are listed'} for this source (label-diagram-v1 may be planned only when at least one figure is listed for the page)`);
           affected.push(`/componentPlan/${i}/componentId`);
+        }
+      });
+      // Balance pre-check: balance-equation-v1 needs one neutral printed reaction in its focus quote.
+      plan.forEach((e, i) => {
+        if (e.componentId !== 'balance-equation-v1') return;
+        const problem = balancePlanProblem(e.focusQuote);
+        if (problem !== null) {
+          problems.push(`componentPlan[${i}] plans balance-equation-v1 but ${problem}; plan another part for this region of the page`);
+          affected.push(`/componentPlan/${i}/componentId`, `/componentPlan/${i}/focusQuote`);
         }
       });
       return problems.length === 0

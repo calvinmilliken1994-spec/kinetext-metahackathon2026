@@ -67,7 +67,8 @@ test('A-01: analysisVersion != 2 is caught by the schema gate (A-01 double-guard
 test('A-03: balance-equation-v1 requires subject chemistry', () => {
   const a = clone(usableAnalysis());
   a.componentPlan[0] = { componentId: 'balance-equation-v1', pedagogicalReason: a.componentPlan[0]!.pedagogicalReason, focusQuote: a.componentPlan[0]!.focusQuote, focusSourceId: a.componentPlan[0]!.focusSourceId };
-  expectFailures(validateAnalysisV2(a, [dragSource()]), ['A-03'], 'schema.analysis-v2');
+  // The drag page's prose holds no reaction, so the balance pre-check (A-08) fails this plan too.
+  expectFailures(validateAnalysisV2(a, [dragSource()]), ['A-03', 'A-08'], 'schema.analysis-v2');
 });
 
 test('A-04: decline fields must be consistent both ways, incl. the 300-char stub rule', () => {
