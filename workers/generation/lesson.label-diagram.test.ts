@@ -716,7 +716,7 @@ test('label-diagram: when SAM cannot find one part, LD-06 gates the component ou
   const summary = await done;
 
   assert.equal(summary.status, 'succeeded', 'the lesson still publishes the overview and the quiz');
-  assert.equal(sam.calls.length, 2, 'segmentation re-ran on the repaired revision');
+  assert.equal(sam.calls.length, 4, 'segmentation re-ran on the repaired revision; each revision also paid one best-of retry for the missing region');
   const lesson = readRunFile(storageDir, jobId, 'lesson.json');
   const labelEntry = lesson.components.find((c: any) => c.componentId === 'label-diagram-v1');
   assert.equal(labelEntry.status, 'failed');
@@ -727,6 +727,7 @@ test('label-diagram: when SAM cannot find one part, LD-06 gates the component ou
   const segOks = events.filter(e => e.stage === 'segment' && e.status === 'succeeded');
   assert.equal(segOks.length, 2);
   assert.match(String(segOks[0]?.detail), /returned 5 of 6 region\(s\)/);
+  assert.match(String(segOks[0]?.detail), /retried 1 weak part\(s\): part-backbone missing -> missing$/, 'the retry found nothing either, and says so');
 
   const r1 = readRunFile(storageDir, jobId, 'label-diagram-v1.r1.json');
   assert.equal(r1.regions.length, 5);
@@ -738,8 +739,8 @@ test('label-diagram: when SAM cannot find one part, LD-06 gates the component ou
   assert.equal(repairs.length, 1);
   assert.deepEqual(repairs[0]?.targeted, ['LD-06']);
   assert.equal(repairs[0]?.passed, false);
-  // 4 model calls + 2 SAM images
-  assert.equal(summary.totalCostUSD, 0.045);
+  // 4 model calls + 4 SAM images (2 revisions x (first pass + the best-of retry for the missing region))
+  assert.equal(summary.totalCostUSD, 0.05);
   assert.equal(summary.lesson?.componentsPublished, 1);
   assert.equal(summary.lesson?.partialPublish, true);
 });
@@ -759,7 +760,7 @@ test('label-diagram (lead, live run 3): a repair that returns the same gen stops
   const summary = await done;
   assert.equal(summary.status, 'succeeded');
   assert.equal((summary.componentRepairs ?? []).length, 1, 'no second paid repair after an unchanged revision');
-  assert.equal(sam.calls.length, 2);
+  assert.equal(sam.calls.length, 4, 'two revisions, each with a first pass and one retry for the missing part 6');
 });
 
 test('label-diagram (lead): the published spec figure carries the lead-verified label boxes', async () => {

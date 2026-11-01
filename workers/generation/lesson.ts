@@ -42,7 +42,7 @@ import {
 } from '../../packages/meta/pipeline-v2.ts';
 import type { V2ImageInput, V2RevisionComparator, V2Validator } from '../../packages/meta/pipeline-v2.ts';
 import { segmentObjects } from '../../packages/meta/sam.ts';
-import type { SamBox, SamObject, SegmentPointsResult } from '../../packages/meta/sam.ts';
+import type { SamBox, SamObject, SamPromptBox, SegmentPointsResult } from '../../packages/meta/sam.ts';
 import { maskToOutline } from '../../packages/meta/sam-outline.ts';
 import type { Ledger } from '../../packages/meta/ledger.ts';
 import { generateSpec, repairSpec } from '../../packages/meta/pipeline.ts';
@@ -60,6 +60,7 @@ import {
   validateKitComponent,
 } from '../../packages/validation/kit/index.ts';
 import type { DroppedItem } from '../../packages/validation/kit/index.ts';
+import { normaliseCoverageText } from '../../packages/validation/kit/label-diagram.ts';
 import { repairFindings, truncate, validateAnalysis } from '../../packages/validation/validate.ts';
 import type { AnyActivitySpec } from '../../packages/validation/validate.ts';
 import {
@@ -100,6 +101,7 @@ import type {
   ValidationCheck,
   ValidationReport,
 } from '../../packages/contracts/index.ts';
+import { KIT_LIMITS } from '../../packages/contracts/kit.ts';
 import type {
   ComponentPlanEntry,
   FormulaExplorerGen,
@@ -364,6 +366,31 @@ export function boxesToRegions(boxes: readonly SamBox[], parts: readonly LabelPa
 }
 
 /**
+ * Stage 8c: a part's area box in IMAGE pixels (0..1000 → pixels, rounded, clamped into the image, edges inclusive),
+ * or null when it has no usable area: any of the four fields missing or not finite, or the box degenerate
+ * (x2 <= x1 or y2 <= y1 after conversion).
+ */
+function areaBoxPx(part: LabelPartGen, width: number, height: number): SamPromptBox | null {
+  const area = [part.areaX1, part.areaY1, part.areaX2, part.areaY2];
+  if (!area.every(v => typeof v === 'number' && Number.isFinite(v))) {
+    return null;
+  }
+  const x1 = clampToInt(((part.areaX1 as number) * width) / 1000, 0, width - 1);
+  const y1 = clampToInt(((part.areaY1 as number) * height) / 1000, 0, height - 1);
+  const x2 = clampToInt(((part.areaX2 as number) * width) / 1000, 0, width - 1);
+  const y2 = clampToInt(((part.areaY2 as number) * height) / 1000, 0, height - 1);
+  return x2 > x1 && y2 > y1 ? { x1, y1, x2, y2 } : null;
+}
+
+/** A part's point (normalised 0..1000) as an image pixel, rounded and clamped. */
+function pointPx(part: LabelPartGen, width: number, height: number): { x: number; y: number } {
+  return {
+    x: clampToInt(Math.round((part.x * width) / 1000), 0, width - 1),
+    y: clampToInt(Math.round((part.y * height) / 1000), 0, height - 1),
+  };
+}
+
+/**
  * Stage 8c: the SAM prompt objects for a gen's parts (object id i+1 for parts[i]). A part whose four area
  * fields are all finite numbers is prompted by its BOX (0..1000 → image pixels, rounded, clamped into the
  * image, edges inclusive, x2 > x1 and y2 > y1) and by nothing else: the probes showed a box alone beats a
@@ -373,25 +400,134 @@ export function boxesToRegions(boxes: readonly SamBox[], parts: readonly LabelPa
 export function samObjectsFor(parts: readonly LabelPartGen[], width: number, height: number): SamObject[] {
   return parts.map((p, i): SamObject => {
     const id = i + 1;
-    const area = [p.areaX1, p.areaY1, p.areaX2, p.areaY2];
-    if (area.every(v => typeof v === 'number' && Number.isFinite(v))) {
-      const x1 = clampToInt(((p.areaX1 as number) * width) / 1000, 0, width - 1);
-      const y1 = clampToInt(((p.areaY1 as number) * height) / 1000, 0, height - 1);
-      const x2 = clampToInt(((p.areaX2 as number) * width) / 1000, 0, width - 1);
-      const y2 = clampToInt(((p.areaY2 as number) * height) / 1000, 0, height - 1);
-      if (x2 > x1 && y2 > y1) {
-        return { id, box: { x1, y1, x2, y2 } };
+    const box = areaBoxPx(p, width, height);
+    return box !== null ? { id, box } : { id, points: [pointPx(p, width, height)] };
+  });
+}
+
+/* --- Stage 8c round 2: SAM best-of retry for weak regions ------------------------------------------------ */
+
+/** Object-id bases of the retry request: the point-alone variant of part i is 100+i, the widened area 200+i. */
+export const SAM_RETRY_POINT_BASE = 100;
+export const SAM_RETRY_AREA_BASE = 200;
+/** Two variants per weak part and SAM's 16-object limit: at most 8 weak parts are retried. */
+export const SAM_RETRY_MAX_PARTS = 8;
+/** How far the retry's second variant widens the part's area box: this fraction of its width/height on each side. */
+export const SAM_RETRY_WIDEN_FRACTION = 0.2;
+
+/** Part indexes (0-based) whose region is missing or whose confidence is below the LD-11 minimum. Unscored regions are not weak. */
+export function weakPartIndexes(boxes: readonly SamBox[], parts: readonly LabelPartGen[]): number[] {
+  const byId = new Map<number, SamBox>();
+  for (const b of boxes) {
+    byId.set(b.id, b);
+  }
+  const weak: number[] = [];
+  parts.forEach((_part, i) => {
+    const b = byId.get(i + 1);
+    if (b === undefined || (typeof b.confidence === 'number' && b.confidence < KIT_LIMITS.labelDiagram.minRegionConfidence)) {
+      weak.push(i);
+    }
+  });
+  return weak;
+}
+
+/**
+ * The extra request's objects for the given weak part indexes: (P) the part's point alone, id 100+i; (E) when the
+ * part has a usable area, that area widened by 20% of its width/height on each side (clamped to the image), id
+ * 200+i. A part without a usable area was already prompted by its point alone, so it has nothing new to try and is
+ * skipped; so is an E identical to the area (a full-image box). At most 8 parts, in part order. `retried` lists the
+ * part indexes that got objects. Exported for tests.
+ */
+export function samRetryObjectsFor(
+  parts: readonly LabelPartGen[],
+  weak: readonly number[],
+  width: number,
+  height: number,
+): { objects: SamObject[]; retried: number[] } {
+  const objects: SamObject[] = [];
+  const retried: number[] = [];
+  for (const i of weak) {
+    if (retried.length >= SAM_RETRY_MAX_PARTS) {
+      break;
+    }
+    const part = parts[i];
+    if (part === undefined) {
+      continue;
+    }
+    const area = areaBoxPx(part, width, height);
+    if (area === null) {
+      continue;
+    }
+    const dx = (area.x2 - area.x1) * SAM_RETRY_WIDEN_FRACTION;
+    const dy = (area.y2 - area.y1) * SAM_RETRY_WIDEN_FRACTION;
+    const wide: SamPromptBox = {
+      x1: clampToInt(area.x1 - dx, 0, width - 1),
+      y1: clampToInt(area.y1 - dy, 0, height - 1),
+      x2: clampToInt(area.x2 + dx, 0, width - 1),
+      y2: clampToInt(area.y2 + dy, 0, height - 1),
+    };
+    objects.push({ id: SAM_RETRY_POINT_BASE + i, points: [pointPx(part, width, height)] });
+    if (wide.x1 !== area.x1 || wide.y1 !== area.y1 || wide.x2 !== area.x2 || wide.y2 !== area.y2) {
+      objects.push({ id: SAM_RETRY_AREA_BASE + i, box: wide });
+    }
+    retried.push(i);
+  }
+  return { objects, retried };
+}
+
+/**
+ * For each retried weak part keep the most confident of first pass / P / E (a variant must carry a numeric
+ * confidence to compete; ties keep the first pass, then P over E), re-keyed to the part's own object id (i+1) so
+ * `boxesToRegions` maps it; a variant keeps its own mask. Every other first-pass box is untouched. `changes` has one
+ * entry per retried part, e.g. `evaporation 0.37 -> 0.74` or `cytosine missing -> 0.70`. Exported for tests.
+ */
+export function pickBestRegions(
+  first: readonly SamBox[],
+  retry: readonly SamBox[],
+  parts: readonly LabelPartGen[],
+  retried: readonly number[],
+): { boxes: SamBox[]; changes: string[] } {
+  const out = new Map<number, SamBox>();
+  for (const b of first) {
+    out.set(b.id, b);
+  }
+  const variants = new Map<number, SamBox>();
+  for (const b of retry) {
+    variants.set(b.id, b);
+  }
+  const shown = (b: SamBox | undefined): string =>
+    b === undefined ? 'missing' : typeof b.confidence === 'number' ? b.confidence.toFixed(2) : 'unscored';
+  const changes: string[] = [];
+  for (const i of retried) {
+    const id = i + 1;
+    const before = out.get(id);
+    let best = before;
+    let bestScore = typeof before?.confidence === 'number' ? before.confidence : Number.NEGATIVE_INFINITY;
+    for (const variantId of [SAM_RETRY_POINT_BASE + i, SAM_RETRY_AREA_BASE + i]) {
+      const v = variants.get(variantId);
+      if (v !== undefined && typeof v.confidence === 'number' && v.confidence > bestScore) {
+        best = { ...v, id };
+        bestScore = v.confidence;
       }
     }
-    return {
-      id,
-      points: [
-        {
-          x: clampToInt(Math.round((p.x * width) / 1000), 0, width - 1),
-          y: clampToInt(Math.round((p.y * height) / 1000), 0, height - 1),
-        },
-      ],
-    };
+    if (best !== undefined) {
+      out.set(id, best);
+    }
+    changes.push(`${String(parts[i]?.id ?? id).slice(0, 40)} ${shown(before)} -> ${shown(best)}`);
+  }
+  return { boxes: [...out.values()].sort((a, b) => a.id - b.id), changes };
+}
+
+/**
+ * Stage 8c round 2 (A): the printed labels worth telling Muse about: only those whose normalised words are a
+ * whole phrase of some normalised page text (the rule LD-10 enforces), so a label the page never names
+ * ("Snowmelt Runoff" on a page that only says "runoff") is not offered. Keeps the input order. Exported for tests.
+ */
+export function pageNamedPrintedLabels(labels: readonly string[], pageTexts: readonly string[]): string[] {
+  const texts = pageTexts.map(t => ` ${normaliseCoverageText(t)} `);
+  return labels.filter(label => {
+    const phrase = normaliseCoverageText(label);
+    return phrase !== '' && texts.some(t => t.includes(` ${phrase} `));
   });
 }
 
@@ -1304,18 +1440,21 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
       }
       openHolds.clear();
     };
-    let result: SegmentPointsResult;
-    try {
-      result = await segmentObjects({
-        apiKey: ctx.sam.apiKey,
-        ...(ctx.sam.baseUrl !== undefined ? { baseUrl: ctx.sam.baseUrl } : {}),
-        ...(ctx.sam.fetch !== undefined ? { fetch: ctx.sam.fetch } : {}),
+    const samDeps: SamSegmentDeps = ctx.sam;
+    const callSam = (objs: SamObject[]): Promise<SegmentPointsResult> =>
+      segmentObjects({
+        apiKey: samDeps.apiKey,
+        ...(samDeps.baseUrl !== undefined ? { baseUrl: samDeps.baseUrl } : {}),
+        ...(samDeps.fetch !== undefined ? { fetch: samDeps.fetch } : {}),
         ledger: wrapped,
         purpose: ctx.purpose,
         image: { bytes: figure.bytes, mime: figure.meta.mime, width, height },
-        objects,
+        objects: objs,
         signal: ctx.signal,
       });
+    let result: SegmentPointsResult;
+    try {
+      result = await callSam(objects);
     } catch (err: unknown) {
       sweepOpenHolds();
       const charge = errorCharge(err, { componentId: cid, revision });
@@ -1337,14 +1476,52 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
     }
     sweepOpenHolds();
     ctx.account(Math.max(result.costUSD, trace.charged), trace.unknown);
-    const regions = boxesToRegions(result.boxes, parts);
+    let boxes: SamBox[] = result.boxes;
+    let latencyMs = result.latencyMs;
+    let imagesProcessed = result.imagesProcessed;
+    let costUSD = result.costUSD;
+    let retryNote = '';
+
+    // Stage 8c round 2: SAM best-of retry. A part whose region is missing or below the LD-11 minimum gets ONE
+    // extra request for the whole revision (same image): its point alone (P) and its widened area (E). Every
+    // region kept is still SAM's own output for that part; only the most confident one is kept, so the check
+    // (LD-11) and the repair loop below see the best SAM could do. Nothing weak (or nothing to vary) = no call.
+    const weak = weakPartIndexes(boxes, parts);
+    const retryPlan = weak.length > 0 && !ctx.signal.aborted ? samRetryObjectsFor(parts, weak, width, height) : null;
+    if (retryPlan !== null && retryPlan.objects.length > 0) {
+      // The first call's money is already in the job's accumulator: the extra call is traced from zero.
+      trace.charged = 0;
+      trace.unknown = 0;
+      try {
+        const second = await callSam(retryPlan.objects);
+        sweepOpenHolds();
+        ctx.account(Math.max(second.costUSD, trace.charged), trace.unknown);
+        const picked = pickBestRegions(boxes, second.boxes, parts, retryPlan.retried);
+        boxes = picked.boxes;
+        latencyMs += second.latencyMs;
+        imagesProcessed += second.imagesProcessed;
+        costUSD += second.costUSD;
+        retryNote = `sam-3.1 retried ${retryPlan.retried.length} weak part(s): ${picked.changes.join(', ')}`;
+      } catch (err: unknown) {
+        // The extra call failing never fails the component: keep the first-pass regions, but account
+        // exactly what the ledger holds for the failed call (one accumulator, before the event write).
+        sweepOpenHolds();
+        const charge = errorCharge(err, { componentId: cid, revision });
+        const chargedUSD = Math.max(charge.chargedUSD, trace.charged);
+        const unknownUSD = Math.max(charge.unknownUSD, trace.unknown);
+        ctx.account(chargedUSD, unknownUSD);
+        costUSD += chargedUSD;
+        retryNote = `sam-3.1 retry of ${retryPlan.retried.length} weak part(s) failed (${charge.code}); kept the first pass`;
+      }
+    }
+    const regions = boxesToRegions(boxes, parts);
     ctx.emit('segment', 'succeeded', {
       componentId: cid,
       revision,
-      latencyMs: result.latencyMs,
-      imagesProcessed: result.imagesProcessed,
-      estCostUSD: result.costUSD,
-      detail: `sam-3.1 returned ${regions.length} of ${parts.length} region(s)`,
+      latencyMs,
+      imagesProcessed,
+      estCostUSD: costUSD,
+      detail: `sam-3.1 returned ${regions.length} of ${parts.length} region(s)${retryNote === '' ? '' : `; ${retryNote}`}`,
     });
     return { ok: true, regions };
   }
@@ -1377,12 +1554,17 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
         try {
           const loaded = loadFigure(first.id);
           labelFigure = loaded;
-          const printedLabels = loadFigurePrintedLabels(loaded.meta.id);
+          // Stage 8c: the lead-curated printed labels (one string per part label group), narrowed to the ones the page
+          // text names (the LD-10 rule), so Muse is never told to cover a label the page never mentions. Absent when none.
+          const printedLabels = pageNamedPrintedLabels(
+            loadFigurePrintedLabels(loaded.meta.id),
+            sources.map(s => s.text),
+          );
           labelImage = {
             figureId: loaded.meta.id,
             mime: loaded.meta.mime,
             base64: Buffer.from(loaded.bytes).toString('base64'),
-            // Stage 8c: the lead-curated printed labels (one string per part label group); absent for uncurated figures.
+            // The page-named printed labels (see above); absent for uncurated figures and when the page names none.
             ...(printedLabels.length > 0 ? { printedLabels } : {}),
           };
         } catch {
