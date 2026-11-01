@@ -291,3 +291,7 @@ test('naturalRepairNote: never claims a repair that did not happen', () => {
   assert.match(failed, /system-made demo fault/);
   assert.match(naturalRepairNote('running'), /is repairing/);
 });
+
+test('naturalRepairNote: never says "mistake" or "Muse’s own" (Calvin’s wording rule)', () => {
+  for (const s of ['passed', 'failed', 'running'] as const) assert.doesNotMatch(naturalRepairNote(s), /mistake|\bown\b/i, s);
+});

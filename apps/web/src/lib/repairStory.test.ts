@@ -39,7 +39,9 @@ test('DNA story: four steps in plain words, no check id, no part name', () => {
   assert.equal(s.steps[1]?.sentence, 'Muse moved 4 points onto the parts they mark.');
   assert.equal(s.steps[2]?.sentence, 'All 11 checks pass, and no check was loosened to get there.');
   assert.equal(s.steps[3]?.sentence, 'The revised part is the one in this lesson.');
-  assert.equal(s.originNote, 'The mistake was Muse’s own, not a planted test fault.');
+  // Calvin's rule: a natural repair is "Revised by Muse after a failed check", never "Muse's own mistake".
+  assert.equal(s.originNote, 'Found in Muse’s draft by the checks; not a planted test fault.');
+  assert.doesNotMatch(s.originNote, /mistake|\bown\b/i);
   const all = JSON.stringify(s);
   assert.doesNotMatch(all, /LD-04|adenine|guanine|thymine|cytosine/i);
 });
@@ -98,4 +100,19 @@ test('parseComponentHistory keeps the frozen shape and drops malformed parts', (
   assert.equal(h['quiz-cards-v1']?.[0]?.labelPoints, undefined);
   assert.equal(h.bad, undefined);
   assert.deepEqual(parseComponentHistory(undefined), {});
+});
+
+// Demo review #7: the before/after crop cut a printed label in half ("…irs" of "Base pairs"). A label box the crop
+// touches is now taken in whole (boxes are in image pixels; the crop is on the 0..1000 grid).
+test('storyView widens the crop to take in every printed label it touches, whole', () => {
+  const figure = { id: 'medlineplus-dna-structure-1', width: 600, height: 600, labelBoxes: [{ x1: 235, y1: 180, x2: 327, y2: 203 }] };
+  const moves = [{ n: 1, from: { x: 300, y: 300 }, to: { x: 320, y: 320 } }];
+  const plain = storyView(moves);
+  assert.ok(plain && plain.x + plain.w < 545, 'without boxes the crop cuts through "Base pairs" (x 392..545)');
+  const v = storyView(moves, 120, 340, figure);
+  assert.ok(v);
+  assert.ok(v.x <= 392 && v.x + v.w >= 545, `label taken in whole horizontally (${v.x}..${v.x + v.w})`);
+  assert.ok(v.y <= 300 && v.y + v.h >= 339, `and vertically (${v.y}..${v.y + v.h})`);
+  const far = storyView(moves, 120, 340, { ...figure, labelBoxes: [{ x1: 560, y1: 560, x2: 590, y2: 590 }] });
+  assert.deepEqual(far, plain, 'a label the crop does not touch changes nothing');
 });

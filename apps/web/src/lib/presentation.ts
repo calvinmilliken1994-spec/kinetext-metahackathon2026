@@ -87,8 +87,9 @@ export function deckFromLesson(input: DeckCommon & {
   const notesOnly = parts.length === 0 && cards.length > 0;
   return {
     jobId: input.jobId, source: input.source, checks: input.checks, quotes: input.quotes,
-    // A notes-only deck opens on its title slide, whose disclosure line then starts by saying so.
-    disclosure: notesOnly ? `${NOTES_ONLY_LINE} ${input.disclosure}` : input.disclosure,
+    // A notes-only deck opens on its title slide, whose disclosure line then starts by saying so. A deck with SAM
+    // regions credits SAM there too (demo pair review #8), so the title slide names both Meta models.
+    disclosure: withSamNote(notesOnly ? `${NOTES_ONLY_LINE} ${input.disclosure}` : input.disclosure, parts),
     headline: ov?.headline ?? input.fallbackTitle,
     overview: ov === null ? null : { keyPoints: ov.keyPoints, keyTerms: ov.keyTerms },
     objectives: [],
@@ -353,13 +354,59 @@ export function heroBeatIndex(beats: readonly Beat[]): number {
 export const HOOK_BEAT = -1;
 
 /**
- * The one-line credit on the hook slide, so the first slide shown carries the source and the AI disclosure: page ·
- * publisher · licence · "AI-written, teacher review pending". Null without source information.
+ * The one-line credit on the hook slide (demo pair review #8), so the first slide shown carries the source, the AI
+ * disclosure and Meta's models: page · publisher · licence · "AI-written with <model>, teacher review pending" ·
+ * "diagram regions: SAM 3.1 (Meta)" (only when a part's regions came from SAM). The model is the job's own, read
+ * back from the deck's disclosure. Null without source information.
  */
-export function creditLine(source: DeckSource | null): string | null {
-  const card = titleCard(source);
+export function creditLine(deck: Pick<Deck, 'source' | 'disclosure' | 'parts'>): string | null {
+  const card = titleCard(deck.source);
   if (card === null) return null;
-  return [card.name, card.from, card.licence, 'AI-written, teacher review pending'].filter((x): x is string => x !== null && x.trim() !== '').join(' · ');
+  const made = madeWithOf(deck.disclosure);
+  // The review caution stays next to the AI disclosure, so a line too long for a small screen loses only the SAM credit.
+  const ai = made === null ? 'AI-written, teacher review pending' : `AI-written with ${creditModel(made)}, teacher review pending`;
+  return [card.name, card.from === null ? null : firstSegment(card.from), card.licence, ai, usesSam(deck.parts) ? SAM_CREDIT : null]
+    .filter((x): x is string => x !== null && x.trim() !== '').join(' · ');
+}
+
+/** The model as the one-line credit names it: the open-weights host is left to the title slide's disclosure. */
+function creditModel(made: string): string {
+  return made.replace(/,\s*hosted on [^)]*\)/, ')');
+}
+
+/** The one place SAM is credited on slides. */
+export const SAM_CREDIT = 'diagram regions: SAM 3.1 (Meta)';
+
+/** A deck disclosure with SAM credited after it when a presented part's regions came from SAM (said once). */
+export function withSamNote(disclosure: string, parts: readonly DeckPart[]): string {
+  if (!usesSam(parts) || /\bSAM\b/.test(disclosure)) return disclosure;
+  return `${disclosure.trimEnd()} Diagram regions by SAM 3.1 (Meta).`;
+}
+
+/** Whether a presented part's figure regions came from SAM (a label diagram with stored regions). */
+export function usesSam(parts: readonly DeckPart[]): boolean {
+  return parts.some((p) => p.kind === 'kit' && p.spec.componentId === 'label-diagram-v1' && Array.isArray((p.spec as LabelDiagramSpec).regions) && (p.spec as LabelDiagramSpec).regions.length > 0);
+}
+
+/**
+ * The model named in a disclosure that sources.ts `disclosureText` wrote ("AI-generated with <model>. …" or "… with
+ * <model> from a teacher-provided text …"), or null. A version dot ("1.3") is not a sentence end.
+ */
+export function madeWithOf(disclosure: string): string | null {
+  const m = /AI-generated with (.+?)(?= from a |\.(?:\s|$))/.exec(disclosure);
+  return m === null ? null : (m[1] as string).trim();
+}
+
+/** A publisher line's first comma-separated segment ("MedlinePlus Genetics, Help Me …" → "MedlinePlus Genetics"); a comma inside brackets does not cut. */
+function firstSegment(text: string): string {
+  let depth = 0;
+  for (let i = 0; i < text.length; i += 1) {
+    const ch = text[i];
+    if (ch === '(') depth += 1;
+    else if (ch === ')') depth = Math.max(0, depth - 1);
+    else if (ch === ',' && depth === 0) return text.slice(0, i).trim();
+  }
+  return text;
 }
 
 /** A beat's name on the bar's track, short enough to stay whole beside its neighbours ('Q2' for a quiz card). */

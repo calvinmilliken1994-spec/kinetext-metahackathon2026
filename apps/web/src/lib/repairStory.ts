@@ -57,7 +57,8 @@ export interface RepairStory {
 }
 
 export const REVISED_LABEL = 'Revised by Muse after a failed check';
-const NATURAL_ORIGIN = 'The mistake was Muse’s own, not a planted test fault.';
+// Calvin's rule: a natural repair is "Revised by Muse after a failed check"; never call it Muse's mistake.
+const NATURAL_ORIGIN = 'Found in Muse’s draft by the checks; not a planted test fault.';
 const SYSTEM_ORIGIN = 'The first version carried a fault the system planted on purpose to show the repair; it is not a model error.';
 
 const times = (n: number): string => (n === 1 ? 'once' : n === 2 ? 'twice' : `${n} times`);
@@ -93,8 +94,34 @@ export function pointMoves(before: readonly HistoryPoint[], after: readonly Hist
   return out;
 }
 
-/** A crop of the 0..1000 figure that holds every move with room around it (at least `min` units wide and tall). */
-export function storyView(moves: readonly StoryMove[], pad = 120, min = 340): StoryView | null {
+/**
+ * A crop of the 0..1000 figure that holds every move with room around it (at least `min` units wide and tall). With a
+ * figure, any printed label the crop touches is taken in whole, so no label is cut ("…irs" of "Base pairs").
+ */
+export function storyView(moves: readonly StoryMove[], pad = 120, min = 340, figure: StoryFigure | null = null): StoryView | null {
+  const base = cropOf(moves, pad, min);
+  if (base === null || figure === null || !(figure.width > 0) || !(figure.height > 0)) return base;
+  const boxes = figure.labelBoxes.map((b) => ({
+    x1: (b.x1 * 1000) / figure.width, x2: (b.x2 * 1000) / figure.width, y1: (b.y1 * 1000) / figure.height, y2: (b.y2 * 1000) / figure.height,
+  }));
+  let { x, y, w, h } = base;
+  for (let round = 0; round < 4; round += 1) { // taking a label in can touch another one
+    let x1 = x; let y1 = y; let x2 = x + w; let y2 = y + h;
+    for (const b of boxes) {
+      const touches = b.x1 < x + w && b.x2 > x && b.y1 < y + h && b.y2 > y;
+      if (!touches) continue;
+      x1 = Math.min(x1, b.x1 - 8); y1 = Math.min(y1, b.y1 - 8); x2 = Math.max(x2, b.x2 + 8); y2 = Math.max(y2, b.y2 + 8);
+    }
+    const next = { x: Math.max(0, Math.floor(x1)), y: Math.max(0, Math.floor(y1)), w: 0, h: 0 };
+    next.w = Math.min(1000, Math.ceil(x2)) - next.x;
+    next.h = Math.min(1000, Math.ceil(y2)) - next.y;
+    if (next.x === x && next.y === y && next.w === w && next.h === h) break;
+    ({ x, y, w, h } = next);
+  }
+  return { x, y, w, h };
+}
+
+function cropOf(moves: readonly StoryMove[], pad: number, min: number): StoryView | null {
   if (moves.length === 0) return null;
   const xs = moves.flatMap((m) => [m.from.x, m.to.x]);
   const ys = moves.flatMap((m) => [m.from.y, m.to.y]);
@@ -179,7 +206,7 @@ export function repairStory(input: StoryInput): RepairStory {
       published,
     ],
     moves,
-    view: input.figure === null ? null : storyView(moves),
+    view: input.figure === null ? null : storyView(moves, 120, 340, input.figure),
     figureId: input.figure?.id ?? null,
     figureAspect: input.figure !== null && input.figure.height > 0 ? input.figure.width / input.figure.height : 1,
     originNote: system ? SYSTEM_ORIGIN : NATURAL_ORIGIN,

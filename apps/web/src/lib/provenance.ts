@@ -1,12 +1,12 @@
 // The one provenance line under a lesson's title (pure): which repairs happened and who caused them.
-// Natural = Muse's own mistake, caught by a check and repaired. System-made = a demonstration fault the system
+// Natural = an issue in Muse's draft, caught by a check and revised by Muse. System-made = a demonstration fault the system
 // planted on purpose (never a model error). Both stay visible in words; the details live in the runs drawer.
 
 import type { AnalysisRepairState } from './analysisRepairs.ts';
 import { formatCostUSD } from './jobs.ts';
 
 export interface RepairCounts {
-  /** Parts (or the page analysis) Muse repaired after its own mistake. */
+  /** Parts (or the page analysis) Muse revised after a failed check. */
   natural: number;
   /** Demonstration faults planted by the system on purpose. */
   system: number;

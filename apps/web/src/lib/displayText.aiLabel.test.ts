@@ -56,6 +56,31 @@ test('aiLabel leaves "Students learn" alone when it is not an opener to strip', 
   }
 });
 
+// Demo pair review #14: the other stock openers Muse uses on key points go the same way as "Students learn".
+test('aiLabel drops the other stock openers (explain/describe/show/understand/see/discover/find out + that / how)', () => {
+  assert.equal(aiLabel('Students explain that water vapour condenses into clouds.'), 'Water vapour condenses into clouds.');
+  assert.equal(aiLabel('Students describe how a bill becomes law.'), 'How a bill becomes law.');
+  assert.equal(aiLabel('Students show that the bars level at 6, 6, 1, 6.'), 'The bars level at 6, 6, 1, 6.');
+  assert.equal(aiLabel('Students understand that DNA is a double helix.'), 'DNA is a double helix.');
+  assert.equal(aiLabel('Students see that pH 7 is neutral.'), 'pH 7 is neutral.');
+  assert.equal(aiLabel('Students discover that a candidate needs 270 electors.'), 'A candidate needs 270 electors.');
+  assert.equal(aiLabel('Students find out how the Sun drives the cycle.'), 'How the Sun drives the cycle.');
+  assert.equal(aiLabel('students  will   explain that   evaporation needs heat'), 'Evaporation needs heat');
+  assert.equal(aiLabel('Students can describe that mRNA carries the code.'), 'mRNA carries the code.');
+});
+
+test('aiLabel leaves the other openers alone when they are not an opener to strip', () => {
+  for (const s of [
+    'Students explain', 'Students explain.', 'Students explain that', 'Students explain that.', 'Students describe how',
+    'Students describe the water cycle.', 'Students show their work.', 'Students see the figure.', 'Students find out',
+    'Students explained that rocks erode.', 'Students showed how ice melts.', 'What students describe that day',
+    'Students understanding that matters', 'Students find that rocks erode.',
+  ]) {
+    assert.equal(aiLabel(s), s, s);
+  }
+});
+
 test('aiText (sentences such as objectives) is not changed by the opener rule', () => {
+  assert.equal(aiText('Students explain that water evaporates.'), 'Students explain that water evaporates.');
   assert.equal(aiText('Students learn that water evaporates.'), 'Students learn that water evaporates.');
 });

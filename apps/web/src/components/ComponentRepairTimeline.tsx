@@ -32,7 +32,7 @@ function byComponent(cards: readonly ComponentRepairCard[]): ComponentRepairCard
 /**
  * Set B: repairs of single lesson parts as a story a teacher can read (check found an issue → revised by Muse →
  * rechecked → published), with the diagram's before/after points drawn on the figure. Who caused the first failure is
- * always said: Muse's own mistake, or a fault the system planted on purpose. The per-attempt record (check ids, the
+ * always said: an issue found in Muse's draft, or a fault the system planted on purpose. The per-attempt record (check ids, the
  * checker's own words, model string, response id) is shown only with technical details on.
  */
 export function ComponentRepairTimeline({ cards, model }: { cards: readonly ComponentRepairCard[]; model: JobModel }) {

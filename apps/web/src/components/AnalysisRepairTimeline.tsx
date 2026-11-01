@@ -27,7 +27,7 @@ function Checks({ checks, tone }: { checks: readonly CheckRef[]; tone: 'ok' | 'b
 
 /**
  * Source-analysis repairs (TASK-024c): Muse's first analysis failed a check → what failed, in words → Muse's repair
- * (a before/after diff) → checks passed. Labelled "Revised by Muse after a failed check": Muse's own mistake, never a system-made demo fault.
+ * (a before/after diff) → checks passed. Labelled "Revised by Muse after a failed check": found in Muse's draft, never a system-made demo fault.
  */
 export function AnalysisRepairTimeline({ steps, overall, model }: AnalysisRepairTimelineProps) {
   if (steps.length === 0) return null;

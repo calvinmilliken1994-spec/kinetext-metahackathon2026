@@ -3,7 +3,7 @@
 // (lib/onboarding.ts); this file only measures targets and draws. No confetti, no bounce, no glow: one opacity fade.
 import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import type { Rect, TourOutcome, TourSignals, TourStep } from '../lib/onboarding.ts';
-import { activeSteps, autoAdvance, canGoNext, clipRect, indexAfterSkip, placeCard, unionRect, withoutReplay } from '../lib/onboarding.ts';
+import { activeSteps, autoAdvance, canGoNext, clipRect, indexAfterSkip, placeStep, unionRect, withoutReplay } from '../lib/onboarding.ts';
 import { revealInPanels } from '../lib/scroll.ts';
 
 export interface OnboardingProps {
@@ -77,7 +77,6 @@ export function Onboarding({ signals: given, onStartReplay, onPresent, onClose, 
   const bodyId = useId();
   const cardRef = useRef<HTMLDivElement>(null);
   const [groups, setGroups] = useState<Rect[][]>([]);
-  const rects = groups.flat();
   const [vp, setVp] = useState({ w: window.innerWidth, h: window.innerHeight });
   const [cardSize, setCardSize] = useState<{ w: number; h: number } | null>(null);
 
@@ -125,22 +124,30 @@ export function Onboarding({ signals: given, onStartReplay, onPresent, onClose, 
     onStep?.(step);
     const first = step.targets.length === 0 ? null : document.querySelector<HTMLElement>(step.targets[0] as string);
     if (first !== null && step.id === 'try') revealInPanels(first, 'start', 140);
+    // The summary step: bring the page's first lit sentence near the top of the source pane, so the lit sentences show
+    // rather than one line above the fold (demo pair review #5). Marks can land a frame after the overview.
+    let t = 0;
+    if (step.id === 'overview') {
+      t = window.setTimeout(() => revealInPanels(document.querySelector<HTMLElement>('[data-tour="source-text"] mark'), 'start', 24), 120);
+    }
     document.getElementById(titleId)?.focus({ preventScroll: true });
+    return () => window.clearTimeout(t);
   }, [stepId]);
 
-  // Follow the targets while they move (the replay keeps adding content, panels scroll). Cheap: a few rects per frame,
-  // and state only changes when a rect really moved.
+  // Follow the targets (and extras) while they move (the replay keeps adding content, panels scroll). Cheap: a few rects
+  // per frame, and state only changes when a rect really moved.
+  const selectors = [...step.targets, ...step.extras];
   useEffect(() => {
     let raf = 0;
     const tick = (): void => {
-      const g = measure(step.targets);
+      const g = measure(selectors);
       setGroups((prev) => (prev.length === g.length && prev.every((p, i) => sameRects(p, g[i] ?? [])) ? prev : g));
       setVp((p) => (p.w === window.innerWidth && p.h === window.innerHeight ? p : { w: window.innerWidth, h: window.innerHeight }));
       raf = requestAnimationFrame(tick);
     };
     tick();
     return () => cancelAnimationFrame(raf);
-  }, [step.targets.join('|')]);
+  }, [selectors.join('|')]);
 
   useLayoutEffect(() => {
     const el = cardRef.current;
@@ -175,10 +182,12 @@ export function Onboarding({ signals: given, onStartReplay, onPresent, onClose, 
     return () => window.removeEventListener('keydown', onKey, true);
   }, [onClose, interactive]);
 
-  // The card sits beside the main target (the first selector), clear of every cut-out.
-  const target = unionRect(groups[0] ?? []) ?? unionRect(rects);
-  const waitingForTarget = step.targets.length > 0 && target === null;
-  const pos = cardSize === null ? null : placeCard(waitingForTarget ? null : target, vp, cardSize, rects);
+  // The card sits beside the main target (the first selector), clear of every cut-out; extras are lit only when the card
+  // still fits clear of them.
+  const waitingForTarget = step.targets.length > 0 && unionRect(groups.slice(0, step.targets.length).flat()) === null;
+  const placed = cardSize === null ? null : waitingForTarget ? null : placeStep(groups, step.targets.length, vp, cardSize);
+  const rects = placed?.cut ?? groups.slice(0, step.targets.length).flat();
+  const pos = cardSize === null ? null : waitingForTarget ? { x: Math.round((vp.w - cardSize.w) / 2), y: Math.round((vp.h - cardSize.h) / 2), side: 'center' as const } : placed;
   const last = index === steps.length - 1;
 
   return (

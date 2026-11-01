@@ -5,9 +5,10 @@
 
 import type { JobDetail } from '../api.ts';
 import type { PartBuild, StripState } from './liveBuild.ts';
+import { DEMO_PINS } from './demoPins.ts';
 
 /** The stored run the tour plays: NOAA water cycle on Muse Spark 1.3 (label diagram, two SAM 3.1 calls, one natural repair, a sequence). */
-export const TOUR_JOB_ID = 'job-20261031081105-910f3776';
+export const TOUR_JOB_ID = DEMO_PINS.tour;
 export const TOUR_STORAGE_KEY = 'mki.tour';
 export const TOUR_DEFAULT_SPEED = 2;
 /** A step that moves on by itself stays up at least this long (wall time), so its card can be read. */
@@ -169,6 +170,11 @@ export interface TourStep {
   body: string;
   /** CSS selectors of the elements to cut out of the dim backdrop (none: a centred card). */
   targets: string[];
+  /**
+   * More elements the step talks about, cut out too when the card still fits clear of every cut-out; on a screen too
+   * small for that they stay dimmed (the card may then sit over them, never over `targets`).
+   */
+  extras: string[];
   /** Clicks reach the cut-out (the teacher tries the part). */
   interactive: boolean;
   /** The primary button: Next, start the replay, or open presentation mode. */
@@ -184,11 +190,18 @@ function speedWords(speed: number): string {
   return speed === 1 ? 'at real speed' : `at ${Number.isInteger(speed) ? speed : speed.toFixed(2).replace(/0+$/, '')}× speed`;
 }
 
+/** What the teacher does on the try step, worded for the kind of part it points at (a part id is its component id). */
+function tryWords(partId: string | null): string {
+  if (partId?.startsWith('label-diagram') === true) return 'Drag each name onto its number, then press Check. Nothing is marked until you do. Have a go, then continue.';
+  if (partId !== null && /^(?:sequence|sort-groups|concept-map)/.test(partId)) return 'Have a go as a student would: answers stay hidden until you check. Then continue.';
+  return 'Parts ask for a prediction first: answers stay hidden until a choice is made. Have a go, then continue.';
+}
+
 /** The tour, worded from what is actually on screen (counts, model, whether this run had a repair). */
 export function tourSteps(s: TourSignals): TourStep[] {
   const lib = s.library === null ? 'a library of licensed pages' : `${s.library.pages} licensed pages in ${s.library.subjects} subjects`;
-  const step = (x: Omit<TourStep, 'interactive' | 'primary' | 'primaryLabel' | 'needsReplay'> & Partial<TourStep>): TourStep => ({
-    interactive: false, primary: 'next', primaryLabel: 'Next', needsReplay: false, ...x,
+  const step = (x: Omit<TourStep, 'interactive' | 'primary' | 'primaryLabel' | 'needsReplay' | 'extras'> & Partial<TourStep>): TourStep => ({
+    interactive: false, primary: 'next', primaryLabel: 'Next', needsReplay: false, extras: [], ...x,
   });
   return [
     step({
@@ -205,30 +218,34 @@ export function tourSteps(s: TourSignals): TourStep[] {
     step({
       id: 'reading', title: `${s.model} is reading the page`,
       body: `This is a replay of a recorded run, ${speedWords(s.speed)}. The strip names the model, what it is doing and how long it has taken. Every step you see happened in that run.`,
-      targets: ['[data-tour="live-strip"]'], needsReplay: true,
+      // The page being read is lit too, so the card never sits on it (demo pair review #4).
+      targets: ['[data-tour="live-strip"]', '[data-tour="source-text"]'], needsReplay: true,
     }),
     step({
       id: 'overview', title: 'Muse writes the summary first',
       body: 'Each key point is tied to the sentence it came from: those sentences light up in the page on the left. Below, the parts Muse planned take shape while it writes them.',
-      targets: ['.lesson .overview', '[data-tour="source-text"]'], needsReplay: true,
+      // The part frames the card talks about are lit as well, so the card never covers the next part (review #5).
+      targets: ['.lesson .overview', '[data-tour="source-text"]'], extras: ['.lesson [data-component]'], needsReplay: true,
     }),
     step({
       id: 'checking', title: 'Code checks every part',
       body: s.repairPart === null
         ? 'Before a part appears, code checks its quotes, numbers and structure against the page. A part that fails is reworked or left out.'
         : s.repairPassed
-          ? `A check failed on the first draft, so Muse reworked it. Revision ${s.repairRevision} passed every check. That mistake was the model’s own, caught by code, not a planted fault.`
+          // Calvin's rule: "Revised by Muse after a failed check", never "the model's own mistake".
+          ? `A check failed on the first draft, so Muse revised it. Revision ${s.repairRevision} passed every check. The checks found the issue in Muse’s draft; it was not a planted fault.`
           : `Code checks each draft against the page. A check failed on this one, so Muse is reworking it as revision ${s.repairRevision}.`,
       targets: part(s.watchPart), needsReplay: true,
     }),
     step({
-      id: 'ready', title: 'Ready to teach',
+      // Not "Ready to teach": the lesson still says "Teacher review pending" (review #6).
+      id: 'ready', title: 'Ready for your review',
       body: 'The strip now sums up the build: how long it took, the model calls it made and whether every part passed its checks.',
       targets: ['[data-tour="live-strip"]'], needsReplay: true,
     }),
     step({
       id: 'try', title: 'Try it as a student would',
-      body: 'Parts ask for a prediction first: answers stay hidden until a choice is made. Have a go, then continue.',
+      body: tryWords(s.firstPart),
       targets: part(s.firstPart), interactive: true,
     }),
     step({
@@ -356,8 +373,28 @@ export function placeCard(target: Rect | null, viewport: { w: number; h: number 
   const left = target.x - gap - card.w;
   if (left >= margin && free(left, clampY(target.y))) return { x: left, y: clampY(target.y), side: 'left' };
   const below = target.y + target.h + gap;
-  if (below + card.h + margin <= viewport.h && free(clampX(target.x), below)) return { x: clampX(target.x), y: below, side: 'below' };
+  if (below + card.h + margin <= viewport.h) {
+    // Left-aligned with the target first, then right-aligned (a wide target leaves room under its right end).
+    for (const x of [clampX(target.x), clampX(target.x + target.w - card.w)]) if (free(x, below)) return { x, y: below, side: 'below' };
+  }
   const above = target.y - gap - card.h;
-  if (above >= margin && free(clampX(target.x), above)) return { x: clampX(target.x), y: above, side: 'above' };
+  if (above >= margin) {
+    for (const x of [clampX(target.x), clampX(target.x + target.w - card.w)]) if (free(x, above)) return { x, y: above, side: 'above' };
+  }
   return { x: clampX(target.x + target.w - card.w - gap), y: clampY(target.y + target.h - card.h - gap), side: 'inside' };
+}
+
+/**
+ * Where a step's card goes and which cut-outs are drawn. `groups` are the measured rects per selector: the step's
+ * targets first (`required` of them; the first is the main target), then its extras. The card is placed clear of every
+ * cut-out; when that leaves only a place inside the main target, the extras are dropped (left dimmed, the card may sit
+ * over them) rather than covering a target.
+ */
+export function placeStep(groups: readonly (readonly Rect[])[], required: number, viewport: { w: number; h: number }, card: { w: number; h: number }): { x: number; y: number; side: CardSide; cut: Rect[] } {
+  const all = groups.flat();
+  const target = unionRect(groups[0] ?? []) ?? unionRect(all);
+  const p = placeCard(target, viewport, card, all);
+  if (p.side !== 'inside' || groups.length <= required) return { ...p, cut: all };
+  const kept = groups.slice(0, required).flat();
+  return { ...placeCard(target, viewport, card, kept), cut: kept };
 }

@@ -1,5 +1,5 @@
 // Analysis repairs (TASK-024b/c), pure. When Muse's FIRST source analysis genuinely fails a deterministic check, the
-// worker asks Muse to repair it. That is a NATURAL repair (Muse's own mistake) and must never be confused with a
+// worker asks Muse to repair it. That is a NATURAL repair (found in Muse's draft by a check) and must never be confused with a
 // system-made demo fault. This module turns the stored revisions, records and events into plain-language steps:
 // what failed, what exactly changed (a short before/after diff), which checks pass now, and what the repair cost.
 
@@ -34,9 +34,9 @@ const NOT_A_DEMO_FAULT = 'Nothing was injected here, and this is different from 
 /** The bold lead and the explanation under the section heading; never claims a repair that did not happen. */
 export function naturalRepairNoteParts(state: 'passed' | 'failed' | 'running' | 'none'): { lead: string; body: string } {
   switch (state) {
-    case 'passed': return { lead: ANALYSIS_REPAIR_LABEL, body: `Muse’s own first analysis failed a deterministic check, and Muse repaired it. ${NOT_A_DEMO_FAULT}` };
-    case 'failed': return { lead: 'Muse’s revision did not pass', body: `Muse’s own analysis failed a deterministic check and Muse’s repair did not fix it. ${NOT_A_DEMO_FAULT}` };
-    case 'running': return { lead: ANALYSIS_REPAIR_LABEL, body: `Muse’s own first analysis failed a deterministic check and Muse is repairing it. ${NOT_A_DEMO_FAULT}` };
+    case 'passed': return { lead: ANALYSIS_REPAIR_LABEL, body: `Muse’s first analysis failed a deterministic check, and Muse repaired it. ${NOT_A_DEMO_FAULT}` };
+    case 'failed': return { lead: 'Muse’s revision did not pass', body: `Muse’s analysis failed a deterministic check and Muse’s repair did not fix it. ${NOT_A_DEMO_FAULT}` };
+    case 'running': return { lead: ANALYSIS_REPAIR_LABEL, body: `Muse’s first analysis failed a deterministic check and Muse is repairing it. ${NOT_A_DEMO_FAULT}` };
     case 'none': return { lead: '', body: '' };
   }
 }

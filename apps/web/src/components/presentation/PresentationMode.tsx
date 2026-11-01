@@ -43,7 +43,7 @@ export function PresentationMode({ deck, quotes, sourceId, repairBadge, startBea
   // The hook: the first part's first beat. It carries the one-line credit, so the first slide shown names the source and
   // says the lesson is AI-written and awaits review (the title sheet with the full credit stays one ← away).
   const hero = useMemo(() => heroBeatIndex(beats), [beats]);
-  const credit = useMemo(() => creditLine(deck.source), [deck.source]);
+  const credit = useMemo(() => creditLine(deck), [deck]);
   const rootRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const beatRef = useRef<HTMLDivElement>(null);
@@ -235,7 +235,7 @@ export function PresentationMode({ deck, quotes, sourceId, repairBadge, startBea
       <div className="pz-live sr-only" aria-live="polite">{`Beat ${state.beat + 1} of ${n}: ${beat.title}${beat.kind === 'engine' && beat.steps > 1 ? `, question ${Math.min(state.step, beat.steps - 1) + 1} of ${beat.steps}` : ''}${revealed ? '. Revealed.' : ''}`}</div>
 
       <div ref={stageRef} className={`pz-stage-frame${state.notes ? ' pz-with-notes' : ''}`} tabIndex={-1} aria-label={beat.title}>
-        {state.beat === hero && hero > 0 && credit !== null && <p className="pz-credit">{credit}</p>}
+        {state.beat === hero && hero > 0 && credit !== null && <p className="pz-credit" title={credit}>{credit}</p>}
         <div key={beat.id} ref={beatRef} className="pz-beat" data-kind={beat.kind} data-revealed={revealed ? 'true' : 'false'}>
           <BeatView
             beat={beat}

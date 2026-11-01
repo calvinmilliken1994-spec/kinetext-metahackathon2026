@@ -13,7 +13,7 @@ export interface QuoteRef {
   ownerLabel: string;
 }
 
-/** Explanation and timeline-event quotes are the activity's evidence; analysis concepts are Muse's own finds. */
+/** Explanation and timeline-event quotes are the activity's evidence; analysis concepts are what Muse found. */
 export function isEvidenceKey(key: string): boolean {
   return key.startsWith('explanation:') || key.startsWith('event:') || key.startsWith('lesson:');
 }

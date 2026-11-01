@@ -8,8 +8,9 @@ import { assembleKitSpec } from '../../../../packages/contracts/kit.ts';
 import type { KitSpec, LogLadderGen } from '../../../../packages/contracts/kit.ts';
 import type { Provenance } from '../../../../packages/contracts/index.ts';
 import {
-  creditLine, deckFromLesson, heroBeatIndex, HOOK_BEAT, initialPresent, planBeats, presentReducer, presentRequest, stepCaption, teachingOrder, trackLabel,
+  creditLine, deckFromLesson, heroBeatIndex, HOOK_BEAT, initialPresent, madeWithOf, NOTES_ONLY_LINE, planBeats, presentReducer, presentRequest, stepCaption, teachingOrder, trackLabel, withSamNote,
 } from './presentation.ts';
+import { disclosureText } from './sources.ts';
 import type { Deck, DeckPart } from './presentation.ts';
 import { mostVisualFirst, visualRank } from './partOrder.ts';
 import { loadDemoLessons } from './stage6-fixtures.ts';
@@ -97,11 +98,52 @@ test('a lesson-flow deck keeps the plan order in the deck but presents the formu
   assert.ok(hero?.kind === 'predict' && hero.target.kind === 'formula');
 });
 
-test('the hook slide carries one credit line: page · publisher · licence · AI-written, teacher review pending', () => {
-  assert.equal(creditLine(SOURCE), 'pH scale · U.S. Geological Survey · U.S. Government work · AI-written, teacher review pending');
-  assert.equal(creditLine(null), null);
+test('the hook slide carries one credit line: page · publisher · licence · the model, teacher review pending', () => {
+  const deck = (source: typeof SOURCE | null, disclosure = 'AI-generated with Muse Spark 1.3 (Meta). Includes material from U.S. Geological Survey, which has not reviewed or endorsed this lesson.') => ({ source, disclosure, parts: [] as DeckPart[] });
+  assert.equal(creditLine(deck(SOURCE)), 'pH scale · U.S. Geological Survey · U.S. Government work · AI-written with Muse Spark 1.3 (Meta), teacher review pending');
+  assert.equal(creditLine(deck(null)), null);
   const plain = { ...SOURCE, title: 'Untitled page' };
-  assert.equal(creditLine(plain), 'Untitled page · U.S. Government work · AI-written, teacher review pending', 'no publisher, no empty part');
+  assert.equal(creditLine(deck(plain)), 'Untitled page · U.S. Government work · AI-written with Muse Spark 1.3 (Meta), teacher review pending', 'no publisher, no empty part');
+  // The model comes from the job (via its disclosure), never a fixed name.
+  const open = 'AI-generated with Muse Spark Open (Meta’s open weights, hosted on Modal). Includes material from NOAA, which has not reviewed or endorsed this lesson.';
+  assert.match(creditLine(deck(SOURCE, open)) ?? '', /AI-written with Muse Spark Open \(Meta’s open weights\), teacher review pending$/);
+  // Without a model in the disclosure it still says AI-written.
+  assert.equal(creditLine(deck(SOURCE, 'AI-written.')), 'pH scale · U.S. Geological Survey · U.S. Government work · AI-written, teacher review pending');
+  // A long publisher line is cut to its first segment on the one-line credit.
+  const long = { ...SOURCE, title: 'What is DNA? — MedlinePlus Genetics, Help Me Understand Genetics' };
+  assert.match(creditLine(deck(long)) ?? '', /^What is DNA\? · MedlinePlus Genetics · U\.S\. Government work · /);
+});
+
+test('the hook credit names SAM 3.1 only when a label diagram with SAM regions is in the deck', () => {
+  const disclosure = 'AI-generated with Muse Spark 1.3 (Meta). Includes material from NOAA, which has not reviewed or endorsed this lesson.';
+  const diagram = { kind: 'kit', spec: { componentId: 'label-diagram-v1', regions: [{ partId: 'a', x1: 0, y1: 0, x2: 1, y2: 1, confidence: 1 }] } } as unknown as DeckPart;
+  const noRegions = { kind: 'kit', spec: { componentId: 'label-diagram-v1', regions: [] } } as unknown as DeckPart;
+  assert.equal(creditLine({ source: SOURCE, disclosure, parts: [diagram] }), 'pH scale · U.S. Geological Survey · U.S. Government work · AI-written with Muse Spark 1.3 (Meta), teacher review pending · diagram regions: SAM 3.1 (Meta)');
+  assert.doesNotMatch(creditLine({ source: SOURCE, disclosure, parts: [noRegions] }) ?? '', /SAM/);
+  assert.doesNotMatch(creditLine({ source: SOURCE, disclosure, parts: [{ kind: 'kit', spec: quiz }] }) ?? '', /SAM/);
+});
+
+test('madeWithOf reads the model back from every disclosure form sources.ts writes', () => {
+  for (const made of ['Muse Spark 1.3 (Meta)', 'Muse Spark Open (Meta’s open weights, hosted on Modal)']) {
+    for (const m of [
+      { title: 'p', kind: 'library' as const, attribution: 'Source material: NOAA National Weather Service, JetStream.', license: 'US-Gov-Work' },
+      { title: 'p', kind: 'library' as const, attribution: '', license: 'US-Gov-Work' },
+      { title: 'p', kind: 'user' as const, attribution: '', license: 'teacher-provided' },
+    ]) assert.equal(madeWithOf(disclosureText(m, made)), made, `${made} / ${m.kind} / ${m.attribution}`);
+  }
+  assert.equal(madeWithOf(`${NOTES_ONLY_LINE} ${disclosureText(null, 'Muse Spark 1.3 (Meta)')}`), 'Muse Spark 1.3 (Meta)');
+  assert.equal(madeWithOf('AI-written.'), null);
+});
+
+test('a lesson deck with SAM regions says so on the title slide’s disclosure; one without does not', () => {
+  const base = { jobId: 'j', lesson: drag.lesson, specs: drag.specs, premium: null, analysis: drag.analysis, source: SOURCE, checks: null, quotes: null, fallbackTitle: 'L' };
+  const d = deckFromLesson({ ...base, disclosure: 'AI-generated with Muse Spark 1.3 (Meta).' });
+  assert.equal(d.disclosure, 'AI-generated with Muse Spark 1.3 (Meta).', 'no diagram: unchanged');
+  const diagram = { kind: 'kit', spec: { componentId: 'label-diagram-v1', regions: [{ partId: 'a', x1: 0, y1: 0, x2: 1, y2: 1, confidence: 1 }] } } as unknown as DeckPart;
+  const said = withSamNote('AI-generated with Muse Spark 1.3 (Meta). Includes material from NOAA.', [diagram]);
+  assert.equal(said, 'AI-generated with Muse Spark 1.3 (Meta). Includes material from NOAA. Diagram regions by SAM 3.1 (Meta).');
+  assert.equal(withSamNote(said, [diagram]), said, 'said once');
+  assert.equal(madeWithOf(said), 'Muse Spark 1.3 (Meta)', 'the model still reads back');
 });
 
 test('the bar names the current step plainly', () => {

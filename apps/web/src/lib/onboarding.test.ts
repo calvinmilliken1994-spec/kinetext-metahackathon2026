@@ -7,7 +7,7 @@ import { liveStrip, partBuilds } from './liveBuild.ts';
 import { replaySnapshot } from './replay.ts';
 import { fixtureFinalWire } from './liveBuildFixtures.ts';
 import {
-  activeSteps, autoAdvance, canGoNext, clipRect, placeCard, shouldAutoStart, stepReady, tourRequest, tourSignals, tourSteps, unionRect,
+  activeSteps, autoAdvance, canGoNext, clipRect, placeCard, placeStep, shouldAutoStart, stepReady, tourRequest, tourSignals, tourSteps, unionRect,
   TOUR_MIN_DWELL_MS,
 } from './onboarding.ts';
 import type { TourSignals } from './onboarding.ts';
@@ -63,6 +63,22 @@ test('steps read real counts and the run’s own model, and only claim a repair 
   assert.doesNotMatch(check(60), /failed/);
   assert.match(check(65), /reworking it as revision 2/);
   assert.match(check(90), /Revision 2 passed every check.*not a planted fault/);
+  // Calvin's rule: a natural repair is "revised by Muse after a failed check", never "the model's own mistake".
+  for (const t of [60, 65, 90]) assert.doesNotMatch(check(t), /mistake|\bown\b/i, `at ${t} s`);
+});
+
+test('copy: the closing step does not clash with "Teacher review pending"; the try step fits the part', () => {
+  const ready = tourSteps(sig(90)).find((x) => x.id === 'ready');
+  assert.equal(ready?.title, 'Ready for your review');
+  assert.doesNotMatch(`${ready?.title} ${ready?.body}`, /ready to teach/i);
+  // The tour run's first part is a label diagram: no "prediction first" over a drag-and-name task.
+  const tryDiagram = tourSteps(sig(90)).find((x) => x.id === 'try')?.body ?? '';
+  assert.match(tryDiagram, /Drag each name onto its number, then press Check/);
+  assert.doesNotMatch(tryDiagram, /prediction/);
+  const trySequence = tourSteps(sig(72)).find((x) => x.id === 'try')?.body ?? '';
+  assert.doesNotMatch(trySequence, /prediction|numbered/, 'a sequence is not a prediction either');
+  const quizSignals: TourSignals = { ...sig(90), firstPart: 'quiz-cards-v1' };
+  assert.match(tourSteps(quizSignals).find((x) => x.id === 'try')?.body ?? '', /prediction first/);
 });
 
 test('signals follow the recorded run moment by moment', () => {
@@ -138,6 +154,60 @@ test('card placement: beside the target where it fits, else below/above, else in
   const both = placeCard(overview, vp, card, [overview, source]);
   assert.equal(both.side, 'below');
   assert.ok(both.x >= source.x + source.w, 'clear of the source text');
+});
+
+test('the reading and summary steps light what they talk about, so the card sits clear of it (demo pair review #4, #5)', () => {
+  const reading = tourSteps(sig(10)).find((x) => x.id === 'reading');
+  assert.deepEqual(reading?.targets, ['[data-tour="live-strip"]', '[data-tour="source-text"]']);
+  const overview = tourSteps(sig(36)).find((x) => x.id === 'overview');
+  assert.deepEqual(overview?.targets, ['.lesson .overview', '[data-tour="source-text"]']);
+  assert.deepEqual(overview?.extras, ['.lesson [data-component]']);
+  for (const x of tourSteps(sig(36))) assert.ok(Array.isArray(x.extras), x.id);
+});
+
+// Measured at 1920 × 1080 on the tour run (padded cut-outs), with the larger ≥ 1600 px card.
+const VP = { w: 1920, h: 1080 };
+const CARD = { w: 460, h: 300 };
+const STRIP = { x: 719, y: 93, w: 1055, h: 129 };
+const SOURCE = { x: 145, y: 158, w: 494, h: 846 };
+const OVERVIEW = { x: 719, y: 390, w: 1055, h: 172 };
+const FRAMES = [{ x: 719, y: 571, w: 1055, h: 428 }];
+const hits = (p: { x: number; y: number }, rs: readonly { x: number; y: number; w: number; h: number }[]): number =>
+  rs.filter((r) => p.x < r.x + r.w && r.x < p.x + CARD.w && p.y < r.y + r.h && r.y < p.y + CARD.h).length;
+
+test('placeStep: the reading card drops below the strip into the empty lesson column, off the page being read', () => {
+  const p = placeStep([[STRIP], [SOURCE]], 2, VP, CARD);
+  assert.equal(p.side, 'below');
+  assert.equal(hits(p, [STRIP, SOURCE]), 0);
+  assert.equal(p.cut.length, 2);
+});
+
+test('placeStep: the summary card stays off the overview, the page and the part frames below', () => {
+  const p = placeStep([[OVERVIEW], [SOURCE], FRAMES], 2, VP, CARD);
+  assert.equal(hits(p, [OVERVIEW, SOURCE, ...FRAMES]), 0);
+  assert.equal(p.side, 'above');
+  assert.equal(p.cut.length, 3, 'the frames are lit too');
+});
+
+test('placeStep: on a screen too small for that, extras are dropped before a target is covered', () => {
+  const vp = { w: 1366, h: 768 };
+  const card = { w: 380, h: 300 };
+  const overview = { x: 520, y: 200, w: 760, h: 150 };
+  const source = { x: 100, y: 120, w: 400, h: 600 };
+  const frames = [{ x: 520, y: 366, w: 760, h: 390 }];
+  const p = placeStep([[overview], [source], frames], 2, vp, card);
+  assert.notEqual(p.side, 'inside');
+  assert.equal(p.cut.length, 2, 'frames left dimmed');
+  const ov = (r: { x: number; y: number; w: number; h: number }): boolean => p.x < r.x + r.w && r.x < p.x + card.w && p.y < r.y + r.h && r.y < p.y + card.h;
+  assert.equal(ov(overview) || ov(source), false);
+});
+
+test('placeCard: a below card that would cover a second cut-out under the target’s left end moves to its right end', () => {
+  const target = { x: 600, y: 100, w: 1200, h: 100 };
+  const blocker = { x: 500, y: 200, w: 500, h: 600 };
+  const p = placeCard(target, VP, { w: 460, h: 300 }, [target, blocker]);
+  assert.equal(p.side, 'below');
+  assert.equal(p.x, 1800 - 460);
 });
 
 test('the present step points at the closing beat once the replay has finished, else at the lesson’s Present button', () => {

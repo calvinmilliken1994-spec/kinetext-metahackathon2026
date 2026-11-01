@@ -149,12 +149,14 @@ export function aiLabel(text: string): string {
 }
 
 /**
- * Muse opened almost every key point with "Students learn that …" (UX pair review 2026-11-01): the most machine-written
- * voice on screen. The opener is dropped for display only; what follows must be a real clause, so "Students learn",
- * "Students learn that." and "Students learn about …" stay as written. Never used on page quotes.
+ * Muse opened almost every key point with "Students learn that …" (UX pair review 2026-11-01), and with the other stock
+ * openers "Students explain / describe / show / understand / see / discover / find out that (or how) …" (demo pair
+ * review #14): the most machine-written voice on screen. The opener is dropped for display only; what follows must be a
+ * real clause, so "Students learn", "Students explain that." and "Students describe the cycle." stay as written.
+ * Never used on page quotes.
  */
 function withoutLearnOpener(text: string): string {
-  const m = /^\s*students\s+(?:will\s+)?learn\s+(?:that\s+(?=[\p{L}\p{N}(])|(?=how\s+[\p{L}\p{N}(]))/iu.exec(text);
+  const m = /^\s*students\s+(?:(?:will|can)\s+)?(?:learn|explain|describe|show|understand|see|discover|find\s+out)\s+(?:that\s+(?=[\p{L}\p{N}(])|(?=how\s+[\p{L}\p{N}(]))/iu.exec(text);
   return m === null ? text : text.slice(m[0].length);
 }
 

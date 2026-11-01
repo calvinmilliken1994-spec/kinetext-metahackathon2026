@@ -29,6 +29,19 @@
 .tour-skip { font-size: var(--fs-14); }
 .tour-actions .btn[disabled] { opacity: 0.55; cursor: default; }
 
+/* Demo pair review #11: on 1080p and larger the card reads at video scale beside a 26 px lesson title. Fixed sizes, not
+ * the window's --fs tokens, so the card is the same at 1920 and steps up once more at QHD. */
+@media (min-width: 1600px) {
+  .tour-card { inline-size: min(460px, calc(100vw - 32px)); padding: 22px 24px 18px; gap: 10px; }
+  .tour-count, .tour-skip, .tour-wait, .tour-problem { font-size: 16px; }
+  .tour-title { font-size: 24px; }
+  .tour-body { font-size: 18px; line-height: 1.5; }
+  .tour-actions .btn { font-size: 16px; }
+}
+@media (min-width: 2200px) {
+  .tour-card { inline-size: min(480px, calc(100vw - 32px)); }
+}
+
 @keyframes tour-in { from { opacity: 0; } to { opacity: 1; } }
 
 @media (prefers-reduced-motion: reduce) {
