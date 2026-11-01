@@ -7,8 +7,11 @@ import type { OpeningJob } from './jobs.ts';
 export const DEMO_PINS = {
   /** The run the tour replays: NOAA water cycle on Muse Spark 1.3 (label diagram, two SAM 3.1 calls, one natural repair). */
   tour: 'job-20261031081105-910f3776',
-  /** What a plain visit opens, first listed one wins: the same water-cycle run, so the tour replays the lesson on screen. */
-  opening: ['job-20261031081105-910f3776'],
+  /**
+   * What a plain visit opens, first listed one wins: the Stage 8c water-cycle run (Muse Spark located every part, SAM 3.1
+   * confirmed all five; Calvin 2026-11-02). The tour keeps the older run above because its build has a real repair.
+   */
+  opening: ['job-20261101200607-c65a20bb', 'job-20261031081105-910f3776'],
 } as const;
 
 type Listed = { jobId: string; sourceId: string; status: string; flow?: 'lesson' | 'activity' | undefined };
