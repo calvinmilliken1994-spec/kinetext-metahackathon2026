@@ -26,6 +26,8 @@ export interface FigureMeta {
   retrievedAt: string;
   /** In-memory only (never in the sidecar JSON): the stored printed-label boxes, attached by the lesson worker. */
   labelBoxes?: FigureLabelBox[];
+  /** In-memory only: the Stage 8c lead-curated label groups that name drawn parts (labels.json `partLabelGroups`), attached by the lesson worker. */
+  partLabelGroups?: number[];
 }
 
 function readMeta(id: string, dir: URL): FigureMeta {
@@ -82,13 +84,23 @@ export interface FigureLabelBox {
  * Missing file, a different image hash or a malformed box gives [] (the view then falls back to Muse's boxes).
  */
 export function loadFigureLabelBoxes(figureId: string, dir: URL = FIGURES_DIR): FigureLabelBox[] {
-  if (!/^[a-z0-9][a-z0-9-]{0,63}$/.test(figureId)) return [];
+  return readLabelsFile(figureId, dir)?.boxes ?? [];
+}
+
+interface LabelsFile {
+  boxes: FigureLabelBox[];
+  partLabelGroups?: number[];
+}
+
+/** Validated contents of `<id>.labels.json`, or null when the file is missing, stale (different image hash) or malformed. */
+function readLabelsFile(figureId: string, dir: URL): LabelsFile | null {
+  if (!/^[a-z0-9][a-z0-9-]{0,63}$/.test(figureId)) return null;
   try {
     const meta = readMeta(figureId, dir);
     const raw = JSON.parse(readFileSync(new URL(`${figureId}.labels.json`, dir), 'utf8')) as {
-      figureId?: unknown; imageSha256?: unknown; boxes?: unknown;
+      figureId?: unknown; imageSha256?: unknown; boxes?: unknown; partLabelGroups?: unknown;
     };
-    if (raw.figureId !== figureId || raw.imageSha256 !== meta.sha256 || !Array.isArray(raw.boxes)) return [];
+    if (raw.figureId !== figureId || raw.imageSha256 !== meta.sha256 || !Array.isArray(raw.boxes)) return null;
     const ok = (b: unknown): b is FigureLabelBox => {
       const o = b as Record<string, unknown>;
       return [o?.['x1'], o?.['y1'], o?.['x2'], o?.['y2']].every((n) => Number.isInteger(n)) &&
@@ -103,15 +115,61 @@ export function loadFigureLabelBoxes(figureId: string, dir: URL = FIGURES_DIR): 
       return (text === undefined || (typeof text === 'string' && text.length >= 1 && text.length <= FIGURE_LABEL_TEXT_MAX)) &&
         (group === undefined || (Number.isInteger(group) && (group as number) >= 0));
     };
-    if (!raw.boxes.every(ok) || !raw.boxes.every(extrasOk)) return [];
-    return (raw.boxes as FigureLabelBox[]).map(({ x1, y1, x2, y2, text, group }) => ({
+    if (!raw.boxes.every(ok) || !raw.boxes.every(extrasOk)) return null;
+    const boxes = (raw.boxes as FigureLabelBox[]).map(({ x1, y1, x2, y2, text, group }) => ({
       x1, y1, x2, y2,
       ...(text !== undefined ? { text } : {}),
       ...(group !== undefined ? { group } : {}),
     }));
+    // Stage 8c: absent or malformed means "not curated" (LD-10 is skipped), never a partial list.
+    const g = raw.partLabelGroups;
+    const groupsOk = Array.isArray(g) && g.length > 0 && g.every((n) => Number.isInteger(n) && (n as number) >= 0);
+    return {
+      boxes,
+      ...(groupsOk ? { partLabelGroups: [...new Set(g as number[])].sort((a, b) => a - b) } : {}),
+    };
   } catch {
-    return [];
+    return null;
   }
+}
+
+/**
+ * Stage 8c: the label `group` numbers that name drawn parts of the figure (lead-curated in
+ * `<id>.labels.json` as `partLabelGroups`, ascending, de-duplicated). undefined = not curated, in
+ * which case LD-10 is skipped and no printed-label list is sent to Muse.
+ */
+export function loadFigurePartLabelGroups(figureId: string, dir: URL = FIGURES_DIR): number[] | undefined {
+  return readLabelsFile(figureId, dir)?.partLabelGroups;
+}
+
+/**
+ * Stage 8c: one string per printed-label group, in ascending group order. A group's text boxes are joined
+ * with a single space in file (reading) order; boxes without text or group are skipped, and so is a group
+ * with no text at all. `groups` limits the result to those group numbers (the order stays ascending).
+ */
+export function printedLabelsOf(boxes: readonly FigureLabelBox[], groups?: readonly number[]): string[] {
+  const wanted = groups === undefined ? null : new Set(groups);
+  const byGroup = new Map<number, string[]>();
+  for (const b of boxes) {
+    if (b.group === undefined || b.text === undefined) continue;
+    if (wanted !== null && !wanted.has(b.group)) continue;
+    const text = b.text.trim().replace(/\s+/g, ' ');
+    if (text === '') continue;
+    const lines = byGroup.get(b.group);
+    if (lines === undefined) byGroup.set(b.group, [text]);
+    else lines.push(text);
+  }
+  return [...byGroup.keys()].sort((a, b) => a - b).map((g) => (byGroup.get(g) as string[]).join(' '));
+}
+
+/**
+ * Stage 8c: the printed labels sent to Muse for a figure: the curated `partLabelGroups` only, one string per
+ * group in group order (e.g. ["Condensation", "Precipitation", ...]). [] when the figure is not curated.
+ */
+export function loadFigurePrintedLabels(figureId: string, dir: URL = FIGURES_DIR): string[] {
+  const file = readLabelsFile(figureId, dir);
+  if (file === null || file.partLabelGroups === undefined) return [];
+  return printedLabelsOf(file.boxes, file.partLabelGroups);
 }
 
 /** Load a figure's meta plus its exact stored bytes, refusing any whose bytes no longer match the recorded sha256. */

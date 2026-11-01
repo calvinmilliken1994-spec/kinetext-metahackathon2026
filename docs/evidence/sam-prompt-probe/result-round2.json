@@ -1,0 +1,36 @@
+{
+  "figure": "noaa-hydrologic-cycle-1",
+  "at": "2026-11-01T17:53:39.700Z",
+  "results": {
+    "wideBox": {
+      "prompt": "<0f>1<|box;x1=135;y1=306;x2=200;y2=429;w=572;h=504|>",
+      "boxes": [
+        {
+          "id": 1,
+          "x1": 136,
+          "y1": 310,
+          "x2": 197,
+          "y2": 426,
+          "confidence": 0.73828125
+        }
+      ],
+      "costUSD": 0.0025,
+      "latencyMs": 2052
+    },
+    "wideBoxPlusPoint": {
+      "prompt": "<0f>1<|box;x1=135;y1=306;x2=200;y2=429;w=572;h=504|><|point;x=166;y=375;w=572;h=504|>",
+      "boxes": [
+        {
+          "id": 1,
+          "x1": 136,
+          "y1": 309,
+          "x2": 197,
+          "y2": 426,
+          "confidence": 0.62109375
+        }
+      ],
+      "costUSD": 0.0025,
+      "latencyMs": 1856
+    }
+  }
+}

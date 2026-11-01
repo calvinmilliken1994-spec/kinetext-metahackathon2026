@@ -1,0 +1,51 @@
+{
+  "figure": "noaa-hydrologic-cycle-1",
+  "at": "2026-11-01T17:51:27.569Z",
+  "results": {
+    "onePointOnArrow": {
+      "prompt": "<0f>1<|point;x=166;y=375;w=572;h=504|>",
+      "boxes": [
+        {
+          "id": 1,
+          "x1": 162,
+          "y1": 323,
+          "x2": 171,
+          "y2": 426,
+          "confidence": 0.7890625
+        }
+      ],
+      "costUSD": 0.0025,
+      "latencyMs": 2187
+    },
+    "fourPointsOnArrows": {
+      "prompt": "<0f>1<|point;x=154;y=375;w=572;h=504|><|point;x=166;y=375;w=572;h=504|><|point;x=180;y=375;w=572;h=504|><|point;x=192;y=375;w=572;h=504|>",
+      "boxes": [
+        {
+          "id": 1,
+          "x1": 137,
+          "y1": 309,
+          "x2": 197,
+          "y2": 426,
+          "confidence": 0.62109375
+        }
+      ],
+      "costUSD": 0.0025,
+      "latencyMs": 2636
+    },
+    "boxAroundArrows": {
+      "prompt": "<0f>1<|box;x1=147;y1=306;x2=200;y2=429;w=572;h=504|>",
+      "boxes": [
+        {
+          "id": 1,
+          "x1": 150,
+          "y1": 309,
+          "x2": 197,
+          "y2": 426,
+          "confidence": 0.703125
+        }
+      ],
+      "costUSD": 0.0025,
+      "latencyMs": 1376
+    }
+  }
+}

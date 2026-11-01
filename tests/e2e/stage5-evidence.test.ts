@@ -18,6 +18,7 @@ import { basename, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { loadSource } from '../../packages/sources/index.ts';
+import { NOT_RETROACTIVE_CHECK_IDS } from '../../packages/validation/not-retroactive.ts';
 import { compareRevisions, validateAnalysis, validateSpec } from '../../packages/validation/validate.ts';
 import { computeOutput } from '../../packages/activities/registry.ts';
 import { maxTolerance } from '../../packages/contracts/index.ts';
@@ -143,9 +144,12 @@ function assertReportShape(report: ValidationReport, label: string): void {
  * prediction) arrived with prompt v10; runs recorded under v9 were told fixed example defaults, so
  * many open on a different scenario than their first case (e.g. the Moon lesson at g = 9.8). The
  * stored verdicts stay as recorded; the web app opens every activity on its first case regardless.
+ * LD-10 (labels-covered) and LD-11 (regions-confident) arrived with Stage 8c: stored runs were never asked for
+ * area boxes, a part per printed label the page names, or confident SAM regions. They come from the shared
+ * NOT_RETROACTIVE_CHECK_IDS list (packages/validation/not-retroactive.ts), the same one the API recheck uses.
  * Every other check added since recording must still pass.
  */
-const CHECKS_NOT_RETROACTIVE: ReadonlySet<string> = new Set<string>(['semantic.opening-case']);
+const CHECKS_NOT_RETROACTIVE: ReadonlySet<string> = new Set<string>(['semantic.opening-case', ...NOT_RETROACTIVE_CHECK_IDS]);
 
 /** Publishable when every check passes apart from the non-retroactive ones above. */
 function publishableIgnoringLaterChecks(report: ValidationReport): boolean {

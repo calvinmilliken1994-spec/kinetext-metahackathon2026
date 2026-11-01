@@ -119,8 +119,8 @@ test('LD-03: an unknown figureId fails, and missing figures fail closed', () => 
   // No figure list at all => LD-03 fails closed even for the golden figureId:
   const noFigures = validateLabelDiagram(golden(), [dnaSource()], {});
   assert.ok(failedIds(noFigures).includes('LD-03'), failureDetail(noFigures));
-  // The exact co-failure set through the dispatcher without regions:
-  const r2 = expectFailures(validate(gen, { figures: [dnaFigure()] }), ['LD-03', 'LD-06', 'LD-07']);
+  // The exact co-failure set through the dispatcher without regions (Stage 8c: LD-11 also needs the regions):
+  const r2 = expectFailures(validate(gen, { figures: [dnaFigure()] }), ['LD-03', 'LD-06', 'LD-07', 'LD-11']);
   assert.equal(checkOf(r2, 'LD-06').message, 'segmentation did not run');
 });
 
@@ -200,6 +200,7 @@ test('LD-06/LD-07: no regions option fails both with "segmentation did not run"'
   assert.ok(failedIds(report).includes('LD-06') && failedIds(report).includes('LD-07'), failureDetail(report));
   assert.equal(checkOf(report, 'LD-06').message, 'segmentation did not run');
   assert.equal(checkOf(report, 'LD-07').message, 'segmentation did not run');
+  assert.equal(checkOf(report, 'LD-11').message, 'segmentation did not run'); // Stage 8c
   assert.equal(report.publishable, false);
 });
 
@@ -291,7 +292,11 @@ test('LD-09: too many parts fails alone', () => {
     { id: 'part-chemical-bases', name: 'chemical bases', quote: bases, x: 100, y: 100 },
     { id: 'part-double-helix', name: 'double helix', quote: 'Nucleotides are arranged in two long strands that form a spiral called a double helix', x: 900, y: 900 },
     { id: 'part-nucleotide', name: 'nucleotide', quote: 'Together, a base, sugar, and phosphate are called a nucleotide', x: 100, y: 900 },
-  ].map(e => ({ ...e, sourceId: DNA_SOURCE, labelX1: 0, labelY1: 0, labelX2: 0, labelY2: 0 }));
+  ].map(e => ({
+    ...e, sourceId: DNA_SOURCE, labelX1: 0, labelY1: 0, labelX2: 0, labelY2: 0,
+    // Stage 8c: the gen schema requires the four area edges; a 100-wide box around each point.
+    areaX1: e.x - 50, areaY1: e.y - 50, areaX2: e.x + 50, areaY2: e.y + 50,
+  }));
   gen.parts = [...gen.parts, ...extra];
   const report = expectFailures(validate(gen, withRegions(gen, meta)), ['LD-09']);
   assert.ok((checkOf(report, 'LD-09').affected ?? []).includes('/parts'));

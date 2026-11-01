@@ -17,6 +17,7 @@ import type { JobStageEvent, JobSummary } from './jobs.ts';
 import {
   boxesToRegions,
   FIGURE_UNAVAILABLE_REASON,
+  samObjectsFor,
   SEGMENTATION_FAILED_REASON,
   validateLessonAnalysis,
 } from './lesson.ts';
@@ -27,6 +28,8 @@ import { loadSource } from '../../packages/sources/index.ts';
 import { loadFigure } from '../../packages/sources/figures.ts';
 import type { MetaReceipt } from '../../packages/contracts/index.ts';
 import type { LabelDiagramGen, SourceAnalysisV2 } from '../../packages/contracts/kit.ts';
+import { maskToOutline } from '../../packages/meta/sam-outline.ts';
+import { parseSamOutput } from '../../packages/meta/sam.ts';
 
 const DNA = 'medlineplus-what-is-dna';
 const FIGURE_ID = 'medlineplus-dna-structure-1';
@@ -262,6 +265,8 @@ interface SamBoxSpec {
   x2: number;
   y2: number;
   confidence?: number;
+  /** Raw `data=` value of the mask token (`H,W,~payload`); defaults to an unreadable placeholder. */
+  maskData?: string;
 }
 
 /** The SAM SSE stream shape parseSamStream/parseSamOutput expect (box token + mask token). */
@@ -273,7 +278,7 @@ function samSseBody(boxes: SamBoxSpec[], imagesProcessed = 1): string {
         const c = b.confidence !== undefined ? `;c=${b.confidence}` : '';
         return (
           `${b.id}<|box;x1=${b.x1};y1=${b.y1};x2=${b.x2};y2=${b.y2};w=${FIG_W};h=${FIG_H}${c}|>` +
-          `<|mask;x=0;y=0${c};data=27,60,~!!!!M!0c[0o9|>`
+          `<|mask;x=0;y=0${c};data=${b.maskData ?? '27,60,~!!!!M!0c[0o9'}|>`
         );
       })
       .join(',');
@@ -453,11 +458,13 @@ test('label-diagram: figures reach the analysis call, the image reaches generati
   assert.equal(content[1]!['type'], 'input_image');
   assert.equal(content[1]!['image_url'], `data:image/jpeg;base64,${expectedB64}`, 'SAM receives the exact stored bytes');
   void FIG_W; void FIG_H;
-  // parts[0] (283, 475) → (round(283*600/1000), round(475*600/1000)) = (170, 285), object id 1
+  // Stage 8c: the golden parts carry area boxes, so SAM gets a BOX per part (no point), object id i+1.
+  // parts[0] area (230, 420, 340, 530) on the 600x600 figure → x1=138 y1=252 x2=204 y2=318.
   assert.equal(content[0]!['type'], 'input_text');
   const inputText = String(content[0]!['text']);
-  assert.ok(inputText.startsWith('<0f>1<|point;x=170;y=285;w=600;h=600|>,'), `point prompt: ${inputText.slice(0, 60)}`);
-  assert.equal(inputText.split('<|point;').length - 1, 6, 'one point per part, ids 1..n');
+  assert.ok(inputText.startsWith('<0f>1<|box;x1=138;y1=252;x2=204;y2=318;w=600;h=600|>,2<|box;'), `box prompt: ${inputText.slice(0, 90)}`);
+  assert.equal(inputText.split('<|box;').length - 1, 6, 'one box per part, ids 1..n');
+  assert.equal(inputText.split('<|point;').length - 1, 0, 'a part with an area is prompted by its box only');
 
   // --- money: ledger reserve/reconcile mirrored through the ONE cost accumulator ---
   assert.equal(reserveCalls.length, 1);
@@ -505,8 +512,9 @@ test('label-diagram: figures reach the analysis call, the image reaches generati
   assert.equal(rec.spec.componentId, 'label-diagram-v1');
   assert.equal(rec.spec.id, `${jobId}:label-diagram-v1:r1`);
   assert.equal(rec.spec.figureId, FIGURE_ID);
-  const { labelBoxes: storedBoxes, ...figureRest } = rec.spec.figure;
+  const { labelBoxes: storedBoxes, partLabelGroups, ...figureRest } = rec.spec.figure;
   assert.equal(storedBoxes.length, 7, 'the lead-verified printed-label boxes travel with the figure');
+  assert.deepEqual(partLabelGroups, [1, 2, 3, 4, 5, 6], 'the lead-curated part label groups travel with the figure');
   assert.deepEqual(figureRest, {
     id: FIGURE_ID,
     width: FIG_W,
@@ -867,4 +875,171 @@ test('label-diagram: an unreadable figure store entry would fail the component b
   // constant so the UI sentence stays stable.
   assert.equal(typeof FIGURE_UNAVAILABLE_REASON, 'string');
   assert.match(FIGURE_UNAVAILABLE_REASON, /left out/);
+});
+
+/* ------------------------------------------------------------------ */
+/* Stage 8c slice S: box prompts, outlines, printed labels              */
+/* ------------------------------------------------------------------ */
+
+const partWith = (over: Record<string, number | undefined>): LabelDiagramGen['parts'][number] =>
+  ({ ...structuredClone(goldenLabelGen.parts[0]), ...over }) as LabelDiagramGen['parts'][number];
+
+test('samObjectsFor: area fields (0..1000) become a pixel BOX with no point; no area means the point', () => {
+  const objs = samObjectsFor(
+    [
+      partWith({ areaX1: 230, areaY1: 420, areaX2: 340, areaY2: 530 }),
+      partWith({ areaX1: undefined, areaY1: undefined, areaX2: undefined, areaY2: undefined, x: 283, y: 475 }),
+    ],
+    600,
+    600,
+  );
+  assert.deepEqual(objs, [
+    { id: 1, box: { x1: 138, y1: 252, x2: 204, y2: 318 } },
+    { id: 2, points: [{ x: 170, y: 285 }] },
+  ]);
+});
+
+test('samObjectsFor: clamps into the image (1000 is the last pixel), keeps x2 > x1, and falls back to the point otherwise', () => {
+  const objs = samObjectsFor(
+    [
+      partWith({ areaX1: 900, areaY1: 800, areaX2: 1000, areaY2: 1000 }), // right/bottom edge
+      partWith({ areaX1: -50, areaY1: -10, areaX2: 1200, areaY2: 1300 }), // overshoots both ways
+      partWith({ areaX1: 500, areaY1: 100, areaX2: 500, areaY2: 300 }), // zero width -> point
+      partWith({ areaX1: 700, areaY1: 100, areaX2: 300, areaY2: 300 }), // reversed -> point
+      partWith({ areaX1: 100, areaY1: 100, areaX2: 300, areaY2: undefined }), // one field missing -> point
+      partWith({ areaX1: Number.NaN, areaY1: 100, areaX2: 300, areaY2: 300 }), // not a number -> point
+      partWith({ areaX1: 999.9, areaY1: 100, areaX2: 1000, areaY2: 300 }), // collapses to one pixel column -> point
+    ],
+    600,
+    600,
+  );
+  assert.deepEqual(objs[0], { id: 1, box: { x1: 540, y1: 480, x2: 599, y2: 599 } });
+  assert.deepEqual(objs[1], { id: 2, box: { x1: 0, y1: 0, x2: 599, y2: 599 } });
+  for (const [i, o] of objs.slice(2).entries()) {
+    assert.equal(o.box, undefined, `object ${i + 3} has no box`);
+    assert.equal(o.points?.length, 1, `object ${i + 3} uses its point`);
+  }
+});
+
+test('label-diagram: a part whose area is empty (all zero, schema-valid) is still prompted by its point; a mixed gen mixes boxes and points in one request', async () => {
+  // The gen schema requires the four area fields, so "no area" reaches the worker as an empty 0,0,0,0 box.
+  const noAreas = structuredClone(goldenLabelGen);
+  for (const p of noAreas.parts) {
+    Object.assign(p, { areaX1: 0, areaY1: 0, areaX2: 0, areaY2: 0 });
+  }
+  const mixed = structuredClone(goldenLabelGen);
+  Object.assign(mixed.parts[1] as object, { areaX1: 0, areaY1: 0, areaX2: 0, areaY2: 0 });
+  const prompts: string[] = [];
+  for (const gen of [noAreas, mixed]) {
+    const sam = fakeSamFetch(() => ({ status: 200, body: samSseBody(samBoxesFor(gen), 1) }));
+    const { ledger } = fakeLedger();
+    const client = fakeClient({ analysis: dnaAnalysis, kit: { label_diagram: gen, quiz_cards: dnaQuizGen } });
+    const { done } = startLabelLesson(client, { sam: { apiKey: 'LLM_S...01', ledger, fetch: sam.impl }, maxRepairAttempts: 0 });
+    await done;
+    assert.equal(sam.calls.length, 1);
+    const content = (sam.calls[0]!.body['input'] as Array<Record<string, unknown>>)[0]!['content'] as Array<Record<string, unknown>>;
+    prompts.push(String(content[0]!['text']));
+  }
+  assert.ok(prompts[0]!.startsWith('<0f>1<|point;x=170;y=285;w=600;h=600|>,2<|point;'), prompts[0]);
+  assert.equal(prompts[0]!.split('<|box;').length - 1, 0);
+  assert.equal(prompts[0]!.split('<|point;').length - 1, 6);
+  assert.ok(prompts[1]!.startsWith('<0f>1<|box;x1=138;y1=252;x2=204;y2=318;w=600;h=600|>,2<|point;'), prompts[1]);
+  assert.equal(prompts[1]!.split('<|box;').length - 1, 5);
+  assert.equal(prompts[1]!.split('<|point;').length - 1, 1);
+});
+
+// The REAL runoff mask (docs/evidence/sam-mask-probe, box 322,332..351,362) rides a fake SAM stream through the worker.
+const runoffBox = parseSamOutput(
+  readFileSync(new URL('../../docs/evidence/sam-mask-probe/raw-output.txt', import.meta.url), 'utf8'),
+).find(b => b.id === 5)!;
+
+test('boxesToRegions: a region gains the outline traced from its mask; a missing or unreadable mask omits the key', () => {
+  const parts = [{ id: 'p-one' }, { id: 'p-two' }, { id: 'p-three' }] as unknown as LabelDiagramGen['parts'];
+  const regions = boxesToRegions(
+    [
+      { ...runoffBox, id: 1 },
+      { id: 2, x1: 5, y1: 5, x2: 10, y2: 10, confidence: 0.7 }, // no mask at all
+      { id: 3, x1: 5, y1: 5, x2: 10, y2: 10, confidence: 0.7, mask: { encoding: 'lossless', payload: '~garbage', width: 6, height: 6 } },
+    ],
+    parts,
+  );
+  const expected = maskToOutline(runoffBox.mask!, runoffBox);
+  assert.ok(expected !== null && expected.length <= 6000);
+  assert.deepEqual(regions[0], {
+    partId: 'p-one',
+    x1: 322,
+    y1: 332,
+    x2: 351,
+    y2: 362,
+    confidence: runoffBox.confidence,
+    outline: expected,
+  });
+  assert.deepEqual(regions[1], { partId: 'p-two', x1: 5, y1: 5, x2: 10, y2: 10, confidence: 0.7 });
+  assert.ok(!('outline' in (regions[1] as object)));
+  assert.ok(!('outline' in (regions[2] as object)), 'undecodable mask: no outline key (never null, never empty)');
+});
+
+test('label-diagram: SAM masks become region outlines in the stored revision and the published spec', async () => {
+  // Part 1 gets the real runoff mask (its box is the mask box); the rest keep the unreadable placeholder mask.
+  const boxes = samBoxesFor(goldenLabelGen).map(b =>
+    b.id === 1
+      ? {
+          ...b,
+          x1: runoffBox.x1,
+          y1: runoffBox.y1,
+          x2: runoffBox.x2,
+          y2: runoffBox.y2,
+          confidence: 0.9,
+          maskData: `${runoffBox.mask!.height},${runoffBox.mask!.width},${runoffBox.mask!.payload}`,
+        }
+      : b,
+  );
+  const sam = fakeSamFetch(() => ({ status: 200, body: samSseBody(boxes, 1) }));
+  const { ledger } = fakeLedger();
+  const client = fakeClient({ analysis: dnaAnalysis, kit: { label_diagram: goldenLabelGen, quiz_cards: dnaQuizGen } });
+  const { storageDir, jobId, done } = startLabelLesson(client, { sam: { apiKey: 'LLM_S...01', ledger, fetch: sam.impl }, maxRepairAttempts: 0 });
+  await done;
+  const rec = readRunFile(storageDir, jobId, 'label-diagram-v1.r1.json');
+  const expected = maskToOutline(runoffBox.mask!, runoffBox);
+  assert.ok(expected !== null);
+  assert.equal(rec.regions.length, 6);
+  assert.equal(rec.regions[0].outline, expected);
+  assert.equal(rec.regions[0].confidence, 0.9);
+  for (const r of rec.regions.slice(1)) {
+    assert.ok(!('outline' in r), 'placeholder masks give no outline');
+  }
+  assert.deepEqual(rec.spec.regions, rec.regions, 'the published spec carries the outline too');
+  assert.ok(rec.spec.regions[0].outline.length <= 6000);
+});
+
+test('label-diagram: generation AND repair messages list the figure printed labels; the spec figure carries partLabelGroups', async () => {
+  const broken = brokenQuoteLabelGen();
+  let samCalls = 0;
+  const sam = fakeSamFetch(() => {
+    samCalls += 1;
+    return { status: 200, body: samSseBody(samBoxesFor(goldenLabelGen), 1) };
+  });
+  const { ledger } = fakeLedger();
+  const client = fakeClient({
+    analysis: dnaAnalysis,
+    kit: { label_diagram: broken, quiz_cards: dnaQuizGen },
+    kitRepair: { label_diagram_repair: goldenLabelGen },
+  });
+  const { storageDir, jobId, done } = startLabelLesson(client, {
+    sam: { apiKey: 'LLM_S...01', ledger, fetch: sam.impl },
+    maxRepairAttempts: 1,
+  });
+  await done;
+  assert.equal(samCalls, 2);
+  const textOf = (schema: string): string => {
+    const req = client.requests.find(r => r.schemaName === schema);
+    assert.ok(req !== undefined, `a ${schema} request was made`);
+    return req.messages.map(m => (typeof m.content === 'string' ? m.content : '')).join('\n');
+  };
+  const listed = '"Base pairs"; "Thymine"; "Adenine"; "Guanine"; "Cytosine"; "Sugar phosphate backbone"';
+  assert.ok(textOf('label_diagram').includes(listed), 'the generation message lists the printed labels in group order');
+  assert.ok(textOf('label_diagram_repair').includes(listed), 'the repair message lists them too');
+  assert.ok(!textOf('quiz_cards').includes('Sugar phosphate backbone'), 'sibling components never see them');
+  const r2 = readRunFile(storageDir, jobId, 'label-diagram-v1.r2.json');
+  assert.deepEqual(r2.spec.figure.partLabelGroups, [1, 2, 3, 4, 5, 6]);
 });

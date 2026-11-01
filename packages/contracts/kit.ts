@@ -201,7 +201,9 @@ export const KIT_LIMITS = {
     maxRegionOverlapIoU: 0.6,
     // Stage 8b live run (lead): SAM boxes hug thin arrows and strands, so LD-06 accepts a point within this
     // fraction of the image's longer side outside its region box (12 px on a 600 px figure).
-    pointToleranceFraction: 0.02
+    pointToleranceFraction: 0.02,
+    // Stage 8c: SAM regions below this fail LD-11.
+    minRegionConfidence: 0.5
   }
 } as const;
 
@@ -528,6 +530,11 @@ export interface LabelPartGen {
   labelY1: number;
   labelX2: number;
   labelY2: number;
+  /** Stage 8c: normalised 0..1000 box around ALL drawn pieces of the part (not its printed label); SAM is prompted with it; absent on lessons generated before Stage 8c. */
+  areaX1?: number;
+  areaY1?: number;
+  areaX2?: number;
+  areaY2?: number;
 }
 export interface LabelFigureRef {
   id: string;
@@ -539,6 +546,8 @@ export interface LabelFigureRef {
   labelsInImage: boolean;
   /** Stage 8b (lead): lead-verified boxes (image pixels) around EVERY printed label; the view covers these. Absent on older lessons. `text`/`group` (optional, Set A): the printed words in the box and the group shared by the lines of ONE printed label; LD-02 binds part names to them. */
   labelBoxes?: { x1: number; y1: number; x2: number; y2: number; text?: string; group?: number }[];
+  /** Stage 8c: lead-curated label groups that name drawn parts; LD-10 is skipped when absent. */
+  partLabelGroups?: number[];
 }
 export interface LabelRegion {
   partId: string;
@@ -547,6 +556,8 @@ export interface LabelRegion {
   x2: number;
   y2: number;
   confidence: number | null;
+  /** Stage 8c: SVG path (M x y L x y … Z, absolute image pixels, simplified) tracing SAM's mask, at most 6000 characters; absent on older lessons or when decoding failed. */
+  outline?: string;
 }
 
 export interface KitGenByComponent {
@@ -802,7 +813,9 @@ export const STAGE6_CHECKS = {
   'LD-06': 'regions-found',
   'LD-07': 'regions-distinct',
   'LD-08': 'numbers-checkable',
-  'LD-09': 'counts-valid'
+  'LD-09': 'counts-valid',
+  'LD-10': 'labels-covered',
+  'LD-11': 'regions-confident'
 } as const;
 export type Stage6CheckId = keyof typeof STAGE6_CHECKS;
 export const STAGE6_CHECK_IDS: readonly Stage6CheckId[] = Object.keys(STAGE6_CHECKS) as unknown as readonly Stage6CheckId[];

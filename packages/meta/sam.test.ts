@@ -75,8 +75,15 @@ describe('parseSamOutput', (): void => {
       '<|mask;x=0;y=0;c=0.5;data=27,48,~abc!>~XYZ|>';
     const boxes = parseSamOutput(line);
     assert.equal(boxes.length, 2);
-    assert.deepEqual(boxes[0], { id: 1, x1: 10, y1: 20, x2: 30, y2: 40, confidence: 0.91 });
-    assert.deepEqual(boxes[1], { id: 2, x1: 100, y1: 120, x2: 150, y2: 170, confidence: 0.5 });
+    assert.deepEqual(boxes[0], {
+      id: 1, x1: 10, y1: 20, x2: 30, y2: 40, confidence: 0.91,
+      mask: { encoding: 'lossless', payload: '~!!!!M!0c[0o9', width: 60, height: 27 },
+    });
+    // The marker stays on the payload (a `!` or `>` inside it is payload, not syntax).
+    assert.deepEqual(boxes[1], {
+      id: 2, x1: 100, y1: 120, x2: 150, y2: 170, confidence: 0.5,
+      mask: { encoding: 'lossless', payload: '~abc!>~XYZ', width: 48, height: 27 },
+    });
   });
 
   it('leaves a missing object absent', (): void => {

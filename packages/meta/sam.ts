@@ -1,3 +1,4 @@
+import { buildObjectPrompt, ObjectPromptError } from '@meta-sam/parser';
 import { MetaError } from './client.ts';
 import type { MetaErrorCode } from './client.ts';
 import type { Ledger } from './ledger.ts';
@@ -6,6 +7,8 @@ export const SAM_MODEL = 'sam-3.1';
 export const SAM_BASE_URL = 'https://api.meta.ai/v1';
 export const SAM_COST_USD_PER_IMAGE = 0.0025;
 export const SAM_MAX_POINTS = 16;
+/** Documented per-call cap on prompted objects (points and boxes share it). */
+export const SAM_MAX_OBJECTS = 16;
 
 export interface SamPoint {
   id: number;
@@ -20,6 +23,18 @@ export interface SamImage {
   height: number;
 }
 
+/**
+ * The mask token of a result record, in the shape Meta's `@meta-sam/parser` decoders take.
+ * `payload` INCLUDES the marker character (`~` lossless, `!` one_bit); the raster covers the record's
+ * box only (height = y2 - y1 + 1 rows, width = x2 - x1 + 1 columns, box-local).
+ */
+export interface SamMask {
+  encoding: 'lossless' | 'one_bit';
+  payload: string;
+  width: number;
+  height: number;
+}
+
 export interface SamBox {
   id: number;
   x1: number;
@@ -27,17 +42,41 @@ export interface SamBox {
   x2: number;
   y2: number;
   confidence: number | null;
+  /** The traced mask of this region (Stage 8c); absent when the token carried none we could read. */
+  mask?: SamMask;
 }
 
-export interface SegmentPointsOptions {
+/** A prompt box in IMAGE pixels, edges inclusive (x2/y2 name the last pixel row/column). */
+export interface SamPromptBox {
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+}
+
+/**
+ * One prompted object: an id plus a box, points, or both. Several prompts of one object are
+ * concatenated after its id (box first, then the points).
+ */
+export interface SamObject {
+  id: number;
+  box?: SamPromptBox;
+  points?: ReadonlyArray<{ x: number; y: number }>;
+}
+
+export interface SegmentObjectsOptions {
   apiKey: string | undefined;
   baseUrl?: string;
   fetch?: typeof fetch;
   ledger: Ledger;
   purpose: 'test-live' | 'demo';
   image: SamImage;
-  points: SamPoint[];
+  objects: SamObject[];
   signal?: AbortSignal;
+}
+
+export interface SegmentPointsOptions extends Omit<SegmentObjectsOptions, 'objects'> {
+  points: SamPoint[];
 }
 
 export interface SegmentPointsResult {
@@ -76,12 +115,76 @@ export function buildPointPrompt(points: ReadonlyArray<SamPoint>, width: number,
   return `<0f>${records.join(',')}`;
 }
 
+/**
+ * Builds the documented object-prompt text, e.g. `<0f>1<|box;x1=135;y1=306;x2=200;y2=429;w=572;h=504|>,2<|point;x=166;y=375;w=572;h=504|>`.
+ * The grammar itself comes from Meta's `buildObjectPrompt` (which takes half-open right/bottom and writes x2 = right - 1);
+ * this wrapper clamps every coordinate into the image first, as `buildPointPrompt` always did, and throws a RangeError with a
+ * fixed code for input that cannot be a prompt. Throws BEFORE anything is reserved, so a bad prompt never costs money.
+ */
+export function buildObjectsPrompt(objects: ReadonlyArray<SamObject>, width: number, height: number): string {
+  if (objects.length === 0) {
+    throw new RangeError('SAM_NO_OBJECTS');
+  }
+  if (objects.length > SAM_MAX_OBJECTS) {
+    throw new RangeError('SAM_TOO_MANY_OBJECTS');
+  }
+  const w: number = Math.floor(width);
+  const h: number = Math.floor(height);
+  if (!(w >= 1 && h >= 1)) {
+    throw new RangeError('SAM_IMAGE_SIZE_INVALID');
+  }
+  try {
+    return buildObjectPrompt({
+      size: { width: w, height: h },
+      objects: objects.map((o: SamObject) => {
+        const points = (o.points ?? []).map((p) => ({
+          x: clampPixel(p.x, 0, w - 1),
+          y: clampPixel(p.y, 0, h - 1),
+        }));
+        let box: { left: number; top: number; right: number; bottom: number } | undefined;
+        if (o.box !== undefined) {
+          const left: number = clampPixel(o.box.x1, 0, w - 1);
+          const top: number = clampPixel(o.box.y1, 0, h - 1);
+          box = {
+            left,
+            top,
+            right: clampPixel(o.box.x2, left, w - 1) + 1,
+            bottom: clampPixel(o.box.y2, top, h - 1) + 1,
+          };
+        }
+        return {
+          id: o.id,
+          prompts: [{ ...(box !== undefined ? { box } : {}), ...(points.length > 0 ? { points } : {}) }],
+        };
+      }),
+    });
+  } catch (err: unknown) {
+    if (err instanceof ObjectPromptError) {
+      throw new RangeError(`SAM_PROMPT_INVALID_${err.code.toUpperCase()}`);
+    }
+    throw err;
+  }
+}
+
 const BOX_TOKEN_RE =
   /^<\|box;x1=(\d+);y1=(\d+);x2=(\d+);y2=(\d+);w=(\d+);h=(\d+)(?:;c=([0-9]+(?:\.[0-9]+)?))?\|>/;
 const FRAME_MARKER_RE = /^<\d+f>/;
 const OBJECT_ID_RE = /^[0-9]+/;
 const MASK_TOKEN_RE =
-  /^<\|mask;x=0;y=0(?:;c=([0-9]+(?:\.[0-9]+)?))?;data=\d+,\d+,[~!][\s\S]*\|>$/;
+  /^<\|mask;x=0;y=0(?:;c=([0-9]+(?:\.[0-9]+)?))?;data=(\d+),(\d+),([~!][\s\S]*)\|>$/;
+
+/** `data=<H>,<W>,<marker><payload>`: height FIRST; the marker stays on the payload (Meta's decoders need it). */
+function parseMask(heightRaw: string | undefined, widthRaw: string | undefined, payload: string | undefined): SamMask | undefined {
+  const height: number = Number.parseInt(heightRaw ?? '', 10);
+  const width: number = Number.parseInt(widthRaw ?? '', 10);
+  if (!Number.isSafeInteger(height) || !Number.isSafeInteger(width) || height < 1 || width < 1) {
+    return undefined;
+  }
+  if (payload === undefined || payload.length < 2) {
+    return undefined;
+  }
+  return { encoding: payload.startsWith('!') ? 'one_bit' : 'lossless', payload, width, height };
+}
 
 function parseConfidence(raw: string | undefined): number | null {
   if (raw === undefined) {
@@ -147,7 +250,8 @@ export function parseSamOutput(output: string): SamBox[] {
     }
     const maskConfidence: number | null = parseConfidence(maskMatch[1]);
     const confidence: number | null = boxConfidence ?? maskConfidence;
-    found.set(id, { id, x1, y1, x2, y2, confidence });
+    const mask: SamMask | undefined = parseMask(maskMatch[2], maskMatch[3], maskMatch[4]);
+    found.set(id, { id, x1, y1, x2, y2, confidence, ...(mask !== undefined ? { mask } : {}) });
     i = end + 2;
   }
   return [...found.values()].sort((a: SamBox, b: SamBox): number => a.id - b.id);
@@ -285,13 +389,28 @@ function parseSamStream(body: string): ParsedSamStream {
   return parsed;
 }
 
+/** Point prompts only: one object per point (ids as given). Same billing and request as `segmentObjects`. */
 export async function segmentPoints(opts: SegmentPointsOptions): Promise<SegmentPointsResult> {
   if (opts.points.length > SAM_MAX_POINTS) {
     throw new RangeError('SAM_TOO_MANY_POINTS');
   }
+  const { points, ...rest } = opts;
+  return segmentObjects({
+    ...rest,
+    objects: points.map((p: SamPoint): SamObject => ({ id: p.id, points: [{ x: p.x, y: p.y }] })),
+  });
+}
+
+/** Box and/or point prompts, up to 16 objects, ONE image per request. */
+export async function segmentObjects(opts: SegmentObjectsOptions): Promise<SegmentPointsResult> {
+  if (opts.objects.length > SAM_MAX_OBJECTS) {
+    throw new RangeError('SAM_TOO_MANY_OBJECTS');
+  }
   if (typeof opts.apiKey !== 'string' || opts.apiKey.length === 0) {
     throw new MetaError('MODEL_API_KEY_MISSING', undefined, { provider: 'meta-api' });
   }
+  // Build (and so validate) the prompt BEFORE reserving: an unusable prompt must never cost money.
+  const prompt: string = buildObjectsPrompt(opts.objects, opts.image.width, opts.image.height);
   let reservationId: string;
   try {
     reservationId = opts.ledger.reserve({
@@ -315,7 +434,6 @@ export async function segmentPoints(opts: SegmentPointsOptions): Promise<Segment
     }
   };
 
-  const prompt: string = buildPointPrompt(opts.points, opts.image.width, opts.image.height);
   const base: string = opts.baseUrl ?? SAM_BASE_URL;
   const url = `${base}/responses`;
   const headers: Record<string, string> = {

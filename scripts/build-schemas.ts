@@ -581,7 +581,11 @@ function labelDiagramSchema(cid: KitGenComponentId): Record<string, unknown> {
     labelX1: coord('Left edge of the box around the printed part label, normalised 0 to 1000; all four label edges are 0 when there is no printed label.'),
     labelY1: coord('Top edge of the box around the printed part label, normalised 0 to 1000; all four label edges are 0 when there is no printed label.'),
     labelX2: coord('Right edge of the box around the printed part label, normalised 0 to 1000; all four label edges are 0 when there is no printed label.'),
-    labelY2: coord('Bottom edge of the box around the printed part label, normalised 0 to 1000; all four label edges are 0 when there is no printed label.')
+    labelY2: coord('Bottom edge of the box around the printed part label, normalised 0 to 1000; all four label edges are 0 when there is no printed label.'),
+    areaX1: coord('Left edge of a box around ALL drawn pieces of this part (every arrow, the whole cloud), never its printed label, normalised 0 to 1000; the point lies inside it.'),
+    areaY1: coord('Top edge of a box around ALL drawn pieces of this part (every arrow, the whole cloud), never its printed label, normalised 0 to 1000; the point lies inside it.'),
+    areaX2: coord('Right edge of a box around ALL drawn pieces of this part (every arrow, the whole cloud), never its printed label, normalised 0 to 1000; the point lies inside it.'),
+    areaY2: coord('Bottom edge of a box around ALL drawn pieces of this part (every arrow, the whole cloud), never its printed label, normalised 0 to 1000; the point lies inside it.')
   });
   return obj({
     schemaVersion: { type: 'string', enum: [cid], description: 'Generator schema version, always the component id.' },

@@ -5,6 +5,7 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { validateKitComponent } from '../../packages/validation/kit/index.ts';
+import { NOT_RETROACTIVE_CHECK_IDS, retroactiveFailedIds } from '../../packages/validation/not-retroactive.ts';
 import { listFigures, loadFigureLabelBoxes } from '../../packages/sources/figures.ts';
 import type { FigureMeta } from '../../packages/sources/figures.ts';
 import { loadSource, loadUserSource, userSourcesDirOf } from '../../packages/sources/index.ts';
@@ -53,10 +54,15 @@ function recheckOne(storageDir: string, job: RecheckJob, componentId: string, re
       if (art.gen !== undefined) {
         const docs = loadDocs(storageDir, job, opts);
         const extra = componentId === 'label-diagram-v1'
-          ? { figures: figuresFor(job.summary.sourceId), ...(Array.isArray(art.regions) ? { labelRegions: art.regions } : {}) }
+          ? { figures: figuresFor(job.summary.sourceId), storedWithoutAreas: true, ...(Array.isArray(art.regions) ? { labelRegions: art.regions } : {}) }
           : {};
         const report = validateKitComponent(componentId, art.gen, docs, { revision, ...extra } as Parameters<typeof validateKitComponent>[3]);
-        result = { publishable: report.publishable, failedChecks: report.checks.filter(c => !c.passed).map(c => c.id) };
+        // LD-10/LD-11 (Stage 8c) are not retroactive: stored parts were never asked for areas, full label
+        // coverage or confident regions, so they are ignored here (NOT_RETROACTIVE_CHECK_IDS).
+        result = {
+          publishable: report.checks.every(c => c.passed || NOT_RETROACTIVE_CHECK_IDS.has(c.id)),
+          failedChecks: retroactiveFailedIds(report.checks),
+        };
       }
     } catch {
       result = null; // unreadable artifact or source: leave the lesson as stored

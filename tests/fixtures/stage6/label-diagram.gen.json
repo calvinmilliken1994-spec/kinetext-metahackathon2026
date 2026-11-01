@@ -13,7 +13,11 @@
       "labelX1": 397,
       "labelY1": 303,
       "labelX2": 542,
-      "labelY2": 330
+      "labelY2": 330,
+      "areaX1": 230,
+      "areaY1": 420,
+      "areaX2": 340,
+      "areaY2": 530
     },
     {
       "id": "part-adenine",
@@ -25,7 +29,11 @@
       "labelX1": 595,
       "labelY1": 353,
       "labelX2": 707,
-      "labelY2": 380
+      "labelY2": 380,
+      "areaX1": 600,
+      "areaY1": 270,
+      "areaX2": 700,
+      "areaY2": 340
     },
     {
       "id": "part-thymine",
@@ -37,7 +45,11 @@
       "labelX1": 762,
       "labelY1": 353,
       "labelX2": 873,
-      "labelY2": 380
+      "labelY2": 380,
+      "areaX1": 750,
+      "areaY1": 270,
+      "areaX2": 850,
+      "areaY2": 340
     },
     {
       "id": "part-guanine",
@@ -49,7 +61,11 @@
       "labelX1": 595,
       "labelY1": 510,
       "labelX2": 707,
-      "labelY2": 537
+      "labelY2": 537,
+      "areaX1": 608,
+      "areaY1": 430,
+      "areaX2": 708,
+      "areaY2": 500
     },
     {
       "id": "part-cytosine",
@@ -61,7 +77,11 @@
       "labelX1": 762,
       "labelY1": 510,
       "labelX2": 880,
-      "labelY2": 537
+      "labelY2": 537,
+      "areaX1": 750,
+      "areaY1": 430,
+      "areaX2": 850,
+      "areaY2": 500
     },
     {
       "id": "part-backbone",
@@ -73,7 +93,11 @@
       "labelX1": 508,
       "labelY1": 672,
       "labelX2": 745,
-      "labelY2": 733
+      "labelY2": 733,
+      "areaX1": 310,
+      "areaY1": 630,
+      "areaX2": 460,
+      "areaY2": 730
     }
   ],
   "hint": "Tap each part of the DNA diagram and name it with the page words."

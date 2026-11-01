@@ -151,9 +151,9 @@ test('assembleKitSpec plus attachLabelRegions produce the spec without mutating 
   assert.equal(JSON.stringify(spec), specSnap, 'spec must deep-copy figure and regions');
 });
 
-test('checkIdsFor returns 9 LD ids and the check names match the spec', () => {
+test('checkIdsFor returns the LD ids (9 from Stage 8b, LD-10/LD-11 from Stage 8c) and the check names match the spec', () => {
   assert.deepEqual(checkIdsFor('label-diagram-v1'), [
-    'LD-01', 'LD-02', 'LD-03', 'LD-04', 'LD-05', 'LD-06', 'LD-07', 'LD-08', 'LD-09'
+    'LD-01', 'LD-02', 'LD-03', 'LD-04', 'LD-05', 'LD-06', 'LD-07', 'LD-08', 'LD-09', 'LD-10', 'LD-11'
   ]);
   assert.ok(checkIdsFor('label-diagram-v1').every((id) => id.startsWith('LD-')));
   assert.equal(CHECK_PREFIX_BY_COMPONENT['label-diagram-v1'], 'LD');
@@ -166,7 +166,7 @@ test('checkIdsFor returns 9 LD ids and the check names match the spec', () => {
     'points-valid', 'label-boxes-valid', 'regions-found',
     'regions-distinct', 'numbers-checkable', 'counts-valid'
   ]);
-  assert.equal(Object.keys(STAGE6_CHECKS).length, 101);
+  assert.equal(Object.keys(STAGE6_CHECKS).length, 103); // +2 Stage 8c (LD-10, LD-11)
 });
 
 test('label-diagram gen schema rejects 2 parts and a missing key', () => {

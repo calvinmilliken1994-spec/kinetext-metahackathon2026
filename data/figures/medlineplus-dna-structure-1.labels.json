@@ -60,5 +60,14 @@
       "y2": 440,
       "group": 6
     }
-  ]
+  ],
+  "partLabelGroups": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "partLabelGroupsNote": "Lead-curated (STAGE-8c): label groups that name drawn parts of the figure; LD-10 requires a part for each one the page text names."
 }

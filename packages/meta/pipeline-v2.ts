@@ -43,6 +43,8 @@ export interface V2ImageInput {
   mime: string;
   base64: string;
   figureId: string;
+  /** Stage 8c: one string per printed label group, in group order; listed in the generation message. */
+  printedLabels?: string[];
 }
 
 export type V2GeneratedOutputStage = 'analyze-v2' | 'component' | 'component-repair' | 'analysis-v2-repair';
@@ -218,7 +220,12 @@ function labelImageDataUrl(image: V2ImageInput): string {
 }
 
 function figureIdLine(image: V2ImageInput): string {
-  return `The figure attached is figureId "${image.figureId}" (use exactly this figureId).`;
+  const base: string = `The figure attached is figureId "${image.figureId}" (use exactly this figureId).`;
+  if (image.printedLabels !== undefined && image.printedLabels.length > 0) {
+    const listed: string = image.printedLabels.map((l) => JSON.stringify(l)).join('; ');
+    return `${base} The figure's printed labels (in reading order): ${listed}. Make one part for every printed label above whose words the page text names; a label the page never names gets no part.`;
+  }
+  return base;
 }
 
 function attachImageToUserMessage(messages: ChatMessage[], image: V2ImageInput): ChatMessage[] {

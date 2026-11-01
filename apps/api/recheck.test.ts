@@ -58,6 +58,21 @@ test('a stored ladder that still passes keeps publishable true; components outsi
   }
 });
 
+// Stage 8c: LD-10 / LD-11 are NOT retroactive. These two stored label diagrams carry SAM regions the new LD-11
+// rejects (water cycle: evaporation 0.28; DNA: backbone 0.15, guanine 0.25, cytosine 0.22) and were never asked for
+// area boxes, yet they were published and must stay publishable and unlisted for those checks.
+for (const [jobId, what] of [['job-20261031081105-910f3776', 'water cycle'], ['job-20261031081105-21355f66', 'DNA']] as const) {
+  test(`a stored ${what} label diagram stays publishable: LD-10 and LD-11 are ignored when re-checking stored parts`, (t) => {
+    const dir = storageWith(jobId);
+    if (dir === null) return t.skip('stored run not present on this machine');
+    const job = jobView(dir, jobId);
+    recheckLesson(dir, job, {});
+    const part = job.lesson.components.find(c => c.componentId === 'label-diagram-v1');
+    assert.ok(part);
+    assert.deepEqual(part.recheck, { publishable: true, failedChecks: [] });
+  });
+}
+
 test('a missing artifact or unfinished job leaves the lesson untouched (no recheck field)', () => {
   const dir = mkdtempSync(join(tmpdir(), 'recheck-empty-'));
   const job = {

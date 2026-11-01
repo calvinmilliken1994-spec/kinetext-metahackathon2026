@@ -39,7 +39,11 @@
           "labelX1",
           "labelY1",
           "labelX2",
-          "labelY2"
+          "labelY2",
+          "areaX1",
+          "areaY1",
+          "areaX2",
+          "areaY2"
         ],
         "properties": {
           "id": {
@@ -81,6 +85,22 @@
           "labelY2": {
             "type": "integer",
             "description": "Bottom edge of the box around the printed part label, normalised 0 to 1000; all four label edges are 0 when there is no printed label."
+          },
+          "areaX1": {
+            "type": "integer",
+            "description": "Left edge of a box around ALL drawn pieces of this part (every arrow, the whole cloud), never its printed label, normalised 0 to 1000; the point lies inside it."
+          },
+          "areaY1": {
+            "type": "integer",
+            "description": "Top edge of a box around ALL drawn pieces of this part (every arrow, the whole cloud), never its printed label, normalised 0 to 1000; the point lies inside it."
+          },
+          "areaX2": {
+            "type": "integer",
+            "description": "Right edge of a box around ALL drawn pieces of this part (every arrow, the whole cloud), never its printed label, normalised 0 to 1000; the point lies inside it."
+          },
+          "areaY2": {
+            "type": "integer",
+            "description": "Bottom edge of a box around ALL drawn pieces of this part (every arrow, the whole cloud), never its printed label, normalised 0 to 1000; the point lies inside it."
           }
         }
       },

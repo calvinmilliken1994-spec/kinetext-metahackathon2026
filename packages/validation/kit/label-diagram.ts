@@ -28,7 +28,17 @@
 //   LD-07 the pairwise IoU of the regions is at most maxRegionOverlapIoU;
 //   LD-08 the shared N-01 numbers-checkable rule over the AI-written title and hint;
 //   LD-09 parts count within KIT_LIMITS.labelDiagram.parts, distinct part ids and distinct part
-//         names (case-insensitive).
+//         names (case-insensitive);
+//   LD-10 (Stage 8c, docs/specs/STAGE-8c-label-coverage-and-outlines.md) labels-covered: for each
+//         printed-label group the figure lists in partLabelGroups whose normalised text is a whole phrase
+//         of the normalised page text, some part's label box claims it (kit/label-identity.ts), unless the
+//         diagram already has the maximum number of parts; affected '/parts' so a repair may ADD parts;
+//   LD-11 (Stage 8c) regions-confident: every SAM region with a numeric confidence is at least
+//         KIT_LIMITS.labelDiagram.minRegionConfidence; without the regions option it fails with the same
+//         'segmentation did not run' as LD-06/07. LD-04 also checks the optional area box (all four edges
+//         integers 0..1000, x1 < x2, y1 < y2, the part's point inside it) once any area field is present.
+// LD-10 and LD-11 are NOT RETROACTIVE: stored runs were never asked for areas or full coverage, so
+// NOT_RETROACTIVE_CHECK_IDS (packages/validation/not-retroactive.ts) is ignored when stored parts are re-checked.
 // schema.gen owns the non-quote structural shape (title, part id pattern, name length) like the
 // other kit components; the publisher/plain-text sweep merges into it (kit/policy.ts).
 // Failing checks carry validator-owned `affected` JSON pointers into the GEN (the artifact a
@@ -57,7 +67,7 @@ import {
 } from './shared.ts';
 import type { EntryQuote } from './shared.ts';
 import { phraseOccursWhole } from './threshold.ts';
-import { printedLabelProblems } from './label-identity.ts';
+import { claimedPrintedUnits, printedLabelProblems, printedUnits } from './label-identity.ts';
 
 const L = KIT_LIMITS.labelDiagram;
 
@@ -103,6 +113,45 @@ function boxContains(box: LabelBox, px: number, py: number): boolean {
 
 function boxText(b: LabelBox): string {
   return `(${b.x1},${b.y1})-(${b.x2},${b.y2})`;
+}
+
+const AREA_FIELDS = ['areaX1', 'areaY1', 'areaX2', 'areaY2'] as const;
+
+function areaPathsOf(i: number): string[] {
+  return AREA_FIELDS.map(f => `/parts/${i}/${f}`);
+}
+
+/**
+ * Stage 8c: the problem with a part's optional area box, or null. No area field at all = nothing to check (older
+ * lessons). Any area field present = all four must be integers 0..coordMax with x1 < x2, y1 < y2, and the part's own
+ * point (x, y), when it is a usable number, must lie inside the box (edges inclusive).
+ */
+function areaBoxProblem(part: LabelPartGen | undefined): string | null {
+  const area: unknown[] = AREA_FIELDS.map(f => (part as unknown as Record<string, unknown> | undefined)?.[f]);
+  if (area.every(v => v === undefined)) return null;
+  const shown = `(${area.map(v => JSON.stringify(v) ?? 'missing').join(', ')})`;
+  if (!area.every(v => Number.isInteger(v) && (v as number) >= 0 && (v as number) <= L.coordMax)) {
+    return `the area box ${shown} needs all four edges (areaX1, areaY1, areaX2, areaY2) as integers 0..${L.coordMax}`;
+  }
+  const [x1, y1, x2, y2] = area as number[];
+  if (!(x1! < x2! && y1! < y2!)) {
+    return `the area box ${shown} is not well-formed: expected areaX1 < areaX2 and areaY1 < areaY2`;
+  }
+  if (isFiniteNumber(part?.x) && isFiniteNumber(part?.y) && !boxContains({ x1: x1!, y1: y1!, x2: x2!, y2: y2! }, part.x, part.y)) {
+    return `the point (${part.x}, ${part.y}) lies outside its own area box ${boxText({ x1: x1!, y1: y1!, x2: x2!, y2: y2! })}; the point must sit on the part, inside the box that surrounds all of its drawn pieces`;
+  }
+  return null;
+}
+
+/** Stage 8c (LD-10): lowercase, every run of non-letters/digits (hyphens included) becomes one space, trimmed. */
+export function normaliseCoverageText(text: unknown): string {
+  if (typeof text !== 'string') return '';
+  return text.normalize('NFKC').toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+}
+
+/** True when the normalised phrase is a whole-word phrase of the normalised text. */
+function phraseOfText(normalisedText: string, normalisedPhrase: string): boolean {
+  return normalisedPhrase !== '' && ` ${normalisedText} `.includes(` ${normalisedPhrase} `);
 }
 
 /** Intersection-over-union of two pixel boxes; 0 when either box has no positive area. */
@@ -238,6 +287,13 @@ export function validateLabelDiagram(gen: LabelDiagramGen, sources: SourceDocume
             affected.push(`/parts/${i}/${axis}`);
           }
         }
+        // Stage 8c: the optional area box (around ALL drawn pieces of the part). Lessons written before Stage 8c carry
+        // none and skip this; once ANY area field is present all four must be well-formed and hold the part's point.
+        const areaProblem = areaBoxProblem(p);
+        if (areaProblem !== null) {
+          problems.push(`parts[${i}]: ${areaProblem}`);
+          affected.push(...areaPathsOf(i), `/parts/${i}/x`, `/parts/${i}/y`);
+        }
         if (!Number.isInteger(p?.x) || !Number.isInteger(p?.y)) return;
         const px = p.x as number;
         const py = p.y as number;
@@ -262,7 +318,7 @@ export function validateLabelDiagram(gen: LabelDiagramGen, sources: SourceDocume
         });
       });
       return problems.length === 0
-        ? { passed: true, message: `all ${parts.length} part point(s) are integers within 0..${L.coordMax} and none lies inside any printed-label box (points-valid)` }
+        ? { passed: true, message: `all ${parts.length} part point(s) are integers within 0..${L.coordMax}, every area box (where given) is well-formed and holds its point, and no point lies inside any printed-label box (points-valid)` }
         : { passed: false, message: problems.join('; '), path: affected[0], affected };
     }),
 
@@ -450,6 +506,63 @@ export function validateLabelDiagram(gen: LabelDiagramGen, sources: SourceDocume
       });
       return problems.length === 0
         ? { passed: true, message: `${parts.length} parts (within ${L.parts.min}-${L.parts.max}) with distinct ids and distinct names (counts-valid)` }
+        : { passed: false, message: problems.join('; '), path: affected[0], affected };
+    }),
+
+    // Stage 8c: every printed label that names a drawn part AND that the page text names is claimed by a part.
+    guarded('LD-10', 'semantic', () => {
+      const groups = (figure as (FigureMeta & { partLabelGroups?: unknown }) | null)?.partLabelGroups;
+      const units = printedUnits(figure);
+      if (!Array.isArray(groups) || units === null) {
+        return { passed: true, message: 'this figure does not list which printed labels name drawn parts (or stores no printed text), so label coverage is not checked (labels-covered)' };
+      }
+      const claimed = claimedPrintedUnits(parts, figure, units) ?? new Set<never>();
+      const pageTexts = all.map(normaliseCoverageText);
+      const missing: string[] = [];
+      let required = 0;
+      for (const group of groups) {
+        if (!Number.isInteger(group)) continue;
+        const unit = units.find(u => u.group === group);
+        if (unit === undefined || unit.text === null) continue;
+        const phrase = normaliseCoverageText(unit.text);
+        if (!pageTexts.some(t => phraseOfText(t, phrase))) continue; // the page never names this label: not required
+        required++;
+        if (!claimed.has(unit)) missing.push(`"${unit.text}"`);
+      }
+      if (missing.length === 0) {
+        return { passed: true, message: `all ${required} printed label(s) of the figure that the page text names are claimed by a part (labels-covered)` };
+      }
+      if (parts.length >= L.parts.max) {
+        return { passed: true, message: `${missing.length} printed label(s) the page names (${missing.join(', ')}) have no part, but the diagram already has the maximum of ${L.parts.max} parts (labels-covered)` };
+      }
+      return {
+        passed: false,
+        message: `the figure prints ${missing.length} label(s) that the page text names but no part covers: ${missing.join(', ')}; add a part for each (up to ${L.parts.max} parts), with its label box on that printed label`,
+        path: '/parts',
+        affected: ['/parts'],
+      };
+    }),
+
+    // Stage 8c: SAM must be sure of every region it traced.
+    guarded('LD-11', 'behavioral', () => {
+      if (!regionsGiven) {
+        return { passed: false, message: SEGMENTATION_DID_NOT_RUN };
+      }
+      const problems: string[] = [];
+      const affected: string[] = [];
+      let judged = 0;
+      regionEntries.forEach(({ r }) => {
+        const confidence: unknown = r.confidence;
+        if (!isFiniteNumber(confidence)) return;
+        judged++;
+        if (confidence >= L.minRegionConfidence) return;
+        const i = partIndexOfId.get(r.partId);
+        if (i === undefined) return; // a stray region: LD-06 owns it
+        problems.push(`${nameOf(i)} (parts[${i}]): SAM was only ${confidence.toFixed(2)} sure of its region (at least ${L.minRegionConfidence} needed); move the point onto the drawn part and put the area box around all of its drawn pieces`);
+        affected.push(`/parts/${i}/x`, `/parts/${i}/y`, ...areaPathsOf(i));
+      });
+      return problems.length === 0
+        ? { passed: true, message: `SAM was at least ${L.minRegionConfidence} sure of all ${judged} region(s) that carry a confidence (regions-confident)` }
         : { passed: false, message: problems.join('; '), path: affected[0], affected };
     }),
   ];

@@ -167,7 +167,7 @@ test('checkIdsFor returns 7/7/7/8 ids and prefixes map the new components', () =
   assert.equal(CHECK_PREFIX_BY_COMPONENT['log-ladder-v1'], 'LOG');
   assert.equal(CHECK_PREFIX_BY_COMPONENT['threshold-v1'], 'TH');
   assert.equal(CHECK_PREFIX_BY_COMPONENT['data-table-v1'], 'DT');
-  assert.equal(Object.keys(STAGE6_CHECKS).length, 101); // 92 + 9 LD checks (Stage 8b)
+  assert.equal(Object.keys(STAGE6_CHECKS).length, 103); // 92 + 9 LD checks (Stage 8b) + 2 (Stage 8c)
 });
 
 test('new constants and guards behave', () => {

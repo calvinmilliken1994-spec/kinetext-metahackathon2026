@@ -14,7 +14,7 @@ import { Ajv } from 'ajv';
 import type { AnySchemaObject, ValidateFunction } from 'ajv';
 
 import type { SourceDocument, ValidationCheck, ValidationReport } from '../../contracts/index.ts';
-import { isKitComponentId, KIT_GEN_COMPONENT_IDS } from '../../contracts/kit.ts';
+import { isKitComponentId, KIT_GEN_COMPONENT_IDS, KIT_LIMITS } from '../../contracts/kit.ts';
 import type {
   BalanceEquationGen,
   CompareTableGen,
@@ -71,7 +71,15 @@ export interface KitValidateOptions {
   /** Stage 8b label-diagram-v1 only: SAM regions for this revision and the source's figure list. */
   labelRegions?: readonly LabelRegion[];
   figures?: readonly FigureMeta[];
+  /**
+   * Stage 8c, label-diagram-v1 only: set when re-checking a STORED part. The gen schema Muse receives requires the
+   * four area edges, but lessons stored before Stage 8c never had them; with this flag a missing area edge is not a
+   * schema failure (LD-04 still checks any area that is present). New generations never set it.
+   */
+  storedWithoutAreas?: boolean;
 }
+
+const LABEL_AREA_KEYS: ReadonlySet<string> = new Set(['areaX1', 'areaY1', 'areaX2', 'areaY2']);
 
 /**
  * Validate one Stage 6 kit component gen against the provided source documents.
@@ -117,7 +125,10 @@ export function validateKitComponent(
     // per-field affected paths. Any other schema error (types, enums, required keys) is unsafe to
     // walk and short-circuits like v1's schema.full.
     const errors = validate.errors ?? [];
-    const nonCount = errors.filter(e => e.keyword !== 'minItems' && e.keyword !== 'maxItems');
+    const missingStoredArea = (e: (typeof errors)[number]): boolean =>
+      opts.storedWithoutAreas === true && componentId === 'label-diagram-v1' && e.keyword === 'required' &&
+      LABEL_AREA_KEYS.has(String((e.params as { missingProperty?: unknown } | undefined)?.missingProperty));
+    const nonCount = errors.filter(e => e.keyword !== 'minItems' && e.keyword !== 'maxItems' && !missingStoredArea(e));
     if (nonCount.length > 0) {
       return {
         artifactId,
@@ -235,7 +246,12 @@ export function compareKitRevisions(
         // Stage 8a (lead): DT-04 names `/rows/i/values` when a row's value count differs from the column count;
         // exactly the compare-table S6R-06 rule — tail slots of THAT row only, ending on the revision-1 column count.
         ? ({ pointer, allowed, after }) => /^\/rows\/\d+\/values$/.test(pointer) && allowed.includes(pointer) && after === dataColumnCountOf(baseline)
-        : undefined,
+        : componentId === 'label-diagram-v1'
+          // Stage 8c (lead): LD-10 (labels-covered) names `/parts` when a printed label the page names has no part, so
+          // the honest repair ADDS parts. Pure append only, up to the maximum; the kept parts stay frozen (a resized list
+          // grants no content authority over them) and every new part is checked like any other by LD-01..LD-11.
+          ? ({ pointer, allowed, before, after }) => pointer === '/parts' && allowed.includes('/parts') && after > before && after <= KIT_LIMITS.labelDiagram.parts.max
+          : undefined,
   });
 }
 

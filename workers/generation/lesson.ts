@@ -41,8 +41,9 @@ import {
   repairKitComponent,
 } from '../../packages/meta/pipeline-v2.ts';
 import type { V2ImageInput, V2RevisionComparator, V2Validator } from '../../packages/meta/pipeline-v2.ts';
-import { segmentPoints } from '../../packages/meta/sam.ts';
-import type { SamBox, SamPoint, SegmentPointsResult } from '../../packages/meta/sam.ts';
+import { segmentObjects } from '../../packages/meta/sam.ts';
+import type { SamBox, SamObject, SegmentPointsResult } from '../../packages/meta/sam.ts';
+import { maskToOutline } from '../../packages/meta/sam-outline.ts';
 import type { Ledger } from '../../packages/meta/ledger.ts';
 import { generateSpec, repairSpec } from '../../packages/meta/pipeline.ts';
 import type { TimelineSourceAnalysis } from '../../packages/meta/pipeline.ts';
@@ -108,7 +109,7 @@ import type {
   LabelPartGen,
   PlanComponentId,
 } from '../../packages/contracts/kit.ts';
-import { loadFigureLabelBoxes, listFigures, loadFigure } from '../../packages/sources/figures.ts';
+import { loadFigureLabelBoxes, loadFigurePartLabelGroups, loadFigurePrintedLabels, listFigures, loadFigure } from '../../packages/sources/figures.ts';
 import type { FigureMeta } from '../../packages/sources/figures.ts';
 import { sha256 } from '../../packages/sources/index.ts';
 import { applyLessonDemoFault, lessonFaultTarget, lessonIntendedChecks } from './demo-faults.ts';
@@ -334,7 +335,9 @@ function clampToInt(value: number, lo: number, hi: number): number {
 /**
  * Stage 8b flow step 3: map SAM boxes back to the gen's parts. Object id i belongs to
  * parts[i-1] (ids 1..n in part order); a missing object is simply absent (LD-06 then fails
- * for that part), and a stray id outside 1..n is ignored. Exported for tests.
+ * for that part), and a stray id outside 1..n is ignored. Stage 8c: a region also carries the
+ * `outline` traced from its mask (`maskToOutline`), omitted when the mask is missing, cannot be
+ * decoded or the path would exceed its limit. Exported for tests.
  */
 export function boxesToRegions(boxes: readonly SamBox[], parts: readonly LabelPartGen[]): LabelRegion[] {
   const byId = new Map<number, SamBox>();
@@ -345,6 +348,7 @@ export function boxesToRegions(boxes: readonly SamBox[], parts: readonly LabelPa
   parts.forEach((part, i) => {
     const box = byId.get(i + 1);
     if (box !== undefined) {
+      const outline = box.mask !== undefined ? maskToOutline(box.mask, box) : null;
       out.push({
         partId: part.id,
         x1: box.x1,
@@ -352,14 +356,48 @@ export function boxesToRegions(boxes: readonly SamBox[], parts: readonly LabelPa
         x2: box.x2,
         y2: box.y2,
         confidence: box.confidence,
+        ...(outline !== null ? { outline } : {}),
       });
     }
   });
   return out;
 }
 
+/**
+ * Stage 8c: the SAM prompt objects for a gen's parts (object id i+1 for parts[i]). A part whose four area
+ * fields are all finite numbers is prompted by its BOX (0..1000 → image pixels, rounded, clamped into the
+ * image, edges inclusive, x2 > x1 and y2 > y1) and by nothing else: the probes showed a box alone beats a
+ * box plus a point. Any other part (older lessons, a missing or degenerate area) keeps the point prompt.
+ * Exported for tests.
+ */
+export function samObjectsFor(parts: readonly LabelPartGen[], width: number, height: number): SamObject[] {
+  return parts.map((p, i): SamObject => {
+    const id = i + 1;
+    const area = [p.areaX1, p.areaY1, p.areaX2, p.areaY2];
+    if (area.every(v => typeof v === 'number' && Number.isFinite(v))) {
+      const x1 = clampToInt(((p.areaX1 as number) * width) / 1000, 0, width - 1);
+      const y1 = clampToInt(((p.areaY1 as number) * height) / 1000, 0, height - 1);
+      const x2 = clampToInt(((p.areaX2 as number) * width) / 1000, 0, width - 1);
+      const y2 = clampToInt(((p.areaY2 as number) * height) / 1000, 0, height - 1);
+      if (x2 > x1 && y2 > y1) {
+        return { id, box: { x1, y1, x2, y2 } };
+      }
+    }
+    return {
+      id,
+      points: [
+        {
+          x: clampToInt(Math.round((p.x * width) / 1000), 0, width - 1),
+          y: clampToInt(Math.round((p.y * height) / 1000), 0, height - 1),
+        },
+      ],
+    };
+  });
+}
+
 /** Stage 8b flow step 5: the system-owned figure reference of the published spec. */
 export function labelFigureRefOf(meta: FigureMeta): LabelFigureRef {
+  const partLabelGroups = meta.partLabelGroups ?? loadFigurePartLabelGroups(meta.id);
   return {
     id: meta.id,
     width: meta.width,
@@ -369,6 +407,7 @@ export function labelFigureRefOf(meta: FigureMeta): LabelFigureRef {
     license: meta.license,
     labelsInImage: meta.labelsInImage,
     labelBoxes: loadFigureLabelBoxes(meta.id),
+    ...(partLabelGroups !== undefined ? { partLabelGroups } : {}),
   };
 }
 
@@ -787,7 +826,10 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
   // (listFigures sorts by id) travel through analysis, generation, validation and publish.
   const jobProvider: MetaProvider = isMetaProvider(summary.provider) ? summary.provider : 'meta-api';
   // Stage 8b (lead): each figure carries its stored printed-label boxes so LD-04 (and the repair guard's recompute) can reject points on printed words.
-  const jobFigures: FigureMeta[] = jobProvider === 'meta-api' ? listFigures(source.id).slice(0, 3).map(f => ({ ...f, labelBoxes: loadFigureLabelBoxes(f.id) })) : [];
+  const jobFigures: FigureMeta[] = jobProvider === 'meta-api' ? listFigures(source.id).slice(0, 3).map(f => {
+    const partLabelGroups = loadFigurePartLabelGroups(f.id);
+    return { ...f, labelBoxes: loadFigureLabelBoxes(f.id), ...(partLabelGroups !== undefined ? { partLabelGroups } : {}) };
+  }) : [];
 
   // --- Call 1: analysis v2 (same-call overview + component plan) -------------
   ctx.emit('analyze', 'started');
@@ -1205,11 +1247,7 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
       // Config invariant: a live API always wires the SAM deps; failing here is INTERNAL.
       return segmentFail('INTERNAL', SEGMENTATION_FAILED_REASON);
     }
-    const points: SamPoint[] = parts.map((p, i) => ({
-      id: i + 1,
-      x: clampToInt(Math.round((p.x * width) / 1000), 0, width - 1),
-      y: clampToInt(Math.round((p.y * height) / 1000), 0, height - 1),
-    }));
+    const objects: SamObject[] = samObjectsFor(parts, width, height);
     // The wrapper ledger mirrors every settled reconciliation into `trace`, so the job's
     // accumulator can account EXACTLY what the spending ledger holds — without re-deriving
     // sam.ts's billing rules from error codes. `close` is a no-op: the job's ledger outlives
@@ -1268,14 +1306,14 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
     };
     let result: SegmentPointsResult;
     try {
-      result = await segmentPoints({
+      result = await segmentObjects({
         apiKey: ctx.sam.apiKey,
         ...(ctx.sam.baseUrl !== undefined ? { baseUrl: ctx.sam.baseUrl } : {}),
         ...(ctx.sam.fetch !== undefined ? { fetch: ctx.sam.fetch } : {}),
         ledger: wrapped,
         purpose: ctx.purpose,
         image: { bytes: figure.bytes, mime: figure.meta.mime, width, height },
-        points,
+        objects,
         signal: ctx.signal,
       });
     } catch (err: unknown) {
@@ -1339,7 +1377,14 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
         try {
           const loaded = loadFigure(first.id);
           labelFigure = loaded;
-          labelImage = { figureId: loaded.meta.id, mime: loaded.meta.mime, base64: Buffer.from(loaded.bytes).toString('base64') };
+          const printedLabels = loadFigurePrintedLabels(loaded.meta.id);
+          labelImage = {
+            figureId: loaded.meta.id,
+            mime: loaded.meta.mime,
+            base64: Buffer.from(loaded.bytes).toString('base64'),
+            // Stage 8c: the lead-curated printed labels (one string per part label group); absent for uncurated figures.
+            ...(printedLabels.length > 0 ? { printedLabels } : {}),
+          };
         } catch {
           labelFigure = null; // FIGURE_NOT_FOUND / FIGURE_HASH_MISMATCH → component-level failure below
         }

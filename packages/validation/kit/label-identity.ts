@@ -79,7 +79,9 @@ function intersection(a: PxBox, b: PxBox): number {
   return w > 0 && h > 0 ? w * h : 0;
 }
 
-interface PrintedUnit {
+export interface PrintedUnit {
+  /** The stored `group` number of this label, or undefined for an ungrouped box. */
+  group?: number;
   /** One printed label: the boxes of one group, or one ungrouped box. */
   members: { box: PxBox; text: string | undefined }[];
   /** The label's words in reading order, or null when no member carries text. */
@@ -119,11 +121,57 @@ export function printedUnits(figure: FigureMeta | null | undefined): PrintedUnit
       units.push({ members: [member], text: member.text ?? null });
     }
   }
-  for (const members of byGroup.values()) {
+  for (const [group, members] of byGroup.entries()) {
     const texts = readingOrder(members).map(m => m.text).filter((t): t is string => t !== undefined);
-    units.push({ members, text: texts.length > 0 ? texts.join(' ') : null });
+    units.push({ group, members, text: texts.length > 0 ? texts.join(' ') : null });
   }
   return units;
+}
+
+/** The units a part's box (image pixels) sits on by overlap, best first (the LD-02 rule: covers >= 30% of the smaller box). */
+function overlappedUnits(box: PxBox, units: PrintedUnit[]): { u: PrintedUnit; k: number; score: number }[] {
+  return units.map((u, k) => {
+    let score = 0;
+    for (const m of u.members) {
+      const inter = intersection(box, m.box);
+      const cover = inter / Math.max(1e-9, Math.min(area(box), area(m.box)));
+      if (cover >= MIN_COVER_FRACTION && inter > score) score = inter;
+    }
+    return { u, k, score };
+  }).filter(s => s.score > 0).sort((a, b) => b.score - a.score);
+}
+
+/** The units within the near reach of a part's box (image pixels), nearest first. */
+function nearUnits(box: PxBox, units: PrintedUnit[], width: number, height: number): { u: PrintedUnit; k: number; d: number }[] {
+  const reach = NEAR_FRACTION * Math.max(width, height);
+  return units.map((u, k) => ({ u, k, d: Math.min(...u.members.map(m => gap(box, m.box))) })).filter(x => x.d <= reach).sort((a, b) => a.d - b.d);
+}
+
+/**
+ * Stage 8c (LD-10): the printed labels (units) that at least one part claims. A part claims a unit when its label
+ * box (0..1000 grid, converted to image pixels) overlaps that unit's boxes by the LD-02 rule, or, when it overlaps
+ * none, when the unit is the nearest within the near reach (the LD-02 fallback). A box covering two labels claims
+ * both (LD-02 flags the ambiguity itself). Parts without a usable box claim nothing. Null when the figure stores
+ * no printed text. Pass the `units` the caller already built so the returned set holds the caller's own objects.
+ */
+export function claimedPrintedUnits(parts: readonly LabelPartGen[], figure: FigureMeta | null | undefined, units: PrintedUnit[] | null = printedUnits(figure)): Set<PrintedUnit> | null {
+  const width = figure?.width;
+  const height = figure?.height;
+  if (units === null || typeof width !== 'number' || typeof height !== 'number' || !(width > 0) || !(height > 0)) return null;
+  const claimed = new Set<PrintedUnit>();
+  for (const part of parts) {
+    const edges: unknown[] = [part?.labelX1, part?.labelY1, part?.labelX2, part?.labelY2];
+    if (edges.every(e => e === 0)) continue;
+    if (!edges.every(e => typeof e === 'number' && Number.isFinite(e))) continue;
+    const [gx1, gy1, gx2, gy2] = edges as number[];
+    if (!(gx1! < gx2! && gy1! < gy2!)) continue;
+    const box: PxBox = { x1: (gx1! * width) / COORD_MAX, y1: (gy1! * height) / COORD_MAX, x2: (gx2! * width) / COORD_MAX, y2: (gy2! * height) / COORD_MAX };
+    const over = overlappedUnits(box, units);
+    if (over.length > 0) { over.forEach(o => claimed.add(o.u)); continue; }
+    const near = nearUnits(box, units, width, height);
+    if (near.length > 0) claimed.add(near[0]!.u);
+  }
+  return claimed;
 }
 
 export interface PrintedLabelProblems {
@@ -156,15 +204,7 @@ export function printedLabelProblems(parts: readonly LabelPartGen[], figure: Fig
     const box: PxBox = { x1: (gx1! * width) / COORD_MAX, y1: (gy1! * height) / COORD_MAX, x2: (gx2! * width) / COORD_MAX, y2: (gy2! * height) / COORD_MAX };
     const nameShown = typeof part?.name === 'string' && part.name !== '' ? `"${part.name}"` : `parts[${i}]`;
     // 1) overlap: the unit whose boxes the part's box covers most.
-    const overlapped = units.map((u, k) => {
-      let score = 0;
-      for (const m of u.members) {
-        const inter = intersection(box, m.box);
-        const cover = inter / Math.max(1e-9, Math.min(area(box), area(m.box)));
-        if (cover >= MIN_COVER_FRACTION && inter > score) score = inter;
-      }
-      return { u, k, score };
-    }).filter(s => s.score > 0).sort((a, b) => b.score - a.score);
+    const overlapped = overlappedUnits(box, units);
     let best: { u: PrintedUnit; k: number };
     if (overlapped.length > 0) {
       if (overlapped.length > 1 && overlapped[1]!.u.text !== null && overlapped[0]!.u.text !== null) {
@@ -174,8 +214,7 @@ export function printedLabelProblems(parts: readonly LabelPartGen[], figure: Fig
       best = overlapped[0]!;
     } else {
       // 2) nearest: a box that misses the word by a few pixels still belongs to the printed label next to it.
-      const reach = NEAR_FRACTION * Math.max(width, height);
-      const near = units.map((u, k) => ({ u, k, d: Math.min(...u.members.map(m => gap(box, m.box))) })).filter(x => x.d <= reach).sort((a, b) => a.d - b.d);
+      const near = nearUnits(box, units, width, height);
       if (near.length === 0) {
         flag(i, `parts[${i}]: the name ${nameShown} is written on a label box that covers no printed label of the figure; the box (image pixel ${Math.round(box.x1)},${Math.round(box.y1)}-${Math.round(box.x2)},${Math.round(box.y2)}) must sit on the word the figure prints for this part`);
         return;

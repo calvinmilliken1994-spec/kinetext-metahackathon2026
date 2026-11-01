@@ -17,6 +17,7 @@ import { loadSource } from '../packages/sources/index.ts';
 import { listFigures, loadFigureLabelBoxes } from '../packages/sources/figures.ts';
 import type { FigureMeta } from '../packages/sources/figures.ts';
 import { validateKitComponent } from '../packages/validation/kit/index.ts';
+import { NOT_RETROACTIVE_CHECK_IDS } from '../packages/validation/not-retroactive.ts';
 
 const COMPONENTS = ['label-diagram-v1', 'log-ladder-v1', 'data-table-v1', 'threshold-v1'] as const;
 type Component = (typeof COMPONENTS)[number];
@@ -105,21 +106,23 @@ for (const job of readdirSync(runsDir).sort()) {
     try {
       report = validateKitComponent(component as KitGenComponentId, artifact.gen, sources, {
         revision: artifact.report?.revision ?? revision,
-        ...(figures !== undefined ? { figures } : {}),
+        ...(figures !== undefined ? { figures, storedWithoutAreas: true } : {}),
         ...(regions !== undefined ? { labelRegions: regions } : {}),
       });
     } catch (err) {
       rows.push({ job, file: name, component, published, recordedPublishable: artifact.report?.publishable ?? null, nowPublishable: false, failed: [{ id: 'THROW', message: err instanceof Error ? err.message : String(err) }] });
       continue;
     }
+    // LD-10/LD-11 (Stage 8c) are not retroactive: stored revisions are judged without them (NOT_RETROACTIVE_CHECK_IDS).
+    const failedNow = report.checks.filter(c => !c.passed && !NOT_RETROACTIVE_CHECK_IDS.has(c.id));
     rows.push({
       job,
       file: name,
       component,
       published,
       recordedPublishable: artifact.report?.publishable ?? null,
-      nowPublishable: report.publishable,
-      failed: report.checks.filter(c => !c.passed).map(c => ({ id: c.id, message: c.message })),
+      nowPublishable: failedNow.length === 0,
+      failed: failedNow.map(c => ({ id: c.id, message: c.message })),
     });
   }
 }
