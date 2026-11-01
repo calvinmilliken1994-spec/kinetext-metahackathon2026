@@ -2,7 +2,7 @@
 // stored passed parts of the engines whose checks changed after lessons were stored. A part that
 // no longer passes gets `recheck: { publishable: false, failedChecks }`; the web app then shows it
 // as held back instead of "checked". Stored artifacts and reports are never rewritten.
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { validateKitComponent } from '../../packages/validation/kit/index.ts';
 import { listFigures, loadFigureLabelBoxes } from '../../packages/sources/figures.ts';
@@ -99,4 +99,58 @@ export function enrichLabelBoxes(spec: unknown, current: (figureId: string) => B
   });
   if (!same) return;
   fig.labelBoxes = now.map(b => ({ ...b }));
+}
+
+export interface ComponentRevisionLite {
+  revision: number;
+  publishable: boolean;
+  failedChecks: string[];
+  /** label-diagram-v1 only: where each part's point sat (0..1000 grid). Never names or quotes. */
+  labelPoints?: { id: string; x: number; y: number }[];
+}
+
+const ARTIFACT = /^([a-z0-9-]+-v\d+)\.r(\d+)\.json$/;
+
+/**
+ * Set B (repair story): every stored revision of each lesson part, as the report recorded it, so the web app can show
+ * "check found an issue -> revised -> rechecked". A failed revision contributes only check ids and, for label
+ * diagrams, point positions: its text is never served (unverified content stays hidden).
+ */
+export function componentHistory(storageDir: string, jobId: string): Record<string, ComponentRevisionLite[]> {
+  const out: Record<string, ComponentRevisionLite[]> = {};
+  if (!/^[A-Za-z0-9-]{1,80}$/.test(jobId)) return out;
+  let names: string[];
+  try {
+    names = readdirSync(join(storageDir, 'runs', jobId));
+  } catch {
+    return out;
+  }
+  for (const name of names) {
+    const m = ARTIFACT.exec(name);
+    if (!m || m[1] === 'analysis-v2') continue;
+    const componentId = m[1] as string;
+    const revision = Number(m[2]);
+    try {
+      const art = JSON.parse(readFileSync(join(storageDir, 'runs', jobId, name), 'utf8')) as {
+        report?: { publishable?: unknown; checks?: { id?: unknown; passed?: unknown }[] };
+        gen?: { parts?: { id?: unknown; x?: unknown; y?: unknown }[] };
+      };
+      const checks = Array.isArray(art.report?.checks) ? art.report.checks : [];
+      const entry: ComponentRevisionLite = {
+        revision,
+        publishable: art.report?.publishable === true,
+        failedChecks: checks.filter(c => c.passed !== true && typeof c.id === 'string').map(c => c.id as string),
+      };
+      if (componentId === 'label-diagram-v1' && Array.isArray(art.gen?.parts)) {
+        entry.labelPoints = art.gen.parts
+          .filter(q => typeof q.id === 'string' && typeof q.x === 'number' && typeof q.y === 'number')
+          .map(q => ({ id: q.id as string, x: q.x as number, y: q.y as number }));
+      }
+      (out[componentId] ??= []).push(entry);
+    } catch {
+      // unreadable revision: left out
+    }
+  }
+  for (const list of Object.values(out)) list.sort((a, b) => a.revision - b.revision);
+  return out;
 }
