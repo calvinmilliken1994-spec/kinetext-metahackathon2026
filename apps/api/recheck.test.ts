@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { cpSync, existsSync, mkdtempSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { componentHistory, enrichLabelBoxes, recheckLesson, RECHECKED_COMPONENTS } from './recheck.ts';
+import { applyContentHolds, componentHistory, enrichLabelBoxes, loadContentHolds, recheckLesson, RECHECKED_COMPONENTS } from './recheck.ts';
 
 const RUNS = new URL('../../storage/runs/', import.meta.url);
 const BAD_PH = 'job-20261031111156-12c77646'; // BUG-013: 'pH six' plotted at 14
@@ -101,4 +101,38 @@ test('componentHistory lists every stored revision with its failed checks, and l
 
 test('componentHistory of an unknown or unreadable job is empty', () => {
   assert.deepEqual(componentHistory(mkdtempSync(join(tmpdir(), 'hist-')), 'job-nope'), {});
+});
+
+// ISSUE-011 (Calvin 2026-11-01: "hold back the chemosynthesis table"): the NOAA page itself says chemosynthesis turns
+// carbon dioxide and water into "glucose and hydrogen sulfide". A part quoting a held sentence is served as held back.
+const CHEMO = 'job-20261101091250-cc4a139c';
+
+test('the content holds file lists the NOAA chemosynthesis sentence with a reason a teacher can read', () => {
+  const holds = loadContentHolds();
+  const h = holds.find(x => x.id === 'HOLD-001');
+  assert.ok(h);
+  assert.equal(h.sourceId, 'noaa-oceanexplorer-fueling-life-on-earth');
+  assert.match(h.quote, /glucose and hydrogen sulfide\.$/);
+  assert.match(h.reason, /used up, not produced/);
+});
+
+test('a passed part that quotes a held sentence is held back after review; the other parts are untouched', (t) => {
+  const dir = storageWith(CHEMO);
+  if (dir === null) return t.skip('stored run not present on this machine');
+  const job = jobView(dir, CHEMO);
+  recheckLesson(dir, job, {});
+  applyContentHolds(dir, job);
+  const table = job.lesson.components.find(c => c.componentId === 'compare-table-v1') as { recheck?: { publishable: boolean; failedChecks: string[]; review?: { id: string; reason: string } } } | undefined;
+  const balance = job.lesson.components.find(c => c.componentId === 'balance-equation-v1') as { recheck?: unknown } | undefined;
+  assert.ok(table?.recheck);
+  assert.equal(table.recheck.publishable, false);
+  assert.deepEqual(table.recheck.failedChecks, []);
+  assert.equal(table.recheck.review?.id, 'HOLD-001');
+  assert.equal(balance?.recheck, undefined);
+});
+
+test('holds only apply to parts of the held source', () => {
+  const job = { summary: { jobId: 'job-x', sourceId: 'other-source', status: 'succeeded' }, lesson: { components: [{ componentId: 'compare-table-v1', status: 'passed', revision: 1 }] } };
+  applyContentHolds('nowhere', job);
+  assert.equal((job.lesson.components[0] as { recheck?: unknown }).recheck, undefined);
 });

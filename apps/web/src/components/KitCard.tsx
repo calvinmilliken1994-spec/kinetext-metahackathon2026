@@ -7,7 +7,10 @@ import { AiWritten } from './Disclosure.tsx';
 import { Mark } from './icons.tsx';
 
 /** Today's checks a withheld part fails (lib/lessonJob.ts heldBackChecks): plain name + id. */
-export type HeldBack = ReadonlyArray<{ id: string; name: string }>;
+export type HeldBack = ReadonlyArray<{ id: string; name: string; review?: true }>;
+
+/** ISSUE-011: the reviewer's reason when a human review held the part back (the source page is wrong), else null. */
+const reviewOf = (held: HeldBack): string | null => held.find((h) => h.review === true)?.name ?? null;
 
 /** Quiet per-part status in words: checked, checked with items left out, could not be verified, held back, or not built. */
 export function StatusText({ card, heldBack = null }: { card: Pick<LessonCard, 'status' | 'note'>; heldBack?: HeldBack | null }) {
@@ -55,7 +58,7 @@ export function KitCard({ card, children, trace = null, heldBack = null }: Props
       {!shown && heldBack !== null && (
         <div className="kit-message" role="note">
           <p><strong>{card.explain?.sentence ?? card.message}</strong></p>
-          <p className="muted small">{HELD_BACK_NOTE}</p>
+          <p className="muted small">{reviewOf(heldBack) ?? HELD_BACK_NOTE}</p>
           <HeldBackWhy heldBack={heldBack} />
         </div>
       )}
@@ -71,9 +74,19 @@ export function KitCard({ card, children, trace = null, heldBack = null }: Props
 }
 
 const HELD_BACK_NOTE = 'It passed when this lesson was built. Our checks are stricter now, so it is left out of the lesson and of presentation mode.';
+const REVIEW_NOTE = 'It matched the page and passed every check, but the page itself is wrong here. Our checks compare a part with its page, so a human review held it back. It is left out of the lesson and of presentation mode.';
 const UNVERIFIED_NOTE = 'Nothing from this part is shown, because it was not confirmed by the page.';
 
 function HeldBackWhy({ heldBack }: { heldBack: HeldBack }) {
+  const review = reviewOf(heldBack);
+  if (review !== null) {
+    return (
+          <details className="small kit-why">
+            <summary>Details for the teacher</summary>
+            <p>{REVIEW_NOTE}</p>
+          </details>
+    );
+  }
   return (
           <details className="small kit-why">
             <summary>Details for the teacher</summary>
@@ -125,7 +138,8 @@ export function LeftOutNotice({ cards, heldBackOf }: { cards: readonly LessonCar
         {cards.map((card) => {
           const held = heldBackOf(card);
           const sentence = held !== null ? (card.explain?.sentence ?? card.message) : card.message;
-          const note = card.status === 'skipped' ? '' : held !== null ? HELD_BACK_NOTE : UNVERIFIED_NOTE;
+          const review = held === null ? null : reviewOf(held);
+          const note = card.status === 'skipped' || review !== null ? '' : held !== null ? HELD_BACK_NOTE : UNVERIFIED_NOTE; // a review hold's sentence already gives the reason
           return (
             <li key={card.key} className="left-out-item" data-component={card.componentId} data-status={card.status} data-held-back={held === null ? undefined : 'true'}>
               <p className="left-out-head"><strong>{card.title}</strong><StatusText card={card} heldBack={held} /></p>

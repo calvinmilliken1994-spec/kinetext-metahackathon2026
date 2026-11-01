@@ -67,7 +67,7 @@ import type { ModelChoice } from '../../packages/meta/pricing.ts';
 import { DEFAULT_MODEL, MODEL_INFO } from './model-clients.ts';
 import { MAX_CONCURRENT_JOBS_BOUND } from './resource-limits.ts';
 import { listJobs, readJob } from '../../workers/generation/jobs.ts';
-import { componentHistory, enrichLabelBoxes, recheckLesson } from './recheck.ts';
+import { applyContentHolds, componentHistory, enrichLabelBoxes, recheckLesson } from './recheck.ts';
 import { museSubjectsBySource } from './source-subjects.ts';
 import type { Subject } from '../../packages/contracts/kit.ts';
 import type { JobFlow, JobSummary } from '../../workers/generation/jobs.ts';
@@ -538,6 +538,8 @@ export function createApiServer(opts: ApiOptions): Server {
           ...(opts.sourcesDir !== undefined ? { sourcesDir: opts.sourcesDir } : {}),
           userSourcesDir: userSourcesDir(),
         });
+        // ISSUE-011: parts quoting a sentence a human review found wrong on the source page are held back.
+        applyContentHolds(opts.storageDir, job);
         for (const spec of Object.values(job.kitSpecs ?? {})) enrichLabelBoxes(spec);
         // Set B: per-revision check outcomes for the repair story (failed revisions give check ids and points only).
         const withHistory = job.lesson !== undefined ? { ...job, componentHistory: componentHistory(opts.storageDir, id) } : job;

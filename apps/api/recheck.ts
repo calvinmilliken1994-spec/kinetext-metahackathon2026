@@ -18,7 +18,7 @@ export const RECHECKED_COMPONENTS: ReadonlySet<string> = new Set([
   'threshold-v1',
 ]);
 
-export interface Recheck { publishable: boolean; failedChecks: string[] }
+export interface Recheck { publishable: boolean; failedChecks: string[]; review?: { id: string; reason: string } }
 
 interface RecheckJob {
   summary: { jobId: string; sourceId: string; status: string; provider?: string; sourceKind?: string };
@@ -153,4 +153,52 @@ export function componentHistory(storageDir: string, jobId: string): Record<stri
   }
   for (const list of Object.values(out)) list.sort((a, b) => a.revision - b.revision);
   return out;
+}
+
+// ---- ISSUE-011: content holds (a human review found an error printed on the SOURCE PAGE) ---------------------------
+// Quote checks confirm a part matches its page, so they cannot catch a page that is wrong. data/content-holds.json lists
+// such sentences; a passed part whose stored artifact quotes one is served as held back with the reviewer's reason.
+// Stored runs are never rewritten.
+
+export interface ContentHold { id: string; sourceId: string; quote: string; reason: string }
+
+const HOLDS_FILE = new URL('../../data/content-holds.json', import.meta.url);
+
+export function loadContentHolds(file: URL = HOLDS_FILE): ContentHold[] {
+  try {
+    const raw = JSON.parse(readFileSync(file, 'utf8')) as { holds?: unknown };
+    if (!Array.isArray(raw.holds)) return [];
+    return raw.holds.filter((h): h is ContentHold => typeof h === 'object' && h !== null
+      && ['id', 'sourceId', 'quote', 'reason'].every(k => typeof (h as Record<string, unknown>)[k] === 'string'));
+  } catch {
+    return [];
+  }
+}
+
+const squash = (s: string): string => s.replace(/\s+/g, ' ').trim();
+
+function quotesHeld(value: unknown, quote: string): boolean {
+  if (typeof value === 'string') return squash(value).includes(quote);
+  if (Array.isArray(value)) return value.some(v => quotesHeld(v, quote));
+  if (typeof value === 'object' && value !== null) return Object.values(value).some(v => quotesHeld(v, quote));
+  return false;
+}
+
+/** Marks each passed part of a finished lesson that quotes a held sentence of its source as not publishable. */
+export function applyContentHolds(storageDir: string, job: RecheckJob, holds: ContentHold[] = loadContentHolds()): void {
+  if (job.summary.status !== 'succeeded') return;
+  const mine = holds.filter(h => h.sourceId === job.summary.sourceId);
+  if (mine.length === 0) return;
+  const lesson = job.lesson as { components?: { componentId?: unknown; status?: unknown; revision?: unknown; recheck?: Recheck }[] } | null | undefined;
+  if (!lesson || !Array.isArray(lesson.components)) return;
+  for (const c of lesson.components) {
+    if (c.status !== 'passed' || typeof c.componentId !== 'string' || typeof c.revision !== 'number') continue;
+    const file = join(storageDir, 'runs', job.summary.jobId, `${c.componentId}.r${c.revision}.json`);
+    if (!existsSync(file)) continue;
+    let gen: unknown;
+    try { gen = (JSON.parse(readFileSync(file, 'utf8')) as { gen?: unknown }).gen; } catch { continue; }
+    const hit = mine.find(h => quotesHeld(gen, squash(h.quote)));
+    if (hit === undefined) continue;
+    c.recheck = { publishable: false, failedChecks: c.recheck?.failedChecks ?? [], review: { id: hit.id, reason: hit.reason } };
+  }
 }

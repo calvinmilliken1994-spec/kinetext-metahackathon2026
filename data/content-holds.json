@@ -1,0 +1,13 @@
+{
+  "_about": "Parts held back after human review because the SOURCE PAGE itself is wrong. Quote checks confirm a part matches its page, so they cannot catch an error printed on the page. Any passed part whose stored artifact quotes a held sentence is served as held back, with the reason shown to the teacher. Stored runs are never rewritten.",
+  "holds": [
+    {
+      "id": "HOLD-001",
+      "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+      "quote": "Chemosynthesis – hydrogen sulfide supplies the energy to convert carbon dioxide and water to glucose and hydrogen sulfide.",
+      "reason": "The source page lists hydrogen sulfide as a product of chemosynthesis. In chemosynthesis hydrogen sulfide is used up, not produced, so a part built on this sentence would teach an error.",
+      "decidedBy": "Calvin",
+      "date": "2026-11-01"
+    }
+  ]
+}

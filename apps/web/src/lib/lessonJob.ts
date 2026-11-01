@@ -127,14 +127,21 @@ function parseOverview(raw: unknown): OverviewSpec | null {
  */
 export const HELD_BACK_REASON = 'Held back: this part no longer passes today’s checks.';
 
-/** A lesson entry as parsed here: a withheld part carries the ids of today's checks it fails. */
-type HeldBackEntry = LessonComponentEntry & { heldBack?: { failedChecks: string[] } };
+/** ISSUE-011: the start of a part's reason when a human review held it back (the source page itself is wrong). */
+export const REVIEW_HOLD_PREFIX = 'Held back after review:';
 
-/** For a withheld part, today's failed checks with their plain names (id when it has no name); null for any other part. */
-export function heldBackChecks(entry: LessonComponentEntry): Array<{ id: string; name: string }> | null {
+/** A lesson entry as parsed here: a withheld part carries the ids of today's checks it fails, or a review hold. */
+type HeldBackEntry = LessonComponentEntry & { heldBack?: { failedChecks: string[]; review?: { id: string; reason: string } } };
+
+/**
+ * For a withheld part, today's failed checks with their plain names (id when it has no name); null for any other part.
+ * A review hold comes first as one item flagged `review: true` whose name is the reviewer's reason: it is not a check.
+ */
+export function heldBackChecks(entry: LessonComponentEntry): Array<{ id: string; name: string; review?: true }> | null {
   const held = (entry as HeldBackEntry).heldBack;
   if (held === undefined) return null;
-  return held.failedChecks.map((id) => ({ id, name: lessonCheckName(id) ?? id }));
+  const checks = held.failedChecks.map((id) => ({ id, name: lessonCheckName(id) ?? id }));
+  return held.review === undefined ? checks : [{ id: held.review.id, name: held.review.reason, review: true as const }, ...checks];
 }
 
 function parseLessonSpec(raw: unknown): LessonSpec | null {
@@ -151,6 +158,11 @@ function parseLessonSpec(raw: unknown): LessonSpec | null {
         entry.status = 'failed';
         entry.reason = HELD_BACK_REASON;
         entry.heldBack = { failedChecks: [...new Set(strings(c.recheck.failedChecks))] };
+        const review = c.recheck.review;
+        if (isRecord(review) && str(review.id) && str(review.reason)) {
+          entry.heldBack.review = { id: review.id, reason: review.reason };
+          entry.reason = `${REVIEW_HOLD_PREFIX} ${review.reason}`;
+        }
       }
       return entry;
     });
@@ -823,7 +835,7 @@ export function buildLessonSteps(detail: JobDetail): LessonStep[] {
       }
       case 'failed': {
         const held = entry === undefined ? null : heldBackChecks(entry);
-        steps.push({ ...base, status: 'failed', outcome: 'unverified', detail: held === null ? failureMessage(slot.componentId) : HELD_BACK_REASON, tags: held === null ? [] : [{ text: 'Held back today', tone: 'warn' }], ...span });
+        steps.push({ ...base, status: 'failed', outcome: 'unverified', detail: held === null ? failureMessage(slot.componentId) : (entry?.reason || HELD_BACK_REASON), tags: held === null ? [] : [{ text: held.some((h) => h.review === true) ? 'Held back after review' : 'Held back today', tone: 'warn' }], ...span });
         break;
       }
       case 'skipped': steps.push({ ...base, status: 'skipped', outcome: 'skipped', detail: SKIPPED_MESSAGE, tags: [], ...span }); break;
@@ -939,10 +951,13 @@ export function lessonCheckSections(detail: JobDetail): CheckSection[] {
     const section = sectionOf(`component-${id}`, componentLabel(id), report);
     if (held !== null) {
       // The stored report passed; today's re-run fails these checks, so the list says so instead of the old verdict.
-      const failing = new Set(held.map((h) => h.id));
+      // A review hold is not a check: it changes the label, never the list.
+      const failed = held.filter((h) => h.review !== true);
+      const failing = new Set(failed.map((h) => h.id));
       const checks = section.checks.map((c) => (failing.has(c.id) ? { ...c, passed: false, message: TODAY_FAILED } : c));
-      for (const h of held) if (!checks.some((c) => c.id === h.id)) checks.push({ id: h.id, name: h.name, passed: false, message: TODAY_FAILED });
-      out.push({ ...section, label: `${section.label} (held back today)`, checks, passed: checks.filter((c) => c.passed).length, total: checks.length });
+      for (const h of failed) if (!checks.some((c) => c.id === h.id)) checks.push({ id: h.id, name: h.name, passed: false, message: TODAY_FAILED });
+      const label = held.some((h) => h.review === true) ? 'held back after review' : 'held back today';
+      out.push({ ...section, label: `${section.label} (${label})`, checks, passed: checks.filter((c) => c.passed).length, total: checks.length });
     } else out.push(section);
   }
   return out;
