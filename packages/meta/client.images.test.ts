@@ -27,19 +27,20 @@ function makeFakeLedger(): {
   return { ledger, reserveCalls };
 }
 
-function fakeChatFetch(captured: { body: Record<string, unknown>; count: number }): typeof fetch {
+function fakeChatFetch(captured: { body: Record<string, unknown>; count: number; headers?: Record<string, string> }, model = 'muse-spark-1.3'): typeof fetch {
   return (async (
     _url: Parameters<typeof fetch>[0],
     init?: Parameters<typeof fetch>[1],
   ): Promise<Response> => {
     captured.count += 1;
     captured.body = JSON.parse(init?.body as string) as Record<string, unknown>;
+    captured.headers = Object.fromEntries(new Headers(init?.headers as HeadersInit).entries());
     return {
       ok: true,
       status: 200,
       json: async (): Promise<unknown> => ({
         id: 'resp-1',
-        model: 'muse-spark-1.3',
+        model,
         choices: [{ finish_reason: 'stop', message: { content: '{"ok":true}' } }],
         usage: { prompt_tokens: 10, completion_tokens: 5 },
       }),
@@ -157,14 +158,14 @@ describe('chat image transport', (): void => {
     assert.equal(fake.reserveCalls.length, 0);
   });
 
-  it('rejects images on the Modal provider before any call', async (): Promise<void> => {
+  it('sends images on the Modal provider as image_url parts, with Modal headers only', async (): Promise<void> => {
     const fake = makeFakeLedger();
-    const captured: { body: Record<string, unknown>; count: number } = { body: {}, count: 0 };
+    const captured: { body: Record<string, unknown>; count: number; headers?: Record<string, string> } = { body: {}, count: 0 };
     const client = createMetaClient({
       apiKey: undefined,
       ledger: fake.ledger,
       allowLive: true,
-      fetchImpl: fakeChatFetch(captured),
+      fetchImpl: fakeChatFetch(captured, MODAL_MUSE_SPARK_OPEN_MODEL),
       providerConfig: {
         provider: 'modal',
         baseUrl: 'https://example.com',
@@ -173,22 +174,27 @@ describe('chat image transport', (): void => {
         modelString: MODAL_MUSE_SPARK_OPEN_MODEL,
       },
     });
-    await assert.rejects(
-      client.complete({
-        purpose: 'demo',
-        schemaName: 's',
-        jsonSchema: SCHEMA,
-        messages: imageUserMessage(),
-        maxOutputTokens: 16,
-      }),
-      (err: unknown): boolean => {
-        assert.ok(err instanceof MetaError);
-        assert.equal((err as MetaError).code, 'IMAGES_NOT_SUPPORTED');
-        return true;
-      },
-    );
-    assert.equal(captured.count, 0);
-    assert.equal(fake.reserveCalls.length, 0);
+    const result = await client.complete<{ ok: boolean }>({
+      purpose: 'demo',
+      schemaName: 's',
+      jsonSchema: SCHEMA,
+      messages: imageUserMessage(),
+      maxOutputTokens: 16,
+    });
+    assert.equal(result.data.ok, true);
+    assert.equal(captured.count, 1);
+    assert.equal(fake.reserveCalls.length, 1);
+    const sent: unknown = (captured.body['messages'] as unknown[])[0];
+    assert.deepEqual(sent, {
+      role: 'user',
+      content: [
+        { type: 'text', text: 'label this diagram' },
+        { type: 'image_url', image_url: { url: 'data:image/jpeg;base64,AAA' } },
+      ],
+    });
+    assert.equal('images' in (sent as Record<string, unknown>), false);
+    const headerNames: string[] = Object.keys(captured.headers ?? {});
+    assert.ok(!headerNames.some((h) => h.toLowerCase() === 'authorization'));
   });
 
   it('counts each image as 1600 tokens on top of the text bound', async (): Promise<void> => {

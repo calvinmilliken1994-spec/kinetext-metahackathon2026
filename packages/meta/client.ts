@@ -46,7 +46,7 @@ export type MetaErrorCode =
   | 'EMPTY_OUTPUT'
   | 'DEADLINE_EXCEEDED'
   | 'INPUT_TOO_LARGE'
-  | 'IMAGES_NOT_SUPPORTED'
+  | 'IMAGES_NOT_SUPPORTED' // retained for stored receipts; no provider raises it since Stage 8d
   | 'IMAGE_IN_SYSTEM_MESSAGE'
   | 'SAM_STREAM_FAILED'
   | 'SAM_STREAM_INCOMPLETE'
@@ -579,15 +579,8 @@ export function createMetaClient(opts: MetaClientOptions): MetaClient {
         provider: effectiveProvider,
       });
     }
+    // Stage 8d: Modal Muse Spark Open accepts image_url parts; see docs/evidence/open-weights-vision-probe/.
     const imageCount: number = countImages(req.messages);
-    if (effectiveProvider !== 'meta-api' && imageCount > 0) {
-      throw new MetaError('IMAGES_NOT_SUPPORTED', undefined, {
-        chargedUSD: 0,
-        reservedUnknownUSD: 0,
-        costBasis: 'usage',
-        provider: effectiveProvider,
-      });
-    }
     const bound: number =
       inputTokenBound(req.messages, req.jsonSchema) +
       imageCount * IMAGE_PART_TOKEN_COUNT;

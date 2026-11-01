@@ -1,0 +1,67 @@
+{
+  "status": "passed",
+  "route": "hermes-to-muse-cli-subscription",
+  "requestedModel": "muse-spark-1.3",
+  "contributorMode": "off",
+  "checkedAt": "2026-11-01T21:03:46.319797+00:00",
+  "fallbackUsed": false,
+  "maxModelSteps": 1,
+  "timeoutSeconds": 580,
+  "subscriptionTier": "Muse Code High Usage",
+  "allowanceBefore": {
+    "tier": "Muse Code High Usage",
+    "window": {
+      "usedPercent": 0,
+      "resetsAtMs": 1793573812000
+    },
+    "weekly": {
+      "usedPercent": 17,
+      "resetsAtMs": 1793577600000
+    },
+    "asOfMs": 1793567026372,
+    "source": "mint"
+  },
+  "exitCode": 0,
+  "configuredModel": "muse-spark-1.3",
+  "usage": {
+    "kind": "run_usage",
+    "command_id": "01a198ec-f4ec-7971-b744-1b28df4b0fab",
+    "run_stream": {
+      "kind": "run",
+      "id": "01a198ec-f4ec-7971-b744-1b28df4b0fab"
+    },
+    "models": [
+      {
+        "model": "muse-spark-1.3",
+        "input_tokens": 20513,
+        "cached_tokens": 0,
+        "output_tokens": 5564,
+        "reasoning_tokens": 4325,
+        "calls": 1
+      }
+    ],
+    "calls": 1,
+    "completed_calls": 1,
+    "failed_calls": 0,
+    "cancelled_calls": 0,
+    "children_included": false,
+    "allowance": {
+      "tier": null,
+      "window": {
+        "used_percent": 0,
+        "resets_at_ms": 1793573812000
+      },
+      "weekly": {
+        "used_percent": 17,
+        "resets_at_ms": 1793577600000
+      },
+      "as_of_ms": 1793567041522,
+      "source": "stream"
+    }
+  },
+  "httpStatuses": [],
+  "terminal": "completed",
+  "answer": "=== EDIT: packages/meta/client.ts ===\n<<<<<<< OLD\n  | 'INPUT_TOO_LARGE'\n  | 'IMAGES_NOT_SUPPORTED'\n  | 'IMAGE_IN_SYSTEM_MESSAGE'\n=======\n  | 'INPUT_TOO_LARGE'\n  | 'IMAGES_NOT_SUPPORTED' // retained for stored receipts; no provider raises it since Stage 8d\n  | 'IMAGE_IN_SYSTEM_MESSAGE'\n>>>>>>> NEW\n=== EDIT: packages/meta/client.ts ===\n<<<<<<< OLD\n    const imageCount: number = countImages(req.messages);\n    if (effectiveProvider !== 'meta-api' && imageCount > 0) {\n      throw new MetaError('IMAGES_NOT_SUPPORTED', undefined, {\n        chargedUSD: 0,\n        reservedUnknownUSD: 0,\n        costBasis: 'usage',\n        provider: effectiveProvider,\n      });\n    }\n    const bound: number =\n=======\n    // Stage 8d: Modal Muse Spark Open accepts image_url parts; see docs/evidence/open-weights-vision-probe/.\n    const imageCount: number = countImages(req.messages);\n    const bound: number =\n>>>>>>> NEW\n=== EDIT: packages/meta/client.images.test.ts ===\n<<<<<<< OLD\nfunction fakeChatFetch(captured: { body: Record<string, unknown>; count: number }): typeof fetch {\n  return (async (\n    _url: Parameters<typeof fetch>[0],\n    init?: Parameters<typeof fetch>[1],\n  ): Promise<Response> => {\n    captured.count += 1;\n    captured.body = JSON.parse(init?.body as string) as Record<string, unknown>;\n=======\nfunction fakeChatFetch(captured: { body: Record<string, unknown>; count: number; headers?: Record<string, string> }): typeof fetch {\n  return (async (\n    _url: Parameters<typeof fetch>[0],\n    init?: Parameters<typeof fetch>[1],\n  ): Promise<Response> => {\n    captured.count += 1;\n    captured.body = JSON.parse(init?.body as string) as Record<string, unknown>;\n    captured.headers = Object.fromEntries(new Headers(init?.headers as HeadersInit).entries());\n>>>>>>> NEW\n=== EDIT: packages/meta/client.images.test.ts ===\n<<<<<<< OLD\n  it('rejects images on the Modal provider before any call', async (): Promise<void> => {\n    const fake = makeFakeLedger();\n    const captured: { body: Record<string, unknown>; count: number } = { body: {}, count: 0 };\n    const client = createMetaClient({\n      apiKey: undefined,\n      ledger: fake.ledger,\n      allowLive: true,\n      fetchImpl: fakeChatFetch(captured),\n      providerConfig: {\n        provider: 'modal',\n        baseUrl: 'https://example.com',\n        proxyKey: 'wk-testkey',\n        proxySecret: 'ws-testsecret',\n        modelString: MODAL_MUSE_SPARK_OPEN_MODEL,\n      },\n    });\n    await assert.rejects(\n      client.complete({\n        purpose: 'demo',\n        schemaName: 's',\n        jsonSchema: SCHEMA,\n        messages: imageUserMessage(),\n        maxOutputTokens: 16,\n      }),\n      (err: unknown): boolean => {\n        assert.ok(err instanceof MetaError);\n        assert.equal((err as MetaError).code, 'IMAGES_NOT_SUPPORTED');\n        return true;\n      },\n    );\n    assert.equal(captured.count, 0);\n    assert.equal(fake.reserveCalls.length, 0);\n  });\n=======\n  it('sends images on the Modal provider as image_url parts, with Modal headers only', async (): Promise<void> => {\n    const fake = makeFakeLedger();\n    const captured: { body: Record<string, unknown>; count: number; headers?: Record<string, string> } = { body: {}, count: 0 };\n    const client = createMetaClient({\n      apiKey: undefined,\n      ledger: fake.ledger,\n      allowLive: true,\n      fetchImpl: fakeChatFetch(captured),\n      providerConfig: {\n        provider: 'modal',\n        baseUrl: 'https://example.com',\n        proxyKey: 'wk-testkey',\n        proxySecret: 'ws-testsecret',\n        modelString: MODAL_MUSE_SPARK_OPEN_MODEL,\n      },\n    });\n    const result = await client.complete<{ ok: boolean }>({\n      purpose: 'demo',\n      schemaName: 's',\n      jsonSchema: SCHEMA,\n      messages: imageUserMessage(),\n      maxOutputTokens: 16,\n    });\n    assert.equal(result.data.ok, true);\n    assert.equal(captured.count, 1);\n    assert.equal(fake.reserveCalls.length, 1);\n    const sent: unknown = (captured.body['messages'] as unknown[])[0];\n    assert.deepEqual(sent, {\n      role: 'user',\n      content: [\n        { type: 'text', text: 'label this diagram' },\n        { type: 'image_url', image_url: { url: 'data:image/jpeg;base64,AAA' } },\n      ],\n    });\n    assert.equal('images' in (sent as Record<string, unknown>), false);\n    const headerNames: string[] = Object.keys(captured.headers ?? {});\n    assert.ok(!headerNames.some((h) => h.toLowerCase() === 'authorization'));\n  });\n>>>>>>> NEW\n=== NOTES ===\nKept IMAGES_NOT_SUPPORTED in the union and message map for receipt type-checks. Kept IMAGE_IN_SYSTEM_MESSAGE and the 1600-token image bound unchanged. Modal now shares serializeMessages image_url transport with meta-api.\n",
+  "reason": null,
+  "elapsedSeconds": 15.297
+}
