@@ -231,6 +231,8 @@ export interface JobSummary {
    * Optional: records written before this field existed carry no owner.
    */
   owner?: JobOwner;
+  /** Stage 10: 'judge' when started under a judge access session (absent otherwise). */
+  access?: 'judge';
 }
 
 /** Per-job resource budgets wired from config/resource-limits.json (TASK-009 R-11). */
@@ -268,6 +270,13 @@ export interface JobDeps {
    * the worker keeps 'activity' as its own default so pre-Stage-6 callers/tests are unchanged.
    */
   flow?: JobFlow;
+  /**
+   * Stage 10: set to 'judge' by the API for a job started under a judge access session.
+   * Recorded in job.json from the FIRST write (only the literal 'judge' is ever stored; the
+   * key is absent otherwise, so every other job record keeps its exact shape). The API sums
+   * the cost of judge-tagged jobs against the judge budget.
+   */
+  access?: 'judge';
   now?: () => Date;
   newJobId?: () => string;
   limits?: JobLimits;
@@ -594,6 +603,9 @@ export function startJob(
     // N-05: recovery consults this owner record before interrupting a running job.
     owner: { pid: process.pid, startedAt: createdAt },
   };
+  if (deps.access === 'judge') {
+    summary.access = 'judge'; // Stage 10: tagged from the first write; the key is absent for every other job
+  }
   if (flow === 'lesson') {
     summary.lesson = {
       overviewReady: false,

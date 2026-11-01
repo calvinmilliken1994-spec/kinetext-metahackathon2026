@@ -6,6 +6,18 @@
 //   META_LIVE    '1' enables live generation (opens ledger + Meta client)
 //   META_PURPOSE 'demo' | 'test-live' (default 'test-live')
 //
+// Stage 10 slice A (judge access, apps/api/access.ts; never logged, never sent to a client):
+//   ACCESS_CODE            the one shared judge code; the gate is ON when set and non-empty,
+//                          OFF (today's local behaviour, unchanged) when unset
+//   ACCESS_SESSION_SECRET  HMAC key for the session cookie; a random per-process key when
+//                          absent, so sessions end on restart
+//   BUILDS_PAUSED          '1' pauses gated builds at runtime (kill switch, no redeploy);
+//                          the file <STORAGE_DIR>/BUILDS_PAUSED does the same
+//   TRUST_PROXY            '1' behind a trusted reverse proxy (Render): the access-code attempt
+//                          limiter then keys on the rightmost X-Forwarded-For entry
+//   judgeCapUSD (config/resource-limits.json) is the judge budget (USD 50).
+//
+
 // OW-2 (open-weights mode): POST /api/jobs carries an optional model choice. A
 // muse-spark-open job builds its Modal client at submission time and reads
 // MODAL_PROXY_TOKEN (`wk-…ws-…`, split server-side) ONLY then — the token is
@@ -52,6 +64,8 @@ let activeLedger: Ledger | null = null;
  * it can never run a job anyway (POST answers 503 LIVE_DISABLED).
  */
 let maxConcurrentJobs: number | undefined;
+/** Stage 10: the validated judge budget (live mode reads the config; offline keeps the access.ts default). */
+let judgeCapUSD: number | undefined;
 
 async function startup(): Promise<void> {
   if (live) {
@@ -63,6 +77,7 @@ async function startup(): Promise<void> {
         JSON.parse(readFileSync(new URL('../../config/resource-limits.json', import.meta.url), 'utf8')),
       );
       maxConcurrentJobs = limits.maxConcurrentJobs;
+      judgeCapUSD = limits.judgeCapUSD;
       // N-01: the OS-backed ledger lock — a second process fails closed below.
       // OW-2: per-provider caps from config (meta-api additionally bounded by
       // the stage-2 cap; modal capped separately).
@@ -91,7 +106,7 @@ async function startup(): Promise<void> {
       const clientV2: MetaClient = buildMetaApiClient(limits.maxInputTokensV2);
       startJob = (
         sourceId: string,
-        jobOpts?: { demoFault?: DemoFault; model?: ModelChoice; flow?: JobFlow },
+        jobOpts?: { demoFault?: DemoFault; model?: ModelChoice; flow?: JobFlow; access?: 'judge' },
       ) => {
         const model: ModelChoice = jobOpts?.model ?? 'muse-spark-1.3';
         const flow: JobFlow = jobOpts?.flow ?? 'lesson';
@@ -118,6 +133,8 @@ async function startup(): Promise<void> {
           purpose,
           // Stage 5: the optional labelled demo fault requested by POST /api/jobs.
           demoFault: jobOpts?.demoFault,
+          // Stage 10: a job started under a judge access session is tagged in its job record.
+          ...(jobOpts?.access === 'judge' ? { access: 'judge' as const } : {}),
           // Stage 8b: SAM 3.1 segmentation for label-diagram-v1 revisions runs on the
           // Meta API key and the job's spending ledger (USD 0.0025 per image, reserved
           // and reconciled like every model call). The key is read from the environment
@@ -162,6 +179,14 @@ async function startup(): Promise<void> {
     // (each with its own abort/wall-time budget and cost accumulator); the busy 409 only
     // fires when that many are running.
     ...(maxConcurrentJobs !== undefined ? { maxConcurrentJobs } : {}),
+    // Stage 10 slice A: judge access. The code and secret come from the environment only and
+    // are handed straight to the access module; nothing here prints them.
+    access: {
+      code: process.env.ACCESS_CODE ?? '',
+      ...(process.env.ACCESS_SESSION_SECRET ? { sessionSecret: process.env.ACCESS_SESSION_SECRET } : {}),
+      ...(judgeCapUSD !== undefined ? { judgeCapUSD } : {}),
+      trustProxy: process.env.TRUST_PROXY === '1',
+    },
     // OW-2: which models are available — BOOLEANS ONLY, re-evaluated per
     // request. In live mode the Meta-API client exists by construction (startup
     // fails without its key), so muse-spark-1.3 is available; muse-spark-open

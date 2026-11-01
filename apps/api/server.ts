@@ -34,6 +34,15 @@
 //                           (the Stage 6 pipeline); 'activity' runs the unchanged v1 pipeline;
 //                           anything else is a 400 FLOW_INVALID.
 //
+//   GET/POST/DELETE /api/access -> Stage 10 slice A, judge access (apps/api/access.ts): GET reports
+//                           {gate, granted, capUSD, spentUSD, remainingUSD, buildsEnabled}; POST {code}
+//                           starts a signed HttpOnly session (401 ACCESS_CODE_INVALID, 429
+//                           TOO_MANY_ATTEMPTS); DELETE ends it. With `access.code` set (the gate),
+//                           POST /api/jobs and POST /api/sources need a session (403 ACCESS_REQUIRED)
+//                           and POST /api/jobs also answers 503 BUILDS_PAUSED (kill switch) and 402
+//                           JUDGE_BUDGET_REACHED; its jobs start with access: 'judge'. Gate off (the
+//                           default) leaves every existing route exactly as it was.
+//
 // Authorization (TASK-009 R-07): every request must carry an allowed Host
 // (127.0.0.1:<bound port>, localhost:<bound port>, or an allowedHosts entry —
 // by default the Vite dev proxy hosts); POST routes additionally require
@@ -66,6 +75,8 @@ import { isModelChoice } from '../../packages/meta/pricing.ts';
 import type { ModelChoice } from '../../packages/meta/pricing.ts';
 import { DEFAULT_MODEL, MODEL_INFO } from './model-clients.ts';
 import { MAX_CONCURRENT_JOBS_BOUND } from './resource-limits.ts';
+import { createAccessControl } from './access.ts';
+import type { AccessControl, AccessOptions } from './access.ts';
 import { listJobs, readJob } from '../../workers/generation/jobs.ts';
 import { applyContentHolds, componentHistory, enrichLabelBoxes, recheckLesson } from './recheck.ts';
 import { museSubjectsBySource } from './source-subjects.ts';
@@ -81,7 +92,7 @@ export interface ApiOptions {
   startJob:
     | ((
         sourceId: string,
-        opts?: { demoFault?: DemoFault; model?: ModelChoice; flow?: JobFlow },
+        opts?: { demoFault?: DemoFault; model?: ModelChoice; flow?: JobFlow; access?: 'judge' },
       ) => { jobId: string; done: Promise<JobSummary> })
     | null;
   /** Extra allowed Host values (and http://<value> Origins); replaces the Vite defaults. */
@@ -105,11 +116,19 @@ export interface ApiOptions {
    * 'muse-spark-1.3' when a startJob function exists, nothing otherwise.
    */
   availableModels?: readonly ModelChoice[] | (() => readonly ModelChoice[]);
+  /**
+   * Stage 10 slice A: judge access. Absent, or with an empty `code`, the gate is OFF and every
+   * existing route behaves exactly as before (GET/POST/DELETE /api/access still exist and report
+   * gate: false). See apps/api/access.ts for the options and the spend rule.
+   */
+  access?: AccessOptions;
 }
 
 const MAX_BODY_BYTES = 10 * 1024;
 /** Teacher-pasted source bodies may be larger than job bodies, but stay bounded (Stage 5). */
 const MAX_SOURCE_BODY_BYTES = 64 * 1024;
+/** Stage 10: POST /api/access carries only a short code. */
+const MAX_ACCESS_BODY_BYTES = 1024;
 const DEFAULT_ALLOWED_HOSTS: readonly string[] = ['127.0.0.1:5173', 'localhost:5173'];
 
 /** Stage 8b: a bare figure-store id — never a path, never dots, bounded length. */
@@ -149,13 +168,14 @@ function subjectFields(subject: Subject | undefined, from: 'curated' | 'muse'): 
   return subject === undefined ? {} : { subject, subjectSource: from };
 }
 
-function sendJson(res: ServerResponse, status: number, body: unknown): void {
+function sendJson(res: ServerResponse, status: number, body: unknown, extraHeaders?: Record<string, string>): void {
   const payload = JSON.stringify(body);
   res.writeHead(status, {
     'content-type': 'application/json; charset=utf-8',
     'x-content-type-options': 'nosniff',
     'cache-control': 'no-store',
     'content-length': Buffer.byteLength(payload),
+    ...extraHeaders,
   });
   res.end(payload);
 }
@@ -232,6 +252,11 @@ export function createApiServer(opts: ApiOptions): Server {
   }
   const inFlight: Set<Promise<JobSummary>> = new Set();
   const allowedHosts: readonly string[] = opts.allowedHosts ?? DEFAULT_ALLOWED_HOSTS;
+  /** Stage 10 slice A: the judge gate (off unless opts.access.code is a non-empty string). */
+  const access: AccessControl = createAccessControl(opts.access, {
+    storageDir: opts.storageDir,
+    live: () => opts.startJob !== null,
+  });
 
   /** Stage 5: teacher-source store (defaults to `<storageDir>/user-sources`). */
   function userSourcesDir(): string {
@@ -321,6 +346,10 @@ export function createApiServer(opts: ApiOptions): Server {
           available: availability[info.id],
         })),
       );
+    }
+
+    if (pathname === '/api/access') {
+      return handleAccess(req, res, method);
     }
 
     if (pathname === '/api/sources') {
@@ -552,10 +581,72 @@ export function createApiServer(opts: ApiOptions): Server {
     return sendError(res, 404, 'NOT_FOUND');
   }
 
+  /** Stage 10 slice A: GET (open) / POST (code -> session) / DELETE (sign out) /api/access. */
+  async function handleAccess(req: IncomingMessage, res: ServerResponse, method: string): Promise<void> {
+    if (method === 'GET') {
+      return sendJson(res, 200, access.body(req));
+    }
+    if (method !== 'POST' && method !== 'DELETE') {
+      return sendError(res, 405, 'METHOD_NOT_ALLOWED');
+    }
+    // R-07: the same Origin protection as every other state-changing route.
+    if (!originAllowed(req)) {
+      return sendError(res, 403, 'ORIGIN_NOT_ALLOWED');
+    }
+    if (method === 'DELETE') {
+      if (!access.gateOn) {
+        return sendJson(res, 200, access.body(req));
+      }
+      const clearing = access.clearCookie(req); // revokes the request's session before the body is built
+      return sendJson(res, 200, { ...access.body(req), granted: false }, { 'set-cookie': clearing });
+    }
+    // POST: with the gate off there is nothing to unlock (and nothing to guess).
+    if (!access.gateOn) {
+      return sendJson(res, 200, access.body(req));
+    }
+    const contentType = (req.headers['content-type'] ?? '').toLowerCase();
+    if (!contentType.startsWith('application/json')) {
+      return sendError(res, 415, 'UNSUPPORTED_MEDIA_TYPE');
+    }
+    let rawBody: string;
+    try {
+      rawBody = await readBodyLimited(req, MAX_ACCESS_BODY_BYTES);
+    } catch (err: unknown) {
+      if (err instanceof Error && err.message === 'PAYLOAD_TOO_LARGE') {
+        return sendError(res, 413, 'PAYLOAD_TOO_LARGE');
+      }
+      return sendError(res, 400, 'BAD_REQUEST');
+    }
+    let submitted: unknown;
+    try {
+      submitted = (JSON.parse(rawBody) as { code?: unknown } | null)?.code;
+    } catch {
+      return sendError(res, 400, 'BAD_REQUEST');
+    }
+    if (typeof submitted !== 'string') {
+      return sendError(res, 400, 'BAD_REQUEST');
+    }
+    // Every code guess spends one of the client's 5 attempts per minute (right or wrong).
+    const attempt = access.takeAttempt(req);
+    if (!attempt.ok) {
+      return sendJson(res, 429, { error: 'TOO_MANY_ATTEMPTS' }, { 'retry-after': String(attempt.retryAfterS) });
+    }
+    if (!access.codeMatches(submitted)) {
+      return sendError(res, 401, 'ACCESS_CODE_INVALID');
+    }
+    const cookie = access.sessionCookie(req);
+    // The new session is not on this request yet, so the body is built as granted.
+    return sendJson(res, 200, { ...access.body(req), granted: true }, { 'set-cookie': cookie });
+  }
+
   async function handleCreateSource(req: IncomingMessage, res: ServerResponse): Promise<void> {
     // R-07: same Origin protection as every other POST route.
     if (!originAllowed(req)) {
       return sendError(res, 403, 'ORIGIN_NOT_ALLOWED');
+    }
+    // Stage 10: with the gate on, pasting a source needs a judge session.
+    if (!access.isGranted(req)) {
+      return sendError(res, 403, 'ACCESS_REQUIRED');
     }
     const contentType = (req.headers['content-type'] ?? '').toLowerCase();
     if (!contentType.startsWith('application/json')) {
@@ -614,9 +705,22 @@ export function createApiServer(opts: ApiOptions): Server {
     if (!originAllowed(req)) {
       return sendError(res, 403, 'ORIGIN_NOT_ALLOWED');
     }
+    // Stage 10: with the gate on, a build needs a judge session (checked before anything is read).
+    if (!access.isGranted(req)) {
+      return sendError(res, 403, 'ACCESS_REQUIRED');
+    }
     const start = opts.startJob;
     if (start === null) {
       return sendError(res, 503, 'LIVE_DISABLED');
+    }
+    if (access.gateOn) {
+      // Kill switch (file or env) and the judge budget, both re-evaluated on every gated POST.
+      if (access.buildsPaused()) {
+        return sendError(res, 503, 'BUILDS_PAUSED');
+      }
+      if (access.budgetReached()) {
+        return sendError(res, 402, 'JUDGE_BUDGET_REACHED');
+      }
     }
     const contentType = (req.headers['content-type'] ?? '').toLowerCase();
     if (!contentType.startsWith('application/json')) {
@@ -693,6 +797,12 @@ export function createApiServer(opts: ApiOptions): Server {
       // is already running — same error code/shape as the pre-concurrency single-job gate.
       return sendError(res, 409, 'JOB_RUNNING');
     }
+    // Stage 10: re-checked in the same synchronous block that starts the job, so concurrent
+    // POSTs cannot all pass the early check against one stale budget (each started judge job
+    // is recorded, and counted, before the next request gets here).
+    if (access.gateOn && access.budgetReached()) {
+      return sendError(res, 402, 'JUDGE_BUDGET_REACHED');
+    }
     let started: { jobId: string; done: Promise<JobSummary> };
     try {
       // OW-2: the model always travels with the job (defaulted above), so the
@@ -702,6 +812,7 @@ export function createApiServer(opts: ApiOptions): Server {
         ...(demoFault !== undefined ? { demoFault } : {}),
         model,
         flow,
+        ...(access.gateOn ? { access: 'judge' as const } : {}),
       });
     } catch {
       return sendError(res, 500, 'JOB_START_FAILED');

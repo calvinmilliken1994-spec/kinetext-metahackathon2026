@@ -60,7 +60,17 @@ export interface RuntimeLimits {
    */
   maxConcurrentJobs: number;
   ledgerLockPort: number;
+  /**
+   * Stage 10: the judging-period budget in USD for jobs started under a judge access
+   * session. Explicit value: finite, > 0 and <= the smaller of the provider caps' sum and
+   * the stage cap (else RESOURCE_LIMITS_INVALID). Absent: DEFAULT_JUDGE_CAP_USD (50), clamped
+   * to that same bound so a pre-Stage-10 config (or one with smaller caps) still parses.
+   */
+  judgeCapUSD: number;
 }
+
+/** Stage 10: the default judge budget (USD) when judgeCapUSD is absent from the config. */
+export const DEFAULT_JUDGE_CAP_USD = 50;
 
 /**
  * The provider context window the v2 input bound is validated against: muse-spark-1.3 has a
@@ -188,6 +198,7 @@ export function parseResourceLimits(raw: unknown): RuntimeLimits {
     maxRepairAttempts?: unknown;
     maxConcurrentJobs?: unknown;
     ledgerLockPort?: unknown;
+    judgeCapUSD?: unknown;
   };
   const stage2: unknown = limits.stageCapsUSD?.stage2;
   const capUSD: number = typeof stage2 === 'number' ? stage2 : 0; // default zero spend
@@ -225,6 +236,16 @@ export function parseResourceLimits(raw: unknown): RuntimeLimits {
   // OW-2: per-provider caps and the Modal endpoint base URL fail closed too.
   const providerCapsUSD = parseProviderCaps(limits.providerCapsUSD, stage2);
   const modalBaseUrl = parseModalBaseUrl(limits.modalBaseUrl);
+  // Stage 10: the judge budget cannot exceed what the ledger could ever let through.
+  const judgeBound: number = Math.min(providerCapsUSD['meta-api'] + providerCapsUSD.modal, capUSD);
+  let judgeCapUSD: number;
+  if (limits.judgeCapUSD === undefined) {
+    judgeCapUSD = Math.min(DEFAULT_JUDGE_CAP_USD, judgeBound);
+  } else if (finitePositive(limits.judgeCapUSD) && limits.judgeCapUSD <= judgeBound) {
+    judgeCapUSD = limits.judgeCapUSD;
+  } else {
+    throw new Error('RESOURCE_LIMITS_INVALID');
+  }
   return {
     capUSD,
     providerCapsUSD,
@@ -237,5 +258,6 @@ export function parseResourceLimits(raw: unknown): RuntimeLimits {
     maxRepairAttempts,
     maxConcurrentJobs,
     ledgerLockPort: lockPort,
+    judgeCapUSD,
   };
 }

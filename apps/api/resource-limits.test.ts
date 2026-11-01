@@ -8,6 +8,7 @@ import { mkdtempSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
+  DEFAULT_JUDGE_CAP_USD,
   DEFAULT_MAX_CONCURRENT_JOBS,
   MAX_CONCURRENT_JOBS_BOUND,
   MAX_REPAIR_ATTEMPTS_BOUND,
@@ -89,10 +90,13 @@ test('the other runtime bounds still fail closed (regression)', () => {
       `${JSON.stringify(overrides)} must fail closed`,
     );
   }
-  // A missing stage cap defaults to zero spend (never an error).
+  // A missing stage cap defaults to zero spend (never an error). Stage 10: a judge budget would
+  // exceed that zero cap, so the same config drops judgeCapUSD (absent clamps to 0).
   const noCap = config();
   delete noCap['stageCapsUSD'];
+  delete noCap['judgeCapUSD'];
   assert.equal(parseResourceLimits(noCap).capUSD, 0);
+  assert.throws(() => parseResourceLimits({ ...noCap, judgeCapUSD: 50 }), /RESOURCE_LIMITS_INVALID/, 'an explicit judge cap above zero spend fails closed');
   // Junk input fails closed.
   assert.throws(() => parseResourceLimits(null), /RESOURCE_LIMITS_INVALID/);
   assert.throws(() => parseResourceLimits('limits'), /RESOURCE_LIMITS_INVALID/);
@@ -146,7 +150,7 @@ test('OW-2: the meta-api provider cap must equal stageCapsUSD.stage2', () => {
   );
   // Changing BOTH together stays valid (the caps remain consistent).
   const both = parseResourceLimits(
-    config({ stageCapsUSD: { stage2: 30 }, providerCapsUSD: { 'meta-api': 30, modal: 50 } }),
+    config({ stageCapsUSD: { stage2: 30 }, providerCapsUSD: { 'meta-api': 30, modal: 50 }, judgeCapUSD: 25 }),
   );
   assert.equal(both.capUSD, 30);
   assert.deepEqual(both.providerCapsUSD, { 'meta-api': 30, modal: 50 });
@@ -255,6 +259,52 @@ test('concurrency: maxConcurrentJobs 0, 9, negatives, fractions and non-numbers 
       () => parseResourceLimits(config({ maxConcurrentJobs: invalid })),
       (err: unknown) => err instanceof Error && err.message === 'RESOURCE_LIMITS_INVALID',
       `maxConcurrentJobs=${String(invalid)} must fail closed at startup`,
+    );
+  }
+});
+
+/* ------------------------------------------------------------------ */
+/* Stage 10 slice A: judgeCapUSD                                        */
+/* ------------------------------------------------------------------ */
+
+test('Stage 10: the checked-in config carries judgeCapUSD = 50 and it parses', () => {
+  assert.equal((realConfig as { judgeCapUSD?: unknown }).judgeCapUSD, 50);
+  assert.equal(parseResourceLimits(realConfig).judgeCapUSD, 50);
+  assert.equal(DEFAULT_JUDGE_CAP_USD, 50);
+});
+
+test('Stage 10: judgeCapUSD absent means 50 (clamped to the available budget so older configs still parse)', () => {
+  const missing = config();
+  delete missing['judgeCapUSD'];
+  assert.equal(parseResourceLimits(missing).judgeCapUSD, 50);
+  // a config whose stage cap is below 50 and has no judge cap parses, with the default clamped to what exists
+  const small = config({ stageCapsUSD: { stage2: 30 }, providerCapsUSD: { 'meta-api': 30, modal: 5 } });
+  delete small['judgeCapUSD'];
+  assert.equal(parseResourceLimits(small).judgeCapUSD, 30, 'min(50, min(30 + 5, 30)) = 30');
+  // no stage cap at all (zero spend by default) leaves no judge budget
+  const noStage = config();
+  delete noStage['judgeCapUSD'];
+  delete noStage['stageCapsUSD'];
+  assert.equal(parseResourceLimits(noStage).judgeCapUSD, 0);
+});
+
+test('Stage 10: judgeCapUSD accepts finite values > 0 up to the smaller of the provider caps sum and the stage cap', () => {
+  // real config: stage cap 100, providers 100 + 80 = 180, so the bound is 100
+  for (const valid of [0.01, 1, 25, 50, 99.99, 100]) {
+    assert.equal(parseResourceLimits(config({ judgeCapUSD: valid })).judgeCapUSD, valid);
+  }
+  // providers' sum below the stage cap is the binding bound
+  const lowProviders = { stageCapsUSD: { stage2: 40 }, providerCapsUSD: { 'meta-api': 40, modal: 5 } };
+  assert.equal(parseResourceLimits(config({ ...lowProviders, judgeCapUSD: 40 })).judgeCapUSD, 40, 'the stage cap (40) binds, not the sum (45)');
+  assert.throws(() => parseResourceLimits(config({ ...lowProviders, judgeCapUSD: 40.01 })), /RESOURCE_LIMITS_INVALID/);
+});
+
+test('Stage 10: judgeCapUSD 0, negatives, NaN, Infinity, strings, null and values above the bound fail closed', () => {
+  for (const invalid of [0, -1, -50, Number.NaN, Number.POSITIVE_INFINITY, '50', null, true, [], {}, 100.01, 1000]) {
+    assert.throws(
+      () => parseResourceLimits(config({ judgeCapUSD: invalid })),
+      (err: unknown) => err instanceof Error && err.message === 'RESOURCE_LIMITS_INVALID',
+      `judgeCapUSD=${JSON.stringify(invalid)} must fail closed at startup`,
     );
   }
 });
