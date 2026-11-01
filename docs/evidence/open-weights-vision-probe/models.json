@@ -1,0 +1,50 @@
+{
+  "data": [
+    {
+      "base_model_id": "meta-models/Muse-Spark-Open-816B-A42B",
+      "context_length": 1000000,
+      "created": 0,
+      "id": "meta-models/Muse-Spark-Open-816B-A42B",
+      "input_modalities": [
+        "text",
+        "image",
+        "video",
+        "audio"
+      ],
+      "interleaved": {
+        "field": "reasoning_content"
+      },
+      "max_output_length": 262144,
+      "name": "Meta: Muse Spark Open",
+      "object": "model",
+      "output_modalities": [
+        "text"
+      ],
+      "owned_by": "modal",
+      "reasoning_options": [
+        {
+          "type": "effort",
+          "values": [
+            "low",
+            "medium",
+            "high",
+            "xhigh"
+          ]
+        }
+      ],
+      "supported_features": [
+        "tools",
+        "json_mode",
+        "structured_outputs",
+        "reasoning"
+      ],
+      "supported_sampling_parameters": [
+        "temperature",
+        "top_p",
+        "stop",
+        "max_tokens"
+      ]
+    }
+  ],
+  "object": "list"
+}

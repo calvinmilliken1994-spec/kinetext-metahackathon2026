@@ -1,0 +1,40 @@
+{
+  "at": "2026-11-01T20:47:03.752Z",
+  "base": "modal shared endpoint",
+  "results": [
+    {
+      "figure": "noaa-hydrologic-cycle-1",
+      "status": 200,
+      "ms": 41276,
+      "usage": {
+        "prompt_tokens": 740,
+        "total_tokens": 6635,
+        "completion_tokens": 5895,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "image_tokens": 360
+        },
+        "reasoning_tokens": 5400
+      },
+      "finish": "stop",
+      "content": "{\"objects\": [{\"object_name\": \"the drawn Condensation that the printed label 'Condensation' points to\", \"bbox\": [{\"x_min\": 389, \"y_min\": 167, \"x_max\": 572, \"y_max\": 294 }, {\"x_min\": 259, \"y_min\": 236, \"x_max\": 323, \"y_max\": 295 }]}, {\"object_name\": \"the drawn Precipitation that the printed label 'Precipitation' points to\", \"bbox\": [{\"x_min\": 702, \"y_min\": 342, \"x_max\": 875, \"y_max\": 489 }]}, {\"object_name\": \"the drawn Transpiration that the printed label 'Transpiration' points to\", \"bbox\": [{\"x_min\": 58, \"y_min\": 508, \"x_max\": 80, \"y_max\": 695 }, {\"x_min\": 85, \"y_min\": 497, \"x_max\": 107, \"y_max\": 695 }, {\"x_min\": 106, \"y_min\": 480, \"x_max\": 129, \"y_max\": 695 }, {\"x_min\": 130, \"y_min\": 480, \"x_max\": 152, \"y_max\": 695 }, {\"x_min\": 151, \"y_min\": 505, \"x_max\": 172, \"y_max\": 695 }]}, {\"object_name\": \"the drawn Evaporation that the printed label 'Evaporation' points to\", \"bbox\": [{\"x_min\": 238, \"y_min\": 648, \"x_max\": 266, \"y_max\": 837 }, {\"x_min\": 260, \"y_min\": 640, \"x_max\": 287, \"y_max\": 835 }, {\"x_min\": 283, \"y_min\": 630, \"x_max\": 310, \"y_max\": 842 }, {\"x_min\": 308, \"y_min\": 635, \"x_max\": 348, \"y_max\": 840 }]}, {\"object_name\": \"the drawn Runoff that the printed label 'Surface Runoff' points to\", \"bbox\": [{\"x_min\": 557, \"y_min\": 664, \"x_max\": 617, \"y_max\": 728 }]}]}"
+    },
+    {
+      "figure": "medlineplus-dna-structure-1",
+      "status": 200,
+      "ms": 12712,
+      "usage": {
+        "prompt_tokens": 843,
+        "total_tokens": 3135,
+        "completion_tokens": 2292,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "image_tokens": 441
+        },
+        "reasoning_tokens": 1936
+      },
+      "finish": "stop",
+      "content": "{\"objects\": [{\"object_name\": \"the drawn base pairs that the printed label 'Base pairs' points to\", \"bbox\": [{\"x_min\": 155, \"y_min\": 373, \"x_max\": 342, \"y_max\": 398}, {\"x_min\": 188, \"y_min\": 413, \"x_max\": 388, \"y_max\": 435}]}, {\"object_name\": \"the drawn adenine that the printed label 'Adenine' points to\", \"bbox\": [{\"x_min\": 575, \"y_min\": 302, \"x_max\": 685, \"y_max\": 333}]}, {\"object_name\": \"the drawn thymine that the printed label 'Thymine' points to\", \"bbox\": [{\"x_min\": 682, \"y_min\": 302, \"x_max\": 830, \"y_max\": 333}]}, {\"object_name\": \"the drawn guanine that the printed label 'Guanine' points to\", \"bbox\": [{\"x_min\": 575, \"y_min\": 463, \"x_max\": 695, \"y_max\": 497}]}, {\"object_name\": \"the drawn cytosine that the printed label 'Cytosine' points to\", \"bbox\": [{\"x_min\": 693, \"y_min\": 463, \"x_max\": 830, \"y_max\": 497}]}, {\"object_name\": \"the drawn sugar-phosphate backbone that the printed label 'Sugar phosphate backbone' points to\", \"bbox\": [{\"x_min\": 139, \"y_min\": 36, \"x_max\": 450, \"y_max\": 940}]}]}"
+    }
+  ]
+}
