@@ -16,7 +16,7 @@ import { partReports } from './lib/failures.ts';
 import { checkName } from './lib/checks.ts';
 import { defaultRevision, overallRepairBadge, revisionInputs, validationHeading } from './lib/repairs.ts';
 import { timelineEventLabels } from './lib/timeline.ts';
-import { demoFaultToSend, disclosureText } from './lib/sources.ts';
+import { demoFaultToSend, disclosureText, shortTitle } from './lib/sources.ts';
 import { isRetiredPage, subjectNote } from './lib/subjects.ts';
 import type { SubjectKey } from './lib/subjects.ts';
 import type { DemoChoice } from './lib/sources.ts';
@@ -334,7 +334,7 @@ export function App() {
       if (stream.pending.length > 0) return null;
       const d = deckFromLesson({
         ...common, lesson: stream.lesson, specs: ready.lessonData.kitSpecs, premium: spec ?? null,
-        analysis: ready.lessonData.analysis, fallbackTitle: selectedSource?.title ?? 'Lesson',
+        analysis: ready.lessonData.analysis, fallbackTitle: selectedSource !== undefined && selectedSource !== null ? shortTitle(selectedSource.title) : 'Lesson',
       });
       return d.overview === null && d.parts.length === 0 ? null : d;
     }
@@ -503,7 +503,7 @@ export function App() {
                   cite={{ sourceId: ready.summary.sourceId, located, onCite }}
                   disclosure={disclosure}
                   provenance={provenance}
-                  fallbackTitle={selectedSource?.title ?? 'Lesson'}
+                  fallbackTitle={selectedSource !== undefined && selectedSource !== null ? shortTitle(selectedSource.title) : 'Lesson'}
                   premium={spec ?? null}
                   repairBadge={repairBadge}
                   pending={stream.pending}
