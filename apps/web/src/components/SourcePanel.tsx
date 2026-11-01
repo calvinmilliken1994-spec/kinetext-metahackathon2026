@@ -8,7 +8,7 @@ import type { QuoteRef } from '../lib/evidence.ts';
 import { linkStore, markLinks, segmentIsTabStop } from '../lib/linking.ts';
 import { revealInPanels, scrollContainersOf, scrollTopToReveal } from '../lib/scroll.ts';
 import { sourceDecorations, sourcePieces } from '../lib/sourceText.ts';
-import { isHttpUrl, sourceLicenseText, TEACHER_TAG } from '../lib/sources.ts';
+import { isHttpUrl, sourceCreditText, sourceCreditTitle, TEACHER_TAG } from '../lib/sources.ts';
 import { sourceMetaLine } from '../lib/lessonLayout.ts';
 import { CitationChip } from './Explanations.tsx';
 import { IconChevronDown, IconExternal, IconSourcePanel } from './icons.tsx';
@@ -195,9 +195,9 @@ export function SourcePanel({ sources, selectedId, onSelect, onReload, doc, high
 
         {meta !== undefined && (
           <p className="source-meta">
-            <span className="source-meta-main">
+            <span className="source-meta-main" title={sourceCreditTitle(meta)}>
               {meta.kind === 'user' ? `${TEACHER_TAG} · ` : ''}
-              {sourceMetaLine({ licence: sourceLicenseText(meta), found: foundCount, total: quotes.length })}
+              {sourceMetaLine({ licence: sourceCreditText(meta), found: foundCount, total: quotes.length })}
             </span>
             {isHttpUrl(meta.locator) && (
               <>

@@ -5,7 +5,7 @@ import { USER_LICENSES, USER_SOURCE_LIMITS, validateUserSourceInput } from '../.
 import {
   demoFaultOptions, demoFaultToSend, disclosureText, EMPTY_FORM, FREE_CREDITS_NOTE, isHttpUrl, licenseLabel, licenseOptions, problemMessage,
   problemsByField, RIGHTS_LABEL, sourceLicenseText, sourceOptionLabel, sourcePublisher, textCount, validateSourceForm,
-  capFirst, reuseNotice, shortTitle,
+  capFirst, reuseNotice, shortTitle, sourceCreditText, sourceCreditTitle,
 } from './sources.ts';
 import type { SourceFormValues } from './sources.ts';
 
@@ -272,4 +272,15 @@ test('sourcePublisher never cuts inside brackets, and drops an editor credit ("(
   const nist = "Source material: NIST Dictionary of Algorithms and Data Structures (Paul E. Black, ed.), 'hash table'. Courtesy: NIST.";
   assert.equal(sourcePublisher(nist), 'NIST Dictionary of Algorithms and Data Structures');
   assert.equal(sourcePublisher('Source material: NOAA Office of Ocean Exploration and Research (NOAA Ocean Exploration), Fueling Life.'), 'NOAA Office of Ocean Exploration and Research (NOAA Ocean Exploration)');
+});
+
+test('the source header names the publisher instead of repeating "U.S. Government work" on every page', () => {
+  const lib = (attribution: string) => ({ title: 'T', kind: 'library' as const, license: 'US-Gov-Work', attribution });
+  assert.equal(sourceCreditText(lib('Source material: U.S. Geological Survey, Water Science School.')), 'U.S. Geological Survey');
+  assert.equal(sourceCreditText(lib("Source material: NIST Dictionary of Algorithms and Data Structures (Paul E. Black, ed.), 'hash table'.")), 'NIST');
+  assert.equal(sourceCreditText(lib('Source material: National Archives and Records Administration, Milestone Documents.')), 'National Archives');
+  assert.equal(sourceCreditText(lib('Source material: NOAA Office of Ocean Exploration and Research (NOAA Ocean Exploration), Fueling Life.')), 'NOAA Ocean Exploration');
+  assert.equal(sourceCreditText(lib('Credit: someone.')), 'U.S. Government work', 'no publisher found: the licence as before');
+  assert.equal(sourceCreditText({ title: 'T', kind: 'user', license: 'own-work', licenseLabel: 'My own work' }), 'My own work', 'teacher texts keep their licence');
+  assert.equal(sourceCreditTitle(lib('Source material: U.S. Geological Survey, Water Science School.')), 'U.S. Geological Survey · U.S. Government work, public domain');
 });

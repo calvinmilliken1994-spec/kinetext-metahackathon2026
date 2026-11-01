@@ -144,6 +144,35 @@ export function sourceLicenseText(m: SourceMetaLike): string {
   return m.kind === 'user' ? (m.licenseLabel ?? licenseLabel(m.license)) : (LIBRARY_LICENCE_TEXT[m.license] ?? licenseLabel(m.license));
 }
 
+/** Long agency names shortened for the one-line source header (the full credit stays in "Credit & key"). */
+const SHORT_PUBLISHER: Readonly<Record<string, string>> = {
+  'National Archives and Records Administration': 'National Archives',
+  'Board of Governors of the Federal Reserve System': 'Federal Reserve',
+  'National Human Genome Research Institute (NHGRI)': 'National Human Genome Research Institute',
+  'NIST Dictionary of Algorithms and Data Structures': 'NIST',
+};
+
+/**
+ * The source header's credit: a library page names its publisher ("U.S. Geological Survey"); every library page is a
+ * U.S. Government work, so repeating that told a teacher nothing (the licence is in the hover text and Credit & key). A name with a short alias in
+ * brackets uses the alias ("NOAA Ocean Exploration"). Teacher texts and pages without a publisher keep the licence.
+ */
+export function sourceCreditText(m: SourceMetaLike): string {
+  if (m.kind === 'user') return sourceLicenseText(m);
+  const publisher = sourcePublisher(m.attribution);
+  if (publisher === null) return sourceLicenseText(m);
+  const alias = /\(([^()]+)\)\s*$/.exec(publisher)?.[1]?.trim();
+  const name = SHORT_PUBLISHER[publisher] ?? (alias !== undefined && alias !== '' ? alias : publisher);
+  return m.license === 'US-Gov-Work' ? name : `${name} · ${sourceLicenseText(m)}`;
+}
+
+/** Hover text for the header credit: the full publisher and the licence in words. */
+export function sourceCreditTitle(m: SourceMetaLike): string {
+  const publisher = m.kind === 'user' ? null : sourcePublisher(m.attribution);
+  const licence = m.license === 'US-Gov-Work' && m.kind !== 'user' ? 'U.S. Government work, public domain' : sourceLicenseText(m);
+  return publisher === null ? licence : `${publisher} · ${licence}`;
+}
+
 /** Option text in the source select: teacher sources are tagged with their licence; library sources stay as they were. */
 export function sourceOptionLabel(m: SourceMetaLike): string {
   return m.kind === 'user' ? `${m.title} — ${TEACHER_TAG} · ${sourceLicenseText(m)}` : capFirst(m.title);
