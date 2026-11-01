@@ -1,0 +1,85 @@
+{
+  "figure": "noaa-hydrologic-cycle-1",
+  "size": [
+    572,
+    504
+  ],
+  "points": [
+    {
+      "id": 1,
+      "x": 172,
+      "y": 372,
+      "partId": "evaporation"
+    },
+    {
+      "id": 2,
+      "x": 66,
+      "y": 296,
+      "partId": "transpiration"
+    },
+    {
+      "id": 3,
+      "x": 286,
+      "y": 141,
+      "partId": "condensation"
+    },
+    {
+      "id": 4,
+      "x": 440,
+      "y": 98,
+      "partId": "precipitation"
+    },
+    {
+      "id": 5,
+      "x": 335,
+      "y": 350,
+      "partId": "runoff"
+    }
+  ],
+  "boxes": [
+    {
+      "id": 1,
+      "x1": 30,
+      "y1": 313,
+      "x2": 309,
+      "y2": 449,
+      "confidence": 0.275390625
+    },
+    {
+      "id": 2,
+      "x1": 61,
+      "y1": 227,
+      "x2": 69,
+      "y2": 330,
+      "confidence": 0.81640625
+    },
+    {
+      "id": 3,
+      "x1": 251,
+      "y1": 84,
+      "x2": 324,
+      "y2": 146,
+      "confidence": 0.78515625
+    },
+    {
+      "id": 4,
+      "x1": 400,
+      "y1": 95,
+      "x2": 473,
+      "y2": 147,
+      "confidence": 0.6484375
+    },
+    {
+      "id": 5,
+      "x1": 322,
+      "y1": 332,
+      "x2": 351,
+      "y2": 362,
+      "confidence": 0.92578125
+    }
+  ],
+  "imagesProcessed": 1,
+  "costUSD": 0.0025,
+  "latencyMs": 3858,
+  "at": "2026-11-01T17:20:03.526Z"
+}
