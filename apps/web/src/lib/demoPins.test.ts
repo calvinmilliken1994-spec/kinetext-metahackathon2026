@@ -2,7 +2,7 @@
 // Demo pair review #13: the demo opens on fixed known-good runs, so a new run before filming cannot change the first frame.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { DEMO_PINS, pinnedOpening } from './demoPins.ts';
+import { DEMO_PINS, openingFor, pinnedOpening } from './demoPins.ts';
 import { TOUR_JOB_ID } from './onboarding.ts';
 
 const WATER = 'job-20261031081105-910f3776';
@@ -27,4 +27,18 @@ test('a pin that is missing, unfinished or not a lesson is passed over (null let
   assert.equal(pinnedOpening([row('job-x', 's', '2026-11-01T00:00:00Z')]), null);
   assert.equal(pinnedOpening([row(WATER, 'noaa-jetstream-hydrologic-cycle', '2026-10-31T08:11:05Z', 'failed')]), null);
   assert.equal(pinnedOpening([row(WATER, 'noaa-jetstream-hydrologic-cycle', '2026-10-31T08:11:05Z', 'succeeded', 'activity')]), null);
+});
+
+// The pin is for the demo's first frame, not a trap: a browser that has opened another lesson goes back to it.
+test('a plain visit opens the lesson this browser last showed when it is still a finished lesson, else the pin', () => {
+  const pin = DEMO_PINS.opening[0];
+  const jobs = [
+    { jobId: pin, sourceId: 'noaa-water', status: 'succeeded', flow: 'lesson' as const },
+    { jobId: 'job-mine', sourceId: 'my-page', status: 'succeeded', flow: 'lesson' as const },
+    { jobId: 'job-failed', sourceId: 'x', status: 'failed', flow: 'lesson' as const },
+  ];
+  assert.deepEqual(openingFor(jobs, 'job-mine'), { jobId: 'job-mine', sourceId: 'my-page' });
+  assert.deepEqual(openingFor(jobs, null), { jobId: pin, sourceId: 'noaa-water' }, 'fresh browser: the pin');
+  assert.deepEqual(openingFor(jobs, 'job-gone'), { jobId: pin, sourceId: 'noaa-water' }, 'deleted run: the pin');
+  assert.deepEqual(openingFor(jobs, 'job-failed'), { jobId: pin, sourceId: 'noaa-water' }, 'not a finished lesson: the pin');
 });

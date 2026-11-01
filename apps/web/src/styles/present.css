@@ -411,7 +411,8 @@
 }
 
 .pz-keyhint {
-  position: absolute; inset-inline: 0; inset-block-end: 64px; z-index: 5; margin-inline: auto; inline-size: fit-content;
+  /* in the stage's top margin: at the bottom it covered the title slide's disclosure (demo pair review) */
+  position: absolute; inset-inline: 0; inset-block-start: 14px; z-index: 5; margin-inline: auto; inline-size: fit-content;
   display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 18px; padding: 6px 14px; border-radius: var(--r);
   background: color-mix(in srgb, var(--chrome) 94%, transparent); color: var(--ink-2); font-size: var(--pz-chrome);
   animation: pz-words-in 0.3s ease-out 0.4s both;

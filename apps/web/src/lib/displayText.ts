@@ -156,9 +156,27 @@ export function aiLabel(text: string): string {
  * Never used on page quotes.
  */
 function withoutLearnOpener(text: string): string {
-  const m = /^\s*students\s+(?:(?:will|can)\s+)?(?:learn|explain|describe|show|understand|see|discover|find\s+out)\s+(?:that\s+(?=[\p{L}\p{N}(])|(?=how\s+[\p{L}\p{N}(]))/iu.exec(text);
-  return m === null ? text : text.slice(m[0].length);
+  for (const [re, lead] of OPENERS) {
+    const m = re.exec(text);
+    if (m !== null) return lead + text.slice(m[0].length);
+  }
+  return text;
 }
+
+// Measured across every stored run (2026-11-01). Each rule needs a real clause after the opener.
+const OPENER_HEAD = String.raw`^\s*students\s+(?:(?:will|can|should|must)\s+)?`;
+const OPENER_VERBS = String.raw`(?:learn|explain|describe|show|understand|see|discover|find\s+out|state|recogni[sz]e|apply|trace|explore|identify|know|reali[sz]e|note|observe)`;
+const CLAUSE = String.raw`[\p{L}\p{N}(]`;
+const OPENERS: ReadonlyArray<readonly [RegExp, string]> = [
+  // "Students explain that X" → "X"
+  [new RegExp(String.raw`${OPENER_HEAD}${OPENER_VERBS}\s+that\s+(?=${CLAUSE})`, 'iu'), ''],
+  // "Students learn why X" → "Why X" (how, why, which, whether, what, when, where)
+  [new RegExp(String.raw`${OPENER_HEAD}${OPENER_VERBS}\s+(?=(?:how|why|which|whether|what|when|where)\s+${CLAUSE})`, 'iu'), ''],
+  // "Students learn to calculate X" → "How to calculate X"
+  [new RegExp(String.raw`${OPENER_HEAD}learn\s+to\s+(?=${CLAUSE})`, 'iu'), 'how to '],
+  // "Students learn the convention …" / "Students learn DNA is …" → what follows (three words or more; never "about …")
+  [new RegExp(String.raw`${OPENER_HEAD}learn\s+(?!(?:about|that|it|them|this|to|how|why|which|whether|what|when|where)\b)(?=${CLAUSE}\S*\s+\S+\s+\S)`, 'iu'), ''],
+];
 
 /** Unit symbols that must stay on the line of their number. */
 const UNIT_AFTER_NUMBER = /(\d) (?=(?:m\/s[²³]?|km\/h|kg\/m[²³]|m[²³]?|s|km|cm|mm|kg|g|N|J|K|W|Pa|kPa|Hz|%|mph|ft|lbs?|min|h|mol|mL|L|°C|°F|USD|years?)(?![\p{L}\d_]))/gu;

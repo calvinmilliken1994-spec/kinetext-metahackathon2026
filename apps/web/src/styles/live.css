@@ -199,6 +199,8 @@ mark.lb-lit { animation: lb-lit 900ms var(--lb-ease) calc(var(--i, 0) * 70ms + 1
  *      settle to the quiet resting outline (fill: backwards, so the resting style and a later focus are never overridden) */
 .ld-plate[data-build="draw"] .ld-marker { animation: lb-pop 280ms var(--lb-ease) calc(380ms + var(--i, 0) * 150ms) backwards; }
 .ld-plate[data-build="draw"] .ld-region { animation: lb-outline 2600ms linear calc(460ms + var(--i, 0) * 180ms) backwards; }
+/* the draw-in waits for the figure image: on a cold load it played over an empty plate (paused at its first frame) */
+.ld-plate[data-build="draw"][data-img="loading"] :is(.ld-marker, .ld-region) { animation-play-state: paused; }
 
 @keyframes lb-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes lb-rise { from { opacity: 0; translate: 0 6px; } to { opacity: 1; translate: 0 0; } }

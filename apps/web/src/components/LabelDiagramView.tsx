@@ -204,6 +204,9 @@ interface FigureProps {
 function Figure({ spec, views, slots, masks, named, slotState, labelsShown, markerState, current, outlined, slotFont, size, caption, marker, onSlotHover, build = false }: FigureProps) {
   const srcOf = useContext(FigureSrcContext);
   const [failed, setFailed] = useState(false);
+  // Demo review: on a cold load the build's draw-in played over an empty plate. It waits for the image (a cached image
+  // is already complete when the ref attaches).
+  const [imgReady, setImgReady] = useState(false);
   const plateRef = useRef<HTMLDivElement>(null);
   const slotOf = useMemo(() => slotOfPart(slots, views.length), [slots, views.length]);
   const tagged = useMemo(() => slotOf.map((k) => k === null), [slotOf]);
@@ -220,10 +223,10 @@ function Figure({ spec, views, slots, masks, named, slotState, labelsShown, mark
   const credit = figureCredit(fig);
   return (
     <figure className="ld-figure" style={figureStyle}>
-      <div className="ld-plate" style={plateStyle} ref={plateRef} data-labels={labelsShown ? 'shown' : 'covered'} data-build={build ? 'draw' : undefined}>
+      <div className="ld-plate" style={plateStyle} ref={plateRef} data-labels={labelsShown ? 'shown' : 'covered'} data-build={build ? 'draw' : undefined} data-img={imgReady || failed ? 'ready' : 'loading'}>
         {failed
           ? <p className="ld-missing">The figure could not be loaded.</p>
-          : <img src={srcOf(spec.figureId)} alt={fig.caption.trim() === '' ? 'The page’s figure, labels covered' : `The page’s figure, labels covered: ${fig.caption.trim()}`} draggable={false} onError={() => setFailed(true)} />}
+          : <img src={srcOf(spec.figureId)} alt={fig.caption.trim() === '' ? 'The page’s figure, labels covered' : `The page’s figure, labels covered: ${fig.caption.trim()}`} draggable={false} onError={() => setFailed(true)} onLoad={() => setImgReady(true)} ref={(el) => { if (el?.complete === true && el.naturalWidth > 0) setImgReady(true); }} />}
         {masks.length > 0 && slots.length === 0 && masks.map((m) => (
           <span key={m.key} className="ld-mask" style={pct(m.box)} data-on={labelsShown ? 'false' : 'true'} aria-hidden="true" />
         ))}

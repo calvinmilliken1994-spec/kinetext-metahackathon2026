@@ -84,3 +84,31 @@ test('aiText (sentences such as objectives) is not changed by the opener rule', 
   assert.equal(aiText('Students explain that water evaporates.'), 'Students explain that water evaporates.');
   assert.equal(aiText('Students learn that water evaporates.'), 'Students learn that water evaporates.');
 });
+
+// Measured over every stored run (2026-11-01): after "learn that" (2,214) the openers left were "learn the/a/an …" (204),
+// "learn how/why/which …", "learn to …" (44), "learn <clause>" ("Students learn DNA is …") and "state / recognize /
+// apply / trace / explore that|how …". They go the same way. Openers naming a classroom activity ("Students compare …",
+// "Students examine …") stay: they say what the class does, not boilerplate.
+test('aiLabel drops the remaining stock openers measured across stored runs', () => {
+  assert.equal(aiLabel('Students learn the convention convened in Philadelphia to revise the Articles.'), 'The convention convened in Philadelphia to revise the Articles.');
+  assert.equal(aiLabel('Students learn a good rule to save 10 percent of earnings.'), 'A good rule to save 10 percent of earnings.');
+  assert.equal(aiLabel('Students learn DNA is the hereditary material in humans.'), 'DNA is the hereditary material in humans.');
+  assert.equal(aiLabel('Students learn compound interest means earning interest on interest.'), 'Compound interest means earning interest on interest.');
+  assert.equal(aiLabel('Students learn why midpoint calculation overflows for large values.'), 'Why midpoint calculation overflows for large values.');
+  assert.equal(aiLabel('Students learn which planets have a ring system.'), 'Which planets have a ring system.');
+  assert.equal(aiLabel('Students learn to calculate drag from coefficient, density, velocity and area.'), 'How to calculate drag from coefficient, density, velocity and area.');
+  assert.equal(aiLabel('Students state that a proposed amendment becomes part of the Constitution.'), 'A proposed amendment becomes part of the Constitution.');
+  assert.equal(aiLabel('Students recognize that scientists combined the constant with earth mass.'), 'Scientists combined the constant with earth mass.');
+  assert.equal(aiLabel('Students apply that weight is mass times gravitational acceleration.'), 'Weight is mass times gravitational acceleration.');
+  assert.equal(aiLabel('Students trace how the Archivist submits the amendment to the States.'), 'How the Archivist submits the amendment to the States.');
+  assert.equal(aiLabel('Students explore how velocity and density change the dynamic term.'), 'How velocity and density change the dynamic term.');
+  assert.equal(aiLabel('Students should explain why the bars level.'), 'Why the bars level.');
+});
+
+test('aiLabel keeps activity openers and short or odd "learn" lines as written', () => {
+  for (const s of [
+    'Students compare Orbital Period values for Mercury and Earth.', 'Students examine Mean Temperature extremes.',
+    'Students contrast energy sources for both paths', 'Students learn about photosynthesis.', 'Students learn it.',
+    'Students learn', 'Students learn to', 'Students learn why', 'Students state the rule.',
+  ]) assert.equal(aiLabel(s), s, s);
+});

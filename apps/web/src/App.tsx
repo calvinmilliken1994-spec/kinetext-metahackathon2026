@@ -53,7 +53,7 @@ import type { LinkNoticeState } from './lib/lessonJobLinks.ts';
 import { useReplay } from './components/useReplay.ts';
 import { jobStartMs, liveStrip, partBuilds } from './lib/liveBuild.ts';
 import { replayRequest } from './lib/replay.ts';
-import { pinnedOpening } from './lib/demoPins.ts';
+import { LAST_SHOWN_KEY, openingFor } from './lib/demoPins.ts';
 import { shownSearch } from './lib/jobUrl.ts';
 import type { ReplayRequest } from './lib/replay.ts';
 import { replayAfterTourClose, shouldAutoStart, tourReady, tourRequest, tourSignals, TOUR_JOB_ID, TOUR_STORAGE_KEY, watchAfterTourClose } from './lib/onboarding.ts';
@@ -140,7 +140,10 @@ export function App() {
   if (opening === undefined && jobs.state !== 'loading') {
     const res = jobs.state === 'ready' ? resolveRunLink(RUN_LINK, jobs.data) : { opening: null, notice: null, replay: false };
     // A plain visit opens the demo's pinned run (lib/demoPins.ts), not whichever run happens to be newest.
-    const pinned = RUN_LINK === null && jobs.state === 'ready' ? pinnedOpening(jobs.data) : null;
+    // A browser that has shown another lesson goes back to it (lib/demoPins.ts openingFor).
+    let lastShown: string | null = null;
+    try { lastShown = localStore()?.getItem(LAST_SHOWN_KEY) ?? null; } catch { lastShown = null; }
+    const pinned = RUN_LINK === null && jobs.state === 'ready' ? openingFor(jobs.data, lastShown) : null;
     setOpening(pinned ?? res.opening);
     setLinkState(res.notice);
     if (RUN_LINK?.kind === 'replay' && !res.replay) setReplayReq(null);
@@ -226,6 +229,8 @@ export function App() {
   useEffect(() => {
     if (selectedJobId === null || typeof window === 'undefined') return;
     if (firstShown.current === null) firstShown.current = selectedJobId;
+    // Remember it for the next plain visit, except the tour's replay (a demo, not the teacher's choice).
+    if (!replaying) { try { localStore()?.setItem(LAST_SHOWN_KEY, selectedJobId); } catch { /* storage blocked */ } }
     const next = shownSearch(window.location.search, selectedJobId, { replaying, presenting: presentingNow, opened: selectedJobId !== firstShown.current });
     if (next !== window.location.search) window.history.replaceState(window.history.state, '', `${window.location.pathname}${next}${window.location.hash}`);
   }, [selectedJobId, replaying, presentingNow]);

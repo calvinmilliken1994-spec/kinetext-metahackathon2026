@@ -21,3 +21,18 @@ export function pinnedOpening(jobs: readonly Listed[]): OpeningJob | null {
   }
   return null;
 }
+
+/** The key under which the app remembers the lesson this browser showed last. */
+export const LAST_SHOWN_KEY = 'mki.lastJob';
+
+/**
+ * What a plain visit opens: the lesson this browser showed last, when the server still lists it as a finished lesson
+ * (a teacher comes back to their own work), else the pinned demo run (a fresh browser, e.g. a judge or a recording).
+ */
+export function openingFor(jobs: readonly Listed[], lastShown: string | null): OpeningJob | null {
+  if (lastShown !== null) {
+    const j = jobs.find((x) => x.jobId === lastShown);
+    if (j !== undefined && j.status === 'succeeded' && j.flow === 'lesson') return { jobId: j.jobId, sourceId: j.sourceId };
+  }
+  return pinnedOpening(jobs);
+}
