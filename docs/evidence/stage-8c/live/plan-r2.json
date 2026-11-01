@@ -1,0 +1,4 @@
+[
+  { "sourceId": "noaa-jetstream-hydrologic-cycle", "model": "muse-spark-1.3", "run": 2, "set": "stage-8c" },
+  { "sourceId": "medlineplus-what-is-dna", "model": "muse-spark-1.3", "run": 2, "set": "stage-8c" }
+]
