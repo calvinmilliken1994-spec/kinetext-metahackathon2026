@@ -304,10 +304,14 @@ export function barScale(n: number): number {
   }
 }
 
-/** The scale for the current totals, never smaller than the previous one, so a bar only moves when its own count moves. */
-export function nextBarScale(previous: number | null, totals: AtomTotals): number {
+/**
+ * The scale for the current totals: the readable step that fits the largest count, growing and shrinking with it, so
+ * removing a big coefficient brings the diagram back to its earlier size (it used to only grow). `previous` is kept in
+ * the signature for callers; the scale no longer depends on it.
+ */
+export function nextBarScale(_previous: number | null, totals: AtomTotals): number {
   const most = totals.rows.reduce((m, r) => Math.max(m, r.left, r.right), 0);
-  return Math.max(previous ?? 0, barScale(most));
+  return barScale(most);
 }
 
 export interface FormulaPart { text: string; sub: boolean }

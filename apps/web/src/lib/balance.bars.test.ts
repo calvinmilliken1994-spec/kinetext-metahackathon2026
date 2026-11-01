@@ -87,11 +87,11 @@ test('bar scale is a nice ceiling: 4, 6, 8, 12, 16, 24, 32, 48 ...', () => {
   for (const [n, want] of cases) assert.equal(barScale(n), want, `barScale(${n})`);
 });
 
-test('the bar scale only grows during a session, so bars never shrink because another element grew', () => {
+test('the bar scale fits the current counts both ways: it grows with a big coefficient and returns when it is removed', () => {
   const start = nextBarScale(null, atomTotals(photo, ones) as NonNullable<ReturnType<typeof atomTotals>>);
   assert.equal(start, 12, 'H has 12 atoms in the products at the start');
   const grown = nextBarScale(start, atomTotals(photo, [6, 6, 1, 6]) as NonNullable<ReturnType<typeof atomTotals>>);
   assert.equal(grown, 24, 'O reaches 18');
   const back = nextBarScale(grown, atomTotals(photo, ones) as NonNullable<ReturnType<typeof atomTotals>>);
-  assert.equal(back, 24, 'stepping back down keeps the scale');
+  assert.equal(back, 12, 'Calvin 2026-11-01: removing the extra C6H12O6 must not leave the diagram shrunk');
 });
