@@ -87,6 +87,10 @@
   box-shadow: 0 0 0 1.5px var(--ld-region-halo), 0 0 0 3.5px var(--ld-region-shade), inset 0 0 0 1px var(--ld-region-halo);
 }
 .ld[data-mode="stage"] .ld-region[data-on="false"] { opacity: 0; visibility: hidden; }
+/* Calvin 2026-11-02: SAM's regions show only while a build draws them in (styles/live.css lb-outline), then they are
+   gone: at rest, on hover and on slides the numbers and slots carry the activity, and a box around SAM's weaker regions
+   read as a mistake. The animation overrides this while it plays. */
+.ld-plate .ld-region { opacity: 0; visibility: hidden; }
 /* A part with no printed label: its name tag beside its marker, at the spot lib placeTags chose (clear of slots and markers). */
 .ld-tag {
   position: absolute; z-index: 2; inset-block-start: 0; inset-inline-start: 0; box-sizing: border-box;

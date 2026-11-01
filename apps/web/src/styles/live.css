@@ -196,7 +196,7 @@
 mark.lb-lit { animation: lb-lit 900ms var(--lb-ease) calc(var(--i, 0) * 70ms + 120ms) backwards; }
 
 /* ---- label the diagram: Muse's part points, then SAM's regions, draw in part by part in the strong outline, hold, and
- *      settle to the quiet resting outline (fill: backwards, so the resting style and a later focus are never overridden) */
+ *      fade out (Calvin 2026-11-02: regions are a build moment only; at rest they are hidden, styles/engines-c.css) */
 .ld-plate[data-build="draw"] .ld-marker { animation: lb-pop 280ms var(--lb-ease) calc(380ms + var(--i, 0) * 150ms) backwards; }
 .ld-plate[data-build="draw"] .ld-region { animation: lb-outline 2600ms linear calc(460ms + var(--i, 0) * 180ms) backwards; }
 /* the draw-in waits for the figure image: on a cold load it played over an empty plate (paused at its first frame) */
@@ -224,8 +224,8 @@ mark.lb-lit { animation: lb-lit 900ms var(--lb-ease) calc(var(--i, 0) * 70ms + 1
   18% { clip-path: inset(-6px -6px -6px -6px round 8px); }
   70% { clip-path: inset(-6px -6px -6px -6px round 8px); animation-timing-function: var(--lb-ease); }
   100% {
-    opacity: 1; visibility: visible; border-width: 2px; border-color: var(--ld-region); background-color: transparent;
-    box-shadow: 0 0 0 1px var(--ld-region-halo), 0 0 0 0 transparent, inset 0 0 0 0 transparent; clip-path: inset(-6px -6px -6px -6px round 8px);
+    opacity: 0; visibility: hidden; border-width: 3px; border-color: var(--ld-region-strong); background-color: var(--ld-region-tint);
+    box-shadow: 0 0 0 1.5px var(--ld-region-halo), 0 0 0 4px var(--ld-region-shade), inset 0 0 0 1px var(--ld-region-halo); clip-path: inset(-6px -6px -6px -6px round 8px);
   }
 }
 
