@@ -481,12 +481,14 @@ export const STAGE6_CHECK_NAMES: Readonly<Record<keyof typeof STAGE6_CHECKS, str
   'LD-01': 'Each quote appears word for word on the page',
   'LD-02': 'Each name is the word printed in its label',
   'LD-03': 'The figure belongs to this page',
-  'LD-04': 'Each number sits on its part, not on the printed label',
+  'LD-04': 'Each number sits on its part, inside its area, not on the printed label',
   'LD-05': 'The printed labels’ boxes are valid',
   'LD-06': 'SAM outlined one region around each numbered point',
   'LD-07': 'The part regions do not overlap too much',
   'LD-08': 'Numbers in the text can be found on the page',
   'LD-09': 'The number of parts is in range',
+  'LD-10': 'Every printed label the page names has a part',
+  'LD-11': 'SAM was sure of every part’s region',
 };
 
 export function stage6CheckName(id: string): string | null {

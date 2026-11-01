@@ -51,6 +51,10 @@ const CLAUSES: Readonly<Record<string, string>> = {
   'timeline.date-grounded': 'gave a date that its quote does not state', 'timeline.case-order': 'gave ordering answers the dates do not support',
   'timeline.approximate-date': 'used an approximate date', 'timeline.distinct-dates': 'gave two events the same date',
   'timeline.unique-ids': 'mixed up its events and questions',
+  'LD-01': QUOTED, 'LD-02': 'gave a part a name that is not printed in its label', 'LD-03': 'used a figure that does not belong to this page',
+  'LD-04': 'put a number outside its part’s area or on its printed label', 'LD-05': 'marked the printed labels in the wrong places',
+  'LD-06': 'put numbers where SAM found no region', 'LD-07': 'marked parts whose regions overlap too much', 'LD-08': NUMBERS, 'LD-09': COUNTS,
+  'LD-10': 'left a printed label the page names without a part', 'LD-11': 'marked a part SAM could not outline with confidence',
 };
 const UNKNOWN = 'failed one of our checks against the page';
 const REPAIR = 'repair.no-weakening';

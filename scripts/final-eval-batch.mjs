@@ -11,7 +11,7 @@ const key = (r) => `${r.sourceId}|${r.model}|${r.run}`;
 const doneKeys = new Set(existsSync(out) ? readFileSync(out, 'utf8').split('\n').filter(Boolean).map((l) => { try { const r = JSON.parse(l); return r.jobId ? key(r) : null; } catch { return null; } }).filter(Boolean) : []);
 const plan = fullPlan.filter((r) => !doneKeys.has(key(r)));
 console.log(`plan ${fullPlan.length}, already done ${fullPlan.length - plan.length}, to run ${plan.length}`);
-const API = 'http://127.0.0.1:8787';
+const API = process.env.API_BASE ?? 'http://127.0.0.1:8787';
 const RUNS = new URL('../storage/runs/', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1').replace(/\/$/, '');
 const CONCURRENCY = 3;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));

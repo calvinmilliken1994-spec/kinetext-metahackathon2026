@@ -363,6 +363,12 @@ test('every Stage 6 check id has a plain-words name that is not the contract slu
   }
 });
 
+test('Stage 8c label-diagram checks: coverage and SAM confidence named, LD-04 covers areas', () => {
+  assert.equal(stage6CheckName('LD-10'), 'Every printed label the page names has a part');
+  assert.equal(stage6CheckName('LD-11'), 'SAM was sure of every part’s region');
+  assert.equal(stage6CheckName('LD-04'), 'Each number sits on its part, inside its area, not on the printed label');
+});
+
 test('retired checks are named as retired; unknown ids have no name', () => {
   assert.match(stage6CheckName('A-02') ?? '', /retired/i);
   assert.match(stage6CheckName('BAL-06') ?? '', /retired/i);

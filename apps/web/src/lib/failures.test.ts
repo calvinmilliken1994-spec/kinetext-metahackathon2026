@@ -56,6 +56,18 @@ test('real stored reasons map to plain sentences (kit checks)', () => {
   }
 });
 
+test('label-diagram reasons (Stage 8c coverage, SAM confidence, points in their areas) read as plain sentences', () => {
+  assert.equal(teacherFailure('LD-10: printed label "Snowmelt Runoff" is named by the page but no part claims it').sentence,
+    'Muse’s draft left a printed label the page names without a part, so this part was left out.');
+  assert.equal(teacherFailure('LD-11: region for part "evaporation" has confidence 0.28 < 0.5').sentence,
+    'Muse’s draft marked a part SAM could not outline with confidence, so this part was left out.');
+  assert.equal(teacherFailure('LD-04, LD-10: part "runoff" point lies outside its area').sentence,
+    'Muse’s draft put a number outside its part’s area or on its printed label and left a printed label the page names without a part, so this part was left out.');
+  for (const id of ['LD-01', 'LD-02', 'LD-03', 'LD-04', 'LD-05', 'LD-06', 'LD-07', 'LD-08', 'LD-09', 'LD-10', 'LD-11']) {
+    assert.doesNotMatch(teacherFailure(`${id}: x`).sentence, /failed one of our checks/, id);
+  }
+});
+
 test('the repair kinds are named from the report message when it says what changed', () => {
   const timeline = { checks: [{ id: 'repair.no-weakening', passed: false, message: 'repair weakened the spec: event "e2" changed (evidence quotes changed) even though its date check passed on the baseline' }] };
   assert.equal(teacherFailure('repair.no-weakening: repair weakened the spec: event "e2" changed', timeline).sentence,

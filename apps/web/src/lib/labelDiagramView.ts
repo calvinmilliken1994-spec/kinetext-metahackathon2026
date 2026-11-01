@@ -366,19 +366,81 @@ export function slotOfPart(slots: readonly LabelSlot[], partCount: number): (num
   });
 }
 
-export type SlotState = 'covered' | 'named' | 'open';
+export type SlotState = 'covered' | 'named' | 'open' | 'muted';
 
 /**
  * What each slot shows: 'covered' (a blank label slot), 'named' (its part's name written in), 'open' (the printed label
- * shows). `labelsShown` uncovers every slot (the slide's last step); `openUnmatched` uncovers the slots no part names
- * (the lesson's Show the answers, where those printed words give nothing away).
+ * shows), 'muted' (Stage 8c: a printed label no part claims, hidden under a patch in the figure's own colour so it never
+ * looks fillable). `labelsShown` uncovers every slot (the slide's last step); `openUnmatched` uncovers the slots no part
+ * names (the lesson's Show the answers, where those printed words give nothing away).
  */
 export function slotStates(slots: readonly LabelSlot[], named: readonly boolean[], opts: { labelsShown: boolean; openUnmatched: boolean }): SlotState[] {
   return slots.map((s) => {
     if (opts.labelsShown) return 'open';
-    if (s.partIndex === null) return opts.openUnmatched ? 'open' : 'covered';
+    if (s.partIndex === null) return opts.openUnmatched ? 'open' : 'muted';
     return named[s.partIndex] === true ? 'named' : 'covered';
   });
+}
+
+/**
+ * The colour of a muted patch: the median colour of a thin ring (`ring` px) just outside the printed label's box, in the
+ * figure's own pixels (RGBA, image pixels, x2/y2 exclusive), so the patch reads as background. Null when the ring has no
+ * pixel inside the image.
+ */
+export function patchColour(img: { data: ArrayLike<number>; width: number; height: number }, box: PixelBox, ring = 3): string | null {
+  return ringMedian(img, box, ring, -Infinity, Infinity);
+}
+
+/** The median colour of the ring pixels around `box` whose column is in [xFrom, xTo). */
+function ringMedian(img: { data: ArrayLike<number>; width: number; height: number }, box: PixelBox, ring: number, xFrom: number, xTo: number, yFrom = -Infinity, yTo = Infinity): string | null {
+  const { width: W, height: H, data } = img;
+  const x1 = Math.round(box.x1);
+  const y1 = Math.round(box.y1);
+  const x2 = Math.round(box.x2);
+  const y2 = Math.round(box.y2);
+  const rs: number[] = [];
+  const gs: number[] = [];
+  const bs: number[] = [];
+  for (let y = Math.max(0, y1 - ring, Math.ceil(yFrom)); y < Math.min(H, y2 + ring, yTo); y++) {
+    for (let x = Math.max(0, x1 - ring, Math.ceil(xFrom)); x < Math.min(W, x2 + ring, xTo); x++) {
+      if (x >= x1 && x < x2 && y >= y1 && y < y2) continue;
+      const o = (y * W + x) * 4;
+      rs.push(data[o] ?? 0); gs.push(data[o + 1] ?? 0); bs.push(data[o + 2] ?? 0);
+    }
+  }
+  if (rs.length === 0) return null;
+  const median = (v: number[]): number => { v.sort((a, b) => a - b); return v[Math.floor(v.length / 2)] ?? 0; };
+  return `rgb(${median(rs)}, ${median(gs)}, ${median(bs)})`;
+}
+
+/**
+ * The fill of a muted patch: the ring's median colour in `bands` column bands from left to right, as a CSS
+ * left-to-right gradient, so a label lying across two backgrounds (the water cycle's "Snowmelt Runoff" over the edge of
+ * a pale arrow and the sky) is covered by both. A plain colour when every band agrees; null when the ring is empty.
+ */
+export function patchFill(img: { data: ArrayLike<number>; width: number; height: number }, box: PixelBox, bands = 6, ring = 3, rows: [number, number] = [-Infinity, Infinity]): string | null {
+  const from = Math.round(box.x1) - ring;
+  const span = Math.round(box.x2) + ring - from;
+  const stops: { at: number; c: string }[] = [];
+  for (let i = 0; i < bands; i++) {
+    const c = ringMedian(img, box, ring, from + (span * i) / bands, from + (span * (i + 1)) / bands, rows[0], rows[1]);
+    if (c !== null) stops.push({ at: bands === 1 ? 0 : (i * 100) / (bands - 1), c });
+  }
+  if (stops.length === 0) return null;
+  if (stops.every((s) => s.c === stops[0]?.c)) return stops[0]?.c ?? null;
+  return `linear-gradient(to right, ${stops.map((s) => `${s.c} ${Math.round(s.at)}%`).join(', ')})`;
+}
+
+/**
+ * The patch's fill as two rows, from the ring's upper and lower halves (patchFill each): the view lays the upper one over
+ * the lower with a vertical fade, so a label on a sky that darkens upwards is covered by both shades. Null when empty.
+ */
+export function patchFills(img: { data: ArrayLike<number>; width: number; height: number }, box: PixelBox, bands = 6, ring = 3): { top: string; bottom: string } | null {
+  const mid = (Math.round(box.y1) + Math.round(box.y2)) / 2;
+  const top = patchFill(img, box, bands, ring, [-Infinity, mid]);
+  const bottom = patchFill(img, box, bands, ring, [mid, Infinity]);
+  if (top === null && bottom === null) return null;
+  return { top: top ?? (bottom as string), bottom: bottom ?? (top as string) };
 }
 
 export interface SlotFit {
@@ -464,6 +526,8 @@ export interface PartView {
   /** The SAM region around the part, or null when segmentation found none for it. */
   region: PctBox | null;
   confidence: number | null;
+  /** Stage 8c: SAM's traced outline (SVG path, image pixels), or null (older runs, or decoding failed). */
+  outline: string | null;
 }
 
 /** SAM's own score below which its region is not drawn (Calvin 2026-11-02: weak regions covered the wrong area). */
@@ -475,11 +539,42 @@ export function regionToDraw(view: Pick<PartView, 'region' | 'confidence'>): Pct
   return view.confidence !== null && view.confidence < MIN_REGION_CONFIDENCE ? null : view.region;
 }
 
+/** The longest stored outline (frozen in STAGE-8c: longer paths are omitted by the worker). */
+export const MAX_OUTLINE_CHARS = 6000;
+const OUTLINE_PATH = /^M[\s\d.,-]*(?:[MLZ][\s\d.,-]*)*$/;
+
+/** True for an outline in the frozen shape: move / line / close commands and numbers only, at most MAX_OUTLINE_CHARS. */
+export function isOutlinePath(d: unknown): d is string {
+  return typeof d === 'string' && d.length > 0 && d.length <= MAX_OUTLINE_CHARS && OUTLINE_PATH.test(d.trim()) && /\d/.test(d);
+}
+
+/** The outline to draw for a part: none below 50% (as for boxes), none when absent or malformed. */
+export function outlineToDraw(view: Pick<PartView, 'outline' | 'confidence'>): string | null {
+  if (!isOutlinePath(view.outline)) return null;
+  return view.confidence !== null && view.confidence < MIN_REGION_CONFIDENCE ? null : view.outline;
+}
+
+export type RegionDrawing = { kind: 'outline'; d: string } | { kind: 'box'; box: PctBox };
+
+/** What a part's SAM region draws during the build: its traced outline when it has one, else its box; null when weak. */
+export function regionDrawing(view: Pick<PartView, 'region' | 'outline' | 'confidence'>): RegionDrawing | null {
+  const d = outlineToDraw(view);
+  if (d !== null) return { kind: 'outline', d };
+  const box = regionToDraw(view);
+  return box === null ? null : { kind: 'box', box };
+}
+
+/** The outline overlay's viewBox: the figure's own pixel grid (outlines are image pixels); null when the size is unknown. */
+export function outlineViewBox(figure: { width: number; height: number }): string | null {
+  return figure.width > 0 && figure.height > 0 ? `0 0 ${figure.width} ${figure.height}` : null;
+}
+
 export function partViews(spec: Pick<LabelDiagramSpec, 'parts' | 'regions' | 'figure'>): PartView[] {
   return spec.parts.map((part, index) => {
     const r = spec.regions.find((x) => x.partId === part.id);
     const region = r === undefined ? null : pixelBoxPct(r, spec.figure);
-    return { part, index, number: index + 1, name: aiLabel(part.name.trim()), point: pointPct(part), region, confidence: r?.confidence ?? null };
+    const outline = r !== undefined && isOutlinePath(r.outline) ? r.outline : null;
+    return { part, index, number: index + 1, name: aiLabel(part.name.trim()), point: pointPct(part), region, confidence: r?.confidence ?? null, outline };
   });
 }
 

@@ -91,6 +91,32 @@
    gone: at rest, on hover and on slides the numbers and slots carry the activity, and a box around SAM's weaker regions
    read as a mistake. The animation overrides this while it plays. */
 .ld-plate .ld-region { opacity: 0; visibility: hidden; }
+/* Stage 8c: SAM's traced outlines, one SVG over the plate on the figure's own pixel grid (object-fit: contain, like the
+   image). They exist only while a build plays (styles/live.css lb-trace); hidden as a base, like the boxes. The strokes
+   are in layout px (--ld-u: image px per layout px): a dark shade, a white halo and the strong blue line, so the trace
+   reads on the water cycle's sky as well as on white. */
+.ld-outlines { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; overflow: visible; pointer-events: none; }
+.ld-outline { opacity: 0; visibility: hidden; }
+.ld-outline path { fill: none; stroke-linejoin: round; stroke-linecap: butt; fill-rule: evenodd; }
+.ld-outline .ld-outline-fill { fill: var(--ld-region-tint); fill-opacity: 0; stroke: none; }
+.ld-outline .ld-outline-shade { stroke: var(--ld-region-shade); stroke-width: calc(var(--ld-u, 1) * 8px); }
+.ld-outline .ld-outline-halo { stroke: var(--ld-region-halo); stroke-width: calc(var(--ld-u, 1) * 6px); }
+.ld-outline .ld-outline-line { stroke: var(--ld-region-strong); stroke-width: calc(var(--ld-u, 1) * 3px); }
+/* Stage 8c: a printed label no part claims (no part's name goes there) is covered by a patch in the colour around it
+   (read from the figure, --ld-patch), with soft edges and no border, so it reads as part of the picture, never as a
+   blank slot to fill. Without that colour it falls back to a frosted patch. It fades open with the other labels. */
+.ld-slotbox[data-claimed="false"] {
+  border-color: transparent; border-radius: 4px; background: var(--ld-patch); filter: blur(1px);
+}
+/* the upper half's shade over the lower one, fading downwards (a sky that darkens upwards) */
+.ld-slotbox[data-patch="figure"]::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--ld-patch-top);
+  -webkit-mask-image: linear-gradient(to bottom, #000 15%, transparent 85%); mask-image: linear-gradient(to bottom, #000 15%, transparent 85%);
+}
+.ld-slotbox[data-patch="fallback"] {
+  background: rgba(140, 147, 155, 0.22); filter: none;
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+}
 /* A part with no printed label: its name tag beside its marker, at the spot lib placeTags chose (clear of slots and markers). */
 .ld-tag {
   position: absolute; z-index: 2; inset-block-start: 0; inset-inline-start: 0; box-sizing: border-box;

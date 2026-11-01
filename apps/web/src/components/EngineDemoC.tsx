@@ -15,14 +15,15 @@ import waterFigureMeta from '../../../../data/figures/noaa-hydrologic-cycle-1.js
 import waterFigureLabels from '../../../../data/figures/noaa-hydrologic-cycle-1.labels.json';
 import waterFigureUrl from '../../../../data/figures/noaa-hydrologic-cycle-1.jpg?url';
 import type { Provenance, SourceDocument } from '../../../../packages/contracts/index.ts';
-import type { LabelDiagramGen, LessonSpec } from '../../../../packages/contracts/kit.ts';
+import type { LabelDiagramGen, LabelDiagramSpec, LessonSpec } from '../../../../packages/contracts/kit.ts';
 import { buildLabelDiagramDemos } from '../lib/labelDiagramDemoSpecs.ts';
 import type { FigureLabelsLike, FigureMetaLike, LabelDiagramDemo } from '../lib/labelDiagramDemoSpecs.ts';
 import { presentRequest } from '../lib/presentation.ts';
 import type { Deck } from '../lib/presentation.ts';
 import { AppWindow } from './AppWindow.tsx';
 import { LessonView } from './LessonView.tsx';
-import { FigureSrcContext } from './LabelDiagramView.tsx';
+import { FigureSrcContext, LabelDiagramView } from './LabelDiagramView.tsx';
+import { WATER_OUTLINES } from '../lib/labelOutline.fixtures.ts';
 import { Provenance as ProvenanceLine } from './Provenance.tsx';
 import { PresentationMode } from './presentation/PresentationMode.tsx';
 import type { CiteProps } from './Explanations.tsx';
@@ -40,6 +41,27 @@ const tabs: LabelDiagramDemo[] = buildLabelDiagramDemos(
 );
 const FIGURES: Readonly<Record<string, string>> = { [dnaFigureMeta.id]: dnaFigureUrl, [waterFigureMeta.id]: waterFigureUrl };
 const figureSrc = (id: string): string => FIGURES[id] ?? `/api/figures/${encodeURIComponent(id)}/image`;
+
+/**
+ * Stage 8c build harness (&build=outline | box): the water-cycle demo-set part with SAM 3.1's traced outlines from the
+ * mask probe (lib/labelOutline.fixtures.ts) or with its stored boxes only, played as the build's draw-in. Evaporation
+ * (0.28 sure) must draw nothing either way.
+ */
+function withOutlines(spec: LabelDiagramSpec): LabelDiagramSpec {
+  return { ...spec, regions: spec.regions.map((r) => (WATER_OUTLINES[r.partId] === undefined ? r : { ...r, outline: WATER_OUTLINES[r.partId] })) };
+}
+
+function BuildHarness({ t, mode, cite }: { t: LabelDiagramDemo; mode: 'outline' | 'box'; cite: CiteProps }) {
+  const [run, setRun] = useState(0);
+  const spec = useMemo(() => (mode === 'outline' ? withOutlines(t.spec) : t.spec), [t, mode]);
+  return (
+    <section className="demo-build" data-testid="build-harness" data-mode={mode}>
+      <p className="muted small">Build draw-in: {mode === 'outline' ? 'SAM 3.1 traced outlines (mask probe of the demo-set run)' : 'stored region boxes (no outlines)'}.</p>
+      <button type="button" className="btn btn-small" onClick={() => setRun((n) => n + 1)}>Play the draw-in again</button>
+      <LabelDiagramView key={run} spec={spec} cite={cite} build />
+    </section>
+  );
+}
 
 function lessonOf(t: LabelDiagramDemo): LessonSpec {
   return { jobId: `demo-${t.id}`, analysisRef: '', overview: null, components: [{ componentId: 'label-diagram-v1', specId: t.spec.id, status: 'passed', reason: '', revision: 1 }] };
@@ -64,6 +86,7 @@ export function EngineDemoC() {
   const [presenting, setPresenting] = useState<number | null>(asked !== null && asked.jobId === DECK_JOB ? asked.beat : null);
   const [toast, setToast] = useState('');
   const t = tabs.find((x) => x.id === id) ?? tabs[0];
+  const buildMode = params.get('build') === 'outline' ? 'outline' : params.get('build') === 'box' ? 'box' : null;
   const deck = useMemo(demoDeck, []);
   if (t === undefined) return null;
   const cite: CiteProps = { sourceId: t.sourceId, located: new Set(), onCite: (key) => setToast(`Demo: in the workspace this highlights the quote in the source panel (${key}).`) };
@@ -99,10 +122,10 @@ export function EngineDemoC() {
             </nav>
             <p className="muted small demo-note">{t.note}</p>
             <main className="activity-panel demo-main" aria-label="Interactive lesson">
-              <LessonView
+              {buildMode !== null ? <BuildHarness t={t} mode={buildMode} cite={cite} /> : <LessonView
                 key={t.id} lesson={lessonOf(t)} specs={{ [t.spec.id]: t.spec }} analysis={null} sources={t.spec.sources}
                 cite={cite} disclosure={DISCLOSURE} provenance={<ProvenanceLine disclosure={DISCLOSURE} phrases={[]} />}
-              />
+              />}
             </main>
             <p className="demo-toast small" role="status" aria-live="polite">{toast}</p>
           </div>

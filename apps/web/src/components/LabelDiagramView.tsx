@@ -2,14 +2,16 @@
 // slots (like a worksheet: the figure's leader lines point at them), a numbered marker on each part, and a word bank of the
 // page's part names. The class drags (or picks, then places) each name onto its number; Check marks each number; a right
 // name, Show the answers or a presenter's R writes the part's name INTO its own slot. Parts with no printed label get a
-// small name tag beside the marker instead. A part's SAM region is outlined only while it is the one in focus. All geometry
+// small name tag beside the marker instead. A printed label no part claims is a muted patch in the figure's own colour,
+// never a slot (Stage 8c). SAM's regions show only while a build draws them in: traced outlines where SAM gave one,
+// boxes otherwise. All geometry
 // comes from the spec (lib/labelDiagramView.ts matches parts to slots, fits the text and places the tags); the view only
 // measures the rendered size for that fitting.
-import { createContext, useContext, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { createContext, useCallback, useContext, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { CSSProperties, DragEvent, ReactNode, RefObject } from 'react';
 import type { LabelDiagramSpec } from '../../../../packages/contracts/kit.ts';
 import type { EnginePresentation } from '../lib/enginePresentation.ts';
-import { regionToDraw,
+import { outlineViewBox, patchFills, regionDrawing,
   changedBy, checkPlacements, coverMasks, finishLine, fitSlotTexts, keepResults, labelDiagramPresentationSteps, labelSlots, lessonFigureMaxWidth, markerSpots,
   partViews, place, placeTags, slotOfPart, slotStates, stageFigureSize, stageOutline, stageQuestion, stageView, unplace, wordBank,
 } from '../lib/labelDiagramView.ts';
@@ -27,6 +29,8 @@ export interface LabelDiagramViewProps {
   /** Stage 9: the part has just arrived in a building lesson: its markers and SAM regions draw in one by one, then the regions fade (CSS, on mount). */
   build?: boolean;
 }
+
+type PatchFill = { top: string; bottom: string };
 
 /** Where the figure image comes from. The app reads the API; the dev harness serves the committed file instead. */
 export const FigureSrcContext = createContext<(figureId: string) => string>((id) => `/api/figures/${encodeURIComponent(id)}/image`);
@@ -168,6 +172,56 @@ function useSlotFits(plateRef: RefObject<HTMLDivElement | null>, slots: readonly
   return fits.list;
 }
 
+/**
+ * Stage 8c: the colour of each muted patch (a printed label no part claims), read once from the figure's own pixels
+ * around the label (lib patchFills), so the patch blends into the figure. Until the image is read (or when the canvas
+ * cannot read it), the patch keeps its CSS fallback.
+ */
+function usePatchColours(img: HTMLImageElement | null, ready: boolean, slots: readonly LabelSlot[], figure: { width: number; height: number }): Readonly<Record<string, PatchFill>> {
+  const [colours, setColours] = useState<Readonly<Record<string, PatchFill>>>({});
+  const muted = useMemo(() => slots.filter((s) => s.partIndex === null), [slots]);
+  useLayoutEffect(() => {
+    if (img === null || !ready || muted.length === 0 || !(img.naturalWidth > 0) || !(figure.width > 0) || !(figure.height > 0)) return;
+    try {
+      // drawn at the figure's stored size, the size the label boxes are measured in
+      const canvas = document.createElement('canvas');
+      canvas.width = figure.width;
+      canvas.height = figure.height;
+      const ctx = canvas.getContext('2d', { willReadFrequently: true });
+      if (ctx === null) return;
+      ctx.drawImage(img, 0, 0, figure.width, figure.height);
+      const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const out: Record<string, PatchFill> = {};
+      for (const s of muted) {
+        const c = patchFills(pixels, s.px);
+        if (c !== null) out[s.key] = c;
+      }
+      setColours(out);
+    } catch {
+      // a canvas that cannot read the image (cross-origin) keeps the CSS fallback
+    }
+  }, [img, ready, muted, figure.width, figure.height]);
+  return colours;
+}
+
+/** Image pixels per layout px of the plate, so the outline strokes keep one screen width whatever the figure's size. */
+function useStrokeUnit(plateRef: RefObject<HTMLDivElement | null>, figureWidth: number, on: boolean): number {
+  const [unit, setUnit] = useState(1);
+  useLayoutEffect(() => {
+    const plate = plateRef.current;
+    if (!on || plate === null || !(figureWidth > 0)) return undefined;
+    const measure = (): void => {
+      const W = plate.clientWidth;
+      if (W > 0) setUnit((u) => (Math.abs(u - figureWidth / W) < 1e-3 ? u : figureWidth / W));
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(plate);
+    return () => ro.disconnect();
+  }, [plateRef, figureWidth, on]);
+  return unit;
+}
+
 interface FigureProps {
   spec: LabelDiagramSpec;
   views: readonly PartView[];
@@ -207,6 +261,8 @@ function Figure({ spec, views, slots, masks, named, slotState, labelsShown, mark
   // Demo review: on a cold load the build's draw-in played over an empty plate. It waits for the image (a cached image
   // is already complete when the ref attaches).
   const [imgReady, setImgReady] = useState(false);
+  const [imgEl, setImgEl] = useState<HTMLImageElement | null>(null);
+  const imgRef = useCallback((el: HTMLImageElement | null) => { setImgEl(el); if (el?.complete === true && el.naturalWidth > 0) setImgReady(true); }, []);
   const plateRef = useRef<HTMLDivElement>(null);
   const slotOf = useMemo(() => slotOfPart(slots, views.length), [slots, views.length]);
   const tagged = useMemo(() => slotOf.map((k) => k === null), [slotOf]);
@@ -215,6 +271,13 @@ function Figure({ spec, views, slots, masks, named, slotState, labelsShown, mark
   const tagPos = useTagLayout(plateRef, views, tagged, covers, spots);
   const fits = useSlotFits(plateRef, slots, views, slotFont);
   const fig = spec.figure;
+  const patches = usePatchColours(imgEl, imgReady, slots, fig);
+  // Stage 8c: SAM's regions as the build draws them (weak ones not at all): a traced outline where SAM gave one, else
+  // the box. Outlines exist only while a build plays; nothing is drawn at rest, on hover or on slides.
+  const drawings = useMemo(() => views.map((v) => regionDrawing(v)), [views]);
+  const viewBox = outlineViewBox(fig);
+  const traced = build && viewBox !== null ? views.filter((v) => drawings[v.index]?.kind === 'outline') : [];
+  const unit = useStrokeUnit(plateRef, fig.width, traced.length > 0);
   const plateStyle: CSSProperties = size !== undefined
     ? { width: size.width, height: size.height }
     : { aspectRatio: `${fig.width > 0 ? fig.width : 1} / ${fig.height > 0 ? fig.height : 1}` };
@@ -226,28 +289,50 @@ function Figure({ spec, views, slots, masks, named, slotState, labelsShown, mark
       <div className="ld-plate" style={plateStyle} ref={plateRef} data-labels={labelsShown ? 'shown' : 'covered'} data-build={build ? 'draw' : undefined} data-img={imgReady || failed ? 'ready' : 'loading'}>
         {failed
           ? <p className="ld-missing">The figure could not be loaded.</p>
-          : <img src={srcOf(spec.figureId)} alt={fig.caption.trim() === '' ? 'The page’s figure, labels covered' : `The page’s figure, labels covered: ${fig.caption.trim()}`} draggable={false} onError={() => setFailed(true)} onLoad={() => setImgReady(true)} ref={(el) => { if (el?.complete === true && el.naturalWidth > 0) setImgReady(true); }} />}
+          : <img src={srcOf(spec.figureId)} alt={fig.caption.trim() === '' ? 'The page’s figure, labels covered' : `The page’s figure, labels covered: ${fig.caption.trim()}`} draggable={false} onError={() => setFailed(true)} onLoad={() => setImgReady(true)} ref={imgRef} />}
         {masks.length > 0 && slots.length === 0 && masks.map((m) => (
           <span key={m.key} className="ld-mask" style={pct(m.box)} data-on={labelsShown ? 'false' : 'true'} aria-hidden="true" />
         ))}
         {views.map((v) => {
-          const region = regionToDraw(v); // SAM's weak regions (< 50% sure) are not drawn
-          return region === null ? null : (
+          const d = drawings[v.index] ?? null; // SAM's weak regions (< 50% sure) are not drawn
+          return d === null || d.kind !== 'box' ? null : (
           <span
-            key={`r-${v.part.id}`} className="ld-region" style={build ? { ...pct(region), '--i': v.index } as CSSProperties : pct(region)}
+            key={`r-${v.part.id}`} className="ld-region" style={build ? { ...pct(d.box), '--i': v.index } as CSSProperties : pct(d.box)}
             data-on={outlined === v.index ? 'true' : 'false'} aria-hidden="true"
           />
           );
         })}
+        {traced.length > 0 && viewBox !== null && (
+          // SAM's traced outlines (image pixels, so the figure's own grid), drawn in during the build, then gone.
+          <svg className="ld-outlines" viewBox={viewBox} preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false" style={{ '--ld-u': unit } as CSSProperties}>
+            {traced.map((v) => {
+              const d = drawings[v.index];
+              if (d === undefined || d === null || d.kind !== 'outline') return null;
+              return (
+                <g key={`o-${v.part.id}`} className="ld-outline" style={{ '--i': v.index } as CSSProperties}>
+                  <path className="ld-outline-fill" d={d.d} />
+                  <path className="ld-outline-shade" d={d.d} pathLength={1} />
+                  <path className="ld-outline-halo" d={d.d} pathLength={1} />
+                  <path className="ld-outline-line" d={d.d} pathLength={1} />
+                </g>
+              );
+            })}
+          </svg>
+        )}
         {/* The printed labels as worksheet slots: blank until their part is named, then the name written in. */}
         {slots.map((s, k) => {
           const state = slotState[k] ?? 'covered';
           const fit = fits[k] ?? null;
           const show = state === 'named' && fit !== null && s.partIndex !== null;
           const nameStyle: CSSProperties | undefined = fit === null ? undefined : { fontSize: `${fit.fontSize}px`, lineHeight: fit.lineHeight, paddingInline: `${fit.padX}px` };
+          // Stage 8c: a printed label no part claims is a patch in the figure's own colour, never a fillable slot (it keeps
+          // that look while it fades open, so it never flashes as a blank slot).
+          const patch = s.partIndex === null ? patches[s.key] : undefined;
+          const boxStyle: CSSProperties = patch === undefined ? pct(s.box) : { ...pct(s.box), '--ld-patch': patch.bottom, '--ld-patch-top': patch.top } as CSSProperties;
           return (
             <span
-              key={s.key} className="ld-slotbox" style={pct(s.box)} data-state={state} data-fits={fit === null || fit.fits ? 'true' : 'false'}
+              key={s.key} className="ld-slotbox" style={boxStyle} data-state={state} data-fits={fit === null || fit.fits ? 'true' : 'false'}
+              data-claimed={s.partIndex === null ? 'false' : 'true'} data-patch={s.partIndex === null ? (patch === undefined ? 'fallback' : 'figure') : undefined}
               data-current={s.partIndex !== null && s.partIndex === current ? 'true' : 'false'} aria-hidden="true"
               onPointerEnter={onSlotHover !== undefined && show ? () => onSlotHover(s.partIndex) : undefined}
               onPointerLeave={onSlotHover !== undefined ? () => onSlotHover(null) : undefined}

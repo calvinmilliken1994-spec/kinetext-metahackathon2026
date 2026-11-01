@@ -199,8 +199,16 @@ mark.lb-lit { animation: lb-lit 900ms var(--lb-ease) calc(var(--i, 0) * 70ms + 1
  *      fade out (Calvin 2026-11-02: regions are a build moment only; at rest they are hidden, styles/engines-c.css) */
 .ld-plate[data-build="draw"] .ld-marker { animation: lb-pop 280ms var(--lb-ease) calc(380ms + var(--i, 0) * 150ms) backwards; }
 .ld-plate[data-build="draw"] .ld-region { animation: lb-outline 2600ms linear calc(460ms + var(--i, 0) * 180ms) backwards; }
+/* Stage 8c: a region SAM traced draws as its own outline instead: the line follows the mask (the dash offset runs from
+   the whole path length to zero), a light tint settles in, it holds, then fades. Same timing and per-part stagger as
+   the box, so a lesson that mixes the two still reads as one build moment. */
+.ld-plate[data-build="draw"] .ld-outline { animation: lb-outline-hold 2600ms linear calc(460ms + var(--i, 0) * 180ms) backwards; }
+.ld-plate[data-build="draw"] .ld-outline :is(.ld-outline-shade, .ld-outline-halo, .ld-outline-line) {
+  stroke-dasharray: 1 1; animation: lb-trace 2600ms linear calc(460ms + var(--i, 0) * 180ms) backwards;
+}
+.ld-plate[data-build="draw"] .ld-outline .ld-outline-fill { animation: lb-outline-fill 2600ms linear calc(460ms + var(--i, 0) * 180ms) backwards; }
 /* the draw-in waits for the figure image: on a cold load it played over an empty plate (paused at its first frame) */
-.ld-plate[data-build="draw"][data-img="loading"] :is(.ld-marker, .ld-region) { animation-play-state: paused; }
+.ld-plate[data-build="draw"][data-img="loading"] :is(.ld-marker, .ld-region, .ld-outline, .ld-outline path) { animation-play-state: paused; }
 
 @keyframes lb-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes lb-rise { from { opacity: 0; translate: 0 6px; } to { opacity: 1; translate: 0 0; } }
@@ -227,6 +235,19 @@ mark.lb-lit { animation: lb-lit 900ms var(--lb-ease) calc(var(--i, 0) * 70ms + 1
     opacity: 0; visibility: hidden; border-width: 3px; border-color: var(--ld-region-strong); background-color: var(--ld-region-tint);
     box-shadow: 0 0 0 1.5px var(--ld-region-halo), 0 0 0 4px var(--ld-region-shade), inset 0 0 0 1px var(--ld-region-halo); clip-path: inset(-6px -6px -6px -6px round 8px);
   }
+}
+@keyframes lb-outline-hold {
+  0%, 70% { opacity: 1; visibility: visible; animation-timing-function: var(--lb-ease); }
+  100% { opacity: 0; visibility: hidden; }
+}
+/* the path is pathLength=1: offset 1 hides the whole line, 0 shows it */
+@keyframes lb-trace {
+  0% { stroke-dashoffset: 1; animation-timing-function: var(--lb-ease); }
+  28%, 100% { stroke-dashoffset: 0; }
+}
+@keyframes lb-outline-fill {
+  0%, 20% { fill-opacity: 0; animation-timing-function: var(--lb-ease); }
+  34%, 100% { fill-opacity: 1; }
 }
 
 /* ---- working cues: loop only while calls are open (Calvin: the seconds counter alone did not show work going on) ----
@@ -276,7 +297,8 @@ mark.lb-lit { animation: lb-lit 900ms var(--lb-ease) calc(var(--i, 0) * 70ms + 1
     animation: lb-in 120ms linear both; animation-delay: 0s;
   }
   .lb-pv, .lb-bar, .lb-frame { transition: none; }
-  mark.lb-lit, .ld-plate[data-build="draw"] .ld-marker, .ld-plate[data-build="draw"] .ld-region { animation: none; }
+  mark.lb-lit, .ld-plate[data-build="draw"] .ld-marker, .ld-plate[data-build="draw"] .ld-region,
+  .ld-plate[data-build="draw"] .ld-outline, .ld-plate[data-build="draw"] .ld-outline path { animation: none; }
   /* no looping motion: the open-call dot and the sweep hold still; the sweep stays as a static accent line */
   .lb-bar[data-state="running"] .lb-op::before, .lb-dot.is-open, .lb-frame .pv-bar, .lb-overview-pv .pv-bar { animation: none; }
   .lb-sweep::before { animation: none; inline-size: 100%; opacity: 0.5; }
