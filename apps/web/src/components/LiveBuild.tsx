@@ -6,7 +6,7 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import type { CSSProperties, ReactNode, RefObject } from 'react';
 import type { LogLine, PartBuild, PartPreview, PreviewPhase, StripState, TraceStep } from '../lib/liveBuild.ts';
-import { closingBeat, followFocus, formatElapsed, previewOf, previewPhase, progressFacts, reserveHeight, stagger } from '../lib/liveBuild.ts';
+import { arrivals, closingBeat, figureNote, followFocus, formatElapsed, previewOf, previewPhase, progressFacts, reserveHeight, stagger } from '../lib/liveBuild.ts';
 import { REPLAY_LABEL } from '../lib/replay.ts';
 import { scrollTopToReveal } from '../lib/scroll.ts';
 import type { PendingSlot } from '../lib/lesson.ts';
@@ -175,7 +175,10 @@ const width = (i: number): string => `${WIDTHS[i % WIDTHS.length] ?? 70}%`;
 const range = (n: number): number[] => Array.from({ length: n }, (_, i) => i);
 const Bar = ({ i, className = 'pv-bar' }: { i: number; className?: string }) => <span className={className} style={{ inlineSize: width(i) }} />;
 
-function PreviewBody({ p }: { p: PartPreview }): ReactNode {
+/** What SAM is doing for a label diagram still being built (lib figureNote), shown in the figure frame. */
+type FigureNote = ReturnType<typeof figureNote>;
+
+function PreviewBody({ p, note = null }: { p: PartPreview; note?: FigureNote }): ReactNode {
   switch (p.kind) {
     case 'quiz':
       return (
@@ -222,7 +225,12 @@ function PreviewBody({ p }: { p: PartPreview }): ReactNode {
     case 'figure':
       return (
         <div className="pv-figure">
-          <div className="pv-box pv-plate"><span className="pv-caption">The page’s figure</span></div>
+          {/* Once SAM is called, the frame says so (working cue while the call is open); no region is drawn before the part arrives. */}
+          <div className="pv-box pv-plate" data-sam={note === null ? undefined : note.working ? 'working' : 'done'}>
+            {note === null
+              ? <span className="pv-caption">The page’s figure</span>
+              : <span className="pv-caption pv-sam"><strong>{note.actor}</strong> {note.text}</span>}
+          </div>
           <div className="pv-col pv-chips">
             <Bar i={0} />
             {range(p.rows).map((r) => <span key={r} className="pv-chip" />)}
@@ -287,10 +295,10 @@ function PreviewBody({ p }: { p: PartPreview }): ReactNode {
 }
 
 /** A faint, static sketch of the part's shape (no shimmer): it fills the frame's reserved space until the part arrives. */
-export function PartPreviewSketch({ preview, phase }: { preview: PartPreview; phase: PreviewPhase }) {
+export function PartPreviewSketch({ preview, phase, note = null }: { preview: PartPreview; phase: PreviewPhase; note?: FigureNote }) {
   return (
     <div className={`lb-pv lb-pv-${preview.kind}`} data-phase={phase} data-testid="part-preview" aria-hidden="true">
-      <PreviewBody p={preview} />
+      <PreviewBody p={preview} note={note} />
     </div>
   );
 }
@@ -329,7 +337,7 @@ export function PartFrame({ slot, build, clock }: { slot: PendingSlot; build: Pa
           ))}
         </ol>
       )}
-      <PartPreviewSketch preview={previewOf(slot.componentId, build)} phase={phase} />
+      <PartPreviewSketch preview={previewOf(slot.componentId, build)} phase={phase} note={figureNote(build)} />
     </article>
   );
 }
@@ -385,11 +393,12 @@ export function useFollowBuild(root: RefObject<HTMLElement | null>, live: LiveCo
 
   useEffect(() => {
     if (live === null) return;
-    // Parts already there when the view started watching (a replay opened mid-way) are not arrivals.
-    if (seen.current === null) seen.current = new Set(arrived);
-    const known = seen.current;
-    const newly = arrived.filter((id) => !known.has(id));
-    for (const id of newly) known.add(id);
+    // Parts already there when the view started watching (a replay opened mid-way) are not arrivals. Parts that vanish
+    // mean the replay restarted ("Replay again"): follow it afresh, as a direct replay does (demo pair review #10).
+    const a = arrivals(seen.current, arrived);
+    seen.current = a.known;
+    const newly = a.newly;
+    if (a.restarted) { focus.current = null; userMoved.current = false; }
     const next = followFocus(focus.current, live.builds, order, newly);
     if (next === focus.current && newly.length === 0) return;
     focus.current = next;

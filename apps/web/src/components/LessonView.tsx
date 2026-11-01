@@ -156,7 +156,7 @@ function LiveTitle({ title }: { title: string }) {
     if (h > tallest) setTallest(h);
   });
   return (
-    <h2 className="lesson-title lb-title" style={tallest > 0 ? { minBlockSize: tallest } : undefined}>
+    <h2 className="lesson-title lb-title" tabIndex={-1} style={tallest > 0 ? { minBlockSize: tallest } : undefined}>
       <span key={title} ref={textRef} className="lb-title-text">{title}</span>
     </h2>
   );
@@ -232,7 +232,8 @@ export function LessonView({ lesson, specs, analysis, sources, cite, disclosure,
       {live !== null && <LiveBar live={live} />}
       <header className="lesson-head">
         {/* Keyed by its text, so Muse's headline replacing the page title fades in rather than snapping. */}
-        {live === null ? <h2 className="lesson-title">{title}</h2> : <LiveTitle title={title} />}
+        {/* tabIndex -1: the app moves focus here after the tour closes (no ring round the whole column). */}
+        {live === null ? <h2 className="lesson-title" tabIndex={-1}>{title}</h2> : <LiveTitle title={title} />}
         {/* While building: an invisible twin of the Present button holds its column, so the title never rewraps when it appears. */}
         {live !== null && <span className="btn present-launch lb-present-slot" aria-hidden="true"><IconPresent size={18} />Present</span>}
         {provenance}

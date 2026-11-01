@@ -53,6 +53,8 @@ import type { LinkNoticeState } from './lib/lessonJobLinks.ts';
 import { useReplay } from './components/useReplay.ts';
 import { jobStartMs, liveStrip, partBuilds } from './lib/liveBuild.ts';
 import { replayRequest } from './lib/replay.ts';
+import { pinnedOpening } from './lib/demoPins.ts';
+import { shownSearch } from './lib/jobUrl.ts';
 import type { ReplayRequest } from './lib/replay.ts';
 import { replayAfterTourClose, shouldAutoStart, tourReady, tourRequest, tourSignals, TOUR_JOB_ID, TOUR_STORAGE_KEY, watchAfterTourClose } from './lib/onboarding.ts';
 import type { TourOutcome, TourStep } from './lib/onboarding.ts';
@@ -83,6 +85,12 @@ const REPLAY_REQUEST = typeof window === 'undefined' ? null : replayRequest(wind
 const RUN_LINK = typeof window === 'undefined' ? null : runLink(window.location.search);
 /** Stage 9b: `?tour=1[&speed=N]` forces the first-run tour (the scripted demo path), `?tour=0` keeps it closed. */
 const TOUR_REQUEST = tourRequest(typeof window === 'undefined' ? '' : window.location.search);
+
+/** Focus the start of the lesson column: its title (a quiet tab stop, no ring) when a lesson is shown, else the column. */
+function focusLessonStart(main: HTMLElement): void {
+  const title = main.querySelector<HTMLElement>('.lesson-title[tabindex="-1"]');
+  (title ?? main).focus({ preventScroll: true });
+}
 
 function readTourOutcome(): string | null {
   try { return localStore()?.getItem(TOUR_STORAGE_KEY) ?? null; } catch { return null; }
@@ -131,7 +139,9 @@ export function App() {
   const [linkState, setLinkState] = useState<LinkNoticeState | null>(null);
   if (opening === undefined && jobs.state !== 'loading') {
     const res = jobs.state === 'ready' ? resolveRunLink(RUN_LINK, jobs.data) : { opening: null, notice: null, replay: false };
-    setOpening(res.opening);
+    // A plain visit opens the demo's pinned run (lib/demoPins.ts), not whichever run happens to be newest.
+    const pinned = RUN_LINK === null && jobs.state === 'ready' ? pinnedOpening(jobs.data) : null;
+    setOpening(pinned ?? res.opening);
     setLinkState(res.notice);
     if (RUN_LINK?.kind === 'replay' && !res.replay) setReplayReq(null);
     if (res.notice?.problem === 'not-found') setPresenting(null);
@@ -209,6 +219,16 @@ export function App() {
   const located = useMemo(() => new Set(Object.keys(highlights?.ranges ?? {})), [highlights]);
 
   const mainRef = useRef<HTMLElement>(null);
+  // The address bar names the lesson on screen (lib/jobUrl.ts): another lesson opening replaces a stale ?job=, ?replay=
+  // or ?present=, so a refresh or a shared link never opens a different lesson. The page's first lesson keeps its URL.
+  const firstShown = useRef<string | null>(null);
+  const presentingNow = presenting !== null;
+  useEffect(() => {
+    if (selectedJobId === null || typeof window === 'undefined') return;
+    if (firstShown.current === null) firstShown.current = selectedJobId;
+    const next = shownSearch(window.location.search, selectedJobId, { replaying, presenting: presentingNow, opened: selectedJobId !== firstShown.current });
+    if (next !== window.location.search) window.history.replaceState(window.history.state, '', `${window.location.pathname}${next}${window.location.hash}`);
+  }, [selectedJobId, replaying, presentingNow]);
   // A citation highlights its quote in the source text, so it brings the source panel back if it was hidden.
   const onCite = useCallback((key: string) => { setShowSource(true); setFlash((f) => ({ key, n: (f?.n ?? 0) + 1 })); }, []);
   const onLesson = useCallback(() => {
@@ -217,7 +237,7 @@ export function App() {
     scrollPanelToTop(main);
     // In the stacked (narrow) layout the workspace scrolls, not the lesson column.
     revealInPanels(main, 'start', 0);
-    main.focus({ preventScroll: true });
+    focusLessonStart(main);
   }, []);
   const openDrawer = useCallback((mode: DrawerMode) => setDrawer(mode), []);
   const closeDrawer = useCallback(() => setDrawer(null), []);
@@ -400,6 +420,25 @@ export function App() {
     if (step.id === 'library' || step.id === 'overview') { setShowSource(true); setDrawer(null); }
     if (step.id === 'present') setDrawer(null);
   }, []);
+  // Closing the tour (Skip, Esc, Finish) puts focus on the lesson title, not on the whole lesson column (which drew a
+  // focus ring round it after Esc). It waits for the lesson to render (Skip mid-replay reloads it) and gives way when
+  // focus went somewhere on purpose (the rail button that opened the tour, presentation mode).
+  const focusAfterTour = useRef(0);
+  const wasTouring = useRef(touring);
+  useEffect(() => {
+    if (wasTouring.current && !touring) focusAfterTour.current = Date.now() + 4000;
+    wasTouring.current = touring;
+  }, [touring]);
+  useEffect(() => {
+    if (focusAfterTour.current === 0) return;
+    const main = mainRef.current;
+    const active = document.activeElement;
+    if (Date.now() > focusAfterTour.current || main === null || (active !== null && active !== document.body && active !== main)) { focusAfterTour.current = 0; return; }
+    const title = main.querySelector<HTMLElement>('.lesson-title[tabindex="-1"]');
+    if (title === null) return;
+    title.focus({ preventScroll: true });
+    focusAfterTour.current = 0;
+  });
   const closeTour = useCallback((how: TourOutcome) => {
     setTouring(false);
     // Skipping mid-demo stops the recorded build and leaves its build view: the lesson shows at rest, activity first.

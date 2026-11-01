@@ -136,6 +136,33 @@ export function reserveHeight(componentId: string): number {
   return FRAME_HEAD_PX + previewOf(componentId).bodyPx;
 }
 
+/**
+ * What a label diagram's figure frame says about SAM while the part is still being built (demo pair review #1a): its
+ * latest SAM call, open (`working`: the frame shows the working cue) or finished. Null before the first SAM call and for
+ * every other kind, so the frame never claims SAM work that has not been recorded. It never draws regions: those exist
+ * only once the checked part arrives.
+ */
+export function figureNote(build: PartBuild | undefined): { actor: 'SAM 3.1'; text: string; working: boolean } | null {
+  if (build === undefined || build.componentId !== 'label-diagram-v1') return null;
+  const sam = [...build.lines].reverse().find((l) => l.kind === 'outlining');
+  if (sam === undefined) return null;
+  // the log line without its actor ("SAM 3.1 is outlining 5 parts…" → "is outlining 5 parts…")
+  const text = sam.text.replace(/^SAM 3\.1\s+/, '');
+  return { actor: 'SAM 3.1', text, working: sam.open };
+}
+
+/**
+ * Which parts have just arrived (Stage 9b follow, demo pair review #10). `known` is what the previous frame held (null
+ * before the first frame, which is only a baseline: parts already there are not arrivals). A part that vanishes means
+ * the replay started again ("Replay again", Restart), so it counts as arriving again when it comes back.
+ */
+export function arrivals(known: ReadonlySet<string> | null, arrived: readonly string[]): { known: Set<string>; newly: string[]; restarted: boolean } {
+  const now = new Set(arrived);
+  if (known === null) return { known: now, newly: [], restarted: false };
+  const restarted = [...known].some((id) => !now.has(id));
+  return { known: now, newly: arrived.filter((id) => !known.has(id)), restarted };
+}
+
 /** How far along a planned part is, for the preview's emphasis (it only changes opacity and the outline tone). */
 export type PreviewPhase = 'waiting' | 'writing' | 'outlining' | 'reworking' | 'checked' | 'left-out';
 

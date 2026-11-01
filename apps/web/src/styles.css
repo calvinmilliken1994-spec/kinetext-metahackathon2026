@@ -307,7 +307,9 @@ input, textarea { caret-color: var(--accent-text); }
 
 /* the lesson column: no frame, centred content of a comfortable reading width */
 .activity-panel { padding: 8px 12px 48px; font-size: var(--fs-16); }
-.activity-panel:focus-visible { outline-offset: -2px; }
+/* The column and the lesson title take focus only from code (rail Lesson, tour closed): a ring round the whole column
+ * or a heading told nothing (demo pair review #9); Tab moves on from there as usual. */
+.activity-panel:focus-visible, .lesson-title[tabindex="-1"]:focus { outline: none; }
 .main-inner { width: 100%; max-width: 880px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
 
 /* ================================================================================================================

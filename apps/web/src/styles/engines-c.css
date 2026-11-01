@@ -16,8 +16,13 @@
   --ld-pin-current: #0064e0;
   --ld-pin-ok: #0d7444;
   --ld-pin-bad: #b3261e;
-  --ld-region: rgba(0, 100, 224, 0.45);
-  --ld-region-fill: rgba(0, 100, 224, 0.05);
+  /* SAM 3.1's regions (demo pair review #1a): a resting line in a dark blue with a white halo, so it reads on a sky-blue
+     figure as well as on a white one; the focused part (and the draw-in) in the strong blue, a white inner line, a dark
+     outer shadow and a light tint. The plate is always white, so none of these switch with the theme. */
+  --ld-region: rgba(0, 72, 168, 0.72);
+  --ld-region-halo: rgba(255, 255, 255, 0.9);
+  --ld-region-shade: rgba(10, 19, 23, 0.42);
+  --ld-region-tint: rgba(0, 100, 224, 0.14);
   --ld-region-strong: #0064e0;
   --ld-tag: #0050b3;
   --ld-tag-ink: #ffffff;
@@ -68,12 +73,20 @@
 .ld-slotline { display: block; }
 @keyframes ld-write { from { opacity: 0; } to { opacity: 1; } }
 
-/* The focused part's SAM region (one at a time), a faint outline that never hides the drawing. */
+/* SAM's regions. In a lesson every part keeps a quiet outline (SAM's work stays visible, and it names nothing: the numbers
+   already sit on the parts); the part in focus is drawn strong. On a slide only the current part is outlined. Outlines are
+   absolutely placed and border-box, so changing their weight never moves anything. Whole-pixel widths: Chrome rounds
+   1.5 px borders down to 1 px at 100% zoom. */
 .ld-region {
-  position: absolute; border-radius: 6px; border: 1.5px solid var(--ld-region); background: var(--ld-region-fill);
-  pointer-events: none; transition: opacity 0.2s ease-out, visibility 0.2s;
+  position: absolute; box-sizing: border-box; border-radius: 6px; pointer-events: none;
+  border: 2px solid var(--ld-region); background-color: transparent; box-shadow: 0 0 0 1px var(--ld-region-halo);
+  transition: opacity 0.2s ease-out, visibility 0.2s, border-color 0.2s ease-out, border-width 0.2s ease-out, background-color 0.2s ease-out, box-shadow 0.2s ease-out;
 }
-.ld-region[data-on="false"] { opacity: 0; visibility: hidden; }
+.ld-region[data-on="true"] {
+  border: 3px solid var(--ld-region-strong); background-color: var(--ld-region-tint);
+  box-shadow: 0 0 0 1.5px var(--ld-region-halo), 0 0 0 3.5px var(--ld-region-shade), inset 0 0 0 1px var(--ld-region-halo);
+}
+.ld[data-mode="stage"] .ld-region[data-on="false"] { opacity: 0; visibility: hidden; }
 /* A part with no printed label: its name tag beside its marker, at the spot lib placeTags chose (clear of slots and markers). */
 .ld-tag {
   position: absolute; z-index: 2; inset-block-start: 0; inset-inline-start: 0; box-sizing: border-box;

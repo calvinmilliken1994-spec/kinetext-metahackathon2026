@@ -195,10 +195,10 @@
 /* ---- the source page: each newly cited sentence lights up, in the order its quote arrived ------------------------- */
 mark.lb-lit { animation: lb-lit 900ms var(--lb-ease) calc(var(--i, 0) * 70ms + 120ms) backwards; }
 
-/* ---- label the diagram: Muse's part points, then SAM's regions, draw in part by part; the regions then fade so the
- *      figure ends in its normal covered state (fill: backwards, so a later reveal is never overridden) --------------- */
+/* ---- label the diagram: Muse's part points, then SAM's regions, draw in part by part in the strong outline, hold, and
+ *      settle to the quiet resting outline (fill: backwards, so the resting style and a later focus are never overridden) */
 .ld-plate[data-build="draw"] .ld-marker { animation: lb-pop 280ms var(--lb-ease) calc(380ms + var(--i, 0) * 150ms) backwards; }
-.ld-plate[data-build="draw"] .ld-region { animation: lb-outline 2200ms linear calc(460ms + var(--i, 0) * 150ms) backwards; }
+.ld-plate[data-build="draw"] .ld-region { animation: lb-outline 2600ms linear calc(460ms + var(--i, 0) * 180ms) backwards; }
 
 @keyframes lb-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes lb-rise { from { opacity: 0; translate: 0 6px; } to { opacity: 1; translate: 0 0; } }
@@ -212,11 +212,19 @@ mark.lb-lit { animation: lb-lit 900ms var(--lb-ease) calc(var(--i, 0) * 70ms + 1
   0% { background: transparent; box-shadow: 0 0 0 1px transparent; }
   35% { background: var(--flash-bg); box-shadow: 0 0 0 1px var(--flash-bg); }
 }
+/* The clip reaches 6 px past the box, so the halo and the shadow draw in with the line. */
 @keyframes lb-outline {
-  0% { opacity: 1; visibility: visible; border-color: var(--ld-region-strong); clip-path: inset(0 100% 0 0 round 6px); animation-timing-function: var(--lb-ease); }
-  18% { opacity: 1; visibility: visible; border-color: var(--ld-region-strong); clip-path: inset(0 0 0 0 round 6px); }
-  72% { opacity: 1; visibility: visible; border-color: var(--ld-region-strong); clip-path: inset(0 0 0 0 round 6px); }
-  100% { opacity: 0; visibility: visible; border-color: var(--ld-region); clip-path: inset(0 0 0 0 round 6px); }
+  0%, 18%, 70% {
+    opacity: 1; visibility: visible; border-width: 3px; border-color: var(--ld-region-strong); background-color: var(--ld-region-tint);
+    box-shadow: 0 0 0 1.5px var(--ld-region-halo), 0 0 0 4px var(--ld-region-shade), inset 0 0 0 1px var(--ld-region-halo);
+  }
+  0% { clip-path: inset(-6px 100% -6px -6px round 8px); animation-timing-function: var(--lb-ease); }
+  18% { clip-path: inset(-6px -6px -6px -6px round 8px); }
+  70% { clip-path: inset(-6px -6px -6px -6px round 8px); animation-timing-function: var(--lb-ease); }
+  100% {
+    opacity: 1; visibility: visible; border-width: 2px; border-color: var(--ld-region); background-color: transparent;
+    box-shadow: 0 0 0 1px var(--ld-region-halo), 0 0 0 0 transparent, inset 0 0 0 0 transparent; clip-path: inset(-6px -6px -6px -6px round 8px);
+  }
 }
 
 /* ---- working cues: loop only while calls are open (Calvin: the seconds counter alone did not show work going on) ----
@@ -246,7 +254,21 @@ mark.lb-lit { animation: lb-lit 900ms var(--lb-ease) calc(var(--i, 0) * 70ms + 1
 @keyframes lb-breathe { 0%, 100% { opacity: 1; scale: 1; } 50% { opacity: 0.35; scale: 0.75; } }
 @keyframes lb-shimmer { from { background-position: 100% 0; } to { background-position: 0 0; } }
 
+/* ---- SAM at work on the page's figure (demo pair review #1a): once SAM is called the figure frame names it, and while
+ *      its call is open a light passes over the frame. Nothing is drawn where regions will be: they exist only on arrival. */
+.pv-plate[data-sam] { position: relative; overflow: hidden; border-color: var(--accent-line); }
+.pv-sam { display: inline-flex; align-items: center; gap: 8px; font-size: var(--fs-16); color: var(--ink-2); }
+.pv-sam strong { font-weight: var(--fw-bold); color: var(--ink); }
+.pv-sam::before { content: ""; flex: none; inline-size: 8px; block-size: 8px; border-radius: 50%; box-shadow: inset 0 0 0 2px var(--ink-2); }
+.pv-plate[data-sam="working"] .pv-sam::before { box-shadow: inset 0 0 0 2px var(--accent-text); animation: lb-breathe 1.4s ease-in-out infinite; }
+.pv-plate[data-sam="working"]::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(100deg, transparent 35%, color-mix(in oklab, var(--accent-text) 14%, transparent) 50%, transparent 65%);
+  background-size: 300% 100%; animation: lb-shimmer 1.8s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .pv-plate[data-sam="working"]::after, .pv-plate[data-sam="working"] .pv-sam::before { animation: none; }
   .lb-op, .lb-main, .lb-facts, .lb-log li, .lb-frame, .lb-arrive, .lb-tick, .lb-title-text,
   .overview[data-arrive="true"] .key-points li, .overview[data-arrive="true"] .overview-foot {
     animation: lb-in 120ms linear both; animation-delay: 0s;
