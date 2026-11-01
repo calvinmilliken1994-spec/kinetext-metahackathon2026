@@ -274,7 +274,7 @@ function Figure({ spec, views, slots, masks, named, slotState, labelsShown, mark
           <span key={m.key} className="ld-mask" style={pct(m.box)} data-on={labelsShown ? 'false' : 'true'} aria-hidden="true" />
         ))}
         {build && views.map((v) => {
-          const d = drawings[v.index] ?? null; // SAM's weak regions (< 50% sure) are not drawn
+          const d = drawings[v.index] ?? null; // every located part glows, weak SAM regions too (regionDrawing)
           return d === null ? null : (
             <span
               key={`r-${v.part.id}`} className="ld-region" style={{ ...glowStyle(d.box), '--i': v.index } as CSSProperties}

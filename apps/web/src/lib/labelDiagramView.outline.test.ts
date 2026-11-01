@@ -53,13 +53,13 @@ test('a confident region with an outline draws the outline; a weak one draws not
   assert.equal(outlineToDraw({ outline: 'M 1 2 C 3 4 5 6 7 8 Z', confidence: 0.9 }), null, 'a malformed path falls back');
 });
 
-test('what a region draws in the build (Addendum A): always its box, outline or not; nothing below 50%', () => {
+test('what a region draws in the build (Addendum A): always its box, outline or not; weak ones too', () => {
   const d = WATER_OUTLINES.runoff;
   assert.deepEqual(regionDrawing({ region: box, outline: d, confidence: 0.93 }), { kind: 'box', box });
   assert.deepEqual(regionDrawing({ region: box, outline: null, confidence: 0.93 }), { kind: 'box', box });
   assert.deepEqual(regionDrawing({ region: box, outline: 'bad', confidence: 0.93 }), { kind: 'box', box });
-  assert.equal(regionDrawing({ region: box, outline: d, confidence: 0.28 }), null);
-  assert.equal(regionDrawing({ region: box, outline: null, confidence: 0.28 }), null);
+  assert.deepEqual(regionDrawing({ region: box, outline: d, confidence: 0.28 }), { kind: 'box', box });
+  assert.deepEqual(regionDrawing({ region: box, outline: null, confidence: 0.28 }), { kind: 'box', box });
   assert.equal(regionDrawing({ region: null, outline: null, confidence: null }), null);
 });
 
@@ -69,8 +69,8 @@ test('part views carry the stored outline (stored lessons have none: null)', () 
   const traced: LabelDiagramSpec = { ...water, regions: water.regions.map((r) => ({ ...r, outline: WATER_OUTLINES[r.partId] })) };
   const views = partViews(traced);
   assert.equal(views.find((v) => v.part.id === 'runoff')?.outline, WATER_OUTLINES.runoff);
-  // evaporation's region is 0.28 sure: nothing draws for it; the other four glow as boxes (outlines stay stored only)
-  assert.deepEqual(views.map((v) => regionDrawing(v)?.kind ?? null), [null, 'box', 'box', 'box', 'box']);
+  // every part glows as a box, evaporation's 0.28 region too (Calvin 2026-11-02); outlines stay stored only
+  assert.deepEqual(views.map((v) => regionDrawing(v)?.kind ?? null), ['box', 'box', 'box', 'box', 'box']);
 });
 
 test('the fixture outlines are absolute image pixels inside their SAM boxes (probe paths were box-local)', () => {

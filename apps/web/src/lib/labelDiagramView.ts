@@ -528,6 +528,8 @@ export interface PartView {
   confidence: number | null;
   /** Stage 8c: SAM's traced outline (SVG path, image pixels), or null (older runs, or decoding failed). */
   outline: string | null;
+  /** Addendum A: the box Muse's grounding call located for the part, or null (older runs, or grounding failed). */
+  ground?: PctBox | null;
 }
 
 /** SAM's own score below which its region is not drawn (Calvin 2026-11-02: weak regions covered the wrong area). */
@@ -562,9 +564,14 @@ export type RegionDrawing = { kind: 'box'; box: PctBox };
  * located. A stored traced outline no longer changes what is drawn (it stays on the region; `outlineToDraw` keeps the
  * old rule should outlines come back). Null when SAM was less than 50% sure, or found no region.
  */
-export function regionDrawing(view: Pick<PartView, 'region' | 'outline' | 'confidence'>): RegionDrawing | null {
-  const box = regionToDraw(view);
-  return box === null ? null : { kind: 'box', box };
+export function regionDrawing(view: Pick<PartView, 'region' | 'outline' | 'confidence' | 'ground'>): RegionDrawing | null {
+  // Calvin 2026-11-02: every part glows during the build, a weak one too. SAM's tight box when it was sure; for a weak
+  // or missing SAM region, the box Muse located (also a model's box), else SAM's own box on older runs.
+  const confident = regionToDraw(view);
+  if (confident !== null) return { kind: 'box', box: confident };
+  const ground = view.ground ?? null;
+  if (ground !== null) return { kind: 'box', box: ground };
+  return view.region === null ? null : { kind: 'box', box: view.region };
 }
 
 /** Space the glow keeps around SAM's box (layout px), so its line never cuts the drawing it frames. */
@@ -588,7 +595,8 @@ export function partViews(spec: Pick<LabelDiagramSpec, 'parts' | 'regions' | 'fi
     const r = spec.regions.find((x) => x.partId === part.id);
     const region = r === undefined ? null : pixelBoxPct(r, spec.figure);
     const outline = r !== undefined && isOutlinePath(r.outline) ? r.outline : null;
-    return { part, index, number: index + 1, name: aiLabel(part.name.trim()), point: pointPct(part), region, confidence: r?.confidence ?? null, outline };
+    const ground = r?.ground === undefined ? null : pixelBoxPct(r.ground, spec.figure);
+    return { part, index, number: index + 1, name: aiLabel(part.name.trim()), point: pointPct(part), region, confidence: r?.confidence ?? null, outline, ground };
   });
 }
 

@@ -15,9 +15,9 @@ test('the build glow is always SAM’s box: a stored outline no longer changes w
   assert.deepEqual(regionDrawing({ region: box, outline: d, confidence: null }), { kind: 'box', box }, 'no score (older runs) still draws');
 });
 
-test('weak regions (< 50% sure) and missing regions still draw nothing, outline or not', () => {
-  assert.equal(regionDrawing({ region: box, outline: d, confidence: 0.28 }), null);
-  assert.equal(regionDrawing({ region: box, outline: null, confidence: 0.49 }), null);
+test('weak regions (< 50% sure) glow too (Calvin 2026-11-02); a part with no region and no Muse box draws nothing', () => {
+  assert.deepEqual(regionDrawing({ region: box, outline: d, confidence: 0.28 }), { kind: 'box', box });
+  assert.deepEqual(regionDrawing({ region: box, outline: null, confidence: 0.49 }), { kind: 'box', box });
   assert.equal(regionDrawing({ region: null, outline: d, confidence: 0.9 }), null);
 });
 
@@ -45,4 +45,30 @@ test('grounding probe boxes (water cycle rep 2): every confident part glows as i
   const t = drawn[2];
   assert.ok(t !== null && t !== undefined);
   assert.ok(Math.abs(t.box.left - (34 / W) * 100) < 1e-9 && Math.abs(t.box.width - (62 / W) * 100) < 1e-9, 'the box, not the outline');
+});
+
+test('Calvin 2026-11-02: every part glows, a weak one too; a weak part uses the box Muse located when the run has one', () => {
+  const sam = { left: 10, top: 10, width: 5, height: 5 };
+  const muse = { left: 8, top: 6, width: 12, height: 20 };
+  // Weak SAM region with Muse's grounding box: Muse's box glows.
+  assert.deepEqual(regionDrawing({ region: sam, outline: null, confidence: 0.28, ground: muse }), { kind: 'box', box: muse });
+  // Weak SAM region on an older run (no grounding): SAM's own box still glows.
+  assert.deepEqual(regionDrawing({ region: sam, outline: null, confidence: 0.28, ground: null }), { kind: 'box', box: sam });
+  // Confident: SAM's tight box, even when Muse's box exists.
+  assert.deepEqual(regionDrawing({ region: sam, outline: null, confidence: 0.81, ground: muse }), { kind: 'box', box: sam });
+  // No SAM region at all but Muse located the part: Muse's box.
+  assert.deepEqual(regionDrawing({ region: null, outline: null, confidence: null, ground: muse }), { kind: 'box', box: muse });
+  assert.equal(regionDrawing({ region: null, outline: null, confidence: null, ground: null }), null);
+});
+
+test('partViews carries Muse\'s grounding box as percent of the figure', () => {
+  const spec = {
+    figure: { width: 200, height: 100 },
+    parts: [{ id: 'a', name: 'A', x: 500, y: 500 }],
+    regions: [{ partId: 'a', x1: 20, y1: 10, x2: 60, y2: 30, confidence: 0.3, ground: { x1: 10, y1: 5, x2: 110, y2: 55 } }],
+  } as unknown as Parameters<typeof partViews>[0];
+  const v = partViews(spec)[0]!;
+  assert.ok(v.ground !== null);
+  assert.ok(Math.abs(v.ground!.left - 5) < 1e-9 && Math.abs(v.ground!.top - 5) < 1e-9);
+  assert.ok(Math.abs(v.ground!.width - 50) < 1.5 && Math.abs(v.ground!.height - 50) < 1.5);
 });
