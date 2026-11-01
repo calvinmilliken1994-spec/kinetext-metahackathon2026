@@ -46,6 +46,9 @@ export interface InkPlacementOptions {
   within?: { x1: number; y1: number; x2: number; y2: number };
   /** Optional: true when the grid point (integers 0..1000) lies on printed text, which the number must stay off. */
   avoid?: (x: number, y: number) => boolean;
+  /** Optional: Muse's own point (0..1000). It is kept unchanged when it already lies on this ink, inside the area and
+   * off printed text, so the system only moves a number Muse placed wrongly. */
+  keep?: { x: number; y: number };
 }
 
 export interface InkPlacement {
@@ -122,6 +125,17 @@ export function placeOnInk(raster: InkRaster, origin: MaskOrigin, options: InkPl
   };
   const insideArea = (pl: InkPlacement): boolean =>
     within === undefined || (within.x1 <= pl.x && pl.x <= within.x2 && within.y1 <= pl.y && pl.y <= within.y2);
+
+  const keep = options.keep;
+  if (keep !== undefined && Number.isInteger(keep.x) && Number.isInteger(keep.y)) {
+    const own: InkPlacement = {
+      x: keep.x,
+      y: keep.y,
+      px: Math.floor((keep.x * imageWidth) / PLACEMENT_GRID),
+      py: Math.floor((keep.y * imageHeight) / PLACEMENT_GRID),
+    };
+    if (roundTripsOntoInk(own) && insideArea(own) && (avoid === undefined || !avoid(own.x, own.y))) return own;
+  }
 
   // Tier 0 (all three) is returned at once; otherwise the first candidate of the best tier seen wins.
   const tiers: Array<InkPlacement | null> = [null, null, null]; // off text only, inside area only, round-trip only

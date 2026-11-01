@@ -496,6 +496,7 @@ export function placeLabelPartsOnInk(
       imageWidth: width,
       imageHeight: height,
       within: union,
+      keep: { x: part.x, y: part.y },
       ...(avoid !== undefined ? { avoid } : {}),
     });
     if (at === null) {

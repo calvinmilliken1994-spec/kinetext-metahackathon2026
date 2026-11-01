@@ -146,6 +146,22 @@ describe('placeOnInk on synthetic rasters', () => {
   });
   const at = { x1: 0, y1: 0 };
 
+  it('keep: Muse\'s own point stays when it is already on the ink, inside the area and off printed text', () => {
+    // A ring 10x10 px image: Muse put the number on the ring's bottom edge (grid 250, 450 -> pixel 2, 4).
+    const r = raster(['#####', '#...#', '#...#', '#...#', '#####']);
+    const kept = placeOnInk(r, at, { imageWidth: 10, imageHeight: 10, keep: { x: 250, y: 450 } });
+    assert.ok(kept !== null);
+    assert.deepEqual([kept.x, kept.y], [250, 450], 'unchanged: Muse was right');
+    // Muse's point in the hole (not ink): placed on the ring as before.
+    const moved = placeOnInk(r, at, { imageWidth: 10, imageHeight: 10, keep: { x: 250, y: 250 } });
+    assert.deepEqual([moved!.px, moved!.py], [2, 0]);
+    // On ink but on printed text, or outside the area: moved.
+    const onText = placeOnInk(r, at, { imageWidth: 10, imageHeight: 10, keep: { x: 250, y: 450 }, avoid: (x, y) => y >= 400 });
+    assert.notDeepEqual([onText!.x, onText!.y], [250, 450]);
+    const outside = placeOnInk(r, at, { imageWidth: 10, imageHeight: 10, keep: { x: 250, y: 450 }, within: { x1: 0, y1: 0, x2: 1000, y2: 300 } });
+    assert.notDeepEqual([outside!.x, outside!.y], [250, 450]);
+  });
+
   it('no ink gives null', () => {
     assert.equal(placeOnInk(raster(['...', '...']), at, { imageWidth: 1000, imageHeight: 1000 }), null);
   });

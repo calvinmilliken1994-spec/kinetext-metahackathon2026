@@ -150,6 +150,7 @@ test('replay round 3 DNA: guanine and cytosine left the printed words and sit on
 });
 
 test('replay round 3 water cycle: without the printed-text rule precipitation would land on its own printed word (why the rule exists)', () => {
+  // Muse's own point is kept only when it is already right, so start from a gen whose precipitation point is off its ink.
   // SAM's precipitation mask (0.69) covers the rain AND the printed word "Precipitation"; the ink nearest its centroid is a letter.
   const job = fixture.jobs.water;
   const meta = figureFor(job);
@@ -158,7 +159,10 @@ test('replay round 3 water cycle: without the printed-text rule precipitation wo
     const region = job.regions.find(r => r.partId === p.id);
     return region?.outline === undefined ? null : rasterOfOutline(region);
   });
-  const naive = placeLabelPartsOnInk(job.gen, rasters, job.regions, unions, meta.width, meta.height);
+  const offInk = structuredClone(job.gen);
+  offInk.parts[1]!.x = 0;
+  offInk.parts[1]!.y = 0;
+  const naive = placeLabelPartsOnInk(offInk, rasters, job.regions, unions, meta.width, meta.height);
   const report = validate(job, naive.gen);
   assert.deepEqual(failedIds(report), ['LD-04']);
   assert.match(report.checks.find(c => c.id === 'LD-04')!.message, /parts\[1\].*printed word/);

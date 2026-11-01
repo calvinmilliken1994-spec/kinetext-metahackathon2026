@@ -317,7 +317,10 @@ test('worker: placed values are what is validated, persisted and published; genP
     assert.deepEqual([p.areaX1, p.areaY1, p.areaX2, p.areaY2], [u.x1, u.y1, u.x2, u.y2]);
     assert.deepEqual([a.spec.parts[i].x, a.spec.parts[i].y], [p.x, p.y], 'the published spec carries the placed point');
     assert.deepEqual([lessonSpecParts[i]!.x, lessonSpecParts[i]!.y], [p.x, p.y], 'so does the lesson');
-    assert.notDeepEqual([p.x, p.y], [g.x, g.y], `${g.name}: the placed point differs from Muse's generation point`);
+    // Muse's own point stays when it was already on the ink (and off printed text); otherwise it was moved.
+    if (!inkAt(boxOf(REC1, i), g.x, g.y)) {
+      assert.notDeepEqual([p.x, p.y], [g.x, g.y], `${g.name}: a point off the ink was moved onto it`);
+    }
   });
   // Muse's own generation values, for the placed parts only
   assert.deepEqual(
