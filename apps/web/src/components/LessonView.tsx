@@ -8,7 +8,9 @@ import { declineText, lessonCards, lessonItems } from '../lib/lesson.ts';
 import { sourceLicenseText } from '../lib/sources.ts';
 import type { ReportLike } from '../lib/failures.ts';
 import { heldBackChecks } from '../lib/lessonJob.ts';
-import type { LessonCard, PendingSlot } from '../lib/lesson.ts';
+import type { LessonCard, LessonItem, PendingSlot } from '../lib/lesson.ts';
+import { activityFirst, partCounts } from '../lib/partOrder.ts';
+import { LessonPartsContext } from './LessonPartsContext.ts';
 import { ActivityPanel } from './ActivityPanel.tsx';
 import { AlgorithmTraceView } from './AlgorithmTraceView.tsx';
 import { BalanceView } from './BalanceView.tsx';
@@ -21,7 +23,7 @@ import { ConceptMapView } from './ConceptMapView.tsx';
 import { AiWritten } from './Disclosure.tsx';
 import type { CiteProps } from './Explanations.tsx';
 import { FormulaExplorerView } from './FormulaExplorerView.tsx';
-import { KitCard } from './KitCard.tsx';
+import { KitCard, LeftOutNotice } from './KitCard.tsx';
 import { OverviewView } from './OverviewView.tsx';
 import { PendingCard } from './PendingCard.tsx';
 import { BuildTrace, LiveBar, OverviewSlot, PartFrame, useFollowBuild } from './LiveBuild.tsx';
@@ -30,6 +32,7 @@ import { IconPresent } from './presentation/icons.tsx';
 import { QuizCardsView } from './QuizCardsView.tsx';
 import { SequenceView } from './SequenceView.tsx';
 import { SortView } from './SortView.tsx';
+import '../styles/lesson-b.css';
 
 const NO_REPORTS: Readonly<Record<string, ReportLike>> = {};
 
@@ -171,8 +174,10 @@ function Arrival({ live, index, children }: { live: boolean; index: number; chil
 }
 
 /**
- * One lesson: its title and the provenance line, the overview, then the parts in plan order as a vertical stack. A declined
- * page shows the decline card instead. A part that did not pass shows only its message, never its content.
+ * One lesson: its title, the status line and one provenance sentence, then (Set B) the most visual checked part with its
+ * first question, the overview as "Lesson notes", the other working parts in plan order, and one compact notice for the
+ * parts left out. While a build is watched the plan order is kept, overview first, so nothing jumps as parts arrive.
+ * A declined page shows the decline card instead. A part that did not pass shows only its message, never its content.
  */
 export function LessonView({ lesson, specs, analysis, sources, cite, disclosure, provenance = null, fallbackTitle = 'Lesson', premium = null, repairBadge = null, pending = [], order = [], reports = NO_REPORTS, live = null }: LessonViewProps) {
   const declined = analysis !== null && !analysis.usable;
@@ -194,7 +199,32 @@ export function LessonView({ lesson, specs, analysis, sources, cite, disclosure,
 
   const empty = lesson.overview === null && items.length === 0;
   const title = lesson.overview?.headline ?? fallbackTitle;
+  const atRest = live === null;
+  const layout = atRest ? activityFirst(items) : null;
+  const counts = atRest ? partCounts(cards) : null;
+  const heldBack = (card: LessonCard): ReturnType<typeof heldBackOf> => heldBackOf(lesson, card);
+  const renderItem = (item: LessonItem, i: number): ReactNode => (
+    item.kind === 'pending'
+      ? (live !== null
+        ? <PartFrame key={`pending:${item.slot.componentId}`} slot={item.slot} build={live.builds[item.slot.componentId]} clock={live.clock} />
+        : <PendingCard key={`pending:${item.slot.componentId}`} slot={item.slot} />)
+      : (
+        <CardBoundary key={item.card.key}>
+          <Arrival live={live !== null} index={i}>
+            {item.card.premium && item.card.status === 'passed' && premium !== null
+              ? <PremiumCard card={item.card} premium={premium} cite={cite} disclosure={disclosure} repairBadge={repairBadge} />
+              : (
+                <KitCard card={item.card} heldBack={heldBack(item.card)} trace={live === null ? null : <BuildTrace build={live.builds[item.card.componentId]} />}>
+                  {item.card.spec !== null && <KitBody spec={item.card.spec} cite={cite} building={live !== null} />}
+                </KitCard>
+              )}
+          </Arrival>
+        </CardBoundary>
+      )
+  );
+  const notes = lesson.overview !== null && <CardBoundary><OverviewView overview={lesson.overview} live={live !== null} notes={atRest} /></CardBoundary>;
   return (
+    <LessonPartsContext.Provider value={counts}>
     <div className={liveClass} data-testid="lesson" ref={rootRef}>
       {live !== null && <LiveBar live={live} />}
       <header className="lesson-head">
@@ -204,7 +234,7 @@ export function LessonView({ lesson, specs, analysis, sources, cite, disclosure,
         {live !== null && <span className="btn present-launch lb-present-slot" aria-hidden="true"><IconPresent size={18} />Present</span>}
         {provenance}
       </header>
-      {lesson.overview !== null && <CardBoundary><OverviewView overview={lesson.overview} live={live !== null} /></CardBoundary>}
+      {!atRest && notes}
       {lesson.overview === null && live !== null && !live.strip.finished && <OverviewSlot words={live.sourceWords} />}
       {empty && live === null && (
         <div className="empty" role="status">
@@ -212,25 +242,17 @@ export function LessonView({ lesson, specs, analysis, sources, cite, disclosure,
           <p className="muted">No overview and no parts were stored for this run.</p>
         </div>
       )}
-      {items.map((item, i) => (
-        item.kind === 'pending'
-          ? (live !== null
-            ? <PartFrame key={`pending:${item.slot.componentId}`} slot={item.slot} build={live.builds[item.slot.componentId]} clock={live.clock} />
-            : <PendingCard key={`pending:${item.slot.componentId}`} slot={item.slot} />)
-          : (
-            <CardBoundary key={item.card.key}>
-              <Arrival live={live !== null} index={i}>
-                {item.card.premium && item.card.status === 'passed' && premium !== null
-                  ? <PremiumCard card={item.card} premium={premium} cite={cite} disclosure={disclosure} repairBadge={repairBadge} />
-                  : (
-                    <KitCard card={item.card} heldBack={heldBackOf(lesson, item.card)} trace={live === null ? null : <BuildTrace build={live.builds[item.card.componentId]} />}>
-                      {item.card.spec !== null && <KitBody spec={item.card.spec} cite={cite} building={live !== null} />}
-                    </KitCard>
-                  )}
-              </Arrival>
-            </CardBoundary>
-          )
-      ))}
+      {layout === null
+        ? items.map(renderItem)
+        : (
+          <>
+            {layout.lead !== null && renderItem(layout.lead, 0)}
+            {notes}
+            {layout.rest.map((item, i) => renderItem(item, i + 1))}
+            <LeftOutNotice cards={layout.leftOut} heldBackOf={heldBack} />
+          </>
+        )}
     </div>
+    </LessonPartsContext.Provider>
   );
 }

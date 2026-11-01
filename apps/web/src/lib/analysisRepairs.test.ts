@@ -163,7 +163,7 @@ test('buildAnalysisRepairSteps: a passed natural repair, with before/after, name
   assert.equal(s.repairOf, 1);
   assert.equal(s.state, 'passed');
   assert.equal(s.label, ANALYSIS_REPAIR_LABEL);
-  assert.equal(ANALYSIS_REPAIR_LABEL, 'Natural repair (Muse’s own mistake)');
+  assert.equal(ANALYSIS_REPAIR_LABEL, 'Revised by Muse after a failed check');
   assert.deepEqual(s.failedBefore.map((f) => [f.id, f.name]), [['analysis.concept-ids', 'Concept ids are short and well-formed']]);
   assert.match(s.failedBefore[0]?.plain ?? '', /40 characters/);
   assert.match(s.failedBefore[0]?.message ?? '', /velocity-and-displacement/);
@@ -282,10 +282,10 @@ test('analysisRepairNote: says what was repaired, or honestly that no attempt pa
 });
 
 test('naturalRepairNote: never claims a repair that did not happen', () => {
-  assert.match(naturalRepairNote('passed'), /^Natural repair \(Muse’s own mistake\)\./);
+  assert.match(naturalRepairNote('passed'), /^Revised by Muse after a failed check\./);
   assert.match(naturalRepairNote('passed'), /Muse repaired it/);
   const failed = naturalRepairNote('failed');
-  assert.match(failed, /^Muse’s own mistake — repair did not pass\./);
+  assert.match(failed, /^Muse’s revision did not pass\./);
   assert.match(failed, /did not fix it/);
   assert.doesNotMatch(failed, /repaired it/);
   assert.match(failed, /system-made demo fault/);

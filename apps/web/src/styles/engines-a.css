@@ -310,3 +310,21 @@
 .ea-stage-bar { position: fixed; inset-inline: 0; inset-block-end: 14px; margin: 0; text-align: center; font-size: var(--fs-14); color: var(--ink-3); z-index: 1001; }
 .ea-stage-bar kbd { margin-inline: 2px 4px; }
 @media (max-width: 1000px) { .ea-layout { grid-template-columns: minmax(0, 1fr); } .ea-page { position: static; max-block-size: 260px; } }
+
+/* ---- one feedback voice (set B, lib/feedback.ts): every prediction check in the lesson ----------------------------------
+ * One line (predicted · calculated · verdict), one next step, and a folded "How close counts" with the margin's numbers.
+ * Within the target is green; "very close" and "off" stay neutral (no alarm colour for a near miss). */
+.fb { display: grid; gap: 4px; margin-top: 10px; padding: 10px 12px; border-radius: var(--r); background: var(--panel-2); font-size: var(--fs-14); line-height: 1.45; }
+.fb[data-level="within"] { background: var(--ok-soft); }
+.fb-line { margin: 0; display: flex; align-items: baseline; gap: 0; font-weight: var(--fw-medium); color: var(--ink); font-variant-numeric: tabular-nums; }
+.fb[data-level="within"] .fb-line { color: var(--ok-ink); }
+.fb-mark-none { display: inline-block; inline-size: 1em; margin-right: 6px; flex: none; }
+.fb-line > .mark { flex: none; }
+.fb-next { margin: 0; padding-inline-start: calc(1em + 6px); color: var(--ink-2); }
+.fb-more { padding-inline-start: calc(1em + 6px); font-size: var(--fs-12); color: var(--ink-3); }
+.fb-more > summary { cursor: pointer; inline-size: fit-content; }
+.fb-more > summary:hover { color: var(--ink-2); }
+.fb-more > p { margin: 4px 0 0; color: var(--ink-2); max-inline-size: 70ch; }
+.ll-ask .fb { margin-top: 0; }
+.th-fine .fb-more { padding-inline-start: 0; margin-top: 2px; }
+.th-fine > p { margin: 0; }

@@ -5,7 +5,8 @@ import type { KitSpec } from '../../../../../packages/contracts/kit.ts';
 import type { Badge } from '../../lib/repairs.ts';
 import type { Beat, Deck, DeckPart, EngineSpec, NumericAnswer } from '../../lib/presentation.ts';
 import type { EnginePresentation } from '../../lib/enginePresentation.ts';
-import { checksLine, CLOSING_QUOTES, deckQuotes, engineStage, isRevealed, leftOutLine, numericAnswer, predictVerdict, predictVisual, revealDelayMs, shownPoints, shownTerms, titleCard, visibleCount } from '../../lib/presentation.ts';
+import { checksLine, CLOSING_QUOTES, deckQuotes, engineStage, isRevealed, leftOutLine, numericAnswer, predictVerdict, predictVisual, revealDelayMs, shownPoints, shownTerms, SUMMARY_HEADING, SUMMARY_NOTE, titleCard, visibleCount } from '../../lib/presentation.ts';
+import { targetRule } from '../../lib/feedback.ts';
 import { aiLabel, prettyExponents } from '../../lib/displayText.ts';
 import { REVIEW_STATUS, withoutReviewNote } from '../../lib/provenance.ts';
 import { quizCards } from '../../lib/quiz.ts';
@@ -93,9 +94,11 @@ function OverviewBeat({ beat, step, deck }: Pick<BeatProps, 'beat' | 'step' | 'd
   return (
     <div className="pz-split">
       <header className="pz-split-head">
-        <h2 className="pz-heading">What the page says</h2>
+        {/* An AI summary is never titled as if it were the page's words (P11): those appear only in the quote zone. */}
+        <h2 className="pz-heading">{SUMMARY_HEADING}</h2>
         {/* The lesson's own headline leads the key points (never Muse's internal page-coverage note). */}
         <p className="pz-lead">{aiLabel(deck.headline)}</p>
+        <p className="pz-note">{SUMMARY_NOTE}</p>
       </header>
       <ul className={`pz-points${points.length > 4 ? ' pz-dense' : ''}`}>
         {points.map((p, i) => (
@@ -350,25 +353,27 @@ function PredictBeat({ beat, step, answer, onAnswer, cite, deck }: AskProps<'pre
           <form className="pz-slot" onSubmit={release}>
             <label htmlFor={inputId} className="pz-slot-label">Class prediction</label>
             <span className="pz-slot-value">
-              <input id={inputId} inputMode="decimal" autoComplete="off" placeholder="?" size={Math.max(2, answer.length + 1)} value={answer} disabled={revealed} onChange={(e) => onAnswer(e.target.value)} />
+              <input id={inputId} inputMode="decimal" autoComplete="off" placeholder="?" size={Math.max(2, answer.length)} value={answer} disabled={revealed} onChange={(e) => onAnswer(e.target.value)} />
               {unit !== '' && <span className="pz-unit">{prettyExponents(unit)}</span>}
             </span>
           </form>
           <div className="pz-slot pz-slot-answer" data-revealed={landed && value !== null ? 'true' : 'false'} role="status">
-            <p className="pz-slot-label">{value === null ? 'Answer' : t.kind === 'engine' ? `Engine · ${value.label.toLowerCase()}` : `Calculator · ${value.label}`}</p>
+            <p className="pz-slot-label">{value === null ? 'Answer' : t.kind === 'engine' ? `Calculated · ${value.label.toLowerCase()}` : `Calculated · ${value.label}`}</p>
             {landed && value !== null
               ? <p className="pz-slot-value pz-answer-value"><span className="num">{value.display}</span>{unit !== '' && <span className="pz-unit">{prettyExponents(unit)}</span>}</p>
               : <p className="pz-slot-value pz-slot-hidden" aria-label="Hidden until the reveal">?</p>}
           </div>
+          {/* The lesson's feedback voice (lib/feedback.ts): one headline and one line, three levels. */}
           {verdict !== null && (
-            <p className={`pz-grade pz-verdict ${verdict.within ? 'pz-grade-ok' : ''}`} aria-label={verdict.text}>
-              <Mark kind={verdict.within ? 'ok' : 'bad'} /><strong>{verdict.headline}</strong>
+            <p className={`pz-grade pz-verdict${verdict.within ? ' pz-grade-ok' : ''}`} data-level={verdict.level} aria-label={verdict.text}>
+              {verdict.level === 'close' ? <span className="mark pz-mark-none" aria-hidden="true" /> : <Mark kind={verdict.within ? 'ok' : 'bad'} />}
+              <strong>{verdict.headline}</strong>
               <span className="pz-verdict-detail">{verdict.detail}</span>
             </p>
           )}
           {landed && value !== null && verdict === null && <p className="pz-grade pz-verdict">No class prediction was entered.</p>}
           {landed && value !== null
-            ? <p className="pz-fine">Computed by code from this case’s inputs. Close means within 2% of this value.</p>
+            ? <p className="pz-fine">{targetRule()}</p>
             : !revealed && <p className="pz-hint">Write your estimate down first. Type the class number, then <kbd>R</kbd>.</p>}
         </div>
       </div>

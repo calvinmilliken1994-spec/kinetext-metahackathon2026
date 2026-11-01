@@ -101,7 +101,7 @@ export function LiftView({ spec, inputs, onInput, onReset, predict, equation, co
           <ResetSliders onReset={onReset} />
         </div>
         <dl className="readouts" aria-label="Live readouts from the engine">
-          <Readout name="Lift L (engine)" value={formatQuantity(liftN)} unit="N" accent="force" concealed={concealed} />
+          <Readout name="Lift L (calculated)" value={formatQuantity(liftN)} unit="N" accent="force" concealed={concealed} />
         </dl>
       </div>
       )}

@@ -64,6 +64,16 @@
 .pz-hint { margin-block-start: auto; font-size: var(--pz-meta); color: var(--ink-3); }
 .pz-fine { font-size: var(--pz-meta); color: var(--ink-3); max-inline-size: 90ch; text-wrap: pretty; }
 .pz-prompt { font-size: var(--pz-body); color: var(--ink-2); }
+/* The AI summary's small label under its heading ("AI-written summary"). */
+.pz-note { font-size: var(--pz-meta); color: var(--ink-3); }
+
+/* The hook slide's one-line credit: the page, its publisher and licence, and that the lesson is AI-written and awaits
+ * review. Readable on a projector, quieter than the slide; one line, laid out before the slide, so R never moves it. */
+.pz-credit {
+  flex: none; inline-size: min(100%, calc(var(--pz-u0) * 150)); margin-block-end: calc(var(--pz-u0) * 1.1);
+  font-size: var(--pz-meta); line-height: 1.35; color: var(--ink-3);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
 .pz-prompt strong { color: var(--ink); }
 
 /* the page's own words printed in a slide's body (the which-came-first pair): the source's serif */
@@ -207,6 +217,8 @@
 .pz-verdict .mark { margin-block-start: 0.25em; }
 .pz-verdict strong { font-size: 1.25em; font-weight: var(--fw-bold); letter-spacing: -0.01em; }
 .pz-verdict-detail { grid-column: 2; color: var(--ink-2); }
+/* "Very close" carries no cross: it is outside the target but not wrong. The empty mark keeps the column. */
+.pz-mark-none { display: inline-block; inline-size: 1em; }
 .pz-slot {
   display: grid; gap: calc(var(--pz-u) * 0.8); align-content: start;
   padding: calc(var(--pz-u) * 1.6) calc(var(--pz-u) * 2); border: 2px solid var(--line-2); border-radius: var(--pz-radius);
@@ -215,7 +227,7 @@
 .pz-slot-value { display: flex; align-items: baseline; gap: 0.25em; min-block-size: 1.15em; font-size: var(--pz-display); font-weight: var(--fw-bold); line-height: 1.1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
 .pz-slot-value .pz-unit { font-size: 0.5em; letter-spacing: 0; }
 .pz-slot input {
-  inline-size: auto; max-inline-size: 100%; padding: 0; border: 0; border-block-end: 3px solid var(--line-3); border-radius: 0;
+  inline-size: auto; max-inline-size: 100%; min-inline-size: 0; flex: 0 1 auto; padding: 0; border: 0; border-block-end: 3px solid var(--line-3); border-radius: 0;
   background: transparent; color: var(--ink); font: inherit; letter-spacing: inherit;
 }
 .pz-slot:focus-within { border-color: var(--accent-line); }
@@ -348,15 +360,25 @@
 .pz-tool[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent-text); }
 .pz-tool:disabled { opacity: 0.38; cursor: default; }
 .pz-tool-strong { background: var(--accent); color: var(--accent-ink); padding-inline: 12px 8px; }
+/* The two moves a presenter reaches for (next, reveal) and back are bigger targets than the rest of the bar. */
+.pz-tool-big { block-size: 44px; min-inline-size: 44px; font-size: 15px; border-radius: 10px; }
+.pz-tool-big svg { inline-size: 20px; block-size: 20px; }
+.pz-tool-next { padding-inline: 14px 10px; background: var(--panel-3); color: var(--ink); }
+.pz-tool-next:hover:not(:disabled) { background: var(--line-2); }
+.pz-tool-quiet { color: var(--ink-3); }
 .pz-tool-strong:hover:not(:disabled) { background: var(--accent-hover); color: var(--accent-ink); }
 .pz-tool-strong kbd { border-color: color-mix(in srgb, var(--accent-ink) 45%, transparent); background: transparent; color: var(--accent-ink); }
 .pz-count { flex: none; min-inline-size: 3.2em; text-align: center; font-weight: var(--fw-medium); color: var(--ink-3); }
+/* Where the presenter is: the current beat and step in words, then the count. */
+.pz-now { flex: none; display: grid; justify-items: end; gap: 1px; max-inline-size: 18em; padding-inline: 6px 4px; line-height: 1.25; }
+.pz-now-step { max-inline-size: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 14px; font-weight: var(--fw-bold); color: var(--ink); }
+.pz-now .pz-count { min-inline-size: 0; font-size: 12px; }
 .pz-track { flex: 1; min-inline-size: 0; display: flex; gap: 3px; }
 .pz-track > li { flex: 1 1 0; min-inline-size: 0; }
 .pz-track button {
   position: relative; inline-size: 100%; block-size: 34px; padding: 11px 6px 0; border: 0; border-radius: var(--r-s);
   background: transparent; color: var(--ink-3); cursor: pointer; text-align: start;
-  font-size: 12px; font-weight: var(--fw-medium);
+  font-size: 13px; font-weight: var(--fw-medium);
 }
 .pz-track button::before { content: ""; position: absolute; inset-inline: 4px; inset-block-start: 5px; block-size: 3px; border-radius: 2px; background: var(--line-2); }
 .pz-track button:hover { background: var(--panel-3); color: var(--ink); }
@@ -364,6 +386,13 @@
 .pz-track [data-state="done"] button::before { background: var(--accent-line); }
 .pz-track [data-state="current"] button { color: var(--ink); font-weight: var(--fw-bold); }
 .pz-track [data-state="current"] button::before { background: var(--accent); }
+.pz-track > li[data-state="current"] { flex: 0 0 auto; max-inline-size: 12em; }
+/* On a laptop-width bar the other beats show as marks only (their names stay in each button's tooltip and in the
+ * "where am I" line), so no label is cut to "Diag…". */
+@media (max-width: 1600px) {
+  .pz-track > li:not([data-state="current"]) .pz-track-label { visibility: hidden; }
+  .pz-track > li:not([data-state="current"]) { flex: 1 1 0; min-inline-size: 18px; }
+}
 
 .pz-keyhint {
   position: absolute; inset-inline: 0; inset-block-end: 64px; z-index: 5; margin-inline: auto; inline-size: fit-content;

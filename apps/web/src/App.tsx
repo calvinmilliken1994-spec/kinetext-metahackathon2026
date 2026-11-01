@@ -24,7 +24,7 @@ import { activityRepairCounts, checkTally, lessonRepairCounts, quoteTally, repai
 import { readStoredTech, writeStoredTech } from './lib/techDetails.ts';
 import { readSourceOpen, writeSourceOpen } from './lib/lessonLayout.ts';
 import { revealInPanels, scrollPanelToTop } from './lib/scroll.ts';
-import { deckFromActivity, deckFromLesson, exitSearch, presentRequest } from './lib/presentation.ts';
+import { deckFromActivity, deckFromLesson, exitSearch, HOOK_BEAT, presentRequest } from './lib/presentation.ts';
 import type { Deck } from './lib/presentation.ts';
 import { ApiStatus } from './components/ApiStatus.tsx';
 import { AppWindow } from './components/AppWindow.tsx';
@@ -346,7 +346,8 @@ export function App() {
     setPresenting(null);
   }
   const onPresent = useCallback(() => {
-    if (deck !== null) setPresenting({ jobId: deck.jobId, beat: 0 });
+    // Set B: Present opens on the hook (the most visual ask); the title sheet is one ← away.
+    if (deck !== null) setPresenting({ jobId: deck.jobId, beat: HOOK_BEAT });
   }, [deck]);
   const onExitPresent = useCallback(() => {
     setPresenting((p) => {

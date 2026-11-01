@@ -2,6 +2,9 @@ import { useId } from 'react';
 import type { CheckSection } from '../lib/lessonJob.ts';
 import { Mark } from './icons.tsx';
 
+/** lessonJob.ts's own plain sentence for a part held back today (not checker text, so it may show). */
+const TODAY_FAILED_TEXT = 'Fails when re-run with today’s checks (it passed when this run was built).';
+
 /** The checks behind a lesson, kept quiet: one closed fold-out per checked part, readable names, raw ids under Technical details. */
 export function LessonChecksPanel({ sections }: { sections: readonly CheckSection[] }) {
   // The same panel can be on screen twice (runs drawer and the lesson's trust receipt), so its heading id is per instance.
@@ -29,9 +32,11 @@ export function LessonChecksPanel({ sections }: { sections: readonly CheckSectio
                 <details className={`check ${c.passed ? 'check-pass' : 'check-fail'}`} open={!c.passed}>
                   <summary>
                     <Mark kind={c.passed ? 'ok' : 'bad'} label={c.passed ? 'passed' : 'failed'} />
-                    {c.name !== c.id ? <strong className="check-name">{c.name}</strong> : <code>{c.id}</code>}
+                    {c.name !== c.id ? <strong className="check-name">{c.name}</strong> : <><strong className="check-name no-tech">A check</strong><code className="tech">{c.id}</code></>}
                   </summary>
-                  <p>{c.message}</p>
+                  {/* Set B: the checker's own words are technical detail; a teacher sees the plain name and the verdict. */}
+                  {!c.passed && <p className="no-tech">{c.message === TODAY_FAILED_TEXT ? c.message : 'This check did not pass.'}</p>}
+                  <p className="tech">{c.message}</p>
                   {c.name !== c.id && <p className="tech">Check <code>{c.id}</code></p>}
                 </details>
               </li>

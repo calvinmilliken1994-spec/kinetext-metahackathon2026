@@ -10,12 +10,15 @@ import {
   gapText, gradeLadder, ladderAxis, ladderCases, ladderWording, ratioText, spreadLabels, valueText,
 } from '../lib/logLadderView.ts';
 import type { LadderCase, LadderGrade } from '../lib/logLadderView.ts';
+import { ladderFeedback, targetRule } from '../lib/feedback.ts';
+import type { Feedback } from '../lib/feedback.ts';
+import { FeedbackLine } from './PredictionCards.tsx';
 import { aiLabel, aiText, capitalFirst } from '../lib/displayText.ts';
 import { linkKey } from '../lib/linking.ts';
 import type { CiteProps } from './Explanations.tsx';
 import { Linked } from './Linked.tsx';
 import { QuoteBlock } from './QuoteBlock.tsx';
-import { IconArrowRight, Mark } from './icons.tsx';
+import { IconArrowRight } from './icons.tsx';
 
 export interface LogLadderViewProps { spec: LogLadderSpec; cite: CiteProps; presentation?: EnginePresentation }
 
@@ -112,20 +115,19 @@ function Answer({ spec, c, revealed }: { spec: LogLadderSpec; c: LadderCase; rev
         <p className="ll-answer-big">{capitalFirst(c.answerText)}</p>
         <p className="ll-answer-why">
           {valueText(c.exponent)} {c.exponent === 1 ? 'step' : 'steps'} of ×{ratioText(spec.factor)}: <Power factor={spec.factor} exponent={c.exponent} /> {whole ? '=' : '≈'} {ratioText(c.ratio)}.
-          {' '}Computed by our code from the page’s factor.
         </p>
       </div>
     </div>
   );
 }
 
-function gradeText(g: LadderGrade, c: LadderCase, dirWords: { more: string; less: string }, factor: number): { tone: 'ok' | 'miss'; text: string } {
-  switch (g.status) {
-    case 'right': return { tone: 'ok', text: `Right: ${c.answerText}.` };
-    case 'wrong-way': return { tone: 'miss', text: `The right number, the wrong way: this case is ${dirWords[c.direction]}.` };
-    case 'off': return { tone: 'miss', text: `Not quite. Count the whole steps: each one multiplies by ${ratioText(factor)}.` };
-    default: return { tone: 'miss', text: 'Type how many times, for example 1000.' };
-  }
+/** A graded check in the shared feedback voice (lib/feedback.ts); the answer stays out of it until it is shown. */
+function checkFeedback(g: LadderGrade, guess: number, dir: 'more' | 'less', c: LadderCase, dirWords: { more: string; less: string }, factor: number, revealed: boolean): Feedback | null {
+  if (g.status === 'invalid') return null;
+  return ladderFeedback({
+    guess, ratio: c.ratio, margin: g.margin, chosen: dirWords[dir], actualWay: dirWords[c.direction], sameWay: dir === c.direction,
+    revealed, factorText: ratioText(factor), format: ratioText,
+  });
 }
 
 interface CaseState { guess: string; dir: 'more' | 'less' | null; grade: LadderGrade | null; revealed: boolean }
@@ -148,9 +150,10 @@ function LessonLadder({ spec, cite }: { spec: LogLadderSpec; cite: CiteProps }) 
     const g = gradeLadder(c, n, st.dir);
     update({ grade: g, revealed: st.revealed || g.status === 'right' });
   };
-  const msg = st.grade === null ? null : st.dir === null && st.grade.status === 'invalid'
-    ? { tone: 'miss' as const, text: `Choose ${wording.dir.more} or ${wording.dir.less} as well.` }
-    : gradeText(st.grade, c, wording.dir, spec.factor);
+  const guessed = Number(st.guess.replace(/[,\s]/g, ''));
+  const feedback = st.grade === null || st.dir === null ? null : checkFeedback(st.grade, guessed, st.dir, c, wording.dir, spec.factor, st.revealed);
+  // Input problems are not feedback: they ask for the missing piece.
+  const problem = st.grade === null || feedback !== null ? null : st.dir === null ? `Choose ${wording.dir.more} or ${wording.dir.less} as well.` : 'Type how many times, for example 1000.';
 
   return (
     <div className="ll" data-mode="lesson" data-testid="log-ladder-view">
@@ -190,11 +193,11 @@ function LessonLadder({ spec, cite }: { spec: LogLadderSpec; cite: CiteProps }) 
               {st.revealed && <button type="button" className="btn btn-quiet" onClick={() => update(FRESH)}>Try again</button>}
             </div>
           </form>
-          <p className={`ll-grade${msg === null ? '' : ` ll-grade-${msg.tone}`}`} role="status" aria-live="polite">
-            {msg !== null && <><Mark kind={msg.tone === 'ok' ? 'ok' : 'bad'} />{msg.text}</>}
-          </p>
+          {feedback !== null
+            ? <FeedbackLine feedback={feedback} working={`each whole step of the page’s scale multiplies by ${ratioText(spec.factor)}`} />
+            : <p className="ll-grade" role="status" aria-live="polite">{problem}</p>}
           <Answer spec={spec} c={c} revealed={st.revealed} />
-          <p className="ll-fine">A prediction within 2% of the computed value counts as right.</p>
+          <p className="ll-fine">{targetRule()}</p>
         </section>
       </div>
       <section className="ll-facts" aria-label="What the page says">

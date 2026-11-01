@@ -12,6 +12,8 @@ interface Props {
   label: string;
   /** What is counted, for screen readers: 'page' or 'run'. */
   unit: 'page' | 'run';
+  /** A quiet note after the chips (e.g. "+ 2 teacher texts", counted apart from the library); '' or absent for none. */
+  note?: string;
 }
 
 const plural = (n: number, unit: string): string => `${n} ${unit}${n === 1 ? '' : 's'}`;
@@ -22,7 +24,7 @@ const plural = (n: number, unit: string): string => `${n} ${unit}${n === 1 ? '' 
  * with nothing in them are not drawn (except the active one, so it can be switched off). Hidden when there is only
  * one subject to show.
  */
-export function SubjectChips({ counts, total, active, onChange, label, unit }: Props) {
+export function SubjectChips({ counts, total, active, onChange, label, unit, note = '' }: Props) {
   const chips = chipList(counts, active);
   if (chips.length < 2 && active === null) return null;
   return (
@@ -43,6 +45,7 @@ export function SubjectChips({ counts, total, active, onChange, label, unit }: P
           <span className="sr-only">, {plural(c.count, unit)}</span>
         </button>
       ))}
+      {note !== '' && <span className="subject-note muted small">{note}</span>}
     </div>
   );
 }

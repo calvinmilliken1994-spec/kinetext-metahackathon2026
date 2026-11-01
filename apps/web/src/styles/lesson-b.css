@@ -1,0 +1,81 @@
+/* Set B lesson slice: activity first, lesson notes, one-sentence provenance, left-out notice, repair story.
+   Colours come from the theme tokens; the two story-dot colours are drawn on the source figure (always a white
+   image), so they are the same in both themes. */
+
+:root, [data-theme="dark"], [data-theme="light"] {
+  --story-before: #c5221f;
+  --story-after: #137333;
+  --story-arrow: #3c4043;
+}
+
+/* ---- technical-details gating for the plain fallbacks ------------------------------------------------------- */
+.show-tech .no-tech { display: none; }
+
+/* ---- provenance: one sentence, details behind a small disclosure ------------------------------------------- */
+.prov-more-btn {
+  display: inline-flex; align-items: center; gap: 2px; padding: 0 4px; margin-left: 2px;
+  border: 0; border-radius: var(--r-s); background: transparent; color: var(--accent-text);
+  font: inherit; font-weight: var(--fw-medium); cursor: pointer; vertical-align: baseline;
+}
+.prov-more-btn:hover { background: var(--panel-2); }
+.prov-more { color: var(--ink-3); max-width: 110ch; }
+/* the one provenance sentence is fine print: one line at laptop width, so the activity starts higher */
+.lesson-head .prov-line { font-size: var(--fs-12); line-height: 1.5; }
+.lesson-head .prov-more { font-size: var(--fs-12); line-height: 1.5; }
+/* a lesson at rest: a little less air between the head, the first activity and the notes */
+.lesson:not(.is-live) { gap: 16px; }
+.prov-count.tone-fault { color: var(--fault); font-weight: var(--fw-medium); }
+
+/* ---- lesson notes (the overview, after the first activity) ----------------------------------------------- */
+.lesson-notes { padding-top: 4px; }
+.notes-title { font-size: var(--fs-16); font-weight: var(--fw-bold); color: var(--ink); }
+.notes-sub { font-size: var(--fs-14); font-weight: var(--fw-medium); color: var(--ink-2); margin: 2px 0 0; }
+
+/* ---- parts left out: one compact notice after the working parts ------------------------------------------ */
+.left-out { display: grid; gap: 8px; padding: 12px 16px; border: 1px solid var(--line-2); border-radius: var(--r-l); }
+.left-out-title { font-size: var(--fs-14); font-weight: var(--fw-bold); color: var(--ink); }
+.left-out-list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.left-out-item { display: grid; gap: 2px; }
+.left-out-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+.left-out-head .card-status { font-size: var(--fs-12); }
+.left-out-item .kit-why { margin-top: 2px; }
+
+/* ---- repair story (runs drawer) ---------------------------------------------------------------------------- */
+.story { display: grid; gap: 10px; }
+.story-head { font-size: var(--fs-16); font-weight: var(--fw-bold); color: var(--ink); margin: 0; }
+.story-steps { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+.story-step {
+  position: relative; display: grid; grid-template-columns: 14px 1fr; column-gap: 10px; row-gap: 1px;
+  padding: 0 0 10px; font-size: var(--fs-14);
+}
+.story-step:last-child { padding-bottom: 0; }
+/* the thin line that joins the steps */
+.story-step:not(:last-child)::after {
+  content: ""; position: absolute; left: 6px; top: 16px; bottom: 0; width: 2px; background: var(--line-2);
+}
+.story-dot {
+  grid-row: 1 / span 2; width: 14px; height: 14px; margin-top: 3px; border-radius: 50%;
+  border: 2px solid var(--line-3); background: var(--panel);
+}
+.story-step.tone-bad .story-dot { border-color: var(--bad); background: var(--bad-soft); }
+.story-step.tone-fault .story-dot { border-color: var(--fault); background: var(--fault-soft); }
+.story-step.tone-neutral .story-dot { border-color: var(--accent-text); background: var(--accent-soft); }
+.story-step.tone-ok .story-dot { border-color: var(--ok); background: var(--ok); }
+.story-step.tone-pending .story-dot { border-style: dashed; }
+.story-title { font-weight: var(--fw-medium); color: var(--ink); }
+.story-text { grid-column: 2; color: var(--ink-2); }
+
+.story-figure { margin: 2px 0 0; display: grid; gap: 6px; justify-items: start; }
+.story-svg { display: block; width: min(100%, 340px); height: auto; border-radius: var(--r-s); border: 1px solid var(--line-2); background: #ffffff; }
+.story-before { fill: #ffffff; stroke: var(--story-before); }
+.story-after { fill: var(--story-after); stroke: #ffffff; }
+.story-arrow { stroke: var(--story-arrow); fill: none; }
+.story-arrowhead { fill: var(--story-arrow); }
+.story-legend { display: flex; flex-wrap: wrap; gap: 4px 16px; color: var(--ink-3); }
+.story-key { display: inline-flex; align-items: center; gap: 6px; }
+.story-key-before, .story-key-after { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
+.story-key-before { border: 2px solid var(--story-before); background: #ffffff; }
+.story-key-after { background: var(--story-after); border: 1px solid var(--story-after); }
+.story-foot { color: var(--ink-2); }
+.story-tech { display: none; }
+.show-tech .story-tech { display: grid; gap: 8px; }

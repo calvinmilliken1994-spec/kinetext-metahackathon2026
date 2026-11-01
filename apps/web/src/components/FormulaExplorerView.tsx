@@ -16,7 +16,8 @@ import type { GraphRevealView } from './FormulaGraph.tsx';
 import { revealInPanels } from '../lib/scroll.ts';
 import { QuoteBlock } from './QuoteBlock.tsx';
 import { Linked } from './Linked.tsx';
-import { Mark } from './icons.tsx';
+import { FeedbackLine } from './PredictionCards.tsx';
+import { gradeFeedback, targetRule } from '../lib/feedback.ts';
 import { EquationLine } from './EquationLine.tsx';
 import { explorerEquation } from '../lib/equation.ts';
 import { linkKey } from '../lib/linking.ts';
@@ -235,13 +236,8 @@ export function FormulaExplorerView({ spec, cite, presentation }: Props) {
         </div>
 
         <div className="explorer-visual" ref={visualRef}>
+          {/* The graph itself marks the guess and the gap; the words are said once, on the case's card (set B). */}
           <FormulaGraph geometry={geometry} yName={yName} xName={xName} concealed={concealed} reveal={reveal} />
-          {reveal !== null && (
-            <p className={`explorer-verdict ${reveal.within ? 'reveal-ok' : 'reveal-miss'}`} role="status">
-              <Mark kind={reveal.within ? 'ok' : 'bad'} />
-              <span>Your guess <b>{groupedSig6(reveal.guess)}</b> · the calculator <b>{yName} = {groupedSig6(reveal.actual)}</b> · <span className="explorer-verdict-gap">{reveal.text}</span>{!reveal.within && <> (margin ±{groupedSig6(reveal.tolerance)})</>}</span>
-            </p>
-          )}
           {presentation === undefined && (
             <table className="value-table">
               <caption>{yName} as the {xShort} changes (other sliders as set)</caption>
@@ -294,13 +290,13 @@ export function FormulaExplorerView({ spec, cite, presentation }: Props) {
                       </div>
                       <button type="submit" className="btn btn-primary" disabled={parseGuess(r?.raw ?? '') === null} aria-describedby={parseGuess(r?.raw ?? '') === null ? `${inputId}-first` : undefined}>Check my prediction</button>
                     </div>
-                    <p className="muted small" id={`${inputId}-tol`}>{parseGuess(r?.raw ?? '') === null && <span id={`${inputId}-first`}>Make a prediction first. </span>}Counts as correct within 2% of the calculator’s value.</p>
+                    <p className="muted small" id={`${inputId}-tol`}>{parseGuess(r?.raw ?? '') === null && <span id={`${inputId}-first`}>Make a prediction first. </span>}{targetRule()}</p>
                     {r?.error != null && <p className="field-error" role="alert">{r.error}</p>}
                     {r?.grade != null && (
-                      <div className={`grade ${r.grade.withinTolerance ? 'grade-ok' : 'grade-miss'}`} role="status">
-                        <strong><Mark kind={r.grade.withinTolerance ? 'ok' : 'bad'} />{r.grade.withinTolerance ? 'Close enough' : `Not close enough — your guess was too ${r.grade.direction === 'high' ? 'high' : 'low'}`}</strong>
-                        <span>You guessed {groupedSig6(r.grade.guess)} · the calculator says <b>{yName} = {groupedSig6(out?.output ?? Number.NaN)}</b> · off by {groupedSig6(Math.abs(r.grade.error))} (allowed ±{groupedSig6(r.grade.tolerance)}). The sliders and the graph now show this case.</span>
-                      </div>
+                      <FeedbackLine
+                        feedback={gradeFeedback(r.grade, { format: groupedSig6, more: i < spec.cases.length - 1 })}
+                        working={`${yName} = ${groupedSig6(out?.output ?? Number.NaN)} from the page’s formula`}
+                      />
                     )}
                   </form>
                 </li>

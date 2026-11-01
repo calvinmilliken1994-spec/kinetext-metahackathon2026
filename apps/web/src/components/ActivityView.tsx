@@ -2,11 +2,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ReactNode, RefObject } from 'react';
 import type { ActivitySpec, AnyPrediction, EngineId, ForcesActivitySpec, Prediction } from '../../../../packages/contracts/index.ts';
 import type { Badge } from '../lib/repairs.ts';
-import { caseInputs, defaultInputs, engineOutput, formatOutputValue, isEngineSpec, outputInfo, playbackPlan } from '../lib/engines.ts';
+import { caseInputs, defaultInputs, engineOutput, isEngineSpec, playbackPlan } from '../lib/engines.ts';
 import { gradePrediction, studentTolerance } from '../lib/predictions.ts';
 import type { Grade } from '../lib/predictions.ts';
-import { amountText } from '../lib/displayText.ts';
-import { trimmed } from '../lib/format.ts';
 import { revealInPanels } from '../lib/scroll.ts';
 import { engineEquation } from '../lib/equation.ts';
 import { equationQuoteLinks } from '../lib/linking.ts';
@@ -21,7 +19,6 @@ import { Simulation } from './Simulation.tsx';
 import { PredictionCards } from './PredictionCards.tsx';
 import { Explanations } from './Explanations.tsx';
 import type { CiteProps } from './Explanations.tsx';
-import { Mark } from './icons.tsx';
 import { useSimulation } from './useSimulation.ts';
 import { useSourceDoc } from '../hooks.ts';
 import { usePlayback } from './usePlayback.ts';
@@ -101,12 +98,10 @@ interface ShellProps extends NumericProps {
 }
 
 /**
- * Header with the provenance line, the last prediction result, the engine view (which shows case 1's predict card right under
+ * Header with the provenance line, the engine view (which shows case 1's predict card right under
  * its scene, above the sliders), the remaining cases, explanations.
  */
-function Shell({ spec, cite, repairBadge, provenance, engine, last, simRef, onRun, children, presentation }: ShellProps) {
-  const out = outputInfo(engine);
-  const unit = out.unit === '' ? '' : ` ${out.unit}`;
+function Shell({ spec, cite, repairBadge, provenance, engine, simRef, onRun, children, presentation }: ShellProps) {
   if (presentation !== undefined) {
     // The deck shows the title, the cases and the page's words on beats of their own.
     return (
@@ -118,17 +113,8 @@ function Shell({ spec, cite, repairBadge, provenance, engine, last, simRef, onRu
   return (
     <article className="activity" aria-labelledby="activity-title" data-engine={engine}>
       <ActivityHeader title={spec.title} learningObjectives={spec.learningObjectives} engine={engine} repairBadge={repairBadge} provenance={provenance} />
-      <div ref={simRef} className="sim-anchor">
-        {last !== null && (
-          <div className={`last-result ${last.grade.withinTolerance ? 'grade-ok' : 'grade-miss'}`} role="status">
-            <strong><Mark kind={last.grade.withinTolerance ? 'ok' : 'bad'} />Prediction {last.index + 1}: {last.grade.withinTolerance ? 'close enough' : 'not close enough'}</strong>
-            <span>
-              you guessed {trimmed(last.grade.guess, 4)}{unit}, the engine gives {formatOutputValue(engine, last.grade.actual)}{unit}{last.grade.withinTolerance ? '' : `, off by ${amountText(Math.abs(last.grade.error), out.unit)}`} (±{amountText(last.grade.tolerance, out.unit)} allowed)
-            </span>
-          </div>
-        )}
-        {children}
-      </div>
+      {/* One feedback voice (set B): each case's check is worded once, on its own card next to its input. */}
+      <div ref={simRef} className="sim-anchor">{children}</div>
       <PredictionCards engine={engine} predictions={spec.predictions as AnyPrediction[]} onRun={onRun} part="rest" />
       <Explanations explanations={spec.explanations} cite={cite} />
     </article>

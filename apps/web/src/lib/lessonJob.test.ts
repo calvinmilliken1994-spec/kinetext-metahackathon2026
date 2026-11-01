@@ -249,7 +249,7 @@ test('component steps say passed, repaired, dropped items or could not be verifi
   assert.match(get('Concept map')?.detail ?? '', /left out/);
   assert.equal(get('Published')?.detail, '2 of 3 components, 1 left out');
   assert.equal(stepOf('repaired', 'Quiz cards').outcome, 'repaired');
-  assert.match(stepOf('repaired', 'Quiz cards').detail, /repaired by Muse/i);
+  assert.match(stepOf('repaired', 'Quiz cards').detail, /revised by Muse after a failed check/i);
 });
 
 test('an analysis repair adds its own step, labelled natural', () => {
@@ -257,7 +257,7 @@ test('an analysis repair adds its own step, labelled natural', () => {
   assert.deepEqual(l.slice(0, 3), ['Analyse page', 'Repair analysis · attempt 1', 'Overview ready']);
   const rep = stepOf('repaired', 'Repair analysis · attempt 1');
   assert.equal(rep.status, 'succeeded');
-  assert.ok(rep.tags.some((t) => t.text.includes('Natural repair')));
+  assert.ok(rep.tags.some((t) => t.text.includes('Revised by Muse')));
 });
 
 test('a system-made demo fault is labelled on the component step', () => {
@@ -287,7 +287,7 @@ test('a natural component repair is labelled natural, with readable check names'
   const c = cards[0];
   assert.equal(c?.componentId, 'quiz-cards-v1');
   assert.equal(c?.origin, 'natural');
-  assert.equal(c?.badge.text, 'Natural repair (Muse’s own mistake)');
+  assert.equal(c?.badge.text, 'Revised by Muse after a failed check');
   assert.deepEqual(c?.targeted.map((t) => t.id), ['Q-02']);
   assert.equal(c?.targeted[0]?.name, 'The right answer is supported by the quote');
   assert.equal(c?.state, 'passed');

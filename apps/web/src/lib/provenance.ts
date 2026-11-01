@@ -137,10 +137,10 @@ export function receiptLabel(r: ReceiptInput): string {
 
 const n = (count: number, one: string, many: string): string => `${count} ${count === 1 ? one : many}`;
 
-/** 'Muse fixed 1 of its own mistakes', '1 system-made fault (planted on purpose, not a model error)', '1 repair did not pass'. */
+/** '1 revision by Muse after a failed check', '1 system-made fault (planted on purpose, not a model error)', '1 repair did not pass'. */
 export function repairPhrases(c: RepairCounts): CountPhrase[] {
   const out: CountPhrase[] = [];
-  if (c.natural > 0) out.push({ text: `${n(c.natural, 'natural repair', 'natural repairs')} (Muse’s own mistake)`, tone: 'neutral' });
+  if (c.natural > 0) out.push({ text: c.natural === 1 ? '1 revision by Muse after a failed check' : `${c.natural} revisions by Muse after failed checks`, tone: 'neutral' });
   if (c.system > 0) out.push({ text: `${n(c.system, 'system-made fault', 'system-made faults')} (planted on purpose, not a model error)`, tone: 'fault' });
   if (c.failed > 0) out.push({ text: `${n(c.failed, 'repair', 'repairs')} did not pass`, tone: 'bad' });
   return out;

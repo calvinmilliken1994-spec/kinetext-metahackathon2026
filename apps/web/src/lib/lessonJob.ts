@@ -17,6 +17,8 @@ import { FAILURE_MESSAGES, PREMIUM_FAILURE_MESSAGE, SKIPPED_MESSAGE, componentLa
 import type { PendingSlot } from './lesson.ts';
 import { previewQuote } from './evidence.ts';
 import { cleanModelStrings } from './displayText.ts';
+import { REVISED_LABEL, repairStory } from './repairStory.ts';
+import type { HistoryEntry, HistoryPoint, RepairStory, StoryFigure } from './repairStory.ts';
 import type { ModelId } from './models.ts';
 
 // ---- types ------------------------------------------------------------------------------------------------------
@@ -46,6 +48,8 @@ export interface LessonData {
   /** Latest validation report per component, by spec id. */
   componentReports: Record<string, ValidationReport>;
   componentRepairs: ComponentRepairRecord[];
+  /** Set B: every stored revision of each part (publishable, failed checks, diagram points), by component id. {} on older APIs. */
+  componentHistory: Record<string, HistoryEntry[]>;
 }
 
 /** Events of a lesson job carry stages beyond the Stage 5 ones (`overview`, `component`) and a `componentId`. */
@@ -153,7 +157,33 @@ function parseLessonSpec(raw: unknown): LessonSpec | null {
   return { jobId: str(raw.jobId) ? raw.jobId : '', analysisRef: str(raw.analysisRef) ? raw.analysisRef : '', overview: parseOverview(raw.overview), components };
 }
 
-const LESSON_KEYS = ['analysisV2', 'analysisV2Report', 'analysisV2Revisions', 'lesson', 'kitSpecs', 'componentReports', 'componentRepairs'] as const;
+const LESSON_KEYS = ['analysisV2', 'analysisV2Report', 'analysisV2Revisions', 'lesson', 'kitSpecs', 'componentReports', 'componentRepairs', 'componentHistory'] as const;
+
+const finiteNum = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v);
+
+/**
+ * Set B: `componentHistory` (frozen contract): `Record<componentId, { revision, publishable, failedChecks, labelPoints? }[]>`,
+ * x/y on the 0..1000 grid. Malformed entries and points are dropped; a missing field gives {}.
+ */
+export function parseComponentHistory(raw: unknown): Record<string, HistoryEntry[]> {
+  if (!isRecord(raw)) return {};
+  const out: Record<string, HistoryEntry[]> = {};
+  for (const [componentId, list] of Object.entries(raw)) {
+    if (!Array.isArray(list)) continue;
+    const entries = list.filter(isRecord).filter((h) => finiteNum(h.revision)).map((h): HistoryEntry => {
+      const points = Array.isArray(h.labelPoints)
+        ? h.labelPoints.filter(isRecord).filter((p) => str(p.id) && finiteNum(p.x) && finiteNum(p.y))
+          .map((p): HistoryPoint => ({ id: p.id as string, x: p.x as number, y: p.y as number }))
+        : null;
+      return {
+        revision: h.revision as number, publishable: h.publishable === true, failedChecks: strings(h.failedChecks),
+        ...(points === null ? {} : { labelPoints: points }),
+      };
+    }).sort((a, b) => a.revision - b.revision);
+    if (entries.length > 0) out[componentId] = entries;
+  }
+  return out;
+}
 
 /** The lesson fields of a job detail, or null when this is not a lesson job (flow 'activity', or no lesson fields at all). */
 export function parseLessonData(raw: unknown): LessonData | null {
@@ -187,6 +217,7 @@ export function parseLessonData(raw: unknown): LessonData | null {
   return {
     analysis: parseAnalysisV2(raw.analysisV2), analysisReport: parseReport(raw.analysisV2Report), analysisRevisions: revisions,
     lesson, kitSpecs: Object.fromEntries(kitEntries.filter(([k, v]) => !withheld.has(k) && !withheld.has(v.id))), componentReports: Object.fromEntries(reportEntries), componentRepairs: repairs,
+    componentHistory: parseComponentHistory(raw.componentHistory),
   };
 }
 
@@ -460,12 +491,13 @@ const checkRef = (id: string): CheckRef => ({ id, name: lessonCheckName(id) ?? i
 // ---- repairs: which are natural, which system-made --------------------------------------------------------------
 
 export const NATURAL_REPAIR_LABEL = ANALYSIS_REPAIR_LABEL;
+export { REVISED_LABEL };
 export const SYSTEM_REPAIR_LABEL = 'System-made fault, repaired by Muse';
 export const SYSTEM_REPAIR_FAILED_LABEL = 'System-made fault, repair did not pass';
 /** S6R-11: the planted fault did not trip its intended check; the part still carried it, so this is never a natural repair. */
 export const SYSTEM_UNCAUGHT_REPAIR_LABEL = 'System-made fault (not caught by its check), repaired by Muse';
 export const SYSTEM_UNCAUGHT_FAILED_LABEL = 'System-made fault (not caught by its check), repair did not pass';
-export const NATURAL_FAILURE_LABEL = 'Muse’s own mistake — repair did not pass';
+export const NATURAL_FAILURE_LABEL = 'Muse’s revision did not pass — this part is withheld';
 
 /**
  * S6R-11: the component the demo fault was ACTUALLY planted in, or null. Derived only from a successful injection:
@@ -515,6 +547,8 @@ export interface ComponentRepairCard {
   costUSD: number | null;
   model: string | null;
   responseId: string | null;
+  /** Set B: the part's repair told in four plain steps (shared by every attempt card of the same component). */
+  story: RepairStory | null;
 }
 
 const plural = (n: number, one: string, many: string): string => `${n} ${n === 1 ? one : many}`;
@@ -563,7 +597,7 @@ export function buildLessonRepairs(detail: JobDetail): ComponentRepairCard[] {
         ? `Muse’s repair passed: fixed ${r.fixed.length} of ${nTarget} and every check now passes.`
         : `Not repaired: fixed ${r.fixed.length} of ${nTarget}; ${r.remaining.length} still failing${introduced.length > 0 ? ` (${introduced.length} new)` : ''}.`,
       costUSD: typeof ev?.estCostUSD === 'number' && Number.isFinite(ev.estCostUSD) ? ev.estCostUSD : null,
-      model: ev?.model ?? null, responseId: ev?.responseId ?? null,
+      model: ev?.model ?? null, responseId: ev?.responseId ?? null, story: null,
     });
   }
   // a repair call that has started and has no record yet
@@ -577,10 +611,38 @@ export function buildLessonRepairs(detail: JobDetail): ComponentRepairCard[] {
       key: `${e.componentId}:r${e.revision}`, componentId: e.componentId, label: isPlanComponentId(e.componentId) ? componentLabel(e.componentId) : e.componentId,
       attempt: e.revision - 1, revision: e.revision, origin,
       badge: origin === 'system' ? { text: systemPassed, tone: 'fault' } : { text: NATURAL_REPAIR_LABEL, tone: 'natural' },
-      state: 'running', targeted: [], fixed: [], remaining: [], introduced: [], outcome: 'Muse is repairing this component…', costUSD: null, model: e.model ?? null, responseId: null,
+      state: 'running', targeted: [], fixed: [], remaining: [], introduced: [], outcome: 'Muse is repairing this component…', costUSD: null, model: e.model ?? null, responseId: null, story: null,
     });
   }
+  // Set B: one story per component, from its first failed check to its latest revision.
+  for (const id of new Set(cards.map((c) => c.componentId))) {
+    const own = cards.filter((c) => c.componentId === id).sort((a, b) => a.revision - b.revision);
+    const first = own[0];
+    const last = own[own.length - 1];
+    if (first === undefined || last === undefined) continue;
+    const finalReport = reportFor(data, id, last.revision);
+    const story = repairStory({
+      label: last.label, origin: last.origin, state: last.state, attempts: last.attempt,
+      targeted: first.targeted, history: data.componentHistory[id] ?? [], figure: storyFigure(data, id),
+      finalChecks: finalReport === null || finalReport.checks.length === 0 ? null : {
+        passed: finalReport.checks.filter((c) => c.passed).length, total: finalReport.checks.length,
+        noWeakening: finalReport.checks.find((c) => c.id === 'repair.no-weakening')?.passed ?? null,
+      },
+    });
+    for (const c of own) c.story = story;
+  }
   return cards;
+}
+
+/** The published label diagram's figure (size and printed-label boxes), or null for any other part. */
+function storyFigure(data: LessonData, componentId: string): StoryFigure | null {
+  if (componentId !== 'label-diagram-v1') return null;
+  const spec = Object.values(data.kitSpecs).find((s) => s.componentId === 'label-diagram-v1');
+  if (spec === undefined || spec.componentId !== 'label-diagram-v1') return null;
+  const f = spec.figure;
+  if (!str(f.id) || !finiteNum(f.width) || !finiteNum(f.height)) return null;
+  const boxes = (Array.isArray(f.labelBoxes) ? f.labelBoxes : []).filter((b) => finiteNum(b.x1) && finiteNum(b.y1) && finiteNum(b.x2) && finiteNum(b.y2));
+  return { id: f.id, width: f.width, height: f.height, labelBoxes: boxes.map((b) => ({ x1: b.x1, y1: b.y1, x2: b.x2, y2: b.y2 })) };
 }
 
 // ---- diffing two v2 analyses ----------------------------------------------------------------------------------
@@ -752,7 +814,7 @@ export function buildLessonSteps(detail: JobDetail): LessonStep[] {
         // S6R-11: system-made when this component carried an ACTUAL injected fault (any repair attempt).
         const systemMade = repaired && (faultId === slot.componentId || own.some((r) => r.origin === 'system'));
         const dropped = entry?.reason.trim() ?? '';
-        const lead = repaired ? (systemMade ? SYSTEM_REPAIR_LABEL : 'Repaired by Muse after a check failed') : 'Passed all checks';
+        const lead = repaired ? (systemMade ? SYSTEM_REPAIR_LABEL : REVISED_LABEL) : 'Passed all checks';
         steps.push({
           ...base, status: 'succeeded', outcome: repaired ? 'repaired' : dropped !== '' ? 'dropped' : 'passed', detail: dropped === '' ? lead : `${lead}. ${dropped}`,
           tags: repaired ? [systemMade ? { text: 'System-made fault', tone: 'fault' } : { text: NATURAL_REPAIR_LABEL, tone: 'natural' }] : dropped !== '' ? [{ text: 'Some items left out', tone: 'warn' }] : [], ...span,

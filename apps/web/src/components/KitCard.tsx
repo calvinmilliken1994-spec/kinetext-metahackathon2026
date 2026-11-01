@@ -55,7 +55,26 @@ export function KitCard({ card, children, trace = null, heldBack = null }: Props
       {!shown && heldBack !== null && (
         <div className="kit-message" role="note">
           <p><strong>{card.explain?.sentence ?? card.message}</strong></p>
-          <p className="muted small">It passed when this lesson was built. Our checks are stricter now, so it is left out of the lesson and of presentation mode.</p>
+          <p className="muted small">{HELD_BACK_NOTE}</p>
+          <HeldBackWhy heldBack={heldBack} />
+        </div>
+      )}
+      {!shown && heldBack === null && (
+        <div className="kit-message" role="note">
+          <p><strong>{card.message}</strong></p>
+          <p className="muted small">{UNVERIFIED_NOTE}</p>
+          <FailedWhy card={card} />
+        </div>
+      )}
+    </article>
+  );
+}
+
+const HELD_BACK_NOTE = 'It passed when this lesson was built. Our checks are stricter now, so it is left out of the lesson and of presentation mode.';
+const UNVERIFIED_NOTE = 'Nothing from this part is shown, because it was not confirmed by the page.';
+
+function HeldBackWhy({ heldBack }: { heldBack: HeldBack }) {
+  return (
           <details className="small kit-why">
             <summary>Details for the teacher</summary>
             {heldBack.length === 0
@@ -71,13 +90,12 @@ export function KitCard({ card, children, trace = null, heldBack = null }: Props
                 </>
               )}
           </details>
-        </div>
-      )}
-      {!shown && heldBack === null && (
-        <div className="kit-message" role="note">
-          <p><strong>{card.message}</strong></p>
-          <p className="muted small">Nothing from this part is shown, because it was not confirmed by the page.</p>
-          {card.explain !== null && (
+  );
+}
+
+function FailedWhy({ card }: { card: LessonCard }) {
+  if (card.explain === null) return null;
+  return (
             <details className="small kit-why">
               <summary>Details for the teacher</summary>
               <p>{card.explain.sentence}</p>
@@ -90,9 +108,33 @@ export function KitCard({ card, children, trace = null, heldBack = null }: Props
                 </details>
               )}
             </details>
-          )}
-        </div>
-      )}
-    </article>
+  );
+}
+
+/**
+ * Set B: the parts a lesson at rest does not show (held back today, could not be verified, not built), as ONE compact
+ * notice after the working parts: each part's title and its plain sentence, the teacher's details folded away.
+ */
+export function LeftOutNotice({ cards, heldBackOf }: { cards: readonly LessonCard[]; heldBackOf: (card: LessonCard) => HeldBack | null }) {
+  const headId = useId();
+  if (cards.length === 0) return null;
+  return (
+    <section className="left-out" aria-labelledby={headId} data-testid="left-out">
+      <h2 id={headId} className="left-out-title">{cards.length === 1 ? 'One part was left out' : `${cards.length} parts were left out`}</h2>
+      <ul className="left-out-list">
+        {cards.map((card) => {
+          const held = heldBackOf(card);
+          const sentence = held !== null ? (card.explain?.sentence ?? card.message) : card.message;
+          const note = card.status === 'skipped' ? '' : held !== null ? HELD_BACK_NOTE : UNVERIFIED_NOTE;
+          return (
+            <li key={card.key} className="left-out-item" data-component={card.componentId} data-status={card.status} data-held-back={held === null ? undefined : 'true'}>
+              <p className="left-out-head"><strong>{card.title}</strong><StatusText card={card} heldBack={held} /></p>
+              <p className="small">{sentence}{note !== '' && <span className="muted"> {note}</span>}</p>
+              {held !== null ? <HeldBackWhy heldBack={held} /> : <FailedWhy card={card} />}
+            </li>
+          );
+        })}
+      </ul>
+    </section>
   );
 }

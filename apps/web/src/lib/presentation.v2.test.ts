@@ -115,18 +115,21 @@ test('revealDelayMs: the numbers wait for the scene: a projectile’s until the 
   assert.ok(revealDelayMs(fp.target) > 0 && revealDelayMs(fp.target) <= 900, 'a graph: just the settle of its point');
 });
 
-test('predictVerdict: the class number against the engine, with units and three significant figures', () => {
+test('predictVerdict: the class number against the engine, in the lesson’s feedback voice (lib/feedback.ts)', () => {
   const answer = { value: 19.753086, display: '19.753', unit: 'm', label: 'Maximum height' };
   assert.equal(predictVerdict(answer, '', 0.01), null, 'no class prediction, no verdict');
   assert.equal(predictVerdict(answer, 'abc', 0.01), null);
   const miss = predictVerdict(answer, '12', 0.01);
-  assert.deepEqual(miss, { within: false, text: 'Class prediction 12 m · off by 7.75 m, too low', headline: 'Off by 7.75 m', detail: 'Too low' });
+  assert.deepEqual(miss, { within: false, level: 'off', text: '12 m predicted · 19.753 m calculated · 7.75 m too low', headline: '7.75 m too low', detail: 'outside the 2% target' });
   const high = predictVerdict(answer, '25', 0.01);
-  assert.equal(high?.text, 'Class prediction 25 m · off by 5.25 m, too high');
+  assert.equal(high?.text, '25 m predicted · 19.753 m calculated · 5.25 m too high');
   const ok = predictVerdict(answer, '19.6', 0.01);
-  assert.deepEqual(ok, { within: true, text: 'Class prediction 19.6 m · inside the ±0.395 m margin', headline: 'Close enough', detail: 'Inside the ±0.395 m margin' });
+  assert.deepEqual(ok, { within: true, level: 'within', text: '19.6 m predicted · 19.753 m calculated · within the 2% target', headline: 'Within the 2% target', detail: '19.6 m predicted' });
+  const near = predictVerdict(answer, '19.2', 0.01);
+  assert.equal(near?.level, 'close');
+  assert.equal(near?.headline, 'Very close');
   const graph = predictVerdict({ value: 6250, display: '6250', unit: '', label: 'D' }, '9000', null);
-  assert.equal(graph?.text, 'Class prediction 9,000 · off by 2,750, too high');
+  assert.equal(graph?.text, '9,000 predicted · 6250 calculated · 2,750 too high');
 });
 
 test('askFrame: before R the height scale comes from the guess alone, never from the answer', () => {

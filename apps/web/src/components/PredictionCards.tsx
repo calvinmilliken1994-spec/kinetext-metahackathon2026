@@ -4,29 +4,51 @@ import type { AnyPrediction, EngineId, TimelineEvent } from '../../../../package
 import { engineOutput, formatOutputValue, outputInfo, predictionExplanation } from '../lib/engines.ts';
 import { gradePrediction, parseGuess, studentTolerance } from '../lib/predictions.ts';
 import type { Grade } from '../lib/predictions.ts';
-import { trimmed } from '../lib/format.ts';
+import { CALCULATED_SOURCE, gradeFeedback, targetRule } from '../lib/feedback.ts';
+import type { Feedback } from '../lib/feedback.ts';
 import { formatEventDate, gradePair, pairOptions } from '../lib/timeline.ts';
 import type { PairGrade, PairPrediction } from '../lib/timeline.ts';
 import { EventEvidence } from './EventEvidence.tsx';
 import type { CiteProps } from './Explanations.tsx';
 import { Mark } from './icons.tsx';
-import { amountText, bindUnits, prettyExponents } from '../lib/displayText.ts';
+import { bindUnits, prettyExponents } from '../lib/displayText.ts';
 
 export type RunPrediction = (prediction: AnyPrediction, index: number, grade: Grade) => void;
+
+/**
+ * One prediction check in the shared voice (lib/feedback.ts): the mark, one compact line, one next step, and a small
+ * disclosure with the margin's numbers and where the calculated value comes from (teacher detail, folded away).
+ */
+export function FeedbackLine({ feedback: f, working }: { feedback: Feedback; working?: string }) {
+  return (
+    <div className="fb" data-level={f.level} role="status">
+      <p className="fb-line">
+        {f.level === 'close' ? <span className="mark fb-mark-none" aria-hidden="true" /> : <Mark kind={f.ok ? 'ok' : 'bad'} />}
+        <span><span className="sr-only">{f.label}: </span>{f.line}</span>
+      </p>
+      <p className="fb-next">{f.next}</p>
+      <details className="fb-more">
+        <summary>How close counts</summary>
+        <p>{f.margin}{working === undefined ? '' : ` Worked out: ${working}.`} {CALCULATED_SOURCE}</p>
+      </details>
+    </div>
+  );
+}
 
 interface CardProps {
   engine: EngineId;
   prediction: AnyPrediction;
   index: number;
   onRun: RunPrediction;
+  /** Another case follows this one (the feedback's next step points to it). */
+  more: boolean;
 }
 
-function PredictionCard({ engine, prediction: p, index, onRun }: CardProps) {
+function PredictionCard({ engine, prediction: p, index, onRun, more }: CardProps) {
   const [raw, setRaw] = useState('');
   const [grade, setGrade] = useState<Grade | null>(null);
   const [error, setError] = useState<string | null>(null);
   const out = outputInfo(engine);
-  const unit = out.unit === '' ? '' : ` ${out.unit}`;
   const inputId = `pred-${p.id}-input`;
   const guess = parseGuess(raw);
 
@@ -40,7 +62,7 @@ function PredictionCard({ engine, prediction: p, index, onRun }: CardProps) {
     // The reference value comes from the engine, never from the spec's stored expectation.
     const actual = engineOutput(engine, p);
     if (actual === null) {
-      setError('The engine cannot evaluate this prediction.');
+      setError('This case cannot be calculated, so it cannot be checked.');
       return;
     }
     const g = gradePrediction(guess, actual, studentTolerance(actual, p.tolerance));
@@ -68,16 +90,13 @@ function PredictionCard({ engine, prediction: p, index, onRun }: CardProps) {
           </div>
           <button type="submit" className="btn btn-primary" disabled={guess === null} aria-describedby={guess === null ? `${inputId}-first` : undefined}>Run it</button>
         </div>
-        <p className="muted small" id={`${inputId}-tol`}>{guess === null && <span id={`${inputId}-first`}>Make a prediction first. </span>}Counts as correct within 2% of the engine's value (or ±{trimmed(p.tolerance, 6)}{prettyExponents(unit)}, whichever is larger).</p>
+        <p className="muted small" id={`${inputId}-tol`}>{guess === null && <span id={`${inputId}-first`}>Make a prediction first. </span>}{targetRule()}</p>
         {error !== null && <p className="field-error" role="alert">{error}</p>}
         {grade !== null && (
-          <div className={`grade ${grade.withinTolerance ? 'grade-ok' : 'grade-miss'}`} role="status">
-            <strong><Mark kind={grade.withinTolerance ? 'ok' : 'bad'} />{grade.withinTolerance ? 'Close enough' : `Not close enough — your guess was too ${grade.direction === 'high' ? 'high' : 'low'}`}</strong>
-            <span>
-              You guessed {trimmed(grade.guess, 4)}{unit} · engine says <b>{predictionExplanation(engine, p, grade.actual)}</b>
-              {' '}· off by {amountText(Math.abs(grade.error), out.unit)} (allowed ±{amountText(grade.tolerance, out.unit)})
-            </span>
-          </div>
+          <FeedbackLine
+            feedback={gradeFeedback(grade, { unit: out.unit, format: (n) => formatOutputValue(engine, n), more })}
+            working={predictionExplanation(engine, p, grade.actual)}
+          />
         )}
       </form>
     </li>
@@ -112,7 +131,7 @@ export function PredictionCards({ engine, predictions, onRun, part = 'all', answ
       <h3 id={headingId}>{heading}</h3>
       <p className="muted small">{hint}</p>
       <ol className="predictions" start={from + 1}>
-        {shown.map((p, i) => <PredictionCard key={p.id} engine={engine} prediction={p} index={from + i} onRun={onRun} />)}
+        {shown.map((p, i) => <PredictionCard key={p.id} engine={engine} prediction={p} index={from + i} onRun={onRun} more={from + i < predictions.length - 1} />)}
       </ol>
     </section>
   );

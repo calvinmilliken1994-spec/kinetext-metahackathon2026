@@ -35,10 +35,14 @@ const kinds = (beats: readonly Beat[]): string[] => beats.map((b) => b.kind);
 
 // ---- the deck ---------------------------------------------------------------------------------------------------
 
-test('a lesson becomes title → overview → terms → one beat per quiz card / part → closing, in plan order', () => {
+test('a lesson becomes title → the parts (most visual first, one beat per quiz card) → In short → terms → closing', () => {
   const beats = planBeats(dragDeck());
   assert.equal(beats[0]?.kind, 'title');
-  assert.equal(beats[1]?.kind, 'overview');
+  assert.equal(beats[1]?.kind, 'predict', 'the formula explorer leads (set B: the hook)');
+  const ov = beats.findIndex((b) => b.kind === 'overview');
+  const lastQuiz = beats.map((b) => b.kind).lastIndexOf('quiz');
+  assert.ok(ov > lastQuiz, 'the summary comes after the questions it would answer');
+  assert.equal(beats[ov]?.title, 'In short');
   assert.equal(beats[beats.length - 1]?.kind, 'closing');
   const quiz = drag!.lesson.components.find((c) => c.componentId === 'quiz-cards-v1');
   const quizSpec = quiz === undefined ? undefined : drag!.specs[quiz.specId];
@@ -284,9 +288,10 @@ test('keyContext: inputs, sliders, selects and editable text are "text"; buttons
 // ---- deep link --------------------------------------------------------------------------------------------------
 
 test('?present=<jobId> opens presentation mode; &beat=N (1-based) picks the start beat', () => {
-  assert.deepEqual(presentRequest('?present=job-1'), { jobId: 'job-1', beat: 0 });
+  assert.deepEqual(presentRequest('?present=job-1'), { jobId: 'job-1', beat: -1 }, 'no beat: open on the hook');
   assert.deepEqual(presentRequest('?present=job-1&beat=4'), { jobId: 'job-1', beat: 3 });
-  assert.deepEqual(presentRequest('?present=job-1&beat=nope'), { jobId: 'job-1', beat: 0 });
+  assert.deepEqual(presentRequest('?present=job-1&beat=1'), { jobId: 'job-1', beat: 0 }, 'beat=1 is still the title');
+  assert.deepEqual(presentRequest('?present=job-1&beat=nope'), { jobId: 'job-1', beat: -1 });
   assert.equal(presentRequest('?job=job-1'), null);
   assert.equal(presentRequest('?present='), null);
   assert.equal(presentSearch('?job=job-1&x=1', 'job-1', 2), '?x=1&present=job-1&beat=3');

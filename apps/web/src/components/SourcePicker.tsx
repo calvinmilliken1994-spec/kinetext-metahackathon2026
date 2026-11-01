@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react';
 import type { SourceMeta } from '../api.ts';
 import { shortTitle, sourceOptionLabel, TEACHER_TAG } from '../lib/sources.ts';
-import { activeSources, filterPrompt, groupSources, pickerValue, showAllLabel, subjectCounts, subjectOf } from '../lib/subjects.ts';
+import { filterPrompt, groupSources, pickerValue, showAllLabel } from '../lib/subjects.ts';
+import { libraryCounts, teacherNote, toggleSubject } from '../lib/libraryCounts.ts';
 import type { SubjectKey } from '../lib/subjects.ts';
 import { IconChevronDown } from './icons.tsx';
 import { SubjectChips } from './SubjectChips.tsx';
@@ -39,9 +40,12 @@ export function SourcePicker({ id, label, sources, selectedId, onSelect, filter,
     () => groupSources(sources, activeFilter, { collapse: !compact, expanded, selectedId }),
     [sources, activeFilter, compact, expanded, selectedId],
   );
-  const counts = useMemo(() => subjectCounts(activeSources(sources), subjectOf), [sources]);
+  // Set B: the chips count licensed library pages only (the tour's number); teacher texts are counted on their own.
+  const lib = useMemo(() => libraryCounts(sources), [sources]);
   const value = pickerValue(selectedId, grouped.visible);
-  const toggles = compact ? [] : grouped.groups.filter((g) => g.collapsible);
+  // Set B: the one "Show all" toggle follows the category in play (the chip that is on, else the selected page's subject).
+  const toggleFor = compact ? null : toggleSubject(activeFilter, sources, selectedId);
+  const toggles = toggleFor === null ? [] : grouped.groups.filter((g) => g.collapsible && g.subject === toggleFor);
   const toggle = (subject: SubjectKey): void => setExpanded((prev) => {
     const next = new Set(prev);
     if (next.has(subject)) next.delete(subject); else next.add(subject);
@@ -90,7 +94,7 @@ export function SourcePicker({ id, label, sources, selectedId, onSelect, filter,
   return (
     <div className="source-picker">
       <label htmlFor={id} className="field-label">{label}</label>
-      <SubjectChips counts={counts} total={grouped.total} active={filter} onChange={onFilter} label="Filter pages by subject" unit="page" />
+      <SubjectChips counts={lib.counts} total={lib.library} active={filter} onChange={onFilter} label="Filter pages by subject" unit="page" note={teacherNote(lib.teacher)} />
       {select}
       {toggles.length > 0 && (
         <p className="picker-more small">

@@ -4,8 +4,8 @@ import type { QuoteRef } from '../../lib/evidence.ts';
 import type { Badge } from '../../lib/repairs.ts';
 import type { Deck, PresentAction } from '../../lib/presentation.ts';
 import {
-  acceptsNumber, beatConcealed, beatRevealed, canRevealNow, deckQuotes, initialPresent, KEY_MAP, keyAction, keyContext, planBeats, presentReducer, presentSearch,
-  quoteRefForLinks, revealQuote, visibleQuotes, zoneQuote, zoneQuoteSize,
+  acceptsNumber, beatConcealed, beatRevealed, canRevealNow, creditLine, deckQuotes, heroBeatIndex, initialPresent, KEY_MAP, keyAction, keyContext, planBeats, presentReducer,
+  presentSearch, quoteRefForLinks, revealQuote, stepCaption, trackLabel, visibleQuotes, zoneQuote, zoneQuoteSize,
 } from '../../lib/presentation.ts';
 import type { QuoteLike } from '../../lib/linking.ts';
 import { linkKey, linkStore } from '../../lib/linking.ts';
@@ -20,7 +20,7 @@ export interface PresentationModeProps {
   quotes: readonly QuoteRef[];
   sourceId: string;
   repairBadge: Badge | null;
-  /** 0-based start beat (from the ?present=…&beat= deep link). */
+  /** 0-based start beat (from the ?present=…&beat= deep link); HOOK_BEAT (-1) opens on the most visual ask. */
   startBeat: number;
   onExit: () => void;
 }
@@ -40,6 +40,10 @@ export function PresentationMode({ deck, quotes, sourceId, repairBadge, startBea
   const reducer = useMemo(() => presentReducer(beats), [beats]);
   const [state, dispatch] = useReducer(reducer, undefined, () => initialPresent(beats, startBeat));
   const beat = beats[state.beat] ?? beats[0];
+  // The hook: the first part's first beat. It carries the one-line credit, so the first slide shown names the source and
+  // says the lesson is AI-written and awaits review (the title sheet with the full credit stays one ← away).
+  const hero = useMemo(() => heroBeatIndex(beats), [beats]);
+  const credit = useMemo(() => creditLine(deck.source), [deck.source]);
   const rootRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const beatRef = useRef<HTMLDivElement>(null);
@@ -220,6 +224,7 @@ export function PresentationMode({ deck, quotes, sourceId, repairBadge, startBea
       <div className="pz-live sr-only" aria-live="polite">{`Beat ${state.beat + 1} of ${n}: ${beat.title}${beat.kind === 'engine' && beat.steps > 1 ? `, question ${Math.min(state.step, beat.steps - 1) + 1} of ${beat.steps}` : ''}${revealed ? '. Revealed.' : ''}`}</div>
 
       <div ref={stageRef} className={`pz-stage-frame${state.notes ? ' pz-with-notes' : ''}`} tabIndex={-1} aria-label={beat.title}>
+        {state.beat === hero && hero > 0 && credit !== null && <p className="pz-credit">{credit}</p>}
         <div key={beat.id} ref={beatRef} className="pz-beat" data-kind={beat.kind} data-revealed={revealed ? 'true' : 'false'}>
           <BeatView
             beat={beat}
@@ -283,23 +288,26 @@ export function PresentationMode({ deck, quotes, sourceId, repairBadge, startBea
         onBlur={(e) => { if (!(e.relatedTarget instanceof Node && e.currentTarget.contains(e.relatedTarget))) setBarHeld(false); }}
       >
         <button type="button" className="pz-tool" onClick={onExit} aria-label="Leave presentation (Esc)" title="Leave presentation (Esc)"><IconExit /><span>Exit</span></button>
+        {state.beat === hero && hero > 0 && (
+          <button type="button" className="pz-tool pz-tool-quiet" onClick={() => act({ type: 'first' })} title="The title sheet with the full credit, then every slide in order (Home)">Start from the beginning</button>
+        )}
         <span className="pz-bar-sep" aria-hidden="true" />
-        <button type="button" className="pz-tool" onClick={() => act({ type: 'prev' })} aria-label="Back (←)" title="Back (←)" disabled={state.beat === 0 && state.step === 0}><IconPrev /></button>
+        <button type="button" className="pz-tool pz-tool-big" onClick={() => act({ type: 'prev' })} aria-label="Back (←)" title="Back (←)" disabled={state.beat === 0 && state.step === 0}><IconPrev /></button>
         <ol className="pz-track">
           {beats.map((b, i) => (
             <li key={b.id} data-state={i < state.beat ? 'done' : i === state.beat ? 'current' : 'todo'}>
               <button type="button" onClick={() => act({ type: 'jump', beat: i })} aria-current={i === state.beat ? 'step' : undefined} title={`${i + 1}. ${b.title}`}>
-                <span className="pz-track-label">{b.label}</span>
+                <span className="pz-track-label">{trackLabel(b)}</span>
               </button>
             </li>
           ))}
         </ol>
-        <button type="button" className="pz-tool" onClick={() => act({ type: 'next' })} aria-label="Next (→)" title="Next (→)" disabled={state.beat === n - 1 && state.step >= beat.steps - 1}><IconNext /></button>
-        <span className="pz-count num" aria-hidden="true">{state.beat + 1}/{n}</span>
-        <span className="pz-bar-sep" aria-hidden="true" />
+        <p className="pz-now" aria-hidden="true"><span className="pz-now-step">{stepCaption(beat, state)}</span><span className="pz-count num">{state.beat + 1} / {n}</span></p>
         {revealable && (beat.steps === 2 || beat.kind === 'engine') && (
-          <button type="button" className="pz-tool pz-tool-strong" onClick={() => act({ type: 'reveal' })} title="Reveal (R)"><span>Reveal</span><kbd>R</kbd></button>
+          <button type="button" className="pz-tool pz-tool-big pz-tool-strong" onClick={() => act({ type: 'reveal' })} title="Reveal (R)"><span>Reveal</span><kbd>R</kbd></button>
         )}
+        <button type="button" className="pz-tool pz-tool-big pz-tool-next" onClick={() => act({ type: 'next' })} aria-label="Next (→)" title="Next (→)" disabled={state.beat === n - 1 && state.step >= beat.steps - 1}><span>Next</span><IconNext /></button>
+        <span className="pz-bar-sep" aria-hidden="true" />
         <button type="button" className="pz-tool" onClick={() => act({ type: 'notes' })} aria-pressed={state.notes} aria-label="Presenter notes (P)" title="Presenter notes (P)"><IconNotes /></button>
         <button type="button" className="pz-tool" onClick={() => act({ type: 'blank' })} aria-label="Black screen (B)" title="Black screen (B)"><IconBlank /></button>
         <button type="button" className="pz-tool" onClick={toggleFullscreen} aria-pressed={isFull} aria-label="Full screen (F)" title={fullRefused && !isFull ? 'Full screen (F) — the browser needs a key press or click first' : 'Full screen (F)'}><IconFullscreen /></button>

@@ -6,6 +6,8 @@ import type { ThresholdScenarioGen, ThresholdSpec, ThresholdStageGen } from '../
 import { fractionWords, requiredCount, stagePasses } from '../../../../packages/kit-engines/threshold.ts';
 import { aiLabel, groupThousands } from './displayText.ts';
 import type { QuoteLike } from './linking.ts';
+import { choiceFeedback } from './feedback.ts';
+import type { ChoiceFeedback } from './feedback.ts';
 
 /** How many presenter steps (→ presses inside the part's presentation beat) this view uses: one per try-it scenario. */
 export function thresholdPresentationSteps(spec: ThresholdSpec): number {
@@ -114,6 +116,20 @@ export function verdictText(spec: ThresholdSpec, outcome: VoteOutcome): { headli
   if (s === undefined || stage === undefined) return { headline: 'It fails', detail: '' };
   const short = `${countText(-s.margin)} short of the ${countText(s.need)} needed`;
   return { headline: 'It fails', detail: multi ? `${aiLabel(stage.body.trim())}: ${short}.` : `${short}.` };
+}
+
+/**
+ * A learner's pass/fail prediction against the engine's outcome, in the shared feedback voice (lib/feedback.ts):
+ * 'It passes predicted · it fails · 1 short of the 270 needed'.
+ */
+export function thresholdFeedback(spec: ThresholdSpec, outcome: VoteOutcome, guess: 'pass' | 'fail'): ChoiceFeedback {
+  const v = verdictText(spec, outcome);
+  return choiceFeedback({
+    predicted: guess === 'pass' ? 'it passes' : 'it fails',
+    outcome: outcome.passes ? 'it passes' : 'it fails',
+    why: v.detail,
+    right: (guess === 'pass') === outcome.passes,
+  });
 }
 
 /** Whole numbers a text states (thousands commas allowed): '38 of 50 States' → [38, 50]. */

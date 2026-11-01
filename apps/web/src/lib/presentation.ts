@@ -16,10 +16,13 @@ import { linkKey, linkKeysOf } from './linking.ts';
 import type { QuoteLike } from './linking.ts';
 import { compareConcealed, planPredict } from './compare.ts';
 import { concealedKeys } from './conceal.ts';
-import { aiLabel, amountText, groupThousands } from './displayText.ts';
+import { aiLabel } from './displayText.ts';
 import { gradeCaseGuess } from './explorer.ts';
-import { trimmed } from './format.ts';
 import { gradePrediction, parseGuess, studentTolerance } from './predictions.ts';
+import { gradeFeedback } from './feedback.ts';
+import type { FeedbackLevel } from './feedback.ts';
+import { mostVisualFirst } from './partOrder.ts';
+import type { PartKind } from './partOrder.ts';
 import type { PredictPlan } from './compare.ts';
 import type { CheckTally, QuoteTally } from './provenance.ts';
 import { isTimelineSpec, pairOptions } from './timeline.ts';
@@ -175,7 +178,7 @@ const CUE = {
   objectives: 'Say what the class will find out. Press → for each objective.',
   quiz: 'Read the question aloud and let the class vote (hands or cards). Click the option most chose, then press R.',
   compare: 'One cell is hidden. Let the class choose its value, click their choice, then press R.',
-  predict: 'Collect a few estimates, agree on one class prediction and type it in, then press R for the engine’s value.',
+  predict: 'Collect a few estimates, agree on one class prediction and type it in, then press R. The value shown is worked out by code from this case’s inputs; within 2% counts as right.',
   pair: 'Let the class vote on which came first, click the event most chose, then press R for the dates.',
   stage: 'Run it with the class. The controls work as in the lesson.',
   engine: 'Ask the question on screen and let the class decide, then press R. Press → for the next question.',
@@ -288,12 +291,35 @@ function partBeats(part: DeckPart, n: number): Beat[] {
   }
 }
 
-/** The beats of a deck, in order: title, overview or objectives, key terms, each part's beats, closing. */
+/** A deck part's kind for the "most visual part" rule (lib/partOrder.ts). */
+export function deckPartKind(part: DeckPart): PartKind {
+  if (part.kind === 'kit') return part.spec.componentId;
+  return isTimelineSpec(part.spec) ? 'timeline' : 'simulation';
+}
+
+/** The parts in teaching order: the most visual part first, other visual parts next, quizzes and sequences after. */
+export function teachingOrder(parts: readonly DeckPart[]): DeckPart[] {
+  return mostVisualFirst(parts, deckPartKind);
+}
+
+/** The AI summary's slide heading: a plain recap, never "what the page says" (that is for real quotes). */
+export const SUMMARY_HEADING = 'In short';
+export const SUMMARY_NOTE = 'AI-written summary';
+
+/**
+ * The beats of a deck, in teaching order: title, objectives (classic runs), then each part's beats with the most visual
+ * part first (the hook), then the AI summary ("In short") and the key terms, which would answer the questions if they
+ * came first, then the closing. Presenting starts on the hook (heroBeatIndex); the title stays one ← away.
+ */
 export function planBeats(deck: Deck): Beat[] {
   const beats: Beat[] = [{ kind: 'title', id: 'title', label: 'Title', title: aiLabel(deck.headline), steps: 1, quotes: [], cue: CUE.title }];
+  if (deck.objectives.length > 0) {
+    beats.push({ kind: 'objectives', id: 'objectives', label: 'Goals', title: 'What we will find out', steps: deck.objectives.length, quotes: [], cue: CUE.objectives });
+  }
+  teachingOrder(deck.parts).forEach((part, i) => { beats.push(...partBeats(part, i + 1)); });
   const ov = deck.overview;
   if (ov !== null && ov.keyPoints.length > 0) {
-    beats.push({ kind: 'overview', id: 'overview', label: 'Overview', title: 'What the page says', steps: ov.keyPoints.length, quotes: uniqueQuotes(ov.keyPoints), cue: CUE.overview });
+    beats.push({ kind: 'overview', id: 'overview', label: SUMMARY_HEADING, title: SUMMARY_HEADING, steps: ov.keyPoints.length, quotes: uniqueQuotes(ov.keyPoints), cue: CUE.overview });
   }
   if (ov !== null && ov.keyTerms.length > 0) {
     beats.push({
@@ -301,12 +327,55 @@ export function planBeats(deck: Deck): Beat[] {
       termQuotes: ov.keyTerms.map((t) => ({ sourceId: t.sourceId, quote: t.quote })),
     });
   }
-  if (deck.objectives.length > 0) {
-    beats.push({ kind: 'objectives', id: 'objectives', label: 'Goals', title: 'What we will find out', steps: deck.objectives.length, quotes: [], cue: CUE.objectives });
-  }
-  deck.parts.forEach((part, i) => { beats.push(...partBeats(part, i + 1)); });
   beats.push({ kind: 'closing', id: 'closing', label: 'Sources', title: 'Where this came from', steps: 1, quotes: [], cue: CUE.closing });
   return beats;
+}
+
+const PART_BEATS: ReadonlySet<BeatKind> = new Set<BeatKind>(['engine', 'predict', 'stage', 'compare', 'quiz']);
+
+/** The hook: the first beat of the first part (the most visual ask), or 0 when the deck has no part. */
+export function heroBeatIndex(beats: readonly Beat[]): number {
+  const i = beats.findIndex((b) => PART_BEATS.has(b.kind));
+  return i < 0 ? 0 : i;
+}
+
+/** A start beat meaning "open on the hook" (Present button, a `?present=` link without `&beat=`). */
+export const HOOK_BEAT = -1;
+
+/**
+ * The one-line credit on the hook slide, so the first slide shown carries the source and the AI disclosure: page ·
+ * publisher · licence · "AI-written, teacher review pending". Null without source information.
+ */
+export function creditLine(source: DeckSource | null): string | null {
+  const card = titleCard(source);
+  if (card === null) return null;
+  return [card.name, card.from, card.licence, 'AI-written, teacher review pending'].filter((x): x is string => x !== null && x.trim() !== '').join(' · ');
+}
+
+/** A beat's name on the bar's track, short enough to stay whole beside its neighbours ('Q2' for a quiz card). */
+export function trackLabel(beat: Beat): string {
+  return beat.kind === 'quiz' ? `Q${beat.number}` : beat.label;
+}
+
+/** The bar's "where am I" line: the beat's label and, on a beat that builds or asks several questions, the step. */
+export function stepCaption(beat: Beat, s: Pick<PresentState, 'step' | 'revealed'>): string {
+  const step = Math.max(0, Math.min(beat.steps - 1, s.step));
+  switch (beat.kind) {
+    case 'engine':
+      return beat.steps > 1 ? `${beat.label} · step ${step + 1} of ${beat.steps}${s.revealed ? ' · revealed' : ''}` : `${beat.label}${s.revealed ? ' · revealed' : ''}`;
+    case 'overview':
+      return `${beat.label} · point ${step + 1} of ${beat.steps}`;
+    case 'objectives':
+      return `${beat.label} · ${step + 1} of ${beat.steps}`;
+    case 'terms':
+      return step === 0 ? `${beat.label} · ask first` : `${beat.label} · meaning ${step} of ${beat.steps - 1}`;
+    case 'quiz':
+      return `Question ${beat.number} of ${beat.of}${isRevealed(beat, step) ? ' · revealed' : ''}`;
+    case 'predict': case 'compare':
+      return beat.steps > 1 ? `${beat.label} · ${isRevealed(beat, step) ? 'revealed' : 'ask'}` : beat.label;
+    default:
+      return beat.label;
+  }
 }
 
 /** How many items of a building beat are shown at `step`: overview points / objectives (first one on arrival), term meanings (none on arrival). */
@@ -376,21 +445,16 @@ export function revealDelayMs(target: PredictTarget): number {
 }
 
 /**
- * The verdict line under a revealed numeric predict beat: the class number against the checked value, graded with the
- * teaching margin (engine cases: max(case tolerance, 2 %); formula cases: 2 %). Null when no class number was entered.
+ * The verdict under a revealed numeric predict beat, in the lesson's voice (lib/feedback.ts): the class number against
+ * the checked value, graded with the teaching margin (engine cases: max(case tolerance, 2 %); formula cases: 2 %).
+ * `headline` + `detail` are the slide's two lines, `text` the one compact line. Null when no class number was entered.
  */
-export function predictVerdict(answer: NumericAnswer, guessRaw: string, caseTolerance: number | null): { within: boolean; text: string; headline: string; detail: string } | null {
+export function predictVerdict(answer: NumericAnswer, guessRaw: string, caseTolerance: number | null): { within: boolean; level: FeedbackLevel; text: string; headline: string; detail: string } | null {
   const guess = parseGuess(guessRaw);
   if (guess === null) return null;
   const g = caseTolerance === null ? gradeCaseGuess(guess, answer.value) : gradePrediction(guess, answer.value, studentTolerance(answer.value, caseTolerance));
-  const unit = answer.unit === '' ? '' : ` ${answer.unit}`;
-  const said = `Class prediction ${groupThousands(trimmed(guess, 4))}${unit}`;
-  const margin = `±${amountText(g.tolerance, answer.unit)}`;
-  const gap = amountText(Math.abs(g.error), answer.unit);
-  const way = g.direction === 'high' ? 'high' : 'low';
-  return g.withinTolerance
-    ? { within: true, text: `${said} · inside the ${margin} margin`, headline: 'Close enough', detail: `Inside the ${margin} margin` }
-    : { within: false, text: `${said} · off by ${gap}, too ${way}`, headline: `Off by ${gap}`, detail: `Too ${way}` };
+  const f = gradeFeedback(g, { unit: answer.unit, format: (n) => (n === answer.value ? answer.display : String(n)) });
+  return { within: f.ok, level: f.level, text: f.line, headline: f.headline, detail: f.detail };
 }
 
 // ---- navigation ---------------------------------------------------------------------------------------------------
@@ -434,7 +498,9 @@ function typeInto(prev: string, key: string): string {
 const clampBeat = (beats: readonly Beat[], n: number): number => (Number.isFinite(n) ? Math.max(0, Math.min(beats.length - 1, Math.trunc(n))) : 0);
 
 export function initialPresent(beats: readonly Beat[], beat = 0): PresentState {
-  return { beat: clampBeat(beats, beat), step: 0, blank: false, blankTone: 'black', notes: false, help: false, answers: {}, revealed: false };
+  // A negative start (HOOK_BEAT) opens on the hook: the first part's first beat.
+  const at = Number.isFinite(beat) && beat < 0 ? heroBeatIndex(beats) : clampBeat(beats, beat);
+  return { beat: at, step: 0, blank: false, blankTone: 'black', notes: false, help: false, answers: {}, revealed: false };
 }
 
 /** Whether the current beat shows its answer: an engine beat's current step after R, any other beat at its last step. */
@@ -571,13 +637,13 @@ export const KEY_MAP: readonly { keys: string; does: string }[] = [
 
 // ---- deep link ----------------------------------------------------------------------------------------------------
 
-/** `?present=<jobId>[&beat=N]` (N is 1-based on the address bar, 0-based here). */
+/** `?present=<jobId>[&beat=N]` (N is 1-based on the address bar, 0-based here); without a valid `&beat=` it opens on the hook (HOOK_BEAT). */
 export function presentRequest(search: string): { jobId: string; beat: number } | null {
   const q = new URLSearchParams(search);
   const jobId = q.get('present');
   if (jobId === null || jobId === '') return null;
   const n = Number(q.get('beat'));
-  return { jobId, beat: Number.isInteger(n) && n >= 1 ? n - 1 : 0 };
+  return { jobId, beat: q.get('beat') !== null && Number.isInteger(n) && n >= 1 ? n - 1 : HOOK_BEAT };
 }
 
 /** The address while presenting: other parameters kept, `job` replaced by `present` and the 1-based beat. */

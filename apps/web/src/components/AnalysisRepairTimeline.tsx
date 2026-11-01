@@ -18,7 +18,7 @@ function Checks({ checks, tone }: { checks: readonly CheckRef[]; tone: 'ok' | 'b
     <span className="check-ids">
       {checks.map((c) => (
         <span key={c.id} className={`check-id check-id-${tone}`} title={c.id}>
-          {c.name !== c.id ? <>{c.name} <code className="check-code tech">{c.id}</code></> : <code className="check-code">{c.id}</code>}
+          {c.name !== c.id ? <>{c.name} <code className="check-code tech">{c.id}</code></> : <><span className="no-tech">A check</span><code className="check-code tech">{c.id}</code></>}
         </span>
       ))}
     </span>
@@ -27,7 +27,7 @@ function Checks({ checks, tone }: { checks: readonly CheckRef[]; tone: 'ok' | 'b
 
 /**
  * Source-analysis repairs (TASK-024c): Muse's first analysis failed a check → what failed, in words → Muse's repair
- * (a before/after diff) → checks passed. A NATURAL repair: Muse's own mistake, never a system-made demo fault.
+ * (a before/after diff) → checks passed. Labelled "Revised by Muse after a failed check": Muse's own mistake, never a system-made demo fault.
  */
 export function AnalysisRepairTimeline({ steps, overall, model }: AnalysisRepairTimelineProps) {
   if (steps.length === 0) return null;
@@ -68,9 +68,9 @@ export function AnalysisRepairTimeline({ steps, overall, model }: AnalysisRepair
                 <ul className="fail-list">
                   {s.failedBefore.map((f) => (
                     <li key={f.id}>
-                      <span className="check-id check-id-bad" title={f.id}>{f.name !== f.id ? <>{f.name} <code className="check-code tech">{f.id}</code></> : <code className="check-code">{f.id}</code>}</span>
+                      <span className="check-id check-id-bad" title={f.id}>{f.name !== f.id ? <>{f.name} <code className="check-code tech">{f.id}</code></> : <><span className="no-tech">A check</span><code className="check-code tech">{f.id}</code></>}</span>
                       {f.plain !== null && <span className="plain"> {f.plain}</span>}
-                      {f.message !== null && <span className="muted"> Checker said: <q className="checker-msg">{f.message}</q></span>}
+                      {f.message !== null && <span className="muted tech"> Checker said: <q className="checker-msg">{f.message}</q></span>}
                     </li>
                   ))}
                 </ul>
@@ -107,7 +107,7 @@ export function AnalysisRepairTimeline({ steps, overall, model }: AnalysisRepair
                       {s.after.checks.map((c) => (
                         <li key={c.id} className={c.passed ? 'after-ok' : 'after-bad'}>
                           <Mark kind={c.passed ? 'ok' : 'bad'} label={c.passed ? 'passed' : 'failed'} />
-                          {c.name !== c.id ? <>{c.name} <code className="check-code tech">{c.id}</code></> : <code className="check-code">{c.id}</code>}
+                          {c.name !== c.id ? <>{c.name} <code className="check-code tech">{c.id}</code></> : <><span className="no-tech">A check</span><code className="check-code tech">{c.id}</code></>}
                         </li>
                       ))}
                     </ul>

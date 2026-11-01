@@ -11,6 +11,8 @@ interface Props {
   overview: OverviewSpec;
   /** Stage 9: the overview has just arrived in a building lesson; its points come in one by one (CSS, on mount only). */
   live?: boolean;
+  /** Set B: the lesson at rest shows the overview after its first activity, headed "Lesson notes" with an "In short" summary. */
+  notes?: boolean;
 }
 
 const points = (n: number): string => `${n} more ${n === 1 ? 'point' : 'points'}`;
@@ -21,7 +23,7 @@ const points = (n: number): string => `${n} more ${n === 1 ? 'point' : 'points'}
  * sentence in the source page, which is how a teacher sees where it comes from. Every quote is still checked and still
  * highlighted in the source text.
  */
-export function OverviewView({ overview, live = false }: Props) {
+export function OverviewView({ overview, live = false, notes = false }: Props) {
   const headId = useId();
   const moreId = useId();
   const [open, setOpen] = useState(false);
@@ -32,8 +34,15 @@ export function OverviewView({ overview, live = false }: Props) {
     ? `Key terms (${terms.length})${more.length > 0 ? ` and ${points(more.length)}` : ''}`
     : points(more.length);
   return (
-    <section className="overview overview-compact" aria-labelledby={headId} data-testid="overview" data-arrive={live ? 'true' : undefined} style={live ? ({ '--n': lead.length } as CSSProperties) : undefined}>
-      <h2 id={headId} className="sr-only">Page overview</h2>
+    <section className={`overview overview-compact${notes ? ' lesson-notes' : ''}`} aria-labelledby={headId} data-testid="overview" data-arrive={live ? 'true' : undefined} style={live ? ({ '--n': lead.length } as CSSProperties) : undefined}>
+      {notes
+        ? (
+          <>
+            <h2 id={headId} className="notes-title">Lesson notes</h2>
+            <h3 className="notes-sub">In short</h3>
+          </>
+        )
+        : <h2 id={headId} className="sr-only">Page overview</h2>}
       <ul className="key-points" aria-label="Key points">
         {lead.map((p, i) => (
           <Linked as="li" key={p.id} links={linkKeysOf([p])} tabIndex={0} style={live ? ({ '--i': i } as CSSProperties) : undefined}>

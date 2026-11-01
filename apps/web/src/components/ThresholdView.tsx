@@ -5,7 +5,7 @@ import type { CSSProperties } from 'react';
 import type { ThresholdSpec } from '../../../../packages/contracts/kit.ts';
 import type { EnginePresentation } from '../lib/enginePresentation.ts';
 import {
-  clampVotes, countText, quoteLeaksNeed, scenarioQuestion, scenarioTitle, scenarioTitleShown, stageInfo, thresholdPresentationSteps, thresholdRevealState,
+  clampVotes, countText, quoteLeaksNeed, scenarioQuestion, scenarioTitle, scenarioTitleShown, stageInfo, thresholdFeedback, thresholdPresentationSteps, thresholdRevealState,
   verdictText, voteOutcome,
 } from '../lib/thresholdView.ts';
 import type { StageInfo, StageOutcome } from '../lib/thresholdView.ts';
@@ -135,7 +135,8 @@ export function ThresholdView({ spec, cite: _cite, presentation }: ThresholdView
     setOwn(next);
   };
   const answer = (g: Guess): void => { setGuess(g); setShown(true); };
-  const right = guess !== null && (guess === 'pass') === outcome.passes;
+  // A learner's own prediction is answered in the shared feedback voice; a plain reveal (or a tried count) shows the verdict.
+  const feedback = !staged && guess !== null && own === null ? thresholdFeedback(spec, outcome, guess) : null;
 
   return (
     <div className="th" data-mode={staged ? 'stage' : 'lesson'} data-testid="threshold">
@@ -181,13 +182,28 @@ export function ThresholdView({ spec, cite: _cite, presentation }: ThresholdView
           )}
         </div>
         <div data-on={revealed ? 'true' : 'false'} aria-hidden={revealed ? undefined : true} role="status">
-          <p className={`th-verdict ${outcome.passes ? 'th-ok' : 'th-bad'}`}>
-            <Mark kind={outcome.passes ? 'ok' : 'bad'} /><strong>{verdict.headline}</strong>
-            <span className="th-verdict-detail">{verdict.detail}{!staged && guess !== null && own === null ? ` ${right ? 'Your prediction was right.' : 'Not what you predicted.'}` : ''}</span>
-          </p>
+          {feedback !== null ? (
+            <p className={`th-verdict ${feedback.ok ? 'th-ok' : 'th-bad'}`} data-level={feedback.level}>
+              <Mark kind={feedback.ok ? 'ok' : 'bad'} /><strong>{feedback.label}</strong>
+              <span className="th-verdict-detail">{feedback.line}</span>
+            </p>
+          ) : (
+            <p className={`th-verdict ${outcome.passes ? 'th-ok' : 'th-bad'}`}>
+              <Mark kind={outcome.passes ? 'ok' : 'bad'} /><strong>{verdict.headline}</strong>
+              <span className="th-verdict-detail">{verdict.detail}</span>
+            </p>
+          )}
         </div>
       </div>
-      {!staged && <p className="th-fine">{multi ? 'Every stage must pass. ' : ''}Required counts are worked out by code from the page’s rule; the try-it counts are examples, not page facts.</p>}
+      {!staged && (
+        <div className="th-fine">
+          <p>{multi ? 'Every stage must pass. ' : ''}The try-it counts are examples, not page facts.</p>
+          <details className="fb-more">
+            <summary>How the count is found</summary>
+            <p>The required count is worked out by code from the page’s rule, not written by the AI.</p>
+          </details>
+        </div>
+      )}
     </div>
   );
 }

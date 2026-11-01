@@ -70,7 +70,7 @@ test('lesson repair counts use each component’s latest attempt and keep natura
   assert.deepEqual(counts, { natural: 2, system: 1, failed: 1 });
   assert.deepEqual(repairPhrases(counts).map((p) => p.tone), ['neutral', 'fault', 'bad']);
   assert.equal(repairPhrases(counts)[1]?.text, '1 system-made fault (planted on purpose, not a model error)');
-  assert.equal(repairPhrases(counts)[0]?.text, '2 natural repairs (Muse’s own mistake)');
+  assert.equal(repairPhrases(counts)[0]?.text, '2 revisions by Muse after failed checks');
   assert.deepEqual(repairPhrases({ natural: 0, system: 0, failed: 0 }), []);
 });
 
