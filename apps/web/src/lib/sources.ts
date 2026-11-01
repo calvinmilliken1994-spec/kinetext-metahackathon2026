@@ -146,7 +146,7 @@ export function sourceLicenseText(m: SourceMetaLike): string {
 
 /** Option text in the source select: teacher sources are tagged with their licence; library sources stay as they were. */
 export function sourceOptionLabel(m: SourceMetaLike): string {
-  return m.kind === 'user' ? `${m.title} — ${TEACHER_TAG} · ${sourceLicenseText(m)}` : m.title;
+  return m.kind === 'user' ? `${m.title} — ${TEACHER_TAG} · ${sourceLicenseText(m)}` : capFirst(m.title);
 }
 
 /** Project convention for licensed library sources: "Source material: <publisher>, <work>. …" (see packages/validation). */
@@ -192,7 +192,19 @@ export function disclosureText(m: SourceMetaLike | null | undefined, made = 'Mus
  */
 export function shortTitle(title: string): string {
   const cut = title.indexOf(' — ');
-  return cut > 0 ? title.slice(0, cut) : title;
+  return capFirst(cut > 0 ? title.slice(0, cut) : title);
+}
+
+/**
+ * A title shown as a heading starts with a capital: some publishers print page names in lower case ("hash table").
+ * Words written with an inner capital keep their spelling ("pH and Water", "mRNA"). Display only: stored titles are
+ * untouched.
+ */
+export function capFirst(title: string): string {
+  const first = title.charAt(0);
+  const second = title.charAt(1);
+  if (first === '' || first === first.toUpperCase() || (second !== '' && second !== second.toLowerCase())) return title;
+  return first.toUpperCase() + title.slice(1);
 }
 
 // ---- demo fault choice (generate control) --------------------------------------------------------------------

@@ -5,7 +5,7 @@ import { USER_LICENSES, USER_SOURCE_LIMITS, validateUserSourceInput } from '../.
 import {
   demoFaultOptions, demoFaultToSend, disclosureText, EMPTY_FORM, FREE_CREDITS_NOTE, isHttpUrl, licenseLabel, licenseOptions, problemMessage,
   problemsByField, RIGHTS_LABEL, sourceLicenseText, sourceOptionLabel, sourcePublisher, textCount, validateSourceForm,
-  reuseNotice, shortTitle,
+  capFirst, reuseNotice, shortTitle,
 } from './sources.ts';
 import type { SourceFormValues } from './sources.ts';
 
@@ -257,4 +257,13 @@ test('S5-07: a reused source is disclosed with its stored title and licence', ()
     reuseNotice({ id: 'user-abc', title: 'First title', kind: 'user', reused: true }),
     'This text was already saved as “First title”. Using the existing source; its title, licence and attribution were not changed.',
   );
+});
+
+test('page titles start with a capital in headers and pickers, unless the first word is written with an inner capital (pH, mRNA)', () => {
+  assert.equal(shortTitle('hash table — NIST Dictionary of Algorithms and Data Structures'), 'Hash table');
+  assert.equal(shortTitle('big-O notation — NIST Dictionary of Algorithms and Data Structures'), 'Big-O notation');
+  assert.equal(shortTitle('pH and Water — USGS Water Science School'), 'pH and Water');
+  assert.equal(capFirst('mRNA basics'), 'mRNA basics');
+  assert.equal(capFirst('Fueling Life'), 'Fueling Life');
+  assert.equal(capFirst(''), '');
 });

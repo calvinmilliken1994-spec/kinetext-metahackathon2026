@@ -17,6 +17,7 @@ import type { QuoteLike } from './linking.ts';
 import { compareConcealed, planPredict } from './compare.ts';
 import { concealedKeys } from './conceal.ts';
 import { aiLabel } from './displayText.ts';
+import { capFirst } from './sources.ts';
 import { gradeCaseGuess } from './explorer.ts';
 import { gradePrediction, parseGuess, studentTolerance } from './predictions.ts';
 import { gradeFeedback } from './feedback.ts';
@@ -679,7 +680,7 @@ const PROJECT_TEAM = /^\s*Written by the Make knowledge interactive project team
 export function titleCard(source: DeckSource | null): { name: string; from: string | null; licence: string } | null {
   if (source === null) return null;
   const at = source.title.indexOf(' — ');
-  const name = at > 0 ? source.title.slice(0, at).trim() : source.title.trim();
+  const name = capFirst(at > 0 ? source.title.slice(0, at).trim() : source.title.trim());
   let from: string | null = at > 0 ? source.title.slice(at + 3).trim() : null;
   if (PROJECT_TEAM.test(source.attribution)) from = 'Written by the project team';
   else if (source.kind === 'user' && from === null) from = 'A teacher’s own text';

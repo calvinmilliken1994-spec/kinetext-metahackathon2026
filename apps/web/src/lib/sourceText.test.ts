@@ -44,3 +44,10 @@ test('highlight keys survive the extra cuts, so a quote that crosses a heading m
   const inHeading = sourcePieces(text, [{ start: 0, end: 5, keys: ['h'] }, { start: 5, end: text.length, keys: [] }], markdownDecorations(text));
   assert.equal(inHeading.filter((p) => p.keys.includes('h')).map((p) => text.slice(p.start, p.end)).join(''), '# Tit');
 });
+
+test('a lowercase page heading gets its first letter shown as a capital (CSS only; the stored text is unchanged)', () => {
+  const caps = markdownDecorations('# hash table\nbody').filter(d => d.kind === 'md-cap');
+  assert.deepEqual(caps, [{ start: 2, end: 3, kind: 'md-cap' }]);
+  assert.deepEqual(markdownDecorations('# pH and Water\nbody').filter(d => d.kind === 'md-cap'), []);
+  assert.deepEqual(markdownDecorations('# Drag\nbody').filter(d => d.kind === 'md-cap'), []);
+});

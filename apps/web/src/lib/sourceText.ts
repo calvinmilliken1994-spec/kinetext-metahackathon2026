@@ -10,7 +10,7 @@ export interface Decoration {
    * ALL-CAPS label ("TOPIC:"); 'md-join' marks the whitespace between a label line and its short value, which the pane
    * renders with `white-space: normal` so it collapses to one space (the characters stay in the DOM).
    */
-  kind: 'hide' | 'md-h1' | 'md-h2' | 'md-pipe' | 'md-row' | 'md-label' | 'md-join';
+  kind: 'hide' | 'md-h1' | 'md-h2' | 'md-pipe' | 'md-row' | 'md-label' | 'md-join' | 'md-cap';
 }
 
 export interface Segment { start: number; end: number; keys: readonly string[] }
@@ -42,6 +42,11 @@ export function markdownDecorations(text: string): Decoration[] {
       const level = (heading[1] as string).length;
       const textEnd = line.endsWith('\r') ? lineEnd - 1 : lineEnd;
       if (textEnd > lineStart + marker) out.push({ start: lineStart + marker, end: textEnd, kind: level === 1 ? 'md-h1' : 'md-h2' });
+      // A lowercase heading ("hash table") shows its first letter as a capital via CSS ('md-cap'); the stored character
+      // and every offset stay the same. Inner-capital words ("pH", "mRNA") are left as written.
+      const h0 = line.charAt(marker);
+      const h1 = line.charAt(marker + 1);
+      if (h0 !== h0.toUpperCase() && (h1 === '' || h1 === h1.toLowerCase())) out.push({ start: lineStart + marker, end: lineStart + marker + 1, kind: 'md-cap' });
     } else if (TABLE_SEPARATOR.test(line) && line.includes('-')) {
       // The |---|---| row carries no text: hide it with its line break.
       out.push({ start: lineStart, end: nl < 0 ? lineEnd : nl + 1, kind: 'hide' });
