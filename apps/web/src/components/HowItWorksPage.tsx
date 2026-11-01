@@ -122,19 +122,3 @@ export function HowItWorksPage({ library, access, onDemo, onNewLesson, onEnterCo
     </div>
   );
 }
-
-/** Review and publish / Results until their slice lands: one calm sentence, nothing fake. */
-export function PlaceholderPage({ kind, onBack, backLabel }: { kind: 'review' | 'results'; onBack: (() => void) | null; backLabel: string }) {
-  const review = kind === 'review';
-  return (
-    <div className={`page page-soon page-${kind}`} data-testid={`${kind}-page`}>
-      <header className="page-head">
-        <h1 className="page-title" tabIndex={-1} data-view-title>{review ? 'Review and publish' : 'Results'}</h1>
-        <p className="page-lede">
-          {review ? 'Teacher review and publishing open here.' : 'Evaluation results for both models open here.'}
-        </p>
-      </header>
-      {onBack !== null && <p><button type="button" className="btn" onClick={onBack}>{backLabel}</button></p>}
-    </div>
-  );
-}

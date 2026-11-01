@@ -1,0 +1,1466 @@
+{
+  "version": 1,
+  "evaluation": {
+    "title": "Final evaluation",
+    "preRegisteredAt": "2026-10-31",
+    "reportGeneratedAt": "2026-10-31T20:16:23",
+    "pages": 97,
+    "runsPerPage": 2,
+    "jobsPerModel": 194,
+    "promptVersion": "s6-v10",
+    "maxRepairAttempts": 2,
+    "subjects": 9,
+    "figurePages": 8,
+    "figuresGivenTo": "muse-spark-1.3",
+    "paired": {
+      "pages": 97,
+      "sparkAhead": 18,
+      "openAhead": 11,
+      "tied": 68
+    },
+    "models": [
+      {
+        "id": "muse-spark-1.3",
+        "label": "Muse Spark 1.3",
+        "route": "Meta Model API",
+        "providerModel": null,
+        "jobs": 194,
+        "lessons": {
+          "k": 189,
+          "n": 194,
+          "rate": 0.9742,
+          "ci95": [
+            0.9411,
+            0.9889
+          ]
+        },
+        "lessonsOfUsable": {
+          "k": 189,
+          "n": 192,
+          "rate": 0.9844,
+          "ci95": [
+            0.9551,
+            0.9947
+          ]
+        },
+        "declined": {
+          "k": 2,
+          "n": 194,
+          "rate": 0.0103,
+          "ci95": [
+            0.0028,
+            0.0368
+          ]
+        },
+        "failed": {
+          "k": 3,
+          "n": 194,
+          "rate": 0.0155,
+          "ci95": [
+            0.0053,
+            0.0445
+          ]
+        },
+        "errorCodes": [
+          {
+            "code": "NETWORK_ERROR",
+            "count": 1
+          },
+          {
+            "code": "TIMEOUT",
+            "count": 1
+          },
+          {
+            "code": "ANALYSIS_INVALID",
+            "count": 1
+          }
+        ],
+        "parts": {
+          "planned": 379,
+          "published": 348,
+          "rate": {
+            "k": 348,
+            "n": 379,
+            "rate": 0.9182,
+            "ci95": [
+              0.8862,
+              0.9418
+            ]
+          },
+          "perLesson": 1.794,
+          "firstTry": {
+            "k": 303,
+            "n": 379,
+            "rate": 0.7995,
+            "ci95": [
+              0.7562,
+              0.8367
+            ]
+          },
+          "naturalRepair": {
+            "k": 45,
+            "n": 76,
+            "rate": 0.5921,
+            "ci95": [
+              0.4798,
+              0.6956
+            ]
+          },
+          "passedInFailedJobs": 1
+        },
+        "analysisRepairs": 22,
+        "wallS": {
+          "p50": 75.286,
+          "p90": 144.82,
+          "max": 251.174
+        },
+        "cost": {
+          "totalUSD": 29.1409,
+          "perLessonUSD": 0.1502,
+          "perPublishedPartUSD": 0.0837,
+          "failedPartsUSD": 4.2126
+        },
+        "sam": {
+          "calls": 23,
+          "usd": 0.0575
+        },
+        "consistency": {
+          "pages": 97,
+          "sameOutcome": {
+            "k": 94,
+            "n": 97,
+            "rate": 0.9691,
+            "ci95": [
+              0.913,
+              0.9894
+            ]
+          },
+          "samePlan": {
+            "k": 74,
+            "n": 97,
+            "rate": 0.7629,
+            "ci95": [
+              0.6693,
+              0.8365
+            ]
+          },
+          "samePublishedCount": {
+            "k": 85,
+            "n": 97,
+            "rate": 0.8763,
+            "ci95": [
+              0.7961,
+              0.9278
+            ]
+          }
+        },
+        "engines": [
+          {
+            "id": "quiz-cards-v1",
+            "label": "Quiz cards",
+            "planned": 133,
+            "firstTry": 122,
+            "repaired": 11,
+            "failed": 0
+          },
+          {
+            "id": "sequence-v1",
+            "label": "Sequence",
+            "planned": 58,
+            "firstTry": 52,
+            "repaired": 6,
+            "failed": 0
+          },
+          {
+            "id": "compare-table-v1",
+            "label": "Compare table",
+            "planned": 33,
+            "firstTry": 32,
+            "repaired": 1,
+            "failed": 0
+          },
+          {
+            "id": "formula-explorer-v1",
+            "label": "Formula explorer",
+            "planned": 29,
+            "firstTry": 18,
+            "repaired": 0,
+            "failed": 11
+          },
+          {
+            "id": "data-table-v1",
+            "label": "Data table",
+            "planned": 25,
+            "firstTry": 12,
+            "repaired": 10,
+            "failed": 3
+          },
+          {
+            "id": "sort-groups-v1",
+            "label": "Sort",
+            "planned": 18,
+            "firstTry": 17,
+            "repaired": 1,
+            "failed": 0
+          },
+          {
+            "id": "timeline-v1",
+            "label": "Timeline",
+            "planned": 18,
+            "firstTry": 5,
+            "repaired": 7,
+            "failed": 6
+          },
+          {
+            "id": "algorithm-trace-v1",
+            "label": "Algorithm tracer",
+            "planned": 8,
+            "firstTry": 8,
+            "repaired": 0,
+            "failed": 0
+          },
+          {
+            "id": "threshold-v1",
+            "label": "Vote threshold",
+            "planned": 8,
+            "firstTry": 7,
+            "repaired": 1,
+            "failed": 0
+          },
+          {
+            "id": "concept-map-v1",
+            "label": "Concept map",
+            "planned": 10,
+            "firstTry": 3,
+            "repaired": 3,
+            "failed": 4
+          },
+          {
+            "id": "half-life-v1",
+            "label": "Half-life sim",
+            "planned": 4,
+            "firstTry": 4,
+            "repaired": 0,
+            "failed": 0
+          },
+          {
+            "id": "compound-interest-v1",
+            "label": "Compound interest sim",
+            "planned": 6,
+            "firstTry": 5,
+            "repaired": 1,
+            "failed": 0
+          },
+          {
+            "id": "label-diagram-v1",
+            "label": "Label the diagram",
+            "planned": 11,
+            "firstTry": 2,
+            "repaired": 2,
+            "failed": 7
+          },
+          {
+            "id": "forces-1d-v1",
+            "label": "Forces sim",
+            "planned": 4,
+            "firstTry": 4,
+            "repaired": 0,
+            "failed": 0
+          },
+          {
+            "id": "log-ladder-v1",
+            "label": "Log-scale ladder",
+            "planned": 4,
+            "firstTry": 3,
+            "repaired": 1,
+            "failed": 0
+          },
+          {
+            "id": "speed-of-sound-v1",
+            "label": "Speed of sound sim",
+            "planned": 4,
+            "firstTry": 4,
+            "repaired": 0,
+            "failed": 0
+          },
+          {
+            "id": "balance-equation-v1",
+            "label": "Balance equation",
+            "planned": 2,
+            "firstTry": 1,
+            "repaired": 1,
+            "failed": 0
+          },
+          {
+            "id": "hardy-weinberg-v1",
+            "label": "Hardy-Weinberg sim",
+            "planned": 2,
+            "firstTry": 2,
+            "repaired": 0,
+            "failed": 0
+          },
+          {
+            "id": "lift-equation-v1",
+            "label": "Lift sim",
+            "planned": 2,
+            "firstTry": 2,
+            "repaired": 0,
+            "failed": 0
+          }
+        ],
+        "subjects": [
+          {
+            "id": "biology",
+            "label": "Biology",
+            "jobs": 22,
+            "lessons": {
+              "k": 22,
+              "n": 22,
+              "rate": 1,
+              "ci95": [
+                0.8513,
+                1
+              ]
+            },
+            "parts": {
+              "k": 37,
+              "n": 44,
+              "rate": 0.8409,
+              "ci95": [
+                0.7063,
+                0.9207
+              ]
+            }
+          },
+          {
+            "id": "chemistry",
+            "label": "Chemistry",
+            "jobs": 20,
+            "lessons": {
+              "k": 18,
+              "n": 20,
+              "rate": 0.9,
+              "ci95": [
+                0.699,
+                0.9721
+              ]
+            },
+            "parts": {
+              "k": 33,
+              "n": 36,
+              "rate": 0.9167,
+              "ci95": [
+                0.7817,
+                0.9713
+              ]
+            }
+          },
+          {
+            "id": "civics",
+            "label": "Civics",
+            "jobs": 20,
+            "lessons": {
+              "k": 20,
+              "n": 20,
+              "rate": 1,
+              "ci95": [
+                0.8389,
+                1
+              ]
+            },
+            "parts": {
+              "k": 40,
+              "n": 40,
+              "rate": 1,
+              "ci95": [
+                0.9124,
+                1
+              ]
+            }
+          },
+          {
+            "id": "computing",
+            "label": "Computing & AI",
+            "jobs": 20,
+            "lessons": {
+              "k": 20,
+              "n": 20,
+              "rate": 1,
+              "ci95": [
+                0.8389,
+                1
+              ]
+            },
+            "parts": {
+              "k": 39,
+              "n": 40,
+              "rate": 0.975,
+              "ci95": [
+                0.8712,
+                0.9956
+              ]
+            }
+          },
+          {
+            "id": "earth-science",
+            "label": "Earth & space",
+            "jobs": 22,
+            "lessons": {
+              "k": 21,
+              "n": 22,
+              "rate": 0.9545,
+              "ci95": [
+                0.782,
+                0.9919
+              ]
+            },
+            "parts": {
+              "k": 37,
+              "n": 42,
+              "rate": 0.881,
+              "ci95": [
+                0.75,
+                0.9481
+              ]
+            }
+          },
+          {
+            "id": "finance",
+            "label": "Finance",
+            "jobs": 22,
+            "lessons": {
+              "k": 22,
+              "n": 22,
+              "rate": 1,
+              "ci95": [
+                0.8513,
+                1
+              ]
+            },
+            "parts": {
+              "k": 41,
+              "n": 44,
+              "rate": 0.9318,
+              "ci95": [
+                0.8177,
+                0.9765
+              ]
+            }
+          },
+          {
+            "id": "history",
+            "label": "History",
+            "jobs": 22,
+            "lessons": {
+              "k": 20,
+              "n": 22,
+              "rate": 0.9091,
+              "ci95": [
+                0.7218,
+                0.9747
+              ]
+            },
+            "parts": {
+              "k": 35,
+              "n": 41,
+              "rate": 0.8537,
+              "ci95": [
+                0.7156,
+                0.9312
+              ]
+            }
+          },
+          {
+            "id": "maths",
+            "label": "Maths",
+            "jobs": 20,
+            "lessons": {
+              "k": 20,
+              "n": 20,
+              "rate": 1,
+              "ci95": [
+                0.8389,
+                1
+              ]
+            },
+            "parts": {
+              "k": 36,
+              "n": 40,
+              "rate": 0.9,
+              "ci95": [
+                0.7695,
+                0.9604
+              ]
+            }
+          },
+          {
+            "id": "physics",
+            "label": "Physics",
+            "jobs": 26,
+            "lessons": {
+              "k": 26,
+              "n": 26,
+              "rate": 1,
+              "ci95": [
+                0.8713,
+                1
+              ]
+            },
+            "parts": {
+              "k": 50,
+              "n": 52,
+              "rate": 0.9615,
+              "ci95": [
+                0.8702,
+                0.9894
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "muse-spark-open",
+        "label": "Muse Spark Open",
+        "route": "Open weights on Modal",
+        "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+        "jobs": 194,
+        "lessons": {
+          "k": 178,
+          "n": 194,
+          "rate": 0.9175,
+          "ci95": [
+            0.8702,
+            0.9486
+          ]
+        },
+        "lessonsOfUsable": {
+          "k": 178,
+          "n": 192,
+          "rate": 0.9271,
+          "ci95": [
+            0.8813,
+            0.9561
+          ]
+        },
+        "declined": {
+          "k": 2,
+          "n": 194,
+          "rate": 0.0103,
+          "ci95": [
+            0.0028,
+            0.0368
+          ]
+        },
+        "failed": {
+          "k": 14,
+          "n": 194,
+          "rate": 0.0722,
+          "ci95": [
+            0.0435,
+            0.1175
+          ]
+        },
+        "errorCodes": [
+          {
+            "code": "TIMEOUT",
+            "count": 11
+          },
+          {
+            "code": "ANALYSIS_INVALID",
+            "count": 2
+          }
+        ],
+        "parts": {
+          "planned": 374,
+          "published": 342,
+          "rate": {
+            "k": 342,
+            "n": 374,
+            "rate": 0.9144,
+            "ci95": [
+              0.8817,
+              0.9387
+            ]
+          },
+          "perLesson": 1.763,
+          "firstTry": {
+            "k": 272,
+            "n": 374,
+            "rate": 0.7273,
+            "ci95": [
+              0.68,
+              0.7699
+            ]
+          },
+          "naturalRepair": {
+            "k": 70,
+            "n": 102,
+            "rate": 0.6863,
+            "ci95": [
+              0.5909,
+              0.7682
+            ]
+          },
+          "passedInFailedJobs": 13
+        },
+        "analysisRepairs": 86,
+        "wallS": {
+          "p50": 127.925,
+          "p90": 220.174,
+          "max": 307.97
+        },
+        "cost": {
+          "totalUSD": 36.0961,
+          "perLessonUSD": 0.1861,
+          "perPublishedPartUSD": 0.1055,
+          "failedPartsUSD": 4.4435
+        },
+        "sam": {
+          "calls": 0,
+          "usd": 0
+        },
+        "consistency": {
+          "pages": 97,
+          "sameOutcome": {
+            "k": 87,
+            "n": 97,
+            "rate": 0.8969,
+            "ci95": [
+              0.8205,
+              0.943
+            ]
+          },
+          "samePlan": {
+            "k": 55,
+            "n": 97,
+            "rate": 0.567,
+            "ci95": [
+              0.4677,
+              0.6612
+            ]
+          },
+          "samePublishedCount": {
+            "k": 74,
+            "n": 97,
+            "rate": 0.7629,
+            "ci95": [
+              0.6693,
+              0.8365
+            ]
+          }
+        },
+        "engines": [
+          {
+            "id": "quiz-cards-v1",
+            "label": "Quiz cards",
+            "planned": 124,
+            "firstTry": 116,
+            "repaired": 8,
+            "failed": 0
+          },
+          {
+            "id": "sequence-v1",
+            "label": "Sequence",
+            "planned": 81,
+            "firstTry": 72,
+            "repaired": 9,
+            "failed": 0
+          },
+          {
+            "id": "compare-table-v1",
+            "label": "Compare table",
+            "planned": 32,
+            "firstTry": 26,
+            "repaired": 4,
+            "failed": 2
+          },
+          {
+            "id": "formula-explorer-v1",
+            "label": "Formula explorer",
+            "planned": 28,
+            "firstTry": 14,
+            "repaired": 4,
+            "failed": 10
+          },
+          {
+            "id": "data-table-v1",
+            "label": "Data table",
+            "planned": 22,
+            "firstTry": 0,
+            "repaired": 17,
+            "failed": 5
+          },
+          {
+            "id": "sort-groups-v1",
+            "label": "Sort",
+            "planned": 25,
+            "firstTry": 20,
+            "repaired": 3,
+            "failed": 2
+          },
+          {
+            "id": "timeline-v1",
+            "label": "Timeline",
+            "planned": 9,
+            "firstTry": 2,
+            "repaired": 4,
+            "failed": 3
+          },
+          {
+            "id": "algorithm-trace-v1",
+            "label": "Algorithm tracer",
+            "planned": 9,
+            "firstTry": 0,
+            "repaired": 8,
+            "failed": 1
+          },
+          {
+            "id": "threshold-v1",
+            "label": "Vote threshold",
+            "planned": 8,
+            "firstTry": 2,
+            "repaired": 4,
+            "failed": 2
+          },
+          {
+            "id": "concept-map-v1",
+            "label": "Concept map",
+            "planned": 4,
+            "firstTry": 0,
+            "repaired": 2,
+            "failed": 2
+          },
+          {
+            "id": "half-life-v1",
+            "label": "Half-life sim",
+            "planned": 9,
+            "firstTry": 5,
+            "repaired": 3,
+            "failed": 1
+          },
+          {
+            "id": "compound-interest-v1",
+            "label": "Compound interest sim",
+            "planned": 5,
+            "firstTry": 3,
+            "repaired": 0,
+            "failed": 2
+          },
+          {
+            "id": "forces-1d-v1",
+            "label": "Forces sim",
+            "planned": 4,
+            "firstTry": 4,
+            "repaired": 0,
+            "failed": 0
+          },
+          {
+            "id": "log-ladder-v1",
+            "label": "Log-scale ladder",
+            "planned": 4,
+            "firstTry": 2,
+            "repaired": 2,
+            "failed": 0
+          },
+          {
+            "id": "speed-of-sound-v1",
+            "label": "Speed of sound sim",
+            "planned": 3,
+            "firstTry": 1,
+            "repaired": 1,
+            "failed": 1
+          },
+          {
+            "id": "balance-equation-v1",
+            "label": "Balance equation",
+            "planned": 3,
+            "firstTry": 2,
+            "repaired": 0,
+            "failed": 1
+          },
+          {
+            "id": "hardy-weinberg-v1",
+            "label": "Hardy-Weinberg sim",
+            "planned": 2,
+            "firstTry": 1,
+            "repaired": 1,
+            "failed": 0
+          },
+          {
+            "id": "lift-equation-v1",
+            "label": "Lift sim",
+            "planned": 2,
+            "firstTry": 2,
+            "repaired": 0,
+            "failed": 0
+          }
+        ],
+        "subjects": [
+          {
+            "id": "biology",
+            "label": "Biology",
+            "jobs": 22,
+            "lessons": {
+              "k": 21,
+              "n": 22,
+              "rate": 0.9545,
+              "ci95": [
+                0.782,
+                0.9919
+              ]
+            },
+            "parts": {
+              "k": 41,
+              "n": 44,
+              "rate": 0.9318,
+              "ci95": [
+                0.8177,
+                0.9765
+              ]
+            }
+          },
+          {
+            "id": "chemistry",
+            "label": "Chemistry",
+            "jobs": 20,
+            "lessons": {
+              "k": 17,
+              "n": 20,
+              "rate": 0.85,
+              "ci95": [
+                0.6396,
+                0.9476
+              ]
+            },
+            "parts": {
+              "k": 31,
+              "n": 36,
+              "rate": 0.8611,
+              "ci95": [
+                0.7134,
+                0.9392
+              ]
+            }
+          },
+          {
+            "id": "civics",
+            "label": "Civics",
+            "jobs": 20,
+            "lessons": {
+              "k": 20,
+              "n": 20,
+              "rate": 1,
+              "ci95": [
+                0.8389,
+                1
+              ]
+            },
+            "parts": {
+              "k": 38,
+              "n": 40,
+              "rate": 0.95,
+              "ci95": [
+                0.835,
+                0.9862
+              ]
+            }
+          },
+          {
+            "id": "computing",
+            "label": "Computing & AI",
+            "jobs": 20,
+            "lessons": {
+              "k": 20,
+              "n": 20,
+              "rate": 1,
+              "ci95": [
+                0.8389,
+                1
+              ]
+            },
+            "parts": {
+              "k": 40,
+              "n": 40,
+              "rate": 1,
+              "ci95": [
+                0.9124,
+                1
+              ]
+            }
+          },
+          {
+            "id": "earth-science",
+            "label": "Earth & space",
+            "jobs": 22,
+            "lessons": {
+              "k": 21,
+              "n": 22,
+              "rate": 0.9545,
+              "ci95": [
+                0.782,
+                0.9919
+              ]
+            },
+            "parts": {
+              "k": 38,
+              "n": 42,
+              "rate": 0.9048,
+              "ci95": [
+                0.7793,
+                0.9623
+              ]
+            }
+          },
+          {
+            "id": "finance",
+            "label": "Finance",
+            "jobs": 22,
+            "lessons": {
+              "k": 19,
+              "n": 22,
+              "rate": 0.8636,
+              "ci95": [
+                0.6666,
+                0.9525
+              ]
+            },
+            "parts": {
+              "k": 36,
+              "n": 42,
+              "rate": 0.8571,
+              "ci95": [
+                0.7216,
+                0.9328
+              ]
+            }
+          },
+          {
+            "id": "history",
+            "label": "History",
+            "jobs": 22,
+            "lessons": {
+              "k": 15,
+              "n": 22,
+              "rate": 0.6818,
+              "ci95": [
+                0.4732,
+                0.8364
+              ]
+            },
+            "parts": {
+              "k": 34,
+              "n": 37,
+              "rate": 0.9189,
+              "ci95": [
+                0.787,
+                0.972
+              ]
+            }
+          },
+          {
+            "id": "maths",
+            "label": "Maths",
+            "jobs": 20,
+            "lessons": {
+              "k": 20,
+              "n": 20,
+              "rate": 1,
+              "ci95": [
+                0.8389,
+                1
+              ]
+            },
+            "parts": {
+              "k": 34,
+              "n": 41,
+              "rate": 0.8293,
+              "ci95": [
+                0.6874,
+                0.9147
+              ]
+            }
+          },
+          {
+            "id": "physics",
+            "label": "Physics",
+            "jobs": 26,
+            "lessons": {
+              "k": 25,
+              "n": 26,
+              "rate": 0.9615,
+              "ci95": [
+                0.8111,
+                0.9932
+              ]
+            },
+            "parts": {
+              "k": 50,
+              "n": 52,
+              "rate": 0.9615,
+              "ci95": [
+                0.8702,
+                0.9894
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "path": "docs/evidence/final-eval/PREREGISTRATION.md",
+        "date": "2026-10-31",
+        "what": "Measures, pages and models, committed before the first job"
+      },
+      {
+        "path": "docs/evidence/final-eval/manifest.json",
+        "date": "2026-10-31",
+        "what": "The 97 pages with their hashes, both models, prompt version"
+      },
+      {
+        "path": "docs/evidence/final-eval/summary.json",
+        "date": "2026-10-31",
+        "what": "Every rate, interval, time and cost on this page"
+      },
+      {
+        "path": "docs/evidence/final-eval/jobs.csv",
+        "date": "2026-10-31",
+        "what": "One row per job; each part’s result and revision"
+      },
+      {
+        "path": "docs/evidence/final-eval/REPORT.md",
+        "date": "2026-10-31",
+        "what": "The written report these numbers are checked against"
+      }
+    ]
+  },
+  "timeoutRetest": {
+    "title": "Spark Open timeout retest",
+    "date": "2026-10-31",
+    "preRegistered": false,
+    "pages": 9,
+    "model": "muse-spark-open",
+    "before": {
+      "jobs": 18,
+      "lessons": 7,
+      "timeouts": 11,
+      "partsPublished": 14,
+      "partsPlanned": 27,
+      "wallP50S": 170,
+      "wallMaxS": 296,
+      "costUSD": 4.718993
+    },
+    "after": {
+      "jobs": 18,
+      "lessons": 18,
+      "timeouts": 0,
+      "partsPublished": 30,
+      "partsPlanned": 37,
+      "wallP50S": 135,
+      "wallMaxS": 271,
+      "costUSD": 4.14472
+    },
+    "slowestCallS": 113.9,
+    "sources": [
+      {
+        "path": "docs/evidence/timeout-retest/README.md",
+        "date": "2026-10-31",
+        "what": "Why it was run, and an honest reading of the result"
+      },
+      {
+        "path": "docs/evidence/timeout-retest/plan.json",
+        "date": "2026-10-31",
+        "what": "The 9 pages × 2 runs"
+      },
+      {
+        "path": "docs/evidence/timeout-retest/results.jsonl",
+        "date": "2026-10-31",
+        "what": "One line per retest job"
+      },
+      {
+        "path": "docs/evidence/final-eval/results-muse-spark-open.jsonl",
+        "date": "2026-10-31",
+        "what": "The same pages in the evaluation, for the before column"
+      }
+    ]
+  },
+  "diagramRuns": {
+    "runs": [
+      {
+        "jobId": "job-20261101212123-3e4734fe",
+        "date": "2026-11-01",
+        "stage": "8d",
+        "round": 2,
+        "model": "muse-spark-open",
+        "modelLabel": "Muse Spark Open",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "page": "The Hydrologic Cycle",
+        "labelDiagram": "published",
+        "planned": 2,
+        "published": 2,
+        "wallS": 145,
+        "costUSD": 0.137436,
+        "sam": {
+          "min": 0.61,
+          "max": 0.88,
+          "scope": "all 5 parts",
+          "source": {
+            "path": "docs/evidence/stage-8d/live/README.md",
+            "date": "2026-11-01",
+            "what": "Stage 8d live-run notes"
+          }
+        },
+        "note": null,
+        "source": {
+          "path": "docs/evidence/stage-8d/live/results-r2.jsonl",
+          "date": "2026-11-01",
+          "what": "Stage 8d live runs, round 2"
+        }
+      },
+      {
+        "jobId": "job-20261101211438-e741b91a",
+        "date": "2026-11-01",
+        "stage": "8d",
+        "round": 1,
+        "model": "muse-spark-open",
+        "modelLabel": "Muse Spark Open",
+        "sourceId": "medlineplus-what-is-dna",
+        "page": "What is DNA?",
+        "labelDiagram": "published",
+        "planned": 2,
+        "published": 2,
+        "wallS": 165,
+        "costUSD": 0.139655,
+        "sam": {
+          "min": 0.78,
+          "max": 0.92,
+          "scope": "all 6 parts",
+          "source": {
+            "path": "docs/evidence/stage-8d/live/README.md",
+            "date": "2026-11-01",
+            "what": "Stage 8d live-run notes"
+          }
+        },
+        "note": {
+          "text": "Spark Open located all 6 parts and SAM 3.1 confirmed each one.",
+          "source": {
+            "path": "docs/evidence/stage-8d/live/README.md",
+            "date": "2026-11-01",
+            "what": "Stage 8d live-run notes"
+          }
+        },
+        "source": {
+          "path": "docs/evidence/stage-8d/live/results.jsonl",
+          "date": "2026-11-01",
+          "what": "Stage 8d live runs, round 1"
+        }
+      },
+      {
+        "jobId": "job-20261101211438-87fa1e93",
+        "date": "2026-11-01",
+        "stage": "8d",
+        "round": 1,
+        "model": "muse-spark-open",
+        "modelLabel": "Muse Spark Open",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "page": "The Hydrologic Cycle",
+        "labelDiagram": "held-back",
+        "planned": 2,
+        "published": 1,
+        "wallS": 226,
+        "costUSD": 0.192289,
+        "sam": null,
+        "note": {
+          "text": "Held back: SAM’s retry kept a runoff region that covered the whole landscape, and the agreement check caught it. Fixed in the next round.",
+          "source": {
+            "path": "docs/evidence/stage-8d/live/README.md",
+            "date": "2026-11-01",
+            "what": "Stage 8d live-run notes"
+          }
+        },
+        "source": {
+          "path": "docs/evidence/stage-8d/live/results.jsonl",
+          "date": "2026-11-01",
+          "what": "Stage 8d live runs, round 1"
+        }
+      },
+      {
+        "jobId": "job-20261101201240-cfd92cb9",
+        "date": "2026-11-01",
+        "stage": "8c",
+        "round": 5,
+        "model": "muse-spark-1.3",
+        "modelLabel": "Muse Spark 1.3",
+        "sourceId": "medlineplus-what-is-dna",
+        "page": "What is DNA?",
+        "labelDiagram": "published",
+        "planned": 2,
+        "published": 2,
+        "wallS": 100,
+        "costUSD": 0.182492,
+        "sam": null,
+        "note": null,
+        "source": {
+          "path": "docs/evidence/stage-8c/live/results-r5.jsonl",
+          "date": "2026-11-01",
+          "what": "Stage 8c live runs, round 5"
+        }
+      },
+      {
+        "jobId": "job-20261101200607-c65a20bb",
+        "date": "2026-11-01",
+        "stage": "8c",
+        "round": 4,
+        "model": "muse-spark-1.3",
+        "modelLabel": "Muse Spark 1.3",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "page": "The Hydrologic Cycle",
+        "labelDiagram": "published",
+        "planned": 2,
+        "published": 2,
+        "wallS": 91,
+        "costUSD": 0.130966,
+        "sam": null,
+        "note": null,
+        "source": {
+          "path": "docs/evidence/stage-8c/live/results-r4.jsonl",
+          "date": "2026-11-01",
+          "what": "Stage 8c live runs, round 4"
+        }
+      },
+      {
+        "jobId": "job-20261101200607-9c607b3f",
+        "date": "2026-11-01",
+        "stage": "8c",
+        "round": 4,
+        "model": "muse-spark-1.3",
+        "modelLabel": "Muse Spark 1.3",
+        "sourceId": "medlineplus-what-is-dna",
+        "page": "What is DNA?",
+        "labelDiagram": "published",
+        "planned": 2,
+        "published": 2,
+        "wallS": 90,
+        "costUSD": 0.156598,
+        "sam": null,
+        "note": null,
+        "source": {
+          "path": "docs/evidence/stage-8c/live/results-r4.jsonl",
+          "date": "2026-11-01",
+          "what": "Stage 8c live runs, round 4"
+        }
+      },
+      {
+        "jobId": "job-20261101194027-4b4aec38",
+        "date": "2026-11-01",
+        "stage": "8c",
+        "round": 3,
+        "model": "muse-spark-1.3",
+        "modelLabel": "Muse Spark 1.3",
+        "sourceId": "medlineplus-what-is-dna",
+        "page": "What is DNA?",
+        "labelDiagram": "held-back",
+        "planned": 2,
+        "published": 1,
+        "wallS": 140,
+        "costUSD": 0.218777,
+        "sam": {
+          "min": 0.59,
+          "max": 0.95,
+          "scope": "every part on both figures this round",
+          "source": {
+            "path": "docs/specs/STAGE-8c-label-coverage-and-outlines.md",
+            "date": "2026-11-02",
+            "what": "Stage 8c spec, Addendum B (live round 3)"
+          }
+        },
+        "note": {
+          "text": "Held back: the guanine and cytosine numbers sat on the printed words. From the next round each number is placed on the part the models located.",
+          "source": {
+            "path": "docs/specs/STAGE-8c-label-coverage-and-outlines.md",
+            "date": "2026-11-02",
+            "what": "Stage 8c spec, Addendum B (live round 3)"
+          }
+        },
+        "source": {
+          "path": "docs/evidence/stage-8c/live/results-r3.jsonl",
+          "date": "2026-11-01",
+          "what": "Stage 8c live runs, round 3"
+        }
+      },
+      {
+        "jobId": "job-20261101194027-0082b239",
+        "date": "2026-11-01",
+        "stage": "8c",
+        "round": 3,
+        "model": "muse-spark-1.3",
+        "modelLabel": "Muse Spark 1.3",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "page": "The Hydrologic Cycle",
+        "labelDiagram": "held-back",
+        "planned": 2,
+        "published": 1,
+        "wallS": 115,
+        "costUSD": 0.176429,
+        "sam": {
+          "min": 0.59,
+          "max": 0.95,
+          "scope": "every part on both figures this round",
+          "source": {
+            "path": "docs/specs/STAGE-8c-label-coverage-and-outlines.md",
+            "date": "2026-11-02",
+            "what": "Stage 8c spec, Addendum B (live round 3)"
+          }
+        },
+        "note": {
+          "text": "Held back: the runoff number sat beside the stream, not on it. From the next round each number is placed on the part the models located.",
+          "source": {
+            "path": "docs/specs/STAGE-8c-label-coverage-and-outlines.md",
+            "date": "2026-11-02",
+            "what": "Stage 8c spec, Addendum B (live round 3)"
+          }
+        },
+        "source": {
+          "path": "docs/evidence/stage-8c/live/results-r3.jsonl",
+          "date": "2026-11-01",
+          "what": "Stage 8c live runs, round 3"
+        }
+      },
+      {
+        "jobId": "job-20261101184315-a6e4658b",
+        "date": "2026-11-01",
+        "stage": "8c",
+        "round": 2,
+        "model": "muse-spark-1.3",
+        "modelLabel": "Muse Spark 1.3",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "page": "The Hydrologic Cycle",
+        "labelDiagram": "published",
+        "planned": 2,
+        "published": 2,
+        "wallS": 55,
+        "costUSD": 0.095938,
+        "sam": null,
+        "note": null,
+        "source": {
+          "path": "docs/evidence/stage-8c/live/results-r2.jsonl",
+          "date": "2026-11-01",
+          "what": "Stage 8c live runs, round 2"
+        }
+      },
+      {
+        "jobId": "job-20261101184315-42c92adc",
+        "date": "2026-11-01",
+        "stage": "8c",
+        "round": 2,
+        "model": "muse-spark-1.3",
+        "modelLabel": "Muse Spark 1.3",
+        "sourceId": "medlineplus-what-is-dna",
+        "page": "What is DNA?",
+        "labelDiagram": "held-back",
+        "planned": 2,
+        "published": 1,
+        "wallS": 130,
+        "costUSD": 0.25003,
+        "sam": null,
+        "note": null,
+        "source": {
+          "path": "docs/evidence/stage-8c/live/results-r2.jsonl",
+          "date": "2026-11-01",
+          "what": "Stage 8c live runs, round 2"
+        }
+      },
+      {
+        "jobId": "job-20261101182353-9084509b",
+        "date": "2026-11-01",
+        "stage": "8c",
+        "round": 1,
+        "model": "muse-spark-1.3",
+        "modelLabel": "Muse Spark 1.3",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "page": "The Hydrologic Cycle",
+        "labelDiagram": "held-back",
+        "planned": 2,
+        "published": 1,
+        "wallS": 140,
+        "costUSD": 0.186706,
+        "sam": null,
+        "note": null,
+        "source": {
+          "path": "docs/evidence/stage-8c/live/results.jsonl",
+          "date": "2026-11-01",
+          "what": "Stage 8c live runs, round 1"
+        }
+      },
+      {
+        "jobId": "job-20261101182353-097482c0",
+        "date": "2026-11-01",
+        "stage": "8c",
+        "round": 1,
+        "model": "muse-spark-1.3",
+        "modelLabel": "Muse Spark 1.3",
+        "sourceId": "medlineplus-what-is-dna",
+        "page": "What is DNA?",
+        "labelDiagram": "held-back",
+        "planned": 2,
+        "published": 1,
+        "wallS": 110,
+        "costUSD": 0.173115,
+        "sam": null,
+        "note": null,
+        "source": {
+          "path": "docs/evidence/stage-8c/live/results.jsonl",
+          "date": "2026-11-01",
+          "what": "Stage 8c live runs, round 1"
+        }
+      }
+    ],
+    "sources": [
+      {
+        "path": "docs/evidence/stage-8c/live/results.jsonl",
+        "date": "2026-11-01",
+        "what": "Stage 8c live runs, round 1"
+      },
+      {
+        "path": "docs/evidence/stage-8c/live/results-r2.jsonl",
+        "date": "2026-11-01",
+        "what": "Stage 8c live runs, round 2"
+      },
+      {
+        "path": "docs/evidence/stage-8c/live/results-r3.jsonl",
+        "date": "2026-11-01",
+        "what": "Stage 8c live runs, round 3"
+      },
+      {
+        "path": "docs/evidence/stage-8c/live/results-r4.jsonl",
+        "date": "2026-11-01",
+        "what": "Stage 8c live runs, round 4"
+      },
+      {
+        "path": "docs/evidence/stage-8c/live/results-r5.jsonl",
+        "date": "2026-11-01",
+        "what": "Stage 8c live runs, round 5"
+      },
+      {
+        "path": "docs/evidence/stage-8d/live/results.jsonl",
+        "date": "2026-11-01",
+        "what": "Stage 8d live runs, round 1"
+      },
+      {
+        "path": "docs/evidence/stage-8d/live/results-r2.jsonl",
+        "date": "2026-11-01",
+        "what": "Stage 8d live runs, round 2"
+      },
+      {
+        "path": "docs/evidence/stage-8d/live/README.md",
+        "date": "2026-11-01",
+        "what": "Stage 8d notes: SAM confidence and why a diagram was held back"
+      },
+      {
+        "path": "docs/specs/STAGE-8c-label-coverage-and-outlines.md",
+        "date": "2026-11-02",
+        "what": "Stage 8c spec, Addendum B: SAM confidence in round 3"
+      }
+    ]
+  }
+}
