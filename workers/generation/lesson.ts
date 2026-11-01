@@ -61,8 +61,8 @@ import type { Ledger } from '../../packages/meta/ledger.ts';
 import { generateSpec, repairSpec } from '../../packages/meta/pipeline.ts';
 import type { TimelineSourceAnalysis } from '../../packages/meta/pipeline.ts';
 import { STAGE6_PROMPT_VERSION } from '../../packages/meta/prompts-v2.ts';
-import { isMetaProvider } from '../../packages/meta/pricing.ts';
-import type { MetaProvider } from '../../packages/meta/pricing.ts';
+import { isModelChoice } from '../../packages/meta/pricing.ts';
+import type { MetaProvider, ModelChoice } from '../../packages/meta/pricing.ts';
 import { compareAnalysisV2Revisions, validateLessonAnalysisGate } from '../../packages/validation/analysis-v2.ts';
 import {
   compareKitRevisions,
@@ -282,7 +282,7 @@ export function validateLessonAnalysis(
 ): ValidationReport {
   // Stage 8b (A-08): the figure list travels with the analysis validation, so a
   // label-diagram-v1 plan is judged against the figures the analysis call actually saw.
-  // An empty/absent list means "this source has no figures" (Spark Open jobs never pass one).
+  // An empty/absent list means "this source has no figures" (a source with no stored figures, e.g. a pasted text).
   return validateLessonAnalysisGate(
     analysis,
     sources,
@@ -916,9 +916,8 @@ function componentLossReason(err: unknown): string | null {
 export const SEGMENTATION_FAILED_REASON = 'The system could not segment the figure for this part, so it was left out.';
 /**
  * Stage 8b plain-sentence entry reason for a label-diagram-v1 component whose listed figure
- * could not be loaded or failed its sha256 verification (or when the job's provider has no
- * figure access at all — a Spark Open job never sees figures, so a stray plan fails here or
- * in A-08 honestly).
+ * could not be loaded or failed its sha256 verification (or when the source has no stored
+ * figures at all, so a stray plan fails here or in A-08 honestly).
  */
 export const FIGURE_UNAVAILABLE_REASON = 'The figure this part needs could not be loaded, so it was left out.';
 
@@ -1156,18 +1155,21 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
     partialPublish: false,
   };
 
-  // --- Stage 8b: figure access (Muse Spark 1.3 / meta-api jobs only) ----------
+  // --- Stage 8b/8d: figure access (every provider) ---------------------------
   // Library sources may carry licence-checked figures (data/figures sidecars); user sources
-  // never do. Spark Open (Modal) jobs get NO figure list — the analysis never sees figures,
-  // so it cannot plan label-diagram-v1 (a stray plan fails A-08 honestly), and the worker
-  // never attaches an image for that provider. At most the first 3 figures in listed order
-  // (listFigures sorts by id) travel through analysis, generation, validation and publish.
-  const jobProvider: MetaProvider = isMetaProvider(summary.provider) ? summary.provider : 'meta-api';
+  // never do. Stage 8d: a Spark Open (Modal) job gets the SAME figure list as a Spark 1.3 job,
+  // so the analysis may plan label-diagram-v1, and the generation, repair and grounding calls
+  // attach the figure image through the job's own client (the Modal client on an open-weights
+  // job; Spark Open accepts images, see docs/evidence/open-weights-vision-probe). SAM 3.1 is a
+  // separate Meta API call with its own deps and ledger provider (meta-api) on every job.
+  // At most the first 3 figures in listed order (listFigures sorts by id) travel through
+  // analysis, generation, validation and publish.
+  const jobModel: ModelChoice = isModelChoice(summary.model) ? summary.model : 'muse-spark-1.3';
   // Stage 8b (lead): each figure carries its stored printed-label boxes so LD-04 (and the repair guard's recompute) can reject points on printed words.
-  const jobFigures: FigureMeta[] = jobProvider === 'meta-api' ? listFigures(source.id).slice(0, 3).map(f => {
+  const jobFigures: FigureMeta[] = listFigures(source.id).slice(0, 3).map(f => {
     const partLabelGroups = loadFigurePartLabelGroups(f.id);
     return { ...f, labelBoxes: loadFigureLabelBoxes(f.id), ...(partLabelGroups !== undefined ? { partLabelGroups } : {}) };
-  }) : [];
+  });
 
   // --- Call 1: analysis v2 (same-call overview + component plan) -------------
   ctx.emit('analyze', 'started');
@@ -1717,8 +1719,8 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
     const objects: SamObject[] = samObjectsFor(parts, width, height, grounding.prompts);
     const groundingNote =
       grounding.failedCode === null
-        ? `muse-spark-1.3 located ${grounding.located} of ${parts.length} part(s) for SAM`
-        : `muse-spark-1.3 grounding failed (${grounding.failedCode}); used the generation areas`;
+        ? `${jobModel} located ${grounding.located} of ${parts.length} part(s) for SAM`
+        : `${jobModel} grounding failed (${grounding.failedCode}); used the generation areas`;
     // The wrapper ledger mirrors every settled reconciliation into `trace`, so the job's
     // accumulator can account EXACTLY what the spending ledger holds — without re-deriving
     // sam.ts's billing rules from error codes. `close` is a no-op: the job's ledger outlives

@@ -317,6 +317,8 @@ function readRunFile(storageDir: string, jobId: string, name: string): any {
 interface ModelLedger {
   ledger: Ledger;
   reserves: number;
+  /** The `provider` field of every SAM reservation (Stage 8d: always meta-api, even on a Modal job). */
+  reserveProviders: Array<string | undefined>;
   reconcileAttempts: Array<{ costUSD: number; note: string | undefined }>;
   /** What the spending ledger holds for SAM: reconciled amount, else the reserved hold. */
   committed(): number;
@@ -328,6 +330,7 @@ function modelLedger(failReconcile: boolean): ModelLedger {
   const holds = new Map<string, { est: number; actual?: number }>();
   const state: ModelLedger = {
     reserves: 0,
+    reserveProviders: [],
     reconcileAttempts: [],
     committed: () => [...holds.values()].reduce((sum, h) => sum + (h.actual ?? h.est), 0),
     outstanding: () => [...holds.values()].reduce((sum, h) => sum + (h.actual === undefined ? h.est : 0), 0),
@@ -335,6 +338,7 @@ function modelLedger(failReconcile: boolean): ModelLedger {
       capUSD: 150,
       reserve: (req): string => {
         state.reserves += 1;
+        state.reserveProviders.push(req.provider);
         const id = `sam-res-${state.reserves}`;
         holds.set(id, { est: req.estUSD });
         return id;
@@ -379,6 +383,7 @@ async function runCase(
   respond: () => { status: number; body?: string },
   failReconcile: boolean,
   jobId: string,
+  opts: { modal?: boolean } = {},
 ): Promise<Case> {
   const sam = fakeSamFetch(respond);
   const ledger = modelLedger(failReconcile);
@@ -386,6 +391,7 @@ async function runCase(
     analysis: dnaAnalysis,
     kit: { label_diagram: goldenLabelGen, quiz_cards: dnaQuizGen },
     kitRepair: { label_diagram_repair: goldenLabelGen },
+    ...(opts.modal === true ? { provider: 'modal' as const } : {}),
   });
   const { storageDir, done } = startLabelLesson(client, {
     sam: { apiKey: 'test-sam-token', ledger: ledger.ledger, fetch: sam.impl },
@@ -532,4 +538,31 @@ test('B-07/B-08: a successful SAM call still matches the ledger with no unknown'
   assert.equal(c.segFail, undefined);
   assert.equal(c.ledger.committed(), 0.0025);
   assertMatchesLedger(c, 0);
+});
+
+/* ------------------------------------------------------------------ */
+/* Stage 8d: a Spark Open (Modal) job keeps SAM on the Meta API ledger  */
+/* ------------------------------------------------------------------ */
+
+test('8d: on a Spark Open (Modal) job the SAM reservation is provider meta-api and the total still matches the ledger', async () => {
+  const c = await runCase(
+    () => ({ status: 200, body: samSseBody(samBoxesFor(goldenLabelGen)) }),
+    false,
+    'lesson-sam-open-success',
+    { modal: true },
+  );
+  assert.equal(c.summary.provider, 'modal');
+  assert.equal(c.summary.status, 'succeeded');
+  assert.equal(c.labelStatus, 'passed', 'the diagram is built on the open-weights job');
+  assert.deepEqual(c.ledger.reserveProviders, ['meta-api'], 'SAM spend is booked to the Meta API, not Modal');
+  assert.equal(c.ledger.committed(), 0.0025);
+  assertMatchesLedger(c, 0);
+});
+
+test('8d: a Spark Open job whose SAM call fails (HTTP 500) fails only the diagram; the uncertain hold is booked to meta-api and matches the ledger', async () => {
+  const c = await runCase(() => ({ status: 500, body: 'Internal Server Error' }), false, 'lesson-sam-open-500', { modal: true });
+  assert.equal(c.summary.provider, 'modal');
+  assertSegmentationFailedPartially(c, 'SAM_HTTP_500');
+  assert.deepEqual(c.ledger.reserveProviders, ['meta-api']);
+  assertMatchesLedger(c, 0.0025);
 });

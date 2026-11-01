@@ -5,8 +5,8 @@
 // one SAM 3.1 segmentation per revision with ledger reserve/reconcile mirrored through the
 // job's ONE cost accumulator, regions into validation and the published spec, SAM 500 as a
 // COMPONENT-level failure (partial publish, charge recorded), missing SAM deps as INTERNAL,
-// a missing SAM box gating publication through LD-06, and Spark Open (Modal) jobs never
-// seeing figures or images. No network, no credits, no .env access.
+// a missing SAM box gating publication through LD-06, and Spark Open (Modal) jobs getting
+// the same figures and images through the Modal client (SAM stays on the Meta API ledger). No network, no credits, no .env access.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtempSync, readFileSync } from 'node:fs';
@@ -113,7 +113,7 @@ const dnaAnalysis: SourceAnalysisV2 = {
   ],
 } as unknown as SourceAnalysisV2;
 
-/** The same analysis without the label-diagram plan (a Spark Open job's honest plan). */
+/** The same analysis without the label-diagram plan (a plan that leaves the diagram out). */
 const dnaAnalysisNoLabel: SourceAnalysisV2 = structuredClone(dnaAnalysis);
 dnaAnalysisNoLabel.componentPlan = dnaAnalysisNoLabel.componentPlan.filter(
   e => e.componentId !== 'label-diagram-v1',
@@ -808,19 +808,17 @@ test('label-diagram: a job without SAM deps fails only that component with the f
 });
 
 /* ------------------------------------------------------------------ */
-/* Spark Open (Modal): never figures, never images                      */
+/* Spark Open (Modal): the same figures, images through the Modal client (Stage 8d) */
 /* ------------------------------------------------------------------ */
 
-test('label-diagram: a Spark Open (Modal) job never sees figures or images', async () => {
-  let samCalls = 0;
-  const sam = fakeSamFetch(() => {
-    samCalls += 1;
-    return { status: 200, body: samSseBody([]) };
-  });
-  const { ledger } = fakeLedger();
+test('label-diagram: a Spark Open (Modal) job gets the figure; its generation and grounding calls carry the image through the Modal client; SAM spend is meta-api', async () => {
+  const boxes = samBoxesFor(goldenLabelGen);
+  const sam = fakeSamFetch(() => ({ status: 200, body: samSseBody(boxes, 1) }));
+  const { ledger, reserveCalls, reconcileCalls } = fakeLedger();
+  // the analysis plans the diagram because the job's figure list reached it
   const client = fakeClient({
-    analysis: dnaAnalysisNoLabel,
-    kit: { quiz_cards: dnaQuizGen },
+    analysis: dnaAnalysis,
+    kit: { label_diagram: goldenLabelGen, quiz_cards: dnaQuizGen },
     provider: 'modal',
   });
   const { storageDir, jobId, done } = startLabelLesson(client, {
@@ -829,21 +827,49 @@ test('label-diagram: a Spark Open (Modal) job never sees figures or images', asy
   const summary = await done;
 
   assert.equal(summary.status, 'succeeded');
+  assert.equal(summary.error, undefined);
   assert.equal(summary.provider, 'modal');
-  assert.equal(summary.lesson?.componentsPublished, 1);
-  // the analysis message carries NO figure list on a Modal job
-  for (const req of client.requests) {
-    for (const m of req.messages) {
-      assert.ok(!m.content.includes('<untrusted-figures>'), `${req.schemaName}: no figure list`);
-      assert.ok(!m.content.includes(FIGURE_ID), `${req.schemaName}: no figure id`);
-      assert.equal(m.images, undefined, `${req.schemaName}: no image is ever attached`);
-    }
-  }
-  assert.equal(samCalls, 0, 'SAM never runs for a Modal job');
-  const events = readEvents(storageDir, jobId);
-  assert.ok(!events.some(e => e.stage === 'segment'), 'no segment events');
+  assert.equal(summary.model, 'muse-spark-open');
+  assert.equal(summary.lesson?.componentsPublished, 2, 'the label diagram and the quiz both publish on Spark Open');
+  assert.equal(summary.lesson?.componentsFailed, 0);
 
-  // and a STRAY label-diagram plan fails A-08 honestly when no figures were passed
+  // the analysis message (sent through the Modal client) lists the figure, without an image
+  const analysisReq = client.requests.find(r => r.schemaName === 'source_analysis_v2');
+  assert.ok(analysisReq !== undefined);
+  const analysisUser = analysisReq.messages.filter(m => m.role === 'user').map(m => m.content).join('\n');
+  assert.ok(analysisUser.includes('<untrusted-figures>'), 'the analysis message carries the figure list');
+  assert.ok(analysisUser.includes(FIGURE_ID), 'the analysis message lists the figure id');
+  assert.deepEqual(imagesOf(client.requests, 'source_analysis_v2'), []);
+
+  // generation AND grounding calls carry exactly the figure's own bytes, through the SAME (Modal) client
+  const expectedUrl = `data:${figure.meta.mime};base64,${Buffer.from(figure.bytes).toString('base64')}`;
+  assert.deepEqual(imagesOf(client.requests, 'label_diagram'), [expectedUrl]);
+  assert.deepEqual(imagesOf(client.requests, 'label_grounding'), [expectedUrl]);
+  assert.deepEqual(imagesOf(client.requests, 'quiz_cards'), [], 'the sibling component never sees an image');
+  assert.ok(client.calls.includes('label_grounding'), 'grounding ran on the Modal client');
+
+  // SAM stays on the Meta API with its own deps: one request, to api.meta.ai, ledger provider meta-api
+  assert.equal(sam.calls.length, 1);
+  assert.equal(sam.calls[0].url, 'https://api.meta.ai/v1/responses');
+  assert.equal(sam.calls[0].body['model'], 'sam-3.1');
+  assert.deepEqual(reserveCalls, [{ purpose: 'test-live', model: 'sam-3.1', estUSD: 0.0025, provider: 'meta-api' }]);
+  assert.equal(reconcileCalls.length, 1);
+  assert.equal(reconcileCalls[0]?.['costUSD'], 0.0025);
+  // 3 model calls + grounding at 0.01 each + one SAM image
+  assert.equal(summary.totalCostUSD, 0.0425);
+  assert.equal(summary.reservedUnknownUSD, 0);
+
+  // the event names the model that located the parts: Spark Open here, never Spark 1.3
+  const events = readEvents(storageDir, jobId);
+  assert.deepEqual(events.filter(e => e.stage === 'segment').map(ev), ['segment:started', 'segment:succeeded']);
+  const segOk = events.find(e => e.stage === 'segment' && e.status === 'succeeded') as Ev;
+  assert.match(String(segOk.detail), /^sam-3\.1 returned 6 of 6 region\(s\); muse-spark-open located 0 of 6 part\(s\) for SAM; sam-3\.1 sure of 5 of 6 part\(s\)$/);
+  assert.ok(!String(segOk.detail).includes('muse-spark-1.3'));
+  const rec = readRunFile(storageDir, jobId, 'label-diagram-v1.r1.json');
+  assert.equal(rec.report.publishable, true);
+  assert.equal(rec.spec.figureId, FIGURE_ID);
+
+  // a plan without any figure list still fails A-08 honestly (the pure validator is unchanged)
   const report = validateLessonAnalysis(dnaAnalysis, [loadSource(DNA)]);
   const a08 = report.checks.find(c => c.id === 'A-08');
   assert.ok(a08 !== undefined && !a08.passed, 'A-08 fails a label-diagram plan without a figure list');

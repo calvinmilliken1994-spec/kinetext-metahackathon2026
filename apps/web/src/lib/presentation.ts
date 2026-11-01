@@ -356,7 +356,8 @@ export const HOOK_BEAT = -1;
 /**
  * The one-line credit on the hook slide (demo pair review #8), so the first slide shown carries the source, the AI
  * disclosure and Meta's models: page · publisher · licence · "AI-written with <model>, teacher review pending" ·
- * "diagram regions: SAM 3.1 (Meta)" (only when a part's regions came from SAM). The model is the job's own, read
+ * "diagram regions: SAM 3.1 (Meta)" (only when a part's regions came from SAM; on an open-weights lesson it names both
+ * models, `OPEN_DIAGRAM_CREDIT`). The model is the job's own, read
  * back from the deck's disclosure. Null without source information.
  */
 export function creditLine(deck: Pick<Deck, 'source' | 'disclosure' | 'parts'>): string | null {
@@ -365,7 +366,7 @@ export function creditLine(deck: Pick<Deck, 'source' | 'disclosure' | 'parts'>):
   const made = madeWithOf(deck.disclosure);
   // The review caution stays next to the AI disclosure, so a line too long for a small screen loses only the SAM credit.
   const ai = made === null ? 'AI-written, teacher review pending' : `AI-written with ${creditModel(made)}, teacher review pending`;
-  return [card.name, card.from === null ? null : firstSegment(card.from), card.licence, ai, usesSam(deck.parts) ? SAM_CREDIT : null]
+  return [card.name, card.from === null ? null : firstSegment(card.from), card.licence, ai, usesSam(deck.parts) ? diagramCredit(made) : null]
     .filter((x): x is string => x !== null && x.trim() !== '').join(' · ');
 }
 
@@ -374,12 +375,31 @@ function creditModel(made: string): string {
   return made.replace(/,\s*hosted on [^)]*\)/, ')');
 }
 
-/** The one place SAM is credited on slides. */
+/** The one place SAM is credited on slides (a Spark 1.3 lesson: both models are Meta API). */
 export const SAM_CREDIT = 'diagram regions: SAM 3.1 (Meta)';
+
+/**
+ * Stage 8d: on an open-weights lesson the parts were located by Muse Spark Open on Modal and the regions came from
+ * SAM 3.1 on the Meta API, so the credit names both and never implies a single provider.
+ */
+export const OPEN_DIAGRAM_CREDIT = 'diagram parts located by Muse Spark Open (open weights, Modal) · regions by SAM 3.1 (Meta API)';
+
+/** Whether the model a disclosure names is Muse Spark Open (open weights). */
+function isOpenWeightsMade(made: string | null): boolean {
+  return made !== null && /^Muse Spark Open\b/.test(made);
+}
+
+/** The diagram credit for the deck's model: SAM alone for Spark 1.3, both named for Spark Open. */
+function diagramCredit(made: string | null): string {
+  return isOpenWeightsMade(made) ? OPEN_DIAGRAM_CREDIT : SAM_CREDIT;
+}
 
 /** A deck disclosure with SAM credited after it when a presented part's regions came from SAM (said once). */
 export function withSamNote(disclosure: string, parts: readonly DeckPart[]): string {
   if (!usesSam(parts) || /\bSAM\b/.test(disclosure)) return disclosure;
+  if (isOpenWeightsMade(madeWithOf(disclosure))) {
+    return `${disclosure.trimEnd()} Diagram parts located by Muse Spark Open (open weights, Modal); regions by SAM 3.1 (Meta API).`;
+  }
   return `${disclosure.trimEnd()} Diagram regions by SAM 3.1 (Meta).`;
 }
 

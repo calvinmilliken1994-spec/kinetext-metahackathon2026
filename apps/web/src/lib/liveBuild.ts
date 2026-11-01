@@ -65,13 +65,21 @@ export function parseSegmentGot(detail: string | undefined): { got: number; of: 
 /**
  * STAGE-8c Addendum A: Muse's grounding call before SAM, as the worker notes it in the `segment succeeded` detail:
  * "; muse-spark-1.3 located K of N part(s) for SAM" → { located: K, of: N }; "; muse-spark-1.3 grounding failed (CODE);
- * used the generation areas" → 'failed'. Null for older runs, which had no grounding call. Any order of notes.
+ * used the generation areas" → 'failed'. Stage 8d: the same notes name `muse-spark-open` on an open-weights (Modal) job;
+ * the count regex is model-agnostic, `parseGroundingActor` reads who it was. Null for older runs, which had no
+ * grounding call. Any order of notes.
  */
 export function parseGrounding(detail: string | undefined): { located: number; of: number } | 'failed' | null {
   const d = detail ?? '';
   const m = /\blocated (\d+) of (\d+) part\(s\) for SAM\b/.exec(d);
   if (m !== null) return { located: Number(m[1]), of: Number(m[2]) };
   return /\bgrounding failed\b/.test(d) ? 'failed' : null;
+}
+
+/** Who ran the grounding call: Muse Spark Open on an open-weights job (the worker writes its model id), else Muse Spark (1.3). */
+export type MuseActor = 'Muse Spark' | 'Muse Spark Open';
+export function parseGroundingActor(detail: string | undefined): MuseActor {
+  return /\bmuse-spark-open (?:located|grounding failed)\b/.test(detail ?? '') ? 'Muse Spark Open' : 'Muse Spark';
 }
 
 /** "sam-3.1 sure of 4 of 5 part(s)" → { sure: 4, of: 5 }; null when the run does not record it. */
@@ -161,12 +169,13 @@ export function reserveHeight(componentId: string): number {
  * every other kind, so the frame never claims SAM work that has not been recorded. It never draws regions: those exist
  * only once the checked part arrives.
  */
-export function figureNote(build: PartBuild | undefined): { actor: 'SAM 3.1'; text: string; working: boolean; muse?: { actor: 'Muse Spark'; text: string } } | null {
+export function figureNote(build: PartBuild | undefined): { actor: 'SAM 3.1'; text: string; working: boolean; muse?: { actor: MuseActor; text: string } } | null {
   if (build === undefined || build.componentId !== 'label-diagram-v1') return null;
   const sam = [...build.lines].reverse().find((l) => l.kind === 'outlining');
   if (sam === undefined) return null;
   // Addendum A: a grounded call reads "Muse Spark located 5 parts · SAM 3.1 confirmed 5 of 5 in 1.9 s"
-  if (sam.muse !== undefined && sam.sam !== undefined) return { actor: 'SAM 3.1', text: sam.sam, working: sam.open, muse: { actor: 'Muse Spark', text: sam.muse } };
+  // (Stage 8d: "Muse Spark Open located …" on an open-weights job)
+  if (sam.muse !== undefined && sam.sam !== undefined) return { actor: 'SAM 3.1', text: sam.sam, working: sam.open, muse: { actor: sam.museActor ?? 'Muse Spark', text: sam.muse } };
   // the log line without its actor ("SAM 3.1 is outlining 5 parts…" → "is outlining 5 parts…")
   const text = sam.text.replace(/^SAM 3\.1\s+/, '');
   return { actor: 'SAM 3.1', text, working: sam.open };
@@ -345,6 +354,8 @@ export interface LogLine {
   parts?: number;
   /** SAM (Addendum A): what Muse's grounding call located before SAM ("located 5 parts"), when recorded. */
   muse?: string;
+  /** SAM (Stage 8d): who located the parts ('Muse Spark Open' on an open-weights job), set with `muse`. */
+  museActor?: MuseActor;
   /** SAM (Addendum A): the SAM half of a grounded line ("confirmed 5 of 5 in 1.9 s"). */
   sam?: string;
   checks?: { passed: number; total: number };
@@ -417,6 +428,7 @@ function logFor(id: PlanComponentId, evs: readonly Ev[], model: string, running:
       // older runs keep the SAM-only wording.
       const grounded = !open && got !== null && grounding !== null && grounding !== 'failed'
         ? {
+          museActor: parseGroundingActor(end?.detail),
           muse: `located ${grounding.located === grounding.of ? plural(grounding.located, 'part', 'parts') : `${grounding.located} of ${plural(grounding.of, 'part', 'parts')}`}`,
           // Runs that record how many regions SAM was sure of (>= 0.5) count those; older grounded runs count returned ones.
           sam: `confirmed ${parseSamSure(end?.detail)?.sure ?? got.got} of ${got.of} in ${formatSeconds(durationMs ?? 0)}`,
@@ -428,7 +440,7 @@ function logFor(id: PlanComponentId, evs: readonly Ev[], model: string, running:
         text: open
           ? `SAM 3.1 is outlining ${parts === undefined ? 'the' : parts} parts of the figure`
           : end?.status === 'failed' ? 'SAM 3.1 could not outline the parts'
-            : grounded !== null ? `Muse Spark ${grounded.muse} · SAM 3.1 ${grounded.sam}`
+            : grounded !== null ? `${grounded.museActor} ${grounded.muse} · SAM 3.1 ${grounded.sam}`
               : `SAM 3.1 outlined ${got === null ? (parts ?? '') : `${got.got} of ${got.of}`} parts in ${formatSeconds(durationMs ?? 0)}`,
       });
     }

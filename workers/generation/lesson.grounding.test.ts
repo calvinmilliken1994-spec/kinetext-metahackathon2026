@@ -166,13 +166,17 @@ interface Captured {
 
 function fakeMuse(
   captured: Captured,
-  opts: { analysis: unknown; gen: LabelDiagramGen; repair?: LabelDiagramGen; grounding: (n: number) => GroundingReply },
+  opts: { analysis: unknown; gen: LabelDiagramGen; repair?: LabelDiagramGen; grounding: (n: number) => GroundingReply; modal?: boolean },
 ): MetaClient & { calls: string[] } {
   const calls: string[] = [];
   let groundingN = 0;
   let n = 0;
   return {
     calls,
+    // Stage 8d: a Spark Open job is a client that declares the Modal provider and the open model.
+    ...(opts.modal === true
+      ? { provider: 'modal' as const, model: 'muse-spark-open' as const, providerModel: 'meta-models/Muse-Spark-Open-816B-A42B' }
+      : {}),
     complete: async <T,>(req: CompleteRequest): Promise<{ data: T; receipt: MetaReceipt }> => {
       calls.push(req.schemaName);
       captured.order.push(`muse:${req.schemaName}`);
@@ -296,6 +300,7 @@ async function run(
     repair?: LabelDiagramGen;
     maxRepairAttempts?: number;
     conf?: (callNo: number, id: number) => number | undefined;
+    modal?: boolean;
   },
 ): Promise<Run> {
   const captured: Captured = { order: [], requests: [] };
@@ -306,6 +311,7 @@ async function run(
     gen: opts.gen ?? goldenLabelGen,
     ...(opts.repair !== undefined ? { repair: opts.repair } : {}),
     grounding: opts.grounding,
+    ...(opts.modal === true ? { modal: true } : {}),
   });
   const storageDir = mkdtempSync(join(tmpdir(), 's8c-ground-'));
   const { done } = startJob(
@@ -751,4 +757,36 @@ test('boxesToRegions: ground is attached per part when given, never invented', (
   assert.deepEqual(withGround[0]!.ground, g);
   assert.equal('ground' in withGround[1]!, false);
   assert.equal(boxesToRegions(boxes, parts).some(x => 'ground' in x), false);
+});
+
+/* ------------------------------------------------------------------ */
+/* Stage 8d: the grounding text names the model that located the parts   */
+/* ------------------------------------------------------------------ */
+
+test('8d: a Spark Open (Modal) job says muse-spark-open located K of N part(s); Spark 1.3 keeps muse-spark-1.3', async () => {
+  const open = await run('lesson-ground-open-ok', { modal: true, grounding: () => ({ data: groundingAnswer(goldenUnions()) }) });
+  assert.equal(open.summary.provider, 'modal');
+  assert.equal(open.summary.model, 'muse-spark-open');
+  assert.equal(open.label.status, 'passed', 'the diagram is built on a Modal job');
+  const doneOpen = open.seg.find(e => e.status === 'succeeded');
+  assert.equal(doneOpen?.detail, 'sam-3.1 returned 6 of 6 region(s); muse-spark-open located 6 of 6 part(s) for SAM; sam-3.1 sure of 6 of 6 part(s)');
+  assert.ok(!String(doneOpen?.detail).includes('muse-spark-1.3'), 'never names Spark 1.3 on an open-weights job');
+  // the dedicated grounding call goes through the job's own (Modal) client, with the figure image
+  const reqs = groundingRequests(open);
+  assert.equal(reqs.length, 1);
+  assert.deepEqual(reqs[0]!.messages[0]!.images, [{ url: IMAGE_URL }]);
+
+  const meta = await run('lesson-ground-meta-ok', { grounding: () => ({ data: groundingAnswer(goldenUnions()) }) });
+  const doneMeta = meta.seg.find(e => e.status === 'succeeded');
+  assert.match(doneMeta?.detail ?? '', /; muse-spark-1\.3 located 6 of 6 part\(s\) for SAM; /);
+});
+
+test('8d: a Spark Open grounding failure reads "muse-spark-open grounding failed (CODE); used the generation areas"', async () => {
+  const r = await run('lesson-ground-open-fail', {
+    modal: true,
+    grounding: () => ({ error: new MetaError('TIMEOUT', undefined, { chargedUSD: 0.1, reservedUnknownUSD: 0.1, costBasis: 'reservation' }) }),
+  });
+  assert.equal(r.label.status, 'passed', 'a failed grounding call never fails the component');
+  const done = r.seg.find(e => e.status === 'succeeded');
+  assert.equal(done?.detail, 'sam-3.1 returned 6 of 6 region(s); muse-spark-open grounding failed (TIMEOUT); used the generation areas; sam-3.1 sure of 6 of 6 part(s)');
 });
