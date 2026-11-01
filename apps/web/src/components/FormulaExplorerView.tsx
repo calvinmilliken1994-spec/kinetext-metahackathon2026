@@ -37,6 +37,14 @@ interface Props { spec: FormulaExplorerSpec; cite: CiteProps; presentation?: Exp
 
 export const AI_FORMULA_NOTICE = 'Formula entered by AI from the quoted line - compare with the quote.';
 
+/**
+ * The predict slide's graph: wider than the lesson graph (about the shape of the slide's scene column), drawn at
+ * PREDICT_SCENE_WIDTH so its labels scale up 1.5× with it. The lesson graph's 520 × 300 left a third of the slide empty.
+ */
+const PREDICT_GRAPH_SIZE = { width: 600, height: 260 } as const;
+/** The design width the predict beat lays the scene out at (Beats.tsx PredictScene). */
+export const PREDICT_SCENE_WIDTH = 900;
+
 interface CaseResult { raw: string; grade: Grade | null; error: string | null }
 
 /**
@@ -58,7 +66,7 @@ export function FormulaExplorerView({ spec, cite, presentation }: Props) {
   const samples = useMemo(() => (model.ok ? curveSamples(model, drawn, inputs) : []), [model, drawn, inputs]);
   const output = model.ok ? evalAt(model, inputs) : Number.NaN;
   const geometry = useMemo(
-    () => graphGeometry(samples, { x: inputs[spec.xVariable] ?? xVar?.default ?? 0, y: output }, presentation?.mode === 'stage' ? STAGE_GRAPH_SIZE : GRAPH_SIZE),
+    () => graphGeometry(samples, { x: inputs[spec.xVariable] ?? xVar?.default ?? 0, y: output }, presentation?.mode === 'stage' ? STAGE_GRAPH_SIZE : presentation?.mode === 'predict' ? PREDICT_GRAPH_SIZE : GRAPH_SIZE),
     [samples, inputs, spec.xVariable, xVar, output, presentation?.mode],
   );
   const table = useMemo(() => (model.ok ? niceValueRows(model, spec, inputs) : []), [model, spec, inputs]);
@@ -152,6 +160,7 @@ export function FormulaExplorerView({ spec, cite, presentation }: Props) {
         <div className="explorer-visual" ref={visualRef}>
           <FormulaGraph geometry={geometry} yName={yName} xName={xName} concealed={concealed} reveal={reveal} />
         </div>
+        {/* The worked line at heading size under the graph: on a slide the formula is read from the back of the room. */}
         <EquationLine equation={equation} concealed={concealed} links={formulaLinks} />
       </div>
     );
@@ -214,17 +223,18 @@ export function FormulaExplorerView({ spec, cite, presentation }: Props) {
     );
   }
 
+  // The predictions sit right under the graph (case 1 first), so a teacher at 1920 × 1080 reaches the first question
+  // without scrolling past the value table; the formula heads the slider column beside the graph.
   return (
     <div className="explorer" data-testid="formula-explorer">
-      <div className="explorer-formula">
-        <p className="field-label">The formula</p>
-        {formula}
-        <QuoteBlock componentId="formula-explorer-v1" part="equation" id="equation" sourceId={spec.sourceId} quote={spec.quote} cite={cite} caption="As the page writes it" />
-        {formulaStatus !== 'matches' && <p className="note small" role="note" data-testid="ai-formula-notice">{AI_FORMULA_NOTICE}</p>}
-      </div>
-
       <div className="explorer-main">
         <div className="explorer-controls">
+          <div className="explorer-formula">
+            <p className="field-label">The formula</p>
+            {formula}
+            <QuoteBlock componentId="formula-explorer-v1" part="equation" id="equation" sourceId={spec.sourceId} quote={spec.quote} cite={cite} caption="As the page writes it" />
+            {formulaStatus !== 'matches' && <p className="note small" role="note" data-testid="ai-formula-notice">{AI_FORMULA_NOTICE}</p>}
+          </div>
           <h3>Move the sliders</h3>
           {sliders}
           <EquationLine equation={equation} concealed={concealed} links={formulaLinks} />
@@ -238,6 +248,49 @@ export function FormulaExplorerView({ spec, cite, presentation }: Props) {
         <div className="explorer-visual" ref={visualRef}>
           {/* The graph itself marks the guess and the gap; the words are said once, on the case's card (set B). */}
           <FormulaGraph geometry={geometry} yName={yName} xName={xName} concealed={concealed} reveal={reveal} />
+          {spec.cases.length > 0 && presentation === undefined && (
+            <section aria-labelledby={`${uid}-predict`}>
+              <h3 id={`${uid}-predict`}>Predict, then reveal</h3>
+              <p className="muted small">Commit to a number first; checking moves the sliders and the graph to that case.{concealed ? ' Until then the result shows as ?.' : ''}</p>
+              <ol className="predictions">
+                {spec.cases.map((c, i) => {
+                  const r = results[c.id];
+                  const out = cases.find((x) => x.id === c.id);
+                  const inputId = `${uid}-${c.id}`;
+                  return (
+                    <li key={c.id} className="prediction">
+                      <form onSubmit={(e) => submit(e, c.id)} noValidate>
+                        <p className="prediction-head" id={`${inputId}-prompt`}><span className="case-label">Case {i + 1}</span> {casePrompt(spec, c)}</p>
+                        <div className="prediction-row">
+                          <label htmlFor={inputId}>Your prediction: {yName}</label>
+                          <div className="guess">
+                            <input
+                              id={inputId}
+                              inputMode="decimal"
+                              autoComplete="off"
+                              placeholder="e.g. 25"
+                              value={r?.raw ?? ''}
+                              aria-describedby={`${inputId}-prompt ${inputId}-tol`}
+                              onChange={(e) => setResults((prev) => ({ ...prev, [c.id]: { raw: e.target.value, grade: null, error: null } }))}
+                            />
+                          </div>
+                          <button type="submit" className="btn btn-primary" disabled={parseGuess(r?.raw ?? '') === null} aria-describedby={parseGuess(r?.raw ?? '') === null ? `${inputId}-first` : undefined}>Check my prediction</button>
+                        </div>
+                        <p className="muted small" id={`${inputId}-tol`}>{parseGuess(r?.raw ?? '') === null && <span id={`${inputId}-first`}>Make a prediction first. </span>}{targetRule()}</p>
+                        {r?.error != null && <p className="field-error" role="alert">{r.error}</p>}
+                        {r?.grade != null && (
+                          <FeedbackLine
+                            feedback={gradeFeedback(r.grade, { format: groupedSig6, more: i < spec.cases.length - 1 })}
+                            working={`${yName} = ${groupedSig6(out?.output ?? Number.NaN)} from the page’s formula`}
+                          />
+                        )}
+                      </form>
+                    </li>
+                  );
+                })}
+              </ol>
+            </section>
+          )}
           {presentation === undefined && (
             <table className="value-table">
               <caption>{yName} as the {xShort} changes (other sliders as set)</caption>
@@ -260,50 +313,6 @@ export function FormulaExplorerView({ spec, cite, presentation }: Props) {
           <p className="small"><strong>The page’s own example</strong> gives {groupedSig6(spec.sourceExample.resultNumber)}.</p>
           <QuoteBlock componentId="formula-explorer-v1" part="example" id="example" sourceId={spec.sourceId} quote={spec.sourceExample.quote} cite={cite} caption="The page’s words" />
         </div>
-      )}
-
-      {spec.cases.length > 0 && presentation === undefined && (
-        <section aria-labelledby={`${uid}-predict`}>
-          <h3 id={`${uid}-predict`}>Predict, then reveal</h3>
-          <p className="muted small">Commit to a number first; checking moves the sliders and the graph to that case.{concealed ? ' Until then the result shows as ?.' : ''}</p>
-          <ol className="predictions">
-            {spec.cases.map((c, i) => {
-              const r = results[c.id];
-              const out = cases.find((x) => x.id === c.id);
-              const inputId = `${uid}-${c.id}`;
-              return (
-                <li key={c.id} className="prediction">
-                  <form onSubmit={(e) => submit(e, c.id)} noValidate>
-                    <p className="prediction-head" id={`${inputId}-prompt`}><span className="case-label">Case {i + 1}</span> {casePrompt(spec, c)}</p>
-                    <div className="prediction-row">
-                      <label htmlFor={inputId}>Your prediction: {yName}</label>
-                      <div className="guess">
-                        <input
-                          id={inputId}
-                          inputMode="decimal"
-                          autoComplete="off"
-                          placeholder="e.g. 25"
-                          value={r?.raw ?? ''}
-                          aria-describedby={`${inputId}-prompt ${inputId}-tol`}
-                          onChange={(e) => setResults((prev) => ({ ...prev, [c.id]: { raw: e.target.value, grade: null, error: null } }))}
-                        />
-                      </div>
-                      <button type="submit" className="btn btn-primary" disabled={parseGuess(r?.raw ?? '') === null} aria-describedby={parseGuess(r?.raw ?? '') === null ? `${inputId}-first` : undefined}>Check my prediction</button>
-                    </div>
-                    <p className="muted small" id={`${inputId}-tol`}>{parseGuess(r?.raw ?? '') === null && <span id={`${inputId}-first`}>Make a prediction first. </span>}{targetRule()}</p>
-                    {r?.error != null && <p className="field-error" role="alert">{r.error}</p>}
-                    {r?.grade != null && (
-                      <FeedbackLine
-                        feedback={gradeFeedback(r.grade, { format: groupedSig6, more: i < spec.cases.length - 1 })}
-                        working={`${yName} = ${groupedSig6(out?.output ?? Number.NaN)} from the page’s formula`}
-                      />
-                    )}
-                  </form>
-                </li>
-              );
-            })}
-          </ol>
-        </section>
       )}
     </div>
   );

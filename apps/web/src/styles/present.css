@@ -38,7 +38,8 @@
 .pz-stage-frame {
   position: absolute; inset: 0;
   display: flex; flex-direction: column; align-items: center;
-  padding: calc(var(--pz-u) * 4.6) calc(var(--pz-u) * 6.5) max(76px, calc(var(--pz-u) * 4.4));
+  /* Title-safe top (about 6% of the height) and room for the bar at the bottom: the bar is about 72 px tall at every size. */
+  padding: calc(var(--pz-u) * 3.6) calc(var(--pz-u) * 6.5) max(80px, calc(var(--pz-u) * 3.4));
   outline: none;
   transition: padding-inline-end 0.3s var(--pz-ease);
 }
@@ -95,8 +96,10 @@
 /* ---- lists that build (overview, objectives) and key terms --------------------------------------------------------- */
 /* Overview and objectives use the width of the screen: what the page is about on the left, the points that build on the
  * right. Points not yet shown keep their space, so nothing moves while the list builds. */
-.pz-split { flex: 1; display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: calc(var(--pz-u) * 6); align-items: center; min-block-size: 0; }
-.pz-split-head { display: grid; gap: calc(var(--pz-u) * 1.4); align-content: center; }
+.pz-split { flex: 1; display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: calc(var(--pz-u) * 6); align-items: start; align-content: center; min-block-size: 0; }
+/* The heading starts on the first point's line: the list's later points are reserved below it, so a centred heading
+ * floated beside empty space while the first point sat at the top right. */
+.pz-split-head { display: grid; gap: calc(var(--pz-u) * 1.4); align-content: start; }
 .pz-split .pz-heading { font-size: var(--pz-h); }
 .pz-list-beat { flex: 1; display: flex; flex-direction: column; gap: calc(var(--pz-u) * 1.4); min-block-size: 0; }
 .pz-points { display: grid; gap: calc(var(--pz-u) * 2); max-inline-size: 48ch; font-size: calc(var(--pz-body) * 1.06); }
@@ -213,6 +216,10 @@
 .pz-predict-side .pz-slot-value { font-size: calc(var(--pz-display) * 0.86); }
 .pz-predict-side .pz-hint { margin-block-start: 0; }
 .pz-predict-side .pz-fine { margin-block-start: auto; }
+/* The formula predict slide: the worked line under the graph at heading size (it is the question's formula), set in the
+ * scene's design pixels so it zooms with the graph. */
+.pz-predict .explorer-presented { gap: 14px; }
+.pz-predict .explorer-presented .eq-line { margin: 0; font-size: var(--fs-26); line-height: 1.5; min-block-size: calc(1.5em + 16px); }
 .pz-grade.pz-verdict { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: start; gap: 0.1em 0.45em; font-size: calc(var(--pz-body) * 0.8); line-height: 1.3; }
 .pz-verdict .mark { margin-block-start: 0.25em; }
 .pz-verdict strong { font-size: 1.25em; font-weight: var(--fw-bold); letter-spacing: -0.01em; }
@@ -289,28 +296,37 @@
 
 /* ---- the quote zone: one anchored band under every slide for what the page says --------------------------------------
  * Hovering a quoted value, "Show in source" inside a part, and R on a quiz or compare beat all put the page's sentence
- * here. The band's height is reserved on every beat, so a quote appearing or going never moves or covers the slide; long
- * quotes step their size down (zoneQuoteSize) to fit the same band. */
+ * here. The band's height is reserved per beat (the tallest quote that beat can show), so a quote appearing or going
+ * never moves or covers the slide; long quotes step their size down (zoneQuoteSize) to fit. */
 .pz-zone {
-  flex: none; inline-size: min(100%, calc(var(--pz-u) * 150)); block-size: var(--pz-zone-h);
+  position: relative;
+  flex: none; inline-size: min(100%, calc(var(--pz-u) * 150)); max-block-size: var(--pz-zone-h);
   margin: calc(var(--pz-u) * 1.2) 0 0; padding-block-start: calc(var(--pz-u) * 0.9);
-  display: flex; flex-direction: column; align-items: center; gap: calc(var(--pz-u) * 0.35);
+  display: grid; justify-items: center;
   overflow: hidden; text-align: center;
   border-block-start: 1px solid transparent;
   transition: border-color 0.2s ease-out;
 }
+/* A beat that cites nothing (title, goals, closing) keeps no band at all. */
+.pz-zone[data-reserve="none"] { margin: 0; padding: 0; border: 0; block-size: 0; }
 .pz-zone[data-filled="true"] { border-block-start-color: var(--line-2); }
-.pz-zone figcaption { font-size: var(--pz-meta); font-weight: var(--fw-medium); line-height: 1.3; color: var(--ink-3); }
+/* Every quote the beat can show, laid out hidden in one cell: the band takes the tallest one's height, once per beat. */
+.pz-zone-sizer { display: grid; inline-size: 100%; visibility: hidden; }
+.pz-zone-sizer > .pz-zone-quote { grid-area: 1 / 1; }
+/* The quote on show sits over that reserved room (never in the flow), so it can never change the band's height. */
+.pz-zone-live { position: absolute; inset: calc(var(--pz-u) * 0.9) 0 auto; }
+.pz-zone-quote { display: flex; flex-direction: column; align-items: center; gap: calc(var(--pz-u) * 0.35); }
+.pz-zone-cap { font-size: var(--pz-meta); font-weight: var(--fw-medium); line-height: 1.3; color: var(--ink-3); }
 .pz-zone blockquote {
   --zq: 0.74;
   max-inline-size: min(100%, calc(var(--pz-u) * 66));
   font-family: var(--serif); font-size: calc(var(--pz-body) * var(--zq)); line-height: 1.4; color: var(--ink);
   text-wrap: balance;
-  animation: pz-words-in 0.22s ease-out both;
 }
-.pz-zone[data-size="long"] blockquote { --zq: 0.6; }
-.pz-zone[data-size="longer"] blockquote { --zq: 0.5; max-inline-size: min(100%, calc(var(--pz-u) * 80)); }
-.pz-zone[data-size="longest"] blockquote {
+.pz-zone-live blockquote { animation: pz-words-in 0.22s ease-out both; }
+.pz-zone [data-size="long"] blockquote { --zq: 0.6; }
+.pz-zone [data-size="longer"] blockquote { --zq: 0.5; max-inline-size: min(100%, calc(var(--pz-u) * 80)); }
+.pz-zone [data-size="longest"] blockquote {
   --zq: 0.44; max-inline-size: min(100%, calc(var(--pz-u) * 96));
   display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 5; line-clamp: 5; overflow: hidden;
 }
@@ -439,3 +455,7 @@
   .pz-bar[data-shown="false"] { transform: none; }
   .pz-guess { transition: none; }
 }
+
+/* One credit line per slide: the hook slide already carries the page credit above the stage, so a label diagram on it
+   drops its own figure credit (other slides keep it). */
+.pz-stage-frame:has(> .pz-credit) .ld-stage-credit { display: none; }

@@ -24,7 +24,7 @@ import { LogLadderView } from '../LogLadderView.tsx';
 import { ThresholdView } from '../ThresholdView.tsx';
 import { BalanceView } from '../BalanceView.tsx';
 import { ConceptMapView } from '../ConceptMapView.tsx';
-import { FormulaExplorerView } from '../FormulaExplorerView.tsx';
+import { FormulaExplorerView, PREDICT_SCENE_WIDTH } from '../FormulaExplorerView.tsx';
 import { SequenceView } from '../SequenceView.tsx';
 import { SortView } from '../SortView.tsx';
 import { CompareView } from '../CompareView.tsx';
@@ -274,7 +274,7 @@ function PredictScene({ beat, revealed, guess, cite, deck }: { beat: KindOf<'pre
   if (t.kind === 'timeline') return null;
   const visual = predictVisual(t);
   return (
-    <StageFit width={visual === 'graph' ? 760 : 940} contain>
+    <StageFit width={visual === 'graph' ? PREDICT_SCENE_WIDTH : 940} contain>
       {t.kind === 'formula'
         ? <FormulaExplorerView spec={t.spec} cite={cite} presentation={{ mode: 'predict', revealed, guess }} />
         : <ActivityPanel spec={t.spec} cite={cite} disclosure={deck.disclosure} repairBadge={null} presentation={{ mode: 'predict', revealed, guess }} />}
@@ -390,6 +390,11 @@ function PredictBeat({ beat, step, answer, onAnswer, cite, deck }: AskProps<'pre
  */
 /** The smallest scale a stage part is set at before it scrolls instead. */
 const MIN_STAGE_ZOOM = 0.85;
+/**
+ * The largest scale a stage part is set at. High enough that a QHD projector (2560×1440, a stage about 2.3× the design
+ * width) is filled by the part rather than leaving its lower third empty; a part still never grows past the stage.
+ */
+const MAX_STAGE_ZOOM = 2.6;
 /** The sequence board with its reserved answers fits a 1366×768 slide at ~0.8 rather than scrolling its last card. */
 const MIN_SEQUENCE_ZOOM = 0.75;
 
@@ -434,7 +439,7 @@ function StageFit({ children, width = 980, hero, follow, contain = false, frozen
       // Fill the stage; a part taller than the stage shrinks to fit, but not below 85% of its own size (past that it
       // scrolls: the quote zone under every slide takes some height, and a little smaller beats a cut-off graph).
       // `contain` (a predict beat's scene): always the whole part on screen, shrinking below its own size if it must.
-      const next = contain ? Math.min(byWidth, byHeight, 1.9) : Math.max(Math.min(byWidth, minZoom), Math.min(byWidth, byHeight, 1.9));
+      const next = contain ? Math.min(byWidth, byHeight, MAX_STAGE_ZOOM) : Math.max(Math.min(byWidth, minZoom), Math.min(byWidth, byHeight, MAX_STAGE_ZOOM));
       // Measuring the zoomed part rounds to device pixels, so each rescale can measure a hair differently and flip the
       // scale back and forth every frame (a visible vibration at some window sizes). Ignore changes under 0.5%.
       setZoom((prev) => settleZoom(prev, next));
@@ -507,9 +512,13 @@ function EngineBeat({ beat, step, revealed, cite }: { beat: KindOf<'engine'>; st
   );
 }
 
-/** Design width each engine is laid out at before it is scaled to the stage. */
+/**
+ * Design width each engine is laid out at before it is scaled to the stage. Each is chosen so the part's own shape is
+ * close to the stage's (about 2.4 : 1 on a 16:9 screen once the heading and the quote band are taken), so it fills the
+ * slide in both directions instead of leaving the right or the bottom third empty.
+ */
 const ENGINE_WIDTH: Readonly<Record<EngineSpec['componentId'], number>> = {
-  'algorithm-trace-v1': 980, 'log-ladder-v1': 980, 'threshold-v1': 940, 'data-table-v1': 1180, 'label-diagram-v1': 1100,
+  'algorithm-trace-v1': 1040, 'log-ladder-v1': 1140, 'threshold-v1': 920, 'data-table-v1': 1180, 'label-diagram-v1': 1040,
 };
 
 function StageBeat({ beat, cite, deck, repairBadge }: { beat: KindOf<'stage'>; cite: CiteProps; deck: Deck; repairBadge: Badge | null }) {

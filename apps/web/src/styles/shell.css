@@ -68,6 +68,21 @@
 .workspace.hide-source { grid-template-columns: 44px minmax(0, 1fr); }
 .main-inner { max-width: 1040px; }
 
+/* QHD and larger (2560 × 1440): the lesson column and its type grow one step, so a big screen shows a big lesson instead
+ * of a 1040 px strip with 300 px gutters. Only the window's tokens change (presentation mode, portalled outside the
+ * window, keeps its own projector scale). Prose blocks keep their ch caps, so lines stay under ~80 characters. */
+@media (min-width: 2200px) {
+  .app-window {
+    --fs-12: 13px;
+    --fs-14: 15px;
+    --fs-16: 18px;
+    --fs-20: 22px;
+    --fs-26: 30px;
+    font-size: var(--fs-14);
+  }
+  .main-inner { max-width: 1320px; }
+}
+
 /* ---- lesson head: title, one status line, one quiet provenance line ---- */
 .lesson { gap: 24px; }
 .lesson-head { gap: 6px; padding: 8px 0 0; }

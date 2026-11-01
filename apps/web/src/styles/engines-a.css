@@ -290,6 +290,18 @@
 .ll[data-mode="stage"] { --ll-h: 400px; }
 .ll[data-mode="stage"] .ll-ask-case { font-size: var(--fs-26); }
 .ll[data-mode="stage"] .ll-q { font-size: var(--fs-20); }
+/* On a slide the question column is read from the back of the room: it carries the case, the question and the answer at
+ * heading size beside the ladder, instead of lesson-size type in the top corner of an empty column. */
+.ll[data-mode="stage"] .ll-ask { gap: 18px; padding-block-start: 8px; }
+.ll[data-mode="stage"] .ll-ask-n { font-size: var(--fs-16); }
+.ll[data-mode="stage"] .ll-ask-case { font-size: calc(var(--fs-26) * 1.5); line-height: 1.1; }
+.ll[data-mode="stage"] .ll-q { font-size: var(--fs-26); line-height: 1.25; color: var(--ink); }
+.ll[data-mode="stage"] .ll-rule { font-size: var(--fs-20); }
+.ll[data-mode="stage"] .ll-answer { min-block-size: 140px; }
+.ll[data-mode="stage"] .ll-answer-hidden { font-size: var(--fs-26); }
+.ll[data-mode="stage"] .ll-answer-lead { font-size: var(--fs-20); }
+.ll[data-mode="stage"] .ll-answer-big { font-size: calc(var(--fs-26) * 1.4); }
+.ll[data-mode="stage"] .ll-answer-why { font-size: var(--fs-16); }
 
 @media (prefers-reduced-motion: reduce) {
   .at-bar, .at-col, .at-tray li, .at-option, .ll-total, .ll-totals[data-on="true"] .ll-total { transition: none; }

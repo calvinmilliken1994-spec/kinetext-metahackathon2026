@@ -328,9 +328,6 @@ input, textarea { caret-color: var(--accent-text); }
 .btn-small { padding: 4px 10px; }
 .btn-quiet { background: transparent; border-color: transparent; color: var(--accent-text); padding-left: 0; padding-right: 0; }
 .btn-quiet:hover:not(:disabled) { background: transparent; border-color: transparent; text-decoration: underline; text-underline-offset: 3px; }
-/* One credit line per slide: the hook slide already carries the page credit above the stage, so a label diagram on it
-   drops its own figure credit (other slides keep it). */
-.pz-stage-frame:has(> .pz-credit) .ld-stage-credit { display: none; }
 .link-btn {
   display: inline; padding: 0; border: 0; background: none; color: var(--link); cursor: pointer;
   font: inherit; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px;

@@ -11,7 +11,8 @@
   --chem-tick: rgba(10, 19, 23, 0.42);
   --chem-track: #222326;
   --chem-guide: #c5cad0;
-  --chem-excess: rgba(255, 143, 134, 0.7);
+  --chem-excess: rgba(10, 19, 23, 0.5);
+  --chem-excess-line: #0a1317;
 }
 [data-theme="light"] {
   --chem-react: #0064e0;
@@ -20,7 +21,8 @@
   --chem-tick: rgba(255, 255, 255, 0.5);
   --chem-track: #eceef1;
   --chem-guide: #33434f;
-  --chem-excess: rgba(179, 38, 30, 0.55);
+  --chem-excess: rgba(255, 255, 255, 0.55);
+  --chem-excess-line: #0a1317;
 }
 
 .chem-balance {
@@ -29,15 +31,15 @@
   --ab-side-w: 92px;
   --ab-gap: 12px;
   --ab-count-w: 56px;
-  --ab-bar-h: 30px;
+  --ab-bar-h: 28px;
   display: grid;
-  gap: 16px;
+  gap: 14px;
 }
 
 /* ---- the typeset equation -------------------------------------------------------------------------------------- */
 .chem-eq {
   display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: center;
-  gap: 10px 8px; padding: 6px 0 18px; border-bottom: 1px solid var(--line);
+  gap: 10px 8px; padding: 2px 0 14px; border-bottom: 1px solid var(--line);
 }
 .chem-term-wrap { display: inline-flex; align-items: flex-start; gap: 8px; }
 .chem-term { display: inline-flex; flex-direction: column; align-items: center; gap: 10px; }
@@ -59,7 +61,7 @@
 /* ---- atom tally bars ------------------------------------------------------------------------------------------- */
 .atom-bars { display: grid; gap: 0; margin: 0; }
 .ab-legend {
-  display: flex; flex-wrap: wrap; align-items: center; gap: 6px 22px; padding-bottom: 10px;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px 22px; padding-bottom: 6px;
   font-size: var(--fs-14); color: var(--ink-2);
 }
 .ab-key { display: inline-flex; align-items: center; gap: 8px; }
@@ -67,13 +69,13 @@
 .ab-key-right::before { background: var(--chem-prod); }
 .ab-key-note { margin-left: auto; color: var(--ink-3); }
 
-.ab-row { display: grid; gap: 8px; padding: 12px 0 14px; border-top: 1px solid var(--line); }
+.ab-row { display: grid; gap: 4px; padding: 8px 0 10px; border-top: 1px solid var(--line); }
 .ab-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
 .ab-el { font-size: var(--fs-26); font-weight: var(--fw-bold); line-height: 1.1; color: var(--ink); min-width: 2ch; }
 .ab-status { font-size: var(--fs-16); font-weight: var(--fw-medium); color: var(--ink-2); font-variant-numeric: tabular-nums; }
 .ab-row[data-level="true"] .ab-status { color: var(--ok-ink); }
 
-.ab-pair { position: relative; display: grid; gap: 6px; }
+.ab-pair { position: relative; display: grid; gap: 4px; }
 .ab-line { display: grid; grid-template-columns: var(--ab-side-w) minmax(0, 1fr); align-items: center; column-gap: var(--ab-gap); }
 .ab-side { font-size: var(--fs-14); color: var(--ink-3); }
 .ab-track { position: relative; height: var(--ab-bar-h); }
@@ -104,11 +106,12 @@
 }
 .ab-right .ab-seg-label > span { background: var(--chem-prod); }
 
-/* The longer bar's surplus past the shorter bar's end: outlined and lightly hatched, under the substance labels. */
+/* The longer bar's surplus past the shorter bar's end: a neutral hatch with a dark outline, under the substance labels.
+ * It means "more here than on the other side", not "wrong": red stays for a failed check only. */
 .ab-excess {
   position: absolute; z-index: 1; top: -3px; bottom: -3px; border-radius: 4px; pointer-events: none;
-  background: repeating-linear-gradient(-45deg, var(--chem-excess) 0 2px, transparent 2px 9px);
-  box-shadow: inset 0 0 0 2px var(--bad);
+  background: repeating-linear-gradient(-45deg, var(--chem-excess) 0 3px, transparent 3px 9px);
+  box-shadow: inset 0 0 0 2px var(--chem-excess-line);
   transition: left 420ms var(--chem-ease), width 420ms var(--chem-ease);
 }
 

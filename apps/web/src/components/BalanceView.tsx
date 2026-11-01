@@ -176,6 +176,18 @@ export function BalanceView({ spec, cite }: Props) {
         ))}
       </figure>
 
+      <p className="sr-only" role="status" aria-live="polite">{totals.balanced ? 'Every element is balanced.' : `Not balanced: ${totals.rows.filter((r) => !r.balanced).map((r) => r.element).join(', ')}.`}</p>
+
+      {msg !== null && <div className={`grade grade-${msg.tone} chem-verdict`} role="status"><strong><Mark kind={msg.mark} />{msg.text}</strong></div>}
+
+      <div className="order-actions">
+        <button type="button" className="btn btn-primary" onClick={() => { setChecked(gradeBalance(spec.species, coefs, key)); }}>Check my balance</button>
+        <button type="button" className="btn" onClick={() => setShowHint((v) => !v)} aria-expanded={showHint} aria-controls={`${uid}-hint`}>{showHint ? 'Hide hint' : 'Show hint'}</button>
+        <button type="button" className="btn" onClick={() => setRevealed(true)} disabled={revealed}>Reveal the page’s equation</button>
+        <button type="button" className="btn" onClick={reset}>Reset to 1</button>
+      </div>
+      <p id={`${uid}-hint`} className="small" hidden={!showHint}>{spec.hint === '' ? 'Count the atoms of each element on both sides.' : spec.hint}</p>
+      {/* The bars' text alternative sits under the buttons, so "Check my balance" stays above the fold at 1920 × 1080. */}
       <div className="ab-table-wrap">
         <button type="button" className="btn btn-quiet ab-table-toggle" aria-expanded={showTable} aria-controls={`${uid}-atoms`} onClick={() => setShowTable((v) => !v)}>
           {showTable ? 'Hide the atom count table' : 'Show the counts as a table'}
@@ -195,17 +207,6 @@ export function BalanceView({ spec, cite }: Props) {
           </tbody>
         </table>
       </div>
-      <p className="sr-only" role="status" aria-live="polite">{totals.balanced ? 'Every element is balanced.' : `Not balanced: ${totals.rows.filter((r) => !r.balanced).map((r) => r.element).join(', ')}.`}</p>
-
-      {msg !== null && <div className={`grade grade-${msg.tone} chem-verdict`} role="status"><strong><Mark kind={msg.mark} />{msg.text}</strong></div>}
-
-      <div className="order-actions">
-        <button type="button" className="btn btn-primary" onClick={() => { setChecked(gradeBalance(spec.species, coefs, key)); }}>Check my balance</button>
-        <button type="button" className="btn" onClick={() => setShowHint((v) => !v)} aria-expanded={showHint} aria-controls={`${uid}-hint`}>{showHint ? 'Hide hint' : 'Show hint'}</button>
-        <button type="button" className="btn" onClick={() => setRevealed(true)} disabled={revealed}>Reveal the page’s equation</button>
-        <button type="button" className="btn" onClick={reset}>Reset to 1</button>
-      </div>
-      <p id={`${uid}-hint`} className="small" hidden={!showHint}>{spec.hint === '' ? 'Count the atoms of each element on both sides.' : spec.hint}</p>
 
       {revealed && (
         <div className="bal-reveal" data-testid="balance-reveal">

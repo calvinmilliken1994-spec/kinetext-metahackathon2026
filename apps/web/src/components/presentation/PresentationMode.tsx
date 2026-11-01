@@ -183,6 +183,17 @@ export function PresentationMode({ deck, quotes, sourceId, repairBadge, startBea
   const active = useSyncExternalStore(linkStore.subscribe, linkStore.get);
   const known = useMemo((): QuoteLike[] => [...quotes.map((q) => ({ sourceId, quote: q.quote })), ...deckQuotes(beats)], [quotes, sourceId, beats]);
   const hovered = useMemo(() => (active === null ? null : quoteRefForLinks(active.keys, known)), [active, known]);
+  // Every quote this beat can put in the zone (its own quotes: hover, "Show in source" and R only ever show those). The
+  // band is sized to the tallest of them once per beat, so neither a hover nor R changes its height.
+  const reserve = useMemo((): QuoteLike[] => {
+    const seen = new Set<string>();
+    return (beat?.quotes ?? []).filter((q) => {
+      const k = linkKey(q.sourceId, q.quote);
+      if (k === '' || seen.has(k)) return false;
+      seen.add(k);
+      return true;
+    });
+  }, [beat]);
   const cite = useMemo((): CiteProps => ({
     sourceId,
     located: new Set(quotes.map((q) => q.key)),
@@ -239,17 +250,27 @@ export function PresentationMode({ deck, quotes, sourceId, repairBadge, startBea
             concealed={concealed}
           />
         </div>
-        {/* One anchored band, centred under every slide and reserved in the layout: showing or hiding a quote never moves
-            or covers the slide. Hover, "Show in source" and the reveal all put the page's sentence here. */}
+        {/* One anchored band, centred under the slide and reserved in the layout: showing or hiding a quote never moves
+            or covers the slide. Hover, "Show in source" and the reveal all put the page's sentence here. The band is as
+            tall as the longest quote this beat can show (every one is laid out hidden in one stacked cell, decided once
+            per beat), and a beat that cites nothing reserves no band, so the slide above gets the rest of the screen. */}
         <Linked
           as="figure" className="pz-zone" links={zone === null ? [] : [linkKey(zone.sourceId, zone.quote)]}
-          data-size={zone === null ? undefined : zoneQuoteSize(zone.quote)} data-filled={zone === null ? 'false' : 'true'} aria-live="polite"
+          data-filled={zone === null ? 'false' : 'true'} data-reserve={reserve.length === 0 ? 'none' : undefined} aria-live="polite"
         >
+          <div className="pz-zone-sizer" aria-hidden="true">
+            {reserve.map((q) => (
+              <div key={linkKey(q.sourceId, q.quote)} className="pz-zone-quote" data-size={zoneQuoteSize(q.quote)}>
+                <p className="pz-zone-cap">The page says</p>
+                <blockquote>“{q.quote}”</blockquote>
+              </div>
+            ))}
+          </div>
           {zone !== null && (
-            <>
-              <figcaption>The page says</figcaption>
+            <div className="pz-zone-quote pz-zone-live" data-size={zoneQuoteSize(zone.quote)}>
+              <figcaption className="pz-zone-cap">The page says</figcaption>
               <blockquote key={zone.quote}>“{zone.quote}”</blockquote>
-            </>
+            </div>
           )}
         </Linked>
       </div>
