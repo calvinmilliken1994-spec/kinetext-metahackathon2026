@@ -36,7 +36,7 @@ export function browsePages<T extends BrowsePage>(sources: readonly T[], o: { qu
   return { groups, shown: keep.length, total: library.length };
 }
 
-interface JobLike { jobId: string; sourceId: string; createdAt: string; status: string }
+interface JobLike { jobId: string; sourceId: string; createdAt: string; status: string; reviewPublishedAt?: string | undefined }
 
 const newest = (a: JobLike, b: JobLike): number => b.createdAt.localeCompare(a.createdAt);
 
@@ -53,7 +53,11 @@ export function lessonsByPage(jobs: readonly JobLike[]): Map<string, { count: nu
 /** latest: the newest finished lesson of each page; lessons: every finished lesson; all: every run, failed and declined too. */
 export type LessonScope = 'latest' | 'lessons' | 'all';
 
-export interface LessonRow<J> { jobId: string; sourceId: string; title: string; subject: SubjectKey; job: J }
+export interface LessonRow<J> {
+  jobId: string; sourceId: string; title: string; subject: SubjectKey; job: J;
+  /** Stage 10b: when a teacher published this lesson (the "Published" mark), else null. */
+  published: string | null;
+}
 
 /** Finished lessons (or every run), newest first, narrowed by subject and a search over the page title. */
 export function browseLessons<J extends JobLike>(
@@ -69,7 +73,7 @@ export function browseLessons<J extends JobLike>(
       seen.add(j.sourceId);
       return true;
     })
-    .map((j) => ({ jobId: j.jobId, sourceId: j.sourceId, title: byId.get(j.sourceId)?.title ?? 'A page no longer listed', subject: subjectOfSource(byId, j.sourceId), job: j }))
+    .map((j) => ({ jobId: j.jobId, sourceId: j.sourceId, title: byId.get(j.sourceId)?.title ?? 'A page no longer listed', subject: subjectOfSource(byId, j.sourceId), job: j, published: j.reviewPublishedAt ?? null }))
     .filter((r) => (o.subject === null || r.subject === o.subject) && matchesQuery(r.title, o.query));
 }
 

@@ -34,6 +34,14 @@
 //                           (the Stage 6 pipeline); 'activity' runs the unchanged v1 pipeline;
 //                           anything else is a 400 FLOW_INVALID.
 //
+//   POST /api/jobs/:id/review -> Stage 10b slice R, teacher review and publish (apps/api/review.ts): body
+//                           {action:'publish', checkedParts, hiddenParts} or {action:'unpublish'}; the same Origin
+//                           check and judge-access gate as the other POSTs (403 ACCESS_REQUIRED); free, so the judge
+//                           budget does not apply. 409 NOT_REVIEWABLE unless the job is a succeeded lesson; 400
+//                           BAD_REQUEST / REVIEW_INCOMPLETE / NOTHING_TO_PUBLISH; 200 {review: record | null}. The review is
+//                           `<storageDir>/runs/<id>/review.json`; GET /api/jobs/:id adds `review` when it exists and
+//                           GET /api/jobs marks published lessons with `reviewPublishedAt`.
+//
 //   GET/POST/DELETE /api/access -> Stage 10 slice A, judge access (apps/api/access.ts): GET reports
 //                           {gate, granted, capUSD, spentUSD, remainingUSD, buildsEnabled}; POST {code}
 //                           starts a signed HttpOnly session (401 ACCESS_CODE_INVALID, 429
@@ -76,6 +84,7 @@ import type { ModelChoice } from '../../packages/meta/pricing.ts';
 import { DEFAULT_MODEL, MODEL_INFO } from './model-clients.ts';
 import { MAX_CONCURRENT_JOBS_BOUND } from './resource-limits.ts';
 import { createAccessControl } from './access.ts';
+import { deleteReview, MAX_REVIEW_BODY_BYTES, publishedPartIds, readReview, validatePublishBody, writeReview } from './review.ts';
 import type { AccessControl, AccessOptions } from './access.ts';
 import { listJobs, readJob } from '../../workers/generation/jobs.ts';
 import { applyContentHolds, componentHistory, enrichLabelBoxes, recheckLesson } from './recheck.ts';
@@ -122,6 +131,8 @@ export interface ApiOptions {
    * gate: false). See apps/api/access.ts for the options and the spend rule.
    */
   access?: AccessOptions;
+  /** Stage 10b: the clock that stamps `publishedAt` (tests pin it). Default: the system clock. */
+  now?: () => Date;
 }
 
 const MAX_BODY_BYTES = 10 * 1024;
@@ -541,7 +552,11 @@ export function createApiServer(opts: ApiOptions): Server {
 
     if (pathname === '/api/jobs') {
       if (method === 'GET') {
-        return sendJson(res, 200, listJobs(opts.storageDir));
+        // Stage 10b: a published lesson carries its publish time, so the web list can mark it.
+        return sendJson(res, 200, listJobs(opts.storageDir).map(job => {
+          const review = readReview(opts.storageDir, job.jobId);
+          return review === null ? job : { ...job, reviewPublishedAt: review.publishedAt };
+        }));
       }
       if (method === 'POST') {
         return handleCreateJob(req, res);
@@ -550,7 +565,12 @@ export function createApiServer(opts: ApiOptions): Server {
     }
 
     if (pathname.startsWith('/api/jobs/')) {
-      const id = decodeURIComponent(pathname.slice('/api/jobs/'.length));
+      const rest = decodeURIComponent(pathname.slice('/api/jobs/'.length));
+      // Stage 10b: /api/jobs/:id/review (exactly one id segment, then "review").
+      if (rest.endsWith('/review') && !rest.slice(0, -'/review'.length).includes('/') && rest !== '/review') {
+        return handleReview(req, res, method, rest.slice(0, -'/review'.length));
+      }
+      const id = rest;
       if (id === '' || id.includes('/')) {
         return sendError(res, 404, 'NOT_FOUND');
       }
@@ -572,13 +592,92 @@ export function createApiServer(opts: ApiOptions): Server {
         for (const spec of Object.values(job.kitSpecs ?? {})) enrichLabelBoxes(spec);
         // Set B: per-revision check outcomes for the repair story (failed revisions give check ids and points only).
         const withHistory = job.lesson !== undefined ? { ...job, componentHistory: componentHistory(opts.storageDir, id) } : job;
-        return sendJson(res, 200, withHistory);
+        // Stage 10b: the teacher review, when there is one (no file = not reviewed).
+        const review = readReview(opts.storageDir, id);
+        return sendJson(res, 200, review === null ? withHistory : { ...withHistory, review });
       } catch {
         return sendError(res, 404, 'NOT_FOUND'); // JOB_ID_INVALID or unreadable run
       }
     }
 
     return sendError(res, 404, 'NOT_FOUND');
+  }
+
+  /**
+   * Stage 10b slice R: POST /api/jobs/:id/review. Order: Origin, access gate (so a visitor learns nothing about jobs),
+   * the job (404), reviewable (409), then the body. Free: no ledger entry, no judge budget.
+   */
+  async function handleReview(req: IncomingMessage, res: ServerResponse, method: string, id: string): Promise<void> {
+    if (method !== 'POST') {
+      return sendError(res, 405, 'METHOD_NOT_ALLOWED');
+    }
+    if (!originAllowed(req)) {
+      return sendError(res, 403, 'ORIGIN_NOT_ALLOWED');
+    }
+    if (!access.isGranted(req)) {
+      return sendError(res, 403, 'ACCESS_REQUIRED');
+    }
+    let job: ReturnType<typeof readJob>;
+    try {
+      job = readJob(opts.storageDir, id);
+    } catch {
+      return sendError(res, 404, 'NOT_FOUND'); // JOB_ID_INVALID or an unreadable run
+    }
+    if (job === null) {
+      return sendError(res, 404, 'NOT_FOUND');
+    }
+    if (job.summary.status !== 'succeeded' || job.summary.flow !== 'lesson') {
+      return sendError(res, 409, 'NOT_REVIEWABLE');
+    }
+    const contentType = (req.headers['content-type'] ?? '').toLowerCase();
+    if (!contentType.startsWith('application/json')) {
+      return sendError(res, 415, 'UNSUPPORTED_MEDIA_TYPE');
+    }
+    let rawBody: string;
+    try {
+      rawBody = await readBodyLimited(req, MAX_REVIEW_BODY_BYTES);
+    } catch (err: unknown) {
+      if (err instanceof Error && err.message === 'PAYLOAD_TOO_LARGE') {
+        return sendError(res, 413, 'PAYLOAD_TOO_LARGE');
+      }
+      return sendError(res, 400, 'BAD_REQUEST');
+    }
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(rawBody) as unknown;
+    } catch {
+      return sendError(res, 400, 'BAD_REQUEST');
+    }
+    const action: unknown = typeof parsed === 'object' && parsed !== null ? (parsed as Record<string, unknown>)['action'] : undefined;
+    try {
+      if (action === 'unpublish') {
+        deleteReview(opts.storageDir, id);
+        return sendJson(res, 200, { review: null });
+      }
+      if (action !== 'publish') {
+        return sendError(res, 400, 'BAD_REQUEST');
+      }
+      // The same view of the lesson the detail route serves: parts today's checks or a human review withheld are not reviewable.
+      recheckLesson(opts.storageDir, job, {
+        ...(opts.sourcesDir !== undefined ? { sourcesDir: opts.sourcesDir } : {}),
+        userSourcesDir: userSourcesDir(),
+      });
+      applyContentHolds(opts.storageDir, job);
+      const checked = validatePublishBody(parsed, publishedPartIds(job));
+      if (!checked.ok) {
+        return sendError(res, checked.status, checked.code);
+      }
+      const review = {
+        status: 'published' as const,
+        publishedAt: (opts.now ?? ((): Date => new Date()))().toISOString(),
+        hiddenParts: checked.value.hiddenParts,
+        checkedParts: checked.value.checkedParts,
+      };
+      writeReview(opts.storageDir, id, review);
+      return sendJson(res, 200, { review });
+    } catch {
+      return sendError(res, 500, 'INTERNAL');
+    }
   }
 
   /** Stage 10 slice A: GET (open) / POST (code -> session) / DELETE (sign out) /api/access. */

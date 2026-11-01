@@ -1,0 +1,90 @@
+/* Stage 10b slice R: Review and publish (components/ReviewPage.tsx). Tokens only; the page sits in the main area like
+ * the other pages (nav.css .page). Also: the "Published" mark in All lessons and the brief highlight on a part that the
+ * Review page's "Open" scrolled to. */
+
+/* The page fills the same column as the other pages; the long sentences below keep their own line length. */
+
+/* The lesson under review: its title, its state, a way back. */
+.rv-lesson {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px;
+  padding: 16px 20px; border: 1px solid var(--line); border-radius: var(--r-l); background: var(--panel);
+}
+.rv-lesson-text { display: grid; gap: 4px; min-width: 0; }
+.rv-lesson-title { font-size: var(--fs-20); font-weight: var(--fw-bold); line-height: 1.3; color: var(--ink); overflow-wrap: anywhere; }
+.rv-state { font-size: var(--fs-14); color: var(--ink-2); }
+.rv-state.is-published { color: var(--ink); font-weight: var(--fw-medium); }
+.rv-state .mark { margin-right: 6px; }
+
+/* Result of the last action, said in words (and moved to when it happens). Empty = no space taken. */
+.rv-status { margin: 0; font-size: var(--fs-14); color: var(--ink); }
+.rv-status:empty { display: none; }
+.rv-status:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; border-radius: var(--r); }
+
+.rv-access { display: grid; gap: 12px; max-width: 560px; padding: 16px 20px; border: 1px solid var(--line-2); border-radius: var(--r-l); background: var(--panel-2); }
+
+.rv-section { display: grid; gap: 10px; min-width: 0; }
+.rv-h { font-size: var(--fs-16); font-weight: var(--fw-bold); color: var(--ink); }
+
+/* One bordered list; rows are divided by hairlines, not boxed again. */
+.rv-list { margin: 0; padding: 0; list-style: none; border: 1px solid var(--line); border-radius: var(--r-l); background: var(--panel); overflow: hidden; }
+.rv-row {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px 28px; padding: 16px 20px;
+}
+.rv-row + .rv-row { border-top: 1px solid var(--line); }
+.rv-row-main { display: grid; gap: 4px; min-width: 0; }
+.rv-row-title { font-size: var(--fs-16); font-weight: var(--fw-bold); line-height: 1.35; color: var(--ink); overflow-wrap: anywhere; }
+.rv-row-meta { display: flex; flex-wrap: wrap; align-items: center; font-size: var(--fs-12); font-weight: var(--fw-medium); color: var(--ink-3); }
+.rv-row-meta > * + *::before { content: "·"; margin: 0 8px; color: var(--ink-3); }
+.rv-row-ok .mark { margin-right: 4px; color: var(--ok); }
+.rv-row-note { font-size: var(--fs-14); line-height: 1.5; color: var(--ink-2); max-width: 70ch; }
+.rv-list-quiet .rv-row { background: var(--panel-2); }
+.rv-row.is-hidden .rv-row-title { color: var(--ink-2); }
+
+.rv-row-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 10px 22px; }
+.rv-check, .rv-switch { display: inline-flex; align-items: center; gap: 8px; font-size: var(--fs-14); color: var(--ink); cursor: pointer; }
+.rv-check input { inline-size: 18px; block-size: 18px; margin: 0; accent-color: var(--accent); cursor: inherit; }
+.rv-check:has(input:disabled), .rv-switch:has(input:disabled) { color: var(--ink-3); cursor: not-allowed; }
+.rv-check:has(input:focus-visible), .rv-switch:has(input:focus-visible) { outline: 2px solid var(--focus); outline-offset: 4px; border-radius: var(--r); }
+.rv-read { display: inline-flex; align-items: center; font-size: var(--fs-14); color: var(--ink-2); }
+
+/* The hide switch: a real checkbox (role=switch) drawn as a track and knob. */
+.rv-switch input { position: absolute; opacity: 0; inline-size: 1px; block-size: 1px; margin: 0; }
+.rv-switch-track {
+  position: relative; flex: none; inline-size: 34px; block-size: 20px; border-radius: 999px; background: var(--panel-3);
+  border: 1px solid var(--line-3); transition: background 0.12s, border-color 0.12s;
+}
+.rv-switch-track::after {
+  content: ""; position: absolute; inset-block-start: 2px; inset-inline-start: 2px; inline-size: 14px; block-size: 14px; border-radius: 50%;
+  background: var(--ink-2); transition: transform 0.12s, background 0.12s;
+}
+.rv-switch input:checked + .rv-switch-track { background: var(--accent); border-color: var(--accent); }
+.rv-switch input:checked + .rv-switch-track::after { transform: translateX(14px); background: var(--accent-ink); }
+.rv-switch input:disabled + .rv-switch-track { opacity: 0.55; }
+
+/* "Open": a quiet text button that takes the teacher to the part in the lesson. */
+.rv-open {
+  display: inline-flex; align-items: center; gap: 4px; padding: 2px 0; border: 0; background: none; color: var(--accent-text);
+  font: inherit; font-size: var(--fs-14); font-weight: var(--fw-medium); cursor: pointer;
+}
+.rv-open:hover { text-decoration: underline; text-underline-offset: 3px; }
+.rv-open:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: var(--r); }
+
+.rv-publish { display: grid; gap: 14px; padding-top: 4px; }
+.rv-note { max-width: 78ch; font-size: var(--fs-14); line-height: 1.55; color: var(--ink-2); }
+.rv-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; }
+.rv-bar .btn-primary { min-width: 168px; padding: 9px 20px; font-size: var(--fs-16); }
+.rv-need { font-size: var(--fs-14); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+
+/* The part "Open" scrolled to: a ring that fades, so the eye finds it. */
+[data-review-target="true"] { outline: 2px solid var(--accent-text); outline-offset: 6px; border-radius: var(--r-l); animation: rv-target-fade 2.4s ease-out forwards; }
+@keyframes rv-target-fade { 0%, 70% { outline-color: var(--accent-text); } 100% { outline-color: transparent; } }
+@media (prefers-reduced-motion: reduce) { [data-review-target="true"] { animation: none; } }
+
+/* All lessons: a small "Published" mark after the page title. */
+.ll-published { display: inline-flex; align-items: center; font-size: var(--fs-12); font-weight: var(--fw-medium); color: var(--ok); white-space: nowrap; }
+.ll-published .mark { margin-right: 4px; }
+
+@media (max-width: 760px) {
+  .rv-row { grid-template-columns: minmax(0, 1fr); }
+  .rv-row-actions { justify-content: flex-start; }
+}

@@ -1,0 +1,13 @@
+// Scratch API for the review harness: the REAL server code on a copy of two stored lessons, on its own port.
+// RV_GATE=1 turns the judge gate on (test code only). Never the :8787 read-only server.
+import { createApiServer } from 'file:///C:/projects/meta-hackathon/apps/api/server.ts';
+
+const port = Number(process.env.RV_PORT ?? 8790);
+const gate = process.env.RV_GATE === '1';
+const server = createApiServer({
+  storageDir: '<local scratch folder>/storage',
+  startJob: null,
+  allowedHosts: ['127.0.0.1:5199', 'localhost:5199'],
+  ...(gate ? { access: { code: 'scratch-harness-code-not-a-secret', sessionSecret: 'scratch-harness-session-secret', buildsPaused: () => false } } : {}),
+});
+server.listen(port, '127.0.0.1', () => console.log(`rv api on ${port} gate=${gate}`));

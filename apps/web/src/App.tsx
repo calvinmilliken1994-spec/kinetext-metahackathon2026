@@ -32,6 +32,7 @@ import { Sidebar } from './components/Sidebar.tsx';
 import { NewLessonPage } from './components/NewLessonPage.tsx';
 import { AllLessonsPage } from './components/AllLessonsPage.tsx';
 import { HowItWorksPage, PlaceholderPage } from './components/HowItWorksPage.tsx';
+import { ReviewPage } from './components/ReviewPage.tsx';
 import { ACCESS_INPUT_ID } from './components/AccessForm.tsx';
 import { navTarget, searchForView, sidebarSections, VIEW_TITLES, viewFromSearch } from './lib/navigation.ts';
 import type { MainView, NavId } from './lib/navigation.ts';
@@ -641,7 +642,17 @@ export function App() {
                     onEnterCode={onEnterCode}
                   />
                 )}
-                {(view === 'review' || view === 'results') && (
+                {view === 'review' && (
+                  <ReviewPage
+                    detail={ready}
+                    title={lessonOpen && selectedSource !== null ? shortTitle(selectedSource.title) : null}
+                    access={access}
+                    onAccess={setAccess}
+                    onShowLesson={() => navigate('lesson')}
+                    onBrowseLessons={() => navigate('lessons')}
+                  />
+                )}
+                {view === 'results' && (
                   <PlaceholderPage
                     kind={view}
                     onBack={lessonOpen ? () => navigate('lesson') : null}

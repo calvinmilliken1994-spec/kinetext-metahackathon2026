@@ -26,6 +26,8 @@ import { mostVisualFirst } from './partOrder.ts';
 import type { PartKind } from './partOrder.ts';
 import type { PredictPlan } from './compare.ts';
 import type { CheckTally, QuoteTally } from './provenance.ts';
+import { reviewOfLesson } from './reviewState.ts';
+import type { ReviewState } from './reviewState.ts';
 import { isTimelineSpec, pairOptions } from './timeline.ts';
 import type { AnyActivitySpec } from './timeline.ts';
 import type { AlgorithmTraceSpec, DataTableSpec, LabelDiagramSpec, LogLadderSpec, ThresholdSpec } from '../../../../packages/contracts/kit.ts';
@@ -65,6 +67,8 @@ export interface Deck {
   notesOnly?: boolean;
   checks: CheckTally | null;
   quotes: QuoteTally | null;
+  /** Stage 10b: the lesson was published by a teacher (its status reads "Reviewed by a teacher" instead of "needs teacher review"). */
+  review?: ReviewState;
 }
 
 interface DeckCommon { jobId: string; source: DeckSource | null; disclosure: string; checks: CheckTally | null; quotes: QuoteTally | null }
@@ -85,8 +89,9 @@ export function deckFromLesson(input: DeckCommon & {
   }
   const ov = input.lesson.overview;
   const notesOnly = parts.length === 0 && cards.length > 0;
+  const review = reviewOfLesson(input.lesson);
   return {
-    jobId: input.jobId, source: input.source, checks: input.checks, quotes: input.quotes,
+    jobId: input.jobId, source: input.source, checks: input.checks, quotes: input.quotes, ...(review === null ? {} : { review }),
     // A notes-only deck opens on its title slide, whose disclosure line then starts by saying so. A deck with SAM
     // regions credits SAM there too (demo pair review #8), so the title slide names both Meta models.
     disclosure: withSamNote(notesOnly ? `${NOTES_ONLY_LINE} ${input.disclosure}` : input.disclosure, parts),
@@ -360,12 +365,13 @@ export const HOOK_BEAT = -1;
  * models, `OPEN_DIAGRAM_CREDIT`). The model is the job's own, read
  * back from the deck's disclosure. Null without source information.
  */
-export function creditLine(deck: Pick<Deck, 'source' | 'disclosure' | 'parts'>): string | null {
+export function creditLine(deck: Pick<Deck, 'source' | 'disclosure' | 'parts' | 'review'>): string | null {
   const card = titleCard(deck.source);
   if (card === null) return null;
   const made = madeWithOf(deck.disclosure);
   // The review caution stays next to the AI disclosure, so a line too long for a small screen loses only the SAM credit.
-  const ai = made === null ? 'AI-written, teacher review pending' : `AI-written with ${creditModel(made)}, teacher review pending`;
+  const state = deck.review === undefined ? 'teacher review pending' : 'reviewed by a teacher';
+  const ai = made === null ? `AI-written, ${state}` : `AI-written with ${creditModel(made)}, ${state}`;
   return [card.name, card.from === null ? null : firstSegment(card.from), card.licence, ai, usesSam(deck.parts) ? diagramCredit(made) : null]
     .filter((x): x is string => x !== null && x.trim() !== '').join(' · ');
 }

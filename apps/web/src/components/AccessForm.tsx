@@ -8,7 +8,7 @@ import { IconKey } from './navIcons.tsx';
 
 export const ACCESS_INPUT_ID = 'access-code';
 
-export function AccessForm({ onAccess }: { onAccess: (a: Access) => void }) {
+export function AccessForm({ onAccess, intro = ACCESS_INTRO, submitLabel = 'Unlock builds' }: { onAccess: (a: Access) => void; intro?: string; submitLabel?: string }) {
   const uid = useId();
   const [code, setCode] = useState('');
   const [busy, setBusy] = useState(false);
@@ -29,7 +29,7 @@ export function AccessForm({ onAccess }: { onAccess: (a: Access) => void }) {
   return (
     <form className="access-form" onSubmit={submit} noValidate aria-labelledby={`${uid}-h`} data-testid="access-form">
       <p className="access-head" id={`${uid}-h`}><IconKey size={16} />Judge access</p>
-      <p className="access-intro">{ACCESS_INTRO}</p>
+      <p className="access-intro">{intro}</p>
       <label htmlFor={ACCESS_INPUT_ID} className="field-label">Access code</label>
       <div className="access-row">
         <input
@@ -37,7 +37,7 @@ export function AccessForm({ onAccess }: { onAccess: (a: Access) => void }) {
           aria-invalid={error !== null} aria-describedby={error !== null ? `${uid}-err` : undefined}
           onChange={(e) => { setCode(e.target.value); setError(null); }}
         />
-        <button type="submit" className="btn btn-primary" disabled={busy}>{busy ? 'Checking…' : 'Unlock builds'}</button>
+        <button type="submit" className="btn btn-primary" disabled={busy}>{busy ? 'Checking…' : submitLabel}</button>
       </div>
       {error !== null && <p id={`${uid}-err`} className="field-error" role="alert">{error}</p>}
     </form>

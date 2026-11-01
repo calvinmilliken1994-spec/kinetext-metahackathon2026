@@ -9,6 +9,7 @@ import { checksLine, CLOSING_QUOTES, deckQuotes, engineStage, isRevealed, leftOu
 import { targetRule } from '../../lib/feedback.ts';
 import { aiLabel, prettyExponents } from '../../lib/displayText.ts';
 import { REVIEW_STATUS, withoutReviewNote } from '../../lib/provenance.ts';
+import { reviewedStatus } from '../../lib/reviewState.ts';
 import { quizCards } from '../../lib/quiz.ts';
 import { compareGrid, NOT_STATED } from '../../lib/compare.ts';
 import { parseGuess } from '../../lib/predictions.ts';
@@ -81,7 +82,7 @@ function TitleBeat({ deck }: Pick<BeatProps, 'deck'>) {
           <div><dt>Licence</dt><dd>{card.licence}</dd></div>
         </dl>
       )}
-      <p className="pz-honest"><strong>{REVIEW_STATUS}</strong> · {withoutReviewNote(deck.disclosure)}</p>
+      <p className="pz-honest"><strong>{deck.review === undefined ? REVIEW_STATUS : reviewedStatus(deck.review)}</strong> · {withoutReviewNote(deck.disclosure)}</p>
     </div>
   );
 }
@@ -573,7 +574,7 @@ function ClosingBeat({ deck, beats }: Pick<BeatProps, 'deck' | 'beats'>) {
           </ul>
         </section>
       </div>
-      <p className="pz-calm">{checks !== null && <Mark kind="ok" />}{[checks, REVIEW_STATUS].filter((s) => s !== null).join(' · ')}</p>
+      <p className="pz-calm">{checks !== null && <Mark kind="ok" />}{[checks, deck.review === undefined ? REVIEW_STATUS : reviewedStatus(deck.review)].filter((s) => s !== null).join(' · ')}</p>
       {leftOut !== null && <p className="pz-calm pz-muted">{leftOut}</p>}
       <p className="pz-fine">{withoutReviewNote(deck.disclosure)}</p>
     </div>

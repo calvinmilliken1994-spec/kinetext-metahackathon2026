@@ -4,7 +4,7 @@ import { CHECKED_SENTENCE } from '../lib/provenance.ts';
 import type { CountPhrase, ReceiptInput } from '../lib/provenance.ts';
 import { lessonStatusLine, provenanceSentence } from '../lib/partOrder.ts';
 import { IconChevronDown, IconChevronUp } from './icons.tsx';
-import { LessonPartsContext } from './LessonPartsContext.ts';
+import { LessonPartsContext, LessonReviewContext } from './LessonPartsContext.ts';
 import { revealInPanels } from '../lib/scroll.ts';
 import { TrustReceipt, TrustReceiptPanel } from './TrustReceipt.tsx';
 
@@ -39,6 +39,7 @@ export function Provenance({ disclosure, phrases, onDetails, receipt = null, sub
   const panelId = useId();
   const moreId = useId();
   const counts = useContext(LessonPartsContext);
+  const review = useContext(LessonReviewContext);
   const faults = phrases.filter((p) => p.tone === 'fault');
   const folded = phrases.filter((p) => p.tone !== 'fault');
   const revised = folded.some((p) => p.tone === 'neutral');
@@ -54,7 +55,7 @@ export function Provenance({ disclosure, phrases, onDetails, receipt = null, sub
     <div className="provenance" data-testid="provenance">
       <p className="prov-status">
         {subject !== null && <span className="prov-subject" data-testid="lesson-subject">{subject.text}</span>}
-        <span className="review-status" data-testid="review-status">{lessonStatusLine(counts)}</span>
+        <span className="review-status" data-testid="review-status">{lessonStatusLine(counts, review)}</span>
         {receipt !== null && <TrustReceipt input={receipt.input} open={open} onToggle={() => setOpen((v) => !v)} panelId={panelId} />}
         {onDetails !== undefined && <button type="button" className="link-btn" onClick={onDetails}>Run details</button>}
       </p>

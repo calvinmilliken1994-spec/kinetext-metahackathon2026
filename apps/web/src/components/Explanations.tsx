@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import type { ActivitySpec } from '../../../../packages/contracts/index.ts';
 import { previewQuote, quoteKey } from '../lib/evidence.ts';
 import { AiWritten } from './Disclosure.tsx';
@@ -5,6 +6,8 @@ import { IconLocate } from './icons.tsx';
 import { Linked } from './Linked.tsx';
 import { linkKeysOf } from '../lib/linking.ts';
 import { prettyExponents } from '../lib/displayText.ts';
+import { partReviewTag } from '../lib/reviewState.ts';
+import { LessonReviewContext } from './LessonPartsContext.ts';
 
 export interface CiteProps {
   /** Source currently shown in the Source panel. */
@@ -32,11 +35,13 @@ export function CitationChip({ label, quote, citeKey, enabled, onCite }: { label
 export const AI_TAG_TEXT = 'AI-written · needs teacher review';
 
 export function Explanations({ explanations, cite }: { explanations: ActivitySpec['explanations']; cite: CiteProps }) {
+  // Stage 10b: a lesson a teacher published says "teacher-reviewed"; every other place keeps "needs teacher review".
+  const review = useContext(LessonReviewContext);
   return (
     <section className="card" aria-labelledby="expl-heading">
       <div className="card-head">
         <h3 id="expl-heading">Explanations, grounded in the source</h3>
-        <AiWritten extra="needs teacher review" />
+        <AiWritten extra={partReviewTag(review)} />
       </div>
       <ul className="explanations">
         {explanations.map((ex) => (

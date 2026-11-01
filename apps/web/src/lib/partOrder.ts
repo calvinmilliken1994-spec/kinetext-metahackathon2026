@@ -8,6 +8,8 @@
 
 import { isKitGenComponentId } from '../../../../packages/contracts/kit.ts';
 import type { LessonCard, LessonItem } from './lesson.ts';
+import { reviewedStatus } from './reviewState.ts';
+import type { ReviewState } from './reviewState.ts';
 
 /** A part's kind: a kit componentId, or 'simulation' / 'timeline' for a premium or classic activity. */
 export type PartKind = string;
@@ -101,10 +103,15 @@ export function partCounts(cards: readonly Pick<LessonCard, 'status'>[]): PartCo
 /** The lesson's review status, said once. */
 export const TEACHER_REVIEW_PENDING = 'Teacher review pending';
 
-/** 'Teacher review pending · 2 parts ready · 1 held back'. Counts are left out when unknown (a build still running). */
-export function lessonStatusLine(counts: PartCounts | null): string {
-  if (counts === null) return TEACHER_REVIEW_PENDING;
-  const out = [TEACHER_REVIEW_PENDING];
+/**
+ * 'Teacher review pending · 2 parts ready · 1 held back'. Counts are left out when unknown (a build still running).
+ * A published lesson (Stage 10b) reads 'Reviewed by a teacher · published 2 Nov 2026 · 2 parts ready' instead; `utc` pins
+ * the date's time zone for tests.
+ */
+export function lessonStatusLine(counts: PartCounts | null, review: ReviewState | null = null, utc = false): string {
+  const head = review === null ? TEACHER_REVIEW_PENDING : reviewedStatus(review, utc);
+  if (counts === null) return head;
+  const out = [head];
   if (counts.ready > 0) out.push(`${counts.ready} ${counts.ready === 1 ? 'part' : 'parts'} ready`);
   if (counts.heldBack > 0) out.push(`${counts.heldBack} held back`);
   return out.join(' · ');

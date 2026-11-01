@@ -8,6 +8,8 @@ import { parseModels } from './lib/models.ts';
 import { ACCESS_MESSAGES, accessFromInfo, accessFromResponse, parseAccessInfo } from './lib/access.ts';
 import type { Access } from './lib/access.ts';
 import { createJobBody, normaliseJobDetail, parseJobSummary } from './lib/lessonJob.ts';
+import { parseReview } from './lib/reviewState.ts';
+import type { ReviewState } from './lib/reviewState.ts';
 import type { FlowId, LessonData, LessonProgress } from './lib/lessonJob.ts';
 import type { ModelId, ModelOption } from './lib/models.ts';
 import type { ActivityId, DemoFault, FaultRecord, MetaReceipt, RepairRecord, SourceAnalysis, StageEvent, UserSourceInput, ValidationReport } from '../../../packages/contracts/index.ts';
@@ -62,6 +64,8 @@ export interface JobSummary {
   flow?: FlowId;
   /** Stage 6 lesson jobs: progress counters. Absent on other jobs. */
   lesson?: LessonProgress;
+  /** Stage 10b: when a teacher published this lesson (the job list only; the detail carries the whole review). */
+  reviewPublishedAt?: string;
 }
 
 /** One stored revision of the activity spec and its validation report (Stage 5). */
@@ -166,6 +170,19 @@ export const api = {
   })),
   /** Sign out: the server clears the session cookie. */
   deleteAccess: async (): Promise<Access> => accessOrError(await request<unknown>('/api/access', { method: 'DELETE' })),
+  /**
+   * Stage 10b: publish a lesson's teacher review ({ action: 'publish', checkedParts, hiddenParts }) or take it back
+   * ({ action: 'unpublish' }). The answer is { review } (null after unpublishing); a refusal throws an ApiError with the
+   * API's code (ACCESS_REQUIRED, REVIEW_INCOMPLETE, NOTHING_TO_PUBLISH, NOT_REVIEWABLE, …).
+   */
+  postReview: async (jobId: string, body: { action: 'publish'; checkedParts: string[]; hiddenParts: string[] } | { action: 'unpublish' }): Promise<ReviewState | null> => {
+    const raw = await request<{ review?: unknown } | null>(`/api/jobs/${encodeURIComponent(jobId)}/review`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    return parseReview(raw?.review);
+  },
   /** Store a teacher-pasted text. 201 = created, 200 = the same text was stored before. */
   createSource: (input: UserSourceInput) =>
     request<CreatedSource>('/api/sources', {

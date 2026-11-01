@@ -10,6 +10,7 @@ import {
 import type { QuoteLike } from '../../lib/linking.ts';
 import { linkKey, linkStore } from '../../lib/linking.ts';
 import { Linked } from '../Linked.tsx';
+import { LessonReviewContext } from '../LessonPartsContext.ts';
 import type { CiteProps } from '../Explanations.tsx';
 import { BeatView } from './Beats.tsx';
 import { IconBlank, IconExit, IconFullscreen, IconKeys, IconNext, IconNotes, IconPrev } from './icons.tsx';
@@ -354,5 +355,6 @@ export function PresentationMode({ deck, quotes, sourceId, repairBadge, startBea
       )}
     </div>
   );
-  return createPortal(view, document.body);
+  // Stage 10b: parts shown on the slides read "teacher-reviewed" when the lesson was published.
+  return createPortal(<LessonReviewContext.Provider value={deck.review ?? null}>{view}</LessonReviewContext.Provider>, document.body);
 }

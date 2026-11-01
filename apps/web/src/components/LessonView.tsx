@@ -1,4 +1,4 @@
-import { Component, useId, useLayoutEffect, useRef, useState } from 'react';
+import { Component, useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import type { CSSProperties, ErrorInfo, ReactNode } from 'react';
 import type { KitSpec, LessonSpec, PlanComponentId, SourceAnalysisV2 } from '../../../../packages/contracts/kit.ts';
 import type { SourceRef } from '../../../../packages/contracts/index.ts';
@@ -11,7 +11,10 @@ import { heldBackChecks } from '../lib/lessonJob.ts';
 import type { LessonCard, LessonItem, PendingSlot } from '../lib/lesson.ts';
 import { activityFirst, partCounts } from '../lib/partOrder.ts';
 import { NOTES_ONLY_LINE } from '../lib/presentation.ts';
-import { LessonPartsContext } from './LessonPartsContext.ts';
+import { peekPartFocus, takePartFocus } from '../lib/review.ts';
+import { reviewOfLesson } from '../lib/reviewState.ts';
+import { revealInPanels } from '../lib/scroll.ts';
+import { LessonPartsContext, LessonReviewContext } from './LessonPartsContext.ts';
 import { ActivityPanel } from './ActivityPanel.tsx';
 import { AlgorithmTraceView } from './AlgorithmTraceView.tsx';
 import { BalanceView } from './BalanceView.tsx';
@@ -34,6 +37,7 @@ import { QuizCardsView } from './QuizCardsView.tsx';
 import { SequenceView } from './SequenceView.tsx';
 import { SortView } from './SortView.tsx';
 import '../styles/lesson-b.css';
+import '../styles/review.css';
 
 const NO_REPORTS: Readonly<Record<string, ReportLike>> = {};
 
@@ -189,6 +193,20 @@ export function LessonView({ lesson, specs, analysis, sources, cite, disclosure,
   // Stage 9b: while watching a build, keep the part where something is happening in view (until the user scrolls).
   const arrived = items.flatMap((it) => (it.kind === 'card' ? [it.card.componentId as string] : []));
   useFollowBuild(rootRef, live, arrived, order);
+  // Stage 10b: "Open" on the Review page brings the lesson up scrolled to that part (taken once, so a later visit starts at the top).
+  useEffect(() => {
+    if (peekPartFocus() === null) return undefined;
+    const timer = window.setTimeout(() => {
+      const id = takePartFocus();
+      if (id === null) return;
+      const part = Array.from(rootRef.current?.querySelectorAll<HTMLElement>('[data-component]') ?? []).find((el) => el.dataset.component === id);
+      if (part === undefined) return;
+      revealInPanels(part, 'start', 16);
+      part.setAttribute('data-review-target', 'true');
+      window.setTimeout(() => part.removeAttribute('data-review-target'), 2400);
+    }, 80);
+    return () => window.clearTimeout(timer);
+  }, []);
   if (declined) {
     return (
       <div className={liveClass} data-testid="lesson" ref={rootRef}>
@@ -227,6 +245,7 @@ export function LessonView({ lesson, specs, analysis, sources, cite, disclosure,
   );
   const notes = lesson.overview !== null && <CardBoundary><OverviewView overview={lesson.overview} live={live !== null} notes={atRest} /></CardBoundary>;
   return (
+    <LessonReviewContext.Provider value={reviewOfLesson(lesson)}>
     <LessonPartsContext.Provider value={counts}>
     <div className={liveClass} data-testid="lesson" ref={rootRef}>
       {live !== null && <LiveBar live={live} />}
@@ -259,5 +278,6 @@ export function LessonView({ lesson, specs, analysis, sources, cite, disclosure,
         )}
     </div>
     </LessonPartsContext.Provider>
+    </LessonReviewContext.Provider>
   );
 }

@@ -5,6 +5,7 @@ import { api, describeError } from './api.ts';
 import type { Health, JobDetail, JobSummary, SourceDoc, SourceMeta } from './api.ts';
 import type { ModelOption } from './lib/models.ts';
 import type { Access } from './lib/access.ts';
+import { subscribeReviewChanged } from './lib/review.ts';
 
 export const POLL_MS = 1500;
 /** /api/health poll: the authoritative busy flag for the Generate button (R-10). */
@@ -105,6 +106,8 @@ export function useSourceDoc(id: string | null): Loadable<SourceDoc> | null {
 export function useJobs(serverBusy: boolean): { jobs: Loadable<JobSummary[]>; refresh: () => void } {
   const [jobs, setJobs] = useState<Loadable<JobSummary[]>>({ state: 'loading' });
   const [nonce, setNonce] = useState(0);
+  // Stage 10b: a review published or removed changes the "Published" mark in All lessons.
+  useEffect(() => subscribeReviewChanged(() => setNonce((n) => n + 1)), []);
   // Re-fetch when busy flips (a finished job must appear without a manual reload).
   useEffect(() => {
     const ctl = new AbortController();
@@ -125,6 +128,9 @@ export function useJobs(serverBusy: boolean): { jobs: Loadable<JobSummary[]>; re
 export function useJobDetail(jobId: string | null): Loadable<JobDetail> | null {
   const [slot, setSlot] = useState<{ id: string; value: Loadable<JobDetail> } | null>(null);
   const running = useRef(false);
+  // Stage 10b: publishing or unpublishing this lesson (Review page) reads it again, so the lesson, slides and status line follow.
+  const [reviewNonce, setReviewNonce] = useState(0);
+  useEffect(() => subscribeReviewChanged((changed) => { if (changed === jobId) setReviewNonce((n) => n + 1); }), [jobId]);
   useEffect(() => {
     if (jobId === null) return;
     const ctl = new AbortController();
@@ -144,7 +150,7 @@ export function useJobDetail(jobId: string | null): Loadable<JobDetail> | null {
     };
     void load();
     return () => { ctl.abort(); if (timer !== undefined) clearTimeout(timer); };
-  }, [jobId]);
+  }, [jobId, reviewNonce]);
   if (jobId === null) return null;
   if (slot === null || slot.id !== jobId) return { state: 'loading' };
   return slot.value;

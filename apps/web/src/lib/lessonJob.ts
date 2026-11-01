@@ -20,6 +20,8 @@ import { cleanModelStrings } from './displayText.ts';
 import { REVISED_LABEL, repairStory } from './repairStory.ts';
 import type { HistoryEntry, HistoryPoint, RepairStory, StoryFigure } from './repairStory.ts';
 import type { ModelId } from './models.ts';
+import { parseReview } from './reviewState.ts';
+import type { ReviewState } from './reviewState.ts';
 
 // ---- types ------------------------------------------------------------------------------------------------------
 
@@ -50,7 +52,17 @@ export interface LessonData {
   componentRepairs: ComponentRepairRecord[];
   /** Set B: every stored revision of each part (publishable, failed checks, diagram points), by component id. {} on older APIs. */
   componentHistory: Record<string, HistoryEntry[]>;
+  /** Stage 10b: the teacher's published review of this lesson (the API's `review`); null when it has none. */
+  review: ReviewState | null;
+  /**
+   * Stage 10b: the parts a published review hid. They are already removed from `lesson.components` and `kitSpecs`, so the
+   * lesson, its quotes, its checks list and the slides never see them; the Review page lists them from here.
+   */
+  hiddenParts: HiddenPart[];
 }
+
+/** A part the teacher hid from a published lesson: its stored entry and, for a kit part, its spec. */
+export interface HiddenPart { entry: LessonComponentEntry; spec: KitSpec | null }
 
 /** Events of a lesson job carry stages beyond the Stage 5 ones (`overview`, `component`) and a `componentId`. */
 interface LessonEvent extends Omit<StageEvent, 'stage' | 'target'> { stage: string; target?: string; componentId?: string }
@@ -80,6 +92,8 @@ export function parseJobSummary(raw: unknown): JobSummary {
   if (raw.flow !== 'lesson' && raw.flow !== 'activity') delete out.flow;
   const progress = parseLessonProgress(raw.lesson);
   if (progress === null) delete out.lesson; else out.lesson = progress;
+  // Stage 10b: the list marks a published lesson with its publish time.
+  if (typeof raw.reviewPublishedAt !== 'string' || Number.isNaN(Date.parse(raw.reviewPublishedAt))) delete out.reviewPublishedAt;
   return out as unknown as JobSummary;
 }
 
@@ -171,6 +185,24 @@ function parseLessonSpec(raw: unknown): LessonSpec | null {
 
 const LESSON_KEYS = ['analysisV2', 'analysisV2Report', 'analysisV2Revisions', 'lesson', 'kitSpecs', 'componentReports', 'componentRepairs', 'componentHistory'] as const;
 
+/**
+ * Stage 10b: a published review hides some parts. They leave the lesson's component list and the served specs (so the
+ * lesson view, the source highlights, the checks list and presentation mode all drop them with no further wiring) and are
+ * kept aside for the Review page. An id the lesson does not have hides nothing; with no review the lesson is untouched.
+ */
+function splitHidden(lesson: LessonSpec | null, specs: Array<[string, KitSpec]>, review: ReviewState | null): { lesson: LessonSpec | null; specs: Array<[string, KitSpec]>; hiddenParts: HiddenPart[] } {
+  if (lesson === null || review === null || review.hiddenParts.length === 0) return { lesson, specs, hiddenParts: [] };
+  const hide = new Set(review.hiddenParts);
+  const gone = lesson.components.filter((c) => hide.has(c.componentId));
+  if (gone.length === 0) return { lesson, specs, hiddenParts: [] };
+  const goneSpecs = new Set(gone.map((c) => c.specId));
+  return {
+    lesson: { ...lesson, components: lesson.components.filter((c) => !hide.has(c.componentId)) },
+    specs: specs.filter(([k, v]) => !goneSpecs.has(k) && !goneSpecs.has(v.id)),
+    hiddenParts: gone.map((entry) => ({ entry, spec: specs.find(([k, v]) => k === entry.specId || v.id === entry.specId)?.[1] ?? null })),
+  };
+}
+
 const finiteNum = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v);
 
 /**
@@ -223,13 +255,15 @@ export function parseLessonData(raw: unknown): LessonData | null {
       targeted: strings(r.targeted), fixed: strings(r.fixed), remaining: strings(r.remaining), passed: r.passed === true,
       ...(typeof r.afterInjectedFault === 'boolean' ? { afterInjectedFault: r.afterInjectedFault } : {}),
     }));
-  const lesson = parseLessonSpec(raw.lesson);
+  const parsedLesson = parseLessonSpec(raw.lesson);
   // A withheld part's spec is not served: no view can mount it and no quote of it lights up in the page.
-  const withheld = new Set((lesson?.components ?? []).filter((c) => heldBackChecks(c) !== null).map((c) => c.specId));
+  const withheld = new Set((parsedLesson?.components ?? []).filter((c) => heldBackChecks(c) !== null).map((c) => c.specId));
+  const review = parseReview(raw.review);
+  const split = splitHidden(parsedLesson, kitEntries.filter(([k, v]) => !withheld.has(k) && !withheld.has(v.id)), review);
   return {
     analysis: parseAnalysisV2(raw.analysisV2), analysisReport: parseReport(raw.analysisV2Report), analysisRevisions: revisions,
-    lesson, kitSpecs: Object.fromEntries(kitEntries.filter(([k, v]) => !withheld.has(k) && !withheld.has(v.id))), componentReports: Object.fromEntries(reportEntries), componentRepairs: repairs,
-    componentHistory: parseComponentHistory(raw.componentHistory),
+    lesson: split.lesson, kitSpecs: Object.fromEntries(split.specs), componentReports: Object.fromEntries(reportEntries), componentRepairs: repairs,
+    componentHistory: parseComponentHistory(raw.componentHistory), review, hiddenParts: split.hiddenParts,
   };
 }
 
@@ -323,6 +357,7 @@ export function buildLessonStream(detail: JobDetail): LessonStream {
   const running = status === 'running';
   const analysis = data?.analysis ?? null;
   const stored = data?.lesson ?? null;
+  const review = data?.review ?? null;
   const hasPremium = detail.spec !== undefined;
 
   const overviewEvent = events.some((e) => e.stage === 'overview' && e.status === 'succeeded');
@@ -331,7 +366,9 @@ export function buildLessonStream(detail: JobDetail): LessonStream {
 
   const order: PlanComponentId[] = [];
   // The plan is listed only once the overview is known (the plan comes with it); until then nothing is promised.
-  for (const e of analysis?.usable === false || overview === null ? [] : analysis?.componentPlan ?? []) if (!order.includes(e.componentId)) order.push(e.componentId);
+  // A part the teacher hid from a published lesson has no slot at all (not a placeholder, not "skipped").
+  const hiddenIds = new Set((data?.hiddenParts ?? []).map((h) => h.entry.componentId));
+  for (const e of analysis?.usable === false || overview === null ? [] : analysis?.componentPlan ?? []) if (!order.includes(e.componentId) && !hiddenIds.has(e.componentId)) order.push(e.componentId);
   for (const c of stored?.components ?? []) if (!order.includes(c.componentId)) order.push(c.componentId);
 
   const slots: ComponentSlot[] = order.map((componentId): ComponentSlot => {
@@ -366,7 +403,8 @@ export function buildLessonStream(detail: JobDetail): LessonStream {
 
   return {
     phase, overview, order, slots, pending,
-    lesson: { jobId: stored?.jobId ?? jobId, analysisRef: stored?.analysisRef ?? '', overview, components: stored?.components ?? [] },
+    // A published lesson carries its review, so the lesson view and the deck can say so (reviewOfLesson); an unreviewed one is unchanged.
+    lesson: { jobId: stored?.jobId ?? jobId, analysisRef: stored?.analysisRef ?? '', overview, components: stored?.components ?? [], ...(review === null ? {} : { review }) },
   };
 }
 

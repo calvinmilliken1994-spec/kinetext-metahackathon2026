@@ -1,6 +1,8 @@
-import { useId, useMemo, useState } from 'react';
+import { useContext, useId, useMemo, useState } from 'react';
 import type { TimelineEvent, TimelineScenario } from '../../../../packages/contracts/index.ts';
 import { dateOrder, formatEventDate } from '../lib/timeline.ts';
+import { partReviewTag } from '../lib/reviewState.ts';
+import { LessonReviewContext } from './LessonPartsContext.ts';
 import { SchematicTag } from './controls.tsx';
 import { AiWritten } from './Disclosure.tsx';
 import type { CiteProps } from './Explanations.tsx';
@@ -21,6 +23,7 @@ interface Props {
  */
 export function TimelineView({ events, scenario, cite }: Props) {
   const headingId = useId();
+  const review = useContext(LessonReviewContext);
   const ordered = useMemo(() => dateOrder(events), [events]);
   const [selected, setSelected] = useState<string | null>(ordered[0]?.id ?? null);
   const [hover, setHover] = useState<string | null>(null);
@@ -31,7 +34,7 @@ export function TimelineView({ events, scenario, cite }: Props) {
     <section className="simulation timeline-view" data-engine="timeline-v1" aria-labelledby={headingId}>
       <div className="card-head">
         <h3 id={headingId}>{scenario.subjectLabel}</h3>
-        <AiWritten extra="needs teacher review" />
+        <AiWritten extra={partReviewTag(review)} />
       </div>
       <SchematicTag text={TIMELINE_LABEL} />
       {scenario.settingLabel !== '' && <p className="muted small timeline-setting">{scenario.settingLabel}</p>}

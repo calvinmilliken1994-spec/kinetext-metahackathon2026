@@ -1,0 +1,129 @@
+// DEV-ONLY harness for the Review and publish page (Stage 10b slice R). Not part of the app: it is reached only through
+// review-demo.html, which the production build does not include. It wires the real hooks, the real Sidebar, the real
+// ReviewPage, LessonView, All lessons and presentation mode the way App.tsx does, so the publish flow can be driven
+// against a scratch API. The lead's App.tsx mounts ReviewPage with the same props.
+import { StrictMode, useMemo, useState } from 'react';
+import { createRoot } from 'react-dom/client';
+import './styles.css';
+import './styles/shell.css';
+import './styles/sim.css';
+import './styles/linking.css';
+import './styles/chem.css';
+import './styles/history.css';
+import './styles/present.css';
+import './styles/engines-a.css';
+import './styles/engines-b.css';
+import './styles/engines-c.css';
+import './styles/live.css';
+import './styles/onboarding.css';
+import './styles/nav.css';
+import { api } from './api.ts';
+import { useAccess, useJobDetail, useJobs, useSources } from './hooks.ts';
+import { AppWindow } from './components/AppWindow.tsx';
+import { Sidebar } from './components/Sidebar.tsx';
+import { ReviewPage } from './components/ReviewPage.tsx';
+import { LessonView } from './components/LessonView.tsx';
+import { AllLessonsPage } from './components/AllLessonsPage.tsx';
+import { Provenance } from './components/Provenance.tsx';
+import { PresentationMode } from './components/presentation/PresentationMode.tsx';
+import { SourceTab } from './components/SourcePanel.tsx';
+import { accessFooter } from './lib/access.ts';
+import { buildLessonStream, lessonRenderMode } from './lib/lessonJob.ts';
+import { partReports } from './lib/failures.ts';
+import { deckFromLesson, HOOK_BEAT } from './lib/presentation.ts';
+import { madeWithPhrase, resolveJobModel } from './lib/models.ts';
+import { disclosureText, shortTitle } from './lib/sources.ts';
+import { navTarget, sidebarSections } from './lib/navigation.ts';
+import type { MainView, NavId } from './lib/navigation.ts';
+import type { SourceRef } from '../../../packages/contracts/index.ts';
+
+const params = new URLSearchParams(window.location.search);
+const JOB = params.get('job') ?? 'job-20261101200607-c65a20bb';
+
+function Harness() {
+  const [job, setJob] = useState(JOB);
+  const [view, setView] = useState<MainView>((params.get('view') as MainView | null) ?? 'review');
+  const [presenting, setPresenting] = useState(false);
+  const { sources } = useSources();
+  const { jobs } = useJobs(false);
+  const { access, refresh, set: setAccess } = useAccess();
+  const detail = useJobDetail(job);
+  const ready = detail?.state === 'ready' ? detail.data : null;
+  const source = sources.state === 'ready' ? sources.data.find((s) => s.id === ready?.summary.sourceId) ?? null : null;
+  const sourcesById = useMemo(() => new Map((sources.state === 'ready' ? sources.data : []).map((s) => [s.id, s] as const)), [sources]);
+  const stream = useMemo(() => (ready === null || ready.lessonData === undefined ? null : buildLessonStream(ready)), [ready]);
+  const mode = ready === null ? 'v1' : lessonRenderMode(ready);
+  const jobModel = ready === null ? null : resolveJobModel(ready.summary);
+  const disclosure = disclosureText(source, jobModel === null ? undefined : madeWithPhrase(jobModel));
+  const title = source === null ? null : shortTitle(source.title);
+  const lessonSources = useMemo((): SourceRef[] => (source === null ? [] : [{ id: source.id, title: source.title, locator: source.locator, license: source.license, attribution: source.attribution, sha256: source.sha256 }]), [source]);
+  const deck = useMemo(() => {
+    if (ready === null || stream === null || ready.lessonData === undefined || ready.summary.status !== 'succeeded') return null;
+    return deckFromLesson({ jobId: ready.summary.jobId, source, disclosure, checks: null, quotes: null, lesson: stream.lesson, specs: ready.lessonData.kitSpecs, premium: ready.spec ?? null, analysis: ready.lessonData.analysis, fallbackTitle: title ?? 'Lesson' });
+  }, [ready, stream, source, disclosure, title]);
+
+  const sections = sidebarSections({ view, lessonTitle: title, showSource: false, canPresent: deck !== null, touring: false, checksOpen: false, activity: null });
+  const onItem = (id: NavId): void => {
+    const t = navTarget(id);
+    if ('view' in t) setView(t.view);
+    else if (t.action === 'present') setPresenting(true);
+  };
+  const pick = (jobId: string): void => { setJob(jobId); setView('lesson'); };
+
+  return (
+    <AppWindow title="Make knowledge interactive" titleIsHeading>
+      <div className="window-body">
+        <Sidebar sections={sections} view={view} onItem={onItem} footer={accessFooter(access, false)} onEnterCode={() => setView('review')} onSignOut={() => { void api.deleteAccess().then(setAccess); }} signingOut={false} />
+        {view !== 'lesson' && (
+          <div className="workspace workspace-page">
+            <main className="panel page-panel" aria-label={view} tabIndex={-1}>
+              <div className="page-inner">
+                {view === 'review' && (
+                  <ReviewPage detail={ready} title={title} access={access} onAccess={(a) => { setAccess(a); void refresh(); }} onShowLesson={() => setView('lesson')} onBrowseLessons={() => setView('lessons')} />
+                )}
+                {view === 'lessons' && (
+                  <AllLessonsPage jobs={jobs} sourcesById={sourcesById} openJobId={job} serverBusy={false} subjectFilter={null} onSubjectFilter={() => undefined} onOpen={pick} onNewLesson={() => undefined} />
+                )}
+              </div>
+            </main>
+          </div>
+        )}
+        {view === 'lesson' && (
+          <div className="workspace hide-source">
+            <SourceTab onExpand={() => undefined} found={null} total={0} />
+            <main className="panel activity-panel" aria-label="Lesson" tabIndex={-1}>
+              <div className="main-inner">
+                {detail?.state === 'loading' && <p className="muted">Loading the lesson…</p>}
+                {ready !== null && stream !== null && mode === 'lesson' && (
+                  <LessonView
+                    key={ready.summary.jobId}
+                    lesson={stream.lesson}
+                    specs={ready.lessonData?.kitSpecs ?? {}}
+                    analysis={ready.lessonData?.analysis ?? null}
+                    sources={lessonSources}
+                    cite={{ sourceId: ready.summary.sourceId, located: new Set<string>(), onCite: () => undefined }}
+                    disclosure={disclosure}
+                    provenance={<Provenance disclosure={disclosure} phrases={[]} />}
+                    fallbackTitle={title ?? 'Lesson'}
+                    premium={ready.spec ?? null}
+                    repairBadge={null}
+                    pending={stream.pending}
+                    order={stream.order}
+                    reports={partReports(ready)}
+                    live={null}
+                  />
+                )}
+              </div>
+            </main>
+          </div>
+        )}
+      </div>
+      {presenting && deck !== null && (
+        <PresentationMode key={deck.jobId} deck={deck} quotes={[]} sourceId={ready?.summary.sourceId ?? ''} repairBadge={null} startBeat={HOOK_BEAT} onExit={() => setPresenting(false)} />
+      )}
+    </AppWindow>
+  );
+}
+
+const root = document.getElementById('root');
+if (root !== null) createRoot(root).render(<StrictMode><Harness /></StrictMode>);

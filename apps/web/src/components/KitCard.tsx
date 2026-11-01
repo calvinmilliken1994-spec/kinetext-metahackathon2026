@@ -1,9 +1,11 @@
-import { useId } from 'react';
+import { useContext, useId } from 'react';
 import type { ReactNode } from 'react';
 import { technicalMessage } from '../lib/failures.ts';
 import { droppedNoteForTeacher } from '../lib/lesson.ts';
 import type { LessonCard } from '../lib/lesson.ts';
 import { AiWritten } from './Disclosure.tsx';
+import { LessonReviewContext } from './LessonPartsContext.ts';
+import { PART_REVIEWED_TAG } from '../lib/reviewState.ts';
 import { Mark } from './icons.tsx';
 
 /** Today's checks a withheld part fails (lib/lessonJob.ts heldBackChecks): plain name + id. */
@@ -41,6 +43,8 @@ interface Props {
 export function KitCard({ card, children, trace = null, heldBack = null }: Props) {
   const headId = useId();
   const shown = card.status === 'passed';
+  // Stage 10b: a part of a lesson a teacher published reads "AI-written · teacher-reviewed" (before that, just "AI-written").
+  const reviewed = useContext(LessonReviewContext) !== null;
   return (
     <article className={`card kit-card kit-${card.status}`} aria-labelledby={headId} data-component={card.componentId} data-status={card.status} data-held-back={heldBack === null ? undefined : 'true'}>
       <header className="kit-head">
@@ -48,7 +52,7 @@ export function KitCard({ card, children, trace = null, heldBack = null }: Props
         <p className="card-meta">
           {/* A part that failed is titled by its kind already: the kind is not said twice. */}
           {card.label !== card.title && <span>{card.label}</span>}
-          {shown && <AiWritten />}
+          {shown && <AiWritten {...(reviewed ? { extra: PART_REVIEWED_TAG } : {})} />}
           <StatusText card={card} heldBack={heldBack} />
         </p>
         {trace}

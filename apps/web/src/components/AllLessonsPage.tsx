@@ -6,10 +6,12 @@ import type { JobSummary, SourceMeta } from '../api.ts';
 import type { Loadable } from '../hooks.ts';
 import { browseLessons } from '../lib/browse.ts';
 import type { LessonScope } from '../lib/browse.ts';
+import { reviewDate } from '../lib/reviewState.ts';
 import { runLine } from '../lib/runs.ts';
 import { shortTitle } from '../lib/sources.ts';
 import { subjectCounts, subjectLabel } from '../lib/subjects.ts';
 import type { SubjectKey } from '../lib/subjects.ts';
+import { Mark } from './icons.tsx';
 import { IconSearch } from './navIcons.tsx';
 import { SubjectChips } from './SubjectChips.tsx';
 
@@ -118,6 +120,7 @@ export function AllLessonsPage(p: AllLessonsPageProps) {
                         <span className="ll-title">
                           {title}
                           {open && <span className="ll-open">Open now</span>}
+                          {r.published !== null && <span className="ll-published" title={`Reviewed by a teacher and published ${reviewDate(r.published)}`}><Mark kind="ok" />Published</span>}
                         </span>
                         <span className="ll-cell"><span className="sr-only">Subject: </span>{subjectLabel(r.subject)}</span>
                         <span className="ll-cell"><span className="sr-only">Model: </span>{line.model}</span>
