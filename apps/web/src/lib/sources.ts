@@ -150,7 +150,6 @@ export function sourceOptionLabel(m: SourceMetaLike): string {
 }
 
 /** Project convention for licensed library sources: "Source material: <publisher>, <work>. …" (see packages/validation). */
-const SOURCE_MATERIAL = /Source material:\s*([^,]*)/i;
 
 /** Attribution of texts the project team wrote itself (they have no outside publisher to credit). */
 const PROJECT_TEAM_TEXT = /^\s*Written by the Make knowledge interactive project team\b/i;
@@ -162,9 +161,21 @@ const PROJECT_TEAM_TEXT = /^\s*Written by the Make knowledge interactive project
  */
 export function sourcePublisher(attribution: string | undefined): string | null {
   if (typeof attribution !== 'string') return null;
-  const match = SOURCE_MATERIAL.exec(attribution);
-  if (match === null) return null;
-  const publisher = (match[1] as string).trim().replace(/[.;:]+$/, '').trim();
+  const at = /Source material:\s*/i.exec(attribution);
+  if (at === null) return null;
+  // The publisher is the first comma-separated segment, but a comma inside brackets ("(Paul E. Black, ed.)") does not end it.
+  const rest = attribution.slice(at.index + at[0].length);
+  let depth = 0;
+  let end = rest.length;
+  for (let i = 0; i < rest.length; i += 1) {
+    const ch = rest[i];
+    if (ch === '(') depth += 1;
+    else if (ch === ')') depth = Math.max(0, depth - 1);
+    else if (ch === ',' && depth === 0) { end = i; break; }
+  }
+  const publisher = rest.slice(0, end).trim()
+    .replace(/\s*\([^()]*\bed(?:s|itor|itors)?\.?\)\s*$/i, '') // an editor credit is not part of the publisher's name
+    .replace(/[.;:]+$/, '').trim();
   return publisher === '' ? null : publisher;
 }
 

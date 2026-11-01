@@ -267,3 +267,9 @@ test('page titles start with a capital in headers and pickers, unless the first 
   assert.equal(capFirst('Fueling Life'), 'Fueling Life');
   assert.equal(capFirst(''), '');
 });
+
+test('sourcePublisher never cuts inside brackets, and drops an editor credit ("(Paul E. Black, ed.)")', () => {
+  const nist = "Source material: NIST Dictionary of Algorithms and Data Structures (Paul E. Black, ed.), 'hash table'. Courtesy: NIST.";
+  assert.equal(sourcePublisher(nist), 'NIST Dictionary of Algorithms and Data Structures');
+  assert.equal(sourcePublisher('Source material: NOAA Office of Ocean Exploration and Research (NOAA Ocean Exploration), Fueling Life.'), 'NOAA Office of Ocean Exploration and Research (NOAA Ocean Exploration)');
+});
