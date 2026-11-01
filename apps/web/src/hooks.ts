@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { api, describeError } from './api.ts';
 import type { Health, JobDetail, JobSummary, SourceDoc, SourceMeta } from './api.ts';
 import type { ModelOption } from './lib/models.ts';
+import type { Access } from './lib/access.ts';
 
 export const POLL_MS = 1500;
 /** /api/health poll: the authoritative busy flag for the Generate button (R-10). */
@@ -147,4 +148,33 @@ export function useJobDetail(jobId: string | null): Loadable<JobDetail> | null {
   if (jobId === null) return null;
   if (slot === null || slot.id !== jobId) return { state: 'loading' };
   return slot.value;
+}
+
+/** Stage 10: how often the judge access state (budget left, paused) is re-read while the page is open. */
+export const ACCESS_POLL_MS = 20000;
+
+/**
+ * GET /api/access, re-read every 20 s and on demand. `set` takes the answer of a sign-in or sign-out straight away.
+ * An API without the route (404) is "gate off", so the app behaves exactly as before.
+ */
+export function useAccess(): { access: Access; refresh: () => Promise<void>; set: (a: Access) => void } {
+  const [access, setAccess] = useState<Access>({ state: 'loading' });
+  useEffect(() => {
+    const ctl = new AbortController();
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const tick = async (): Promise<void> => {
+      try {
+        setAccess(await api.getAccess(ctl.signal));
+      } catch (e) {
+        if (isAbort(e)) return;
+      }
+      timer = setTimeout(() => { void tick(); }, ACCESS_POLL_MS);
+    };
+    void tick();
+    return () => { ctl.abort(); if (timer !== undefined) clearTimeout(timer); };
+  }, []);
+  const refresh = useCallback(async (): Promise<void> => {
+    try { setAccess(await api.getAccess()); } catch { /* aborted */ }
+  }, []);
+  return { access, refresh, set: setAccess };
 }

@@ -14,6 +14,7 @@ import './styles/engines-b.css';
 import './styles/engines-c.css';
 import './styles/live.css';
 import './styles/onboarding.css';
+import './styles/nav.css';
 
 interface BoundaryState { failed: boolean }
 

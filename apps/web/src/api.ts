@@ -5,6 +5,8 @@ import type { CreatedSource } from './lib/sources.ts';
 import type { AnyActivitySpec } from './lib/timeline.ts';
 import type { AnalysisRepairRecord } from './lib/analysisRepairs.ts';
 import { parseModels } from './lib/models.ts';
+import { ACCESS_MESSAGES, accessFromInfo, accessFromResponse, parseAccessInfo } from './lib/access.ts';
+import type { Access } from './lib/access.ts';
 import { createJobBody, normaliseJobDetail, parseJobSummary } from './lib/lessonJob.ts';
 import type { FlowId, LessonData, LessonProgress } from './lib/lessonJob.ts';
 import type { ModelId, ModelOption } from './lib/models.ts';
@@ -141,6 +143,29 @@ export const api = {
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(createJobBody(sourceId, demoFault, model, flow)),
     }),
+  /**
+   * Stage 10: the judge access gate. An API without the route answers 404, which is "gate off" (lib/access.ts).
+   * Never throws for an HTTP answer; a network failure is an unknown state.
+   */
+  getAccess: async (signal?: AbortSignal): Promise<Access> => {
+    try {
+      const res = await fetch('/api/access', { signal, headers: { accept: 'application/json' } });
+      let body: unknown = null;
+      try { body = await res.json(); } catch { body = null; }
+      return accessFromResponse(res.status, body);
+    } catch (e) {
+      if (e instanceof DOMException && e.name === 'AbortError') throw e;
+      return { state: 'error' };
+    }
+  },
+  /** Sign in with the shared judge code. 401 ACCESS_CODE_INVALID / 429 TOO_MANY_ATTEMPTS throw an ApiError. */
+  postAccess: async (code: string): Promise<Access> => accessOrError(await request<unknown>('/api/access', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ code }),
+  })),
+  /** Sign out: the server clears the session cookie. */
+  deleteAccess: async (): Promise<Access> => accessOrError(await request<unknown>('/api/access', { method: 'DELETE' })),
   /** Store a teacher-pasted text. 201 = created, 200 = the same text was stored before. */
   createSource: (input: UserSourceInput) =>
     request<CreatedSource>('/api/sources', {
@@ -150,7 +175,13 @@ export const api = {
     }),
 };
 
+function accessOrError(raw: unknown): Access {
+  const info = parseAccessInfo(raw);
+  return info === null ? { state: 'error' } : accessFromInfo(info);
+}
+
 const MESSAGES: Record<string, string> = {
+  ...ACCESS_MESSAGES,
   NETWORK: 'Cannot reach the API. Is it running on port 8787?',
   LIVE_DISABLED: 'Live generation is switched off on this server.',
   JOB_RUNNING: 'A generation job is already running. Wait for it to finish.',

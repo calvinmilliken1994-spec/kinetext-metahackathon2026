@@ -1,0 +1,332 @@
+/* Stage 10 (docs/specs/STAGE-10-navigation-and-access.md, section B): the labelled sidebar, the main-area pages it opens
+ * (New lesson, All lessons, How it works, Review and publish, Results) and the judge access form. Tokens come from
+ * ../styles.css; the two sidebar surface tokens below exist in both themes. */
+
+:root, [data-theme="dark"] {
+  --sidebar-w: 232px;
+  --nav-hover: #212225;
+  --nav-current: #2b2c30;
+}
+[data-theme="light"] {
+  --nav-hover: #e8eaed;
+  --nav-current: #dde1e6;
+}
+
+/* ---- sidebar ------------------------------------------------------------------------------------------------------ */
+.sidebar { position: relative; display: flex; flex-direction: column; min-height: 0; min-width: 0; }
+.sb-menu { display: none; }
+.sb-body { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
+.sb-sections {
+  flex: 1 1 auto; min-height: 0; overflow-y: auto; display: grid; align-content: start; gap: 20px;
+  padding: 10px 10px 16px 12px;
+}
+.sb-section { display: grid; gap: 2px; min-width: 0; }
+.sb-heading {
+  padding: 0 10px 4px; font-size: var(--fs-12); font-weight: var(--fw-medium); line-height: 1.4; color: var(--ink-3);
+  text-wrap: nowrap;
+}
+.sb-list { display: grid; gap: 1px; }
+
+.sb-item {
+  display: flex; align-items: center; gap: 10px; width: 100%; min-height: 34px; padding: 6px 10px;
+  border: 0; border-radius: var(--r); background: transparent; color: var(--ink-2);
+  font-size: var(--fs-14); font-weight: var(--fw-regular); line-height: 1.3; text-align: left; cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+.sb-item:hover { background: var(--nav-hover); color: var(--ink); }
+.sb-item:active { background: var(--nav-current); }
+.sb-item:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; border-radius: var(--r); }
+.sb-item[aria-current="page"] { background: var(--nav-current); color: var(--ink); font-weight: var(--fw-medium); }
+.sb-item[aria-disabled="true"] { color: var(--ink-3); opacity: 0.6; cursor: not-allowed; }
+.sb-item[aria-disabled="true"]:hover { background: transparent; color: var(--ink-3); }
+.sb-icon { display: inline-flex; flex: none; color: var(--ink-3); transition: color 0.12s; }
+.sb-item:hover .sb-icon, .sb-item[aria-pressed="true"] .sb-icon { color: var(--ink-2); }
+.sb-item[aria-current="page"] .sb-icon { color: var(--accent-text); }
+.sb-item[aria-disabled="true"] .sb-icon { color: inherit; }
+.sb-label { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sb-badge { flex: none; font-size: var(--fs-12); font-weight: var(--fw-medium); color: var(--accent-text); }
+
+/* The open lesson, listed under All lessons: indented to the labels, its title on up to two lines. */
+.sb-item-lesson { align-items: flex-start; padding-top: 7px; padding-bottom: 7px; font-size: var(--fs-14); }
+.sb-item-lesson .sb-label { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; }
+.sb-dot { position: relative; flex: none; width: 18px; height: 18px; }
+.sb-dot::before {
+  content: ""; position: absolute; left: 6px; top: 6px; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--line-3);
+}
+/* It is marked by its accent dot and weight, not a second filled row: the filled row is the view on screen. */
+.sb-item-lesson[aria-current="true"] { color: var(--ink); font-weight: var(--fw-medium); }
+.sb-item-lesson[aria-current="true"] .sb-dot::before { background: var(--accent-text); }
+.sb-item-lesson .sb-badge { padding-top: 1px; }
+
+/* Source page is a toggle: a small switch says whether the page is shown beside the lesson. */
+.sb-switch {
+  position: relative; flex: none; width: 26px; height: 16px; border-radius: 999px;
+  background: var(--panel-3); box-shadow: inset 0 0 0 1px var(--line-2); transition: background 0.15s;
+}
+.sb-switch::after {
+  content: ""; position: absolute; top: 3px; left: 3px; width: 10px; height: 10px; border-radius: 50%;
+  background: var(--ink-3); transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), background 0.15s;
+}
+.sb-switch.is-on { background: var(--accent); box-shadow: none; }
+.sb-switch.is-on::after { transform: translateX(10px); background: var(--accent-ink); }
+
+/* Access status at the bottom of the sidebar. */
+.sb-footer {
+  flex: none; display: grid; gap: 4px; margin: 0 12px 12px; padding: 12px 12px 10px;
+  border: 1px solid var(--line); border-radius: var(--r-l); background: var(--panel);
+}
+.sb-footer-title { display: grid; font-size: var(--fs-14); font-weight: var(--fw-medium); color: var(--ink); font-variant-numeric: tabular-nums; }
+.sb-footer-amount { font-weight: var(--fw-regular); color: var(--ink-2); }
+.sb-footer-detail { font-size: var(--fs-12); line-height: 1.45; color: var(--ink-3); }
+.sb-footer.tone-warn .sb-footer-detail { color: var(--ink-2); }
+.sb-footer-btn {
+  justify-self: start; display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; padding: 5px 10px;
+  border: 1px solid var(--line-2); border-radius: var(--r); background: transparent; color: var(--ink);
+  font-size: var(--fs-14); font-weight: var(--fw-medium); cursor: pointer; transition: background 0.12s, border-color 0.12s;
+}
+.sb-footer-btn:hover:not(:disabled) { background: var(--panel-2); border-color: var(--line-3); }
+.sb-footer-btn .icon { color: var(--accent-text); }
+.sb-footer-btn.is-quiet { margin-top: 2px; padding: 2px 0; border-color: transparent; color: var(--accent-text); }
+.sb-footer-btn.is-quiet:hover:not(:disabled) { background: transparent; border-color: transparent; text-decoration: underline; text-underline-offset: 3px; }
+.sb-footer-btn:disabled { opacity: 0.6; cursor: default; }
+
+/* ---- main-area pages -------------------------------------------------------------------------------------------- */
+.workspace.workspace-page { grid-template-columns: minmax(0, 1fr); }
+.page-panel { padding: 28px 32px 64px; }
+.page-panel:focus-visible { outline: none; }
+.page-inner { width: 100%; max-width: 1180px; margin: 0 auto; }
+.page { display: grid; gap: 24px; min-width: 0; }
+.page-head { display: grid; gap: 8px; max-width: 92ch; }
+.page-title { font-size: var(--fs-26); font-weight: var(--fw-bold); line-height: 1.2; letter-spacing: -0.01em; color: var(--ink); }
+.page-title:focus { outline: none; }
+.page-lede { font-size: var(--fs-16); line-height: 1.55; color: var(--ink-2); }
+
+input[type="search"], input[type="password"] {
+  width: 100%; padding: 8px 10px; border: 1px solid var(--line-2); border-radius: var(--r); background: var(--field); color: var(--ink);
+}
+input[type="search"]:hover, input[type="password"]:hover { border-color: var(--line-3); }
+input[type="search"]::-webkit-search-cancel-button { cursor: pointer; }
+
+/* ---- New lesson ---- */
+.nl-paths { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.nl-path {
+  display: flex; align-items: center; gap: 14px; min-width: 0; padding: 14px 18px;
+  border: 1px solid var(--line-2); border-radius: var(--r-l); background: var(--panel); color: var(--ink);
+  text-align: left; cursor: pointer; transition: border-color 0.12s, background 0.12s;
+}
+.nl-path:hover { border-color: var(--line-3); background: var(--panel-2); }
+.nl-path:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: var(--r-l); }
+.nl-path[aria-selected="true"] { border-color: var(--accent-line); background: var(--accent-soft); }
+.nl-path-icon { display: inline-flex; flex: none; color: var(--ink-3); }
+.nl-path[aria-selected="true"] .nl-path-icon { color: var(--accent-text); }
+.nl-path-text { display: grid; gap: 2px; min-width: 0; }
+.nl-path-title { font-size: var(--fs-16); font-weight: var(--fw-bold); }
+.nl-path-detail { font-size: var(--fs-14); color: var(--ink-3); }
+.nl-path[aria-selected="true"] .nl-path-detail { color: var(--ink-2); }
+
+.nl-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(360px, 420px); gap: 28px; align-items: start; }
+.nl-main { display: grid; gap: 20px; min-width: 0; }
+.nl-source { min-width: 0; }
+/* Sticky beside the list, never taller than the visible page column (window minus title bar, footer and paddings), so
+ * the Build button can always be reached; on short windows its own content scrolls. */
+.nl-side {
+  position: sticky; top: 0; display: grid; align-content: start; min-width: 0;
+  max-height: calc(100dvh - 2 * var(--float-y) - 40px - 30px - 32px - 2px); overflow-y: auto; overscroll-behavior: contain;
+  border: 1px solid var(--line); border-radius: var(--r-l); background: var(--panel);
+}
+
+.nl-library { display: grid; gap: 12px; }
+.nl-search { position: relative; display: flex; align-items: center; }
+.nl-search > .icon { position: absolute; left: 12px; color: var(--ink-3); pointer-events: none; }
+.nl-search input { padding: 10px 12px 10px 38px; font-size: var(--fs-14); }
+.nl-count { font-size: var(--fs-14); color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.nl-empty { color: var(--ink-2); padding: 12px 0; }
+.nl-pages { margin: 0; padding: 0; border: 0; min-width: 0; display: grid; gap: 20px; }
+.nl-group { display: grid; gap: 6px; }
+.nl-group-title { padding: 0 12px; font-size: var(--fs-14); font-weight: var(--fw-bold); color: var(--ink-2); }
+.nl-rows { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2px 8px; }
+.nl-row {
+  position: relative; display: grid; gap: 2px; padding: 9px 12px; border: 1px solid transparent; border-radius: var(--r);
+  cursor: pointer; transition: background 0.12s, border-color 0.12s;
+}
+.nl-row:hover { background: var(--panel-2); }
+.nl-row.is-on { background: var(--accent-soft); border-color: var(--accent-line); }
+.nl-row:has(input:focus-visible) { outline: 2px solid var(--focus); outline-offset: -2px; }
+.nl-row-title { font-size: var(--fs-14); font-weight: var(--fw-medium); line-height: 1.35; color: var(--ink); }
+.nl-row-meta { display: flex; flex-wrap: wrap; gap: 0 10px; font-size: var(--fs-12); color: var(--ink-3); }
+.nl-row-lessons { color: var(--ink-2); }
+.nl-row.is-on .nl-row-meta { color: var(--ink-2); }
+
+.nl-own { display: grid; gap: 16px; max-width: 76ch; }
+.nl-own-lede { color: var(--ink-2); line-height: 1.55; }
+.nl-own .paste-form { padding: 0; gap: 14px; }
+.nl-own .paste-form textarea { min-height: 240px; }
+.nl-mine { margin: 0; padding: 0; border: 0; display: grid; gap: 6px; }
+.nl-mine > legend { padding: 0 0 6px; }
+.nl-mine .nl-rows { margin-inline: -12px; }
+.nl-own-locked { display: grid; gap: 8px; color: var(--ink-2); }
+.nl-needs { display: grid; gap: 4px; }
+.nl-needs li { position: relative; padding-left: 18px; line-height: 1.5; }
+.nl-needs li::before { content: ""; position: absolute; left: 5px; top: calc(0.75em - 2.5px); width: 5px; height: 5px; border-radius: 50%; background: var(--ink-3); }
+
+.nl-preview { display: grid; gap: 8px; padding: 18px 20px; min-width: 0; }
+.nl-preview.is-empty { gap: 4px; }
+.nl-preview-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 8px; font-size: var(--fs-12); color: var(--ink-3); }
+.nl-preview-meta a { display: inline-flex; align-items: center; gap: 3px; }
+.nl-preview-title { font-size: var(--fs-20); line-height: 1.3; color: var(--ink); }
+.nl-preview.is-empty .nl-preview-title { font-size: var(--fs-16); color: var(--ink-2); }
+.nl-excerpt p {
+  font-family: var(--serif); font-size: var(--fs-14); line-height: 1.6; color: var(--source-ink); white-space: pre-line;
+  overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 5; line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden;
+}
+.nl-excerpt p.muted { font-family: var(--font); color: var(--ink-3); }
+.nl-made { font-size: var(--fs-14); color: var(--ink-2); }
+
+.nl-build { display: grid; gap: 14px; padding: 16px 20px 20px; border-top: 1px solid var(--line); min-width: 0; }
+.nl-build-title { font-size: var(--fs-16); color: var(--ink); }
+.nl-build .model-picker legend { margin-bottom: 2px; }
+.nl-go { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.nl-go-btn { min-width: 160px; padding: 9px 20px; font-size: var(--fs-16); }
+.nl-why { font-size: var(--fs-14); line-height: 1.5; color: var(--ink-3); margin-top: -4px; }
+.nl-build .run-options { padding-top: 10px; }
+
+/* the judge access form, flat inside the build area */
+.access-form { display: grid; gap: 8px; }
+.access-head { display: flex; align-items: center; gap: 6px; font-size: var(--fs-14); font-weight: var(--fw-bold); color: var(--ink); }
+.access-head .icon { color: var(--accent-text); }
+.access-intro { font-size: var(--fs-14); line-height: 1.5; color: var(--ink-2); margin-bottom: 4px; }
+.access-row { display: flex; gap: 8px; }
+.access-row input { flex: 1 1 auto; min-width: 0; }
+.access-row .btn { flex: none; }
+.access-form [aria-invalid="true"] { border-color: var(--bad); }
+
+/* ---- All lessons ---- */
+.ll-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+.ll-search { flex: 1 1 320px; max-width: 520px; }
+.ll-scope { display: inline-flex; gap: 2px; padding: 3px; border: 1px solid var(--line-2); border-radius: var(--r); }
+.ll-scope-btn {
+  padding: 5px 12px; border: 0; border-radius: var(--r-s); background: transparent; color: var(--ink-2);
+  font-size: var(--fs-14); font-weight: var(--fw-medium); cursor: pointer; transition: background 0.12s, color 0.12s;
+}
+.ll-scope-btn:hover { background: var(--panel-2); color: var(--ink); }
+.ll-scope-btn[aria-pressed="true"] { background: var(--panel-3); color: var(--ink); }
+.ll-table { display: grid; min-width: 0; }
+.ll-head, .ll-row {
+  display: grid; align-items: baseline; gap: 16px;
+  grid-template-columns: minmax(0, 2.6fr) minmax(0, 1fr) minmax(0, 1.1fr) minmax(0, 0.9fr) minmax(0, 1fr);
+}
+.ll-head { padding: 0 12px 8px; border-bottom: 1px solid var(--line); font-size: var(--fs-12); font-weight: var(--fw-medium); color: var(--ink-3); }
+.ll-rows > li { border-bottom: 1px solid var(--line); }
+.ll-row {
+  width: 100%; padding: 11px 12px; border: 0; border-radius: var(--r-s); background: transparent; color: var(--ink-2);
+  font-size: var(--fs-14); text-align: left; cursor: pointer; transition: background 0.12s;
+}
+.ll-row:hover { background: var(--panel-2); }
+.ll-row:focus-visible { outline-offset: -2px; }
+.ll-row.is-open { background: var(--accent-soft); }
+.ll-title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; min-width: 0; color: var(--ink); font-weight: var(--fw-medium); }
+.ll-open { font-size: var(--fs-12); font-weight: var(--fw-medium); color: var(--accent-text); white-space: nowrap; }
+.ll-cell { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ll-when { text-align: right; font-variant-numeric: tabular-nums; }
+.ll-more { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding-top: 16px; }
+
+/* ---- How it works ---- */
+.page-how { max-width: 840px; gap: 40px; }
+.how-section { display: grid; gap: 14px; }
+.how-section > h2 { font-size: var(--fs-20); color: var(--ink); }
+.how-steps { display: grid; counter-reset: how; border-top: 1px solid var(--line); }
+.how-steps > li {
+  counter-increment: how; display: grid; grid-template-columns: 32px minmax(0, 1fr); column-gap: 12px; row-gap: 4px;
+  padding: 14px 0; border-bottom: 1px solid var(--line);
+}
+.how-steps > li::before {
+  content: counter(how); grid-row: 1 / span 2; font-size: var(--fs-16); color: var(--ink-3); font-variant-numeric: tabular-nums; line-height: 1.4;
+}
+.how-steps h3 { font-size: var(--fs-16); line-height: 1.4; color: var(--ink); }
+.how-steps p { font-size: var(--fs-16); line-height: 1.55; color: var(--ink-2); max-width: 70ch; }
+.how-models { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.how-models > div { display: grid; align-content: start; gap: 4px; padding: 14px 16px; border: 1px solid var(--line); border-radius: var(--r-l); background: var(--panel); }
+.how-models dt { font-size: var(--fs-16); color: var(--ink); }
+.how-models dd { margin: 0; font-size: var(--fs-14); line-height: 1.5; color: var(--ink-2); }
+.how-models code { display: block; margin-top: 6px; font-size: var(--fs-12); overflow-wrap: anywhere; color: var(--ink-3); }
+.how-note { font-size: var(--fs-16); line-height: 1.55; color: var(--ink-2); max-width: 72ch; }
+.how-can { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 32px; }
+.how-can h3 { font-size: var(--fs-16); color: var(--ink); margin-bottom: 8px; }
+.how-can ul { display: grid; gap: 6px; }
+.how-can li { position: relative; padding-left: 18px; font-size: var(--fs-16); line-height: 1.55; color: var(--ink-2); }
+.how-can li::before { content: ""; position: absolute; left: 5px; top: calc(0.775em - 2.5px); width: 5px; height: 5px; border-radius: 50%; background: var(--ink-3); }
+.how-state { font-size: var(--fs-14); color: var(--ink-2); }
+.how-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; }
+
+/* ---- Review and publish / Results (until their slice lands) ---- */
+.page-soon { padding-top: 6vh; }
+.page-soon .page-head { gap: 10px; }
+
+/* ---- big screens (2560 × 1440): a wider sidebar and page column, like the lesson column ---- */
+@media (min-width: 2200px) {
+  :root, [data-theme="dark"], [data-theme="light"] { --sidebar-w: 260px; }
+  .sb-item { min-height: 38px; }
+  .page-inner { max-width: 1440px; }
+  .page-how { max-width: 960px; }
+  .nl-grid { grid-template-columns: minmax(0, 1fr) minmax(420px, 480px); }
+}
+
+/* ---- narrower windows ---- */
+/* Laptop widths (1366 × 768): a slightly narrower sidebar and source page, so the lesson column keeps its two-column
+ * parts (a diagram beside its labels) instead of stacking them under the fold. */
+@media (max-width: 1440px) {
+  :root, [data-theme="dark"], [data-theme="light"] { --sidebar-w: 212px; }
+  .workspace { grid-template-columns: minmax(270px, 26%) minmax(0, 1fr); }
+  .sb-sections { padding-left: 10px; padding-right: 8px; }
+}
+@media (max-width: 1280px) {
+  .nl-grid { grid-template-columns: minmax(0, 1fr) minmax(320px, 360px); gap: 20px; }
+  .page-panel { padding: 22px 24px 56px; }
+}
+/* Below 1100 px the sidebar folds into a top bar with a Menu button; its sections open as a list over the page. */
+@media (max-width: 1100px) {
+  .window-body { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
+  .window-body.drawer-open { grid-template-columns: minmax(0, 1fr); }
+  .sidebar { z-index: 25; flex-direction: row; align-items: center; padding: 4px 10px 8px; }
+  .sb-menu {
+    display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px 6px 10px;
+    border: 1px solid var(--line-2); border-radius: var(--r); background: transparent; color: var(--ink);
+    font-size: var(--fs-14); font-weight: var(--fw-medium); cursor: pointer;
+  }
+  .sb-menu:hover { background: var(--panel-2); }
+  .sb-menu-view { color: var(--ink-3); font-weight: var(--fw-regular); }
+  .sb-menu-view::before { content: "·"; margin-right: 8px; }
+  .sb-body {
+    display: none; position: absolute; top: calc(100% - 4px); left: 10px; width: min(300px, calc(100% - 20px)); max-height: min(70vh, 640px);
+    border: 1px solid var(--line-2); border-radius: var(--r-l); background: var(--chrome); box-shadow: var(--shadow-pop);
+  }
+  .sidebar[data-open="true"] .sb-body { display: flex; }
+  .workspace { border-right: 1px solid var(--inset-line); border-radius: var(--r-l) var(--r-l) 0 0; }
+  .nl-grid { grid-template-columns: minmax(0, 1fr); }
+  .nl-side { position: static; }
+  .ll-head { display: none; }
+  .ll-row { grid-template-columns: minmax(0, 1fr) auto; }
+  .ll-row > .ll-cell:not(.ll-when) { display: none; }
+}
+@media (max-width: 700px) {
+  .nl-paths, .how-models, .how-can { grid-template-columns: minmax(0, 1fr); }
+  .page-panel { padding: 16px 12px 40px; }
+}
+/* Short windows (1366 × 768): a tighter page head and preview, so Build stays above the fold. */
+@media (max-height: 860px) {
+  .page-panel { padding-top: 18px; }
+  .page { gap: 16px; }
+  .nl-main { gap: 14px; }
+  .nl-path { padding-block: 10px; }
+  .nl-excerpt p { -webkit-line-clamp: 3; line-clamp: 3; }
+  .nl-preview { padding-block: 14px; gap: 6px; }
+  .nl-build { gap: 12px; padding-top: 14px; }
+  /* The sidebar keeps every section in view above the access footer (Demo and How it works included). */
+  .sb-sections { gap: 12px; padding-top: 6px; }
+  .sb-item { min-height: 30px; padding-block: 4px; }
+  .sb-item-lesson { padding-block: 5px; }
+  .sb-footer { padding: 10px 12px 8px; margin-bottom: 10px; }
+  .sb-footer.tone-neutral .sb-footer-detail { display: none; }
+  .sb-footer-btn { margin-top: 4px; }
+}

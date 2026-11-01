@@ -3,7 +3,8 @@ import type { ReactNode } from 'react';
 import { IconClose } from './icons.tsx';
 import { scrollTopToReveal } from '../lib/scroll.ts';
 
-export type DrawerMode = 'new' | 'runs';
+/** Stage 10: the drawer only holds the open lesson's details; New lesson is a page in the main area. */
+export type DrawerMode = 'runs';
 
 interface Props {
   mode: DrawerMode;
@@ -16,7 +17,7 @@ interface Props {
   openAt?: string | null;
 }
 
-export const DRAWER_TITLES: Record<DrawerMode, string> = { new: 'New lesson', runs: 'Runs and checks' };
+export const DRAWER_TITLES: Record<DrawerMode, string> = { runs: 'Checks and run details' };
 
 /** Below this width the drawer overlays the lesson (styles.css), so it behaves as a modal dialog. */
 export const DRAWER_OVERLAY_QUERY = '(max-width: 1439.98px)';
@@ -41,9 +42,8 @@ function tabbables(root: HTMLElement): HTMLElement[] {
 }
 
 /**
- * The pipeline drawer. The rail is its only switch: "New lesson" (page, model, Generate, run options) or "Runs"
- * (the runs for this page, their steps, repairs and checks) — the drawer itself shows just its title, no second tab
- * strip. On wide windows it sits beside the lesson; on narrower ones it slides over it. Esc or the close button
+ * The open lesson's details drawer (Stage 10: "Checks and run details" in the sidebar, or the lesson's own links): the
+ * runs for this page, their steps, repairs and checks. On wide windows it sits beside the lesson; on narrower ones it slides over it. Esc or the close button
  * dismisses it, and focus returns to whatever opened it. While it overlays the lesson it is a modal dialog (W2-04): the
  * covered rail and workspace are inert and Tab cycles inside the drawer.
  */
@@ -76,8 +76,7 @@ export function RunsDrawer({ mode, onClose, tech, onTech, children, openAt = nul
     } else {
       body?.scrollTo({ top: 0 });
     }
-    const first = mode === 'new' ? root.querySelector<HTMLElement>('#new-lesson-source') : null;
-    (first ?? root.querySelector<HTMLElement>('.drawer-title'))?.focus({ preventScroll: true });
+    root.querySelector<HTMLElement>('.drawer-title')?.focus({ preventScroll: true });
   }, [mode]);
 
   // Overlay mode: what the drawer covers (the rail and the workspace beside it) cannot be reached or clicked.

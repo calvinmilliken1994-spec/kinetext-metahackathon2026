@@ -9,7 +9,12 @@ import type { FieldProblems, SourceFormValues } from '../lib/sources.ts';
 export interface PasteSourceFormProps {
   /** Called with the stored source id after a successful save, plus a notice when the text already existed. */
   onCreated: (sourceId: string, notice: string | null) => void;
-  onCancel: () => void;
+  /** Absent: no Cancel button (Stage 10: the form is a path of the New lesson page, not a pop-up). */
+  onCancel?: (() => void) | undefined;
+  /** The form's heading; null leaves it out when the page already names the form. */
+  title?: string | null;
+  /** Height of the text box in lines. */
+  rows?: number;
 }
 
 function FieldError({ id, message }: { id: string; message: string | undefined }) {
@@ -17,7 +22,7 @@ function FieldError({ id, message }: { id: string; message: string | undefined }
 }
 
 /** Paste-a-source form. The server re-validates everything; the problems it returns are shown in plain language. */
-export function PasteSourceForm({ onCreated, onCancel }: PasteSourceFormProps) {
+export function PasteSourceForm({ onCreated, onCancel, title = 'Paste your own text', rows = 9 }: PasteSourceFormProps) {
   const uid = useId();
   const [v, setV] = useState<SourceFormValues>(EMPTY_FORM);
   const [problems, setProblems] = useState<FieldProblems>({});
@@ -66,8 +71,8 @@ export function PasteSourceForm({ onCreated, onCancel }: PasteSourceFormProps) {
   const countClass = count.status === 'ok' ? 'ok' : count.status === 'empty' ? 'idle' : 'bad';
 
   return (
-    <form className="paste-form" onSubmit={submit} noValidate aria-labelledby={id('heading')}>
-      <h3 id={id('heading')}>Paste your own text</h3>
+    <form className="paste-form" onSubmit={submit} noValidate aria-labelledby={title === null ? undefined : id('heading')} aria-label={title === null ? 'Your own source' : undefined}>
+      {title !== null && <h3 id={id('heading')}>{title}</h3>}
       <p className="callout callout-warn small" role="note" data-testid="free-credits-note">{FREE_CREDITS_NOTE}</p>
 
       <div className="field">
@@ -80,7 +85,7 @@ export function PasteSourceForm({ onCreated, onCancel }: PasteSourceFormProps) {
 
       <div className="field">
         <label htmlFor={id('text')} className="field-label">Text</label>
-        <textarea id={id('text')} rows={9} value={v.text}
+        <textarea id={id('text')} rows={rows} value={v.text}
           aria-invalid={problems.text !== undefined || count.status === 'long'}
           aria-describedby={`${id('count')}${problems.text !== undefined ? ` ${id('text-err')}` : ''}`}
           onChange={(e) => set('text', e.target.value)} />
@@ -134,7 +139,7 @@ export function PasteSourceForm({ onCreated, onCancel }: PasteSourceFormProps) {
 
       <div className="paste-actions">
         <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? 'Saving…' : 'Use this text'}</button>
-        <button type="button" className="btn" onClick={onCancel} disabled={saving}>Cancel</button>
+        {onCancel !== undefined && <button type="button" className="btn" onClick={onCancel} disabled={saving}>Cancel</button>}
       </div>
       <p className="muted small">The text is stored locally on this computer with a SHA-256 fingerprint. Muse treats it as untrusted data, never as instructions.</p>
     </form>

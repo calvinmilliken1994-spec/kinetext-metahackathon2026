@@ -20,6 +20,8 @@ export function ModelPicker({ options, selected, onSelect, live, locked }: Model
       <div className="model-options">
         {options.map((o) => {
           const reason = unavailableReason(o, live);
+          // With live generation off every model is unavailable for the same reason; the Build area says it once.
+          const why = live === false ? null : reason;
           const checked = o.id === selected;
           const inputId = `model-${o.id}`;
           return (
@@ -31,12 +33,12 @@ export function ModelPicker({ options, selected, onSelect, live, locked }: Model
                 value={o.id}
                 checked={checked}
                 disabled={reason !== null}
-                aria-describedby={reason !== null ? `${inputId}-why` : undefined}
+                aria-describedby={why !== null ? `${inputId}-why` : undefined}
                 onChange={() => onSelect(o.id)}
               />
               <span className="model-option-text">
                 <span className="model-option-label">{o.label}</span>
-                {reason !== null && <span id={`${inputId}-why`} className="model-option-why">{reason}</span>}
+                {why !== null && <span id={`${inputId}-why`} className="model-option-why">{why}</span>}
               </span>
             </label>
           );

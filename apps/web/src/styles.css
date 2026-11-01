@@ -263,24 +263,10 @@ input, textarea { caret-color: var(--accent-text); }
 }
 .chrome-btn:hover { background: var(--panel-2); color: var(--ink); }
 
-/* body: rail + workspace (+ the drawer). The workspace is an inset with its own rounded corner. */
-.window-body { position: relative; display: grid; grid-template-columns: 76px minmax(0, 1fr); min-height: 0; }
+/* body: sidebar + workspace (+ the drawer). The workspace is an inset with its own rounded corner. The sidebar itself is
+ * styled in styles/nav.css (Stage 10). */
+.window-body { position: relative; display: grid; grid-template-columns: var(--sidebar-w) minmax(0, 1fr); min-height: 0; }
 .window-body-plain { grid-template-columns: minmax(0, 1fr); }
-
-.rail { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 0; min-height: 0; overflow-y: auto; }
-.rail-group { display: grid; gap: 4px; }
-.rail-sep { width: 32px; height: 1px; background: var(--line-2); margin: 6px 0; }
-.rail-btn {
-  display: flex; flex-direction: column; align-items: center; gap: 4px; width: 66px; padding: 8px 2px 6px;
-  border: 0; border-radius: var(--r); background: transparent; color: var(--ink-3); cursor: pointer;
-  transition: background 0.12s, color 0.12s;
-}
-.rail-btn:hover:not(:disabled) { background: var(--panel-2); color: var(--ink); }
-.rail-btn.rail-on { color: var(--ink); background: var(--panel-2); }
-.rail-btn:disabled { opacity: 0.45; cursor: not-allowed; }
-.rail-icon { position: relative; display: inline-flex; }
-.rail-dot { position: absolute; top: -1px; right: -3px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent-text); box-shadow: 0 0 0 2px var(--chrome); }
-.rail-label { font-size: var(--fs-12); font-weight: var(--fw-medium); line-height: 1.2; text-align: center; }
 
 /* footer */
 .window-footer {
@@ -307,7 +293,7 @@ input, textarea { caret-color: var(--accent-text); }
 
 /* the lesson column: no frame, centred content of a comfortable reading width */
 .activity-panel { padding: 8px 12px 48px; font-size: var(--fs-16); }
-/* The column and the lesson title take focus only from code (rail Lesson, tour closed): a ring round the whole column
+/* The column and the lesson title take focus only from code (sidebar Lesson, demo closed): a ring round the whole column
  * or a heading told nothing (demo pair review #9); Tab moves on from there as usual. */
 .activity-panel:focus-visible, .lesson-title[tabindex="-1"]:focus { outline: none; }
 .main-inner { width: 100%; max-width: 880px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
@@ -980,7 +966,7 @@ kbd { display: inline-grid; place-items: center; min-width: 20px; height: 20px; 
 
 /* wide windows: the drawer sits beside the lesson as a third column */
 @media (min-width: 1440px) {
-  .window-body.drawer-open { grid-template-columns: 76px minmax(0, 1fr) minmax(380px, 440px); }
+  .window-body.drawer-open { grid-template-columns: var(--sidebar-w) minmax(0, 1fr) minmax(380px, 440px); }
   .drawer-open .workspace { border-right: 1px solid var(--inset-line); border-radius: var(--r-l) var(--r-l) 0 0; }
   .drawer { border-left: 0; }
 }
@@ -1012,9 +998,6 @@ kbd { display: inline-grid; place-items: center; min-width: 20px; height: 20px; 
   .titlebar { grid-template-columns: minmax(0, 1fr) auto; padding: 0 8px 0 14px; }
   .titlebar-title { grid-column: 1; }
   .titlebar-right { grid-column: 2; }
-  .window-body { grid-template-columns: 68px minmax(0, 1fr); }
-  .window-body-plain { grid-template-columns: minmax(0, 1fr); }
-  .rail-btn { width: 60px; }
   .workspace { padding: 10px; gap: 12px; }
   .card { padding: 16px; }
   .lesson-premium { padding: 4px 16px 16px; }

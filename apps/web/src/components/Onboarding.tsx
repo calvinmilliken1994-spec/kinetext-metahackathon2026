@@ -216,22 +216,12 @@ export function Onboarding({ signals: given, onStartReplay, onPresent, onClose, 
         )}
         {!nextReady && !replayBroken && <p className="tour-wait" role="status">{step.primary === 'replay' ? 'Loading the recorded run…' : 'The next step starts when the replay gets there.'}</p>}
         <div className="tour-actions">
-          <button type="button" className="link-btn tour-skip" onClick={() => onClose('skipped')}>{last ? 'Close' : 'Skip tour'}</button>
+          <button type="button" className="link-btn tour-skip" onClick={() => onClose('skipped')}>{last ? 'Close' : 'Skip demo'}</button>
           <span className="tour-spacer" />
           {index > 0 && <button type="button" className="btn btn-quiet" onClick={() => go(index - 1)}>Back</button>}
           {!replayBroken && <button type="button" className="btn btn-primary" onClick={next} disabled={!nextReady}>{step.primaryLabel}</button>}
         </div>
       </div>
     </div>
-  );
-}
-
-/** The rail's way back into the tour (drawn here so the icon set stays untouched). */
-export function IconTour({ size = 20 }: { size?: number }) {
-  return (
-    <svg className="icon" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <circle cx="12" cy="12" r="8.5" />
-      <path d="m14.8 9.2-1.9 3.7-3.7 1.9 1.9-3.7z" />
-    </svg>
   );
 }

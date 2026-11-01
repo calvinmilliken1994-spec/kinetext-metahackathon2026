@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { api, describeError } from './api.ts';
-import { useHealth, useJobDetail, useJobs, useModels, useSourceDoc, useSources } from './hooks.ts';
+import { api, ApiError, describeError } from './api.ts';
+import { useAccess, useHealth, useJobDetail, useJobs, useModels, useSourceDoc, useSources } from './hooks.ts';
 import { buildHighlights } from './lib/highlight.ts';
 import { collectQuoteRefs } from './lib/evidence.ts';
 import { newestFirst, pickDefaultJob } from './lib/jobs.ts';
@@ -28,10 +28,17 @@ import { deckFromActivity, deckFromLesson, exitSearch, HOOK_BEAT, NOTES_ONLY_LIN
 import type { Deck } from './lib/presentation.ts';
 import { ApiStatus } from './components/ApiStatus.tsx';
 import { AppWindow } from './components/AppWindow.tsx';
-import { IconRail } from './components/IconRail.tsx';
+import { Sidebar } from './components/Sidebar.tsx';
+import { NewLessonPage } from './components/NewLessonPage.tsx';
+import { AllLessonsPage } from './components/AllLessonsPage.tsx';
+import { HowItWorksPage, PlaceholderPage } from './components/HowItWorksPage.tsx';
+import { ACCESS_INPUT_ID } from './components/AccessForm.tsx';
+import { navTarget, searchForView, sidebarSections, VIEW_TITLES, viewFromSearch } from './lib/navigation.ts';
+import type { MainView, NavId } from './lib/navigation.ts';
+import { accessFooter } from './lib/access.ts';
 import { SourcePanel, SourceTab } from './components/SourcePanel.tsx';
 import type { Flash } from './components/SourcePanel.tsx';
-import { NewLessonSection, RunsSection, StepsSection } from './components/PipelinePanel.tsx';
+import { RunsSection, StepsSection } from './components/PipelinePanel.tsx';
 import { RunsDrawer } from './components/RunsDrawer.tsx';
 import type { DrawerMode } from './components/RunsDrawer.tsx';
 import type { RunScope } from './components/PipelinePanel.tsx';
@@ -128,6 +135,28 @@ export function App() {
   const [presenting, setPresenting] = useState<{ jobId: string; beat: number } | null>(PRESENT_REQUEST);
   const onTech = useCallback((on: boolean) => { setTech(on); writeStoredTech(localStore(), on); }, []);
 
+  // Stage 10: the main view (lesson, New lesson, All lessons, How it works, …) lives in the URL as ?view=. Sidebar
+  // entries push a history entry, so Back returns to the previous view; the URL follows any other change of view.
+  const [view, setView] = useState<MainView>(() => (typeof window === 'undefined' ? 'lesson' : viewFromSearch(window.location.search)));
+  const navigate = useCallback((next: MainView) => {
+    const search = searchForView(window.location.search, next);
+    if (search !== window.location.search) window.history.pushState(window.history.state, '', `${window.location.pathname}${search}${window.location.hash}`);
+    if (next !== 'lesson') setDrawer(null);
+    setView(next);
+  }, []);
+  useEffect(() => {
+    const search = searchForView(window.location.search, view);
+    if (search !== window.location.search) window.history.replaceState(window.history.state, '', `${window.location.pathname}${search}${window.location.hash}`);
+  }, [view]);
+  useEffect(() => {
+    const onPop = (): void => setView(viewFromSearch(window.location.search));
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, []);
+  // Stage 10: the judge access gate (GET /api/access; a 404 from an older API means the gate is off).
+  const { access, refresh: refreshAccess, set: setAccess } = useAccess();
+  const [signingOut, setSigningOut] = useState(false);
+
   // Stage 7: the app opens on a chosen lesson — a ?job= link, else the most recent succeeded lesson-flow run — and
   // else on the New lesson view; never on whatever old run belongs to the first source in the list. Decided once,
   // when the runs list first arrives, so a run finishing later never pulls the view away.
@@ -148,7 +177,7 @@ export function App() {
     setLinkState(res.notice);
     if (RUN_LINK?.kind === 'replay' && !res.replay) setReplayReq(null);
     if (res.notice?.problem === 'not-found') setPresenting(null);
-    if (res.opening === null && res.notice === null && jobs.state === 'ready') setDrawer('new');
+    if (res.opening === null && res.notice === null && jobs.state === 'ready' && view === 'lesson') setView('new');
   }
   // A link that named nothing holds the lesson column for its notice until the teacher picks a page or a run.
   const linkHold = linkState?.problem === 'not-found' && pickedJob === null && pickedSource === null;
@@ -257,15 +286,20 @@ export function App() {
         setLiveJobIds((prev) => new Set(prev).add(jobId));
         setPickedJob({ jobId, sourceId });
         refreshJobs();
-        // Watch the new run's steps advance.
-        setDrawer('runs');
+        // Watch the new lesson being built, in the lesson view.
+        navigate('lesson');
+        void refreshAccess();
       },
-      (e: unknown) => setGenerateError(describeError(e)),
+      (e: unknown) => {
+        setGenerateError(describeError(e));
+        // The session ended, the budget ran out or builds were paused: re-read the gate so the page says so.
+        if (e instanceof ApiError && ['ACCESS_REQUIRED', 'JUDGE_BUDGET_REACHED', 'BUILDS_PAUSED'].includes(e.code)) void refreshAccess();
+      },
     ).finally(() => {
       // Keep the button locked until /api/health has been re-read, so it never flickers enabled.
       void refreshHealth().finally(() => setGenerating(false));
     });
-  }, [selectedSourceId, demoChoice, models, modelChoice, flow, refreshJobs, refreshHealth]);
+  }, [selectedSourceId, demoChoice, models, modelChoice, flow, refreshJobs, refreshHealth, navigate, refreshAccess]);
   const onModelChoice = useCallback((id: ModelId) => { setWantedModel(id); writeStoredModel(sessionStore(), id); }, []);
 
   const onSelectSource = useCallback((id: string) => { setPickedSource(id); setFlash(null); }, []);
@@ -414,6 +448,7 @@ export function App() {
   const startTourReplay = useCallback(() => {
     if (tourJob === null) return;
     setDrawer(null);
+    setView('lesson');
     setShowSource(true);
     setPickedSource(tourJob.sourceId);
     setFlash(null);
@@ -422,7 +457,7 @@ export function App() {
     else setReplayReq({ jobId: tourJob.jobId, speed: TOUR_REQUEST.speed });
   }, [tourJob, replayReq, replay]);
   const onTourStep = useCallback((step: TourStep) => {
-    if (step.id === 'library' || step.id === 'overview') { setShowSource(true); setDrawer(null); }
+    if (step.id === 'library' || step.id === 'overview') { setShowSource(true); setDrawer(null); setView('lesson'); }
     if (step.id === 'present') setDrawer(null);
   }, []);
   // Closing the tour (Skip, Esc, Finish) puts focus on the lesson title, not on the whole lesson column (which drew a
@@ -452,6 +487,71 @@ export function App() {
     try { localStore()?.setItem(TOUR_STORAGE_KEY, how); } catch { /* blocked storage: the tour just reopens next visit */ }
   }, []);
 
+  // Stage 10: the sidebar. Views open in the main area; Source page, Present, Checks and Demo act on the open lesson.
+  const lessonOpen = selectedJobId !== null && !linkHold;
+  const sections = sidebarSections({
+    view,
+    lessonTitle: lessonOpen ? (selectedSource !== null ? shortTitle(selectedSource.title) : 'Lesson') : null,
+    showSource,
+    canPresent: deck !== null,
+    touring,
+    checksOpen: drawer === 'runs' && view === 'lesson',
+    activity: !lessonOpen ? null : replaying ? 'replay' : ready?.summary.status === 'running' ? 'building' : null,
+  });
+  // Where focus goes after a view change: the access-code field (Enter access code), else the new view's heading.
+  const focusAccess = useRef(false);
+  const onNav = useCallback((id: NavId) => {
+    const t = navTarget(id);
+    if ('view' in t) {
+      if (t.view === view) { if (view === 'lesson') onLesson(); else mainRef.current?.querySelector<HTMLElement>('[data-view-title]')?.focus({ preventScroll: true }); return; }
+      navigate(t.view);
+      return;
+    }
+    if (t.action === 'source') {
+      if (view === 'lesson') setShowSource((v) => !v);
+      else { setShowSource(true); navigate('lesson'); }
+    } else if (t.action === 'present') {
+      onPresent();
+    } else if (t.action === 'checks') {
+      if (view === 'lesson' && drawer === 'runs') { closeDrawer(); return; }
+      if (view !== 'lesson') navigate('lesson');
+      setDrawer('runs');
+    } else {
+      setDrawer(null);
+      if (view !== 'lesson') navigate('lesson');
+      setTouring(true);
+    }
+  }, [view, navigate, onLesson, onPresent, drawer, closeDrawer]);
+  const onEnterCode = useCallback(() => {
+    focusAccess.current = true;
+    if (view === 'new') document.getElementById(ACCESS_INPUT_ID)?.focus();
+    else navigate('new');
+  }, [view, navigate]);
+  const onSignOut = useCallback(() => {
+    setSigningOut(true);
+    api.deleteAccess().then(setAccess, () => { void refreshAccess(); }).finally(() => setSigningOut(false));
+  }, [setAccess, refreshAccess]);
+  const firstView = useRef(true);
+  useEffect(() => {
+    if (firstView.current) { firstView.current = false; return; }
+    const main = mainRef.current;
+    if (main === null) return;
+    scrollPanelToTop(main);
+    const code = focusAccess.current ? document.getElementById(ACCESS_INPUT_ID) : null;
+    focusAccess.current = false;
+    if (code !== null) {
+      code.focus({ preventScroll: true });
+      // Only scroll when the field is out of sight (narrow windows stack the build area under the list).
+      const r = code.getBoundingClientRect();
+      const m = main.getBoundingClientRect();
+      if (r.top < m.top || r.bottom > m.bottom) revealInPanels(code, 'center', 0);
+      return;
+    }
+    if (view === 'lesson') focusLessonStart(main);
+    else main.querySelector<HTMLElement>('[data-view-title]')?.focus({ preventScroll: true });
+  }, [view]);
+  const openFromList = useCallback((jobId: string, sourceId: string) => { onSelectJob(jobId, sourceId); navigate('lesson'); }, [onSelectJob, navigate]);
+
   const notesOnly = deck?.notesOnly === true;
   // While a build is watched (live or replay) the strip's closing beat offers Present, so the header shows none.
   // Run details opens on "How Muse revised this lesson" when the lesson had a repair (it sat two screens down).
@@ -480,20 +580,79 @@ export function App() {
 
   return (
     <AppWindow title="Make knowledge interactive" titleIsHeading titlebarExtra={<ApiStatus health={health} down={down} />}>
-      <div className={`window-body${drawer !== null ? ' drawer-open' : ''}`}>
-        <IconRail
-          showSource={showSource}
-          drawer={drawer}
-          onNewLesson={() => (drawer === 'new' ? closeDrawer() : openDrawer('new'))}
-          onLesson={onLesson}
-          onToggleSource={() => setShowSource((v) => !v)}
-          onRuns={() => (drawer === 'runs' ? closeDrawer() : openDrawer('runs'))}
-          busy={generate.busy}
-          onPresent={onPresent}
-          canPresent={deck !== null}
-          onTour={() => setTouring(true)}
-          touring={touring}
+      <div className={`window-body${drawer !== null && view === 'lesson' ? ' drawer-open' : ''}`}>
+        <Sidebar
+          sections={sections}
+          view={view}
+          onItem={onNav}
+          footer={accessFooter(access, health === null ? null : health.live)}
+          onEnterCode={onEnterCode}
+          onSignOut={onSignOut}
+          signingOut={signingOut}
         />
+        {view !== 'lesson' && (
+          <div className="workspace workspace-page">
+            <main className="panel page-panel" aria-label={VIEW_TITLES[view]} ref={mainRef} tabIndex={-1}>
+              <div className="page-inner">
+                {view === 'new' && (
+                  <NewLessonPage
+                    sources={sources}
+                    jobs={allJobs}
+                    selectedId={selectedSourceId}
+                    onSelect={onSelectSource}
+                    onCreated={onSourceCreated}
+                    doc={doc}
+                    onOpenLesson={openFromList}
+                    subjectFilter={subjectFilter}
+                    onSubjectFilter={setSubjectFilter}
+                    generate={generate}
+                    onGenerate={onGenerate}
+                    generateError={generateError}
+                    models={models}
+                    modelChoice={modelChoice}
+                    onModelChoice={onModelChoice}
+                    live={health === null ? null : health.live}
+                    flow={flow}
+                    onFlow={setFlow}
+                    demoChoice={demoChoice}
+                    onDemoChoice={setDemoChoice}
+                    access={access}
+                    onAccess={setAccess}
+                  />
+                )}
+                {view === 'lessons' && (
+                  <AllLessonsPage
+                    jobs={jobs}
+                    sourcesById={sourcesById}
+                    openJobId={lessonOpen ? selectedJobId : null}
+                    serverBusy={health === null ? null : generate.busy}
+                    subjectFilter={subjectFilter}
+                    onSubjectFilter={setSubjectFilter}
+                    onOpen={openFromList}
+                    onNewLesson={() => navigate('new')}
+                  />
+                )}
+                {view === 'how' && (
+                  <HowItWorksPage
+                    library={library}
+                    access={access}
+                    onDemo={() => onNav('demo')}
+                    onNewLesson={() => navigate('new')}
+                    onEnterCode={onEnterCode}
+                  />
+                )}
+                {(view === 'review' || view === 'results') && (
+                  <PlaceholderPage
+                    kind={view}
+                    onBack={lessonOpen ? () => navigate('lesson') : null}
+                    backLabel="Back to the lesson"
+                  />
+                )}
+              </div>
+            </main>
+          </div>
+        )}
+        {view === 'lesson' && (
         <div className={`workspace${showSource ? '' : ' hide-source'}`}>
           {showSource ? (
             <SourcePanel
@@ -523,7 +682,7 @@ export function App() {
               {notice !== null && (
                 <LinkNotice
                   notice={notice}
-                  onChoose={() => { setRunScope('all'); openDrawer('runs'); }}
+                  onChoose={() => navigate('lessons')}
                   latest={notice.problem === 'classic-replay' ? null : latestLesson(allJobs)}
                   onOpen={onSelectJob}
                 />
@@ -537,7 +696,7 @@ export function App() {
                       : 'Muse Spark reads the page, writes a short overview with the page’s own words, then builds a few interactive parts. Code checks every quote and number.'}
                   </p>
                   {(health === null || health.live) && (
-                    <button type="button" className="btn btn-primary" onClick={() => openDrawer('new')}>New lesson</button>
+                    <button type="button" className="btn btn-primary" onClick={() => navigate('new')}>New lesson</button>
                   )}
                 </div>
               )}
@@ -584,31 +743,10 @@ export function App() {
             </div>
           </main>
         </div>
+        )}
 
-        {drawer !== null && (
+        {drawer !== null && view === 'lesson' && (
           <RunsDrawer mode={drawer} onClose={closeDrawer} tech={tech} onTech={onTech} openAt={repairStoryAt}>
-            {drawer === 'new' && (
-              <NewLessonSection
-                sources={sources}
-                selectedId={selectedSourceId}
-                onSelect={onSelectSource}
-                onCreated={onSourceCreated}
-                teacherSource={selectedSource?.kind === 'user'}
-                generate={generate}
-                onGenerate={onGenerate}
-                demoChoice={demoChoice}
-                onDemoChoice={setDemoChoice}
-                generateError={generateError}
-                models={models}
-                modelChoice={modelChoice}
-                onModelChoice={onModelChoice}
-                live={health === null ? null : health.live}
-                flow={flow}
-                onFlow={setFlow}
-                subjectFilter={subjectFilter}
-                onSubjectFilter={setSubjectFilter}
-              />
-            )}
             {drawer === 'runs' && (
               <>
                 <RunsSection
@@ -625,7 +763,7 @@ export function App() {
                   onSelectJob={onSelectJob}
                   liveJobIds={liveJobIds}
                   canGenerate={!generate.liveOff}
-                  onNewLesson={() => openDrawer('new')}
+                  onNewLesson={() => navigate('new')}
                 />
                 <StepsSection detail={detail} />
                 {ready !== null && jobModel !== null && <AnalysisRepairTimeline steps={analysisSteps} overall={analysisOverall} model={jobModel} />}

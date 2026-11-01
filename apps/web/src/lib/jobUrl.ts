@@ -25,7 +25,7 @@ export function shownSearch(search: string, shown: string | null, s: ShownState)
   if (replay !== null) {
     q.delete('replay');
     // speed only means something to a replay, or to a forced tour's replay
-    if (q.get('tour') !== '1') q.delete('speed');
+    if (q.get('tour') !== '1' && q.get('demo') !== '1') q.delete('speed');
   }
   if (present !== null) { q.delete('present'); q.delete('beat'); }
   q.set('job', shown);

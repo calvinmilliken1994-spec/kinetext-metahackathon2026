@@ -53,7 +53,8 @@ export interface TourRequest {
 
 export function tourRequest(search: string): TourRequest {
   const q = new URLSearchParams(search);
-  const t = q.get('tour');
+  // Stage 10: ?demo= is the visible name; ?tour= keeps working.
+  const t = q.get('demo') ?? q.get('tour');
   const raw = Number(q.get('speed') ?? '');
   const speed = q.has('speed') && Number.isFinite(raw) && raw > 0 ? Math.min(16, Math.max(0.25, raw)) : TOUR_DEFAULT_SPEED;
   return { force: t === '1', suppress: t === '0', speed };
@@ -69,7 +70,7 @@ export function shouldAutoStart(stored: string | null, search: string): boolean 
   if (req.suppress) return false;
   if (stored === 'done' || stored === 'skipped') return false;
   const q = new URLSearchParams(search);
-  return !['job', 'present', 'replay', 'lesson-demo', 'engine-demo'].some((k) => q.has(k));
+  return !['job', 'present', 'replay', 'view', 'lesson-demo', 'engine-demo'].some((k) => q.has(k));
 }
 
 // ---- what the app tells the tour --------------------------------------------------------------------------------
@@ -211,7 +212,7 @@ export function tourSteps(s: TourSignals): TourStep[] {
     }),
     step({
       id: 'library', title: 'Start from a page',
-      body: `Choose one of ${lib}, or paste your own text from New lesson. A real build calls Meta's models, so this tour plays back a recorded build instead. It costs nothing.`,
+      body: `Choose one of ${lib}, or paste your own text from New lesson. A real build calls Meta's models, so this demo plays back a recorded build instead. It costs nothing.`,
       targets: ['[data-tour="library"]', '[data-tour="new-lesson"]'],
       primary: s.replayAvailable ? 'replay' : 'next', primaryLabel: s.replayAvailable ? 'Watch a lesson being built' : 'Next',
     }),
