@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "log-ladder-v1",
+  "title": "Understanding the pH scale in tenfold steps",
+  "quantity": "pH",
+  "factor": 10,
+  "factorText": "10-fold",
+  "effectPhrase": "more acidic",
+  "increasing": false,
+  "sourceId": "usgs-wss-ph-and-water",
+  "quote": "pH is reported in \"logarithmic units\". Each number represents a 10-fold change in the acidity/basicness of the water.",
+  "rungs": [
+    {
+      "id": "rung-neutral-7",
+      "label": "Neutral water at pH 7",
+      "value": 7,
+      "sourceId": "usgs-wss-ph-and-water",
+      "quote": "The range goes from 0 to 14, with 7 being neutral."
+    },
+    {
+      "id": "rung-rain-5-6",
+      "label": "Normal rainfall at pH 5.6",
+      "value": 5.6,
+      "sourceId": "usgs-wss-ph-and-water",
+      "quote": "Normal rainfall has a pH of about 5.6—slightly acidic due to carbon dioxide gas from the atmosphere."
+    },
+    {
+      "id": "rung-mine-2",
+      "label": "Mine drainage at pH 2",
+      "value": 2,
+      "sourceId": "usgs-wss-ph-and-water",
+      "quote": "water coming out of an abandoned coal mine can have a pH of 2, which is very acidic"
+    },
+    {
+      "id": "rung-ph-five",
+      "label": "Water at pH 5",
+      "value": 5,
+      "sourceId": "usgs-wss-ph-and-water",
+      "quote": "Water with a pH of five is ten times more acidic than water having a pH of six."
+    },
+    {
+      "id": "rung-ph-six",
+      "label": "Water at pH 6",
+      "value": 6,
+      "sourceId": "usgs-wss-ph-and-water",
+      "quote": "water having a pH of six."
+    }
+  ],
+  "cases": [
+    {
+      "id": "case-mine-vs-neutral",
+      "fromValue": 7,
+      "toValue": 2
+    },
+    {
+      "id": "case-five-vs-six",
+      "fromValue": 6,
+      "toValue": 5
+    }
+  ]
+}

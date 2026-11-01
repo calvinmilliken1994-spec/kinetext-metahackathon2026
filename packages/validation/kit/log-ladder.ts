@@ -37,6 +37,7 @@ import {
   duplicateOccurrences,
   idProblems,
   lengthProblems,
+  missingSignedNumbers,
   numberCutAtQuoteEdge,
   numbersCarryingToken,
   numbersCheckProblems,
@@ -93,6 +94,33 @@ export function rungNamingNumber(label: unknown, quantity: unknown): number | nu
     }
   }
   return null;
+}
+
+/**
+ * BUG-016: every number (digits or number words, via statedNumbersOrdered) that a text states right after the scale
+ * word, through at most three filler words: "a pH of five" -> 5, "magnitude 6.3" -> 6.3. A number word not tied to the
+ * scale word ("one of the most acidic") never counts. Ladder checks only: the shared digits-only rule is unchanged.
+ */
+export function scaleStatedNumbers(text: unknown, quantity: unknown): number[] {
+  if (typeof text !== 'string' || typeof quantity !== 'string') return [];
+  const lab = normalizeWhitespace(text).toLowerCase();
+  const names = [normalizeWhitespace(quantity).toLowerCase()];
+  const bare = names[0]!.replace(/\s+scale$/, '');
+  if (bare !== '' && bare !== names[0]) names.push(bare);
+  const ordered = statedNumbersOrdered(lab);
+  const out: number[] = [];
+  for (const name of names) {
+    if (name === '') continue;
+    const esc = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    for (const m of lab.matchAll(new RegExp(`(?<![a-z0-9])${esc}(?![a-z0-9])`, 'g'))) {
+      const qe = (m.index ?? 0) + name.length;
+      const after = ordered.find(n => n.start >= qe);
+      if (after === undefined) continue;
+      const between = lab.slice(qe, after.start).split(/[\s=:,]+/).filter(x => x !== '');
+      if (between.length <= 3 && between.every(x => NAMING_FILLER.has(x)) && !out.includes(after.value)) out.push(after.value);
+    }
+  }
+  return out;
 }
 
 /**
@@ -307,6 +335,8 @@ export function validateLogLadder(gen: LogLadderGen, sources: SourceDocument[], 
           affected.push(`/rungs/${i}/value`, `/rungs/${i}/quote`);
           return;
         }
+        // BUG-016: the page may state the rung in words tied to the scale word ("a pH of five").
+        if (!tokens.includes(canonical) && scaleStatedNumbers(quote, gen?.quantity).some(n => Math.abs(n - Number(canonical)) <= VALUE_TOLERANCE)) return;
         if (!tokens.includes(canonical)) {
           const carriers = numbersCarryingToken(quote, canonical);
           problems.push(`rungs[${i}] (${String(rung?.id)}): the value ${canonical} does not occur as a whole number in its quote "${quote.slice(0, 60)}"${carriers.length === 0 ? '' : ` — the quote prints ${carriers.map(c => `"${c}"`).join(', ')} there`} (a number inside a larger number, like 3 inside 33 or 6 inside 6.3, is a different value) (rung-values-in-quote)`);
@@ -428,7 +458,13 @@ export function validateLogLadder(gen: LogLadderGen, sources: SourceDocument[], 
       check('effectPhrase', gen?.effectPhrase, '/effectPhrase', all);
       rungs.forEach((rung, i) => {
         const cited = typeof rung?.sourceId === 'string' ? idx.textOf(rung.sourceId) : undefined;
-        check(`rungs[${i}].label`, rung?.label, `/rungs/${i}/label`, [cited, ...all]);
+        // BUG-016: a label number the page prints only in words ("pH 5" for "a pH of five") passes N-01 when the rung's
+        // own quote states it at the scale word; every other number in the label is still held to the digits rule.
+        const wordOk = scaleStatedNumbers(rung?.quote, gen?.quantity);
+        const labelMissing = typeof rung?.label === 'string' ? missingSignedNumbers(rung.label, [cited, ...all].filter((x): x is string => typeof x === 'string').join('\n')) : [];
+        if (!(labelMissing.length > 0 && labelMissing.every(v => wordOk.some(n => Math.abs(n - Number(v)) <= VALUE_TOLERANCE)))) {
+          check(`rungs[${i}].label`, rung?.label, `/rungs/${i}/label`, [cited, ...all]);
+        }
         // BUG-013 label-value agreement: a number the label states (digits OR number words like
         // "five"/"five point six") must be the rung's own value; with several stated numbers (e.g.
         // "pH 7 water, 10 times more acidic than pH 8") the value must be one of them. A label
