@@ -1,0 +1,1 @@
+{"sourceId":"medlineplus-what-is-dna","model":"muse-spark-1.3","run":5,"set":"stage-8c","jobId":"job-20261101201240-cfd92cb9","status":"succeeded","wallS":100,"costUSD":0.182492,"engine":null,"planned":2,"published":2,"components":["sort-groups-v1:passed","label-diagram-v1:passed"],"failureCode":null}
