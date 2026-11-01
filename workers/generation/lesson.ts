@@ -73,7 +73,7 @@ import {
   validateKitComponent,
 } from '../../packages/validation/kit/index.ts';
 import type { DroppedItem } from '../../packages/validation/kit/index.ts';
-import { normaliseCoverageText, pageWordingOfLabel } from '../../packages/validation/kit/label-diagram.ts';
+import { normaliseCoverageText, pageWordingOfLabel, regionAgreesWithGround } from '../../packages/validation/kit/label-diagram.ts';
 import { claimedPrintedUnits, printedUnits } from '../../packages/validation/kit/label-identity.ts';
 import { repairFindings, truncate, validateAnalysis } from '../../packages/validation/validate.ts';
 import type { AnyActivitySpec } from '../../packages/validation/validate.ts';
@@ -685,6 +685,8 @@ export function pickBestRegions(
   retry: readonly SamBox[],
   parts: readonly LabelPartGen[],
   retried: readonly number[],
+  /** Muse's grounding box per part (image pixels): a variant that disagrees with it (LD-06's rule) cannot win. */
+  grounds?: readonly ({ x1: number; y1: number; x2: number; y2: number } | null)[],
 ): { boxes: SamBox[]; changes: string[] } {
   const out = new Map<number, SamBox>();
   for (const b of first) {
@@ -704,6 +706,8 @@ export function pickBestRegions(
     let bestScore = typeof before?.confidence === 'number' ? before.confidence : Number.NEGATIVE_INFINITY;
     for (const variantId of [SAM_RETRY_POINT_BASE + i, SAM_RETRY_AREA_BASE + i]) {
       const v = variants.get(variantId);
+      const g = grounds?.[i] ?? null;
+      if (g !== null && v !== undefined && !regionAgreesWithGround(v, g)) continue; // confident, but not where Muse located it
       if (v !== undefined && typeof v.confidence === 'number' && v.confidence > bestScore) {
         best = { ...v, id };
         bestScore = v.confidence;
@@ -1838,7 +1842,7 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
         const second = await callSam(retryPlan.objects);
         sweepOpenHolds();
         ctx.account(Math.max(second.costUSD, trace.charged), trace.unknown);
-        const picked = pickBestRegions(boxes, second.boxes, parts, retryPlan.retried);
+        const picked = pickBestRegions(boxes, second.boxes, parts, retryPlan.retried, grounding.grounds);
         boxes = picked.boxes;
         latencyMs += second.latencyMs;
         imagesProcessed += second.imagesProcessed;

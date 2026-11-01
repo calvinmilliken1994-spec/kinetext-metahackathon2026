@@ -78,6 +78,21 @@ export const GROUND_AGREEMENT_MARGIN_FRACTION = 0.25;
 /** A thin part (a 35 px tall stream) still gets this much slack per side: SAM's edges are a few pixels loose. */
 export const GROUND_AGREEMENT_MIN_MARGIN_PX = 12;
 
+/**
+ * The Muse-vs-SAM agreement (Stage 8c Addendum B), shared by LD-06 and the worker's best-of retry: SAM's box lies inside
+ * Muse's grounding box widened by GROUND_AGREEMENT_MARGIN_FRACTION of its size (at least GROUND_AGREEMENT_MIN_MARGIN_PX)
+ * per side. Image pixels.
+ */
+export function regionAgreesWithGround(
+  r: { x1: number; y1: number; x2: number; y2: number },
+  g: { x1: number; y1: number; x2: number; y2: number },
+): boolean {
+  const mx = Math.max(GROUND_AGREEMENT_MIN_MARGIN_PX, (g.x2 - g.x1) * GROUND_AGREEMENT_MARGIN_FRACTION);
+  const my = Math.max(GROUND_AGREEMENT_MIN_MARGIN_PX, (g.y2 - g.y1) * GROUND_AGREEMENT_MARGIN_FRACTION);
+  const eps = 1e-9;
+  return r.x1 >= g.x1 - mx - eps && r.y1 >= g.y1 - my - eps && r.x2 <= g.x2 + mx + eps && r.y2 <= g.y2 + my + eps;
+}
+
 export interface LabelDiagramValidateOptions { revision?: number; regions?: readonly LabelRegion[]; figures?: readonly FigureMeta[] }
 
 function partsOf(gen: LabelDiagramGen): LabelPartGen[] {
@@ -445,10 +460,7 @@ export function validateLabelDiagram(gen: LabelDiagramGen, sources: SourceDocume
         // malformed ground box is ignored (the region is then judged by the criteria above only).
         const g = r.ground;
         if (g !== undefined && g !== null && [g.x1, g.y1, g.x2, g.y2].every(isFiniteNumber) && g.x1 < g.x2 && g.y1 < g.y2) {
-          const mx = Math.max(GROUND_AGREEMENT_MIN_MARGIN_PX, (g.x2 - g.x1) * GROUND_AGREEMENT_MARGIN_FRACTION);
-          const my = Math.max(GROUND_AGREEMENT_MIN_MARGIN_PX, (g.y2 - g.y1) * GROUND_AGREEMENT_MARGIN_FRACTION);
-          const eps = 1e-9;
-          if (!(rx1 >= g.x1 - mx - eps && ry1 >= g.y1 - my - eps && rx2 <= g.x2 + mx + eps && ry2 <= g.y2 + my + eps)) {
+          if (!regionAgreesWithGround({ x1: rx1, y1: ry1, x2: rx2, y2: ry2 }, g)) {
             problems.push(`SAM's region for parts[${i}] (${nameOf(i)}), (${rx1},${ry1})-(${rx2},${ry2}), spilled outside what Muse located for it, (${g.x1},${g.y1})-(${g.x2},${g.y2}) widened by ${GROUND_AGREEMENT_MARGIN_FRACTION * 100}% (at least ${GROUND_AGREEMENT_MIN_MARGIN_PX} px) per side; the two models disagree about where the part is`);
             affected.push(`/parts/${i}/x`, `/parts/${i}/y`, ...areaPathsOf(i));
           }

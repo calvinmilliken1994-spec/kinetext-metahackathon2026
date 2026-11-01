@@ -134,6 +134,24 @@ test('pickBestRegions: a variant keeps its own mask; an unscored variant is igno
   assert.deepEqual(changes, ['a 0.30 -> 0.60', 'b missing -> missing']);
 });
 
+test('pickBestRegions with Muse\'s grounding boxes: a variant that spills outside where Muse located the part never wins', () => {
+  // Live Spark Open water cycle (job-20261101211438-87fa1e93 r1): runoff first pass 0.27; the point-alone variant came
+  // back 0.74 but covered the whole landscape (120,340)-(462,482) against Muse's (290,326)-(325,359); LD-06 failed.
+  const parts = [part({ id: 'runoff' })];
+  const first: SamBox[] = [box(1, 0.27, 293, 337, 325, 378)];
+  const retry: SamBox[] = [box(100, 0.74, 120, 340, 462, 482), box(200, 0.55, 288, 330, 330, 368)]; // 368 <= 359 + 12
+  const grounds = [{ x1: 290, y1: 326, x2: 325, y2: 359 }];
+  const { boxes, changes } = pickBestRegions(first, retry, parts, [0], grounds);
+  assert.deepEqual(boxes[0], { ...retry[1], id: 1 }, 'the widened-box variant agrees with Muse and wins; the landscape does not');
+  assert.deepEqual(changes, ['runoff 0.27 -> 0.55']);
+  // Nothing agrees: the first pass stays (LD-11 then judges it honestly).
+  const none = pickBestRegions(first, [box(100, 0.74, 120, 340, 462, 482)], parts, [0], grounds);
+  assert.deepEqual(none.boxes[0], first[0]);
+  // Without grounding boxes (older path) the rule is unchanged.
+  const old = pickBestRegions(first, retry, parts, [0]);
+  assert.deepEqual(old.boxes[0], { ...retry[0], id: 1 });
+});
+
 /* ------------------------------------------------------------------ */
 /* Worker: fixtures                                                     */
 /* ------------------------------------------------------------------ */
