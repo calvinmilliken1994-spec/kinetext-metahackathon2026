@@ -15,6 +15,7 @@ import {
 } from '../lib/labelDiagramView.ts';
 import type { CheckResult, LabelMask, LabelSlot, PartView, PctBox, Placements, SlotFit, SlotState } from '../lib/labelDiagramView.ts';
 import { aiLabel } from '../lib/displayText.ts';
+import { figureCredit } from '../lib/presentation.ts';
 import { linkKey } from '../lib/linking.ts';
 import type { CiteProps } from './Explanations.tsx';
 import { Linked } from './Linked.tsx';
@@ -199,9 +200,6 @@ interface FigureProps {
 }
 
 /** The page's figure: printed labels as slots (or covers), a numbered marker per part, the focused part's outline. */
-function figureCredit(fig: LabelDiagramSpec['figure']): string {
-  return [fig.credit.trim(), fig.license.trim()].filter((s) => s !== '').join(' · ');
-}
 
 function Figure({ spec, views, slots, masks, named, slotState, labelsShown, markerState, current, outlined, slotFont, size, caption, marker, onSlotHover, build = false }: FigureProps) {
   const srcOf = useContext(FigureSrcContext);

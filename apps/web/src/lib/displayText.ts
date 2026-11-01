@@ -141,7 +141,21 @@ export function aiText(text: string): string {
  * units). Never used on page quotes.
  */
 export function aiLabel(text: string): string {
-  return capitalFirst(aiText(text));
+  const shown = aiText(text);
+  const rest = withoutLearnOpener(shown);
+  if (rest === shown) return capitalFirst(shown);
+  // After the opener a lone article starts the sentence ('a candidate needs …' → 'A candidate needs …').
+  return /^a\s/.test(rest) ? `A${rest.slice(1)}` : capitalFirst(rest);
+}
+
+/**
+ * Muse opened almost every key point with "Students learn that …" (UX pair review 2026-11-01): the most machine-written
+ * voice on screen. The opener is dropped for display only; what follows must be a real clause, so "Students learn",
+ * "Students learn that." and "Students learn about …" stay as written. Never used on page quotes.
+ */
+function withoutLearnOpener(text: string): string {
+  const m = /^\s*students\s+(?:will\s+)?learn\s+(?:that\s+(?=[\p{L}\p{N}(])|(?=how\s+[\p{L}\p{N}(]))/iu.exec(text);
+  return m === null ? text : text.slice(m[0].length);
 }
 
 /** Unit symbols that must stay on the line of their number. */

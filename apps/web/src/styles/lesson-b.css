@@ -79,3 +79,10 @@
 .story-foot { color: var(--ink-2); }
 .story-tech { display: none; }
 .show-tech .story-tech { display: grid; gap: 8px; }
+
+/* UX pair quick wins: a vote's verdict sits inline after its rule ("needs ? of 538 · Passes?"). */
+.th-rule .th-stage-state { grid-column: auto; grid-row: auto; align-self: baseline; justify-items: start; }
+
+/* A lesson with no working part says so once, under its title. */
+.notes-only { margin: 0; color: var(--ink-2); font-size: var(--fs-14); }
+.notes-only strong { color: var(--ink); font-weight: var(--fw-medium); }

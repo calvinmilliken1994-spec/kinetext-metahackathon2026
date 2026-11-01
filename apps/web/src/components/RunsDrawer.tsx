@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { IconClose } from './icons.tsx';
+import { scrollTopToReveal } from '../lib/scroll.ts';
 
 export type DrawerMode = 'new' | 'runs';
 
@@ -11,6 +12,8 @@ interface Props {
   tech: boolean;
   onTech: (on: boolean) => void;
   children: ReactNode;
+  /** A selector inside the drawer to open at (the lesson's repair story), instead of the top. */
+  openAt?: string | null;
 }
 
 export const DRAWER_TITLES: Record<DrawerMode, string> = { new: 'New lesson', runs: 'Runs and checks' };
@@ -44,7 +47,7 @@ function tabbables(root: HTMLElement): HTMLElement[] {
  * dismisses it, and focus returns to whatever opened it. While it overlays the lesson it is a modal dialog (W2-04): the
  * covered rail and workspace are inert and Tab cycles inside the drawer.
  */
-export function RunsDrawer({ mode, onClose, tech, onTech, children }: Props) {
+export function RunsDrawer({ mode, onClose, tech, onTech, children, openAt = null }: Props) {
   const headingId = useId();
   const ref = useRef<HTMLElement>(null);
   // What had focus when the drawer opened, read during the first render (before any effect moves focus into the drawer).
@@ -59,11 +62,20 @@ export function RunsDrawer({ mode, onClose, tech, onTech, children }: Props) {
     if (opener !== null && opener.isConnected && opener !== document.body) opener.focus({ preventScroll: true });
   }, [opener]);
 
-  // Each time the drawer opens or switches mode, focus its heading (the first field for "New lesson").
+  // Each time the drawer opens or switches mode, focus its heading (the first field for "New lesson"). "Runs" for a
+  // lesson that Muse revised opens on that story (it sat two screens down, under the run list); otherwise at the top.
   useEffect(() => {
     const root = ref.current;
     if (root === null) return;
-    root.querySelector<HTMLElement>('.drawer-body')?.scrollTo({ top: 0 });
+    const body = root.querySelector<HTMLElement>('.drawer-body');
+    const story = mode === 'runs' && openAt !== null ? root.querySelector<HTMLElement>(openAt) : null;
+    if (body !== null && story !== null) {
+      const b = body.getBoundingClientRect();
+      const t = story.getBoundingClientRect();
+      body.scrollTo({ top: scrollTopToReveal({ top: b.top + body.clientTop, height: body.clientHeight, scrollTop: body.scrollTop, scrollHeight: body.scrollHeight }, { top: t.top, height: t.height }, 'start', 12) });
+    } else {
+      body?.scrollTo({ top: 0 });
+    }
     const first = mode === 'new' ? root.querySelector<HTMLElement>('#new-lesson-source') : null;
     (first ?? root.querySelector<HTMLElement>('.drawer-title'))?.focus({ preventScroll: true });
   }, [mode]);

@@ -68,13 +68,15 @@ function StageBlock({ info, yes, result, revealed, multi, canMove, onMove }: {
             </span>
             {' '}of {countText(info.total)}
           </span>
-        </Linked>
-        <p className="th-stage-state th-stack" aria-live="polite">
-          <span data-on={revealed ? 'true' : 'false'} className={passes ? 'th-ok' : 'th-bad'}>
-            <Mark kind={passes ? 'ok' : 'bad'} />{passes ? 'Passes' : `${countText(Math.max(0, -(result?.margin ?? 0)))} short`}
+          {/* The verdict sits right beside the rule it answers ("needs ? of 538 · Passes?"), not across the card. */}
+          <span className="th-sep" aria-hidden="true">·</span>
+          <span className="th-stage-state th-stack" aria-live="polite">
+            <span data-on={revealed ? 'true' : 'false'} className={passes ? 'th-ok' : 'th-bad'}>
+              <Mark kind={passes ? 'ok' : 'bad'} />{passes ? 'Passes' : `${countText(Math.max(0, -(result?.margin ?? 0)))} short`}
+            </span>
+            <span data-on={revealed ? 'false' : 'true'} className="th-open">Passes?</span>
           </span>
-          <span data-on={revealed ? 'false' : 'true'} className="th-open">Passes?</span>
-        </p>
+        </Linked>
       </div>
       <Meter info={info} yes={yes} revealed={revealed} />
       <div className="th-controls">

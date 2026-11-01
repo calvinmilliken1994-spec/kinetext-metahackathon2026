@@ -61,11 +61,16 @@ export interface Deck {
   parts: DeckPart[];
   /** Parts that were planned but did not pass their checks (never shown). */
   leftOut: number;
+  /** No planned part passed today's checks: the deck is the notes only, and its disclosure line says so first. */
+  notesOnly?: boolean;
   checks: CheckTally | null;
   quotes: QuoteTally | null;
 }
 
 interface DeckCommon { jobId: string; source: DeckSource | null; disclosure: string; checks: CheckTally | null; quotes: QuoteTally | null }
+
+/** The one line a lesson with no working part carries (lesson view, Present hint, title slide). */
+export const NOTES_ONLY_LINE = 'Notes only: no activity passed today’s checks.';
 
 /** A lesson-flow run as a deck: the overview, then every passed part in plan order. */
 export function deckFromLesson(input: DeckCommon & {
@@ -79,13 +84,17 @@ export function deckFromLesson(input: DeckCommon & {
     if (c.spec !== null) parts.push({ kind: 'kit', spec: c.spec });
   }
   const ov = input.lesson.overview;
+  const notesOnly = parts.length === 0 && cards.length > 0;
   return {
-    jobId: input.jobId, source: input.source, disclosure: input.disclosure, checks: input.checks, quotes: input.quotes,
+    jobId: input.jobId, source: input.source, checks: input.checks, quotes: input.quotes,
+    // A notes-only deck opens on its title slide, whose disclosure line then starts by saying so.
+    disclosure: notesOnly ? `${NOTES_ONLY_LINE} ${input.disclosure}` : input.disclosure,
     headline: ov?.headline ?? input.fallbackTitle,
     overview: ov === null ? null : { keyPoints: ov.keyPoints, keyTerms: ov.keyTerms },
     objectives: [],
     parts,
     leftOut: cards.filter((c) => c.status === 'failed').length,
+    notesOnly,
   };
 }
 
@@ -673,6 +682,35 @@ const LICENCE_TEXT: Readonly<Record<string, string>> = {
 };
 
 export function licenceText(license: string): string { return LICENCE_TEXT[license] ?? license; }
+
+const norm = (s: string): string => s.replace(/\s+/g, ' ').trim().toLowerCase();
+
+/**
+ * A figure's credit as ONE line: who made it, then its licence. The stored licence often repeats the publisher in a
+ * bracket ("U.S. Government work (U.S. National Library of Medicine), public domain") and adds the conditions of use
+ * after a ';' or in a later sentence ("credit NOAA; AI edits must be disclosed"). Those are rules for us, not a credit:
+ * only the licence's first clause is printed, without a bracket that repeats the credit.
+ */
+export function figureCredit(fig: { credit: string; license: string }): string {
+  const credit = fig.credit.replace(/^\s*credit:\s*/i, '').replace(/\s+/g, ' ').trim();
+  const first = (fig.license.split(/;|(?<=\p{Ll}{2})\.\s+(?=\p{Lu})/u)[0] ?? '').replace(/\s+/g, ' ').trim().replace(/\.$/, '');
+  const licence = credit === ''
+    ? first
+    : first.replace(/\s*\(([^()]*)\)/g, (m, inner: string) => (norm(inner) === norm(credit) ? '' : m)).trim();
+  const policy = /\b(?:must|should|disclos\w*|insignia|endorse\w*)\b/i;
+  return [credit, policy.test(licence) ? '' : licence].filter((s) => s !== '').join(' · ');
+}
+
+/**
+ * The one page claim an algorithm slide prints under the trace (two, e.g. "O(ln n)" beside "O(log n)", read as a
+ * typo to a class): the claim about comparisons, which the trace counts on screen; else the running time; else the first.
+ */
+export function stageClaim<C extends { kind: string; text: string }>(claims: readonly C[]): C | null {
+  return claims.find((c) => /\bcomparisons?\b/i.test(c.text))
+    ?? claims.find((c) => c.kind === 'running-time')
+    ?? claims[0]
+    ?? null;
+}
 
 const PROJECT_TEAM = /^\s*Written by the Make knowledge interactive project team\b/i;
 

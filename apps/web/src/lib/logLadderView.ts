@@ -58,6 +58,27 @@ export function ladderWording(spec: Pick<LogLadderSpec, 'effectPhrase'>): Ladder
   return { question: `How many times more or less ${phrase}?`, dir: { more: `more ${phrase}`, less: `less ${phrase}` } };
 }
 
+// ---- one unit wording (UX pair review #6: "each step" beside ×100 gaps read as a contradiction) ------------------------
+
+/** What one whole step of the scale is called: 'pH unit' / 'pH units'; a long quantity name falls back to 'step'. */
+export function unitWords(spec: Pick<LogLadderSpec, 'quantity'>): { one: string; many: string } {
+  const q = aiText(spec.quantity).replace(/\s+/g, ' ').trim();
+  if (q === '' || q.split(' ').length > 2 || q.length > 20) return { one: 'step', many: 'steps' };
+  return { one: `${q} unit`, many: `${q} units` };
+}
+
+/** 'Each pH unit is ×10.' (lesson and slide say it the same way). */
+export function unitRule(spec: Pick<LogLadderSpec, 'quantity' | 'factor'>): string {
+  const w = unitWords(spec);
+  return w.one === 'step' ? `Each step on the scale is ×${ratioText(spec.factor)}.` : `Each ${w.one} is ×${ratioText(spec.factor)}.`;
+}
+
+/** '5 pH units', '1 pH unit', '1.4 pH units'. */
+export function unitsText(n: number, spec: Pick<LogLadderSpec, 'quantity'>): string {
+  const w = unitWords(spec);
+  return `${valueText(n)} ${n === 1 ? w.one : w.many}`;
+}
+
 // ---- cases -----------------------------------------------------------------------------------------------------------
 
 export interface LadderStep {
@@ -90,8 +111,8 @@ export interface LadderCase {
 
 /** The most running-multiplier steps a case draws; a longer case groups whole steps (×10 per step becomes ×100 per 2). */
 export const MAX_CASE_STEPS = 12;
-/** The most tick marks a ladder draws, whatever the span of its values. */
-export const MAX_TICKS = 12;
+/** The most tick marks a ladder draws, whatever the span of its values (14: the whole pH scale, one mark per unit). */
+export const MAX_TICKS = 14;
 
 /**
  * The ladder's steps from one value to another: whole steps of the factor, then a part step if the case ends between.

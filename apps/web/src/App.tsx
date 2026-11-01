@@ -24,7 +24,7 @@ import { activityRepairCounts, checkTally, lessonRepairCounts, quoteTally, repai
 import { readStoredTech, writeStoredTech } from './lib/techDetails.ts';
 import { readSourceOpen, writeSourceOpen } from './lib/lessonLayout.ts';
 import { revealInPanels, scrollPanelToTop } from './lib/scroll.ts';
-import { deckFromActivity, deckFromLesson, exitSearch, HOOK_BEAT, presentRequest } from './lib/presentation.ts';
+import { deckFromActivity, deckFromLesson, exitSearch, HOOK_BEAT, NOTES_ONLY_LINE, presentRequest } from './lib/presentation.ts';
 import type { Deck } from './lib/presentation.ts';
 import { ApiStatus } from './components/ApiStatus.tsx';
 import { AppWindow } from './components/AppWindow.tsx';
@@ -54,7 +54,7 @@ import { useReplay } from './components/useReplay.ts';
 import { jobStartMs, liveStrip, partBuilds } from './lib/liveBuild.ts';
 import { replayRequest } from './lib/replay.ts';
 import type { ReplayRequest } from './lib/replay.ts';
-import { replayAfterTourClose, shouldAutoStart, tourRequest, tourSignals, TOUR_JOB_ID, TOUR_STORAGE_KEY } from './lib/onboarding.ts';
+import { replayAfterTourClose, shouldAutoStart, tourReady, tourRequest, tourSignals, TOUR_JOB_ID, TOUR_STORAGE_KEY, watchAfterTourClose } from './lib/onboarding.ts';
 import type { TourOutcome, TourStep } from './lib/onboarding.ts';
 import { Onboarding } from './components/Onboarding.tsx';
 import { IconPresent } from './components/presentation/icons.tsx';
@@ -360,6 +360,13 @@ export function App() {
 
   // Stage 9b: the first-run tour. It opens by itself once, on a plain first visit (or with ?tour=1), and from the rail.
   const [touring, setTouring] = useState(() => typeof window !== 'undefined' && shouldAutoStart(readTourOutcome(), window.location.search));
+  // The first card waits for the runs list, the page list and the opening lesson (never a tour over an empty "Loading…"
+  // app); once shown it stays, since the tour's own replay reloads the lesson under it.
+  const lessonLoad = opening === undefined || (selectedSourceId !== null && doc?.state === 'loading')
+    ? 'loading'
+    : selectedJobId === null ? 'none' : detail === null || detail === undefined ? 'loading' : detail.state;
+  const [tourShown, setTourShown] = useState(false);
+  if (touring && !tourShown && tourReady({ jobs: jobs.state, sources: sources.state, lesson: lessonLoad })) setTourShown(true);
   const tourJob = allJobs.find((j) => j.jobId === TOUR_JOB_ID) ?? null;
   const tourReplaying = replaying && replayReq?.jobId === TOUR_JOB_ID;
   const library = useMemo(() => {
@@ -395,14 +402,24 @@ export function App() {
   }, []);
   const closeTour = useCallback((how: TourOutcome) => {
     setTouring(false);
-    // Skipping mid-demo stops the recorded build; the lesson stays open as it finished.
+    // Skipping mid-demo stops the recorded build and leaves its build view: the lesson shows at rest, activity first.
     setReplayReq((r) => replayAfterTourClose(r, how));
+    setWatched((w) => watchAfterTourClose(w, how));
     try { localStore()?.setItem(TOUR_STORAGE_KEY, how); } catch { /* blocked storage: the tour just reopens next visit */ }
   }, []);
 
-  const presentButton = deck === null ? null : (
-    <button type="button" className="btn present-launch" data-tour="present" onClick={onPresent} title="Present this lesson full screen, one step at a time">
-      <IconPresent size={18} />Present
+  const notesOnly = deck?.notesOnly === true;
+  // While a build is watched (live or replay) the strip's closing beat offers Present, so the header shows none.
+  // Run details opens on "How Muse revised this lesson" when the lesson had a repair (it sat two screens down).
+  const repairStoryAt = componentRepairs.length > 0
+    ? '[data-testid="component-repair"]'
+    : ready?.lessonData !== undefined && analysisSteps.length > 0 ? '[data-testid="analysis-repair"]' : null;
+  const presentButton = deck === null || liveCtx !== null ? null : (
+    <button
+      type="button" className="btn present-launch" data-tour="present" onClick={onPresent}
+      title={notesOnly ? `${NOTES_ONLY_LINE} Present the lesson notes full screen.` : 'Present this lesson full screen, one step at a time'}
+    >
+      <IconPresent size={18} />{notesOnly ? 'Present notes' : 'Present'}
     </button>
   );
 
@@ -525,7 +542,7 @@ export function App() {
         </div>
 
         {drawer !== null && (
-          <RunsDrawer mode={drawer} onClose={closeDrawer} tech={tech} onTech={onTech}>
+          <RunsDrawer mode={drawer} onClose={closeDrawer} tech={tech} onTech={onTech} openAt={repairStoryAt}>
             {drawer === 'new' && (
               <NewLessonSection
                 sources={sources}
@@ -606,7 +623,7 @@ export function App() {
           </RunsDrawer>
         )}
       </div>
-      {touring && presenting === null && (
+      {touring && tourShown && presenting === null && (
         <Onboarding
           signals={signals} onStartReplay={startTourReplay} onPresent={onPresent} onClose={closeTour} onStep={onTourStep}
           onRetryReplay={replay.retry} onSkipReplay={skipTourReplay}

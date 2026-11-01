@@ -23,6 +23,24 @@ export function replayAfterTourClose<R extends { jobId: string }>(req: R | null,
   return how === 'skipped' && req?.jobId === TOUR_JOB_ID ? null : req;
 }
 
+/**
+ * The build view to keep once the tour closes: skipping mid-replay drops the tour run's build view too, so the lesson
+ * shows at rest (activity first, one Present button); a finished tour keeps it (re-ordering at the end would jump).
+ */
+export function watchAfterTourClose(watched: string | null, how: TourOutcome): string | null {
+  return how === 'skipped' && watched === TOUR_JOB_ID ? null : watched;
+}
+
+type LoadState = 'loading' | 'ready' | 'error';
+
+/**
+ * Whether the first tour card may open: not over an empty, loading app. It waits for the runs list, the page list and
+ * the opening lesson ('none' when there is no lesson to wait for); an error never holds it back.
+ */
+export function tourReady(i: { jobs: LoadState; sources: LoadState; lesson: LoadState | 'none' }): boolean {
+  return i.jobs !== 'loading' && i.sources !== 'loading' && i.lesson !== 'loading';
+}
+
 export interface TourRequest {
   /** `?tour=1`: start the tour whatever the stored flag says. */
   force: boolean;
@@ -190,7 +208,7 @@ export function tourSteps(s: TourSignals): TourStep[] {
       targets: ['[data-tour="live-strip"]'], needsReplay: true,
     }),
     step({
-      id: 'overview', title: 'The summary comes first',
+      id: 'overview', title: 'Muse writes the summary first',
       body: 'Each key point is tied to the sentence it came from: those sentences light up in the page on the left. Below, the parts Muse planned take shape while it writes them.',
       targets: ['.lesson .overview', '[data-tour="source-text"]'], needsReplay: true,
     }),

@@ -7,7 +7,7 @@ import type { CSSProperties, FormEvent } from 'react';
 import type { LogLadderSpec } from '../../../../packages/contracts/kit.ts';
 import type { EnginePresentation } from '../lib/enginePresentation.ts';
 import {
-  gapText, gradeLadder, ladderAxis, ladderCases, ladderWording, ratioText, spreadLabels, valueText,
+  gapText, gradeLadder, ladderAxis, ladderCases, ladderWording, ratioText, spreadLabels, unitRule, unitsText, unitWords, valueText,
 } from '../lib/logLadderView.ts';
 import type { LadderCase, LadderGrade } from '../lib/logLadderView.ts';
 import { ladderFeedback, targetRule } from '../lib/feedback.ts';
@@ -56,7 +56,7 @@ function Ladder({ spec, c, revealed }: { spec: LogLadderSpec; c: LadderCase; rev
   // The effect grows towards higher values when `increasing`, else towards lower ones (pH: lower is more acidic).
   const growsUp = spec.increasing;
   return (
-    <figure className="ll-ladder" data-testid="log-ladder" aria-label={`The ${aiText(spec.quantity)} scale from ${axis.min} to ${axis.max}; each whole step is ×${ratioText(spec.factor)}.`}>
+    <figure className="ll-ladder" data-testid="log-ladder" aria-label={`The ${aiText(spec.quantity)} scale from ${axis.min} to ${axis.max}. ${unitRule(spec)}`}>
       <p className="ll-end ll-end-top" data-grows={growsUp ? 'true' : 'false'}>{growsUp ? capitalFirst(wording.dir.more) : capitalFirst(wording.dir.less)}</p>
       <div className="ll-body">
         <div className="ll-guides" aria-hidden="true">
@@ -114,7 +114,7 @@ function Answer({ spec, c, revealed }: { spec: LogLadderSpec; c: LadderCase; rev
       <div className="ll-answer-shown" aria-hidden={revealed ? undefined : 'true'}>
         <p className="ll-answer-big">{capitalFirst(c.answerText)}</p>
         <p className="ll-answer-why">
-          {valueText(c.exponent)} {c.exponent === 1 ? 'step' : 'steps'} of ×{ratioText(spec.factor)}: <Power factor={spec.factor} exponent={c.exponent} /> {whole ? '=' : '≈'} {ratioText(c.ratio)}.
+          {unitsText(c.exponent, spec)} of ×{ratioText(spec.factor)}: <Power factor={spec.factor} exponent={c.exponent} /> {whole ? '=' : '≈'} {ratioText(c.ratio)}.
         </p>
       </div>
     </div>
@@ -171,6 +171,7 @@ function LessonLadder({ spec, cite }: { spec: LogLadderSpec; cite: CiteProps }) 
         <section className="ll-ask" aria-labelledby={`${uid}-q`}>
           <p className="ll-ask-case"><FromTo spec={spec} c={c} /></p>
           <h3 id={`${uid}-q`} className="ll-q">{wording.question}</h3>
+          <Linked as="p" className="ll-rule" links={[linkKey(spec.sourceId, spec.quote)]}>{unitRule(spec)}</Linked>
           <form className="ll-form" onSubmit={check} noValidate>
             <label className="ll-guess">
               <span className="sr-only">How many times</span>
@@ -194,14 +195,14 @@ function LessonLadder({ spec, cite }: { spec: LogLadderSpec; cite: CiteProps }) 
             </div>
           </form>
           {feedback !== null
-            ? <FeedbackLine feedback={feedback} working={`each whole step of the page’s scale multiplies by ${ratioText(spec.factor)}`} />
+            ? <FeedbackLine feedback={feedback} working={`each ${unitWords(spec).one} multiplies by ${ratioText(spec.factor)}`} />
             : <p className="ll-grade" role="status" aria-live="polite">{problem}</p>}
           <Answer spec={spec} c={c} revealed={st.revealed} />
           <p className="ll-fine">{targetRule()}</p>
         </section>
       </div>
       <section className="ll-facts" aria-label="What the page says">
-        <QuoteBlock componentId={COMPONENT} part="factor" id="factor" sourceId={spec.sourceId} quote={spec.quote} cite={cite} caption={`Each step, in the page’s words: “${aiText(spec.factorText)}”`} />
+        <QuoteBlock componentId={COMPONENT} part="factor" id="factor" sourceId={spec.sourceId} quote={spec.quote} cite={cite} caption={`Each ${unitWords(spec).one}, in the page’s words: “${aiText(spec.factorText)}”`} />
         <details className="ll-rung-quotes">
           <summary>Where the points on the scale come from</summary>
           <ul>
@@ -230,7 +231,7 @@ function StagedLadder({ spec, presentation }: { spec: LogLadderSpec; presentatio
           <p className="ll-ask-case"><FromTo spec={spec} c={c} /></p>
           <h3 className="ll-q">{wording.question}</h3>
           <Linked as="p" className="ll-rule" links={[linkKey(spec.sourceId, spec.quote)]} tabIndex={0}>
-            Each step on this scale is ×{ratioText(spec.factor)}.
+            {unitRule(spec)}
           </Linked>
           <Answer spec={spec} c={c} revealed={presentation.revealed} />
         </section>

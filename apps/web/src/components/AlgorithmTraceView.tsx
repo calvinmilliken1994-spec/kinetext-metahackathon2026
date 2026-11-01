@@ -12,6 +12,7 @@ import {
 import type { BoardMarkers, BoardRooms, BoardView, PredictPoint } from '../lib/algorithmView.ts';
 import { aiLabel, capitalFirst } from '../lib/displayText.ts';
 import { lessonQuoteKey } from '../lib/lesson.ts';
+import { stageClaim } from '../lib/presentation.ts';
 import { linkKey } from '../lib/linking.ts';
 import { CitationChip } from './Explanations.tsx';
 import type { CiteProps } from './Explanations.tsx';
@@ -332,9 +333,14 @@ function LessonTrace({ spec, cite }: { spec: AlgorithmTraceSpec; cite: CiteProps
       <Board spec={spec} view={view} choices={open ? point?.positions ?? null : null} rooms={rooms} />
       {spec.algorithm === 'merge-sort' && <Tray view={view} />}
       <Status spec={spec} view={view} />
+      {/* The question comes first; the step controls follow it, and "Show the answer" is never the loudest button. */}
+      <AskPanel
+        point={point} ghost={ghost} index={active} total={points.length} shown={settledAnswer} pick={point === null ? null : picks.get(active) ?? null}
+        onPick={open ? choose : null} idleText={idleText} hint="Pick an answer, or press Show the answer."
+      />
       <div className="at-controls" role="group" aria-label="Step through the algorithm">
         <button type="button" className="btn" onClick={back} disabled={frame <= 0}><Chevron dir="back" />Back</button>
-        <button type="button" className="btn btn-primary at-next" onClick={next} disabled={frame >= last && target === null && !open}>
+        <button type="button" className={`btn at-next${open ? '' : ' btn-primary'}`} onClick={next} disabled={frame >= last && target === null && !open}>
           <span className="at-next-label" data-on={open ? 'true' : 'false'}>Show the answer</span>
           <span className="at-next-label" data-on={open ? 'false' : 'true'}>Next step</span>
           <Chevron dir="next" />
@@ -345,10 +351,6 @@ function LessonTrace({ spec, cite }: { spec: AlgorithmTraceSpec; cite: CiteProps
         <button type="button" className="btn" onClick={reset}><IconReset />Reset</button>
         <span className="at-frame">Step {frame + 1} of {last + 1}</span>
       </div>
-      <AskPanel
-        point={point} ghost={ghost} index={active} total={points.length} shown={settledAnswer} pick={point === null ? null : picks.get(active) ?? null}
-        onPick={open ? choose : null} idleText={idleText} hint="Pick an answer, or press Show the answer."
-      />
       {variantNote(spec.algorithm) !== null && <p className="at-variant">{variantNote(spec.algorithm)}</p>}
       {trace.truncated && <p className="at-variant">The trace is shown up to {trace.frames.length} steps.</p>}
       <Facts spec={spec} cite={cite} />
@@ -377,6 +379,8 @@ function StagedTrace({ spec, presentation }: { spec: AlgorithmTraceSpec; present
 
   const view = boardAt(spec, trace, frame);
   const shown = presentation.revealed && p !== null && frame === p.reveal;
+  // One page claim on a slide: two ("O(ln n)" beside "O(log n)") read as a typo to a class.
+  const claim = stageClaim(spec.claims);
   const classPick = pick !== null && pick.step === k ? pick.id : null;
   return (
     <div className="at" data-algorithm={spec.algorithm} data-mode="stage" data-testid="algorithm-trace" data-revealed={shown ? 'true' : 'false'}>
@@ -388,9 +392,9 @@ function StagedTrace({ spec, presentation }: { spec: AlgorithmTraceSpec; present
         point={p} ghost={null} index={k} total={points.length} shown={shown} pick={classPick}
         onPick={presentation.revealed ? null : (id) => setPick({ step: k, id })} idleText="" hint="Predict with the class, then reveal."
       />
-      {spec.claims.length > 0 && (
-        <ul className="at-stage-claims" aria-label="Facts the page states">
-          {spec.claims.map((c) => <Linked as="li" key={c.id} links={[linkKey(c.sourceId, c.quote)]} tabIndex={0}>{aiLabel(c.text)}</Linked>)}
+      {claim !== null && (
+        <ul className="at-stage-claims" aria-label="What the page states">
+          <Linked as="li" key={claim.id} links={[linkKey(claim.sourceId, claim.quote)]} tabIndex={0}>{aiLabel(claim.text)}</Linked>
         </ul>
       )}
       {variantNote(spec.algorithm) !== null && <p className="at-variant">{variantNote(spec.algorithm)}</p>}

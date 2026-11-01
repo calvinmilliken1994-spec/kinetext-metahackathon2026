@@ -4,7 +4,7 @@ import type { OverviewSpec } from '../../../../packages/contracts/kit.ts';
 import { Linked } from './Linked.tsx';
 import { IconChevronDown, IconChevronUp } from './icons.tsx';
 import { linkKeysOf } from '../lib/linking.ts';
-import { prettyExponents } from '../lib/displayText.ts';
+import { aiLabel } from '../lib/displayText.ts';
 import { overviewParts } from '../lib/lessonLayout.ts';
 
 interface Props {
@@ -46,7 +46,7 @@ export function OverviewView({ overview, live = false, notes = false }: Props) {
       <ul className="key-points" aria-label="Key points">
         {lead.map((p, i) => (
           <Linked as="li" key={p.id} links={linkKeysOf([p])} tabIndex={0} style={live ? ({ '--i': i } as CSSProperties) : undefined}>
-            {prettyExponents(p.point)}
+            {aiLabel(p.point)}
           </Linked>
         ))}
       </ul>
@@ -64,7 +64,7 @@ export function OverviewView({ overview, live = false, notes = false }: Props) {
             <ul className="key-points" aria-label="More key points">
               {more.map((p) => (
                 <Linked as="li" key={p.id} links={linkKeysOf([p])} tabIndex={0}>
-                  {prettyExponents(p.point)}
+                  {aiLabel(p.point)}
                 </Linked>
               ))}
             </ul>
@@ -73,8 +73,8 @@ export function OverviewView({ overview, live = false, notes = false }: Props) {
             <dl className="key-terms" aria-label="Key terms">
               {terms.map((t) => (
                 <Linked key={t.id} className="key-term" links={linkKeysOf([t])} tabIndex={0}>
-                  <dt>{prettyExponents(t.term)}</dt>
-                  <dd>{prettyExponents(t.gloss)}</dd>
+                  <dt>{aiLabel(t.term)}</dt>
+                  <dd>{aiLabel(t.gloss)}</dd>
                 </Linked>
               ))}
             </dl>

@@ -10,6 +10,7 @@ import type { ReportLike } from '../lib/failures.ts';
 import { heldBackChecks } from '../lib/lessonJob.ts';
 import type { LessonCard, LessonItem, PendingSlot } from '../lib/lesson.ts';
 import { activityFirst, partCounts } from '../lib/partOrder.ts';
+import { NOTES_ONLY_LINE } from '../lib/presentation.ts';
 import { LessonPartsContext } from './LessonPartsContext.ts';
 import { ActivityPanel } from './ActivityPanel.tsx';
 import { AlgorithmTraceView } from './AlgorithmTraceView.tsx';
@@ -202,6 +203,8 @@ export function LessonView({ lesson, specs, analysis, sources, cite, disclosure,
   const atRest = live === null;
   const layout = atRest ? activityFirst(items) : null;
   const counts = atRest ? partCounts(cards) : null;
+  // Every planned part held back or unverified: the lesson is its notes, and says so once (not only "2 held back").
+  const notesOnly = counts !== null && counts.ready === 0 && counts.heldBack > 0;
   const heldBack = (card: LessonCard): ReturnType<typeof heldBackOf> => heldBackOf(lesson, card);
   const renderItem = (item: LessonItem, i: number): ReactNode => (
     item.kind === 'pending'
@@ -233,6 +236,7 @@ export function LessonView({ lesson, specs, analysis, sources, cite, disclosure,
         {/* While building: an invisible twin of the Present button holds its column, so the title never rewraps when it appears. */}
         {live !== null && <span className="btn present-launch lb-present-slot" aria-hidden="true"><IconPresent size={18} />Present</span>}
         {provenance}
+        {notesOnly && <p className="notes-only" role="note" data-testid="notes-only"><strong>{NOTES_ONLY_LINE.slice(0, NOTES_ONLY_LINE.indexOf(':') + 1)}</strong>{NOTES_ONLY_LINE.slice(NOTES_ONLY_LINE.indexOf(':') + 1)}</p>}
       </header>
       {!atRest && notes}
       {lesson.overview === null && live !== null && !live.strip.finished && <OverviewSlot words={live.sourceWords} />}

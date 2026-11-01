@@ -67,9 +67,9 @@ test('key terms and their meanings are shown in sentence case; symbols and units
   assert.equal(terms[2]?.quote, 'ymax = V0^2 / (2*g)');
 });
 
-test('key points are shown in sentence case with display maths (U0 → U₀)', () => {
+test('key points are shown in sentence case with display maths (U0 → U₀), without the "Students learn that" opener', () => {
   const points = shownPoints(moonTermsDeck());
-  assert.equal(points[0]?.point, 'Students learn that horizontal speed stays U₀ during flight.');
+  assert.equal(points[0]?.point, 'Horizontal speed stays U₀ during flight.');
   assert.equal(points[0]?.quote, 'Horizontal speed stays U0.');
 });
 
