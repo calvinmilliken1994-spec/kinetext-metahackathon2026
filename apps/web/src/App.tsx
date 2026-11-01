@@ -54,7 +54,7 @@ import { useReplay } from './components/useReplay.ts';
 import { jobStartMs, liveStrip, partBuilds } from './lib/liveBuild.ts';
 import { replayRequest } from './lib/replay.ts';
 import type { ReplayRequest } from './lib/replay.ts';
-import { shouldAutoStart, tourRequest, tourSignals, TOUR_JOB_ID, TOUR_STORAGE_KEY } from './lib/onboarding.ts';
+import { replayAfterTourClose, shouldAutoStart, tourRequest, tourSignals, TOUR_JOB_ID, TOUR_STORAGE_KEY } from './lib/onboarding.ts';
 import type { TourOutcome, TourStep } from './lib/onboarding.ts';
 import { Onboarding } from './components/Onboarding.tsx';
 import { IconPresent } from './components/presentation/icons.tsx';
@@ -395,6 +395,8 @@ export function App() {
   }, []);
   const closeTour = useCallback((how: TourOutcome) => {
     setTouring(false);
+    // Skipping mid-demo stops the recorded build; the lesson stays open as it finished.
+    setReplayReq((r) => replayAfterTourClose(r, how));
     try { localStore()?.setItem(TOUR_STORAGE_KEY, how); } catch { /* blocked storage: the tour just reopens next visit */ }
   }, []);
 

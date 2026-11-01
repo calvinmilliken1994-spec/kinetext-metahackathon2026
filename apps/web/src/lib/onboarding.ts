@@ -15,6 +15,14 @@ export const TOUR_MIN_DWELL_MS = 2600;
 
 export type TourOutcome = 'done' | 'skipped';
 
+/**
+ * The replay to keep once the tour closes. Skipping stops the tour's own recorded build (the lesson then shows as it
+ * finished); finishing keeps it, and a replay opened some other way is never touched.
+ */
+export function replayAfterTourClose<R extends { jobId: string }>(req: R | null, how: TourOutcome): R | null {
+  return how === 'skipped' && req?.jobId === TOUR_JOB_ID ? null : req;
+}
+
 export interface TourRequest {
   /** `?tour=1`: start the tour whatever the stored flag says. */
   force: boolean;
