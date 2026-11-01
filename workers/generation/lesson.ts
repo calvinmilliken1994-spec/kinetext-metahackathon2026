@@ -44,6 +44,8 @@ import type { V2ImageInput, V2RevisionComparator, V2Validator } from '../../pack
 import { segmentObjects } from '../../packages/meta/sam.ts';
 import type { SamBox, SamObject, SamPromptBox, SegmentPointsResult } from '../../packages/meta/sam.ts';
 import { maskToOutline } from '../../packages/meta/sam-outline.ts';
+import { maskToRaster, placeOnInk } from '../../packages/meta/sam-mask.ts';
+import type { InkRaster, MaskOrigin } from '../../packages/meta/sam-mask.ts';
 import {
   GROUNDING_MAX_OUTPUT_TOKENS,
   GROUNDING_SCHEMA,
@@ -382,6 +384,170 @@ export function boxesToRegions(
         ...(outline !== null ? { outline } : {}),
         ...(ground !== null ? { ground: { x1: ground.x1, y1: ground.y1, x2: ground.x2, y2: ground.y2 } } : {}),
       });
+    }
+  });
+  return out;
+}
+
+/**
+ * Stage 8c Addendum B, placement. One part's published number (x, y) and area (areaX1..areaY2) come from the two models'
+ * agreed location instead of Muse's generation call: the point is the ink pixel of SAM's mask nearest the mask's centroid
+ * (`placeOnMask`, 0..1000 grid), the area is Muse's grounding union (0..1000). A part is PLACED only when its region has
+ * `ground` (Muse located it), a numeric confidence >= `minRegionConfidence` and a mask that decodes with ink; every other
+ * part keeps Muse's generation values unchanged. Returns a placed COPY of the gen plus `genPositions`: Muse's own
+ * generation values for the placed parts only (audit). Pure and deterministic; `gen` is never mutated. Exported for tests.
+ */
+export interface GenPosition {
+  partId: string;
+  x: number;
+  y: number;
+  areaX1: number;
+  areaY1: number;
+  areaX2: number;
+  areaY2: number;
+}
+
+const PLACED_FIELDS = ['x', 'y', 'areaX1', 'areaY1', 'areaX2', 'areaY2'] as const;
+
+export function placeLabelParts(
+  gen: LabelDiagramGen,
+  boxes: readonly SamBox[],
+  regions: readonly LabelRegion[],
+  unions: readonly (GroundingBox | null)[],
+  width: number,
+  height: number,
+  avoid?: (x: number, y: number) => boolean,
+): { gen: LabelDiagramGen; genPositions: GenPosition[] } {
+  const byId = new Map<number, SamBox>();
+  for (const b of boxes) {
+    byId.set(b.id, b);
+  }
+  const parts: LabelPartGen[] = Array.isArray(gen?.parts) ? gen.parts : [];
+  const rasters = parts.map((_part, i): PartInk | null => {
+    const box = byId.get(i + 1);
+    const raster = box?.mask === undefined || box === undefined ? null : maskToRaster(box.mask, box);
+    return raster === null || box === undefined ? null : { raster, origin: { x1: box.x1, y1: box.y1 } };
+  });
+  return placeLabelPartsOnInk(gen, rasters, regions, unions, width, height, avoid);
+}
+
+/**
+ * Where a placed number must not go, mirroring LD-04: on a stored printed-label box of the figure (image pixels, the grid
+ * point converted as x * width / 1000, right/bottom edges exclusive), or inside any part's own non-zero label box of this gen
+ * (0..1000 grid, edges inclusive). A SAM mask can include printed words (the rain mask covers "Precipitation"), and
+ * the nearest ink to a centroid is then a letter. Exported for tests.
+ */
+export function printedTextAvoider(meta: FigureMeta, gen: LabelDiagramGen): (x: number, y: number) => boolean {
+  const stored = meta.labelBoxes ?? safeStoredLabelBoxes(meta.id);
+  const own = (Array.isArray(gen?.parts) ? gen.parts : [])
+    .filter(p => [p.labelX1, p.labelY1, p.labelX2, p.labelY2].every(v => typeof v === 'number' && Number.isFinite(v)))
+    .filter(p => ![p.labelX1, p.labelY1, p.labelX2, p.labelY2].every(v => v === 0))
+    .map(p => ({ x1: p.labelX1, y1: p.labelY1, x2: p.labelX2, y2: p.labelY2 }));
+  return (x, y) => {
+    const ix = (x * meta.width) / 1000;
+    const iy = (y * meta.height) / 1000;
+    return (
+      stored.some(s => s.x1 <= ix && ix < s.x2 && s.y1 <= iy && iy < s.y2) ||
+      own.some(b => b.x1 <= x && x <= b.x2 && b.y1 <= y && y <= b.y2)
+    );
+  };
+}
+function safeStoredLabelBoxes(figureId: string): { x1: number; y1: number; x2: number; y2: number }[] {
+  try {
+    return loadFigureLabelBoxes(figureId);
+  } catch {
+    return [];
+  }
+}
+
+/** One part's decoded mask: the box-local ink raster and the image pixel of its top-left cell. */
+export interface PartInk {
+  raster: InkRaster;
+  origin: MaskOrigin;
+}
+
+/** `placeLabelParts` on already decoded rasters (rasters[i] belongs to parts[i]); the replay tests feed it too. */
+export function placeLabelPartsOnInk(
+  gen: LabelDiagramGen,
+  rasters: readonly (PartInk | null)[],
+  regions: readonly LabelRegion[],
+  unions: readonly (GroundingBox | null)[],
+  width: number,
+  height: number,
+  avoid?: (x: number, y: number) => boolean,
+): { gen: LabelDiagramGen; genPositions: GenPosition[] } {
+  const placedGen = structuredClone(gen) as LabelDiagramGen;
+  const genPositions: GenPosition[] = [];
+  const parts: LabelPartGen[] = Array.isArray(placedGen.parts) ? placedGen.parts : [];
+  parts.forEach((part, i) => {
+    const union = unions[i] ?? null;
+    const ink = rasters[i] ?? null;
+    const region = regions.find(r => r.partId === part.id);
+    if (
+      union === null ||
+      ink === null ||
+      region?.ground === undefined ||
+      typeof region.confidence !== 'number' ||
+      region.confidence < KIT_LIMITS.labelDiagram.minRegionConfidence
+    ) {
+      return;
+    }
+    const at = placeOnInk(ink.raster, ink.origin, {
+      imageWidth: width,
+      imageHeight: height,
+      within: union,
+      ...(avoid !== undefined ? { avoid } : {}),
+    });
+    if (at === null) {
+      return;
+    }
+    genPositions.push({
+      partId: part.id,
+      x: part.x,
+      y: part.y,
+      areaX1: part.areaX1 as number,
+      areaY1: part.areaY1 as number,
+      areaX2: part.areaX2 as number,
+      areaY2: part.areaY2 as number,
+    });
+    part.x = at.x;
+    part.y = at.y;
+    part.areaX1 = union.x1;
+    part.areaY1 = union.y1;
+    part.areaX2 = union.x2;
+    part.areaY2 = union.y2;
+  });
+  return { gen: placedGen, genPositions };
+}
+
+/**
+ * Repair comparator support (Addendum B): the repair prompt shows Muse the PLACED revision, so a Muse reply that repeats a
+ * placed part's six fields exactly as the worker placed them is an echo, not an edit. Before the comparator runs, those
+ * echoed fields are set back to the immutable baseline's values (the worker re-places them on every revision anyway).
+ * A part is restored only when it was placed in `placedIds` (the input revision), keeps the same id at the same index in
+ * all three gens and echoes every one of the six fields; any other change is left for the comparator to judge. Pure.
+ */
+export function restoreEchoedPlacement(
+  baseline: LabelDiagramGen,
+  candidate: LabelDiagramGen,
+  input: LabelDiagramGen,
+  placedIds: ReadonlySet<string>,
+): LabelDiagramGen {
+  const out = structuredClone(candidate) as LabelDiagramGen;
+  if (!Array.isArray(out.parts) || !Array.isArray(baseline?.parts) || !Array.isArray(input?.parts)) {
+    return out;
+  }
+  out.parts.forEach((part, i) => {
+    const base = baseline.parts[i];
+    const given = input.parts[i];
+    if (base === undefined || given === undefined || part?.id !== base.id || part.id !== given.id || !placedIds.has(part.id)) {
+      return;
+    }
+    if (!PLACED_FIELDS.every(f => part[f] === given[f])) {
+      return;
+    }
+    for (const f of PLACED_FIELDS) {
+      (part as unknown as Record<string, unknown>)[f] = base[f];
     }
   });
   return out;
@@ -1381,6 +1547,13 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
   interface SegmentOk {
     ok: true;
     regions: LabelRegion[];
+    /**
+     * Stage 8c Addendum B: the gen with the placed numbers and areas (a copy; Muse's own gen when nothing was placed). This
+     * is the gen the worker validates, persists, publishes and shows to the repair model.
+     */
+    gen: LabelDiagramGen;
+    /** Muse's generation values for the placed parts (audit), stored in the revision artifact when non-empty. */
+    genPositions: GenPosition[];
     /** Stage 8c Addendum A: the revision's grounding record (stored beside the regions); absent when no call was made. */
     grounding?: Record<string, unknown>;
   }
@@ -1398,6 +1571,8 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
     prompts: (SamPromptBox | null)[];
     /** Per part: Muse's union in image pixels (stored as `LabelRegion.ground`), or null. */
     grounds: (SamPromptBox | null)[];
+    /** Per part: Muse's union on the 0..1000 grid (what placement writes into the area fields), or null. */
+    unions: (GroundingBox | null)[];
     located: number;
     /** The fixed failure code, or null on success. */
     failedCode: string | null;
@@ -1442,6 +1617,7 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
     const failed = (code: string, chargedUSD: number, unknownUSD: number, latencyMs: number | null): GroundingStep => ({
       prompts: none(),
       grounds: none(),
+      unions: parts.map(() => null),
       located: 0,
       failedCode: code,
       costUSD: chargedUSD,
@@ -1488,6 +1664,7 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
     return {
       prompts,
       grounds,
+      unions,
       located,
       failedCode: null,
       costUSD: grounded.estCostUSD,
@@ -1677,6 +1854,13 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
       }
     }
     const regions = boxesToRegions(boxes, parts, grounding.grounds);
+    // Stage 8c Addendum B: the numbers sit on the ink of SAM's confirmed mask and the areas on Muse's grounding union.
+    const placement = placeLabelParts(gen, boxes, regions, grounding.unions, width, height, printedTextAvoider(figure.meta, gen));
+    const sure = regions.filter(
+      r => typeof r.confidence === 'number' && r.confidence >= KIT_LIMITS.labelDiagram.minRegionConfidence,
+    ).length;
+    const placedNote =
+      placement.genPositions.length > 0 ? `; placed ${placement.genPositions.length} number(s) on the located parts` : '';
     ctx.emit('segment', 'succeeded', {
       componentId: cid,
       revision,
@@ -1685,9 +1869,9 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
       // Every charge of this step: the grounding call (already accounted) plus the SAM image(s).
       estCostUSD: roundCost(costUSD + grounding.costUSD),
       ...(grounding.latencyMs !== null ? { groundingLatencyMs: grounding.latencyMs } : {}),
-      detail: `sam-3.1 returned ${regions.length} of ${parts.length} region(s); ${groundingNote}${retryNote === '' ? '' : `; ${retryNote}`}`,
+      detail: `sam-3.1 returned ${regions.length} of ${parts.length} region(s); ${groundingNote}; sam-3.1 sure of ${sure} of ${parts.length} part(s)${placedNote}${retryNote === '' ? '' : `; ${retryNote}`}`,
     });
-    return { ok: true, regions, grounding: grounding.record };
+    return { ok: true, regions, gen: placement.gen, genPositions: placement.genPositions, grounding: grounding.record };
   }
 
   async function runKitComponent(index: number, planEntry: ComponentPlanEntry, cid: KitGenComponentId): Promise<void> {
@@ -1769,6 +1953,11 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
     };
     /** Stage 8b: the REVISION-1 SAM regions — the repair comparator's authority input. */
     let baselineLabelRegions: LabelRegion[] | null = null;
+    /** Stage 8c Addendum B: ids of the parts the worker placed in the CURRENT revision (the repair model's input). */
+    let placedPartIds: ReadonlySet<string> = new Set<string>();
+    /** The artifact field recording Muse's own values for the placed parts of a revision (absent when none were placed). */
+    const genPositionsExtra = (seg: { genPositions: GenPosition[] }): Record<string, unknown> =>
+      seg.genPositions.length > 0 ? { genPositions: seg.genPositions } : {};
 
     ctx.emit('component', 'started', { componentId: cid, revision: 1 });
     if (cid === 'label-diagram-v1' && (labelFigure === null || labelImage === null)) {
@@ -1864,6 +2053,10 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
       const seg = await segmentLabelRevision(cid, 1, gen as LabelDiagramGen, labelFigure, labelImage);
       if (seg.ok) {
         baselineLabelRegions = seg.regions;
+        // Stage 8c Addendum B: from here on the gen is the PLACED one: validated, persisted, published, shown to the
+        // repair model and used as the repair baseline. Muse's own values live on in `genPositions`.
+        gen = seg.gen;
+        placedPartIds = new Set(seg.genPositions.map(p => p.partId));
         report = mergedLabelReport(genRes.report, gen, 1, seg.regions);
         persistKitRevision(
           cid,
@@ -1871,7 +2064,12 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
           gen,
           report,
           lastReceipt,
-          { ...r1Extra, regions: seg.regions, ...(seg.grounding !== undefined ? { grounding: seg.grounding } : {}) },
+          {
+            ...r1Extra,
+            regions: seg.regions,
+            ...(seg.grounding !== undefined ? { grounding: seg.grounding } : {}),
+            ...genPositionsExtra(seg),
+          },
           labelSpecData(gen, seg.regions),
         );
       } else {
@@ -1967,19 +2165,31 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
             // (normalisation is idempotent, so an already-tidied side passes through),
             // keeping the repair comparison consistent with the persisted revisions.
             compare: (b, n, s) =>
-              compareKitRevisions(cid, normaliseGenFor(cid, b).gen, normaliseGenFor(cid, n).gen, {
-                sources: s,
-                findings: baselineFindingsK,
-                // Stage 8b: the revision-1 authority recomputes with the figure list and the
-                // REVISION-1 SAM regions, so LD-03/LD-06/LD-07 agree on both sides of the
-                // comparison with the report the repair model actually saw.
-                ...(cid === 'label-diagram-v1'
-                  ? {
-                      ...(jobFigures.length > 0 ? { figures: jobFigures } : {}),
-                      ...(baselineLabelRegions !== null ? { labelRegions: baselineLabelRegions } : {}),
-                    }
-                  : {}),
-              }),
+              compareKitRevisions(
+                cid,
+                normaliseGenFor(cid, b).gen,
+                // Stage 8c Addendum B: a reply that echoes the worker's own placement is not an edit; the worker
+                // re-places those fields after the comparator ran. Everything else is judged as before.
+                normaliseGenFor(
+                  cid,
+                  cid === 'label-diagram-v1'
+                    ? restoreEchoedPlacement(b as LabelDiagramGen, n as LabelDiagramGen, gen as LabelDiagramGen, placedPartIds)
+                    : n,
+                ).gen,
+                {
+                  sources: s,
+                  findings: baselineFindingsK,
+                  // Stage 8b: the revision-1 authority recomputes with the figure list and the
+                  // REVISION-1 SAM regions, so LD-03/LD-06/LD-07 agree on both sides of the
+                  // comparison with the report the repair model actually saw.
+                  ...(cid === 'label-diagram-v1'
+                    ? {
+                        ...(jobFigures.length > 0 ? { figures: jobFigures } : {}),
+                        ...(baselineLabelRegions !== null ? { labelRegions: baselineLabelRegions } : {}),
+                      }
+                    : {}),
+                },
+              ),
             // Stage 8b flow step 4: the repair call carries the SAME figure image.
             ...(labelImage !== null ? { image: labelImage } : {}),
           },
@@ -2052,6 +2262,10 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
           ctx.writeJob();
           break;
         }
+        // Stage 8c Addendum B: the repaired revision is re-placed on ITS OWN masks, so a repair cannot "fix" a placed
+        // number by hand; the placed gen is the one validated, persisted and (next attempt) shown to Muse.
+        gen = seg.gen;
+        placedPartIds = new Set(seg.genPositions.map(p => p.partId));
         report = mergedLabelReport(rep.report, gen, revision, seg.regions);
         persistKitRevision(
           cid,
@@ -2059,7 +2273,12 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
           gen,
           report,
           lastReceipt,
-          { ...normExtra, regions: seg.regions, ...(seg.grounding !== undefined ? { grounding: seg.grounding } : {}) },
+          {
+            ...normExtra,
+            regions: seg.regions,
+            ...(seg.grounding !== undefined ? { grounding: seg.grounding } : {}),
+            ...genPositionsExtra(seg),
+          },
           labelSpecData(gen, seg.regions),
         );
       } else {

@@ -484,7 +484,7 @@ test('retry: one extra request, exact prompt, best region kept per weak part, bo
   assert.equal(done[0]?.status, 'succeeded');
   assert.equal(
     done[0]?.detail,
-    'sam-3.1 returned 6 of 6 region(s); muse-spark-1.3 located 0 of 6 part(s) for SAM; sam-3.1 retried 2 weak part(s): part-thymine 0.40 -> 0.81, part-cytosine missing -> 0.70',
+    'sam-3.1 returned 6 of 6 region(s); muse-spark-1.3 located 0 of 6 part(s) for SAM; sam-3.1 sure of 6 of 6 part(s); sam-3.1 retried 2 weak part(s): part-thymine 0.40 -> 0.81, part-cytosine missing -> 0.70',
   );
   assert.match(done[0]?.detail ?? '', /returned (\d+) of (\d+) region/, 'the web parser still matches');
   assert.equal((done[0] as any).imagesProcessed, 2);
@@ -503,7 +503,7 @@ test('retry: nothing weak means no extra call and no extra cost; the event text 
   assert.equal(r.ledger.reserves, 1);
   assert.equal(r.ledger.committed(), 0.0025);
   const done = r.segEvents.find(e => e.status === 'succeeded');
-  assert.equal(done?.detail, 'sam-3.1 returned 6 of 6 region(s); muse-spark-1.3 located 0 of 6 part(s) for SAM');
+  assert.equal(done?.detail, 'sam-3.1 returned 6 of 6 region(s); muse-spark-1.3 located 0 of 6 part(s) for SAM; sam-3.1 sure of 6 of 6 part(s)');
   assert.equal((done as any).estCostUSD, 0.0125, 'the grounding call (0.01) + one SAM image (0.0025)');
   assert.equal((done as any).imagesProcessed, 1);
   assert.equal(r.label.status, 'passed');
@@ -559,7 +559,7 @@ test('retry: when the variants are no better, the first pass is kept, honestly r
   const first = aroundPart(2, 50);
   assert.deepEqual([thy.x1, thy.y1, thy.x2, thy.y2], [first.x1, first.y1, first.x2, first.y2]);
   const done = r.segEvents.find(e => e.status === 'succeeded');
-  assert.equal(done?.detail, 'sam-3.1 returned 6 of 6 region(s); muse-spark-1.3 located 0 of 6 part(s) for SAM; sam-3.1 retried 1 weak part(s): part-thymine 0.40 -> 0.40');
+  assert.equal(done?.detail, 'sam-3.1 returned 6 of 6 region(s); muse-spark-1.3 located 0 of 6 part(s) for SAM; sam-3.1 sure of 5 of 6 part(s); sam-3.1 retried 1 weak part(s): part-thymine 0.40 -> 0.40');
   assert.equal(r.ledger.committed(), 0.005);
   // still weak: LD-11 fails, no repair (maxRepairAttempts 0): the component does not publish
   assert.equal((r.r1.report.checks as any[]).find(c => c.id === 'LD-11').passed, false);
@@ -575,7 +575,7 @@ test('retry failure: HTTP 500 on the extra call keeps the first-pass regions, ac
   assert.equal(regionOf(r, THYMINE).confidence, 0.4);
   assert.ok(!r.segEvents.some(e => e.status === 'failed'), 'the retry failing is not a segmentation failure');
   const done = r.segEvents.find(e => e.status === 'succeeded');
-  assert.equal(done?.detail, 'sam-3.1 returned 6 of 6 region(s); muse-spark-1.3 located 0 of 6 part(s) for SAM; sam-3.1 retry of 1 weak part(s) failed (SAM_HTTP_500); kept the first pass');
+  assert.equal(done?.detail, 'sam-3.1 returned 6 of 6 region(s); muse-spark-1.3 located 0 of 6 part(s) for SAM; sam-3.1 sure of 5 of 6 part(s); sam-3.1 retry of 1 weak part(s) failed (SAM_HTTP_500); kept the first pass');
   assert.equal((done as any).estCostUSD, 0.015, 'all three calls are charged on the event: grounding + both SAM images');
   // a 5xx is an uncertain outcome: charged AND unknown, exactly once
   assert.equal(r.ledger.committed(), 0.005);
@@ -588,7 +588,7 @@ test('retry failure: HTTP 400 is a known zero (rejected), first pass kept', asyn
   assert.equal(regionOf(r, THYMINE).confidence, 0.4);
   assert.equal(r.ledger.committed(), 0.0025);
   const done = r.segEvents.find(e => e.status === 'succeeded');
-  assert.equal(done?.detail, 'sam-3.1 returned 6 of 6 region(s); muse-spark-1.3 located 0 of 6 part(s) for SAM; sam-3.1 retry of 1 weak part(s) failed (SAM_HTTP_400); kept the first pass');
+  assert.equal(done?.detail, 'sam-3.1 returned 6 of 6 region(s); muse-spark-1.3 located 0 of 6 part(s) for SAM; sam-3.1 sure of 5 of 6 part(s); sam-3.1 retry of 1 weak part(s) failed (SAM_HTTP_400); kept the first pass');
   assert.equal((done as any).estCostUSD, 0.0125, 'grounding + the one accepted SAM image');
   assertMatchesLedger(r, 0);
 });
@@ -600,7 +600,7 @@ test('retry failure: a failed reconcile of the extra call keeps its hold as unkn
   assert.equal(regionOf(r, THYMINE).confidence, 0.4, 'a retry whose settlement failed is not used');
   assert.equal(r.ledger.outstanding(), 0.0025);
   const done = r.segEvents.find(e => e.status === 'succeeded');
-  assert.equal(done?.detail, 'sam-3.1 returned 6 of 6 region(s); muse-spark-1.3 located 0 of 6 part(s) for SAM; sam-3.1 retry of 1 weak part(s) failed (LEDGER_ERROR); kept the first pass');
+  assert.equal(done?.detail, 'sam-3.1 returned 6 of 6 region(s); muse-spark-1.3 located 0 of 6 part(s) for SAM; sam-3.1 sure of 5 of 6 part(s); sam-3.1 retry of 1 weak part(s) failed (LEDGER_ERROR); kept the first pass');
   assertMatchesLedger(r, 0.0025);
 });
 

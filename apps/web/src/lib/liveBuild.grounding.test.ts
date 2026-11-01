@@ -66,3 +66,10 @@ test('figure frame: a grounded call names Muse first, then what SAM confirmed', 
   assert.deepEqual(figureNote(partBuilds(withSegmentDetail(GROUNDED, 60))[LD]), { actor: 'SAM 3.1', text: 'is outlining 5 parts of the figure', working: true });
   assert.deepEqual(figureNote(partBuilds(withSegmentDetail(FAILED, 62))[LD]), { actor: 'SAM 3.1', text: 'outlined 5 of 5 parts in 1.9 s', working: false });
 });
+
+test('“confirmed K” counts only the parts SAM was sure of when the run records it (sure of K of N)', () => {
+  const sure = 'sam-3.1 returned 5 of 5 region(s); muse-spark-1.3 located 5 of 5 part(s) for SAM; sam-3.1 sure of 4 of 5 part(s); placed 4 number(s) on the located parts';
+  assert.equal(samLines(withSegmentDetail(sure, 90))[0], 'Muse Spark located 5 parts · SAM 3.1 confirmed 4 of 5 in 1.9 s');
+  const all = 'sam-3.1 returned 5 of 5 region(s); muse-spark-1.3 located 5 of 5 part(s) for SAM; sam-3.1 sure of 5 of 5 part(s); placed 5 number(s) on the located parts; sam-3.1 retried 1 weak part(s): runoff 0.42 -> 0.68';
+  assert.equal(samLines(withSegmentDetail(all, 90))[0], 'Muse Spark located 5 parts · SAM 3.1 confirmed 5 of 5 in 1.9 s');
+});

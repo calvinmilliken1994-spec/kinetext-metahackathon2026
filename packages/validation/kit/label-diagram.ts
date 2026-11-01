@@ -24,7 +24,9 @@
 //         dimensions) lies inside its region, and region area / image area lies within
 //         [minRegionAreaFraction, maxRegionAreaFraction]. Without the regions option LD-06 and
 //         LD-07 fail with the exact message 'segmentation did not run' (spec §Checks); an empty
-//         regions list means segmentation ran and found nothing, and fails per part instead;
+//         regions list means segmentation ran and found nothing, and fails per part instead. Stage 8c
+//         Addendum B: a region carrying Muse's grounding box (`ground`) must also lie inside that box widened by
+//         GROUND_AGREEMENT_MARGIN_FRACTION per side (the cross-model agreement), affected = that part's x, y and area;
 //   LD-07 the pairwise IoU of the regions is at most maxRegionOverlapIoU;
 //   LD-08 the shared N-01 numbers-checkable rule over the AI-written title and hint;
 //   LD-09 parts count within KIT_LIMITS.labelDiagram.parts, distinct part ids and distinct part
@@ -70,6 +72,11 @@ import { phraseOccursWhole } from './threshold.ts';
 import { claimedPrintedUnits, printedLabelProblems, printedUnits } from './label-identity.ts';
 
 const L = KIT_LIMITS.labelDiagram;
+
+/** Stage 8c Addendum B (LD-06): SAM's box may reach this fraction of Muse's grounding box width/height beyond it, per side. */
+export const GROUND_AGREEMENT_MARGIN_FRACTION = 0.25;
+/** A thin part (a 35 px tall stream) still gets this much slack per side: SAM's edges are a few pixels loose. */
+export const GROUND_AGREEMENT_MIN_MARGIN_PX = 12;
 
 export interface LabelDiagramValidateOptions { revision?: number; regions?: readonly LabelRegion[]; figures?: readonly FigureMeta[] }
 
@@ -432,6 +439,19 @@ export function validateLabelDiagram(gen: LabelDiagramGen, sources: SourceDocume
         if (!(fraction >= L.minRegionAreaFraction && fraction <= L.maxRegionAreaFraction)) {
           problems.push(`the region for parts[${i}] (${nameOf(i)}) covers ${(fraction * 100).toFixed(2)}% of the image; expected between ${(L.minRegionAreaFraction * 100).toFixed(2)}% and ${(L.maxRegionAreaFraction * 100).toFixed(0)}% (area fraction ${fraction.toFixed(5)} within ${L.minRegionAreaFraction}..${L.maxRegionAreaFraction})`);
           affected.push(`/parts/${i}/x`, `/parts/${i}/y`);
+        }
+        // Stage 8c Addendum B, the Muse-vs-SAM agreement: a region that carries Muse's grounding box (`ground`, image
+        // pixels) must lie inside that box widened by groundAgreementMarginFraction of its width/height per side. A
+        // malformed ground box is ignored (the region is then judged by the criteria above only).
+        const g = r.ground;
+        if (g !== undefined && g !== null && [g.x1, g.y1, g.x2, g.y2].every(isFiniteNumber) && g.x1 < g.x2 && g.y1 < g.y2) {
+          const mx = Math.max(GROUND_AGREEMENT_MIN_MARGIN_PX, (g.x2 - g.x1) * GROUND_AGREEMENT_MARGIN_FRACTION);
+          const my = Math.max(GROUND_AGREEMENT_MIN_MARGIN_PX, (g.y2 - g.y1) * GROUND_AGREEMENT_MARGIN_FRACTION);
+          const eps = 1e-9;
+          if (!(rx1 >= g.x1 - mx - eps && ry1 >= g.y1 - my - eps && rx2 <= g.x2 + mx + eps && ry2 <= g.y2 + my + eps)) {
+            problems.push(`SAM's region for parts[${i}] (${nameOf(i)}), (${rx1},${ry1})-(${rx2},${ry2}), spilled outside what Muse located for it, (${g.x1},${g.y1})-(${g.x2},${g.y2}) widened by ${GROUND_AGREEMENT_MARGIN_FRACTION * 100}% (at least ${GROUND_AGREEMENT_MIN_MARGIN_PX} px) per side; the two models disagree about where the part is`);
+            affected.push(`/parts/${i}/x`, `/parts/${i}/y`, ...areaPathsOf(i));
+          }
         }
       });
       regionEntries.forEach(({ r, k }) => {

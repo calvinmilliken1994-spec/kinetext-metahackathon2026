@@ -427,7 +427,7 @@ test('grounding: one label_grounding request with the exact prompt and the gener
   const done = r.seg.filter(e => e.status !== 'started');
   assert.equal(done.length, 1);
   assert.equal(done[0]!.status, 'succeeded');
-  assert.equal(done[0]!.detail, 'sam-3.1 returned 6 of 6 region(s); muse-spark-1.3 located 6 of 6 part(s) for SAM');
+  assert.equal(done[0]!.detail, 'sam-3.1 returned 6 of 6 region(s); muse-spark-1.3 located 6 of 6 part(s) for SAM; sam-3.1 sure of 6 of 6 part(s)');
   assert.match(done[0]!.detail ?? '', /returned (\d+) of (\d+) region/, 'the web parser still matches');
   assert.equal(done[0]!.estCostUSD, roundCost(GROUNDING_COST + 0.0025));
   assert.equal((done[0] as any).imagesProcessed, 1, 'imagesProcessed stays SAM-only');
@@ -458,7 +458,7 @@ test('grounding: every revision gets its own call, made before that revision\'s 
   for (const q of groundingRequests(r)) assert.deepEqual(q.messages[0]!.images, [{ url: IMAGE_URL }]);
   const segDone = r.seg.filter(e => e.status === 'succeeded');
   assert.equal(segDone.length, 2);
-  for (const e of segDone) assert.match(e.detail ?? '', /; muse-spark-1\.3 located 6 of 6 part\(s\) for SAM$/);
+  for (const e of segDone) assert.match(e.detail ?? '', /; muse-spark-1\.3 located 6 of 6 part\(s\) for SAM; sam-3\.1 sure of 6 of 6 part\(s\)$/);
   assert.equal((r.r2.regions as any[]).length, N);
   assert.ok((r.r2.regions as any[]).every(x => x.ground !== undefined));
   assert.equal(r.label.status, 'passed');
@@ -488,7 +488,7 @@ test('grounding: a part Muse did not box (or boxed with malformed boxes) falls b
   assert.equal(r.r1.grounding.located, 4);
   assert.equal(r.r1.grounding.parts[1].ground, null);
   const done = r.seg.find(e => e.status === 'succeeded');
-  assert.equal(done?.detail, 'sam-3.1 returned 6 of 6 region(s); muse-spark-1.3 located 4 of 6 part(s) for SAM');
+  assert.equal(done?.detail, 'sam-3.1 returned 6 of 6 region(s); muse-spark-1.3 located 4 of 6 part(s) for SAM; sam-3.1 sure of 6 of 6 part(s)');
   assertAccounted(r, 0, 0, 1);
 });
 
@@ -497,7 +497,7 @@ test('grounding: Muse boxing nothing at all is "located 0 of N", the gen areas a
   assert.equal(r.sam.prompts[0], buildObjectsPrompt(samObjectsFor(goldenLabelGen.parts, W, H), W, H), 'identical to the pre-grounding behaviour');
   assert.ok((r.r1.regions as any[]).every(x => x.ground === undefined));
   const done = r.seg.find(e => e.status === 'succeeded');
-  assert.equal(done?.detail, 'sam-3.1 returned 6 of 6 region(s); muse-spark-1.3 located 0 of 6 part(s) for SAM');
+  assert.equal(done?.detail, 'sam-3.1 returned 6 of 6 region(s); muse-spark-1.3 located 0 of 6 part(s) for SAM; sam-3.1 sure of 6 of 6 part(s)');
   assertAccounted(r, 0, 0, 1);
 });
 
@@ -574,7 +574,7 @@ for (const c of FAILS) {
     assert.equal(r.label.status, 'passed', 'a failed grounding call never fails the component');
     assert.ok(!r.seg.some(e => e.status === 'failed'), 'no segment failure');
     const done = r.seg.find(e => e.status === 'succeeded');
-    assert.equal(done?.detail, `sam-3.1 returned 6 of 6 region(s); muse-spark-1.3 grounding failed (${c.code}); used the generation areas`);
+    assert.equal(done?.detail, `sam-3.1 returned 6 of 6 region(s); muse-spark-1.3 grounding failed (${c.code}); used the generation areas; sam-3.1 sure of 6 of 6 part(s)`);
     assert.ok(!JSON.stringify(r.events).includes('provider text'), 'raw error text never reaches events');
     assert.equal(done?.estCostUSD, roundCost(c.charged + 0.0025), 'the event carries the grounding charge plus the SAM image');
     // the stored record says honestly that it failed, with the charge
@@ -590,7 +590,7 @@ test('grounding failure: well-formed JSON without an objects array is an OUTPUT_
   const r = await run('lesson-ground-badshape', { grounding: () => ({ data: { nothing: true } }) });
   assert.equal(r.sam.prompts[0], genAreaPrompt);
   const done = r.seg.find(e => e.status === 'succeeded');
-  assert.equal(done?.detail, 'sam-3.1 returned 6 of 6 region(s); muse-spark-1.3 grounding failed (OUTPUT_INVALID); used the generation areas');
+  assert.equal(done?.detail, 'sam-3.1 returned 6 of 6 region(s); muse-spark-1.3 grounding failed (OUTPUT_INVALID); used the generation areas; sam-3.1 sure of 6 of 6 part(s)');
   assert.equal(r.label.status, 'passed');
   assertAccounted(r, 0, 0, 1);
   assert.equal(r.r1.grounding.chargedUSD, GROUNDING_COST);
@@ -604,8 +604,8 @@ test('grounding failure on the repaired revision does not affect revision 1 and 
     grounding: n => (n === 1 ? { data: groundingAnswer(goldenUnions()) } : { error: new MetaError('OUTPUT_TRUNCATED', undefined, { chargedUSD: 0.07, reservedUnknownUSD: 0, costBasis: 'usage' }) }),
   });
   const done = r.seg.filter(e => e.status === 'succeeded');
-  assert.match(done[0]!.detail ?? '', /located 6 of 6 part\(s\) for SAM$/);
-  assert.match(done[1]!.detail ?? '', /grounding failed \(OUTPUT_TRUNCATED\); used the generation areas$/);
+  assert.match(done[0]!.detail ?? '', /located 6 of 6 part\(s\) for SAM; sam-3\.1 sure of 6 of 6 part\(s\)$/);
+  assert.match(done[1]!.detail ?? '', /grounding failed \(OUTPUT_TRUNCATED\); used the generation areas; sam-3\.1 sure of 6 of 6 part\(s\)$/);
   assert.ok((r.r1.regions as any[]).every(x => x.ground !== undefined));
   assert.ok((r.r2.regions as any[]).every(x => x.ground === undefined));
   assert.equal(r.label.status, 'passed');
@@ -637,7 +637,7 @@ test('best-of retry: its widened E variant widens the box the first pass ACTUALL
     buildObjectsPrompt([{ id: 102, points: [pointPx] }, { id: 202, box: wide }], W, H),
   );
   const done = r.seg.find(e => e.status === 'succeeded');
-  assert.equal(done?.detail, 'sam-3.1 returned 6 of 6 region(s); muse-spark-1.3 located 6 of 6 part(s) for SAM; sam-3.1 retried 1 weak part(s): part-thymine 0.40 -> 0.80');
+  assert.equal(done?.detail, 'sam-3.1 returned 6 of 6 region(s); muse-spark-1.3 located 6 of 6 part(s) for SAM; sam-3.1 sure of 6 of 6 part(s); sam-3.1 retried 1 weak part(s): part-thymine 0.40 -> 0.80');
   // the region kept (the E variant) still stores Muse's union as ground
   const thy = (r.r1.regions as any[])[2];
   assert.deepEqual(thy.ground, groundingPixelBox(unions[2]!, W, H));

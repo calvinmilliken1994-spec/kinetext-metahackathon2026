@@ -74,6 +74,12 @@ export function parseGrounding(detail: string | undefined): { located: number; o
   return /\bgrounding failed\b/.test(d) ? 'failed' : null;
 }
 
+/** "sam-3.1 sure of 4 of 5 part(s)" → { sure: 4, of: 5 }; null when the run does not record it. */
+export function parseSamSure(detail: string | undefined): { sure: number; of: number } | null {
+  const m = /\bsure of (\d+) of (\d+) part\(s\)/.exec(detail ?? '');
+  return m === null ? null : { sure: Number(m[1]), of: Number(m[2]) };
+}
+
 /** A live counter: "12 s", "1 min 23 s". */
 export function formatElapsed(ms: number): string {
   const s = Math.max(0, Math.floor(ms / 1000));
@@ -412,7 +418,8 @@ function logFor(id: PlanComponentId, evs: readonly Ev[], model: string, running:
       const grounded = !open && got !== null && grounding !== null && grounding !== 'failed'
         ? {
           muse: `located ${grounding.located === grounding.of ? plural(grounding.located, 'part', 'parts') : `${grounding.located} of ${plural(grounding.of, 'part', 'parts')}`}`,
-          sam: `confirmed ${got.got} of ${got.of} in ${formatSeconds(durationMs ?? 0)}`,
+          // Runs that record how many regions SAM was sure of (>= 0.5) count those; older grounded runs count returned ones.
+          sam: `confirmed ${parseSamSure(end?.detail)?.sure ?? got.got} of ${got.of} in ${formatSeconds(durationMs ?? 0)}`,
         }
         : null;
       lines.push({

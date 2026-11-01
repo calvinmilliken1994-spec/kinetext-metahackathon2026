@@ -494,7 +494,7 @@ test('label-diagram: figures reach the analysis call, the image reaches generati
   assert.equal(segOk.imagesProcessed, 1);
   assert.equal(segOk.estCostUSD, 0.0125, 'the segment event carries the grounding call (0.01) plus the SAM image (0.0025)');
   assert.equal(typeof segOk.latencyMs, 'number');
-  assert.match(String(segOk.detail), /^sam-3\.1 returned 6 of 6 region\(s\); muse-spark-1\.3 located 0 of 6 part\(s\) for SAM$/);
+  assert.match(String(segOk.detail), /^sam-3\.1 returned 6 of 6 region\(s\); muse-spark-1\.3 located 0 of 6 part\(s\) for SAM; sam-3\.1 sure of 5 of 6 part\(s\)$/);
 
   // --- flow steps 4/5: regions in validation, in the revision artifact and in the spec ---
   const rec = readRunFile(storageDir, jobId, 'label-diagram-v1.r1.json');
