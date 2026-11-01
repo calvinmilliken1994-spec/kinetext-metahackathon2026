@@ -9,7 +9,7 @@ import { createContext, useContext, useLayoutEffect, useMemo, useRef, useState }
 import type { CSSProperties, DragEvent, ReactNode, RefObject } from 'react';
 import type { LabelDiagramSpec } from '../../../../packages/contracts/kit.ts';
 import type { EnginePresentation } from '../lib/enginePresentation.ts';
-import {
+import { regionToDraw,
   changedBy, checkPlacements, coverMasks, finishLine, fitSlotTexts, keepResults, labelDiagramPresentationSteps, labelSlots, lessonFigureMaxWidth, markerSpots,
   partViews, place, placeTags, slotOfPart, slotStates, stageFigureSize, stageOutline, stageQuestion, stageView, unplace, wordBank,
 } from '../lib/labelDiagramView.ts';
@@ -230,12 +230,15 @@ function Figure({ spec, views, slots, masks, named, slotState, labelsShown, mark
         {masks.length > 0 && slots.length === 0 && masks.map((m) => (
           <span key={m.key} className="ld-mask" style={pct(m.box)} data-on={labelsShown ? 'false' : 'true'} aria-hidden="true" />
         ))}
-        {views.map((v) => (v.region === null ? null : (
+        {views.map((v) => {
+          const region = regionToDraw(v); // SAM's weak regions (< 50% sure) are not drawn
+          return region === null ? null : (
           <span
-            key={`r-${v.part.id}`} className="ld-region" style={build ? { ...pct(v.region), '--i': v.index } as CSSProperties : pct(v.region)}
+            key={`r-${v.part.id}`} className="ld-region" style={build ? { ...pct(region), '--i': v.index } as CSSProperties : pct(region)}
             data-on={outlined === v.index ? 'true' : 'false'} aria-hidden="true"
           />
-        )))}
+          );
+        })}
         {/* The printed labels as worksheet slots: blank until their part is named, then the name written in. */}
         {slots.map((s, k) => {
           const state = slotState[k] ?? 'covered';

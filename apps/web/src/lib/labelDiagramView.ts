@@ -466,6 +466,15 @@ export interface PartView {
   confidence: number | null;
 }
 
+/** SAM's own score below which its region is not drawn (Calvin 2026-11-02: weak regions covered the wrong area). */
+export const MIN_REGION_CONFIDENCE = 0.5;
+
+/** The region to draw for a part: none when SAM was less than 50% sure of it; a region without a score still draws. */
+export function regionToDraw(view: Pick<PartView, 'region' | 'confidence'>): PctBox | null {
+  if (view.region === null) return null;
+  return view.confidence !== null && view.confidence < MIN_REGION_CONFIDENCE ? null : view.region;
+}
+
 export function partViews(spec: Pick<LabelDiagramSpec, 'parts' | 'regions' | 'figure'>): PartView[] {
   return spec.parts.map((part, index) => {
     const r = spec.regions.find((x) => x.partId === part.id);
