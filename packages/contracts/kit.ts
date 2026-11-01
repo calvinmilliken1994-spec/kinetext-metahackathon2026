@@ -558,6 +558,12 @@ export interface LabelRegion {
   confidence: number | null;
   /** Stage 8c: SVG path (M x y L x y … Z, absolute image pixels, simplified) tracing SAM's mask, at most 6000 characters; absent on older lessons or when decoding failed. */
   outline?: string;
+  /**
+   * Stage 8c Addendum A: the union (image pixels, inclusive edges) of the boxes Muse Spark's dedicated grounding call
+   * gave for this part's drawn pieces. SAM's box prompt for the part was this union plus a margin. Absent on older
+   * runs, and when the grounding call failed or located nothing for the part.
+   */
+  ground?: { x1: number; y1: number; x2: number; y2: number };
 }
 
 export interface KitGenByComponent {

@@ -223,6 +223,10 @@ function fakeClient(opts: {
         data = opts.analysis;
       } else if (req.schemaName === 'source_analysis_v2_repair') {
         data = opts.analysisRepair ?? opts.analysis;
+      } else if (req.schemaName === 'label_grounding') {
+        // Stage 8c Addendum A: every label revision makes one Muse grounding call before SAM. These tests are about
+        // other things: Muse locates nothing, so SAM keeps getting the generation areas (a normal paid 0.01 call).
+        data = { objects: [] };
       } else if (req.schemaName.endsWith('_repair')) {
         data = opts.kitRepair?.[req.schemaName];
       } else {
@@ -477,8 +481,8 @@ test('label-diagram: figures reach the analysis call, the image reaches generati
   assert.equal(reconcileCalls.length, 1);
   assert.equal(reconcileCalls[0]?.['costUSD'], 0.0025);
   assert.equal(reconcileCalls[0]?.['note'], 'usage');
-  // 3 model calls (analysis + label + quiz) at 0.01 + one SAM image at 0.0025
-  assert.equal(summary.totalCostUSD, 0.0325);
+  // 3 model calls (analysis + label + quiz) + 1 grounding call (Stage 8c Addendum A) at 0.01 + one SAM image at 0.0025
+  assert.equal(summary.totalCostUSD, 0.0425);
   assert.equal(summary.reservedUnknownUSD, 0);
 
   // --- events: the segment stage records status, latency, imagesProcessed and cost ---
@@ -488,9 +492,9 @@ test('label-diagram: figures reach the analysis call, the image reaches generati
   assert.equal(segOk.componentId, 'label-diagram-v1');
   assert.equal(segOk.revision, 1);
   assert.equal(segOk.imagesProcessed, 1);
-  assert.equal(segOk.estCostUSD, 0.0025);
+  assert.equal(segOk.estCostUSD, 0.0125, 'the segment event carries the grounding call (0.01) plus the SAM image (0.0025)');
   assert.equal(typeof segOk.latencyMs, 'number');
-  assert.match(String(segOk.detail), /^sam-3\.1 returned 6 of 6 region\(s\)$/);
+  assert.match(String(segOk.detail), /^sam-3\.1 returned 6 of 6 region\(s\); muse-spark-1\.3 located 0 of 6 part\(s\) for SAM$/);
 
   // --- flow steps 4/5: regions in validation, in the revision artifact and in the spec ---
   const rec = readRunFile(storageDir, jobId, 'label-diagram-v1.r1.json');
@@ -585,7 +589,7 @@ test('label-diagram: a SAM HTTP 500 fails ONLY the component, the lesson still p
   assert.equal(reconcileCalls.length, 1);
   assert.equal(reconcileCalls[0]?.['costUSD'], 0.0025);
   assert.equal(reconcileCalls[0]?.['note'], 'uncertain outcome');
-  assert.equal(summary.totalCostUSD, 0.0325); // 3 model calls + the uncertain SAM charge
+  assert.equal(summary.totalCostUSD, 0.0425); // 3 model calls + the grounding call + the uncertain SAM charge
   assert.equal(summary.reservedUnknownUSD, 0.0025);
 
   // events: the fixed code, never provider text
@@ -594,7 +598,7 @@ test('label-diagram: a SAM HTTP 500 fails ONLY the component, the lesson still p
   assert.ok(segFail !== undefined);
   assert.equal(segFail.detail, 'SAM_HTTP_500');
   assert.equal(segFail.componentId, 'label-diagram-v1');
-  assert.equal(segFail.estCostUSD, 0.0025);
+  assert.equal(segFail.estCostUSD, 0.0125, 'the failed segment event carries the grounding call (0.01) plus the uncertain SAM charge');
   const compFail = events.find(
     e => e.stage === 'component' && e.status === 'failed' && e.componentId === 'label-diagram-v1',
   ) as Ev;
@@ -638,8 +642,8 @@ test('label-diagram: repair carries the same image, segmentation re-runs on the 
   assert.equal(summary.status, 'succeeded');
   assert.equal(samCalls, 2, 'segmentation ran once per revision');
   assert.equal(reconcileCalls.length, 2);
-  // 4 model calls (analysis, label gen, label repair, quiz) + 2 SAM images
-  assert.equal(summary.totalCostUSD, 0.045);
+  // 4 model calls (analysis, label gen, label repair, quiz) + 2 grounding calls (one per revision) + 2 SAM images
+  assert.equal(summary.totalCostUSD, 0.065);
 
   // the repair call carries the SAME figure image
   const repairImages = imagesOf(client.requests, 'label_diagram_repair');
@@ -739,8 +743,8 @@ test('label-diagram: when SAM cannot find one part, LD-06 gates the component ou
   assert.equal(repairs.length, 1);
   assert.deepEqual(repairs[0]?.targeted, ['LD-06']);
   assert.equal(repairs[0]?.passed, false);
-  // 4 model calls + 4 SAM images (2 revisions x (first pass + the best-of retry for the missing region))
-  assert.equal(summary.totalCostUSD, 0.05);
+  // 4 model calls + 2 grounding calls + 4 SAM images (2 revisions x (first pass + the best-of retry for the missing region))
+  assert.equal(summary.totalCostUSD, 0.07);
   assert.equal(summary.lesson?.componentsPublished, 1);
   assert.equal(summary.lesson?.partialPublish, true);
 });

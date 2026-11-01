@@ -44,6 +44,17 @@ import type { V2ImageInput, V2RevisionComparator, V2Validator } from '../../pack
 import { segmentObjects } from '../../packages/meta/sam.ts';
 import type { SamBox, SamObject, SamPromptBox, SegmentPointsResult } from '../../packages/meta/sam.ts';
 import { maskToOutline } from '../../packages/meta/sam-outline.ts';
+import {
+  GROUNDING_MAX_OUTPUT_TOKENS,
+  GROUNDING_SCHEMA,
+  GROUNDING_SCHEMA_NAME,
+  buildGroundingPrompt,
+  groundingImageUrl,
+  groundingPixelBox,
+  groundingPromptBox,
+  groundingUnions,
+} from '../../packages/meta/grounding.ts';
+import type { GroundingBox } from '../../packages/meta/grounding.ts';
 import type { Ledger } from '../../packages/meta/ledger.ts';
 import { generateSpec, repairSpec } from '../../packages/meta/pipeline.ts';
 import type { TimelineSourceAnalysis } from '../../packages/meta/pipeline.ts';
@@ -61,6 +72,7 @@ import {
 } from '../../packages/validation/kit/index.ts';
 import type { DroppedItem } from '../../packages/validation/kit/index.ts';
 import { normaliseCoverageText, pageWordingOfLabel } from '../../packages/validation/kit/label-diagram.ts';
+import { claimedPrintedUnits, printedUnits } from '../../packages/validation/kit/label-identity.ts';
 import { repairFindings, truncate, validateAnalysis } from '../../packages/validation/validate.ts';
 import type { AnyActivitySpec } from '../../packages/validation/validate.ts';
 import {
@@ -123,6 +135,7 @@ import {
   generatedOutputReceipt,
   receiptFields,
   reservedUnknownOf,
+  roundCost,
 } from './job-support.ts';
 import type { JobStatus, JobSummary } from './jobs.ts';
 
@@ -184,6 +197,8 @@ export interface LessonEventExtra {
   providerModel?: string;
   /** Stage 8b: SAM usage kind images_processed, on 'segment' events. */
   imagesProcessed?: number;
+  /** Stage 8c Addendum A: latency of the revision's Muse grounding call, on 'segment' events (absent when none was made). */
+  groundingLatencyMs?: number;
 }
 
 /**
@@ -341,7 +356,11 @@ function clampToInt(value: number, lo: number, hi: number): number {
  * `outline` traced from its mask (`maskToOutline`), omitted when the mask is missing, cannot be
  * decoded or the path would exceed its limit. Exported for tests.
  */
-export function boxesToRegions(boxes: readonly SamBox[], parts: readonly LabelPartGen[]): LabelRegion[] {
+export function boxesToRegions(
+  boxes: readonly SamBox[],
+  parts: readonly LabelPartGen[],
+  grounds?: readonly (GroundingBox | null)[],
+): LabelRegion[] {
   const byId = new Map<number, SamBox>();
   for (const box of boxes) {
     byId.set(box.id, box);
@@ -351,6 +370,8 @@ export function boxesToRegions(boxes: readonly SamBox[], parts: readonly LabelPa
     const box = byId.get(i + 1);
     if (box !== undefined) {
       const outline = box.mask !== undefined ? maskToOutline(box.mask, box) : null;
+      // Stage 8c Addendum A: Muse's grounded union (image pixels) for this part, when the grounding call gave one.
+      const ground = grounds?.[i] ?? null;
       out.push({
         partId: part.id,
         x1: box.x1,
@@ -359,6 +380,7 @@ export function boxesToRegions(boxes: readonly SamBox[], parts: readonly LabelPa
         y2: box.y2,
         confidence: box.confidence,
         ...(outline !== null ? { outline } : {}),
+        ...(ground !== null ? { ground: { x1: ground.x1, y1: ground.y1, x2: ground.x2, y2: ground.y2 } } : {}),
       });
     }
   });
@@ -391,16 +413,23 @@ function pointPx(part: LabelPartGen, width: number, height: number): { x: number
 }
 
 /**
- * Stage 8c: the SAM prompt objects for a gen's parts (object id i+1 for parts[i]). A part whose four area
+ * Stage 8c Addendum A: the SAM prompt objects for a gen's parts (object id i+1 for parts[i]). `grounded[i]` is the
+ * part's box in IMAGE pixels from the Muse grounding call (union + margin, already converted), when it has one: it wins.
+ * Otherwise, Stage 8c: a part whose four area
  * fields are all finite numbers is prompted by its BOX (0..1000 → image pixels, rounded, clamped into the
  * image, edges inclusive, x2 > x1 and y2 > y1) and by nothing else: the probes showed a box alone beats a
  * box plus a point. Any other part (older lessons, a missing or degenerate area) keeps the point prompt.
  * Exported for tests.
  */
-export function samObjectsFor(parts: readonly LabelPartGen[], width: number, height: number): SamObject[] {
+export function samObjectsFor(
+  parts: readonly LabelPartGen[],
+  width: number,
+  height: number,
+  grounded?: readonly (SamPromptBox | null)[],
+): SamObject[] {
   return parts.map((p, i): SamObject => {
     const id = i + 1;
-    const box = areaBoxPx(p, width, height);
+    const box = grounded?.[i] ?? areaBoxPx(p, width, height);
     return box !== null ? { id, box } : { id, points: [pointPx(p, width, height)] };
   });
 }
@@ -433,8 +462,9 @@ export function weakPartIndexes(boxes: readonly SamBox[], parts: readonly LabelP
 
 /**
  * The extra request's objects for the given weak part indexes: (P) the part's point alone, id 100+i; (E) when the
- * part has a usable area, that area widened by 20% of its width/height on each side (clamped to the image), id
- * 200+i. A part without a usable area was already prompted by its point alone, so it has nothing new to try and is
+ * part has a usable first-pass box, that box widened by 20% of its width/height on each side (clamped to the image),
+ * id 200+i. The first-pass box is `grounded[i]` (Stage 8c Addendum A: Muse's union + margin, pixels) when the part
+ * had one, else its gen area. A part with neither was already prompted by its point alone, so it has nothing new to try and is
  * skipped; so is an E identical to the area (a full-image box). At most 8 parts, in part order. `retried` lists the
  * part indexes that got objects. Exported for tests.
  */
@@ -443,6 +473,7 @@ export function samRetryObjectsFor(
   weak: readonly number[],
   width: number,
   height: number,
+  grounded?: readonly (SamPromptBox | null)[],
 ): { objects: SamObject[]; retried: number[] } {
   const objects: SamObject[] = [];
   const retried: number[] = [];
@@ -454,7 +485,8 @@ export function samRetryObjectsFor(
     if (part === undefined) {
       continue;
     }
-    const area = areaBoxPx(part, width, height);
+    // Widen the box the FIRST PASS actually used: the grounded box when there was one, else the gen area.
+    const area = grounded?.[i] ?? areaBoxPx(part, width, height);
     if (area === null) {
       continue;
     }
@@ -1330,7 +1362,8 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
 
   /**
    * Stage 8b flow step 3: ONE SAM 3.1 point-segmentation request per label-diagram-v1
-   * revision. Each part's normalised (x,y) becomes an image pixel (round + clamp) and an
+   * revision, preceded (Stage 8c Addendum A) by ONE Muse Spark grounding call whose boxes prompt SAM
+   * (`groundLabelParts`; its failure never fails this step). Each part's normalised (x,y) becomes an image pixel (round + clamp) and an
    * object id (index + 1); the returned boxes map back to parts in order.
    *
    * Money discipline (identical to a model call): the SAM reserve/reconcile goes through the
@@ -1348,18 +1381,132 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
   interface SegmentOk {
     ok: true;
     regions: LabelRegion[];
+    /** Stage 8c Addendum A: the revision's grounding record (stored beside the regions); absent when no call was made. */
+    grounding?: Record<string, unknown>;
   }
   interface SegmentFail {
     ok: false;
     reason: string;
     detail: string;
     extra: LessonEventExtra;
+    grounding?: Record<string, unknown>;
+  }
+
+  /** What one revision's Muse grounding step produced (Stage 8c Addendum A). */
+  interface GroundingStep {
+    /** Per part: the SAM box prompt in image pixels (union + 4% margin), or null (use the gen area, then the point). */
+    prompts: (SamPromptBox | null)[];
+    /** Per part: Muse's union in image pixels (stored as `LabelRegion.ground`), or null. */
+    grounds: (SamPromptBox | null)[];
+    located: number;
+    /** The fixed failure code, or null on success. */
+    failedCode: string | null;
+    /** USD the call cost (already accounted through the job's accumulator). */
+    costUSD: number;
+    latencyMs: number | null;
+    /** The stored record: `{ok, located, of, receipt, parts}` or `{ok:false, code, chargedUSD, unknownUSD}`. */
+    record: Record<string, unknown>;
+  }
+
+  /** The printed label text each part's label box claims on the figure's stored boxes (null when it claims none). */
+  function claimedPrintedTexts(parts: readonly LabelPartGen[], meta: FigureMeta): (string | null)[] {
+    try {
+      const fig: FigureMeta = { ...meta, labelBoxes: meta.labelBoxes ?? loadFigureLabelBoxes(meta.id) };
+      const units = printedUnits(fig);
+      return parts.map(part => {
+        const claimed = claimedPrintedUnits([part], fig, units);
+        const first = claimed === null ? undefined : [...claimed][0];
+        return first?.text ?? null;
+      });
+    } catch {
+      return parts.map(() => null); // a figure without usable printed labels: the parts are asked for by name only
+    }
+  }
+
+  /**
+   * Stage 8c Addendum A: ONE dedicated Muse Spark grounding call for this revision, BEFORE the SAM call. It goes
+   * through the job's own client (same model, ledger and receipts as every other Muse call) with the SAME figure
+   * image the generation call carries. Its charge is accounted exactly once through the job's accumulator, on
+   * success (the receipt) and on failure (the error's settled amounts), BEFORE any fallible write. ANY failure
+   * (MetaError incl. OUTPUT_TRUNCATED, invalid JSON, an unusable answer) yields no boxes: the build continues with
+   * the generation areas, it never fails the component on its own.
+   */
+  async function groundLabelParts(
+    cid: KitGenComponentId,
+    revision: number,
+    parts: readonly LabelPartGen[],
+    figure: { meta: FigureMeta },
+    image: V2ImageInput,
+  ): Promise<GroundingStep> {
+    const none = (): (SamPromptBox | null)[] => parts.map(() => null);
+    const failed = (code: string, chargedUSD: number, unknownUSD: number, latencyMs: number | null): GroundingStep => ({
+      prompts: none(),
+      grounds: none(),
+      located: 0,
+      failedCode: code,
+      costUSD: chargedUSD,
+      latencyMs,
+      record: { ok: false, code, chargedUSD, unknownUSD },
+    });
+    const printed = claimedPrintedTexts(parts, figure.meta);
+    const prompt = buildGroundingPrompt(
+      parts.map((p, i) => ({ name: typeof p.name === 'string' ? p.name : '', printed: printed[i] ?? null })),
+    );
+    let data: unknown;
+    let grounded: MetaReceipt;
+    try {
+      const res = await ctx.client.complete<unknown>({
+        purpose: ctx.purpose,
+        schemaName: GROUNDING_SCHEMA_NAME,
+        jsonSchema: GROUNDING_SCHEMA,
+        messages: [{ role: 'user', content: prompt, images: [{ url: groundingImageUrl(image.mime, image.base64) }] }],
+        maxOutputTokens: GROUNDING_MAX_OUTPUT_TOKENS,
+        signal: ctx.signal,
+      });
+      data = res.data;
+      grounded = res.receipt;
+    } catch (err: unknown) {
+      // Accounted HERE, at this call's own catch boundary, through the ONE accumulator (S6R-07).
+      const charge = errorCharge(err, { componentId: cid, revision });
+      ctx.account(charge.chargedUSD, charge.unknownUSD);
+      return failed(charge.code, charge.chargedUSD, charge.unknownUSD, null);
+    }
+    // The call returned: its receipt is accounted once, before anything below can run.
+    ctx.accountReceipt(grounded);
+    const unknownUSD = reservedUnknownOf(grounded.reservedUnknownUSD);
+    const hasObjects =
+      typeof data === 'object' && data !== null && Array.isArray((data as { objects?: unknown }).objects);
+    if (!hasObjects) {
+      // Well-formed JSON that is not the requested shape: paid for, unusable.
+      return failed('OUTPUT_INVALID', grounded.estCostUSD, unknownUSD, grounded.latencyMs);
+    }
+    const unions = groundingUnions(data, parts.length, parts.map(p => p.name));
+    const { width, height } = figure.meta;
+    const prompts = unions.map(u => (u === null ? null : groundingPromptBox(u, width, height)));
+    const grounds = unions.map(u => (u === null ? null : groundingPixelBox(u, width, height)));
+    const located = prompts.filter(b => b !== null).length;
+    return {
+      prompts,
+      grounds,
+      located,
+      failedCode: null,
+      costUSD: grounded.estCostUSD,
+      latencyMs: grounded.latencyMs,
+      record: {
+        ok: true,
+        located,
+        of: parts.length,
+        receipt: grounded,
+        parts: parts.map((p, i) => ({ partId: p.id, ground: unions[i] ?? null })),
+      },
+    };
   }
   async function segmentLabelRevision(
     cid: KitGenComponentId,
     revision: number,
     gen: LabelDiagramGen,
     figure: { meta: FigureMeta; bytes: Uint8Array },
+    image: V2ImageInput,
   ): Promise<SegmentOk | SegmentFail> {
     const width = figure.meta.width;
     const height = figure.meta.height;
@@ -1386,7 +1533,14 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
       // Config invariant: a live API always wires the SAM deps; failing here is INTERNAL.
       return segmentFail('INTERNAL', SEGMENTATION_FAILED_REASON);
     }
-    const objects: SamObject[] = samObjectsFor(parts, width, height);
+    // Stage 8c Addendum A: one Muse grounding call per revision, BEFORE SAM; its boxes prompt SAM, the gen areas are
+    // the fallback (and the point after them). Never fails the component.
+    const grounding = await groundLabelParts(cid, revision, parts, figure, image);
+    const objects: SamObject[] = samObjectsFor(parts, width, height, grounding.prompts);
+    const groundingNote =
+      grounding.failedCode === null
+        ? `muse-spark-1.3 located ${grounding.located} of ${parts.length} part(s) for SAM`
+        : `muse-spark-1.3 grounding failed (${grounding.failedCode}); used the generation areas`;
     // The wrapper ledger mirrors every settled reconciliation into `trace`, so the job's
     // accumulator can account EXACTLY what the spending ledger holds — without re-deriving
     // sam.ts's billing rules from error codes. `close` is a no-op: the job's ledger outlives
@@ -1468,14 +1622,18 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
       // ONE accumulator FIRST, before the fallible event write below (S6R-07 discipline).
       ctx.account(chargedUSD, unknownUSD);
       const extra: LessonEventExtra = { ...charge.extra, componentId: cid, revision };
-      if (chargedUSD > 0) {
-        extra.estCostUSD = chargedUSD;
+      // The event shows every charge of this step: the SAM image and the (already accounted) grounding call.
+      if (chargedUSD + grounding.costUSD > 0) {
+        extra.estCostUSD = roundCost(chargedUSD + grounding.costUSD);
+      }
+      if (grounding.latencyMs !== null) {
+        extra.groundingLatencyMs = grounding.latencyMs;
       }
       ctx.emit('segment', 'failed', extra);
       // R-01: the fixed code from the shared charge vocabulary (SAM_HTTP_<status>,
       // NETWORK_ERROR, BUDGET_EXCEEDED, LEDGER_ERROR, TIMEOUT, INTERNAL, ...), never
       // provider text.
-      return { ok: false, reason: SEGMENTATION_FAILED_REASON, detail: charge.code, extra };
+      return { ok: false, reason: SEGMENTATION_FAILED_REASON, detail: charge.code, extra, grounding: grounding.record };
     }
     sweepOpenHolds();
     ctx.account(Math.max(result.costUSD, trace.charged), trace.unknown);
@@ -1490,7 +1648,8 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
     // region kept is still SAM's own output for that part; only the most confident one is kept, so the check
     // (LD-11) and the repair loop below see the best SAM could do. Nothing weak (or nothing to vary) = no call.
     const weak = weakPartIndexes(boxes, parts);
-    const retryPlan = weak.length > 0 && !ctx.signal.aborted ? samRetryObjectsFor(parts, weak, width, height) : null;
+    const retryPlan =
+      weak.length > 0 && !ctx.signal.aborted ? samRetryObjectsFor(parts, weak, width, height, grounding.prompts) : null;
     if (retryPlan !== null && retryPlan.objects.length > 0) {
       // The first call's money is already in the job's accumulator: the extra call is traced from zero.
       trace.charged = 0;
@@ -1517,16 +1676,18 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
         retryNote = `sam-3.1 retry of ${retryPlan.retried.length} weak part(s) failed (${charge.code}); kept the first pass`;
       }
     }
-    const regions = boxesToRegions(boxes, parts);
+    const regions = boxesToRegions(boxes, parts, grounding.grounds);
     ctx.emit('segment', 'succeeded', {
       componentId: cid,
       revision,
       latencyMs,
       imagesProcessed,
-      estCostUSD: costUSD,
-      detail: `sam-3.1 returned ${regions.length} of ${parts.length} region(s)${retryNote === '' ? '' : `; ${retryNote}`}`,
+      // Every charge of this step: the grounding call (already accounted) plus the SAM image(s).
+      estCostUSD: roundCost(costUSD + grounding.costUSD),
+      ...(grounding.latencyMs !== null ? { groundingLatencyMs: grounding.latencyMs } : {}),
+      detail: `sam-3.1 returned ${regions.length} of ${parts.length} region(s); ${groundingNote}${retryNote === '' ? '' : `; ${retryNote}`}`,
     });
-    return { ok: true, regions };
+    return { ok: true, regions, grounding: grounding.record };
   }
 
   async function runKitComponent(index: number, planEntry: ComponentPlanEntry, cid: KitGenComponentId): Promise<void> {
@@ -1699,8 +1860,8 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
     }
 
     // --- Stage 8b: segment revision 1, then revalidate WITH its regions -------
-    if (cid === 'label-diagram-v1' && labelFigure !== null) {
-      const seg = await segmentLabelRevision(cid, 1, gen as LabelDiagramGen, labelFigure);
+    if (cid === 'label-diagram-v1' && labelFigure !== null && labelImage !== null) {
+      const seg = await segmentLabelRevision(cid, 1, gen as LabelDiagramGen, labelFigure, labelImage);
       if (seg.ok) {
         baselineLabelRegions = seg.regions;
         report = mergedLabelReport(genRes.report, gen, 1, seg.regions);
@@ -1710,7 +1871,7 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
           gen,
           report,
           lastReceipt,
-          { ...r1Extra, regions: seg.regions },
+          { ...r1Extra, regions: seg.regions, ...(seg.grounding !== undefined ? { grounding: seg.grounding } : {}) },
           labelSpecData(gen, seg.regions),
         );
       } else {
@@ -1719,7 +1880,10 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
         // fixed detail beside the receipt, and fail ONLY this component. A dead SAM endpoint
         // must not burn paid Muse repair calls, so the repair loop is skipped entirely.
         report = fixReport(kitValidate(gen, sources), specIdFor(1), 1);
-        persistKitRevision(cid, 1, gen, report, lastReceipt, r1Extra);
+        persistKitRevision(cid, 1, gen, report, lastReceipt, {
+          ...r1Extra,
+          ...(seg.grounding !== undefined ? { grounding: seg.grounding } : {}),
+        });
         ctx.emit('component', 'failed', {
           componentId: cid,
           revision: 1,
@@ -1870,16 +2034,19 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
       lastReceipt = rep.receipt;
       const normExtra: Record<string, unknown> =
         repNorm.normalisedFrom !== null ? { normalisedFrom: repNorm.normalisedFrom } : {};
-      if (cid === 'label-diagram-v1' && labelFigure !== null) {
+      if (cid === 'label-diagram-v1' && labelFigure !== null && labelImage !== null) {
         // Stage 8b flow step 4: segmentation RE-RUNS on the repaired revision, and the
         // revision is validated/persisted with ITS OWN regions.
-        const seg = await segmentLabelRevision(cid, revision, gen as LabelDiagramGen, labelFigure);
+        const seg = await segmentLabelRevision(cid, revision, gen as LabelDiagramGen, labelFigure, labelImage);
         if (!seg.ok) {
           // The repair call itself succeeded and was billed; the segmentation step died.
           // The attempt ran, was paid and cannot pass: record it like a died repair, persist
           // the revision validated without regions, and fail ONLY this component.
           report = fixReport(kitValidate(gen, sources), specIdFor(revision), revision);
-          persistKitRevision(cid, revision, gen, report, lastReceipt, normExtra);
+          persistKitRevision(cid, revision, gen, report, lastReceipt, {
+            ...normExtra,
+            ...(seg.grounding !== undefined ? { grounding: seg.grounding } : {}),
+          });
           pushDiedRepairRecord(summary, cid, attempt, revision, targeted);
           diedReason = seg.reason;
           ctx.writeJob();
@@ -1892,7 +2059,7 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
           gen,
           report,
           lastReceipt,
-          { ...normExtra, regions: seg.regions },
+          { ...normExtra, regions: seg.regions, ...(seg.grounding !== undefined ? { grounding: seg.grounding } : {}) },
           labelSpecData(gen, seg.regions),
         );
       } else {

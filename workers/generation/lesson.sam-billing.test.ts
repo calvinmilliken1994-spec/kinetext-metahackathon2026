@@ -188,6 +188,10 @@ function fakeClient(opts: {
         data = opts.analysis;
       } else if (req.schemaName === 'source_analysis_v2_repair') {
         data = opts.analysisRepair ?? opts.analysis;
+      } else if (req.schemaName === 'label_grounding') {
+        // Stage 8c Addendum A: every label revision makes one Muse grounding call before SAM. These tests are about
+        // other things: Muse locates nothing, so SAM keeps getting the generation areas (a normal paid 0.01 call).
+        data = { objects: [] };
       } else if (req.schemaName.endsWith('_repair')) {
         data = opts.kitRepair?.[req.schemaName];
       } else {
@@ -430,7 +434,8 @@ test('B-08: SAM HTTP 400 + failed reconcile keeps the $0.0025 hold as unknown li
   assert.equal(c.ledger.outstanding(), 0.0025, 'the real ledger still holds the reservation');
   assert.equal(c.ledger.reconcileAttempts.length, 1);
   assertMatchesLedger(c, 0.0025);
-  assert.equal(c.segFail?.estCostUSD, 0.0025);
+  // the failed segment event carries every charge of the step: the grounding call (0.01, Stage 8c Addendum A) + the SAM hold
+  assert.equal(c.segFail?.estCostUSD, 0.0125);
 });
 
 test('B-08: SAM HTTP 500 + failed reconcile: unknown recorded AND included in totalCostUSD', async () => {
@@ -438,7 +443,7 @@ test('B-08: SAM HTTP 500 + failed reconcile: unknown recorded AND included in to
   assertSegmentationFailedPartially(c, 'LEDGER_ERROR');
   assert.equal(c.ledger.outstanding(), 0.0025);
   assertMatchesLedger(c, 0.0025);
-  assert.equal(c.summary.totalCostUSD, 0.0325);
+  assert.equal(c.summary.totalCostUSD, 0.0425, '3 model calls + the grounding call + the uncertain SAM hold');
 });
 
 test('controls: HTTP 400 and 500 with a working ledger still match it exactly', async () => {
@@ -449,7 +454,7 @@ test('controls: HTTP 400 and 500 with a working ledger still match it exactly', 
   const c500 = await runCase(() => ({ status: 500, body: 'x' }), false, 'lesson-sam-ctl-500');
   assertSegmentationFailedPartially(c500, 'SAM_HTTP_500');
   assertMatchesLedger(c500, 0.0025);
-  assert.equal(c500.summary.totalCostUSD, 0.0325);
+  assert.equal(c500.summary.totalCostUSD, 0.0425, '3 model calls + the grounding call + the uncertain SAM hold');
 });
 
 /* ------------------------------------------------------------------ */
@@ -503,7 +508,7 @@ test('B-07: usage 2 on one image records the actual $0.005, flags it and fails t
   assertSegmentationFailedPartially(c, 'SAM_USAGE_EXCEEDED');
   assert.equal(c.ledger.committed(), 0.005);
   assertMatchesLedger(c, 0);
-  assert.equal(c.segFail?.estCostUSD, 0.005);
+  assert.equal(c.segFail?.estCostUSD, 0.015, 'the grounding call (0.01) + the 2-image SAM charge (0.005)');
 });
 
 test('B-07/B-08: stream failure + failed reconcile accounts the hold once (no double count)', async () => {
