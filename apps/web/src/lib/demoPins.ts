@@ -5,8 +5,12 @@
 import type { OpeningJob } from './jobs.ts';
 
 export const DEMO_PINS = {
-  /** The run the tour replays: NOAA water cycle on Muse Spark 1.3 (label diagram, two SAM 3.1 calls, one natural repair). */
-  tour: 'job-20261031081105-910f3776',
+  /**
+   * The run the Demo replays (Stage 10c): NOAA water cycle on Muse Spark 1.3, 2 Nov. Muse located every part, SAM 3.1
+   * outlined them, and the first draft failed LD-06 naturally (SAM's cloud spilled past where Muse located it); Muse
+   * revised and revision 2 passed 13/13.
+   */
+  tour: 'job-20261101234914-97ba271b',
   /**
    * What a plain visit opens, first listed one wins: the Stage 8c water-cycle run (Muse Spark located every part, SAM 3.1
    * confirmed all five; Calvin 2026-11-02). The tour keeps the older run above because its build has a real repair.
