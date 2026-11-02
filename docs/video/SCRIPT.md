@@ -1,4 +1,4 @@
-# Demo video script (draft 1, 3 Nov 2026)
+# Demo video script (draft 2, 3 Nov 2026)
 
 Calvin reads the voiceover on camera (corner bubble). The screen is the real app, driven by a script and captured at
 1920×1080. Target 2:55, hard limit 3:00. Rules: `docs/HACKATHON_RULES.md`, "Demo video guidance".
@@ -46,14 +46,15 @@ names each call as it runs. Real speed for the first seconds, then "4× speed" t
 >
 > I've sped up the middle. The whole build took ⟨about two minutes⟩ and cost ⟨about twenty cents⟩.
 
-## 4. Use it, and see the calls (1:30 to 1:55)
+## 4. Use it, and see how it was checked (1:30 to 1:55)
 
-**Screen:** drag "Magma" onto its number, press Check. Open "Checks and run details": the list of Muse Spark and SAM
-3.1 calls with model, time and cost.
+**Screen:** drag "Magma" onto its number, press Check. Open "Checks and run details": the repair story (the failed
+check, what Muse changed, the figure before and after) and the checks per part.
 
 **Voiceover:**
-> Students drag each name onto its number, and nothing is marked until they check. Under checks and run details, every
-> Meta call is listed: which model, how long it took, and what it cost.
+> Students drag each name onto its number, and nothing is marked until they check. Checks and run details shows every
+> check behind the lesson, and when Muse revised a part, which check failed, what it changed, and the figure before and
+> after.
 
 ## 5. A teacher signs off (1:55 to 2:15)
 
@@ -61,7 +62,8 @@ names each call as it runs. Real speed for the first seconds, then "4× speed" t
 shelf.
 
 **Voiceover:**
-> Every lesson says "Needs review" until a teacher reads each part and publishes it. Published lessons go on the shelf.
+> Every lesson says "Needs review" until a teacher reads each part and publishes it. Published lessons go on the
+> shelf: ten so far, across nine subjects.
 
 ## 6. Two Meta models, measured (2:15 to 2:45)
 
@@ -88,4 +90,6 @@ shelf.
   "No code needed here".
 - If the live take has a repair, keep it and say so in scene 3 ("Here a check failed, and Muse revised the part").
 - If a take holds a part back, re-take (about USD 0.25 each, Meta credits for demoing).
-- Before recording: unpublish the airplane lesson; the Welcome montage starts about 3 s late; decide the app name.
+- Before recording: the Welcome montage starts about 3 s late; decide the app name.
+- Draft 2: scene 4 no longer claims a per-call list (the drawer shows checks and the repair story, not each call's
+  time and cost); the calls are visible in the build strip in scene 3.
