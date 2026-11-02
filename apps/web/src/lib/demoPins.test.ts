@@ -14,9 +14,10 @@ const row = (jobId: string, sourceId: string, createdAt: string, status = 'succe
 /** Stage 10c (Calvin's Q2): water cycle with Muse grounding AND a natural repair (LD-06: the models disagreed on the cloud). */
 const WATER_DEMO = 'job-20261101234914-97ba271b';
 
-test('a plain visit opens the Stage 8c water-cycle run; the Demo replays the grounded run with a natural repair', () => {
+test('a plain visit opens the same grounded water-cycle run the Demo replays (Calvin, 2 Nov)', () => {
   assert.equal(DEMO_PINS.tour, WATER_DEMO);
-  assert.equal(DEMO_PINS.opening[0], WATER_8C);
+  assert.equal(DEMO_PINS.opening[0], WATER_DEMO);
+  assert.equal(DEMO_PINS.opening[1], WATER_8C, 'the earlier Stage 8c run is the fallback');
   assert.equal(TOUR_JOB_ID, DEMO_PINS.tour, 'onboarding.ts plays the pinned tour run');
 });
 

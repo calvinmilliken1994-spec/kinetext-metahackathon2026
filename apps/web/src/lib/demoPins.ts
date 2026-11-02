@@ -12,10 +12,10 @@ export const DEMO_PINS = {
    */
   tour: 'job-20261101234914-97ba271b',
   /**
-   * What a plain visit opens, first listed one wins: the Stage 8c water-cycle run (Muse Spark located every part, SAM 3.1
-   * confirmed all five; Calvin 2026-11-02). The tour keeps the older run above because its build has a real repair.
+   * What a plain visit opens, first listed one wins: the same run the Demo replays, so the guide, the Demo and the
+   * finished lesson are one lesson (Calvin, 2 Nov). Then the earlier Stage 8c water-cycle run, then the 31 Oct run.
    */
-  opening: ['job-20261101200607-c65a20bb', 'job-20261031081105-910f3776'],
+  opening: ['job-20261101234914-97ba271b', 'job-20261101200607-c65a20bb', 'job-20261031081105-910f3776'],
 } as const;
 
 type Listed = { jobId: string; sourceId: string; status: string; flow?: 'lesson' | 'activity' | undefined };
