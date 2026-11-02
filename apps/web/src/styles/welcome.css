@@ -2,7 +2,7 @@
  * (H4: the access form at the top of Your own source; M1: a chosen page the search hides). Tokens only.
  *
  * The Welcome sits inside the app window in place of the sidebar and workspace, split in two: on the left a solid panel
- * in the app's blue (--accent, the same in both themes) with the name, one statement and the minimal sign-in; on the
+ * in the window's chrome grey (Calvin, 3 Nov) with the name, one statement and the minimal sign-in; on the
  * right, on the window background, the "page becomes lesson" montage (components/WelcomeMontage.tsx). Motion animates
  * transform and opacity only: no animated colour, no filters or masks over moving content, no full-screen repaints. Each
  * beat is remounted, which restarts its keyframes; the timing comes from lib/welcomeMontage.ts as --wm-beat/--wm-part. */
@@ -11,23 +11,22 @@
 .welcome {
   position: relative; min-height: 0; overflow: hidden;
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  background: var(--window-bg); border-top: 1px solid var(--inset-line);
+  background: var(--window-bg);
 }
 
-/* ---- left: the app-blue panel ---------------------------------------------------------------------------------------- */
+/* ---- left: the sign-in panel, in the window's chrome grey ------------------------------------------------------------ */
+/* Calvin, 3 Nov: the left side is the app's grey, running on from the title bar and the footer (no line between them);
+ * one hairline divides it from the montage. Blue is kept for the one thing to do (Unlock / Explore read-only). */
 .wl-panel {
-  /* On the blue: white for type, a white just tinted by the blue for secondary lines (≥ 4.5:1), and hairlines. */
-  --wl-on: var(--accent-ink);
-  --wl-on-2: color-mix(in srgb, var(--accent-ink) 93%, var(--accent));
-  --wl-hair: color-mix(in srgb, var(--accent-ink) 38%, var(--accent));
-  --wl-field-ink: color-mix(in srgb, var(--accent) 40%, black);
+  --wl-on: var(--ink);
+  --wl-on-2: var(--ink-2);
+  --wl-hair: var(--line-2);
   --wl-control-h: clamp(48px, 5vh, 62px);
   min-height: 0; overflow: hidden;
   display: grid; grid-template-rows: auto minmax(24px, 1fr) auto; align-content: stretch;
   padding: clamp(32px, 7vh, 112px) clamp(32px, 5.6vw, 144px) clamp(28px, 6vh, 96px);
-  background: var(--accent); color: var(--wl-on);
+  background: var(--chrome); color: var(--wl-on); border-right: 1px solid var(--inset-line);
 }
-.wl-panel ::selection { background: var(--accent-ink); color: var(--accent); }
 
 .wl-head { display: grid; gap: clamp(16px, 2.4vh, 32px); align-content: start; }
 .wl-name {
@@ -43,27 +42,27 @@
 .wl-code-row { display: flex; gap: 10px; min-inline-size: 0; }
 .wl-code-row input {
   flex: 1; min-inline-size: 0; min-block-size: var(--wl-control-h); padding: 0 18px; border-radius: 12px;
-  border: 1px solid transparent; background: var(--accent-ink); color: var(--wl-field-ink); caret-color: var(--accent);
+  border: 1px solid var(--line-2); background: var(--window-bg); color: var(--ink); caret-color: var(--accent-text);
   font: inherit; font-size: clamp(15px, 0.92vw, 21px);
 }
-.wl-code-row input::placeholder { color: var(--accent); opacity: 1; }
-.wl-code-row input:focus-visible { outline: 2px solid var(--wl-on); outline-offset: 3px; }
+.wl-code-row input::placeholder { color: var(--ink-3); opacity: 1; }
+.wl-code-row input:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .wl-code-row input:disabled { background: transparent; border-color: var(--wl-hair); color: var(--wl-on-2); cursor: not-allowed; }
-.wl-code-row input:disabled::placeholder { color: var(--wl-on-2); }
-.wl-code-row input[aria-invalid="true"] { outline: 2px solid var(--wl-on); outline-offset: 3px; }
+.wl-code-row input:disabled::placeholder { color: var(--ink-3); }
+.wl-code-row input[aria-invalid="true"] { border-color: var(--bad-line); outline: 2px solid var(--focus); outline-offset: 2px; }
 
-/* Buttons on the blue: solid white (the one thing to do) or a white outline. State changes are instant (no colour motion). */
+/* Buttons: solid blue for the one thing to do, a grey outline otherwise. State changes are instant (no colour motion). */
 .wl-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px; flex: none;
   min-block-size: var(--wl-control-h); padding: 0 clamp(20px, 1.4vw, 32px); border-radius: 999px;
-  border: 1px solid var(--wl-on-2); background: transparent; color: var(--wl-on);
+  border: 1px solid var(--line-3); background: transparent; color: var(--ink);
   font: inherit; font-size: clamp(15px, 0.92vw, 21px); font-weight: var(--fw-bold); cursor: pointer;
 }
-.wl-btn:hover:not(:disabled) { background: color-mix(in srgb, var(--accent-ink) 12%, var(--accent)); }
-.wl-btn-solid { background: var(--accent-ink); border-color: var(--accent-ink); color: var(--accent); }
-.wl-btn-solid:hover:not(:disabled) { background: color-mix(in srgb, var(--accent-ink) 90%, var(--accent)); }
-.wl-btn:focus-visible { outline: 2px solid var(--wl-on); outline-offset: 3px; }
-.wl-btn:disabled { border-color: var(--wl-hair); color: var(--wl-on-2); background: transparent; cursor: not-allowed; }
+.wl-btn:hover:not(:disabled) { background: color-mix(in srgb, var(--ink) 7%, transparent); }
+.wl-btn-solid { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.wl-btn-solid:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 88%, var(--accent-ink)); }
+.wl-btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+.wl-btn:disabled { border-color: var(--wl-hair); color: var(--ink-3); background: transparent; cursor: not-allowed; }
 .wl-btn:active:not(:disabled) { transform: translateY(1px); }
 .wl-go { inline-size: 100%; min-block-size: calc(var(--wl-control-h) + 6px); font-size: clamp(16px, 1vw, 23px); }
 
