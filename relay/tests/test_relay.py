@@ -231,6 +231,21 @@ def test_modal_chat_forwards_with_proxy_token_and_strips_code(env):
     assert CODE not in all_header_values(req)
 
 
+def test_modal_chat_takes_the_code_in_the_path(env):
+    # Live 2026-11-02: Modal's edge strips Modal-Key/Modal-Secret before the app sees them, so the local API sends the
+    # code in the path (/modal/c/<code>/v1/...). Upstream gets Calvin's proxy token; the code goes nowhere upstream.
+    client, _, up = env
+    raw = body_for(OPEN_MODEL)
+    r = client.post(f"/modal/c/{CODE}/v1/chat/completions", content=raw, headers={"Content-Type": "application/json"})
+    assert r.status_code == 200
+    req = up.requests[0]
+    assert str(req.url) == MODAL_BASE + "/chat/completions"
+    assert req.headers["modal-secret"] == MODAL_SECRET
+    assert CODE not in all_header_values(req) and CODE not in str(req.url)
+    bad = client.post("/modal/c/not-the-code-not-the-code/v1/chat/completions", content=raw, headers={"Content-Type": "application/json"})
+    assert bad.status_code == 401
+
+
 def test_response_status_body_and_only_content_type_pass_through():
     payload = b'{"a": "\xc3\xa9 raw  spacing",  "n": 1}'
 

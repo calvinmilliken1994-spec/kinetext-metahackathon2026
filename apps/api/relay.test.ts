@@ -328,16 +328,16 @@ test('L: the Meta client sends the code as the bearer to <url>/meta/v1/chat/comp
   assert.equal(JSON.parse(seen[0]?.body ?? '{}').model, 'muse-spark-1.3');
 });
 
-test('L: the Modal client sends wk-relay / ws-<code> to <url>/modal/v1/chat/completions', async () => {
+test('L: the Modal client sends the code in the path <url>/modal/c/<code>/v1 (Modal strips Modal-* headers at its edge)', async () => {
   const { fetchImpl, seen } = recordingFetch();
   const client = buildRelayModalClient({ ledger: fakeLedger(), maxInputTokens: 32000, relayUrl: RELAY_URL, code: CODE, fetchImpl });
   assert.equal(client.provider, 'modal');
   assert.equal(client.model, 'muse-spark-open');
   assert.equal(client.providerModel, MODAL_MUSE_SPARK_OPEN_MODEL);
   await assert.rejects(() => client.complete(REQ), MetaError);
-  assert.equal(seen[0]?.url, `${RELAY_URL}/modal/v1/chat/completions`);
+  assert.equal(seen[0]?.url, `${RELAY_URL}/modal/c/${encodeURIComponent(CODE)}/v1/chat/completions`);
   assert.equal(seen[0]?.headers.get('modal-key'), 'wk-relay');
-  assert.equal(seen[0]?.headers.get('modal-secret'), `ws-${CODE}`);
+  assert.equal(seen[0]?.headers.get('modal-secret'), 'ws-relay', 'no code in headers');
   assert.equal(seen[0]?.headers.get('authorization'), null);
   assert.equal(JSON.parse(seen[0]?.body ?? '{}').model, MODAL_MUSE_SPARK_OPEN_MODEL);
 });
@@ -382,9 +382,9 @@ test('L: a job gets the client for its model and the SAM deps, built from the he
   assert.equal(open.client.provider, 'modal');
   assert.equal(open.sam.baseUrl, `${RELAY_URL}/meta/v1`, 'SAM always goes through the Meta route');
   await assert.rejects(() => open.client.complete(REQ), MetaError);
-  assert.equal(seen[1]?.url, `${RELAY_URL}/modal/v1/chat/completions`);
+  assert.equal(seen[1]?.url, `${RELAY_URL}/modal/c/${encodeURIComponent(CODE)}/v1/chat/completions`);
   assert.equal(seen[1]?.headers.get('modal-key'), 'wk-relay');
-  assert.equal(seen[1]?.headers.get('modal-secret'), `ws-${CODE}`);
+  assert.equal(seen[1]?.headers.get('modal-secret'), 'ws-relay');
 });
 
 test('L: the lesson flow uses the V2 input bound, the activity flow the v1 bound', async () => {

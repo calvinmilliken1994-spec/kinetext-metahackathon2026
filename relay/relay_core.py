@@ -249,6 +249,12 @@ def _bearer_code(request: Request) -> str | None:
     return parts[1].strip()
 
 
+def _path_code(request: Request) -> str | None:
+    """The code in /modal/c/<code>/v1/...: Modal's edge strips Modal-Key/Modal-Secret before the app sees them (live, 2 Nov)."""
+    value = request.path_params.get("code")
+    return value.strip() if isinstance(value, str) and value.strip() else None
+
+
 def _modal_secret_code(request: Request) -> str | None:
     value = request.headers.get("modal-secret")
     if not value or not value.startswith("ws-"):
@@ -271,6 +277,10 @@ ROUTES = {
     "/meta/v1/responses": _Route("meta.responses", SAM_MODEL, "sam", "meta", "/responses", _bearer_code),
     "/modal/v1/chat/completions": _Route(
         "modal.chat", OPEN_MODEL, "chat", "modal", "/chat/completions", _modal_secret_code
+    ),
+    # The route the local API uses (the log label never includes the path, so the code is never logged).
+    "/modal/c/{code}/v1/chat/completions": _Route(
+        "modal.chat", OPEN_MODEL, "chat", "modal", "/chat/completions", _path_code
     ),
 }
 

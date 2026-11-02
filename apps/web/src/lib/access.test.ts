@@ -79,3 +79,7 @@ test('the API refusals read as plain sentences', () => {
   assert.equal(ACCESS_MESSAGES['ACCESS_CODE_INVALID'], 'That access code is not right. Check it and try again.');
   assert.equal(ACCESS_MESSAGES['TOO_MANY_ATTEMPTS'], 'Too many tries. Wait a minute, then try again.');
 });
+
+test('relay mode: an unreachable relay gets a plain sentence, not an error code', () => {
+  assert.equal(ACCESS_MESSAGES['RELAY_UNREACHABLE'], 'Can\u2019t reach the access service. Check your internet connection and try again.');
+});

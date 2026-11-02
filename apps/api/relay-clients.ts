@@ -2,8 +2,9 @@
 //
 //   Meta chat   apiKey = access code, baseUrl = <relay>/meta/v1      (relay forwards to api.meta.ai/v1)
 //   SAM         baseUrl = <relay>/meta/v1, key = access code        (relay forwards /responses)
-//   Modal       providerConfig { proxyKey 'wk-relay', proxySecret 'ws-' + code,
-//               baseUrl <relay>/modal/v1, modelString }              (code travels in Modal-Secret)
+//   Modal       providerConfig { proxyKey 'wk-relay', proxySecret 'ws-relay',
+//               baseUrl <relay>/modal/c/<code>/v1, modelString }     (code travels in the path: Modal's edge
+//               strips Modal-Key/Modal-Secret before the relay sees them, found live 2026-11-02)
 //
 // The code is passed in by the caller at job submission time and lives only in the client's closure.
 // Nothing here logs, stores or returns it. A code that cannot be an HTTP header value fails closed.
@@ -18,8 +19,9 @@ import { buildModalClient } from './model-clients.ts';
 import { RELAY_CODE_PATTERN } from './relay.ts';
 import type { RelayControl } from './relay.ts';
 
-/** The fixed Modal-Key the relay ignores; the code travels as the Modal-Secret. */
+/** The fixed Modal-Key/Modal-Secret the relay ignores (the client requires both); the code travels in the path. */
 export const RELAY_MODAL_PROXY_KEY = 'wk-relay';
+export const RELAY_MODAL_PROXY_SECRET = 'ws-relay';
 
 export interface RelayClientDeps {
   ledger: Ledger;
@@ -61,8 +63,8 @@ export function buildRelayModalClient(deps: RelayChatClientDeps): MetaClient {
   return buildModalClient({
     ledger: deps.ledger,
     maxInputTokens: deps.maxInputTokens,
-    modalBaseUrl: `${deps.relayUrl}/modal/v1`,
-    token: { proxyKey: RELAY_MODAL_PROXY_KEY, proxySecret: `ws-${deps.code}` },
+    modalBaseUrl: `${deps.relayUrl}/modal/c/${encodeURIComponent(deps.code)}/v1`,
+    token: { proxyKey: RELAY_MODAL_PROXY_KEY, proxySecret: RELAY_MODAL_PROXY_SECRET },
     ...(deps.fetchImpl !== undefined ? { fetchImpl: deps.fetchImpl } : {}),
   });
 }

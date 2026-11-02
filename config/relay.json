@@ -1,4 +1,4 @@
 {
-  "url": "",
+  "url": "https://calvinmilliken1994--mki-relay.us-east.modal.run",
   "note": "Base URL of the judge relay (the deployed Modal web app, https only, no credentials, query or fragment). Empty until the relay is deployed: the app then starts read-only (recorded lessons, Demo, Results, presenting) and says live builds are unavailable. Not secret; the access code is never stored here."
 }

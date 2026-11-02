@@ -96,6 +96,7 @@ export const ACCESS_MESSAGES: Readonly<Record<string, string>> = {
   BUILDS_PAUSED: 'Builds are paused right now. Recorded lessons, replays and presenting still work.',
   ACCESS_CODE_INVALID: 'That access code is not right. Check it and try again.',
   TOO_MANY_ATTEMPTS: 'Too many tries. Wait a minute, then try again.',
+  RELAY_UNREACHABLE: 'Can\u2019t reach the access service. Check your internet connection and try again.',
 };
 
 /** The sentence shown beside the access-code form (spec wording). */
