@@ -210,7 +210,6 @@
   67% { animation-timing-function: ease-in; }
   71.5%, 100% { opacity: 0; translate: 0 0; }
 }
-}
 
 /* Short windows (1366 × 768 and the like): the statement takes two lines and the spacing tightens, so the card and
  * the figure fit without scrolling. */
