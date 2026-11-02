@@ -48,44 +48,88 @@ export function welcomeAccess(a: Access, live: boolean | null): WelcomeAccess {
   }
 }
 
-export interface WelcomeChoice {
-  /** The access panel's heading and sentence. */
-  title: string;
-  body: string;
-  /** The access-code form is shown (gate on, no session yet). */
-  form: boolean;
-  /** The other panel: its heading, sentence and button. */
-  readTitle: string;
-  readBody: string;
-  continueLabel: string;
+/**
+ * The credential the Get started card asks for, as one descriptor: the field's words and which submit action it runs.
+ * `accessCode` is wired to POST /api/access today. `metaKey` (a judge's own key, held by their local server) is defined
+ * but NOT wired: there is no server endpoint for it yet, and the lead wires it once Calvin decides.
+ */
+export interface CredentialField {
+  label: string;
+  placeholder: string;
+  button: string;
+  /** The button while the submit is in flight. */
+  busyButton: string;
+  /** One line under the field when it can be used. */
+  helper: string;
+  /** Asked for when submitting an empty field. */
+  emptyError: string;
+  /** Which submit handler the card runs ('access': api.postAccess). */
+  submit: 'access' | 'meta-key';
 }
 
-const READ_ONLY_BODY = 'Browse the finished lessons, watch a recorded build and present them. No code needed.';
-const GUIDE_BODY = 'A short guide shows you round the pages first. You can skip it at any point.';
+export const WELCOME_CREDENTIALS = {
+  accessCode: {
+    label: 'Judge access code', placeholder: 'Enter your access code', button: 'Unlock', busyButton: 'Checking…',
+    helper: 'For judges: it unlocks live builds on Meta’s models.', emptyError: 'Enter the access code you were given.', submit: 'access',
+  },
+  metaKey: {
+    label: 'Meta API key', placeholder: 'Paste your Meta API key', button: 'Turn on live builds', busyButton: 'Checking…',
+    helper: 'Kept on this computer, used only by your local server', emptyError: 'Paste your Meta API key first.', submit: 'meta-key',
+  },
+} as const satisfies Record<string, CredentialField>;
 
-export function welcomeChoice(w: WelcomeAccess, info: AccessInfo | null): WelcomeChoice {
-  const go = { readTitle: 'Get started', readBody: GUIDE_BODY, continueLabel: 'Continue' };
+/**
+ * The Welcome's one Get started card (Welcome v2, Calvin 2 Nov): the judge access-code field with an Unlock button, an
+ * "or", then one big button into the guide, and a line on what comes next. The field keeps its place on a server where
+ * there is no code to enter (disabled, with the reason), so the card looks the same locally and on the judged server.
+ */
+export interface WelcomeCard {
+  /** The credential the field asks for (its label, button, helper and submit action). */
+  credential: CredentialField;
+  /** The code field: usable (gate on, locked), shown disabled with a reason, or left out (access already settled). */
+  field: 'enabled' | 'disabled' | 'none';
+  placeholder: string;
+  /** One line under the field (or in its place): what the code does here, or why there is none to enter. */
+  note: string;
+  /** Unlock is the blue button (locked); otherwise the big button below is. */
+  unlockPrimary: boolean;
+  /** The "or" between the field and the big button. */
+  divider: boolean;
+  /** The big button: always continues to the guide. */
+  go: { label: string; primary: boolean };
+}
+
+const EXPLORE = 'Explore read-only';
+
+export function welcomeCard(w: WelcomeAccess, info: AccessInfo | null, credential: CredentialField = WELCOME_CREDENTIALS.accessCode): WelcomeCard {
+  const settled = { credential, field: 'none' as const, placeholder: '', unlockPrimary: false, divider: false, go: { label: 'Continue', primary: true } };
+  const waiting = { credential, field: 'disabled' as const, unlockPrimary: false, divider: true, go: { label: EXPLORE, primary: true } };
   switch (w) {
     case 'locked':
       return {
-        title: 'Enter access code', body: 'For judges. It unlocks live builds on Meta’s models, from a library page or your own.', form: true,
-        readTitle: 'Continue read-only', readBody: READ_ONLY_BODY, continueLabel: 'Continue read-only',
+        credential, field: 'enabled', placeholder: credential.placeholder, note: credential.helper,
+        unlockPrimary: true, divider: true, go: { label: EXPLORE, primary: false },
       };
+    case 'live-off':
+      return { ...waiting, placeholder: 'No code needed here', note: 'Live builds are off on this server.' };
+    case 'checking':
+      return { ...waiting, placeholder: 'Checking access…', note: '' };
+    case 'unknown':
+      return { ...waiting, placeholder: credential.label, note: 'Access could not be checked. Read-only works either way.' };
     case 'granted':
       return {
-        title: 'Judge access is on',
-        body: info === null ? 'Live builds are unlocked in this browser.' : `Live builds are unlocked in this browser: ${formatUSD(info.remainingUSD)} of ${formatUSD(info.capUSD)} left.`,
-        form: false, ...go,
+        ...settled,
+        note: info === null ? 'Judge access is on in this browser.' : `Judge access is on: ${formatUSD(info.remainingUSD)} of ${formatUSD(info.capUSD)} left.`,
       };
     case 'open':
-      return { title: 'Builds are open on this server', body: 'No access code is needed here. Pick a page or paste your own, then build.', form: false, ...go };
-    case 'live-off':
-      return { title: 'Live builds are off on this server', body: 'Recorded lessons, replays of recorded builds and presenting all work.', form: false, ...go };
-    case 'unknown':
-      return { title: 'Access could not be checked', body: 'You can still go on. The New lesson page says whether builds work.', form: false, ...go };
-    case 'checking':
-      return { title: 'Checking access…', body: '', form: false, ...go };
+      return { ...settled, note: 'Builds are open on this server. No access code is needed.' };
   }
+}
+
+/** The card's last line. The guide's step count comes from the guide itself. */
+export function welcomeNext(): string {
+  const steps = guideSteps({ library: null, access: 'locked', demo: { available: true, length: '' } }).filter((s) => s.counted).length;
+  return `Next: a ${steps}-step guide round the pages, then a recorded demo of a build if you want one.`;
 }
 
 /** The recorded build's length at the Demo's replay speed, for the Demo prompt ("about 1 minute"). */

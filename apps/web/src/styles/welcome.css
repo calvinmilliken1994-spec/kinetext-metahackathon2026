@@ -1,67 +1,222 @@
-/* Stage 10c section 1 (docs/specs/STAGE-10c-first-launch-and-fixes.md): the Welcome screen, and the New lesson
- * additions of slice A (H4: the access form at the top of Your own source; M1: a chosen page the search hides).
- * Tokens only. The Welcome sits inside the app window in place of the sidebar and workspace: one statement, two equal
- * choices, one line about what comes next. No hero art, no gradients: type, spacing and the app's own surfaces. */
+/* Stage 10c section 1 (docs/specs/STAGE-10c-first-launch-and-fixes.md): the Welcome screen (v2, Calvin 2 Nov: "more
+ * OOMPH"), and the New lesson additions of slice A (H4: the access form at the top of Your own source; M1: a chosen page
+ * the search hides). Tokens only. The Welcome sits inside the app window in place of the sidebar and workspace: the
+ * statement and one Get started card on the left, the pinned run's real figure on the right, and the page's own text
+ * drifting behind both. Motion is opacity and transform only, one 14 s loop (lib/welcomeBackdrop.ts WELCOME_CYCLE_MS). */
 
 /* ---- Welcome ------------------------------------------------------------------------------------------------------ */
 .welcome {
-  min-height: 0; overflow: auto; display: grid; align-items: center; justify-items: center;
-  padding: clamp(28px, 6vh, 96px) clamp(28px, 6vw, 128px);
+  --wl-cycle: 14s;
+  --wl-page: color-mix(in srgb, var(--ink) 6%, transparent);
+  --wl-page-lit: color-mix(in srgb, var(--accent-text) 50%, transparent);
+  --wl-page-cited: color-mix(in srgb, var(--accent-text) 24%, transparent);
+  /* the build's glow (styles/engines-c.css --ld-glow-*): the accent, the same in both themes, on the page's white figure */
+  --wl-glow: color-mix(in srgb, var(--accent) 78%, white);
+  --wl-glow-fill: color-mix(in srgb, var(--accent) 14%, transparent);
+  --wl-glow-soft: color-mix(in srgb, var(--accent) 55%, transparent);
+  --wl-glow-shadow: 0 0 0 1px rgba(255, 255, 255, 0.6), 0 0 18px 4px var(--wl-glow-soft);
+  --wl-fig-h: min(62vh, 940px);
+  position: relative; isolation: isolate; min-height: 0; overflow: hidden;
+  display: grid; align-items: center; justify-items: center;
+  padding: clamp(24px, 5vh, 80px) clamp(28px, 5vw, 120px);
   background: var(--window-bg); border-top: 1px solid var(--inset-line);
 }
-.wl-inner {
-  inline-size: min(100%, 1640px); display: grid; align-items: center;
-  grid-template-columns: minmax(0, 1.15fr) minmax(380px, 0.85fr); gap: clamp(40px, 6vw, 140px);
-}
 
-.wl-head { display: grid; gap: clamp(16px, 2.2vh, 28px); align-content: center; }
+/* The page behind: the run's own page, set large and faint, drifting slowly. Cited sentences light up in step with the
+ * figure (wl-cite, same loop and stagger as the part they belong to). */
+.wl-backdrop {
+  position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; user-select: none;
+  /* faint under the statement and the card (so nothing reads through the copy), full round the figure; soft top and bottom */
+  --wl-fade-v: linear-gradient(180deg, transparent 0, #000 12%, #000 88%, transparent 100%);
+  --wl-fade-h: linear-gradient(90deg, rgba(0, 0, 0, 0.14) 0, rgba(0, 0, 0, 0.14) 40%, #000 62%);
+  -webkit-mask-image: var(--wl-fade-v), var(--wl-fade-h);
+  -webkit-mask-composite: source-in;
+  mask-image: var(--wl-fade-v), var(--wl-fade-h);
+  mask-composite: intersect;
+}
+.welcome[data-figure="none"] .wl-backdrop { --wl-fade-h: linear-gradient(90deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)); }
+.wl-pagetext {
+  margin: 0; padding: 4vh 3.5vw; max-inline-size: none;
+  font-size: clamp(20px, 1.5vw, 40px); line-height: 1.85; letter-spacing: -0.005em; font-weight: var(--fw-medium);
+  color: var(--wl-page); text-wrap: pretty; transition: opacity 1.2s ease-out;
+}
+.wl-pagetext[data-filled="false"] { opacity: 0; }
+.wl-cite { color: var(--wl-page); }
+
+.wl-inner {
+  position: relative; z-index: 1; inline-size: min(100%, 2080px); display: grid; align-items: center;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr); gap: clamp(32px, 5vw, 128px);
+}
+.welcome[data-figure="none"] .wl-inner { grid-template-columns: minmax(0, 1fr); }
+.wl-main { display: grid; gap: clamp(24px, 4.2vh, 56px); align-content: center; min-inline-size: 0; }
+.welcome[data-figure="none"] .wl-main { grid-template-columns: minmax(0, 1.15fr) minmax(380px, 0.85fr); align-items: center; gap: clamp(40px, 6vw, 140px); }
+
+.wl-head { display: grid; gap: clamp(14px, 2vh, 26px); align-content: center; }
 .wl-title {
-  max-inline-size: 19ch; font-size: clamp(38px, 3.4vw, 88px); line-height: 1.04; letter-spacing: -0.03em;
+  max-inline-size: 15ch; font-size: clamp(38px, 3.4vw, 92px); line-height: 1.03; letter-spacing: -0.032em;
   font-weight: var(--fw-bold); color: var(--ink); text-wrap: balance;
 }
 .wl-title:focus, .wl-title:focus-visible { outline: none; }
-.wl-lede { max-inline-size: 54ch; font-size: clamp(17px, 1.1vw, 26px); line-height: 1.55; color: var(--ink-2); }
-.wl-facts { display: flex; flex-wrap: wrap; gap: 6px 0; font-size: clamp(14px, 0.8vw, 19px); color: var(--ink-3); }
+.wl-lede { max-inline-size: 52ch; font-size: clamp(16px, 1.06vw, 26px); line-height: 1.55; color: var(--ink-2); text-wrap: pretty; }
+/* Every fact starts with its dot; the line is shifted left by one dot and clipped there, so a fact that wraps to a new
+ * line never starts with a stray dot. */
+.wl-facts {
+  display: flex; flex-wrap: wrap; gap: 6px 0; font-size: clamp(14px, 0.78vw, 19px); color: var(--ink-3);
+  margin-inline-start: -1.6em; clip-path: inset(0 0 0 1.6em);
+}
 .wl-facts > span { white-space: nowrap; }
-.wl-facts > span + span::before { content: "·"; padding-inline: 10px; color: var(--line-3); }
+.wl-facts > span::before { content: "·"; display: inline-block; inline-size: 1.6em; text-align: center; color: var(--line-3); }
 
-.wl-side { display: grid; gap: 14px; }
-.wl-choices { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(12px, 1.4vh, 20px); }
-.wl-choice {
-  display: grid; grid-template-rows: auto auto 1fr; align-content: start; gap: 8px;
-  padding: clamp(20px, 1.5vw, 32px); min-block-size: clamp(176px, 19vh, 260px);
-  background: var(--panel); border: 1px solid var(--line); border-radius: 20px;
+/* ---- the Get started card: field, or, one big button, next ---- */
+.wl-card {
+  display: grid; gap: clamp(12px, 1.5vh, 18px); inline-size: min(100%, clamp(440px, 29vw, 720px));
+  padding: clamp(22px, 1.6vw, 40px); background: var(--panel); border: 1px solid var(--line); border-radius: 20px;
+  box-shadow: 0 24px 48px -32px rgba(0, 0, 0, 0.55);
 }
-.wl-choice-title { font-size: clamp(19px, 1.15vw, 27px); line-height: 1.25; color: var(--ink); }
-.wl-choice-body { max-inline-size: 46ch; font-size: clamp(15px, 0.88vw, 20px); line-height: 1.5; color: var(--ink-2); }
-.wl-choice-action { align-self: end; padding-top: 12px; }
-.welcome[data-access="checking"] .wl-choice-access .wl-choice-title { color: var(--ink-3); font-weight: var(--fw-medium); }
-
-/* Both choices end in the same pill button (dev.meta.ai's primary button), so neither reads as the lesser path. */
-.welcome .wl-go, .welcome .access-row .btn {
-  min-block-size: 44px; padding: 10px 24px; border-radius: 999px; font-size: clamp(15px, 0.88vw, 20px);
+[data-theme="light"] .wl-card { box-shadow: 0 24px 48px -30px rgba(22, 38, 64, 0.32); }
+[data-theme="light"] .wl-plate { box-shadow: 0 30px 70px -36px rgba(22, 38, 64, 0.45); }
+.wl-card-title { font-size: clamp(18px, 1.1vw, 28px); line-height: 1.25; color: var(--ink); }
+.wl-code { display: grid; gap: 8px; }
+.wl-label { font-size: clamp(14px, 0.8vw, 19px); font-weight: var(--fw-medium); color: var(--ink-2); }
+.wl-code-row { display: flex; gap: 8px; min-inline-size: 0; }
+.wl-code-row input {
+  flex: 1; min-inline-size: 0; min-block-size: clamp(46px, 4.8vh, 60px); padding: 0 16px; border-radius: 12px;
+  border: 1px solid var(--line-2); background: var(--field); color: var(--ink); font: inherit; font-size: clamp(15px, 0.9vw, 21px);
+  transition: border-color 0.15s ease-out, box-shadow 0.15s ease-out;
 }
-.welcome .wl-go { min-inline-size: 200px; }
-/* The access form's own small heading would sit over the panel heading: the panel names it instead. */
-.welcome .access-head, .welcome .access-intro:empty { display: none; }
-.welcome .access-form { gap: 8px; }
-.welcome .access-form .field-label { font-size: clamp(13px, 0.76vw, 17px); color: var(--ink-3); }
-.welcome .access-row input { min-block-size: 44px; padding: 10px 14px; border-radius: var(--r); font-size: clamp(15px, 0.88vw, 20px); }
+.wl-code-row input:hover:not(:disabled) { border-color: var(--line-3); }
+.wl-code-row input:focus-visible { outline: none; border-color: var(--focus); box-shadow: 0 0 0 3px var(--accent-soft); }
+.wl-code-row input:disabled { background: var(--panel-2); border-color: var(--line); color: var(--ink-3); cursor: not-allowed; }
+.wl-code-row input[aria-invalid="true"] { border-color: var(--bad); }
+.welcome .wl-unlock {
+  flex: none; min-block-size: clamp(46px, 4.8vh, 60px); padding: 0 clamp(18px, 1.3vw, 30px); border-radius: 999px;
+  font-size: clamp(15px, 0.9vw, 21px); font-weight: var(--fw-bold);
+}
+.wl-note { min-block-size: 1.5em; font-size: clamp(14px, 0.8vw, 19px); line-height: 1.5; color: var(--ink-3); }
+.wl-note-error { color: var(--bad); }
+.wl-status { font-size: clamp(15px, 0.9vw, 21px); line-height: 1.5; color: var(--ink-2); }
+.wl-or { display: flex; align-items: center; gap: 14px; font-size: clamp(13px, 0.76vw, 18px); color: var(--ink-3); }
+.wl-or::before, .wl-or::after { content: ""; flex: 1; border-top: 1px solid var(--line); }
+.welcome .wl-go {
+  inline-size: 100%; min-block-size: clamp(50px, 5.4vh, 68px); border-radius: 999px;
+  font-size: clamp(16px, 1vw, 23px); font-weight: var(--fw-bold);
+}
+.welcome .wl-go:not(.btn-primary) { background: var(--panel-2); border-color: var(--line-2); color: var(--ink); }
+.wl-next { font-size: clamp(13px, 0.76vw, 18px); line-height: 1.5; color: var(--ink-3); }
+.welcome[data-access="checking"] .wl-note { visibility: hidden; }
 
-.wl-next { padding-inline: 4px; font-size: clamp(14px, 0.8vw, 18px); line-height: 1.5; color: var(--ink-3); }
+/* ---- the centrepiece: the page's figure, dimmed, with the run's stored boxes and numbers ---- */
+.wl-figure { margin: 0; display: grid; gap: 14px; justify-items: center; min-inline-size: 0; }
+.wl-plate, .wl-figure-hold {
+  position: relative; inline-size: min(100%, calc(var(--wl-fig-h) * var(--wl-aspect, 1.135))); aspect-ratio: var(--wl-aspect, 1.135);
+}
+.wl-figure-hold { justify-self: center; }
+.wl-plate {
+  overflow: hidden; border-radius: 16px; background: #ffffff; border: 1px solid var(--line);
+  box-shadow: 0 30px 70px -36px rgba(0, 0, 0, 0.7);
+}
+.wl-plate > img { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: contain; user-select: none; }
+/* dimmed toward the window colour, so the glow is the brightest thing on the plate */
+.wl-plate::after { content: ""; position: absolute; inset: 0; z-index: 1; background: color-mix(in srgb, var(--window-bg) 24%, transparent); pointer-events: none; }
+.wl-missing { position: absolute; inset: 0; display: grid; place-items: center; color: #4e606f; font-size: var(--fs-14); }
+.wl-marks { position: absolute; inset: 0; z-index: 2; }
+.wl-ground, .wl-glow, .wl-num { position: absolute; opacity: 0; }
+/* Muse Spark's located box: a white dashed line (locating), which SAM's blue glow then settles on (confirmed) */
+.wl-ground {
+  box-sizing: border-box; border-radius: 6px; border: 2px dashed rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 0 1px rgba(10, 19, 23, 0.35), inset 0 0 0 1px rgba(10, 19, 23, 0.25);
+}
+/* SAM 3.1's box: the build's glow */
+.wl-glow {
+  box-sizing: border-box; border-radius: 8px; border: 2px solid var(--wl-glow); background-color: var(--wl-glow-fill);
+  box-shadow: var(--wl-glow-shadow);
+}
+.wl-num {
+  transform: translate(-50%, -50%); display: grid; place-items: center;
+  inline-size: clamp(26px, 1.6vw, 40px); block-size: clamp(26px, 1.6vw, 40px); border-radius: 7px;
+  background: #0a1317; color: #ffffff; box-shadow: 0 0 0 2px #ffffff, 0 3px 8px -2px rgba(10, 19, 23, 0.5);
+  font-size: clamp(14px, 0.85vw, 21px); font-weight: var(--fw-bold); line-height: 1; font-variant-numeric: tabular-nums;
+}
+.wl-figcap {
+  display: grid; gap: 4px; justify-items: center; justify-self: center; text-align: center; max-inline-size: 100%;
+  /* the page text drifts behind the caption: a plate in the window colour keeps it readable over a lit sentence */
+  padding: 8px 16px; border-radius: 10px; background: var(--window-bg);
+}
+.wl-figcap-run { display: flex; flex-wrap: wrap; justify-content: center; font-size: clamp(14px, 0.8vw, 19px); color: var(--ink-2); }
+.wl-figcap-run > span { white-space: nowrap; }
+.wl-figcap-run > span + span::before { content: "·"; padding-inline: 9px; color: var(--line-3); }
+.wl-figcap-credit { font-size: clamp(12px, 0.68vw, 16px); color: var(--ink-3); }
+
+/* ---- the loop: each part runs one timeline (lib/welcomeBackdrop.ts), the next one --wl-stagger later.
+ *  5% Muse's box and the page sentence light · 13.5% SAM's glow settles · 15-18% Muse's line gives way to it ·
+ *  19% the number lands · 22-27% the sentence eases to "cited" · 67-73% everything fades · quiet until the loop ends. */
+@media (prefers-reduced-motion: no-preference) {
+  .wl-inner { animation: wl-in 420ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+  .wl-pagetext { animation: wl-drift 120s ease-in-out infinite alternate; }
+  .wl-ground { animation: wl-ground var(--wl-cycle) linear calc(var(--i, 0) * var(--wl-stagger, 0ms)) infinite both; }
+  .wl-glow { animation: wl-glow var(--wl-cycle) linear calc(var(--i, 0) * var(--wl-stagger, 0ms)) infinite both; }
+  .wl-num { animation: wl-num var(--wl-cycle) linear calc(var(--i, 0) * var(--wl-stagger, 0ms)) infinite both; }
+  .wl-cite { animation: wl-cite var(--wl-cycle) linear calc(var(--i, 0) * var(--wl-stagger, 0ms)) infinite both; }
+  /* the loop waits for the figure: never boxes over an empty plate */
+  .welcome[data-img="loading"] :is(.wl-ground, .wl-glow, .wl-num, .wl-cite) { animation-play-state: paused; }
+}
+/* Reduced motion: a still frame, every stored box and number shown, the cited sentences tinted, nothing drifting. */
+@media (prefers-reduced-motion: reduce) {
+  .wl-glow, .wl-num { opacity: 1; }
+  .wl-cite { color: var(--wl-page-cited); }
+}
+
+@keyframes wl-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes wl-drift {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-0.8%, -4%, 0); }
+}
+@keyframes wl-ground {
+  0%, 5% { opacity: 0; scale: 1.06; animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+  8.5% { opacity: 0.9; scale: 1; }
+  15% { opacity: 0.9; scale: 1; animation-timing-function: ease-in; }
+  18%, 100% { opacity: 0; scale: 1; }
+}
+@keyframes wl-glow {
+  0%, 13.5% { opacity: 0; scale: 0.96; animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+  17%, 67% { opacity: 1; scale: 1; }
+  67% { animation-timing-function: ease-in; }
+  71.5%, 100% { opacity: 0; scale: 1; }
+}
+@keyframes wl-num {
+  0%, 19% { opacity: 0; translate: 0 -14px; animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+  22%, 67% { opacity: 1; translate: 0 0; }
+  67% { animation-timing-function: ease-in; }
+  71.5%, 100% { opacity: 0; translate: 0 0; }
+}
+@keyframes wl-cite {
+  0%, 5% { color: var(--wl-page); animation-timing-function: ease-out; }
+  8%, 22% { color: var(--wl-page-lit); }
+  22% { animation-timing-function: ease-in-out; }
+  27%, 67% { color: var(--wl-page-cited); }
+  67% { animation-timing-function: ease-in-out; }
+  73%, 100% { color: var(--wl-page); }
+}
+
+/* Short windows (1366 × 768 and the like): the statement takes two lines and the spacing tightens, so the card and
+ * the figure fit without scrolling. */
+@media (max-height: 860px) {
+  .welcome { padding-block: 20px; --wl-fig-h: 60vh; }
+  .wl-main { gap: 18px; }
+  .wl-head { gap: 10px; }
+  .wl-title { max-inline-size: 20ch; font-size: clamp(34px, 3.2vw, 46px); }
+  .wl-lede { font-size: 15px; }
+  .wl-card { gap: 10px; padding: 18px 20px; }
+  .wl-code-row input, .welcome .wl-unlock { min-block-size: 42px; }
+  .welcome .wl-go { min-block-size: 46px; }
+}
 
 @media (max-width: 1100px) {
-  .wl-inner { grid-template-columns: minmax(0, 1fr); gap: 28px; }
-  .wl-choices { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .wl-inner { grid-template-columns: minmax(0, 1fr); }
+  .welcome[data-figure="none"] .wl-main { grid-template-columns: minmax(0, 1fr); }
+  .wl-figure, .wl-figure-hold { display: none; }
+  .wl-card { inline-size: min(100%, 560px); }
 }
-@media (max-width: 760px) {
-  .wl-choices { grid-template-columns: minmax(0, 1fr); }
-  .wl-choice { min-block-size: 0; }
-}
-@media (prefers-reduced-motion: no-preference) {
-  .wl-inner { animation: wl-in 260ms cubic-bezier(0.16, 1, 0.3, 1) both; }
-}
-@keyframes wl-in { from { opacity: 0; } to { opacity: 1; } }
 
 /* ---- New lesson additions (slice A) ------------------------------------------------------------------------------- */
 /* H4: locked, Your own source opens on the access form; the paste form below is shown greyed, not usable. */

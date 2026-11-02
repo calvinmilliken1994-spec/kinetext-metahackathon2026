@@ -3,7 +3,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  demoLengthWords, firstLaunch, guideSteps, nextAllowed, NEXT_GUARD_MS, shouldShowWelcome, welcomeAccess, welcomeChoice,
+  demoLengthWords, firstLaunch, guideSteps, nextAllowed, NEXT_GUARD_MS, shouldShowWelcome, welcomeAccess, welcomeCard, welcomeNext, WELCOME_CREDENTIALS,
   WELCOME_STORAGE_KEY,
 } from './welcome.ts';
 import type { GuideInput } from './welcome.ts';
@@ -51,22 +51,49 @@ test('welcomeAccess: what the access half of the Welcome shows', () => {
   assert.equal(welcomeAccess({ state: 'error' }, true), 'unknown');
 });
 
-test('welcomeChoice: two equal choices when locked; Continue is the only button when the gate is off', () => {
-  const locked = welcomeChoice('locked', info());
-  assert.equal(locked.form, true);
-  assert.equal(locked.continueLabel, 'Continue read-only');
-  const open = welcomeChoice('open', null);
-  assert.equal(open.form, false);
-  assert.equal(open.title, 'Builds are open on this server');
-  assert.equal(open.continueLabel, 'Continue');
-  const off = welcomeChoice('live-off', null);
-  assert.equal(off.form, false);
-  assert.match(off.title, /Live builds are off/);
-  assert.equal(off.continueLabel, 'Continue');
-  const granted = welcomeChoice('granted', info({ granted: true, remainingUSD: 47.12 }));
-  assert.equal(granted.form, false);
-  assert.match(granted.body, /\$47\.12 of \$50 left/);
-  assert.equal(granted.continueLabel, 'Continue');
+test('welcomeCard: locked, one card with the code field (focused, Enter submits), an or, and Explore read-only', () => {
+  const c = welcomeCard('locked', info());
+  assert.equal(c.field, 'enabled');
+  assert.equal(c.placeholder, 'Enter your access code');
+  assert.equal(c.unlockPrimary, true, 'Unlock is the one blue button beside the field');
+  assert.equal(c.divider, true);
+  assert.deepEqual(c.go, { label: 'Explore read-only', primary: false });
+  assert.match(c.note, /judges/i);
+});
+
+test('welcomeCard: this local server (gate off, live builds off) keeps the same layout with the field disabled and says why', () => {
+  const c = welcomeCard('live-off', null);
+  assert.equal(c.field, 'disabled');
+  assert.equal(c.note, 'Live builds are off on this server.');
+  assert.equal(c.unlockPrimary, false);
+  assert.equal(c.divider, true);
+  assert.deepEqual(c.go, { label: 'Explore read-only', primary: true }, 'the one thing to do is the blue button');
+});
+
+test('welcomeCard: builds open with no gate: no field, says so, and Continue (never "read-only" when builds work)', () => {
+  const c = welcomeCard('open', null);
+  assert.equal(c.field, 'none');
+  assert.match(c.note, /Builds are open on this server/);
+  assert.equal(c.divider, false);
+  assert.deepEqual(c.go, { label: 'Continue', primary: true });
+});
+
+test('welcomeCard: granted shows the dollars left and a primary Continue', () => {
+  const c = welcomeCard('granted', info({ granted: true, remainingUSD: 47.12 }));
+  assert.equal(c.field, 'none');
+  assert.equal(c.note, 'Judge access is on: $47.12 of $50 left.');
+  assert.deepEqual(c.go, { label: 'Continue', primary: true });
+  assert.equal(welcomeCard('granted', null).note, 'Judge access is on in this browser.');
+});
+
+test('welcomeCard: while checking or when access is unknown, the field waits disabled and read-only still works', () => {
+  for (const w of ['checking', 'unknown'] as const) {
+    const c = welcomeCard(w, null);
+    assert.equal(c.field, 'disabled', w);
+    assert.deepEqual(c.go, { label: 'Explore read-only', primary: true }, w);
+  }
+  assert.equal(welcomeCard('checking', null).placeholder, 'Checking access…');
+  assert.match(welcomeCard('unknown', null).note, /could not be checked/);
 });
 
 test('demoLengthWords: the recorded build at the Demo speed, in plain words', () => {
@@ -129,4 +156,28 @@ test('L5: Next is ignored for a moment after the step changed (a click meant for
   assert.equal(nextAllowed(1000, 1000 + NEXT_GUARD_MS - 1), false);
   assert.equal(nextAllowed(1000, 1000 + NEXT_GUARD_MS), true);
   assert.ok(NEXT_GUARD_MS >= 300 && NEXT_GUARD_MS <= 500);
+});
+
+test('welcomeNext: the one line on what comes next counts the guide’s own steps', () => {
+  const steps = guideSteps({ ...base, access: 'locked' }).filter((s) => s.counted).length;
+  assert.equal(welcomeNext(), `Next: a ${steps}-step guide round the pages, then a recorded demo of a build if you want one.`);
+});
+
+test('credential descriptors: the field\'s words and its submit action come from one descriptor (access code wired today)', () => {
+  const a = WELCOME_CREDENTIALS.accessCode;
+  assert.deepEqual(
+    { label: a.label, placeholder: a.placeholder, button: a.button, submit: a.submit },
+    { label: 'Judge access code', placeholder: 'Enter your access code', button: 'Unlock', submit: 'access' },
+  );
+  const k = WELCOME_CREDENTIALS.metaKey;
+  assert.deepEqual(
+    { label: k.label, placeholder: k.placeholder, button: k.button, helper: k.helper, submit: k.submit },
+    { label: 'Meta API key', placeholder: 'Paste your Meta API key', button: 'Turn on live builds', helper: 'Kept on this computer, used only by your local server', submit: 'meta-key' },
+  );
+  assert.equal(welcomeCard('locked', info()).credential, a, 'the access code is the default');
+  const c = welcomeCard('locked', info(), k);
+  assert.equal(c.credential, k);
+  assert.equal(c.placeholder, 'Paste your Meta API key');
+  assert.equal(c.note, 'Kept on this computer, used only by your local server');
+  assert.equal(welcomeCard('live-off', null, k).note, 'Live builds are off on this server.', 'state lines do not change with the descriptor');
 });
