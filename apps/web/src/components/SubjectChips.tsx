@@ -10,8 +10,8 @@ interface Props {
   onChange: (subject: SubjectKey | null) => void;
   /** Accessible name of the group, e.g. "Filter pages by subject". */
   label: string;
-  /** What is counted, for screen readers: 'page' or 'run'. */
-  unit: 'page' | 'run';
+  /** What is counted, for screen readers: 'page', 'lesson' or 'run'. */
+  unit: 'page' | 'lesson' | 'run';
   /** A quiet note after the chips (e.g. "+ 2 teacher texts", counted apart from the library); '' or absent for none. */
   note?: string;
 }

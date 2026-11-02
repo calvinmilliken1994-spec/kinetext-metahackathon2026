@@ -1,5 +1,6 @@
 import { useId } from 'react';
 import type { CheckSection } from '../lib/lessonJob.ts';
+import { CHECKS_INTRO } from '../lib/pageCopy.ts';
 import { Mark } from './icons.tsx';
 
 /** lessonJob.ts's own plain sentence for a part held back today (not checker text, so it may show). */
@@ -19,7 +20,7 @@ export function LessonChecksPanel({ sections }: { sections: readonly CheckSectio
         <h3 id={headingId} className="section-title">Checks behind this lesson</h3>
         <span className={`card-status ${allPassed ? 'tone-ok' : 'tone-bad'}`}>{passed} of {total} passed</span>
       </div>
-      <p className="muted small">Code compares every quote with the page and recomputes every number. Open a part to see what it checked.</p>
+      <p className="muted small">{CHECKS_INTRO}</p>
       {sections.map((sec) => (
         <details key={sec.key} className="check-group" open={sec.passed < sec.total}>
           <summary>

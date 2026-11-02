@@ -1,0 +1,80 @@
+/* Stage 10c section 1 (docs/specs/STAGE-10c-first-launch-and-fixes.md): the Welcome screen, and the New lesson
+ * additions of slice A (H4: the access form at the top of Your own source; M1: a chosen page the search hides).
+ * Tokens only. The Welcome sits inside the app window in place of the sidebar and workspace: one statement, two equal
+ * choices, one line about what comes next. No hero art, no gradients: type, spacing and the app's own surfaces. */
+
+/* ---- Welcome ------------------------------------------------------------------------------------------------------ */
+.welcome {
+  min-height: 0; overflow: auto; display: grid; align-items: center; justify-items: center;
+  padding: clamp(28px, 6vh, 96px) clamp(28px, 6vw, 128px);
+  background: var(--window-bg); border-top: 1px solid var(--inset-line);
+}
+.wl-inner {
+  inline-size: min(100%, 1640px); display: grid; align-items: center;
+  grid-template-columns: minmax(0, 1.15fr) minmax(380px, 0.85fr); gap: clamp(40px, 6vw, 140px);
+}
+
+.wl-head { display: grid; gap: clamp(16px, 2.2vh, 28px); align-content: center; }
+.wl-title {
+  max-inline-size: 19ch; font-size: clamp(38px, 3.4vw, 88px); line-height: 1.04; letter-spacing: -0.03em;
+  font-weight: var(--fw-bold); color: var(--ink); text-wrap: balance;
+}
+.wl-title:focus, .wl-title:focus-visible { outline: none; }
+.wl-lede { max-inline-size: 54ch; font-size: clamp(17px, 1.1vw, 26px); line-height: 1.55; color: var(--ink-2); }
+.wl-facts { display: flex; flex-wrap: wrap; gap: 6px 0; font-size: clamp(14px, 0.8vw, 19px); color: var(--ink-3); }
+.wl-facts > span { white-space: nowrap; }
+.wl-facts > span + span::before { content: "·"; padding-inline: 10px; color: var(--line-3); }
+
+.wl-side { display: grid; gap: 14px; }
+.wl-choices { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(12px, 1.4vh, 20px); }
+.wl-choice {
+  display: grid; grid-template-rows: auto auto 1fr; align-content: start; gap: 8px;
+  padding: clamp(20px, 1.5vw, 32px); min-block-size: clamp(176px, 19vh, 260px);
+  background: var(--panel); border: 1px solid var(--line); border-radius: 20px;
+}
+.wl-choice-title { font-size: clamp(19px, 1.15vw, 27px); line-height: 1.25; color: var(--ink); }
+.wl-choice-body { max-inline-size: 46ch; font-size: clamp(15px, 0.88vw, 20px); line-height: 1.5; color: var(--ink-2); }
+.wl-choice-action { align-self: end; padding-top: 12px; }
+.welcome[data-access="checking"] .wl-choice-access .wl-choice-title { color: var(--ink-3); font-weight: var(--fw-medium); }
+
+/* Both choices end in the same pill button (dev.meta.ai's primary button), so neither reads as the lesser path. */
+.welcome .wl-go, .welcome .access-row .btn {
+  min-block-size: 44px; padding: 10px 24px; border-radius: 999px; font-size: clamp(15px, 0.88vw, 20px);
+}
+.welcome .wl-go { min-inline-size: 200px; }
+/* The access form's own small heading would sit over the panel heading: the panel names it instead. */
+.welcome .access-head, .welcome .access-intro:empty { display: none; }
+.welcome .access-form { gap: 8px; }
+.welcome .access-form .field-label { font-size: clamp(13px, 0.76vw, 17px); color: var(--ink-3); }
+.welcome .access-row input { min-block-size: 44px; padding: 10px 14px; border-radius: var(--r); font-size: clamp(15px, 0.88vw, 20px); }
+
+.wl-next { padding-inline: 4px; font-size: clamp(14px, 0.8vw, 18px); line-height: 1.5; color: var(--ink-3); }
+
+@media (max-width: 1100px) {
+  .wl-inner { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .wl-choices { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 760px) {
+  .wl-choices { grid-template-columns: minmax(0, 1fr); }
+  .wl-choice { min-block-size: 0; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .wl-inner { animation: wl-in 260ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+}
+@keyframes wl-in { from { opacity: 0; } to { opacity: 1; } }
+
+/* ---- New lesson additions (slice A) ------------------------------------------------------------------------------- */
+/* H4: locked, Your own source opens on the access form; the paste form below is shown greyed, not usable. */
+.nl-own-gate { padding: 16px 18px; border: 1px solid var(--accent-line); border-radius: var(--r-l); background: var(--panel); }
+.nl-own-outline { position: relative; opacity: 0.45; filter: saturate(0.4); pointer-events: none; user-select: none; }
+.nl-own-outline-note { font-size: var(--fs-14); color: var(--ink-3); }
+.nl-build-own-note { font-size: var(--fs-14); line-height: 1.5; color: var(--ink-2); }
+
+/* M1: the library list scrolls in its own box on two-column layouts (its height is set from the page column in
+ * NewLessonPage), so scrolling to the chosen page never moves the paths and the search away. */
+@media (min-width: 1101px) {
+  .nl-library .nl-pages { overflow-y: auto; overscroll-behavior: contain; padding-right: 6px; align-content: start; }
+}
+/* M1: the chosen page is outside the current search or subject. */
+.nl-outside { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; font-size: var(--fs-14); color: var(--ink-2); }
+.nl-outside .link-btn { font-size: var(--fs-14); }

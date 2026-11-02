@@ -14,9 +14,20 @@
 }
 .page-results .page-head { padding-bottom: 8px; }
 
+/* The in-page index: seven short links under the title (the page is long). Plain text buttons, one hairline below. */
+.rs-index { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 20px; padding: 12px 0 4px; }
+.rs-index-label { font-size: var(--fs-14); color: var(--ink-3); }
+.rs-index ul { display: flex; flex-wrap: wrap; gap: 4px 20px; }
+.rs-index-btn {
+  padding: 4px 0; border: 0; background: none; color: var(--accent-text); font: inherit; font-size: var(--fs-14); font-weight: var(--fw-medium); cursor: pointer;
+}
+.rs-index-btn:hover { text-decoration: underline; text-underline-offset: 3px; }
+.rs-index-btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: var(--r); }
+.rs-section > h2:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; border-radius: var(--r); }
+
 /* ---- sections ---- */
 .rs-section { display: grid; gap: 14px; padding: 40px 0 8px; border-top: 1px solid var(--line); min-width: 0; }
-.page-head + .rs-section { border-top: 0; padding-top: 20px; }
+.page-results .rs-index + .rs-section { border-top: 0; padding-top: 24px; }
 .rs-section > h2 { font-size: var(--fs-20); color: var(--ink); line-height: 1.3; }
 .rs-section > h2:focus { outline: none; }
 .rs-prose { font-size: var(--fs-16); line-height: 1.55; color: var(--ink-2); max-width: 74ch; }
@@ -43,6 +54,7 @@
 }
 .rs-hl-detail { font-size: var(--fs-14); color: var(--ink-2); font-variant-numeric: tabular-nums; }
 .rs-hl-track { position: relative; height: 10px; margin-top: 14px; border-radius: 5px; background: var(--panel-3); }
+.rs-scale { margin-top: -6px; }
 .rs-hl-fill { position: absolute; inset: 0 auto 0 0; border-radius: 5px; background: var(--rs-first); }
 
 /* ---- tables ---- */
@@ -146,7 +158,10 @@
 /* ---- sizes ---- */
 @media (min-width: 2200px) {
   .page-results { max-width: 1440px; }
-  .rs-hl-grid, .rs-compare { max-width: 1120px; }
+  /* the same column as the funnel and subject tables (UX review 2: they used about 60-78% of it) */
+  .rs-hl-grid, .rs-compare { max-width: none; }
+  .rs-retest { max-width: 880px; }
+  .rs-files { max-width: none; }
 }
 @media (max-width: 1440px) {
   .rs-hl-grid { gap: 20px 48px; }

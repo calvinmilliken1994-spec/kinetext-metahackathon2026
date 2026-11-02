@@ -5,13 +5,15 @@ import type { CiteProps } from './Explanations.tsx';
 import { EventEvidence } from './EventEvidence.tsx';
 import { OrderBoard } from './OrderBoard.tsx';
 import type { BoardResult } from './OrderBoard.tsx';
+import { TIMELINE_ORDER_HINT } from '../lib/orderReveal.ts';
 
 interface Props {
   events: readonly TimelineEvent[];
   /** Seed for the starting shuffle (the spec id), so a lecture demo starts the same way every time. */
   seed: string;
-  /** Dates and quotes are shown on the cards once the order was checked (or the teacher revealed the timeline). */
+  /** Dates and quotes are shown on the cards once the order is revealed (or the teacher revealed the timeline). */
   revealed: boolean;
+  /** Reveal the dates and the timeline: the order was checked right, or the learner asked for the page's order. */
   onCheck: () => void;
   cite: CiteProps;
 }
@@ -43,7 +45,7 @@ export function OrderActivity({ events, seed, revealed, onCheck, cite }: Props) 
       heading="Put these events in order"
       hint={
         <>
-          Earliest first. Drag a card, or use its up and down arrows. The dates stay hidden until you check.
+          {TIMELINE_ORDER_HINT}
           {ties && ' Some dates are less exact than others (for example “1776” and “July 4, 1776”), so either order is accepted between those events.'}
         </>
       }
@@ -56,7 +58,7 @@ export function OrderActivity({ events, seed, revealed, onCheck, cite }: Props) 
         </>
       )}
       grade={grade}
-      onCheck={onCheck}
+      onReveal={onCheck}
       variant="track"
     />
   );

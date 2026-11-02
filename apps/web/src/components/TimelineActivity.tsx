@@ -38,7 +38,7 @@ export function TimelineActivity({ spec, cite, repairBadge, provenance, presenta
         : (
           <section className="card timeline-hidden" aria-label="Timeline">
             <h3>{scenario.subjectLabel}</h3>
-            <p className="muted small">The timeline stays hidden until you check your order, so it does not give the answer away.</p>
+            <p className="muted small">The timeline stays hidden until your order is right, so it does not give the answer away.</p>
             <button type="button" className="btn" onClick={() => setRevealed(true)}>Reveal the timeline now</button>
           </section>
         )}

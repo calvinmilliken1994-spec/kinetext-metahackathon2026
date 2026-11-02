@@ -4,7 +4,7 @@
 import { useId, useMemo, useState } from 'react';
 import type { JobSummary, SourceMeta } from '../api.ts';
 import type { Loadable } from '../hooks.ts';
-import { browseLessons } from '../lib/browse.ts';
+import { browseLessons, chipUnit, lessonsLede, pageBreakdown, partsText, rowsCountText } from '../lib/browse.ts';
 import type { LessonScope } from '../lib/browse.ts';
 import { reviewDate } from '../lib/reviewState.ts';
 import { runLine } from '../lib/runs.ts';
@@ -34,13 +34,6 @@ const SCOPES: { id: LessonScope; label: string }[] = [
   { id: 'all', label: 'All runs' },
 ];
 
-/** What the parts column says: "2 of 3 parts" for a lesson, the activity for a classic run. */
-function partsText(j: JobSummary): string {
-  const l = j.lesson;
-  if (l !== undefined && l.componentsPlanned > 0) return `${l.componentsPublished} of ${l.componentsPlanned} parts`;
-  return j.flow === 'activity' ? 'One activity' : '';
-}
-
 export function AllLessonsPage(p: AllLessonsPageProps) {
   const uid = useId();
   const [query, setQuery] = useState('');
@@ -51,9 +44,9 @@ export function AllLessonsPage(p: AllLessonsPageProps) {
   const rows = useMemo(() => browseLessons(all, p.sourcesById, { query, subject: p.subjectFilter, scope }), [all, p.sourcesById, query, p.subjectFilter, scope]);
   const counts = useMemo(() => subjectCounts(inScope, (r) => r.subject), [inScope]);
   const finished = useMemo(() => all.filter((j) => j.status === 'succeeded'), [all]);
-  const pages = useMemo(() => new Set(finished.map((j) => j.sourceId)).size, [finished]);
+  // 104 pages against the library's 97: the rest are teacher texts and pages since retired (UX review 2, M5).
+  const breakdown = useMemo(() => pageBreakdown(all, p.sourcesById), [all, p.sourcesById]);
   const shown = rows.slice(0, limit);
-  const unit = scope === 'all' ? 'run' : 'lesson';
 
   return (
     <div className="page page-lessons" data-testid="all-lessons-page">
@@ -61,7 +54,7 @@ export function AllLessonsPage(p: AllLessonsPageProps) {
         <h1 className="page-title" tabIndex={-1} data-view-title>All lessons</h1>
         <p className="page-lede">
           {p.jobs.state === 'ready'
-            ? `${finished.length.toLocaleString('en-US')} finished lessons and activities from ${pages} pages. Open one to try its parts, present it, or see how it was built and checked.`
+            ? lessonsLede(finished.length, breakdown)
             : 'Every finished lesson on this server.'}
         </p>
       </header>
@@ -80,7 +73,7 @@ export function AllLessonsPage(p: AllLessonsPageProps) {
         </div>
       </div>
       {p.jobs.state === 'ready' && (
-        <SubjectChips counts={counts} total={inScope.length} active={p.subjectFilter} onChange={(s) => { p.onSubjectFilter(s); setLimit(PAGE); }} label="Filter lessons by subject" unit="run" />
+        <SubjectChips counts={counts} total={inScope.length} active={p.subjectFilter} onChange={(s) => { p.onSubjectFilter(s); setLimit(PAGE); }} label="Filter lessons by subject" unit={chipUnit(scope)} />
       )}
 
       {p.jobs.state === 'loading' && <p className="muted">Loading lessons…</p>}
@@ -88,10 +81,7 @@ export function AllLessonsPage(p: AllLessonsPageProps) {
       {p.jobs.state === 'ready' && (
         <>
           <p id={`${uid}-count`} className="nl-count" aria-live="polite">
-            {rows.length === 0 ? `No ${unit}s` : `${rows.length.toLocaleString('en-US')} ${rows.length === 1 ? unit : `${unit}s`}`}
-            {p.subjectFilter !== null ? ` in ${subjectLabel(p.subjectFilter)}` : ''}
-            {query.trim() !== '' ? ` matching “${query.trim()}”` : ''}
-            {scope === 'latest' && rows.length > 0 ? ' · the newest of each page' : ''}
+            {rowsCountText({ scope, count: rows.length, subjectLabel: p.subjectFilter === null ? null : subjectLabel(p.subjectFilter), query })}
           </p>
           {rows.length === 0 ? (
             <p className="nl-empty">

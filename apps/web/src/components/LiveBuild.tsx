@@ -3,13 +3,14 @@
 // it up; a planned part's frame keeps its work log over a faint preview of the part's shape; a finished part keeps a
 // one-line trace. Counters read a job clock (live: wall time since the job's first event; replay: the replay clock), so
 // nothing here ever waits on a timer to look busy.
-import { useEffect, useId, useRef, useState } from 'react';
+import { useContext, useEffect, useId, useRef, useState } from 'react';
 import type { CSSProperties, ReactNode, RefObject } from 'react';
 import type { LogLine, PartBuild, PartPreview, PreviewPhase, StripState, TraceStep } from '../lib/liveBuild.ts';
 import { arrivals, closingBeat, figureNote, followFocus, formatElapsed, previewOf, previewPhase, progressFacts, reserveHeight, stagger } from '../lib/liveBuild.ts';
 import { REPLAY_LABEL } from '../lib/replay.ts';
 import { scrollTopToReveal } from '../lib/scroll.ts';
 import type { PendingSlot } from '../lib/lesson.ts';
+import { FigureSrcContext } from './LabelDiagramView.tsx';
 import { Mark } from './icons.tsx';
 import { IconPresent } from './presentation/icons.tsx';
 
@@ -162,7 +163,8 @@ function LogMark({ line }: { line: LogLine }) {
 function stateWord(build: PartBuild, slot: PendingSlot): string {
   const open = build.lines.find((l) => l.open);
   if (slot.state === 'queued' || open?.kind === 'queued') return 'Waiting';
-  if (open?.kind === 'outlining') return 'Outlining';
+  // Stage 10c H2: Muse Spark locates the parts first, then SAM 3.1 confirms them
+  if (open?.kind === 'outlining') return open.phase === 'locating' ? 'Locating' : open.phase === 'confirming' ? 'Confirming' : 'Outlining';
   if (open?.kind === 'writing') return open.revision > 1 ? `Reworking · revision ${open.revision}` : 'Writing';
   if (build.lines.some((l) => l.kind === 'checks-passed')) return 'Checked';
   return 'Checking';
@@ -175,8 +177,36 @@ const width = (i: number): string => `${WIDTHS[i % WIDTHS.length] ?? 70}%`;
 const range = (n: number): number[] => Array.from({ length: n }, (_, i) => i);
 const Bar = ({ i, className = 'pv-bar' }: { i: number; className?: string }) => <span className={className} style={{ inlineSize: width(i) }} />;
 
-/** What SAM is doing for a label diagram still being built (lib figureNote), shown in the figure frame. */
+/** What Muse and SAM are doing for a label diagram still being built (lib figureNote), shown in the figure frame. */
 type FigureNote = ReturnType<typeof figureNote>;
+
+/**
+ * The source figure, dimmed, filling the frame's plate while the segment stage runs (Stage 10c H2): the glow that lands
+ * on arrival then lands on a picture the viewer has already seen. A figure that cannot be read leaves the plain plate.
+ */
+function DimmedFigure({ figureId }: { figureId: string }) {
+  const srcOf = useContext(FigureSrcContext);
+  const [failed, setFailed] = useState(false);
+  if (failed) return null;
+  return <img className="pv-figure-img" src={srcOf(figureId)} alt="" aria-hidden="true" draggable={false} onError={() => setFailed(true)} />;
+}
+
+/** The plate's caption: who is doing what on the figure right now, with Muse's finished half kept above SAM's. */
+function FigureCaption({ note }: { note: NonNullable<FigureNote> }) {
+  return (
+    <span className="pv-caption pv-sam" data-phase={note.phase}>
+      {note.muse !== undefined && note.phase === 'confirming'
+        ? <span className="pv-sam-lines">
+          <span className="pv-sam-done"><strong>{note.muse.actor}</strong> {note.muse.text}</span>
+          <span><strong>{note.actor}</strong> {note.text}</span>
+        </span>
+        : <span>
+          {note.muse !== undefined && <><strong>{note.muse.actor}</strong> {note.muse.text} · </>}
+          <strong>{note.actor}</strong> {note.text}
+        </span>}
+    </span>
+  );
+}
 
 function PreviewBody({ p, note = null }: { p: PartPreview; note?: FigureNote }): ReactNode {
   switch (p.kind) {
@@ -225,16 +255,11 @@ function PreviewBody({ p, note = null }: { p: PartPreview; note?: FigureNote }):
     case 'figure':
       return (
         <div className="pv-figure">
-          {/* Once SAM is called, the frame says so (working cue while the call is open); no region is drawn before the part arrives. */}
-          <div className="pv-box pv-plate" data-sam={note === null ? undefined : note.working ? 'working' : 'done'}>
-            {note === null
-              ? <span className="pv-caption">The page’s figure</span>
-              : <span className="pv-caption pv-sam">
-                <span>
-                  {note.muse !== undefined && <><strong>{note.muse.actor}</strong> {note.muse.text} · </>}
-                  <strong>{note.actor}</strong> {note.text}
-                </span>
-              </span>}
+          {/* Once the segment stage starts, the frame shows the page's figure dimmed and says who is working on it (Muse
+              locating, then SAM confirming; working cue while a call is open). No region is drawn before the part arrives. */}
+          <div className="pv-box pv-plate" data-sam={note === null ? undefined : note.working ? 'working' : 'done'} data-stage={note?.phase}>
+            {note?.figureId !== undefined && <DimmedFigure figureId={note.figureId} />}
+            {note === null ? <span className="pv-caption">The page’s figure</span> : <FigureCaption note={note} />}
           </div>
           <div className="pv-col pv-chips">
             <Bar i={0} />

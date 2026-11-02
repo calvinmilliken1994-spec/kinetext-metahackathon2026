@@ -46,9 +46,11 @@
 .sb-label { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .sb-badge { flex: none; font-size: var(--fs-12); font-weight: var(--fw-medium); color: var(--accent-text); }
 
-/* The open lesson, listed under All lessons: indented to the labels, its title on up to two lines. */
-.sb-item-lesson { align-items: flex-start; padding-top: 7px; padding-bottom: 7px; font-size: var(--fs-14); }
+/* The open lesson, listed under All lessons: indented to the labels, its title on up to two lines. A badge ("Replay")
+ * sits on its own line under the title, so it never squeezes the title into a second line (UX review 2, L4). */
+.sb-item-lesson { display: grid; grid-template-columns: 18px minmax(0, 1fr); align-items: start; padding-top: 7px; padding-bottom: 7px; font-size: var(--fs-14); }
 .sb-item-lesson .sb-label { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; }
+.sb-item-lesson .sb-badge { grid-column: 2; justify-self: start; padding-top: 0; }
 .sb-dot { position: relative; flex: none; width: 18px; height: 18px; }
 .sb-dot::before {
   content: ""; position: absolute; left: 6px; top: 6px; width: 6px; height: 6px; border-radius: 50%;
@@ -57,7 +59,6 @@
 /* It is marked by its accent dot and weight, not a second filled row: the filled row is the view on screen. */
 .sb-item-lesson[aria-current="true"] { color: var(--ink); font-weight: var(--fw-medium); }
 .sb-item-lesson[aria-current="true"] .sb-dot::before { background: var(--accent-text); }
-.sb-item-lesson .sb-badge { padding-top: 1px; }
 
 /* Source page is a toggle: a small switch says whether the page is shown beside the lesson. */
 .sb-switch {
@@ -154,7 +155,7 @@ input[type="search"]::-webkit-search-cancel-button { cursor: pointer; }
 .nl-row.is-on { background: var(--accent-soft); border-color: var(--accent-line); }
 .nl-row:has(input:focus-visible) { outline: 2px solid var(--focus); outline-offset: -2px; }
 .nl-row-title { font-size: var(--fs-14); font-weight: var(--fw-medium); line-height: 1.35; color: var(--ink); }
-.nl-row-meta { display: flex; flex-wrap: wrap; gap: 0 10px; font-size: var(--fs-12); color: var(--ink-3); }
+.nl-row-meta { display: flex; flex-wrap: wrap; gap: 0 10px; font-size: var(--fs-14); color: var(--ink-3); }
 .nl-row-lessons { color: var(--ink-2); }
 .nl-row.is-on .nl-row-meta { color: var(--ink-2); }
 
@@ -172,7 +173,7 @@ input[type="search"]::-webkit-search-cancel-button { cursor: pointer; }
 
 .nl-preview { display: grid; gap: 8px; padding: 18px 20px; min-width: 0; }
 .nl-preview.is-empty { gap: 4px; }
-.nl-preview-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 8px; font-size: var(--fs-12); color: var(--ink-3); }
+.nl-preview-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 8px; font-size: var(--fs-14); color: var(--ink-3); }
 .nl-preview-meta a { display: inline-flex; align-items: center; gap: 3px; }
 .nl-preview-title { font-size: var(--fs-20); line-height: 1.3; color: var(--ink); }
 .nl-preview.is-empty .nl-preview-title { font-size: var(--fs-16); color: var(--ink-2); }
@@ -201,6 +202,10 @@ input[type="search"]::-webkit-search-cancel-button { cursor: pointer; }
 .access-row .btn { flex: none; }
 .access-form [aria-invalid="true"] { border-color: var(--bad); }
 
+/* ---- subject filter chips on the pages (UX review 2, L6): 30 px tall at 1080p, not the 24 px of the runs drawer ---- */
+.page .subject-chips { gap: 8px; }
+.page .subject-chip { min-height: 30px; align-items: center; padding: 3px 12px; font-size: var(--fs-14); line-height: 1.4; }
+
 /* ---- All lessons ---- */
 .ll-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
 .ll-search { flex: 1 1 320px; max-width: 520px; }
@@ -216,7 +221,7 @@ input[type="search"]::-webkit-search-cancel-button { cursor: pointer; }
   display: grid; align-items: baseline; gap: 16px;
   grid-template-columns: minmax(0, 2.6fr) minmax(0, 1fr) minmax(0, 1.1fr) minmax(0, 0.9fr) minmax(0, 1fr);
 }
-.ll-head { padding: 0 12px 8px; border-bottom: 1px solid var(--line); font-size: var(--fs-12); font-weight: var(--fw-medium); color: var(--ink-3); }
+.ll-head { padding: 0 12px 8px; border-bottom: 1px solid var(--line); font-size: var(--fs-14); font-weight: var(--fw-medium); color: var(--ink-3); }
 .ll-rows > li { border-bottom: 1px solid var(--line); }
 .ll-row {
   width: 100%; padding: 11px 12px; border: 0; border-radius: var(--r-s); background: transparent; color: var(--ink-2);
@@ -226,7 +231,7 @@ input[type="search"]::-webkit-search-cancel-button { cursor: pointer; }
 .ll-row:focus-visible { outline-offset: -2px; }
 .ll-row.is-open { background: var(--accent-soft); }
 .ll-title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; min-width: 0; color: var(--ink); font-weight: var(--fw-medium); }
-.ll-open { font-size: var(--fs-12); font-weight: var(--fw-medium); color: var(--accent-text); white-space: nowrap; }
+.ll-open { font-size: var(--fs-14); font-weight: var(--fw-medium); color: var(--accent-text); white-space: nowrap; }
 .ll-cell { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ll-when { text-align: right; font-variant-numeric: tabular-nums; }
 .ll-more { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding-top: 16px; }
@@ -257,6 +262,8 @@ input[type="search"]::-webkit-search-cancel-button { cursor: pointer; }
 .how-can li { position: relative; padding-left: 18px; font-size: var(--fs-16); line-height: 1.55; color: var(--ink-2); }
 .how-can li::before { content: ""; position: absolute; left: 5px; top: calc(0.775em - 2.5px); width: 5px; height: 5px; border-radius: 50%; background: var(--ink-3); }
 .how-state { font-size: var(--fs-14); color: var(--ink-2); }
+.how-steps p.how-step-link { grid-column: 2; margin-top: 2px; }
+.how-step-link .link-btn { display: inline-flex; align-items: center; gap: 5px; font-size: var(--fs-16); }
 .how-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; }
 
 /* ---- Review and publish / Results (until their slice lands) ---- */

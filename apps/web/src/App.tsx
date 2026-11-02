@@ -34,9 +34,10 @@ import { AllLessonsPage } from './components/AllLessonsPage.tsx';
 import { HowItWorksPage } from './components/HowItWorksPage.tsx';
 import { ResultsPage } from './components/ResultsPage.tsx';
 import { ReviewPage } from './components/ReviewPage.tsx';
+import { LessonSkeleton } from './components/PendingCard.tsx';
 import { ACCESS_INPUT_ID } from './components/AccessForm.tsx';
-import { navTarget, searchForView, sidebarSections, VIEW_TITLES, viewFromSearch } from './lib/navigation.ts';
-import type { MainView, NavId } from './lib/navigation.ts';
+import { navTarget, pathFromSearch, searchForPath, searchForView, sidebarSections, VIEW_TITLES, viewFromSearch } from './lib/navigation.ts';
+import type { LessonPath, MainView, NavId } from './lib/navigation.ts';
 import { accessFooter } from './lib/access.ts';
 import { SourcePanel, SourceTab } from './components/SourcePanel.tsx';
 import type { Flash } from './components/SourcePanel.tsx';
@@ -65,9 +66,14 @@ import { replayRequest } from './lib/replay.ts';
 import { LAST_SHOWN_KEY, openingFor } from './lib/demoPins.ts';
 import { shownSearch } from './lib/jobUrl.ts';
 import type { ReplayRequest } from './lib/replay.ts';
-import { replayAfterTourClose, shouldAutoStart, tourReady, tourRequest, tourSignals, TOUR_JOB_ID, TOUR_STORAGE_KEY, watchAfterTourClose } from './lib/onboarding.ts';
+import { replayAfterTourClose, tourReady, tourRequest, tourSignals, TOUR_JOB_ID, TOUR_STORAGE_KEY, watchAfterTourClose } from './lib/onboarding.ts';
 import type { TourOutcome, TourStep } from './lib/onboarding.ts';
-import { Onboarding } from './components/Onboarding.tsx';
+import { Onboarding, PageGuide } from './components/Onboarding.tsx';
+import { WelcomeScreen } from './components/WelcomeScreen.tsx';
+import { demoLengthWords, firstLaunch, guideSteps, welcomeAccess, WELCOME_STORAGE_KEY } from './lib/welcome.ts';
+import type { GuideAction, GuideStep } from './lib/welcome.ts';
+import './styles/welcome.css';
+import { AI_SUMMARY_PHRASE } from './lib/pageCopy.ts';
 import { IconPresent } from './components/presentation/icons.tsx';
 import type { SourceRef } from '../../../packages/contracts/index.ts';
 
@@ -101,9 +107,10 @@ function focusLessonStart(main: HTMLElement): void {
   (title ?? main).focus({ preventScroll: true });
 }
 
-function readTourOutcome(): string | null {
-  try { return localStore()?.getItem(TOUR_STORAGE_KEY) ?? null; } catch { return null; }
-}
+/** Stage 10c: the first launch, decided once per page load (lib/welcome.ts): the Welcome, or a forced Demo, or neither. */
+const FIRST_LAUNCH = typeof window === 'undefined'
+  ? { welcome: false, demo: false }
+  : firstLaunch({ welcome: (() => { try { return localStore()?.getItem(WELCOME_STORAGE_KEY) ?? null; } catch { return null; } })(), search: window.location.search });
 
 export function App() {
   const { health, down, refresh: refreshHealth } = useHealth();
@@ -157,6 +164,26 @@ export function App() {
   }, []);
   // Stage 10: the judge access gate (GET /api/access; a 404 from an older API means the gate is off).
   const { access, refresh: refreshAccess, set: setAccess } = useAccess();
+  // Stage 10c: the first launch. The Welcome screen, then the page guide (it moves the main view itself), then its Demo
+  // prompt. New lesson can be asked to open on a path (the Demo's "Try your own page", ?path=own).
+  const [welcomeOn, setWelcomeOn] = useState(FIRST_LAUNCH.welcome);
+  const [guiding, setGuiding] = useState(false);
+  const [guideRun, setGuideRun] = useState(0);
+  const [pathReq, setPathReq] = useState<{ path: LessonPath; n: number } | null>(() => {
+    const p = typeof window === 'undefined' ? null : pathFromSearch(window.location.search);
+    return p === null ? null : { path: p, n: 0 };
+  });
+  const openNew = useCallback((path: LessonPath) => {
+    const search = searchForPath(searchForView(window.location.search, 'new'), path);
+    if (search !== window.location.search) window.history.pushState(window.history.state, '', `${window.location.pathname}${search}${window.location.hash}`);
+    setDrawer(null);
+    setPathReq({ path, n: Date.now() });
+    setView('new');
+  }, []);
+  const onPathChange = useCallback((path: LessonPath) => {
+    const search = searchForPath(window.location.search, path);
+    if (search !== window.location.search) window.history.replaceState(window.history.state, '', `${window.location.pathname}${search}${window.location.hash}`);
+  }, []);
   const [signingOut, setSigningOut] = useState(false);
 
   // Stage 7: the app opens on a chosen lesson — a ?job= link, else the most recent succeeded lesson-flow run — and
@@ -419,8 +446,11 @@ export function App() {
   // The closing beat of a watched build offers the same Present button (Stage 9b).
   const liveView = useMemo((): LiveContext | null => (liveCtx === null ? null : { ...liveCtx, onPresent: deck === null ? null : onPresent }), [liveCtx, deck, onPresent]);
 
-  // Stage 9b: the first-run tour. It opens by itself once, on a plain first visit (or with ?tour=1), and from the rail.
-  const [touring, setTouring] = useState(() => typeof window !== 'undefined' && shouldAutoStart(readTourOutcome(), window.location.search));
+  // Stage 9b: the Demo. Since Stage 10c it opens by itself only when forced (?demo=1 / ?tour=1, the film path); a first
+  // visit gets the Welcome and the guide, whose last card offers the Demo. It also opens from the sidebar.
+  const [touring, setTouring] = useState(FIRST_LAUNCH.demo);
+  // Started from the guide's prompt, the Demo skips its own introduction (the replay is already playing).
+  const [demoIntro, setDemoIntro] = useState(true);
   // The first card waits for the runs list, the page list and the opening lesson (never a tour over an empty "Loading…"
   // app); once shown it stays, since the tour's own replay reloads the lesson under it.
   const lessonLoad = opening === undefined || (selectedSourceId !== null && doc?.state === 'loading')
@@ -436,11 +466,23 @@ export function App() {
     return { pages: active.length, subjects: new Set(active.map((s) => s.subject ?? 'other')).size };
   }, [sourceList]);
   const tourReplayFailed = replayReq?.jobId === TOUR_JOB_ID && replay.detail?.state === 'error';
+  // M4: the Demo run's whole record, so the figure step knows (before the replay gets there) whether Muse grounded SAM.
+  const tourRecord = useJobDetail(touring && tourJob !== null ? TOUR_JOB_ID : null);
+  const accessHere = welcomeAccess(access, health === null ? null : health.live);
   const signals = useMemo(() => tourSignals({
     replayAvailable: tourJob !== null || jobs.state === 'loading', replayLoading: jobs.state === 'loading', replaying: tourReplaying, replayFailed: tourReplayFailed,
     detail: ready, builds: liveCtx?.builds ?? {}, strip: liveCtx?.strip ?? null,
     canPresent: deck !== null, library, speed: TOUR_REQUEST.speed,
-  }), [tourJob, jobs.state, tourReplaying, tourReplayFailed, ready, liveCtx, deck, library]);
+    recording: tourRecord?.state === 'ready' ? tourRecord.data : null, own: accessHere,
+  }), [tourJob, jobs.state, tourReplaying, tourReplayFailed, ready, liveCtx, deck, library, tourRecord, accessHere]);
+  // Stage 10c: the page guide's steps, worded from the library, the access state and the Demo run's length.
+  const guide = useMemo(() => guideSteps({
+    library, access: accessHere,
+    demo: { available: tourJob !== null, length: demoLengthWords(tourJob?.createdAt, tourJob?.finishedAt, TOUR_REQUEST.speed) },
+  }), [library, accessHere, tourJob]);
+  const appReady = tourReady({ jobs: jobs.state, sources: sources.state, lesson: lessonLoad });
+  const [guideShown, setGuideShown] = useState(false);
+  if (guiding && !guideShown && appReady) setGuideShown(true);
   // W-08: the recording could not be read and the teacher goes on without it: drop the replay, back to the opening lesson.
   const skipTourReplay = useCallback(() => {
     setReplayReq((r) => (r?.jobId === TOUR_JOB_ID ? null : r));
@@ -483,11 +525,42 @@ export function App() {
   });
   const closeTour = useCallback((how: TourOutcome) => {
     setTouring(false);
+    setDemoIntro(true);
     // Skipping mid-demo stops the recorded build and leaves its build view: the lesson shows at rest, activity first.
     setReplayReq((r) => replayAfterTourClose(r, how));
     setWatched((w) => watchAfterTourClose(w, how));
     try { localStore()?.setItem(TOUR_STORAGE_KEY, how); } catch { /* blocked storage: the tour just reopens next visit */ }
   }, []);
+
+  // Stage 10c: leaving the Welcome starts the guide (it shows once the app has loaded what it points at).
+  const onWelcomeContinue = useCallback(() => {
+    try { localStore()?.setItem(WELCOME_STORAGE_KEY, 'done'); } catch { /* blocked storage: the Welcome just shows next visit */ }
+    setWelcomeOn(false);
+    setGuideRun((n) => n + 1);
+    setGuiding(true);
+  }, []);
+  const onGuideStep = useCallback((step: GuideStep) => {
+    setView(step.view);
+    setDrawer(step.drawer ? 'runs' : null);
+    if (step.view === 'lesson') setShowSource(true);
+  }, []);
+  const endGuide = useCallback(() => { setGuiding(false); setGuideShown(false); }, []);
+  const onGuideSkip = useCallback(() => { endGuide(); setDrawer(null); setView('lesson'); }, [endGuide]);
+  const onGuideAction = useCallback((a: Exclude<GuideAction, 'next'>) => {
+    endGuide();
+    setDrawer(null);
+    if (a === 'watch') { setDemoIntro(false); startTourReplay(); setTouring(true); }
+    else if (a === 'own') openNew('own');
+    else if (a === 'lessons') navigate('lessons');
+    else setView('lesson');
+  }, [endGuide, startTourReplay, openNew, navigate]);
+  const showWelcomeAgain = useCallback(() => {
+    setTouring(false);
+    setReplayReq((r) => replayAfterTourClose(r, 'skipped'));
+    endGuide();
+    setDrawer(null);
+    setWelcomeOn(true);
+  }, [endGuide]);
 
   // Stage 10: the sidebar. Views open in the main area; Source page, Present, Checks and Demo act on the open lesson.
   const lessonOpen = selectedJobId !== null && !linkHold;
@@ -518,12 +591,16 @@ export function App() {
       if (view === 'lesson' && drawer === 'runs') { closeDrawer(); return; }
       if (view !== 'lesson') navigate('lesson');
       setDrawer('runs');
+    } else if (t.action === 'welcome') {
+      showWelcomeAgain();
     } else {
       setDrawer(null);
+      endGuide();
       if (view !== 'lesson') navigate('lesson');
+      setDemoIntro(true);
       setTouring(true);
     }
-  }, [view, navigate, onLesson, onPresent, drawer, closeDrawer]);
+  }, [view, navigate, onLesson, onPresent, drawer, closeDrawer, showWelcomeAgain, endGuide]);
   const onEnterCode = useCallback(() => {
     focusAccess.current = true;
     if (view === 'new') document.getElementById(ACCESS_INPUT_ID)?.focus();
@@ -539,6 +616,8 @@ export function App() {
     const main = mainRef.current;
     if (main === null) return;
     scrollPanelToTop(main);
+    // The guide or the Demo moved the view: its card keeps focus.
+    if (document.querySelector('.tour') !== null) return;
     const code = focusAccess.current ? document.getElementById(ACCESS_INPUT_ID) : null;
     focusAccess.current = false;
     if (code !== null) {
@@ -582,6 +661,14 @@ export function App() {
 
   return (
     <AppWindow title="Make knowledge interactive" titleIsHeading titlebarExtra={<ApiStatus health={health} down={down} />}>
+      {welcomeOn ? (
+        <div className="window-body window-body-plain">
+          <WelcomeScreen
+            access={access} live={health === null ? null : health.live} library={library}
+            onAccess={setAccess} onContinue={onWelcomeContinue}
+          />
+        </div>
+      ) : (
       <div className={`window-body${drawer !== null && view === 'lesson' ? ' drawer-open' : ''}`}>
         <Sidebar
           sections={sections}
@@ -620,6 +707,8 @@ export function App() {
                     onDemoChoice={setDemoChoice}
                     access={access}
                     onAccess={setAccess}
+                    openPath={pathReq}
+                    onPathChange={onPathChange}
                   />
                 )}
                 {view === 'lessons' && (
@@ -641,6 +730,7 @@ export function App() {
                     onDemo={() => onNav('demo')}
                     onNewLesson={() => navigate('new')}
                     onEnterCode={onEnterCode}
+                    onNav={onNav}
                   />
                 )}
                 {view === 'review' && (
@@ -699,15 +789,15 @@ export function App() {
                   <p className="muted">
                     {health !== null && !health.live
                       ? 'Live generation is off on this server and nothing is stored for this page. Pick another page.'
-                      : 'Muse Spark reads the page, writes a short overview with the page’s own words, then builds a few interactive parts. Code checks every quote and number.'}
+                      : `Muse Spark reads the page, writes ${AI_SUMMARY_PHRASE}, then builds a few interactive parts. Code checks every quote and number.`}
                   </p>
                   {(health === null || health.live) && (
                     <button type="button" className="btn btn-primary" onClick={() => navigate('new')}>New lesson</button>
                   )}
                 </div>
               )}
-              {selectedJobId === null && jobs.state === 'loading' && <p className="muted">Loading…</p>}
-              {detail?.state === 'loading' && <p className="muted">Loading the lesson…</p>}
+              {selectedJobId === null && jobs.state === 'loading' && <LessonSkeleton />}
+              {detail?.state === 'loading' && <LessonSkeleton />}
               {detail?.state === 'error' && !linkUnreadable && <div className="callout callout-error" role="alert">{detail.message}</div>}
               {ready !== null && lessonMode === 'v1' && spec !== undefined && ready.summary.status === 'succeeded' && (
                 <ActivityPanel
@@ -811,10 +901,16 @@ export function App() {
           </RunsDrawer>
         )}
       </div>
-      {touring && tourShown && presenting === null && (
+      )}
+      {!welcomeOn && guiding && guideShown && presenting === null && (
+        <PageGuide key={guideRun} steps={guide} onStep={onGuideStep} onAction={onGuideAction} onSkip={onGuideSkip} />
+      )}
+      {/* The Demo stays mounted while presentation mode is open from it, and shows again when the slides close. */}
+      {!welcomeOn && touring && tourShown && (
         <Onboarding
           signals={signals} onStartReplay={startTourReplay} onPresent={onPresent} onClose={closeTour} onStep={onTourStep}
-          onRetryReplay={replay.retry} onSkipReplay={skipTourReplay}
+          onRetryReplay={replay.retry} onSkipReplay={skipTourReplay} intro={demoIntro} hidden={presenting !== null}
+          onOwn={() => openNew('own')} onLessons={() => navigate('lessons')}
         />
       )}
       {presenting !== null && deck !== null && deck.jobId === presenting.jobId && (

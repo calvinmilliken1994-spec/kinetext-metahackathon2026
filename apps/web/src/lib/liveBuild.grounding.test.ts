@@ -60,11 +60,11 @@ test('a failed grounding call and older runs keep today’s SAM wording', () => 
 
 test('figure frame: a grounded call names Muse first, then what SAM confirmed', () => {
   assert.deepEqual(figureNote(partBuilds(withSegmentDetail(GROUNDED, 62))[LD]), {
-    actor: 'SAM 3.1', text: 'confirmed 5 of 5 in 1.9 s', working: false, muse: { actor: 'Muse Spark', text: 'located 5 parts' },
+    actor: 'SAM 3.1', text: 'confirmed 5 of 5 in 1.9 s', working: false, phase: 'done', muse: { actor: 'Muse Spark', text: 'located 5 parts' },
   });
-  // while the call is open nothing is known about the grounding yet: the SAM-only working text
-  assert.deepEqual(figureNote(partBuilds(withSegmentDetail(GROUNDED, 60))[LD]), { actor: 'SAM 3.1', text: 'is outlining 5 parts of the figure', working: true });
-  assert.deepEqual(figureNote(partBuilds(withSegmentDetail(FAILED, 62))[LD]), { actor: 'SAM 3.1', text: 'outlined 5 of 5 parts in 1.9 s', working: false });
+  // Stage 10c H2: while the call is open the recorded run is known to be grounded (lib/replay.ts), so Muse is locating
+  assert.deepEqual(figureNote(partBuilds(withSegmentDetail(GROUNDED, 60))[LD]), { actor: 'Muse Spark', text: 'is locating 5 parts on the figure', working: true, phase: 'locating' });
+  assert.deepEqual(figureNote(partBuilds(withSegmentDetail(FAILED, 62))[LD]), { actor: 'SAM 3.1', text: 'outlined 5 of 5 parts in 1.9 s', working: false, phase: 'done' });
 });
 
 test('“confirmed K” counts only the parts SAM was sure of when the run records it (sure of K of N)', () => {

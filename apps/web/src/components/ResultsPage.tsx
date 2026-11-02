@@ -9,11 +9,14 @@ import {
   plotPosition, rateText, seconds, subjectRows, usd,
   type FunnelScale, type FunnelSort, type ModelResult, type Rate, type ResultsData, type SourceRef,
 } from '../lib/results.ts';
+import { BAR_SCALE_NOTE, RESULTS_SECTIONS } from '../lib/pageCopy.ts';
 import { revealInPanels } from '../lib/scroll.ts';
 import '../styles/results.css';
 
 const DATA = raw as unknown as ResultsData;
-const DIAGRAMS_ID = 'results-diagrams';
+/** A section's element id: the index scrolls to it. */
+const sectionId = (key: string): string => `results-${key}`;
+const DIAGRAMS_ID = sectionId('diagrams');
 
 export interface ResultsPageProps {
   /** The server's job list once loaded (null while loading): a recorded diagram run opens only if it is stored here. */
@@ -55,8 +58,8 @@ function Headline({ models, id }: { models: readonly ModelResult[]; id: string }
   const misses = open === undefined ? 0 : open.lessons.n - open.lessons.k;
   const timeouts = open?.errorCodes.find((e) => e.code === 'TIMEOUT')?.count ?? 0;
   return (
-    <section className="rs-section rs-headline" aria-labelledby={id}>
-      <h2 id={id}>Lessons with at least one working interactive part</h2>
+    <section className="rs-section rs-headline" aria-labelledby={id} id={sectionId('headline')}>
+      <h2 id={id} tabIndex={-1}>Lessons with at least one working interactive part</h2>
       <p className="rs-context">
         Pre-registered evaluation, <Day iso={ev.preRegisteredAt} />: {ev.pages} library pages, each built {ev.runsPerPage === 2 ? 'twice' : `${ev.runsPerPage} times`} by
         each model.
@@ -75,12 +78,12 @@ function Headline({ models, id }: { models: readonly ModelResult[]; id: string }
           );
         })}
       </div>
-      <p className="rs-prose">
-        {open !== undefined && timeouts > 0 && (
-          <>Of the {misses} Spark Open builds without a working part, {timeouts} ran out of time on the shared open-weights endpoint; a later retest of those pages is below. </>
-        )}
-        Each bar runs from 0 to 100%.
-      </p>
+      <p className="rs-quiet rs-scale">{BAR_SCALE_NOTE}</p>
+      {open !== undefined && timeouts > 0 && (
+        <p className="rs-prose">
+          Of the {misses} Spark Open builds without a working part, {timeouts} ran out of time on the shared open-weights endpoint; a later retest of those pages is below.
+        </p>
+      )}
       <Sources refs={ev.sources.filter((s) => s.path.endsWith('summary.json'))} />
     </section>
   );
@@ -120,8 +123,8 @@ function Comparison({ models, id }: { models: readonly ModelResult[]; id: string
     { label: 'Same number of parts published', cell: (m) => <RateCell r={m.consistency.samePublishedCount} /> },
   ];
   return (
-    <section className="rs-section" aria-labelledby={id}>
-      <h2 id={id}>Muse Spark 1.3 and Muse Spark Open, side by side</h2>
+    <section className="rs-section" aria-labelledby={id} id={sectionId('compare')}>
+      <h2 id={id} tabIndex={-1}>Muse Spark 1.3 and Muse Spark Open, side by side</h2>
       <p className="rs-prose">
         The same {ev.pages} pages, the same prompts and the same checks; only the model differs. Each model plans its own
         parts, so the planned totals differ too.
@@ -169,8 +172,8 @@ function Funnel({ models, id }: { models: readonly ModelResult[]; id: string }) 
     el?.querySelector<HTMLElement>('h2')?.focus({ preventScroll: true });
   };
   return (
-    <section className="rs-section" aria-labelledby={id}>
-      <h2 id={id}>What reaches the live lesson</h2>
+    <section className="rs-section" aria-labelledby={id} id={sectionId('funnel')}>
+      <h2 id={id} tabIndex={-1}>What reaches the live lesson</h2>
       <p className="rs-prose">
         For each kind of part: how many each model planned, how many passed every check the first time, how many passed
         after Muse revised them, and how many were left out. A part reaches the lesson only when it passes.
@@ -267,8 +270,8 @@ function Subjects({ models, id }: { models: readonly ModelResult[]; id: string }
   const few = Math.min(...counts);
   const many = Math.max(...counts);
   return (
-    <section className="rs-section" aria-labelledby={id}>
-      <h2 id={id}>Pass rate by subject</h2>
+    <section className="rs-section" aria-labelledby={id} id={sectionId('subjects')}>
+      <h2 id={id} tabIndex={-1}>Pass rate by subject</h2>
       <p className="rs-prose">
         Builds that gave a lesson with a working part, by the page’s subject, plotted with their 95% intervals. Each subject has only {few} to {many} builds
         per model, so the intervals are wide and small differences mean little.
@@ -342,8 +345,8 @@ function Retest({ id }: { id: string }) {
     { label: 'Cost', before: usd(t.before.costUSD), after: usd(t.after.costUSD) },
   ];
   return (
-    <section className="rs-section" aria-labelledby={id}>
-      <h2 id={id}>Spark Open’s timeouts, run again</h2>
+    <section className="rs-section" aria-labelledby={id} id={sectionId('retest')}>
+      <h2 id={id} tabIndex={-1}>Spark Open’s timeouts, run again</h2>
       <p className="rs-prose">
         A later run, <strong>not part of the pre-registered evaluation</strong>; the numbers above are unchanged. The{' '}
         {t.pages} pages where Muse Spark Open ran out of time were built twice more on <Day iso={t.date} />.
@@ -452,8 +455,8 @@ function Method({ id }: { id: string }) {
   const [spark, open] = ev.models;
   const all = [...ev.sources, ...DATA.timeoutRetest.sources, ...DATA.diagramRuns.sources];
   return (
-    <section className="rs-section rs-method" aria-labelledby={id}>
-      <h2 id={id}>How these numbers were made</h2>
+    <section className="rs-section rs-method" aria-labelledby={id} id={sectionId('method')}>
+      <h2 id={id} tabIndex={-1}>How these numbers were made</h2>
       <ul className="rs-method-list">
         <li>
           <strong>Pre-registered.</strong> The pages, models and measures were committed on <Day iso={ev.preRegisteredAt} />{' '}
@@ -503,6 +506,26 @@ function Method({ id }: { id: string }) {
   );
 }
 
+/** A short index of the page's seven sections: the page is long, so a judge can jump to the one they want. */
+function SectionIndex() {
+  // Container-scoped scroll (lib/scroll.ts): a plain #anchor jump would also scroll the window shell out of view.
+  const go = (key: string): void => {
+    const el = document.getElementById(sectionId(key));
+    revealInPanels(el, 'start');
+    el?.querySelector<HTMLElement>('h2')?.focus({ preventScroll: true });
+  };
+  return (
+    <nav className="rs-index" aria-label="On this page">
+      <span className="rs-index-label">On this page</span>
+      <ul>
+        {RESULTS_SECTIONS.map((s) => (
+          <li key={s.key}><button type="button" className="rs-index-btn" onClick={() => go(s.key)}>{s.label}</button></li>
+        ))}
+      </ul>
+    </nav>
+  );
+}
+
 export function ResultsPage({ jobs, onOpenLesson }: ResultsPageProps) {
   const uid = useId();
   const models = DATA.evaluation.models;
@@ -515,6 +538,7 @@ export function ResultsPage({ jobs, onOpenLesson }: ResultsPageProps) {
           through the checks. Every number comes from committed evaluation files, named under each section.
         </p>
       </header>
+      <SectionIndex />
       <Headline models={models} id={`${uid}-headline`} />
       <Comparison models={models} id={`${uid}-compare`} />
       <Funnel models={models} id={`${uid}-funnel`} />

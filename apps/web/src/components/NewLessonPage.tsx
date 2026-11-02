@@ -1,14 +1,18 @@
 // Stage 10 (docs/specs/STAGE-10-navigation-and-access.md, section B): the New lesson page, in the main area. Two clearly
 // separated paths (the licensed library, or the teacher's own text), then a model choice and Build lesson. While the
 // judge gate is on and the visitor has no access, the build area holds the access-code form instead of a dead button.
-import { useId, useMemo, useState } from 'react';
+import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { KeyboardEvent as ReactKeyboardEvent, ReactNode } from 'react';
 import type { JobSummary, SourceDoc, SourceMeta } from '../api.ts';
 import type { Loadable } from '../hooks.ts';
 import { USER_SOURCE_LIMITS } from '../../../../packages/contracts/index.ts';
 import { buildGate } from '../lib/access.ts';
 import type { Access } from '../lib/access.ts';
-import { browsePages, lessonsByPage, previewExcerpt } from '../lib/browse.ts';
+import { lessonsByPage, previewExcerpt } from '../lib/browse.ts';
+import { librarySearch, selectionOutside } from '../lib/newLesson.ts';
+import type { LibraryResult } from '../lib/newLesson.ts';
+import { revealInPanels } from '../lib/scroll.ts';
+import { AI_SUMMARY_PHRASE } from '../lib/pageCopy.ts';
 import type { GenerateState } from '../lib/health.ts';
 import type { FlowId } from '../lib/lessonJob.ts';
 import { libraryCounts } from '../lib/libraryCounts.ts';
@@ -53,6 +57,10 @@ export interface NewLessonPageProps {
   onDemoChoice: (c: DemoChoice) => void;
   access: Access;
   onAccess: (a: Access) => void;
+  /** Stage 10c: open on this path (the Demo's "Try your own page"); `n` changes for each request. */
+  openPath?: { path: SourcePath; n: number } | null;
+  /** The visitor switched path (the app keeps `?path=own` in the address). */
+  onPathChange?: (path: SourcePath) => void;
 }
 
 const plural = (n: number, one: string, many = `${one}s`): string => `${n} ${n === 1 ? one : many}`;
@@ -61,10 +69,20 @@ export function NewLessonPage(p: NewLessonPageProps) {
   const uid = useId();
   const list = p.sources.state === 'ready' ? p.sources.data : [];
   const selected = list.find((s) => s.id === p.selectedId) ?? null;
-  const [path, setPath] = useState<SourcePath>(() => (selected?.kind === 'user' ? 'own' : 'library'));
+  const [path, setPathState] = useState<SourcePath>(() => p.openPath?.path ?? (selected?.kind === 'user' ? 'own' : 'library'));
+  const { onPathChange } = p;
+  const setPath = (next: SourcePath): void => { setPathState(next); onPathChange?.(next); };
+  // A request to open a path while the page is already open (the Demo's closing card).
+  const asked = p.openPath?.n;
+  useEffect(() => { if (p.openPath != null) setPathState(p.openPath.path); }, [asked]);
   const lib = useMemo(() => libraryCounts(list), [list]);
   const lessons = useMemo(() => lessonsByPage(p.jobs), [p.jobs]);
+  // M1: the search lives here so the preview can say when it hides the chosen page.
+  const [query, setQuery] = useState('');
+  const found = useMemo(() => librarySearch(list, { query, subject: p.subjectFilter }), [list, query, p.subjectFilter]);
   const target = path === 'library' ? (selected !== null && selected.kind !== 'user' ? selected : null) : (selected?.kind === 'user' ? selected : null);
+  const outside = path === 'library' && target !== null && selectionOutside(target.id, found);
+  const clearSearch = (): void => { setQuery(''); p.onSubjectFilter(null); };
   const gate = buildGate(p.access);
 
   const tabs: { id: SourcePath; icon: ReactNode; title: string; detail: string }[] = [
@@ -84,14 +102,14 @@ export function NewLessonPage(p: NewLessonPageProps) {
       <header className="page-head">
         <h1 className="page-title" tabIndex={-1} data-view-title>New lesson</h1>
         <p className="page-lede">
-          Choose a page, and Muse Spark builds a lesson from it: a short summary in the page’s own words, then interactive parts
-          for your class, each checked against the page.
+          Choose a page, and Muse Spark builds a lesson from it: {AI_SUMMARY_PHRASE}, then interactive parts for your class, each
+          checked against the page.
         </p>
       </header>
 
       <div className="nl-grid">
         <div className="nl-main">
-      <div className="nl-paths" role="tablist" aria-label="Where the lesson comes from">
+      <div className="nl-paths" role="tablist" aria-label="Where the lesson comes from" data-tour="nl-paths">
         {tabs.map((t) => (
           <button
             key={t.id} id={`${uid}-tab-${t.id}`} type="button" role="tab" className="nl-path"
@@ -109,13 +127,13 @@ export function NewLessonPage(p: NewLessonPageProps) {
 
         <div className="nl-source" role="tabpanel" id={`${uid}-panel`} aria-labelledby={`${uid}-tab-${path}`}>
           {path === 'library'
-            ? <LibraryList {...p} list={list} lessons={lessons} />
+            ? <LibraryList {...p} list={list} lessons={lessons} query={query} onQuery={setQuery} found={found} onClear={clearSearch} />
             : <OwnSource {...p} list={list} locked={gate === 'needs-code'} />}
         </div>
         </div>
 
         <div className="nl-side">
-          <Preview path={path} target={target} doc={p.doc} lessons={lessons} onOpenLesson={p.onOpenLesson} />
+          <Preview path={path} target={target} doc={p.doc} lessons={lessons} onOpenLesson={p.onOpenLesson} outside={outside} onClear={clearSearch} />
           <BuildArea {...p} target={target} path={path} gate={gate} />
         </div>
       </div>
@@ -125,21 +143,53 @@ export function NewLessonPage(p: NewLessonPageProps) {
 
 // ---- the library path ------------------------------------------------------------------------------------------
 
-function LibraryList(p: NewLessonPageProps & { list: readonly SourceMeta[]; lessons: Map<string, { count: number; latest: string }> }) {
+function LibraryList(p: NewLessonPageProps & {
+  list: readonly SourceMeta[]; lessons: Map<string, { count: number; latest: string }>;
+  query: string; onQuery: (q: string) => void; found: LibraryResult<SourceMeta>; onClear: () => void;
+}) {
   const uid = useId();
-  const [query, setQuery] = useState('');
+  const { query } = p;
   const lib = useMemo(() => libraryCounts(p.list), [p.list]);
-  const shown = useMemo(() => browsePages(p.list, { query, subject: p.subjectFilter }), [p.list, query, p.subjectFilter]);
+  const shown = p.found;
+  // M1: the list scrolls inside its own box, which ends at the bottom of the page column (beside the sticky preview), so
+  // the chosen page can be scrolled into view without moving the paths and the search off screen.
+  const listRef = useRef<HTMLDivElement>(null);
+  const pagesRef = useRef<HTMLFieldSetElement>(null);
+  const ready = p.sources.state === 'ready';
+  const empty = shown.shown === 0;
+  useLayoutEffect(() => {
+    const fit = (): void => {
+      const el = pagesRef.current;
+      const panel = el?.closest<HTMLElement>('.page-panel') ?? null;
+      if (el === null || panel === null) return;
+      if (window.innerWidth <= 1100) { el.style.maxBlockSize = ''; return; }
+      const top = el.getBoundingClientRect().top - panel.getBoundingClientRect().top + panel.scrollTop;
+      el.style.maxBlockSize = `${Math.max(280, Math.round(panel.clientHeight - top - 28))}px`;
+    };
+    fit();
+    window.addEventListener('resize', fit);
+    return () => window.removeEventListener('resize', fit);
+  }, [ready, empty]);
+  // The chosen page is scrolled into view in that box once, when it first shows (never the document). The choice can
+  // arrive after the list (a direct ?view=new visit learns its opening lesson from the runs list).
+  const revealed = useRef(false);
+  useEffect(() => {
+    if (!ready || revealed.current) return;
+    const row = listRef.current?.querySelector<HTMLElement>('.nl-row.is-on') ?? null;
+    if (row === null) return;
+    revealed.current = true;
+    revealInPanels(row, 'center', 0);
+  }, [ready, p.selectedId]);
   if (p.sources.state === 'loading') return <p className="muted">Loading the library…</p>;
   if (p.sources.state === 'error') return <p className="callout callout-error" role="alert">{p.sources.message}</p>;
   return (
-    <div className="nl-library">
+    <div className="nl-library" ref={listRef}>
       <div className="nl-search">
         <label htmlFor={`${uid}-q`} className="sr-only">Search the library</label>
         <IconSearch size={18} />
         <input
-          id={`${uid}-q`} type="search" value={query} placeholder="Search titles and publishers" autoComplete="off"
-          onChange={(e) => setQuery(e.target.value)} aria-describedby={`${uid}-count`}
+          id={`${uid}-q`} type="search" value={query} placeholder="Search titles, subjects and topics" autoComplete="off"
+          onChange={(e) => p.onQuery(e.target.value)} aria-describedby={`${uid}-count`}
         />
       </div>
       <SubjectChips counts={lib.counts} total={lib.library} active={p.subjectFilter} onChange={p.onSubjectFilter} label="Filter pages by subject" unit="page" />
@@ -150,10 +200,10 @@ function LibraryList(p: NewLessonPageProps & { list: readonly SourceMeta[]; less
       {shown.shown === 0 ? (
         <p className="nl-empty">
           No pages match{query.trim() !== '' ? ` “${query.trim()}”` : ''}{p.subjectFilter !== null ? ` in ${subjectLabel(p.subjectFilter)}` : ''}.{' '}
-          <button type="button" className="link-btn" onClick={() => { setQuery(''); p.onSubjectFilter(null); }}>Show every page</button>
+          <button type="button" className="link-btn" onClick={p.onClear}>Show every page</button>
         </p>
       ) : (
-        <fieldset className="nl-pages">
+        <fieldset className="nl-pages" ref={pagesRef}>
           <legend className="sr-only">Library page</legend>
           {shown.groups.map((g) => (
             <div key={g.subject} className="nl-group" role="group" aria-labelledby={`${uid}-g-${g.subject}`}>
@@ -193,22 +243,30 @@ function OwnSource(p: NewLessonPageProps & { list: readonly SourceMeta[]; locked
   const L = USER_SOURCE_LIMITS;
   return (
     <div className="nl-own">
-      <p className="nl-own-lede">
-        Paste the text of a page you are allowed to use with AI models: a public-domain page, an openly licensed one, or your
-        own writing. Muse treats it as data to read, never as instructions.
-      </p>
       {p.locked ? (
-        <div className="nl-own-locked" data-testid="own-locked">
-          <p>The form asks for:</p>
-          <ul className="nl-needs">
-            <li>a title and the page text, {L.textMin.toLocaleString('en-US')} to {L.textMax.toLocaleString('en-US')} characters;</li>
-            <li>its licence and who to credit, plus an optional link to the original;</li>
-            <li>your confirmation that you may use it with AI models and that it holds no personal or student data.</li>
-          </ul>
-          <p className="muted">Saving your own text needs the judge access code, like building. Enter it under Build.</p>
-        </div>
+        <>
+          {/* H4: judges see at once how to try their own page: the code first, the form it unlocks greyed below. */}
+          <div className="nl-own-gate" data-testid="own-locked">
+            <AccessForm onAccess={p.onAccess} intro="Enter the judge access code to paste your own page and build a lesson from it." />
+          </div>
+          <p className="nl-own-lede">
+            Paste the text of a page you are allowed to use with AI models: a public-domain page, an openly licensed one, or your
+            own writing. Muse treats it as data to read, never as instructions.
+          </p>
+          <div className="nl-own-outline" inert aria-hidden="true" data-testid="own-outline">
+            <PasteSourceForm title={null} rows={6} onCreated={() => undefined} />
+          </div>
+          <p className="nl-own-outline-note">
+            The form asks for a title, the page text ({L.textMin.toLocaleString('en-US')} to {L.textMax.toLocaleString('en-US')} characters),
+            its licence and who to credit, and your confirmation that you may use it with AI models.
+          </p>
+        </>
       ) : (
         <>
+          <p className="nl-own-lede">
+            Paste the text of a page you are allowed to use with AI models: a public-domain page, an openly licensed one, or your
+            own writing. Muse treats it as data to read, never as instructions.
+          </p>
           {mine.length > 0 && (
             <fieldset className="nl-mine">
               <legend className="nl-group-title">Your saved texts</legend>
@@ -239,9 +297,11 @@ function OwnSource(p: NewLessonPageProps & { list: readonly SourceMeta[]; locked
 
 // ---- the chosen page --------------------------------------------------------------------------------------------
 
-function Preview({ path, target, doc, lessons, onOpenLesson }: {
+function Preview({ path, target, doc, lessons, onOpenLesson, outside, onClear }: {
   path: SourcePath; target: SourceMeta | null; doc: Loadable<SourceDoc> | null;
   lessons: Map<string, { count: number; latest: string }>; onOpenLesson: (jobId: string, sourceId: string) => void;
+  /** M1: the chosen page is not in the current results. */
+  outside: boolean; onClear: () => void;
 }) {
   const uid = useId();
   if (target === null) {
@@ -256,6 +316,12 @@ function Preview({ path, target, doc, lessons, onOpenLesson }: {
   const made = lessons.get(target.id);
   return (
     <section className="nl-preview" aria-labelledby={`${uid}-h`} data-testid="page-preview">
+      {outside && (
+        <p className="nl-outside" role="status" data-testid="preview-outside">
+          <span>Chosen page, not in these results.</span>
+          <button type="button" className="link-btn" onClick={onClear}>Clear the search</button>
+        </p>
+      )}
       <p className="nl-preview-meta">
         <span>{target.kind === 'user' ? 'Your text' : subjectLabel(subjectOf(target))}</span>
         <span aria-hidden="true">·</span>
@@ -293,11 +359,15 @@ function BuildArea(p: NewLessonPageProps & { target: SourceMeta | null; path: So
       : generate.reason;
   const label = generate.busy ? 'Starting…' : p.flow === 'lesson' ? 'Build lesson' : 'Build activity';
   return (
-    <section className="nl-build" aria-labelledby={`${uid}-h`} data-testid="build-area">
+    <section className="nl-build" aria-labelledby={`${uid}-h`} data-testid="build-area" data-tour="nl-build">
       <h2 id={`${uid}-h`} className="nl-build-title">Build</h2>
       <ModelPicker options={p.models} selected={p.modelChoice} onSelect={p.onModelChoice} live={p.live} locked={generate.busy} />
 
-      {p.gate === 'needs-code' && <AccessForm onAccess={p.onAccess} />}
+      {/* H4: on Your own source the access form sits at the top of that panel, so it is not repeated here. */}
+      {p.gate === 'needs-code' && p.path === 'library' && <AccessForm onAccess={p.onAccess} />}
+      {p.gate === 'needs-code' && p.path === 'own' && (
+        <p className="nl-build-own-note" role="note">Enter the access code under Your own source; building unlocks with it.</p>
+      )}
       {p.gate === 'budget' && <p className="callout" role="status">The judges’ build budget is used up. Recorded lessons, replays and presenting still work.</p>}
       {p.gate === 'paused' && <p className="callout" role="status">{p.live === false ? 'Live builds are off on this server.' : 'Builds are paused right now.'} Recorded lessons, replays and presenting still work.</p>}
 

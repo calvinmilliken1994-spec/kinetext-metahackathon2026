@@ -790,3 +790,99 @@ test('8d: a Spark Open grounding failure reads "muse-spark-open grounding failed
   const done = r.seg.find(e => e.status === 'succeeded');
   assert.equal(done?.detail, 'sam-3.1 returned 6 of 6 region(s); muse-spark-open grounding failed (TIMEOUT); used the generation areas; sam-3.1 sure of 6 of 6 part(s)');
 });
+
+/* ------------------------------------------------------------------ */
+/* Stage 10c H2: a 'locate' event as soon as Muse's grounding returns    */
+/* ------------------------------------------------------------------ */
+
+const locates = (r: Run) => r.events.filter(e => e.stage === ('locate' as never));
+
+test('10c H2: a successful grounding emits ONE locate event between segment started and segment succeeded; no cost, grounding latency', async () => {
+  const r = await run('lesson-locate-ok', { grounding: () => ({ data: groundingAnswer(goldenUnions()) }) });
+  const loc = locates(r);
+  assert.equal(loc.length, 1, 'one locate event for the one revision');
+  const e = loc[0]!;
+  assert.equal(e.status, 'succeeded');
+  assert.equal(e.componentId, 'label-diagram-v1');
+  assert.equal(e.revision, 1);
+  assert.equal(e.detail, 'muse-spark-1.3 located 6 of 6 part(s) for SAM');
+  assert.equal(e.latencyMs, 42, 'the grounding call\'s latency');
+  assert.equal(e.estCostUSD, undefined, 'the grounding charge stays on the segment event: no double count when events are summed');
+  const started = r.seg.find(x => x.status === 'started')!;
+  const done = r.seg.find(x => x.status === 'succeeded')!;
+  assert.ok(started.seq < e.seq && e.seq < done.seq, 'after segment started, before segment succeeded');
+  // existing events unchanged
+  assert.equal(started.detail, 'sam-3.1 point segmentation of 6 part(s)');
+  assert.equal(done.detail, 'sam-3.1 returned 6 of 6 region(s); muse-spark-1.3 located 6 of 6 part(s) for SAM; sam-3.1 sure of 6 of 6 part(s)');
+  assert.equal((done as any).groundingLatencyMs, 42);
+  // it is written before SAM is called
+  assert.deepEqual(r.captured.order.filter(x => x !== 'muse:source_analysis_v2'), ['muse:label_diagram', 'muse:label_grounding', 'sam']);
+  assertAccounted(r, 0, 0, 1);
+});
+
+test('10c H2: Muse boxing only some parts says "located K of N"; boxing none says "located 0 of N" (a success, the gen areas are used)', async () => {
+  const unions: (Box4 | null)[] = goldenUnions();
+  unions[1] = null;
+  const some = await run('lesson-locate-partial', { grounding: () => ({ data: groundingAnswer(unions) }) });
+  assert.equal(locates(some)[0]?.detail, 'muse-spark-1.3 located 5 of 6 part(s) for SAM');
+  assert.equal(locates(some)[0]?.status, 'succeeded');
+  const none = await run('lesson-locate-none', { grounding: () => ({ data: { objects: [] } }) });
+  assert.equal(locates(none)[0]?.detail, 'muse-spark-1.3 located 0 of 6 part(s) for SAM');
+});
+
+test('10c H2: a failed grounding emits a failed locate event with the fixed code only, before SAM; the component still completes', async () => {
+  const r = await run('lesson-locate-fail', {
+    grounding: () => ({ error: new MetaError('OUTPUT_TRUNCATED', undefined, { chargedUSD: 0.07, reservedUnknownUSD: 0, costBasis: 'usage', receipt: usageReceipt(0.07) }) }),
+  });
+  const loc = locates(r);
+  assert.equal(loc.length, 1);
+  assert.equal(loc[0]!.status, 'failed');
+  assert.equal(loc[0]!.detail, 'muse-spark-1.3 grounding failed (OUTPUT_TRUNCATED)');
+  assert.equal(loc[0]!.estCostUSD, undefined);
+  assert.equal(loc[0]!.latencyMs, undefined, 'a call that threw has no latency to report');
+  assert.ok(loc[0]!.seq < r.seg.find(x => x.status === 'succeeded')!.seq);
+  assert.equal(r.label.status, 'passed');
+  assertAccounted(r, 0.07, 0, 0);
+  // a billed but unusable answer (OUTPUT_INVALID) keeps its latency
+  const bad = await run('lesson-locate-badshape', { grounding: () => ({ data: { nothing: true } }) });
+  assert.equal(locates(bad)[0]?.status, 'failed');
+  assert.equal(locates(bad)[0]?.detail, 'muse-spark-1.3 grounding failed (OUTPUT_INVALID)');
+  assert.equal(locates(bad)[0]?.latencyMs, 42);
+});
+
+test('10c H2: every revision emits its own locate event, and a Spark Open job names muse-spark-open', async () => {
+  const r = await run('lesson-locate-repair', {
+    gen: brokenQuoteLabelGen(),
+    repair: goldenLabelGen,
+    maxRepairAttempts: 1,
+    grounding: n => (n === 1 ? { data: groundingAnswer(goldenUnions()) } : { error: new MetaError('OUTPUT_TRUNCATED', undefined, { chargedUSD: 0.07, reservedUnknownUSD: 0, costBasis: 'usage' }) }),
+  });
+  const loc = locates(r);
+  assert.deepEqual(loc.map(e => [e.revision, e.status]), [[1, 'succeeded'], [2, 'failed']]);
+  const open = await run('lesson-locate-open', { modal: true, grounding: () => ({ data: groundingAnswer(goldenUnions()) }) });
+  assert.equal(locates(open)[0]?.detail, 'muse-spark-open located 6 of 6 part(s) for SAM');
+});
+
+test('10c H2: no locate event when no grounding call is made (SAM not configured)', async () => {
+  const captured: Captured = { order: [], requests: [] };
+  const client = fakeMuse(captured, { analysis: dnaAnalysis, gen: goldenLabelGen, grounding: () => ({ data: groundingAnswer(goldenUnions()) }) });
+  const storageDir = mkdtempSync(join(tmpdir(), 's10c-locate-'));
+  const { done } = startJob(
+    DNA,
+    { client, storageDir, purpose: 'test-live', flow: 'lesson', newJobId: () => 'lesson-locate-nosam', limits: { maxRepairAttempts: 0 } },
+    () => {},
+  );
+  await done;
+  const evs = readFileSync(join(storageDir, 'runs', 'lesson-locate-nosam', 'events.jsonl'), 'utf8').split('\n').filter(l => l.trim() !== '').map(l => JSON.parse(l) as JobStageEvent);
+  assert.ok(!evs.some(e => e.stage === ('locate' as never)));
+});
+
+test('10c H2: `segment started` names the figure the part is built on (the web draws it dimmed while the stage runs); its detail text is unchanged', async () => {
+  const r = await run('lesson-locate-figure', { grounding: () => ({ data: groundingAnswer(goldenUnions()) }) });
+  const started = r.seg.find(e => e.status === 'started') as any;
+  assert.equal(started.figureId, FIGURE_ID);
+  assert.equal(started.detail, 'sam-3.1 point segmentation of 6 part(s)');
+  // only the start carries it
+  assert.ok(r.seg.filter(e => e.status !== 'started').every(e => (e as any).figureId === undefined));
+  assert.equal(locates(r)[0] && (locates(r)[0] as any).figureId, undefined);
+});

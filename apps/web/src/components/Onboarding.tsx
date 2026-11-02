@@ -1,26 +1,14 @@
-// Stage 9b: the first-run tour (docs/specs/STAGE-9b-onboarding-and-live-build-2.md). A dim backdrop with a cut-out
-// around the step's target and a compact card beside it. The step machine, its wording and the card placement are pure
-// (lib/onboarding.ts); this file only measures targets and draws. No confetti, no bounce, no glow: one opacity fade.
+// Stage 9b: the Demo (the recorded-build walk), and Stage 10c: the page guide of the first launch
+// (docs/specs/STAGE-10c-first-launch-and-fixes.md). Both are a dim backdrop with cut-outs around the step's targets and a
+// compact card beside them. The step machines, their wording and the card placement are pure (lib/onboarding.ts,
+// lib/welcome.ts); this file only measures targets and draws. No confetti, no bounce, no glow: one opacity fade.
 import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
+import type { RefObject } from 'react';
 import type { Rect, TourOutcome, TourSignals, TourStep } from '../lib/onboarding.ts';
 import { activeSteps, autoAdvance, canGoNext, clipRect, indexAfterSkip, placeStep, unionRect, withoutReplay } from '../lib/onboarding.ts';
+import type { GuideAction, GuideStep } from '../lib/welcome.ts';
+import { nextAllowed } from '../lib/welcome.ts';
 import { revealInPanels } from '../lib/scroll.ts';
-
-export interface OnboardingProps {
-  signals: TourSignals;
-  /** Plays the tour's recorded run (labelled as a replay) in the lesson column. */
-  onStartReplay: () => void;
-  /** Opens the finished lesson in presentation mode. */
-  onPresent: () => void;
-  /** The tour ended: finished, or skipped (both are remembered so it does not open by itself again). */
-  onClose: (how: TourOutcome) => void;
-  /** Each time a step is entered, so the app can open what it points at (the source panel). */
-  onStep?: (step: TourStep) => void;
-  /** The recorded run failed to load: read it again. */
-  onRetryReplay?: () => void;
-  /** The recorded run failed to load and the teacher goes on without it (the app puts the lesson back). */
-  onSkipReplay?: () => void;
-}
 
 const PAD = 8;
 const sameRects = (a: readonly Rect[], b: readonly Rect[]): boolean =>
@@ -65,78 +53,16 @@ function holePath(rects: readonly Rect[], w: number, h: number): string {
   return `M0 0H${w}V${h}H0Z${rects.map((r) => rr(r)).join('')}`;
 }
 
-export function Onboarding({ signals: given, onStartReplay, onPresent, onClose, onStep, onRetryReplay, onSkipReplay }: OnboardingProps) {
-  // W-08: after a failed replay fetch the teacher can go on without the recording; the replay steps then drop out.
-  const [skipReplay, setSkipReplay] = useState(false);
-  const signals = skipReplay ? withoutReplay(given) : given;
-  const steps = activeSteps(signals);
-  const [state, setState] = useState(() => ({ index: 0, enteredAt: Date.now() }));
-  const index = Math.min(state.index, steps.length - 1);
-  const step = steps[index] as TourStep;
-  const titleId = useId();
-  const bodyId = useId();
+/**
+ * Follows a step's targets (and extras) while they move (a replay keeps adding content, panels scroll) and places the
+ * card beside the main target, clear of every cut-out. Cheap: a few rects per frame; state changes only on real moves.
+ */
+function useSpotlight(targets: readonly string[], extras: readonly string[]) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [groups, setGroups] = useState<Rect[][]>([]);
   const [vp, setVp] = useState({ w: window.innerWidth, h: window.innerHeight });
   const [cardSize, setCardSize] = useState<{ w: number; h: number } | null>(null);
-
-  // Replay steps move on by themselves once the recorded run has passed their moment (checked four times a second).
-  const live = useRef({ steps, signals });
-  live.current = { steps, signals };
-  useEffect(() => {
-    const t = setInterval(() => setState((s) => autoAdvance(s, live.current.steps, live.current.signals, Date.now())), 250);
-    return () => clearInterval(t);
-  }, []);
-
-  const go = useCallback((to: number) => setState({ index: to, enteredAt: Date.now() }), []);
-  const continueWithout = (): void => {
-    go(indexAfterSkip(steps, index, activeSteps(withoutReplay(given))));
-    setSkipReplay(true);
-    onSkipReplay?.();
-  };
-
-  // W-11: closing the tour gives focus back to what opened it (the rail button), else to the lesson column.
-  const opener = useRef<Element | null>(typeof document === 'undefined' ? null : document.activeElement);
-  useEffect(() => () => {
-    const now = document.activeElement;
-    // Only when focus was in the tour or is lost; a view that took focus on purpose (presentation mode) keeps it.
-    if (now !== null && now !== document.body && now.isConnected && now.closest('.tour') === null) return;
-    const back = opener.current;
-    const target = back instanceof HTMLElement && back.isConnected && back !== document.body && back.closest('.tour') === null
-      ? back
-      : document.querySelector<HTMLElement>('main.activity-panel');
-    target?.focus({ preventScroll: true });
-  }, []);
-  const next = (): void => {
-    if (step.primary === 'replay') onStartReplay();
-    if (step.primary === 'present') { onPresent(); onClose('done'); return; }
-    if (step.primary === 'finish' || index === steps.length - 1) { onClose('done'); return; }
-    go(index + 1);
-  };
-  const nextReady = step.primary === 'replay' ? !signals.replayLoading : step.primary === 'present' || step.primary === 'finish' || canGoNext(steps, index, signals);
-  // The recording could not be read while the tour waits on it: say so and offer Retry / Continue instead of waiting.
-  const nextStep = steps[index + 1];
-  const replayBroken = signals.replayFailed && (step.needsReplay || nextStep?.needsReplay === true) && step.primary !== 'replay';
-
-  // Entering a step: let the app open what it points at, bring the target into view, then focus the card's heading.
-  const stepId = step.id;
-  useEffect(() => {
-    onStep?.(step);
-    const first = step.targets.length === 0 ? null : document.querySelector<HTMLElement>(step.targets[0] as string);
-    if (first !== null && step.id === 'try') revealInPanels(first, 'start', 140);
-    // The summary step: bring the page's first lit sentence near the top of the source pane, so the lit sentences show
-    // rather than one line above the fold (demo pair review #5). Marks can land a frame after the overview.
-    let t = 0;
-    if (step.id === 'overview') {
-      t = window.setTimeout(() => revealInPanels(document.querySelector<HTMLElement>('[data-tour="source-text"] mark'), 'start', 24), 120);
-    }
-    document.getElementById(titleId)?.focus({ preventScroll: true });
-    return () => window.clearTimeout(t);
-  }, [stepId]);
-
-  // Follow the targets (and extras) while they move (the replay keeps adding content, panels scroll). Cheap: a few rects
-  // per frame, and state only changes when a rect really moved.
-  const selectors = [...step.targets, ...step.extras];
+  const selectors = [...targets, ...extras];
   useEffect(() => {
     let raf = 0;
     const tick = (): void => {
@@ -148,23 +74,41 @@ export function Onboarding({ signals: given, onStartReplay, onPresent, onClose, 
     tick();
     return () => cancelAnimationFrame(raf);
   }, [selectors.join('|')]);
-
   useLayoutEffect(() => {
     const el = cardRef.current;
     if (el === null) return;
     const size = { w: el.offsetWidth, h: el.offsetHeight };
     setCardSize((p) => (p !== null && p.w === size.w && p.h === size.h ? p : size));
   });
+  // Until a target is on screen (a page or lesson still loading) the card waits in the middle and says so.
+  const waiting = targets.length > 0 && unionRect(groups.slice(0, targets.length).flat()) === null;
+  const placed = cardSize === null || waiting ? null : placeStep(groups, targets.length, vp, cardSize);
+  const rects = placed?.cut ?? groups.slice(0, targets.length).flat();
+  const centre = cardSize === null ? null : { x: Math.round((vp.w - cardSize.w) / 2), y: Math.round((vp.h - cardSize.h) / 2), side: 'center' as const };
+  const pos = cardSize === null ? null : waiting ? centre : placed;
+  return { cardRef, vp, rects, pos, waiting };
+}
 
-  // Esc skips the tour (before the drawer's own Esc handler sees it). Tab stays inside the card, except on the step
-  // where the teacher tries the part, whose controls must be reachable.
-  const interactive = step.interactive;
+function Scrim({ rects, vp, interactive }: { rects: readonly Rect[]; vp: { w: number; h: number }; interactive: boolean }) {
+  return (
+    <svg className="tour-scrim" width={vp.w} height={vp.h} viewBox={`0 0 ${vp.w} ${vp.h}`} aria-hidden="true">
+      <path className="tour-dim" d={holePath(rects, vp.w, vp.h)} fillRule="evenodd" />
+      {/* Outside a cut-out, clicks are held back; inside one, only on a step where the visitor tries the part. */}
+      {!interactive && rects.map((r, i) => <rect key={`b${i}`} className="tour-block" x={r.x} y={r.y} width={r.w} height={r.h} />)}
+      {rects.map((r, i) => <rect key={`o${i}`} className="tour-ring" x={r.x + 0.5} y={r.y + 0.5} width={Math.max(0, r.w - 1)} height={Math.max(0, r.h - 1)} rx="12" />)}
+    </svg>
+  );
+}
+
+/** Esc closes (before the drawer's own Esc handler sees it); Tab stays inside the card unless the step is interactive. */
+function useCardKeys(cardRef: RefObject<HTMLDivElement | null>, onEscape: () => void, interactive: boolean, active: boolean): void {
   useEffect(() => {
+    if (!active) return undefined;
     const onKey = (e: KeyboardEvent): void => {
       if (e.key === 'Escape') {
         e.preventDefault();
         e.stopPropagation();
-        onClose('skipped');
+        onEscape();
         return;
       }
       if (e.key !== 'Tab' || interactive) return;
@@ -180,34 +124,131 @@ export function Onboarding({ signals: given, onStartReplay, onPresent, onClose, 
     };
     window.addEventListener('keydown', onKey, true);
     return () => window.removeEventListener('keydown', onKey, true);
-  }, [onClose, interactive]);
+  }, [onEscape, interactive, active]);
+}
 
-  // The card sits beside the main target (the first selector), clear of every cut-out; extras are lit only when the card
-  // still fits clear of them.
-  const waitingForTarget = step.targets.length > 0 && unionRect(groups.slice(0, step.targets.length).flat()) === null;
-  const placed = cardSize === null ? null : waitingForTarget ? null : placeStep(groups, step.targets.length, vp, cardSize);
-  const rects = placed?.cut ?? groups.slice(0, step.targets.length).flat();
-  const pos = cardSize === null ? null : waitingForTarget ? { x: Math.round((vp.w - cardSize.w) / 2), y: Math.round((vp.h - cardSize.h) / 2), side: 'center' as const } : placed;
+/** W-11: closing gives focus back to what opened it (a sidebar entry), else to the main column. */
+function useFocusReturn(): void {
+  const opener = useRef<Element | null>(typeof document === 'undefined' ? null : document.activeElement);
+  useEffect(() => () => {
+    const now = document.activeElement;
+    // Only when focus was in the card or is lost; a view that took focus on purpose (presentation mode) keeps it.
+    if (now !== null && now !== document.body && now.isConnected && now.closest('.tour') === null) return;
+    const back = opener.current;
+    const target = back instanceof HTMLElement && back.isConnected && back !== document.body && back.closest('.tour') === null
+      ? back
+      : document.querySelector<HTMLElement>('main.activity-panel, main.page-panel');
+    target?.focus({ preventScroll: true });
+  }, []);
+}
+
+// ---- the Demo ------------------------------------------------------------------------------------------------------
+
+export interface OnboardingProps {
+  signals: TourSignals;
+  /** Plays the Demo's recorded run (labelled as a replay) in the lesson column. */
+  onStartReplay: () => void;
+  /** Opens the finished lesson in presentation mode; the Demo stays and shows again when the slides close. */
+  onPresent: () => void;
+  /** The Demo ended: finished, or skipped (both are remembered so it does not open by itself again). */
+  onClose: (how: TourOutcome) => void;
+  /** Each time a step is entered, so the app can open what it points at (the source panel). */
+  onStep?: (step: TourStep) => void;
+  /** The recorded run failed to load: read it again. */
+  onRetryReplay?: () => void;
+  /** The recorded run failed to load and the teacher goes on without it (the app puts the lesson back). */
+  onSkipReplay?: () => void;
+  /** The closing card: New lesson on the Your own source path. */
+  onOwn: () => void;
+  /** The closing card's second choice: All lessons. */
+  onLessons: () => void;
+  /** Started from the guide's prompt: the replay is already playing, so the Demo opens on the build. */
+  intro?: boolean;
+  /** Presentation mode is open over the app: the Demo keeps its place but shows nothing and takes no keys. */
+  hidden?: boolean;
+}
+
+export function Onboarding({ signals: given, onStartReplay, onPresent, onClose, onStep, onRetryReplay, onSkipReplay, onOwn, onLessons, intro = true, hidden = false }: OnboardingProps) {
+  // W-08: after a failed replay fetch the teacher can go on without the recording; the replay steps then drop out.
+  const [skipReplay, setSkipReplay] = useState(false);
+  const signals = skipReplay ? withoutReplay(given) : given;
+  const opts = { intro };
+  const steps = activeSteps(signals, opts);
+  const [state, setState] = useState(() => ({ index: 0, enteredAt: Date.now() }));
+  const index = Math.min(state.index, steps.length - 1);
+  const step = steps[index] as TourStep;
+  const titleId = useId();
+  const bodyId = useId();
+
+  // Replay steps move on by themselves once the recorded run has passed their moment (checked four times a second).
+  const live = useRef({ steps, signals });
+  live.current = { steps, signals };
+  useEffect(() => {
+    const t = setInterval(() => setState((s) => autoAdvance(s, live.current.steps, live.current.signals, Date.now())), 250);
+    return () => clearInterval(t);
+  }, []);
+
+  const go = useCallback((to: number) => setState({ index: to, enteredAt: Date.now() }), []);
+  const continueWithout = (): void => {
+    go(indexAfterSkip(steps, index, activeSteps(withoutReplay(given), opts)));
+    setSkipReplay(true);
+    onSkipReplay?.();
+  };
+  useFocusReturn();
+
   const last = index === steps.length - 1;
+  const next = (): void => {
+    // L5: a click aimed at the previous step (just auto-advanced) never skips this one.
+    if (!nextAllowed(state.enteredAt, Date.now())) return;
+    if (step.primary === 'replay') onStartReplay();
+    if (step.primary === 'own') { onOwn(); onClose('done'); return; }
+    if (step.primary === 'finish' || last) { onClose('done'); return; }
+    go(index + 1);
+  };
+  const secondary = (): void => {
+    if (step.secondary?.action === 'present') onPresent();
+    if (step.secondary?.action === 'lessons') { onLessons(); onClose('done'); }
+  };
+  const nextReady = step.primary === 'replay' ? !signals.replayLoading : step.primary === 'own' || step.primary === 'finish' || last || canGoNext(steps, index, signals);
+  // The recording could not be read while the Demo waits on it: say so and offer Retry / Continue instead of waiting.
+  const nextStep = steps[index + 1];
+  const replayBroken = signals.replayFailed && (step.needsReplay || nextStep?.needsReplay === true) && step.primary !== 'replay';
 
+  // Entering a step: let the app open what it points at, bring the target into view, then focus the card's heading.
+  const stepId = step.id;
+  useEffect(() => {
+    onStep?.(step);
+    const first = step.targets.length === 0 ? null : document.querySelector<HTMLElement>(step.targets[0] as string);
+    if (first !== null && (step.id === 'try' || step.id === 'figure')) revealInPanels(first, 'start', 140);
+    // The summary step: bring the page's first lit sentence near the top of the source pane, so the lit sentences show
+    // rather than one line above the fold (demo pair review #5). Marks can land a frame after the overview.
+    let t = 0;
+    if (step.id === 'overview') {
+      t = window.setTimeout(() => revealInPanels(document.querySelector<HTMLElement>('[data-tour="source-text"] mark'), 'start', 24), 120);
+    }
+    if (!hidden) document.getElementById(titleId)?.focus({ preventScroll: true });
+    return () => window.clearTimeout(t);
+  }, [stepId]);
+
+  const { cardRef, vp, rects, pos } = useSpotlight(step.targets, step.extras);
+  const close = useCallback(() => onClose('skipped'), [onClose]);
+  useCardKeys(cardRef, close, step.interactive, !hidden);
+  if (hidden) return null;
+
+  const choice = step.primary === 'own';
   return (
     <div className="tour" data-testid="tour" data-step={step.id} data-interactive={step.interactive ? 'true' : 'false'}>
-      <svg className="tour-scrim" width={vp.w} height={vp.h} viewBox={`0 0 ${vp.w} ${vp.h}`} aria-hidden="true">
-        <path className="tour-dim" d={holePath(rects, vp.w, vp.h)} fillRule="evenodd" />
-        {/* Outside a cut-out, clicks are held back; inside one, only on the step where the teacher tries the part. */}
-        {!step.interactive && rects.map((r, i) => <rect key={`b${i}`} className="tour-block" x={r.x} y={r.y} width={r.w} height={r.h} />)}
-        {rects.map((r, i) => <rect key={`o${i}`} className="tour-ring" x={r.x + 0.5} y={r.y + 0.5} width={Math.max(0, r.w - 1)} height={Math.max(0, r.h - 1)} rx="12" />)}
-      </svg>
+      <Scrim rects={rects} vp={vp} interactive={step.interactive} />
       <div
         ref={cardRef} className="tour-card" role="dialog" aria-modal={step.interactive ? 'false' : 'true'} aria-labelledby={titleId} aria-describedby={bodyId}
-        data-side={pos?.side ?? 'center'} style={pos === null ? { opacity: 0 } : { left: pos.x, top: pos.y }} key={step.id}
+        data-side={pos?.side ?? 'center'} data-kind={choice ? 'choice' : undefined} style={pos === null ? { opacity: 0 } : { left: pos.x, top: pos.y }} key={step.id}
       >
-        <p className="tour-count">Step {index + 1} of {steps.length}</p>
+        {!choice && <p className="tour-count">Step {index + 1} of {steps.length - 1}</p>}
         <h2 id={titleId} className="tour-title" tabIndex={-1}>{step.title}</h2>
         <p id={bodyId} className="tour-body">{step.body}</p>
         {replayBroken && (
           <div className="tour-problem" role="alert">
-            <p>The recorded run could not be loaded, so this part of the tour cannot play.</p>
+            <p>The recorded run could not be loaded, so this part of the demo cannot play.</p>
             <p className="tour-problem-actions">
               {onRetryReplay !== undefined && <button type="button" className="btn btn-quiet" onClick={onRetryReplay}>Retry</button>}
               <button type="button" className="btn btn-quiet" onClick={continueWithout}>Continue without it</button>
@@ -215,11 +256,101 @@ export function Onboarding({ signals: given, onStartReplay, onPresent, onClose, 
           </div>
         )}
         {!nextReady && !replayBroken && <p className="tour-wait" role="status">{step.primary === 'replay' ? 'Loading the recorded run…' : 'The next step starts when the replay gets there.'}</p>}
+        {choice && (
+          <div className="tour-choices">
+            <button type="button" className="btn btn-primary" onClick={next}>{step.primaryLabel}</button>
+            {step.secondary !== null && <button type="button" className="btn" onClick={secondary}>{step.secondary.label}</button>}
+          </div>
+        )}
+        {!choice && step.secondary !== null && (
+          <div className="tour-side-action"><button type="button" className="btn" onClick={secondary}>{step.secondary.label}</button></div>
+        )}
         <div className="tour-actions">
-          <button type="button" className="link-btn tour-skip" onClick={() => onClose('skipped')}>{last ? 'Close' : 'Skip demo'}</button>
+          <button type="button" className="link-btn tour-skip" onClick={close}>{last ? 'Close' : 'Skip demo'}</button>
           <span className="tour-spacer" />
           {index > 0 && <button type="button" className="btn btn-quiet" onClick={() => go(index - 1)}>Back</button>}
-          {!replayBroken && <button type="button" className="btn btn-primary" onClick={next} disabled={!nextReady}>{step.primaryLabel}</button>}
+          {!choice && !replayBroken && <button type="button" className="btn btn-primary" onClick={next} disabled={!nextReady}>{step.primaryLabel}</button>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ---- the page guide (first launch) ---------------------------------------------------------------------------------
+
+export interface PageGuideProps {
+  steps: readonly GuideStep[];
+  /** Each time a step is entered: the app opens the step's view (and the drawer for the checks step). */
+  onStep: (step: GuideStep) => void;
+  /** The closing card's choices: watch the Demo, not now, try your own page, browse the lessons. */
+  onAction: (action: Exclude<GuideAction, 'next'>) => void;
+  /** Skip or Esc. */
+  onSkip: () => void;
+}
+
+export function PageGuide({ steps, onStep, onAction, onSkip }: PageGuideProps) {
+  const [state, setState] = useState(() => ({ index: 0, enteredAt: Date.now() }));
+  const index = Math.min(state.index, steps.length - 1);
+  const step = steps[index] as GuideStep;
+  const counted = steps.filter((s) => s.counted).length;
+  const titleId = useId();
+  const bodyId = useId();
+  const go = useCallback((to: number) => setState({ index: to, enteredAt: Date.now() }), []);
+  useFocusReturn();
+
+  const stepId = step.id;
+  useEffect(() => {
+    onStep(step);
+    document.getElementById(titleId)?.focus({ preventScroll: true });
+  }, [stepId]);
+
+  const act = (a: GuideAction): void => {
+    if (a === 'next') {
+      // L5: the same guard as the Demo's Next.
+      if (!nextAllowed(state.enteredAt, Date.now())) return;
+      if (index < steps.length - 1) go(index + 1);
+      return;
+    }
+    onAction(a);
+  };
+  const { cardRef, vp, rects, pos, waiting } = useSpotlight(step.targets, step.extras);
+  useCardKeys(cardRef, onSkip, false, true);
+  // A target that is on the page but scrolled out of its panel is brought into view (the guide moved the view there).
+  useEffect(() => {
+    if (!waiting) return undefined;
+    const t = window.setInterval(() => {
+      const sel = step.targets[0];
+      const el = sel === undefined ? null : document.querySelector<HTMLElement>(sel);
+      // Only when it is really out of sight: a target that has just rendered is left where it is.
+      if (el !== null && sel !== undefined && (measure([sel])[0] ?? []).length === 0) revealInPanels(el, 'start', 24);
+    }, 300);
+    return () => window.clearInterval(t);
+  }, [waiting, stepId]);
+  const prompt = !step.counted;
+  const second = step.secondary;
+
+  return (
+    <div className="tour tour-guide" data-testid="guide" data-step={step.id} data-interactive="false">
+      <Scrim rects={rects} vp={vp} interactive={false} />
+      <div
+        ref={cardRef} className="tour-card" role="dialog" aria-modal="true" aria-labelledby={titleId} aria-describedby={bodyId}
+        data-side={pos?.side ?? 'center'} data-kind={prompt ? 'choice' : undefined} style={pos === null ? { opacity: 0 } : { left: pos.x, top: pos.y }} key={step.id}
+      >
+        {!prompt && <p className="tour-count">Step {index + 1} of {counted}</p>}
+        <h2 id={titleId} className="tour-title" tabIndex={-1}>{step.title}</h2>
+        <p id={bodyId} className="tour-body">{step.body}</p>
+        {waiting && <p className="tour-wait" role="status">{step.wait}</p>}
+        {prompt && (
+          <div className="tour-choices">
+            <button type="button" className="btn btn-primary" onClick={() => act(step.primary.action)}>{step.primary.label}</button>
+            {second !== null && <button type="button" className="btn" onClick={() => act(second.action)}>{second.label}</button>}
+          </div>
+        )}
+        <div className="tour-actions">
+          {!prompt && <button type="button" className="link-btn tour-skip" onClick={onSkip}>Skip the guide</button>}
+          <span className="tour-spacer" />
+          {index > 0 && <button type="button" className="btn btn-quiet" onClick={() => go(index - 1)}>Back</button>}
+          {!prompt && <button type="button" className="btn btn-primary" onClick={() => act('next')}>{step.primary.label}</button>}
         </div>
       </div>
     </div>

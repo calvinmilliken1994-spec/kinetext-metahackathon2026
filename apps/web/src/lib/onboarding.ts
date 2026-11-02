@@ -5,9 +5,13 @@
 
 import type { JobDetail } from '../api.ts';
 import type { PartBuild, StripState } from './liveBuild.ts';
+import { parseFailedChecks, parseGrounding } from './liveBuild.ts';
+import { lessonCheckName } from './lessonJob.ts';
 import { DEMO_PINS } from './demoPins.ts';
+import type { WelcomeAccess } from './welcome.ts';
+import { ownCardBody } from './welcome.ts';
 
-/** The stored run the tour plays: NOAA water cycle on Muse Spark 1.3 (label diagram, two SAM 3.1 calls, one natural repair, a sequence). */
+/** The stored run the Demo plays (lib/demoPins.ts): NOAA water cycle on Muse Spark 1.3, grounded label diagram, one natural repair, a sequence. */
 export const TOUR_JOB_ID = DEMO_PINS.tour;
 export const TOUR_STORAGE_KEY = 'mki.tour';
 export const TOUR_DEFAULT_SPEED = 2;
@@ -110,6 +114,18 @@ export interface TourSignals {
   model: string;
   /** Replay speed. */
   speed: number;
+  /** M4: the run's label-diagram part once SAM has started on it in the replay, else null. */
+  figurePart: string | null;
+  /** M4: the run plans a label-diagram part (the figure step is in the walk). */
+  figurePlanned: boolean;
+  /** M4: what Muse's grounding call located for SAM, read from the whole recording; null on runs without one. */
+  figureGrounding: { located: number; of: number } | null;
+  /** M4: the figure part's first draft has its check result in the replay. */
+  figureChecked: boolean;
+  /** The teacher name of the check that failed on the repaired part (from the run's own events), if any. */
+  repairCheck: string | null;
+  /** What building your own page needs here (the closing card). */
+  own: WelcomeAccess;
 }
 
 export interface SignalInput {
@@ -123,6 +139,24 @@ export interface SignalInput {
   canPresent: boolean;
   library: { pages: number; subjects: number } | null;
   speed: number;
+  /** The tour run's whole stored detail (for what the replay has not reached yet, e.g. whether SAM was grounded). */
+  recording?: JobDetail | null;
+  own?: WelcomeAccess;
+}
+
+type LooseEvent = { stage?: string; status?: string; componentId?: string; detail?: string };
+const loose = (d: JobDetail | null | undefined): LooseEvent[] => (d?.events ?? []) as unknown as LooseEvent[];
+
+/** The first grounded SAM call of `part` in these events: what Muse located for SAM. */
+function groundingOf(events: readonly LooseEvent[], part: string | null): { located: number; of: number } | null {
+  if (part === null) return null;
+  for (const e of events) {
+    // The SAM call's end notes what Muse located; runs from the current worker also carry a `locate` event (Stage 10c H2).
+    if ((e.stage !== 'segment' && e.stage !== 'locate') || e.status !== 'succeeded' || e.componentId !== part) continue;
+    const g = parseGrounding(e.detail);
+    if (g !== null && g !== 'failed') return g;
+  }
+  return null;
 }
 
 export function tourSignals(i: SignalInput): TourSignals {
@@ -139,6 +173,14 @@ export function tourSignals(i: SignalInput): TourSignals {
   const openPlan = (open?.lessonData?.analysis?.componentPlan ?? []).map((e) => e.componentId as string);
   const openPart = openPlan.find((id) => openPassed.includes(id)) ?? openPassed[0] ?? null;
   const replayPart = plan.find((id) => passed.includes(id)) ?? passed[0] ?? null;
+  // M4: the figure part, its SAM moment and whether the run grounded it (the recording knows before the replay does).
+  const recPlan = (i.recording?.lessonData?.analysis?.componentPlan ?? []).map((e) => e.componentId as string);
+  const figure = [...plan, ...recPlan].find((id) => id.startsWith('label-diagram')) ?? null;
+  const evs = loose(d);
+  const figureStarted = figure !== null && evs.some((e) => e.stage === 'segment' && e.componentId === figure);
+  const figureChecked = figure !== null && evs.some((e) => e.stage === 'component' && e.componentId === figure && (e.status === 'failed' || e.status === 'succeeded'));
+  const failedIds = repair === null ? [] : parseFailedChecks(evs.find((e) => e.stage === 'component' && e.status === 'failed' && e.componentId === repair)?.detail);
+  const repairCheck = failedIds.map((id) => lessonCheckName(id)).find((n) => n !== null) ?? null;
   return {
     replayAvailable: i.replayAvailable,
     replayLoading: i.replayLoading === true,
@@ -158,12 +200,19 @@ export function tourSignals(i: SignalInput): TourSignals {
     library: i.library,
     model: i.strip?.model ?? 'Muse Spark',
     speed: i.speed,
+    figurePart: i.replaying && figureStarted ? figure : null,
+    // Known from the recording before the replay starts, so the step count holds still through the Demo.
+    figurePlanned: (i.replaying || i.recording != null) && figure !== null,
+    figureGrounding: groundingOf(loose(i.recording), figure) ?? groundingOf(evs, figure),
+    figureChecked,
+    repairCheck,
+    own: i.own ?? 'open',
   };
 }
 
 // ---- the steps ---------------------------------------------------------------------------------------------------
 
-export type TourStepId = 'welcome' | 'library' | 'reading' | 'overview' | 'checking' | 'ready' | 'try' | 'present';
+export type TourStepId = 'welcome' | 'library' | 'reading' | 'overview' | 'figure' | 'checking' | 'ready' | 'try' | 'present' | 'own';
 
 export interface TourStep {
   id: TourStepId;
@@ -178,9 +227,11 @@ export interface TourStep {
   extras: string[];
   /** Clicks reach the cut-out (the teacher tries the part). */
   interactive: boolean;
-  /** The primary button: Next, start the replay, or open presentation mode. */
-  primary: 'next' | 'replay' | 'present' | 'finish';
+  /** The primary button: Next, start the replay, finish, or (closing card) open New lesson on Your own source. */
+  primary: 'next' | 'replay' | 'finish' | 'own';
   primaryLabel: string;
+  /** A second choice on the card: open presentation mode (the Demo stays, and comes back after it), or All lessons. */
+  secondary: { action: 'present' | 'lessons'; label: string } | null;
   /** Plays the recorded run: skipped when it cannot be replayed. */
   needsReplay: boolean;
 }
@@ -201,9 +252,11 @@ function tryWords(partId: string | null): string {
 /** The tour, worded from what is actually on screen (counts, model, whether this run had a repair). */
 export function tourSteps(s: TourSignals): TourStep[] {
   const lib = s.library === null ? 'a library of licensed pages' : `${s.library.pages} licensed pages in ${s.library.subjects} subjects`;
-  const step = (x: Omit<TourStep, 'interactive' | 'primary' | 'primaryLabel' | 'needsReplay' | 'extras'> & Partial<TourStep>): TourStep => ({
-    interactive: false, primary: 'next', primaryLabel: 'Next', needsReplay: false, extras: [], ...x,
+  const step = (x: Omit<TourStep, 'interactive' | 'primary' | 'primaryLabel' | 'needsReplay' | 'extras' | 'secondary'> & Partial<TourStep>): TourStep => ({
+    interactive: false, primary: 'next', primaryLabel: 'Next', needsReplay: false, extras: [], secondary: null, ...x,
   });
+  const g = s.figureGrounding;
+  const failed = s.repairCheck === null ? 'The first draft did not pass one of its checks.' : `The first draft did not pass one check: “${s.repairCheck}”.`;
   return [
     step({
       id: 'welcome', title: 'Turn a page into a lesson you can teach',
@@ -229,13 +282,22 @@ export function tourSteps(s: TourSignals): TourStep[] {
       targets: ['.lesson .overview', '[data-tour="source-text"]'], extras: ['.lesson [data-component]'], needsReplay: true,
     }),
     step({
+      // M4: the diagram's Meta moment. A grounded run names both models; an older run says once that newer lessons add it.
+      id: 'figure',
+      title: g !== null ? 'Muse Spark finds the parts, SAM 3.1 confirms them' : 'SAM 3.1 outlines the parts of the figure',
+      body: g !== null
+        ? `Muse Spark locates each of the ${g.of} parts on the page’s figure. SAM 3.1, Meta’s segmentation model, then outlines each one to confirm it, so every number sits on its part.`
+        : 'SAM 3.1, Meta’s segmentation model, outlines each part from the point Muse marked on the figure, so every number sits on its part. Newer lessons add a step first: Muse Spark locates each part, then SAM 3.1 confirms it.',
+      targets: part(s.figurePart), needsReplay: true,
+    }),
+    step({
       id: 'checking', title: 'Code checks every part',
       body: s.repairPart === null
         ? 'Before a part appears, code checks its quotes, numbers and structure against the page. A part that fails is reworked or left out.'
         : s.repairPassed
           // Calvin's rule: "Revised by Muse after a failed check", never "the model's own mistake".
-          ? `A check failed on the first draft, so Muse revised it. Revision ${s.repairRevision} passed every check. The checks found the issue in Muse’s draft; it was not a planted fault.`
-          : `Code checks each draft against the page. A check failed on this one, so Muse is reworking it as revision ${s.repairRevision}.`,
+          ? `${failed} Muse revised it, and revision ${s.repairRevision} passed every check. The check found the issue in Muse’s draft; it was not a planted fault.`
+          : `Code checks each draft against the page. ${failed} Muse is reworking it as revision ${s.repairRevision}.`,
       targets: part(s.watchPart), needsReplay: true,
     }),
     step({
@@ -253,7 +315,13 @@ export function tourSteps(s: TourSignals): TourStep[] {
       id: 'present', title: 'Run it with a class',
       body: 'Presentation mode shows the lesson one step at a time on the projector. Students predict, you press R to reveal.',
       // The strip's closing beat holds a Present button; without a watched build, the lesson's own button.
-      targets: s.finished ? ['[data-tour="live-strip"]'] : ['[data-tour="present"]'], primary: s.canPresent ? 'present' : 'finish', primaryLabel: s.canPresent ? 'Open presentation mode' : 'Finish',
+      // Stage 10c: Next goes on to the closing card; presentation mode is a side action the Demo comes back from.
+      targets: s.finished ? ['[data-tour="live-strip"]'] : ['[data-tour="present"]'],
+      secondary: s.canPresent ? { action: 'present', label: 'Open presentation mode' } : null,
+    }),
+    step({
+      id: 'own', title: 'Try your own page', body: ownCardBody(s.own), targets: [],
+      primary: 'own', primaryLabel: 'Try your own page', secondary: { action: 'lessons', label: 'Browse the lessons' },
     }),
   ];
 }
@@ -264,10 +332,11 @@ export function stepReady(id: TourStepId, s: TourSignals): boolean {
     case 'welcome': case 'library': return true;
     case 'reading': return s.replaying;
     case 'overview': return s.replaying && s.overview;
+    case 'figure': return s.replaying && s.figurePart !== null;
     case 'checking': return s.replaying && s.watchPart !== null && s.overview;
     case 'ready': return s.finished;
     case 'try': return s.firstPart !== null;
-    case 'present': return true;
+    case 'present': case 'own': return true;
   }
 }
 
@@ -276,6 +345,7 @@ export function autoUntil(id: TourStepId, s: TourSignals): boolean {
   switch (id) {
     case 'reading': return s.overview;
     case 'overview': return s.partProgress;
+    case 'figure': return s.figureChecked;
     case 'checking': return s.finished;
     default: return false;
   }
@@ -287,8 +357,13 @@ export interface TourState { index: number; enteredAt: number }
  * The steps that will actually be shown. Replay steps drop out when the recorded run is not available; without a replay
  * the try step needs a checked part on screen, so a tour with nothing to try still reaches its last step (W-08).
  */
-export function activeSteps(s: TourSignals): TourStep[] {
-  return tourSteps(s).filter((x) => (x.needsReplay ? s.replayAvailable : x.id !== 'try' || s.replayAvailable || s.firstPart !== null));
+export function activeSteps(s: TourSignals, o: { intro: boolean } = { intro: true }): TourStep[] {
+  return tourSteps(s).filter((x) => {
+    // Started from the guide's prompt (Stage 10c), the Demo opens on the build: its own introduction is already done.
+    if (!o.intro && (x.id === 'welcome' || x.id === 'library')) return false;
+    if (x.id === 'figure') return s.replayAvailable && s.figurePlanned;
+    return x.needsReplay ? s.replayAvailable : x.id !== 'try' || s.replayAvailable || s.firstPart !== null;
+  });
 }
 
 /** The signals with the replay set aside (the teacher pressed Continue after the recording failed to load). */
@@ -296,7 +371,7 @@ export function withoutReplay(s: TourSignals): TourSignals {
   return { ...s, replayAvailable: false, replaying: false, replayFailed: false, firstPart: s.firstPart ?? s.openPart };
 }
 
-const STEP_ORDER: readonly TourStepId[] = ['welcome', 'library', 'reading', 'overview', 'checking', 'ready', 'try', 'present'];
+const STEP_ORDER: readonly TourStepId[] = ['welcome', 'library', 'reading', 'overview', 'figure', 'checking', 'ready', 'try', 'present', 'own'];
 
 /** Where the tour stands in `after` once the steps changed: the same step when it survives, else the next one that does. */
 export function indexAfterSkip(before: readonly TourStep[], index: number, after: readonly TourStep[]): number {

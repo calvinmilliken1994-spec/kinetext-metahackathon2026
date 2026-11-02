@@ -4,6 +4,7 @@ import { moveItem } from '../lib/timeline.ts';
 import { IconChevronDown, IconChevronUp, IconGrip, Mark } from './icons.tsx';
 import { splitMark } from '../lib/marks.ts';
 import { Linked } from './Linked.tsx';
+import { afterOrderCheck, offerShowOrder, resultNoteShown, SHOW_ORDER_LABEL } from '../lib/orderReveal.ts';
 
 export interface BoardItem { id: string; label: string }
 
@@ -20,13 +21,17 @@ interface Props<T extends BoardItem> {
   startOrder: readonly string[];
   heading: string;
   hint: ReactNode;
-  /** Shown under the result line. */
+  /** Shown under the result line once the page's order is revealed (it points at what the reveal added). */
   resultNote: string;
-  /** Items show their reveal (dates, quotes) once the order was checked or the teacher revealed everything. */
+  /** Items show their reveal (dates, quotes) once the page's order is revealed (lib/orderReveal.ts). */
   revealed: boolean;
   renderReveal: (item: T) => ReactNode;
   grade: (order: string[]) => BoardResult;
-  onCheck: () => void;
+  /**
+   * Reveal the page's order: called when a check finds the order right, or when the learner presses "Show the page's
+   * order" (offered from the first wrong check on). A wrong check alone reveals nothing (UX pair review 2, H1; Q4).
+   */
+  onReveal: () => void;
   checkLabel?: string;
   /** 'track': the list is drawn as numbered stations on one vertical line (sequence and timeline boards). */
   variant?: 'cards' | 'track';
@@ -43,12 +48,15 @@ interface Props<T extends BoardItem> {
  * “Put these in order”: drag cards, or use each card's move-up and move-down arrows (keyboard and screen-reader friendly), then check.
  * Shared by the timeline activity (graded against dates) and the sequence component (graded against the page's order).
  */
-export function OrderBoard<T extends BoardItem>({ items, startOrder, heading, hint, resultNote, revealed, renderReveal, grade: gradeFn, onCheck, checkLabel = 'Check order', variant = 'cards', reserve = false, linksOf }: Props<T>) {
+export function OrderBoard<T extends BoardItem>({ items, startOrder, heading, hint, resultNote, revealed, renderReveal, grade: gradeFn, onReveal, checkLabel = 'Check order', variant = 'cards', reserve = false, linksOf }: Props<T>) {
   const headingId = useId();
   const hintId = useId();
   const byId = new Map(items.map((e) => [e.id, e] as const));
   const [order, setOrder] = useState<string[]>([...startOrder]);
   const [result, setResult] = useState<BoardResult | null>(null);
+  // A wrong check has happened: from then on the page's order can be asked for.
+  const [missed, setMissed] = useState(false);
+  const checkRef = useRef<HTMLButtonElement>(null);
   const [announce, setAnnounce] = useState('');
   const [dragId, setDragId] = useState<string | null>(null);
   const [overIndex, setOverIndex] = useState<number | null>(null);
@@ -85,9 +93,21 @@ export function OrderBoard<T extends BoardItem>({ items, startOrder, heading, hi
   }, [order]);
 
   const check = (): void => {
-    setResult(gradeFn(order));
+    const graded = gradeFn(order);
+    setResult(graded);
     setAnnounce('');
-    onCheck();
+    const next = afterOrderCheck({ correct: graded.correct, revealed, missed });
+    setMissed(next.missed);
+    if (next.reveal) onReveal();
+  };
+
+  const offered = offerShowOrder({ missed, revealed });
+  const noteOn = resultNoteShown({ revealed });
+  const showOrder = (): void => {
+    onReveal();
+    setAnnounce(`The page’s order is shown. ${resultNote}`);
+    // The button goes once the order is shown: keep keyboard focus in the board.
+    checkRef.current?.focus({ preventScroll: true });
   };
 
   const reset = (): void => {
@@ -182,8 +202,12 @@ export function OrderBoard<T extends BoardItem>({ items, startOrder, heading, hi
         })}
       </ol>
       <div className="order-actions">
-        <button type="button" className="btn btn-primary" onClick={check}>{checkLabel}</button>
+        <button type="button" className="btn btn-primary" ref={checkRef} onClick={check}>{checkLabel}</button>
         <button type="button" className="btn" onClick={reset}>Back to the starting order</button>
+        {reserve
+          // Presentation: the button's room is kept from the start (hidden), so it appearing moves nothing.
+          ? <button type="button" className="btn order-show" data-on={offered ? 'true' : 'false'} disabled={!offered} aria-hidden={offered ? undefined : true} tabIndex={offered ? undefined : -1} onClick={showOrder}>{SHOW_ORDER_LABEL}</button>
+          : offered && <button type="button" className="btn order-show" onClick={showOrder}>{SHOW_ORDER_LABEL}</button>}
       </div>
       <p className="sr-only" role="status" aria-live="polite">{announce}</p>
       {reserve ? (
@@ -191,12 +215,12 @@ export function OrderBoard<T extends BoardItem>({ items, startOrder, heading, hi
           {/* Before the check a hidden stand-in of the longest result keeps the line's room. */}
           {result === null
             ? <><strong aria-hidden="true"><Mark kind="bad" />{`${n} of ${n} steps are in the right place. Move the marked steps and check again.`}</strong><span aria-hidden="true">{resultNote}</span></>
-            : <><strong>{splitMark(result.summary).mark !== null && <Mark kind={splitMark(result.summary).mark ?? 'ok'} />}{splitMark(result.summary).text}</strong><span>{resultNote}</span></>}
+            : <><strong>{splitMark(result.summary).mark !== null && <Mark kind={splitMark(result.summary).mark ?? 'ok'} />}{splitMark(result.summary).text}</strong><span data-on={noteOn ? 'true' : 'false'} aria-hidden={noteOn ? undefined : true}>{resultNote}</span></>}
         </div>
       ) : result !== null && (
         <div className={`grade ${result.correct ? 'grade-ok' : 'grade-miss'}`} role="status" data-testid="order-result">
           <strong>{splitMark(result.summary).mark !== null && <Mark kind={splitMark(result.summary).mark ?? 'ok'} />}{splitMark(result.summary).text}</strong>
-          <span>{resultNote}</span>
+          {noteOn && <span>{resultNote}</span>}
         </div>
       )}
     </section>

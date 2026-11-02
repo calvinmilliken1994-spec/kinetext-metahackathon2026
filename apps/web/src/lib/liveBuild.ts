@@ -18,6 +18,11 @@ interface Ev {
   seq: number; stage: string; status: string; at: string; t: number;
   componentId?: string; target?: string; revision?: number; detail?: string;
   latencyMs?: number; estCostUSD?: number; usage?: { completionTokens?: number };
+  /** `segment started` (Stage 10c H2): the figure the part is built on (live worker; replays rebuild it from the stored spec). */
+  figureId?: string;
+  /** `segment started` in a replay (Stage 10c H2): whether this run's grounding call happened (rebuilt from the recorded end event). */
+  grounded?: boolean;
+  groundingLatencyMs?: number;
 }
 
 const num = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null);
@@ -86,6 +91,12 @@ export function parseGroundingActor(detail: string | undefined): MuseActor {
 export function parseSamSure(detail: string | undefined): { sure: number; of: number } | null {
   const m = /\bsure of (\d+) of (\d+) part\(s\)/.exec(detail ?? '');
   return m === null ? null : { sure: Number(m[1]), of: Number(m[2]) };
+}
+
+/** "...; sam-3.1 retried 1 weak part(s): runoff 0.41 -> 0.70" → 1 (SAM's best-of retry); null when there was none. */
+export function parseSamRetried(detail: string | undefined): number | null {
+  const m = /\bsam-3\.1 retried (\d+) weak part/.exec(detail ?? '');
+  return m === null ? null : Number(m[1]);
 }
 
 /** A live counter: "12 s", "1 min 23 s". */
@@ -163,22 +174,42 @@ export function reserveHeight(componentId: string): number {
   return FRAME_HEAD_PX + previewOf(componentId).bodyPx;
 }
 
+/** Where a label diagram's segment stage stands (Stage 10c H2): Muse locating, SAM confirming, SAM alone (no grounding), done. */
+export type FigurePhase = 'locating' | 'confirming' | 'outlining' | 'done';
+
+export interface FigureNoteData {
+  actor: 'SAM 3.1' | MuseActor; text: string; working: boolean; phase: FigurePhase;
+  /** The Muse half of a grounded stage ("located 5 parts"), once Muse's locating is over. */
+  muse?: { actor: MuseActor; text: string };
+  /** The figure the part is built on, when the run recorded it (drawn dimmed in the frame). */
+  figureId?: string;
+}
+
 /**
- * What a label diagram's figure frame says about SAM while the part is still being built (demo pair review #1a): its
- * latest SAM call, open (`working`: the frame shows the working cue) or finished. Null before the first SAM call and for
- * every other kind, so the frame never claims SAM work that has not been recorded. It never draws regions: those exist
- * only once the checked part arrives.
+ * What a label diagram's figure frame says while the part is still being built (demo pair review #1a, Stage 10c H2):
+ * its latest segment stage. Muse Spark is locating the parts first ("is locating 5 parts on the figure"), then SAM 3.1
+ * confirms them ("is confirming 5 parts"); a run without grounding keeps "SAM 3.1 is outlining 5 parts of the figure".
+ * Open (`working`: the frame shows the working cue) or finished. Null before the segment stage starts and for every
+ * other kind, so the frame never claims work that has not been recorded. It never draws regions: those exist only once
+ * the checked part arrives.
  */
-export function figureNote(build: PartBuild | undefined): { actor: 'SAM 3.1'; text: string; working: boolean; muse?: { actor: MuseActor; text: string } } | null {
+export function figureNote(build: PartBuild | undefined): FigureNoteData | null {
   if (build === undefined || build.componentId !== 'label-diagram-v1') return null;
   const sam = [...build.lines].reverse().find((l) => l.kind === 'outlining');
   if (sam === undefined) return null;
+  const fig = sam.figureId === undefined ? {} : { figureId: sam.figureId };
+  // Muse is still locating the parts: nothing about SAM yet
+  if (sam.open && sam.phase === 'locating') return { actor: sam.museActor ?? 'Muse Spark', text: sam.text.replace(/^Muse Spark(?: Open)?\s+/, ''), working: true, phase: 'locating', ...fig };
+  // Muse has located them, SAM's call is still open
+  if (sam.open && sam.phase === 'confirming' && sam.muse !== undefined) {
+    return { actor: 'SAM 3.1', text: sam.text.replace(/^SAM 3\.1\s+/, ''), working: true, phase: 'confirming', muse: { actor: sam.museActor ?? 'Muse Spark', text: sam.muse }, ...fig };
+  }
   // Addendum A: a grounded call reads "Muse Spark located 5 parts · SAM 3.1 confirmed 5 of 5 in 1.9 s"
   // (Stage 8d: "Muse Spark Open located …" on an open-weights job)
-  if (sam.muse !== undefined && sam.sam !== undefined) return { actor: 'SAM 3.1', text: sam.sam, working: sam.open, muse: { actor: sam.museActor ?? 'Muse Spark', text: sam.muse } };
+  if (sam.muse !== undefined && sam.sam !== undefined) return { actor: 'SAM 3.1', text: sam.sam, working: sam.open, phase: 'done', muse: { actor: sam.museActor ?? 'Muse Spark', text: sam.muse }, ...fig };
   // the log line without its actor ("SAM 3.1 is outlining 5 parts…" → "is outlining 5 parts…")
   const text = sam.text.replace(/^SAM 3\.1\s+/, '');
-  return { actor: 'SAM 3.1', text, working: sam.open };
+  return { actor: 'SAM 3.1', text, working: sam.open, phase: sam.open ? 'outlining' : 'done', ...fig };
 }
 
 /**
@@ -279,10 +310,13 @@ export function liveStrip(detail: JobDetail): StripState {
       const open = builds[id]?.lines.find((l) => l.open && (l.kind === 'writing' || l.kind === 'outlining'));
       if (open === undefined || open.startMs === null) continue;
       const label = componentLabel(id);
+      const parts = open.parts === undefined ? 'the parts' : plural(open.parts, 'part', 'parts');
       const text = open.kind === 'outlining'
-        ? `Outlining ${open.parts ?? ''} parts of the figure`.replace('  ', ' ')
+        ? (open.phase === 'locating' ? `Locating ${parts} on the figure` : open.phase === 'confirming' ? `Confirming ${parts}` : `Outlining ${open.parts ?? ''} parts of the figure`.replace('  ', ' '))
         : open.revision > 1 ? `Reworking ${label}` : `Writing ${label}`;
-      ops.push({ key: `${id}:${open.key}`, actor: open.kind === 'outlining' ? 'sam' : 'muse', text, startMs: open.startMs });
+      // Stage 10c H2: while Muse locates the parts the call is Muse's; SAM's op starts once Muse is done.
+      const actor = open.kind === 'outlining' && open.phase !== 'locating' ? 'sam' : 'muse';
+      ops.push({ key: `${id}:${open.key}`, actor, text, startMs: open.startMs });
     }
   }
   const museCalls = evs.filter((e) => MUSE_STAGES.has(e.stage) && e.status !== 'started' && num(e.latencyMs) !== null).length;
@@ -358,6 +392,14 @@ export interface LogLine {
   museActor?: MuseActor;
   /** SAM (Addendum A): the SAM half of a grounded line ("confirmed 5 of 5 in 1.9 s"). */
   sam?: string;
+  /** SAM (Stage 10c H2): how far the segment stage is while the line is open: Muse locating, SAM confirming, or SAM alone. */
+  phase?: 'locating' | 'confirming' | 'outlining';
+  /** SAM: how long Muse's grounding call took (the succeeded event's `groundingLatencyMs`), when recorded. */
+  museMs?: number;
+  /** SAM: parts SAM's best-of retry re-tried ("SAM retried 1 weak part"), when it did. */
+  retried?: number;
+  /** SAM: the figure the part is built on (`segment started` event), when recorded. */
+  figureId?: string;
   checks?: { passed: number; total: number };
 }
 
@@ -379,9 +421,13 @@ export interface PartBuild {
 
 const plural = (n: number, one: string, many: string): string => `${n} ${n === 1 ? one : many}`;
 
+/** "located 5 parts" / "located 4 of 5 parts": the Muse half of a grounded line (counts from the `located K of N` note). */
+const locatedText = (g: { located: number; of: number }): string => `located ${g.located === g.of ? plural(g.located, 'part', 'parts') : `${g.located} of ${plural(g.of, 'part', 'parts')}`}`;
+
 function checkNames(ids: readonly string[]): string {
   const names = ids.map((id) => lessonCheckName(id) ?? 'a page check');
-  const first = names.slice(0, 2).map((n) => n.charAt(0).toLowerCase() + n.slice(1));
+  // Lower-case the first letter only for an ordinary word ("Each number…" → "each number…"), never an acronym ("SAM", "LD").
+  const first = names.slice(0, 2).map((n) => (/^[A-Z][a-z]/.test(n) ? n.charAt(0).toLowerCase() + n.slice(1) : n));
   return names.length > 2 ? `${first.join('; ')}; and ${names.length - 2} more` : first.join('; ');
 }
 
@@ -390,7 +436,7 @@ function tokensText(n: number | null): string {
 }
 
 function logFor(id: PlanComponentId, evs: readonly Ev[], model: string, running: boolean): LogLine[] {
-  const own = evs.filter((e) => e.componentId === id && (e.stage === 'component' || e.stage === 'segment' || (e.stage === 'repair' && e.target === 'component')));
+  const own = evs.filter((e) => e.componentId === id && (e.stage === 'component' || e.stage === 'segment' || e.stage === 'locate' || (e.stage === 'repair' && e.target === 'component')));
   if (own.length === 0) {
     return running ? [{ key: 'queued', kind: 'queued', text: 'Waiting for its turn: Muse writes two parts at a time.', open: true, startMs: null, durationMs: null, tokens: null, revision: 1 }] : [];
   }
@@ -401,13 +447,13 @@ function logFor(id: PlanComponentId, evs: readonly Ev[], model: string, running:
     // The Muse call of this revision: 'component started' (r1) or 'repair started' (r2+); it ends at the first SAM call,
     // else at the revision's first end event. Its recorded latency sits on the event that ended the call.
     const start = r.find((e) => e.status === 'started' && (e.stage === 'component' || e.stage === 'repair'));
-    const callEnd = r.find((e) => e.status !== 'started' && num(e.latencyMs) !== null && e.stage !== 'segment');
-    const firstAfter = r.find((e) => start !== undefined && e.seq > start.seq && (e.stage === 'segment' || e.status !== 'started'));
+    const callEnd = r.find((e) => e.status !== 'started' && num(e.latencyMs) !== null && e.stage !== 'segment' && e.stage !== 'locate');
+    const firstAfter = r.find((e) => start !== undefined && e.seq > start.seq && (e.stage === 'segment' || (e.stage !== 'locate' && e.status !== 'started')));
     if (start !== undefined) {
       const open = running && firstAfter === undefined;
       const durationMs = open ? null : num(callEnd?.latencyMs) ?? (firstAfter === undefined ? null : firstAfter.t - start.t);
       const tokens = num(callEnd?.usage?.completionTokens);
-      const unusable = r.find((e) => e.status === 'failed' && /OUTPUT_(INVALID|TRUNCATED)/.test(e.detail ?? ''));
+      const unusable = r.find((e) => e.status === 'failed' && (e.stage === 'component' || e.stage === 'repair') && /OUTPUT_(INVALID|TRUNCATED)/.test(e.detail ?? ''));
       lines.push({
         key: `write-r${rev}`, kind: 'writing', open, startMs: start.t, durationMs, tokens, revision: rev,
         text: open
@@ -419,6 +465,9 @@ function logFor(id: PlanComponentId, evs: readonly Ev[], model: string, running:
     // SAM calls of this revision
     for (const seg of r.filter((e) => e.stage === 'segment' && e.status === 'started')) {
       const end = r.find((e) => e.stage === 'segment' && e.status !== 'started' && e.seq > seg.seq);
+      // Stage 10c H2: the worker marks the end of Muse's locating with a `locate` event inside the segment stage.
+      const loc = r.find((e) => e.stage === 'locate' && e.seq > seg.seq && (end === undefined || e.seq < end.seq));
+      const locGrounding = loc === undefined ? null : parseGrounding(loc.detail);
       const parts = parseSegmentAsk(seg.detail) ?? undefined;
       const got = parseSegmentGot(end?.detail);
       const grounding = end?.status === 'succeeded' ? parseGrounding(end.detail) : null;
@@ -429,16 +478,34 @@ function logFor(id: PlanComponentId, evs: readonly Ev[], model: string, running:
       const grounded = !open && got !== null && grounding !== null && grounding !== 'failed'
         ? {
           museActor: parseGroundingActor(end?.detail),
-          muse: `located ${grounding.located === grounding.of ? plural(grounding.located, 'part', 'parts') : `${grounding.located} of ${plural(grounding.of, 'part', 'parts')}`}`,
+          muse: locatedText(grounding),
           // Runs that record how many regions SAM was sure of (>= 0.5) count those; older grounded runs count returned ones.
           sam: `confirmed ${parseSamSure(end?.detail)?.sure ?? got.got} of ${got.of} in ${formatSeconds(durationMs ?? 0)}`,
         }
         : null;
+      // While the call is open: Muse is locating until its `locate` event; then SAM confirms what Muse located (or, when
+      // Muse located nothing or failed, outlines from the generation areas). A replayed run recorded without grounding
+      // (`grounded: false`, set by lib/replay.ts) was SAM alone from the start.
+      const phase: 'locating' | 'confirming' | 'outlining' | undefined = !open ? undefined
+        : loc === undefined ? (seg.grounded === false ? 'outlining' : 'locating')
+          : locGrounding !== null && locGrounding !== 'failed' && locGrounding.located > 0 ? 'confirming' : 'outlining';
+      const actor = parseGroundingActor(loc?.detail ?? (model === 'Muse Spark Open' ? 'muse-spark-open located' : undefined));
+      const n = parts === undefined ? 'the parts' : plural(parts, 'part', 'parts');
+      const museMs = num(end?.groundingLatencyMs);
+      const retried = parseSamRetried(end?.detail);
       lines.push({
         key: `sam-r${rev}-${seg.seq}`, kind: 'outlining', open, startMs: seg.t, durationMs, tokens: null, revision: rev, ...(parts === undefined ? {} : { parts }),
         ...(grounded === null ? {} : grounded),
+        ...(phase === undefined ? {} : { phase }),
+        ...(phase === 'locating' || phase === 'confirming' ? { museActor: actor } : {}),
+        ...(phase === 'confirming' && locGrounding !== null && locGrounding !== 'failed' ? { muse: locatedText(locGrounding) } : {}),
+        ...(grounded !== null && museMs !== null ? { museMs } : {}),
+        ...(grounded !== null && retried !== null ? { retried } : {}),
+        ...(seg.figureId === undefined ? {} : { figureId: seg.figureId }),
         text: open
-          ? `SAM 3.1 is outlining ${parts === undefined ? 'the' : parts} parts of the figure`
+          ? (phase === 'locating' ? `${actor} is locating ${n} on the figure`
+            : phase === 'confirming' ? `SAM 3.1 is confirming ${n}`
+              : `SAM 3.1 is outlining ${parts === undefined ? 'the' : parts} parts of the figure`)
           : end?.status === 'failed' ? 'SAM 3.1 could not outline the parts'
             : grounded !== null ? `${grounded.museActor} ${grounded.muse} · SAM 3.1 ${grounded.sam}`
               : `SAM 3.1 outlined ${got === null ? (parts ?? '') : `${got.got} of ${got.of}`} parts in ${formatSeconds(durationMs ?? 0)}`,
@@ -468,7 +535,12 @@ function traceOf(lines: readonly LogLine[]): TraceStep[] {
   for (const l of lines) {
     if (l.open || l.kind === 'queued') continue;
     if (l.kind === 'writing') out.push({ text: l.revision === 1 ? `Written ${formatSeconds(l.durationMs ?? 0)}` : `Revision ${l.revision} · ${formatSeconds(l.durationMs ?? 0)}`, tone: 'plain' });
-    else if (l.kind === 'outlining') out.push({ text: `SAM 3.1 ${formatSeconds(l.durationMs ?? 0)}`, tone: 'plain' });
+    else if (l.kind === 'outlining' && l.muse !== undefined && l.sam !== undefined) {
+      // Stage 10c H2: a grounded stage keeps its line on the part for good: Muse's half, SAM's half, the retry when there was one.
+      out.push({ text: `${l.museActor ?? 'Muse Spark'} ${l.muse}${l.museMs === undefined ? '' : ` in ${formatSeconds(l.museMs)}`}`, tone: 'plain' });
+      out.push({ text: `SAM 3.1 ${l.sam}`, tone: 'plain' });
+      if (l.retried !== undefined) out.push({ text: `SAM retried ${plural(l.retried, 'weak part', 'weak parts')}`, tone: 'plain' });
+    } else if (l.kind === 'outlining') out.push({ text: `SAM 3.1 ${formatSeconds(l.durationMs ?? 0)}`, tone: 'plain' });
     else if (l.kind === 'checks-failed') out.push({ text: l.text.split(':')[0] as string, tone: 'bad' });
     else if (l.kind === 'unusable') out.push({ text: 'Draft unreadable', tone: 'bad' });
     else if (l.kind === 'checks-passed') out.push({ text: l.checks === undefined ? 'Checks passed' : `${l.checks.passed}/${l.checks.total} checks`, tone: 'ok' });

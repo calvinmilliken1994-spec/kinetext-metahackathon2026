@@ -9,6 +9,8 @@ import { lessonCards } from './lesson.ts';
 import type { LessonCard } from './lesson.ts';
 import { heldBackChecks } from './lessonJob.ts';
 import { lessonPartKind, mostVisualFirst } from './partOrder.ts';
+import { partWording } from './partWording.ts';
+import type { WordingLine } from './partWording.ts';
 import { REVISED_LABEL } from './repairStory.ts';
 import type { ReviewState } from './reviewState.ts';
 
@@ -41,6 +43,8 @@ export interface ReviewRow {
   repaired: boolean;
   /** Hidden from the published lesson. */
   hidden: boolean;
+  /** What a student reads in this part (questions, steps, labels), for the teacher to read before ticking it. Stage 10c, M3. */
+  wording: WordingLine[];
 }
 
 export interface ReviewHeld {
@@ -83,6 +87,7 @@ export function reviewModel(detail: JobDetail, review: ReviewState | null = deta
   const row = (card: LessonCard): ReviewRow => ({
     id: card.componentId, title: card.title, label: card.label, status: `${statusText(card)}${repairNote(card.componentId)}`,
     repaired: repair(card.componentId), hidden: hiddenIds.has(card.componentId),
+    wording: partWording(card.spec, card.premium ? detail.spec ?? null : null),
   });
   const working = [...shownCards, ...hiddenCards].filter((c) => c.status === 'passed').map(row);
   const inLesson = mostVisualFirst(working.filter((r) => !r.hidden), (r) => lessonPartKind(r.id));
@@ -93,6 +98,9 @@ export function reviewModel(detail: JobDetail, review: ReviewState | null = deta
   });
   return { parts: [...inLesson, ...working.filter((r) => r.hidden)], held, review };
 }
+
+/** The state line of a lesson that has not been published (the status under the lesson's title on the Review page). */
+export const NOT_REVIEWED_LINE = 'Not reviewed yet';
 
 // ---- the draft: ticks and hides, before publishing -----------------------------------------------------------------------
 

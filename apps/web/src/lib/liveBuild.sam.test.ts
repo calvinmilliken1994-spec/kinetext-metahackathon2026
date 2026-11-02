@@ -20,7 +20,7 @@ test('figure frame: no SAM note before any SAM call, and never one for other kin
 
 test('figure frame: SAM working while its call is open, then what it outlined (no regions invented)', () => {
   const open = figureNote(partBuilds(at(60))[LD]);
-  assert.deepEqual(open, { actor: 'SAM 3.1', text: 'is outlining 5 parts of the figure', working: true });
+  assert.deepEqual(open, { actor: 'SAM 3.1', text: 'is outlining 5 parts of the figure', working: true, phase: 'outlining' });
   const done = figureNote(partBuilds(at(62))[LD]);
   assert.equal(done?.working, false, 'the call has closed: no working cue');
   assert.equal(done?.actor, 'SAM 3.1');

@@ -21,6 +21,7 @@ const ICONS: Partial<Record<NavId, ReactNode>> = {
   results: <IconResults />,
   demo: <IconDemo />,
   how: <IconHelp />,
+  welcome: <IconHelp />,
 };
 
 export interface SidebarProps {

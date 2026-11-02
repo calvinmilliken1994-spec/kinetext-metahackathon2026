@@ -9,10 +9,12 @@ import { linkStore, markLinks, segmentIsTabStop } from '../lib/linking.ts';
 import { revealInPanels, scrollContainersOf, scrollTopToReveal } from '../lib/scroll.ts';
 import { sourceDecorations, sourcePieces } from '../lib/sourceText.ts';
 import { isHttpUrl, sourceCreditText, sourceCreditTitle, TEACHER_TAG } from '../lib/sources.ts';
-import { sourceMetaLine } from '../lib/lessonLayout.ts';
+import { quoteCountLine } from '../lib/sourceMeta.ts';
 import { CitationChip } from './Explanations.tsx';
 import { IconChevronDown, IconExternal, IconSourcePanel } from './icons.tsx';
 import { SourcePicker } from './SourcePicker.tsx';
+import { SourceSkeleton } from './PendingCard.tsx';
+import '../styles/lesson-load.css';
 
 export interface Flash { key: string; n: number }
 
@@ -163,6 +165,7 @@ export function SourcePanel({ sources, selectedId, onSelect, onReload, doc, high
   const [detailsOpen, setDetailsOpen] = useState(false);
   const detailsId = useId();
   const foundCount = highlights === null || quotes.length === 0 ? null : quotes.filter((q) => highlights.ranges[q.key] !== undefined).length;
+  const countLine = quoteCountLine({ found: foundCount, total: quotes.length });
 
   return (
     <section className="panel source-panel" aria-labelledby="source-heading">
@@ -194,23 +197,28 @@ export function SourcePanel({ sources, selectedId, onSelect, onReload, doc, high
         </div>
 
         {meta !== undefined && (
-          <p className="source-meta">
+          // The credit is never cut: on a narrow pane (1366) the links wrap under it as one group rather than squeezing it to
+          // "NOAA Natio…" (lesson-load.css).
+          <p className="source-meta source-meta-credit">
             <span className="source-meta-main" title={sourceCreditTitle(meta)}>
               {meta.kind === 'user' ? `${TEACHER_TAG} · ` : ''}
-              {sourceMetaLine({ licence: sourceCreditText(meta), found: foundCount, total: quotes.length })}
+              {sourceCreditText(meta)}
             </span>
-            {isHttpUrl(meta.locator) && (
-              <>
-                <span className="source-meta-sep" aria-hidden="true">·</span>
-                <a href={meta.locator} target="_blank" rel="noopener noreferrer">Original <IconExternal size={14} /><span className="sr-only"> page (opens in a new tab)</span></a>
-              </>
-            )}
-            <span className="source-meta-sep" aria-hidden="true">·</span>
-            <button type="button" className="link-btn" aria-expanded={detailsOpen} aria-controls={detailsId} onClick={() => setDetailsOpen((v) => !v)}>
-              {detailsOpen ? 'Hide details' : 'Credit & key'}
-            </button>
+            <span className="source-meta-links">
+              {isHttpUrl(meta.locator) && (
+                <>
+                  <a href={meta.locator} target="_blank" rel="noopener noreferrer">Original <IconExternal size={14} /><span className="sr-only"> page (opens in a new tab)</span></a>
+                  <span className="source-meta-sep" aria-hidden="true">·</span>
+                </>
+              )}
+              <button type="button" className="link-btn" aria-expanded={detailsOpen} aria-controls={detailsId} onClick={() => setDetailsOpen((v) => !v)}>
+                {detailsOpen ? 'Hide details' : 'Credit & key'}
+              </button>
+            </span>
           </p>
         )}
+        {/* The quote count on a quiet line of its own: sharing the credit's line cut it to "21 of 21 qu…" at 1920. */}
+        {meta !== undefined && countLine !== null && <p className="source-meta source-meta-count" data-testid="source-quote-count">{countLine}</p>}
 
         {meta !== undefined && detailsOpen && (
           <div id={detailsId} className="source-details">
@@ -240,7 +248,7 @@ export function SourcePanel({ sources, selectedId, onSelect, onReload, doc, high
 
       <div className="source-scroll">
         {doc === null && <p className="muted pad">Select a page.</p>}
-        {doc?.state === 'loading' && <p className="muted pad">Loading the page…</p>}
+        {doc?.state === 'loading' && <SourceSkeleton />}
         {doc?.state === 'error' && <div className="callout callout-error" role="alert">{doc.message}</div>}
         {doc?.state === 'ready' && <HighlightedText text={doc.data.text} highlights={highlights} byKey={byKey} flash={flash} sourceId={selectedId ?? ''} order={order} />}
       </div>

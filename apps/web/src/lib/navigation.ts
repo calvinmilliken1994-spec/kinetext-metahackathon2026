@@ -1,7 +1,7 @@
 // Stage 10 (docs/specs/STAGE-10-navigation-and-access.md, section B): the main view and the sidebar. The view lives in
 // the URL (`?view=new|lessons|review|results|how`, none = the lesson). The sidebar is always expanded, in labelled
-// sections; every entry opens something in the main area, except Source page (a toggle on the lesson), Present, Demo
-// and "Checks and run details" (the open lesson's details drawer). Pure: no React, no DOM.
+// sections; every entry opens something in the main area, except Source page (a toggle on the lesson), Present, Demo,
+// Show the welcome again and "Checks and run details" (the open lesson's details drawer). Pure: no React, no DOM.
 
 export type MainView = 'lesson' | 'new' | 'lessons' | 'review' | 'results' | 'how';
 
@@ -20,12 +20,29 @@ export function viewFromSearch(search: string): MainView {
 export function searchForView(search: string, view: MainView): string {
   const q = new URLSearchParams(search);
   if (view === 'lesson') q.delete('view'); else q.set('view', view);
+  // `path` belongs to New lesson only.
+  if (view !== 'new') q.delete('path');
   const out = q.toString();
   return out === '' ? '' : `?${out}`;
 }
 
-export type NavId = 'new-lesson' | 'all-lessons' | 'open-lesson' | 'lesson' | 'source' | 'present' | 'checks' | 'review' | 'results' | 'demo' | 'how';
-export type NavAction = 'source' | 'present' | 'checks' | 'demo';
+/** Stage 10c: which path New lesson opens on (`?path=own` from the Demo's "Try your own page"), or null. */
+export type LessonPath = 'library' | 'own';
+export function pathFromSearch(search: string): LessonPath | null {
+  const p = new URLSearchParams(search).get('path');
+  return p === 'own' || p === 'library' ? p : null;
+}
+
+/** The search string with New lesson's path: `own` is written, the library (the default) leaves no parameter. */
+export function searchForPath(search: string, path: LessonPath): string {
+  const q = new URLSearchParams(search);
+  if (path === 'own') q.set('path', 'own'); else q.delete('path');
+  const out = q.toString();
+  return out === '' ? '' : `?${out}`;
+}
+
+export type NavId = 'new-lesson' | 'all-lessons' | 'open-lesson' | 'lesson' | 'source' | 'present' | 'checks' | 'review' | 'results' | 'demo' | 'how' | 'welcome';
+export type NavAction = 'source' | 'present' | 'checks' | 'demo' | 'welcome';
 
 export interface NavItem {
   id: NavId;
@@ -63,7 +80,7 @@ export interface SidebarInput {
 const TARGETS: Readonly<Record<NavId, { view: MainView } | { action: NavAction }>> = {
   'new-lesson': { view: 'new' }, 'all-lessons': { view: 'lessons' }, 'open-lesson': { view: 'lesson' }, lesson: { view: 'lesson' },
   source: { action: 'source' }, present: { action: 'present' }, checks: { action: 'checks' }, review: { view: 'review' },
-  results: { view: 'results' }, demo: { action: 'demo' }, how: { view: 'how' },
+  results: { view: 'results' }, demo: { action: 'demo' }, how: { view: 'how' }, welcome: { action: 'welcome' },
 };
 
 export function navTarget(id: NavId): { view: MainView } | { action: NavAction } {
@@ -80,10 +97,11 @@ export function sidebarSections(s: SidebarInput): NavSection[] {
       pressed: null, disabled: false, hint: null, badge: null, tour: null, ...o,
     };
   };
+  // Stage 10c, L3: no heading over a single entry. New lesson leads the Lessons section; Results joins Help.
   const sections: NavSection[] = [
-    { id: 'create', heading: 'Create', items: [it('new-lesson', 'New lesson', { tour: 'new-lesson' })] },
     {
       id: 'lessons', heading: 'Lessons', items: [
+        it('new-lesson', 'New lesson', { tour: 'new-lesson' }),
         it('all-lessons', 'All lessons'),
         ...(s.lessonTitle === null ? [] : [it('open-lesson', s.lessonTitle, {
           current: 'true', badge: s.activity === 'building' ? 'Building' : s.activity === 'replay' ? 'Replay' : null, hint: 'The lesson open now',
@@ -107,14 +125,13 @@ export function sidebarSections(s: SidebarInput): NavSection[] {
       ],
     });
   }
-  sections.push(
-    { id: 'results', heading: 'Results', items: [it('results', 'Results')] },
-    {
-      id: 'help', heading: 'Help', items: [
-        it('demo', 'Demo', { pressed: s.touring, hint: 'A short walk through the app, using a recorded build' }),
-        it('how', 'How it works'),
-      ],
-    },
-  );
+  sections.push({
+    id: 'help', heading: 'Results and help', items: [
+      it('results', 'Results'),
+      it('demo', 'Demo', { pressed: s.touring, hint: 'Watch a lesson being built, from a recorded build' }),
+      it('how', 'How it works'),
+      it('welcome', 'Show the welcome again', { hint: 'The first screen and the short guide round the pages' }),
+    ],
+  });
   return sections;
 }

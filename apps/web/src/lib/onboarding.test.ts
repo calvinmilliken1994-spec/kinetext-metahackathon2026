@@ -42,11 +42,13 @@ test('shouldAutoStart: once on a plain first visit, never over a deep link, alwa
   assert.equal(shouldAutoStart('done', '?job=x&tour=1'), true);
 });
 
-test('steps: eight in order; the replay steps drop out when the recorded run is missing', () => {
-  assert.deepEqual(ids(sig(null)), ['welcome', 'library', 'reading', 'overview', 'checking', 'ready', 'try', 'present']);
+test('steps in order; the replay steps drop out when the recorded run is missing', () => {
+  // The figure step (Stage 10c, M4) joins once the replay shows the plan has a figure part.
+  assert.deepEqual(ids(sig(null)), ['welcome', 'library', 'reading', 'overview', 'checking', 'ready', 'try', 'present', 'own']);
+  assert.deepEqual(ids(sig(36)), ['welcome', 'library', 'reading', 'overview', 'figure', 'checking', 'ready', 'try', 'present', 'own']);
   // W-08 (Set A): without the recording and with nothing on screen to try, the try step drops out too.
   const none = sig(null, { replayAvailable: false });
-  assert.deepEqual(ids(none), ['welcome', 'library', 'present']);
+  assert.deepEqual(ids(none), ['welcome', 'library', 'present', 'own']);
   assert.equal(activeSteps(none)[1]?.primary, 'next', 'no replay button when nothing can be replayed');
   assert.equal(activeSteps(sig(null))[1]?.primary, 'replay');
   assert.equal(activeSteps(sig(null))[1]?.primaryLabel, 'Watch a lesson being built');
@@ -62,7 +64,7 @@ test('steps read real counts and the run’s own model, and only claim a repair 
   const check = (s: number): string => tourSteps(sig(s)).find((x) => x.id === 'checking')?.body ?? '';
   assert.doesNotMatch(check(60), /failed/);
   assert.match(check(65), /reworking it as revision 2/);
-  assert.match(check(90), /Revision 2 passed every check.*not a planted fault/);
+  assert.match(check(90), /revision 2 passed every check.*not a planted fault/);
   // Calvin's rule: a natural repair is "revised by Muse after a failed check", never "the model's own mistake".
   for (const t of [60, 65, 90]) assert.doesNotMatch(check(t), /mistake|\bown\b/i, `at ${t} s`);
 });
@@ -124,11 +126,14 @@ test('auto-advance: after the replay passes the moment, and only after the minim
   assert.deepEqual(autoAdvance(reading, steps, sig(36), 1000 + TOUR_MIN_DWELL_MS), { index: 3, enteredAt: 1000 + TOUR_MIN_DWELL_MS });
   const overview = { index: 3, enteredAt: 0 };
   assert.equal(autoAdvance(overview, steps, sig(40), 10_000), overview, 'writing alone does not move on');
-  assert.equal(autoAdvance(overview, steps, sig(60), 10_000).index, 4);
-  const checking = { index: 4, enteredAt: 0 };
+  assert.equal(autoAdvance(overview, steps, sig(60), 10_000).index, 4, 'on to the figure step once SAM starts');
+  const figure = { index: 4, enteredAt: 0 };
+  assert.equal(autoAdvance(figure, steps, sig(60), 10_000), figure, 'SAM still running');
+  assert.equal(autoAdvance(figure, steps, sig(62), 10_000).index, 5, 'the first draft has its check result');
+  const checking = { index: 5, enteredAt: 0 };
   assert.equal(autoAdvance(checking, steps, sig(80), 10_000), checking);
-  assert.equal(autoAdvance(checking, steps, sig(90), 10_000).index, 5);
-  const ready = { index: 5, enteredAt: 0 };
+  assert.equal(autoAdvance(checking, steps, sig(90), 10_000).index, 6);
+  const ready = { index: 6, enteredAt: 0 };
   assert.equal(autoAdvance(ready, steps, sig(90), 99_999), ready, 'from the closing beat on, the teacher moves on');
 });
 
@@ -213,9 +218,10 @@ test('placeCard: a below card that would cover a second cut-out under the target
 test('the present step points at the closing beat once the replay has finished, else at the lesson’s Present button', () => {
   const present = (s: TourSignals) => tourSteps(s).find((x) => x.id === 'present');
   assert.deepEqual(present(sig(90))?.targets, ['[data-tour="live-strip"]']);
-  assert.equal(present(sig(90))?.primary, 'present');
+  assert.equal(present(sig(90))?.primary, 'next', 'Stage 10c: the Demo goes on to Try your own page');
+  assert.deepEqual(present(sig(90))?.secondary, { action: 'present', label: 'Open presentation mode' });
   assert.deepEqual(present(sig(null))?.targets, ['[data-tour="present"]']);
-  assert.equal(present(sig(null))?.primary, 'finish', 'nothing to present: the button just finishes');
+  assert.equal(present(sig(null))?.secondary, null, 'nothing to present: no side action');
   assert.equal(sig(null, { replayLoading: true }).replayLoading, true);
 });
 

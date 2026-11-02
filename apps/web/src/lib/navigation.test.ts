@@ -4,7 +4,7 @@
 // the right except "Checks and run details", which belongs to the open lesson.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { navTarget, searchForView, sidebarSections, VIEW_TITLES, viewFromSearch } from './navigation.ts';
+import { navTarget, pathFromSearch, searchForPath, searchForView, sidebarSections, VIEW_TITLES, viewFromSearch } from './navigation.ts';
 import type { SidebarInput } from './navigation.ts';
 
 test('viewFromSearch: ?view= names a main view; none or an unknown value means the lesson', () => {
@@ -44,21 +44,24 @@ const base: SidebarInput = {
 const flat = (i: SidebarInput) => sidebarSections(i).flatMap((s) => s.items.map((it) => ({ ...it, section: s.id })));
 const item = (i: SidebarInput, id: string) => flat(i).find((x) => x.id === id);
 
-test('sections in the frozen order, each with a heading; This lesson only while a lesson is open', () => {
+test('sections: no heading sits over a single entry (L3); This lesson only while a lesson is open', () => {
+  // Stage 10c, L3: "Create" (only New lesson) folds into Lessons, and "Results" (only Results) into the Help section.
   assert.deepEqual(sidebarSections(base).map((s) => [s.id, s.heading]), [
-    ['create', 'Create'], ['lessons', 'Lessons'], ['lesson', 'This lesson'], ['results', 'Results'], ['help', 'Help'],
+    ['lessons', 'Lessons'], ['lesson', 'This lesson'], ['help', 'Results and help'],
   ]);
-  assert.deepEqual(sidebarSections({ ...base, lessonTitle: null }).map((s) => s.id), ['create', 'lessons', 'results', 'help']);
+  assert.deepEqual(sidebarSections({ ...base, lessonTitle: null }).map((s) => s.id), ['lessons', 'help']);
+  for (const i of [base, { ...base, lessonTitle: null }]) {
+    for (const s of sidebarSections(i)) assert.ok(s.items.length > 1, `${s.id} has more than one entry`);
+  }
 });
 
-test('the entries of each section, with Tour renamed Demo', () => {
+test('the entries of each section, with Tour renamed Demo and the Welcome reachable again', () => {
   const by = (id: string) => sidebarSections(base).find((s) => s.id === id)?.items.map((x) => x.label);
-  assert.deepEqual(by('create'), ['New lesson']);
-  assert.deepEqual(by('lessons'), ['All lessons', 'How water circulates']);
+  assert.deepEqual(by('lessons'), ['New lesson', 'All lessons', 'How water circulates']);
   assert.deepEqual(by('lesson'), ['Lesson', 'Source page', 'Present', 'Checks and run details', 'Review and publish']);
-  assert.deepEqual(by('results'), ['Results']);
-  assert.deepEqual(by('help'), ['Demo', 'How it works']);
+  assert.deepEqual(by('help'), ['Results', 'Demo', 'How it works', 'Show the welcome again']);
   assert.equal(flat(base).some((x) => /tour/i.test(x.label)), false);
+  assert.equal(item(base, 'welcome')?.kind, 'action');
 });
 
 test('the current view is marked: one aria-current="page"; the open lesson is always marked as the current lesson', () => {
@@ -108,4 +111,16 @@ test('navTarget: views open in the main area, Source/Present/Checks/Demo are act
   assert.deepEqual(navTarget('present'), { action: 'present' });
   assert.deepEqual(navTarget('checks'), { action: 'checks' });
   assert.deepEqual(navTarget('demo'), { action: 'demo' });
+  assert.deepEqual(navTarget('welcome'), { action: 'welcome' });
+});
+
+test('New lesson can open on a path: ?path=own (the Demo\u2019s Try your own page), dropped on other views', () => {
+  assert.equal(pathFromSearch('?view=new&path=own'), 'own');
+  assert.equal(pathFromSearch('?view=new&path=library'), 'library');
+  assert.equal(pathFromSearch('?view=new'), null);
+  assert.equal(pathFromSearch('?view=new&path=nope'), null);
+  assert.equal(searchForView('?view=new&path=own', 'lessons'), '?view=lessons', 'leaving New lesson drops the path');
+  assert.equal(searchForView('?view=new&path=own', 'new'), '?view=new&path=own');
+  assert.equal(searchForPath('?view=new', 'own'), '?view=new&path=own');
+  assert.equal(searchForPath('?view=new&path=own', 'library'), '?view=new');
 });

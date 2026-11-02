@@ -36,7 +36,7 @@ import { algorithmPresentationSteps } from './algorithmView.ts';
 import { logLadderPresentationSteps } from './logLadderView.ts';
 import { thresholdPresentationSteps, thresholdRevealQuote } from './thresholdView.ts';
 import { dataTablePresentationSteps, dataTableRevealQuote } from './dataTableView.ts';
-import { labelDiagramPresentationSteps } from './labelDiagramView.ts';
+import { labelDiagramPresentationSteps, stageFigureSize } from './labelDiagramView.ts';
 import { labelDiagramRevealQuote } from './labelDiagramView.ts';
 
 // ---- the deck -----------------------------------------------------------------------------------------------------
@@ -169,6 +169,27 @@ export function enginePresentationSteps(spec: EngineSpec): number {
     case 'label-diagram-v1': n = labelDiagramPresentationSteps(spec); break;
   }
   return Number.isFinite(n) && n >= 1 ? Math.trunc(n) : 1;
+}
+
+/**
+ * The label-diagram slide (UX pair review 2, H5). Its heading sits over the side column, so the figure runs the full
+ * stage height, and the part is laid out at a design width whose shape matches the stage (as STAGE_LAYOUT does for the
+ * formula explorer): StageFit then scales it by the height and the figure fills the stage top to bottom.
+ * `DIAGRAM_FIGURE_BOX` mirrors the figure's design box on a slide (`STAGE_FIGURE` in LabelDiagramView.tsx).
+ */
+export const DIAGRAM_FIGURE_BOX = { maxW: 600, maxH: 436 } as const;
+/**
+ * `aspect`: the stage box at 2560×1440 (2227×1051, the narrowest of the target sizes; 1920×1080 gives 1670×774 and
+ * 1366×768 gives 1189×525). `gap` is the figure–side column gap (40 px in the stage layout); `padBottom` is StageFit's
+ * own bottom padding; `sideMin` keeps the question, the names and the numbers readable beside a wide figure.
+ */
+export const DIAGRAM_STAGE = { aspect: 2.12, gap: 40, padBottom: 8, sideMin: 420 } as const;
+
+/** Design width of the label-diagram slide for this figure. */
+export function diagramStageWidth(figure: { width: number; height: number }): number {
+  const fig = stageFigureSize(figure, DIAGRAM_FIGURE_BOX.maxW, DIAGRAM_FIGURE_BOX.maxH);
+  const byShape = Math.round(DIAGRAM_STAGE.aspect * (fig.height + DIAGRAM_STAGE.padBottom));
+  return Math.max(fig.width + DIAGRAM_STAGE.gap + DIAGRAM_STAGE.sideMin, byShape);
 }
 
 /** The page sentence a revealed engine step shows in the quote zone (views without one: null). */

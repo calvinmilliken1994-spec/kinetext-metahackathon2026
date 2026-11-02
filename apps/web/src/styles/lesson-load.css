@@ -1,0 +1,44 @@
+/* Stage 10c slice B: the lesson's cold start (UX pair review 2, M7) and the source header's credit line (polish).
+ * Imported by PendingCard.tsx and SourcePanel.tsx. Theme tokens from ../styles.css. */
+
+/* ---- cold-start skeletons: the lesson's shape and the page's text as bars --------------------------------------------- */
+.skel-lesson { display: flex; flex-direction: column; gap: 20px; }
+.skel-head { display: grid; gap: 12px; padding-block: 6px 4px; }
+.skel-card { display: grid; gap: 12px; align-content: start; }
+.skel-part { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 28px; align-items: start; margin-block-start: 8px; }
+.skel-controls { display: grid; gap: 14px; align-content: start; }
+.skel-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.skel-bar, .skel-block {
+  display: block; border-radius: var(--r-s);
+  background: linear-gradient(90deg, var(--panel-2) 0%, var(--panel-3) 45%, var(--panel-2) 90%) 0 0 / 240% 100%;
+  animation: skel-shimmer 1.6s ease-in-out infinite;
+}
+.skel-title { inline-size: min(26em, 62%); block-size: 30px; border-radius: var(--r); }
+.skel-heading { inline-size: min(18em, 48%); block-size: 20px; }
+.skel-line { block-size: 12px; }
+.skel-question { inline-size: 80%; block-size: 22px; }
+.skel-chip { inline-size: 92px; block-size: 30px; border-radius: var(--r); }
+.skel-figure { inline-size: 100%; aspect-ratio: 4 / 3; border-radius: var(--r-l); }
+/* Later bars start a beat later, so the light moves down the sketch rather than flashing all at once. */
+.skel-card:nth-of-type(2) :is(.skel-bar, .skel-block) { animation-delay: 160ms; }
+.skel-notes .skel-bar { animation-delay: 320ms; }
+
+.skel-source { display: grid; gap: 22px; padding: 18px 16px; }
+.skel-para { display: grid; gap: 10px; }
+.skel-text { block-size: 11px; }
+.skel-para:first-child .skel-text { block-size: 18px; }
+.skel-para:nth-child(2n) .skel-bar { animation-delay: 160ms; }
+
+@keyframes skel-shimmer { from { background-position: 100% 0; } to { background-position: 0 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .skel-bar, .skel-block { animation: none; background: var(--panel-2); }
+}
+
+/* ---- the source header's credit: never cut ---------------------------------------------------------------------------
+ * The publisher keeps its whole name; on a narrow pane (1366) the links wrap under it as one group. The quote count has
+ * its own quiet line below (it was cut to "21 of 21 qu…" at 1920 when it shared the credit's line). */
+.source-meta.source-meta-credit { flex-wrap: wrap; column-gap: 12px; white-space: normal; }
+.source-meta-credit > .source-meta-main { overflow: visible; text-overflow: clip; }
+.source-meta-links { display: inline-flex; align-items: baseline; white-space: nowrap; }
+.source-meta-links > .source-meta-sep { margin-inline: 7px; }

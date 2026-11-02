@@ -1,5 +1,5 @@
 // Stage 10 (docs/specs/STAGE-10-navigation-and-access.md, section B): the library list on the New lesson page and the
-// All lessons page. Search is plain: every typed word must appear in the title or the publisher (case and accents
+// All lessons page. Search is plain: every typed word must appear in the title, the publisher or the subject (case and accents
 // ignored). Pure: no React, no DOM.
 
 import { sourcePublisher } from './sources.ts';
@@ -27,7 +27,7 @@ const featuredFirst = (a: PickerSource, b: PickerSource): number => Number(b.fea
 export function browsePages<T extends BrowsePage>(sources: readonly T[], o: { query: string; subject: SubjectKey | null }): { groups: PageGroup<T>[]; shown: number; total: number } {
   const library = activeSources(sources).filter((s) => s.kind !== 'user');
   const keep = library.filter((s) => (o.subject === null || subjectOf(s) === o.subject)
-    && matchesQuery(`${s.title} ${sourcePublisher(s.attribution) ?? ''}`, o.query));
+    && matchesQuery(`${s.title} ${sourcePublisher(s.attribution) ?? ''} ${subjectLabel(subjectOf(s))}`, o.query));
   const groups: PageGroup<T>[] = [];
   for (const subject of SUBJECT_ORDER) {
     const items = keep.filter((s) => subjectOf(s) === subject).sort(featuredFirst);
@@ -95,4 +95,59 @@ export function previewExcerpt(text: string, max: number, title?: string): strin
   const cut = clean.slice(0, max);
   const at = cut.search(/\s\S*$/);
   return `${(at > max * 0.6 ? cut.slice(0, at) : cut).replace(/[\s,;:.–—-]+$/, '')}…`;
+}
+
+// ---- All lessons: counts, units and what the pages are (Stage 10c slice D, UX review 2 M5) --------------------------------
+
+const num = (n: number): string => n.toLocaleString('en-US');
+const plural = (n: number, one: string, many: string): string => (n === 1 ? one : many);
+
+/** Where the pages behind the finished lessons come from: the active library, a teacher's own text, or a page since retired. */
+export interface PageBreakdown { pages: number; library: number; own: number; retired: number }
+
+/**
+ * The distinct pages with a finished run, split by what the page is now. The library list the New lesson page shows leaves
+ * out retired pages, and the sources route does not list them at all, so a page missing from `byId` counts as retired.
+ */
+export function pageBreakdown(jobs: readonly { sourceId: string; status: string }[], byId: ReadonlyMap<string, { kind?: string | undefined; retired?: boolean | undefined }>): PageBreakdown {
+  const ids = new Set(jobs.filter((j) => j.status === 'succeeded').map((j) => j.sourceId));
+  const out: PageBreakdown = { pages: ids.size, library: 0, own: 0, retired: 0 };
+  for (const id of ids) {
+    const s = byId.get(id);
+    if (s === undefined || s.retired === true) out.retired += 1;
+    else if (s.kind === 'user') out.own += 1;
+    else out.library += 1;
+  }
+  return out;
+}
+
+/** The All lessons lede: the totals, and why the page count is higher than the library's. */
+export function lessonsLede(finished: number, b: PageBreakdown): string {
+  const head = finished === 1 ? '1 finished lesson or activity' : `${num(finished)} finished lessons and activities`;
+  const from = `${num(b.pages)} ${plural(b.pages, 'page', 'pages')}`;
+  const where = [`${num(b.library)} in the library`, ...(b.own > 0 ? [`${num(b.own)} pasted by a teacher`] : []), ...(b.retired > 0 ? [`${num(b.retired)} since retired from it`] : [])];
+  const tail = b.own === 0 && b.retired === 0 ? (b.pages === 1 ? ', in the library' : ', all in the library')
+    : `: ${where.length === 1 ? where[0] : `${where.slice(0, -1).join(', ')} and ${where[where.length - 1]}`}`;
+  return `${head} from ${from}${tail}. Open ${finished === 1 ? 'it' : 'one'} to try its parts, present it, or see how it was built and checked.`;
+}
+
+/** What a row of each list is: a page (newest per page), a lesson (every lesson), a run (all runs). */
+export function chipUnit(scope: LessonScope): 'page' | 'lesson' | 'run' {
+  return scope === 'latest' ? 'page' : scope === 'lessons' ? 'lesson' : 'run';
+}
+
+/** The count line above the table: "104 pages · the newest lesson of each", "670 lessons", "746 runs". */
+export function rowsCountText(o: { scope: LessonScope; count: number; subjectLabel: string | null; query: string }): string {
+  const unit = chipUnit(o.scope);
+  const q = o.query.trim();
+  const noun = o.count === 0 ? `No ${unit}s` : `${num(o.count)} ${unit}${o.count === 1 ? '' : 's'}`;
+  const where = `${o.subjectLabel !== null ? ` in ${o.subjectLabel}` : ''}${q !== '' ? ` matching “${q}”` : ''}`;
+  return `${noun}${where}${o.scope === 'latest' && o.count > 0 ? ' · the newest lesson of each' : ''}`;
+}
+
+/** What the parts column says: "2 of 3 parts" for a lesson ("1 of 1 part" for one), the activity for a classic run. */
+export function partsText(j: { flow?: string | undefined; lesson?: { componentsPublished: number; componentsPlanned: number } | undefined }): string {
+  const l = j.lesson;
+  if (l !== undefined && l.componentsPlanned > 0) return `${l.componentsPublished} of ${l.componentsPlanned} ${plural(l.componentsPlanned, 'part', 'parts')}`;
+  return j.flow === 'activity' ? 'One activity' : '';
 }

@@ -179,8 +179,9 @@ export interface ComponentRepairRecord {
 }
 
 /** The contracts' Stage union extended with the frozen lesson stages ('segment' is the
- *  Stage 8b SAM 3.1 segmentation step of a label-diagram-v1 revision). */
-export type LessonStage = Stage | 'overview' | 'component' | 'segment';
+ *  Stage 8b SAM 3.1 segmentation step of a label-diagram-v1 revision; 'locate' is the Stage 10c
+ *  marker for the end of that revision's Muse grounding call, emitted between segment started and succeeded). */
+export type LessonStage = Stage | 'overview' | 'component' | 'segment' | 'locate';
 /** Repair events target the analysis, the v1 spec loop, or one lesson component. */
 export type LessonRepairTarget = 'analysis' | 'spec' | 'component';
 
@@ -201,6 +202,8 @@ export interface LessonEventExtra {
   imagesProcessed?: number;
   /** Stage 8c Addendum A: latency of the revision's Muse grounding call, on 'segment' events (absent when none was made). */
   groundingLatencyMs?: number;
+  /** Stage 10c H2: on `segment started`, the figure the part is built on (the web shows it dimmed while the stage runs). */
+  figureId?: string;
 }
 
 /**
@@ -1699,6 +1702,7 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
       componentId: cid,
       revision,
       detail: `sam-3.1 point segmentation of ${parts.length} part(s)`,
+      figureId: figure.meta.id,
     });
     const segmentFail = (detail: string, reason: string): SegmentFail => {
       const extra: LessonEventExtra = { componentId: cid, revision, detail };
@@ -1725,6 +1729,17 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
       grounding.failedCode === null
         ? `${jobModel} located ${grounding.located} of ${parts.length} part(s) for SAM`
         : `${jobModel} grounding failed (${grounding.failedCode}); used the generation areas`;
+    // Stage 10c H2: tell the live view the moment Muse's locating is over, so it can switch from "Muse is locating"
+    // to "SAM is confirming" while SAM's call is still open. No cost here: the charge rides on the segment event.
+    ctx.emit('locate', grounding.failedCode === null ? 'succeeded' : 'failed', {
+      componentId: cid,
+      revision,
+      ...(grounding.latencyMs !== null ? { latencyMs: grounding.latencyMs } : {}),
+      detail:
+        grounding.failedCode === null
+          ? groundingNote
+          : `${jobModel} grounding failed (${grounding.failedCode})`,
+    });
     // The wrapper ledger mirrors every settled reconciliation into `trace`, so the job's
     // accumulator can account EXACTLY what the spending ledger holds — without re-deriving
     // sam.ts's billing rules from error codes. `close` is a no-op: the job's ledger outlives

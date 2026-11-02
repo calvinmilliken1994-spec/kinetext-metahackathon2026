@@ -5,8 +5,10 @@ import { useId } from 'react';
 import type { Access } from '../lib/access.ts';
 import { formatUSD } from '../lib/access.ts';
 import { MODAL_PROVIDER_MODEL, MODEL_EXPLAINER } from '../lib/models.ts';
+import type { NavId } from '../lib/navigation.ts';
+import { HOW_STEPS, howLede } from '../lib/pageCopy.ts';
 import { IconDemo } from './navIcons.tsx';
-import { IconNewLesson } from './icons.tsx';
+import { IconArrowRight, IconNewLesson } from './icons.tsx';
 
 export interface HowItWorksProps {
   /** Active licensed pages and subjects, once the list has loaded. */
@@ -15,56 +17,34 @@ export interface HowItWorksProps {
   onDemo: () => void;
   onNewLesson: () => void;
   onEnterCode: () => void;
+  /** Opens a sidebar entry (App's onNav): the steps link to where a judge can see them. Without it the steps are plain text. */
+  onNav?: ((id: NavId) => void) | undefined;
 }
 
-const STEPS: { title: string; body: string }[] = [
-  {
-    title: 'Muse Spark reads the page',
-    body: 'It decides the subject, writes a short summary whose key points are tied to the sentences they came from, and plans which interactive parts suit the page.',
-  },
-  {
-    title: 'Muse writes each part from the page',
-    body: 'Quiz cards that ask for a prediction first, sequences, sorts, compare tables, formula explorers, simulations, timelines and diagrams to label. Muse writes data for tested components, never code.',
-  },
-  {
-    title: 'Code checks every part',
-    body: 'Deterministic checks, not a model: every quote must appear word for word in the stored page, numbers are recomputed by tested engines, and formulas are evaluated by our own parser.',
-  },
-  {
-    title: 'Muse repairs a part that fails a check',
-    body: 'The failed checks go back to Muse, which revises only what they name, at most twice. A part that still fails is left out of the lesson rather than shown wrong.',
-  },
-  {
-    title: 'SAM 3.1 and Muse locate diagram parts',
-    body: 'For a diagram to label, Muse Spark locates each part on the figure and SAM 3.1, Meta’s segmentation model, confirms where it is.',
-  },
-  {
-    title: 'A teacher reviews it',
-    body: 'Every lesson is marked AI-written and “Teacher review pending” until a teacher has checked it.',
-  },
-];
-
-export function HowItWorksPage({ library, access, onDemo, onNewLesson, onEnterCode }: HowItWorksProps) {
+export function HowItWorksPage({ library, access, onDemo, onNewLesson, onEnterCode, onNav }: HowItWorksProps) {
   const uid = useId();
   const pages = library === null ? 'licensed public pages' : `${library.pages} licensed public pages in ${library.subjects} subjects`;
   return (
     <div className="page page-how" data-testid="how-page">
       <header className="page-head">
         <h1 className="page-title" tabIndex={-1} data-view-title>How it works</h1>
-        <p className="page-lede">
-          A teacher picks a page from a library of {pages}, or pastes their own. Muse Spark, Meta’s model, turns it into a
-          lesson to teach from: a short summary in the page’s own words, then interactive parts a class can try, each one
-          checked against the page.
-        </p>
+        <p className="page-lede">{howLede(pages)}</p>
       </header>
 
       <section className="how-section" aria-labelledby={`${uid}-steps`}>
         <h2 id={`${uid}-steps`}>How a lesson is built</h2>
         <ol className="how-steps">
-          {STEPS.map((s) => (
+          {HOW_STEPS.map((s) => (
             <li key={s.title}>
               <h3>{s.title}</h3>
               <p>{s.body}</p>
+              {s.link !== null && onNav !== undefined && (
+                <p className="how-step-link">
+                  <button type="button" className="link-btn" onClick={() => onNav(s.link!.nav)} data-how-link={s.link.nav}>
+                    {s.link.label}<IconArrowRight size={14} />
+                  </button>
+                </p>
+              )}
             </li>
           ))}
         </ol>

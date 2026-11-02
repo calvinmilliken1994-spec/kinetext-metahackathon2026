@@ -36,16 +36,19 @@ test('no recording, a finished lesson open: the tour points at its first checked
   const open: JobDetail = normaliseJobDetail(lessonWire('complete'));
   const s = base({ detail: open, canPresent: true });
   assert.equal(s.firstPart, 'formula-explorer-v1', 'the open lesson’s first passed part, in plan order');
-  assert.deepEqual(ids(s), ['welcome', 'library', 'try', 'present']);
-  assert.deepEqual(walk(s), ['welcome', 'library', 'try', 'present']);
-  assert.equal(activeSteps(s).at(-1)?.primary, 'present');
+  assert.deepEqual(ids(s), ['welcome', 'library', 'try', 'present', 'own']);
+  assert.deepEqual(walk(s), ['welcome', 'library', 'try', 'present', 'own']);
+  // Stage 10c: presentation mode is the present step's side action; the Demo ends on Try your own page.
+  assert.equal(activeSteps(s).find((x) => x.id === 'present')?.secondary?.action, 'present');
+  assert.equal(activeSteps(s).at(-1)?.primary, 'own');
 });
 
 test('no recording and nothing to try on screen: the try step drops out and the tour still finishes', () => {
   const s = base({});
-  assert.deepEqual(ids(s), ['welcome', 'library', 'present']);
-  assert.deepEqual(walk(s), ['welcome', 'library', 'present']);
-  assert.equal(activeSteps(s).at(-1)?.primary, 'finish');
+  assert.deepEqual(ids(s), ['welcome', 'library', 'present', 'own']);
+  assert.deepEqual(walk(s), ['welcome', 'library', 'present', 'own']);
+  assert.equal(activeSteps(s).find((x) => x.id === 'present')?.secondary, null, 'nothing to present');
+  assert.equal(activeSteps(s).at(-1)?.primary, 'own');
 });
 
 test('a lesson with no passed part (all failed or withheld) offers nothing to try', () => {
@@ -53,7 +56,7 @@ test('a lesson with no passed part (all failed or withheld) offers nothing to tr
   for (const c of (wire.lesson as { components: Array<Record<string, unknown>> }).components) c.recheck = { publishable: false, failedChecks: [] };
   const s = base({ detail: normaliseJobDetail(wire) });
   assert.equal(s.firstPart, null);
-  assert.deepEqual(ids(s), ['welcome', 'library', 'present']);
+  assert.deepEqual(ids(s), ['welcome', 'library', 'present', 'own']);
 });
 
 test('with the recording, the open lesson is NOT used for the try step before the replay reaches it', () => {
@@ -72,9 +75,9 @@ test('a failed replay fetch is a signal; Continue drops the replay steps and mov
   assert.equal(stepReady('reading', s), false, 'the reading step cannot start: the card offers Retry / Continue instead');
   const skipped = withoutReplay(s);
   const after = activeSteps(skipped);
-  assert.deepEqual(after.map((x) => x.id), ['welcome', 'library', 'present']);
+  assert.deepEqual(after.map((x) => x.id), ['welcome', 'library', 'present', 'own']);
   assert.equal(indexAfterSkip(withReplay, reading, after), 2, 'the step after the library: present');
-  assert.deepEqual(walk(skipped), ['welcome', 'library', 'present']);
+  assert.deepEqual(walk(skipped), ['welcome', 'library', 'present', 'own']);
 });
 
 test('Continue mid-replay (after the overview) lands on the next non-replay step, keeping the tried part when known', () => {
@@ -83,7 +86,7 @@ test('Continue mid-replay (after the overview) lands on the next non-replay step
   const steps = activeSteps(s);
   const checking = steps.findIndex((x) => x.id === 'checking');
   const after = activeSteps(withoutReplay(s));
-  assert.deepEqual(after.map((x) => x.id), ['welcome', 'library', 'try', 'present']);
+  assert.deepEqual(after.map((x) => x.id), ['welcome', 'library', 'try', 'present', 'own']);
   assert.equal(after[indexAfterSkip(steps, checking, after)]?.id, 'try');
 });
 

@@ -33,14 +33,14 @@
 .rv-row + .rv-row { border-top: 1px solid var(--line); }
 .rv-row-main { display: grid; gap: 4px; min-width: 0; }
 .rv-row-title { font-size: var(--fs-16); font-weight: var(--fw-bold); line-height: 1.35; color: var(--ink); overflow-wrap: anywhere; }
-.rv-row-meta { display: flex; flex-wrap: wrap; align-items: center; font-size: var(--fs-12); font-weight: var(--fw-medium); color: var(--ink-3); }
+.rv-row-meta { display: flex; flex-wrap: wrap; align-items: center; font-size: var(--fs-14); font-weight: var(--fw-medium); color: var(--ink-3); }
 .rv-row-meta > * + *::before { content: "·"; margin: 0 8px; color: var(--ink-3); }
 .rv-row-ok .mark { margin-right: 4px; color: var(--ok); }
 .rv-row-note { font-size: var(--fs-14); line-height: 1.5; color: var(--ink-2); max-width: 70ch; }
 .rv-list-quiet .rv-row { background: var(--panel-2); }
 .rv-row.is-hidden .rv-row-title { color: var(--ink-2); }
 
-.rv-row-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 10px 22px; }
+.rv-row-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; align-self: start; gap: 10px 22px; }
 .rv-check, .rv-switch { display: inline-flex; align-items: center; gap: 8px; font-size: var(--fs-14); color: var(--ink); cursor: pointer; }
 .rv-check input { inline-size: 18px; block-size: 18px; margin: 0; accent-color: var(--accent); cursor: inherit; }
 .rv-check:has(input:disabled), .rv-switch:has(input:disabled) { color: var(--ink-3); cursor: not-allowed; }
@@ -61,7 +61,22 @@
 .rv-switch input:checked + .rv-switch-track::after { transform: translateX(14px); background: var(--accent-ink); }
 .rv-switch input:disabled + .rv-switch-track { opacity: 0.55; }
 
-/* "Open": a quiet text button that takes the teacher to the part in the lesson. */
+/* What students read in a part: the first lines, the rest behind a button. A quiet panel, no side stripe. */
+.rv-wording { display: grid; gap: 6px; justify-items: start; margin-top: 8px; padding: 10px 14px 12px; max-width: 80ch; border-radius: var(--r); background: var(--panel-2); }
+.rv-list-quiet .rv-wording { background: var(--panel-3); }
+.rv-wording-head { font-size: var(--fs-14); font-weight: var(--fw-medium); color: var(--ink-3); }
+.rv-wording-list { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.rv-wording-list li { display: grid; gap: 1px; min-width: 0; }
+.rv-wording-text { font-size: var(--fs-14); line-height: 1.5; color: var(--ink); overflow-wrap: anywhere; }
+.rv-wording-detail { font-size: var(--fs-14); line-height: 1.45; color: var(--ink-3); overflow-wrap: anywhere; }
+.rv-wording-none { margin-top: 6px; font-size: var(--fs-14); color: var(--ink-3); }
+.rv-more {
+  padding: 2px 0; border: 0; background: none; color: var(--accent-text); font: inherit; font-size: var(--fs-14); font-weight: var(--fw-medium); cursor: pointer;
+}
+.rv-more:hover { text-decoration: underline; text-underline-offset: 3px; }
+.rv-more:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: var(--r); }
+
+/* "Show in lesson": a quiet text button that takes the teacher to the part in the lesson (an in-app arrow, not an external-link icon). */
 .rv-open {
   display: inline-flex; align-items: center; gap: 4px; padding: 2px 0; border: 0; background: none; color: var(--accent-text);
   font: inherit; font-size: var(--fs-14); font-weight: var(--fw-medium); cursor: pointer;
@@ -81,7 +96,7 @@
 @media (prefers-reduced-motion: reduce) { [data-review-target="true"] { animation: none; } }
 
 /* All lessons: a small "Published" mark after the page title. */
-.ll-published { display: inline-flex; align-items: center; font-size: var(--fs-12); font-weight: var(--fw-medium); color: var(--ok); white-space: nowrap; }
+.ll-published { display: inline-flex; align-items: center; font-size: var(--fs-14); font-weight: var(--fw-medium); color: var(--ok); white-space: nowrap; }
 .ll-published .mark { margin-right: 4px; }
 
 @media (max-width: 760px) {

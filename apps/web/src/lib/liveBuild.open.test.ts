@@ -49,11 +49,11 @@ test('a Spark 1.3 run keeps “Muse Spark located …”; a failed Spark Open gr
 
 test('figure frame: the Muse half names Muse Spark Open on an open-weights run, Muse Spark on 1.3', () => {
   assert.deepEqual(figureNote(partBuilds(withSegmentDetail(OPEN, 62))[LD]), {
-    actor: 'SAM 3.1', text: 'confirmed 4 of 5 in 1.9 s', working: false, muse: { actor: 'Muse Spark Open', text: 'located 5 parts' },
+    actor: 'SAM 3.1', text: 'confirmed 4 of 5 in 1.9 s', working: false, phase: 'done', muse: { actor: 'Muse Spark Open', text: 'located 5 parts' },
   });
   assert.deepEqual(figureNote(partBuilds(withSegmentDetail(SPARK13, 62))[LD]), {
-    actor: 'SAM 3.1', text: 'confirmed 4 of 5 in 1.9 s', working: false, muse: { actor: 'Muse Spark', text: 'located 5 parts' },
+    actor: 'SAM 3.1', text: 'confirmed 4 of 5 in 1.9 s', working: false, phase: 'done', muse: { actor: 'Muse Spark', text: 'located 5 parts' },
   });
-  // while the call is open nothing is known about the grounding yet
-  assert.deepEqual(figureNote(partBuilds(withSegmentDetail(OPEN, 60))[LD]), { actor: 'SAM 3.1', text: 'is outlining 5 parts of the figure', working: true });
+  // while the call is open the actor is the job's own model (the fixture job is Spark 1.3; the open-weights job is tested in liveBuild.locate.test.ts)
+  assert.deepEqual(figureNote(partBuilds(withSegmentDetail(OPEN, 60))[LD]), { actor: 'Muse Spark', text: 'is locating 5 parts on the figure', working: true, phase: 'locating' });
 });

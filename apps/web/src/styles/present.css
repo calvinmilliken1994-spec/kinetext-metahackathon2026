@@ -271,6 +271,9 @@
 .order-place strong { color: var(--ink); }
 .order-result-reserved { min-block-size: 4.2em; align-content: start; }
 .order-result-reserved[data-on="false"] { visibility: hidden; }
+/* A wrong check reveals nothing (UX pair review 2, H1): the note about the revealed order and the "Show the page's order"
+ * button keep their room hidden until they apply, so neither moves the board. */
+.order-result-reserved > [data-on="false"], .order-actions > .order-show[data-on="false"] { visibility: hidden; }
 
 /* An engine beat (Stage 8a): the whole part stays on screen and is fitted once; steps and reveals change it in place. */
 .pz-engine .pz-fit { overflow: hidden; }
@@ -460,3 +463,17 @@
 /* One credit line per slide: the hook slide already carries the page credit above the stage, so a label diagram on it
    drops its own figure credit (other slides keep it). */
 .pz-stage-frame:has(> .pz-credit) .ld-stage-credit { display: none; }
+
+/* The label-diagram slide (UX pair review 2, H5): the slide's heading sits over the side column, inside the fitted part,
+   so the figure runs the full stage height (it filled only about 60% of the slide under a heading row). The view's own
+   stage layout (figure | side column) is lifted into this grid with `display: contents`, and the heading takes the side
+   column's first row. Sizes here are design px: the whole part is scaled by StageFit. */
+.pz-diagram-layout { display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); column-gap: 40px; row-gap: 12px; }
+.pz-diagram-layout > .ld[data-mode="stage"], .pz-diagram-layout > .ld[data-mode="stage"] > .ld-body { display: contents; }
+.pz-diagram-layout .ld-figure { grid-column: 1; grid-row: 1 / span 2; }
+.pz-diagram-layout .ld-side { grid-column: 2; grid-row: 2; }
+.pz-diagram-heading {
+  grid-column: 2; grid-row: 1; align-self: start;
+  font-size: var(--fs-20); font-weight: var(--fw-bold); line-height: 1.25; letter-spacing: -0.01em; color: var(--ink-2);
+  text-wrap: balance;
+}

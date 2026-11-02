@@ -9,12 +9,13 @@ import type { JobDetail } from '../api.ts';
 import type { Access } from '../lib/access.ts';
 import {
   clearDraft, getDraft, notifyReviewChanged, publishBody, publishReadiness, requestPartFocus, reviewAccess, reviewAvailability, reviewDate,
-  reviewedStatus, reviewErrorMessage, reviewModel, setDraft, toggleChecked, toggleHidden, REVIEW_ACCESS_INTRO,
+  reviewedStatus, reviewErrorMessage, reviewModel, setDraft, toggleChecked, toggleHidden, NOT_REVIEWED_LINE, REVIEW_ACCESS_INTRO,
 } from '../lib/review.ts';
+import { previewLines, WORDING_PREVIEW } from '../lib/partWording.ts';
 import type { ReviewDraft, ReviewRow } from '../lib/review.ts';
 import type { ReviewState } from '../lib/reviewState.ts';
 import { AccessForm } from './AccessForm.tsx';
-import { IconExternal, Mark } from './icons.tsx';
+import { IconArrowRight, Mark } from './icons.tsx';
 import '../styles/review.css';
 
 export interface ReviewPageProps {
@@ -32,6 +33,33 @@ export interface ReviewPageProps {
 }
 
 const HEADING = 'Review and publish';
+
+/** What students read in one part: the first lines at once, the rest behind "Show all" (UX review 2, M3). */
+function Wording({ row }: { row: ReviewRow }) {
+  const [all, setAll] = useState(false);
+  const listId = useId();
+  if (row.wording.length === 0) return <p className="rv-wording-none">Show it in the lesson to read how it looks to students.</p>;
+  const { shown } = previewLines(row.wording, all);
+  const total = row.wording.length;
+  return (
+    <div className="rv-wording" data-testid="review-wording">
+      <p className="rv-wording-head">What students read</p>
+      <ul id={listId} className="rv-wording-list">
+        {shown.map((l, i) => (
+          <li key={i}>
+            <span className="rv-wording-text">{l.text}</span>
+            {l.detail !== undefined && <span className="rv-wording-detail">{l.detail}</span>}
+          </li>
+        ))}
+      </ul>
+      {total > WORDING_PREVIEW && (
+        <button type="button" className="rv-more" aria-expanded={all} aria-controls={listId} onClick={() => setAll((v) => !v)}>
+          {all ? 'Show fewer' : `Show all ${total} lines`}
+        </button>
+      )}
+    </div>
+  );
+}
 
 function Shell({ children, lede }: { children?: ReactNode; lede: ReactNode }) {
   return (
@@ -136,7 +164,7 @@ function ReviewBody({ detail, title, access, onAccess, onShowLesson }: ReviewPag
         <div className="rv-lesson-text">
           <p className="rv-lesson-title">{lessonTitle}</p>
           <p className={`rv-state${published ? ' is-published' : ''}`} data-testid="review-state">
-            {published && review !== null ? <><Mark kind="ok" />{reviewedStatus(review)}</> : 'Draft · not reviewed yet · Teacher review pending'}
+            {published && review !== null ? <><Mark kind="ok" />{reviewedStatus(review)}</> : NOT_REVIEWED_LINE}
           </p>
         </div>
         <button type="button" className="btn" onClick={onShowLesson}>Back to the lesson</button>
@@ -163,6 +191,7 @@ function ReviewBody({ detail, title, access, onAccess, onShowLesson }: ReviewPag
                 <div className="rv-row-main">
                   <p className="rv-row-title">{row.title}</p>
                   <p className="rv-row-meta">{row.label !== row.title && <span>{row.label}</span>}<span>AI-written</span><span className="rv-row-ok"><Mark kind="ok" />{row.status}</span></p>
+                  <Wording row={row} />
                 </div>
                 <div className="rv-row-actions">
                   {published ? (
@@ -183,8 +212,8 @@ function ReviewBody({ detail, title, access, onAccess, onShowLesson }: ReviewPag
                       </label>
                     </>
                   )}
-                  <button type="button" className="rv-open" onClick={() => open(row)} aria-label={`Open ${row.title} in the lesson`}>
-                    Open<IconExternal size={14} />
+                  <button type="button" className="rv-open" onClick={() => open(row)} aria-label={`Show ${row.title} in the lesson`}>
+                    Show in lesson<IconArrowRight size={14} />
                   </button>
                 </div>
               </li>

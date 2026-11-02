@@ -5,7 +5,7 @@ import type { KitSpec } from '../../../../../packages/contracts/kit.ts';
 import type { Badge } from '../../lib/repairs.ts';
 import type { Beat, Deck, DeckPart, EngineSpec, NumericAnswer } from '../../lib/presentation.ts';
 import type { EnginePresentation } from '../../lib/enginePresentation.ts';
-import { checksLine, CLOSING_QUOTES, deckQuotes, engineStage, isRevealed, leftOutLine, numericAnswer, predictVerdict, predictVisual, revealDelayMs, shownPoints, shownTerms, SUMMARY_HEADING, SUMMARY_NOTE, titleCard, visibleCount } from '../../lib/presentation.ts';
+import { checksLine, CLOSING_QUOTES, deckQuotes, diagramStageWidth, engineStage, isRevealed, leftOutLine, numericAnswer, predictVerdict, predictVisual, revealDelayMs, shownPoints, shownTerms, SUMMARY_HEADING, SUMMARY_NOTE, titleCard, visibleCount } from '../../lib/presentation.ts';
 import { targetRule } from '../../lib/feedback.ts';
 import { aiLabel, prettyExponents } from '../../lib/displayText.ts';
 import { REVIEW_STATUS, withoutReviewNote } from '../../lib/provenance.ts';
@@ -443,7 +443,10 @@ function StageFit({ children, width = 980, hero, follow, contain = false, frozen
       const next = contain ? Math.min(byWidth, byHeight, MAX_STAGE_ZOOM) : Math.max(Math.min(byWidth, minZoom), Math.min(byWidth, byHeight, MAX_STAGE_ZOOM));
       // Measuring the zoomed part rounds to device pixels, so each rescale can measure a hair differently and flip the
       // scale back and forth every frame (a visible vibration at some window sizes). Ignore changes under 0.5%.
-      setZoom((prev) => settleZoom(prev, next));
+      // A frozen part is fitted once per stage size (the early return above), so it cannot feed back into itself: it takes
+      // the exact fit. The dead band there could keep a scale up to 0.5% too large after a resize and clip the part's edge
+      // (6 px of the diagram slide at 2560×1440 after a resize from 1920).
+      setZoom((prev) => (frozen && follow === undefined ? next : settleZoom(prev, next)));
       if (target !== null && !followed.current) {
         followed.current = true;
         // Bring the revealed answer up on the stage once the new zoom has applied. The stage scrolls by itself only,
@@ -503,6 +506,21 @@ function EnginePart({ spec, cite, presentation }: { spec: EngineSpec; cite: Cite
 function EngineBeat({ beat, step, revealed, cite }: { beat: KindOf<'engine'>; step: number; revealed: boolean; cite: CiteProps }) {
   const spec = beat.part.spec;
   const presentation = useMemo(() => engineStage(beat, { step, revealed }), [beat, step, revealed]);
+  if (spec.componentId === 'label-diagram-v1') {
+    // The diagram slide (UX pair review 2, H5): the heading sits over the side column inside the fitted part, so the
+    // figure runs the full stage height; the design width matches the stage's shape (lib/presentation.ts), so the part
+    // is scaled by the height. Fitted once (frozen), as every engine beat: → and R never rescale it.
+    return (
+      <div className="pz-stage pz-engine pz-diagram" data-part={spec.componentId}>
+        <StageFit key={spec.id} width={diagramStageWidth(spec.figure)} contain frozen>
+          <div className="pz-diagram-layout">
+            <h2 className="pz-diagram-heading">{beat.title}</h2>
+            <LabelDiagramView spec={spec} cite={cite} presentation={presentation} />
+          </div>
+        </StageFit>
+      </div>
+    );
+  }
   return (
     <div className="pz-stage pz-engine" data-part={spec.componentId}>
       <h2 className="pz-heading">{beat.title}</h2>
@@ -519,7 +537,9 @@ function EngineBeat({ beat, step, revealed, cite }: { beat: KindOf<'engine'>; st
  * slide in both directions instead of leaving the right or the bottom third empty.
  */
 const ENGINE_WIDTH: Readonly<Record<EngineSpec['componentId'], number>> = {
-  'algorithm-trace-v1': 1040, 'log-ladder-v1': 1140, 'threshold-v1': 920, 'data-table-v1': 1180, 'label-diagram-v1': 1040,
+  'algorithm-trace-v1': 1040, 'log-ladder-v1': 1140, 'threshold-v1': 920, 'data-table-v1': 1180,
+  // Not used: the diagram slide's width comes from its figure (diagramStageWidth).
+  'label-diagram-v1': 1040,
 };
 
 function StageBeat({ beat, cite, deck, repairBadge }: { beat: KindOf<'stage'>; cite: CiteProps; deck: Deck; repairBadge: Badge | null }) {
