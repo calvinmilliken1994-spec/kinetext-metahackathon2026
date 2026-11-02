@@ -93,7 +93,9 @@ test('the outline overlay uses the figure’s own pixel grid; unknown size draws
 
 // ---- unclaimed printed labels -----------------------------------------------------------------------------------------
 
-test('water cycle (demo-set run): six printed labels, five parts; "Snowmelt Runoff" is no part’s and is muted, not a slot', () => {
+// Calvin, 3 Nov: a printed label no part claims shows as printed, always ("this is the way it should always be"): it
+// gives nothing away, and a blank patch leaves its arrow pointing at nothing.
+test('water cycle (demo-set run): six printed labels, five parts; "Snowmelt Runoff" is no part’s and shows as printed', () => {
   const water = demo('water-demo');
   const slots = labelSlots(water);
   assert.equal(slots.length, 6);
@@ -102,17 +104,17 @@ test('water cycle (demo-set run): six printed labels, five parts; "Snowmelt Runo
   const k = slots.indexOf(unclaimed[0] as (typeof slots)[number]);
   const none = water.parts.map(() => false);
   const rest = slotStates(slots, none, { labelsShown: false, openUnmatched: false });
-  assert.equal(rest[k], 'muted');
+  assert.equal(rest[k], 'open');
   assert.equal(rest.filter((s) => s === 'covered').length, 5, 'the five claimed labels are the blank slots');
   // it uncovers with the others: the lesson's Show the answers, the slide's labels step
   assert.equal(slotStates(slots, water.parts.map(() => true), { labelsShown: false, openUnmatched: true })[k], 'open');
   const last = stageView(water, water.parts.length, true);
   assert.ok(slotStates(slots, last.named, { labelsShown: last.labelsShown, openUnmatched: false }).every((s) => s === 'open'));
-  // every step before that keeps it muted, named parts or not
+  // every step before that shows it too, named parts or not
   for (let step = 0; step < water.parts.length; step++) {
     for (const revealed of [false, true]) {
       const st = stageView(water, step, revealed);
-      assert.equal(slotStates(slots, st.named, { labelsShown: st.labelsShown, openUnmatched: false })[k], 'muted', `step ${step} ${revealed}`);
+      assert.equal(slotStates(slots, st.named, { labelsShown: st.labelsShown, openUnmatched: false })[k], 'open', `step ${step} ${revealed}`);
     }
   }
 });

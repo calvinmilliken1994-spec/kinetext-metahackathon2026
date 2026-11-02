@@ -377,7 +377,9 @@ export type SlotState = 'covered' | 'named' | 'open' | 'muted';
 export function slotStates(slots: readonly LabelSlot[], named: readonly boolean[], opts: { labelsShown: boolean; openUnmatched: boolean }): SlotState[] {
   return slots.map((s) => {
     if (opts.labelsShown) return 'open';
-    if (s.partIndex === null) return opts.openUnmatched ? 'open' : 'muted';
+    // A printed label no part claims shows as printed, always (Calvin, 3 Nov): it gives nothing away, and a blank
+    // patch left its arrow pointing at nothing.
+    if (s.partIndex === null) return 'open';
     return named[s.partIndex] === true ? 'named' : 'covered';
   });
 }

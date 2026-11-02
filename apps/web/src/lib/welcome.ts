@@ -7,7 +7,7 @@ import { formatUSD } from './access.ts';
 import type { MainView } from './navigation.ts';
 
 /** The product's name: ONE constant (the window title and the Welcome's panel). Provisional until Calvin picks a name. */
-export const APP_NAME = 'Make knowledge interactive';
+export const APP_NAME = 'Kinetext';
 
 /** The Welcome's one-line statement under the name (Welcome v3, docs/specs/WELCOME-V3-split.md). */
 export const WELCOME_STATEMENT = 'Turn a page into a lesson you can teach.';

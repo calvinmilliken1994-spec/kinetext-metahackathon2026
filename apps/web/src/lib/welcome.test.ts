@@ -12,7 +12,7 @@ import type { AccessInfo } from './access.ts';
 const info = (o: Partial<AccessInfo> = {}): AccessInfo => ({ gate: true, granted: false, capUSD: 50, spentUSD: 0, remainingUSD: 50, buildsEnabled: true, ...o });
 
 test('Welcome v3: the app name is one constant (provisional) and the statement is one line', () => {
-  assert.equal(APP_NAME, 'Make knowledge interactive');
+  assert.equal(APP_NAME, 'Kinetext');
   assert.equal(WELCOME_STATEMENT, 'Turn a page into a lesson you can teach.');
   assert.ok(!/\n/.test(WELCOME_STATEMENT));
 });

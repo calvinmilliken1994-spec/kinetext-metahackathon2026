@@ -623,7 +623,7 @@ test('slot states: covered until its part is named, the name written in; the fin
   const water = labelSlots(waterDemo);
   const all = waterDemo.parts.map(() => true);
   assert.deepEqual(slotStates(water, all, { labelsShown: false, openUnmatched: true }), ['named', 'named', 'named', 'open', 'named', 'named']);
-  assert.deepEqual(slotStates(water, all, { labelsShown: false, openUnmatched: false }), ['named', 'named', 'named', 'muted', 'named', 'named']);
+  assert.deepEqual(slotStates(water, all, { labelsShown: false, openUnmatched: false }), ['named', 'named', 'named', 'open', 'named', 'named']);
 });
 
 test('presentation outlines: only the current part’s region, never on the labels step', () => {
