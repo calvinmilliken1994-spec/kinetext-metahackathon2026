@@ -75,19 +75,6 @@
 .wl-or::before, .wl-or::after { content: ""; flex: 1; border-top: 1px solid var(--wl-hair); }
 .welcome[data-access="checking"] .wl-note { visibility: hidden; }
 
-/* The split runs the full height of the window (Calvin, 3 Nov): the title bar and the footer carry the same hairline at
- * the same place, so the panel reads as one grey column from top to bottom. The Welcome spans the window, so 50% lines up. */
-.app-window:has(.welcome) :is(.titlebar, .window-footer) { position: relative; }
-.app-window:has(.welcome) :is(.titlebar, .window-footer)::after {
-  content: ""; position: absolute; inset-block: 0; inset-inline-start: calc(50% - 0.5px); inline-size: 1px;
-  background: var(--inset-line); pointer-events: none;
-}
-/* The line would run through the centred window title, and the panel already shows the name large: the title stays for
- * screen readers only while the Welcome is up. */
-.app-window:has(.welcome) .titlebar-title {
-  position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
-}
-
 /* ---- right: the montage ---------------------------------------------------------------------------------------------- */
 .wm {
   --wm-jx: -18px;
