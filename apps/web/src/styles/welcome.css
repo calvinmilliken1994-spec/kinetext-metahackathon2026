@@ -12,11 +12,13 @@
   position: relative; min-height: 0; overflow: hidden;
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   background: var(--window-bg);
+  /* Calvin, 3 Nov: no line down the middle; a hairline under the title bar and over the footer sets the bars apart. */
+  border-block: 1px solid var(--inset-line);
 }
 
 /* ---- left: the sign-in panel, in the window's chrome grey ------------------------------------------------------------ */
 /* Calvin, 3 Nov: the left side is the app's grey, running on from the title bar and the footer (no line between them);
- * one hairline divides it from the montage. Blue is kept for the one thing to do (Unlock / Explore read-only). */
+ * no line divides it from the montage. Blue is kept for the one thing to do (Unlock / Explore read-only). */
 .wl-panel {
   --wl-on: var(--ink);
   --wl-on-2: var(--ink-2);
@@ -25,7 +27,7 @@
   min-height: 0; overflow: hidden;
   display: grid; grid-template-rows: auto minmax(24px, 1fr) auto; align-content: stretch;
   padding: clamp(32px, 7vh, 112px) clamp(32px, 5.6vw, 144px) clamp(28px, 6vh, 96px);
-  background: var(--chrome); color: var(--wl-on); border-right: 1px solid var(--inset-line);
+  background: var(--chrome); color: var(--wl-on);
 }
 
 .wl-head { display: grid; gap: clamp(16px, 2.4vh, 32px); align-content: start; }
