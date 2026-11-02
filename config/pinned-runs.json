@@ -1,0 +1,24 @@
+{
+  "note": "Runs the web app links to by job id. They are never archived (Library tidy, docs/specs/LIBRARY-TIDY.md). apps/api/pinned-runs.test.ts fails when apps/web/src names a job id that is missing here.",
+  "runs": [
+    { "jobId": "job-20261101234914-97ba271b", "why": "Demo replay, first-run tour and opening lesson (DEMO_PINS.tour, DEMO_PINS.opening[0]); also the Welcome backdrop test fixture" },
+    { "jobId": "job-20261101200607-c65a20bb", "why": "Second opening lesson (DEMO_PINS.opening[1], the earlier Stage 8c water-cycle run); also a diagram run in results.json" },
+    { "jobId": "job-20261031081105-910f3776", "why": "Third opening lesson (DEMO_PINS.opening[2], the 31 Oct run); also the engine demo's water-cycle run, the live-build test fixture and the outline fixture source" },
+    { "jobId": "job-20261102044953-f3a2006f", "why": "Welcome screen centrepiece (DEMO_PINS.welcome, USGS volcano-hazards figure)" },
+    { "jobId": "job-20261031051459-6bf49d3d", "why": "Engine demo: live DNA label-diagram run copied into labelDiagramDemoSpecs.ts (LIVE_DNA_JOB)" },
+    { "jobId": "job-20261031051634-7731ba24", "why": "Engine demo: live water label-diagram run copied into labelDiagramDemoSpecs.ts (LIVE_WATER_JOB)" },
+    { "jobId": "job-20261031081105-21355f66", "why": "Engine demo: DNA demo-set run named in labelDiagramDemoSpecs.ts (DEMO_DNA_JOB)" },
+    { "jobId": "job-20261027181336-572d603f", "why": "Moon lesson regression fixture source (moon-fixture.ts copies its spec)" },
+    { "jobId": "job-20261101182353-097482c0", "why": "Results page diagram run (results.json diagramRuns)" },
+    { "jobId": "job-20261101182353-9084509b", "why": "Results page diagram run (results.json diagramRuns)" },
+    { "jobId": "job-20261101184315-42c92adc", "why": "Results page diagram run (results.json diagramRuns)" },
+    { "jobId": "job-20261101184315-a6e4658b", "why": "Results page diagram run (results.json diagramRuns)" },
+    { "jobId": "job-20261101194027-0082b239", "why": "Results page diagram run (results.json diagramRuns)" },
+    { "jobId": "job-20261101194027-4b4aec38", "why": "Results page diagram run (results.json diagramRuns)" },
+    { "jobId": "job-20261101200607-9c607b3f", "why": "Results page diagram run (results.json diagramRuns)" },
+    { "jobId": "job-20261101201240-cfd92cb9", "why": "Results page diagram run (results.json diagramRuns)" },
+    { "jobId": "job-20261101211438-87fa1e93", "why": "Results page diagram run (results.json diagramRuns)" },
+    { "jobId": "job-20261101211438-e741b91a", "why": "Results page diagram run (results.json diagramRuns)" },
+    { "jobId": "job-20261101212123-3e4734fe", "why": "Results page diagram run (results.json diagramRuns)" }
+  ]
+}

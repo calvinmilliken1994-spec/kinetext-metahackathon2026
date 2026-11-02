@@ -42,6 +42,15 @@
 //                           `<storageDir>/runs/<id>/review.json`; GET /api/jobs/:id adds `review` when it exists and
 //                           GET /api/jobs marks published lessons with `reviewPublishedAt`.
 //
+//   POST /api/jobs/:id/archive -> Library tidy (apps/api/archive.ts; docs/specs/LIBRARY-TIDY.md): body
+//                           {action:'archive'|'restore'}; same check order as /review (405, 403 ORIGIN_NOT_ALLOWED, 403
+//                           ACCESS_REQUIRED, 404, 415, 413 over 1 KB, 400) and then, archive only, 409 RUN_PINNED /
+//                           RUN_PUBLISHED / RUN_ACTIVE; 200 {archivedAt: ISO | null}. Nothing is deleted: the marker is
+//                           `<storageDir>/runs/<id>/archive.json`. GET /api/jobs adds `archivedAt` and `pinned: true`
+//                           (config/pinned-runs.json, read once at start) when they apply.
+//   POST /api/archive     -> Library tidy, bulk: {action:'archive-older'|'restore-all', sourceId?}; same gate and error
+//                           order (no 404); 200 {archived: [jobId], restored: [jobId]} (what this call changed).
+//
 //   GET/POST/DELETE /api/access -> Stage 10 slice A, judge access (apps/api/access.ts): GET reports
 //                           {gate, granted, capUSD, spentUSD, remainingUSD, buildsEnabled}; POST {code}
 //                           starts a signed HttpOnly session (401 ACCESS_CODE_INVALID, 429
@@ -65,6 +74,7 @@
 // else is 403 before routing. (A per-session token is deferred technical debt.)
 
 import { createServer } from 'node:http';
+import { fileURLToPath } from 'node:url';
 import type { IncomingMessage, Server, ServerResponse } from 'node:http';
 import {
   isFeatured,
@@ -96,6 +106,7 @@ import { createStaticHandler } from './static.ts';
 import type { StaticHandler } from './static.ts';
 import { deleteReview, MAX_REVIEW_BODY_BYTES, publishedPartIds, readReview, validatePublishBody, writeReview } from './review.ts';
 import type { AccessControl, AccessOptions } from './access.ts';
+import { deleteArchive, isFinished, loadPinnedRuns, MAX_ARCHIVE_BODY_BYTES, olderCopies, readArchive, writeArchive } from './archive.ts';
 import { listJobs, readJob } from '../../workers/generation/jobs.ts';
 import { applyContentHolds, componentHistory, enrichLabelBoxes, orderLabelParts, recheckLesson } from './recheck.ts';
 import { museSubjectsBySource } from './source-subjects.ts';
@@ -143,6 +154,11 @@ export interface ApiOptions {
   access?: AccessOptions;
   /** Stage 10b: the clock that stamps `publishedAt` (tests pin it). Default: the system clock. */
   now?: () => Date;
+  /**
+   * Library tidy: the pinned-runs list (runs the app links to by id; never archived). Default: config/pinned-runs.json
+   * beside this package. Read once at start; a missing or damaged file means no pins.
+   */
+  pinnedRunsFile?: string;
   /**
    * Stage 11: relay mode. The relay judges the access code (the gate is on; `access.code` is ignored),
    * holds Calvin's keys, and reports the shared budget. Absent = direct/read-only mode, unchanged.
@@ -290,6 +306,10 @@ export function createApiServer(opts: ApiOptions): Server {
   );
   const staticHandler: StaticHandler | undefined =
     opts.staticDir !== undefined ? createStaticHandler(opts.staticDir) : undefined;
+  /** Library tidy: runs the app links to by id. Loaded once; the file only changes with a code release. */
+  const pinnedRuns: ReadonlySet<string> = loadPinnedRuns(
+    opts.pinnedRunsFile ?? fileURLToPath(new URL('../../config/pinned-runs.json', import.meta.url)),
+  );
 
   /** Stage 5: teacher-source store (defaults to `<storageDir>/user-sources`). */
   function userSourcesDir(): string {
@@ -585,9 +605,16 @@ export function createApiServer(opts: ApiOptions): Server {
     if (pathname === '/api/jobs') {
       if (method === 'GET') {
         // Stage 10b: a published lesson carries its publish time, so the web list can mark it.
+        // Library tidy: an archived run carries its archive time, a pinned run `pinned: true` (absent otherwise).
         return sendJson(res, 200, listJobs(opts.storageDir).map(job => {
           const review = readReview(opts.storageDir, job.jobId);
-          return review === null ? job : { ...job, reviewPublishedAt: review.publishedAt };
+          const archive = readArchive(opts.storageDir, job.jobId);
+          return {
+            ...job,
+            ...(review === null ? {} : { reviewPublishedAt: review.publishedAt }),
+            ...(archive === null ? {} : { archivedAt: archive.archivedAt }),
+            ...(pinnedRuns.has(job.jobId) ? { pinned: true as const } : {}),
+          };
         }));
       }
       if (method === 'POST') {
@@ -596,8 +623,16 @@ export function createApiServer(opts: ApiOptions): Server {
       return sendError(res, 405, 'METHOD_NOT_ALLOWED');
     }
 
+    if (pathname === '/api/archive') {
+      return handleArchiveBulk(req, res, method);
+    }
+
     if (pathname.startsWith('/api/jobs/')) {
       const rest = decodeURIComponent(pathname.slice('/api/jobs/'.length));
+      // Library tidy: /api/jobs/:id/archive (same shape as /review).
+      if (rest.endsWith('/archive') && !rest.slice(0, -'/archive'.length).includes('/') && rest !== '/archive') {
+        return handleArchive(req, res, method, rest.slice(0, -'/archive'.length));
+      }
       // Stage 10b: /api/jobs/:id/review (exactly one id segment, then "review").
       if (rest.endsWith('/review') && !rest.slice(0, -'/review'.length).includes('/') && rest !== '/review') {
         return handleReview(req, res, method, rest.slice(0, -'/review'.length));
@@ -712,6 +747,132 @@ export function createApiServer(opts: ApiOptions): Server {
       };
       writeReview(opts.storageDir, id, review);
       return sendJson(res, 200, { review });
+    } catch {
+      return sendError(res, 500, 'INTERNAL');
+    }
+  }
+
+  /**
+   * Library tidy, the front of both archive routes: method, Origin, access gate. Sends the refusal and returns false
+   * when the request must stop. The gate comes before any job is read, so a visitor learns nothing about runs.
+   */
+  function archiveGate(req: IncomingMessage, res: ServerResponse, method: string): boolean {
+    if (method !== 'POST') {
+      sendError(res, 405, 'METHOD_NOT_ALLOWED');
+      return false;
+    }
+    if (!originAllowed(req)) {
+      sendError(res, 403, 'ORIGIN_NOT_ALLOWED');
+      return false;
+    }
+    if (!access.isGranted(req)) {
+      sendError(res, 403, 'ACCESS_REQUIRED');
+      return false;
+    }
+    return true;
+  }
+
+  /** Library tidy, the back of both archive routes: content type (415), size (413), JSON object (400). Null = answered. */
+  async function archiveBody(req: IncomingMessage, res: ServerResponse): Promise<Record<string, unknown> | null> {
+    const contentType = (req.headers['content-type'] ?? '').toLowerCase();
+    if (!contentType.startsWith('application/json')) {
+      sendError(res, 415, 'UNSUPPORTED_MEDIA_TYPE');
+      return null;
+    }
+    let rawBody: string;
+    try {
+      rawBody = await readBodyLimited(req, MAX_ARCHIVE_BODY_BYTES);
+    } catch (err: unknown) {
+      const tooLarge = err instanceof Error && err.message === 'PAYLOAD_TOO_LARGE';
+      sendError(res, tooLarge ? 413 : 400, tooLarge ? 'PAYLOAD_TOO_LARGE' : 'BAD_REQUEST');
+      return null;
+    }
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(rawBody) as unknown;
+    } catch {
+      sendError(res, 400, 'BAD_REQUEST');
+      return null;
+    }
+    if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+      sendError(res, 400, 'BAD_REQUEST');
+      return null;
+    }
+    return parsed as Record<string, unknown>;
+  }
+
+  /**
+   * Library tidy: POST /api/jobs/:id/archive. Order: method, Origin, access, the job (404), body (415, 413, 400), then
+   * for 'archive' only the run's state (409 RUN_PINNED, RUN_PUBLISHED, RUN_ACTIVE). Free: nothing is deleted and no
+   * stored run file is rewritten; the marker is archive.json beside the run.
+   */
+  async function handleArchive(req: IncomingMessage, res: ServerResponse, method: string, id: string): Promise<void> {
+    if (!archiveGate(req, res, method)) return;
+    let job: ReturnType<typeof readJob>;
+    try {
+      job = readJob(opts.storageDir, id);
+    } catch {
+      return sendError(res, 404, 'NOT_FOUND'); // JOB_ID_INVALID or an unreadable run
+    }
+    if (job === null) {
+      return sendError(res, 404, 'NOT_FOUND');
+    }
+    const body = await archiveBody(req, res);
+    if (body === null) return;
+    const action = body['action'];
+    try {
+      if (action === 'restore') {
+        deleteArchive(opts.storageDir, id); // always succeeds, even for a run that is not archived
+        return sendJson(res, 200, { archivedAt: null });
+      }
+      if (action !== 'archive') {
+        return sendError(res, 400, 'BAD_REQUEST');
+      }
+      if (pinnedRuns.has(id)) return sendError(res, 409, 'RUN_PINNED');
+      if (readReview(opts.storageDir, id) !== null) return sendError(res, 409, 'RUN_PUBLISHED');
+      if (!isFinished(job.summary.status)) return sendError(res, 409, 'RUN_ACTIVE');
+      const existing = readArchive(opts.storageDir, id);
+      if (existing !== null) {
+        return sendJson(res, 200, { archivedAt: existing.archivedAt }); // the first time stays
+      }
+      const archivedAt = (opts.now ?? ((): Date => new Date()))().toISOString();
+      writeArchive(opts.storageDir, id, archivedAt);
+      return sendJson(res, 200, { archivedAt });
+    } catch {
+      return sendError(res, 500, 'INTERNAL');
+    }
+  }
+
+  /**
+   * Library tidy: POST /api/archive, {action: 'archive-older' | 'restore-all', sourceId?}. The same gate and order as the
+   * single route, without the 404 (an unknown sourceId simply matches nothing). The rule is olderCopies in archive.ts.
+   */
+  async function handleArchiveBulk(req: IncomingMessage, res: ServerResponse, method: string): Promise<void> {
+    if (!archiveGate(req, res, method)) return;
+    const body = await archiveBody(req, res);
+    if (body === null) return;
+    const action = body['action'];
+    const sourceId = body['sourceId'];
+    if ((action !== 'archive-older' && action !== 'restore-all') || (sourceId !== undefined && typeof sourceId !== 'string')) {
+      return sendError(res, 400, 'BAD_REQUEST');
+    }
+    try {
+      const jobs = listJobs(opts.storageDir);
+      const archived = new Set<string>();
+      const published = new Set<string>();
+      for (const job of jobs) {
+        if (readArchive(opts.storageDir, job.jobId) !== null) archived.add(job.jobId);
+        if (readReview(opts.storageDir, job.jobId) !== null) published.add(job.jobId);
+      }
+      if (action === 'restore-all') {
+        const restored = jobs.filter(j => archived.has(j.jobId) && (sourceId === undefined || j.sourceId === sourceId)).map(j => j.jobId);
+        for (const jobId of restored) deleteArchive(opts.storageDir, jobId);
+        return sendJson(res, 200, { archived: [], restored });
+      }
+      const toArchive = olderCopies(jobs, { pinned: pinnedRuns, published, archived, sourceId });
+      const archivedAt = (opts.now ?? ((): Date => new Date()))().toISOString();
+      for (const jobId of toArchive) writeArchive(opts.storageDir, jobId, archivedAt);
+      return sendJson(res, 200, { archived: toArchive, restored: [] });
     } catch {
       return sendError(res, 500, 'INTERNAL');
     }
