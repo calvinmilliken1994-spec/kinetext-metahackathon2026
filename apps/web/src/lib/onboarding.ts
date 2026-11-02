@@ -422,6 +422,19 @@ export function unionRect(rects: readonly Rect[]): Rect | null {
 }
 
 /** `r` clipped to `bounds`, or null when nothing of it is visible. */
+/**
+ * What of `r` shows below a sticky `cover` (the build strip) that overlaps its top: the part above the cover's bottom is
+ * hidden behind it. A target beside or below the cover is unchanged; one wholly behind it has nothing visible (null).
+ */
+export function belowCover(r: Rect, cover: Rect): Rect | null {
+  const across = Math.min(r.x + r.w, cover.x + cover.w) - Math.max(r.x, cover.x) >= 1;
+  const coverBottom = cover.y + cover.h;
+  // The strip sticks at the top of its scrolling column, so whatever of the target reaches up into it is hidden.
+  if (!across || r.y >= coverBottom || r.y + r.h <= cover.y) return r;
+  const bottom = r.y + r.h;
+  return bottom - coverBottom < 1 ? null : { x: r.x, y: coverBottom, w: r.w, h: bottom - coverBottom };
+}
+
 export function clipRect(r: Rect, bounds: Rect): Rect | null {
   const x = Math.max(r.x, bounds.x);
   const y = Math.max(r.y, bounds.y);

@@ -5,7 +5,7 @@
 import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import type { RefObject } from 'react';
 import type { Rect, TourOutcome, TourSignals, TourStep } from '../lib/onboarding.ts';
-import { activeSteps, autoAdvance, canGoNext, clipRect, indexAfterSkip, placeStep, unionRect, withoutReplay } from '../lib/onboarding.ts';
+import { activeSteps, autoAdvance, belowCover, canGoNext, clipRect, indexAfterSkip, placeStep, unionRect, withoutReplay } from '../lib/onboarding.ts';
 import type { GuideAction, GuideStep } from '../lib/welcome.ts';
 import { nextAllowed } from '../lib/welcome.ts';
 import { revealInPanels } from '../lib/scroll.ts';
@@ -27,6 +27,11 @@ function visibleBox(el: HTMLElement): Rect | null {
     if (node === document.body) break;
     if (getComputedStyle(node).overflowY !== 'visible' || node.classList.contains('app-window')) r = clipRect(r, box(node));
     if (node.classList.contains('app-window')) break;
+  }
+  // The sticky build strip covers whatever scrolls up behind it: never frame the hidden part (a ring round the strip).
+  const strip = document.querySelector<HTMLElement>('[data-tour="live-strip"]');
+  if (r !== null && strip !== null && strip !== el && !strip.contains(el) && !el.contains(strip) && getComputedStyle(strip).position === 'sticky') {
+    r = belowCover(r, box(strip));
   }
   return r;
 }
@@ -223,8 +228,14 @@ export function Onboarding({ signals: given, onStartReplay, onPresent, onClose, 
     // The summary step: bring the page's first lit sentence near the top of the source pane, so the lit sentences show
     // rather than one line above the fold (demo pair review #5). Marks can land a frame after the overview.
     let t = 0;
+    // Only the source pane scrolls (depth 1): moving the outer panels pushed the summary up behind the build strip.
+    // Then the summary itself is brought clear of the strip in its own column.
     if (step.id === 'overview') {
-      t = window.setTimeout(() => revealInPanels(document.querySelector<HTMLElement>('[data-tour="source-text"] mark'), 'start', 24), 120);
+      t = window.setTimeout(() => {
+        revealInPanels(document.querySelector<HTMLElement>('[data-tour="source-text"] mark'), 'start', 24, 1);
+        const strip = document.querySelector<HTMLElement>('[data-tour="live-strip"]');
+        revealInPanels(first, 'nearest', (strip?.offsetHeight ?? 0) + 16, 1);
+      }, 120);
     }
     if (!hidden) document.getElementById(titleId)?.focus({ preventScroll: true });
     return () => window.clearTimeout(t);

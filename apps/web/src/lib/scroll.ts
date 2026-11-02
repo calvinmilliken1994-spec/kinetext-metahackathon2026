@@ -75,12 +75,13 @@ export function scrollContainersOf(el: HTMLElement): HTMLElement[] {
 }
 
 /** Scroll the panels that hold `el` (never the document) so it is visible; smooth unless reduced motion is on. */
-export function revealInPanels(el: HTMLElement | null, block: ScrollBlock = 'start', margin = 12): void {
+export function revealInPanels(el: HTMLElement | null, block: ScrollBlock = 'start', margin = 12, depth = Infinity): void {
   if (el === null) return;
   const behavior: ScrollBehavior = reducedMotion() ? 'auto' : 'smooth';
   // Innermost first: each outer container measures the target after the inner one has been aimed at it. Rects are
-  // read before any smooth scroll starts, so compute every container's goal from current geometry.
-  const containers = scrollContainersOf(el);
+  // read before any smooth scroll starts, so compute every container's goal from current geometry. `depth` limits how
+  // many panels move (1 = only the innermost one).
+  const containers = scrollContainersOf(el).slice(0, depth);
   const goals = containers.map((c, i) => {
     const r = c.getBoundingClientRect();
     // For an outer container, aim at the inner container that holds the target (its own position is stable).
