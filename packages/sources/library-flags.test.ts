@@ -19,6 +19,7 @@ const FEATURED_PHYSICS = [
 ];
 
 const RETIRED = [
+  'nasa-grc-airplane-parts-function', // retired 2 Nov, trial 3 Nov; Calvin: unlabelled arrows look wrong
   'nasa-grc-ballistic-flight-equations',
   'nasa-grc-equations-of-motion',
   'nasa-grc-flight-equations-with-drag',
@@ -35,7 +36,7 @@ test('exactly the five frozen physics pages are featured', () => {
   assert.deepEqual(featuredPhysics, FEATURED_PHYSICS);
 });
 
-test('exactly the six frozen pages are retired, and every one still loads with a verified hash', () => {
+test('exactly the retired pages are retired (six frozen + the airplane page), and every one still loads with a verified hash', () => {
   const retired = listSourceIds().filter((id) => isRetired(loadSourceMeta(id)));
   assert.deepEqual(retired, RETIRED);
   for (const id of RETIRED) {
@@ -44,13 +45,14 @@ test('exactly the six frozen pages are retired, and every one still loads with a
   }
 });
 
-test('physics: 14 active pages, 6 retired, and no page is both featured and retired', () => {
+test('physics: 13 active pages, 7 retired, and no page is both featured and retired', () => {
   const physics = listSourceIds().filter((id) => loadSourceMeta(id).subject === 'physics');
   // 2026-11-02: nasa-grc-airplane-parts-function joined as a SAM figure candidate and was retired the same day
-  // (2 of 4 diagrams published); 3 Nov: back on trial with four large parts (Calvin removes it if it disappoints).
-  assert.equal(physics.filter((id) => !isRetired(loadSourceMeta(id))).length, 14);
-  assert.equal(physics.filter((id) => isRetired(loadSourceMeta(id))).length, 6);
-  assert.equal(isRetired(loadSourceMeta('nasa-grc-airplane-parts-function')), false);
+  // (2 of 4 diagrams published); 3 Nov: a four-part trial went 2 of 3 and its eight unused arrows pointed at blank
+  // label slots (Calvin: "it just doesn't look good"), so it is retired for good.
+  assert.equal(physics.filter((id) => !isRetired(loadSourceMeta(id))).length, 13);
+  assert.equal(physics.filter((id) => isRetired(loadSourceMeta(id))).length, 7);
+  assert.equal(isRetired(loadSourceMeta('nasa-grc-airplane-parts-function')), true);
   for (const id of listSourceIds()) {
     const m = loadSourceMeta(id);
     assert.ok(!(isFeatured(m) && isRetired(m)), `${id} is featured and retired`);
