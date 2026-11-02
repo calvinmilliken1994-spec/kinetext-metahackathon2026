@@ -160,13 +160,11 @@ export function AllLessonsPage(p: AllLessonsPageProps) {
             <>
               <ul className="ll-cards" ref={cardsRef}>
                 {shelfShown.map((r) => {
+                  // No highlight for the lesson already open (it read as still selected, Calvin 2 Nov): a short line says it.
                   const open = r.jobId === p.openJobId;
                   return (
                     <li key={r.jobId}>
-                      <button
-                        type="button" className={`ll-card${open ? ' is-open' : ''}`} onClick={() => p.onOpen(r.jobId, r.sourceId)}
-                        aria-current={open ? 'true' : undefined} data-job={r.jobId}
-                      >
+                      <button type="button" className="ll-card" onClick={() => p.onOpen(r.jobId, r.sourceId)} data-job={r.jobId} aria-current={open ? 'true' : undefined}>
                         <span className="ll-card-tags">
                           <span className="ll-card-subject"><span className="sr-only">Subject: </span>{subjectLabel(r.subject)}</span>
                           {r.job.samUsed === true && (
@@ -178,6 +176,7 @@ export function AllLessonsPage(p: AllLessonsPageProps) {
                         <span className="ll-card-title" title={displayTitle(r.title)}>{displayTitle(r.title)}</span>
                         <span className="ll-card-meta">
                           <span><span className="sr-only">Model: </span>{runLine(r.job, { liveJobIds: new Set(), serverBusy: p.serverBusy }).model}</span>
+                          {open && <><span aria-hidden="true">·</span><span className="ll-open">Open in Lesson</span></>}
                         </span>
                         <span className="ll-card-date"><Mark kind="ok" />Published {r.published === null ? '' : reviewDate(r.published)}</span>
                       </button>
@@ -279,7 +278,7 @@ export function AllLessonsPage(p: AllLessonsPageProps) {
                       >
                         <span className="ll-title">
                           {title}
-                          {open && <span className="ll-open">Open now</span>}
+                          {open && <span className="ll-open">Open in Lesson</span>}
                           {r.badge === 'published' && r.published !== null && <span className="ll-published" title={`Reviewed by a teacher and published ${reviewDate(r.published)}`}><Mark kind="ok" />Published</span>}
                           {r.badge === 'needs-review' && <span className="ll-review" title={NEEDS_REVIEW_DETAIL}>{NEEDS_REVIEW}</span>}
                           {r.archived !== null && <span className="ll-archived">Archived {reviewDate(r.archived)}</span>}
