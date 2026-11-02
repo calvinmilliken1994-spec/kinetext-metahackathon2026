@@ -87,7 +87,7 @@ import { createAccessControl } from './access.ts';
 import { deleteReview, MAX_REVIEW_BODY_BYTES, publishedPartIds, readReview, validatePublishBody, writeReview } from './review.ts';
 import type { AccessControl, AccessOptions } from './access.ts';
 import { listJobs, readJob } from '../../workers/generation/jobs.ts';
-import { applyContentHolds, componentHistory, enrichLabelBoxes, recheckLesson } from './recheck.ts';
+import { applyContentHolds, componentHistory, enrichLabelBoxes, orderLabelParts, recheckLesson } from './recheck.ts';
 import { museSubjectsBySource } from './source-subjects.ts';
 import type { Subject } from '../../packages/contracts/kit.ts';
 import type { JobFlow, JobSummary } from '../../workers/generation/jobs.ts';
@@ -590,6 +590,11 @@ export function createApiServer(opts: ApiOptions): Server {
         // ISSUE-011: parts quoting a sentence a human review found wrong on the source page are held back.
         applyContentHolds(opts.storageDir, job);
         for (const spec of Object.values(job.kitSpecs ?? {})) enrichLabelBoxes(spec);
+        // Label diagrams are numbered in the order the page describes their parts (label-order.ts).
+        orderLabelParts(opts.storageDir, job, {
+          ...(opts.sourcesDir !== undefined ? { sourcesDir: opts.sourcesDir } : {}),
+          userSourcesDir: userSourcesDir(),
+        });
         // Set B: per-revision check outcomes for the repair story (failed revisions give check ids and points only).
         const withHistory = job.lesson !== undefined ? { ...job, componentHistory: componentHistory(opts.storageDir, id) } : job;
         // Stage 10b: the teacher review, when there is one (no file = not reviewed).

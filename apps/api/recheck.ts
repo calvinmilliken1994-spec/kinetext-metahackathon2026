@@ -10,6 +10,7 @@ import { listFigures, loadFigureLabelBoxes } from '../../packages/sources/figure
 import type { FigureMeta } from '../../packages/sources/figures.ts';
 import { loadSource, loadUserSource, userSourcesDirOf } from '../../packages/sources/index.ts';
 import type { SourceDocument } from '../../packages/contracts/index.ts';
+import { orderLabelPartsByPage } from './label-order.ts';
 
 /** Engines whose checks tightened after lessons were stored (BUG-013 and the set A review fixes). */
 export const RECHECKED_COMPONENTS: ReadonlySet<string> = new Set([
@@ -83,6 +84,15 @@ export function recheckLesson(storageDir: string, job: RecheckJob, opts: Recheck
     const r = recheckOne(storageDir, job, c.componentId, c.revision, opts);
     if (r !== null) c.recheck = r;
   }
+}
+
+/** Numbers each served label diagram in its page's order (label-order.ts). An unreadable source leaves the order as stored. */
+export function orderLabelParts(storageDir: string, job: RecheckJob & { kitSpecs?: Record<string, unknown> }, opts: RecheckOptions): void {
+  const specs = Object.values(job.kitSpecs ?? {}).filter((s) => (s as { componentId?: unknown } | null)?.componentId === 'label-diagram-v1');
+  if (specs.length === 0) return;
+  let text: string;
+  try { text = loadDocs(storageDir, job, opts).map((d) => d.text).join('\n'); } catch { return; }
+  for (const s of specs) orderLabelPartsByPage(s, text);
 }
 
 type Box = { x1: number; y1: number; x2: number; y2: number; text?: string; group?: number };
