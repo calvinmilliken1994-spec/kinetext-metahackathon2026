@@ -17,9 +17,11 @@
 .sb-menu { display: none; }
 .sb-body { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
 .sb-sections {
-  flex: 1 1 auto; min-height: 0; overflow-y: auto; display: grid; align-content: start; gap: 20px;
+  flex: 1 1 auto; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 20px;
   padding: 10px 10px 16px 12px;
 }
+/* Results and help sit at the foot of the list, apart from the main functions (Calvin, 2 Nov). */
+.sb-section.sb-help { margin-top: auto; padding-top: 14px; border-top: 1px solid var(--inset-line); }
 .sb-section { display: grid; gap: 2px; min-width: 0; }
 .sb-heading {
   padding: 0 10px 4px; font-size: var(--fs-12); font-weight: var(--fw-medium); line-height: 1.4; color: var(--ink-3);
