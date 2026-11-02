@@ -284,11 +284,11 @@ test('archiveErrorMessage: plain sentences for the API refusals', () => {
 
 
 // Calvin, 2 Nov: no "Show all" while two rows of the shelf still have room.
-test('shelfVisible: everything that fits in two rows of the measured grid; at least one row on an unmeasured grid', () => {
-  assert.equal(shelfVisible(8, 5), 8, '8 cards in a 5-column grid fit two rows');
-  assert.equal(shelfVisible(10, 5), 10);
-  assert.equal(shelfVisible(11, 5), 10, 'the eleventh waits for Show all');
-  assert.equal(shelfVisible(8, 3), 6);
+test('shelfVisible: everything that fits in three rows of the measured grid; six on an unmeasured grid', () => {
+  assert.equal(shelfVisible(8, 5), 8, '8 cards in a 5-column grid');
+  assert.equal(shelfVisible(10, 4), 10, 'ten published lessons at 1920 (four columns): no Show all');
+  assert.equal(shelfVisible(13, 4), 12, 'the thirteenth waits for Show all');
+  assert.equal(shelfVisible(11, 3), 9);
   assert.equal(shelfVisible(4, 0), 4, 'not measured yet: no cut below one sensible row');
   assert.equal(shelfVisible(9, 0), 6);
 });

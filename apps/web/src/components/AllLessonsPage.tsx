@@ -120,7 +120,7 @@ export function AllLessonsPage(p: AllLessonsPageProps) {
 
   // The shelf: hidden when nothing is published, except for a teacher who can publish (it points to Review and publish).
   const showShelf = scope !== 'archived' && p.jobs.state === 'ready' && (shelf.length > 0 || manage);
-  // Two rows of the grid as laid out now (Calvin: no Show all while there is room).
+  // Three rows of the grid as laid out now (Calvin: no Show all while there is room).
   const cardsRef = useRef<HTMLUListElement | null>(null);
   const [columns, setColumns] = useState(0);
   useEffect(() => {
@@ -175,7 +175,7 @@ export function AllLessonsPage(p: AllLessonsPageProps) {
                             </span>
                           )}
                         </span>
-                        <span className="ll-card-title">{displayTitle(r.title)}</span>
+                        <span className="ll-card-title" title={displayTitle(r.title)}>{displayTitle(r.title)}</span>
                         <span className="ll-card-meta">
                           <span><span className="sr-only">Model: </span>{runLine(r.job, { liveJobIds: new Set(), serverBusy: p.serverBusy }).model}</span>
                         </span>
