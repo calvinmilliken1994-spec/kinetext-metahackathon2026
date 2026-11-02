@@ -1,0 +1,943 @@
+{
+  "at": "2026-11-02T04:24:31.318Z",
+  "results": [
+    {
+      "figure": "nasa-grc-airplane-parts",
+      "rep": 1,
+      "muse": {
+        "objects": [
+          {
+            "bbox": [
+              {
+                "x_max": 470,
+                "x_min": 320,
+                "y_max": 545,
+                "y_min": 230
+              }
+            ],
+            "object_name": "the drawn wing that the printed label 'Wing' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 365,
+                "x_min": 300,
+                "y_max": 560,
+                "y_min": 485
+              }
+            ],
+            "object_name": "the drawn jet engine that the printed label 'Jet Engine' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 715,
+                "x_min": 150,
+                "y_max": 775,
+                "y_min": 320
+              }
+            ],
+            "object_name": "the drawn fuselage that the printed label 'Fuselage (Body)' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 222,
+                "x_min": 158,
+                "y_max": 730,
+                "y_min": 680
+              }
+            ],
+            "object_name": "the drawn cockpit that the printed label 'Cockpit' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 735,
+                "x_min": 610,
+                "y_max": 335,
+                "y_min": 150
+              }
+            ],
+            "object_name": "the drawn vertical stabilizer that the printed label 'Vertical Stabilizer' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 653,
+                "x_min": 590,
+                "y_max": 330,
+                "y_min": 242
+              }
+            ],
+            "object_name": "the drawn horizontal stabilizer that the printed label 'Horizontal Stabilizer' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 710,
+                "x_min": 681,
+                "y_max": 283,
+                "y_min": 177
+              }
+            ],
+            "object_name": "the drawn rudder that the printed label 'Rudder' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 830,
+                "x_min": 738,
+                "y_max": 368,
+                "y_min": 335
+              }
+            ],
+            "object_name": "the drawn elevator that the printed label 'Elevator' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 627,
+                "x_min": 516,
+                "y_max": 553,
+                "y_min": 518
+              }
+            ],
+            "object_name": "the drawn flaps that the printed label 'Flaps' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 730,
+                "x_min": 613,
+                "y_max": 648,
+                "y_min": 600
+              }
+            ],
+            "object_name": "the drawn aileron that the printed label 'Aileron' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 750,
+                "x_min": 668,
+                "y_max": 690,
+                "y_min": 665
+              }
+            ],
+            "object_name": "the drawn spoiler that the printed label 'Spoiler' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 590,
+                "x_min": 525,
+                "y_max": 695,
+                "y_min": 655
+              }
+            ],
+            "object_name": "the drawn slats that the printed label 'Slats' points to"
+          }
+        ]
+      },
+      "museMs": 30386,
+      "museReceipt": {
+        "purpose": "test-live",
+        "requestedModel": "muse-spark-1.3",
+        "returnedModel": "muse-spark-1.3",
+        "responseId": "chatcmpl-01a19a7f-d605-779d-b51a-b3eaba86137e",
+        "usage": {
+          "promptTokens": 1467,
+          "completionTokens": 5109,
+          "reasoningTokens": 4479,
+          "cachedTokens": 0
+        },
+        "latencyMs": 30385,
+        "estCostUSD": 0.023547,
+        "reservedUnknownUSD": 0,
+        "finishReason": "stop",
+        "attempts": 1,
+        "costBasis": "usage",
+        "provider": "meta-api",
+        "model": "muse-spark-1.3",
+        "providerModel": "muse-spark-1.3",
+        "cachedUnknown": false
+      },
+      "samObjects": [
+        {
+          "id": 1,
+          "box": {
+            "x1": 367,
+            "y1": 166,
+            "x2": 556,
+            "y2": 427
+          }
+        },
+        {
+          "id": 2,
+          "box": {
+            "x1": 347,
+            "y1": 369,
+            "x2": 429,
+            "y2": 431
+          }
+        },
+        {
+          "id": 3,
+          "box": {
+            "x1": 149,
+            "y1": 231,
+            "x2": 862,
+            "y2": 607
+          }
+        },
+        {
+          "id": 4,
+          "box": {
+            "x1": 182,
+            "y1": 519,
+            "x2": 262,
+            "y2": 560
+          }
+        },
+        {
+          "id": 5,
+          "box": {
+            "x1": 707,
+            "y1": 109,
+            "x2": 864,
+            "y2": 262
+          }
+        },
+        {
+          "id": 6,
+          "box": {
+            "x1": 686,
+            "y1": 182,
+            "x2": 766,
+            "y2": 255
+          }
+        },
+        {
+          "id": 7,
+          "box": {
+            "x1": 794,
+            "y1": 132,
+            "x2": 831,
+            "y2": 220
+          }
+        },
+        {
+          "id": 8,
+          "box": {
+            "x1": 858,
+            "y1": 255,
+            "x2": 974,
+            "y2": 283
+          }
+        },
+        {
+          "id": 9,
+          "box": {
+            "x1": 598,
+            "y1": 395,
+            "x2": 738,
+            "y2": 424
+          }
+        },
+        {
+          "id": 10,
+          "box": {
+            "x1": 711,
+            "y1": 458,
+            "x2": 858,
+            "y2": 497
+          }
+        },
+        {
+          "id": 11,
+          "box": {
+            "x1": 776,
+            "y1": 508,
+            "x2": 880,
+            "y2": 529
+          }
+        },
+        {
+          "id": 12,
+          "box": {
+            "x1": 610,
+            "y1": 500,
+            "x2": 692,
+            "y2": 533
+          }
+        }
+      ],
+      "sam": [
+        {
+          "id": 1,
+          "name": "wing",
+          "x1": 378,
+          "y1": 181,
+          "x2": 516,
+          "y2": 409,
+          "confidence": 0.95703125
+        },
+        {
+          "id": 2,
+          "name": "jet engine",
+          "x1": 333,
+          "y1": 359,
+          "x2": 392,
+          "y2": 422,
+          "confidence": 0.7265625
+        },
+        {
+          "id": 3,
+          "name": "fuselage",
+          "x1": 148,
+          "y1": 230,
+          "x2": 859,
+          "y2": 593,
+          "confidence": 0.78125
+        },
+        {
+          "id": 4,
+          "name": "cockpit",
+          "x1": 190,
+          "y1": 555,
+          "x2": 208,
+          "y2": 559,
+          "confidence": 0.30078125
+        },
+        {
+          "id": 5,
+          "name": "vertical stabilizer",
+          "x1": 705,
+          "y1": 121,
+          "x2": 827,
+          "y2": 249,
+          "confidence": 0.8828125
+        },
+        {
+          "id": 6,
+          "name": "horizontal stabilizer",
+          "x1": 707,
+          "y1": 210,
+          "x2": 760,
+          "y2": 242,
+          "confidence": 0.85546875
+        },
+        {
+          "id": 7,
+          "name": "rudder",
+          "x1": 796,
+          "y1": 160,
+          "x2": 811,
+          "y2": 216,
+          "confidence": 0.671875
+        },
+        {
+          "id": 8,
+          "name": "elevator",
+          "x1": 849,
+          "y1": 250,
+          "x2": 920,
+          "y2": 284,
+          "confidence": 0.466796875
+        },
+        {
+          "id": 9,
+          "name": "flaps",
+          "x1": 593,
+          "y1": 396,
+          "x2": 698,
+          "y2": 424,
+          "confidence": 0.7578125
+        },
+        {
+          "id": 10,
+          "name": "aileron",
+          "x1": 704,
+          "y1": 450,
+          "x2": 851,
+          "y2": 500,
+          "confidence": 0.88671875
+        },
+        {
+          "id": 11,
+          "name": "spoiler",
+          "x1": 840,
+          "y1": 507,
+          "x2": 874,
+          "y2": 527,
+          "confidence": 0.30859375
+        },
+        {
+          "id": 12,
+          "name": "slats",
+          "x1": 691,
+          "y1": 501,
+          "x2": 708,
+          "y2": 518,
+          "confidence": 0.255859375
+        }
+      ],
+      "samCostUSD": 0.0025
+    },
+    {
+      "figure": "usgs-volcano-hazards",
+      "rep": 1,
+      "muse": {
+        "objects": [
+          {
+            "bbox": [
+              {
+                "x_max": 686,
+                "x_min": 564,
+                "y_max": 927,
+                "y_min": 808
+              }
+            ],
+            "object_name": "the drawn magma that the printed label 'Magma' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 631,
+                "x_min": 556,
+                "y_max": 335,
+                "y_min": 296
+              }
+            ],
+            "object_name": "the drawn vent that the printed label 'Vent' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 674,
+                "x_min": 530,
+                "y_max": 320,
+                "y_min": 155
+              }
+            ],
+            "object_name": "the drawn eruption column that the printed label 'Eruption Column' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 680,
+                "x_min": 12,
+                "y_max": 162,
+                "y_min": 30
+              }
+            ],
+            "object_name": "the drawn eruption cloud that the printed label 'Eruption Cloud' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 587,
+                "x_min": 32,
+                "y_max": 543,
+                "y_min": 302
+              }
+            ],
+            "object_name": "the drawn lava flow that the printed label 'Lava Flow' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 515,
+                "x_min": 459,
+                "y_max": 375,
+                "y_min": 332
+              }
+            ],
+            "object_name": "the drawn lava dome that the printed label 'Lava Dome' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 835,
+                "x_min": 615,
+                "y_max": 500,
+                "y_min": 345
+              }
+            ],
+            "object_name": "the drawn landslide that the printed label 'Landslide (Debris Avalanche)' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 890,
+                "x_min": 855,
+                "y_max": 540,
+                "y_min": 500
+              },
+              {
+                "x_max": 980,
+                "x_min": 950,
+                "y_max": 540,
+                "y_min": 495
+              }
+            ],
+            "object_name": "the drawn fumaroles that the printed label 'Fumaroles' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 998,
+                "x_min": 740,
+                "y_max": 600,
+                "y_min": 485
+              }
+            ],
+            "object_name": "the drawn ground water that the printed label 'Ground Water' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 531,
+                "x_min": 514,
+                "y_max": 270,
+                "y_min": 256
+              },
+              {
+                "x_max": 550,
+                "x_min": 534,
+                "y_max": 296,
+                "y_min": 282
+              }
+            ],
+            "object_name": "the drawn bombs that the printed label 'Bombs' points to"
+          }
+        ]
+      },
+      "museMs": 23161,
+      "museReceipt": {
+        "purpose": "test-live",
+        "requestedModel": "muse-spark-1.3",
+        "returnedModel": "muse-spark-1.3",
+        "responseId": "chatcmpl-01a19a80-3ba0-74ed-8ca4-a92fef90cb37",
+        "usage": {
+          "promptTokens": 1053,
+          "completionTokens": 4142,
+          "reasoningTokens": 3558,
+          "cachedTokens": 0
+        },
+        "latencyMs": 23161,
+        "estCostUSD": 0.01891975,
+        "reservedUnknownUSD": 0,
+        "finishReason": "stop",
+        "attempts": 1,
+        "costBasis": "usage",
+        "provider": "meta-api",
+        "model": "muse-spark-1.3",
+        "providerModel": "muse-spark-1.3",
+        "cachedUnknown": false
+      },
+      "samObjects": [
+        {
+          "id": 1,
+          "box": {
+            "x1": 391,
+            "y1": 655,
+            "x2": 483,
+            "y2": 760
+          }
+        },
+        {
+          "id": 2,
+          "box": {
+            "x1": 387,
+            "y1": 240,
+            "x2": 443,
+            "y2": 275
+          }
+        },
+        {
+          "id": 3,
+          "box": {
+            "x1": 366,
+            "y1": 121,
+            "x2": 475,
+            "y2": 267
+          }
+        },
+        {
+          "id": 4,
+          "box": {
+            "x1": 0,
+            "y1": 20,
+            "x2": 494,
+            "y2": 137
+          }
+        },
+        {
+          "id": 5,
+          "box": {
+            "x1": 7,
+            "y1": 239,
+            "x2": 426,
+            "y2": 451
+          }
+        },
+        {
+          "id": 6,
+          "box": {
+            "x1": 319,
+            "y1": 270,
+            "x2": 362,
+            "y2": 307
+          }
+        },
+        {
+          "id": 7,
+          "box": {
+            "x1": 424,
+            "y1": 276,
+            "x2": 590,
+            "y2": 413
+          }
+        },
+        {
+          "id": 8,
+          "box": {
+            "x1": 594,
+            "y1": 402,
+            "x2": 689,
+            "y2": 442
+          }
+        },
+        {
+          "id": 9,
+          "box": {
+            "x1": 510,
+            "y1": 392,
+            "x2": 698,
+            "y2": 493
+          }
+        },
+        {
+          "id": 10,
+          "box": {
+            "x1": 358,
+            "y1": 208,
+            "x2": 385,
+            "y2": 243
+          }
+        }
+      ],
+      "sam": [
+        {
+          "id": 1,
+          "name": "magma",
+          "x1": 396,
+          "y1": 657,
+          "x2": 478,
+          "y2": 747,
+          "confidence": 0.95703125
+        },
+        {
+          "id": 2,
+          "name": "vent",
+          "x1": 426,
+          "y1": 238,
+          "x2": 445,
+          "y2": 256,
+          "confidence": 0.291015625
+        },
+        {
+          "id": 3,
+          "name": "eruption column",
+          "x1": 362,
+          "y1": 133,
+          "x2": 485,
+          "y2": 266,
+          "confidence": 0.484375
+        },
+        {
+          "id": 4,
+          "name": "eruption cloud",
+          "x1": 17,
+          "y1": 29,
+          "x2": 496,
+          "y2": 152,
+          "confidence": 0.734375
+        },
+        {
+          "id": 5,
+          "name": "lava flow",
+          "x1": 3,
+          "y1": 253,
+          "x2": 420,
+          "y2": 449,
+          "confidence": 0.55078125
+        },
+        {
+          "id": 6,
+          "name": "lava dome",
+          "x1": 323,
+          "y1": 277,
+          "x2": 356,
+          "y2": 299,
+          "confidence": 0.875
+        },
+        {
+          "id": 7,
+          "name": "landslide",
+          "x1": 442,
+          "y1": 263,
+          "x2": 609,
+          "y2": 409,
+          "confidence": 0.80859375
+        },
+        {
+          "id": 8,
+          "name": "fumaroles",
+          "x1": 590,
+          "y1": 405,
+          "x2": 698,
+          "y2": 441,
+          "confidence": 0.37109375
+        },
+        {
+          "id": 9,
+          "name": "ground water",
+          "x1": 519,
+          "y1": 400,
+          "x2": 695,
+          "y2": 506,
+          "confidence": 0.8046875
+        },
+        {
+          "id": 10,
+          "name": "bombs",
+          "x1": 362,
+          "y1": 213,
+          "x2": 381,
+          "y2": 243,
+          "confidence": 0.42578125
+        }
+      ],
+      "samCostUSD": 0.0025
+    },
+    {
+      "figure": "nasa-grc-rocket-parts",
+      "rep": 1,
+      "muse": {
+        "objects": [
+          {
+            "bbox": [
+              {
+                "x_max": 545,
+                "x_min": 505,
+                "y_max": 295,
+                "y_min": 210
+              }
+            ],
+            "object_name": "the drawn nose cone that the printed label 'Nose Cone' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 558,
+                "x_min": 493,
+                "y_max": 530,
+                "y_min": 390
+              }
+            ],
+            "object_name": "the drawn fuel tank that the printed label 'Fuel' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 555,
+                "x_min": 490,
+                "y_max": 695,
+                "y_min": 535
+              }
+            ],
+            "object_name": "the drawn oxidizer tank that the printed label 'Oxidizer' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 513,
+                "x_min": 489,
+                "y_max": 720,
+                "y_min": 692
+              }
+            ],
+            "object_name": "the drawn pumps that the printed label 'Pumps' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 546,
+                "x_min": 503,
+                "y_max": 904,
+                "y_min": 780
+              }
+            ],
+            "object_name": "the drawn nozzle that the printed label 'Nozzle' points to"
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 497,
+                "x_min": 409,
+                "y_max": 933,
+                "y_min": 707
+              },
+              {
+                "x_max": 617,
+                "x_min": 552,
+                "y_max": 933,
+                "y_min": 707
+              }
+            ],
+            "object_name": "the drawn fin that the printed label 'Fin' points to"
+          }
+        ]
+      },
+      "museMs": 10360,
+      "museReceipt": {
+        "purpose": "test-live",
+        "requestedModel": "muse-spark-1.3",
+        "returnedModel": "muse-spark-1.3",
+        "responseId": "chatcmpl-01a19a80-6c03-7437-82fc-0d1e1bc01cf2",
+        "usage": {
+          "promptTokens": 732,
+          "completionTokens": 2007,
+          "reasoningTokens": 1662,
+          "cachedTokens": 0
+        },
+        "latencyMs": 10360,
+        "estCostUSD": 0.00944475,
+        "reservedUnknownUSD": 0,
+        "finishReason": "stop",
+        "attempts": 1,
+        "costBasis": "usage",
+        "provider": "meta-api",
+        "model": "muse-spark-1.3",
+        "providerModel": "muse-spark-1.3",
+        "cachedUnknown": false
+      },
+      "samObjects": [
+        {
+          "id": 1,
+          "box": {
+            "x1": 357,
+            "y1": 110,
+            "x2": 388,
+            "y2": 158
+          }
+        },
+        {
+          "id": 2,
+          "box": {
+            "x1": 348,
+            "y1": 204,
+            "x2": 397,
+            "y2": 284
+          }
+        },
+        {
+          "id": 3,
+          "box": {
+            "x1": 346,
+            "y1": 281,
+            "x2": 395,
+            "y2": 372
+          }
+        },
+        {
+          "id": 4,
+          "box": {
+            "x1": 346,
+            "y1": 367,
+            "x2": 364,
+            "y2": 383
+          }
+        },
+        {
+          "id": 5,
+          "box": {
+            "x1": 355,
+            "y1": 412,
+            "x2": 388,
+            "y2": 483
+          }
+        },
+        {
+          "id": 6,
+          "box": {
+            "x1": 284,
+            "y1": 371,
+            "x2": 443,
+            "y2": 500
+          }
+        }
+      ],
+      "sam": [
+        {
+          "id": 1,
+          "name": "nose cone",
+          "x1": 352,
+          "y1": 111,
+          "x2": 391,
+          "y2": 161,
+          "confidence": 0.5546875
+        },
+        {
+          "id": 2,
+          "name": "fuel tank",
+          "x1": 333,
+          "y1": 194,
+          "x2": 376,
+          "y2": 289,
+          "confidence": 0.2890625
+        },
+        {
+          "id": 3,
+          "name": "oxidizer tank",
+          "x1": 349,
+          "y1": 286,
+          "x2": 368,
+          "y2": 371,
+          "confidence": 0.72265625
+        },
+        {
+          "id": 4,
+          "name": "pumps",
+          "x1": 345,
+          "y1": 366,
+          "x2": 366,
+          "y2": 383,
+          "confidence": 0.7421875
+        },
+        {
+          "id": 5,
+          "name": "nozzle",
+          "x1": 357,
+          "y1": 411,
+          "x2": 393,
+          "y2": 491,
+          "confidence": 0.76953125
+        },
+        {
+          "id": 6,
+          "name": "fin",
+          "x1": 278,
+          "y1": 368,
+          "x2": 439,
+          "y2": 496,
+          "confidence": 0.7890625
+        }
+      ],
+      "samCostUSD": 0.0025
+    }
+  ]
+}
