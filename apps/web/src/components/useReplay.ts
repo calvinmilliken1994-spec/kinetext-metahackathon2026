@@ -1,15 +1,13 @@
 // Stage 9 replay: plays a stored job's recorded events through the live build view (lib/replay.ts rebuilds each moment's
 // detail). The stored detail is read once through the existing GET /api/jobs/:id; nothing is posted.
+// Demo v2: the clock can be sought (the Demo's Next and Back) and held (a beat's minimum dwell); see lib/replay.ts.
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { JobDetail } from '../api.ts';
 import type { Loadable } from '../hooks.ts';
 import { normaliseJobDetail } from '../lib/lessonJob.ts';
-import { replayBounds, replaySnapshot, replayStep } from '../lib/replay.ts';
-import type { ReplayRequest } from '../lib/replay.ts';
+import { clockHold, clockRead, clockSeek, clockStart, replayBounds, replaySnapshot, replayStep } from '../lib/replay.ts';
+import type { ReplayClock, ReplayRequest } from '../lib/replay.ts';
 import type { JobClock } from './LiveBuild.tsx';
-
-/** Job time shown before the first event, so the replay opens on the empty lesson rather than mid-step. */
-const LEAD_IN_MS = 800;
 
 export interface ReplayState {
   detail: Loadable<JobDetail> | null;
@@ -19,6 +17,10 @@ export interface ReplayState {
   restart: () => void;
   /** Fetch the stored run again after a failed read (the tour's Retry). */
   retry: () => void;
+  /** Jump to job time `t` (ms), held below `cap` when given. */
+  seek: (t: number, cap?: number | null) => void;
+  /** Hold the replay at job time `cap` at most (null: play on from where it stands). */
+  hold: (cap: number | null) => void;
 }
 
 export function useReplay(req: ReplayRequest | null): ReplayState {
@@ -27,9 +29,11 @@ export function useReplay(req: ReplayRequest | null): ReplayState {
   const [finished, setFinished] = useState(false);
   const [run, setRun] = useState(0);
   const [attempt, setAttempt] = useState(0);
-  const wallStart = useRef(Date.now());
+  // Bumped whenever the clock is started, sought or held, so the frame loop reschedules from the new time.
+  const [moved, setMoved] = useState(0);
   const speed = req?.speed ?? 1;
-  const clock = useCallback<JobClock>(() => (Date.now() - wallStart.current) * speed - LEAD_IN_MS, [speed]);
+  const timer = useRef<ReplayClock>(clockStart(speed, Date.now()));
+  const clock = useCallback<JobClock>(() => clockRead(timer.current, Date.now()), []);
 
   const jobId = req?.jobId ?? null;
   useEffect(() => {
@@ -48,25 +52,34 @@ export function useReplay(req: ReplayRequest | null): ReplayState {
   }, [jobId, attempt]);
 
   const data = raw !== null && raw.id === jobId && raw.value.state === 'ready' ? raw.value.data : null;
+  // A new recording, Restart ("Replay again") or another speed starts the clock again from the lead-in.
+  useEffect(() => {
+    if (data === null) return;
+    timer.current = clockStart(speed, Date.now());
+    setMoved((n) => n + 1);
+  }, [data, run, speed]);
+
   useEffect(() => {
     if (data === null) return undefined;
-    wallStart.current = Date.now();
-    setFinished(false);
-    let timer: ReturnType<typeof setTimeout> | undefined;
+    let id: ReturnType<typeof setTimeout> | undefined;
     let shown = -1;
     const frame = (): void => {
       const t = clock();
       const snap = replaySnapshot(data, t) as { events?: unknown[] };
       const n = Array.isArray(snap.events) ? snap.events.length : 0;
       const next = replayStep(data, t);
-      // A new frame only when another event has happened, so the app re-renders on events, not on every tick.
+      // A new frame only when another event has happened (or a seek moved back), so the app re-renders on events.
       if (n !== shown || next === null) { shown = n; setDetail(normaliseJobDetail(snap)); }
-      if (next === null) { setFinished(true); return; }
-      timer = setTimeout(frame, Math.max(16, (next - t) / speed + 4));
+      setFinished(next === null);
+      if (next === null) return;
+      // Held before the next event: nothing to do until the hold moves, which restarts this loop.
+      const cap = timer.current.cap;
+      if (cap !== null && next > cap) return;
+      id = setTimeout(frame, Math.max(16, (next - t) / timer.current.speed + 4));
     };
     frame();
-    return () => { if (timer !== undefined) clearTimeout(timer); };
-  }, [data, run, clock, speed]);
+    return () => { if (id !== undefined) clearTimeout(id); };
+  }, [data, moved, clock]);
 
   const recordedAt = useMemo(() => {
     const b = data === null ? null : replayBounds(data);
@@ -75,11 +88,21 @@ export function useReplay(req: ReplayRequest | null): ReplayState {
 
   const restart = useCallback(() => setRun((n) => n + 1), []);
   const retry = useCallback(() => { setRaw(null); setAttempt((n) => n + 1); }, []);
+  const seek = useCallback((t: number, cap: number | null = null) => {
+    timer.current = clockSeek(timer.current, t, Date.now(), cap);
+    setMoved((n) => n + 1);
+  }, []);
+  const hold = useCallback((cap: number | null) => {
+    const next = clockHold(timer.current, cap, Date.now());
+    if (next === timer.current) return;
+    timer.current = next;
+    setMoved((n) => n + 1);
+  }, []);
   let out: Loadable<JobDetail> | null = null;
   if (jobId !== null) {
     if (raw === null || raw.id !== jobId) out = { state: 'loading' };
     else if (raw.value.state === 'error') out = { state: 'error', message: raw.value.message };
     else out = detail === null ? { state: 'loading' } : { state: 'ready', data: detail };
   }
-  return { detail: out, clock, finished, recordedAt, restart, retry };
+  return { detail: out, clock, finished, recordedAt, restart, retry, seek, hold };
 }

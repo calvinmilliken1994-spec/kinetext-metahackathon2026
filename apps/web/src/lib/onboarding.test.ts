@@ -7,8 +7,7 @@ import { liveStrip, partBuilds } from './liveBuild.ts';
 import { replaySnapshot } from './replay.ts';
 import { fixtureFinalWire } from './liveBuildFixtures.ts';
 import {
-  activeSteps, autoAdvance, canGoNext, clipRect, placeCard, placeStep, shouldAutoStart, stepReady, tourRequest, tourSignals, tourSteps, unionRect,
-  TOUR_MIN_DWELL_MS,
+  activeSteps, canGoNext, clipRect, placeCard, placeStep, shouldAutoStart, stepReady, tourRequest, tourSignals, tourSteps, unionRect,
 } from './onboarding.ts';
 import type { TourSignals } from './onboarding.ts';
 
@@ -18,17 +17,20 @@ const sig = (s: number | null, extra: Partial<Parameters<typeof tourSignals>[0]>
   const d = s === null ? null : at(s);
   return tourSignals({
     replayAvailable: true, replaying: d !== null, detail: d, builds: d === null ? {} : partBuilds(d), strip: d === null ? null : liveStrip(d),
-    canPresent: d !== null && d.summary.status === 'succeeded', library: LIB, speed: 2, ...extra,
+    canPresent: d !== null && d.summary.status === 'succeeded', library: LIB, speed: 2, recording: normaliseJobDetail(fixtureFinalWire()), ...extra,
   });
 };
+// Demo v2: the build steps are the recorded run's beats (lib/demoBeats.ts); this fixture run has 10.
+const BUILD = Array.from({ length: 10 }, () => 'build');
+const beatStep = (s: TourSignals, kind: string) => tourSteps(s).find((x) => x.beat?.kind === kind);
 const ids = (s: TourSignals): string[] => activeSteps(s).map((x) => x.id);
 
-test('tourRequest: ?tour=1 forces, ?tour=0 suppresses, speed defaults to 2 and is clamped', () => {
-  assert.deepEqual(tourRequest(''), { force: false, suppress: false, speed: 2 });
+test('tourRequest: ?tour=1 forces, ?tour=0 suppresses, speed defaults to 4 (Demo v2) and is clamped', () => {
+  assert.deepEqual(tourRequest(''), { force: false, suppress: false, speed: 4 });
   assert.deepEqual(tourRequest('?tour=1&speed=8'), { force: true, suppress: false, speed: 8 });
   assert.equal(tourRequest('?tour=1&speed=99').speed, 16);
-  assert.equal(tourRequest('?tour=1&speed=0').speed, 2);
-  assert.equal(tourRequest('?tour=1&speed=abc').speed, 2);
+  assert.equal(tourRequest('?tour=1&speed=0').speed, 4);
+  assert.equal(tourRequest('?tour=1&speed=abc').speed, 4);
   assert.equal(tourRequest('?tour=0').suppress, true);
 });
 
@@ -43,9 +45,10 @@ test('shouldAutoStart: once on a plain first visit, never over a deep link, alwa
 });
 
 test('steps in order; the replay steps drop out when the recorded run is missing', () => {
-  // The figure step (Stage 10c, M4) joins once the replay shows the plan has a figure part.
-  assert.deepEqual(ids(sig(null)), ['welcome', 'library', 'reading', 'overview', 'checking', 'ready', 'try', 'present', 'own']);
-  assert.deepEqual(ids(sig(36)), ['welcome', 'library', 'reading', 'overview', 'figure', 'checking', 'ready', 'try', 'present', 'own']);
+  // Demo v2: one build step per beat, known from the recording before the replay starts (the count holds still).
+  assert.deepEqual(ids(sig(null)), ['welcome', 'library', ...BUILD, 'try', 'present', 'own']);
+  assert.deepEqual(ids(sig(36)), ids(sig(null)));
+  assert.deepEqual(ids(sig(null, { recording: null })), ['welcome', 'library', 'build', 'try', 'present', 'own'], 'one reading step until the recording loads');
   // W-08 (Set A): without the recording and with nothing on screen to try, the try step drops out too.
   const none = sig(null, { replayAvailable: false });
   assert.deepEqual(ids(none), ['welcome', 'library', 'present', 'own']);
@@ -58,19 +61,19 @@ test('steps read real counts and the run’s own model, and only claim a repair 
   const lib = tourSteps(sig(null)).find((x) => x.id === 'library');
   assert.match(lib?.body ?? '', /97 licensed pages in 9 subjects/);
   assert.match(tourSteps(sig(null, { library: null })).find((x) => x.id === 'library')?.body ?? '', /a library of licensed pages/);
-  assert.equal(tourSteps(sig(10)).find((x) => x.id === 'reading')?.title, 'Muse Spark 1.3 is reading the page');
-  assert.match(tourSteps(sig(10)).find((x) => x.id === 'reading')?.body ?? '', /replay of a recorded run, at 2× speed/);
-  // before the failed check, the checking step makes no repair claim; during the rework it says so; after, it passed
-  const check = (s: number): string => tourSteps(sig(s)).find((x) => x.id === 'checking')?.body ?? '';
-  assert.doesNotMatch(check(60), /failed/);
-  assert.match(check(65), /reworking it as revision 2/);
-  assert.match(check(90), /revision 2 passed every check.*not a planted fault/);
+  assert.equal(beatStep(sig(10), 'reading')?.title, 'Muse Spark 1.3 is reading the page');
+  assert.match(beatStep(sig(10), 'reading')?.body ?? '', /replay of a recorded run, at 2× speed/);
+  // Demo v2: the failed check has its own beat (reworking), and the repaired part's checked beat says it passed.
+  assert.match(beatStep(sig(65), 'failed')?.body ?? '', /reworking it as revision 2/);
+  const revised = tourSteps(sig(90)).find((x) => x.beat?.kind === 'passed' && x.beat.revised);
+  assert.equal(revised?.title, 'Revised by Muse after a failed check');
+  assert.match(revised?.body ?? '', /revision 2 passed 11 of 11 checks\..*not a planted fault/);
   // Calvin's rule: a natural repair is "revised by Muse after a failed check", never "the model's own mistake".
-  for (const t of [60, 65, 90]) assert.doesNotMatch(check(t), /mistake|\bown\b/i, `at ${t} s`);
+  for (const x of tourSteps(sig(90)).filter((y) => y.beat !== null)) assert.doesNotMatch(x.body, /mistake|\bown\b/i, x.title);
 });
 
 test('copy: the closing step does not clash with "Needs review"; the try step fits the part', () => {
-  const ready = tourSteps(sig(90)).find((x) => x.id === 'ready');
+  const ready = beatStep(sig(90), 'done');
   assert.equal(ready?.title, 'Ready for your review');
   assert.doesNotMatch(`${ready?.title} ${ready?.body}`, /ready to teach/i);
   // The tour run's first part is a label diagram: no "prediction first" over a drag-and-name task.
@@ -86,18 +89,11 @@ test('copy: the closing step does not clash with "Needs review"; the try step fi
 test('signals follow the recorded run moment by moment', () => {
   const r = sig(10);
   assert.equal(r.replaying, true);
-  assert.equal(r.overview, false);
-  const o = sig(36);
-  assert.equal(o.overview, true);
-  assert.equal(o.partProgress, false, 'parts only being written are not yet progress');
-  assert.equal(o.watchPart, 'label-diagram-v1');
-  assert.equal(sig(60).partProgress, true, 'SAM outlining is');
-  assert.equal(sig(65).repairPart, 'label-diagram-v1');
-  assert.equal(sig(65).repairPassed, false);
+  assert.equal(r.finished, false);
+  assert.equal(r.beats.length, 10, 'the beats come from the whole recording, not from what the replay has reached');
   assert.equal(sig(72).firstPart, 'sequence-v1', 'the sequence passed first');
   const f = sig(90);
   assert.equal(f.finished, true);
-  assert.equal(f.repairPassed, true);
   assert.equal(f.firstPart, 'label-diagram-v1', 'plan order once both passed');
   assert.equal(f.canPresent, true);
   const notReplaying = sig(90, { replaying: false });
@@ -105,36 +101,16 @@ test('signals follow the recorded run moment by moment', () => {
   assert.equal(notReplaying.finished, false, 'a stored lesson at rest is not the tour replay');
 });
 
-test('readiness: each replay step waits for its recorded moment', () => {
-  assert.equal(stepReady('reading', sig(null)), false);
-  assert.equal(stepReady('reading', sig(5)), true);
-  assert.equal(stepReady('overview', sig(5)), false);
-  assert.equal(stepReady('overview', sig(36)), true);
-  assert.equal(stepReady('ready', sig(70)), false);
-  assert.equal(stepReady('ready', sig(90)), true);
-  const steps = activeSteps(sig(5));
-  assert.equal(canGoNext(steps, 2, sig(5)), false, 'Next waits for the overview');
-  assert.equal(canGoNext(steps, 2, sig(36)), true);
+test('readiness (Demo v2): a build step never waits on the replay; only the try step needs a part to try', () => {
+  for (const t of [null, 5, 36, 70]) {
+    const steps = activeSteps(sig(t));
+    steps.forEach((x, i) => { if (x.id === 'build') assert.equal(canGoNext(steps, i, sig(t)), true, `${x.beat?.id} at ${t}`); });
+  }
+  assert.equal(stepReady('build', sig(null)), true);
+  assert.equal(stepReady('try', sig(5)), false);
+  assert.equal(stepReady('try', sig(90)), true);
+  const steps = activeSteps(sig(90));
   assert.equal(canGoNext(steps, steps.length - 1, sig(90)), false, 'nothing after the last step');
-});
-
-test('auto-advance: after the replay passes the moment, and only after the minimum dwell', () => {
-  const steps = activeSteps(sig(36));
-  const reading = { index: 2, enteredAt: 1000 };
-  assert.equal(autoAdvance(reading, steps, sig(10), 99_999), reading, 'analysis still open: stays');
-  assert.equal(autoAdvance(reading, steps, sig(36), 1000 + TOUR_MIN_DWELL_MS - 1), reading, 'too soon to read');
-  assert.deepEqual(autoAdvance(reading, steps, sig(36), 1000 + TOUR_MIN_DWELL_MS), { index: 3, enteredAt: 1000 + TOUR_MIN_DWELL_MS });
-  const overview = { index: 3, enteredAt: 0 };
-  assert.equal(autoAdvance(overview, steps, sig(40), 10_000), overview, 'writing alone does not move on');
-  assert.equal(autoAdvance(overview, steps, sig(60), 10_000).index, 4, 'on to the figure step once SAM starts');
-  const figure = { index: 4, enteredAt: 0 };
-  assert.equal(autoAdvance(figure, steps, sig(60), 10_000), figure, 'SAM still running');
-  assert.equal(autoAdvance(figure, steps, sig(62), 10_000).index, 5, 'the first draft has its check result');
-  const checking = { index: 5, enteredAt: 0 };
-  assert.equal(autoAdvance(checking, steps, sig(80), 10_000), checking);
-  assert.equal(autoAdvance(checking, steps, sig(90), 10_000).index, 6);
-  const ready = { index: 6, enteredAt: 0 };
-  assert.equal(autoAdvance(ready, steps, sig(90), 99_999), ready, 'from the closing beat on, the teacher moves on');
 });
 
 test('card placement: beside the target where it fits, else below/above, else inside; centred without a target', () => {
@@ -162,9 +138,9 @@ test('card placement: beside the target where it fits, else below/above, else in
 });
 
 test('the reading and summary steps light what they talk about, so the card sits clear of it (demo pair review #4, #5)', () => {
-  const reading = tourSteps(sig(10)).find((x) => x.id === 'reading');
+  const reading = beatStep(sig(10), 'reading');
   assert.deepEqual(reading?.targets, ['[data-tour="live-strip"]', '[data-tour="source-text"]']);
-  const overview = tourSteps(sig(36)).find((x) => x.id === 'overview');
+  const overview = beatStep(sig(36), 'summary');
   assert.deepEqual(overview?.targets, ['.lesson .overview', '[data-tour="source-text"]']);
   assert.deepEqual(overview?.extras, ['.lesson [data-component]']);
   for (const x of tourSteps(sig(36))) assert.ok(Array.isArray(x.extras), x.id);

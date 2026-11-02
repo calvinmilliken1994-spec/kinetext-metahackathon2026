@@ -4,6 +4,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { tourSteps, tourReady, tourSignals, watchAfterTourClose, TOUR_JOB_ID } from './onboarding.ts';
+import { normaliseJobDetail } from './lessonJob.ts';
+import { demoRunWire } from './demoRunFixtures.ts';
 
 test('the tour waits while the runs list loads', () => {
   assert.equal(tourReady({ jobs: 'loading', sources: 'ready', lesson: 'none' }), false);
@@ -30,7 +32,8 @@ test('skipping the tour mid-replay leaves the tour run at rest (no build view ke
 });
 
 test('step 4 says Muse writes the summary first (the finished lesson puts the activity first)', () => {
-  const s = tourSignals({ replayAvailable: true, replaying: false, detail: null, builds: {}, strip: null, canPresent: false, library: null, speed: 4 });
-  const step = tourSteps(s).find((x) => x.id === 'overview');
+  const s = tourSignals({ replayAvailable: true, replaying: false, detail: null, builds: {}, strip: null, canPresent: false, library: null, speed: 4, recording: normaliseJobDetail(demoRunWire()) });
+  const step = tourSteps(s)[3];
+  assert.equal(step?.beat?.kind, 'summary');
   assert.equal(step?.title, 'Muse writes the summary first');
 });

@@ -1,7 +1,7 @@
 /// <reference types="node" />
-// Stage 10c (docs/specs/STAGE-10c-first-launch-and-fixes.md): the Demo's new steps. M4 the figure step (Muse Spark
-// locates each part, SAM 3.1 confirms it), the repair step worded from the run's own failed check, the present step
-// that no longer ends the Demo, and the closing "Try your own page" card.
+// Stage 10c (docs/specs/STAGE-10c-first-launch-and-fixes.md): the Demo's new steps. M4 the figure (Muse Spark locates
+// each part, SAM 3.1 confirms it), the repair worded from the run's own failed check, the present step that no longer
+// ends the Demo, and the closing "Try your own page" card. Demo v2: the figure and repair are beats of the build.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { lessonCheckName, normaliseJobDetail } from './lessonJob.ts';
@@ -9,7 +9,7 @@ import type { JobDetail } from '../api.ts';
 import { liveStrip, partBuilds } from './liveBuild.ts';
 import { replaySnapshot } from './replay.ts';
 import { fixtureFinalWire } from './liveBuildFixtures.ts';
-import { activeSteps, autoAdvance, autoUntil, stepReady, tourSignals, tourSteps, TOUR_MIN_DWELL_MS } from './onboarding.ts';
+import { activeSteps, stepReady, tourSignals, tourSteps } from './onboarding.ts';
 import type { SignalInput, TourSignals } from './onboarding.ts';
 
 // The fixture copies the 31 Oct run (no grounding, LD-04). The grounded wire swaps in the 2 Nov run's recorded wording:
@@ -45,59 +45,54 @@ const sig = (wire: Record<string, unknown> | null, s: number | null, extra: Part
 };
 const ids = (s: TourSignals, o?: { intro: boolean }): string[] => activeSteps(s, o).map((x) => x.id);
 
-test('M4: the figure step sits between the summary and the checks once the plan has a figure part', () => {
-  assert.deepEqual(ids(sig(grounded(), 36)), ['welcome', 'library', 'reading', 'overview', 'figure', 'checking', 'ready', 'try', 'present', 'own']);
-  assert.ok(!ids(sig(noFigure(), 36)).includes('figure'), 'a run with no figure has no figure step');
+// Demo v2: the figure's Meta moment is now its own beats (lib/demoBeats.ts): Muse Spark locating, SAM 3.1 confirming.
+const build = (s: TourSignals) => tourSteps(s).filter((x) => x.id === 'build');
+const kinds = (s: TourSignals): string[] => build(s).map((x) => x.beat?.kind ?? '');
+
+test('M4: the figure beats sit between the part starts and the checks once the plan has a figure part', () => {
+  assert.deepEqual(kinds(sig(grounded(), 36)), ['reading', 'summary', 'writing', 'writing', 'locating', 'failed', 'passed', 'locating', 'passed', 'done']);
+  assert.ok(!kinds(sig(noFigure(), 36)).some((k) => k === 'locating' || k === 'confirming' || k === 'outlining'), 'a run with no figure has no figure beat');
 });
 
 test('M4: on a grounded run it names both models: Muse Spark locates, SAM 3.1 confirms', () => {
-  const s = sig(grounded(), 60);
-  assert.equal(s.figurePart, 'label-diagram-v1');
-  assert.deepEqual(s.figureGrounding, { located: 5, of: 5 }, 'read from the recording, so it is known while SAM is still running');
-  const step = tourSteps(s).find((x) => x.id === 'figure');
-  assert.match(step?.title ?? '', /Muse Spark finds the parts/);
-  assert.match(step?.body ?? '', /Muse Spark locates each of the 5 parts/);
+  const step = build(sig(grounded(), 60)).find((x) => x.beat?.kind === 'locating');
+  assert.equal(step?.title, 'Muse Spark locates the parts on the figure');
+  assert.match(step?.body ?? '', /Muse Spark finds each of the 5 parts on the page’s figure/);
   assert.match(step?.body ?? '', /SAM 3\.1, Meta’s segmentation model,/);
-  assert.doesNotMatch(step?.body ?? '', /Newer lessons/, 'no age caveat on a grounded run');
   assert.deepEqual(step?.targets, ['.lesson [data-component="label-diagram-v1"]']);
 });
 
-test('M4: a run whose grounding is recorded only as a locate event (current worker) still counts as grounded', () => {
+test('M4: a run whose grounding is recorded as a locate event (current worker) gets the SAM confirming beat with its counts', () => {
   const w = JSON.parse(JSON.stringify(fixtureFinalWire())) as { events: Array<Record<string, unknown>> };
   const seg = w.events.findIndex((e) => e['stage'] === 'segment' && e['status'] === 'started');
   const at = w.events[seg]?.['at'];
   w.events.splice(seg + 1, 0, { ...w.events[seg], at, stage: 'locate', status: 'succeeded', detail: 'muse-spark-1.3 located 5 of 5 part(s) for SAM' });
   w.events.forEach((e, i) => { e['seq'] = i; });
-  assert.deepEqual(sig(w, 62).figureGrounding, { located: 5, of: 5 });
+  const conf = build(sig(w, 62)).find((x) => x.beat?.kind === 'confirming');
+  assert.equal(conf?.title, 'SAM 3.1 confirms what Muse Spark located');
+  assert.match(conf?.body ?? '', /^Muse Spark located 5 of 5 parts\. SAM 3\.1/);
 });
 
-test('M4: on an older run with no grounding call it says so in one honest line', () => {
-  const step = tourSteps(sig(fixtureFinalWire(), 60)).find((x) => x.id === 'figure');
-  assert.match(step?.title ?? '', /SAM 3\.1 outlines the parts/);
-  assert.match(step?.body ?? '', /Newer lessons add a step first: Muse Spark locates each part, then SAM 3\.1 confirms it\./);
+test('M4: on an older run with no grounding call, SAM 3.1 outlines the parts (no Muse locating beat is invented)', () => {
+  const steps = build(sig(fixtureFinalWire(), 60));
+  assert.ok(!steps.some((x) => x.beat?.kind === 'locating' || x.beat?.kind === 'confirming'));
+  const step = steps.find((x) => x.beat?.kind === 'outlining');
+  assert.equal(step?.title, 'SAM 3.1 outlines the parts of the figure');
+  assert.match(step?.body ?? '', /from the point Muse marked on the figure/);
 });
 
-test('M4: the figure step waits for SAM to start, then moves on once that part has its check result', () => {
-  assert.equal(stepReady('figure', sig(grounded(), 50)), false, 'before SAM starts');
-  assert.equal(stepReady('figure', sig(grounded(), 60)), true, 'SAM is running');
-  assert.equal(autoUntil('figure', sig(grounded(), 60)), false);
-  assert.equal(autoUntil('figure', sig(grounded(), 62)), true, 'the first draft has been checked');
-  const steps = activeSteps(sig(grounded(), 62));
-  const at = steps.findIndex((x) => x.id === 'figure');
-  const moved = autoAdvance({ index: at, enteredAt: 0 }, steps, sig(grounded(), 62), TOUR_MIN_DWELL_MS);
-  assert.equal(steps[moved.index]?.id, 'checking');
-});
-
-test('the repair step names the check that failed, from the run itself (never a hard-coded check)', () => {
+test('the repair beats name the check that failed, from the run itself (never a hard-coded check)', () => {
   const name = lessonCheckName('LD-06');
   assert.ok(name !== null);
-  const check = (wire: Record<string, unknown>, s: number): string => tourSteps(sig(wire, s)).find((x) => x.id === 'checking')?.body ?? '';
-  assert.equal(sig(grounded(), 65).repairCheck, name);
-  assert.ok(check(grounded(), 65).includes(`“${name}”`), check(grounded(), 65));
-  assert.ok(check(grounded(), 90).includes(`“${name}”`));
-  assert.match(check(grounded(), 90), /revision 2 passed every check/);
-  assert.ok(check(fixtureFinalWire(), 90).includes(`“${lessonCheckName('LD-04')}”`), 'the older run names its own check');
-  for (const t of [65, 90]) assert.doesNotMatch(check(grounded(), t), /mistake|\bown\b/i);
+  const failed = build(sig(grounded(), 65)).find((x) => x.beat?.kind === 'failed');
+  const revised = build(sig(grounded(), 90)).find((x) => x.beat?.kind === 'passed' && x.beat.revised);
+  assert.ok(failed?.body.includes(`“${name}”`), failed?.body ?? '');
+  assert.ok(revised?.body.includes(`“${name}”`), revised?.body ?? '');
+  assert.equal(revised?.title, 'Revised by Muse after a failed check');
+  assert.match(revised?.body ?? '', /revision 2 passed 11 of 11 checks/);
+  const old = build(sig(fixtureFinalWire(), 90)).find((x) => x.beat?.kind === 'failed');
+  assert.ok(old?.body.includes(`“${lessonCheckName('LD-04')}”`), 'the older run names its own check');
+  for (const x of [failed, revised]) assert.doesNotMatch(x?.body ?? '', /mistake|\bown\b/i);
 });
 
 test('the present step no longer ends the Demo: Next goes on, presentation mode is a side action', () => {
@@ -124,5 +119,6 @@ test('the Demo ends on Try your own page, with Browse the lessons as the second 
 });
 
 test('started from the guide\u2019s prompt, the Demo skips its own introduction and opens on the build', () => {
-  assert.deepEqual(ids(sig(grounded(), 36), { intro: false }), ['reading', 'overview', 'figure', 'checking', 'ready', 'try', 'present', 'own']);
+  const n = build(sig(grounded(), 36)).length;
+  assert.deepEqual(ids(sig(grounded(), 36), { intro: false }), [...Array.from({ length: n }, () => 'build'), 'try', 'present', 'own']);
 });

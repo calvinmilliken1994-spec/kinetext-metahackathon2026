@@ -467,6 +467,8 @@ export function App() {
     return { pages: active.length, subjects: new Set(active.map((s) => s.subject ?? 'other')).size };
   }, [sourceList]);
   const tourReplayFailed = replayReq?.jobId === TOUR_JOB_ID && replay.detail?.state === 'error';
+  // Demo v2: while the Demo's replay plays, the Demo reads its clock and seeks or holds it (Next, Back, a beat's dwell).
+  const demoReplay = useMemo(() => (tourReplaying ? { clock: replay.clock, seek: replay.seek, hold: replay.hold } : null), [tourReplaying, replay.clock, replay.seek, replay.hold]);
   // M4: the Demo run's whole record, so the figure step knows (before the replay gets there) whether Muse grounded SAM.
   const tourRecord = useJobDetail(touring && tourJob !== null ? TOUR_JOB_ID : null);
   const accessHere = welcomeAccess(access, health === null ? null : health.live);
@@ -502,7 +504,8 @@ export function App() {
     else setReplayReq({ jobId: tourJob.jobId, speed: TOUR_REQUEST.speed });
   }, [tourJob, replayReq, replay]);
   const onTourStep = useCallback((step: TourStep) => {
-    if (step.id === 'library' || step.id === 'overview') { setShowSource(true); setDrawer(null); setView('lesson'); }
+    // Demo v2: the reading and summary beats light the page, so it is open for them.
+    if (step.id === 'library' || step.beat?.kind === 'reading' || step.beat?.kind === 'summary') { setShowSource(true); setDrawer(null); setView('lesson'); }
     if (step.id === 'present') setDrawer(null);
   }, []);
   // Closing the tour (Skip, Esc, Finish) puts focus on the lesson title, not on the whole lesson column (which drew a
@@ -920,7 +923,7 @@ export function App() {
         <Onboarding
           signals={signals} onStartReplay={startTourReplay} onPresent={onPresent} onClose={closeTour} onStep={onTourStep}
           onRetryReplay={replay.retry} onSkipReplay={skipTourReplay} intro={demoIntro} hidden={presenting !== null}
-          onOwn={() => openNew('own')} onLessons={() => navigate('lessons')}
+          onOwn={() => openNew('own')} onLessons={() => navigate('lessons')} replay={demoReplay}
         />
       )}
       {presenting !== null && deck !== null && deck.jobId === presenting.jobId && (

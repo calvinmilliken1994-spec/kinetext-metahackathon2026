@@ -10,7 +10,7 @@ import { lessonWire } from './lessonJobFixtures.ts';
 import { liveStrip, partBuilds } from './liveBuild.ts';
 import { replaySnapshot } from './replay.ts';
 import { fixtureFinalWire } from './liveBuildFixtures.ts';
-import { activeSteps, canGoNext, indexAfterSkip, stepReady, tourSignals, withoutReplay } from './onboarding.ts';
+import { activeSteps, canGoNext, indexAfterSkip, tourSignals, withoutReplay } from './onboarding.ts';
 import type { SignalInput, TourSignals } from './onboarding.ts';
 
 const LIB = { pages: 97, subjects: 9 };
@@ -70,9 +70,9 @@ test('a failed replay fetch is a signal; Continue drops the replay steps and mov
   const s = base({ replayAvailable: true, replayFailed: true });
   assert.equal(s.replayFailed, true);
   const withReplay = activeSteps(s);
-  const reading = withReplay.findIndex((x) => x.id === 'reading');
+  const reading = withReplay.findIndex((x) => x.id === 'build');
   assert.equal(reading, 2);
-  assert.equal(stepReady('reading', s), false, 'the reading step cannot start: the card offers Retry / Continue instead');
+  assert.equal(withReplay[reading]?.needsReplay, true, 'the build needs the recording: the card offers Retry / Continue instead');
   const skipped = withoutReplay(s);
   const after = activeSteps(skipped);
   assert.deepEqual(after.map((x) => x.id), ['welcome', 'library', 'present', 'own']);
@@ -84,7 +84,7 @@ test('Continue mid-replay (after the overview) lands on the next non-replay step
   const d = normaliseJobDetail(replaySnapshot(fixtureFinalWire(), 1e9));
   const s = tourSignals({ replayAvailable: true, replaying: true, detail: d, builds: partBuilds(d), strip: liveStrip(d), canPresent: true, library: LIB, speed: 2 });
   const steps = activeSteps(s);
-  const checking = steps.findIndex((x) => x.id === 'checking');
+  const checking = steps.findIndex((x) => x.id === 'build');
   const after = activeSteps(withoutReplay(s));
   assert.deepEqual(after.map((x) => x.id), ['welcome', 'library', 'try', 'present', 'own']);
   assert.equal(after[indexAfterSkip(steps, checking, after)]?.id, 'try');

@@ -104,6 +104,50 @@ function timedEvents(raw: Rec): TimedEvent[] | null {
   return holdConfirm(evs.map((e) => ({ e, seq: e.seq as number, t: Date.parse(e.at as string) - start })).sort((a, b) => a.seq - b.seq));
 }
 
+/**
+ * Demo v2: the recorded events on the replay's own timeline (job ms from the first event, with the grounding facts
+ * rebuilt and the SAM confirm holds applied), in recorded order. What the Demo's beats are timed by, so a beat's time is
+ * exactly the moment the replay shows its event. Null when the detail has no usable events.
+ */
+export function replayEvents(raw: unknown): Array<{ e: Record<string, unknown>; t: number }> | null {
+  if (!isRec(raw)) return null;
+  const evs = timedEvents(raw);
+  return evs === null ? null : evs.map((x) => ({ e: x.e, t: x.t }));
+}
+
+// ---- the replay clock (Demo v2) -------------------------------------------------------------------------------------
+
+/** Job time shown before the first event, so the replay opens on the empty lesson rather than mid-step. */
+export const REPLAY_LEAD_IN_MS = 800;
+
+/**
+ * The replay's clock: job time `base` at wall time `anchor`, running at `speed`, never past `cap` (null: no cap). Seeking
+ * moves it to a job time; a cap holds it (the Demo keeps a fast beat readable); lifting the cap plays on from where it
+ * stood, so job time never jumps.
+ */
+export interface ReplayClock { base: number; anchor: number; speed: number; cap: number | null }
+
+export function clockStart(speed: number, now: number): ReplayClock {
+  return { base: -REPLAY_LEAD_IN_MS, anchor: now, speed, cap: null };
+}
+
+export function clockRead(c: ReplayClock, now: number): number {
+  const t = c.base + (now - c.anchor) * c.speed;
+  return c.cap === null ? t : Math.min(c.cap, t);
+}
+
+/** Jump to job time `t`, held below `cap` when given (a plain seek clears any hold). */
+export function clockSeek(c: ReplayClock, t: number, now: number, cap: number | null = null): ReplayClock {
+  return { base: t, anchor: now, speed: c.speed, cap: cap === null ? null : Math.max(t, cap) };
+}
+
+/** Hold the clock at `cap` (null lifts the hold). The same cap returns the same clock; a cap behind now holds at now. */
+export function clockHold(c: ReplayClock, cap: number | null, now: number): ReplayClock {
+  if (cap === c.cap) return c;
+  const t = clockRead(c, now);
+  return { base: t, anchor: now, speed: c.speed, cap: cap === null ? null : Math.max(t, cap) };
+}
+
 /** Job time of the recorded run: from its first event (0) to its last (`durationMs`), and the wall time it started. */
 export function replayBounds(raw: unknown): { startAt: number; durationMs: number } | null {
   if (!isRec(raw)) return null;

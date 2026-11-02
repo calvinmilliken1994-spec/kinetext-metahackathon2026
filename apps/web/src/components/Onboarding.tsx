@@ -4,8 +4,10 @@
 // lib/welcome.ts); this file only measures targets and draws. No confetti, no bounce, no glow: one opacity fade.
 import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import type { RefObject } from 'react';
-import type { Rect, TourOutcome, TourSignals, TourStep } from '../lib/onboarding.ts';
-import { activeSteps, autoAdvance, belowCover, canGoNext, clipRect, indexAfterSkip, placeStep, unionRect, withoutReplay } from '../lib/onboarding.ts';
+import type { Rect, TourOutcome, TourSignals, TourStep, TourStepId } from '../lib/onboarding.ts';
+import { activeSteps, belowCover, canGoNext, clipRect, indexAfterSkip, placeStep, stepLights, tourMove, unionRect, withoutReplay, TOUR_MIN_DWELL_MS } from '../lib/onboarding.ts';
+import type { Beat } from '../lib/demoBeats.ts';
+import { beatAt, paceCap } from '../lib/demoBeats.ts';
 import type { GuideAction, GuideStep } from '../lib/welcome.ts';
 import { nextAllowed } from '../lib/welcome.ts';
 import { revealInPanels, scrollContainersOf } from '../lib/scroll.ts';
@@ -171,31 +173,71 @@ export interface OnboardingProps {
   intro?: boolean;
   /** Presentation mode is open over the app: the Demo keeps its place but shows nothing and takes no keys. */
   hidden?: boolean;
+  /** Demo v2: the Demo's replay while it plays (its clock, and seek and hold for Next, Back and the beat's dwell). */
+  replay?: DemoReplay | null;
 }
 
-export function Onboarding({ signals: given, onStartReplay, onPresent, onClose, onStep, onRetryReplay, onSkipReplay, onOwn, onLessons, intro = true, hidden = false }: OnboardingProps) {
+export interface DemoReplay {
+  clock: () => number;
+  seek: (t: number, cap?: number | null) => void;
+  hold: (cap: number | null) => void;
+}
+
+export function Onboarding({ signals: given, onStartReplay, onPresent, onClose, onStep, onRetryReplay, onSkipReplay, onOwn, onLessons, intro = true, hidden = false, replay = null }: OnboardingProps) {
   // W-08: after a failed replay fetch the teacher can go on without the recording; the replay steps then drop out.
   const [skipReplay, setSkipReplay] = useState(false);
   const signals = skipReplay ? withoutReplay(given) : given;
   const opts = { intro };
   const steps = activeSteps(signals, opts);
-  const [state, setState] = useState(() => ({ index: 0, enteredAt: Date.now() }));
-  const index = Math.min(state.index, steps.length - 1);
-  const step = steps[index] as TourStep;
+  // Where the Demo stands. During the build ('build') the beat on screen is not stored: it is the replay's (Demo v2).
+  const [at, setAt] = useState<TourStepId>(() => steps[0]?.id ?? 'welcome');
   const titleId = useId();
   const bodyId = useId();
 
-  // Replay steps move on by themselves once the recorded run has passed their moment (checked four times a second).
-  const live = useRef({ steps, signals });
-  live.current = { steps, signals };
+  const buildFrom = steps.findIndex((x) => x.id === 'build');
+  const beats = steps.map((x) => x.beat).filter((b): b is Beat => b !== null);
+  const inBuild = at === 'build' && buildFrom >= 0;
+  // While the build plays, re-read the replay's clock a few times a second.
+  const [, setTick] = useState(0);
   useEffect(() => {
-    const t = setInterval(() => setState((s) => autoAdvance(s, live.current.steps, live.current.signals, Date.now())), 250);
-    return () => clearInterval(t);
-  }, []);
+    if (!inBuild) return undefined;
+    const t = window.setInterval(() => setTick((n) => n + 1), 150);
+    return () => window.clearInterval(t);
+  }, [inBuild]);
+  const t = replay === null ? -Infinity : replay.clock();
+  const found = steps.findIndex((x) => x.id === at);
+  const index = inBuild ? buildFrom + Math.max(0, beatAt(beats, t)) : found >= 0 ? found : Math.min(steps.length - 1, Math.max(0, buildFrom));
+  const step = steps[index] as TourStep;
+  const stepKey = step.beat?.id ?? step.id;
+  // When the step (or beat) on screen was entered: the minimum dwell and the L5 guard count from here.
+  const entered = useRef({ key: '', at: 0 });
+  if (entered.current.key !== stepKey) entered.current = { key: stepKey, at: Date.now() };
 
-  const go = useCallback((to: number) => setState({ index: to, enteredAt: Date.now() }), []);
+  // The replay waits for a beat's minimum dwell, never the other way round; outside the build it plays freely.
+  const ctl = useRef(replay);
+  ctl.current = replay;
+  const beatIndex = inBuild ? index - buildFrom : -1;
+  useEffect(() => {
+    ctl.current?.hold(inBuild ? paceCap(beats, beatIndex, entered.current.at, Date.now(), TOUR_MIN_DWELL_MS) : null);
+  });
+  useEffect(() => () => ctl.current?.hold(null), []);
+
+  const move = (dir: 1 | -1): void => {
+    const mv = tourMove(steps, index, dir);
+    if (mv === null) return;
+    const target = steps[mv.index] as TourStep;
+    if (mv.seek !== null) {
+      // Next and Back during the build seek the replay to that beat, held there for its dwell.
+      const now = Date.now();
+      entered.current = { key: target.beat?.id ?? target.id, at: now };
+      ctl.current?.seek(mv.seek, paceCap(beats, mv.index - buildFrom, now, now, TOUR_MIN_DWELL_MS));
+      setTick((n) => n + 1);
+    }
+    setAt(target.id);
+  };
   const continueWithout = (): void => {
-    go(indexAfterSkip(steps, index, activeSteps(withoutReplay(given), opts)));
+    const after = activeSteps(withoutReplay(given), opts);
+    setAt(after[indexAfterSkip(steps, index, after)]?.id ?? 'own');
     setSkipReplay(true);
     onSkipReplay?.();
   };
@@ -203,12 +245,12 @@ export function Onboarding({ signals: given, onStartReplay, onPresent, onClose, 
 
   const last = index === steps.length - 1;
   const next = (): void => {
-    // L5: a click aimed at the previous step (just auto-advanced) never skips this one.
-    if (!nextAllowed(state.enteredAt, Date.now())) return;
+    // L5: a click aimed at the previous step (or a beat that just changed by itself) never skips this one.
+    if (!nextAllowed(entered.current.at, Date.now())) return;
     if (step.primary === 'replay') onStartReplay();
     if (step.primary === 'own') { onOwn(); onClose('done'); return; }
     if (step.primary === 'finish' || last) { onClose('done'); return; }
-    go(index + 1);
+    move(1);
   };
   const secondary = (): void => {
     if (step.secondary?.action === 'present') onPresent();
@@ -218,32 +260,34 @@ export function Onboarding({ signals: given, onStartReplay, onPresent, onClose, 
   // The recording could not be read while the Demo waits on it: say so and offer Retry / Continue instead of waiting.
   const nextStep = steps[index + 1];
   const replayBroken = signals.replayFailed && (step.needsReplay || nextStep?.needsReplay === true) && step.primary !== 'replay';
+  // What the step lights now: a checked part hands the light on to the work still going on.
+  const lights = stepLights(step, t);
+  const lit = lights.targets[0];
 
-  // Entering a step: let the app open what it points at, bring the target into view, then focus the card's heading.
-  const stepId = step.id;
+  // Entering a step (or a beat): let the app open what it points at, bring the target into view, then focus the heading.
   useEffect(() => {
     onStep?.(step);
-    const first = step.targets.length === 0 ? null : document.querySelector<HTMLElement>(step.targets[0] as string);
-    // The summary step: bring the page's first lit sentence near the top of the source pane, so the lit sentences show
+    const first = lit === undefined ? null : document.querySelector<HTMLElement>(lit);
+    // The summary beat: bring the page's first lit sentence near the top of the source pane, so the lit sentences show
     // rather than one line above the fold (demo pair review #5). Marks can land a frame after the overview.
-    let t = 0;
+    let timer = 0;
     // Only the source pane scrolls (depth 1): moving the outer panels pushed the summary up behind the build strip.
     // Then the summary itself is brought clear of the strip in its own column.
-    if (step.id === 'overview') {
-      t = window.setTimeout(() => {
+    if (step.beat?.kind === 'summary') {
+      timer = window.setTimeout(() => {
         revealInPanels(document.querySelector<HTMLElement>('[data-tour="source-text"] mark'), 'start', 24, 1);
         const strip = document.querySelector<HTMLElement>('[data-tour="live-strip"]');
         revealInPanels(first, 'nearest', (strip?.offsetHeight ?? 0) + 16, 1);
       }, 120);
     }
     if (!hidden) document.getElementById(titleId)?.focus({ preventScroll: true });
-    return () => window.clearTimeout(t);
-  }, [stepId]);
+    return () => window.clearTimeout(timer);
+  }, [stepKey]);
 
   // A step that points at a lesson part keeps the whole part on screen: when it arrives below the fold, or grows past it
   // while Muse writes it, its panel scrolls it up under the build strip (a few times at most, so it never fights the reader).
   useEffect(() => {
-    const sel = step.targets[0];
+    const sel = lit;
     if (sel === undefined || !sel.startsWith('.lesson [data-component')) return undefined;
     let moves = 0;
     let lastH = -1;
@@ -263,20 +307,20 @@ export function Onboarding({ signals: given, onStartReplay, onPresent, onClose, 
       }
     }, 300);
     return () => window.clearInterval(timer);
-  }, [stepId, step.targets[0]]);
+  }, [stepKey, lit]);
 
-  const { cardRef, vp, rects, pos } = useSpotlight(step.targets, step.extras);
+  const { cardRef, vp, rects, pos } = useSpotlight(lights.targets, lights.extras);
   const close = useCallback(() => onClose('skipped'), [onClose]);
   useCardKeys(cardRef, close, step.interactive, !hidden);
   if (hidden) return null;
 
   const choice = step.primary === 'own';
   return (
-    <div className="tour" data-testid="tour" data-step={step.id} data-interactive={step.interactive ? 'true' : 'false'}>
+    <div className="tour" data-testid="tour" data-step={step.id} data-beat={step.beat?.kind} data-interactive={step.interactive ? 'true' : 'false'}>
       <Scrim rects={rects} vp={vp} interactive={step.interactive} />
       <div
         ref={cardRef} className="tour-card" role="dialog" aria-modal={step.interactive ? 'false' : 'true'} aria-labelledby={titleId} aria-describedby={bodyId}
-        data-side={pos?.side ?? 'center'} data-kind={choice ? 'choice' : undefined} style={pos === null ? { opacity: 0 } : { left: pos.x, top: pos.y }} key={step.id}
+        data-side={pos?.side ?? 'center'} data-kind={choice ? 'choice' : undefined} style={pos === null ? { opacity: 0 } : { left: pos.x, top: pos.y }} key={stepKey}
       >
         {!choice && <p className="tour-count">Step {index + 1} of {steps.length - 1}</p>}
         <h2 id={titleId} className="tour-title" tabIndex={-1}>{step.title}</h2>
@@ -290,7 +334,7 @@ export function Onboarding({ signals: given, onStartReplay, onPresent, onClose, 
             </p>
           </div>
         )}
-        {!nextReady && !replayBroken && <p className="tour-wait" role="status">{step.primary === 'replay' ? 'Loading the recorded run…' : 'The next step starts when the replay gets there.'}</p>}
+        {!nextReady && !replayBroken && step.primary === 'replay' && <p className="tour-wait" role="status">Loading the recorded run…</p>}
         {choice && (
           <div className="tour-choices">
             <button type="button" className="btn btn-primary" onClick={next}>{step.primaryLabel}</button>
@@ -303,7 +347,7 @@ export function Onboarding({ signals: given, onStartReplay, onPresent, onClose, 
         <div className="tour-actions">
           <button type="button" className="link-btn tour-skip" onClick={close}>{last ? 'Close' : 'Skip demo'}</button>
           <span className="tour-spacer" />
-          {index > 0 && <button type="button" className="btn btn-quiet" onClick={() => go(index - 1)}>Back</button>}
+          {index > 0 && <button type="button" className="btn btn-quiet" onClick={() => move(-1)}>Back</button>}
           {!choice && !replayBroken && <button type="button" className="btn btn-primary" onClick={next} disabled={!nextReady}>{step.primaryLabel}</button>}
         </div>
       </div>
