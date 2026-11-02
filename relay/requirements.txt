@@ -1,0 +1,4 @@
+fastapi==0.162.0
+httpx==0.28.1
+# tests only: pytest (any recent 9.x; the suite ran on 9.2.0). The Modal SDK (1.6.3) is needed only by `modal` CLI commands
+# and the optional relay/tests/test_app_wiring.py; it is not installed in the Modal image by this file.

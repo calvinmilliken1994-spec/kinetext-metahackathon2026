@@ -26,6 +26,14 @@
 // reservation. GET /api/health and GET /api/models report availability as
 // booleans only.
 //
+// Stage 11 slice L (local relay mode; apps/api/relay.ts, docs/specs/STAGE-11-judge-relay.md):
+//   RELAY       '1' forces relay mode, '0' turns it off (default: relay mode when MODEL_API_KEY is
+//               absent or blank and config/relay.json holds a url)
+//   WEB_DIST_DIR a built web app folder to serve on the same port (scripts/start.mjs sets it)
+// In relay mode the server holds no keys: a judge enters the access code (POST /api/access), the relay
+// checks it, the code is kept in memory only, and every model call goes to the relay with it. With no
+// key and no relay url the server starts read-only (live generation off).
+//
 // Live mode opens the spending ledger FIRST (TASK-009 N-01: an OS-backed lock;
 // LEDGER_LOCKED exits 1) and only then recovers interrupted jobs, so job
 // storage is mutated only by the process that owns the ledger (TASK-009 N-05).
@@ -46,6 +54,10 @@ import { startJob as startGenerationJob, recoverInterruptedJobs } from '../../wo
 import type { JobFlow } from '../../workers/generation/jobs.ts';
 import { parseResourceLimits } from './resource-limits.ts';
 import { buildModalClient, modalTokenAvailable } from './model-clients.ts';
+import { createRelayControl, loadRelayConfig, selectApiMode } from './relay.ts';
+import type { ApiMode, RelayControl } from './relay.ts';
+import { buildRelayJobClients } from './relay-clients.ts';
+import { staticDirIfBuilt } from './static.ts';
 import { createApiServer } from './server.ts';
 import type { ApiOptions } from './server.ts';
 
@@ -53,7 +65,20 @@ const portEnv: string | undefined = process.env.PORT;
 const port: number =
   portEnv !== undefined && /^[0-9]+$/.test(portEnv) && Number(portEnv) > 0 ? Number(portEnv) : 8787;
 const storageDir: string = process.env.STORAGE_DIR ?? 'storage';
-const live: boolean = process.env.META_LIVE === '1';
+
+// Stage 11: which way this server runs (relay | direct | readonly). Direct mode is exactly today's.
+let mode: ApiMode;
+let relay: RelayControl | undefined;
+try {
+  const relayUrl: string = loadRelayConfig().url;
+  mode = selectApiMode(process.env, relayUrl);
+  relay = mode === 'relay' ? createRelayControl({ url: relayUrl }) : undefined;
+} catch (err: unknown) {
+  console.error(`API startup failed: ${err instanceof Error ? err.message : 'UNKNOWN'}`);
+  process.exit(1);
+}
+const live: boolean = mode !== 'readonly';
+const staticDir: string | undefined = staticDirIfBuilt(process.env.WEB_DIST_DIR);
 const purpose: 'test-live' | 'demo' = process.env.META_PURPOSE === 'demo' ? 'demo' : 'test-live';
 
 let startJob: ApiOptions['startJob'] = null;
@@ -102,8 +127,9 @@ async function startup(): Promise<void> {
           maxInputTokens,
         });
       // Built once at startup so a missing key still fails startup exactly as before.
-      const client: MetaClient = buildMetaApiClient(limits.maxInputTokens);
-      const clientV2: MetaClient = buildMetaApiClient(limits.maxInputTokensV2);
+      // Relay mode holds no key: its clients are built per job from the in-memory access code.
+      const client: MetaClient | null = relay === undefined ? buildMetaApiClient(limits.maxInputTokens) : null;
+      const clientV2: MetaClient | null = relay === undefined ? buildMetaApiClient(limits.maxInputTokensV2) : null;
       startJob = (
         sourceId: string,
         jobOpts?: { demoFault?: DemoFault; model?: ModelChoice; flow?: JobFlow; access?: 'judge' },
@@ -117,16 +143,29 @@ async function startup(): Promise<void> {
         // MODAL_PROXY_TOKEN_MISSING error before any ledger reservation. There
         // is never a silent fallback between providers.
         // S6-W: the flow picks the input bound the client was constructed with.
-        const jobClient: MetaClient =
-          model === 'muse-spark-open'
-            ? buildModalClient({
+        // Stage 11: in relay mode the code the relay accepted (memory only) is read here, at submission
+        // time; the clients send it to the relay, which holds Calvin's keys.
+        const relayJob =
+          relay !== undefined
+            ? buildRelayJobClients({
+                relay,
+                model,
+                flow,
                 ledger,
-                maxInputTokens: flow === 'lesson' ? limits.maxInputTokensV2 : limits.maxInputTokens,
-                modalBaseUrl: limits.modalBaseUrl,
+                maxInputTokens: limits.maxInputTokens,
+                maxInputTokensV2: limits.maxInputTokensV2,
               })
-            : flow === 'lesson'
-              ? clientV2
-              : client;
+            : null;
+        const jobClient: MetaClient =
+          relayJob !== null
+            ? relayJob.client
+            : model === 'muse-spark-open'
+              ? buildModalClient({
+                  ledger,
+                  maxInputTokens: flow === 'lesson' ? limits.maxInputTokensV2 : limits.maxInputTokens,
+                  modalBaseUrl: limits.modalBaseUrl,
+                })
+              : ((flow === 'lesson' ? clientV2 : client) as MetaClient);
         return startGenerationJob(sourceId, {
           client: jobClient,
           storageDir,
@@ -139,7 +178,7 @@ async function startup(): Promise<void> {
           // Meta API key and the job's spending ledger (USD 0.0025 per image, reserved
           // and reconciled like every model call). The key is read from the environment
           // here only and never logged.
-          sam: { apiKey: process.env.MODEL_API_KEY, ledger },
+          sam: relayJob !== null ? relayJob.sam : { apiKey: process.env.MODEL_API_KEY, ledger },
           // S6-W: the pipeline choice from POST /api/jobs (default 'lesson').
           flow,
           // R-11: one job-wide deadline and per-stage output caps from config;
@@ -193,16 +232,24 @@ async function startup(): Promise<void> {
     // is available exactly when a well-formed MODAL_PROXY_TOKEN is present in
     // the environment (shape check only — the value is read solely when a
     // muse-spark-open job is submitted, and never leaves the server).
-    availableModels: (): ModelChoice[] => {
-      if (!live) {
-        return [];
-      }
-      const models: ModelChoice[] = ['muse-spark-1.3'];
-      if (modalTokenAvailable()) {
-        models.push('muse-spark-open');
-      }
-      return models;
-    },
+    // Relay mode leaves this to the server: both models once a code is held.
+    ...(relay === undefined
+      ? {
+          availableModels: (): ModelChoice[] => {
+            if (!live) {
+              return [];
+            }
+            const models: ModelChoice[] = ['muse-spark-1.3'];
+            if (modalTokenAvailable()) {
+              models.push('muse-spark-open');
+            }
+            return models;
+          },
+        }
+      : {}),
+    // Stage 11: relay mode (the relay judges the access code) and the built web app on this port.
+    ...(relay !== undefined ? { relay } : {}),
+    ...(staticDir !== undefined ? { staticDir } : {}),
   });
   server.on('error', (err: Error) => {
     console.error(`API server error: ${err.message}`);
@@ -220,6 +267,14 @@ async function startup(): Promise<void> {
       console.log(
         `API listening on http://127.0.0.1:${port} (live generation: ${live ? 'on' : 'off'}, purpose: ${purpose})`,
       );
+      if (relay !== undefined) {
+        console.log('Relay mode: live builds unlock when a valid access code is entered in the app.');
+      } else if (!live) {
+        console.log('Read-only: live builds are unavailable (no MODEL_API_KEY and no relay in config/relay.json).');
+      }
+      if (staticDir !== undefined) {
+        console.log(`Serving the web app from ${staticDir}`);
+      }
       resolveListen();
     });
   });

@@ -130,6 +130,11 @@ export interface ModalClientDeps {
   env?: Readonly<Record<string, string | undefined>>;
   /** Test seam: fake transport, no live calls. */
   fetchImpl?: typeof fetch;
+  /**
+   * Stage 11 (relay mode): the token halves to use instead of reading MODAL_PROXY_TOKEN. The relay
+   * route takes `wk-relay` / `ws-<access code>`; `modalBaseUrl` is then `<relay url>/modal/v1`.
+   */
+  token?: ModalProxyToken;
 }
 
 /**
@@ -147,7 +152,7 @@ export const MODAL_CALL_TIMEOUT_MS = 180_000;
 
 export function buildModalClient(deps: ModalClientDeps): MetaClient {
   const env: Readonly<Record<string, string | undefined>> = deps.env ?? process.env;
-  const token = splitModalProxyToken(env['MODAL_PROXY_TOKEN']);
+  const token = deps.token ?? splitModalProxyToken(env['MODAL_PROXY_TOKEN']);
   if (token === null) {
     return missingModalTokenClient();
   }

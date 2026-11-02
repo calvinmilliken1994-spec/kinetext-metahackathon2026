@@ -51,6 +51,13 @@
 //                           JUDGE_BUDGET_REACHED; its jobs start with access: 'judge'. Gate off (the
 //                           default) leaves every existing route exactly as it was.
 //
+// Stage 11 slice L (local relay mode, apps/api/relay.ts; docs/specs/STAGE-11-judge-relay.md): with `relay`
+// set, the gate is ON and the RELAY judges the code. POST /api/access {code} asks the relay's GET /v1/status:
+// 200 starts the same signed session and keeps the code in server memory only; 401 is the usual
+// 401 ACCESS_CODE_INVALID; an unreachable relay is 502 RELAY_UNREACHABLE. GET /api/access and /api/health add
+// the relay's budget (cached <= 10 s) and `live` is true once a code is held. Shapes are unchanged. With
+// `staticDir` set, GET/HEAD outside /api/ serve the built web app (apps/api/static.ts).
+//
 // Authorization (TASK-009 R-07): every request must carry an allowed Host
 // (127.0.0.1:<bound port>, localhost:<bound port>, or an allowedHosts entry —
 // by default the Vite dev proxy hosts); POST routes additionally require
@@ -84,6 +91,9 @@ import type { ModelChoice } from '../../packages/meta/pricing.ts';
 import { DEFAULT_MODEL, MODEL_INFO } from './model-clients.ts';
 import { MAX_CONCURRENT_JOBS_BOUND } from './resource-limits.ts';
 import { createAccessControl } from './access.ts';
+import type { RelayControl } from './relay.ts';
+import { createStaticHandler } from './static.ts';
+import type { StaticHandler } from './static.ts';
 import { deleteReview, MAX_REVIEW_BODY_BYTES, publishedPartIds, readReview, validatePublishBody, writeReview } from './review.ts';
 import type { AccessControl, AccessOptions } from './access.ts';
 import { listJobs, readJob } from '../../workers/generation/jobs.ts';
@@ -133,6 +143,13 @@ export interface ApiOptions {
   access?: AccessOptions;
   /** Stage 10b: the clock that stamps `publishedAt` (tests pin it). Default: the system clock. */
   now?: () => Date;
+  /**
+   * Stage 11: relay mode. The relay judges the access code (the gate is on; `access.code` is ignored),
+   * holds Calvin's keys, and reports the shared budget. Absent = direct/read-only mode, unchanged.
+   */
+  relay?: RelayControl;
+  /** Stage 11: a built web app folder (apps/web/dist) to serve for GET/HEAD outside /api/. */
+  staticDir?: string;
 }
 
 const MAX_BODY_BYTES = 10 * 1024;
@@ -264,10 +281,15 @@ export function createApiServer(opts: ApiOptions): Server {
   const inFlight: Set<Promise<JobSummary>> = new Set();
   const allowedHosts: readonly string[] = opts.allowedHosts ?? DEFAULT_ALLOWED_HOSTS;
   /** Stage 10 slice A: the judge gate (off unless opts.access.code is a non-empty string). */
-  const access: AccessControl = createAccessControl(opts.access, {
-    storageDir: opts.storageDir,
-    live: () => opts.startJob !== null,
-  });
+  const relay: RelayControl | undefined = opts.relay;
+  /** Live builds are possible: a job starter exists, and in relay mode a code the relay accepted is held. */
+  const liveNow = (): boolean => opts.startJob !== null && (relay === undefined || relay.hasCode());
+  const access: AccessControl = createAccessControl(
+    relay !== undefined ? { ...opts.access, relay } : opts.access,
+    { storageDir: opts.storageDir, live: liveNow },
+  );
+  const staticHandler: StaticHandler | undefined =
+    opts.staticDir !== undefined ? createStaticHandler(opts.staticDir) : undefined;
 
   /** Stage 5: teacher-source store (defaults to `<storageDir>/user-sources`). */
   function userSourcesDir(): string {
@@ -282,8 +304,10 @@ export function createApiServer(opts: ApiOptions): Server {
   function modelAvailability(): Record<ModelChoice, boolean> {
     const configured =
       typeof opts.availableModels === 'function' ? opts.availableModels() : opts.availableModels;
-    const list: readonly ModelChoice[] =
-      configured ?? (opts.startJob !== null ? [DEFAULT_MODEL] : []);
+    // Relay mode: both models go through the relay once a code is held.
+    const relayDefault: readonly ModelChoice[] =
+      relay !== undefined ? (liveNow() ? ['muse-spark-1.3', 'muse-spark-open'] : []) : opts.startJob !== null ? [DEFAULT_MODEL] : [];
+    const list: readonly ModelChoice[] = configured ?? relayDefault;
     const available = new Set<ModelChoice>(list.filter(isModelChoice));
     return {
       'muse-spark-1.3': available.has('muse-spark-1.3'),
@@ -323,20 +347,28 @@ export function createApiServer(opts: ApiOptions): Server {
       return sendError(res, 403, 'HOST_NOT_ALLOWED');
     }
 
+    if (staticHandler !== undefined && (method === 'GET' || method === 'HEAD') && pathname !== '/api' && !pathname.startsWith('/api/')) {
+      return staticHandler.serve(req, res, pathname);
+    }
+
     if (pathname === '/api/health') {
       if (method !== 'GET') {
         return sendError(res, 405, 'METHOD_NOT_ALLOWED');
       }
+      await relay?.refresh(); // relay mode: the budget below is at most 10 s old
       // busy (R-10): kept for compatibility as running >= maxConcurrentJobs.
       // running / maxConcurrentJobs (concurrency, part B): the live-job count and its limit.
       // models (OW-2): which ModelChoice values are available — booleans only.
+      const relayBudget = relay?.snapshot() ?? null;
       return sendJson(res, 200, {
         ok: true,
-        live: opts.startJob !== null,
+        live: liveNow(),
         busy: inFlight.size >= maxConcurrentJobs,
         running: inFlight.size,
         maxConcurrentJobs,
         models: modelAvailability(),
+        // Relay mode, once a code is held: dollars left on the relay (additive; absent otherwise).
+        ...(relayBudget !== null ? { remainingUSD: relayBudget.remainingUSD } : {}),
       });
     }
 
@@ -688,6 +720,7 @@ export function createApiServer(opts: ApiOptions): Server {
   /** Stage 10 slice A: GET (open) / POST (code -> session) / DELETE (sign out) /api/access. */
   async function handleAccess(req: IncomingMessage, res: ServerResponse, method: string): Promise<void> {
     if (method === 'GET') {
+      await relay?.refresh();
       return sendJson(res, 200, access.body(req));
     }
     if (method !== 'POST' && method !== 'DELETE') {
@@ -702,6 +735,7 @@ export function createApiServer(opts: ApiOptions): Server {
         return sendJson(res, 200, access.body(req));
       }
       const clearing = access.clearCookie(req); // revokes the request's session before the body is built
+      relay?.forget(); // relay mode: sign-out also drops the code held in memory
       return sendJson(res, 200, { ...access.body(req), granted: false }, { 'set-cookie': clearing });
     }
     // POST: with the gate off there is nothing to unlock (and nothing to guess).
@@ -735,7 +769,19 @@ export function createApiServer(opts: ApiOptions): Server {
     if (!attempt.ok) {
       return sendJson(res, 429, { error: 'TOO_MANY_ATTEMPTS' }, { 'retry-after': String(attempt.retryAfterS) });
     }
-    if (!access.codeMatches(submitted)) {
+    if (relay !== undefined) {
+      // Relay mode: the relay judges the code; on success it is held in memory (never logged or returned).
+      const verdict = await relay.verify(submitted);
+      if (!verdict.ok) {
+        if (verdict.reason === 'invalid') {
+          return sendError(res, 401, 'ACCESS_CODE_INVALID');
+        }
+        if (verdict.reason === 'rate-limited') {
+          return sendJson(res, 429, { error: 'TOO_MANY_ATTEMPTS' }, { 'retry-after': '60' });
+        }
+        return sendError(res, 502, 'RELAY_UNREACHABLE');
+      }
+    } else if (!access.codeMatches(submitted)) {
       return sendError(res, 401, 'ACCESS_CODE_INVALID');
     }
     const cookie = access.sessionCookie(req);

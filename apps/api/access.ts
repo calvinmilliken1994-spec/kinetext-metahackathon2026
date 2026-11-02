@@ -14,6 +14,13 @@
 // time), then enforces the 7-day Max-Age on the server. DELETE also revokes that session id in
 // memory until it would have expired anyway.
 //
+// Relay mode (Stage 11, docs/specs/STAGE-11-judge-relay.md): on a judge's own machine there is no
+// ACCESS_CODE. The gate is ON and the RELAY decides whether a code is right (server.ts calls
+// relay.verify; this module never sees the code). The session is still this module's signed cookie,
+// but it only counts while the server holds a code the relay accepted (in memory, apps/api/relay.ts),
+// so a cookie that outlives a restart grants nothing. The budget figures come from the relay's
+// cached status instead of local job costs.
+//
 // Spend (the judge budget): spentUSD is the summed cost of every job whose stored record
 // carries `access: 'judge'` (workers/generation/jobs.ts). For a finished job that is
 // max(job.json totalCostUSD, sum of estCostUSD over its events): the two agree on 732 of 742
@@ -49,6 +56,14 @@ const MAX_FUTURE_SKEW_MS = 5 * 60_000;
 /** Rate-limit table bound: past this many tracked addresses, expired ones are dropped first. */
 const MAX_TRACKED_ADDRESSES = 5000;
 
+/** What access.ts needs from the relay control (apps/api/relay.ts satisfies it). */
+export interface RelayAccess {
+  /** The server holds a code the relay accepted. */
+  hasCode(): boolean;
+  /** The relay's last budget status (cached <= 10 s), or null. */
+  snapshot(): { enabled: boolean; capUSD: number; spentUSD: number; remainingUSD: number } | null;
+}
+
 export interface AccessOptions {
   /** The shared judge code. The gate is on when this is a non-empty string. Never logged. */
   code?: string;
@@ -68,6 +83,11 @@ export interface AccessOptions {
   buildsPaused?: () => boolean;
   /** Clock in epoch ms (tests). */
   now?: () => number;
+  /**
+   * Relay mode: the relay is the judge of the code. The gate is on, `code` is ignored, and the budget
+   * and kill switch come from the relay's status.
+   */
+  relay?: RelayAccess;
 }
 
 export interface AccessBody {
@@ -205,7 +225,7 @@ function eventCostUSD(eventsPath: string): number {
 type SpendCacheEntry = { stamp: string; judge: false } | { stamp: string; judge: true; costUSD: number };
 
 export interface AccessControl {
-  /** True when ACCESS_CODE is set and non-empty. */
+  /** True when ACCESS_CODE is set and non-empty, or the relay judges the code. */
   readonly gateOn: boolean;
   readonly capUSD: number;
   /** A valid, unexpired, unrevoked session cookie (always true with the gate off). */
@@ -228,8 +248,9 @@ export interface AccessControl {
 }
 
 export function createAccessControl(opts: AccessOptions | undefined, ctx: { storageDir: string; live: () => boolean }): AccessControl {
-  const code: string = typeof opts?.code === 'string' ? opts.code : '';
-  const gateOn = code !== '';
+  const relay: RelayAccess | undefined = opts?.relay;
+  const code: string = relay === undefined && typeof opts?.code === 'string' ? opts.code : '';
+  const gateOn = code !== '' || relay !== undefined;
   const capUSD: number = opts?.judgeCapUSD ?? DEFAULT_JUDGE_CAP_USD;
   const headroom: number = opts?.minHeadroomUSD ?? JUDGE_MIN_HEADROOM_USD;
   const now: () => number = opts?.now ?? ((): number => Date.now());
@@ -257,7 +278,11 @@ export function createAccessControl(opts: AccessOptions | undefined, ctx: { stor
   }
 
   function isGranted(req: IncomingMessage): boolean {
-    return !gateOn || sessionOf(req) !== null;
+    if (!gateOn) {
+      return true;
+    }
+    // Relay mode: a session only counts while the server holds a code the relay accepted.
+    return sessionOf(req) !== null && (relay === undefined || relay.hasCode());
   }
 
   function clientAddress(req: IncomingMessage): string {
@@ -316,6 +341,9 @@ export function createAccessControl(opts: AccessOptions | undefined, ctx: { stor
   }
 
   function buildsPaused(): boolean {
+    if (relay !== undefined && relay.snapshot()?.enabled === false) {
+      return true; // Calvin paused the relay
+    }
     return existsSync(join(ctx.storageDir, BUILDS_PAUSED_FILE)) || envPaused();
   }
 
@@ -383,17 +411,26 @@ export function createAccessControl(opts: AccessOptions | undefined, ctx: { stor
     return Math.max(0, roundUSD(capUSD - spent));
   }
 
+  /** The budget figures: the relay's own numbers once it has answered, else the local judge-job sums. */
+  function figures(): { cap: number; spent: number; remaining: number } {
+    const status = relay?.snapshot() ?? null;
+    if (status !== null) {
+      return { cap: status.capUSD, spent: status.spentUSD, remaining: Math.max(0, roundUSD(status.remainingUSD)) };
+    }
+    const spent = spentUSD();
+    return { cap: capUSD, spent, remaining: remainingUSD(spent) };
+  }
+
   function budgetReached(): boolean {
-    return remainingUSD(spentUSD()) < headroom;
+    return figures().remaining < headroom;
   }
 
   function body(req: IncomingMessage): AccessBody {
-    const spent = spentUSD();
-    const remaining = remainingUSD(spent);
+    const { cap, spent, remaining } = figures();
     return {
       gate: gateOn,
       granted: isGranted(req),
-      capUSD,
+      capUSD: cap,
       spentUSD: spent,
       remainingUSD: remaining,
       buildsEnabled: ctx.live() && !buildsPaused() && remaining >= headroom,
@@ -405,7 +442,7 @@ export function createAccessControl(opts: AccessOptions | undefined, ctx: { stor
     capUSD,
     isGranted,
     body,
-    codeMatches: (submitted: string): boolean => gateOn && safeEqual(submitted, code),
+    codeMatches: (submitted: string): boolean => relay === undefined && gateOn && safeEqual(submitted, code),
     takeAttempt,
     sessionCookie,
     clearCookie,

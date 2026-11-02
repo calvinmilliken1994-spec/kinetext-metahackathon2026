@@ -12,6 +12,7 @@
     "typecheck": "tsc -p tsconfig.json",
     "check": "npm run typecheck && npm test",
     "smoke:meta": "node --env-file-if-exists=.env.local scripts/meta-smoke.mjs",
+    "start": "node scripts/start.mjs",
     "api": "node apps/api/main.ts",
     "live:spike": "node scripts/live-spike.ts",
     "web": "npm --prefix apps/web run dev",

@@ -3,6 +3,48 @@
 Product name provisional. Solo entry (Indie Developer) to the Meta Global AI Developer Hackathon 2026
 (Cerebral Valley), track **Build for Your World**.
 
+## Quick start
+
+You need **Node.js 24** (22.18 or newer also works; check with `node --version`) and npm. Node runs this
+project's TypeScript directly, so there is no server build step.
+
+```bash
+git clone https://github.com/calvinmilliken1994-spec/meta-hackathon-2026.git
+cd meta-hackathon-2026
+npm install
+npm start
+```
+
+`npm start` builds the web app on the first run (about a minute; it installs the web packages itself),
+starts the app and its API on **one local port**, prints the address (default `http://127.0.0.1:8787`; the
+next free port is used when that one is taken, or set `PORT`) and opens your browser. Stop it with Ctrl+C.
+Later starts skip the build unless the web sources changed (`npm start -- --rebuild` forces one).
+
+**Build your own lessons: enter the access code.** The submission notes contain an access code. Paste it into
+the welcome screen's "Judge access code" box and press Unlock (the New lesson page has the same box). The app then builds
+lessons with Muse Spark 1.3 and Muse Spark Open through a small relay that holds the model keys, so nothing
+about the keys is ever on your machine. The code lives only in the running server's memory: it is not written
+to disk or logs and is forgotten when you sign out or stop the server. The sidebar footer shows the
+dollars left on the shared judging budget.
+
+**Without a code the app is read-only, and still shows the product:** browse the recorded lessons, watch the
+Demo walkthrough, open Results (the evaluation tables), and present a lesson full-screen. Pressing
+"Explore read-only" on the welcome screen is all it takes. Building a new lesson needs a code or your own key.
+
+**Using your own Meta key instead.** Copy `.env.example` to `.env` in the repo folder, set
+`MODEL_API_KEY=` to your Meta Model API key, and run `npm start`. `npm start` reads `.env` (and `.env.local`) from
+the repo root; variables already set in your shell win, and values are never printed. With your own key the app
+is in direct mode: live builds run on Muse Spark 1.3 and SAM 3.1 against your Meta credit, no access code is
+asked for, and the key stays in your local server process. Muse Spark Open runs on our Modal deployment, so
+without the access code it shows its recorded lessons and Results only.
+
+The relay is a thin proxy on Modal that forwards model calls and keeps a spend counter; it stores no lessons,
+pages or student data. Text you paste as a source is sent to Meta's model API (and to Modal for Spark Open) to
+build the lesson, so paste only text you may share.
+
+Trouble? `npm start` prints the reason when it stops. A busy port: set `PORT=8800`. A web build that fails: run
+`npm install` again. Live builds say "unavailable": there is no key in `.env`, and no code was entered.
+
 ## What it is
 
 A teacher picks a licensed public page (or pastes one they have rights to). Muse Spark, Meta's model,
@@ -112,7 +154,9 @@ Live events, artifacts and costs are stored per job under `storage/runs/` (gitig
 - **Money honesty.** Every call is reserved against a cap before sending and reconciled after; unknown
   cost renders as *unknown*, never as $0.
 
-## Run it locally
+## Run it locally (development)
+
+The one-command launch is in Quick start above; this section is the developer setup with the API and Vite run separately.
 
 Prerequisites: Node.js **>= 22** (`package.json` engines; developed and verified on Node 24, which runs
 the TypeScript directly via type stripping — no build step for server or packages).
