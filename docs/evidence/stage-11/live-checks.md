@@ -18,3 +18,11 @@ Relay: `https://calvinmilliken1994--mki-relay.us-east.modal.run` (Modal app `mki
 | Calls longer than Modal's 150 s web limit | throwaway endpoint sleeping 170 s: Node `fetch` POST followed Modal's 303 and got the JSON at 174 s (app stopped after) |
 
 The access code lives only in the Modal Secret and a file in Calvin's Hermes profile; it is not in the repo.
+
+## After the security-review fixes (redeployed 2026-11-02)
+Durable up-front charging with refund, bounded requests (no stream, n = 1, one bounded max-token field, inline `data:` images only, one SAM image), pause re-checked at dispatch, our keys redacted from every upstream body. 282 relay tests.
+
+| Check | Result |
+|---|---|
+| Keyless local API in relay mode, Muse Spark 1.3 volcano lesson (`job-20261102050029-1ebd79c6`) | succeeded in 180 s, USD 0.24; label diagram, sort groups and quiz cards all passed |
+| Relay tally | USD 0.21 → 0.45 (matches the job) |

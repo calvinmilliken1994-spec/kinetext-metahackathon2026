@@ -5,8 +5,13 @@ Pure logic, no Modal imports: `create_app(store, transport, settings)` builds th
 A judge's local server holds only an access code. This relay checks the code, the model allowlist, the budget cap and the
 kill switch, then forwards the request with Calvin's real upstream credentials, which exist only in `Settings`.
 
-Nothing in this module logs a body, a code, a key or a header, and error text from upstreams or exceptions is never
-echoed to the caller.
+Nothing in this module logs a body, a code, a key or a header, and error text from exceptions is never echoed to the
+caller. Upstream answers are relayed with every configured credential replaced by "[redacted]".
+
+Spend is durable (security review 2026-11-02): the estimate is written to the store BEFORE the request is forwarded and only
+the difference to the actual cost is written afterwards, so a crash or restart mid-call leaves the estimate charged. This
+assumes ONE container (`max_containers=1`, see app.py): the lock that serialises the read-modify-write of `spentUSD` is
+process-local, and there is no fencing against a second container.
 """
 from __future__ import annotations
 
@@ -42,7 +47,11 @@ MAX_BODY_BYTES = 12 * 1024 * 1024
 MIN_CODE_LENGTH = 20
 DEFAULT_CAP_USD = 50.0
 DEFAULT_MAX_OUT_TOKENS = 32000
+MAX_OUT_TOKENS_LIMIT = 32000  # the largest max_tokens / max_completion_tokens a chat request may ask for
+INPUT_BYTES_PER_TOKEN = 2  # conservative: at most one input token per two request bytes (was three)
 UPSTREAM_TIMEOUT_S = 600.0
+BODY_READ_TIMEOUT_S = 60.0
+REDACTED = "[redacted]"
 
 # USD per token (Muse Spark 1.3 and Spark Open share these rates; no cached discount, deliberately conservative)
 INPUT_USD_PER_TOKEN = 1.25e-6
@@ -108,6 +117,7 @@ class Settings:
     meta_base_url: str = META_BASE_URL
     upstream_timeout_s: float = UPSTREAM_TIMEOUT_S
     max_body_bytes: int = MAX_BODY_BYTES
+    body_read_timeout_s: float = BODY_READ_TIMEOUT_S
     rate_limit_failures: int = RATE_LIMIT_FAILURES
     rate_limit_window_s: float = RATE_LIMIT_WINDOW_S
     clock: Callable[[], float] = field(default=time.monotonic, repr=False, compare=False)
@@ -184,13 +194,13 @@ def _positive_int(value: Any) -> int | None:
 
 
 def estimate_chat_cost_usd(body_bytes: bytes, body: Mapping[str, Any]) -> float:
-    """(len(body)/3 * 1.25 + max_out * 4.25) / 1e6 with max_out = max_completion_tokens or max_tokens or 32000.
+    """(len(body)/2 * 1.25 + max_out * 4.25) / 1e6 with max_out = max_completion_tokens or max_tokens or 32000.
 
-    Unusable values (zero, negative, non-integers) fall back to the default so a request can never shrink its
-    own reservation.
+    Routes validate the bound before this runs (see `_validate_chat`); unusable values (zero, negative, non-integers)
+    still fall back to the default so a request can never shrink its own reservation.
     """
     max_out = _positive_int(body.get("max_completion_tokens")) or _positive_int(body.get("max_tokens")) or DEFAULT_MAX_OUT_TOKENS
-    return (len(body_bytes) / 3 * 1.25 + max_out * 4.25) / 1e6
+    return (len(body_bytes) / INPUT_BYTES_PER_TOKEN * 1.25 + max_out * 4.25) / 1e6
 
 
 def chat_cost_usd(usage: Any) -> float | None:
@@ -237,6 +247,72 @@ def _parse_object(raw: bytes) -> dict[str, Any] | None:
     except (ValueError, RecursionError):
         return None
     return parsed if isinstance(parsed, dict) else None
+
+
+def _is_int(value: Any) -> bool:
+    return isinstance(value, int) and not isinstance(value, bool)
+
+
+def _valid_chat_body(body: Mapping[str, Any]) -> bool:
+    """Bounded chat request: no streaming, one choice, exactly one max-token bound that is an integer in [1, 32000]."""
+    if body.get("stream"):
+        return False
+    if "n" in body and not (_is_int(body["n"]) and body["n"] == 1):
+        return False
+    has_max, has_completion = "max_tokens" in body, "max_completion_tokens" in body
+    if has_max == has_completion:  # both present, or neither
+        return False
+    bound = body["max_tokens"] if has_max else body["max_completion_tokens"]
+    return _is_int(bound) and 1 <= bound <= MAX_OUT_TOKENS_LIMIT and _images_inline(body)
+
+
+def _images_inline(node: Any) -> bool:
+    """Every image URL in the body is an inline `data:` URL: a remote image would be fetched and billed by the provider
+    outside the byte-based estimate (security review residual, 2026-11-02). Our client only sends data URLs."""
+    if isinstance(node, dict):
+        for key, value in node.items():
+            if key in ("image_url", "url") and isinstance(value, str) and not value.startswith("data:"):
+                if key == "image_url" or node.get("type") in (None, "image_url") or "image" in str(node.get("type", "")):
+                    return False
+            if not _images_inline(value):
+                return False
+    elif isinstance(node, list):
+        return all(_images_inline(v) for v in node)
+    return True
+
+
+def _count_media(node: Any) -> tuple[int, bool]:
+    """(image inputs, any video input) anywhere in a request body, however they are nested.
+
+    A dict whose `type` mentions "image" (input_image, image_url, ...) is one image; one that mentions "video" is refused
+    outright. This is the encoding packages/meta/sam.ts uses: input[].content[] parts of type input_image.
+    """
+    images, video = 0, False
+    if isinstance(node, dict):
+        kind = node.get("type")
+        if isinstance(kind, str):
+            low = kind.lower()
+            if "video" in low:
+                video = True
+            elif "image" in low:
+                images += 1
+        for value in node.values():
+            n, v = _count_media(value)
+            images, video = images + n, video or v
+    elif isinstance(node, list):
+        for value in node:
+            n, v = _count_media(value)
+            images, video = images + n, video or v
+    return images, video
+
+
+def _valid_sam_body(body: Mapping[str, Any]) -> bool:
+    """One image at most and no video. `stream` may only be a boolean: our SAM client sends stream:true and parses the
+    SSE reply, the relay buffers it, and SAM costs a flat amount per call, so streaming cannot multiply the cost."""
+    if "stream" in body and not isinstance(body["stream"], bool):
+        return False
+    images, video = _count_media(body)
+    return images <= 1 and not video
 
 
 def _bearer_code(request: Request) -> str | None:
@@ -311,10 +387,14 @@ class _Relay:
         self._digests = [hashlib.sha256(c.encode("utf-8")).digest() for c in settings.access_codes]
         self._failures: dict[str, deque[float]] = {}
         self._client: httpx.AsyncClient | None = None
-        self.spent = 0.0
-        self.reserved = 0.0
-        self._loaded = False
-        self._persist_lock = asyncio.Lock()
+        self.spent = 0.0  # mirror of the last persisted total (+ unsettled); the store is the authority
+        self._unsettled = 0.0  # charges the store has not (yet) accepted: carried into the next successful write
+        self._ledger_lock = asyncio.Lock()  # serialises the read-modify-write of spentUSD within this process
+        self._secrets = sorted(
+            {x.encode("utf-8") for x in (settings.meta_api_key, settings.modal_key, settings.modal_secret) if x},
+            key=len,
+            reverse=True,
+        )
 
     # ---- auth and rate limit
 
@@ -357,35 +437,87 @@ class _Relay:
 
     # ---- state
 
-    def _read_state(self) -> tuple[bool, float | None]:
+    def _read_spent(self) -> float:
+        raw = self.store.get("spentUSD", 0.0)
+        if isinstance(raw, bool) or not isinstance(raw, (int, float, str)):
+            raise ValueError("bad spentUSD")
+        spent = float(raw)
+        if not math.isfinite(spent) or spent < 0:
+            raise ValueError("bad spentUSD")
+        return spent
+
+    def _read_state(self) -> tuple[bool, float]:
         enabled = self.store.get("enabled", True) is True
-        spent = None
-        if not self._loaded:
-            raw = self.store.get("spentUSD", 0.0)
-            spent = float(raw)
-            if isinstance(raw, bool) or not math.isfinite(spent) or spent < 0:
-                raise ValueError("bad spentUSD")
-        return enabled, spent
+        return enabled, self._read_spent() + self._unsettled
 
     async def _state(self) -> bool | None:
-        """Return `enabled`; None when the state cannot be read (callers fail closed)."""
+        """Return `enabled` and refresh the spent mirror; None when the state cannot be read (callers fail closed)."""
         try:
             enabled, spent = await asyncio.to_thread(self._read_state)
         except Exception:
             log.warning("state read failed")
             return None
-        if not self._loaded and spent is not None:  # no await between check and set
-            self.spent = spent
-            self._loaded = True
+        self.spent = spent
         return enabled
 
-    async def _persist(self) -> None:
-        async with self._persist_lock:
-            value = self.spent
+    async def _enabled_now(self) -> bool:
+        """Re-read the kill switch alone; anything but a clean True (including a read error) counts as paused."""
+        try:
+            return await asyncio.to_thread(lambda: self.store.get("enabled", True) is True)
+        except Exception:
+            log.warning("state read failed")
+            return False
+
+    def _admit_sync(self, estimate: float) -> str:
+        """Runs in a worker thread under the ledger lock: cap check against the persisted total, then persist."""
+        total = self._read_spent() + self._unsettled
+        if total + estimate > self.s.cap_usd:
+            return "spent"
+        new_total = total + estimate
+        self.store.put("spentUSD", new_total)
+        self._unsettled = 0.0
+        self.spent = new_total
+        return "ok"
+
+    async def _admit(self, estimate: float) -> str:
+        """Charge `estimate` durably before forwarding: 'ok', 'spent' (cap) or 'unavailable' (store read/write failed)."""
+        try:
+            async with self._ledger_lock:
+                return await asyncio.to_thread(self._admit_sync, estimate)
+        except Exception:
+            log.warning("state write failed")
+            return "unavailable"
+
+    def _adjust_sync(self, delta: float) -> None:
+        total = self._read_spent() + self._unsettled + delta
+        if total < 1e-12:
+            total = 0.0
+        self.store.put("spentUSD", total)
+        self._unsettled = 0.0
+        self.spent = total
+
+    async def _adjust(self, delta: float) -> None:
+        """Persist `delta` (actual minus estimate; negative refunds). On failure the delta is kept and carried into the
+        next write, while the estimate admission persisted stays charged (the conservative side)."""
+        if delta == 0.0:
+            return
+        async with self._ledger_lock:
             try:
-                await asyncio.to_thread(self.store.put, "spentUSD", value)
+                await asyncio.to_thread(self._adjust_sync, delta)
             except Exception:
+                self._unsettled += delta
+                self.spent += delta
                 log.warning("state write failed")
+
+    def _redact(self, data: bytes) -> bytes:
+        for secret in self._secrets:
+            data = data.replace(secret, REDACTED.encode())
+        return data
+
+    def _redact_text(self, text: str) -> str:
+        for secret in self._secrets:
+            text = text.replace(secret.decode("utf-8"), REDACTED)
+        return text
 
     def _client_for_call(self) -> httpx.AsyncClient:
         if self._client is None:
@@ -411,7 +543,7 @@ class _Relay:
             if denied is not None:
                 return denied
             enabled = await self._state()
-            spent = self.spent if self._loaded else self.s.cap_usd  # unreadable state reads as fully spent
+            spent = self.spent if enabled is not None else self.s.cap_usd  # unreadable state reads as fully spent
             ctx.status = 200
             return JSONResponse(
                 {
@@ -462,16 +594,29 @@ class _Relay:
         if not enabled:  # paused, or state unreadable: fail closed
             return _error(ctx, 503, "RELAY_PAUSED", "The relay is paused.")
 
-        raw = await self._read_body(request)
+        try:
+            raw = await asyncio.wait_for(self._read_body(request), self.s.body_read_timeout_s)
+        except asyncio.TimeoutError:
+            return _error(ctx, 408, "RELAY_REQUEST_INVALID", "The request body was not received in time.")
         body = _parse_object(raw) if raw is not None else None
-        if raw is None or body is None or body.get("model") != route.model:
+        valid = raw is not None and body is not None and body.get("model") == route.model
+        if valid:
+            valid = _valid_chat_body(body) if route.kind == "chat" else _valid_sam_body(body)
+        if not valid:
             return _error(ctx, 400, "RELAY_REQUEST_INVALID", "The request body is not allowed on this route.")
 
         estimate = estimate_chat_cost_usd(raw, body) if route.kind == "chat" else SAM_COST_USD
-        # No await between this check and the reservation: concurrent requests cannot both pass on the same headroom.
-        if self.spent + self.reserved + estimate > self.s.cap_usd:
+        # Charge the estimate durably BEFORE forwarding: a crash or restart from here on leaves it charged.
+        admitted = await self._admit(estimate)
+        if admitted == "spent":
             return _error(ctx, 402, "RELAY_BUDGET_SPENT", "The relay budget is spent.")
-        self.reserved += estimate
+        if admitted != "ok":  # the ledger could not be read or written: nothing is forwarded, nothing is charged
+            return _error(ctx, 503, "RELAY_PAUSED", "The relay is paused.")
+
+        # Dispatch fence: the switch may have been thrown while the body was being read or the spend written.
+        if not await asyncio.shield(self._enabled_now()):
+            await asyncio.shield(self._adjust(-estimate))
+            return _error(ctx, 503, "RELAY_PAUSED", "The relay is paused.")
 
         if route.upstream == "meta":
             url = self.s.meta_base_url.rstrip("/") + route.path
@@ -487,9 +632,9 @@ class _Relay:
             upstream = await self._client_for_call().post(url, content=raw, headers=headers)
             charge = self._actual_charge(route, upstream, estimate)
             response = Response(
-                content=upstream.content,
+                content=self._redact(upstream.content),
                 status_code=upstream.status_code,
-                headers={"content-type": upstream.headers.get("content-type", "application/json")},
+                headers={"content-type": self._redact_text(upstream.headers.get("content-type", "application/json"))},
             )
             ctx.status = upstream.status_code
         except httpx.TimeoutException:
@@ -497,12 +642,9 @@ class _Relay:
         except Exception:
             response = _error(ctx, 502, "RELAY_UPSTREAM_UNREACHABLE", "The upstream model could not be reached.")
         finally:
-            self.reserved -= estimate
-            if self.reserved < 1e-12:
-                self.reserved = 0.0
-            self.spent += charge
+            # The estimate is already in the ledger; settle only the difference (0 when the rules charge the estimate).
             ctx.charged = charge
-            await asyncio.shield(self._persist())
+            await asyncio.shield(self._adjust(charge - estimate))
         return response
 
     @staticmethod

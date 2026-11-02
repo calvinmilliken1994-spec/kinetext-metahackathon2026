@@ -25,25 +25,35 @@ local API (judge) --HTTPS, code as the bearer--> mki-relay --> api.meta.ai/v1   
 Errors are `{ "error": { "code", "message" } }`:
 `401 RELAY_CODE_INVALID`, `429 RELAY_RATE_LIMITED` (more than 10 failed attempts per client IP per minute; a blocked IP is
 refused even with a valid code until its window clears), `400 RELAY_REQUEST_INVALID` (body over 12 MiB, not a JSON
-object, duplicate keys, or `model` not allowlisted for that route), `402 RELAY_BUDGET_SPENT`, `503 RELAY_PAUSED`.
-Upstream answers (status and JSON body, errors included) pass through unchanged; only `content-type` is copied. If the
-upstream cannot be reached the relay answers `502 RELAY_UPSTREAM_UNREACHABLE`, or `504 RELAY_UPSTREAM_TIMEOUT` after 600 s.
+object, duplicate keys, `model` not allowlisted for that route, or a request that is not bounded: see Security notes),
+`408 RELAY_REQUEST_INVALID` (body not fully received within 60 s; nothing charged), `402 RELAY_BUDGET_SPENT`,
+`503 RELAY_PAUSED` (also when the spend ledger cannot be read or written).
+Upstream answers (status and body, errors included) pass through with our credentials replaced by `[redacted]`; only
+`content-type` is copied. If the upstream cannot be reached the relay answers `502 RELAY_UPSTREAM_UNREACHABLE`, or `504 RELAY_UPSTREAM_TIMEOUT` after 600 s.
 
-Check order: client-IP rate limit and code, then paused, then body validation, then the cap.
+Check order: client-IP rate limit and code, then paused, then the body (read within 60 s), body validation, the cap and
+the durable charge, then the pause flag once more immediately before forwarding.
 
 ## Cost rules
 
-- Before forwarding, the relay reserves an estimate and refuses with 402 when `spent + reserved + estimate > cap`.
-  Chat estimate: `(len(body_bytes) / 3 * 1.25 + max_out * 4.25) / 1e6` USD, where `max_out` is `max_completion_tokens`, else
-  `max_tokens`, else 32000 (zero, negative or non-integer values count as absent). SAM: USD 0.0025 per call.
-- After the answer it charges the actual cost. Chat: `prompt_tokens * 1.25e-6 + completion_tokens * 4.25e-6` from the
-  response `usage` (no cached discount, conservative; `completion_tokens` already includes reasoning).
-  A 200 without usable `usage` charges the estimate. A non-200 charges only what its `usage` reports (usually nothing).
-  SAM charges 0.0025 on 200 and nothing otherwise.
-- Timeouts, network errors and cancelled requests charge the estimate (the call may have run).
-- `spentUSD` and `enabled` live in the `modal.Dict` `mki-relay-state`; spent is written after every call. The app runs
-  with `max_containers=1` and up to 8 concurrent requests, so in-memory reservations are consistent. The rate limiter is
-  in memory and resets when the container restarts.
+- **Admission charges the estimate durably.** The relay reads `spentUSD` from the store, refuses with 402 when
+  `spentUSD + estimate > cap`, and otherwise writes `spentUSD += estimate` **before** forwarding. If the store cannot be
+  read or written, it answers `503 RELAY_PAUSED`, forwards nothing and charges nothing.
+  Chat estimate: `(len(body_bytes) / 2 * 1.25 + max_out * 4.25) / 1e6` USD, where `max_out` is the request's one
+  `max_tokens` / `max_completion_tokens` (required, an integer 1..32000). SAM: USD 0.0025 per call.
+- **Settlement writes only the difference.** After the answer it persists `spentUSD += (actual - estimate)`.
+  Actual chat cost: `prompt_tokens * 1.25e-6 + completion_tokens * 4.25e-6` from the response `usage` (no cached discount,
+  conservative; `completion_tokens` already includes reasoning). A 200 without usable `usage` charges the estimate (delta
+  0, no second write). A non-200 charges only what its `usage` reports (usually nothing, so the estimate is refunded).
+  SAM charges 0.0025 on 200 and nothing otherwise. If the settlement write fails, the estimate stays charged and the
+  shortfall is carried into the next successful write.
+- Timeouts, network errors and cancelled requests charge the estimate (the call may have run). A crash or restart
+  mid-call leaves the estimate charged, never refunded.
+- `spentUSD` and `enabled` live in the `modal.Dict` `mki-relay-state`. The Dict is the source of truth: it is read on
+  every admission, so an operator reset is seen at once. **Single-container assumption:** the app runs with
+  `max_containers=1` and up to 8 concurrent requests; an `asyncio` lock serialises the read-modify-write of `spentUSD`
+  inside that one process. There is no cross-process lock or fencing, so never raise `max_containers` without adding one.
+  The rate limiter is in memory and resets when the container restarts.
 - If the state cannot be read, the relay fails closed (`503 RELAY_PAUSED`).
 
 ## Deploy (the lead does this; nothing here runs on import)
@@ -83,7 +93,7 @@ variable, never the value).
 | Spent / cap / enabled (never prints codes or keys) | `modal run relay/app.py::report` |
 | Stop everything | `modal app stop mki-relay -y` (redeploy with `modal deploy relay/app.py` to bring it back) |
 | Raise the cap or rotate codes | update the Secret with `--force`, then `modal deploy relay/app.py` (spend is kept in the Dict) |
-| Reset spend | `modal app stop mki-relay -y`, then `modal dict clear mki-relay-state -y`, then redeploy (clearing while it runs would be overwritten by the live container's in-memory total) |
+| Reset spend | `modal app stop mki-relay -y`, then `modal dict clear mki-relay-state -y`, then redeploy (stopping first keeps in-flight calls from writing their settlement into the cleared total) |
 
 `pause`/`resume`/`report` need the Secret to exist first, because `modal run` resolves the app's Secret. `report` starts a
 tiny remote function only to read `CAP_USD` from the Secret.
@@ -97,6 +107,40 @@ API needs no special handling; a client that does not follow redirects must. The
 upstream and the Modal function timeout is 900 s. This redirect behaviour comes from Modal's docs
 (https://modal.com/docs/guide/webhook-timeouts); it has not been exercised against the live deployment yet.
 
+## Security notes
+
+Hardening from the independent review (`docs/reviews/relay-security-review-2026-11-02.md`):
+
+1. **Durable spend.** The estimate is persisted before forwarding and only the difference after the answer (see Cost
+   rules). A crash mid-call leaves the estimate charged; a ledger read/write failure is `503 RELAY_PAUSED` with nothing
+   forwarded. The cap is checked against the persisted total plus this request's estimate.
+2. **Bounded requests.** Chat routes answer `400 RELAY_REQUEST_INVALID` when: `stream` is present and truthy; `n` is
+   present and not the integer 1; both `max_tokens` and `max_completion_tokens` are present, or neither; the bound is not
+   an integer in [1, 32000]. Input is estimated at one token per 2 bytes. The SAM route (`/meta/v1/responses`) refuses
+   more than one image input (any `input_image` / `image_url`-typed part anywhere in the body counts), any video input,
+   and a non-boolean `stream`; it keeps the flat USD 0.0025 per call. `stream: true` **is accepted on SAM** because
+   `packages/meta/sam.ts` sends it and parses the SSE reply; the relay buffers the reply and SAM's price does not depend
+   on streaming. A body shaped exactly like the requests of `packages/meta/client.ts` (`max_tokens`, `stream: false`,
+   `response_format`, optional `image_url` parts) and `packages/meta/sam.ts` passes (tests pin both shapes).
+3. **Pause at dispatch.** The kill switch is read at request entry and again right before forwarding (after the body is
+   read and the estimate is persisted). If it is off, or unreadable, the estimate is refunded and the answer is
+   `503 RELAY_PAUSED`. The body must arrive within 60 s (`408`, nothing charged). Calls already sent upstream when the
+   switch is thrown are not cancelled; they finish and are settled.
+4. **Response redaction.** Every upstream body (success or error) and its content-type have the configured Meta API key,
+   Modal key and Modal secret replaced by `[redacted]` before it reaches the caller.
+
+Accepted residual risks (lead's decisions, 2026-11-02):
+
+- **The access code travels in the Spark Open URL path** (`/modal/c/<code>/v1/...`). Modal's edge strips the
+  `Modal-Key`/`Modal-Secret` headers before the app sees them (observed live), so a header cannot carry it there. The relay
+  never logs paths, so only Calvin's Modal account logs could show the code. Rotate the access code after judging.
+- **Rate limiting keys on the client address Modal presents** to the ASGI app. Whether that is the end user or a shared
+  Modal edge address is unverified; impact is low (ten failed attempts block one address for a minute, and the limiter is
+  in memory).
+- **Long-request 303 result URLs follow Modal's semantics** (see below): access, lifetime and logging of those URLs are
+  Modal's, not the relay's.
+- Provider-side spend limits remain the hard backstop; the cap is the relay's own conservative accounting.
+
 ## Logging
 
 One line per request: `route=<label> status=<code> latency_ms=<n> charged_usd=<x>`. Request and response bodies, codes,
@@ -106,8 +150,8 @@ keys, headers and exception text are never logged (the tests capture all log out
 
 ```bash
 uv run --with fastapi==0.162.0 --with httpx==0.28.1 --with pytest pytest relay -q
-# optional wiring check for app.py (needs the Modal SDK, no network or login):
-uv run --with fastapi==0.162.0 --with httpx==0.28.1 --with pytest --with modal==1.6.3 pytest relay -q
+# with the app.py wiring check (needs the Modal SDK, no network or login):
+uv run --with fastapi==0.162.0 --with httpx==0.28.1 --with modal==1.6.3 --with pytest pytest relay -q
 ```
 
 Upstreams are mocked with `httpx.MockTransport`; the tests need no key, no Modal login and no network.

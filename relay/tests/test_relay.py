@@ -10,6 +10,7 @@ import dataclasses
 import json
 import logging
 import re
+import time
 
 import httpx
 import pytest
@@ -67,18 +68,30 @@ class FakeStore:
         self.data = dict(initial)
         self.fail_get = False
         self.fail_put = False
+        self.fail_put_after = None  # fail every put once this many have succeeded
         self.puts = 0
+        self.delay = 0.0  # seconds slept inside get/put (they run in worker threads) to widen race windows
+        self.after_put = None  # callback(key, value) run after a successful put
+        self.get_hook = None  # callback(key) run at the start of every get
 
     def get(self, key, default=None):
+        if self.get_hook is not None:
+            self.get_hook(key)
+        if self.delay:
+            time.sleep(self.delay)
         if self.fail_get:
             raise RuntimeError("store down")
         return self.data.get(key, default)
 
     def put(self, key, value):
-        if self.fail_put:
+        if self.delay:
+            time.sleep(self.delay)
+        if self.fail_put or (self.fail_put_after is not None and self.puts >= self.fail_put_after):
             raise RuntimeError("store down")
         self.puts += 1
         self.data[key] = value
+        if self.after_put is not None:
+            self.after_put(key, value)
 
 
 class Upstream:
@@ -128,7 +141,12 @@ def env():
 
 
 def body_for(model: str, **extra) -> bytes:
-    return json.dumps({"model": model, "messages": [{"role": "user", "content": PROMPT_MARKER}], **extra}).encode()
+    """A request our client could send. Chat bodies carry max_tokens (the relay requires exactly one bound), SAM ones none."""
+    body: dict = {"model": model, "messages": [{"role": "user", "content": PROMPT_MARKER}]}
+    if model != SAM_MODEL and "max_tokens" not in extra and "max_completion_tokens" not in extra:
+        body["max_tokens"] = 32000
+    body.update(extra)
+    return json.dumps(body).encode()
 
 
 def bearer(code=CODE):
@@ -423,7 +441,7 @@ def test_duplicate_model_keys_are_rejected(env):
 def test_body_size_limit_is_12_mib():
     assert MAX_BODY_BYTES == 12 * 1024 * 1024
     app, _, up = build(cap_usd=1000.0)
-    prefix = ('{"model": "%s", "pad": "' % CHAT_MODEL).encode()
+    prefix = ('{"model": "%s", "max_tokens": 1, "pad": "' % CHAT_MODEL).encode()
     suffix = b'"}'
 
     def padded(total: int) -> bytes:
@@ -452,13 +470,13 @@ def test_oversized_body_with_wrong_code_is_401_not_read(env):
 def test_estimate_formula_chat():
     body = {"model": CHAT_MODEL, "max_tokens": 100}
     raw = json.dumps(body).encode()
-    assert estimate_chat_cost_usd(raw, body) == pytest.approx((len(raw) / 3 * 1.25 + 100 * 4.25) / 1e6)
+    assert estimate_chat_cost_usd(raw, body) == pytest.approx((len(raw) / 2 * 1.25 + 100 * 4.25) / 1e6)
     body = {"model": CHAT_MODEL, "max_completion_tokens": 700, "max_tokens": 100}
     raw = json.dumps(body).encode()
-    assert estimate_chat_cost_usd(raw, body) == pytest.approx((len(raw) / 3 * 1.25 + 700 * 4.25) / 1e6)
+    assert estimate_chat_cost_usd(raw, body) == pytest.approx((len(raw) / 2 * 1.25 + 700 * 4.25) / 1e6)
     body = {"model": CHAT_MODEL}
     raw = json.dumps(body).encode()
-    assert estimate_chat_cost_usd(raw, body) == pytest.approx((len(raw) / 3 * 1.25 + 32000 * 4.25) / 1e6)
+    assert estimate_chat_cost_usd(raw, body) == pytest.approx((len(raw) / 2 * 1.25 + 32000 * 4.25) / 1e6)
 
 
 @pytest.mark.parametrize("bad", [0, -5, "100", None, True, 1.5, [1], {"a": 1}])
@@ -466,7 +484,7 @@ def test_estimate_ignores_unusable_max_out(bad):
     # a negative / bogus max_tokens must never shrink the reservation below the 32000 default
     body = {"model": CHAT_MODEL, "max_tokens": bad}
     raw = json.dumps(body).encode()
-    assert estimate_chat_cost_usd(raw, body) == pytest.approx((len(raw) / 3 * 1.25 + 32000 * 4.25) / 1e6)
+    assert estimate_chat_cost_usd(raw, body) == pytest.approx((len(raw) / 2 * 1.25 + 32000 * 4.25) / 1e6)
 
 
 def test_chat_cost_from_usage():
@@ -694,17 +712,6 @@ def test_sam_network_error_charges_the_flat_estimate():
     with TestClient(app) as c:
         assert c.post(META_RESP, content=body_for(SAM_MODEL), headers=bearer()).status_code == 504
     assert store.data["spentUSD"] == pytest.approx(SAM_COST_USD)
-
-
-def test_store_write_failure_does_not_break_the_response_or_in_memory_accounting():
-    app, store, _ = build()
-    store.fail_put = True
-    with TestClient(app) as c:
-        assert c.post(META_CHAT, content=body_for(CHAT_MODEL), headers=bearer()).status_code == 200
-        assert c.get("/v1/status", headers=bearer()).json()["spentUSD"] == pytest.approx(round(cost(1000, 2000), 2))
-        store.fail_put = False
-        c.post(META_CHAT, content=body_for(CHAT_MODEL), headers=bearer())
-    assert store.data["spentUSD"] == pytest.approx(2 * cost(1000, 2000))  # next write carries the full total
 
 
 def test_client_disconnect_style_cancellation_charges_the_estimate():
@@ -953,3 +960,654 @@ def test_settings_is_immutable():
     s = make_settings()
     with pytest.raises(dataclasses.FrozenInstanceError):
         s.cap_usd = 1e9  # type: ignore[misc]
+
+
+# ============================================================================= security hardening (2026-11-02 review)
+# Four accepted fixes: durable up-front spend, bounded requests, pause at dispatch, response redaction.
+
+CHAT_ROUTES = [(META_CHAT, CHAT_MODEL, bearer), (MODAL_CHAT, OPEN_MODEL, modal_headers)]
+CHAT_ROUTE_IDS = ["meta-chat", "modal-chat"]
+
+
+def est_of(raw: bytes) -> float:
+    return estimate_chat_cost_usd(raw, json.loads(raw))
+
+
+def client_chat_body(model: str = CHAT_MODEL, *, images: int = 0, max_tokens: int = 6000) -> bytes:
+    """Byte-for-byte the shape packages/meta/client.ts builds (see `body` in complete(); serializeMessages for images)."""
+    user_content: object = "Explain the diagram."
+    if images:
+        user_content = [{"type": "text", "text": "Explain the diagram."}] + [
+            {"type": "image_url", "image_url": {"url": "data:image/png;base64," + "QUJD" * 50}} for _ in range(images)
+        ]
+    return json.dumps(
+        {
+            "model": model,
+            "messages": [{"role": "system", "content": "You are a tutor."}, {"role": "user", "content": user_content}],
+            "max_tokens": max_tokens,
+            "reasoning_effort": "high",
+            "stream": False,
+            "response_format": {
+                "type": "json_schema",
+                "json_schema": {"name": "analysis", "schema": {"type": "object", "properties": {"a": {"type": "string"}}}},
+            },
+        }
+    ).encode()
+
+
+def client_sam_body(images: int = 1) -> bytes:
+    """The shape packages/meta/sam.ts builds: one input message with an input_text and an input_image part, stream true."""
+    parts = [{"type": "input_text", "text": "box: [1,2,3,4]"}] + [
+        {"type": "input_image", "image_url": "data:image/png;base64," + "QUJD" * 50} for _ in range(images)
+    ]
+    return json.dumps(
+        {
+            "model": SAM_MODEL,
+            "input": [{"type": "message", "role": "user", "content": parts}],
+            "stream": True,
+            "metadata": {"include_confidence": "true"},
+        }
+    ).encode()
+
+
+def post_async(app, path, content, headers, *, client_kw=None):
+    """Run one POST against the ASGI app in-process (no TestClient), returning the httpx response."""
+
+    async def go():
+        async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://relay", **(client_kw or {})) as c:
+            return await asyncio.wait_for(c.post(path, content=content, headers=headers), 10)
+
+    return asyncio.run(go())
+
+
+# ----------------------------------------------------------------------------- fix 1: durable spend
+
+
+def test_estimate_is_persisted_before_the_request_is_forwarded():
+    raw = body_for(CHAT_MODEL, max_tokens=500)
+    est = est_of(raw)
+    store = FakeStore()
+    seen = []
+
+    def responder(req):
+        seen.append(store.data.get("spentUSD"))  # what the durable ledger says while the call is in flight
+        return ok_chat(10, 10)
+
+    app, _, _ = build(Upstream(responder), store=store)
+    with TestClient(app) as c:
+        assert c.post(META_CHAT, content=raw, headers=bearer()).status_code == 200
+    assert seen == [pytest.approx(est)]
+    assert store.data["spentUSD"] == pytest.approx(cost(10, 10))  # settled by the delta afterwards
+
+
+def test_sam_estimate_is_persisted_before_forwarding_too():
+    store = FakeStore(spentUSD=1.0)
+    seen = []
+    app, _, _ = build(Upstream(lambda req: (seen.append(store.data["spentUSD"]), httpx.Response(200, json={}))[1]), store=store)
+    with TestClient(app) as c:
+        assert c.post(META_RESP, content=client_sam_body(), headers=bearer()).status_code == 200
+    assert seen == [pytest.approx(1.0 + SAM_COST_USD)]
+    assert store.data["spentUSD"] == pytest.approx(1.0 + SAM_COST_USD)
+
+
+@pytest.mark.parametrize("path,model,hdr", CHAT_ROUTES, ids=CHAT_ROUTE_IDS)
+def test_admission_write_failure_is_503_paused_nothing_forwarded_nothing_charged(path, model, hdr):
+    store = FakeStore(spentUSD=2.0)
+    store.fail_put = True
+    app, _, up = build(store=store)
+    with TestClient(app) as c:
+        r = c.post(path, content=body_for(model), headers=hdr())
+        assert r.status_code == 503
+        assert r.json()["error"]["code"] == "RELAY_PAUSED"
+    assert up.requests == []
+    assert store.data["spentUSD"] == 2.0
+    # and the failed attempt left nothing behind in memory: once the store works, the full headroom is there
+    store.fail_put = False
+    with TestClient(app) as c:
+        assert c.post(path, content=body_for(model, max_tokens=10), headers=hdr()).status_code == 200
+
+
+def test_sam_admission_write_failure_is_503_nothing_forwarded():
+    store = FakeStore()
+    store.fail_put = True
+    app, _, up = build(store=store)
+    with TestClient(app) as c:
+        r = c.post(META_RESP, content=client_sam_body(), headers=bearer())
+    assert r.status_code == 503 and r.json()["error"]["code"] == "RELAY_PAUSED"
+    assert up.requests == [] and "spentUSD" not in store.data
+
+
+@pytest.mark.parametrize("bad", ["not a number", -1.0, float("nan"), float("inf"), None, True, [1]])
+def test_unusable_persisted_total_fails_closed(bad):
+    store = FakeStore(spentUSD=bad)
+    app, _, up = build(store=store)
+    with TestClient(app) as c:
+        r = c.post(META_CHAT, content=body_for(CHAT_MODEL, max_tokens=10), headers=bearer())
+    assert r.status_code == 503 and r.json()["error"]["code"] == "RELAY_PAUSED"
+    assert up.requests == [] and store.puts == 0
+
+
+def test_ledger_read_failure_at_admission_is_503():
+    store = FakeStore()
+    hits = {"n": 0}
+
+    def hook(key):
+        if key == "spentUSD":
+            hits["n"] += 1
+            raise RuntimeError("store down")
+
+    store.get_hook = hook
+    app, _, up = build(store=store)
+    with TestClient(app) as c:
+        r = c.post(META_CHAT, content=body_for(CHAT_MODEL, max_tokens=10), headers=bearer())
+    assert r.status_code == 503 and hits["n"] >= 1
+    assert up.requests == [] and store.puts == 0
+
+
+def test_cap_check_uses_the_persisted_total_read_at_admission():
+    # not a value cached at start: another writer (or an operator reset) is seen on the very next request
+    app, store, up = build(cap_usd=1.0)
+    raw = body_for(CHAT_MODEL, max_tokens=10)
+    with TestClient(app) as c:
+        assert c.post(META_CHAT, content=raw, headers=bearer()).status_code == 200
+        store.data["spentUSD"] = 0.9999999
+        assert c.post(META_CHAT, content=raw, headers=bearer()).status_code == 402
+        assert c.get("/v1/status", headers=bearer()).json()["spentUSD"] == 1.0
+        store.data["spentUSD"] = 0.0  # `modal dict clear`-style reset while running
+        assert c.post(META_CHAT, content=raw, headers=bearer()).status_code == 200
+    assert len(up.requests) == 2
+
+
+def test_settlement_charges_the_difference_not_the_total():
+    raw = body_for(CHAT_MODEL, max_tokens=500)
+    est = est_of(raw)
+    store = FakeStore(spentUSD=3.0)
+    app, _, _ = build(Upstream(lambda req: ok_chat(40, 60)), store=store)
+    with TestClient(app) as c:
+        c.post(META_CHAT, content=raw, headers=bearer())
+    assert est > cost(40, 60)
+    assert store.data["spentUSD"] == pytest.approx(3.0 + cost(40, 60))
+
+
+def test_charging_the_estimate_needs_no_second_write():
+    # 200 without usage: the rules say 'charge the estimate', which admission already persisted (delta 0)
+    raw = body_for(CHAT_MODEL, max_tokens=500)
+    store = FakeStore()
+    app, _, _ = build(Upstream(lambda req: httpx.Response(200, json={"id": "x"})), store=store)
+    with TestClient(app) as c:
+        assert c.post(META_CHAT, content=raw, headers=bearer()).status_code == 200
+    assert store.puts == 1
+    assert store.data["spentUSD"] == pytest.approx(est_of(raw))
+
+
+def test_non_200_without_usage_refunds_the_estimate():
+    store = FakeStore(spentUSD=1.0)
+    app, _, _ = build(Upstream(lambda req: httpx.Response(500, json={"error": "x"})), store=store)
+    with TestClient(app) as c:
+        assert c.post(META_CHAT, content=body_for(CHAT_MODEL), headers=bearer()).status_code == 500
+    assert store.data["spentUSD"] == pytest.approx(1.0)
+
+
+def test_actual_above_estimate_is_charged_in_full():
+    raw = body_for(CHAT_MODEL, max_tokens=1)
+    store = FakeStore()
+    app, _, _ = build(Upstream(lambda req: ok_chat(50000, 1)), store=store)
+    with TestClient(app) as c:
+        c.post(META_CHAT, content=raw, headers=bearer())
+    assert store.data["spentUSD"] == pytest.approx(cost(50000, 1))
+
+
+def test_failed_settlement_write_keeps_the_estimate_and_the_shortfall_is_carried_into_the_next_write():
+    raw = body_for(CHAT_MODEL, max_tokens=1)
+    est = est_of(raw)
+    actual = cost(50000, 1)
+    store = FakeStore()
+    app, _, _ = build(Upstream(lambda req: ok_chat(50000, 1)), store=store)
+    with TestClient(app) as c:
+        store.fail_put_after = 1  # admission write succeeds, settlement write fails
+        assert c.post(META_CHAT, content=raw, headers=bearer()).status_code == 200
+        assert store.data["spentUSD"] == pytest.approx(est)  # conservative floor survived
+        # status already reports the in-memory truth (store + unsettled shortfall)
+        store.fail_put_after = None
+        assert c.get("/v1/status", headers=bearer()).json()["spentUSD"] == round(actual, 2)
+        c.post(META_CHAT, content=raw, headers=bearer())
+    assert store.data["spentUSD"] == pytest.approx(2 * actual)  # nothing lost
+
+
+def test_restart_mid_call_leaves_the_estimate_charged():
+    raw = body_for(CHAT_MODEL, max_tokens=1000)
+    est = est_of(raw)
+
+    async def scenario():
+        entered, gate = asyncio.Event(), asyncio.Event()
+
+        async def hang(request):
+            entered.set()
+            await gate.wait()
+            return ok_chat(1, 1)
+
+        store = FakeStore()
+        old = create_app(store, httpx.MockTransport(hang), make_settings(cap_usd=est * 1.5))
+        async with httpx.AsyncClient(transport=httpx.ASGITransport(app=old), base_url="http://relay") as c:
+            task = asyncio.create_task(c.post(META_CHAT, content=raw, headers=bearer()))
+            await asyncio.wait_for(entered.wait(), 5)
+            in_flight = store.data["spentUSD"]
+            # the container dies here: a brand-new app (fresh memory) starts on the same durable store
+            fresh = create_app(store, httpx.MockTransport(lambda r: ok_chat(1, 1)), make_settings(cap_usd=est * 1.5))
+            second = await post_async_in_loop(fresh, raw)
+            gate.set()
+            task.cancel()
+            await asyncio.gather(task, return_exceptions=True)
+        return in_flight, second
+
+    async def post_async_in_loop(app, body):
+        async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://relay") as c:
+            return await asyncio.wait_for(c.post(META_CHAT, content=body, headers=bearer()), 5)
+
+    in_flight, second = asyncio.run(scenario())
+    assert in_flight == pytest.approx(est)
+    assert second.status_code == 402  # est + est > 1.5 est: the interrupted call's estimate still counts
+
+
+def test_concurrent_admissions_do_not_lose_updates():
+    raw = body_for(CHAT_MODEL, max_tokens=100)
+    store = FakeStore()
+    store.delay = 0.01  # get/put run in worker threads; this widens any read-modify-write race
+
+    async def scenario():
+        app = create_app(store, httpx.MockTransport(lambda r: ok_chat(10, 10)), make_settings(cap_usd=1000.0))
+        async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://relay") as c:
+            rs = await asyncio.wait_for(
+                asyncio.gather(*[c.post(META_CHAT, content=raw, headers=bearer()) for _ in range(8)]), 30
+            )
+        return [r.status_code for r in rs]
+
+    assert asyncio.run(scenario()) == [200] * 8
+    assert store.data["spentUSD"] == pytest.approx(8 * cost(10, 10))
+
+
+# ----------------------------------------------------------------------------- fix 2: bounded requests
+
+
+@pytest.mark.parametrize("path,model,hdr", CHAT_ROUTES, ids=CHAT_ROUTE_IDS)
+def test_a_body_shaped_like_our_clients_requests_passes(path, model, hdr):
+    app, store, up = build()
+    with TestClient(app) as c:
+        for raw in [client_chat_body(model), client_chat_body(model, images=2), client_chat_body(model, max_tokens=32000)]:
+            r = c.post(path, content=raw, headers=hdr())
+            assert r.status_code == 200, r.text
+    assert len(up.requests) == 3
+
+
+def test_a_sam_body_shaped_like_our_clients_request_passes():
+    app, store, up = build()
+    with TestClient(app) as c:
+        r = c.post(META_RESP, content=client_sam_body(), headers=bearer())
+    assert r.status_code == 200
+    assert up.requests[0].content == client_sam_body()
+    assert store.data["spentUSD"] == pytest.approx(SAM_COST_USD)
+
+
+@pytest.mark.parametrize("path,model,hdr", CHAT_ROUTES, ids=CHAT_ROUTE_IDS)
+@pytest.mark.parametrize(
+    "fields",
+    [
+        {"stream": True},
+        {"stream": "false"},
+        {"stream": 1},
+        {"stream": [False]},
+        {"n": 2},
+        {"n": 50},
+        {"n": 0},
+        {"n": 1.0},
+        {"n": True},
+        {"n": "1"},
+        {"n": None},
+        {"max_tokens": 100, "max_completion_tokens": 100},
+        {"max_tokens": 100, "max_completion_tokens": None},
+        {"max_tokens": 0},
+        {"max_tokens": -5},
+        {"max_tokens": 32001},
+        {"max_tokens": 10**9},
+        {"max_tokens": 1.5},
+        {"max_tokens": 100.0},
+        {"max_tokens": "100"},
+        {"max_tokens": True},
+        {"max_tokens": None},
+        {"max_tokens": [100]},
+        {"max_completion_tokens": 0},
+        {"max_completion_tokens": 32001},
+        {"max_completion_tokens": "5"},
+        {"max_completion_tokens": False},
+    ],
+    ids=lambda f: json.dumps(f),
+)
+def test_chat_rejects_unbounded_or_cost_multiplying_options(path, model, hdr, fields):
+    app, store, up = build()
+    body = {"model": model, "messages": [{"role": "user", "content": "hi"}], **fields}
+    if not ({"max_tokens", "max_completion_tokens"} & set(fields)):
+        body["max_tokens"] = 100
+    with TestClient(app) as c:
+        r = c.post(path, content=json.dumps(body).encode(), headers=hdr())
+    assert r.status_code == 400, fields
+    assert r.json()["error"]["code"] == "RELAY_REQUEST_INVALID"
+    assert up.requests == [] and store.puts == 0
+
+
+@pytest.mark.parametrize("path,model,hdr", CHAT_ROUTES, ids=CHAT_ROUTE_IDS)
+def test_chat_requires_a_max_token_bound(path, model, hdr):
+    app, store, up = build()
+    raw = json.dumps({"model": model, "messages": [{"role": "user", "content": "hi"}]}).encode()
+    with TestClient(app) as c:
+        r = c.post(path, content=raw, headers=hdr())
+    assert r.status_code == 400 and r.json()["error"]["code"] == "RELAY_REQUEST_INVALID"
+    assert up.requests == [] and store.puts == 0
+
+
+@pytest.mark.parametrize("path,model,hdr", CHAT_ROUTES, ids=CHAT_ROUTE_IDS)
+@pytest.mark.parametrize(
+    "fields",
+    [
+        {"max_tokens": 1},
+        {"max_tokens": 32000},
+        {"max_completion_tokens": 1},
+        {"max_completion_tokens": 32000},
+        {"max_tokens": 500, "stream": False},
+        {"max_tokens": 500, "stream": None},
+        {"max_tokens": 500, "n": 1},
+    ],
+    ids=lambda f: json.dumps(f),
+)
+def test_chat_accepts_the_bounded_forms(path, model, hdr, fields):
+    app, _, up = build()
+    raw = json.dumps({"model": model, "messages": [{"role": "user", "content": "hi"}], **fields}).encode()
+    with TestClient(app) as c:
+        assert c.post(path, content=raw, headers=hdr()).status_code == 200
+    assert len(up.requests) == 1
+
+
+def test_max_completion_tokens_alone_sets_the_estimate():
+    raw = json.dumps({"model": CHAT_MODEL, "messages": [], "max_completion_tokens": 700}).encode()
+    assert est_of(raw) == pytest.approx((len(raw) / 2 * 1.25 + 700 * 4.25) / 1e6)
+
+
+def test_input_is_estimated_at_half_a_token_per_byte():
+    head, tail = b'{"model": "x", "max_tokens": 1000, "pad": "', b'"}'
+    raw = head + b"a" * (1000 - len(head) - len(tail)) + tail
+    assert len(raw) == 1000
+    assert estimate_chat_cost_usd(raw, {"max_tokens": 1000}) == pytest.approx((500 * 1.25 + 1000 * 4.25) / 1e6)
+
+
+def test_the_conservative_estimate_decides_the_cap():
+    raw = body_for(CHAT_MODEL, max_tokens=1000)
+    est = est_of(raw)
+    old_style = (len(raw) / 3 * 1.25 + 1000 * 4.25) / 1e6
+    assert est > old_style
+    app, _, up = build(cap_usd=(est + old_style) / 2)  # fits the old estimate, not the new one
+    with TestClient(app) as c:
+        assert c.post(META_CHAT, content=raw, headers=bearer()).status_code == 402
+    assert up.requests == []
+
+
+def test_sam_rejects_more_than_one_image():
+    app, store, up = build()
+    with TestClient(app) as c:
+        r = c.post(META_RESP, content=client_sam_body(images=2), headers=bearer())
+        assert r.status_code == 400 and r.json()["error"]["code"] == "RELAY_REQUEST_INVALID"
+        assert c.post(META_RESP, content=client_sam_body(images=5), headers=bearer()).status_code == 400
+    assert up.requests == [] and store.puts == 0
+
+
+@pytest.mark.parametrize(
+    "body",
+    [
+        # images spread over several messages
+        {"input": [{"type": "message", "role": "user", "content": [{"type": "input_image", "image_url": "data:x"}]},
+                   {"type": "message", "role": "user", "content": [{"type": "input_image", "image_url": "data:y"}]}]},
+        # a bare image item next to a message that has one
+        {"input": [{"type": "input_image", "image_url": "data:x"},
+                   {"type": "message", "role": "user", "content": [{"type": "input_image", "image_url": "data:y"}]}]},
+        # chat-style image parts are counted too
+        {"input": [{"type": "message", "role": "user", "content": [{"type": "image_url", "image_url": {"url": "data:x"}},
+                                                                    {"type": "input_image", "image_url": "data:y"}]}]},
+        # a video input is never allowed
+        {"input": [{"type": "message", "role": "user", "content": [{"type": "input_video", "video_url": "https://x/v.mp4"}]}]},
+        # image parts hidden in a nested container still count
+        {"input": [{"type": "message", "role": "user", "content": [{"type": "wrapper", "parts": [
+            {"type": "input_image", "image_url": "a"}, {"type": "input_image", "image_url": "b"}]}]}]},
+    ],
+    ids=["two-messages", "bare-plus-message", "mixed-types", "video", "nested"],
+)
+def test_sam_counts_image_inputs_the_way_the_body_encodes_them(body):
+    app, store, up = build()
+    with TestClient(app) as c:
+        r = c.post(META_RESP, content=json.dumps({"model": SAM_MODEL, **body}).encode(), headers=bearer())
+    assert r.status_code == 400
+    assert up.requests == [] and store.puts == 0
+
+
+@pytest.mark.parametrize("stream", ["yes", 1, [True], {"a": 1}])
+def test_sam_stream_must_be_a_boolean(stream):
+    # The SAM client itself sends stream:true (it parses the SSE reply; the relay buffers it, and SAM is flat-priced per
+    # call, so streaming cannot multiply the cost). Only non-boolean junk is refused.
+    app, _, up = build()
+    raw = json.dumps({**json.loads(client_sam_body()), "stream": stream}).encode()
+    with TestClient(app) as c:
+        assert c.post(META_RESP, content=raw, headers=bearer()).status_code == 400
+    assert up.requests == []
+
+
+def test_sam_stays_flat_priced_per_call():
+    assert SAM_COST_USD == 0.0025
+    app, store, _ = build()
+    with TestClient(app) as c:
+        c.post(META_RESP, content=client_sam_body(), headers=bearer())
+        c.post(META_RESP, content=client_sam_body(), headers=bearer())
+    assert store.data["spentUSD"] == pytest.approx(2 * SAM_COST_USD)
+
+
+# ----------------------------------------------------------------------------- fix 3: pause at dispatch
+
+
+def test_pause_between_admission_and_dispatch_refunds_and_forwards_nothing():
+    raw = body_for(CHAT_MODEL, max_tokens=500)
+    store = FakeStore(spentUSD=1.0)
+    # the operator pauses right after the estimate has been persisted (the race the review found)
+    store.after_put = lambda k, v: store.data.__setitem__("enabled", False) if k == "spentUSD" else None
+    app, _, up = build(store=store)
+    with TestClient(app) as c:
+        r = c.post(META_CHAT, content=raw, headers=bearer())
+    assert r.status_code == 503 and r.json()["error"]["code"] == "RELAY_PAUSED"
+    assert up.requests == []
+    assert store.data["spentUSD"] == pytest.approx(1.0)  # estimate refunded, nothing charged
+
+
+def test_pause_between_admission_and_dispatch_on_the_sam_route():
+    store = FakeStore()
+    store.after_put = lambda k, v: store.data.__setitem__("enabled", False) if k == "spentUSD" else None
+    app, _, up = build(store=store)
+    with TestClient(app) as c:
+        r = c.post(META_RESP, content=client_sam_body(), headers=bearer())
+    assert r.status_code == 503 and up.requests == [] and store.data["spentUSD"] == pytest.approx(0.0)
+
+
+def test_unreadable_enabled_flag_at_dispatch_refunds_and_fails_closed():
+    store = FakeStore()
+    reads = {"enabled": 0}
+
+    def hook(key):
+        if key == "enabled":
+            reads["enabled"] += 1
+            if reads["enabled"] == 2:  # 1st = request entry, 2nd = dispatch
+                raise RuntimeError("store down")
+
+    store.get_hook = hook
+    app, _, up = build(store=store)
+    with TestClient(app) as c:
+        r = c.post(META_CHAT, content=body_for(CHAT_MODEL, max_tokens=50), headers=bearer())
+    assert r.status_code == 503 and up.requests == []
+    assert reads["enabled"] == 2
+    assert store.data["spentUSD"] == pytest.approx(0.0)
+
+
+def test_failed_refund_keeps_the_estimate_charged():
+    raw = body_for(CHAT_MODEL, max_tokens=500)
+    store = FakeStore()
+    store.after_put = lambda k, v: store.data.__setitem__("enabled", False) if k == "spentUSD" else None
+    store.fail_put_after = 1  # admission write OK, refund write fails
+    app, _, up = build(store=store)
+    with TestClient(app) as c:
+        assert c.post(META_CHAT, content=raw, headers=bearer()).status_code == 503
+    assert up.requests == []
+    assert store.data["spentUSD"] == pytest.approx(est_of(raw))  # conservative: crash-equivalent
+
+
+def test_pause_during_a_slow_body_read_stops_the_request():
+    raw = body_for(CHAT_MODEL, max_tokens=500)
+    store = FakeStore()
+    up = Upstream()
+
+    async def scenario():
+        release = asyncio.Event()
+
+        async def slow_body():
+            yield raw[:20]
+            await release.wait()
+            yield raw[20:]
+
+        app = create_app(store, httpx.MockTransport(up), make_settings())
+        async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://relay") as c:
+            task = asyncio.create_task(c.post(META_CHAT, content=slow_body(), headers=bearer()))
+            await asyncio.sleep(0.2)  # the request passed the entry check and is now reading its body
+            store.data["enabled"] = False
+            release.set()
+            return await asyncio.wait_for(task, 10)
+
+    r = asyncio.run(scenario())
+    assert r.status_code == 503 and r.json()["error"]["code"] == "RELAY_PAUSED"
+    assert up.requests == []
+    assert store.data.get("spentUSD", 0) == pytest.approx(0.0)
+
+
+def test_body_read_has_a_time_limit_and_costs_nothing():
+    store = FakeStore()
+    up = Upstream()
+
+    async def scenario():
+        never = asyncio.Event()
+
+        async def stalled():
+            yield b'{"model": '
+            await never.wait()
+            yield b"x"
+
+        app = create_app(store, httpx.MockTransport(up), make_settings(body_read_timeout_s=0.3))
+        async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://relay") as c:
+            return await asyncio.wait_for(c.post(META_CHAT, content=stalled(), headers=bearer()), 10)
+
+    r = asyncio.run(scenario())
+    assert r.status_code == 408
+    assert r.json()["error"]["code"] == "RELAY_REQUEST_INVALID"
+    assert up.requests == [] and store.puts == 0
+
+
+def test_body_read_time_limit_defaults_to_60_seconds():
+    assert make_settings().body_read_timeout_s == 60.0
+
+
+# ----------------------------------------------------------------------------- fix 4: response redaction
+
+SECRETS = [("meta-key", META_KEY), ("modal-key", MODAL_KEY), ("modal-secret", MODAL_SECRET)]
+
+
+def _echo_routes():
+    return [
+        (META_CHAT, body_for(CHAT_MODEL), bearer),
+        (META_RESP, client_sam_body(), bearer),
+        (MODAL_CHAT, body_for(OPEN_MODEL), modal_headers),
+        (f"/modal/c/{CODE}/v1/chat/completions", body_for(OPEN_MODEL), lambda: {"Content-Type": "application/json"}),
+    ]
+
+
+@pytest.mark.parametrize("name,secret", SECRETS, ids=[n for n, _ in SECRETS])
+@pytest.mark.parametrize("route", range(4), ids=["meta-chat", "meta-responses", "modal-chat", "modal-chat-path"])
+def test_a_secret_echoed_in_a_200_body_is_redacted(route, name, secret):
+    path, raw, hdr = _echo_routes()[route]
+    payload = {
+        "id": "chatcmpl-1",
+        "usage": {"prompt_tokens": 10, "completion_tokens": 20},
+        "choices": [{"message": {"content": f"my key is {secret}, ok? {secret}{secret}"}}],
+    }
+    app, store, _ = build(Upstream(lambda req: httpx.Response(200, json=payload)))
+    with TestClient(app) as c:
+        r = c.post(path, content=raw, headers=hdr())
+    assert r.status_code == 200
+    assert secret.encode() not in r.content
+    assert r.json()["choices"][0]["message"]["content"] == "my key is [redacted], ok? [redacted][redacted]"
+    assert r.json()["id"] == "chatcmpl-1"
+    if path != META_RESP:
+        assert store.data["spentUSD"] == pytest.approx(cost(10, 20))  # usage is still read for the charge
+
+
+@pytest.mark.parametrize("name,secret", SECRETS, ids=[n for n, _ in SECRETS])
+@pytest.mark.parametrize("status", [400, 401, 403, 500])
+@pytest.mark.parametrize("route", range(4), ids=["meta-chat", "meta-responses", "modal-chat", "modal-chat-path"])
+def test_a_secret_echoed_in_an_error_body_is_redacted(route, status, name, secret):
+    path, raw, hdr = _echo_routes()[route]
+    app, _, _ = build(Upstream(lambda req: httpx.Response(status, json={"error": {"message": f"bad credential {secret}"}})))
+    with TestClient(app) as c:
+        r = c.post(path, content=raw, headers=hdr())
+    assert r.status_code == status
+    assert secret.encode() not in r.content
+    assert r.json() == {"error": {"message": "bad credential [redacted]"}}
+
+
+def test_every_secret_at_once_and_non_json_bodies_and_headers_are_redacted():
+    text = f"Authorization: Bearer {META_KEY}\nModal-Key: {MODAL_KEY}\nModal-Secret: {MODAL_SECRET}\n".encode()
+
+    def responder(req):
+        return httpx.Response(401, content=text, headers={"content-type": f"text/plain; note={META_KEY}"})
+
+    app, _, _ = build(Upstream(responder))
+    with TestClient(app) as c:
+        r = c.post(META_CHAT, content=body_for(CHAT_MODEL), headers=bearer())
+    assert r.status_code == 401
+    for _, secret in SECRETS:
+        assert secret.encode() not in r.content
+        assert secret not in all_header_values_resp(r)
+    assert r.text == "Authorization: Bearer [redacted]\nModal-Key: [redacted]\nModal-Secret: [redacted]\n"
+
+
+def all_header_values_resp(r) -> str:
+    return " ".join(f"{k}={v}" for k, v in r.headers.items())
+
+
+def test_redaction_leaves_clean_bodies_byte_identical():
+    payload = b'{"a": "\xc3\xa9 raw  spacing",  "usage": {"prompt_tokens": 1, "completion_tokens": 1}}'
+    app, _, _ = build(Upstream(lambda req: httpx.Response(200, content=payload, headers={"content-type": "application/json"})))
+    with TestClient(app) as c:
+        r = c.post(META_CHAT, content=body_for(CHAT_MODEL), headers=bearer())
+    assert r.content == payload
+
+
+@pytest.mark.parametrize("url", [
+    "https://example.com/big.png",
+    "http://127.0.0.1/x.png",
+    " data:image/png;base64,QUJD",
+])
+def test_chat_images_must_be_inline_data_urls(env, url):
+    # Review residual: a remote image would be fetched and billed by the provider outside the byte-based estimate.
+    client, _, up = env
+    body = {"model": CHAT_MODEL, "max_tokens": 16, "messages": [{"role": "user", "content": [
+        {"type": "text", "text": "x"}, {"type": "image_url", "image_url": {"url": url}}]}]}
+    r = client.post(META_CHAT, content=json.dumps(body).encode(), headers=bearer())
+    assert r.status_code == 400
+    assert up.requests == []
+
+
+def test_chat_inline_data_url_image_still_passes(env):
+    client, _, up = env
+    body = {"model": CHAT_MODEL, "max_tokens": 16, "messages": [{"role": "user", "content": [
+        {"type": "image_url", "image_url": {"url": "data:image/png;base64,QUJD"}}]}]}
+    r = client.post(META_CHAT, content=json.dumps(body).encode(), headers=bearer())
+    assert r.status_code == 200

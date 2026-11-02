@@ -77,3 +77,35 @@ Rules:
 Lead: creates the Modal Secret from the profile `.env` without printing values, generates the access code, deploys,
 runs live checks (status, one tiny chat, one SAM, one Spark Open call, a wrong code, the cap, pause/resume), then one GPT
 security review of `relay/` + slice L.
+
+## Amendment 2026-11-02 (post security review): cap, request and response rules
+Added after `docs/reviews/relay-security-review-2026-11-02.md`; the frozen text above is unchanged. Where this section and
+the text above disagree, this section wins. Implemented in `relay/relay_core.py`, tests in `relay/tests/test_relay.py`.
+
+- **Durable spend (replaces "reserve in memory, write after each call").** On admission the relay reads `spentUSD` from the
+  Dict, refuses with 402 `RELAY_BUDGET_SPENT` when `spentUSD + estimate > cap`, and otherwise writes
+  `spentUSD += estimate` before forwarding. A Dict read or write failure (or an unusable stored value) is 503
+  `RELAY_PAUSED`: nothing forwarded, nothing charged. After the upstream answers it writes
+  `spentUSD += (actual - estimate)`, with `actual` per the existing charge rules (when those say "charge the estimate" the
+  delta is 0). A crash or restart mid-call therefore leaves the estimate charged. A failed settlement write keeps the
+  estimate and carries the difference into the next write. The in-memory `reserved` counter is gone; the Dict is the
+  source of truth and is read on every admission. The `max_containers=1` assumption stays and is load-bearing: the
+  lock serialising the read-modify-write is process-local, with no fencing across containers.
+- **Bounded requests.** Chat routes reject with 400 `RELAY_REQUEST_INVALID`: `stream` present and truthy; `n` present and
+  not the integer 1; both `max_tokens` and `max_completion_tokens` present; neither present; a bound that is not an integer
+  in [1, 32000]. The client (`packages/meta/client.ts`) sends `max_tokens` and `stream: false`. Input estimate is now
+  `len(body_bytes)/2` tokens (was /3): chat estimate `(len(body_bytes)/2 * 1.25 + max_out * 4.25) / 1e6`. SAM route: more
+  than one image input (any part typed `input_image`/`image_url`/`*image*` anywhere in the body) or any video input is
+  rejected; flat USD 0.0025 per call is unchanged. **Deviation from the review's "reject stream" for SAM:** `packages/meta/sam.ts`
+  sends `stream: true` and parses the SSE reply, so SAM accepts a boolean `stream` (non-booleans are rejected); the relay
+  buffers the reply and SAM's price is per call, so streaming does not change cost.
+- **Pause at dispatch.** After the body is read and the estimate persisted, the relay re-reads `enabled` immediately before
+  forwarding; if it is not exactly true (or unreadable) it refunds the estimate and answers 503 `RELAY_PAUSED`. Reading the
+  body is bounded to 60 s: on expiry, 408 with code `RELAY_REQUEST_INVALID` and no charge. Calls already dispatched upstream
+  are not cancelled by a later pause.
+- **Response redaction.** Before returning any upstream body or content-type (success or error), every occurrence of the
+  configured Meta API key, Modal key and Modal secret is replaced with `[redacted]`. This refines "Response status and JSON
+  body pass through unchanged": clean bodies are still byte-identical.
+- **Accepted residual risks** (lead, 2026-11-02): the access code stays in the Spark Open URL path because Modal's edge strips
+  `Modal-Key`/`Modal-Secret` (only Calvin's Modal logs could show it; rotate the code after judging); the rate limiter keys on
+  the client address Modal presents (unverified, low impact); 303 result URLs follow Modal's semantics.

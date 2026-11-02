@@ -31,7 +31,9 @@ state = modal.Dict.from_name(STATE_NAME, create_if_missing=True)
 secret = modal.Secret.from_name(SECRET_NAME)
 
 
-# One container only: reservations and the rate limiter live in its memory. Up to 8 requests in flight (async I/O).
+# One container only (REQUIRED): the lock that serialises the spentUSD read-modify-write and the rate limiter live in this
+# process; spend itself is durable in the Dict (estimate persisted before forwarding), but nothing fences a second
+# container. Do not raise max_containers without adding cross-process locking. Up to 8 requests in flight (async I/O).
 # timeout > the 600 s upstream timeout; Modal answers callers with a 303 to a result URL after 150 s of waiting.
 @app.function(max_containers=1, timeout=900, secrets=[secret])
 @modal.concurrent(max_inputs=8)
