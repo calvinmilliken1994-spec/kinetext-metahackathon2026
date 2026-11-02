@@ -1,0 +1,1381 @@
+{
+  "at": "2026-11-02T19:42:31.451Z",
+  "results": [
+    {
+      "figure": "nasa-grc-airplane-parts-1",
+      "rep": 1,
+      "muse": {
+        "objects": [
+          {
+            "bbox": [
+              {
+                "x_max": 436,
+                "x_min": 304,
+                "y_max": 515,
+                "y_min": 240
+              }
+            ],
+            "object_name": "the drawn wing that the printed label 'Wing' points to",
+            "tip": {
+              "x": 320,
+              "y": 433
+            }
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 363,
+                "x_min": 293,
+                "y_max": 555,
+                "y_min": 484
+              }
+            ],
+            "object_name": "the drawn jet engine that the printed label 'Jet Engine' points to",
+            "tip": {
+              "x": 305,
+              "y": 529
+            }
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 710,
+                "x_min": 148,
+                "y_max": 742,
+                "y_min": 308
+              }
+            ],
+            "object_name": "the drawn fuselage that the printed label 'Fuselage (Body)' points to",
+            "tip": {
+              "x": 335,
+              "y": 670
+            }
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 270,
+                "x_min": 148,
+                "y_max": 742,
+                "y_min": 610
+              }
+            ],
+            "object_name": "the drawn cockpit that the printed label 'Cockpit' points to",
+            "tip": {
+              "x": 177,
+              "y": 695
+            }
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 710,
+                "x_min": 618,
+                "y_max": 340,
+                "y_min": 163
+              }
+            ],
+            "object_name": "the drawn vertical stabilizer that the printed label 'Vertical Stabilizer' points to",
+            "tip": {
+              "x": 652,
+              "y": 212
+            }
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 674,
+                "x_min": 588,
+                "y_max": 332,
+                "y_min": 215
+              }
+            ],
+            "object_name": "the drawn horizontal stabilizer that the printed label 'Horizontal Stabilizer' points to",
+            "tip": {
+              "x": 596,
+              "y": 278
+            }
+          }
+        ]
+      },
+      "museMs": 24592,
+      "museReceipt": {
+        "purpose": "test-live",
+        "requestedModel": "muse-spark-1.3",
+        "returnedModel": "muse-spark-1.3",
+        "responseId": "chatcmpl-01a19dc7-1437-7186-80bf-9f696e9b3022",
+        "usage": {
+          "promptTokens": 1437,
+          "completionTokens": 5448,
+          "reasoningTokens": 5034,
+          "cachedTokens": 0
+        },
+        "latencyMs": 24591,
+        "estCostUSD": 0.02495025,
+        "reservedUnknownUSD": 0,
+        "finishReason": "stop",
+        "attempts": 1,
+        "costBasis": "usage",
+        "provider": "meta-api",
+        "model": "muse-spark-1.3",
+        "providerModel": "muse-spark-1.3",
+        "cachedUnknown": false
+      },
+      "samObjects": [
+        {
+          "id": 1,
+          "box": {
+            "x1": 349,
+            "y1": 175,
+            "x2": 515,
+            "y2": 402
+          }
+        },
+        {
+          "id": 101,
+          "box": {
+            "x1": 349,
+            "y1": 175,
+            "x2": 515,
+            "y2": 402
+          },
+          "points": [
+            {
+              "x": 374,
+              "y": 331
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "box": {
+            "x1": 339,
+            "y1": 368,
+            "x2": 427,
+            "y2": 427
+          }
+        },
+        {
+          "id": 102,
+          "box": {
+            "x1": 339,
+            "y1": 368,
+            "x2": 427,
+            "y2": 427
+          },
+          "points": [
+            {
+              "x": 356,
+              "y": 405
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "box": {
+            "x1": 147,
+            "y1": 222,
+            "x2": 856,
+            "y2": 581
+          }
+        },
+        {
+          "id": 103,
+          "box": {
+            "x1": 147,
+            "y1": 222,
+            "x2": 856,
+            "y2": 581
+          },
+          "points": [
+            {
+              "x": 391,
+              "y": 513
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "box": {
+            "x1": 167,
+            "y1": 463,
+            "x2": 321,
+            "y2": 572
+          }
+        },
+        {
+          "id": 104,
+          "box": {
+            "x1": 167,
+            "y1": 463,
+            "x2": 321,
+            "y2": 572
+          },
+          "points": [
+            {
+              "x": 207,
+              "y": 532
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "box": {
+            "x1": 718,
+            "y1": 119,
+            "x2": 834,
+            "y2": 266
+          }
+        },
+        {
+          "id": 105,
+          "box": {
+            "x1": 718,
+            "y1": 119,
+            "x2": 834,
+            "y2": 266
+          },
+          "points": [
+            {
+              "x": 762,
+              "y": 162
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "box": {
+            "x1": 683,
+            "y1": 161,
+            "x2": 791,
+            "y2": 258
+          }
+        },
+        {
+          "id": 106,
+          "box": {
+            "x1": 683,
+            "y1": 161,
+            "x2": 791,
+            "y2": 258
+          },
+          "points": [
+            {
+              "x": 696,
+              "y": 213
+            }
+          ]
+        }
+      ],
+      "tips": [
+        {
+          "x": 374,
+          "y": 331
+        },
+        {
+          "x": 356,
+          "y": 405
+        },
+        {
+          "x": 391,
+          "y": 513
+        },
+        {
+          "x": 207,
+          "y": 532
+        },
+        {
+          "x": 762,
+          "y": 162
+        },
+        {
+          "x": 696,
+          "y": 213
+        }
+      ],
+      "boxes": [
+        {
+          "x1": 349,
+          "y1": 175,
+          "x2": 515,
+          "y2": 402
+        },
+        {
+          "x1": 339,
+          "y1": 368,
+          "x2": 427,
+          "y2": 427
+        },
+        {
+          "x1": 147,
+          "y1": 222,
+          "x2": 856,
+          "y2": 581
+        },
+        {
+          "x1": 167,
+          "y1": 463,
+          "x2": 321,
+          "y2": 572
+        },
+        {
+          "x1": 718,
+          "y1": 119,
+          "x2": 834,
+          "y2": 266
+        },
+        {
+          "x1": 683,
+          "y1": 161,
+          "x2": 791,
+          "y2": 258
+        }
+      ],
+      "sam": [
+        {
+          "id": 1,
+          "variant": "box",
+          "name": "wing",
+          "x1": 334,
+          "y1": 181,
+          "x2": 514,
+          "y2": 416,
+          "confidence": 0.96875,
+          "tipInside": true
+        },
+        {
+          "id": 2,
+          "variant": "box",
+          "name": "jet engine",
+          "x1": 333,
+          "y1": 359,
+          "x2": 394,
+          "y2": 421,
+          "confidence": 0.91796875,
+          "tipInside": true
+        },
+        {
+          "id": 3,
+          "variant": "box",
+          "name": "fuselage",
+          "x1": 196,
+          "y1": 230,
+          "x2": 831,
+          "y2": 579,
+          "confidence": 0.83203125,
+          "tipInside": true
+        },
+        {
+          "id": 4,
+          "variant": "box",
+          "name": "cockpit",
+          "x1": 207,
+          "y1": 521,
+          "x2": 221,
+          "y2": 567,
+          "confidence": 0.80859375,
+          "tipInside": true
+        },
+        {
+          "id": 5,
+          "variant": "box",
+          "name": "vertical stabilizer",
+          "x1": 706,
+          "y1": 121,
+          "x2": 819,
+          "y2": 244,
+          "confidence": 0.91015625,
+          "tipInside": true
+        },
+        {
+          "id": 6,
+          "variant": "box",
+          "name": "horizontal stabilizer",
+          "x1": 705,
+          "y1": 169,
+          "x2": 776,
+          "y2": 242,
+          "confidence": 0.91015625,
+          "tipInside": false
+        },
+        {
+          "id": 101,
+          "variant": "box+tip",
+          "name": "wing",
+          "x1": 340,
+          "y1": 187,
+          "x2": 515,
+          "y2": 388,
+          "confidence": 0.95703125,
+          "tipInside": true
+        },
+        {
+          "id": 102,
+          "variant": "box+tip",
+          "name": "jet engine",
+          "x1": 333,
+          "y1": 369,
+          "x2": 391,
+          "y2": 421,
+          "confidence": 0.91796875,
+          "tipInside": true
+        },
+        {
+          "id": 103,
+          "variant": "box+tip",
+          "name": "fuselage",
+          "x1": 210,
+          "y1": 229,
+          "x2": 862,
+          "y2": 570,
+          "confidence": 0.734375,
+          "tipInside": true
+        },
+        {
+          "id": 104,
+          "variant": "box+tip",
+          "name": "cockpit",
+          "x1": 123,
+          "y1": 443,
+          "x2": 599,
+          "y2": 579,
+          "confidence": 0.7265625,
+          "tipInside": true
+        },
+        {
+          "id": 105,
+          "variant": "box+tip",
+          "name": "vertical stabilizer",
+          "x1": 710,
+          "y1": 123,
+          "x2": 826,
+          "y2": 248,
+          "confidence": 0.859375,
+          "tipInside": true
+        },
+        {
+          "id": 106,
+          "variant": "box+tip",
+          "name": "horizontal stabilizer",
+          "x1": 704,
+          "y1": 173,
+          "x2": 729,
+          "y2": 243,
+          "confidence": 0.890625,
+          "tipInside": false
+        }
+      ],
+      "samCostUSD": 0.0025
+    },
+    {
+      "figure": "nasa-grc-airplane-parts-1",
+      "rep": 2,
+      "muse": {
+        "objects": [
+          {
+            "bbox": [
+              {
+                "x_max": 438,
+                "x_min": 308,
+                "y_max": 515,
+                "y_min": 242
+              }
+            ],
+            "object_name": "the drawn wing that the printed label 'Wing' points to",
+            "tip": {
+              "x": 326,
+              "y": 436
+            }
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 380,
+                "x_min": 312,
+                "y_max": 557,
+                "y_min": 486
+              }
+            ],
+            "object_name": "the drawn jet engine that the printed label 'Jet Engine' points to",
+            "tip": {
+              "x": 322,
+              "y": 528
+            }
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 715,
+                "x_min": 175,
+                "y_max": 773,
+                "y_min": 310
+              }
+            ],
+            "object_name": "the drawn fuselage that the printed label 'Fuselage (Body)' points to",
+            "tip": {
+              "x": 335,
+              "y": 662
+            }
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 285,
+                "x_min": 175,
+                "y_max": 773,
+                "y_min": 668
+              }
+            ],
+            "object_name": "the drawn cockpit that the printed label 'Cockpit' points to",
+            "tip": {
+              "x": 194,
+              "y": 723
+            }
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 708,
+                "x_min": 613,
+                "y_max": 332,
+                "y_min": 153
+              }
+            ],
+            "object_name": "the drawn vertical stabilizer that the printed label 'Vertical Stabilizer' points to",
+            "tip": {
+              "x": 638,
+              "y": 222
+            }
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 678,
+                "x_min": 614,
+                "y_max": 318,
+                "y_min": 208
+              }
+            ],
+            "object_name": "the drawn horizontal stabilizer that the printed label 'Horizontal Stabilizer' points to",
+            "tip": {
+              "x": 620,
+              "y": 283
+            }
+          }
+        ]
+      },
+      "museMs": 24089,
+      "museReceipt": {
+        "purpose": "test-live",
+        "requestedModel": "muse-spark-1.3",
+        "returnedModel": "muse-spark-1.3",
+        "responseId": "chatcmpl-01a19dc7-7e23-758b-b663-6d360b25de14",
+        "usage": {
+          "promptTokens": 1437,
+          "completionTokens": 5168,
+          "reasoningTokens": 4754,
+          "cachedTokens": 0
+        },
+        "latencyMs": 24089,
+        "estCostUSD": 0.02376025,
+        "reservedUnknownUSD": 0,
+        "finishReason": "stop",
+        "attempts": 1,
+        "costBasis": "usage",
+        "provider": "meta-api",
+        "model": "muse-spark-1.3",
+        "providerModel": "muse-spark-1.3",
+        "cachedUnknown": false
+      },
+      "samObjects": [
+        {
+          "id": 1,
+          "box": {
+            "x1": 354,
+            "y1": 177,
+            "x2": 518,
+            "y2": 402
+          }
+        },
+        {
+          "id": 101,
+          "box": {
+            "x1": 354,
+            "y1": 177,
+            "x2": 518,
+            "y2": 402
+          },
+          "points": [
+            {
+              "x": 381,
+              "y": 334
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "box": {
+            "x1": 361,
+            "y1": 370,
+            "x2": 447,
+            "y2": 428
+          }
+        },
+        {
+          "id": 102,
+          "box": {
+            "x1": 361,
+            "y1": 370,
+            "x2": 447,
+            "y2": 428
+          },
+          "points": [
+            {
+              "x": 376,
+              "y": 404
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "box": {
+            "x1": 179,
+            "y1": 223,
+            "x2": 860,
+            "y2": 606
+          }
+        },
+        {
+          "id": 103,
+          "box": {
+            "x1": 179,
+            "y1": 223,
+            "x2": 860,
+            "y2": 606
+          },
+          "points": [
+            {
+              "x": 391,
+              "y": 506
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "box": {
+            "x1": 199,
+            "y1": 508,
+            "x2": 338,
+            "y2": 595
+          }
+        },
+        {
+          "id": 104,
+          "box": {
+            "x1": 199,
+            "y1": 508,
+            "x2": 338,
+            "y2": 595
+          },
+          "points": [
+            {
+              "x": 227,
+              "y": 553
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "box": {
+            "x1": 712,
+            "y1": 112,
+            "x2": 831,
+            "y2": 259
+          }
+        },
+        {
+          "id": 105,
+          "box": {
+            "x1": 712,
+            "y1": 112,
+            "x2": 831,
+            "y2": 259
+          },
+          "points": [
+            {
+              "x": 745,
+              "y": 170
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "box": {
+            "x1": 714,
+            "y1": 156,
+            "x2": 795,
+            "y2": 247
+          }
+        },
+        {
+          "id": 106,
+          "box": {
+            "x1": 714,
+            "y1": 156,
+            "x2": 795,
+            "y2": 247
+          },
+          "points": [
+            {
+              "x": 724,
+              "y": 216
+            }
+          ]
+        }
+      ],
+      "tips": [
+        {
+          "x": 381,
+          "y": 334
+        },
+        {
+          "x": 376,
+          "y": 404
+        },
+        {
+          "x": 391,
+          "y": 506
+        },
+        {
+          "x": 227,
+          "y": 553
+        },
+        {
+          "x": 745,
+          "y": 170
+        },
+        {
+          "x": 724,
+          "y": 216
+        }
+      ],
+      "boxes": [
+        {
+          "x1": 354,
+          "y1": 177,
+          "x2": 518,
+          "y2": 402
+        },
+        {
+          "x1": 361,
+          "y1": 370,
+          "x2": 447,
+          "y2": 428
+        },
+        {
+          "x1": 179,
+          "y1": 223,
+          "x2": 860,
+          "y2": 606
+        },
+        {
+          "x1": 199,
+          "y1": 508,
+          "x2": 338,
+          "y2": 595
+        },
+        {
+          "x1": 712,
+          "y1": 112,
+          "x2": 831,
+          "y2": 259
+        },
+        {
+          "x1": 714,
+          "y1": 156,
+          "x2": 795,
+          "y2": 247
+        }
+      ],
+      "sam": [
+        {
+          "id": 1,
+          "variant": "box",
+          "name": "wing",
+          "x1": 343,
+          "y1": 181,
+          "x2": 514,
+          "y2": 408,
+          "confidence": 0.94921875,
+          "tipInside": true
+        },
+        {
+          "id": 2,
+          "variant": "box",
+          "name": "jet engine",
+          "x1": 337,
+          "y1": 359,
+          "x2": 429,
+          "y2": 422,
+          "confidence": 0.294921875,
+          "tipInside": true
+        },
+        {
+          "id": 3,
+          "variant": "box",
+          "name": "fuselage",
+          "x1": 203,
+          "y1": 230,
+          "x2": 832,
+          "y2": 579,
+          "confidence": 0.828125,
+          "tipInside": true
+        },
+        {
+          "id": 4,
+          "variant": "box",
+          "name": "cockpit",
+          "x1": 209,
+          "y1": 555,
+          "x2": 311,
+          "y2": 580,
+          "confidence": 0.87890625,
+          "tipInside": false
+        },
+        {
+          "id": 5,
+          "variant": "box",
+          "name": "vertical stabilizer",
+          "x1": 705,
+          "y1": 120,
+          "x2": 819,
+          "y2": 243,
+          "confidence": 0.9296875,
+          "tipInside": true
+        },
+        {
+          "id": 6,
+          "variant": "box",
+          "name": "horizontal stabilizer",
+          "x1": 705,
+          "y1": 169,
+          "x2": 776,
+          "y2": 241,
+          "confidence": 0.90234375,
+          "tipInside": true
+        },
+        {
+          "id": 101,
+          "variant": "box+tip",
+          "name": "wing",
+          "x1": 334,
+          "y1": 189,
+          "x2": 511,
+          "y2": 393,
+          "confidence": 0.9609375,
+          "tipInside": true
+        },
+        {
+          "id": 103,
+          "variant": "box+tip",
+          "name": "fuselage",
+          "x1": 209,
+          "y1": 229,
+          "x2": 866,
+          "y2": 551,
+          "confidence": 0.703125,
+          "tipInside": true
+        },
+        {
+          "id": 104,
+          "variant": "box+tip",
+          "name": "cockpit",
+          "x1": 218,
+          "y1": 571,
+          "x2": 250,
+          "y2": 580,
+          "confidence": 0.859375,
+          "tipInside": false
+        },
+        {
+          "id": 105,
+          "variant": "box+tip",
+          "name": "vertical stabilizer",
+          "x1": 705,
+          "y1": 138,
+          "x2": 808,
+          "y2": 244,
+          "confidence": 0.921875,
+          "tipInside": true
+        },
+        {
+          "id": 106,
+          "variant": "box+tip",
+          "name": "horizontal stabilizer",
+          "x1": 711,
+          "y1": 229,
+          "x2": 711,
+          "y2": 229,
+          "confidence": 0.828125,
+          "tipInside": false
+        }
+      ],
+      "samCostUSD": 0.0025
+    },
+    {
+      "figure": "nasa-grc-airplane-parts-1",
+      "rep": 3,
+      "muse": {
+        "objects": [
+          {
+            "bbox": [
+              {
+                "x_max": 432,
+                "x_min": 305,
+                "y_max": 497,
+                "y_min": 236
+              }
+            ],
+            "object_name": "the drawn wing that the printed label 'Wing' points to",
+            "tip": {
+              "x": 324,
+              "y": 415
+            }
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 328,
+                "x_min": 267,
+                "y_max": 555,
+                "y_min": 476
+              }
+            ],
+            "object_name": "the drawn jet engine that the printed label 'Jet Engine' points to",
+            "tip": {
+              "x": 285,
+              "y": 518
+            }
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 737,
+                "x_min": 151,
+                "y_max": 730,
+                "y_min": 315
+              }
+            ],
+            "object_name": "the drawn fuselage that the printed label 'Fuselage (Body)' points to",
+            "tip": {
+              "x": 336,
+              "y": 642
+            }
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 262,
+                "x_min": 151,
+                "y_max": 730,
+                "y_min": 620
+              }
+            ],
+            "object_name": "the drawn cockpit that the printed label 'Cockpit' points to",
+            "tip": {
+              "x": 175,
+              "y": 702
+            }
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 741,
+                "x_min": 655,
+                "y_max": 331,
+                "y_min": 144
+              }
+            ],
+            "object_name": "the drawn vertical stabilizer that the printed label 'Vertical Stabilizer' points to",
+            "tip": {
+              "x": 672,
+              "y": 213
+            }
+          },
+          {
+            "bbox": [
+              {
+                "x_max": 714,
+                "x_min": 637,
+                "y_max": 332,
+                "y_min": 207
+              }
+            ],
+            "object_name": "the drawn horizontal stabilizer that the printed label 'Horizontal Stabilizer' points to",
+            "tip": {
+              "x": 645,
+              "y": 285
+            }
+          }
+        ]
+      },
+      "museMs": 85392,
+      "museReceipt": {
+        "purpose": "test-live",
+        "requestedModel": "muse-spark-1.3",
+        "returnedModel": "muse-spark-1.3",
+        "responseId": "chatcmpl-01a19dc8-d353-7399-aeed-12c35dab8fba",
+        "usage": {
+          "promptTokens": 1437,
+          "completionTokens": 4152,
+          "reasoningTokens": 3738,
+          "cachedTokens": 0
+        },
+        "latencyMs": 85392,
+        "estCostUSD": 0.01944225,
+        "reservedUnknownUSD": 0,
+        "finishReason": "stop",
+        "attempts": 1,
+        "costBasis": "usage",
+        "provider": "meta-api",
+        "model": "muse-spark-1.3",
+        "providerModel": "muse-spark-1.3",
+        "cachedUnknown": false
+      },
+      "samObjects": [
+        {
+          "id": 1,
+          "box": {
+            "x1": 350,
+            "y1": 173,
+            "x2": 511,
+            "y2": 388
+          }
+        },
+        {
+          "id": 101,
+          "box": {
+            "x1": 350,
+            "y1": 173,
+            "x2": 511,
+            "y2": 388
+          },
+          "points": [
+            {
+              "x": 378,
+              "y": 317
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "box": {
+            "x1": 309,
+            "y1": 362,
+            "x2": 386,
+            "y2": 427
+          }
+        },
+        {
+          "id": 102,
+          "box": {
+            "x1": 309,
+            "y1": 362,
+            "x2": 386,
+            "y2": 427
+          },
+          "points": [
+            {
+              "x": 333,
+              "y": 396
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "box": {
+            "x1": 149,
+            "y1": 228,
+            "x2": 888,
+            "y2": 571
+          }
+        },
+        {
+          "id": 103,
+          "box": {
+            "x1": 149,
+            "y1": 228,
+            "x2": 888,
+            "y2": 571
+          },
+          "points": [
+            {
+              "x": 392,
+              "y": 491
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "box": {
+            "x1": 171,
+            "y1": 471,
+            "x2": 311,
+            "y2": 562
+          }
+        },
+        {
+          "id": 104,
+          "box": {
+            "x1": 171,
+            "y1": 471,
+            "x2": 311,
+            "y2": 562
+          },
+          "points": [
+            {
+              "x": 204,
+              "y": 537
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "box": {
+            "x1": 761,
+            "y1": 104,
+            "x2": 870,
+            "y2": 259
+          }
+        },
+        {
+          "id": 105,
+          "box": {
+            "x1": 761,
+            "y1": 104,
+            "x2": 870,
+            "y2": 259
+          },
+          "points": [
+            {
+              "x": 785,
+              "y": 163
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "box": {
+            "x1": 740,
+            "y1": 155,
+            "x2": 838,
+            "y2": 258
+          }
+        },
+        {
+          "id": 106,
+          "box": {
+            "x1": 740,
+            "y1": 155,
+            "x2": 838,
+            "y2": 258
+          },
+          "points": [
+            {
+              "x": 753,
+              "y": 218
+            }
+          ]
+        }
+      ],
+      "tips": [
+        {
+          "x": 378,
+          "y": 317
+        },
+        {
+          "x": 333,
+          "y": 396
+        },
+        {
+          "x": 392,
+          "y": 491
+        },
+        {
+          "x": 204,
+          "y": 537
+        },
+        {
+          "x": 785,
+          "y": 163
+        },
+        {
+          "x": 753,
+          "y": 218
+        }
+      ],
+      "boxes": [
+        {
+          "x1": 350,
+          "y1": 173,
+          "x2": 511,
+          "y2": 388
+        },
+        {
+          "x1": 309,
+          "y1": 362,
+          "x2": 386,
+          "y2": 427
+        },
+        {
+          "x1": 149,
+          "y1": 228,
+          "x2": 888,
+          "y2": 571
+        },
+        {
+          "x1": 171,
+          "y1": 471,
+          "x2": 311,
+          "y2": 562
+        },
+        {
+          "x1": 761,
+          "y1": 104,
+          "x2": 870,
+          "y2": 259
+        },
+        {
+          "x1": 740,
+          "y1": 155,
+          "x2": 838,
+          "y2": 258
+        }
+      ],
+      "sam": [
+        {
+          "id": 1,
+          "variant": "box",
+          "name": "wing",
+          "x1": 342,
+          "y1": 181,
+          "x2": 514,
+          "y2": 402,
+          "confidence": 0.9375,
+          "tipInside": true
+        },
+        {
+          "id": 2,
+          "variant": "box",
+          "name": "jet engine",
+          "x1": 333,
+          "y1": 359,
+          "x2": 388,
+          "y2": 421,
+          "confidence": 0.94140625,
+          "tipInside": true
+        },
+        {
+          "id": 3,
+          "variant": "box",
+          "name": "fuselage",
+          "x1": 210,
+          "y1": 229,
+          "x2": 911,
+          "y2": 579,
+          "confidence": 0.890625,
+          "tipInside": true
+        },
+        {
+          "id": 4,
+          "variant": "box",
+          "name": "cockpit",
+          "x1": 206,
+          "y1": 466,
+          "x2": 289,
+          "y2": 573,
+          "confidence": 0.671875,
+          "tipInside": false
+        },
+        {
+          "id": 5,
+          "variant": "box",
+          "name": "vertical stabilizer",
+          "x1": 757,
+          "y1": 120,
+          "x2": 867,
+          "y2": 256,
+          "confidence": 0.80859375,
+          "tipInside": true
+        },
+        {
+          "id": 6,
+          "variant": "box",
+          "name": "horizontal stabilizer",
+          "x1": 718,
+          "y1": 168,
+          "x2": 809,
+          "y2": 241,
+          "confidence": 0.66015625,
+          "tipInside": true
+        },
+        {
+          "id": 101,
+          "variant": "box+tip",
+          "name": "wing",
+          "x1": 374,
+          "y1": 189,
+          "x2": 514,
+          "y2": 404,
+          "confidence": 0.921875,
+          "tipInside": true
+        },
+        {
+          "id": 102,
+          "variant": "box+tip",
+          "name": "jet engine",
+          "x1": 332,
+          "y1": 370,
+          "x2": 386,
+          "y2": 421,
+          "confidence": 0.9296875,
+          "tipInside": true
+        },
+        {
+          "id": 103,
+          "variant": "box+tip",
+          "name": "fuselage",
+          "x1": 227,
+          "y1": 230,
+          "x2": 915,
+          "y2": 579,
+          "confidence": 0.8203125,
+          "tipInside": true
+        },
+        {
+          "id": 104,
+          "variant": "box+tip",
+          "name": "cockpit",
+          "x1": 152,
+          "y1": 465,
+          "x2": 440,
+          "y2": 573,
+          "confidence": 0.62109375,
+          "tipInside": true
+        },
+        {
+          "id": 105,
+          "variant": "box+tip",
+          "name": "vertical stabilizer",
+          "x1": 764,
+          "y1": 120,
+          "x2": 861,
+          "y2": 250,
+          "confidence": 0.828125,
+          "tipInside": true
+        }
+      ],
+      "samCostUSD": 0.0025
+    }
+  ]
+}
