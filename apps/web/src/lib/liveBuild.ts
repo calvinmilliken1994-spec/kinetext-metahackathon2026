@@ -424,10 +424,14 @@ const plural = (n: number, one: string, many: string): string => `${n} ${n === 1
 /** "located 5 parts" / "located 4 of 5 parts": the Muse half of a grounded line (counts from the `located K of N` note). */
 const locatedText = (g: { located: number; of: number }): string => `located ${g.located === g.of ? plural(g.located, 'part', 'parts') : `${g.located} of ${plural(g.of, 'part', 'parts')}`}`;
 
-function checkNames(ids: readonly string[]): string {
+/** Names that keep their capital at the start of a check name. */
+const PROPER = /^(Muse|Meta|Spark|SAM)\b/;
+
+/** The failed checks' teacher names for the strip, as one phrase (exported for its test). */
+export function checkNames(ids: readonly string[]): string {
   const names = ids.map((id) => lessonCheckName(id) ?? 'a page check');
   // Lower-case the first letter only for an ordinary word ("Each number…" → "each number…"), never an acronym ("SAM", "LD").
-  const first = names.slice(0, 2).map((n) => (/^[A-Z][a-z]/.test(n) ? n.charAt(0).toLowerCase() + n.slice(1) : n));
+  const first = names.slice(0, 2).map((n) => (/^[A-Z][a-z]/.test(n) && !PROPER.test(n) ? n.charAt(0).toLowerCase() + n.slice(1) : n));
   return names.length > 2 ? `${first.join('; ')}; and ${names.length - 2} more` : first.join('; ');
 }
 

@@ -8,7 +8,7 @@ import type { Rect, TourOutcome, TourSignals, TourStep } from '../lib/onboarding
 import { activeSteps, autoAdvance, belowCover, canGoNext, clipRect, indexAfterSkip, placeStep, unionRect, withoutReplay } from '../lib/onboarding.ts';
 import type { GuideAction, GuideStep } from '../lib/welcome.ts';
 import { nextAllowed } from '../lib/welcome.ts';
-import { revealInPanels } from '../lib/scroll.ts';
+import { revealInPanels, scrollContainersOf } from '../lib/scroll.ts';
 
 const PAD = 8;
 const sameRects = (a: readonly Rect[], b: readonly Rect[]): boolean =>
@@ -224,7 +224,6 @@ export function Onboarding({ signals: given, onStartReplay, onPresent, onClose, 
   useEffect(() => {
     onStep?.(step);
     const first = step.targets.length === 0 ? null : document.querySelector<HTMLElement>(step.targets[0] as string);
-    if (first !== null && (step.id === 'try' || step.id === 'figure')) revealInPanels(first, 'start', 140);
     // The summary step: bring the page's first lit sentence near the top of the source pane, so the lit sentences show
     // rather than one line above the fold (demo pair review #5). Marks can land a frame after the overview.
     let t = 0;
@@ -240,6 +239,31 @@ export function Onboarding({ signals: given, onStartReplay, onPresent, onClose, 
     if (!hidden) document.getElementById(titleId)?.focus({ preventScroll: true });
     return () => window.clearTimeout(t);
   }, [stepId]);
+
+  // A step that points at a lesson part keeps the whole part on screen: when it arrives below the fold, or grows past it
+  // while Muse writes it, its panel scrolls it up under the build strip (a few times at most, so it never fights the reader).
+  useEffect(() => {
+    const sel = step.targets[0];
+    if (sel === undefined || !sel.startsWith('.lesson [data-component')) return undefined;
+    let moves = 0;
+    let lastH = -1;
+    const timer = window.setInterval(() => {
+      const el = document.querySelector<HTMLElement>(sel);
+      if (el === null || moves >= 4) return;
+      const b = el.getBoundingClientRect();
+      const panel = scrollContainersOf(el)[0];
+      const strip = document.querySelector<HTMLElement>('[data-tour="live-strip"]');
+      const margin = (strip?.offsetHeight ?? 0) + 16;
+      const room = (panel?.clientHeight ?? window.innerHeight) - margin - 16;
+      const seen = visibleBox(el);
+      if ((seen === null || seen.h < Math.min(b.height, room) - 2) && Math.abs(b.height - lastH) >= 1) {
+        lastH = b.height;
+        moves += 1;
+        revealInPanels(el, 'start', margin);
+      }
+    }, 300);
+    return () => window.clearInterval(timer);
+  }, [stepId, step.targets[0]]);
 
   const { cardRef, vp, rects, pos } = useSpotlight(step.targets, step.extras);
   const close = useCallback(() => onClose('skipped'), [onClose]);
