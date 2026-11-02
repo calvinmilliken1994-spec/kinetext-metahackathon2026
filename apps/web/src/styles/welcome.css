@@ -9,7 +9,7 @@
   --wl-cycle: 14s;
   --wl-page: color-mix(in srgb, var(--ink) 6%, transparent);
   --wl-page-lit: color-mix(in srgb, var(--accent-text) 34%, transparent);
-  --wl-page-cited: color-mix(in srgb, var(--accent-text) 14%, transparent);
+  --wl-page-cited: color-mix(in srgb, var(--accent-text) 10%, transparent);
   /* the build's glow (styles/engines-c.css --ld-glow-*): the accent, the same in both themes, on the page's white figure */
   --wl-glow: color-mix(in srgb, var(--accent) 78%, white);
   --wl-glow-fill: color-mix(in srgb, var(--accent) 14%, transparent);
@@ -22,26 +22,31 @@
   background: var(--window-bg); border-top: 1px solid var(--inset-line);
 }
 
-/* The page behind: the run's own page, set large and faint, drifting slowly. Cited sentences light up in step with the
- * figure (wl-cite, same loop and stagger as the part they belong to). */
+/* The page behind: the run's own page, set large and faint, drifting slowly on its own compositor layer. The sentences
+ * the parts were written from carry a static tint (animating their colour repainted the whole page every frame). */
 .wl-backdrop {
-  position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; user-select: none;
-  /* faint under the statement and the card (so nothing reads through the copy), full round the figure; soft top and bottom */
-  --wl-fade-v: linear-gradient(180deg, transparent 0, #000 12%, #000 88%, transparent 100%);
-  --wl-fade-h: linear-gradient(90deg, rgba(0, 0, 0, 0.14) 0, rgba(0, 0, 0, 0.14) 40%, #000 62%);
-  -webkit-mask-image: var(--wl-fade-v), var(--wl-fade-h);
-  -webkit-mask-composite: source-in;
-  mask-image: var(--wl-fade-v), var(--wl-fade-h);
-  mask-composite: intersect;
+  position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; user-select: none; contain: strict;
 }
-.welcome[data-figure="none"] .wl-backdrop { --wl-fade-h: linear-gradient(90deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)); }
+/* Faint under the statement and the card, full round the figure, soft top and bottom. A static overlay in the window
+ * colour, not a mask: a mask over the drifting text made the browser recomposite the whole page every frame (lag). */
+.wl-backdrop::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(180deg, var(--window-bg) 0, transparent 12%, transparent 88%, var(--window-bg) 100%),
+    linear-gradient(90deg, color-mix(in srgb, var(--window-bg) 86%, transparent) 0, color-mix(in srgb, var(--window-bg) 86%, transparent) 40%, transparent 62%);
+}
+.welcome[data-figure="none"] .wl-backdrop::after {
+  background:
+    linear-gradient(180deg, var(--window-bg) 0, transparent 12%, transparent 88%, var(--window-bg) 100%),
+    color-mix(in srgb, var(--window-bg) 50%, transparent);
+}
 .wl-pagetext {
   margin: 0; padding: 4vh 3.5vw; max-inline-size: none;
   font-size: clamp(20px, 1.5vw, 40px); line-height: 1.85; letter-spacing: -0.005em; font-weight: var(--fw-medium);
-  color: var(--wl-page); text-wrap: pretty; transition: opacity 1.2s ease-out;
+  color: var(--wl-page); text-wrap: pretty; transition: opacity 1.2s ease-out; will-change: transform;
 }
 .wl-pagetext[data-filled="false"] { opacity: 0; }
-.wl-cite { color: var(--wl-page); }
+.wl-cite { color: var(--wl-page-cited); }
 
 .wl-inner {
   position: relative; z-index: 1; inline-size: min(100%, 2080px); display: grid; align-items: center;
@@ -124,13 +129,12 @@
 :root[data-theme="light"] .wl-plate > img { opacity: 0.34; filter: grayscale(1) contrast(1.05); }
 .wl-outlines { position: absolute; inset: 0; z-index: 2; inline-size: 100%; block-size: 100%; overflow: visible; pointer-events: none; }
 .wl-outline {
-  fill: color-mix(in srgb, var(--accent) 10%, transparent); stroke: var(--wl-glow); stroke-width: 1.6;
+  fill: color-mix(in srgb, var(--accent) 10%, transparent); stroke: var(--wl-glow); stroke-width: 2;
   vector-effect: non-scaling-stroke; stroke-linejoin: round; stroke-dasharray: 1px; stroke-dashoffset: 0px; opacity: 0;
-  filter: drop-shadow(0 0 4px var(--wl-glow-soft));
 }
 .wl-missing { position: absolute; inset: 0; display: grid; place-items: center; color: #4e606f; font-size: var(--fs-14); }
 .wl-marks { position: absolute; inset: 0; z-index: 3; }
-.wl-ground, .wl-glow, .wl-num { position: absolute; opacity: 0; }
+.wl-ground, .wl-glow, .wl-num { position: absolute; opacity: 0; will-change: opacity, transform; }
 /* Muse Spark's located box: a white dashed line (locating), which SAM's blue glow then settles on (confirmed) */
 .wl-ground {
   box-sizing: border-box; border-radius: 6px; border: 2px dashed rgba(255, 255, 255, 0.95);
@@ -167,14 +171,12 @@
   .wl-glow { animation: wl-glow var(--wl-cycle) linear calc(var(--i, 0) * var(--wl-stagger, 0ms)) infinite both; }
   .wl-outline { animation: wl-trace var(--wl-cycle) linear calc(var(--i, 0) * var(--wl-stagger, 0ms)) infinite both; }
   .wl-num { animation: wl-num var(--wl-cycle) linear calc(var(--i, 0) * var(--wl-stagger, 0ms)) infinite both; }
-  .wl-cite { animation: wl-cite var(--wl-cycle) linear calc(var(--i, 0) * var(--wl-stagger, 0ms)) infinite both; }
   /* the loop waits for the figure: never boxes over an empty plate */
-  .welcome[data-img="loading"] :is(.wl-ground, .wl-glow, .wl-num, .wl-cite, .wl-outline) { animation-play-state: paused; }
+  .welcome[data-img="loading"] :is(.wl-ground, .wl-glow, .wl-num, .wl-outline) { animation-play-state: paused; }
 }
 /* Reduced motion: a still frame, every stored box and number shown, the cited sentences tinted, nothing drifting. */
 @media (prefers-reduced-motion: reduce) {
   .wl-glow, .wl-num, .wl-outline { opacity: 1; }
-  .wl-cite { color: var(--wl-page-cited); }
 }
 
 @keyframes wl-in { from { opacity: 0; } to { opacity: 1; } }
@@ -208,13 +210,6 @@
   67% { animation-timing-function: ease-in; }
   71.5%, 100% { opacity: 0; translate: 0 0; }
 }
-@keyframes wl-cite {
-  0%, 5% { color: var(--wl-page); animation-timing-function: ease-out; }
-  8%, 22% { color: var(--wl-page-lit); }
-  22% { animation-timing-function: ease-in-out; }
-  27%, 67% { color: var(--wl-page-cited); }
-  67% { animation-timing-function: ease-in-out; }
-  73%, 100% { color: var(--wl-page); }
 }
 
 /* Short windows (1366 × 768 and the like): the statement takes two lines and the spacing tightens, so the card and
