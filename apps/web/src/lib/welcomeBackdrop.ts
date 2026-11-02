@@ -11,11 +11,11 @@ import { markerSpots, MIN_REGION_CONFIDENCE, partViews, pixelBoxPct, regionDrawi
 import { resolveJobModel } from './models.ts';
 import { figureCredit } from './presentation.ts';
 
-/** The run the Welcome shows: the plain-visit opening run, so the Welcome, the guide and the Demo show one lesson. */
-export const WELCOME_FIGURE_JOB: string = DEMO_PINS.opening[0];
+/** The run the Welcome shows: the pinned volcano run (demoPins.ts `welcome`), a figure SAM 3.1 reads cleanly. */
+export const WELCOME_FIGURE_JOB: string = DEMO_PINS.welcome;
 
 /** That run's page: its text still drifts behind the Welcome when the run itself cannot be loaded. */
-export const WELCOME_SOURCE_ID = 'noaa-jetstream-hydrologic-cycle';
+export const WELCOME_SOURCE_ID = 'usgs-volcano-hazards';
 
 /** The slice of GET /api/jobs/:id (as api.job parses it) the Welcome reads. */
 export interface WelcomeJob {

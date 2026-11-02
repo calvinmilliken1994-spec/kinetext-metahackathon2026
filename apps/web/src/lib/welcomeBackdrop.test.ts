@@ -4,7 +4,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  backdropSentences, WELCOME_CYCLE_MS, WELCOME_END_GAP_MS, WELCOME_PART_SPAN_MS, WELCOME_FIGURE_JOB, welcomeFigure,
+  backdropSentences, WELCOME_CYCLE_MS, WELCOME_END_GAP_MS, WELCOME_PART_SPAN_MS, WELCOME_FIGURE_JOB, WELCOME_SOURCE_ID, welcomeFigure,
   welcomeMarkerSpots, welcomeStagger,
 } from './welcomeBackdrop.ts';
 import type { WelcomeJob } from './welcomeBackdrop.ts';
@@ -27,9 +27,12 @@ function job(o: { spec?: LabelDiagramSpec | null; status?: string; entryStatus?:
 
 const clone = (): LabelDiagramSpec => JSON.parse(JSON.stringify(WELCOME_FIXTURE_SPEC)) as LabelDiagramSpec;
 
-test('the Welcome figure comes from the pinned opening run (the one lesson the guide and the Demo show)', () => {
-  assert.equal(WELCOME_FIGURE_JOB, DEMO_PINS.opening[0]);
-  assert.equal(WELCOME_FIXTURE_JOB, DEMO_PINS.opening[0], 'the fixture is that run');
+test('the Welcome figure is the pinned volcano run (Calvin, 2 Nov: SAM reads it cleanly); its page drifts behind', () => {
+  assert.equal(WELCOME_FIGURE_JOB, 'job-20261102044953-f3a2006f');
+  assert.equal(WELCOME_FIGURE_JOB, DEMO_PINS.welcome);
+  assert.equal(WELCOME_SOURCE_ID, 'usgs-volcano-hazards');
+  // The rules below run on a real stored run of another figure (the water cycle): same code path, fixed data.
+  assert.equal(WELCOME_FIXTURE_JOB, DEMO_PINS.opening[0]);
 });
 
 test('welcomeFigure: the stored parts in page order, each with the model boxes the run stored', () => {

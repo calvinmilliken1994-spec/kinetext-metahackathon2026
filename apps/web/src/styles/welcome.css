@@ -8,8 +8,8 @@
 .welcome {
   --wl-cycle: 14s;
   --wl-page: color-mix(in srgb, var(--ink) 6%, transparent);
-  --wl-page-lit: color-mix(in srgb, var(--accent-text) 50%, transparent);
-  --wl-page-cited: color-mix(in srgb, var(--accent-text) 24%, transparent);
+  --wl-page-lit: color-mix(in srgb, var(--accent-text) 34%, transparent);
+  --wl-page-cited: color-mix(in srgb, var(--accent-text) 14%, transparent);
   /* the build's glow (styles/engines-c.css --ld-glow-*): the accent, the same in both themes, on the page's white figure */
   --wl-glow: color-mix(in srgb, var(--accent) 78%, white);
   --wl-glow-fill: color-mix(in srgb, var(--accent) 14%, transparent);

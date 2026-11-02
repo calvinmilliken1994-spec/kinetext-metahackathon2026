@@ -16,6 +16,11 @@ export const DEMO_PINS = {
    * finished lesson are one lesson (Calvin, 2 Nov). Then the earlier Stage 8c water-cycle run, then the 31 Oct run.
    */
   opening: ['job-20261101234914-97ba271b', 'job-20261101200607-c65a20bb', 'job-20261031081105-910f3776'],
+  /**
+   * The Welcome screen's centrepiece (Calvin, 2 Nov): the USGS volcano-hazards figure, whose labelled parts are separate
+   * shapes SAM 3.1 reads cleanly. Muse Spark 1.3, published first try, SAM 0.65-0.87 on all five parts.
+   */
+  welcome: 'job-20261102044953-f3a2006f',
 } as const;
 
 type Listed = { jobId: string; sourceId: string; status: string; flow?: 'lesson' | 'activity' | undefined };
