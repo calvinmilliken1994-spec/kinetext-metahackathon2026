@@ -104,6 +104,11 @@ export function WelcomeFigurePlate({ figure, onImage }: { figure: WelcomeFigure;
         {failed
           ? <p className="wl-missing">The figure could not be loaded.</p>
           : <img src={srcOf(figure.figureId)} alt={alt} draggable={false} ref={imgRef} onLoad={ready} onError={() => { setFailed(true); ready(); }} />}
+        {/* SAM 3.1's own outlines of each part, traced in on the figure's pixel grid before the glow settles */}
+        <svg className="wl-outlines" viewBox={figure.viewBox} preserveAspectRatio="none" aria-hidden="true">
+          {figure.parts.map((p, i) => (p.outline === null ? null
+            : <path key={`o${p.number}`} className="wl-outline" d={p.outline} pathLength={1} style={{ '--i': i } as CSSProperties} />))}
+        </svg>
         <div className="wl-marks" aria-hidden="true">
           {figure.parts.map((p, i) => (
             <span key={`b${p.number}`} style={{ '--i': i } as CSSProperties}>

@@ -38,6 +38,8 @@ export interface WelcomePart {
   glow: PctBox | null;
   /** The box Muse Spark's grounding call located, or null (older runs, or grounding found nothing for the part). */
   ground: PctBox | null;
+  /** SAM 3.1's stored outline of the part (SVG path in figure pixels, see `viewBox`), or null when none was stored. */
+  outline: string | null;
 }
 
 export interface WelcomeFigure {
@@ -46,6 +48,8 @@ export interface WelcomeFigure {
   figureId: string;
   /** width / height of the stored figure. */
   aspect: number;
+  /** The figure's pixel grid ('0 0 W H'), for SAM's outlines. */
+  viewBox: string;
   /** The figure's own caption, for the image's alt text. */
   caption: string;
   /** Credit line for the figure and its page. */
@@ -79,7 +83,7 @@ export function welcomeFigure(job: WelcomeJob | null): WelcomeFigure | null {
   const views = partViews(spec);
   const parts: WelcomePart[] = views.map((v) => ({
     number: v.number, name: v.name, quote: v.part.quote, point: v.point,
-    glow: regionDrawing(v)?.box ?? null, ground: v.ground ?? null,
+    glow: regionDrawing(v)?.box ?? null, ground: v.ground ?? null, outline: v.outline ?? null,
   }));
   if (!parts.some((p) => p.glow !== null)) return null;
 
@@ -94,6 +98,7 @@ export function welcomeFigure(job: WelcomeJob | null): WelcomeFigure | null {
   const labelBoxes = (fig.labelBoxes ?? []).map((b) => pixelBoxPct(b, fig)).filter((b): b is PctBox => b !== null);
   return {
     jobId: job.summary.jobId, sourceId: job.summary.sourceId, figureId: spec.figureId, aspect: fig.width / fig.height,
+    viewBox: `0 0 ${fig.width} ${fig.height}`,
     caption: fig.caption.trim(), credit: figureCredit(fig), labelBoxes, parts, note,
   };
 }

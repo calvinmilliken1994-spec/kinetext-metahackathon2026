@@ -112,14 +112,24 @@
 }
 .wl-figure-hold { justify-self: center; }
 .wl-plate {
-  overflow: hidden; border-radius: 16px; background: #ffffff; border: 1px solid var(--line);
+  overflow: hidden; border-radius: 16px; background: var(--window-bg); border: 1px solid var(--line);
   box-shadow: 0 30px 70px -36px rgba(0, 0, 0, 0.7);
 }
-.wl-plate > img { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: contain; user-select: none; }
-/* dimmed toward the window colour, so the glow is the brightest thing on the plate */
-.wl-plate::after { content: ""; position: absolute; inset: 0; z-index: 1; background: color-mix(in srgb, var(--window-bg) 24%, transparent); pointer-events: none; }
+/* Option 3 (Calvin, 2 Nov: the colour figure read as cartoony): the page's figure in grey and very faint, so SAM's
+ * outlines and the glow are the only colour on the plate. */
+.wl-plate > img {
+  position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: contain; user-select: none;
+  filter: grayscale(1) contrast(1.15) brightness(0.9); opacity: 0.22;
+}
+:root[data-theme="light"] .wl-plate > img { opacity: 0.34; filter: grayscale(1) contrast(1.05); }
+.wl-outlines { position: absolute; inset: 0; z-index: 2; inline-size: 100%; block-size: 100%; overflow: visible; pointer-events: none; }
+.wl-outline {
+  fill: color-mix(in srgb, var(--accent) 10%, transparent); stroke: var(--wl-glow); stroke-width: 1.6;
+  vector-effect: non-scaling-stroke; stroke-linejoin: round; stroke-dasharray: 1px; stroke-dashoffset: 0px; opacity: 0;
+  filter: drop-shadow(0 0 4px var(--wl-glow-soft));
+}
 .wl-missing { position: absolute; inset: 0; display: grid; place-items: center; color: #4e606f; font-size: var(--fs-14); }
-.wl-marks { position: absolute; inset: 0; z-index: 2; }
+.wl-marks { position: absolute; inset: 0; z-index: 3; }
 .wl-ground, .wl-glow, .wl-num { position: absolute; opacity: 0; }
 /* Muse Spark's located box: a white dashed line (locating), which SAM's blue glow then settles on (confirmed) */
 .wl-ground {
@@ -128,8 +138,8 @@
 }
 /* SAM 3.1's box: the build's glow */
 .wl-glow {
-  box-sizing: border-box; border-radius: 8px; border: 2px solid var(--wl-glow); background-color: var(--wl-glow-fill);
-  box-shadow: var(--wl-glow-shadow);
+  box-sizing: border-box; border-radius: 8px; border: 1.5px solid color-mix(in srgb, var(--wl-glow) 55%, transparent);
+  box-shadow: 0 0 16px 2px color-mix(in srgb, var(--accent) 30%, transparent);
 }
 .wl-num {
   transform: translate(-50%, -50%); display: grid; place-items: center;
@@ -155,14 +165,15 @@
   .wl-pagetext { animation: wl-drift 120s ease-in-out infinite alternate; }
   .wl-ground { animation: wl-ground var(--wl-cycle) linear calc(var(--i, 0) * var(--wl-stagger, 0ms)) infinite both; }
   .wl-glow { animation: wl-glow var(--wl-cycle) linear calc(var(--i, 0) * var(--wl-stagger, 0ms)) infinite both; }
+  .wl-outline { animation: wl-trace var(--wl-cycle) linear calc(var(--i, 0) * var(--wl-stagger, 0ms)) infinite both; }
   .wl-num { animation: wl-num var(--wl-cycle) linear calc(var(--i, 0) * var(--wl-stagger, 0ms)) infinite both; }
   .wl-cite { animation: wl-cite var(--wl-cycle) linear calc(var(--i, 0) * var(--wl-stagger, 0ms)) infinite both; }
   /* the loop waits for the figure: never boxes over an empty plate */
-  .welcome[data-img="loading"] :is(.wl-ground, .wl-glow, .wl-num, .wl-cite) { animation-play-state: paused; }
+  .welcome[data-img="loading"] :is(.wl-ground, .wl-glow, .wl-num, .wl-cite, .wl-outline) { animation-play-state: paused; }
 }
 /* Reduced motion: a still frame, every stored box and number shown, the cited sentences tinted, nothing drifting. */
 @media (prefers-reduced-motion: reduce) {
-  .wl-glow, .wl-num { opacity: 1; }
+  .wl-glow, .wl-num, .wl-outline { opacity: 1; }
   .wl-cite { color: var(--wl-page-cited); }
 }
 
@@ -176,6 +187,14 @@
   8.5% { opacity: 0.9; scale: 1; }
   15% { opacity: 0.9; scale: 1; animation-timing-function: ease-in; }
   18%, 100% { opacity: 0; scale: 1; }
+}
+/* SAM's outline traces round the part (10-16.5%) while Muse's dashed box is still up, then stays lit with the glow */
+@keyframes wl-trace {
+  0%, 10% { opacity: 0; stroke-dashoffset: 1px; animation-timing-function: cubic-bezier(0.45, 0, 0.2, 1); }
+  10.5% { opacity: 1; stroke-dashoffset: 1px; }
+  16.5%, 67% { opacity: 1; stroke-dashoffset: 0px; }
+  67% { animation-timing-function: ease-in; }
+  71.5%, 100% { opacity: 0; stroke-dashoffset: 0px; }
 }
 @keyframes wl-glow {
   0%, 13.5% { opacity: 0; scale: 0.96; animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }

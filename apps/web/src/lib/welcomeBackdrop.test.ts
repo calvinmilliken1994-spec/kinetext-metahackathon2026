@@ -154,3 +154,15 @@ test('welcomeMarkerSpots: numbers sit clear of every printed label on the real f
     }
   }
 });
+
+test('outlines (Welcome option 3): each part carries SAM\'s stored outline path, drawn on the figure\'s own pixel grid', () => {
+  const s = clone();
+  const evap = s.regions.find((r) => r.partId === 'evaporation');
+  assert.ok(evap !== undefined);
+  (evap as { outline?: string }).outline = 'M140 323.5L141.5 323L143 325.5Z';
+  const f = welcomeFigure(job({ spec: s }));
+  assert.ok(f !== null);
+  assert.equal(f.viewBox, '0 0 572 504');
+  assert.equal(f.parts.find((p) => p.name === 'Evaporation')?.outline, 'M140 323.5L141.5 323L143 325.5Z');
+  assert.equal(f.parts.find((p) => p.name === 'Runoff')?.outline, null, 'no stored outline: none drawn');
+});
