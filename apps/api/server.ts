@@ -105,6 +105,7 @@ import type { RelayControl } from './relay.ts';
 import { createStaticHandler } from './static.ts';
 import type { StaticHandler } from './static.ts';
 import { lessonUsesSam } from './sam-used.ts';
+import { capitaliseSpecTitle } from './title-case.ts';
 import { deleteReview, MAX_REVIEW_BODY_BYTES, publishedPartIds, readReview, validatePublishBody, writeReview } from './review.ts';
 import type { AccessControl, AccessOptions } from './access.ts';
 import { deleteArchive, isFinished, loadPinnedRuns, MAX_ARCHIVE_BODY_BYTES, olderCopies, readArchive, writeArchive } from './archive.ts';
@@ -660,6 +661,8 @@ export function createApiServer(opts: ApiOptions): Server {
         // ISSUE-011: parts quoting a sentence a human review found wrong on the source page are held back.
         applyContentHolds(opts.storageDir, job);
         for (const spec of Object.values(job.kitSpecs ?? {})) enrichLabelBoxes(spec);
+        // Part titles start with a capital (older runs stored e.g. "merge sort"); stored files are untouched.
+        for (const spec of Object.values(job.kitSpecs ?? {})) capitaliseSpecTitle(spec);
         // Label diagrams are numbered in the order the page describes their parts (label-order.ts).
         orderLabelParts(opts.storageDir, job, {
           ...(opts.sourcesDir !== undefined ? { sourcesDir: opts.sourcesDir } : {}),
