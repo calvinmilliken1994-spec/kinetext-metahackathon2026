@@ -33,3 +33,17 @@ Page temporarily un-retired with these five label groups, then restored (the com
 (0.35 to 0.61). Not demo-reliable, so the page stays retired.
 
 Spend: probe about USD 0.08 (3 Muse grounding calls, 3 SAM calls), builds USD 0.576.
+
+## Jet-engine version (Calvin: try it in the real app), Muse Spark 1.3, parts: horizontal stabilizer, wing, jet engine, fuselage
+
+Validation change first (test-first): a singular printed label counts as named when the page uses its plural ("Jet
+Engine" / "jet engines"), in `pageWordingOfLabel` and LD-02's name-in-quote rule (`phraseOrPluralOccurs`). Page
+un-retired on trial; `partLabelGroups` [3, 5, 7, 11].
+
+| Job | Result |
+|---|---|
+| `job-20261102195358-7694fc91` | published first try (0.90 / 0.94 / 0.67 / 0.66), 85 s, USD 0.141 |
+| `job-20261102195358-9edc95fe` | published after one repair (LD-10: the first draft left out the jet engine), 155 s, USD 0.246 |
+| `job-20261102195358-06dcd649` | held back: r1 jet engine 0.34 and outside Muse's box (LD-06/LD-11); r2 wings and body overlap, IoU 0.60 (LD-07), 140 s, USD 0.225 |
+
+2 of 3 published again.

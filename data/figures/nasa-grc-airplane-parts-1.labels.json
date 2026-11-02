@@ -222,10 +222,10 @@
     }
   ],
   "partLabelGroups": [
-    1,
     3,
     5,
-    6
+    7,
+    11
   ],
-  "partLabelGroupsNote": "Lead-curated (SAM figure candidates, 2026-11-02): label groups that name drawn parts, kept only when the page text names the label (whole, or by its last word: the LD-10 rule) AND SAM 3.1 was sure of the part in the probe (>= 0.73, docs/evidence/sam-figure-candidates/result.json): Vertical Stabilizer (group 1, 0.88), Horizontal Stabilizer (3, 0.86), Wing (5, 0.96), Flaps (6, 0.76), Aileron (8, 0.89). Left out: Jet Engine (7, SAM 0.73): the page only says 'jet engines' and 'turbine engines' (plural), and the page-wording rule matches whole words without plural folding, so the label counts as not named; Fuselage (Body) (11, 0.78): SAM's box covered the whole airplane, not the fuselage alone. Rudder (2, 0.67), Elevator (4, 0.47), Spoiler (9, 0.31), Cockpit (10, 0.30) and Slats (12, 0.26) are below 0.73. Aileron (group 8) dropped 2026-11-02 after live runs: the thin wingtip strip got SAM 0.35-0.38 in two of three label-diagram drafts (docs/evidence/sam-figures-live/), so lessons use the four large parts."
+  "partLabelGroupsNote": "Lead-curated (SAM figure candidates, 2026-11-02): label groups that name drawn parts, kept only when the page text names the label (whole, or by its last word: the LD-10 rule) AND SAM 3.1 was sure of the part in the probe (>= 0.73, docs/evidence/sam-figure-candidates/result.json): Vertical Stabilizer (group 1, 0.88), Horizontal Stabilizer (3, 0.86), Wing (5, 0.96), Flaps (6, 0.76), Aileron (8, 0.89). Left out: Jet Engine (7, SAM 0.73): the page only says 'jet engines' and 'turbine engines' (plural), and the page-wording rule matches whole words without plural folding, so the label counts as not named; Fuselage (Body) (11, 0.78): SAM's box covered the whole airplane, not the fuselage alone. Rudder (2, 0.67), Elevator (4, 0.47), Spoiler (9, 0.31), Cockpit (10, 0.30) and Slats (12, 0.26) are below 0.73. Aileron (group 8) dropped 2026-11-02 after live runs: the thin wingtip strip got SAM 0.35-0.38 in two of three label-diagram drafts (docs/evidence/sam-figures-live/), so lessons use the four large parts. 2026-11-03: re-curated to Horizontal Stabilizer, Wing, Jet Engine, Fuselage (Body) after the arrow-tip probe (docs/evidence/arrow-tip-probe/): Vertical Stabilizer's region spilled into the tail and Flaps scored 0.35 to 0.61; Jet Engine became usable once a singular label matches the page's plural."
 }

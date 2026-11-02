@@ -254,7 +254,8 @@ test('pageWordingOfLabel: the whole label, else the last word of a longer label,
   assert.equal(pageWordingOfLabel('Sugar phosphate backbone', ['a sugar-phosphate backbone']), 'sugar phosphate backbone');
   assert.equal(pageWordingOfLabel('Evaporation', ['no such word']), null);
   assert.equal(pageWordingOfLabel('Run', ['Runoff occurs.']), null, 'a word prefix is not a word');
-  assert.equal(pageWordingOfLabel('Surface Runoff', ['Runoffs']), null);
+  assert.equal(pageWordingOfLabel('Surface Runoff', ['Runoffs']), 'runoff', 'a plural on the page names the singular label (3 Nov)');
+  assert.equal(pageWordingOfLabel('Surface Runoff', ['Runoffish']), null);
   assert.equal(pageWordingOfLabel('  ', ['anything']), null);
 });
 

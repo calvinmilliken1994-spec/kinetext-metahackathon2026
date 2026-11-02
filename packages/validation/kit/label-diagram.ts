@@ -177,6 +177,21 @@ function phraseOfText(normalisedText: string, normalisedPhrase: string): boolean
 }
 
 /**
+ * The phrase, or its plain English plural (+s, +es), as a whole-word phrase of the text. A figure prints the singular
+ * ("Jet Engine") where the page may only use the plural ("jet engines"); the page still names that part.
+ */
+function phraseOrPluralOfText(normalisedText: string, normalisedPhrase: string): boolean {
+  return normalisedPhrase !== '' && [normalisedPhrase, `${normalisedPhrase}s`, `${normalisedPhrase}es`].some(p => phraseOfText(normalisedText, p));
+}
+
+/** LD-02's name-in-quote rule with the plural allowance: the name, or its +s/+es plural, is a whole phrase of the quote. */
+export function phraseOrPluralOccurs(quote: unknown, name: unknown): boolean {
+  if (phraseOccursWhole(quote, name)) return true;
+  if (typeof quote !== 'string' || typeof name !== 'string') return false;
+  return phraseOrPluralOfText(normaliseCoverageText(quote), normaliseCoverageText(name));
+}
+
+/**
  * How the page words a printed label (normalised), or null when it never does: the whole label when the page names
  * it, else the LAST word of a longer label ("Surface Runoff" on a page that only says "runoff"). Which printed labels
  * count at all is the lead's curation (partLabelGroups), so two labels sharing a last word are never both curated.
@@ -185,10 +200,10 @@ export function pageWordingOfLabel(label: string, pageTexts: readonly string[]):
   const phrase = normaliseCoverageText(label);
   if (phrase === '') return null;
   const texts = pageTexts.map(normaliseCoverageText);
-  if (texts.some(t => phraseOfText(t, phrase))) return phrase;
+  if (texts.some(t => phraseOrPluralOfText(t, phrase))) return phrase;
   const words = phrase.split(' ');
   const last = words[words.length - 1] as string;
-  return words.length > 1 && texts.some(t => phraseOfText(t, last)) ? last : null;
+  return words.length > 1 && texts.some(t => phraseOrPluralOfText(t, last)) ? last : null;
 }
 
 /** Intersection-over-union of two pixel boxes; 0 when either box has no positive area. */
@@ -277,7 +292,7 @@ export function validateLabelDiagram(gen: LabelDiagramGen, sources: SourceDocume
       const problems: string[] = [];
       const affected: string[] = [];
       parts.forEach((p, i) => {
-        if (phraseOccursWhole(p?.quote, p?.name)) return;
+        if (phraseOrPluralOccurs(p?.quote, p?.name)) return;
         problems.push(`parts[${i}]: the name ${JSON.stringify(p?.name)} does not occur as a whole phrase in its quote "${truncate(String(p?.quote ?? ''), QUOTE_MESSAGE_LIMIT)}" (expected the page's own complete wording for the part, case-insensitive)`);
         affected.push(`/parts/${i}/name`, `/parts/${i}/quote`);
       });

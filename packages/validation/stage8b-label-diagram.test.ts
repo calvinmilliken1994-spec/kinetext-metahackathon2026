@@ -100,10 +100,14 @@ test('LD-02: a name that is not a whole phrase of its own quote fails alone', ()
   const report = expectFailures(validate(gen, withRegions(gen)), ['LD-02']);
   const affected = checkOf(report, 'LD-02').affected ?? [];
   assert.ok(affected.includes('/parts/2/name'), affected.join(', '));
-  // A name that is only a fragment of a longer printed word fails the whole-phrase rule:
+  // A name that is only a fragment of a longer word fails the whole-phrase rule ...
   const frag = golden();
-  frag.parts[0]!.name = 'base pair'; // the quote prints "base pairs"
+  frag.parts[0]!.name = 'base p'; // the quote prints "base pairs"
   assert.deepEqual(failedIds(validate(frag, withRegions(frag))), ['LD-02']);
+  // ... but the plain singular of a plural the quote prints is the page's wording (3 Nov: "Jet Engine" / "jet engines").
+  const singular = golden();
+  singular.parts[0]!.name = 'base pair';
+  assert.equal(failedIds(validate(singular, withRegions(singular))).includes('LD-02'), false);
 });
 
 /* ------------------------------------------------------------------ */

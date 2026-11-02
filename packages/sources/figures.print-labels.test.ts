@@ -56,13 +56,15 @@ test('real DNA figure: multi-line label joined with a space, untexted line skipp
 
 test('SAM figure candidates (2026-11-02): airplane and volcano curated labels are the page-named, SAM-sure parts only', () => {
   // Airplane: the red function lines share their part's group but carry no text, so each label reads as the part name.
-  // Aileron dropped after live runs (Calvin, 2 Nov): a thin wingtip strip SAM scored 0.35-0.38 in two of three drafts.
-  assert.deepEqual(loadFigurePartLabelGroups('nasa-grc-airplane-parts-1'), [1, 3, 5, 6]);
+  // 3 Nov (Calvin: a fuller published shelf): four large, separate shapes from the arrow-tip probe. The fin and the
+  // flaps are out (the fin's outline spilled into the tail, flaps 0.35 to 0.61); the jet engine is in now that a
+  // singular label matches the page's plural ("jet engines").
+  assert.deepEqual(loadFigurePartLabelGroups('nasa-grc-airplane-parts-1'), [3, 5, 7, 11]);
   assert.deepEqual(loadFigurePrintedLabels('nasa-grc-airplane-parts-1'), [
-    'Vertical Stabilizer',
     'Horizontal Stabilizer',
     'Wing',
-    'Flaps',
+    'Jet Engine',
+    'Fuselage (Body)',
   ]);
   assert.equal(loadFigureLabelBoxes('nasa-grc-airplane-parts-1').length, 29);
   assert.equal(new Set(loadFigureLabelBoxes('nasa-grc-airplane-parts-1').map((b) => b.group)).size, 12);
