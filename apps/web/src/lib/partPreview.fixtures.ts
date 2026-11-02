@@ -1,7 +1,8 @@
-// Welcome backdrop test fixture: the published label diagram of the pinned demo run job-20261101234914-97ba271b
-// (NOAA water cycle, Muse Spark 1.3, revision 2) exactly as GET /api/jobs/:id served it on 2 Nov 2026, with the traced
-// SAM outlines left out (the Welcome draws boxes only), and the page's stored text (GET /api/sources/:id, public domain,
-// NOAA National Weather Service, JetStream). Real model output and real page text, copied unchanged.
+// Part-preview and Welcome montage test fixture (moved here from the retired Welcome v2 backdrop): the published label
+// diagram of the pinned demo run job-20261101234914-97ba271b (NOAA water cycle, Muse Spark 1.3, revision 2) exactly as
+// GET /api/jobs/:id served it on 2 Nov 2026, with the traced SAM outlines left out (tests add one where they need it),
+// and the page's stored text (GET /api/sources/:id, public domain, NOAA National Weather Service, JetStream). Real model
+// output and real page text, copied unchanged.
 import type { LabelDiagramSpec } from '../../../../packages/contracts/kit.ts';
 
 export const WELCOME_FIXTURE_JOB = 'job-20261101234914-97ba271b';

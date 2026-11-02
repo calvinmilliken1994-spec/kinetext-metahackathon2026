@@ -1,240 +1,217 @@
-/* Stage 10c section 1 (docs/specs/STAGE-10c-first-launch-and-fixes.md): the Welcome screen (v2, Calvin 2 Nov: "more
- * OOMPH"), and the New lesson additions of slice A (H4: the access form at the top of Your own source; M1: a chosen page
- * the search hides). Tokens only. The Welcome sits inside the app window in place of the sidebar and workspace: the
- * statement and one Get started card on the left, the pinned run's real figure on the right, and the page's own text
- * drifting behind both. Motion is opacity and transform only, one 14 s loop (lib/welcomeBackdrop.ts WELCOME_CYCLE_MS). */
+/* Welcome v3 (docs/specs/WELCOME-V3-split.md, Calvin's split draft, 3 Nov), and the New lesson additions of slice A
+ * (H4: the access form at the top of Your own source; M1: a chosen page the search hides). Tokens only.
+ *
+ * The Welcome sits inside the app window in place of the sidebar and workspace, split in two: on the left a solid panel
+ * in the app's blue (--accent, the same in both themes) with the name, one statement and the minimal sign-in; on the
+ * right, on the window background, the "page becomes lesson" montage (components/WelcomeMontage.tsx). Motion animates
+ * transform and opacity only: no animated colour, no filters or masks over moving content, no full-screen repaints. Each
+ * beat is remounted, which restarts its keyframes; the timing comes from lib/welcomeMontage.ts as --wm-beat/--wm-part. */
 
-/* ---- Welcome ------------------------------------------------------------------------------------------------------ */
+/* ---- the split ------------------------------------------------------------------------------------------------------ */
 .welcome {
-  --wl-cycle: 14s;
-  --wl-page: color-mix(in srgb, var(--ink) 6%, transparent);
-  --wl-page-lit: color-mix(in srgb, var(--accent-text) 34%, transparent);
-  --wl-page-cited: color-mix(in srgb, var(--accent-text) 10%, transparent);
-  /* the build's glow (styles/engines-c.css --ld-glow-*): the accent, the same in both themes, on the page's white figure */
-  --wl-glow: color-mix(in srgb, var(--accent) 78%, white);
-  --wl-glow-fill: color-mix(in srgb, var(--accent) 14%, transparent);
-  --wl-glow-soft: color-mix(in srgb, var(--accent) 55%, transparent);
-  --wl-glow-shadow: 0 0 0 1px rgba(255, 255, 255, 0.6), 0 0 18px 4px var(--wl-glow-soft);
-  --wl-fig-h: min(62vh, 940px);
-  position: relative; isolation: isolate; min-height: 0; overflow: hidden;
-  display: grid; align-items: center; justify-items: center;
-  padding: clamp(24px, 5vh, 80px) clamp(28px, 5vw, 120px);
+  position: relative; min-height: 0; overflow: hidden;
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   background: var(--window-bg); border-top: 1px solid var(--inset-line);
 }
 
-/* The page behind: the run's own page, set large and faint, drifting slowly. Everything that moves runs on the
- * compositor: the text is one layer that only translates, its fades are a mask on that same layer (rasterised once, so
- * no banded overlay and no repaint per frame), and the cited sentences light up through opacity on their own layers. */
-.wl-backdrop {
-  position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; user-select: none; contain: strict;
+/* ---- left: the app-blue panel ---------------------------------------------------------------------------------------- */
+.wl-panel {
+  /* On the blue: white for type, a white just tinted by the blue for secondary lines (≥ 4.5:1), and hairlines. */
+  --wl-on: var(--accent-ink);
+  --wl-on-2: color-mix(in srgb, var(--accent-ink) 93%, var(--accent));
+  --wl-hair: color-mix(in srgb, var(--accent-ink) 38%, var(--accent));
+  --wl-field-ink: color-mix(in srgb, var(--accent) 40%, black);
+  --wl-control-h: clamp(48px, 5vh, 62px);
+  min-height: 0; overflow: hidden;
+  display: grid; grid-template-rows: auto minmax(24px, 1fr) auto; align-content: stretch;
+  padding: clamp(32px, 7vh, 112px) clamp(32px, 5.6vw, 144px) clamp(28px, 6vh, 96px);
+  background: var(--accent); color: var(--wl-on);
 }
-.wl-pagetext {
-  margin: 0; padding: 4vh 3.5vw; max-inline-size: none;
-  font-size: clamp(20px, 1.5vw, 40px); line-height: 1.85; letter-spacing: -0.005em; font-weight: var(--fw-medium);
-  color: var(--wl-page); text-wrap: pretty; transition: opacity 1.2s ease-out; will-change: transform;
-  /* faint under the statement and the card (so nothing reads through the copy), full round the figure; soft top and bottom */
-  --wl-fade-v: linear-gradient(180deg, transparent 0, #000 12%, #000 88%, transparent 100%);
-  --wl-fade-h: linear-gradient(90deg, rgba(0, 0, 0, 0.14) 0, rgba(0, 0, 0, 0.14) 40%, #000 62%);
-  -webkit-mask-image: var(--wl-fade-v), var(--wl-fade-h);
-  -webkit-mask-composite: source-in;
-  mask-image: var(--wl-fade-v), var(--wl-fade-h);
-  mask-composite: intersect;
-}
-.welcome[data-figure="none"] .wl-pagetext { --wl-fade-h: linear-gradient(90deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)); }
-/* Lit colour at full strength; opacity takes it down to the cited tint and back up in step with its part. */
-.wl-cite { color: var(--wl-page-lit); opacity: 0.3; will-change: opacity; }
-.wl-pagetext[data-filled="false"] { opacity: 0; }
+.wl-panel ::selection { background: var(--accent-ink); color: var(--accent); }
 
-.wl-inner {
-  position: relative; z-index: 1; inline-size: min(100%, 2080px); display: grid; align-items: center;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr); gap: clamp(32px, 5vw, 128px);
+.wl-head { display: grid; gap: clamp(16px, 2.4vh, 32px); align-content: start; }
+.wl-name {
+  max-inline-size: 14ch; font-size: clamp(44px, 4.3vw, 96px); line-height: 0.98; letter-spacing: -0.038em;
+  font-weight: var(--fw-bold); color: var(--wl-on); text-wrap: balance;
 }
-.welcome[data-figure="none"] .wl-inner { grid-template-columns: minmax(0, 1fr); }
-.wl-main { display: grid; gap: clamp(24px, 4.2vh, 56px); align-content: center; min-inline-size: 0; }
-.welcome[data-figure="none"] .wl-main { grid-template-columns: minmax(0, 1.15fr) minmax(380px, 0.85fr); align-items: center; gap: clamp(40px, 6vw, 140px); }
+.wl-name:focus, .wl-name:focus-visible { outline: none; }
+.wl-statement { max-inline-size: 32ch; font-size: clamp(19px, 1.45vw, 36px); line-height: 1.3; letter-spacing: -0.012em; color: var(--wl-on-2); text-wrap: balance; }
 
-.wl-head { display: grid; gap: clamp(14px, 2vh, 26px); align-content: center; }
-.wl-title {
-  max-inline-size: 15ch; font-size: clamp(38px, 3.4vw, 92px); line-height: 1.03; letter-spacing: -0.032em;
-  font-weight: var(--fw-bold); color: var(--ink); text-wrap: balance;
-}
-.wl-title:focus, .wl-title:focus-visible { outline: none; }
-.wl-lede { max-inline-size: 52ch; font-size: clamp(16px, 1.06vw, 26px); line-height: 1.55; color: var(--ink-2); text-wrap: pretty; }
-/* Every fact starts with its dot; the line is shifted left by one dot and clipped there, so a fact that wraps to a new
- * line never starts with a stray dot. */
-.wl-facts {
-  display: flex; flex-wrap: wrap; gap: 6px 0; font-size: clamp(14px, 0.78vw, 19px); color: var(--ink-3);
-  margin-inline-start: -1.6em; clip-path: inset(0 0 0 1.6em);
-}
-.wl-facts > span { white-space: nowrap; }
-.wl-facts > span::before { content: "·"; display: inline-block; inline-size: 1.6em; text-align: center; color: var(--line-3); }
-
-/* ---- the Get started card: field, or, one big button, next ---- */
-.wl-card {
-  display: grid; gap: clamp(12px, 1.5vh, 18px); inline-size: min(100%, clamp(440px, 29vw, 720px));
-  padding: clamp(22px, 1.6vw, 40px); background: var(--panel); border: 1px solid var(--line); border-radius: 20px;
-  box-shadow: 0 24px 48px -32px rgba(0, 0, 0, 0.55);
-}
-[data-theme="light"] .wl-card { box-shadow: 0 24px 48px -30px rgba(22, 38, 64, 0.32); }
-[data-theme="light"] .wl-plate { box-shadow: 0 30px 70px -36px rgba(22, 38, 64, 0.45); }
-.wl-card-title { font-size: clamp(18px, 1.1vw, 28px); line-height: 1.25; color: var(--ink); }
+.wl-signin { grid-row: 3; display: grid; gap: clamp(12px, 1.6vh, 20px); inline-size: min(100%, clamp(380px, 25vw, 600px)); }
 .wl-code { display: grid; gap: 8px; }
-.wl-label { font-size: clamp(14px, 0.8vw, 19px); font-weight: var(--fw-medium); color: var(--ink-2); }
-.wl-code-row { display: flex; gap: 8px; min-inline-size: 0; }
+.wl-label { font-size: clamp(14px, 0.82vw, 19px); font-weight: var(--fw-medium); color: var(--wl-on-2); }
+.wl-code-row { display: flex; gap: 10px; min-inline-size: 0; }
 .wl-code-row input {
-  flex: 1; min-inline-size: 0; min-block-size: clamp(46px, 4.8vh, 60px); padding: 0 16px; border-radius: 12px;
-  border: 1px solid var(--line-2); background: var(--field); color: var(--ink); font: inherit; font-size: clamp(15px, 0.9vw, 21px);
-  transition: border-color 0.15s ease-out, box-shadow 0.15s ease-out;
+  flex: 1; min-inline-size: 0; min-block-size: var(--wl-control-h); padding: 0 18px; border-radius: 12px;
+  border: 1px solid transparent; background: var(--accent-ink); color: var(--wl-field-ink); caret-color: var(--accent);
+  font: inherit; font-size: clamp(15px, 0.92vw, 21px);
 }
-.wl-code-row input:hover:not(:disabled) { border-color: var(--line-3); }
-.wl-code-row input:focus-visible { outline: none; border-color: var(--focus); box-shadow: 0 0 0 3px var(--accent-soft); }
-.wl-code-row input:disabled { background: var(--panel-2); border-color: var(--line); color: var(--ink-3); cursor: not-allowed; }
-.wl-code-row input[aria-invalid="true"] { border-color: var(--bad); }
-.welcome .wl-unlock {
-  flex: none; min-block-size: clamp(46px, 4.8vh, 60px); padding: 0 clamp(18px, 1.3vw, 30px); border-radius: 999px;
-  font-size: clamp(15px, 0.9vw, 21px); font-weight: var(--fw-bold);
+.wl-code-row input::placeholder { color: var(--accent); opacity: 1; }
+.wl-code-row input:focus-visible { outline: 2px solid var(--wl-on); outline-offset: 3px; }
+.wl-code-row input:disabled { background: transparent; border-color: var(--wl-hair); color: var(--wl-on-2); cursor: not-allowed; }
+.wl-code-row input:disabled::placeholder { color: var(--wl-on-2); }
+.wl-code-row input[aria-invalid="true"] { outline: 2px solid var(--wl-on); outline-offset: 3px; }
+
+/* Buttons on the blue: solid white (the one thing to do) or a white outline. State changes are instant (no colour motion). */
+.wl-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; flex: none;
+  min-block-size: var(--wl-control-h); padding: 0 clamp(20px, 1.4vw, 32px); border-radius: 999px;
+  border: 1px solid var(--wl-on-2); background: transparent; color: var(--wl-on);
+  font: inherit; font-size: clamp(15px, 0.92vw, 21px); font-weight: var(--fw-bold); cursor: pointer;
 }
-.wl-note { min-block-size: 1.5em; font-size: clamp(14px, 0.8vw, 19px); line-height: 1.5; color: var(--ink-3); }
-.wl-note-error { color: var(--bad); }
-.wl-status { font-size: clamp(15px, 0.9vw, 21px); line-height: 1.5; color: var(--ink-2); }
-.wl-or { display: flex; align-items: center; gap: 14px; font-size: clamp(13px, 0.76vw, 18px); color: var(--ink-3); }
-.wl-or::before, .wl-or::after { content: ""; flex: 1; border-top: 1px solid var(--line); }
-.welcome .wl-go {
-  inline-size: 100%; min-block-size: clamp(50px, 5.4vh, 68px); border-radius: 999px;
-  font-size: clamp(16px, 1vw, 23px); font-weight: var(--fw-bold);
-}
-.welcome .wl-go:not(.btn-primary) { background: var(--panel-2); border-color: var(--line-2); color: var(--ink); }
-.wl-next { font-size: clamp(13px, 0.76vw, 18px); line-height: 1.5; color: var(--ink-3); }
+.wl-btn:hover:not(:disabled) { background: color-mix(in srgb, var(--accent-ink) 12%, var(--accent)); }
+.wl-btn-solid { background: var(--accent-ink); border-color: var(--accent-ink); color: var(--accent); }
+.wl-btn-solid:hover:not(:disabled) { background: color-mix(in srgb, var(--accent-ink) 90%, var(--accent)); }
+.wl-btn:focus-visible { outline: 2px solid var(--wl-on); outline-offset: 3px; }
+.wl-btn:disabled { border-color: var(--wl-hair); color: var(--wl-on-2); background: transparent; cursor: not-allowed; }
+.wl-btn:active:not(:disabled) { transform: translateY(1px); }
+.wl-go { inline-size: 100%; min-block-size: calc(var(--wl-control-h) + 6px); font-size: clamp(16px, 1vw, 23px); }
+
+.wl-note, .wl-next { font-size: clamp(14px, 0.8vw, 19px); line-height: 1.5; color: var(--wl-on-2); text-wrap: pretty; }
+.wl-note { min-block-size: 1.5em; }
+.wl-note-error { display: flex; align-items: flex-start; gap: 8px; color: var(--wl-on); font-weight: var(--fw-medium); }
+.wl-note-error .icon { flex: none; margin-top: 0.2em; }
+.wl-status { font-size: clamp(15px, 0.92vw, 21px); line-height: 1.5; color: var(--wl-on); }
+.wl-or { display: flex; align-items: center; gap: 14px; font-size: clamp(13px, 0.76vw, 18px); color: var(--wl-on-2); }
+.wl-or::before, .wl-or::after { content: ""; flex: 1; border-top: 1px solid var(--wl-hair); }
 .welcome[data-access="checking"] .wl-note { visibility: hidden; }
 
-/* ---- the centrepiece: the page's figure, dimmed, with the run's stored boxes and numbers ---- */
-.wl-figure { margin: 0; display: grid; gap: 14px; justify-items: center; min-inline-size: 0; }
-.wl-plate, .wl-figure-hold {
-  position: relative; inline-size: min(100%, calc(var(--wl-fig-h) * var(--wl-aspect, 1.135))); aspect-ratio: var(--wl-aspect, 1.135);
+/* ---- right: the montage ---------------------------------------------------------------------------------------------- */
+.wm {
+  --wm-jx: -18px;
+  --wm-cx: -26px;
+  position: relative; min-height: 0; min-width: 0; overflow: hidden;
+  display: grid; grid-template-rows: minmax(0, 1fr) auto; gap: clamp(16px, 2.4vh, 32px);
+  padding: clamp(28px, 6vh, 96px) clamp(28px, 3.6vw, 96px) clamp(20px, 3.4vh, 52px);
 }
-.wl-figure-hold { justify-self: center; }
-.wl-plate {
-  overflow: hidden; border-radius: 16px; background: var(--window-bg); border: 1px solid var(--line);
-  box-shadow: 0 30px 70px -36px rgba(0, 0, 0, 0.7);
-}
-/* Option 3 (Calvin, 2 Nov: the colour figure read as cartoony): the page's figure in grey and very faint, so SAM's
- * outlines and the glow are the only colour on the plate. */
-.wl-plate > img {
-  position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: contain; user-select: none;
-  filter: grayscale(1) contrast(1.15) brightness(0.9); opacity: 0.22;
-}
-:root[data-theme="light"] .wl-plate > img { opacity: 0.34; filter: grayscale(1) contrast(1.05); }
-.wl-outlines { position: absolute; inset: 0; z-index: 2; inline-size: 100%; block-size: 100%; overflow: visible; pointer-events: none; }
-.wl-outline {
-  fill: color-mix(in srgb, var(--accent) 10%, transparent); stroke: var(--wl-glow); stroke-width: 2;
-  vector-effect: non-scaling-stroke; stroke-linejoin: round; stroke-dasharray: 1px; stroke-dashoffset: 0px; opacity: 0;
-}
-.wl-missing { position: absolute; inset: 0; display: grid; place-items: center; color: #4e606f; font-size: var(--fs-14); }
-.wl-marks { position: absolute; inset: 0; z-index: 3; }
-.wl-ground, .wl-glow, .wl-num { position: absolute; opacity: 0; will-change: opacity, transform; }
-/* Muse Spark's located box: a white dashed line (locating), which SAM's blue glow then settles on (confirmed) */
-.wl-ground {
-  box-sizing: border-box; border-radius: 6px; border: 2px dashed rgba(255, 255, 255, 0.95);
-  box-shadow: 0 0 0 1px rgba(10, 19, 23, 0.35), inset 0 0 0 1px rgba(10, 19, 23, 0.25);
-}
-/* SAM 3.1's box: the build's glow */
-.wl-glow {
-  box-sizing: border-box; border-radius: 8px; border: 1.5px solid color-mix(in srgb, var(--wl-glow) 55%, transparent);
-  box-shadow: 0 0 16px 2px color-mix(in srgb, var(--accent) 30%, transparent);
-}
-.wl-num {
-  transform: translate(-50%, -50%); display: grid; place-items: center;
-  inline-size: clamp(26px, 1.6vw, 40px); block-size: clamp(26px, 1.6vw, 40px); border-radius: 7px;
-  background: #0a1317; color: #ffffff; box-shadow: 0 0 0 2px #ffffff, 0 3px 8px -2px rgba(10, 19, 23, 0.5);
-  font-size: clamp(14px, 0.85vw, 21px); font-weight: var(--fw-bold); line-height: 1; font-variant-numeric: tabular-nums;
-}
-.wl-figcap {
-  display: grid; gap: 4px; justify-items: center; justify-self: center; text-align: center; max-inline-size: 100%;
-  /* the page text drifts behind the caption: a plate in the window colour keeps it readable over a lit sentence */
-  padding: 8px 16px; border-radius: 10px; background: var(--window-bg);
-}
-.wl-figcap-run { display: flex; flex-wrap: wrap; justify-content: center; font-size: clamp(14px, 0.8vw, 19px); color: var(--ink-2); }
-.wl-figcap-run > span { white-space: nowrap; }
-.wl-figcap-run > span + span::before { content: "·"; padding-inline: 9px; color: var(--line-3); }
-.wl-figcap-credit { font-size: clamp(12px, 0.68vw, 16px); color: var(--ink-3); }
+.wm-stage { position: relative; min-height: 0; }
 
-/* ---- the loop: each part runs one timeline (lib/welcomeBackdrop.ts), the next one --wl-stagger later.
- *  5% Muse's box and the page sentence light · 13.5% SAM's glow settles · 15-18% Muse's line gives way to it ·
- *  19% the number lands · 22-27% the sentence eases to "cited" · 67-73% everything fades · quiet until the loop ends. */
+.wm-beat {
+  position: absolute; inset: 0;
+  display: grid; grid-template-columns: minmax(0, 55fr) minmax(0, 7fr) minmax(0, 38fr); grid-template-rows: minmax(0, 1fr);
+  grid-template-areas: "sheet gap card"; align-items: start;
+}
+.wm-beat[data-side="end"] { grid-template-columns: minmax(0, 38fr) minmax(0, 7fr) minmax(0, 55fr); grid-template-areas: "card gap sheet"; --wm-jx: 18px; --wm-cx: 26px; }
+/* A figure, a table or a curve needs more room than a list or a formula. */
+.wm-beat:is([data-kind="label-diagram"], [data-kind="compare-table"], [data-kind="data-table"], [data-kind="half-life"], [data-kind="compound-interest"]) { grid-template-columns: minmax(0, 50fr) minmax(0, 6fr) minmax(0, 44fr); }
+.wm-beat:is([data-kind="label-diagram"], [data-kind="compare-table"], [data-kind="data-table"], [data-kind="half-life"], [data-kind="compound-interest"])[data-side="end"] { grid-template-columns: minmax(0, 44fr) minmax(0, 6fr) minmax(0, 50fr); }
+
+/* The page: a clean sheet of the page's own words, the cited sentence lit. It lands at one of three heights. */
+.wm-sheet {
+  grid-area: sheet; align-self: start; max-block-size: 100%; overflow: hidden;
+  display: grid; gap: clamp(10px, 1.4vh, 18px);
+  padding: clamp(20px, 1.7vw, 44px) clamp(22px, 1.9vw, 48px);
+  background: var(--panel); border: 1px solid var(--line); border-radius: 16px;
+  box-shadow: 0 22px 44px -30px rgba(0, 0, 0, 0.55);
+  will-change: transform, opacity;
+}
+.wm-beat[data-drop="1"] .wm-sheet { align-self: center; }
+.wm-beat[data-drop="2"] .wm-sheet { align-self: end; }
+[data-theme="light"] .wm-sheet { box-shadow: 0 22px 44px -30px rgba(22, 38, 64, 0.35); }
+.wm-page-title {
+  padding-bottom: clamp(8px, 1.1vh, 14px); border-bottom: 1px solid var(--line);
+  font-size: clamp(13px, 0.86vw, 21px); font-weight: var(--fw-medium); color: var(--ink-2);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.wm-excerpt { display: grid; gap: 0.7em; font-size: clamp(15px, 1.12vw, 30px); line-height: 1.62; color: var(--ink-3); text-wrap: pretty; }
+.wm-heading { font-weight: var(--fw-medium); color: var(--ink-2); }
+.wm-lit {
+  color: var(--ink); background: color-mix(in srgb, var(--accent) 24%, transparent);
+  border-radius: 4px; padding: 0.06em 0.18em; margin: 0 -0.18em;
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+}
+.wm-publisher { font-size: clamp(12px, 0.7vw, 17px); color: var(--ink-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* The thin line from the lit sentence's height on the sheet's edge to the part. */
+.wm-link { position: absolute; left: 0; top: 0; inline-size: 0; block-size: 0; pointer-events: none; }
+.wm-link-line {
+  position: absolute; left: 0; right: 0; top: -0.5px; block-size: 1px; background: var(--accent-text);
+  transform-origin: left center;
+}
+.wm-beat[data-side="end"] .wm-link-line { transform-origin: right center; }
+.wm-link-line::before, .wm-link-line::after {
+  content: ""; position: absolute; top: -3px; inline-size: 7px; block-size: 7px; border-radius: 50%; background: var(--accent-text);
+}
+.wm-link-line::before { left: -3.5px; }
+.wm-link-line::after { right: -3.5px; }
+
+/* The part, small: placed by WelcomeMontage on the lit sentence's height. */
+.wm-card {
+  grid-area: card; position: relative; top: 0; align-self: start; min-inline-size: 0;
+  will-change: transform, opacity;
+}
+.wm-card .pp {
+  --pp-fig-h: min(40vh, 26em);
+  font-size: clamp(12px, 0.92vw, 24px);
+  padding: 1.15em 1.25em 1em; background: var(--panel); border: 1px solid var(--line-2); border-radius: 14px;
+  box-shadow: 0 26px 50px -30px rgba(0, 0, 0, 0.7);
+}
+[data-theme="light"] .wm-card .pp { box-shadow: 0 26px 50px -30px rgba(22, 38, 64, 0.4); }
+
+.wm-foot { display: flex; align-items: center; justify-content: space-between; gap: 16px 24px; min-inline-size: 0; }
+/* Every caption part starts with its dot; the line is shifted left by one dot and clipped there, so a part that wraps
+ * to a new line never starts with a stray dot. */
+.wm-cap {
+  display: flex; flex-wrap: wrap; min-inline-size: 0; font-size: clamp(13px, 0.76vw, 18px); line-height: 1.5; color: var(--ink-3);
+  margin-inline-start: -1.4em; clip-path: inset(0 0 0 1.4em);
+}
+.wm-cap > span { white-space: nowrap; }
+.wm-cap > span::before { content: "·"; display: inline-block; inline-size: 1.4em; text-align: center; color: var(--line-3); }
+.wm-cap-label { color: var(--ink-2); font-weight: var(--fw-medium); }
+/* One mark per lesson; the lit one slides along (transform only). */
+.wm-ticks { position: relative; display: flex; gap: 6px; flex: none; }
+.wm-ticks > i { inline-size: 16px; block-size: 3px; border-radius: 2px; background: var(--line-2); }
+.wm-tick-on {
+  position: absolute; left: 0; top: 0; inline-size: 16px; block-size: 3px; border-radius: 2px; background: var(--accent-text);
+  transform: translateX(calc(var(--wm-i, 0) * 22px));
+}
+
+/* No published lesson could be loaded: a calm still, the shape of a page and a part. */
+.wm-still { position: absolute; inset: 0; display: grid; grid-template-columns: 55fr 7fr 38fr; align-items: center; }
+.wm-still-sheet, .wm-still-card { display: grid; gap: 12px; padding: 32px; border: 1px solid var(--line); border-radius: 16px; background: var(--panel); }
+.wm-still-card { grid-column: 3; }
+.wm-still i { block-size: 10px; border-radius: 5px; background: var(--panel-2); }
+.wm-still i:nth-child(2n) { inline-size: 82%; }
+.wm-still i:last-child { inline-size: 56%; }
+
 @media (prefers-reduced-motion: no-preference) {
-  .wl-inner { animation: wl-in 420ms cubic-bezier(0.16, 1, 0.3, 1) both; }
-  .wl-pagetext { animation: wl-drift 120s ease-in-out infinite alternate; }
-  .wl-cite { animation: wl-cite var(--wl-cycle) linear calc(var(--i, 0) * var(--wl-stagger, 0ms)) infinite both; }
-  .wl-ground { animation: wl-ground var(--wl-cycle) linear calc(var(--i, 0) * var(--wl-stagger, 0ms)) infinite both; }
-  .wl-glow { animation: wl-glow var(--wl-cycle) linear calc(var(--i, 0) * var(--wl-stagger, 0ms)) infinite both; }
-  .wl-outline { animation: wl-trace var(--wl-cycle) linear calc(var(--i, 0) * var(--wl-stagger, 0ms)) infinite both; }
-  .wl-num { animation: wl-num var(--wl-cycle) linear calc(var(--i, 0) * var(--wl-stagger, 0ms)) infinite both; }
-  /* the loop waits for the figure: never boxes over an empty plate */
-  .welcome[data-img="loading"] :is(.wl-ground, .wl-glow, .wl-num, .wl-cite, .wl-outline) { animation-play-state: paused; }
+  .wm-sheet { animation: wm-cut 260ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+  .wm-link-line { animation: wm-link 200ms cubic-bezier(0.3, 0, 0.2, 1) var(--wm-part, 560ms) both; }
+  .wm-card { animation: wm-snap 280ms cubic-bezier(0.16, 1, 0.3, 1) calc(var(--wm-part, 560ms) + 110ms) both; }
+  .wm-card .pp-outline { animation: wm-in 200ms ease-out calc(var(--wm-part, 560ms) + 300ms + var(--pp-i, 0) * 45ms) both; }
+  .wm-tick-on { transition: transform 240ms cubic-bezier(0.16, 1, 0.3, 1); }
 }
-/* Reduced motion: a still frame, every stored box and number shown, the cited sentences tinted, nothing drifting. */
-@media (prefers-reduced-motion: reduce) {
-  .wl-glow, .wl-num, .wl-outline { opacity: 1; }
+@keyframes wm-cut {
+  0% { opacity: 0; transform: translate3d(var(--wm-jx), 0, 0) scale(1.012); }
+  35% { opacity: 1; }
+  100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
 }
+@keyframes wm-link { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes wm-snap {
+  from { opacity: 0; transform: translate3d(var(--wm-cx), 0, 0) scale(0.94); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+@keyframes wm-in { from { opacity: 0; } to { opacity: 1; } }
 
-@keyframes wl-in { from { opacity: 0; } to { opacity: 1; } }
-@keyframes wl-drift {
-  from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(-0.8%, -4%, 0); }
-}
-@keyframes wl-cite {
-  0%, 5% { opacity: 0.18; animation-timing-function: ease-out; }
-  8%, 22% { opacity: 1; }
-  22% { animation-timing-function: ease-in-out; }
-  27%, 67% { opacity: 0.3; }
-  67% { animation-timing-function: ease-in-out; }
-  73%, 100% { opacity: 0.18; }
-}
-@keyframes wl-ground {
-  0%, 5% { opacity: 0; scale: 1.06; animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
-  8.5% { opacity: 0.9; scale: 1; }
-  15% { opacity: 0.9; scale: 1; animation-timing-function: ease-in; }
-  18%, 100% { opacity: 0; scale: 1; }
-}
-/* SAM's outline traces round the part (10-16.5%) while Muse's dashed box is still up, then stays lit with the glow */
-@keyframes wl-trace {
-  0%, 10% { opacity: 0; stroke-dashoffset: 1px; animation-timing-function: cubic-bezier(0.45, 0, 0.2, 1); }
-  10.5% { opacity: 1; stroke-dashoffset: 1px; }
-  16.5%, 67% { opacity: 1; stroke-dashoffset: 0px; }
-  67% { animation-timing-function: ease-in; }
-  71.5%, 100% { opacity: 0; stroke-dashoffset: 0px; }
-}
-@keyframes wl-glow {
-  0%, 13.5% { opacity: 0; scale: 0.96; animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
-  17%, 67% { opacity: 1; scale: 1; }
-  67% { animation-timing-function: ease-in; }
-  71.5%, 100% { opacity: 0; scale: 1; }
-}
-@keyframes wl-num {
-  0%, 19% { opacity: 0; translate: 0 -14px; animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
-  22%, 67% { opacity: 1; translate: 0 0; }
-  67% { animation-timing-function: ease-in; }
-  71.5%, 100% { opacity: 0; translate: 0 0; }
-}
-
-/* Short windows (1366 × 768 and the like): the statement takes two lines and the spacing tightens, so the card and
- * the figure fit without scrolling. */
+/* Short windows (1366 × 768 and the like): everything tightens so both halves fit without scrolling. */
 @media (max-height: 860px) {
-  .welcome { padding-block: 20px; --wl-fig-h: 60vh; }
-  .wl-main { gap: 18px; }
-  .wl-head { gap: 10px; }
-  .wl-title { max-inline-size: 20ch; font-size: clamp(34px, 3.2vw, 46px); }
-  .wl-lede { font-size: 15px; }
-  .wl-card { gap: 10px; padding: 18px 20px; }
-  .wl-code-row input, .welcome .wl-unlock { min-block-size: 42px; }
-  .welcome .wl-go { min-block-size: 46px; }
+  .wl-panel { padding: 28px clamp(28px, 4.4vw, 64px) 24px; --wl-control-h: 44px; }
+  .wl-head { gap: 12px; }
+  .wl-name { font-size: clamp(40px, 3.9vw, 54px); }
+  .wl-statement { font-size: 18px; }
+  .wl-signin { gap: 10px; }
+  .wm { padding: 24px clamp(24px, 2.6vw, 40px) 18px; gap: 12px; }
+  .wm-excerpt { font-size: 14px; line-height: 1.55; }
+  .wm-sheet { padding: 18px 20px; gap: 10px; }
+  .wm-card .pp { font-size: 12px; --pp-fig-h: min(36vh, 22em); }
 }
 
+/* Narrow windows: the panel takes the whole width; the montage needs room to read, so it steps aside. */
 @media (max-width: 1100px) {
-  .wl-inner { grid-template-columns: minmax(0, 1fr); }
-  .welcome[data-figure="none"] .wl-main { grid-template-columns: minmax(0, 1fr); }
-  .wl-figure, .wl-figure-hold { display: none; }
-  .wl-card { inline-size: min(100%, 560px); }
+  .window-body-plain:has(> .welcome) { grid-template-rows: minmax(0, 1fr); }
+  .welcome { grid-template-columns: minmax(0, 1fr); }
+  .wm { display: none; }
+  .wl-signin { inline-size: min(100%, 520px); }
 }
 
 /* ---- New lesson additions (slice A) ------------------------------------------------------------------------------- */

@@ -3,13 +3,19 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  demoLengthWords, firstLaunch, guideSteps, nextAllowed, NEXT_GUARD_MS, shouldShowWelcome, welcomeAccess, welcomeCard, welcomeNext, WELCOME_CREDENTIALS,
+  APP_NAME, WELCOME_STATEMENT, demoLengthWords, firstLaunch, guideSteps, nextAllowed, NEXT_GUARD_MS, shouldShowWelcome, welcomeAccess, welcomeCard, welcomeNext, WELCOME_CREDENTIALS,
   WELCOME_STORAGE_KEY,
 } from './welcome.ts';
 import type { GuideInput } from './welcome.ts';
 import type { AccessInfo } from './access.ts';
 
 const info = (o: Partial<AccessInfo> = {}): AccessInfo => ({ gate: true, granted: false, capUSD: 50, spentUSD: 0, remainingUSD: 50, buildsEnabled: true, ...o });
+
+test('Welcome v3: the app name is one constant (provisional) and the statement is one line', () => {
+  assert.equal(APP_NAME, 'Make knowledge interactive');
+  assert.equal(WELCOME_STATEMENT, 'Turn a page into a lesson you can teach.');
+  assert.ok(!/\n/.test(WELCOME_STATEMENT));
+});
 
 test('the welcome key is mki.welcome', () => {
   assert.equal(WELCOME_STORAGE_KEY, 'mki.welcome');

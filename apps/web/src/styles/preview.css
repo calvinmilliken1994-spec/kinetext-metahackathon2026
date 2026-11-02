@@ -1,0 +1,99 @@
+/* Welcome v3 (docs/specs/WELCOME-V3-split.md): the small part previews (components/PartPreview.tsx). Tokens only, sized
+ * in em from the caller's font-size, so the Welcome montage and a later wall of lesson previews share them. Calm and
+ * monochrome; the accent marks only the element tied to the lit page sentence ([data-focus]) and the models' outlines. */
+
+.pp { margin: 0; display: grid; gap: 0.85em; min-inline-size: 0; color: var(--ink); font-variant-numeric: tabular-nums; }
+.pp-title { font-size: 1.08em; font-weight: var(--fw-bold); line-height: 1.3; letter-spacing: -0.008em; color: var(--ink); text-wrap: balance; }
+.pp-body { min-inline-size: 0; }
+.pp-kind { font-size: 0.84em; color: var(--ink-3); }
+
+/* the one element tied to the lit sentence */
+.pp [data-focus="true"]:not(path) {
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-text) 60%, transparent);
+  color: var(--ink);
+}
+
+/* ---- label diagram: the page's figure, grey and faint, SAM 3.1's stored outlines on its parts ---- */
+.pp-figure {
+  position: relative; margin-inline: auto; overflow: hidden; border-radius: 0.6em;
+  inline-size: min(100%, calc(var(--pp-fig-h, 16em) * var(--pp-aspect, 1))); aspect-ratio: var(--pp-aspect, 1);
+  background: var(--plot-bg); border: 1px solid var(--line);
+}
+.pp-figure > img {
+  position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: contain; user-select: none;
+  filter: grayscale(1); opacity: 0.3;
+}
+[data-theme="light"] .pp-figure > img { opacity: 0.42; }
+.pp-outlines { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; overflow: visible; }
+.pp-outline {
+  fill: none; stroke: var(--accent-text); stroke-width: 1.25; vector-effect: non-scaling-stroke; stroke-linejoin: round; opacity: 0.6;
+}
+.pp-outline[data-focus="true"] { fill: color-mix(in srgb, var(--accent) 26%, transparent); stroke-width: 2.25; opacity: 1; }
+.pp-box.pp-box { position: absolute; border-radius: 0.4em; background: color-mix(in srgb, var(--accent) 16%, transparent); }
+.pp-num {
+  position: absolute; transform: translate(-50%, -50%); display: grid; place-items: center;
+  inline-size: 1.75em; block-size: 1.75em; border-radius: 0.4em;
+  background: var(--accent); color: var(--accent-ink); font-size: 0.9em; font-weight: var(--fw-bold); line-height: 1;
+  box-shadow: 0 0 0 2px var(--plot-bg);
+}
+
+/* ---- half-life / compound interest: the engine's curve ---- */
+.pp-curve { display: grid; gap: 0.45em; }
+.pp-axis-y, .pp-axis-x { font-size: 0.8em; color: var(--ink-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pp-axis-x { text-align: end; }
+.pp-plot {
+  position: relative; block-size: 9.5em; margin: 0.6em 2.6em 0 0.2em;
+  border-inline-start: 1px solid var(--line-2); border-block-end: 1px solid var(--line-2);
+}
+.pp-plot > svg { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; overflow: visible; }
+.pp-curve-line { fill: none; stroke: var(--chart-line); stroke-width: 2; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
+.pp-mark { position: absolute; inline-size: 0.5em; block-size: 0.5em; border-radius: 50%; background: var(--chart-line); transform: translate(-50%, -50%); }
+.pp-mark-text { position: absolute; left: 0.8em; bottom: 0.5em; font-size: 0.82em; line-height: 1; color: var(--ink-2); white-space: nowrap; }
+.pp-mark[data-end="true"] .pp-mark-text { left: auto; right: 0.6em; bottom: 0.7em; }
+
+/* ---- formula explorer: the formula and one slider ---- */
+.pp-formula-wrap { display: grid; gap: 1em; }
+.pp-formula {
+  justify-self: start; padding: 0.3em 0.55em; border-radius: 0.4em;
+  font-size: 2em; font-weight: var(--fw-medium); letter-spacing: 0.01em; line-height: 1.2; color: var(--ink);
+}
+.pp-slider { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 0.8em; font-size: 0.92em; color: var(--ink-2); }
+.pp-slider-name i { font-style: italic; font-weight: var(--fw-medium); color: var(--ink); }
+.pp-track { position: relative; block-size: 0.3em; border-radius: 1em; background: var(--line-2); }
+.pp-thumb {
+  position: absolute; top: 50%; inline-size: 1.1em; block-size: 1.1em; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 0 2px var(--panel); transform: translate(-50%, -50%);
+}
+.pp-slider-value { color: var(--ink); }
+
+/* ---- compare / data table: a few cells ---- */
+.pp-table { inline-size: 100%; border-collapse: separate; border-spacing: 0; font-size: 0.88em; line-height: 1.35; }
+.pp-table th, .pp-table td { padding: 0.5em 0.55em; text-align: start; vertical-align: top; border-block-end: 1px solid var(--line); }
+.pp-table thead th { font-weight: var(--fw-medium); color: var(--ink-3); font-size: 0.92em; }
+.pp-table tbody th { font-weight: var(--fw-medium); color: var(--ink-2); }
+.pp-table td { color: var(--ink-2); }
+.pp-table [data-focus="true"] { border-radius: 0.35em; }
+
+/* ---- sequence: the first three steps ---- */
+.pp-steps { display: grid; gap: 0.35em; margin: 0; padding: 0; list-style: none; }
+.pp-steps > li { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 0.7em; padding: 0.5em 0.6em; border-radius: 0.5em; line-height: 1.35; color: var(--ink-2); }
+.pp-step-n {
+  display: grid; place-items: center; inline-size: 1.7em; block-size: 1.7em; border-radius: 50%;
+  border: 1px solid var(--line-2); font-size: 0.85em; font-weight: var(--fw-bold); color: var(--ink-2);
+}
+.pp-steps > li[data-focus="true"] .pp-step-n { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+
+/* ---- sort groups: two groups of chips ---- */
+.pp-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6em; }
+.pp-group { display: grid; gap: 0.55em; align-content: start; padding: 0.7em; border: 1px solid var(--line); border-radius: 0.6em; }
+.pp-group-label { font-size: 0.86em; font-weight: var(--fw-medium); color: var(--ink-2); }
+.pp-group ul { display: flex; flex-wrap: wrap; gap: 0.35em; margin: 0; padding: 0; list-style: none; }
+.pp-group li { padding: 0.28em 0.65em; border-radius: 999px; background: var(--panel-2); border: 1px solid var(--line-2); font-size: 0.86em; color: var(--ink-2); }
+
+/* ---- quiz card: the question and its options ---- */
+.pp-quiz { display: grid; gap: 0.7em; }
+.pp-stem { justify-self: start; padding: 0.3em 0.45em; margin-inline: -0.45em; border-radius: 0.4em; font-weight: var(--fw-medium); line-height: 1.4; }
+.pp-options { display: grid; gap: 0.4em; margin: 0; padding: 0; list-style: none; }
+.pp-options > li { display: flex; align-items: center; gap: 0.65em; padding: 0.5em 0.65em; border: 1px solid var(--line); border-radius: 0.5em; font-size: 0.92em; line-height: 1.35; color: var(--ink-2); }
+.pp-radio { flex: none; inline-size: 0.95em; block-size: 0.95em; border-radius: 50%; border: 1.5px solid var(--line-3); }
