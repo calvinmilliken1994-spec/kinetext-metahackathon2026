@@ -62,3 +62,11 @@ Scene 4 and 5 act on the job scene 3 created; the driver keeps its id (from the 
 - Scene 4 finds Magma's number from `GET /api/jobs/<id>` (the app numbers parts in spec order) and clicks the name,
   then that number's marker on the diagram.
 - Scene 5 ticks only boxes that exist: a run that is already published has none ("Read by a teacher").
+
+## 1440p (Calvin, 3 Nov)
+
+The take is recorded at 2560×1440 so more of the app fits in view; the edit still exports 1080p. `drive.mjs` now
+defaults to a 2560×1440 page area (fullscreen on Calvin's 2560×1440 screen, so no taskbar or window frame);
+`--size 1920x1080` restores the old size. Dry rehearsal of all seven scenes at 1440p:
+`docs/evidence/video-capture/1440/` (scene times 16.2, 18.0, 4.2 dry, 25.8, 18.8, 33.7, 15.4 s). Record the whole
+screen in Tella. The leftover airplane run was archived so the retired page no longer heads All lessons.

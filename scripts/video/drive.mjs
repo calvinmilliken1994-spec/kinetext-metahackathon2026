@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Kinetext video scene driver (docs/video/CAPTURE.md). Plays the demo scenes in a clean 1920x1080 Chrome app window
+// Kinetext video scene driver (docs/video/CAPTURE.md). Plays the demo scenes in a clean 2560x1440 (or --size) Chrome app window
 // with a visible fake cursor, one scene per F8 press, so every take clicks and pauses the same way.
 //
 //   node scripts/video/drive.mjs <all|N|N,M,...> [--dry] [--auto] [--job <id>] [--shots <dir>] [--close]
@@ -20,7 +20,12 @@ import { SCENES } from './scenes.mjs';
 const CHROME = 'C:/Program Files/Google/Chrome/Application/chrome.exe';
 const PORT = 9333;
 const BASE = 'http://127.0.0.1:5173';
-const SIZE = { width: 1920, height: 1080 };
+// Calvin, 3 Nov: record at 1440p (more of the app fits; the edit exports 1080p). `--size 1920x1080` for a 1080p take.
+const SIZE = (() => {
+  const i = process.argv.indexOf('--size');
+  const m = i >= 0 ? /^(\d+)x(\d+)$/.exec(process.argv[i + 1] ?? '') : null;
+  return m !== null ? { width: Number(m[1]), height: Number(m[2]) } : { width: 2560, height: 1440 };
+})();
 // A throwaway profile, so no extensions, saved logins or old app state leak into a take.
 const PROFILE = process.env.VIDEO_CHROME_PROFILE
   ?? join(process.env.LOCALAPPDATA ?? '.', 'hermes/profiles/meta-hackathon-2026/cache/scratch/video-chrome');
@@ -40,10 +45,11 @@ function parseArgs(argv) {
     else if (a === '--close') o.close = true;
     else if (a === '--job') o.job = argv[++i];
     else if (a === '--shots') o.shots = resolve(argv[++i]);
+    else if (a === '--size') i++; // read by SIZE above
     else if (!a.startsWith('--') && o.which === null) o.which = a;
     else throw new Error(`unknown argument ${a}`);
   }
-  if (o.which === null) throw new Error('usage: drive.mjs <all|N|N,M> [--dry] [--auto] [--job <id>] [--shots <dir>] [--close]');
+  if (o.which === null) throw new Error('usage: drive.mjs <all|N|N,M> [--dry] [--auto] [--job <id>] [--shots <dir>] [--size WxH] [--close]');
   const nums = o.which === 'all' ? SCENES.map((_, i) => i + 1) : o.which.split(',').map(Number);
   if (nums.some((n) => !Number.isInteger(n) || n < 1 || n > SCENES.length)) throw new Error(`no such scene: ${o.which}`);
   return { ...o, scenes: nums };
@@ -158,7 +164,7 @@ async function openChrome(startUrl) {
     const args = [
       `--remote-debugging-port=${PORT}`, `--user-data-dir=${PROFILE}`, `--app=${startUrl}`,
       `--window-position=0,0`, `--window-size=${SIZE.width},${SIZE.height}`,
-      // CSS pixels = screen pixels, so the 1920x1080 page is 1920x1080 on the recording whatever Windows scaling is.
+      // CSS pixels = screen pixels, so the page is exactly SIZE on the recording whatever Windows scaling is.
       '--force-device-scale-factor=1',
       '--no-first-run', '--no-default-browser-check', '--disable-session-crashed-bubble', '--hide-crash-restore-bubble',
       '--disable-features=Translate,MediaRouter,OptimizationHints', '--disable-sync', '--password-store=basic',
@@ -236,7 +242,7 @@ class Driver {
     await this.fitWindow();
   }
 
-  /** Make the page area exactly 1920x1080 at screen 0,0: fullscreen on a 1080p screen, else a window sized round it. */
+  /** Make the page area exactly SIZE at screen 0,0: fullscreen when the screen is that size, else a window sized round it. */
   async fitWindow() {
     const { windowId } = await this.cdp.send('Browser.getWindowForTarget');
     const scr = await this.eval('({ w: screen.width, h: screen.height, dpr: devicePixelRatio })');
@@ -254,7 +260,7 @@ class Driver {
         h += SIZE.height - inner[1];
       }
       // Slide the frame off the top-left edge so the page itself sits at screen 0,0: Tella then records the region
-      // 0,0-1920x1080 and the app-mode title bar is never in the shot. Windows' resize borders are invisible.
+      // 0,0 to SIZE and the app-mode title bar is never in the shot. Windows' resize borders are invisible.
       const o = await this.eval('({ ow: outerWidth, oh: outerHeight, iw: innerWidth, ih: innerHeight })');
       const side = Math.round((o.ow - o.iw) / 2);
       const title = o.oh - o.ih - side;
@@ -263,7 +269,7 @@ class Driver {
     await sleep(250);
     const inner = await this.eval('[innerWidth, innerHeight, devicePixelRatio, screenX, screenY]');
     console.log(`Screen ${scr.w}x${scr.h}; page area ${inner[0]}x${inner[1]} at device scale ${inner[2]}; window frame at ${inner[3]},${inner[4]}.`);
-    if (inner[0] !== SIZE.width || inner[1] !== SIZE.height) console.warn('  WARNING: the page area is not 1920x1080 (screen too small?).');
+    if (inner[0] !== SIZE.width || inner[1] !== SIZE.height) console.warn(`  WARNING: the page area is not ${SIZE.width}x${SIZE.height} (screen too small?).`);
   }
 
   async eval(expression) {
