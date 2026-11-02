@@ -19,6 +19,7 @@ const FEATURED_PHYSICS = [
 ];
 
 const RETIRED = [
+  'nasa-grc-airplane-parts-function', // 2026-11-02: unreliable label diagram (see library-flags physics test)
   'nasa-grc-ballistic-flight-equations',
   'nasa-grc-equations-of-motion',
   'nasa-grc-flight-equations-with-drag',
@@ -35,7 +36,7 @@ test('exactly the five frozen physics pages are featured', () => {
   assert.deepEqual(featuredPhysics, FEATURED_PHYSICS);
 });
 
-test('exactly the six frozen pages are retired, and every one still loads with a verified hash', () => {
+test('exactly the retired pages are retired (six frozen + the airplane page), and every one still loads with a verified hash', () => {
   const retired = listSourceIds().filter((id) => isRetired(loadSourceMeta(id)));
   assert.deepEqual(retired, RETIRED);
   for (const id of RETIRED) {
@@ -44,11 +45,13 @@ test('exactly the six frozen pages are retired, and every one still loads with a
   }
 });
 
-test('physics: 14 active pages (13 after Stage 7e + the airplane-parts figure page), 6 retired, and no page is both featured and retired', () => {
+test('physics: 13 active pages, 7 retired, and no page is both featured and retired', () => {
   const physics = listSourceIds().filter((id) => loadSourceMeta(id).subject === 'physics');
-  // 2026-11-02: nasa-grc-airplane-parts-function (SAM figure candidate with a label-diagram figure) joined physics.
-  assert.equal(physics.filter((id) => !isRetired(loadSourceMeta(id))).length, 14);
-  assert.equal(physics.filter((id) => isRetired(loadSourceMeta(id))).length, 6);
+  // 2026-11-02: nasa-grc-airplane-parts-function joined as a SAM figure candidate, then was retired the same day
+  // (Calvin: "we don't use the airplane diagram, it's not reliable"; 2 of 4 live diagrams published).
+  assert.equal(physics.filter((id) => !isRetired(loadSourceMeta(id))).length, 13);
+  assert.equal(physics.filter((id) => isRetired(loadSourceMeta(id))).length, 7);
+  assert.equal(isRetired(loadSourceMeta('nasa-grc-airplane-parts-function')), true);
   for (const id of listSourceIds()) {
     const m = loadSourceMeta(id);
     assert.ok(!(isFeatured(m) && isRetired(m)), `${id} is featured and retired`);
