@@ -9,7 +9,7 @@ import { sourceLicenseText } from '../lib/sources.ts';
 import type { ReportLike } from '../lib/failures.ts';
 import { heldBackChecks } from '../lib/lessonJob.ts';
 import type { LessonCard, LessonItem, PendingSlot } from '../lib/lesson.ts';
-import { activityFirst, partCounts } from '../lib/partOrder.ts';
+import { activityFirst, buildingOrder, partCounts } from '../lib/partOrder.ts';
 import { NOTES_ONLY_LINE } from '../lib/presentation.ts';
 import { peekPartFocus, takePartFocus } from '../lib/review.ts';
 import { reviewOfLesson } from '../lib/reviewState.ts';
@@ -267,7 +267,7 @@ export function LessonView({ lesson, specs, analysis, sources, cite, disclosure,
         </div>
       )}
       {layout === null
-        ? items.map(renderItem)
+        ? buildingOrder(items).map(renderItem)
         : (
           <>
             {layout.lead !== null && renderItem(layout.lead, 0)}

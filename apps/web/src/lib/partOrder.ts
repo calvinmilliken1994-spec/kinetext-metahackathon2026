@@ -77,6 +77,11 @@ export function lessonPartKind(componentId: string): PartKind {
 
 const itemKind = (it: LessonItem): PartKind => lessonPartKind(it.kind === 'card' ? it.card.componentId : it.slot.componentId);
 
+/** A lesson being built: its parts and placeholders in the order the finished lesson will show them (most visual first). */
+export function buildingOrder(items: readonly LessonItem[]): LessonItem[] {
+  return mostVisualFirst(items, itemKind);
+}
+
 /**
  * A lesson at rest (same rule as the slides, mostVisualFirst): the most visual PASSED part leads, then the other working
  * parts in teaching order. Parts that are not shown (held back, could not be verified, not built) never lead: they go
