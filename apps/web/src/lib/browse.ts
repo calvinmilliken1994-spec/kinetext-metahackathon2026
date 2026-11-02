@@ -125,6 +125,15 @@ function toRow<J extends JobLike>(j: J, byId: ReadonlyMap<string, Subjected & { 
 }
 
 /** The Published shelf above All lessons: every published lesson not archived, the most recently published first. */
+/**
+ * How many shelf cards to show before "Show all": as many as fill two rows of the grid (`columns` measured from the
+ * layout), so nobody clicks Show all while there is room. Before the grid is measured, six.
+ */
+export function shelfVisible(total: number, columns: number, rows = 2): number {
+  const cap = columns > 0 ? columns * rows : 6;
+  return Math.min(total, cap);
+}
+
 export function publishedShelf<J extends JobLike>(jobs: readonly J[], byId: ReadonlyMap<string, Subjected & { title: string }>): LessonRow<J>[] {
   return jobs
     .filter((j) => j.reviewPublishedAt !== undefined && notArchived(j))

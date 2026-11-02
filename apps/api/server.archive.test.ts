@@ -451,3 +451,19 @@ test('/api/archive/ with a trailing path is 404, and the bulk route needs no job
     assert.deepEqual((await bulk(base, { action: 'archive-older' })).body, { archived: [], restored: [] }, 'an empty library is fine');
   });
 });
+
+test('GET /api/jobs: a published lesson whose kept label diagram SAM outlined carries samUsed; an unpublished one does not', async () => {
+  const storageDir = tempDir();
+  await withServer({ storageDir }, async ({ base }) => {
+    seedJob(storageDir, A_NEW, { minute: 300 });
+    seedJob(storageDir, A_OLD, { minute: 100 });
+    for (const id of [A_NEW, A_OLD]) {
+      writeJson(join(storageDir, 'runs', id, 'lesson.json'), { components: [{ componentId: 'label-diagram-v1', status: 'passed', revision: 1 }] });
+      writeJson(join(storageDir, 'runs', id, 'label-diagram-v1.r1.json'), { regions: [{ partId: 'p1', confidence: 0.8 }] });
+    }
+    publishRun(storageDir, A_OLD);
+    const byId = new Map((await listing(base)).map(j => [j['jobId'] as string, j]));
+    assert.equal(byId.get(A_OLD)?.['samUsed'], true);
+    assert.equal('samUsed' in (byId.get(A_NEW) ?? {}), false, 'only published lessons are looked at');
+  });
+});

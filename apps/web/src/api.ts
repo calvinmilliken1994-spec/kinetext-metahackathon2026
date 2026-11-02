@@ -71,6 +71,8 @@ export interface JobSummary {
   archivedAt?: string;
   /** Library tidy: the app links to this run by id, so it is never archived (absent = not pinned). */
   pinned?: boolean;
+  /** Published shelf: this published lesson shows a label diagram whose parts SAM 3.1 outlined (absent = no). */
+  samUsed?: boolean;
 }
 
 /** One stored revision of the activity spec and its validation report (Stage 5). */

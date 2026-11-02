@@ -104,6 +104,7 @@ import { createAccessControl } from './access.ts';
 import type { RelayControl } from './relay.ts';
 import { createStaticHandler } from './static.ts';
 import type { StaticHandler } from './static.ts';
+import { lessonUsesSam } from './sam-used.ts';
 import { deleteReview, MAX_REVIEW_BODY_BYTES, publishedPartIds, readReview, validatePublishBody, writeReview } from './review.ts';
 import type { AccessControl, AccessOptions } from './access.ts';
 import { deleteArchive, isFinished, loadPinnedRuns, MAX_ARCHIVE_BODY_BYTES, olderCopies, readArchive, writeArchive } from './archive.ts';
@@ -612,6 +613,8 @@ export function createApiServer(opts: ApiOptions): Server {
           return {
             ...job,
             ...(review === null ? {} : { reviewPublishedAt: review.publishedAt }),
+            // The Published shelf's SAM stamp: published lessons only, so the list stays cheap to build.
+            ...(review !== null && lessonUsesSam(opts.storageDir, job.jobId, review.hiddenParts) ? { samUsed: true as const } : {}),
             ...(archive === null ? {} : { archivedAt: archive.archivedAt }),
             ...(pinnedRuns.has(job.jobId) ? { pinned: true as const } : {}),
           };

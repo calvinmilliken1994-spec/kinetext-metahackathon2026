@@ -83,3 +83,10 @@ Answer: 200 `{ "archived": ["job-…"], "restored": ["job-…"] }` (ids changed 
 - **New lesson page:** the per-page lesson counts leave archived runs out; "open its lesson" prefers the published one.
 - **Lesson page:** the status line under the title becomes an amber **Needs review** notice ("AI-written and not yet
   checked by a teacher") with a link to Review and publish, when the lesson is unpublished. Present mode is unchanged.
+
+## Amendment 2026-11-02 (Calvin's shelf review)
+
+- `GET /api/jobs` adds `samUsed: true` to a **published** lesson whose kept (passed, not hidden) label diagram has SAM 3.1
+  regions in its published revision (`apps/api/sam-used.ts`). Absent otherwise.
+- Published shelf cards carry a small subject tag and, when `samUsed`, a "SAM 3.1" stamp. The shelf shows as many cards
+  as fill two rows of its grid before "Show all".

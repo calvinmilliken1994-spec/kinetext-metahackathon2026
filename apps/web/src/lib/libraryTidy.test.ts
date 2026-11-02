@@ -11,6 +11,7 @@ import {
   archiveConfirmText, archiveErrorMessage, archiveKeeper, archiveStatusText, canArchive, canArchiveRun, olderCopies,
   parseArchiveAnswer, parseBulkAnswer, rowArchiveAction,
 } from './archive.ts';
+import { shelfVisible } from './browse.ts';
 import { lessonReviewCue, NEEDS_REVIEW, NEEDS_REVIEW_DETAIL, reviewBadge } from './reviewState.ts';
 import { lessonStatusLine, partCountsLine, reviewStatusView } from './partOrder.ts';
 import { parseJobSummary } from './lessonJob.ts';
@@ -279,4 +280,15 @@ test('archiveErrorMessage: plain sentences for the API refusals', () => {
   assert.match(archiveErrorMessage({ code: 'NOT_FOUND' }), /no longer on the server/);
   assert.match(archiveErrorMessage({ code: 'HTTP_404' }), /does not support archiving/);
   assert.equal(archiveErrorMessage(new Error('x')), 'The change could not be saved. Try again.');
+});
+
+
+// Calvin, 2 Nov: no "Show all" while two rows of the shelf still have room.
+test('shelfVisible: everything that fits in two rows of the measured grid; at least one row on an unmeasured grid', () => {
+  assert.equal(shelfVisible(8, 5), 8, '8 cards in a 5-column grid fit two rows');
+  assert.equal(shelfVisible(10, 5), 10);
+  assert.equal(shelfVisible(11, 5), 10, 'the eleventh waits for Show all');
+  assert.equal(shelfVisible(8, 3), 6);
+  assert.equal(shelfVisible(4, 0), 4, 'not measured yet: no cut below one sensible row');
+  assert.equal(shelfVisible(9, 0), 6);
 });

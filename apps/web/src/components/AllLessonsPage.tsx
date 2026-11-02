@@ -3,7 +3,7 @@
 // the published lessons sit on a shelf above the list; "One per page" (the default) shows the published lesson of each
 // page, else its newest; "Every lesson" and "All runs" show the rest, and "Archived" the copies a teacher put away.
 // With access, rows offer Archive / Archive older / Restore as SIBLING buttons of the row (never nested in it).
-import { useId, useMemo, useRef, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { KeyboardEvent as ReactKeyboardEvent } from 'react';
 import { api } from '../api.ts';
 import type { JobSummary, SourceMeta } from '../api.ts';
@@ -11,7 +11,7 @@ import type { Loadable } from '../hooks.ts';
 import type { Access } from '../lib/access.ts';
 import { archiveConfirmText, archiveErrorMessage, archiveStatusText, canArchive, olderCopies, rowArchiveAction } from '../lib/archive.ts';
 import type { ArchiveChange, RowArchiveAction } from '../lib/archive.ts';
-import { browseLessons, chipUnit, lessonsLede, pageBreakdown, partsText, publishedShelf, rowsCountText } from '../lib/browse.ts';
+import { browseLessons, chipUnit, lessonsLede, pageBreakdown, partsText, publishedShelf, rowsCountText, shelfVisible } from '../lib/browse.ts';
 import type { LessonRow, LessonScope } from '../lib/browse.ts';
 import { NEEDS_REVIEW, NEEDS_REVIEW_DETAIL, reviewDate } from '../lib/reviewState.ts';
 import { runLine } from '../lib/runs.ts';
@@ -23,8 +23,14 @@ import { IconSearch } from './navIcons.tsx';
 import { SubjectChips } from './SubjectChips.tsx';
 
 const PAGE = 60;
-/** Cards on the Published shelf before "Show all". */
-const SHELF = 6;
+/** The SAM stamp: a small dashed outline, the shape SAM 3.1 traces round a part. */
+function SamGlyph() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
+      <rect x="1.5" y="1.5" width="9" height="9" rx="2" fill="none" stroke="currentColor" strokeWidth="1.3" strokeDasharray="2 1.6" />
+    </svg>
+  );
+}
 
 export interface AllLessonsPageProps {
   jobs: Loadable<JobSummary[]>;
@@ -114,7 +120,20 @@ export function AllLessonsPage(p: AllLessonsPageProps) {
 
   // The shelf: hidden when nothing is published, except for a teacher who can publish (it points to Review and publish).
   const showShelf = scope !== 'archived' && p.jobs.state === 'ready' && (shelf.length > 0 || manage);
-  const shelfShown = shelfAll ? shelf : shelf.slice(0, SHELF);
+  // Two rows of the grid as laid out now (Calvin: no Show all while there is room).
+  const cardsRef = useRef<HTMLUListElement | null>(null);
+  const [columns, setColumns] = useState(0);
+  useEffect(() => {
+    const el = cardsRef.current;
+    if (el === null) return undefined;
+    const measure = (): void => setColumns(getComputedStyle(el).gridTemplateColumns.split(' ').filter((s) => s !== '').length);
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [showShelf, shelf.length]);
+  const fits = shelfVisible(shelf.length, columns);
+  const shelfShown = shelfAll ? shelf : shelf.slice(0, fits);
 
   return (
     <div className="page page-lessons" data-testid="all-lessons-page">
@@ -139,7 +158,7 @@ export function AllLessonsPage(p: AllLessonsPageProps) {
             </p>
           ) : (
             <>
-              <ul className="ll-cards">
+              <ul className="ll-cards" ref={cardsRef}>
                 {shelfShown.map((r) => {
                   const open = r.jobId === p.openJobId;
                   return (
@@ -148,10 +167,16 @@ export function AllLessonsPage(p: AllLessonsPageProps) {
                         type="button" className={`ll-card${open ? ' is-open' : ''}`} onClick={() => p.onOpen(r.jobId, r.sourceId)}
                         aria-current={open ? 'true' : undefined} data-job={r.jobId}
                       >
+                        <span className="ll-card-tags">
+                          <span className="ll-card-subject"><span className="sr-only">Subject: </span>{subjectLabel(r.subject)}</span>
+                          {r.job.samUsed === true && (
+                            <span className="ll-card-sam" title="The diagram's parts were outlined by SAM 3.1">
+                              <SamGlyph /><span className="sr-only">Diagram outlined by </span>SAM 3.1
+                            </span>
+                          )}
+                        </span>
                         <span className="ll-card-title">{displayTitle(r.title)}</span>
                         <span className="ll-card-meta">
-                          <span><span className="sr-only">Subject: </span>{subjectLabel(r.subject)}</span>
-                          <span aria-hidden="true">·</span>
                           <span><span className="sr-only">Model: </span>{runLine(r.job, { liveJobIds: new Set(), serverBusy: p.serverBusy }).model}</span>
                         </span>
                         <span className="ll-card-date"><Mark kind="ok" />Published {r.published === null ? '' : reviewDate(r.published)}</span>
@@ -160,7 +185,7 @@ export function AllLessonsPage(p: AllLessonsPageProps) {
                   );
                 })}
               </ul>
-              {shelf.length > SHELF && (
+              {shelf.length > fits && (
                 <button type="button" className="link-btn ll-shelf-more" aria-expanded={shelfAll} onClick={() => setShelfAll((v) => !v)}>
                   {shelfAll ? 'Show fewer' : `Show all ${num(shelf.length)} published lessons`}
                 </button>
