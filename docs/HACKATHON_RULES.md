@@ -32,3 +32,13 @@ Meta-first core, permanent tagline, physics-first real interactive application, 
 
 ## Provenance note
 Setup commits `23ae633` and `b5f25da` were made 2026-10-27 05:44–05:47 KST (= Oct 26 ~16:45 ET): after kickoff, before the stated Oct 27 building-period start. They contain setup documentation, a draft schema, tests and a smoke probe — no product functionality. Treat them as setup scaffold and say so in the README and demo. All product features are built from 2026-10-27 onward.
+
+## Demo video guidance (organizers on Discord, relayed by Calvin 2026-11-03)
+Not in the guide; organizer answers in the event Discord, as Calvin copied them.
+- AI tools are allowed for editing, voiceover and visuals. An English AI voiceover is acceptable, but organizers prefer a video made and presented by a person.
+- AI visuals are extras: most of the video must be real screen footage of the working product, with **live Meta model calls visible**.
+- No required structure. Suggested: open with one line on what existed before the event and what was built during it; show the working end-to-end flow with live Meta model calls; briefly show where and how Meta's models are used (Use of Meta AI Tooling = 25%).
+- **3:00 at most, in English.**
+- **No slides** (the video may show only features built during the event). Mockups and pre-recorded scenarios are fine if labeled and the core working product is shown; say clearly which parts are simulated and show real interactions wherever possible.
+
+Project consequences: the recorded-run Demo stays labeled "Replay of a recorded run" and cannot carry the video alone; at least one real live build (Muse Spark + SAM 3.1 calls, with their run details) must be on screen, and any sped-up footage is labeled. Opening line per the provenance note: setup scaffold `23ae633`/`b5f25da` only (docs, draft schema, smoke probe, no product), everything shown built Oct 27 to Nov 4.
