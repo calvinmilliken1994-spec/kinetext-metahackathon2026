@@ -1,0 +1,49 @@
+{
+  "dry": true,
+  "job": "job-20261102050029-1ebd79c6",
+  "timings": [
+    {
+      "scene": 1,
+      "title": "Before and after (Welcome montage)",
+      "seconds": 15.3,
+      "scriptSeconds": 14
+    },
+    {
+      "scene": 2,
+      "title": "What it does (montage, then New lesson)",
+      "seconds": 16.9,
+      "scriptSeconds": 16
+    },
+    {
+      "scene": 3,
+      "title": "Live build (screen-only, voiced afterwards)",
+      "seconds": 4.8,
+      "scriptSeconds": 60
+    },
+    {
+      "scene": 4,
+      "title": "Use it, and see how it was checked",
+      "seconds": 23.3,
+      "scriptSeconds": 25
+    },
+    {
+      "scene": 5,
+      "title": "A teacher signs off",
+      "seconds": 18.9,
+      "scriptSeconds": 20
+    },
+    {
+      "scene": 6,
+      "title": "Two Meta models, measured (Results)",
+      "seconds": 30.2,
+      "scriptSeconds": 30
+    },
+    {
+      "scene": 7,
+      "title": "Try it (Welcome again)",
+      "seconds": 14.9,
+      "scriptSeconds": 12
+    }
+  ],
+  "blocked": []
+}

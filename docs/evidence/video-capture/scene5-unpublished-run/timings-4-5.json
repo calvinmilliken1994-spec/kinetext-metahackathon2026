@@ -1,0 +1,19 @@
+{
+  "dry": true,
+  "job": "job-20261102045143-d9405202",
+  "timings": [
+    {
+      "scene": 4,
+      "title": "Use it, and see how it was checked",
+      "seconds": 23.2,
+      "scriptSeconds": 25
+    },
+    {
+      "scene": 5,
+      "title": "A teacher signs off",
+      "seconds": 19.5,
+      "scriptSeconds": 20
+    }
+  ],
+  "blocked": []
+}

@@ -45,3 +45,20 @@ Scene 3 (the live build) is the exception: it is recorded screen-only, sped up i
 
 Scene 4 and 5 act on the job scene 3 created; the driver keeps its id (from the URL after Build), or takes
 `--job <id>` to rehearse on a stored run.
+
+## As built (3 Nov 2026 rehearsal, `docs/evidence/video-capture/rehearsal.md`)
+
+- Run: `node scripts/video/drive.mjs <all|N|N,M> [--dry] [--auto] [--job <id>] [--shots <dir>] [--close]`. `--auto`
+  starts scenes without F8 (rehearsals); `--shots` saves CDP screenshots and timings; `--close` closes Chrome at the end.
+- Window: on a screen larger than 1080p the page area is sized to exactly 1920×1080 and the window frame is slid
+  off the top-left edge (frame at -8,-31), so the page sits at screen 0,0. Record the region 0,0–1920×1080 in Tella.
+  On a 1920×1080 screen the window goes fullscreen instead. `--force-device-scale-factor=1` keeps CSS px = screen px.
+- `--dry` also blocks every non-GET `/api` request inside the browser (Fetch domain), not only the Build/Publish steps.
+- The job id comes from the `POST /api/jobs` response (Network domain), not the URL.
+- Scene 2: the Welcome hides the sidebar, so the cursor goes to "Explore read-only" and the driver cuts to
+  `?view=new&welcome=0&tour=0` (clicking it would start the first-run guide).
+- Scene 3 in `--dry` stops after subject + page and only reports whether the model picker and Build exist; the model
+  and Build selectors are unverified until the live take.
+- Scene 4 finds Magma's number from `GET /api/jobs/<id>` (the app numbers parts in spec order) and clicks the name,
+  then that number's marker on the diagram.
+- Scene 5 ticks only boxes that exist: a run that is already published has none ("Read by a teacher").
