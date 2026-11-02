@@ -211,7 +211,7 @@ export function guideSteps(i: GuideInput): GuideStep[] {
     }),
     step({
       id: 'review', title: 'Review and publish', view: 'review',
-      body: 'The teacher’s step. Read each part, hide any you do not want, then publish. Until then the lesson says “Teacher review pending”; it always says AI-written.',
+      body: 'The teacher’s step. Read each part, hide any you do not want, then publish. Until then the lesson says “Needs review”; it always says AI-written.',
       targets: ['[data-testid="review-page"] .page-head'], extras: ['[data-nav="review"]'],
     }),
     step({

@@ -69,7 +69,7 @@ test('steps read real counts and the run’s own model, and only claim a repair 
   for (const t of [60, 65, 90]) assert.doesNotMatch(check(t), /mistake|\bown\b/i, `at ${t} s`);
 });
 
-test('copy: the closing step does not clash with "Teacher review pending"; the try step fits the part', () => {
+test('copy: the closing step does not clash with "Needs review"; the try step fits the part', () => {
   const ready = tourSteps(sig(90)).find((x) => x.id === 'ready');
   assert.equal(ready?.title, 'Ready for your review');
   assert.doesNotMatch(`${ready?.title} ${ready?.body}`, /ready to teach/i);

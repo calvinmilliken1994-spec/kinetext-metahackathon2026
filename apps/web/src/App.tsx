@@ -39,6 +39,7 @@ import { ACCESS_INPUT_ID } from './components/AccessForm.tsx';
 import { navTarget, pathFromSearch, searchForPath, searchForView, sidebarSections, VIEW_TITLES, viewFromSearch } from './lib/navigation.ts';
 import type { LessonPath, MainView, NavId } from './lib/navigation.ts';
 import { accessFooter } from './lib/access.ts';
+import { lessonReviewCue } from './lib/reviewState.ts';
 import { SourcePanel, SourceTab } from './components/SourcePanel.tsx';
 import type { Flash } from './components/SourcePanel.tsx';
 import { RunsSection, StepsSection } from './components/PipelinePanel.tsx';
@@ -648,8 +649,14 @@ export function App() {
     </button>
   );
 
+  // Library tidy: a finished unpublished lesson gets the amber Needs review notice; activities get no review status.
+  const reviewCue = ready === null ? 'line' : lessonReviewCue({
+    status: ready.summary.status, lesson: ready.lessonData !== undefined, published: (ready.lessonData?.review ?? null) !== null, live: liveCtx !== null,
+  });
   const provenanceLine = (
     <Provenance
+      reviewCue={reviewCue}
+      onReview={() => navigate('review')}
       disclosure={disclosure}
       phrases={repairCounts === null ? [] : repairPhrases(repairCounts)}
       onDetails={ready === null ? undefined : () => openDrawer('runs')}
@@ -721,6 +728,9 @@ export function App() {
                     onSubjectFilter={setSubjectFilter}
                     onOpen={openFromList}
                     onNewLesson={() => navigate('new')}
+                    access={access}
+                    onJobsChanged={refreshJobs}
+                    onReview={() => navigate('review')}
                   />
                 )}
                 {view === 'how' && (

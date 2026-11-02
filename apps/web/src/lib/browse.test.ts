@@ -1,6 +1,6 @@
 /// <reference types="node" />
 // Stage 10 section B: the New lesson page's library list (search + subject) and the All lessons page (finished lessons,
-// newest first, subject filter and search). Pure helpers so the two pages and node tests share them.
+// newest first, subject filter and search; archived runs and the Published shelf are in libraryTidy.test.ts). Pure helpers so the two pages and node tests share them.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { browseLessons, browsePages, chipUnit, lessonsByPage, lessonsLede, matchesQuery, pageBreakdown, partsText, previewExcerpt, rowsCountText } from './browse.ts';
@@ -55,11 +55,11 @@ const JOBS = [
   job('j6', 'gone', '2026-10-27T10:00:00Z'),
 ];
 
-test('lessonsByPage: finished lessons per page with the newest one to open', () => {
+test('lessonsByPage: finished lessons per page with the newest one to open (none published here)', () => {
   const m = lessonsByPage(JOBS);
-  assert.deepEqual(m.get('water'), { count: 2, latest: 'j2' });
+  assert.deepEqual(m.get('water'), { count: 2, open: 'j2', published: false });
   assert.equal(m.get('newton'), undefined, 'a failed run is not a lesson');
-  assert.deepEqual(m.get('lift'), { count: 1, latest: 'j4' });
+  assert.deepEqual(m.get('lift'), { count: 1, open: 'j4', published: false });
 });
 
 test('browseLessons: finished lessons newest first; All runs adds failed and declined runs', () => {
@@ -69,7 +69,7 @@ test('browseLessons: finished lessons newest first; All runs adds failed and dec
   assert.deepEqual(ids({ query: '', subject: null, scope: 'all' }), ['j2', 'j3', 'j1', 'j4', 'j5', 'j6']);
   assert.deepEqual(ids({ query: '', subject: 'physics', scope: 'all' }), ['j3', 'j4']);
   assert.deepEqual(ids({ query: 'hydrologic', subject: null, scope: 'lessons' }), ['j2', 'j1']);
-  assert.deepEqual(ids({ query: '', subject: null, scope: 'latest' }), ['j2', 'j4', 'j6'], 'the newest finished lesson of each page');
+  assert.deepEqual(ids({ query: '', subject: null, scope: 'latest' }), ['j2', 'j4', 'j6'], 'no lesson published: the newest finished lesson of each page');
   const gone = browseLessons(JOBS, byId, { query: '', subject: null, scope: 'lessons' }).find((r) => r.jobId === 'j6');
   assert.equal(gone?.title, 'A page no longer listed');
   assert.equal(gone?.subject, 'other');
@@ -116,8 +116,8 @@ test('lessonsLede: says what the pages are, and why there are more than the libr
 
 test('rowsCountText: the unit follows the list (pages, lessons, runs), singular for one', () => {
   const t = (scope: LessonScope, n: number, subject: string | null = null, query = '') => rowsCountText({ scope, count: n, subjectLabel: subject, query });
-  assert.equal(t('latest', 104), '104 pages · the newest lesson of each');
-  assert.equal(t('latest', 1), '1 page · the newest lesson of each');
+  assert.equal(t('latest', 104), '104 pages · the published or newest lesson of each');
+  assert.equal(t('latest', 1), '1 page · the published or newest lesson of each');
   assert.equal(t('lessons', 670), '670 lessons');
   assert.equal(t('lessons', 1), '1 lesson');
   assert.equal(t('all', 746), '746 runs');
@@ -125,12 +125,13 @@ test('rowsCountText: the unit follows the list (pages, lessons, runs), singular 
   assert.equal(t('latest', 0), 'No pages');
   assert.equal(t('lessons', 0), 'No lessons');
   assert.equal(t('all', 0), 'No runs');
-  assert.equal(t('latest', 19, 'Physics'), '19 pages in Physics · the newest lesson of each');
+  assert.equal(t('latest', 19, 'Physics'), '19 pages in Physics · the published or newest lesson of each');
   assert.equal(t('lessons', 3, 'Physics', ' water '), '3 lessons in Physics matching “water”');
 });
 
 test('chipUnit: what a subject chip counts follows the list too', () => {
   assert.equal(chipUnit('latest'), 'page');
+  assert.equal(chipUnit('archived'), 'run');
   assert.equal(chipUnit('lessons'), 'lesson');
   assert.equal(chipUnit('all'), 'run');
 });

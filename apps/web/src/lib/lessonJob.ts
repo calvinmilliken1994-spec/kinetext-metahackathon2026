@@ -94,6 +94,9 @@ export function parseJobSummary(raw: unknown): JobSummary {
   if (progress === null) delete out.lesson; else out.lesson = progress;
   // Stage 10b: the list marks a published lesson with its publish time.
   if (typeof raw.reviewPublishedAt !== 'string' || Number.isNaN(Date.parse(raw.reviewPublishedAt))) delete out.reviewPublishedAt;
+  // Library tidy: an archived run carries its archive time; a run the app links to is pinned. Anything else reads as absent.
+  if (typeof raw.archivedAt !== 'string' || Number.isNaN(Date.parse(raw.archivedAt))) delete out.archivedAt;
+  if (raw.pinned !== true) delete out.pinned;
   return out as unknown as JobSummary;
 }
 

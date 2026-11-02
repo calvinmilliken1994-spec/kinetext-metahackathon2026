@@ -43,7 +43,7 @@ export const HOW_STEPS: readonly HowStep[] = [
   },
   {
     title: 'A teacher reviews it',
-    body: 'Every lesson is marked AI-written and “Teacher review pending” until a teacher has checked it. Publishing happens on Review and publish: the teacher reads each part, ticks it, and publishes that one lesson.',
+    body: 'Every lesson is marked AI-written and “Needs review” until a teacher has checked it. Publishing happens on Review and publish: the teacher reads each part, ticks it, and publishes that one lesson.',
     link: { label: 'Open Review and publish', nav: 'review' },
   },
 ];

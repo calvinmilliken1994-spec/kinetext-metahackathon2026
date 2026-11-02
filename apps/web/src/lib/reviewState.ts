@@ -1,7 +1,7 @@
 // Stage 10b slice R: the teacher review of one lesson, as the web app reads it (docs/specs/STAGE-10b-review-and-results.md).
 // The API stores `review.json` (apps/api/review.ts) and GET /api/jobs/:id adds it as `review`. These are the small pure
-// pieces every view shares: parsing, the date, and the wording that replaces "needs teacher review" for ONE published
-// lesson. "AI-written" is never touched. No React, no DOM, no network; kept free of other lib imports so any lib file can use it.
+// pieces every view shares: parsing, the date, the review badge, and the wording that replaces "Needs review" (and the
+// part tag "needs teacher review") for ONE published lesson. "AI-written" is never touched. No React, no DOM, no network; kept free of other lib imports so any lib file can use it.
 
 export interface ReviewState {
   status: 'published';
@@ -35,7 +35,36 @@ export function reviewDate(iso: string, utc = false): string {
     : `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
 }
 
-/** The lesson's status line once published, in place of "Teacher review pending". */
+/** The lesson's review status until a teacher publishes it (Library tidy: one wording everywhere). */
+export const NEEDS_REVIEW = 'Needs review';
+/** What the amber notice on the lesson page says beside it. */
+export const NEEDS_REVIEW_DETAIL = 'AI-written and not yet checked by a teacher';
+
+/**
+ * The review mark of one run in All lessons: 'published', 'needs-review' for every other finished lesson, and none for
+ * classic activities (flow `activity`, or no flow on runs recorded before lessons existed), failed, declined or running
+ * runs: they cannot be reviewed.
+ */
+export type ReviewBadge = 'published' | 'needs-review' | null;
+
+export function reviewBadge(j: { status: string; flow?: string | undefined; reviewPublishedAt?: string | undefined; archivedAt?: string | undefined }): ReviewBadge {
+  if (j.reviewPublishedAt !== undefined) return 'published';
+  if (j.archivedAt !== undefined) return null; // an archived copy does not ask for a review
+  return j.status === 'succeeded' && j.flow === 'lesson' ? 'needs-review' : null;
+}
+
+/**
+ * What the lesson page shows under the title. 'notice': the amber Needs review notice with a way to Review and publish
+ * (a finished lesson nobody has published). 'line': the plain status line (a published lesson, or a build being watched).
+ * 'none': no review status at all (classic activities and runs that did not finish: they are not reviewable).
+ */
+export function lessonReviewCue(o: { status: string; lesson: boolean; published: boolean; live: boolean }): 'notice' | 'line' | 'none' {
+  if (!o.lesson) return 'none';
+  if (o.published || o.live || o.status === 'running') return 'line';
+  return o.status === 'succeeded' ? 'notice' : 'none';
+}
+
+/** The lesson's status line once published, in place of "Needs review". */
 export function reviewedStatus(review: ReviewState, utc = false): string {
   const date = reviewDate(review.publishedAt, utc);
   return date === '' ? 'Reviewed by a teacher' : `Reviewed by a teacher · published ${date}`;

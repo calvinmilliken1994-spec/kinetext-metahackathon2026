@@ -301,7 +301,7 @@ export function tourSteps(s: TourSignals): TourStep[] {
       targets: part(s.watchPart), needsReplay: true,
     }),
     step({
-      // Not "Ready to teach": the lesson still says "Teacher review pending" (review #6).
+      // Not "Ready to teach": the lesson still says "Needs review" (review #6).
       id: 'ready', title: 'Ready for your review',
       body: 'The strip now sums up the build: how long it took, the model calls it made and whether every part passed its checks.',
       targets: ['[data-tour="live-strip"]'], needsReplay: true,

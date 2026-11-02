@@ -3,7 +3,8 @@
  * Every colour is a custom property below; component rules only reference tokens.
  * Type: one family, five sizes (12 / 14 / 16 / 20 / 26 px) and three weights (400 / 500 / 600).
  * Colour meaning: neutral, accent (interactive), ok, bad, and one distinct hue reserved for system-made demo faults.
- * Yellow is only the evidence highlight in the source text. */
+ * Yellow is only the evidence highlight in the source text; its amber (the flash ring) also marks a lesson that still
+ * "Needs review" (--warn, mixed from existing tokens, no new literal). */
 
 /* ================================================================================================================
  * Tokens — dark (default). Page/surfaces/text/borders/interactive values follow dev.meta.ai's dark theme.
@@ -46,6 +47,11 @@
   --bad: #ff8f86; --bad-ink: #ffbab4; --bad-soft: #351c1b; --bad-line: #73342f;
   /* system-made demo fault: its own hue, used for nothing else */
   --fault: #cfa9ff; --fault-ink: #e3cdff; --fault-soft: #261d38; --fault-line: #57418a;
+  /* Needs review (Library tidy): the flash ring's amber, mixed with the theme's ink and panel (both themes) */
+  --warn: var(--flash-ring);
+  --warn-ink: color-mix(in srgb, var(--flash-ring) 70%, var(--ink));
+  --warn-soft: color-mix(in srgb, var(--flash-ring) 12%, var(--panel));
+  --warn-line: color-mix(in srgb, var(--flash-ring) 45%, var(--panel));
   /* charts and scenes (kept legible on the dark plot background) */
   --c-force: #ff9a52;
   --c-vel: #3cc6dc;
@@ -113,6 +119,8 @@
   --ok: #0d7444; --ok-ink: #0b5a34; --ok-soft: #e4f5eb; --ok-line: #a6dcbd;
   --bad: #b3261e; --bad-ink: #8c1d17; --bad-soft: #fdeceb; --bad-line: #f0b6b1;
   --fault: #6a3db6; --fault-ink: #4f2a91; --fault-soft: #f2ebfc; --fault-line: #cab4ee;
+  /* darker on light surfaces: amber text keeps 4.5:1 or better */
+  --warn-ink: color-mix(in srgb, var(--flash-ring) 55%, var(--ink));
   --c-force: #e8590c;
   --c-vel: #0b7285;
   --c-pos: #5f3dc4;

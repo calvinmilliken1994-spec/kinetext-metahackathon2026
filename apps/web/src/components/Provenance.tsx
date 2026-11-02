@@ -2,7 +2,8 @@ import { useContext, useId, useState } from 'react';
 import type { ReactNode } from 'react';
 import { CHECKED_SENTENCE } from '../lib/provenance.ts';
 import type { CountPhrase, ReceiptInput } from '../lib/provenance.ts';
-import { lessonStatusLine, provenanceSentence } from '../lib/partOrder.ts';
+import { provenanceSentence, reviewStatusView } from '../lib/partOrder.ts';
+import { NEEDS_REVIEW, NEEDS_REVIEW_DETAIL } from '../lib/reviewState.ts';
 import { IconChevronDown, IconChevronUp } from './icons.tsx';
 import { LessonPartsContext, LessonReviewContext } from './LessonPartsContext.ts';
 import { revealInPanels } from '../lib/scroll.ts';
@@ -25,15 +26,22 @@ interface Props {
   receipt?: ProvenanceReceipt | null | undefined;
   /** Stage 7b: the page's subject as a quiet label (subjectNote); teacher pages say it was detected by Muse. */
   subject?: { text: string; detected: boolean } | null | undefined;
+  /**
+   * Library tidy (lessonReviewCue): 'notice' = the amber Needs review notice with a way to Review and publish, unless the
+   * lesson is published; 'line' = the plain status line (default); 'none' = no review status (classic activities).
+   */
+  reviewCue?: 'notice' | 'line' | 'none' | undefined;
+  /** Opens Review and publish for this lesson (the notice's link). */
+  onReview?: (() => void) | undefined;
 }
 
 /**
- * The provenance block under a lesson's title (Set B). One status line ("Teacher review pending · 2 parts ready · 1 held
- * back") beside the collapsed trust receipt, then ONE sentence: AI-written by which model, from which publisher, who has
+ * The provenance block under a lesson's title (Set B). One status line ("Needs review · 2 parts ready · 1 held back"; for
+ * a finished unpublished lesson an amber Needs review notice with a link to Review and publish) beside the collapsed trust receipt, then ONE sentence: AI-written by which model, from which publisher, who has
  * not reviewed or endorsed it. What code checked and what Muse revised sit behind a small disclosure, with a way to the
  * repair story. A system-made demo fault is never folded away: its phrase stays on the line.
  */
-export function Provenance({ disclosure, phrases, onDetails, receipt = null, subject = null }: Props) {
+export function Provenance({ disclosure, phrases, onDetails, receipt = null, subject = null, reviewCue = 'line', onReview }: Props) {
   const [open, setOpen] = useState(false);
   const [more, setMore] = useState(false);
   const panelId = useId();
@@ -43,6 +51,9 @@ export function Provenance({ disclosure, phrases, onDetails, receipt = null, sub
   const faults = phrases.filter((p) => p.tone === 'fault');
   const folded = phrases.filter((p) => p.tone !== 'fault');
   const revised = folded.some((p) => p.tone === 'neutral');
+  // Library tidy: a published lesson keeps its line ("Reviewed by a teacher · published 2 Nov 2026"); an unpublished
+  // finished one gets the notice, with the part counts beside it; a classic activity gets only its counts (if any).
+  const { notice, text: statusText } = reviewStatusView(reviewCue, counts, review);
   // "See how": open the runs drawer, then bring its repair story into view (the drawer opens scrolled to its top).
   const seeHow = (): void => {
     onDetails?.();
@@ -53,9 +64,16 @@ export function Provenance({ disclosure, phrases, onDetails, receipt = null, sub
   };
   return (
     <div className="provenance" data-testid="provenance">
+      {notice && (
+        <p className="review-notice" data-testid="review-notice">
+          <span className="review-notice-head">{NEEDS_REVIEW}</span>
+          <span className="review-notice-text">{NEEDS_REVIEW_DETAIL}</span>
+          {onReview !== undefined && <button type="button" className="link-btn review-notice-link" onClick={onReview}>Review and publish</button>}
+        </p>
+      )}
       <p className="prov-status">
         {subject !== null && <span className="prov-subject" data-testid="lesson-subject">{subject.text}</span>}
-        <span className="review-status" data-testid="review-status">{lessonStatusLine(counts, review)}</span>
+        {statusText !== '' && <span className="review-status" data-testid="review-status">{statusText}</span>}
         {receipt !== null && <TrustReceipt input={receipt.input} open={open} onToggle={() => setOpen((v) => !v)} panelId={panelId} />}
         {onDetails !== undefined && <button type="button" className="link-btn" onClick={onDetails}>Run details</button>}
       </p>

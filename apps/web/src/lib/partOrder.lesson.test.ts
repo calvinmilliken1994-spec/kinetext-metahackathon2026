@@ -52,10 +52,10 @@ test('nothing passed: no lead, every part left out', () => {
   assert.equal(l.leftOut.length, 1);
 });
 
-test('status line: review pending, parts ready, held back', () => {
-  assert.equal(lessonStatusLine({ ready: 2, heldBack: 1 }), 'Teacher review pending · 2 parts ready · 1 held back');
-  assert.equal(lessonStatusLine({ ready: 1, heldBack: 0 }), 'Teacher review pending · 1 part ready');
-  assert.equal(lessonStatusLine(null), 'Teacher review pending');
+test('status line: Needs review, parts ready, held back', () => {
+  assert.equal(lessonStatusLine({ ready: 2, heldBack: 1 }), 'Needs review · 2 parts ready · 1 held back');
+  assert.equal(lessonStatusLine({ ready: 1, heldBack: 0 }), 'Needs review · 1 part ready');
+  assert.equal(lessonStatusLine(null), 'Needs review');
   assert.deepEqual(partCounts([{ status: 'passed' }, { status: 'failed' }, { status: 'skipped' }]), { ready: 1, heldBack: 2 });
 });
 

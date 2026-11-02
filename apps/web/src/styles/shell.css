@@ -4,6 +4,15 @@
 .provenance { display: grid; gap: 6px; max-width: none; }
 .prov-status { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; }
 .review-status { font-size: var(--fs-14); font-weight: var(--fw-medium); color: var(--ink); }
+/* Library tidy: a finished lesson nobody has published. Amber, one line, with the way to Review and publish. */
+.review-notice {
+  display: flex; flex-wrap: wrap; align-items: baseline; inline-size: fit-content; max-inline-size: 100%; gap: 2px 10px; padding: 5px 12px;
+  border: 1px solid var(--warn-line); border-radius: var(--r); background: var(--warn-soft); font-size: var(--fs-14); line-height: 1.45;
+}
+.review-notice-head { display: inline-flex; align-items: center; gap: 7px; font-weight: var(--fw-bold); color: var(--warn-ink); white-space: nowrap; }
+.review-notice-head::before { content: ""; flex: none; inline-size: 7px; block-size: 7px; border-radius: 50%; background: var(--warn); }
+.review-notice-text { color: var(--ink-2); }
+.review-notice-link { white-space: nowrap; }
 .prov-line { max-width: 110ch; color: var(--ink-3); }
 
 /* The receipt is a quiet button: counts in tabular figures, colour only when something did not pass. */

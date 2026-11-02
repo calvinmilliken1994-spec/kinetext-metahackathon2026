@@ -32,6 +32,9 @@ import { SubjectChips } from './SubjectChips.tsx';
 
 export type SourcePath = 'library' | 'own';
 
+/** Finished lessons per page, archived runs left out (Library tidy): how many, and the one to open (published first). */
+type PageLessons = ReturnType<typeof lessonsByPage>;
+
 export interface NewLessonPageProps {
   sources: Loadable<SourceMeta[]>;
   jobs: readonly JobSummary[];
@@ -144,7 +147,7 @@ export function NewLessonPage(p: NewLessonPageProps) {
 // ---- the library path ------------------------------------------------------------------------------------------
 
 function LibraryList(p: NewLessonPageProps & {
-  list: readonly SourceMeta[]; lessons: Map<string, { count: number; latest: string }>;
+  list: readonly SourceMeta[]; lessons: PageLessons;
   query: string; onQuery: (q: string) => void; found: LibraryResult<SourceMeta>; onClear: () => void;
 }) {
   const uid = useId();
@@ -299,7 +302,7 @@ function OwnSource(p: NewLessonPageProps & { list: readonly SourceMeta[]; locked
 
 function Preview({ path, target, doc, lessons, onOpenLesson, outside, onClear }: {
   path: SourcePath; target: SourceMeta | null; doc: Loadable<SourceDoc> | null;
-  lessons: Map<string, { count: number; latest: string }>; onOpenLesson: (jobId: string, sourceId: string) => void;
+  lessons: PageLessons; onOpenLesson: (jobId: string, sourceId: string) => void;
   /** M1: the chosen page is not in the current results. */
   outside: boolean; onClear: () => void;
 }) {
@@ -340,7 +343,7 @@ function Preview({ path, target, doc, lessons, onOpenLesson, outside, onClear }:
       {made !== undefined && (
         <p className="nl-made">
           {plural(made.count, 'lesson')} already built from this page.{' '}
-          <button type="button" className="link-btn" onClick={() => onOpenLesson(made.latest, target.id)}>Open the newest</button>
+          <button type="button" className="link-btn" onClick={() => onOpenLesson(made.open, target.id)}>{made.published ? 'Open the published lesson' : 'Open the newest'}</button>
         </p>
       )}
     </section>

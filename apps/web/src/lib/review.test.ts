@@ -61,12 +61,12 @@ test('part tags: "needs teacher review" until published, then "teacher-reviewed"
 
 // ---- the lesson's status line -----------------------------------------------------------------------------------------
 
-test('status line: published replaces "Teacher review pending" and keeps the part counts', () => {
-  assert.equal(lessonStatusLine({ ready: 2, heldBack: 1 }), 'Teacher review pending · 2 parts ready · 1 held back');
+test('status line: published replaces "Needs review" and keeps the part counts', () => {
+  assert.equal(lessonStatusLine({ ready: 2, heldBack: 1 }), 'Needs review · 2 parts ready · 1 held back');
   assert.equal(lessonStatusLine({ ready: 2, heldBack: 1 }, PUBLISHED, true), 'Reviewed by a teacher · published 2 Nov 2026 · 2 parts ready · 1 held back');
   assert.equal(lessonStatusLine({ ready: 1, heldBack: 0 }, PUBLISHED, true), 'Reviewed by a teacher · published 2 Nov 2026 · 1 part ready');
   assert.equal(lessonStatusLine(null, PUBLISHED, true), 'Reviewed by a teacher · published 2 Nov 2026');
-  assert.equal(lessonStatusLine(null, null), 'Teacher review pending');
+  assert.equal(lessonStatusLine(null, null), 'Needs review');
 });
 
 // ---- hidden parts leave the lesson, the checks list and the slides -----------------------------------------------------

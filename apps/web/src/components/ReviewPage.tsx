@@ -172,7 +172,7 @@ function ReviewBody({ detail, title, access, onAccess, onShowLesson }: ReviewPag
 
       <p ref={statusRef} className="rv-status" tabIndex={-1} role="status" aria-live="polite" data-testid="review-status-message">
         {justDone === 'published' && review !== null && `Published. ${lessonTitle} now reads “${reviewedStatus(review)}”.`}
-        {justDone === 'unpublished' && 'Unpublished. The lesson reads “Teacher review pending” again and every part is back in it.'}
+        {justDone === 'unpublished' && 'Unpublished. The lesson reads “Needs review” again and every part is back in it.'}
       </p>
       {error !== null && <p className="callout callout-error" role="alert" data-testid="review-error">{error}</p>}
 
@@ -268,7 +268,7 @@ function ReviewBody({ detail, title, access, onAccess, onShowLesson }: ReviewPag
         <h2 id={`${uid}-pub`} className="sr-only">{published ? 'Unpublish' : 'Publish'}</h2>
         {published ? (
           <>
-            <p className="rv-note">Unpublishing puts “Teacher review pending” back on this lesson and brings back any hidden parts. It changes this lesson only.</p>
+            <p className="rv-note">Unpublishing puts “Needs review” back on this lesson and brings back any hidden parts. It changes this lesson only.</p>
             <div className="rv-bar">
               <button type="button" className="btn" onClick={unpublish} disabled={!canEdit}>{busy ? 'Working…' : 'Unpublish'}</button>
             </div>

@@ -9,6 +9,7 @@ import { ACCESS_MESSAGES, accessFromInfo, accessFromResponse, parseAccessInfo } 
 import type { Access } from './lib/access.ts';
 import { createJobBody, normaliseJobDetail, parseJobSummary } from './lib/lessonJob.ts';
 import { parseReview } from './lib/reviewState.ts';
+import { parseArchiveAnswer, parseBulkAnswer } from './lib/archive.ts';
 import type { ReviewState } from './lib/reviewState.ts';
 import type { FlowId, LessonData, LessonProgress } from './lib/lessonJob.ts';
 import type { ModelId, ModelOption } from './lib/models.ts';
@@ -66,6 +67,10 @@ export interface JobSummary {
   lesson?: LessonProgress;
   /** Stage 10b: when a teacher published this lesson (the job list only; the detail carries the whole review). */
   reviewPublishedAt?: string;
+  /** Library tidy: when a teacher archived this run (absent = not archived). */
+  archivedAt?: string;
+  /** Library tidy: the app links to this run by id, so it is never archived (absent = not pinned). */
+  pinned?: boolean;
 }
 
 /** One stored revision of the activity spec and its validation report (Stage 5). */
@@ -183,6 +188,27 @@ export const api = {
     });
     return parseReview(raw?.review);
   },
+  /**
+   * Library tidy: archive one run or restore it ({ action: 'archive' | 'restore' }). The answer is its archive time, null
+   * once restored. A refusal throws an ApiError with the API's code (ACCESS_REQUIRED, RUN_PINNED, RUN_PUBLISHED, RUN_ACTIVE, …).
+   */
+  postArchive: async (jobId: string, action: 'archive' | 'restore'): Promise<{ archivedAt: string | null }> => {
+    const raw = await request<unknown>(`/api/jobs/${encodeURIComponent(jobId)}/archive`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ action }),
+    });
+    const answer = parseArchiveAnswer(raw);
+    if (answer === null) throw new ApiError(200, 'BAD_ANSWER');
+    return answer;
+  },
+  /** Library tidy: archive every page's older copies, or restore every archived run; for one page with `sourceId`, else everywhere. */
+  postArchiveBulk: async (action: 'archive-older' | 'restore-all', sourceId?: string): Promise<{ archived: string[]; restored: string[] }> =>
+    parseBulkAnswer(await request<unknown>('/api/archive', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(sourceId === undefined ? { action } : { action, sourceId }),
+    })),
   /** Store a teacher-pasted text. 201 = created, 200 = the same text was stored before. */
   createSource: (input: UserSourceInput) =>
     request<CreatedSource>('/api/sources', {

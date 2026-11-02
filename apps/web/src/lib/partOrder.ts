@@ -8,7 +8,7 @@
 
 import { isKitGenComponentId } from '../../../../packages/contracts/kit.ts';
 import type { LessonCard, LessonItem } from './lesson.ts';
-import { reviewedStatus } from './reviewState.ts';
+import { NEEDS_REVIEW, reviewedStatus } from './reviewState.ts';
 import type { ReviewState } from './reviewState.ts';
 
 /** A part's kind: a kit componentId, or 'simulation' / 'timeline' for a premium or classic activity. */
@@ -105,21 +105,35 @@ export function partCounts(cards: readonly Pick<LessonCard, 'status'>[]): PartCo
   return { ready, heldBack: cards.length - ready };
 }
 
-/** The lesson's review status, said once. */
-export const TEACHER_REVIEW_PENDING = 'Teacher review pending';
+/** '2 parts ready · 1 held back': the counts alone, for beside the Needs review notice. Empty when unknown or none. */
+export function partCountsLine(counts: PartCounts | null): string {
+  if (counts === null) return '';
+  const out: string[] = [];
+  if (counts.ready > 0) out.push(`${counts.ready} ${counts.ready === 1 ? 'part' : 'parts'} ready`);
+  if (counts.heldBack > 0) out.push(`${counts.heldBack} held back`);
+  return out.join(' · ');
+}
 
 /**
- * 'Teacher review pending · 2 parts ready · 1 held back'. Counts are left out when unknown (a build still running).
+ * 'Needs review · 2 parts ready · 1 held back'. Counts are left out when unknown (a build still running).
  * A published lesson (Stage 10b) reads 'Reviewed by a teacher · published 2 Nov 2026 · 2 parts ready' instead; `utc` pins
  * the date's time zone for tests.
  */
 export function lessonStatusLine(counts: PartCounts | null, review: ReviewState | null = null, utc = false): string {
-  const head = review === null ? TEACHER_REVIEW_PENDING : reviewedStatus(review, utc);
-  if (counts === null) return head;
-  const out = [head];
-  if (counts.ready > 0) out.push(`${counts.ready} ${counts.ready === 1 ? 'part' : 'parts'} ready`);
-  if (counts.heldBack > 0) out.push(`${counts.heldBack} held back`);
-  return out.join(' · ');
+  const head = review === null ? NEEDS_REVIEW : reviewedStatus(review, utc);
+  const tail = partCountsLine(counts);
+  return tail === '' ? head : `${head} · ${tail}`;
+}
+
+/**
+ * Library tidy: what the line under a lesson's title holds for its review cue (lessonReviewCue). `notice`: show the amber
+ * Needs review notice, with the part counts as `text` beside it. A published lesson always keeps its reviewed line; a
+ * classic activity ('none') shows only its counts.
+ */
+export function reviewStatusView(cue: 'notice' | 'line' | 'none', counts: PartCounts | null, review: ReviewState | null, utc = false): { notice: boolean; text: string } {
+  if (cue === 'notice' && review === null) return { notice: true, text: partCountsLine(counts) };
+  if (cue === 'none') return { notice: false, text: partCountsLine(counts) };
+  return { notice: false, text: lessonStatusLine(counts, review, utc) };
 }
 
 /**

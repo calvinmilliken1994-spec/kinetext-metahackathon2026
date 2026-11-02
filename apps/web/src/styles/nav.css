@@ -238,6 +238,59 @@ input[type="search"]::-webkit-search-cancel-button { cursor: pointer; }
 .ll-when { text-align: right; font-variant-numeric: tabular-nums; }
 .ll-more { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding-top: 16px; }
 
+/* Library tidy: review marks, the Published shelf, and the archive controls (with access) */
+.ll-review { display: inline-flex; align-items: center; gap: 6px; font-size: var(--fs-14); font-weight: var(--fw-medium); color: var(--warn-ink); white-space: nowrap; }
+.ll-review::before { content: ""; flex: none; inline-size: 7px; block-size: 7px; border-radius: 50%; background: var(--warn); }
+.ll-archived { font-size: var(--fs-14); font-weight: var(--fw-regular); color: var(--ink-3); white-space: nowrap; }
+.ll-scope-n { margin-left: 6px; font-variant-numeric: tabular-nums; color: var(--ink-3); }
+.ll-scope-btn[aria-pressed="true"] .ll-scope-n { color: var(--ink-2); }
+
+.ll-shelf { display: grid; gap: 10px; }
+.ll-shelf-title { display: flex; align-items: baseline; gap: 8px; font-size: var(--fs-16); font-weight: var(--fw-bold); color: var(--ink); }
+.ll-shelf-n { font-size: var(--fs-14); font-weight: var(--fw-regular); color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.ll-shelf-empty { font-size: var(--fs-14); line-height: 1.5; color: var(--ink-2); }
+.ll-shelf-more { justify-self: start; font-size: var(--fs-14); }
+.ll-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 10px; }
+.ll-cards > li { min-width: 0; }
+.ll-card {
+  display: grid; align-content: start; gap: 4px; inline-size: 100%; block-size: 100%; padding: 11px 14px;
+  border: 1px solid var(--line-2); border-radius: var(--r); background: transparent; color: var(--ink-3);
+  font-size: var(--fs-14); text-align: left; cursor: pointer; transition: background 0.12s, border-color 0.12s;
+}
+.ll-card:hover { background: var(--panel-2); border-color: var(--line-3); }
+.ll-card:focus-visible { outline-offset: 2px; }
+.ll-card.is-open { background: var(--accent-soft); border-color: var(--accent-line); }
+.ll-card-title { overflow: hidden; color: var(--ink); font-weight: var(--fw-medium); text-overflow: ellipsis; white-space: nowrap; }
+.ll-card-meta { display: flex; flex-wrap: wrap; gap: 0 6px; min-width: 0; }
+.ll-card-date { color: var(--ok); font-weight: var(--fw-medium); }
+.ll-card-date .mark { margin-right: 4px; }
+
+.ll-countbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; min-height: 30px; }
+.ll-status { font-size: var(--fs-14); color: var(--ink); }
+.ll-status:empty { display: none; }
+.ll-status:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; border-radius: var(--r); }
+.ll-confirm { display: grid; gap: 10px; max-width: 92ch; padding: 12px 14px; border: 1px solid var(--line-2); border-radius: var(--r); background: var(--panel-2); }
+.ll-confirm-text { font-size: var(--fs-14); line-height: 1.5; color: var(--ink); }
+.ll-confirm-bar { display: flex; flex-wrap: wrap; gap: 8px; }
+.ll-table.has-act { --ll-act-w: 150px; }
+.ll-table.has-act .ll-head { padding-right: calc(12px + var(--ll-act-w)); }
+.ll-table.has-act .ll-rows > li { display: grid; grid-template-columns: minmax(0, 1fr) var(--ll-act-w); align-items: center; transition: background 0.12s; }
+/* The hover and open bands run under the action too, so the row reads as one line. */
+.ll-table.has-act .ll-rows > li:hover { background: var(--panel-2); }
+.ll-table.has-act .ll-rows > li:has(.ll-row.is-open) { background: var(--accent-soft); }
+.ll-table.has-act .ll-row:hover, .ll-table.has-act .ll-row.is-open { background: transparent; }
+.ll-act { display: flex; justify-content: flex-end; padding-right: 12px; }
+.ll-act-btn {
+  padding: 4px 10px; border: 1px solid var(--line-2); border-radius: var(--r-s); background: transparent; color: var(--ink-2);
+  font-size: var(--fs-14); font-weight: var(--fw-medium); white-space: nowrap; cursor: pointer; transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+.ll-act-btn:hover:not(:disabled) { background: var(--panel-2); color: var(--ink); border-color: var(--line-3); }
+.ll-act-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.ll-act-note { font-size: var(--fs-14); color: var(--ink-3); }
+/* In the rows the action stays quiet until its row is pointed at or it has focus: a column of outlined buttons is loud. */
+.ll-rows .ll-act-btn { border-color: transparent; color: var(--ink-3); }
+.ll-rows > li:hover .ll-act-btn:not(:disabled), .ll-rows .ll-act-btn:focus-visible { border-color: var(--line-2); color: var(--ink-2); }
+
 /* ---- How it works ---- */
 .page-how { max-width: 840px; gap: 40px; }
 .how-section { display: grid; gap: 14px; }
