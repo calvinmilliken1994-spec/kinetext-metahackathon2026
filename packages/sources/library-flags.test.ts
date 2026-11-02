@@ -44,9 +44,10 @@ test('exactly the six frozen pages are retired, and every one still loads with a
   }
 });
 
-test('physics after Stage 7e: 13 active pages, 6 retired, and no page is both featured and retired', () => {
+test('physics: 14 active pages (13 after Stage 7e + the airplane-parts figure page), 6 retired, and no page is both featured and retired', () => {
   const physics = listSourceIds().filter((id) => loadSourceMeta(id).subject === 'physics');
-  assert.equal(physics.filter((id) => !isRetired(loadSourceMeta(id))).length, 13);
+  // 2026-11-02: nasa-grc-airplane-parts-function (SAM figure candidate with a label-diagram figure) joined physics.
+  assert.equal(physics.filter((id) => !isRetired(loadSourceMeta(id))).length, 14);
   assert.equal(physics.filter((id) => isRetired(loadSourceMeta(id))).length, 6);
   for (const id of listSourceIds()) {
     const m = loadSourceMeta(id);

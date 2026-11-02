@@ -1,0 +1,13 @@
+{
+  "id": "nasa-grc-airplane-parts-function",
+  "title": "Airplane Parts and Function — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+  "subject": "physics",
+  "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/airplane-parts-function/",
+  "license": "US-Gov-Work",
+  "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+  "sha256": "fbfcc2a718237b414aef7959d17b324fc81952bc06aab90fd56f1907a15477b5",
+  "textFile": "nasa-grc-airplane-parts-function.txt",
+  "retrievedAt": "2026-11-02T04:30:14Z",
+  "transcription": "Main article text only (site banner, menus, the 'On this page:' sidenav, breadcrumbs, the feedback form and footer removed); H1 title line from the page's own H1. The figure (labelled airliner drawing) is not part of the text: it is stored separately as figure nasa-grc-airplane-parts-1; the page gives it no caption (alt text 'Diagram of airplane parts', not kept), and the right-aligned 'NASA-Glenn-Airplane-Parts' download link under it (a PDF of the figure) is removed. The section headings ('Wings', 'Vertical and Horizontal Stabilizer', 'Flaps and Spoilers', 'Fuselage') kept as their own lines. Bold terms (vertical stabilizer, horizontal stabilizer, canard, Slats, cockpit) flattened to plain text; non-breaking spaces around inline links rendered as ordinary spaces. Page quirks kept as printed: 'In the figure, these moving sections are colored brown.' (the figure draws them dark blue), 'Wright brother’s', and the closing parenthesis after the quote in “duck”). Whitespace normalised, LF.",
+  "purpose": "library: the parts of an airliner and what each does — wings generating most of the lift (winglets reduce drag; turbine engines under the wings provide thrust to overcome drag); the tail's fixed horizontal stabilizer (prevents pitch) and vertical stabilizer (prevents yaw), and the canard of the Wright aircraft; the hinged control surfaces — rudder (tail left/right), elevator (tail up/down), aileron (roll) and spoilers (disrupt the flow, decrease lift, roll and slow the plane); flaps and slats deployed at takeoff and landing; the fuselage holding the pieces together, with the cockpit at the front and passengers, cargo and sometimes fuel behind; and other configurations (pusher propellers, buried jet engines, stabilators). Carries figure nasa-grc-airplane-parts-1 (labelled airliner drawing, NASA insignia removed) for label the diagram; also fits a compare table of part vs function and quiz cards with predict-then-reveal."
+}

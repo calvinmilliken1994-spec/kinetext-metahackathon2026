@@ -1,0 +1,47 @@
+# What Are Volcano Hazards?
+
+Volcanoes give rise to numerous geologic and hydrologic hazards. U.S. Geological Survey (USGS) scientists are assessing hazards at many of the almost 70 active and potentially active volcanoes in the United States. They are closely monitoring activity at the most dangerous of these volcanoes and are prepared to issue warnings of impending eruptions or other hazardous events.
+
+More than 50 volcanoes in the United States have erupted one or more times in the past 200 years. The most volcanically active regions of the Nation are in Alaska, Hawaii, California, Oregon, and Washington. Volcanoes produce a wide variety of hazards that can kill people and destroy property. Large explosive eruptions can endanger people and property hundreds of miles away and even affect global climate. Some of the volcano hazards described below, such as landslides, can occur even when a volcano is not erupting.
+
+Volcanoes produce a wide variety of natural hazards that can kill people and destroy property. This simplified sketch shows a volcano typical of those found in the Western United States and Alaska, but many of these hazards also pose risks at other volcanoes, such as those in Hawaii. Some hazards, such as lahars and landslides, can occur even when a volcano is not erupting. (Hazards and terms in this diagram are highlighted in bold where they are discussed in the text below.)
+
+Eruption Columns and Clouds
+
+An explosive eruption blasts solid and molten rock fragments (tephra) and volcanic gases into the air with tremendous force. The largest rock fragments (bombs) usually fall back to the ground within 2 miles of the vent. Small fragments (less than about 0.1 inch across) of volcanic glass, minerals, and rock (ash) rise high into the air, forming a huge, billowing eruption column.
+
+Eruption columns can grow rapidly and reach more than 12 miles above a volcano in less than 30 minutes, forming an eruption cloud. The volcanic ash in the cloud can pose a serious hazard to aviation. During the past 15 years, about 80 commercial jets have been damaged by inadvertently flying into ash clouds, and several have nearly crashed because of engine failure. Large eruption clouds can extend hundreds of miles downwind, resulting in ash fall over enormous areas; the wind carries the smallest ash particles the farthest. Ash from the May 18, 1980, eruption of Mount St. Helens, Washington, fell over an area of 22,000 square miles in the Western United States. Heavy ash fall can collapse buildings, and even minor ash fall can damage crops, electronics, and machinery.
+
+Volcanic Gases
+
+Volcanoes emit gases during eruptions. Even when a volcano is not erupting, cracks in the ground allow gases to reach the surface through small openings called fumaroles. More than 90% of all gas emitted by volcanoes is water vapor (steam), most of which is heated ground water (underground water from rainfall and streams). Other common volcanic gases are carbon dioxide, sulfur dioxide, hydrogen sulfide, hydrogen, and fluorine. Sulfur dioxide gas can react with water droplets in the atmosphere to create acid rain, which causes corrosion and harms vegetation. Carbon dioxide is heavier than air and can be trapped in low areas in concentrations that are deadly to people and animals. Fluorine, which in high concentrations is toxic, can be adsorbed onto volcanic ash particles that later fall to the ground. The fluorine on the particles can poison livestock grazing on ash-coated grass and also contaminate domestic water supplies.
+
+Cataclysmic eruptions, such as the June 15, 1991, eruption of Mount Pinatubo (Philippines), inject huge amounts of sulfur dioxide gas into the stratosphere, where it combines with water to form an aerosol (mist) of sulfuric acid. By reflecting solar radiation, such aerosols can lower the Earth’s average surface temperature for extended periods of time by several degrees Fahrenheit (°F). These sulfuric acid aerosols also contribute to the destruction of the ozone layer by altering chlorine and nitrogen
+
+Lava Flows and Domes
+
+Molten rock (magma) that pours or oozes onto the Earth’s surface is called lava and forms lava flows. The higher a lava’s content of silica (silicon dioxide, SiO2), the less easily it flows. For example, low-silica basalt lava can form fast-moving (10 to 30 miles per hour) streams or can spread out in broad thin sheets as much as several miles wide. Since 1983, Kilauea Volcano on the Island of Hawaii has erupted basalt lava flows that have destroyed nearly 200 houses and severed the nearby coastal highway.
+
+In contrast, flows of higher-silica andesite and dacite lava tend to be thick and sluggish, traveling only short distances from a vent. Dacite and rhyolite lavas often squeeze out of a vent to form irregular mounds called lava domes. Between 1980 and 1986, a dacite lava dome at Mount St. Helens grew to about 1,000 feet high and 3,500 feet across.
+
+Pyroclastic Flows
+
+High-speed avalanches of hot ash, rock fragments, and gas can move down the sides of a volcano during explosive eruptions or when the steep side of a growing lava dome collapses and breaks apart. These pyroclastic flows can be as hot as 1,500°F and move at speeds of 100 to 150 miles per hour. Such flows tend to follow valleys and are capable of knocking down and burning everything in their paths. Lower-density pyroclastic flows, called pyroclastic surges, can easily overflow ridges hundreds of feet high.
+
+The climactic eruption of Mount St. Helens on May 18, 1980, generated a series of explosions that formed a huge pyroclastic surge. This so-called “lateral blast” destroyed an area of 230 square miles. Trees 6 feet in diameter were mowed down like blades of grass as far as 15 miles from the volcano.
+
+Volcano Landslides
+
+A landslide or debris avalanche is a rapid downhill movement of rocky material, snow, and (or) ice. Volcano landslides range in size from small movements of loose debris on the surface of a volcano to massive collapses of the entire summit or sides of a volcano. Steep volcanoes are susceptible to landslides because they are built up partly of layers of loose volcanic rock fragments. Some rocks on volcanoes have also been altered to soft, slippery clay minerals by circulating hot, acidic ground water. Landslides on volcano slopes are triggered when eruptions, heavy rainfall, or large earthquakes cause these materials to break free and move downhill.
+
+At least five large landslides have swept down the slopes of Mount Rainier, Washington, during the past 6,000 years. The largest volcano landslide in historical time occurred at the start of the May 18, 1980, Mount St. Helens eruption.
+
+The town of Weed, California, nestled below 14,162-foot-high Mount Shasta, is built on a huge debris avalanche that roared down the slopes of this volcano about 300,000 years ago. This ancient landslide (brown on inset map; arrows indicate flow directions) traveled more than 30 miles from the volcano’s peak, inundating an area of about 260 square miles. The upper part of Mount Shasta volcano (above 6,000 feet) is shown in dark green on the map.
+
+Lahars
+
+Mudflows or debris flows composed mostly of volcanic materials on the flanks of a volcano are called lahars. These flows of mud, rock, and water can rush down valleys and stream channels at speeds of 20 to 40 miles per hour and can travel more than 50 miles. Some lahars contain so much rock debris (60 to 90% by weight) that they look like fast-moving rivers of wet concrete. Close to their source, these flows are powerful enough to rip up and carry trees, houses, and huge boulders miles downstream. Farther downstream they entomb everything in their path in mud.
+
+Historically, lahars have been one of the deadliest volcano hazards. They can occur both during an eruption and when a volcano is quiet. The water that creates lahars can come from melting snow and ice (especially water from a glacier melted by a pyroclastic flow or surge), intense rainfall, or the breakout of a summit crater lake. Large lahars are a potential hazard to many communities downstream from glacier-clad volcanoes, such as Mount Rainier.
+
+To help protect lives and property, scientists of the USGS Volcano Hazards Program maintain a close watch on the volcanic regions of the United States, including the Pacific Coast States, Wyoming, Hawaii, and Alaska. This ongoing work enables the USGS to detect the early signs of volcano unrest and to warn the public of impending eruptions and associated hazards.

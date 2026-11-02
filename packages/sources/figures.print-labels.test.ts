@@ -54,6 +54,29 @@ test('real DNA figure: multi-line label joined with a space, untexted line skipp
   ]);
 });
 
+test('SAM figure candidates (2026-11-02): airplane and volcano curated labels are the page-named, SAM-sure parts only', () => {
+  // Airplane: the red function lines share their part's group but carry no text, so each label reads as the part name.
+  assert.deepEqual(loadFigurePartLabelGroups('nasa-grc-airplane-parts-1'), [1, 3, 5, 6, 8]);
+  assert.deepEqual(loadFigurePrintedLabels('nasa-grc-airplane-parts-1'), [
+    'Vertical Stabilizer',
+    'Horizontal Stabilizer',
+    'Wing',
+    'Flaps',
+    'Aileron',
+  ]);
+  assert.equal(loadFigureLabelBoxes('nasa-grc-airplane-parts-1').length, 29);
+  assert.equal(new Set(loadFigureLabelBoxes('nasa-grc-airplane-parts-1').map((b) => b.group)).size, 12);
+  assert.deepEqual(loadFigurePartLabelGroups('usgs-volcano-hazards-1'), [1, 5, 11, 16, 28]);
+  assert.deepEqual(loadFigurePrintedLabels('usgs-volcano-hazards-1'), [
+    'Eruption Cloud',
+    'Landslide',
+    'Lava Dome',
+    'Ground Water',
+    'Magma',
+  ]);
+  assert.equal(loadFigureLabelBoxes('usgs-volcano-hazards-1').length, 33);
+});
+
 test('an uncurated figure has no partLabelGroups and no printed-label list; unknown ids too', () => {
   assert.equal(loadFigurePartLabelGroups('medlineplus-protein-production-1'), undefined);
   assert.deepEqual(loadFigurePrintedLabels('medlineplus-protein-production-1'), []);

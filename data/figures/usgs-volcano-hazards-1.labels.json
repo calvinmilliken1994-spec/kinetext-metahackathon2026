@@ -1,0 +1,280 @@
+{
+  "figureId": "usgs-volcano-hazards-1",
+  "imageSha256": "68656464c9b3129df09dda33f7aaaf83b402e0cd9f81197c334ec4f652ee3cb4",
+  "width": 699,
+  "height": 816,
+  "method": "Windows built-in OCR (original and 2x LANCZOS upscale, coordinates halved) on the stored image; OCR lines split where the word gap exceeds 1.2x the text height; boxes from both scales with IoU > 0.25 unioned and padded 3 px. OCR found every printed word at one scale or the other (the '68' and the scale's '0' only at 2x), so no box was added by hand; checked by eye on a filled-cover overlay and a zoomed per-box contact sheet (2026-11-02, docs/evidence/sam-figure-candidates/labels-usgs-volcano-hazards-1*.jpg). No SAM concept prompts (no live calls). Every printed word is covered, including the silica/magma-type scale (its headings, the 100% / 68 / 63 / 53 / 0 ticks and the Rhyolite / Dacite / Andesite / Basalt names, each tick and name its own group). One group per printed label; multi-line labels share a group ('Ground' + 'Water'; 'Silica (SiO2)' + 'Content'; 'Magma' + 'Type'). The second line of 'Landslide (Debris Avalanche)' (group 5) carries no `text`: a group's texts are joined into the one printed label that LD-02/LD-10 check and that the worker sends to Muse, and the joined 'Landslide (Debris Avalanche)' is not a page phrase, so the page-wording rule would fall back to its last word ('avalanche') instead of the page's 'landslide'. Leader arrows and the scale's tick lines are not labels and are not covered.",
+  "boxes": [
+    {
+      "x1": 81,
+      "y1": 56,
+      "x2": 200,
+      "y2": 77,
+      "text": "Eruption Cloud",
+      "group": 1
+    },
+    {
+      "x1": 564,
+      "y1": 58,
+      "x2": 674,
+      "y2": 78,
+      "text": "Prevailing Wind",
+      "group": 2
+    },
+    {
+      "x1": 521,
+      "y1": 111,
+      "x2": 655,
+      "y2": 133,
+      "text": "Eruption Column",
+      "group": 3
+    },
+    {
+      "x1": 44,
+      "y1": 120,
+      "x2": 174,
+      "y2": 141,
+      "text": "Ash (Tephra) Fall",
+      "group": 4
+    },
+    {
+      "x1": 507,
+      "y1": 148,
+      "x2": 586,
+      "y2": 167,
+      "text": "Landslide",
+      "group": 5
+    },
+    {
+      "x1": 507,
+      "y1": 166,
+      "x2": 655,
+      "y2": 187,
+      "group": 5
+    },
+    {
+      "x1": 47,
+      "y1": 173,
+      "x2": 123,
+      "y2": 192,
+      "text": "Acid Rain",
+      "group": 6
+    },
+    {
+      "x1": 283,
+      "y1": 185,
+      "x2": 341,
+      "y2": 204,
+      "text": "Bombs",
+      "group": 7
+    },
+    {
+      "x1": 545,
+      "y1": 212,
+      "x2": 672,
+      "y2": 234,
+      "text": "Pyroclastic Flow",
+      "group": 8
+    },
+    {
+      "x1": 440,
+      "y1": 214,
+      "x2": 481,
+      "y2": 232,
+      "text": "Vent",
+      "group": 9
+    },
+    {
+      "x1": 83,
+      "y1": 228,
+      "x2": 242,
+      "y2": 249,
+      "text": "Lava Dome Collapse",
+      "group": 10
+    },
+    {
+      "x1": 276,
+      "y1": 236,
+      "x2": 367,
+      "y2": 254,
+      "text": "Lava Dome",
+      "group": 11
+    },
+    {
+      "x1": 77,
+      "y1": 258,
+      "x2": 204,
+      "y2": 280,
+      "text": "Pyroclastic Flow",
+      "group": 12
+    },
+    {
+      "x1": 603,
+      "y1": 283,
+      "x2": 687,
+      "y2": 302,
+      "text": "Fumaroles",
+      "group": 13
+    },
+    {
+      "x1": 3,
+      "y1": 298,
+      "x2": 212,
+      "y2": 319,
+      "text": "Lahar (Mud or Debris Flow)",
+      "group": 14
+    },
+    {
+      "x1": 15,
+      "y1": 341,
+      "x2": 96,
+      "y2": 360,
+      "text": "Lava Flow",
+      "group": 15
+    },
+    {
+      "x1": 552,
+      "y1": 428,
+      "x2": 616,
+      "y2": 447,
+      "text": "Ground",
+      "group": 16
+    },
+    {
+      "x1": 558,
+      "y1": 448,
+      "x2": 610,
+      "y2": 466,
+      "text": "Water",
+      "group": 16
+    },
+    {
+      "x1": 70,
+      "y1": 485,
+      "x2": 151,
+      "y2": 505,
+      "text": "Silica (SiO2)",
+      "group": 17
+    },
+    {
+      "x1": 91,
+      "y1": 501,
+      "x2": 152,
+      "y2": 517,
+      "text": "Content",
+      "group": 17
+    },
+    {
+      "x1": 207,
+      "y1": 486,
+      "x2": 263,
+      "y2": 504,
+      "text": "Magma",
+      "group": 18
+    },
+    {
+      "x1": 206,
+      "y1": 501,
+      "x2": 245,
+      "y2": 520,
+      "text": "Type",
+      "group": 18
+    },
+    {
+      "x1": 109,
+      "y1": 521,
+      "x2": 153,
+      "y2": 538,
+      "text": "100%",
+      "group": 19
+    },
+    {
+      "x1": 553,
+      "y1": 580,
+      "x2": 601,
+      "y2": 599,
+      "text": "Crack",
+      "group": 20
+    },
+    {
+      "x1": 206,
+      "y1": 588,
+      "x2": 263,
+      "y2": 607,
+      "text": "Rhyolite",
+      "group": 21
+    },
+    {
+      "x1": 129,
+      "y1": 595,
+      "x2": 152,
+      "y2": 612,
+      "text": "68",
+      "group": 22
+    },
+    {
+      "x1": 206,
+      "y1": 604,
+      "x2": 252,
+      "y2": 620,
+      "text": "Dacite",
+      "group": 23
+    },
+    {
+      "x1": 129,
+      "y1": 613,
+      "x2": 152,
+      "y2": 630,
+      "text": "63",
+      "group": 24
+    },
+    {
+      "x1": 206,
+      "y1": 621,
+      "x2": 268,
+      "y2": 637,
+      "text": "Andesite",
+      "group": 25
+    },
+    {
+      "x1": 130,
+      "y1": 634,
+      "x2": 152,
+      "y2": 651,
+      "text": "53",
+      "group": 26
+    },
+    {
+      "x1": 206,
+      "y1": 644,
+      "x2": 249,
+      "y2": 660,
+      "text": "Basalt",
+      "group": 27
+    },
+    {
+      "x1": 401,
+      "y1": 697,
+      "x2": 464,
+      "y2": 718,
+      "text": "Magma",
+      "group": 28
+    },
+    {
+      "x1": 138,
+      "y1": 767,
+      "x2": 152,
+      "y2": 784,
+      "text": "0",
+      "group": 29
+    }
+  ],
+  "partLabelGroups": [
+    1,
+    5,
+    11,
+    16,
+    28
+  ],
+  "partLabelGroupsNote": "Lead-curated (SAM figure candidates, 2026-11-02): label groups that name drawn parts, kept only when the page text names the label (whole, or by its last word: the LD-10 rule) AND SAM 3.1 was sure of the part in the probe (>= 0.73, docs/evidence/sam-figure-candidates/result.json): Eruption Cloud (group 1, 0.73), Landslide (5, 0.81), Lava Dome (11, 0.88), Ground Water (16, 0.80), Magma (28, the label at the magma chamber, 0.96; not group 18, the 'Magma Type' heading of the silica scale). All five are named whole by the page text, so none was dropped for wording. Below 0.73 and so left out: Lava Flow (15, 0.55), Eruption Column (3, 0.48), Bombs (7, 0.43), Fumaroles (13, 0.37), Vent (9, 0.29). Not probed: the other hazard labels (Pyroclastic Flow x2, Lahar, Lava Dome Collapse, Ash (Tephra) Fall, Acid Rain, Prevailing Wind, Crack) and the silica/magma-type scale text, which are covered but stay muted."
+}

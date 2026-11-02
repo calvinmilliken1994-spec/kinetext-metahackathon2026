@@ -1,0 +1,23 @@
+# Airplane Parts and Function
+
+This page shows the parts of an airplane and their functions. Airplanes are transportation devices which are designed to move people and cargo from one place to another. Airplanes come in many different shapes and sizes depending on the mission of the aircraft. The airplane shown on this slide is a turbine-powered airliner which has been chosen as a representative aircraft.
+
+Wings
+
+For any airplane to fly, one must lift the weight of the airplane itself, the fuel, the passengers, and the cargo. The wings generate most of the lift to hold the plane in the air. To generate lift, the airplane must be pushed through the air. The air resists the motion in the form of aerodynamic drag. Modern airliners use winglets on the tips of the wings to reduce drag. The turbine engines, which are located beneath the wings, provide the thrust to overcome drag and push the airplane forward through the air. Smaller, low-speed airplanes use propellers for the propulsion system instead of turbine engines.
+
+Vertical and Horizontal Stabilizer
+
+To control and maneuver the aircraft, smaller wings are located at the tail of the plane. The tail usually has a fixed horizontal piece, called the horizontal stabilizer, and a fixed vertical piece, called the vertical stabilizer. The stabilizers’ job is to provide stability for the aircraft, to keep it flying straight. The vertical stabilizer keeps the nose of the plane from swinging from side to side, which is called yaw. The horizontal stabilizer prevents an up-and-down motion of the nose, which is called pitch. (On the Wright brother’s first aircraft, the horizontal stabilizer was placed in front of the wings. Such a configuration is called a canard after the French word for “duck”).
+
+At the rear of the wings and stabilizers are small moving sections that are attached to the fixed sections by hinges. In the figure, these moving sections are colored brown. Changing the rear portion of a wing will change the amount of force that the wing produces. The ability to change forces gives us a means of controlling and maneuvering the airplane. The hinged part of the vertical stabilizer is called the rudder; it is used to deflect the tail to the left and right as viewed from the front of the fuselage. The hinged part of the horizontal stabilizer is called the elevator; it is used to deflect the tail up and down. The outboard hinged part of the wing is called the aileron; it is used to roll the wings from side to side. Most airliners can also be rolled from side to side by using the spoilers. Spoilers are small plates that are used to disrupt the flow over the wing and to change the amount of force by decreasing the lift when the spoiler is deployed.
+
+Flaps and Spoilers
+
+The wings have additional hinged, rear sections near the body that are called flaps. Flaps are deployed downward on takeoff and landing to increase the amount of force produced by the wing. On some aircraft, the front part of the wing will also deflect. Slats are used at takeoff and landing to produce additional force. The spoilers are also used during landing to slow the plane down and to counteract the flaps when the aircraft is on the ground. The next time you fly on an airplane, notice how the wing shape changes during takeoff and landing.
+
+Fuselage
+
+The fuselage or body of the airplane, holds all the pieces together. The pilots sit in the cockpit at the front of the fuselage. Passengers and cargo are carried in the rear of the fuselage. Some aircraft carry fuel in the fuselage; others carry the fuel in the wings.
+
+As mentioned above, the aircraft configuration in the figure was chosen only as an example. Individual aircraft may be configured quite differently from this airliner. The Wright Brothers 1903 Flyer had pusher propellers and the elevators at the front of the aircraft. Fighter aircraft often have the jet engines buried inside the fuselage instead of in pods hung beneath the wings. Many fighter aircraft also combine the horizontal stabilizer and elevator into a single stabilator surface. There are many possible aircraft configurations, but any configuration must provide for the four forces needed for flight.

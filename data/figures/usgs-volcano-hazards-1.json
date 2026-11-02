@@ -1,0 +1,18 @@
+{
+  "id": "usgs-volcano-hazards-1",
+  "sourceId": "usgs-volcano-hazards",
+  "file": "usgs-volcano-hazards-1.png",
+  "mime": "image/png",
+  "sha256": "68656464c9b3129df09dda33f7aaaf83b402e0cd9f81197c334ec4f652ee3cb4",
+  "width": 699,
+  "height": 816,
+  "imageUrl": "https://pubs.usgs.gov/fs/fs002-97/images/volcBMeyers.png",
+  "pageUrl": "https://pubs.usgs.gov/fs/fs002-97/old%20html%20files/",
+  "caption": "Volcanoes produce a wide variety of natural hazards that can kill people and destroy property. This simplified sketch shows a volcano typical of those found in the Western United States and Alaska, but many of these hazards also pose risks at other volcanoes, such as those in Hawaii. Some hazards, such as lahars and landslides, can occur even when a volcano is not erupting. (Hazards and terms in this diagram are highlighted in bold where they are discussed in the text below.)",
+  "altText": "Illustration of volcano showing different types of volcano hazards",
+  "credit": "U.S. Geological Survey/graphic by Bobbie Myers",
+  "license": "U.S. Government work (U.S. Geological Survey Fact Sheet 002-97), U.S. Public Domain; credit U.S. Geological Survey; no USGS identifier, logo or third-party copyright mark in the figure",
+  "licenseEvidence": "https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits — \"USGS-authored or produced data and information are considered to be in the U.S. Public Domain.\"; \"Some non-USGS photographs, images, and/or graphics that appear on USGS websites are used by the USGS with permission from the copyright holder ... These materials are generally marked as being copyrighted.\" — neither the figure nor its page carries a copyright mark; \"When using information from USGS information products, publications, or websites, we ask that proper credit be given. Credit can be provided by including a citation such as the following: Credit: U.S. Geological Survey Department of the Interior/USGS U.S. Geological Survey/photo by Jane Doe (if the photographer/artist is known)\". Retrieved 2026-11-02 (HTTP 200). The figure is a USGS-produced graphic: the fact sheet (a USGS publication) prints \"Graphics by Bobbie Myers, Sara Boore, and Susan Mayfield\", the image file is named volcBMeyers.png, and the USGS Publications Warehouse lists Bobbie M. Myers as a USGS author (Open-File Report 95-231, 'Hazardous Phenomena at Volcanoes', USGS Organization: Cascades Volcano Observatory; https://www.usgs.gov/publications/hazardous-phenomena-volcanoes, retrieved 2026-11-02, HTTP 200), so the credit follows USGS's 'U.S. Geological Survey/photo by …' pattern. Checked by eye: the image shows no logo, insignia, visual identifier, signature or credit line, only its printed labels; stored as the exact served bytes (no edits).",
+  "labelsInImage": true,
+  "retrievedAt": "2026-11-02T04:30:20Z"
+}

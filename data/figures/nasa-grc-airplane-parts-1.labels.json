@@ -1,0 +1,232 @@
+{
+  "figureId": "nasa-grc-airplane-parts-1",
+  "imageSha256": "eac7211890532a28806118ba37e6af1007b8c2d89c4dd120f5cc55a78c73ee09",
+  "width": 1168,
+  "height": 765,
+  "method": "Windows built-in OCR (original and 2x LANCZOS upscale, coordinates halved) on the stored (insignia-removed) image; OCR lines split where the word gap exceeds 1.2x the text height; boxes from both scales with IoU > 0.25 unioned and padded 3 px. OCR found every printed line at one scale or the other (29 lines; 'Generate Li', 'Fuselage Body)' and 'Hold Things ogether' were read short, but their boxes already span the whole printed line), so no box was added by hand; checked by eye on a filled-cover overlay and a zoomed per-box contact sheet (2026-11-02, docs/evidence/sam-figure-candidates/labels-nasa-grc-airplane-parts-1*.jpg). No SAM concept prompts (no live calls). One group per printed label: a part name and the red function line(s) printed under it share a group (e.g. group 5 = 'Wing' + 'Generate Lift'). Only the part-name line carries `text`; the function lines carry no `text` because a group's texts are joined into the one printed label that LD-02/LD-10 check and that the worker sends to Muse ('Wing Generate Lift' would read as the page word 'lift'). Their printed words, top to bottom per group: 1 'Control Yaw'; 2 'Change Yaw' '(Side-to-Side)'; 3 'Control Pitch'; 4 'Change Pitch' '(Up-Down)'; 5 'Generate Lift'; 6 'Change Lift and Drag'; 7 'Generate Thrust'; 8 'Change Roll' '(Rotate Body)'; 9 'Change Lift and Drag' '(Rotate Body)'; 10 'Command and Control'; 11 'Hold Things Together' '(Carry Payload - Fuel)'; 12 'Change Lift'. Leader arrows are not labels and are not covered.",
+  "boxes": [
+    {
+      "x1": 470,
+      "y1": 38,
+      "x2": 710,
+      "y2": 68,
+      "text": "Vertical Stabilizer",
+      "group": 1
+    },
+    {
+      "x1": 534,
+      "y1": 65,
+      "x2": 661,
+      "y2": 89,
+      "group": 1
+    },
+    {
+      "x1": 953,
+      "y1": 99,
+      "x2": 1056,
+      "y2": 128,
+      "text": "Rudder",
+      "group": 2
+    },
+    {
+      "x1": 940,
+      "y1": 126,
+      "x2": 1067,
+      "y2": 153,
+      "group": 2
+    },
+    {
+      "x1": 932,
+      "y1": 146,
+      "x2": 1075,
+      "y2": 174,
+      "group": 2
+    },
+    {
+      "x1": 242,
+      "y1": 122,
+      "x2": 519,
+      "y2": 152,
+      "text": "Horizontal Stabilizer",
+      "group": 3
+    },
+    {
+      "x1": 311,
+      "y1": 149,
+      "x2": 447,
+      "y2": 173,
+      "group": 3
+    },
+    {
+      "x1": 980,
+      "y1": 226,
+      "x2": 1095,
+      "y2": 255,
+      "text": "Elevator",
+      "group": 4
+    },
+    {
+      "x1": 973,
+      "y1": 252,
+      "x2": 1108,
+      "y2": 279,
+      "group": 4
+    },
+    {
+      "x1": 983,
+      "y1": 273,
+      "x2": 1099,
+      "y2": 301,
+      "group": 4
+    },
+    {
+      "x1": 113,
+      "y1": 256,
+      "x2": 189,
+      "y2": 290,
+      "text": "Wing",
+      "group": 5
+    },
+    {
+      "x1": 82,
+      "y1": 284,
+      "x2": 220,
+      "y2": 307,
+      "group": 5
+    },
+    {
+      "x1": 869,
+      "y1": 343,
+      "x2": 942,
+      "y2": 378,
+      "text": "Flaps",
+      "group": 6
+    },
+    {
+      "x1": 797,
+      "y1": 370,
+      "x2": 1012,
+      "y2": 398,
+      "group": 6
+    },
+    {
+      "x1": 76,
+      "y1": 395,
+      "x2": 220,
+      "y2": 429,
+      "text": "Jet Engine",
+      "group": 7
+    },
+    {
+      "x1": 63,
+      "y1": 422,
+      "x2": 234,
+      "y2": 446,
+      "group": 7
+    },
+    {
+      "x1": 1002,
+      "y1": 417,
+      "x2": 1104,
+      "y2": 447,
+      "text": "Aileron",
+      "group": 8
+    },
+    {
+      "x1": 992,
+      "y1": 444,
+      "x2": 1114,
+      "y2": 471,
+      "group": 8
+    },
+    {
+      "x1": 982,
+      "y1": 464,
+      "x2": 1125,
+      "y2": 493,
+      "group": 8
+    },
+    {
+      "x1": 929,
+      "y1": 548,
+      "x2": 1030,
+      "y2": 583,
+      "text": "Spoiler",
+      "group": 9
+    },
+    {
+      "x1": 870,
+      "y1": 575,
+      "x2": 1086,
+      "y2": 602,
+      "group": 9
+    },
+    {
+      "x1": 907,
+      "y1": 596,
+      "x2": 1050,
+      "y2": 624,
+      "group": 9
+    },
+    {
+      "x1": 70,
+      "y1": 596,
+      "x2": 176,
+      "y2": 630,
+      "text": "Cockpit",
+      "group": 10
+    },
+    {
+      "x1": 6,
+      "y1": 622,
+      "x2": 240,
+      "y2": 646,
+      "group": 10
+    },
+    {
+      "x1": 398,
+      "y1": 625,
+      "x2": 615,
+      "y2": 660,
+      "text": "Fuselage (Body)",
+      "group": 11
+    },
+    {
+      "x1": 397,
+      "y1": 652,
+      "x2": 617,
+      "y2": 680,
+      "group": 11
+    },
+    {
+      "x1": 395,
+      "y1": 673,
+      "x2": 618,
+      "y2": 701,
+      "group": 11
+    },
+    {
+      "x1": 791,
+      "y1": 637,
+      "x2": 860,
+      "y2": 667,
+      "text": "Slats",
+      "group": 12
+    },
+    {
+      "x1": 766,
+      "y1": 664,
+      "x2": 885,
+      "y2": 691,
+      "group": 12
+    }
+  ],
+  "partLabelGroups": [
+    1,
+    3,
+    5,
+    6,
+    8
+  ],
+  "partLabelGroupsNote": "Lead-curated (SAM figure candidates, 2026-11-02): label groups that name drawn parts, kept only when the page text names the label (whole, or by its last word: the LD-10 rule) AND SAM 3.1 was sure of the part in the probe (>= 0.73, docs/evidence/sam-figure-candidates/result.json): Vertical Stabilizer (group 1, 0.88), Horizontal Stabilizer (3, 0.86), Wing (5, 0.96), Flaps (6, 0.76), Aileron (8, 0.89). Left out: Jet Engine (7, SAM 0.73): the page only says 'jet engines' and 'turbine engines' (plural), and the page-wording rule matches whole words without plural folding, so the label counts as not named; Fuselage (Body) (11, 0.78): SAM's box covered the whole airplane, not the fuselage alone. Rudder (2, 0.67), Elevator (4, 0.47), Spoiler (9, 0.31), Cockpit (10, 0.30) and Slats (12, 0.26) are below 0.73."
+}
