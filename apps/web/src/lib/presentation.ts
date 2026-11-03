@@ -18,6 +18,7 @@ import { compareConcealed, planPredict } from './compare.ts';
 import { concealedKeys } from './conceal.ts';
 import { aiLabel } from './displayText.ts';
 import { capFirst } from './sources.ts';
+import { isTeacherFigure, TEACHER_FIGURE_CREDIT } from './teacherFigure.ts';
 import { gradeCaseGuess } from './explorer.ts';
 import { gradePrediction, parseGuess, studentTolerance } from './predictions.ts';
 import { gradeFeedback } from './feedback.ts';
@@ -785,7 +786,9 @@ const norm = (s: string): string => s.replace(/\s+/g, ' ').trim().toLowerCase();
  * after a ';' or in a later sentence ("credit NOAA; AI edits must be disclosed"). Those are rules for us, not a credit:
  * only the licence's first clause is printed, without a bracket that repeats the credit.
  */
-export function figureCredit(fig: { credit: string; license: string }): string {
+export function figureCredit(fig: { id?: string | undefined; provided?: string | undefined; credit: string; license: string }): string {
+  // Teacher diagram (beta, docs/specs/TEACHER-FIGURE.md): credited to the teacher and to Muse's reading of its labels.
+  if (isTeacherFigure(fig)) return TEACHER_FIGURE_CREDIT;
   const credit = fig.credit.replace(/^\s*credit:\s*/i, '').replace(/\s+/g, ' ').trim();
   const first = (fig.license.split(/;|(?<=\p{Ll}{2})\.\s+(?=\p{Lu})/u)[0] ?? '').replace(/\s+/g, ' ').trim().replace(/\.$/, '');
   const licence = credit === ''

@@ -1,0 +1,349 @@
+{
+  "id": "nasa-grc-airplane-parts-1",
+  "width": 1168,
+  "height": 765,
+  "data": {
+    "labels": [
+      {
+        "bbox": [
+          {
+            "x_max": 658,
+            "x_min": 410,
+            "y_max": 78,
+            "y_min": 48
+          }
+        ],
+        "names_part": true,
+        "text": "Vertical Stabilizer"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 585,
+            "x_min": 464,
+            "y_max": 106,
+            "y_min": 82
+          }
+        ],
+        "names_part": false,
+        "text": "Control Yaw"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 478,
+            "x_min": 222,
+            "y_max": 190,
+            "y_min": 160
+          }
+        ],
+        "names_part": true,
+        "text": "Horizontal Stabilizer"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 420,
+            "x_min": 280,
+            "y_max": 216,
+            "y_min": 194
+          }
+        ],
+        "names_part": false,
+        "text": "Control Pitch"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 897,
+            "x_min": 817,
+            "y_max": 162,
+            "y_min": 132
+          }
+        ],
+        "names_part": true,
+        "text": "Rudder"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 905,
+            "x_min": 807,
+            "y_max": 190,
+            "y_min": 166
+          },
+          {
+            "x_max": 918,
+            "x_min": 793,
+            "y_max": 218,
+            "y_min": 192
+          }
+        ],
+        "names_part": false,
+        "text": "Change Yaw (Side-to-Side)"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 162,
+            "x_min": 96,
+            "y_max": 378,
+            "y_min": 345
+          }
+        ],
+        "names_part": true,
+        "text": "Wing"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 201,
+            "x_min": 69,
+            "y_max": 402,
+            "y_min": 380
+          }
+        ],
+        "names_part": false,
+        "text": "Generate Lift"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 926,
+            "x_min": 840,
+            "y_max": 334,
+            "y_min": 304
+          }
+        ],
+        "names_part": true,
+        "text": "Elevator"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 941,
+            "x_min": 824,
+            "y_max": 361,
+            "y_min": 337
+          },
+          {
+            "x_max": 930,
+            "x_min": 835,
+            "y_max": 390,
+            "y_min": 363
+          }
+        ],
+        "names_part": false,
+        "text": "Change Pitch (Up-Down)"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 214,
+            "x_min": 89,
+            "y_max": 550,
+            "y_min": 519
+          }
+        ],
+        "names_part": true,
+        "text": "Jet Engine"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 225,
+            "x_min": 55,
+            "y_max": 578,
+            "y_min": 555
+          }
+        ],
+        "names_part": false,
+        "text": "Generate Thrust"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 824,
+            "x_min": 754,
+            "y_max": 482,
+            "y_min": 450
+          }
+        ],
+        "names_part": true,
+        "text": "Flaps"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 889,
+            "x_min": 689,
+            "y_max": 508,
+            "y_min": 485
+          }
+        ],
+        "names_part": false,
+        "text": "Change Lift and Drag"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 924,
+            "x_min": 839,
+            "y_max": 583,
+            "y_min": 555
+          }
+        ],
+        "names_part": true,
+        "text": "Aileron"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 941,
+            "x_min": 824,
+            "y_max": 610,
+            "y_min": 587
+          },
+          {
+            "x_max": 944,
+            "x_min": 821,
+            "y_max": 637,
+            "y_min": 612
+          }
+        ],
+        "names_part": false,
+        "text": "Change Roll (Rotate Body)"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 883,
+            "x_min": 794,
+            "y_max": 747,
+            "y_min": 716
+          }
+        ],
+        "names_part": true,
+        "text": "Spoiler"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 894,
+            "x_min": 714,
+            "y_max": 779,
+            "y_min": 754
+          },
+          {
+            "x_max": 894,
+            "x_min": 755,
+            "y_max": 805,
+            "y_min": 780
+          }
+        ],
+        "names_part": false,
+        "text": "Change Lift and Drag (Rotate Body)"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 169,
+            "x_min": 85,
+            "y_max": 832,
+            "y_min": 804
+          }
+        ],
+        "names_part": true,
+        "text": "Cockpit"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 254,
+            "x_min": 6,
+            "y_max": 860,
+            "y_min": 836
+          }
+        ],
+        "names_part": false,
+        "text": "Command and Control"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 519,
+            "x_min": 331,
+            "y_max": 857,
+            "y_min": 828
+          }
+        ],
+        "names_part": true,
+        "text": "Fuselage (Body)"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 524,
+            "x_min": 326,
+            "y_max": 882,
+            "y_min": 858
+          },
+          {
+            "x_max": 523,
+            "x_min": 327,
+            "y_max": 910,
+            "y_min": 884
+          }
+        ],
+        "names_part": false,
+        "text": "Hold Things Together (Carry Payload - Fuel)"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 751,
+            "x_min": 688,
+            "y_max": 840,
+            "y_min": 810
+          }
+        ],
+        "names_part": true,
+        "text": "Slats"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 755,
+            "x_min": 634,
+            "y_max": 870,
+            "y_min": 843
+          }
+        ],
+        "names_part": false,
+        "text": "Change Lift"
+      }
+    ]
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a1a1c1-a4e0-7393-bcfc-a1b3bfc6937c",
+    "usage": {
+      "promptTokens": 1358,
+      "completionTokens": 11792,
+      "reasoningTokens": 10542,
+      "cachedTokens": 227
+    },
+    "latencyMs": 108028,
+    "estCostUSD": 0.0515638,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  }
+}

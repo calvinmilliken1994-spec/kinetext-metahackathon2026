@@ -22,6 +22,8 @@ import {
 } from '../lib/sources.ts';
 import type { DemoChoice } from '../lib/sources.ts';
 import { activeSources, subjectLabel, subjectOf } from '../lib/subjects.ts';
+import { figureSizeText } from '../lib/teacherFigure.ts';
+import type { AddedFigure } from '../lib/teacherFigure.ts';
 import type { SubjectKey } from '../lib/subjects.ts';
 import { AccessForm } from './AccessForm.tsx';
 import { IconExternal } from './icons.tsx';
@@ -40,8 +42,12 @@ export interface NewLessonPageProps {
   jobs: readonly JobSummary[];
   selectedId: string | null;
   onSelect: (id: string) => void;
-  /** A pasted text was stored: reload the list and select it. */
-  onCreated: (sourceId: string) => void;
+  /** A pasted text was stored: reload the list and select it. `figure`: the teacher's diagram (beta) added with it, if any. */
+  onCreated: (sourceId: string, figure: AddedFigure | null) => void;
+  /** Teacher diagram (beta): the diagram kept with each own source this session, sent as `figureId` with Build. */
+  figures?: Readonly<Record<string, AddedFigure>>;
+  /** Leave the kept diagram out of the next build. */
+  onRemoveFigure?: (sourceId: string) => void;
   /** The selected page's stored text (for the preview). */
   doc: Loadable<SourceDoc> | null;
   onOpenLesson: (jobId: string, sourceId: string) => void;
@@ -136,7 +142,10 @@ export function NewLessonPage(p: NewLessonPageProps) {
         </div>
 
         <div className="nl-side">
-          <Preview path={path} target={target} doc={p.doc} lessons={lessons} onOpenLesson={p.onOpenLesson} outside={outside} onClear={clearSearch} />
+          <Preview
+            path={path} target={target} doc={p.doc} lessons={lessons} onOpenLesson={p.onOpenLesson} outside={outside} onClear={clearSearch}
+            figure={target?.kind === 'user' ? p.figures?.[target.id] ?? null : null} onRemoveFigure={p.onRemoveFigure}
+          />
           <BuildArea {...p} target={target} path={path} gate={gate} />
         </div>
       </div>
@@ -261,7 +270,7 @@ function OwnSource(p: NewLessonPageProps & { list: readonly SourceMeta[]; locked
           </div>
           <p className="nl-own-outline-note">
             The form asks for a title, the page text ({L.textMin.toLocaleString('en-US')} to {L.textMax.toLocaleString('en-US')} characters),
-            its licence and who to credit, and your confirmation that you may use it with AI models.
+            its licence and who to credit, and your confirmation that you may use it with AI models. You can add one diagram too (beta).
           </p>
         </>
       ) : (
@@ -290,7 +299,10 @@ function OwnSource(p: NewLessonPageProps & { list: readonly SourceMeta[]; locked
           <PasteSourceForm
             title={mine.length > 0 ? 'Paste another text' : null}
             rows={12}
-            onCreated={(id, n) => { setNotice(n ?? 'Saved. Build it with the button on the right.'); p.onCreated(id); }}
+            onCreated={(id, n, figure) => {
+              setNotice(n ?? (figure !== null ? 'Saved with your diagram. Build it with the button on the right.' : 'Saved. Build it with the button on the right.'));
+              p.onCreated(id, figure);
+            }}
           />
         </>
       )}
@@ -300,11 +312,13 @@ function OwnSource(p: NewLessonPageProps & { list: readonly SourceMeta[]; locked
 
 // ---- the chosen page --------------------------------------------------------------------------------------------
 
-function Preview({ path, target, doc, lessons, onOpenLesson, outside, onClear }: {
+function Preview({ path, target, doc, lessons, onOpenLesson, outside, onClear, figure, onRemoveFigure }: {
   path: SourcePath; target: SourceMeta | null; doc: Loadable<SourceDoc> | null;
   lessons: PageLessons; onOpenLesson: (jobId: string, sourceId: string) => void;
   /** M1: the chosen page is not in the current results. */
   outside: boolean; onClear: () => void;
+  /** Teacher diagram (beta) kept with this own source, if any. */
+  figure: AddedFigure | null; onRemoveFigure?: ((sourceId: string) => void) | undefined;
 }) {
   const uid = useId();
   if (target === null) {
@@ -340,6 +354,24 @@ function Preview({ path, target, doc, lessons, onOpenLesson, outside, onClear }:
       <div className="nl-excerpt" aria-label="How the page starts">
         {text === null ? <p className="muted">{doc?.state === 'error' ? 'The page text could not be loaded.' : 'Loading the page…'}</p> : <p>{text}</p>}
       </div>
+      {figure !== null && (
+        <figure className="nl-figure" data-testid="preview-figure">
+          <img
+            src={`/api/figures/${encodeURIComponent(figure.figureId)}/image`} width={figure.width} height={figure.height} draggable={false}
+            alt={figure.caption !== '' ? figure.caption : 'The diagram you added'}
+          />
+          <figcaption>
+            <span>Your diagram <span className="tag figure-beta">beta</span></span>
+            <span aria-hidden="true">·</span>
+            <span>{figureSizeText(figure.width, figure.height)}</span>
+            <span aria-hidden="true">·</span>
+            <span>Used in the next build</span>
+            {onRemoveFigure !== undefined && target !== null && (
+              <button type="button" className="link-btn" onClick={() => onRemoveFigure(target.id)}>Leave it out</button>
+            )}
+          </figcaption>
+        </figure>
+      )}
       {made !== undefined && (
         <p className="nl-made">
           {plural(made.count, 'lesson')} already built from this page.{' '}

@@ -1,0 +1,247 @@
+{
+  "id": "nasa-grc-glide-trajectory-1",
+  "width": 600,
+  "height": 363,
+  "data": {
+    "labels": [
+      {
+        "bbox": [
+          {
+            "x_max": 325,
+            "x_min": 70,
+            "y_max": 115,
+            "y_min": 80
+          }
+        ],
+        "names_part": false,
+        "text": "d = Distance Flown"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 340,
+            "x_min": 70,
+            "y_max": 165,
+            "y_min": 130
+          }
+        ],
+        "names_part": false,
+        "text": "h = Change in Height"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 785,
+            "x_min": 755,
+            "y_max": 95,
+            "y_min": 60
+          }
+        ],
+        "names_part": true,
+        "text": "a"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 864,
+            "x_min": 842,
+            "y_max": 250,
+            "y_min": 205
+          }
+        ],
+        "names_part": true,
+        "text": "h"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 435,
+            "x_min": 200,
+            "y_max": 445,
+            "y_min": 410
+          }
+        ],
+        "names_part": true,
+        "text": "a = Glide Angle"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 722,
+            "x_min": 700,
+            "y_max": 442,
+            "y_min": 410
+          }
+        ],
+        "names_part": true,
+        "text": "d"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 325,
+            "x_min": 95,
+            "y_max": 565,
+            "y_min": 530
+          }
+        ],
+        "names_part": false,
+        "text": "From Trigonometry:"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 525,
+            "x_min": 365,
+            "y_max": 555,
+            "y_min": 515
+          }
+        ],
+        "names_part": false,
+        "text": "tan(a) = h"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 518,
+            "x_min": 492,
+            "y_max": 595,
+            "y_min": 560
+          }
+        ],
+        "names_part": false,
+        "text": "d"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 855,
+            "x_min": 720,
+            "y_max": 555,
+            "y_min": 520
+          }
+        ],
+        "names_part": false,
+        "text": "D = Drag"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 810,
+            "x_min": 720,
+            "y_max": 590,
+            "y_min": 560
+          }
+        ],
+        "names_part": false,
+        "text": "L = Lift"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 335,
+            "x_min": 45,
+            "y_max": 652,
+            "y_min": 615
+          }
+        ],
+        "names_part": false,
+        "text": "From Balance of Forces:"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 650,
+            "x_min": 355,
+            "y_max": 655,
+            "y_min": 615
+          }
+        ],
+        "names_part": false,
+        "text": "L cos(a) + D sin(a) = W"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 875,
+            "x_min": 720,
+            "y_max": 640,
+            "y_min": 605
+          }
+        ],
+        "names_part": false,
+        "text": "W = Weight"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 615,
+            "x_min": 390,
+            "y_max": 710,
+            "y_min": 670
+          }
+        ],
+        "names_part": false,
+        "text": "L sin(a) = D cos(a)"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 795,
+            "x_min": 215,
+            "y_max": 840,
+            "y_min": 805
+          }
+        ],
+        "names_part": false,
+        "text": "Measure: height (h), distance (d), and weight (W)."
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 905,
+            "x_min": 90,
+            "y_max": 920,
+            "y_min": 885
+          }
+        ],
+        "names_part": false,
+        "text": "Solve 3 equations in 3 unknowns for lift (L), drag (D),"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 565,
+            "x_min": 260,
+            "y_max": 965,
+            "y_min": 930
+          }
+        ],
+        "names_part": false,
+        "text": "and glide angle (a)."
+      }
+    ]
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a1a1c2-54fb-750f-a0b1-5484b567efb1",
+    "usage": {
+      "promptTokens": 524,
+      "completionTokens": 5388,
+      "reasoningTokens": 4521,
+      "cachedTokens": 0
+    },
+    "latencyMs": 45065,
+    "estCostUSD": 0.023554,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  }
+}

@@ -17,6 +17,8 @@ import { checkName } from './lib/checks.ts';
 import { defaultRevision, overallRepairBadge, revisionInputs, validationHeading } from './lib/repairs.ts';
 import { timelineEventLabels } from './lib/timeline.ts';
 import { demoFaultToSend, disclosureText, shortTitle } from './lib/sources.ts';
+import { parseFigureMap } from './lib/teacherFigure.ts';
+import type { AddedFigure } from './lib/teacherFigure.ts';
 import { isRetiredPage, subjectNote } from './lib/subjects.ts';
 import type { SubjectKey } from './lib/subjects.ts';
 import type { DemoChoice } from './lib/sources.ts';
@@ -85,6 +87,9 @@ function sessionStore(): Storage | null {
   try { return typeof window === 'undefined' ? null : window.sessionStorage; } catch { return null; }
 }
 
+/** Teacher diagram (beta): the diagrams kept with own sources, per browser session. */
+const FIGURES_KEY = 'mki.figures';
+
 /** Kept across visits (like the colour theme); blocked storage just means it lasts for the page. */
 function localStore(): Storage | null {
   try { return typeof window === 'undefined' ? null : window.localStorage; } catch { return null; }
@@ -125,6 +130,18 @@ export function App() {
   const [liveJobIds, setLiveJobIds] = useState<ReadonlySet<string>>(() => new Set());
   const [generating, setGenerating] = useState(false);
   const [generateError, setGenerateError] = useState<string | null>(null);
+  // Teacher diagram (beta, docs/specs/TEACHER-FIGURE.md): the diagram kept with each own source for this browser
+  // session, sent as `figureId` with Build.
+  const [figures, setFigures] = useState<Record<string, AddedFigure>>(() => {
+    try { return parseFigureMap(sessionStore()?.getItem(FIGURES_KEY) ?? null); } catch { return {}; }
+  });
+  const keepFigures = useCallback((update: (prev: Record<string, AddedFigure>) => Record<string, AddedFigure>) => {
+    setFigures((prev) => {
+      const next = update(prev);
+      try { sessionStore()?.setItem(FIGURES_KEY, JSON.stringify(next)); } catch { /* storage blocked: kept for the page only */ }
+      return next;
+    });
+  }, []);
   const [demoChoice, setDemoChoice] = useState<DemoChoice>('none');
   const [flash, setFlash] = useState<Flash | null>(null);
   const [flow, setFlow] = useState<FlowId>('lesson');
@@ -311,7 +328,8 @@ export function App() {
     const sourceId = selectedSourceId;
     setGenerating(true);
     setGenerateError(null);
-    api.createJob(sourceId, demoFaultToSend(demoChoice), modelToSend(models, modelChoice), flow).then(
+    const figureId = selectedSource?.kind === 'user' ? figures[sourceId]?.figureId ?? null : null;
+    api.createJob(sourceId, demoFaultToSend(demoChoice), modelToSend(models, modelChoice), flow, figureId).then(
       ({ jobId }) => {
         setLiveJobIds((prev) => new Set(prev).add(jobId));
         setPickedJob({ jobId, sourceId });
@@ -329,11 +347,19 @@ export function App() {
       // Keep the button locked until /api/health has been re-read, so it never flickers enabled.
       void refreshHealth().finally(() => setGenerating(false));
     });
-  }, [selectedSourceId, demoChoice, models, modelChoice, flow, refreshJobs, refreshHealth, navigate, refreshAccess]);
+  }, [selectedSourceId, selectedSource, figures, demoChoice, models, modelChoice, flow, refreshJobs, refreshHealth, navigate, refreshAccess]);
   const onModelChoice = useCallback((id: ModelId) => { setWantedModel(id); writeStoredModel(sessionStore(), id); }, []);
 
   const onSelectSource = useCallback((id: string) => { setPickedSource(id); setFlash(null); }, []);
-  const onSourceCreated = useCallback((id: string) => { reloadSources(); setPickedSource(id); setFlash(null); }, [reloadSources]);
+  const onSourceCreated = useCallback((id: string, figure: AddedFigure | null) => {
+    reloadSources(); setPickedSource(id); setFlash(null);
+    // The latest save says which diagram goes with the text: a new one, or none.
+    keepFigures((prev) => {
+      const { [id]: _old, ...rest } = prev;
+      return figure === null ? rest : { ...rest, [id]: figure };
+    });
+  }, [reloadSources, keepFigures]);
+  const onRemoveFigure = useCallback((id: string) => keepFigures((prev) => { const { [id]: _old, ...rest } = prev; return rest; }), [keepFigures]);
   // A run picked from the "All pages" list opens its own page too.
   const onSelectJob = useCallback((jobId: string, sourceId: string) => {
     if (sourceId !== selectedSourceId) { setPickedSource(sourceId); setFlash(null); }
@@ -700,6 +726,8 @@ export function App() {
                     selectedId={selectedSourceId}
                     onSelect={onSelectSource}
                     onCreated={onSourceCreated}
+                    figures={figures}
+                    onRemoveFigure={onRemoveFigure}
                     doc={doc}
                     onOpenLesson={openFromList}
                     subjectFilter={subjectFilter}

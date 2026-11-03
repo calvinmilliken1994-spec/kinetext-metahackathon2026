@@ -1,0 +1,379 @@
+{
+  "id": "nasa-grc-wright-engine-combustion-1",
+  "width": 620,
+  "height": 372,
+  "data": {
+    "labels": [
+      {
+        "bbox": [
+          {
+            "x_max": 195,
+            "x_min": 30,
+            "y_max": 60,
+            "y_min": 25
+          }
+        ],
+        "names_part": false,
+        "text": "Begin - Stage 3"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 180,
+            "x_min": 30,
+            "y_max": 120,
+            "y_min": 90
+          }
+        ],
+        "names_part": false,
+        "text": "Pressure = p3"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 200,
+            "x_min": 30,
+            "y_max": 160,
+            "y_min": 130
+          }
+        ],
+        "names_part": false,
+        "text": "Temperature = T3"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 165,
+            "x_min": 30,
+            "y_max": 200,
+            "y_min": 170
+          }
+        ],
+        "names_part": false,
+        "text": "Volume = V3"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 315,
+            "x_min": 30,
+            "y_max": 325,
+            "y_min": 295
+          }
+        ],
+        "names_part": false,
+        "text": "Heat from combustion = Q"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 185,
+            "x_min": 30,
+            "y_max": 395,
+            "y_min": 365
+          }
+        ],
+        "names_part": false,
+        "text": "End - Stage 4"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 180,
+            "x_min": 30,
+            "y_max": 440,
+            "y_min": 410
+          }
+        ],
+        "names_part": false,
+        "text": "Pressure = p4"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 200,
+            "x_min": 30,
+            "y_max": 480,
+            "y_min": 450
+          }
+        ],
+        "names_part": false,
+        "text": "Temperature = T4"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 165,
+            "x_min": 30,
+            "y_max": 520,
+            "y_min": 490
+          }
+        ],
+        "names_part": false,
+        "text": "Volume = V4"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 655,
+            "x_min": 395,
+            "y_max": 45,
+            "y_min": 15
+          }
+        ],
+        "names_part": false,
+        "text": "Fuel/Air - Medium Pressure"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 650,
+            "x_min": 395,
+            "y_max": 395,
+            "y_min": 365
+          }
+        ],
+        "names_part": false,
+        "text": "Fuel/Air - High Pressure"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 960,
+            "x_min": 750,
+            "y_max": 55,
+            "y_min": 25
+          }
+        ],
+        "names_part": true,
+        "text": "Intake - Closed"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 815,
+            "x_min": 750,
+            "y_max": 95,
+            "y_min": 65
+          }
+        ],
+        "names_part": true,
+        "text": "Valve"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 960,
+            "x_min": 750,
+            "y_max": 145,
+            "y_min": 115
+          }
+        ],
+        "names_part": true,
+        "text": "Electrical - Closed"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 845,
+            "x_min": 750,
+            "y_max": 185,
+            "y_min": 155
+          }
+        ],
+        "names_part": true,
+        "text": "Contact"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 960,
+            "x_min": 750,
+            "y_max": 235,
+            "y_min": 205
+          }
+        ],
+        "names_part": true,
+        "text": "Exhaust - Closed"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 815,
+            "x_min": 750,
+            "y_max": 275,
+            "y_min": 245
+          }
+        ],
+        "names_part": true,
+        "text": "Valve"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 960,
+            "x_min": 750,
+            "y_max": 390,
+            "y_min": 360
+          }
+        ],
+        "names_part": true,
+        "text": "Intake - Closed"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 815,
+            "x_min": 750,
+            "y_max": 430,
+            "y_min": 400
+          }
+        ],
+        "names_part": true,
+        "text": "Valve"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 965,
+            "x_min": 750,
+            "y_max": 480,
+            "y_min": 450
+          }
+        ],
+        "names_part": true,
+        "text": "Electrical - Opened"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 845,
+            "x_min": 750,
+            "y_max": 520,
+            "y_min": 490
+          }
+        ],
+        "names_part": true,
+        "text": "Contact"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 960,
+            "x_min": 750,
+            "y_max": 570,
+            "y_min": 540
+          }
+        ],
+        "names_part": true,
+        "text": "Exhaust - Closed"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 815,
+            "x_min": 750,
+            "y_max": 610,
+            "y_min": 580
+          }
+        ],
+        "names_part": true,
+        "text": "Valve"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 365,
+            "x_min": 25,
+            "y_max": 700,
+            "y_min": 670
+          }
+        ],
+        "names_part": false,
+        "text": "Specific Heat constant volume = Cv"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 260,
+            "x_min": 40,
+            "y_max": 780,
+            "y_min": 745
+          }
+        ],
+        "names_part": false,
+        "text": "T4 = T3 + Q / cv"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 260,
+            "x_min": 40,
+            "y_max": 835,
+            "y_min": 795
+          }
+        ],
+        "names_part": false,
+        "text": "p4 = p3(T4 / T3)"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 835,
+            "x_min": 485,
+            "y_max": 770,
+            "y_min": 735
+          }
+        ],
+        "names_part": false,
+        "text": "Constant volume process."
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 912,
+            "x_min": 408,
+            "y_max": 815,
+            "y_min": 780
+          }
+        ],
+        "names_part": false,
+        "text": "Temperature and pressure increased due"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 798,
+            "x_min": 518,
+            "y_max": 860,
+            "y_min": 825
+          }
+        ],
+        "names_part": false,
+        "text": "to heat release"
+      }
+    ]
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a1a1c3-0ebf-7027-a097-e71fae68919b",
+    "usage": {
+      "promptTokens": 573,
+      "completionTokens": 10770,
+      "reasoningTokens": 9421,
+      "cachedTokens": 0
+    },
+    "latencyMs": 92622,
+    "estCostUSD": 0.04648875,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  }
+}

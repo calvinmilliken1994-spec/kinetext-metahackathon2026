@@ -290,8 +290,15 @@ export function isLessonJob(detail: Pick<JobDetail, 'lessonData'>): boolean {
 }
 
 /** POST /api/jobs body. The flow is always named; the lesson flow is the default. */
-export function createJobBody(sourceId: string, demoFault?: DemoFault, model?: ModelId, flow: FlowId = 'lesson'): Record<string, unknown> {
-  return { sourceId, flow, ...(demoFault === undefined ? {} : { demoFault }), ...(model === undefined ? {} : { model }) };
+/**
+ * The POST /api/jobs body. `figureId` (teacher diagram, beta) goes only with a lesson build: the diagram becomes a Label
+ * the diagram part, which the classic single activity never makes.
+ */
+export function createJobBody(sourceId: string, demoFault?: DemoFault, model?: ModelId, flow: FlowId = 'lesson', figureId?: string | null): Record<string, unknown> {
+  return {
+    sourceId, flow, ...(demoFault === undefined ? {} : { demoFault }), ...(model === undefined ? {} : { model }),
+    ...(flow === 'lesson' && typeof figureId === 'string' && figureId !== '' ? { figureId } : {}),
+  };
 }
 
 // ---- the overview from the analysis (shown before the lesson file exists) -------------------------------------------
@@ -803,6 +810,21 @@ export function buildLessonSteps(detail: JobDetail): LessonStep[] {
   const running = status === 'running';
   const failedJob = status === 'failed';
   const steps: LessonStep[] = [];
+
+  // Teacher diagram (beta): Muse reads the diagram's printed labels before the page (one call, or reused from before).
+  const labels = events.filter((e) => e.stage === 'labels');
+  if (labels.length > 0) {
+    const lEnd = labels.find((e) => e.status !== 'started');
+    const lStatus: StepStatus = lEnd !== undefined ? (lEnd.status === 'failed' ? 'failed' : 'succeeded') : running ? 'running' : 'failed';
+    const said = str(lEnd?.detail) ? lEnd.detail.trim() : '';
+    steps.push({
+      key: 'labels', label: 'Read the diagram’s labels (beta)', status: lStatus, outcome: null, tags: [],
+      detail: lStatus === 'running' ? 'Muse is reading the diagram’s labels…'
+        : said !== '' ? (/[.!?]$/.test(said) ? said : `${said}.`)
+          : lStatus === 'failed' ? 'Muse could not read the diagram’s labels, so the lesson was built without it.' : 'Muse read the diagram’s printed labels.',
+      ...spanOf(labels),
+    });
+  }
 
   // Analyse page
   const analyze = events.filter((e) => e.stage === 'analyze');

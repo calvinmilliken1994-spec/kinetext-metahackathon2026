@@ -98,3 +98,93 @@ The stage event carries `model`, `latencyMs`, `estCostUSD`, `responseId` like ot
 - Web child: `apps/web/**`. Uses only the endpoints and fields above; may read backend files, never edits them.
 - Test-first; `npm test`, `npx tsc -p . --noEmit`, `node --test apps/web/src/lib/*.test.ts`, the web build and
   impeccable detect all pass. Lead runs live checks afterwards (two or three builds, about USD 1).
+
+## As built (backend)
+
+Implemented as frozen above; the points below are what the spec left open, or the few additive choices made.
+
+- **Store.** `packages/sources/index.ts`: `USER_FIGURE_ID_PATTERN`, `userFiguresDirOf`, `userFigureId(sourceId, imageSha256)`,
+  `writeAtomic` (now exported, also takes bytes). `packages/sources/user-figures.ts`: `validateUserFigureInput`,
+  `imageDimensions` (PNG IHDR, JPEG SOF0/SOF2 only), `normaliseFigureCaption`, `saveUserFigure`.
+  `packages/sources/figures.ts`: `figureDirFor(id, userFiguresDir)`, `FigureMeta.provided?: 'teacher'`,
+  `loadFigureLabelsFile` (the existing `readLabelsFile` rules, exported). `licenseEvidence` and `method` use the
+  date only (`YYYY-MM-DD`); `retrievedAt` is the full ISO time. `pageUrl` is the source locator only when it is an
+  http(s) URL. `created: false` never rewrites the sidecar (a new caption for the same image is not stored).
+- **FIGURE_INVALID problems** (fixed order): `NOT_AN_OBJECT`, `RIGHTS_NOT_CONFIRMED`, `MIME_INVALID`, `BASE64_INVALID`
+  (strict standard base64, whitespace ignored, no `data:` prefix), `IMAGE_TOO_LARGE`, `IMAGE_TYPE_MISMATCH` (magic
+  vs mime), `IMAGE_DIMENSIONS` (unreadable header, another JPEG frame type, or a side outside 64..4096),
+  `CAPTION_INVALID` (not a string), `CAPTION_LENGTH`. Caption normalising also drops zero-width and bidi controls.
+- **Upload route order:** 405 (not POST) → 403 ORIGIN_NOT_ALLOWED → 403 ACCESS_REQUIRED → 400 FIGURE_SOURCE_NOT_USER
+  (a library id) → 404 NOT_FOUND → 415 → 413 (over 6 MB) → 400 BAD_REQUEST (bad JSON) → 400 FIGURE_INVALID → 201/200.
+  No per-source or global figure count limit (none was specified).
+- **POST /api/jobs:** an unknown source keeps its 404 SOURCE_NOT_FOUND before the figure is looked at; every figureId
+  problem is `400 {error: 'FIGURE_INVALID'}` (no problems list). The figure is loaded sha256-verified to check it.
+  `startJob` options and `JobDeps` gain `figureId?`; `JobDeps` and `ApiOptions` gain `userFiguresDir?`. The worker
+  boundary throws `FIGURE_ID_INVALID` for a malformed id or a non-user source.
+- **Contracts:** `LabelFigureRef.provided?: 'teacher'` (kit.ts, additive) so the published spec's `figure` says it;
+  `labelFigureRefOf` sets it from the sidecar. Library refs carry no such key.
+- **Labels file:** a label's `text` sits on its FIRST line box only; its other lines carry the same `group` and no
+  text (the library's two-line "Sugar phosphate backbone" is stored the same way, so `printedLabelsOf` and LD-02 join
+  one text per group). `partLabelGroups` is written even when empty (`[]` reads as "not curated", like the library).
+  Box pixels round OUTWARD (floor/ceil) before clamping to `0..width`/`0..height`. A stored file is reused only when
+  it is valid AND has at least one box.
+- **Events:** `labels started` carries `figureId`; every `labels` event carries `figureId`. A failed call's event
+  keeps the charge fields (`estCostUSD`, and `model`/`responseId`/`latencyMs` when a receipt exists) with the spec's
+  sentence as `detail`. The fixed code goes to a private run artifact `figure-labels.json`:
+  `{ok: true, figureId, labels, nameParts, receipt}` or `{ok: false, figureId, code, chargedUSD, unknownUSD,
+  receipt?}`, codes = the MetaError code, `OUTPUT_INVALID` (wrong shape), `NO_LABELS` (zero labels after the
+  conversion), `INTERNAL` (labels.json could not be written; the call is still accounted).
+- **Prompt:** fixed text, nothing interpolated (no caption, no page text), so there is no untrusted input to sanitise
+  on the way in; the returned text goes through grounding's `phrase()` (now exported). Text is cut at 80 chars by it.
+- **Serve time:** only `recheck.ts` loads figures (label-order, sam-used and review do not). A user job with a
+  `figureId` rechecks against that one teacher figure from the teacher store; `enrichLabelBoxes` resolves through
+  `figureDirFor`. `scripts/recheck-stored.ts` (outside the backend paths) still lists library figures only.
+- **Boxes snapped to the printed text (added 3 Nov).** Muse's boxes were often shifted 20-45 px or a little short, so a
+  cover could show part of a word. Before `<id>.labels.json` is written, a PNG figure's boxes go through
+  `snapLabelBoxes` (`packages/meta/figure-label-refine.ts`, decoder `packages/meta/png-decode.ts`, node:zlib only):
+  each box moves (Muse's size, at most +/-60% of its width / 60 px sideways, +/-50% of its height) to the letter-like
+  ink nearby, is trimmed/grown to that line's lettering and re-padded with the same 30%-of-line-height rule; drawn
+  lines, edges, bars and another label's text are never taken; no lettering in reach keeps the box. A JPEG figure is
+  not snapped. `method` gains `; boxes snapped to the printed text`, `; boxes as Muse placed them (JPEG, not
+  snapped)` or `; boxes as Muse placed them (PNG not decodable, not snapped)`; `figure-labels.json` gains
+  `boxPlacement`, `boxesMoved`, `partLabels`. Offline eval on the 10 library figures (docs/evidence/figure-labels-eval):
+  part boxes fully covered 12/21 -> 20/21, all text boxes 53/172 -> 117/172, part-cover area x1.43 -> x1.29 of the OCR
+  box. Pure helper `placeTeacherLabelBoxes` (lesson.ts, exported for tests).
+- **At most 6 part labels (added 3 Nov).** A live build timed out generating the diagram part after Muse marked 20
+  labels as part names (the library curates about 5). `partLabelGroups` keeps at most `TEACHER_FIGURE_PART_LABELS_MAX`
+  = 6 of Muse's `names_part` groups: first those whose text the source page names (`pageWordingOfLabel`, the LD-10
+  rule, over the job's source text), in Muse's order, then the rest in Muse's order; stored ascending
+  (`capPartLabelGroups`, lesson.ts). The `labels succeeded` detail still says how many Muse marked.
+
+## As built (web)
+
+Implemented as section 4 says; the open points and the few additive choices:
+
+- **Pure lib** `apps/web/src/lib/teacherFigure.ts` (tests `teacherFigure.test.ts`): `fitLongSide` (long side at most
+  1600, never enlarged, whole pixels), `encodeSizes` (1600, then 1280/1024/800 only when the PNG would exceed the
+  server's 4 MB; still PNG), `sizeProblem` (64 px per side after scaling), `figureInputProblem` (PNG, JPEG, WebP and
+  clipboard BMP decoded; 40 MB input cap), `figurePayload` (`{mime: 'image/png', base64, rights: true, caption?}`,
+  caption cleaned like the server), `pastedImageIndex` (an image file AND no text/plain, else the paste stays text),
+  `figureErrorMessage` (every backend FIGURE_INVALID code in plain words, never a raw code; FIGURE_SOURCE_NOT_USER,
+  NOT_FOUND, 413 too), `isTeacherFigure` (`provided: 'teacher'` OR a `uf-` id), `teacherFigureCaption` (the default
+  caption is not repeated above the teacher credit), `parseAddedFigure` / `parseFigureMap`.
+- **Canvas** `components/figureImage.ts` (createImageBitmap, `<img>` fallback, `imageSmoothingQuality: 'high'`,
+  `toDataURL('image/png')`). The field is `components/FigureField.tsx`, between Text and License in
+  `PasteSourceForm`. Paste and drop are handled on the whole form; a dropped file never opens in the tab.
+- **Submit:** both rights ticks and the caption are checked BEFORE `createSource`, so a missing image tick sends
+  nothing. A figure refusal after the text was saved shows one role=alert line with "Use the text without the
+  diagram"; submitting again retries (the text answers 200 reused, the figure is idempotent).
+- **New lesson page:** `App.tsx` keeps `{figureId, width, height, caption}` per own source in sessionStorage
+  (`mki.figures`), so a reload keeps it; the latest save of a text decides (saved without a diagram drops the old
+  one). Build sends `figureId` only for a user source AND the lesson flow (the classic single activity never makes a
+  diagram part). The preview shows the thumbnail (`GET /api/figures/<id>/image`), its size, "Used in the next build"
+  and "Leave it out". POST /api/jobs FIGURE_INVALID reads "The diagram kept with this text could not be used…".
+- **Build strip** (`lib/liveBuild.ts`): stage `labels` open → op "Reading the diagram’s labels" (Muse, own timer);
+  it counts as a Muse call and its `estCostUSD` is in the running sum, except a reuse ("Printed labels read earlier",
+  no call). Facts add "diagram labels read in N s" while running; a failed read adds "built without the diagram"
+  while running and at the end. Steps list (`lib/lessonJob.ts`): first step "Read the diagram’s labels (beta)" with
+  model, time, cost, response id and the worker's own detail. Demo beats (`lib/demoBeats.ts`): a `labels` beat before
+  "reading" when a recorded run has the stage (none of the pinned runs do).
+- **Lesson credit:** `figureCredit` (lib/presentation.ts, used by the lesson and the slide) returns "Diagram provided
+  by the teacher · printed labels read by Muse Spark (beta)" for a teacher figure, so slides get it too.
+- **Not done:** no `uf-` handling in `config/pinned-runs.json` or the Welcome montage (no teacher runs exist yet).

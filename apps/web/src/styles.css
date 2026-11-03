@@ -852,6 +852,28 @@ kbd { display: inline-grid; place-items: center; min-width: 20px; height: 20px; 
 .char-ok { color: var(--ok); }
 .char-bad { color: var(--bad); font-weight: var(--fw-bold); }
 .paste-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+/* Teacher diagram (beta) in the paste form: a quiet dashed paste area, then the preview beside its size and actions. */
+.figure-label { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 8px; }
+.figure-beta { padding: 0 6px; border: 1px solid var(--line-2); border-radius: var(--r-s); color: var(--ink-3); font-weight: var(--fw-medium); line-height: 1.5; }
+.figure-field > .muted { max-width: 68ch; line-height: 1.5; }
+.figure-drop {
+  justify-self: stretch; display: grid; gap: 10px; padding: 16px 18px;
+  border: 1px dashed var(--line-2); border-radius: var(--r); background: var(--field);
+  transition: border-color 0.12s, background 0.12s;
+}
+.figure-drop:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.figure-drop:focus-within, .figure-drop:hover { border-color: var(--line-3); }
+.figure-drop[data-drag="on"] { border-color: var(--accent-line); background: var(--accent-soft); }
+.figure-drop-text { font-size: var(--fs-14); color: var(--ink-2); line-height: 1.5; }
+.figure-drop-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+.figure-picked { justify-self: stretch; display: grid; grid-template-columns: minmax(0, 260px) minmax(0, 1fr); gap: 14px; align-items: start; }
+.figure-picked img {
+  display: block; inline-size: 100%; block-size: auto; max-block-size: 220px; object-fit: contain;
+  border: 1px solid var(--line); border-radius: var(--r); background: var(--panel-2);
+}
+.figure-picked-meta { display: grid; gap: 10px; font-size: var(--fs-14); color: var(--ink-2); }
+.figure-field > .field { justify-self: stretch; }
+@media (max-width: 720px) { .figure-picked { grid-template-columns: minmax(0, 1fr); } }
 
 .model-picker { margin: 0; padding: 0; border: 0; min-width: 0; display: grid; gap: 6px; }
 .model-picker legend { padding: 0; margin-bottom: 6px; }

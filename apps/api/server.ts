@@ -16,6 +16,11 @@
 //                           teacher pages = the latest lesson analysis' subject; absent when unknown)
 //   POST /api/sources     → store a teacher-pasted source (JSON ≤ 64 KB); 201 created / 200 existing
 //   GET  /api/sources/:id → metadata + hash-checked text (library and user sources)
+//   POST /api/sources/:id/figure → teacher diagram (beta, docs/specs/TEACHER-FIGURE.md): one PNG/JPEG for a USER
+//                           source, JSON {mime, base64, rights: true, caption?} at most 6 MB raw; gated like
+//                           POST /api/sources. 201 {figureId, width, height, created: true}, 200 with created: false
+//                           for the same image again; 404 unknown source, 400 FIGURE_SOURCE_NOT_USER for a library
+//                           page, 400 {error: FIGURE_INVALID, problems} (packages/sources/user-figures.ts).
 //   GET  /api/jobs        → newest-first job summaries
 //   GET  /api/jobs/:id    → {summary, events, revisions, analysis?, spec?, report?}
 //   GET  /api/figures/:id → Stage 8b: the figure's FigureMeta sidecar JSON (404 unknown id)
@@ -23,8 +28,8 @@
 //                           Content-Type from the sidecar mime, long public cache, ETag = the
 //                           recorded sha256 (If-None-Match answers 304). Ids must be bare
 //                           store ids (/^[a-z0-9-]{1,80}$/); nothing outside data/figures is
-//                           ever served.
-//   POST /api/jobs        → 202 {jobId}; body {sourceId, demoFault?, model?, flow?}; at most
+//                           ever served. Teacher figures (uf- ids) are served the same way from the teacher store.
+//   POST /api/jobs        → 202 {jobId}; body {sourceId, demoFault?, model?, flow?, figureId?}; at most
 //                           `maxConcurrentJobs` live jobs at a time (409 JOB_RUNNING while
 //                           that many are running — the pre-concurrency single-job gate is
 //                           the option default 1; the product config default is 3).
@@ -32,7 +37,8 @@
 //                           defaults to 'muse-spark-1.3'; anything outside the two ModelChoice
 //                           values is a 400 MODEL_INVALID. flow (S6-W) defaults to 'lesson'
 //                           (the Stage 6 pipeline); 'activity' runs the unchanged v1 pipeline;
-//                           anything else is a 400 FLOW_INVALID.
+//                           anything else is a 400 FLOW_INVALID. figureId (teacher diagram, beta) only with a user
+//                           source: a stored uf- figure of THAT source, else 400 FIGURE_INVALID.
 //
 //   POST /api/jobs/:id/review -> Stage 10b slice R, teacher review and publish (apps/api/review.ts): body
 //                           {action:'publish', checkedParts, hiddenParts} or {action:'unpublish'}; the same Origin
@@ -89,11 +95,14 @@ import {
   saveUserSource,
   sourceSubject,
   userSourceId,
+  userFiguresDirOf,
   userSourcesDirOf,
+  USER_FIGURE_ID_PATTERN,
   USER_SOURCE_ID_PATTERN,
 } from '../../packages/sources/index.ts';
-import { loadFigure } from '../../packages/sources/figures.ts';
+import { figureDirFor, loadFigure, loadFigureLabelBoxes } from '../../packages/sources/figures.ts';
 import type { FigureMeta } from '../../packages/sources/figures.ts';
+import { saveUserFigure, validateUserFigureInput } from '../../packages/sources/user-figures.ts';
 import { DEMO_FAULTS, validateUserSourceInput } from '../../packages/contracts/index.ts';
 import type { DemoFault } from '../../packages/contracts/index.ts';
 import { isModelChoice } from '../../packages/meta/pricing.ts';
@@ -124,9 +133,11 @@ export interface ApiOptions {
   startJob:
     | ((
         sourceId: string,
-        opts?: { demoFault?: DemoFault; model?: ModelChoice; flow?: JobFlow; access?: 'judge' },
+        opts?: { demoFault?: DemoFault; model?: ModelChoice; flow?: JobFlow; access?: 'judge'; figureId?: string },
       ) => { jobId: string; done: Promise<JobSummary> })
     | null;
+  /** Teacher diagram (beta): the teacher-figure store; defaults to `<storageDir>/user-figures`. */
+  userFiguresDir?: string;
   /** Extra allowed Host values (and http://<value> Origins); replaces the Vite defaults. */
   allowedHosts?: string[];
   /**
@@ -173,6 +184,8 @@ export interface ApiOptions {
 const MAX_BODY_BYTES = 10 * 1024;
 /** Teacher-pasted source bodies may be larger than job bodies, but stay bounded (Stage 5). */
 const MAX_SOURCE_BODY_BYTES = 64 * 1024;
+/** Teacher diagram (beta): one image as base64 JSON (4 MB of bytes is about 5.4 MB of base64). */
+const MAX_FIGURE_BODY_BYTES = 6 * 1024 * 1024;
 /** Stage 10: POST /api/access carries only a short code. */
 const MAX_ACCESS_BODY_BYTES = 1024;
 const DEFAULT_ALLOWED_HOSTS: readonly string[] = ['127.0.0.1:5173', 'localhost:5173'];
@@ -316,6 +329,11 @@ export function createApiServer(opts: ApiOptions): Server {
   /** Stage 5: teacher-source store (defaults to `<storageDir>/user-sources`). */
   function userSourcesDir(): string {
     return opts.userSourcesDir ?? userSourcesDirOf(opts.storageDir);
+  }
+
+  /** Teacher diagram (beta): teacher-figure store (defaults to `<storageDir>/user-figures`). */
+  function userFiguresDir(): string {
+    return opts.userFiguresDir ?? userFiguresDirOf(opts.storageDir);
   }
 
   /**
@@ -483,6 +501,11 @@ export function createApiServer(opts: ApiOptions): Server {
 
     if (pathname.startsWith('/api/sources/')) {
       const id = decodeURIComponent(pathname.slice('/api/sources/'.length));
+      // Teacher diagram (beta): /api/sources/:id/figure (exactly one id segment, then "figure").
+      const figureOf = id.endsWith('/figure') ? id.slice(0, -'/figure'.length) : null;
+      if (figureOf !== null && figureOf !== '' && !figureOf.includes('/')) {
+        return handleCreateFigure(req, res, method, figureOf);
+      }
       if (id === '' || id.includes('/')) {
         return sendError(res, 404, 'NOT_FOUND');
       }
@@ -565,7 +588,8 @@ export function createApiServer(opts: ApiOptions): Server {
       let meta: FigureMeta;
       let bytes: Uint8Array;
       try {
-        const loaded = loadFigure(id); // re-verifies the recorded sha256 on every load
+        // Teacher diagram (beta): uf- ids resolve to the teacher store, every other id to the library.
+        const loaded = loadFigure(id, figureDirFor(id, userFiguresDir())); // re-verifies the recorded sha256 on every load
         meta = loaded.meta;
         bytes = loaded.bytes;
       } catch (err: unknown) {
@@ -657,10 +681,12 @@ export function createApiServer(opts: ApiOptions): Server {
         recheckLesson(opts.storageDir, job, {
           ...(opts.sourcesDir !== undefined ? { sourcesDir: opts.sourcesDir } : {}),
           userSourcesDir: userSourcesDir(),
+          userFiguresDir: userFiguresDir(),
         });
         // ISSUE-011: parts quoting a sentence a human review found wrong on the source page are held back.
         applyContentHolds(opts.storageDir, job);
-        for (const spec of Object.values(job.kitSpecs ?? {})) enrichLabelBoxes(spec);
+        const storedLabelBoxes = (figureId: string) => loadFigureLabelBoxes(figureId, figureDirFor(figureId, userFiguresDir()));
+        for (const spec of Object.values(job.kitSpecs ?? {})) enrichLabelBoxes(spec, storedLabelBoxes);
         // Part titles start with a capital (older runs stored e.g. "merge sort"); stored files are untouched.
         for (const spec of Object.values(job.kitSpecs ?? {})) capitaliseSpecTitle(spec);
         // Label diagrams are numbered in the order the page describes their parts (label-order.ts).
@@ -739,6 +765,7 @@ export function createApiServer(opts: ApiOptions): Server {
       recheckLesson(opts.storageDir, job, {
         ...(opts.sourcesDir !== undefined ? { sourcesDir: opts.sourcesDir } : {}),
         userSourcesDir: userSourcesDir(),
+        userFiguresDir: userFiguresDir(),
       });
       applyContentHolds(opts.storageDir, job);
       const checked = validatePublishBody(parsed, publishedPartIds(job));
@@ -1017,6 +1044,84 @@ export function createApiServer(opts: ApiOptions): Server {
     }
   }
 
+  /**
+   * Teacher diagram (beta, docs/specs/TEACHER-FIGURE.md section 2): POST /api/sources/:id/figure. Order: method, the
+   * same Origin check and access gate as POST /api/sources (before anything about the source is revealed), the source
+   * (404 unknown, 400 FIGURE_SOURCE_NOT_USER for a library page), then the body (415, 413, 400) and the image checks.
+   * Free: no model call happens here (Muse reads the labels when a build uses the figure).
+   */
+  async function handleCreateFigure(req: IncomingMessage, res: ServerResponse, method: string, sourceId: string): Promise<void> {
+    if (method !== 'POST') {
+      return sendError(res, 405, 'METHOD_NOT_ALLOWED');
+    }
+    if (!originAllowed(req)) {
+      return sendError(res, 403, 'ORIGIN_NOT_ALLOWED');
+    }
+    if (!access.isGranted(req)) {
+      return sendError(res, 403, 'ACCESS_REQUIRED');
+    }
+    let libraryIds: string[] = [];
+    try {
+      libraryIds = listSourceIds(opts.sourcesDir);
+    } catch {
+      libraryIds = [];
+    }
+    if (libraryIds.includes(sourceId)) {
+      return sendError(res, 400, 'FIGURE_SOURCE_NOT_USER');
+    }
+    if (!USER_SOURCE_ID_PATTERN.test(sourceId) || !listUserSourceIds(userSourcesDir()).includes(sourceId)) {
+      return sendError(res, 404, 'NOT_FOUND');
+    }
+    const contentType = (req.headers['content-type'] ?? '').toLowerCase();
+    if (!contentType.startsWith('application/json')) {
+      return sendError(res, 415, 'UNSUPPORTED_MEDIA_TYPE');
+    }
+    let rawBody: string;
+    try {
+      rawBody = await readBodyLimited(req, MAX_FIGURE_BODY_BYTES);
+    } catch (err: unknown) {
+      if (err instanceof Error && err.message === 'PAYLOAD_TOO_LARGE') {
+        return sendError(res, 413, 'PAYLOAD_TOO_LARGE');
+      }
+      return sendError(res, 400, 'BAD_REQUEST');
+    }
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(rawBody) as unknown;
+    } catch {
+      return sendError(res, 400, 'BAD_REQUEST');
+    }
+    // The image is untrusted: its size comes from the PNG/JPEG header only, its bytes are stored exactly as sent.
+    const validated = validateUserFigureInput(parsed);
+    if (!validated.ok) {
+      return sendJson(res, 400, { error: 'FIGURE_INVALID', problems: validated.problems });
+    }
+    try {
+      const source = loadUserSourceMeta(sourceId, userSourcesDir());
+      const saved = saveUserFigure(validated.value, source, userFiguresDir(), opts.now !== undefined ? { now: opts.now } : undefined);
+      return sendJson(res, saved.created ? 201 : 200, saved);
+    } catch {
+      // Fixed, content-free 500; never expose fs internals.
+      return sendError(res, 500, 'INTERNAL');
+    }
+  }
+
+  /**
+   * Teacher diagram (beta): a POST /api/jobs figureId is valid only with a user source, as a stored teacher figure
+   * (sha256-verified) of THAT source.
+   */
+  function figureBelongsTo(figureId: unknown, sourceId: string): figureId is string {
+    if (typeof figureId !== 'string' || !USER_FIGURE_ID_PATTERN.test(figureId) || !USER_SOURCE_ID_PATTERN.test(sourceId)) {
+      return false;
+    }
+    try {
+      const { meta } = loadFigure(figureId, figureDirFor(figureId, userFiguresDir()));
+      return meta.id === figureId && meta.sourceId === sourceId;
+    } catch {
+      return false;
+    }
+  }
+
   async function handleCreateJob(req: IncomingMessage, res: ServerResponse): Promise<void> {
     // R-07: a browser Origin, when present, must be http:// + an allowed host.
     if (!originAllowed(req)) {
@@ -1109,6 +1214,15 @@ export function createApiServer(opts: ApiOptions): Server {
     if (!knownIds.includes(sourceId)) {
       return sendError(res, 404, 'SOURCE_NOT_FOUND');
     }
+    // Teacher diagram (beta): the optional teacher figure travels with the job (checked after the source exists).
+    let figureId: string | undefined;
+    if ('figureId' in (parsed as Record<string, unknown>)) {
+      const rawFigure: unknown = (parsed as Record<string, unknown>)['figureId'];
+      if (!figureBelongsTo(rawFigure, sourceId)) {
+        return sendError(res, 400, 'FIGURE_INVALID');
+      }
+      figureId = rawFigure;
+    }
     if (inFlight.size >= maxConcurrentJobs) {
       // Concurrency (part B): the busy 409 only fires when the configured number of jobs
       // is already running — same error code/shape as the pre-concurrency single-job gate.
@@ -1130,6 +1244,7 @@ export function createApiServer(opts: ApiOptions): Server {
         model,
         flow,
         ...(access.gateOn ? { access: 'judge' as const } : {}),
+        ...(figureId !== undefined ? { figureId } : {}),
       });
     } catch {
       return sendError(res, 500, 'JOB_START_FAILED');

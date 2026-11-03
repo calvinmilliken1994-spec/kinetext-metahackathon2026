@@ -185,6 +185,13 @@ input[type="search"]::-webkit-search-cancel-button { cursor: pointer; }
 }
 .nl-excerpt p.muted { font-family: var(--font); color: var(--ink-3); }
 .nl-made { font-size: var(--fs-14); color: var(--ink-2); }
+/* Teacher diagram (beta): the kept diagram under the own text's preview. */
+.nl-figure { display: grid; gap: 6px; margin: 2px 0 0; justify-items: start; }
+.nl-figure img {
+  display: block; inline-size: auto; block-size: auto; max-inline-size: 100%; max-block-size: 180px; object-fit: contain;
+  border: 1px solid var(--line); border-radius: var(--r); background: var(--panel-2);
+}
+.nl-figure figcaption { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 8px; font-size: var(--fs-14); color: var(--ink-3); }
 
 .nl-build { display: grid; gap: 14px; padding: 16px 20px 20px; border-top: 1px solid var(--line); min-width: 0; }
 .nl-build-title { font-size: var(--fs-16); color: var(--ink); }
@@ -391,6 +398,7 @@ input[type="search"]::-webkit-search-cancel-button { cursor: pointer; }
   .nl-path { padding-block: 10px; }
   .nl-excerpt p { -webkit-line-clamp: 3; line-clamp: 3; }
   .nl-preview { padding-block: 14px; gap: 6px; }
+  .nl-figure img { max-block-size: 120px; }
   .nl-build { gap: 12px; padding-top: 14px; }
   /* The sidebar keeps every section in view above the access footer (Demo and How it works included). */
   .sb-sections { gap: 12px; padding-top: 6px; }

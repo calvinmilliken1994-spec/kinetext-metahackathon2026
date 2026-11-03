@@ -11,7 +11,7 @@ import { parseCheckCount, parseFailedChecks, parseGrounding, parseGroundingActor
 import { replayEvents } from './replay.ts';
 import type { PlanComponentId } from '../../../../packages/contracts/kit.ts';
 
-export type BeatKind = 'reading' | 'summary' | 'writing' | 'locating' | 'confirming' | 'outlining' | 'failed' | 'passed' | 'done';
+export type BeatKind = 'labels' | 'reading' | 'summary' | 'writing' | 'locating' | 'confirming' | 'outlining' | 'failed' | 'passed' | 'done';
 
 /** What is still being worked on when a part has been checked (the light moves on to it after the checked moment). */
 export interface BeatFollow { part: string; label: string; doing: 'writing' | 'reworking' | 'working on' }
@@ -100,6 +100,12 @@ export function buildBeats(raw: unknown): Beat[] {
   const analyze = evs.find((x) => x.e.stage === 'analyze' && x.e.status === 'started') ?? evs[0];
   for (const x of evs) {
     const { e, t, seq } = x;
+    // Teacher diagram (beta): Muse reads the diagram's printed labels before the page.
+    if (e.stage === 'labels' && e.status === 'started' && x !== analyze) {
+      const done = evs.find((y) => y.seq > seq && y.e.stage === 'labels' && y.e.status !== 'started');
+      add('labels', t, seq, null, { untilMs: done?.t ?? null });
+      continue;
+    }
     if (x === analyze) {
       const done = evs.find((y) => y.seq > seq && y.e.stage === 'analyze' && y.e.status !== 'started');
       add('reading', t, seq, null, { untilMs: done?.t ?? null });
@@ -192,6 +198,7 @@ export const partTarget = (id: string): string => `.lesson [data-component="${id
 /** The elements a beat cuts out of the dim backdrop at replay time `tMs`. */
 export function beatLights(b: Beat, tMs: number): { targets: string[]; extras: string[] } {
   switch (b.kind) {
+    case 'labels': return { targets: [STRIP_TARGET], extras: [] };
     case 'reading': return { targets: [STRIP_TARGET, SOURCE_TARGET], extras: [] };
     // The part frames the card talks about are lit as well, so the card never covers the next part (review #5).
     case 'summary': return { targets: ['.lesson .overview', SOURCE_TARGET], extras: ['.lesson [data-component]'] };
@@ -216,6 +223,10 @@ export function beatCard(b: Beat, o: { model: string; speed: number }): { title:
   const follow = b.follow === null ? '' : ` Muse is still ${b.follow.doing} ${q(b.follow.label)}.`;
   const n = b.parts === null ? 'each part' : `each of the ${b.parts} parts`;
   switch (b.kind) {
+    case 'labels': return {
+      title: `${o.model} reads the diagram’s labels`,
+      body: 'The teacher added a diagram to this page. Muse finds every printed label and where it sits, so the lesson can cover them for the class. Beta: the teacher checks the covered labels before publishing.',
+    };
     case 'reading': return {
       title: `${o.model} is reading the page`,
       body: `This is a replay of a recorded run, ${speedWords(o.speed)}. The strip names the model, what it is doing and how long it has taken. Every step you see happened in that run.`,

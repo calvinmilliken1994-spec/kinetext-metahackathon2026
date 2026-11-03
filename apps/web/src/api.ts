@@ -2,6 +2,7 @@
 // it only reads stored results and asks the server to start a job.
 
 import type { CreatedSource } from './lib/sources.ts';
+import type { FigureBody } from './lib/teacherFigure.ts';
 import type { AnyActivitySpec } from './lib/timeline.ts';
 import type { AnalysisRepairRecord } from './lib/analysisRepairs.ts';
 import { parseModels } from './lib/models.ts';
@@ -73,6 +74,8 @@ export interface JobSummary {
   pinned?: boolean;
   /** Published shelf: this published lesson shows a label diagram whose parts SAM 3.1 outlined (absent = no). */
   samUsed?: boolean;
+  /** Teacher diagram (beta): the diagram the teacher added for this build (absent = none). */
+  figureId?: string;
 }
 
 /** One stored revision of the activity spec and its validation report (Stage 5). */
@@ -148,11 +151,12 @@ export const api = {
   },
   job: async (id: string, signal?: AbortSignal): Promise<JobDetail> => normaliseJobDetail(await request<unknown>(`/api/jobs/${encodeURIComponent(id)}`, { signal })),
   /** `demoFault` asks the SYSTEM to inject a labelled fault into revision 1 (a demonstration, not a model error). */
-  createJob: (sourceId: string, demoFault?: DemoFault, model?: ModelId, flow: FlowId = 'lesson') =>
+  /** `figureId`: the teacher's diagram (beta) for a lesson build of their own source. */
+  createJob: (sourceId: string, demoFault?: DemoFault, model?: ModelId, flow: FlowId = 'lesson', figureId?: string | null) =>
     request<{ jobId: string }>('/api/jobs', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(createJobBody(sourceId, demoFault, model, flow)),
+      body: JSON.stringify(createJobBody(sourceId, demoFault, model, flow, figureId)),
     }),
   /**
    * Stage 10: the judge access gate. An API without the route answers 404, which is "gate off" (lib/access.ts).
@@ -218,6 +222,17 @@ export const api = {
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(input),
     }),
+  /**
+   * Teacher diagram (beta, docs/specs/TEACHER-FIGURE.md): add ONE image to a stored teacher source. 201 = stored,
+   * 200 = that exact image was already stored for the source. A refusal throws an ApiError (FIGURE_INVALID with plain
+   * problems, FIGURE_SOURCE_NOT_USER, NOT_FOUND, ACCESS_REQUIRED, …).
+   */
+  addFigure: (sourceId: string, body: FigureBody) =>
+    request<unknown>(`/api/sources/${encodeURIComponent(sourceId)}/figure`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(body),
+    }),
 };
 
 function accessOrError(raw: unknown): Access {
@@ -244,6 +259,9 @@ const MESSAGES: Record<string, string> = {
   MODEL_INVALID: 'The server did not recognise that model. Pick one from the list.',
   FLOW_INVALID: 'The server did not recognise that way of building (lesson or classic activity).',
   INTERNAL: 'The server hit an unexpected error.',
+  // Teacher diagram (beta): POST /api/jobs refuses a diagram it cannot use with this text.
+  FIGURE_INVALID: 'The diagram kept with this text could not be used. Choose “Leave it out” under the preview, or save the text with the diagram again.',
+  FIGURE_SOURCE_NOT_USER: 'A diagram can only be added to your own text.',
 };
 
 export function describeError(e: unknown): string {

@@ -1,0 +1,235 @@
+{
+  "id": "nasa-grc-gas-properties-1",
+  "width": 600,
+  "height": 384,
+  "data": {
+    "labels": [
+      {
+        "bbox": [
+          {
+            "x_max": 155,
+            "x_min": 12,
+            "y_max": 166,
+            "y_min": 125
+          }
+        ],
+        "names_part": false,
+        "text": "Small Scale"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 958,
+            "x_min": 815,
+            "y_max": 166,
+            "y_min": 125
+          }
+        ],
+        "names_part": false,
+        "text": "Large Scale"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 142,
+            "x_min": 22,
+            "y_max": 259,
+            "y_min": 222
+          }
+        ],
+        "names_part": false,
+        "text": "Molecular"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 960,
+            "x_min": 828,
+            "y_max": 259,
+            "y_min": 222
+          }
+        ],
+        "names_part": false,
+        "text": "Whole Gas"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 122,
+            "x_min": 45,
+            "y_max": 365,
+            "y_min": 326
+          }
+        ],
+        "names_part": false,
+        "text": "Micro"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 930,
+            "x_min": 848,
+            "y_max": 365,
+            "y_min": 326
+          }
+        ],
+        "names_part": false,
+        "text": "Macro"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 244,
+            "x_min": 174,
+            "y_max": 598,
+            "y_min": 564
+          }
+        ],
+        "names_part": false,
+        "text": "Mass"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 832,
+            "x_min": 732,
+            "y_max": 598,
+            "y_min": 564
+          }
+        ],
+        "names_part": false,
+        "text": "Density"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 355,
+            "x_min": 217,
+            "y_max": 650,
+            "y_min": 614
+          }
+        ],
+        "names_part": false,
+        "text": "Momentum"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 810,
+            "x_min": 694,
+            "y_max": 650,
+            "y_min": 614
+          }
+        ],
+        "names_part": false,
+        "text": "Pressure"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 355,
+            "x_min": 282,
+            "y_max": 702,
+            "y_min": 666
+          }
+        ],
+        "names_part": false,
+        "text": "Energy"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 769,
+            "x_min": 617,
+            "y_max": 702,
+            "y_min": 666
+          }
+        ],
+        "names_part": false,
+        "text": "Temperature"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 340,
+            "x_min": 88,
+            "y_max": 809,
+            "y_min": 771
+          }
+        ],
+        "names_part": false,
+        "text": "Viscous = \"Sticky\""
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 867,
+            "x_min": 561,
+            "y_max": 809,
+            "y_min": 771
+          }
+        ],
+        "names_part": false,
+        "text": "Diffusion = Random Motion"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 355,
+            "x_min": 22,
+            "y_max": 861,
+            "y_min": 823
+          }
+        ],
+        "names_part": false,
+        "text": "Compressible = \"Springy\""
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 867,
+            "x_min": 537,
+            "y_max": 861,
+            "y_min": 823
+          }
+        ],
+        "names_part": false,
+        "text": "Convection = Ordered Motion"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 736,
+            "x_min": 268,
+            "y_max": 952,
+            "y_min": 914
+          }
+        ],
+        "names_part": false,
+        "text": "Rotational = Angular Momentum"
+      }
+    ]
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a1a1c0-ad4e-70ea-83e8-693a37fb3bd6",
+    "usage": {
+      "promptTokens": 559,
+      "completionTokens": 4277,
+      "reasoningTokens": 3507,
+      "cachedTokens": 227
+    },
+    "latencyMs": 44562,
+    "estCostUSD": 0.0186263,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  }
+}

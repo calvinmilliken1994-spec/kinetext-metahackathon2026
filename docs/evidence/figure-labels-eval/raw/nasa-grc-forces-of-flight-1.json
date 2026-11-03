@@ -1,0 +1,199 @@
+{
+  "id": "nasa-grc-forces-of-flight-1",
+  "width": 600,
+  "height": 382,
+  "data": {
+    "labels": [
+      {
+        "bbox": [
+          {
+            "x_max": 518,
+            "x_min": 471,
+            "y_max": 116,
+            "y_min": 77
+          }
+        ],
+        "names_part": true,
+        "text": "Lift"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 201,
+            "x_min": 124,
+            "y_max": 361,
+            "y_min": 320
+          }
+        ],
+        "names_part": true,
+        "text": "Thrust"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 877,
+            "x_min": 817,
+            "y_max": 362,
+            "y_min": 322
+          }
+        ],
+        "names_part": true,
+        "text": "Drag"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 560,
+            "x_min": 483,
+            "y_max": 471,
+            "y_min": 431
+          }
+        ],
+        "names_part": true,
+        "text": "Weight"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 415,
+            "x_min": 212,
+            "y_max": 619,
+            "y_min": 582
+          }
+        ],
+        "names_part": false,
+        "text": "Flight Condition"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 583,
+            "x_min": 501,
+            "y_max": 617,
+            "y_min": 582
+          }
+        ],
+        "names_part": false,
+        "text": "Effect"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 410,
+            "x_min": 242,
+            "y_max": 683,
+            "y_min": 646
+          }
+        ],
+        "names_part": false,
+        "text": "Lift > Weight"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 652,
+            "x_min": 495,
+            "y_max": 685,
+            "y_min": 646
+          }
+        ],
+        "names_part": false,
+        "text": "Plane Rises"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 395,
+            "x_min": 245,
+            "y_max": 741,
+            "y_min": 702
+          }
+        ],
+        "names_part": false,
+        "text": "Weight > Lift"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 640,
+            "x_min": 495,
+            "y_max": 741,
+            "y_min": 703
+          }
+        ],
+        "names_part": false,
+        "text": "Plane Falls"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 407,
+            "x_min": 272,
+            "y_max": 794,
+            "y_min": 758
+          }
+        ],
+        "names_part": false,
+        "text": "Drag > Thrust"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 653,
+            "x_min": 495,
+            "y_max": 797,
+            "y_min": 758
+          }
+        ],
+        "names_part": false,
+        "text": "Plane Slows"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 407,
+            "x_min": 255,
+            "y_max": 850,
+            "y_min": 814
+          }
+        ],
+        "names_part": false,
+        "text": "Thrust > Drag"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 725,
+            "x_min": 495,
+            "y_max": 852,
+            "y_min": 814
+          }
+        ],
+        "names_part": false,
+        "text": "Plane Accelerates"
+      }
+    ]
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a1a1c0-472b-709e-bd7b-ed74eb367a96",
+    "usage": {
+      "promptTokens": 559,
+      "completionTokens": 1900,
+      "reasoningTokens": 1266,
+      "cachedTokens": 227
+    },
+    "latencyMs": 18466,
+    "estCostUSD": 0.00852405,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  }
+}

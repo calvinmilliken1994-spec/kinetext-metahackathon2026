@@ -3,6 +3,9 @@
 // lesson can never label a silently changed figure. Server-side only: uses node:crypto/node:fs.
 import { createHash } from 'node:crypto';
 import { readdirSync, readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
+import { USER_FIGURE_ID_PATTERN } from './index.ts';
 
 export const FIGURES_DIR = new URL('../../data/figures/', import.meta.url);
 
@@ -24,10 +27,25 @@ export interface FigureMeta {
   licenseEvidence: string;
   labelsInImage: boolean;
   retrievedAt: string;
+  /**
+   * Teacher diagram (beta): 'teacher' on a figure a teacher uploaded with their own source (stored under
+   * `<storageDir>/user-figures/`). Library figures omit the key.
+   */
+  provided?: 'teacher';
   /** In-memory only (never in the sidecar JSON): the stored printed-label boxes, attached by the lesson worker. */
   labelBoxes?: FigureLabelBox[];
   /** In-memory only: the Stage 8c lead-curated label groups that name drawn parts (labels.json `partLabelGroups`), attached by the lesson worker. */
   partLabelGroups?: number[];
+}
+
+/**
+ * Teacher diagram (beta): the directory a figure id is stored in. `uf-` ids (teacher uploads) resolve to the user
+ * figure store, every other id to the licensed library, so every loader below works unchanged for both.
+ */
+export function figureDirFor(id: string, userFiguresDir: string): URL {
+  if (!USER_FIGURE_ID_PATTERN.test(id)) return FIGURES_DIR;
+  // A trailing slash makes the URL a directory, so `new URL(file, dir)` stays inside it.
+  return pathToFileURL(`${resolve(userFiguresDir)}/`);
 }
 
 function readMeta(id: string, dir: URL): FigureMeta {
@@ -87,9 +105,17 @@ export function loadFigureLabelBoxes(figureId: string, dir: URL = FIGURES_DIR): 
   return readLabelsFile(figureId, dir)?.boxes ?? [];
 }
 
-interface LabelsFile {
+export interface LabelsFile {
   boxes: FigureLabelBox[];
   partLabelGroups?: number[];
+}
+
+/**
+ * Teacher diagram (beta): the validated `<id>.labels.json` (same rules as every loader here), or null when it is
+ * missing, stale or malformed. The worker reuses a valid file instead of asking Muse again.
+ */
+export function loadFigureLabelsFile(figureId: string, dir: URL = FIGURES_DIR): LabelsFile | null {
+  return readLabelsFile(figureId, dir);
 }
 
 /** Validated contents of `<id>.labels.json`, or null when the file is missing, stale (different image hash) or malformed. */
