@@ -65,13 +65,13 @@ shelf.
 > Every lesson says "Needs review" until a teacher reads each part and publishes it. Published lessons go on the
 > shelf: ten so far, across eight subjects.
 
-## 6. Two Meta models, measured (2:15 to 2:45)
+## 6. Three Meta models, measured (2:15 to 2:45)
 
 **Screen:** the Results page: Muse Spark 1.3 against Muse Spark Open, then the line from planned parts to published.
 
 **Voiceover:**
-> It runs on two Meta models: Muse Spark 1.3 on Meta's API, and Muse Spark Open, the open-weight model, served on
-> Modal. I built 194 lessons with each. Spark 1.3 made a working lesson 189 times, Spark Open 178. Muse's own repairs
+> It runs on three Meta models: Muse Spark 1.3 on Meta's API, Muse Spark Open, the open-weight model, served on
+> Modal, and SAM 3.1 for the diagrams. I built 194 lessons with each Muse model. Spark 1.3 made a working lesson 189 times, Spark Open 178. Muse's own repairs
 > rescued 45 parts on Spark 1.3 and 70 on Spark Open.
 
 ## 7. Try it (2:45 to 2:57)
