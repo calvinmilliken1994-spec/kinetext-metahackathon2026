@@ -34,6 +34,17 @@ first time it opens.
 | **Your own Meta Model API key** | Copy `.env.example` to `.env`, set `MODEL_API_KEY=`, then `npm start` again | Live builds on Muse Spark 1.3 and SAM 3.1 on your own credit. Muse Spark Open runs on our Modal deployment, so in this mode it shows its recorded lessons only. |
 | Nothing | Press **Explore read-only** | Every recorded lesson, the Demo, Results and presenting. No new builds. |
 
+**Advanced: Muse Spark Open on your own Modal account.** The access code is the easy way to try Spark Open. Our Spark
+Open endpoint is in our own Modal workspace, and Modal tokens only work inside the workspace that created the
+endpoint, so your own Modal token cannot call ours. To run it on your account instead:
+
+1. In Modal, create your own endpoint for Muse Spark Open (`meta-models/Muse-Spark-Open-816B-A42B`).
+2. Put its base URL (ending in `/v1`) in `config/resource-limits.json` as `modalBaseUrl`.
+3. In `.env`, next to `MODEL_API_KEY`, set `MODAL_PROXY_TOKEN=` to your Modal proxy token pair written as one value,
+   `wk-…ws-…`, then `npm start` again. Muse Spark Open appears in the model picker once the token is present.
+
+This is how the app runs on the developer's machine; it has not been tested on another Modal account.
+
 ### 4. A five-minute tour
 
 1. **Demo** (sidebar): replays a real recorded build step by step, including a check that failed and Muse's repair.
