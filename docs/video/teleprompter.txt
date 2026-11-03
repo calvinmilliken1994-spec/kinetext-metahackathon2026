@@ -4,17 +4,22 @@ Hi, I'm Calvin. I built this on my own during the hackathon. Before October 27th
 [2]
 It's for teachers. Pick a licensed page, or paste your own, and Meta's models turn it into a short lesson with interactive parts. Each part is tied to the sentence it came from and checked against the page. These are lessons it built earlier.
 
-[3]  RECORDING: press F8 and stay quiet until "Lesson ready".
-VOICED LATER over the sped-up build:
+[3]  Press F8. Read each line when the strip on screen shows its step; stay quiet in between (those gaps are sped up in the edit).
+
+(when Build is pressed)
 This is a live build on Muse Spark 1.3, through Meta's Model API. The strip shows each call as it happens.
 
+(when the summary appears)
 Muse reads the page and writes the summary first. Each key point lights up the sentence it came from.
 
+(when the strip says "Writing")
 Then it writes the parts. Before a part appears, code checks its quotes, numbers and structure against the page. If a check fails, the part goes back to Muse with that check, and Muse revises it.
 
+(when the strip says "Locating" or "SAM 3.1 confirming")
 For the diagram, Muse Spark finds each labelled part on the USGS figure, and SAM 3.1, Meta's segmentation model, outlines it to confirm. If they disagree, the check fails and the part is reworked.
 
-I've sped up the middle. The whole build took ⟨about two minutes⟩ and cost ⟨about twenty cents⟩.
+(when the strip says "Lesson ready": read the time and cost from the strip)
+That's the whole build: about two minutes, for about twenty cents.
 
 [4]
 Students drag each name onto its number, and nothing is marked until they check. Checks and run details shows every check behind the lesson, and when Muse revised a part, which check failed, what it changed, and the figure before and after.

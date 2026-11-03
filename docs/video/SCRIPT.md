@@ -4,7 +4,9 @@ Calvin reads the voiceover on camera (corner bubble). The screen is the real app
 1920×1080. Target 2:55, hard limit 3:00. Rules: `docs/HACKATHON_RULES.md`, "Demo video guidance".
 
 Live vs recorded, said on screen or in the voiceover:
-- Scene 3 is a **live build** (real Muse Spark 1.3 and SAM 3.1 calls). Its middle plays at 4× with a "4× speed" label.
+- Scene 3 is a **live build** (real Muse Spark 1.3 and SAM 3.1 calls), recorded with the camera like every scene.
+  Calvin reads each paragraph when the strip reaches its step; the quiet stretches in between play at 4× in the edit
+  with a "4× speed" label and the camera bubble hidden.
 - The Welcome montage shows lessons built earlier; it is labeled "From published lessons" on screen and in the voiceover.
 - Numbers marked ⟨…⟩ are filled in from the actual take.
 
@@ -44,7 +46,7 @@ names each call as it runs. Real speed for the first seconds, then "4× speed" t
 > For the diagram, Muse Spark finds each labelled part on the USGS figure, and SAM 3.1, Meta's segmentation model,
 > outlines it to confirm. If they disagree, the check fails and the part is reworked.
 >
-> I've sped up the middle. The whole build took ⟨about two minutes⟩ and cost ⟨about twenty cents⟩.
+> That's the whole build: ⟨about two minutes⟩, for ⟨about twenty cents⟩.
 
 ## 4. Use it, and see how it was checked (1:30 to 1:55)
 

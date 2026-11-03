@@ -3,7 +3,8 @@
 Agreed with Calvin on 3 Nov 2026. He records with Tella's Windows app (screen + camera + mic) and reads
 `docs/video/SCRIPT.md` from Tella's teleprompter. A Node script drives the real app in a clean Chrome window so every
 click and pause is the same on every take. Option A: each scene plays when Calvin presses a key, timed to his lines.
-Scene 3 (the live build) is the exception: it is recorded screen-only, sped up in the edit, and voiced afterwards.
+Scene 3 (the live build) is recorded with the camera too (Calvin, 3 Nov): he reads each paragraph as the strip reaches
+its step, and the quiet stretches are sped up in the edit with the camera hidden.
 
 ## Shape
 
