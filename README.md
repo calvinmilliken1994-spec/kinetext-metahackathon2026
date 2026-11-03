@@ -85,34 +85,26 @@ interactive artifact with a visible verify-and-repair loop, not a conversation.
 
 ## Results
 
-Two evaluation series on the same 29 licensed public pages. The pre-registered v1 evaluation scored
-the first product shape (one premium activity per page, or an honest decline). The lesson flow is a
-later, broader shape (overview plus two to three checked interactive parts). The lesson-flow runs are
-**follow-up runs, not a new pre-registered benchmark**; the pre-registered v1 scores are unchanged.
+**Final evaluation, pre-registered on 31 Oct 2026** (`docs/evidence/final-eval/`): 97 library pages across 9
+subjects, each built twice on each model, so 194 lessons per model, with the same prompts (s6-v10), checks and repair
+limit (two attempts). The measures, pages and models were committed before the first job ran
+(`PREREGISTRATION.md`). The app's **Results** page shows the same numbers with their 95% intervals.
 
-| Run | Pages with a lesson | Failed pages | Interactive parts kept | Median time | Cost | Evidence |
-|---|---|---|---|---|---|---|
-| v1, pre-registered (one premium activity, Spark 1.3) | 9 / 29 | 3 | — | — | USD 0.93 total | `docs/evidence/stage-5b/evaluation/` |
-| Lesson flow, Spark 1.3 via Meta API | **28 / 29** | 1 (BUG-006, since fixed) | 63 / 67 (94%) | 74 s | **USD 4.53** (~0.14/page) | `docs/evidence/stage-6/evaluation-lesson-1.3/` |
-| Lesson flow, Spark Open on Modal (first run) | 27 / 29 | 2 | 61 / 77 (79%) | 139 s | USD 6.86 (Modal credits) | `docs/evidence/stage-6/evaluation-lesson-open/` |
-| Lesson flow, Spark Open after the s6-v2 prompt fixes | **28 / 29** | **0** | 48 / 56 (86%) | 100 s | USD 4.95 (Modal credits) | `docs/evidence/stage-6/evaluation-lesson-open-v2/` |
+| | Muse Spark 1.3 (Meta Model API) | Muse Spark Open (open weights on Modal) |
+|---|---|---|
+| Built a working lesson | **189 / 194** (97%) | **178 / 194** (92%) |
+| Interactive parts that passed every check on the first try | 303 / 379 (80%) | 272 / 374 (73%) |
+| Failed parts that Muse's own repair fixed | 45 / 76 | 70 / 102 |
+| Parts published in the end | 348 / 379 (92%) | 342 / 374 (91%) |
+| Median build time | 75 s | 128 s |
+| Cost per lesson | USD 0.150 | USD 0.186 (Modal credits) |
+| Whole run | USD 29.14 (incl. 23 SAM 3.1 calls, USD 0.06) | USD 36.10 |
 
-What the runs show, beyond the counts:
+Page by page, Spark 1.3 did better on 18 pages, Spark Open on 11, and 68 were tied. Diagram lessons (Label the
+diagram with SAM 3.1) were measured separately in live runs; the Results page lists each one with its SAM scores.
 
-- The v1 run's 9/29 was a coverage problem, not a quality problem: requiring exactly one premium
-  activity per page leaves most pages declined (17 of 29 in v1, including 8 later judged declined in
-  error). The lesson flow turns nearly every page into something interactive (28/29) on both the
-  hosted and the open-weights model.
-- The 254-character glossary stub is correctly declined (`too-short`, 8 s) instead of padded into a lesson.
-- Five **natural** analysis repairs (no injected faults) all passed on the Spark 1.3 run; on Spark Open
-  the checks keep weak parts out rather than failing the page.
-- One truncation inside a single component used to fail the whole lesson (BUG-006); since `a53c1f0` only
-  that part is left out.
-- The two Spark Open runs bracket a real engineering loop: its first run lost 16 planned parts (6 ran
-  out of room, formula and table shape misses). Muse then rewrote its own generation instructions
-  (s6-v2, commits `a6d98bb`/`ef2dee2`); the re-run had 0 failed pages, 0 truncations, and was faster
-  and cheaper. Compare tables remain the weak part on Spark Open (see Limits).
-- The open-weights runs used 3 pages at once (whole 29-page run: 19 minutes).
+Earlier series on 29 pages (the pre-registered v1 evaluation of the first product shape, and the first lesson-flow
+runs on both models) are kept unchanged in `docs/evidence/stage-5b/evaluation/` and `docs/evidence/stage-6/`.
 
 ## How Meta AI is used
 
@@ -125,6 +117,10 @@ What the runs show, beyond the counts:
   pipeline, prompts, checks and repair loop — the product's guarantees come from the deterministic
   checks, not from one hosted API, so a school district or publisher could run it on infrastructure
   it controls.
+- **Runtime, vision:** SAM 3.1 via the Meta Model API. For a Label the diagram part, Muse Spark first locates each
+  labelled part on the page's own figure, then SAM 3.1 outlines it; if the two disagree, a check fails and Muse
+  revises the part. For a teacher's own diagram (beta), Muse Spark also reads the figure's printed labels first, so the
+  answers can be covered.
 - **Engineering:** Muse Spark 1.3, through the Muse Code subscription bridge, authored `packages/meta`
   (client, spend ledger, prompts, pipeline), the Stage 6 contracts, prompts and pipeline, the
   provider-aware open-weights client, and the s6-v2 prompt tuning. Each contribution is applied
@@ -149,7 +145,9 @@ Live events, artifacts and costs are stored per job under `storage/runs/` (gitig
 | `workers/generation` | Job machine: stage events, per-component checks/prune/repair, partial publish |
 | `apps/api` | Localhost-only `node:http` JSON API (loopback, Host/Origin allowlist; live generation opt-in) |
 | `apps/web` | Vite + React teacher workspace: lesson view with all component types, repair cards, cost and scope honesty |
-| `data/sources`, `data/evaluation` | 41 licensed source texts with per-source license/locator/sha256 records; the 29-page evaluation manifest |
+| `data/sources`, `data/figures`, `data/evaluation` | 105 licensed library pages in 9 subjects (98 active, 7 retired) with license/locator/sha256 records; 10 licence-checked figures with hand-checked label boxes; the evaluation manifests |
+| `data/demo-runs` | 119 real recorded runs shipped for fresh clones (Demo, Welcome, published lessons, one lesson per page) |
+| `relay` | The judge relay on Modal: checks the access code, holds the model keys, caps the judging spend |
 
 ## Trust and honesty
 
@@ -181,7 +179,7 @@ Live events, artifacts and costs are stored per job under `storage/runs/` (gitig
 
 ## Run it locally (development)
 
-The one-command launch is in Quick start above; this section is the developer setup with the API and Vite run separately.
+The one-command launch is in Run the demo (judges) above; this section is the developer setup with the API and Vite run separately.
 
 Prerequisites: Node.js **>= 22** (`package.json` engines; developed and verified on Node 24, which runs
 the TypeScript directly via type stripping — no build step for server or packages).
@@ -228,7 +226,13 @@ excluded from everything the demo shows. **All product features were built from 
 | 2026-10-29 | `6c93ce1`, `630a522`, `0fbeac0`, `c0bf205` | Open-weights mode: provider-aware client, per-job model choice, Modal token handling, model picker with labels on every step and repair. |
 | 2026-10-29 | `cc1a9b5` … `d4f94af` | Stage 6 lesson flow: design and contracts (Muse), prompts/pipeline (Muse), 64 kit validators, worker/API, full lesson UI wired to live streaming. |
 | 2026-10-29/30 | `00a0a07`, `a53c1f0`, `5992739`, `a6d98bb`, `ef2dee2`, `a2e1d07` | The four evaluation runs above; BUG-006 fix (a truncated part fails only itself); bounded concurrency (3 pages at once); s6-v2 prompt fixes and the Spark Open re-run. |
-| 2026-10-30 | `e286b7e`, `4acace9`, `de83727` | App reskin with the official Meta logo footer naming the hackathon; publisher-correct AI disclosure; final UI pass (teacher view by default). |
+| 2026-10-30 | `e286b7e`, `4acace9`, `de83727` | App reskin with a footer naming the hackathon (the Meta logo was later replaced by plain text); publisher-correct AI disclosure; final UI pass (teacher view by default). |
+| 2026-10-30 | `1b4b2f5` … `15cab3c` | Stage 7: teacher-facing polish, library grouped by subject, presentation mode for the classroom projector, teacher wording rules for AI-written text; Stage 6 review fix wave. |
+| 2026-10-31 | `2fb4577` … `0b80d72` | 31 more licence-checked pages (computing, maths, chemistry, biology, earth science); four new engines (algorithm tracer, log ladder, threshold, data table); **Label the diagram with SAM 3.1** (figure library, LD checks, live runs); the pre-registered final evaluation, 388 jobs on both models. |
+| 2026-11-01 | `ba79bdc` … `6c78c74` | Independent backend, web and UX reviews (GPT-6.1 Sol, GPT-6.1 Terra, Opus 5.5) and their fix sets: checks that bind meaning, stored parts re-checked when served, SAM billing that fails closed, the repair story with before/after, SAM's work visible in the build; Spark Open timeout retest (18/18). |
+| 2026-11-02 | `6331742` … `053981c` | Muse grounding before SAM; Results page; judge access and the relay on Modal (one access code, capped spend); Welcome screen; Review and publish; library tidy (Needs review, Published shelf, archiving); volcano and airplane diagram pages. |
+| 2026-11-03 | `c4d361e` … `8ceb128` | Demo that follows a recorded build, name Kinetext, printed labels shown as printed, video capture tooling, **teacher diagram upload (beta)** with Muse reading the printed labels. |
+| 2026-11-04 | `cd1d8a0` … | Submission: shipped demo runs for fresh clones, judge quick start. |
 
 Solo human developer. Parts of the implementation were written by AI agents (Muse Spark 1.3, Claude,
 Qwen, GPT reviewers) under the developer's direction; every commit's authoring route is recorded in
@@ -254,14 +258,20 @@ Qwen, GPT reviewers) under the developer's direction; every commit's authoring r
   run in `a53c1f0`); repairs did start.
 - Teacher-pasted source texts live in gitignored runtime storage, so their grounding cannot be
   re-verified from the repository alone.
+- **Teacher diagram upload is beta.** Muse Spark reads the printed labels of an uploaded diagram, and a fixed rule
+  snaps each cover onto the printed text. On the 10 library figures this covers 20 of 21 answer labels fully
+  (`docs/evidence/figure-labels-eval/`), but no person checks an uploaded figure's covers, so the teacher should look
+  before publishing.
 - Costs and latencies come from the local ledger and provider receipts; anything not measured is
   recorded as unknown, never zero.
 - There is no external publishing path: publication is disabled; everything here runs and stays local.
 
 ## Sources and attribution
 
-- The 41 library sources (`data/sources/`) are US-Gov-Work public-domain pages from NASA Glenn Research
-  Center, the National Archives, NOAA, the CFPB, the NRC, the USGS and the NIJ. Each source record keeps
+- The 105 library sources (`data/sources/`) are US-Gov-Work public-domain pages from, among others, NASA, NOAA,
+  the USGS, NIST, MedlinePlus Genetics and NHGRI, the National Archives, the CFPB, the FTC, the IRS, the Census Bureau,
+  the NRC and the NIJ. The 10 figures (`data/figures/`) are public-domain images from the same publishers, each with
+  its credit and licence evidence. Each source record keeps
   its locator, license, attribution text and sha256. Per NASA's media-usage conditions, generated output
   is attributed to this product, never to NASA, and the validator enforces that.
 - The test fixture source text (`tests/fixtures/source.txt`) is original and CC0-1.0.
