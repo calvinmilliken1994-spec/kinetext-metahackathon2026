@@ -1,6 +1,6 @@
 # Security policy
 
-Project: **Make knowledge interactive.** (product name provisional) — Meta AI Developer Hackathon 2026 entry. Early-stage hackathon code; no production deployment exists.
+Project: **Kinetext · Make knowledge interactive**, an entry to the Meta Global AI Developer Hackathon 2026. Hackathon code that runs locally; the only deployed part is the judge relay on Modal (`relay/`).
 
 ## Reporting a vulnerability
 
@@ -10,8 +10,8 @@ In scope: credential exposure, injection through uploaded source material (promp
 
 ## Credential handling
 
-- Real credentials (`MODEL_API_KEY`, partner keys, tokens) are never committed. They live only in ignored `.env.local` files, the Hermes profile secret store, or server-side process environment.
-- `.env.example` contains placeholder names only. Copy it to `.env.local` and fill values locally.
+- Real credentials (`MODEL_API_KEY`, `MODAL_PROXY_TOKEN`, the judge access code) are never committed. They live only in ignored `.env` / `.env.local` files, the developer's local secret store, the relay's Modal secrets, or a server process's memory.
+- `.env.example` contains placeholder names only. Copy it to `.env` (or `.env.local`) and fill values locally.
 - Keys must never reach browser bundles, generated activity code, agent logs, or public evidence receipts. Receipts in `docs/evidence/` are sanitized: model IDs, status codes, timing and usage only.
 - Approved metered spend defaults to USD 0 (`docs/RESOURCE_POLICY.md`); positive budgets require explicit human approval.
 - If a secret is ever committed: revoke/rotate it at the provider **first**, then remove it from history. Deleting it in a later commit is not enough; history rewriting requires maintainer approval.
