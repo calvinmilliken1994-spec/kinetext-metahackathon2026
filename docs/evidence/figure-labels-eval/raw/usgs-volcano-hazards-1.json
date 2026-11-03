@@ -1,0 +1,403 @@
+{
+  "id": "usgs-volcano-hazards-1",
+  "width": 699,
+  "height": 816,
+  "data": {
+    "labels": [
+      {
+        "bbox": [
+          {
+            "x_max": 324,
+            "x_min": 118,
+            "y_max": 91,
+            "y_min": 69
+          }
+        ],
+        "names_part": true,
+        "text": "Eruption Cloud"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 957,
+            "x_min": 807,
+            "y_max": 96,
+            "y_min": 77
+          }
+        ],
+        "names_part": true,
+        "text": "Prevailing Wind"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 934,
+            "x_min": 748,
+            "y_max": 159,
+            "y_min": 140
+          }
+        ],
+        "names_part": true,
+        "text": "Eruption Column"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 278,
+            "x_min": 67,
+            "y_max": 169,
+            "y_min": 149
+          }
+        ],
+        "names_part": true,
+        "text": "Ash (Tephra) Fall"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 836,
+            "x_min": 730,
+            "y_max": 204,
+            "y_min": 185
+          },
+          {
+            "x_max": 856,
+            "x_min": 724,
+            "y_max": 224,
+            "y_min": 204
+          }
+        ],
+        "names_part": true,
+        "text": "Landslide (Debris Avalanche)"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 185,
+            "x_min": 70,
+            "y_max": 236,
+            "y_min": 217
+          }
+        ],
+        "names_part": true,
+        "text": "Acid Rain"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 481,
+            "x_min": 404,
+            "y_max": 248,
+            "y_min": 230
+          }
+        ],
+        "names_part": true,
+        "text": "Bombs"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 958,
+            "x_min": 783,
+            "y_max": 285,
+            "y_min": 266
+          }
+        ],
+        "names_part": true,
+        "text": "Pyroclastic Flow"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 723,
+            "x_min": 678,
+            "y_max": 288,
+            "y_min": 270
+          }
+        ],
+        "names_part": true,
+        "text": "Vent"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 386,
+            "x_min": 121,
+            "y_max": 300,
+            "y_min": 281
+          }
+        ],
+        "names_part": true,
+        "text": "Lava Dome Collapse"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 521,
+            "x_min": 397,
+            "y_max": 313,
+            "y_min": 294
+          }
+        ],
+        "names_part": true,
+        "text": "Lava Dome"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 319,
+            "x_min": 114,
+            "y_max": 340,
+            "y_min": 320
+          }
+        ],
+        "names_part": true,
+        "text": "Pyroclastic Flow"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 981,
+            "x_min": 908,
+            "y_max": 365,
+            "y_min": 347
+          }
+        ],
+        "names_part": true,
+        "text": "Fumaroles"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 345,
+            "x_min": 7,
+            "y_max": 390,
+            "y_min": 370
+          }
+        ],
+        "names_part": true,
+        "text": "Lahar (Mud or Debris Flow)"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 139,
+            "x_min": 32,
+            "y_max": 442,
+            "y_min": 423
+          }
+        ],
+        "names_part": true,
+        "text": "Lava Flow"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 880,
+            "x_min": 794,
+            "y_max": 546,
+            "y_min": 527
+          },
+          {
+            "x_max": 862,
+            "x_min": 796,
+            "y_max": 568,
+            "y_min": 548
+          }
+        ],
+        "names_part": true,
+        "text": "Ground Water"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 212,
+            "x_min": 102,
+            "y_max": 615,
+            "y_min": 596
+          },
+          {
+            "x_max": 189,
+            "x_min": 126,
+            "y_max": 632,
+            "y_min": 616
+          }
+        ],
+        "names_part": false,
+        "text": "Silica (SiO2) Content"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 359,
+            "x_min": 299,
+            "y_max": 613,
+            "y_min": 597
+          },
+          {
+            "x_max": 348,
+            "x_min": 313,
+            "y_max": 631,
+            "y_min": 615
+          }
+        ],
+        "names_part": false,
+        "text": "Magma Type"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 207,
+            "x_min": 162,
+            "y_max": 659,
+            "y_min": 643
+          }
+        ],
+        "names_part": false,
+        "text": "100%"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 856,
+            "x_min": 794,
+            "y_max": 730,
+            "y_min": 711
+          }
+        ],
+        "names_part": true,
+        "text": "Crack"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 132,
+            "x_min": 107,
+            "y_max": 747,
+            "y_min": 732
+          }
+        ],
+        "names_part": false,
+        "text": "68"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 307,
+            "x_min": 236,
+            "y_max": 738,
+            "y_min": 722
+          }
+        ],
+        "names_part": false,
+        "text": "Rhyolite"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 294,
+            "x_min": 236,
+            "y_max": 757,
+            "y_min": 741
+          }
+        ],
+        "names_part": false,
+        "text": "Dacite"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 132,
+            "x_min": 107,
+            "y_max": 767,
+            "y_min": 752
+          }
+        ],
+        "names_part": false,
+        "text": "63"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 306,
+            "x_min": 236,
+            "y_max": 778,
+            "y_min": 762
+          }
+        ],
+        "names_part": false,
+        "text": "Andesite"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 132,
+            "x_min": 107,
+            "y_max": 796,
+            "y_min": 781
+          }
+        ],
+        "names_part": false,
+        "text": "53"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 294,
+            "x_min": 237,
+            "y_max": 809,
+            "y_min": 793
+          }
+        ],
+        "names_part": false,
+        "text": "Basalt"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 692,
+            "x_min": 616,
+            "y_max": 875,
+            "y_min": 856
+          }
+        ],
+        "names_part": true,
+        "text": "Magma"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 189,
+            "x_min": 176,
+            "y_max": 954,
+            "y_min": 940
+          }
+        ],
+        "names_part": false,
+        "text": "0"
+      }
+    ]
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a1a1c2-914c-757b-9624-91bdae42e09c",
+    "usage": {
+      "promptTokens": 976,
+      "completionTokens": 7625,
+      "reasoningTokens": 6185,
+      "cachedTokens": 227
+    },
+    "latencyMs": 60393,
+    "estCostUSD": 0.033376550000000005,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  }
+}

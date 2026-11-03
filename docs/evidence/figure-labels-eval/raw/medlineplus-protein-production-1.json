@@ -1,0 +1,163 @@
+{
+  "id": "medlineplus-protein-production-1",
+  "width": 600,
+  "height": 510,
+  "data": {
+    "labels": [
+      {
+        "bbox": [
+          {
+            "x_max": 827,
+            "x_min": 704,
+            "y_max": 80,
+            "y_min": 45
+          }
+        ],
+        "names_part": true,
+        "text": "Nucleus"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 425,
+            "x_min": 352,
+            "y_max": 152,
+            "y_min": 118
+          }
+        ],
+        "names_part": true,
+        "text": "DNA"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 968,
+            "x_min": 817,
+            "y_max": 241,
+            "y_min": 205
+          }
+        ],
+        "names_part": true,
+        "text": "Cytoplasm"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 372,
+            "x_min": 192,
+            "y_max": 308,
+            "y_min": 272
+          }
+        ],
+        "names_part": false,
+        "text": "Transcription"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 433,
+            "x_min": 333,
+            "y_max": 542,
+            "y_min": 507
+          }
+        ],
+        "names_part": true,
+        "text": "mRNA"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 473,
+            "x_min": 186,
+            "y_max": 646,
+            "y_min": 614
+          }
+        ],
+        "names_part": false,
+        "text": "Transport to cytoplasm"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 902,
+            "x_min": 813,
+            "y_max": 847,
+            "y_min": 812
+          }
+        ],
+        "names_part": true,
+        "text": "tRNA"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 162,
+            "x_min": 42,
+            "y_max": 853,
+            "y_min": 819
+          }
+        ],
+        "names_part": true,
+        "text": "Protein"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 180,
+            "x_min": 22,
+            "y_max": 912,
+            "y_min": 875
+          }
+        ],
+        "names_part": true,
+        "text": "Ribosome"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 474,
+            "x_min": 321,
+            "y_max": 942,
+            "y_min": 908
+          }
+        ],
+        "names_part": false,
+        "text": "Translation"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 357,
+            "x_min": 5,
+            "y_max": 993,
+            "y_min": 963
+          }
+        ],
+        "names_part": false,
+        "text": "U.S. National Library of Medicine"
+      }
+    ]
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a1a1c0-7775-749c-a926-1e534f473c78",
+    "usage": {
+      "promptTokens": 629,
+      "completionTokens": 3017,
+      "reasoningTokens": 2515,
+      "cachedTokens": 227
+    },
+    "latencyMs": 30895,
+    "estCostUSD": 0.013358799999999999,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  }
+}

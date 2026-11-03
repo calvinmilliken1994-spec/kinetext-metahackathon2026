@@ -1,0 +1,103 @@
+{
+  "id": "noaa-hydrologic-cycle-1",
+  "width": 572,
+  "height": 504,
+  "data": {
+    "labels": [
+      {
+        "bbox": [
+          {
+            "x_max": 567,
+            "x_min": 293,
+            "y_max": 165,
+            "y_min": 133
+          }
+        ],
+        "names_part": true,
+        "text": "Condensation"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 902,
+            "x_min": 698,
+            "y_max": 351,
+            "y_min": 316
+          }
+        ],
+        "names_part": true,
+        "text": "Precipitation"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 228,
+            "x_min": 11,
+            "y_max": 423,
+            "y_min": 389
+          }
+        ],
+        "names_part": true,
+        "text": "Transpiration"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 702,
+            "x_min": 473,
+            "y_max": 516,
+            "y_min": 484
+          }
+        ],
+        "names_part": true,
+        "text": "Snowmelt Runoff"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 390,
+            "x_min": 195,
+            "y_max": 611,
+            "y_min": 578
+          }
+        ],
+        "names_part": true,
+        "text": "Evaporation"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 810,
+            "x_min": 571,
+            "y_max": 712,
+            "y_min": 680
+          }
+        ],
+        "names_part": true,
+        "text": "Surface Runoff"
+      }
+    ]
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a1a1c1-df11-7783-b64b-51737e03b09d",
+    "usage": {
+      "promptTokens": 611,
+      "completionTokens": 1549,
+      "reasoningTokens": 1267,
+      "cachedTokens": 0
+    },
+    "latencyMs": 14788,
+    "estCostUSD": 0.007347,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  }
+}

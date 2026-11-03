@@ -1,0 +1,67 @@
+{
+  "id": "noaa-global-circulation-cells-1",
+  "width": 419,
+  "height": 325,
+  "data": {
+    "labels": [
+      {
+        "bbox": [
+          {
+            "x_max": 390,
+            "x_min": 360,
+            "y_max": 75,
+            "y_min": 15
+          }
+        ],
+        "names_part": true,
+        "text": "3"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 207,
+            "x_min": 173,
+            "y_max": 173,
+            "y_min": 111
+          }
+        ],
+        "names_part": true,
+        "text": "2"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 58,
+            "x_min": 31,
+            "y_max": 382,
+            "y_min": 323
+          }
+        ],
+        "names_part": true,
+        "text": "1"
+      }
+    ]
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a1a1c1-fafc-75f4-978c-8055fb18ab63",
+    "usage": {
+      "promptTokens": 405,
+      "completionTokens": 2054,
+      "reasoningTokens": 1912,
+      "cachedTokens": 227
+    },
+    "latencyMs": 21947,
+    "estCostUSD": 0.008986049999999999,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  }
+}

@@ -1,0 +1,217 @@
+{
+  "refine": false,
+  "okParts": 12,
+  "allParts": 21,
+  "okBoxes": 53,
+  "allBoxes": 172,
+  "rows": [
+    {
+      "id": "medlineplus-dna-structure-1",
+      "mime": "image/jpeg",
+      "museLabels": 7,
+      "partBoxesCovered": "5/6",
+      "allBoxesCovered": "5/6",
+      "misses": [
+        "PART Sugar phosphate backbone 92%"
+      ]
+    },
+    {
+      "id": "medlineplus-protein-production-1",
+      "mime": "image/jpeg",
+      "museLabels": 11,
+      "partBoxesCovered": "0/0",
+      "allBoxesCovered": "2/11",
+      "misses": [
+        "Nucleus 82%",
+        "DNA 71%",
+        "Cytoplasm 80%",
+        "Transcription 83%",
+        "Transport to cytoplasm 86%",
+        "tRNA 62%",
+        "Protein 62%",
+        "Translation 64%",
+        "Medicine 68%"
+      ]
+    },
+    {
+      "id": "nasa-grc-airplane-parts-1",
+      "mime": "image/jpeg",
+      "museLabels": 24,
+      "partBoxesCovered": "1/4",
+      "allBoxesCovered": "5/12",
+      "misses": [
+        "PART Horizontal Stabilizer 96%",
+        "Elevator 95%",
+        "Flaps 97%",
+        "PART Jet Engine 90%",
+        "Aileron 82%",
+        "Cockpit 51%",
+        "PART Fuselage (Body) 97%"
+      ]
+    },
+    {
+      "id": "nasa-grc-forces-of-flight-1",
+      "mime": "image/jpeg",
+      "museLabels": 14,
+      "partBoxesCovered": "0/0",
+      "allBoxesCovered": "11/25",
+      "misses": [
+        "Lift 84%",
+        "Drag 23%",
+        "Thrust 68%",
+        "Weight 38%",
+        "Flight 59%",
+        "Condition 53%",
+        "Effect 60%",
+        "Weight 47%",
+        "Drag 56%",
+        "Accelerates 15%",
+        "Thrust 3%",
+        "Drag 4%",
+        "Plane 5%",
+        "> 0%"
+      ]
+    },
+    {
+      "id": "nasa-grc-gas-properties-1",
+      "mime": "image/jpeg",
+      "museLabels": 17,
+      "partBoxesCovered": "0/0",
+      "allBoxesCovered": "4/19",
+      "misses": [
+        "Large 86%",
+        "Scale 95%",
+        "Macro 86%",
+        "Density 0%",
+        "Mass 0%",
+        "Pressure 5%",
+        "Momentum 20%",
+        "Energy 57%",
+        "Temperature 6%",
+        "Viscous = \"Sticky\" 33%",
+        "Diffusion = Random Motion 26%",
+        "Convection = Ordered Motion 86%",
+        "Compressible = \"Springy\" 93%",
+        "Rotational 95%",
+        "= Angular Momentum 96%"
+      ]
+    },
+    {
+      "id": "nasa-grc-glide-trajectory-1",
+      "mime": "image/jpeg",
+      "museLabels": 18,
+      "partBoxesCovered": "0/0",
+      "allBoxesCovered": "1/19",
+      "misses": [
+        "a 81%",
+        "h = Change in Height 31%",
+        "h 64%",
+        "a = Glide Angle 43%",
+        "d 0%",
+        "h 0%",
+        "D = Drag 53%",
+        "From Trigonometry: 59%",
+        "tan(a) = 62%",
+        "d 0%",
+        "L = Lift 66%",
+        "From Balance of Forces: 79%",
+        "L cos(a) + D sin(a) = W 80%",
+        "W = Weight 72%",
+        "L sin(a) = D cos(a) 63%",
+        "Measure: height (h), distance (d), and weight (W). 49%",
+        "Solve 3 equations in 3 unknowns for lift (L), drag (D), 78%",
+        "and glide angle (a). 72%"
+      ]
+    },
+    {
+      "id": "nasa-grc-wright-engine-combustion-1",
+      "mime": "image/jpeg",
+      "museLabels": 29,
+      "partBoxesCovered": "0/0",
+      "allBoxesCovered": "8/42",
+      "misses": [
+        "Fuel/Air – Medium 64%",
+        "Pressure 76%",
+        "Intake 96%",
+        "Stage 89%",
+        "Begin – 85%",
+        "3 70%",
+        "– Closed 18%",
+        "Valve 94%",
+        "– Closed 42%",
+        "Temperature = T3 47%",
+        "Volume = V3 18%",
+        "Exhaust 34%",
+        "– Closed 0%",
+        "Valve 0%",
+        "Heat from 81%",
+        "combustion 49%",
+        "= Q 0%",
+        "Fuel/Air – High Pressure 5%",
+        "Intake 96%",
+        "– Closed 61%",
+        "Pressure = p4 78%",
+        "– Opened 75%",
+        "Temperature = T4 0%",
+        "Contact 92%",
+        "Volume = V4 9%",
+        "Exhaust 0%",
+        "– Closed 0%",
+        "Valve 12%",
+        "Specific Heat constant volume = Cv 61%",
+        "Constant volume process. 91%",
+        "T4 = T3 + Q / cv 58%",
+        "Temperature and pressure increased due 8%",
+        "p4 = p3(T4 / T3) 0%",
+        "to heat release 0%"
+      ]
+    },
+    {
+      "id": "noaa-global-circulation-cells-1",
+      "mime": "image/jpeg",
+      "museLabels": 3,
+      "partBoxesCovered": "0/0",
+      "allBoxesCovered": "0/0",
+      "misses": []
+    },
+    {
+      "id": "noaa-hydrologic-cycle-1",
+      "mime": "image/jpeg",
+      "museLabels": 6,
+      "partBoxesCovered": "2/5",
+      "allBoxesCovered": "2/6",
+      "misses": [
+        "PART Condensation 58%",
+        "Snowmelt Runoff 85%",
+        "PART Evaporation 95%",
+        "PART Surface Runoff 82%"
+      ]
+    },
+    {
+      "id": "usgs-volcano-hazards-1",
+      "mime": "image/png",
+      "museLabels": 29,
+      "partBoxesCovered": "4/6",
+      "allBoxesCovered": "15/32",
+      "misses": [
+        "Vent 28%",
+        "Fumaroles 68%",
+        "Lava Flow 98%",
+        "PART Water 97%",
+        "Content 85%",
+        "Magma 86%",
+        "Type 80%",
+        "100% 91%",
+        "Rhyolite 23%",
+        "68 0%",
+        "Dacite 16%",
+        "63 0%",
+        "Andesite 19%",
+        "53 0%",
+        "Basalt 9%",
+        "PART Magma 62%",
+        "0 0%"
+      ]
+    }
+  ]
+}

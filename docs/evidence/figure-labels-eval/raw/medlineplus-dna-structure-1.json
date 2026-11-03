@@ -1,0 +1,121 @@
+{
+  "id": "medlineplus-dna-structure-1",
+  "width": 600,
+  "height": 600,
+  "data": {
+    "labels": [
+      {
+        "bbox": [
+          {
+            "x_max": 540,
+            "x_min": 348,
+            "y_max": 332,
+            "y_min": 303
+          }
+        ],
+        "names_part": true,
+        "text": "Base pairs"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 708,
+            "x_min": 596,
+            "y_max": 380,
+            "y_min": 353
+          }
+        ],
+        "names_part": true,
+        "text": "Adenine"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 873,
+            "x_min": 762,
+            "y_max": 382,
+            "y_min": 353
+          }
+        ],
+        "names_part": true,
+        "text": "Thymine"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 710,
+            "x_min": 596,
+            "y_max": 540,
+            "y_min": 513
+          }
+        ],
+        "names_part": true,
+        "text": "Guanine"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 875,
+            "x_min": 763,
+            "y_max": 542,
+            "y_min": 513
+          }
+        ],
+        "names_part": true,
+        "text": "Cytosine"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 788,
+            "x_min": 513,
+            "y_max": 700,
+            "y_min": 672
+          },
+          {
+            "x_max": 688,
+            "x_min": 513,
+            "y_max": 732,
+            "y_min": 703
+          }
+        ],
+        "names_part": true,
+        "text": "Sugar phosphate backbone"
+      },
+      {
+        "bbox": [
+          {
+            "x_max": 556,
+            "x_min": 22,
+            "y_max": 983,
+            "y_min": 958
+          }
+        ],
+        "names_part": false,
+        "text": "U.S. National Library of Medicine"
+      }
+    ]
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a1a1c0-60e1-757f-9d91-eb5b77ad9f8f",
+    "usage": {
+      "promptTokens": 692,
+      "completionTokens": 2434,
+      "reasoningTokens": 2075,
+      "cachedTokens": 227
+    },
+    "latencyMs": 25263,
+    "estCostUSD": 0.010959799999999999,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  }
+}
