@@ -33,6 +33,6 @@ Task IDs come from `docs/TASKS.md`.
 Conventional prefixes (`feat:`, `fix:`, `docs:`, `test:`, `chore:`). Note the authoring model/agent in the commit body for anything substantial, to support the Meta contribution ledger and event-origin provenance.
 
 ## Remote and publication
-- Remote: `https://github.com/calvinmilliken1994-spec/meta-hackathon-2026` — **public** for the whole event, so every push is a publication.
+- Remote: `https://github.com/calvinmilliken1994-spec/kinetext-metahackathon2026` (renamed from `meta-hackathon-2026` on 4 Nov; GitHub redirects the old name) — **public** for the whole event, so every push is a publication.
 - Commit only project files; run the `SECURITY.md` pre-commit checklist before every push.
 - No push, visibility change, force-push, history rewrite or deployment without Calvin's explicit approval.

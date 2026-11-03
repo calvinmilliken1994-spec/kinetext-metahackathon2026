@@ -1,4 +1,4 @@
-# Kinetext · Make knowledge interactive
+<p align="center"><img src="docs/brand/social-preview.png" alt="Kinetext · Make knowledge interactive. Built with Muse Spark and SAM 3.1 for the Meta Global AI Developer Hackathon 2026." width="880"></p>
 
 Kinetext turns a licensed page into a short, checked, interactive lesson for teachers, built by Meta's models:
 Muse Spark writes the lesson, SAM 3.1 confirms the parts of a diagram, and deterministic code checks every quote,
@@ -15,8 +15,8 @@ number and formula before anything is shown. Solo entry (Indie Developer) to the
 ### 2. Start it
 
 ```bash
-git clone https://github.com/calvinmilliken1994-spec/meta-hackathon-2026.git
-cd meta-hackathon-2026
+git clone https://github.com/calvinmilliken1994-spec/kinetext-metahackathon2026.git
+cd kinetext-metahackathon2026
 npm install
 npm start
 ```
