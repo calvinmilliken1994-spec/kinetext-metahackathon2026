@@ -34,6 +34,8 @@ export function ThemeSwitch({ theme, onToggle }: { theme: Theme; onToggle: () =>
 interface Props {
   /** Product name shown in the title bar. */
   title: string;
+  /** A quieter line after the name (hidden on narrow screens). */
+  tagline?: string;
   /** Render the title as the page's <h1> (the workspace); the demo harness has its own heading. */
   titleIsHeading?: boolean;
   /** Extra items at the right of the title bar, before the theme switch (e.g. the API status). */
@@ -42,22 +44,25 @@ interface Props {
 }
 
 /**
- * The desktop-app frame: a backdrop in a lighter shade of the app colour, and a window with a slim title bar
- * (decorative traffic lights), the app body, and a slim footer naming the hackathon this entry was built for.
- * The window always fits the viewport with a gap that scales with it; below 900 px the gap narrows and the traffic lights go away.
+ * The app frame: it fills the viewport (Calvin, 3 Nov), with a slim title bar (the name and tagline on the left, the
+ * status and theme switch on the right), the app body, and a slim footer naming the hackathon this entry was built for.
+ * No decorative window buttons: in a browser tab they read as a mock-up (Calvin, 4 Nov).
  */
-export function AppWindow({ title, titleIsHeading = false, titlebarExtra, children }: Props) {
+export function AppWindow({ title, tagline, titleIsHeading = false, titlebarExtra, children }: Props) {
   const [theme, toggleTheme] = useTheme();
   return (
     <div className="desktop">
       <div className="app-window">
         <header className="titlebar">
-          <span className="traffic" aria-hidden="true">
-            <span className="traffic-dot traffic-close" />
-            <span className="traffic-dot traffic-min" />
-            <span className="traffic-dot traffic-max" />
-          </span>
-          {titleIsHeading ? <h1 className="titlebar-title">{title}</h1> : <p className="titlebar-title">{title}</p>}
+          {(() => {
+            const inner = (
+              <>
+                <span className="titlebar-name">{title}</span>
+                {tagline !== undefined && <span className="titlebar-tagline"><span className="titlebar-sep" aria-hidden="true">·</span>{tagline}</span>}
+              </>
+            );
+            return titleIsHeading ? <h1 className="titlebar-title">{inner}</h1> : <p className="titlebar-title">{inner}</p>;
+          })()}
           <div className="titlebar-right">
             {titlebarExtra}
             <ThemeSwitch theme={theme} onToggle={toggleTheme} />

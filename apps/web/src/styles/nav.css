@@ -356,6 +356,7 @@ input[type="search"]::-webkit-search-cancel-button { cursor: pointer; }
   :root, [data-theme="dark"], [data-theme="light"] { --sidebar-w: 212px; }
   .workspace { grid-template-columns: minmax(270px, 26%) minmax(0, 1fr); }
   .sb-sections { padding-left: 10px; padding-right: 8px; }
+  .titlebar { --titlebar-inset: 20px; } /* the title bar's name stays on the sidebar's text column */
 }
 @media (max-width: 1280px) {
   .nl-grid { grid-template-columns: minmax(0, 1fr) minmax(320px, 360px); gap: 20px; }

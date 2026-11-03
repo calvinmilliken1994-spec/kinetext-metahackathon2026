@@ -73,7 +73,7 @@ import { replayAfterTourClose, tourReady, tourRequest, tourSignals, TOUR_JOB_ID,
 import type { TourOutcome, TourStep } from './lib/onboarding.ts';
 import { Onboarding, PageGuide } from './components/Onboarding.tsx';
 import { WelcomeScreen } from './components/WelcomeScreen.tsx';
-import { APP_NAME, demoLengthWords, firstLaunch, guideSteps, welcomeAccess, WELCOME_STORAGE_KEY } from './lib/welcome.ts';
+import { APP_NAME, APP_TAGLINE, demoLengthWords, firstLaunch, guideSteps, welcomeAccess, WELCOME_STORAGE_KEY } from './lib/welcome.ts';
 import type { GuideAction, GuideStep } from './lib/welcome.ts';
 import './styles/welcome.css';
 import { AI_SUMMARY_PHRASE } from './lib/pageCopy.ts';
@@ -696,7 +696,7 @@ export function App() {
   const provenance = presentButton === null ? provenanceLine : <>{presentButton}{provenanceLine}</>;
 
   return (
-    <AppWindow title={APP_NAME} titleIsHeading titlebarExtra={<ApiStatus health={health} down={down} />}>
+    <AppWindow title={APP_NAME} tagline={APP_TAGLINE} titleIsHeading titlebarExtra={<ApiStatus health={health} down={down} />}>
       {welcomeOn ? (
         <div className="window-body window-body-plain">
           <WelcomeScreen
