@@ -98,9 +98,9 @@ variable, never the value).
 `pause`/`resume`/`report` need the Secret to exist first, because `modal run` resolves the app's Secret. `report` starts a
 tiny remote function only to read `CAP_USD` from the Secret.
 
-## Discord pings (optional)
+## Owner notifications (optional)
 
-When the Secret `mki-relay-discord` holds `DISCORD_WEBHOOK_URL`, the relay posts a short message to that channel:
+When the Secret `mki-relay-discord` holds `DISCORD_WEBHOOK_URL`, the relay posts a short note to the owner's channel:
 
 - **Access granted:** a valid code checked the budget (`GET /v1/status`). At most once per visitor per hour.
 - **Live build started:** a chat call after five quiet minutes, with the model (Muse Spark 1.3 or Muse Spark Open).
