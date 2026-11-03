@@ -21,7 +21,8 @@ npm install
 npm start
 ```
 
-The first `npm start` builds the web app (about a minute), then opens **http://127.0.0.1:8787** in your browser.
+The first `npm start` builds the web app (about a minute), picks a free port and opens the app in your browser. The
+terminal prints the address: usually **http://127.0.0.1:8787**, or the next free port if 8787 is taken.
 Leave the terminal open; press **Ctrl+C** in it to stop. The recorded lessons are included, so the app is full the
 first time it opens.
 
@@ -30,8 +31,8 @@ first time it opens.
 | You have | Do this | What works |
 |---|---|---|
 | **The judge access code** (in the submission notes) | Paste it into **Judge access code** and press **Unlock** | Everything, including **live builds** on Muse Spark 1.3 and Muse Spark Open, and SAM 3.1 diagrams. The model keys stay on our relay; the code is held only in your local server's memory. A shared judging budget is shown in the sidebar. |
-| Nothing | Press **Explore read-only** | Every recorded lesson, the Demo, Results and presenting. No new builds. |
 | **Your own Meta Model API key** | Copy `.env.example` to `.env`, set `MODEL_API_KEY=`, then `npm start` again | Live builds on Muse Spark 1.3 and SAM 3.1 on your own credit. Muse Spark Open runs on our Modal deployment, so in this mode it shows its recorded lessons only. |
+| Nothing | Press **Explore read-only** | Every recorded lesson, the Demo, Results and presenting. No new builds. |
 
 ### 4. A five-minute tour
 
@@ -51,8 +52,8 @@ first time it opens.
 
 - **`npm start` stops with an error:** it prints the reason. Most often Node is too old (install Node 24) or
   `npm install` was skipped.
-- **Port 8787 is busy:** the next free port is used automatically and printed; or set one, e.g. `PORT=8800 npm start`
-  (PowerShell: `$env:PORT=8800; npm start`).
+- **Wrong or busy port:** you don't need to choose one; the address is printed when the app starts. To pick your own,
+  set `PORT`, e.g. `PORT=8800 npm start` (PowerShell: `$env:PORT=8800; npm start`).
 - **The web build fails:** run `npm install` again, then `npm start -- --rebuild`.
 - **"Live builds are unavailable":** no code was entered and there is no key in `.env`. Read-only still works.
 - **Privacy:** text you paste is sent to Meta's model API (and to Modal for Spark Open) to build the lesson. The relay
